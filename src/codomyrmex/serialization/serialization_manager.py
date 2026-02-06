@@ -2,7 +2,7 @@
 Serialization manager for managing multiple serializers.
 """
 
-from typing import Any, Optional, Union
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -31,7 +31,7 @@ class SerializationManager:
             self._serializers[format] = Serializer(format=format)
         return self._serializers[format]
 
-    def serialize(self, obj: Any, format: str = "json") -> Union[str, bytes]:
+    def serialize(self, obj: Any, format: str = "json") -> str | bytes:
         """Serialize an object.
 
         Args:
@@ -44,7 +44,7 @@ class SerializationManager:
         serializer = self.get_serializer(format)
         return serializer.serialize(obj)
 
-    def deserialize(self, data: Union[str, bytes], format: Optional[str] = None) -> Any:
+    def deserialize(self, data: str | bytes, format: str | None = None) -> Any:
         """Deserialize data.
 
         Args:

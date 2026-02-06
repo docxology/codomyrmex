@@ -1,26 +1,52 @@
-# Personal AI Infrastructure - Plugin System Context
+# Personal AI Infrastructure — Plugin System Module
 
-**Module**: plugin_system
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Plugin architecture for extensibility with discovery, loading, lifecycle management, and hook systems.
+The Plugin System module provides PAI integration for extensibility.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Plugin Management
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Load and manage plugins:
 
-## Key Files
+```python
+from codomyrmex.plugin_system import PluginManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+manager = PluginManager()
+manager.discover("./plugins/")
+manager.load_all()
 
-## Future Considerations
+for plugin in manager.list():
+    print(f"{plugin.name}: {plugin.version}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Custom Plugins
+
+Create custom plugins:
+
+```python
+from codomyrmex.plugin_system import Plugin
+
+class MyPlugin(Plugin):
+    name = "my_plugin"
+    version = "1.0.0"
+    
+    def initialize(self):
+        # Plugin init
+        pass
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `PluginManager` | Manage plugins |
+| `Plugin` | Base class |
+| `PluginRegistry` | Plugin discovery |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

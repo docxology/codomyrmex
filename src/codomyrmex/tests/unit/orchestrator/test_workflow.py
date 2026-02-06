@@ -1,7 +1,15 @@
 
-import pytest
 import asyncio
-from codomyrmex.orchestrator.workflow import Workflow, TaskStatus, CycleError, WorkflowError
+
+import pytest
+
+from codomyrmex.orchestrator.workflow import (
+    CycleError,
+    TaskStatus,
+    Workflow,
+    WorkflowError,
+)
+
 
 @pytest.mark.asyncio
 async def test_workflow_linear_execution():

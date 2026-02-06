@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -14,7 +13,7 @@ from ..exceptions import DocumentReadError, DocumentWriteError
 logger = get_logger(__name__)
 
 
-def read_html(file_path: str | Path, encoding: Optional[str] = None) -> str:
+def read_html(file_path: str | Path, encoding: str | None = None) -> str:
     """
     Read HTML content from a file.
 
@@ -32,7 +31,7 @@ def read_html(file_path: str | Path, encoding: Optional[str] = None) -> str:
     encoding = encoding or get_config().default_encoding
 
     try:
-        with open(file_path, 'r', encoding=encoding) as f:
+        with open(file_path, encoding=encoding) as f:
             content = f.read()
         return content
     except Exception as e:
@@ -43,7 +42,7 @@ def read_html(file_path: str | Path, encoding: Optional[str] = None) -> str:
         ) from e
 
 
-def write_html(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None:
+def write_html(content: str, file_path: str | Path, encoding: str | None = None) -> None:
     """
     Write HTML content to a file.
 

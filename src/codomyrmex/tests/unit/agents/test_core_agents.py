@@ -11,9 +11,9 @@ Tests cover:
 import importlib.util
 import os
 import sys
+from unittest.mock import MagicMock
+
 import pytest
-from typing import Any, Dict, Iterator, Optional
-from unittest.mock import MagicMock, patch
 
 
 def _load_module_directly(module_name: str, file_path: str):

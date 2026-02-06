@@ -1,8 +1,8 @@
 """Unit tests for code.review module."""
 
 import sys
+
 import pytest
-from pathlib import Path
 
 
 @pytest.mark.unit
@@ -64,7 +64,7 @@ class TestCodeReview:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.coding.review import AnalysisType, SeverityLevel, Language
+            from codomyrmex.coding.review import AnalysisType, Language, SeverityLevel
             assert AnalysisType is not None
             assert SeverityLevel is not None
             assert Language is not None
@@ -98,9 +98,9 @@ class TestCodeReview:
         try:
             from codomyrmex.coding.review import (
                 CodeReviewError,
+                ConfigurationError,
                 PyscnError,
                 ToolNotFoundError,
-                ConfigurationError,
             )
             assert CodeReviewError is not None
             assert PyscnError is not None
@@ -141,7 +141,6 @@ class TestCodeReview:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex import coding
 
         expected_exports = [
             "CodeReviewer",

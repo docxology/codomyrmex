@@ -14,18 +14,12 @@ Tests cover:
 Total: ~19 tests in a single TestInfomaniakMetering class.
 """
 
-import pytest
-from unittest.mock import MagicMock
 from datetime import datetime, timezone
+from unittest.mock import MagicMock
 
-from codomyrmex.cloud.infomaniak.metering.client import InfomaniakMeteringClient
+
 from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
-from codomyrmex.tests.unit.cloud.conftest import (
-    make_mock_server,
-    make_mock_volume,
-    make_mock_floating_ip,
-    make_mock_container,
-)
+from codomyrmex.cloud.infomaniak.metering.client import InfomaniakMeteringClient
 
 
 class TestInfomaniakMetering:

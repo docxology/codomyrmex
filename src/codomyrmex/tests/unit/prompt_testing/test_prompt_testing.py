@@ -68,7 +68,7 @@ class TestPromptTestCase:
 
     def test_test_case_creation(self):
         """Verify PromptTestCase can be created."""
-        from codomyrmex.prompt_testing import PromptTestCase, EvaluationType
+        from codomyrmex.prompt_testing import EvaluationType, PromptTestCase
 
         test_case = PromptTestCase(
             id="greeting_test",
@@ -163,7 +163,7 @@ class TestTestSuiteResult:
 
     def test_suite_result_metrics(self):
         """Verify suite result metrics."""
-        from codomyrmex.prompt_testing import TestSuiteResult, TestResult, TestStatus
+        from codomyrmex.prompt_testing import TestResult, TestStatus, TestSuiteResult
 
         result = TestSuiteResult(suite_id="test", prompt_version="v1")
         result.results = [
@@ -336,7 +336,7 @@ class TestPromptTestSuite:
 
     def test_suite_add_test(self):
         """Verify test addition."""
-        from codomyrmex.prompt_testing import PromptTestSuite, PromptTestCase
+        from codomyrmex.prompt_testing import PromptTestCase, PromptTestSuite
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(id="t1", prompt="Test 1"))
@@ -346,7 +346,7 @@ class TestPromptTestSuite:
 
     def test_suite_add_tests_batch(self):
         """Verify batch test addition."""
-        from codomyrmex.prompt_testing import PromptTestSuite, PromptTestCase
+        from codomyrmex.prompt_testing import PromptTestCase, PromptTestSuite
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_tests([
@@ -359,7 +359,7 @@ class TestPromptTestSuite:
 
     def test_suite_get_test(self):
         """Verify test retrieval."""
-        from codomyrmex.prompt_testing import PromptTestSuite, PromptTestCase
+        from codomyrmex.prompt_testing import PromptTestCase, PromptTestSuite
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(id="target", prompt="Find me"))
@@ -373,7 +373,7 @@ class TestPromptTestSuite:
 
     def test_suite_chaining(self):
         """Verify method chaining."""
-        from codomyrmex.prompt_testing import PromptTestSuite, PromptTestCase
+        from codomyrmex.prompt_testing import PromptTestCase, PromptTestSuite
 
         suite = (
             PromptTestSuite(suite_id="test")
@@ -398,7 +398,9 @@ class TestPromptTester:
     def test_tester_run_suite(self):
         """Verify suite execution."""
         from codomyrmex.prompt_testing import (
-            PromptTester, PromptTestSuite, PromptTestCase
+            PromptTestCase,
+            PromptTester,
+            PromptTestSuite,
         )
 
         def mock_executor(prompt):
@@ -420,7 +422,10 @@ class TestPromptTester:
     def test_tester_handles_executor_error(self):
         """Verify error handling in executor."""
         from codomyrmex.prompt_testing import (
-            PromptTester, PromptTestSuite, PromptTestCase, TestStatus
+            PromptTestCase,
+            PromptTester,
+            PromptTestSuite,
+            TestStatus,
         )
 
         def failing_executor(prompt):
@@ -437,8 +442,11 @@ class TestPromptTester:
     def test_tester_register_evaluator(self):
         """Verify custom evaluator registration."""
         from codomyrmex.prompt_testing import (
-            PromptTester, PromptTestSuite, PromptTestCase,
-            CustomEvaluator, EvaluationType
+            CustomEvaluator,
+            EvaluationType,
+            PromptTestCase,
+            PromptTester,
+            PromptTestSuite,
         )
 
         custom_eval = CustomEvaluator(lambda tc, out: 1.0 if "magic" in out else 0.0)
@@ -493,9 +501,7 @@ class TestABTest:
 
     def test_ab_test_run(self):
         """Verify A/B test execution."""
-        from codomyrmex.prompt_testing import (
-            ABTest, PromptTestSuite, PromptTestCase
-        )
+        from codomyrmex.prompt_testing import ABTest, PromptTestCase, PromptTestSuite
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(
@@ -519,7 +525,10 @@ class TestABTest:
     def test_ab_test_get_winner(self):
         """Verify winner determination."""
         from codomyrmex.prompt_testing import (
-            ABTest, TestSuiteResult, TestResult, TestStatus
+            ABTest,
+            TestResult,
+            TestStatus,
+            TestSuiteResult,
         )
 
         ab_test = ABTest(test_id="test")
@@ -546,7 +555,10 @@ class TestABTest:
     def test_ab_test_compare(self):
         """Verify comparison report generation."""
         from codomyrmex.prompt_testing import (
-            ABTest, TestSuiteResult, TestResult, TestStatus
+            ABTest,
+            TestResult,
+            TestStatus,
+            TestSuiteResult,
         )
 
         ab_test = ABTest(test_id="test")

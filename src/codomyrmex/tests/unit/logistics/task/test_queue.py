@@ -1,6 +1,8 @@
 
 import pytest
+
 from codomyrmex.logistics import task as queue
+
 
 @pytest.mark.unit
 def test_queue_module_import():

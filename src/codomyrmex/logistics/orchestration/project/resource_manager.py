@@ -4,16 +4,12 @@ This module provides resource allocation, dependency management, and coordinatio
 for tasks and workflows across the Codomyrmex ecosystem.
 """
 
-from collections import defaultdict
-from datetime import datetime, timezone
-from typing import Any, Optional, Dict, List, Union
-import json
-import logging
 import threading
 import uuid
-
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -63,7 +59,7 @@ class ResourceLimits:
     min_value: float = 0
     max_value: float = float("inf")
     default_allocation: float = 1.0
-    burst_limit: Optional[float] = None
+    burst_limit: float | None = None
     unit: str = "unit"
 
 
@@ -75,8 +71,8 @@ class ResourceAllocation:
     requester_id: str
     amount: float
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    expires_at: Optional[datetime] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    expires_at: datetime | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -101,17 +97,17 @@ class Resource:
     description: str = ""
     limits: ResourceLimits = field(default_factory=ResourceLimits)
     status: ResourceStatus = ResourceStatus.AVAILABLE
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     # Runtime state (not serialized)
     allocated: float = 0.0
-    allocations: Dict[str, ResourceAllocation] = field(default_factory=dict)
-    
+    allocations: dict[str, ResourceAllocation] = field(default_factory=dict)
+
     def __post_init__(self):
         if not self.id:
             self.id = str(uuid.uuid4())
-            
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert resource to dictionary."""
         return {
             "id": self.id,
@@ -125,13 +121,13 @@ class Resource:
             "metadata": self.metadata,
             "allocations": {k: asdict(v) for k, v in self.allocations.items()}
         }
-        
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Resource':
+    def from_dict(cls, data: dict[str, Any]) -> 'Resource':
         """Create resource from dictionary."""
         limits_data = data.get("limits", {})
         limits = ResourceLimits(**limits_data)
-        
+
         resource = cls(
             id=data.get("id", str(uuid.uuid4())),
             name=data.get("name", "unknown"),
@@ -142,13 +138,13 @@ class Resource:
             status=ResourceStatus(data.get("status", "available")),
             metadata=data.get("metadata", {})
         )
-        
+
         # Restore allocations if present (carefully)
         if "allocations" in data:
             resource.allocated = data.get("allocated", 0.0)
             # Rehydrating allocations is complex due to datetime
             # Skipping detailed allocation rehydration for simplicity in this factory method
-            
+
         return resource
 
 
@@ -157,10 +153,10 @@ class ResourceManager:
 
     def __init__(self):
         """Initialize the resource manager."""
-        self.resources: Dict[str, Resource] = {}
+        self.resources: dict[str, Resource] = {}
         self.total_allocations = 0
         self._lock = threading.RLock()
-        
+
         # Initialize default resources
         self._init_default_resources()
 
@@ -175,7 +171,7 @@ class ResourceManager:
             description="Virtual CPU units",
             limits=ResourceLimits(unit="vCPU")
         ))
-        
+
         # Generic Memory Resource
         self.add_resource(Resource(
             id="sys-memory",
@@ -185,7 +181,7 @@ class ResourceManager:
             description="System RAM in MB/GB units",
             limits=ResourceLimits(unit="MB")
         ))
-        
+
         # API Quota
         self.add_resource(Resource(
             id="api-global",
@@ -202,17 +198,17 @@ class ResourceManager:
         with self._lock:
             if resource.id in self.resources:
                 logger.warning(f"Resource {resource.id} already exists, overwriting")
-            
+
             self.resources[resource.id] = resource
             logger.info(f"Added resource: {resource.name} ({resource.type.value})")
             return True
 
     @monitor_performance("get_resource")
-    def get_resource(self, resource_id: str) -> Optional[Resource]:
+    def get_resource(self, resource_id: str) -> Resource | None:
         """Get a resource by ID."""
         return self.resources.get(resource_id)
-        
-    def get_resource_by_name(self, name: str) -> Optional[Resource]:
+
+    def get_resource_by_name(self, name: str) -> Resource | None:
         """Get a resource by name."""
         for resource in self.resources.values():
             if resource.name == name:
@@ -221,30 +217,30 @@ class ResourceManager:
 
     @monitor_performance("allocate_resource")
     def allocate(
-        self, 
-        resource_id: str, 
-        requester_id: str, 
-        amount: float = 1.0, 
-        timeout: Optional[float] = None
-    ) -> Optional[ResourceAllocation]:
+        self,
+        resource_id: str,
+        requester_id: str,
+        amount: float = 1.0,
+        timeout: float | None = None
+    ) -> ResourceAllocation | None:
         """Allocate a resource."""
         with self._lock:
             resource = self.resources.get(resource_id)
             if not resource:
                 logger.error(f"Cannot allocate: Resource {resource_id} not found")
                 return None
-                
+
             if resource.status != ResourceStatus.AVAILABLE and resource.status != ResourceStatus.ALLOCATED:
                 logger.warning(f"Resource {resource.name} is {resource.status.value}")
                 return None
-                
+
             # Check capacity
             available = resource.capacity - resource.allocated
             if available < amount:
                 logger.warning(f"Insufficient capacity for {resource.name}: requested {amount}, available {available}")
                 resource.status = ResourceStatus.BUSY if available <= 0 else ResourceStatus.ALLOCATED
                 return None
-                
+
             # Create allocation
             allocation_id = str(uuid.uuid4())
             allocation = ResourceAllocation(
@@ -253,14 +249,14 @@ class ResourceManager:
                 requester_id=requester_id,
                 amount=amount
             )
-            
+
             resource.allocations[allocation_id] = allocation
             resource.allocated += amount
             self.total_allocations += 1
-            
+
             # Update status
             resource.status = ResourceStatus.ALLOCATED if resource.allocated < resource.capacity else ResourceStatus.BUSY
-            
+
             logger.info(f"Allocated {amount} {resource.limits.unit} of {resource.name} to {requester_id}")
             return allocation
 
@@ -271,36 +267,36 @@ class ResourceManager:
             # Search for the allocation across all resources
             target_resource = None
             target_allocation = None
-            
+
             for resource in self.resources.values():
                 if allocation_id in resource.allocations:
                     target_resource = resource
                     target_allocation = resource.allocations[allocation_id]
                     break
-            
+
             if not target_resource or not target_allocation:
                 logger.warning(f"Allocation {allocation_id} not found")
                 return False
-                
+
             # Remove allocation
             amount = target_allocation.amount
             del target_resource.allocations[allocation_id]
             target_resource.allocated = max(0.0, target_resource.allocated - amount)
-            
+
             # Update status
             if target_resource.allocated < target_resource.capacity:
                 target_resource.status = ResourceStatus.AVAILABLE if target_resource.allocated == 0 else ResourceStatus.ALLOCATED
-            
+
             logger.info(f"Released {amount} {target_resource.limits.unit} of {target_resource.name}")
             return True
 
     @monitor_performance("get_usage")
-    def get_usage(self, resource_id: str) -> Optional[ResourceUsage]:
+    def get_usage(self, resource_id: str) -> ResourceUsage | None:
         """Get usage statistics for a resource."""
         resource = self.resources.get(resource_id)
         if not resource:
             return None
-            
+
         return ResourceUsage(
             resource_id=resource.id,
             total_capacity=resource.capacity,
@@ -310,7 +306,7 @@ class ResourceManager:
             utilization_percentage=(resource.allocated / resource.capacity * 100) if resource.capacity > 0 else 0
         )
 
-    def list_resources(self, type_filter: Optional[ResourceType] = None) -> List[Resource]:
+    def list_resources(self, type_filter: ResourceType | None = None) -> list[Resource]:
         """List all resources, optionally filtered by type."""
         if type_filter:
             return [r for r in self.resources.values() if r.type == type_filter]
@@ -320,21 +316,21 @@ class ResourceManager:
         """Release all expired allocations."""
         now = datetime.now(timezone.utc)
         cleaned_count = 0
-        
+
         with self._lock:
             for resource in self.resources.values():
                 expired_ids = []
                 for alloc_id, alloc in resource.allocations.items():
                     if alloc.expires_at and alloc.expires_at < now:
                         expired_ids.append(alloc_id)
-                
+
                 for alloc_id in expired_ids:
                     if self.release(alloc_id):
                         cleaned_count += 1
-                        
+
         if cleaned_count > 0:
             logger.info(f"Cleaned up {cleaned_count} expired allocations")
-            
+
         return cleaned_count
 
 

@@ -6,9 +6,8 @@ using various STT providers.
 
 import asyncio
 from pathlib import Path
-from typing import AsyncIterator, Optional
+from collections.abc import AsyncIterator
 
-from codomyrmex.audio.exceptions import ProviderNotAvailableError
 
 from .models import (
     TranscriptionConfig,
@@ -84,7 +83,7 @@ class Transcriber:
     def transcribe(
         self,
         audio_path: str | Path,
-        language: Optional[str] = None,
+        language: str | None = None,
         task: str = "transcribe",
         word_timestamps: bool = True,
         vad_filter: bool = True,
@@ -120,7 +119,7 @@ class Transcriber:
     async def transcribe_async(
         self,
         audio_path: str | Path,
-        language: Optional[str] = None,
+        language: str | None = None,
         task: str = "transcribe",
         word_timestamps: bool = True,
         vad_filter: bool = True,
@@ -152,7 +151,7 @@ class Transcriber:
     async def transcribe_stream(
         self,
         audio_path: str | Path,
-        language: Optional[str] = None,
+        language: str | None = None,
         **kwargs: object,
     ) -> AsyncIterator[TranscriptionResult]:
         """Stream transcription results as they become available.
@@ -190,7 +189,7 @@ class Transcriber:
     def transcribe_batch(
         self,
         audio_paths: list[str | Path],
-        language: Optional[str] = None,
+        language: str | None = None,
         **kwargs: object,
     ) -> list[TranscriptionResult]:
         """Transcribe multiple audio files.
@@ -212,7 +211,7 @@ class Transcriber:
     async def transcribe_batch_async(
         self,
         audio_paths: list[str | Path],
-        language: Optional[str] = None,
+        language: str | None = None,
         max_concurrent: int = 3,
         **kwargs: object,
     ) -> list[TranscriptionResult]:

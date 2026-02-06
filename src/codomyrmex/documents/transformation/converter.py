@@ -11,14 +11,14 @@ logger = get_logger(__name__)
 def convert_document(document: Document, target_format: DocumentFormat) -> Document:
     """
     Convert a document to a different format.
-    
+
     Args:
         document: Document to convert
         target_format: Target format
-    
+
     Returns:
         New Document in target format
-    
+
     Raises:
         DocumentConversionError: If conversion fails
         UnsupportedFormatError: If conversion is not supported
@@ -26,11 +26,11 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
     if document.format == target_format:
         logger.debug("Document already in target format")
         return document
-    
+
     try:
         # Get content as string first
         content_str = document.get_content_as_string()
-        
+
         # Convert based on target format
         if target_format == DocumentFormat.MARKDOWN:
             # Convert to markdown (basic conversion)
@@ -46,7 +46,7 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
                 f"Conversion to {target_format.value} not yet implemented",
                 format=target_format.value
             )
-        
+
         # Create new document with copied metadata
         if document.metadata is not None and hasattr(document.metadata, 'copy'):
             new_metadata = document.metadata.copy()
@@ -60,9 +60,9 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
             encoding=document.encoding,
             metadata=new_metadata,
         )
-        
+
         return converted_doc
-        
+
     except Exception as e:
         logger.error(f"Error converting document: {e}")
         raise DocumentConversionError(f"Failed to convert document: {str(e)}") from e

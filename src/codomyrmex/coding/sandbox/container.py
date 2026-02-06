@@ -7,7 +7,7 @@ Handles Docker container creation, execution, and cleanup for sandboxed code exe
 import os
 import subprocess
 import time
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -34,9 +34,9 @@ def run_code_in_docker(
     language: str,
     code_file_path: str,
     temp_dir: str,
-    stdin_file: Optional[str] = None,
+    stdin_file: str | None = None,
     timeout: int = 30,
-    session_id: Optional[str] = None,
+    session_id: str | None = None,
 ) -> dict[str, Any]:
     """
     Execute code in a Docker container with security constraints.

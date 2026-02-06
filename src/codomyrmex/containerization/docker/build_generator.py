@@ -1,19 +1,8 @@
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-import json
 import logging
-import os
-import re
-
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Build Generator for Codomyrmex Containerization."""
 
@@ -28,12 +17,12 @@ class BuildStage:
     """Represents a single build stage in a multi-stage build."""
     name: str
     base_image: str
-    commands: List[str] = field(default_factory=list)
-    copy_commands: List[str] = field(default_factory=list)
-    labels: Dict[str, str] = field(default_factory=dict)
-    environment: Dict[str, str] = field(default_factory=dict)
-    working_directory: Optional[str] = None
-    user: Optional[str] = None
+    commands: list[str] = field(default_factory=list)
+    copy_commands: list[str] = field(default_factory=list)
+    labels: dict[str, str] = field(default_factory=dict)
+    environment: dict[str, str] = field(default_factory=dict)
+    working_directory: str | None = None
+    user: str | None = None
 
     def to_dockerfile(self) -> str:
         """Convert stage to Dockerfile instructions."""
@@ -62,9 +51,9 @@ class BuildStage:
 @dataclass
 class MultiStageBuild:
     """Represents a complete multi-stage Docker build."""
-    stages: List[BuildStage] = field(default_factory=list)
-    final_stage: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    stages: list[BuildStage] = field(default_factory=list)
+    final_stage: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dockerfile(self) -> str:
         """Convert multi-stage build to complete Dockerfile."""
@@ -93,10 +82,10 @@ class BuildScript:
     name: str
     dockerfile_path: str
     context_path: str
-    build_args: Dict[str, str] = field(default_factory=dict)
-    tags: List[str] = field(default_factory=list)
-    push_targets: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    build_args: dict[str, str] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
+    push_targets: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
 
     def to_shell_script(self) -> str:
         """Convert to shell script."""
@@ -131,7 +120,7 @@ class BuildGenerator:
         """Initialize the build generator."""
         self.templates = self._load_templates()
 
-    def create_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def create_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """
         Create a multi-stage build configuration.
 
@@ -171,7 +160,7 @@ class BuildGenerator:
             Optimized Dockerfile content
         """
         try:
-            with open(dockerfile_path, 'r') as f:
+            with open(dockerfile_path) as f:
                 content = f.read()
 
             lines = content.split('\n')
@@ -216,7 +205,7 @@ class BuildGenerator:
             logger.error(f"Error optimizing Dockerfile {dockerfile_path}: {e}")
             raise
 
-    def generate_build_script(self, config: Dict[str, Any]) -> BuildScript:
+    def generate_build_script(self, config: dict[str, Any]) -> BuildScript:
         """
         Generate a build script from configuration.
 
@@ -238,7 +227,7 @@ class BuildGenerator:
 
         return script
 
-    def validate_dockerfile(self, dockerfile_content: str) -> Tuple[bool, List[str]]:
+    def validate_dockerfile(self, dockerfile_content: str) -> tuple[bool, list[str]]:
         """
         Validate Dockerfile content for common issues.
 
@@ -294,7 +283,7 @@ class BuildGenerator:
 
         return len(issues) == 0, issues
 
-    def _create_python_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def _create_python_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """Create multi-stage build for Python applications."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -336,7 +325,7 @@ class BuildGenerator:
 
         return build
 
-    def _create_node_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def _create_node_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """Create multi-stage build for Node.js applications."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -378,7 +367,7 @@ class BuildGenerator:
 
         return build
 
-    def _create_java_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def _create_java_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """Create multi-stage build for Java applications."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -416,7 +405,7 @@ class BuildGenerator:
 
         return build
 
-    def _create_go_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def _create_go_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """Create multi-stage build for Go applications."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -455,7 +444,7 @@ class BuildGenerator:
 
         return build
 
-    def _create_generic_multi_stage_build(self, config: Dict[str, Any]) -> MultiStageBuild:
+    def _create_generic_multi_stage_build(self, config: dict[str, Any]) -> MultiStageBuild:
         """Create generic multi-stage build."""
         build = MultiStageBuild()
         build.metadata = config.get("metadata", {})
@@ -484,7 +473,7 @@ class BuildGenerator:
 
         return build
 
-    def _load_templates(self) -> Dict[str, str]:
+    def _load_templates(self) -> dict[str, str]:
         """Load Dockerfile templates."""
         templates = {
             "python_basic": """FROM python:3.9-slim

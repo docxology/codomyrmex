@@ -5,15 +5,13 @@ This module provides database schema generation, migration creation,
 and schema comparison capabilities supporting SQLite, PostgreSQL, and MySQL.
 """
 
+import hashlib
+import json
+import time
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
-import json
-import re
-import time
-
-from dataclasses import dataclass, field
-import hashlib
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -65,14 +63,14 @@ class Column:
     """Database column definition."""
     name: str
     data_type: str
-    length: Optional[int] = None
+    length: int | None = None
     nullable: bool = True
     primary_key: bool = False
     auto_increment: bool = False
     unique: bool = False
-    default: Optional[Any] = None
-    foreign_key: Optional[dict[str, str]] = None  # {"table": "users", "column": "id"}
-    check: Optional[str] = None
+    default: Any | None = None
+    foreign_key: dict[str, str] | None = None  # {"table": "users", "column": "id"}
+    check: str | None = None
 
     def to_sql(self, dialect: str = "sqlite") -> str:
         """Generate SQL column definition."""
@@ -118,7 +116,7 @@ class Index:
     name: str
     columns: list[str]
     unique: bool = False
-    condition: Optional[str] = None  # Partial index condition
+    condition: str | None = None  # Partial index condition
 
     def to_sql(self, table_name: str, dialect: str = "sqlite") -> str:
         """Generate SQL index creation statement."""
@@ -235,7 +233,7 @@ class SchemaDefinition:
 class SchemaGenerator:
     """Database schema generation and management system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None, dialect: str = "sqlite"):
+    def __init__(self, workspace_dir: str | None = None, dialect: str = "sqlite"):
         """Initialize schema generator.
 
         Args:

@@ -9,8 +9,8 @@ patterns, and security best practices.
 try:
     from .principles import (
         SecurityPrinciple,
-        get_security_principles,
         apply_principle,
+        get_security_principles,
     )
     PRINCIPLES_AVAILABLE = True
 except ImportError:
@@ -22,8 +22,8 @@ except ImportError:
 try:
     from .frameworks import (
         SecurityFramework,
-        get_framework,
         apply_framework,
+        get_framework,
     )
     FRAMEWORKS_AVAILABLE = True
 except ImportError:
@@ -35,8 +35,8 @@ except ImportError:
 try:
     from .threat_modeling import (
         ThreatModel,
-        create_threat_model,
         analyze_threats,
+        create_threat_model,
     )
     THREAT_MODELING_AVAILABLE = True
 except ImportError:
@@ -61,8 +61,8 @@ except ImportError:
 try:
     from .architecture_patterns import (
         SecurityPattern,
-        get_security_patterns,
         apply_pattern,
+        get_security_patterns,
     )
     ARCHITECTURE_PATTERNS_AVAILABLE = True
 except ImportError:
@@ -74,8 +74,8 @@ except ImportError:
 try:
     from .best_practices import (
         SecurityBestPractice,
-        get_best_practices,
         check_compliance_with_practices,
+        get_best_practices,
     )
     BEST_PRACTICES_AVAILABLE = True
 except ImportError:

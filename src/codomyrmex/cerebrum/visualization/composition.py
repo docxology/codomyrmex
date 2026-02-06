@@ -1,58 +1,21 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec
 from matplotlib.patches import Patch
-import matplotlib.pyplot as plt
-import numpy as np
 
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization.base import BaseChartVisualizer, BaseNetworkVisualizer
-from codomyrmex.cerebrum.visualization.theme import VisualizationTheme, get_default_theme
+from codomyrmex.cerebrum.visualization.base import (
+    BaseChartVisualizer,
+)
+from codomyrmex.cerebrum.visualization.theme import (
+    VisualizationTheme,
+    get_default_theme,
+)
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Composition visualizations: graphical abstracts and multi-panel compositions.
 
@@ -79,9 +42,9 @@ class CompositionVisualizer:
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (20, 14),
+        figure_size: tuple[float, float] = (20, 14),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize composition visualizer.
 
@@ -100,8 +63,8 @@ class CompositionVisualizer:
 
     def create_analysis_overview_dashboard(
         self,
-        analysis_summary: Dict[str, Any],
-        output_path: Optional[Path] = None,
+        analysis_summary: dict[str, Any],
+        output_path: Path | None = None,
     ) -> Figure:
         """Create multi-panel dashboard summarizing all analyses.
 
@@ -235,9 +198,9 @@ class CompositionVisualizer:
 
     def create_pattern_landscape_map(
         self,
-        pattern_embeddings: Dict[str, Tuple[float, float]],
-        pattern_metadata: Optional[Dict[str, Dict[str, Any]]] = None,
-        output_path: Optional[Path] = None,
+        pattern_embeddings: dict[str, tuple[float, float]],
+        pattern_metadata: dict[str, dict[str, Any]] | None = None,
+        output_path: Path | None = None,
     ) -> Figure:
         """Create 2D embedding map of patterns with annotations.
 
@@ -325,8 +288,8 @@ class CompositionVisualizer:
 
     def create_cross_analysis_summary(
         self,
-        analysis_results: Dict[str, Dict[str, Any]],
-        output_path: Optional[Path] = None,
+        analysis_results: dict[str, dict[str, Any]],
+        output_path: Path | None = None,
     ) -> Figure:
         """Create side-by-side comparison panels for different analyses.
 

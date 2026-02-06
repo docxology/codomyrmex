@@ -1,14 +1,14 @@
 """Genome and Gene definitions."""
 
 import random
-from typing import List, Optional
+
 
 class Genome:
     """Represents an individual's genetic information."""
-    
-    def __init__(self, genes: List[float]):
+
+    def __init__(self, genes: list[float]):
         self.genes = genes
-        self.fitness: Optional[float] = None
+        self.fitness: float | None = None
 
     @classmethod
     def random(cls, length: int):

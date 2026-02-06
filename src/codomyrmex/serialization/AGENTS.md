@@ -1,31 +1,60 @@
-# Codomyrmex Agents — src/codomyrmex/serialization
+# Agent Guidelines - Serialization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Data serialization: JSON, YAML, msgpack, protobuf, and custom formats.
 
-Serialization module providing unified data serialization/deserialization with support for JSON, YAML, TOML, MessagePack, and other formats. Integrates with documents and config_management modules.
+## Key Classes
 
-## Active Components
+- **Serializer** — Multi-format serialization
+- **JSONSerializer** — JSON with custom encoders
+- **YAMLSerializer** — YAML with safe loading
+- **ProtobufSerializer** — Protocol Buffers
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `binary_formats.py` – Project file
-- `exceptions.py` – Project file
-- `serialization_manager.py` – Project file
-- `serializer.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use appropriate format** — JSON for APIs, msgpack for speed
+2. **Handle dates** — Use ISO format for datetime
+3. **Safe loading** — Use safe_load for YAML
+4. **Version schemas** — Include version in format
+5. **Validate on deserialize** — Check structure after load
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.serialization import (
+    Serializer, JSONSerializer, serialize, deserialize
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Auto-detect format
+data = {"name": "test", "count": 42}
+json_bytes = serialize(data, format="json")
+back = deserialize(json_bytes, format="json")
+
+# Custom serializer
+serializer = Serializer()
+serializer.register_encoder(datetime, lambda d: d.isoformat())
+output = serializer.dumps({"created": datetime.now()})
+
+# With validation
+from codomyrmex.serialization import deserialize_validated
+data = deserialize_validated(raw, schema=MySchema)
+```
+
+## Testing Patterns
+
+```python
+# Verify round-trip
+data = {"key": "value", "num": 123}
+encoded = serialize(data, format="json")
+decoded = deserialize(encoded, format="json")
+assert decoded == data
+
+# Verify format detection
+assert detect_format(b'{"a":1}') == "json"
+assert detect_format(b'a: 1') == "yaml"
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

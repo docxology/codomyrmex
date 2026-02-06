@@ -1,14 +1,13 @@
 """TCP and UDP socket implementation."""
 
-import socket
-from typing import Optional
 import logging
+import socket
 
 logger = logging.getLogger(__name__)
 
 class TCPClient:
     """Simple TCP client."""
-    
+
     def __init__(self, host: str, port: int):
         self.host = host
         self.port = port
@@ -16,7 +15,7 @@ class TCPClient:
 
     def connect(self) -> None:
         self.sock.connect((self.host, self.port))
-        
+
     def send(self, data: bytes) -> None:
         self.sock.sendall(data)
 
@@ -28,7 +27,7 @@ class TCPClient:
 
 class TCPServer:
     """Simple TCP server."""
-    
+
     def __init__(self, host: str, port: int):
         self.host = host
         self.port = port
@@ -49,7 +48,7 @@ class TCPServer:
 
 class UDPClient:
     """Simple UDP client."""
-    
+
     def __init__(self, host: str, port: int):
         self.host = host
         self.port = port
@@ -66,7 +65,7 @@ class UDPClient:
 
 class PortScanner:
     """Utility for scanning open ports on a host."""
-    
+
     @staticmethod
     def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
         """Check if a single port is open."""

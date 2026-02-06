@@ -1,9 +1,11 @@
 """Tests for the privacy module (crumbs + mixnet)."""
 
-import pytest
 from unittest.mock import patch
+
+import pytest
+
 from codomyrmex.privacy.crumbs import CrumbCleaner
-from codomyrmex.privacy.mixnet import Packet, MixNode, MixnetProxy
+from codomyrmex.privacy.mixnet import MixnetProxy, MixNode, Packet
 
 
 @pytest.mark.unit
@@ -148,3 +150,37 @@ class TestMixnetProxy:
         payload = b"data"
         result = proxy.route_payload(payload, hops=1)
         assert result == payload
+
+
+# Additional tests migrated from root /tests/unit/privacy/
+@pytest.mark.unit
+def test_crumb_cleaning_nested():
+    """Test nested dictionary scrubbing from root tests."""
+    cleaner = CrumbCleaner()
+    data = {
+        "valid": "data",
+        "timestamp": 12345,
+        "meta": {
+            "device_id": "xyz",
+            "nested": "keep"
+        }
+    }
+
+    clean = cleaner.scrub(data)
+    assert "valid" in clean
+    assert "timestamp" not in clean
+    assert "nested" in clean["meta"]
+    assert "device_id" not in clean["meta"]
+
+
+@pytest.mark.unit
+@patch("codomyrmex.privacy.mixnet.time.sleep")
+def test_mixnet_proxy_multiple_hops(mock_sleep):
+    """Test mixnet proxy with configurable hops."""
+    proxy = MixnetProxy()
+    payload = b"test"
+
+    # Should return same payload simulation
+    assert proxy.route_payload(payload, hops=1) == payload
+    assert proxy.route_payload(payload, hops=5) == payload
+

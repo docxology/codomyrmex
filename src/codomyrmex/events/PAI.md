@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Events Context
+# Personal AI Infrastructure — Events Module
 
-**Module**: events
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Event-driven architecture infrastructure for pub/sub messaging and event sourcing.
+The Events module provides PAI integration for event-driven architectures.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Event Publishing
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Publish events:
 
-## Key Files
+```python
+from codomyrmex.events import EventBus, Event
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+class UserCreated(Event):
+    user_id: str
 
-## Future Considerations
+bus = EventBus()
+await bus.publish(UserCreated(user_id="123"))
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Event Handling
+
+Handle events:
+
+```python
+from codomyrmex.events import event_handler
+
+@event_handler(UserCreated)
+async def on_user_created(event):
+    print(f"User {event.user_id} created")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `EventBus` | Publish events |
+| `event_handler` | Handle events |
+| `EventStore` | Persist events |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

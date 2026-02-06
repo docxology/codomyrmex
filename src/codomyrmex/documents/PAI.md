@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Documents Context
+# Personal AI Infrastructure — Documents Module
 
-**Module**: documents
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Document processing infrastructure for parsing, transformation, and indexing across multiple formats.
+The Documents module provides PAI integration for document parsing and processing.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Document Parsing
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Parse documents:
 
-## Key Files
+```python
+from codomyrmex.documents import DocumentParser
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+parser = DocumentParser()
+doc = parser.parse("report.pdf")
 
-## Future Considerations
+print(f"Pages: {doc.page_count}")
+print(doc.text[:500])
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Text Chunking
+
+Chunk for RAG:
+
+```python
+from codomyrmex.documents import TextChunker
+
+chunker = TextChunker(chunk_size=500)
+chunks = chunker.chunk(doc.text)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `DocumentParser` | Parse documents |
+| `TextChunker` | Chunk for RAG |
+| `Metadata` | Extract metadata |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

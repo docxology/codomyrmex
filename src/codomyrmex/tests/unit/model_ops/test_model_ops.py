@@ -1,7 +1,9 @@
 """Unit tests for model_ops module."""
 
 import pytest
-from codomyrmex.model_ops import Dataset, FineTuningJob, DatasetSanitizer, Evaluator
+
+from codomyrmex.model_ops import Dataset, DatasetSanitizer, Evaluator, FineTuningJob
+
 
 @pytest.mark.unit
 def test_dataset_validation():

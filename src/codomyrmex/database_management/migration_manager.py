@@ -6,17 +6,15 @@ and migration execution capabilities with support for SQLite, PostgreSQL,
 and MySQL databases.
 """
 
+import hashlib
+import json
+import re
+import sqlite3
+import time
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, Union
-import json
-import os
-import re
-import time
-
-from dataclasses import dataclass, field
-import hashlib
-import sqlite3
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -47,10 +45,10 @@ class Migration:
     name: str
     description: str
     sql: str
-    rollback_sql: Optional[str] = None
+    rollback_sql: str | None = None
     dependencies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
-    applied_at: Optional[datetime] = None
+    applied_at: datetime | None = None
     status: str = "pending"  # "pending", "applied", "failed", "rolled_back"
     checksum: str = ""
 
@@ -66,7 +64,7 @@ class MigrationResult:
     migration_id: str
     success: bool
     execution_time: float
-    error_message: Optional[str] = None
+    error_message: str | None = None
     rows_affected: int = 0
     statements_executed: int = 0
 
@@ -167,7 +165,7 @@ class DatabaseConnector:
             self._connection = None
             logger.info("Database connection closed")
 
-    def execute(self, sql: str, params: Optional[tuple] = None) -> tuple[int, Any]:
+    def execute(self, sql: str, params: tuple | None = None) -> tuple[int, Any]:
         """Execute SQL statement.
 
         Args:
@@ -271,8 +269,8 @@ class MigrationManager:
 
     def __init__(
         self,
-        workspace_dir: Optional[str] = None,
-        database_url: Optional[str] = None
+        workspace_dir: str | None = None,
+        database_url: str | None = None
     ):
         """Initialize migration manager.
 
@@ -288,7 +286,7 @@ class MigrationManager:
         self._migrations: dict[str, Migration] = {}
         self._applied_migrations: dict[str, MigrationResult] = {}
         self._database_url = database_url
-        self._connector: Optional[DatabaseConnector] = None
+        self._connector: DatabaseConnector | None = None
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
@@ -324,7 +322,7 @@ class MigrationManager:
 
         for migration_file in sorted(self.migrations_dir.glob("*.json")):
             try:
-                with open(migration_file, 'r') as f:
+                with open(migration_file) as f:
                     data = json.load(f)
 
                 migration = Migration(
@@ -351,8 +349,8 @@ class MigrationManager:
         name: str,
         description: str,
         sql: str,
-        rollback_sql: Optional[str] = None,
-        dependencies: Optional[list[str]] = None
+        rollback_sql: str | None = None,
+        dependencies: list[str] | None = None
     ) -> Migration:
         """Create a new migration.
 
@@ -591,7 +589,7 @@ class MigrationManager:
                 "error_message": result.error_message
             }, f, indent=2)
 
-    def get_migration_status(self, migration_id: str) -> Optional[dict[str, Any]]:
+    def get_migration_status(self, migration_id: str) -> dict[str, Any] | None:
         """Get status of a migration."""
         if migration_id not in self._migrations:
             return None

@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Security Context
+# Personal AI Infrastructure — Security Module
 
-**Module**: security
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Comprehensive security framework spanning digital, physical, and cognitive security domains for holistic protection.
+The Security module provides PAI integration for secure AI operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Input Sanitization
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Sanitize AI inputs:
 
-## Key Files
+```python
+from codomyrmex.security import InputSanitizer
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+sanitizer = InputSanitizer()
+safe_input = sanitizer.sanitize(user_input)
+```
 
-## Future Considerations
+### Output Filtering
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Filter AI outputs:
+
+```python
+from codomyrmex.security import OutputFilter
+
+filter = OutputFilter()
+filter.add_rule("no_secrets", r"sk-[a-zA-Z0-9]+")
+
+safe_output = filter.apply(ai_response)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `InputSanitizer` | Clean inputs |
+| `OutputFilter` | Filter outputs |
+| `PolicyEnforcer` | Enforce policies |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

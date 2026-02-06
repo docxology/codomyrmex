@@ -1,14 +1,9 @@
-from typing import Optional
 import os
 import subprocess
-import sys
 import time
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
-
-
-
 
 #!/usr/bin/env python3
 
@@ -233,7 +228,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error switching branch: {e}")
         return False
 
-def get_current_branch(repository_path: str = None) -> Optional[str]:
+def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -290,10 +285,10 @@ def commit_changes(
     author_email: str = None,
     stage_all: bool = True,
     file_paths: list[str] = None,
-) -> Optional[str]:
+) -> str | None:
     """
     Commit staged changes with the given message.
-    
+
     Args:
         message: Commit message
         repository_path: Path to repository (defaults to current directory)
@@ -301,7 +296,7 @@ def commit_changes(
         author_email: Override Git config for author email
         stage_all: If True, stages all tracked, modified files before committing (default: True)
         file_paths: Optional list of specific files to stage and commit (if provided, stage_all is ignored)
-    
+
     Returns:
         SHA of the new commit on success, None on failure
     """
@@ -330,7 +325,7 @@ def commit_changes(
 
         # Build commit command
         cmd = ["git", "commit"]
-        
+
         # Add author override if provided
         if author_name and author_email:
             cmd.extend(["--author", f"{author_name} <{author_email}>"])
@@ -359,7 +354,7 @@ def commit_changes(
             )
             name = name_result.stdout.strip() if name_result.returncode == 0 else "Unknown"
             cmd.extend(["--author", f"{name} <{author_email}>"])
-        
+
         # Add commit message
         cmd.extend(["-m", message])
 
@@ -380,7 +375,7 @@ def commit_changes(
             text=True,
             check=True,
         )
-        
+
         commit_sha = sha_result.stdout.strip()
         logger.info(f"Changes committed successfully: {commit_sha[:8]}")
         return commit_sha
@@ -987,12 +982,12 @@ def clean_repository(force: bool = False, directories: bool = False, repository_
             cmd.append("-x") # Remove ignored files too if force is very true, typically just -f is enough for tracked, but here force param usually implies -f. Actually git clean requires -f.
             # Let's interpret 'force' as -x (ignored files) and always use -f.
             pass
-        
+
         # Actually, standard git clean usage:
         # -f is required via configuration or flag.
         # -d for directories.
         # -x for ignored files.
-        
+
         base_cmd = ["git", "clean", "-f"] # Force is required by default in most extensive configs
         if directories:
             base_cmd.append("-d")
@@ -1075,11 +1070,11 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
             text=True,
             check=True,
         )
-        
+
         parts = result.stdout.strip().split("|", 5)
         if len(parts) < 6:
             return {}
-            
+
         return {
             "hash": parts[0],
             "author": parts[1],
@@ -1094,7 +1089,7 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
 
 # --- Configuration Management ---
 
-def get_config(key: str, repository_path: str = None) -> Optional[str]:
+def get_config(key: str, repository_path: str = None) -> str | None:
     """Get a git configuration value."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -1153,7 +1148,7 @@ def cherry_pick(commit_sha: str, repository_path: str = None) -> bool:
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to cherry-pick {commit_sha}: {e}")
-        # Abort cherry-pick if failed to avoid leaving repo in bad state? 
+        # Abort cherry-pick if failed to avoid leaving repo in bad state?
         # Or let user handle conflict? Simple wrapper implies return False.
         try:
              subprocess.run(["git", "cherry-pick", "--abort"], cwd=repository_path, capture_output=True)
@@ -1346,7 +1341,7 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
                     name = parts[0]
                     url = parts[1]
                     fetch_or_push = parts[2] if len(parts) > 2 else "fetch"
-                    
+
                     if name not in seen_remotes:
                         remotes.append({
                             "name": name,
@@ -1371,7 +1366,7 @@ def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
         logger.error(f"Unexpected error listing remotes: {e}")
         return []
 
-def get_config(key: str, repository_path: str = None, global_config: bool = False) -> Optional[str]:
+def get_config(key: str, repository_path: str = None, global_config: bool = False) -> str | None:
     """Get a Git configuration value."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -1479,7 +1474,7 @@ def amend_commit(
     author_name: str = None,
     author_email: str = None,
     no_edit: bool = False,
-) -> Optional[str]:
+) -> str | None:
     """Amend the last commit."""
     if repository_path is None:
         repository_path = os.getcwd()
@@ -1488,7 +1483,7 @@ def amend_commit(
         logger.info("Amending last commit")
 
         cmd = ["git", "commit", "--amend"]
-        
+
         if no_edit:
             if message:
                 cmd.extend(["-m", message])
@@ -1542,7 +1537,7 @@ def amend_commit(
             text=True,
             check=True,
         )
-        
+
         commit_sha = sha_result.stdout.strip()
         logger.info(f"Successfully amended commit: {commit_sha[:8]}")
         return commit_sha
@@ -1607,7 +1602,7 @@ def get_commit_history_filtered(
 ) -> list[dict[str, str]]:
     """
     Get commit history with filters.
-    
+
     Args:
         limit: Maximum number of commits to return
         repository_path: Path to repository
@@ -1616,7 +1611,7 @@ def get_commit_history_filtered(
         author: Filter by author name or email
         branch: Branch to show commits from
         file_path: Show only commits affecting this file
-    
+
     Returns:
         List of commit dictionaries
     """
@@ -1634,7 +1629,7 @@ def get_commit_history_filtered(
             str(limit),
             "--pretty=format:%H|%an|%ae|%ad|%s",
         ]
-        
+
         if since:
             cmd.extend(["--since", since])
         if until:

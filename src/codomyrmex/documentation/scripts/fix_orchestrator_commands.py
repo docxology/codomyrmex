@@ -1,29 +1,8 @@
-from pathlib import Path
-from typing import List, Set
 import argparse
 import re
-import subprocess
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Add orchestrator commands to AGENTS.md Active Components sections.
@@ -44,7 +23,7 @@ class OrchestratorCommandFixer:
         self.repo_root = repo_root
         self.fixed_count = 0
 
-    def extract_commands_from_orchestrator(self, script_path: Path) -> List[str]:
+    def extract_commands_from_orchestrator(self, script_path: Path) -> list[str]:
         """Extract CLI commands from an orchestrator script."""
         if not script_path.exists():
             return []

@@ -6,32 +6,32 @@ Provides ML model operations including:
 - Model evaluation and metrics
 """
 
-from typing import Any, Callable, Dict, List, Optional
 import json
 import uuid
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
+
+# Submodule exports
+from . import evaluation, training
 
 # Import evaluation components
 from .evaluation import (
-    TaskType,
-    EvaluationResult,
-    Metric,
     AccuracyMetric,
-    PrecisionMetric,
-    RecallMetric,
-    F1Metric,
-    ConfusionMatrix,
-    MSEMetric,
-    MAEMetric,
-    RMSEMetric,
-    R2Metric,
     AUCROCMetric,
+    ConfusionMatrix,
+    EvaluationResult,
+    F1Metric,
+    MAEMetric,
+    Metric,
     ModelEvaluator,
+    MSEMetric,
+    PrecisionMetric,
+    R2Metric,
+    RecallMetric,
+    RMSEMetric,
+    TaskType,
     create_evaluator,
 )
-
-# Submodule exports
-from . import evaluation
-from . import training
 
 # Try optional submodules
 try:
@@ -48,20 +48,20 @@ except ImportError:
 class Dataset:
     """
     A dataset for ML model operations.
-    
+
     Manages collections of training/evaluation data with validation
     and I/O capabilities.
     """
-    
-    def __init__(self, data: List[Dict[str, Any]] = None):
+
+    def __init__(self, data: list[dict[str, Any]] = None):
         """
         Initialize a dataset.
-        
+
         Args:
             data: List of data examples (dictionaries)
         """
         self.data = data or []
-    
+
     def validate(self) -> bool:
         """
         Validate the dataset.
@@ -79,36 +79,36 @@ class Dataset:
             if not (has_prompt_completion or has_messages):
                 return False
         return True
-    
+
     def to_jsonl(self, path: str) -> None:
         """
         Export dataset to JSONL file.
-        
+
         Args:
             path: Output file path
         """
         with open(path, "w") as f:
             for example in self.data:
                 f.write(json.dumps(example) + "\n")
-    
+
     @classmethod
     def from_file(cls, path: str) -> 'Dataset':
         """
         Load dataset from JSONL file.
-        
+
         Args:
             path: Input file path
-            
+
         Returns:
             New Dataset instance
         """
         data = []
-        with open(path, "r") as f:
+        with open(path) as f:
             for line in f:
                 if line.strip():
                     data.append(json.loads(line))
         return cls(data=data)
-    
+
     def __len__(self) -> int:
         return len(self.data)
 
@@ -117,7 +117,7 @@ class DatasetSanitizer:
     """
     Utilities for cleaning and filtering datasets.
     """
-    
+
     @staticmethod
     def filter_by_length(
         dataset: Dataset,
@@ -126,12 +126,12 @@ class DatasetSanitizer:
     ) -> Dataset:
         """
         Filter examples by content length.
-        
+
         Args:
             dataset: Input dataset
             min_length: Minimum total content length
             max_length: Maximum total content length
-            
+
         Returns:
             Filtered dataset
         """
@@ -141,16 +141,16 @@ class DatasetSanitizer:
             if min_length <= len(content) <= max_length:
                 filtered.append(example)
         return Dataset(data=filtered)
-    
+
     @staticmethod
-    def strip_keys(dataset: Dataset, keys: List[str]) -> Dataset:
+    def strip_keys(dataset: Dataset, keys: list[str]) -> Dataset:
         """
         Remove specified keys from all examples.
-        
+
         Args:
             dataset: Input dataset
             keys: Keys to remove
-            
+
         Returns:
             Dataset with keys stripped
         """
@@ -164,10 +164,10 @@ class DatasetSanitizer:
 class FineTuningJob:
     """
     Fine-tuning job management.
-    
+
     Simulates fine-tuning operations for ML models.
     """
-    
+
     def __init__(
         self,
         base_model: str = "gpt-3.5-turbo",
@@ -175,16 +175,16 @@ class FineTuningJob:
     ):
         """
         Initialize a fine-tuning job.
-        
+
         Args:
             base_model: Base model identifier
             dataset: Training dataset
         """
         self.base_model = base_model
         self.dataset = dataset
-        self.job_id: Optional[str] = None
+        self.job_id: str | None = None
         self.status: str = "pending"
-    
+
     def run(self) -> str:
         """
         Start the fine-tuning job.
@@ -212,28 +212,28 @@ class Evaluator:
     """
     Model output evaluator with customizable metrics.
     """
-    
-    def __init__(self, metrics: Dict[str, Callable] = None):
+
+    def __init__(self, metrics: dict[str, Callable] = None):
         """
         Initialize evaluator.
-        
+
         Args:
             metrics: Dictionary of metric name to metric function
         """
         self.metrics = metrics or {}
-    
+
     def evaluate(
         self,
-        predictions: List[str],
-        references: List[str],
-    ) -> Dict[str, float]:
+        predictions: list[str],
+        references: list[str],
+    ) -> dict[str, float]:
         """
         Evaluate predictions against references.
-        
+
         Args:
             predictions: Model predictions
             references: Ground truth references
-            
+
         Returns:
             Dictionary of metric scores
         """
@@ -247,7 +247,7 @@ class Evaluator:
 
 
 # Convenience metric functions
-def exact_match_metric(predictions: List[str], references: List[str]) -> float:
+def exact_match_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate exact match ratio (strips whitespace before comparison)."""
     if not predictions:
         return 0.0
@@ -255,18 +255,18 @@ def exact_match_metric(predictions: List[str], references: List[str]) -> float:
     return matches / len(predictions)
 
 
-def length_ratio_metric(predictions: List[str], references: List[str]) -> float:
+def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
     """Calculate average length ratio."""
     if not predictions:
         return 0.0
-    
+
     ratios = []
     for p, r in zip(predictions, references):
         if len(r) > 0:
             ratios.append(len(p) / len(r))
         else:
             ratios.append(1.0 if len(p) == 0 else 0.0)
-    
+
     return sum(ratios) / len(ratios)
 
 

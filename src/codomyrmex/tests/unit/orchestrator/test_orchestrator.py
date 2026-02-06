@@ -15,32 +15,10 @@ This module provides extensive test coverage for:
 
 import asyncio
 import time
-from typing import Any, Dict, List
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from codomyrmex.orchestrator.workflow import (
-    CycleError,
-    RetryPolicy,
-    Task,
-    TaskResult,
-    TaskStatus,
-    Workflow,
-    WorkflowError,
-    chain,
-    fan_out_fan_in,
-    parallel,
-)
-from codomyrmex.orchestrator.thin import (
-    Steps,
-    StepResult,
-    condition,
-    retry,
-    shell,
-    timeout,
-    workflow,
-)
 from codomyrmex.orchestrator.integration import (
     AgentOrchestrator,
     CICDBridge,
@@ -51,7 +29,25 @@ from codomyrmex.orchestrator.integration import (
     run_agent_task,
     run_ci_stage,
 )
-
+from codomyrmex.orchestrator.thin import (
+    StepResult,
+    Steps,
+    condition,
+    retry,
+    shell,
+    timeout,
+)
+from codomyrmex.orchestrator.workflow import (
+    CycleError,
+    RetryPolicy,
+    TaskResult,
+    TaskStatus,
+    Workflow,
+    WorkflowError,
+    chain,
+    fan_out_fan_in,
+    parallel,
+)
 
 # Mark all tests as orchestrator tests
 pytestmark = [pytest.mark.orchestrator]

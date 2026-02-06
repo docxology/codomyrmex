@@ -4,19 +4,19 @@ This module provides comprehensive build orchestration, dependency management,
 artifact synthesis, and deployment automation capabilities.
 """
 
-from datetime import datetime
-from typing import Any, Optional
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
-import time
-import shlex
 import tarfile
-
+import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any
+
 import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -92,14 +92,14 @@ class BuildStep:
     """Individual build step definition."""
     name: str
     command: str
-    working_dir: Optional[str] = None
+    working_dir: str | None = None
     environment: dict[str, str] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)
     timeout: int = 300  # seconds
     retry_count: int = 0
     required: bool = True
     parallel: bool = False
-    condition: Optional[str] = None  # Command to check if step should run
+    condition: str | None = None  # Command to check if step should run
 
 
 @dataclass
@@ -121,8 +121,8 @@ class BuildResult:
     target_name: str
     status: BuildStatus
     start_time: datetime
-    end_time: Optional[datetime] = None
-    duration: Optional[float] = None
+    end_time: datetime | None = None
+    duration: float | None = None
     output: str = ""
     error: str = ""
     artifacts: list[str] = field(default_factory=list)
@@ -136,8 +136,8 @@ class Dependency:
     version: str
     dep_type: DependencyType
     source: str = "pypi"  # pypi, npm, git, local, etc.
-    install_command: Optional[str] = None
-    check_command: Optional[str] = None
+    install_command: str | None = None
+    check_command: str | None = None
 
 
 class BuildManager:

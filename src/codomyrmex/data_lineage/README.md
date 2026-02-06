@@ -1,43 +1,56 @@
-# data_lineage
+# Data Lineage Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Data provenance and lineage tracking for datasets, transformations, and models.
 
-Data provenance and lineage tracking through a directed graph model. Tracks how datasets flow through transformations and into models, enabling upstream/downstream traversal, path finding between nodes, and change impact analysis. Useful for understanding data dependencies and assessing the blast radius of data changes.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.data_lineage import (
+    LineageGraph, LineageTracker, LineageNode, LineageEdge,
+    NodeType, EdgeType, ImpactAnalyzer
+)
 
-### Enums
+# Build lineage graph
+tracker = LineageTracker()
 
-- **`NodeType`** -- Types of lineage nodes: DATASET, TRANSFORMATION, MODEL, ARTIFACT, EXTERNAL
-- **`EdgeType`** -- Types of lineage edges: DERIVED_FROM, PRODUCED_BY, USED_BY, INPUT_TO
+# Register datasets
+tracker.register_dataset("raw_data", "Raw Customer Data", "/data/raw")
+tracker.register_dataset("clean_data", "Cleaned Data", "/data/clean")
 
-### Data Classes
+# Register transformation
+tracker.register_transformation(
+    id="etl_clean",
+    name="Data Cleaning ETL",
+    inputs=["raw_data"],
+    outputs=["clean_data"]
+)
 
-- **`LineageNode`** -- A node in the lineage graph with ID, name, type, version, and metadata; provides a unique `key` property and `to_dict()` serialization
-- **`LineageEdge`** -- A directed edge connecting two nodes with source/target IDs, edge type, and metadata
-- **`DataAsset`** -- A data asset with location, schema, row count, size, and checksum; includes `compute_checksum()` for SHA-256 hashing of raw data
+# Query lineage
+upstream = tracker.graph.get_upstream("clean_data")
+print(f"Sources: {[n.name for n in upstream]}")
 
-### Services
+# Impact analysis
+analyzer = ImpactAnalyzer(tracker.graph)
+impact = analyzer.analyze_change("raw_data")
+print(f"Risk level: {impact['risk_level']}")
+print(f"Affected: {impact['total_affected']} nodes")
+```
 
-- **`LineageGraph`** -- Thread-safe directed graph for lineage relationships; supports adding/querying nodes and edges, depth-limited upstream and downstream traversal via DFS, path finding between nodes, and full graph serialization
-- **`LineageTracker`** -- High-level lineage tracking; registers datasets and transformations with explicit input/output relationships, and queries for data origins and downstream impact
-- **`ImpactAnalyzer`** -- Analyzes the impact of changing a node; returns affected datasets, models, and transformations with a risk level classification (low/medium/high)
+## Exports
 
-## Directory Contents
-
-- `__init__.py` -- Module implementation with graph model, tracker, and impact analyzer
-- `README.md` -- This file
-- `AGENTS.md` -- Agent integration documentation
-- `API_SPECIFICATION.md` -- Programmatic API specification
-- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
-- `PAI.md` -- PAI integration notes
-- `SPEC.md` -- Module specification
-- `py.typed` -- PEP 561 type stub marker
+| Class | Description |
+|-------|-------------|
+| `LineageGraph` | Graph of nodes and edges |
+| `LineageTracker` | Track datasets and transformations |
+| `LineageNode` | Node with id, type, version |
+| `LineageEdge` | Edge with source, target, type |
+| `DataAsset` | Data asset with schema and checksum |
+| `ImpactAnalyzer` | Analyze change impact |
+| `NodeType` | Enum: dataset, transformation, model, artifact |
+| `EdgeType` | Enum: derived_from, produced_by, used_by, input_to |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/data_lineage/](../../../docs/modules/data_lineage/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

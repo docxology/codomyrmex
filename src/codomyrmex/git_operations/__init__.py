@@ -11,63 +11,6 @@ Integration:
 
 from codomyrmex.exceptions import CodomyrmexError
 
-# Core Git Operations
-from .core.git import (
-    # File operations
-    add_files,
-    amend_commit,
-    apply_stash,
-    # Core operations
-    check_git_availability,
-    clone_repository,
-    commit_changes,
-    # Branch operations
-    create_branch,
-    # Tag operations
-    create_tag,
-    # History & information
-    get_commit_history,
-    get_current_branch,
-    get_diff,
-    get_status,
-    initialize_git_repository,
-    is_git_repository,
-    list_stashes,
-    list_tags,
-    merge_branch,
-    pull_changes,
-    # Remote operations
-    add_remote,
-    fetch_changes,
-    list_remotes,
-    push_changes,
-    remove_remote,
-    rebase_branch,
-    reset_changes,
-    # Stash operations
-    stash_changes,
-    switch_branch,
-    # Config operations
-    get_config,
-    set_config,
-    # Advanced operations
-    cherry_pick,
-)
-
-# Repository Management
-from .core.repository import (
-    RepositoryManager,
-    RepositoryType,
-    Repository,
-)
-
-# Metadata Management
-from .core.metadata import (
-    RepositoryMetadataManager,
-    RepositoryMetadata,
-    CloneStatus,
-)
-
 # GitHub API Operations
 from .api.github import (
     GitHubAPIError,
@@ -78,6 +21,63 @@ from .api.github import (
     get_pull_request,
     get_pull_requests,
     get_repository_info,
+)
+
+# Core Git Operations
+from .core.git import (
+    # File operations
+    add_files,
+    # Remote operations
+    add_remote,
+    amend_commit,
+    apply_stash,
+    # Core operations
+    check_git_availability,
+    # Advanced operations
+    cherry_pick,
+    clone_repository,
+    commit_changes,
+    # Branch operations
+    create_branch,
+    # Tag operations
+    create_tag,
+    fetch_changes,
+    # History & information
+    get_commit_history,
+    # Config operations
+    get_config,
+    get_current_branch,
+    get_diff,
+    get_status,
+    initialize_git_repository,
+    is_git_repository,
+    list_remotes,
+    list_stashes,
+    list_tags,
+    merge_branch,
+    pull_changes,
+    push_changes,
+    rebase_branch,
+    remove_remote,
+    reset_changes,
+    set_config,
+    # Stash operations
+    stash_changes,
+    switch_branch,
+)
+
+# Metadata Management
+from .core.metadata import (
+    CloneStatus,
+    RepositoryMetadata,
+    RepositoryMetadataManager,
+)
+
+# Repository Management
+from .core.repository import (
+    Repository,
+    RepositoryManager,
+    RepositoryType,
 )
 
 # Visualization Integration

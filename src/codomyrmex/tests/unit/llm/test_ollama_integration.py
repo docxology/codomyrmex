@@ -9,23 +9,23 @@ Tests all aspects of the Ollama integration including:
 - Integration with Codomyrmex modules
 - Real execution tests (no mocks)
 """
+import json
+import shutil
+import time
+import unittest
+from pathlib import Path
+
 import pytest
 
-import unittest
-import time
-import json
-import tempfile
-import shutil
-from pathlib import Path
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 # Import Ollama integration
 try:
     from codomyrmex.llm.ollama import (
-        OllamaManager,
+        ConfigManager,
         ModelRunner,
+        OllamaManager,
         OutputManager,
-        ConfigManager
     )
     from codomyrmex.llm.ollama.model_runner import ExecutionOptions
     OLLAMA_AVAILABLE = True
@@ -277,7 +277,7 @@ class TestOllamaIntegration(unittest.TestCase):
         self.assertTrue(output_file.is_file())
 
         # Validate file contents
-        with open(output_file, 'r', encoding='utf-8') as f:
+        with open(output_file, encoding='utf-8') as f:
             content = f.read()
 
         self.assertIn(self.test_model, content)
@@ -459,7 +459,7 @@ class TestOllamaIntegration(unittest.TestCase):
         self.assertTrue(Path(export_path).exists())
 
         # Verify export file structure
-        with open(export_path, 'r', encoding='utf-8') as f:
+        with open(export_path, encoding='utf-8') as f:
             export_data = json.load(f)
 
         self.assertIn('export_timestamp', export_data)
@@ -642,7 +642,7 @@ class TestOllamaIntegrationRealExecution(unittest.TestCase):
         output_file = max(output_files, key=lambda f: f.stat().st_mtime)
 
         # Verify file contents
-        with open(output_file, 'r', encoding='utf-8') as f:
+        with open(output_file, encoding='utf-8') as f:
             content = f.read()
 
         self.assertIn(self.test_model, content)

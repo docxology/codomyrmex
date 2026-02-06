@@ -4,26 +4,25 @@ This module tests all exception classes and utility functions defined in
 the exceptions module to ensure proper error handling throughout the package.
 """
 
-import pytest
 from pathlib import Path
-from typing import Any, Dict
+
+import pytest
 
 from codomyrmex.exceptions import (
+    AIProviderError,
+    CodeExecutionError,
     CodomyrmexError,
     ConfigurationError,
-    EnvironmentError,
     DependencyError,
+    EnvironmentError,
     FileOperationError,
-    AIProviderError,
-    CodeGenerationError,
-    CodeExecutionError,
-    StaticAnalysisError,
     GitOperationError,
-    VisualizationError,
     OrchestrationError,
+    StaticAnalysisError,
     TimeoutError,
-    format_exception_chain,
+    VisualizationError,
     create_error_context,
+    format_exception_chain,
 )
 
 
@@ -42,7 +41,7 @@ class TestCodomyrmexError:
         """Test creating an error with context."""
         context = {"user": "test_user", "operation": "test_op"}
         error = CodomyrmexError("Test error", context=context)
-        
+
         assert error.context == context
         assert "user=test_user" in str(error)
         assert "operation=test_op" in str(error)
@@ -57,7 +56,7 @@ class TestCodomyrmexError:
         """Test converting error to dictionary."""
         context = {"key": "value"}
         error = CodomyrmexError("Test error", context=context, error_code="TEST_001")
-        
+
         error_dict = error.to_dict()
         expected = {
             "error_type": "CodomyrmexError",
@@ -81,7 +80,7 @@ class TestSpecializedErrors:
         """Test FileOperationError with file path context."""
         file_path = Path("/test/file.txt")
         error = FileOperationError("File not found", file_path=file_path)
-        
+
         assert error.context["file_path"] == str(file_path)
         assert "file_path=/test/file.txt" in str(error)
 
@@ -98,7 +97,7 @@ class TestSpecializedErrors:
             stdout="Output message",
             stderr="Error message"
         )
-        
+
         assert error.context["exit_code"] == 1
         assert error.context["stdout"] == "Output message"
         assert error.context["stderr"] == "Error message"
@@ -119,7 +118,7 @@ class TestSpecializedErrors:
             git_command="git pull",
             repository_path=repo_path
         )
-        
+
         assert error.context["git_command"] == "git pull"
         assert error.context["repository_path"] == str(repo_path)
 
@@ -216,7 +215,7 @@ class TestUtilityFunctions:
         cause = CodomyrmexError("Root cause")
         error = ConfigurationError("Config problem")
         error.__cause__ = cause
-        
+
         formatted = format_exception_chain(error)
         lines = formatted.split('\n')
         assert len(lines) == 2
@@ -228,7 +227,7 @@ class TestUtilityFunctions:
         context_error = ValueError("Context error")
         error = CodomyrmexError("Main error")
         error.__context__ = context_error
-        
+
         formatted = format_exception_chain(error)
         lines = formatted.split('\n')
         assert len(lines) == 2
@@ -247,7 +246,7 @@ class TestErrorSerialization:
             context=context,
             error_code="SYNTAX_001"
         )
-        
+
         serialized = error.to_dict()
         assert isinstance(serialized, dict)
         assert serialized["error_type"] == "StaticAnalysisError"
@@ -259,7 +258,7 @@ class TestErrorSerialization:
         """Test that error context can be updated after creation."""
         error = CodomyrmexError("Test error")
         assert error.context == {}
-        
+
         error.context["new_key"] = "new_value"
         assert error.context["new_key"] == "new_value"
         assert "new_key=new_value" in str(error)
@@ -272,14 +271,14 @@ class TestErrorUsagePatterns:
         """Test raising and catching CodomyrmexError."""
         with pytest.raises(CodomyrmexError) as exc_info:
             raise CodomyrmexError("Test error")
-        
+
         assert exc_info.value.message == "Test error"
 
     def test_raise_and_catch_specialized_error(self):
         """Test raising and catching specialized errors."""
         with pytest.raises(FileOperationError) as exc_info:
             raise FileOperationError("File error", file_path="/test/file.txt")
-        
+
         error = exc_info.value
         assert isinstance(error, CodomyrmexError)
         assert isinstance(error, FileOperationError)
@@ -293,13 +292,13 @@ class TestErrorUsagePatterns:
     def test_error_with_exception_chaining(self):
         """Test error chaining with raise ... from ..."""
         original_error = ValueError("Original error")
-        
+
         with pytest.raises(CodomyrmexError) as exc_info:
             try:
                 raise original_error
             except ValueError as e:
                 raise CodomyrmexError("Wrapped error") from e
-        
+
         error = exc_info.value
         assert error.__cause__ is original_error
 
@@ -311,7 +310,7 @@ class TestErrorContextManagement:
         """Test context handling with pathlib Path objects."""
         path = Path("/test/directory/file.txt")
         error = FileOperationError("Path error", file_path=path)
-        
+
         # Should be converted to string
         assert error.context["file_path"] == str(path)
         assert isinstance(error.context["file_path"], str)
@@ -320,7 +319,7 @@ class TestErrorContextManagement:
         """Test context handling with string paths."""
         path = "/test/directory/file.txt"
         error = FileOperationError("Path error", file_path=path)
-        
+
         assert error.context["file_path"] == path
 
     def test_empty_context_string_representation(self):
@@ -338,7 +337,7 @@ class TestErrorContextManagement:
             "retry_count": 3
         }
         error = CodomyrmexError("Complex error", context=context)
-        
+
         error_str = str(error)
         assert "[CodomyrmexError] Complex error" in error_str
         assert "(Context:" in error_str
@@ -353,10 +352,10 @@ class TestErrorIntegration:
     def test_error_logging_compatibility(self):
         """Test that errors work well with logging systems."""
         import logging
-        
+
         logger = logging.getLogger("test")
         error = CodomyrmexError("Log test error", context={"module": "test"})
-        
+
         # Should not raise when logging
         logger.error(str(error))
         logger.exception(error)
@@ -364,17 +363,17 @@ class TestErrorIntegration:
     def test_error_json_serialization(self):
         """Test that error dictionaries can be JSON serialized."""
         import json
-        
+
         error = ConfigurationError(
             "JSON test error",
             context={"config_file": "test.yaml", "line": 10},
             error_code="CONFIG_001"
         )
-        
+
         error_dict = error.to_dict()
         json_str = json.dumps(error_dict)
         parsed = json.loads(json_str)
-        
+
         assert parsed == error_dict
 
     def test_error_message_formatting(self):
@@ -384,7 +383,7 @@ class TestErrorIntegration:
             git_command="git push origin main",
             repository_path="/project/repo"
         )
-        
+
         formatted = format_exception_chain(error)
         assert "Failed to push changes" in formatted
         assert "git_command=git push origin main" in formatted

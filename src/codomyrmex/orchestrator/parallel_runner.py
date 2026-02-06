@@ -12,12 +12,11 @@ This module enables:
 import asyncio
 import concurrent.futures
 import os
-import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -35,14 +34,14 @@ class ExecutionResult:
     timeout: int = 0
     skipped: int = 0
     execution_time: float = 0.0
-    results: List[Dict[str, Any]] = field(default_factory=list)
+    results: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def success(self) -> bool:
         """Check if all scripts passed."""
         return self.failed == 0 and self.timeout == 0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "total": self.total,
@@ -55,7 +54,7 @@ class ExecutionResult:
         }
 
 
-ProgressCallback = Callable[[str, str, Dict[str, Any]], None]
+ProgressCallback = Callable[[str, str, dict[str, Any]], None]
 
 
 class ParallelRunner:
@@ -63,8 +62,8 @@ class ParallelRunner:
 
     def __init__(
         self,
-        max_workers: Optional[int] = None,
-        progress_callback: Optional[ProgressCallback] = None,
+        max_workers: int | None = None,
+        progress_callback: ProgressCallback | None = None,
         default_timeout: int = 60,
         fail_fast: bool = False
     ):
@@ -81,9 +80,9 @@ class ParallelRunner:
         self.default_timeout = default_timeout
         self.fail_fast = fail_fast
         self._cancelled = False
-        self._executor: Optional[concurrent.futures.ProcessPoolExecutor] = None
+        self._executor: concurrent.futures.ProcessPoolExecutor | None = None
 
-    def _emit_progress(self, script: str, status: str, details: Dict[str, Any] = None):
+    def _emit_progress(self, script: str, status: str, details: dict[str, Any] = None):
         """Emit progress update."""
         if self.progress_callback:
             try:
@@ -93,11 +92,11 @@ class ParallelRunner:
 
     def run_scripts(
         self,
-        scripts: List[Path],
-        timeout: Optional[int] = None,
-        cwd: Optional[Path] = None,
-        env: Optional[Dict[str, str]] = None,
-        configs: Optional[Dict[str, Dict[str, Any]]] = None
+        scripts: list[Path],
+        timeout: int | None = None,
+        cwd: Path | None = None,
+        env: dict[str, str] | None = None,
+        configs: dict[str, dict[str, Any]] | None = None
     ) -> ExecutionResult:
         """Run scripts in parallel.
 
@@ -191,11 +190,11 @@ class ParallelRunner:
 
     async def run_scripts_async(
         self,
-        scripts: List[Path],
-        timeout: Optional[int] = None,
-        cwd: Optional[Path] = None,
-        env: Optional[Dict[str, str]] = None,
-        configs: Optional[Dict[str, Dict[str, Any]]] = None
+        scripts: list[Path],
+        timeout: int | None = None,
+        cwd: Path | None = None,
+        env: dict[str, str] | None = None,
+        configs: dict[str, dict[str, Any]] | None = None
     ) -> ExecutionResult:
         """Run scripts in parallel asynchronously.
 
@@ -227,8 +226,8 @@ class BatchRunner:
 
     def __init__(
         self,
-        max_workers: Optional[int] = None,
-        progress_callback: Optional[ProgressCallback] = None
+        max_workers: int | None = None,
+        progress_callback: ProgressCallback | None = None
     ):
         """Initialize batch runner.
 
@@ -243,11 +242,11 @@ class BatchRunner:
 
     def run_batches(
         self,
-        batches: List[List[Path]],
+        batches: list[list[Path]],
         timeout: int = 60,
-        cwd: Optional[Path] = None,
+        cwd: Path | None = None,
         stop_on_batch_failure: bool = True
-    ) -> List[ExecutionResult]:
+    ) -> list[ExecutionResult]:
         """Run batches sequentially, scripts within batches in parallel.
 
         Args:
@@ -279,10 +278,10 @@ class BatchRunner:
 
 
 def run_parallel(
-    scripts: List[Path],
-    max_workers: Optional[int] = None,
+    scripts: list[Path],
+    max_workers: int | None = None,
     timeout: int = 60,
-    progress_callback: Optional[ProgressCallback] = None
+    progress_callback: ProgressCallback | None = None
 ) -> ExecutionResult:
     """Convenience function to run scripts in parallel.
 
@@ -304,10 +303,10 @@ def run_parallel(
 
 
 async def run_parallel_async(
-    scripts: List[Path],
-    max_workers: Optional[int] = None,
+    scripts: list[Path],
+    max_workers: int | None = None,
     timeout: int = 60,
-    progress_callback: Optional[ProgressCallback] = None
+    progress_callback: ProgressCallback | None = None
 ) -> ExecutionResult:
     """Async convenience function to run scripts in parallel.
 

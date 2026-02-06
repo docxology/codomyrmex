@@ -2,9 +2,23 @@
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.core.config import (
+        AgentConfig,
+        get_config,
+        set_config,
+    )
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 @pytest.mark.unit
@@ -49,7 +63,7 @@ class TestBaseAgentConfigExtraction:
         """Test getting config value from AgentConfig."""
         # Save original config
         original_config = get_config()
-        
+
         try:
             # Create test config
             test_config = AgentConfig()
@@ -81,7 +95,7 @@ class TestBaseAgentConfigExtraction:
         """Test config value priority: provided > instance > AgentConfig > default."""
         # Save original config
         original_config = get_config()
-        
+
         try:
             # Set AgentConfig value
             test_config = AgentConfig()

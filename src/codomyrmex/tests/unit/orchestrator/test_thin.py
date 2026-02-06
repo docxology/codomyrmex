@@ -8,11 +8,8 @@ import asyncio
 import os
 import tempfile
 from pathlib import Path
-from typing import Any, Dict
-from unittest.mock import MagicMock, patch
 
 import pytest
-
 
 # Mark all tests in this module as orchestrator tests
 pytestmark = [pytest.mark.orchestrator]
@@ -233,8 +230,8 @@ class TestBatch:
 
     def test_batch_scripts(self):
         """Test batch running multiple scripts."""
-        from codomyrmex.orchestrator.thin import batch
         from codomyrmex.orchestrator import ExecutionResult
+        from codomyrmex.orchestrator.thin import batch
 
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create test scripts
@@ -253,8 +250,8 @@ class TestBatch:
 
     def test_batch_empty_list(self):
         """Test batch with empty list."""
-        from codomyrmex.orchestrator.thin import batch
         from codomyrmex.orchestrator import ExecutionResult
+        from codomyrmex.orchestrator.thin import batch
 
         result = batch([])
         # Should return empty ExecutionResult
@@ -694,7 +691,7 @@ class TestIntegration:
 
     def test_pipe_to_batch_integration(self):
         """Test pipe output can be used with batch."""
-        from codomyrmex.orchestrator.thin import pipe, shell
+        from codomyrmex.orchestrator.thin import pipe
 
         # Run pipe
         pipe_result = pipe(["echo test1", "echo test2"])

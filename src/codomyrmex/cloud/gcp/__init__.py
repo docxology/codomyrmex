@@ -1,15 +1,16 @@
 """GCP integration submodule."""
 
-from google.cloud import storage
-from typing import Optional
 import logging
+from typing import Optional
+
+from google.cloud import storage
 
 logger = logging.getLogger(__name__)
 
 class GCSClient:
     """Wrapper for Google Cloud Storage operations."""
-    
-    def __init__(self, project: Optional[str] = None):
+
+    def __init__(self, project: str | None = None):
         self.client = storage.Client(project=project)
 
     def upload_blob(self, bucket_name: str, source_file_name: str, destination_blob_name: str) -> bool:

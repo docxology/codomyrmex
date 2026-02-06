@@ -1,9 +1,9 @@
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import argparse
-import json
-
 import csv
+import json
+from pathlib import Path
+from typing import Any
+
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -11,13 +11,9 @@ from codomyrmex.cerebrum import (
     ActiveInferenceAgent,
     BayesianNetwork,
     Case,
-    CaseBase,
-    CaseRetriever,
     CerebrumConfig,
     CerebrumEngine,
     InferenceEngine,
-    Model,
-    ReasoningResult,
 )
 from codomyrmex.cerebrum.inference.bayesian import Distribution
 from codomyrmex.cerebrum.visualization import (
@@ -25,7 +21,9 @@ from codomyrmex.cerebrum.visualization import (
     InferenceVisualizer,
     ModelVisualizer,
 )
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.cerebrum.visualization.composition import CompositionVisualizer
+from codomyrmex.cerebrum.visualization.concordance import ConcordanceVisualizer
+from codomyrmex.fpf import FPFAnalyzer, FPFClient, TermAnalyzer
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
 """CEREBRUM orchestration for FPF analysis.
@@ -48,7 +46,7 @@ logger = get_logger(__name__)
 class FPFOrchestrator:
     """Orchestrates CEREBRUM methods for comprehensive FPF analysis."""
 
-    def __init__(self, fpf_spec_path: Optional[str] = None, output_dir: str = "output/cerebrum/orchestration"):
+    def __init__(self, fpf_spec_path: str | None = None, output_dir: str = "output/cerebrum/orchestration"):
         """Initialize FPF orchestrator.
 
         Args:
@@ -84,7 +82,7 @@ class FPFOrchestrator:
 
         self.logger.info(f"Initialized FPF Orchestrator with {len(self.spec.patterns)} patterns")
 
-    def create_pattern_cases(self) -> List[Case]:
+    def create_pattern_cases(self) -> list[Case]:
         """Create cases from FPF patterns for case-based reasoning.
 
         Returns:
@@ -174,7 +172,7 @@ class FPFOrchestrator:
         self.logger.info(f"Built Bayesian network with {len(network.nodes)} nodes")
         return network
 
-    def analyze_with_case_based_reasoning(self) -> Dict[str, Any]:
+    def analyze_with_case_based_reasoning(self) -> dict[str, Any]:
         """Analyze FPF using case-based reasoning.
 
         Returns:
@@ -242,7 +240,7 @@ class FPFOrchestrator:
             "case_base_size": self.cerebrum.case_base.size(),
         }
 
-    def analyze_with_bayesian_inference(self) -> Dict[str, Any]:
+    def analyze_with_bayesian_inference(self) -> dict[str, Any]:
         """Analyze FPF using Bayesian inference.
 
         Returns:
@@ -287,7 +285,7 @@ class FPFOrchestrator:
             "network_edges": sum(len(edges) for edges in network.edges.values()),
         }
 
-    def analyze_with_active_inference(self) -> Dict[str, Any]:
+    def analyze_with_active_inference(self) -> dict[str, Any]:
         """Analyze FPF using active inference.
 
         Returns:
@@ -372,7 +370,7 @@ class FPFOrchestrator:
             "final_beliefs": agent.get_beliefs().to_dict(),
         }
 
-    def generate_comprehensive_analysis(self) -> Dict[str, Any]:
+    def generate_comprehensive_analysis(self) -> dict[str, Any]:
         """Generate comprehensive analysis combining all CEREBRUM methods.
 
         Returns:
@@ -419,7 +417,7 @@ class FPFOrchestrator:
 
         return comprehensive
 
-    def generate_visualizations(self, analysis_results: Dict[str, Any]) -> None:
+    def generate_visualizations(self, analysis_results: dict[str, Any]) -> None:
         """Generate all visualizations.
 
         Args:
@@ -443,7 +441,7 @@ class FPFOrchestrator:
                 )
                 visualizer.save_figure(fig, str(viz_dir / "bayesian_network.png"))
                 self.logger.info("Saved Bayesian network visualization")
-                
+
                 # Export raw data
                 network_data = {
                     "network_name": self.cerebrum.bayesian_network.name,
@@ -475,7 +473,7 @@ class FPFOrchestrator:
                     )
                     similar = self.cerebrum.case_base.retrieve_similar(query_case, k=5)
                     cases_with_similarity.extend(similar)
-                    
+
                     # Collect data for export
                     for case, similarity in similar:
                         case_data_rows.append({
@@ -495,7 +493,7 @@ class FPFOrchestrator:
                 )
                 case_viz.save_figure(fig, str(viz_dir / "case_similarity.png"))
                 self.logger.info("Saved case similarity visualization")
-                
+
                 # Export raw data
                 if case_data_rows:
                     csv_path = viz_dir / "case_similarity.csv"
@@ -525,7 +523,7 @@ class FPFOrchestrator:
                             ],
                         )
                         inference_data[pattern_id] = dist
-                        
+
                         # Collect data for export
                         inference_rows.append({
                             "pattern_id": pattern_id,
@@ -540,7 +538,7 @@ class FPFOrchestrator:
                     fig = inference_viz.plot_inference_results(inference_data)
                     inference_viz.save_figure(fig, str(viz_dir / "inference_results.png"))
                     self.logger.info("Saved inference results visualization")
-                    
+
                     # Export raw data
                     if inference_rows:
                         csv_path = viz_dir / "inference_results.csv"
@@ -559,7 +557,7 @@ class FPFOrchestrator:
         self._generate_composition_visualizations(analysis_results, viz_dir)
 
     def _generate_concordance_visualizations(
-        self, analysis_results: Dict[str, Any], viz_dir: Path
+        self, analysis_results: dict[str, Any], viz_dir: Path
     ) -> None:
         """Generate concordance visualizations comparing different analyses.
 
@@ -611,7 +609,7 @@ class FPFOrchestrator:
             self.logger.warning(f"Failed to generate concordance visualizations: {e}", exc_info=True)
 
     def _generate_composition_visualizations(
-        self, analysis_results: Dict[str, Any], viz_dir: Path
+        self, analysis_results: dict[str, Any], viz_dir: Path
     ) -> None:
         """Generate composition visualizations (dashboards, summaries).
 
@@ -660,7 +658,7 @@ class FPFOrchestrator:
         except Exception as e:
             self.logger.warning(f"Failed to generate composition visualizations: {e}", exc_info=True)
 
-    def export_results(self, analysis_results: Dict[str, Any]) -> None:
+    def export_results(self, analysis_results: dict[str, Any]) -> None:
         """Export all results to JSON and markdown.
 
         Args:
@@ -679,7 +677,7 @@ class FPFOrchestrator:
         self._generate_markdown_report(analysis_results, md_path)
         self.logger.info(f"Exported markdown report to {md_path}")
 
-    def _generate_markdown_report(self, results: Dict[str, Any], output_path: Path) -> None:
+    def _generate_markdown_report(self, results: dict[str, Any], output_path: Path) -> None:
         """Generate markdown report.
 
         Args:
@@ -781,7 +779,7 @@ class FPFOrchestrator:
 
         output_path.write_text("\n".join(lines), encoding="utf-8")
 
-    def run_comprehensive_analysis(self) -> Dict[str, Any]:
+    def run_comprehensive_analysis(self) -> dict[str, Any]:
         """Run complete comprehensive analysis pipeline.
 
         Returns:
@@ -834,7 +832,7 @@ def main():
     # Run comprehensive analysis
     results = orchestrator.run_comprehensive_analysis()
 
-    print(f"\n✅ Analysis complete!")
+    print("\n✅ Analysis complete!")
     print(f"📊 Results saved to: {orchestrator.output_dir}")
     print(f"📈 Analyzed {results['fpf_statistics']['total_patterns']} patterns")
     print(f"🔍 Created {results['case_based_reasoning']['total_cases']} cases")

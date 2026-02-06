@@ -74,10 +74,10 @@ def create_bar_chart(
 class BarChart:
     """
     Bar chart class wrapper for object-oriented usage.
-    
+
     Provides a class-based interface around the create_bar_chart function.
     """
-    
+
     def __init__(
         self,
         categories: list = None,
@@ -90,7 +90,7 @@ class BarChart:
     ):
         """
         Initialize a bar chart.
-        
+
         Args:
             categories: List of category labels
             values: List of values for each category
@@ -107,11 +107,11 @@ class BarChart:
         self.y_label = y_label
         self.horizontal = horizontal
         self.bar_color = bar_color
-    
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the bar chart.
-        
+
         Args:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
@@ -127,11 +127,11 @@ class BarChart:
             horizontal=self.horizontal,
             bar_color=self.bar_color
         )
-    
+
     def save(self, output_path: str):
         """Save the chart to a file."""
         self.render(output_path=output_path, show_plot=False)
-    
+
     def show(self):
         """Display the chart interactively."""
         self.render(show_plot=True)

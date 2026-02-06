@@ -1,37 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/skills
+# Agent Guidelines - Skills
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Agent skill management: discovery, registration, and execution.
 
-Integration with vibeship-spawner-skills repository. Provides access to 462+ specialized skills organized across 35 categories. Enables skill management, syncing, and custom skills.
+## Key Classes
 
-## Active Components
+- **Skill** — Base skill class
+- **SkillRegistry** — Discover and register skills
+- **SkillExecutor** — Execute skills
+- **SkillComposer** — Compose skills
 
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `composition/` – Directory containing composition components
-- `discovery/` – Directory containing discovery components
-- `execution/` – Directory containing execution components
-- `skill_loader.py` – Project file
-- `skill_registry.py` – Project file
-- `skill_sync.py` – Project file
-- `skill_validator.py` – Project file
-- `skills/` – Directory containing skills components
-- `skills_manager.py` – Project file
-- `testing/` – Directory containing testing components
+## Agent Instructions
 
-## Operating Contracts
+1. **Register skills** — Add to registry on startup
+2. **Version skills** — Track skill versions
+3. **Dependencies** — Declare skill dependencies
+4. **Input validation** — Validate skill inputs
+5. **Document skills** — Clear descriptions
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.skills import Skill, SkillRegistry, SkillExecutor
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Define a skill
+@Skill(name="code_review", version="1.0")
+def review_code(code: str, language: str = "python"):
+    \"\"\"Review code for issues.\"\"\"
+    return analyze(code, language)
+
+# Register skills
+registry = SkillRegistry()
+registry.register(review_code)
+registry.discover("./skills/")  # Auto-discover
+
+# List available skills
+for skill in registry.list():
+    print(f"{skill.name} v{skill.version}: {skill.description}")
+
+# Execute skills
+executor = SkillExecutor(registry)
+result = executor.execute("code_review", code=source, language="python")
+
+# Compose skills
+composed = registry.compose(["parse", "analyze", "format"])
+result = executor.execute_composed(composed, input_data)
+```
+
+## Testing Patterns
+
+```python
+# Verify skill registration
+registry = SkillRegistry()
+registry.register(review_code)
+assert "code_review" in registry.list_names()
+
+# Verify execution
+executor = SkillExecutor(registry)
+result = executor.execute("code_review", code="print(1)")
+assert result is not None
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

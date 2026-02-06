@@ -1,21 +1,22 @@
 """Base classes for visualization components."""
 
-from typing import Any, Tuple, Optional
+from typing import Any
+
 import matplotlib.pyplot as plt
 import networkx as nx
-from pathlib import Path
+
 
 class BaseNetworkVisualizer:
     """Base class for network visualizations."""
-    
-    def __init__(self, figure_size: Tuple[int, int] = (12, 8), dpi: int = 100):
+
+    def __init__(self, figure_size: tuple[int, int] = (12, 8), dpi: int = 100):
         self.figure_size = figure_size
         self.dpi = dpi
-        
-    def create_figure(self) -> Tuple[Any, Any]:
+
+    def create_figure(self) -> tuple[Any, Any]:
         """Create a matplotlib figure and axis."""
         return plt.subplots(figsize=self.figure_size, dpi=self.dpi)
-        
+
     def apply_layout(self, G: nx.Graph, layout: str = "spring", **kwargs) -> dict:
         """Apply layout to graph."""
         if layout == "spring":
@@ -26,7 +27,7 @@ class BaseNetworkVisualizer:
             return nx.shell_layout(G)
         else:
             return nx.spring_layout(G, **kwargs)
-            
+
     def get_node_sizes(self, G: nx.Graph, metric: str = "degree", min_size: int = 100, max_size: int = 1000) -> list:
         """Calculate node sizes based on metric."""
         if metric == "degree":
@@ -46,7 +47,7 @@ class BaseNetworkVisualizer:
     def format_title(self, ax: Any, title: str) -> None:
         """Format plot title."""
         ax.set_title(title, fontsize=16, fontweight="bold")
-        
+
     def save_figure(self, fig: Any, path: str) -> None:
         """Save figure to path."""
         fig.savefig(path, bbox_inches="tight")
@@ -55,19 +56,19 @@ class BaseNetworkVisualizer:
 
 class BaseChartVisualizer:
     """Base class for chart visualizations."""
-    
-    def __init__(self, figure_size: Tuple[int, int] = (10, 6), dpi: int = 100):
+
+    def __init__(self, figure_size: tuple[int, int] = (10, 6), dpi: int = 100):
         self.figure_size = figure_size
         self.dpi = dpi
 
-    def create_figure(self) -> Tuple[Any, Any]:
+    def create_figure(self) -> tuple[Any, Any]:
         """Create a matplotlib figure and axis."""
         return plt.subplots(figsize=self.figure_size, dpi=self.dpi)
-        
+
     def format_title(self, ax: Any, title: str) -> None:
         """Format chart title."""
         ax.set_title(title, fontsize=14, fontweight="bold")
-        
+
     def format_axes_labels(self, ax: Any, xlabel: str, ylabel: str) -> None:
         """Format axis labels."""
         ax.set_xlabel(xlabel)

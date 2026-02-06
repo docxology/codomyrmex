@@ -1,118 +1,13 @@
-from pathlib import Path
-from typing import Dict, Any, Generator
-import math
-import os
-import random
 import shutil
 import tempfile
 import time
+from pathlib import Path
+from typing import Any
+from collections.abc import Generator
 
 import pytest
 
-from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.logging_monitoring.logger_config import setup_logging
 
 """
 Shared fixtures and configuration for performance tests.
@@ -146,7 +41,7 @@ def temp_performance_dir() -> Generator[Path, None, None]:
 
 
 @pytest.fixture
-def sample_code_files(temp_performance_dir: Path) -> Dict[str, Path]:
+def sample_code_files(temp_performance_dir: Path) -> dict[str, Path]:
     """Create sample code files for performance testing."""
     files = {}
 
@@ -277,7 +172,7 @@ print(f"Speedup: {recursive_time / iterative_time:.2f}x")
 
 
 @pytest.fixture
-def performance_baseline_data() -> Dict[str, Any]:
+def performance_baseline_data() -> dict[str, Any]:
     """Provide baseline performance data for comparison."""
     return {
         "module_performance_baselines": {
@@ -347,7 +242,7 @@ def mock_performance_logger():
 
 
 @pytest.fixture
-def performance_test_config() -> Dict[str, Any]:
+def performance_test_config() -> dict[str, Any]:
     """Configuration for performance tests."""
     return {
         "iterations": 5,

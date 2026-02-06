@@ -1,8 +1,18 @@
 """Unit tests for tree_sitter module."""
 
-import pytest
 from unittest.mock import MagicMock, patch
-from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager
+
+import pytest
+
+try:
+    from codomyrmex.tree_sitter import LanguageManager, TreeSitterParser
+    _HAS_TREE_SITTER = True
+except ImportError:
+    _HAS_TREE_SITTER = False
+
+if not _HAS_TREE_SITTER:
+    pytest.skip("tree_sitter not available", allow_module_level=True)
+
 
 @pytest.mark.unit
 def test_parser_initialization():
@@ -11,7 +21,7 @@ def test_parser_initialization():
     with patch('tree_sitter.Parser') as mock_parser_cls:
         mock_instance = MagicMock()
         mock_parser_cls.return_value = mock_instance
-        
+
         parser = TreeSitterParser(mock_language)
         mock_instance.set_language.assert_called_once_with(mock_language)
 
@@ -22,10 +32,10 @@ def test_parse_call():
     with patch('tree_sitter.Parser') as mock_parser_cls:
         mock_instance = MagicMock()
         mock_parser_cls.return_value = mock_instance
-        
+
         parser = TreeSitterParser(mock_language)
         parser.parse("print('hello')")
-        
+
         # Verify it was called with bytes
         mock_instance.parse.assert_called_once_with(b"print('hello')")
 
@@ -35,7 +45,7 @@ def test_language_manager():
     with patch('tree_sitter.Language') as mock_lang_cls:
         mock_instance = MagicMock()
         mock_lang_cls.return_value = mock_instance
-        
+
         success = LanguageManager.load_language("/path/to/lib.so", "python")
         assert success is True
         assert LanguageManager.get_language("python") == mock_instance

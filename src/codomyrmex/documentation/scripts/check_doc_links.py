@@ -1,29 +1,9 @@
-from pathlib import Path
-from typing import List, Tuple, Dict
 import os
 import re
 import sys
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Documentation Link Validation Script
@@ -37,7 +17,7 @@ identifying broken links, missing files, and incorrect references.
 
 logger = get_logger(__name__)
 
-def find_markdown_files(docs_dir: Path) -> List[Path]:
+def find_markdown_files(docs_dir: Path) -> list[Path]:
     """Find all markdown files in the documentation directory."""
     markdown_files = []
     for root, dirs, files in os.walk(docs_dir):
@@ -49,7 +29,7 @@ def find_markdown_files(docs_dir: Path) -> List[Path]:
     return sorted(markdown_files)
 
 
-def extract_links(content: str, file_path: Path) -> List[Tuple[str, int, str]]:
+def extract_links(content: str, file_path: Path) -> list[tuple[str, int, str]]:
     """
     Extract all markdown links from content.
 
@@ -72,7 +52,7 @@ def extract_links(content: str, file_path: Path) -> List[Tuple[str, int, str]]:
     return links
 
 
-def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> Tuple[bool, str]:
+def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> tuple[bool, str]:
     """
     Resolve a relative link to an absolute path and check if it exists.
 
@@ -155,7 +135,7 @@ def resolve_link(link_url: str, from_file: Path, docs_root: Path) -> Tuple[bool,
     return (exists, str(resolved.relative_to(docs_root)) if resolved_str.startswith(docs_root_str) else str(resolved))
 
 
-def check_links(docs_dir: Path) -> Dict[str, List[Dict]]:
+def check_links(docs_dir: Path) -> dict[str, list[dict]]:
     """
     Check all links in documentation files.
 

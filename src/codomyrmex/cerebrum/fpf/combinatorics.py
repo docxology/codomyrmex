@@ -1,28 +1,23 @@
+import csv
+import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-import itertools
-import json
+from typing import Any
 
-from matplotlib.patches import Patch
-import csv
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from matplotlib.patches import Patch
 
 from codomyrmex.cerebrum import (
-    ActiveInferenceAgent,
-    BayesianNetwork,
     Case,
-    CaseBase,
-    CaseRetriever,
-    CerebrumConfig,
     CerebrumEngine,
-    InferenceEngine,
-    Model,
 )
-from codomyrmex.cerebrum.visualization import CaseVisualizer, InferenceVisualizer, ModelVisualizer
-from codomyrmex.fpf import FPFClient, FPFAnalyzer, TermAnalyzer
+from codomyrmex.cerebrum.visualization.base import (
+    BaseHeatmapVisualizer,
+    BaseNetworkVisualizer,
+)
+from codomyrmex.fpf import FPFAnalyzer, FPFClient, TermAnalyzer
 from codomyrmex.logging_monitoring import get_logger
 
 """Comprehensive combinatorics analysis using CEREBRUM on FPF.
@@ -49,7 +44,7 @@ logger = get_logger(__name__)
 class FPFCombinatoricsAnalyzer:
     """Analyzes all combinatorics of FPF patterns using CEREBRUM."""
 
-    def __init__(self, fpf_spec_path: Optional[str] = None, output_dir: str = "output/cerebrum/combinatorics"):
+    def __init__(self, fpf_spec_path: str | None = None, output_dir: str = "output/cerebrum/combinatorics"):
         """Initialize combinatorics analyzer.
 
         Args:
@@ -76,7 +71,7 @@ class FPFCombinatoricsAnalyzer:
 
         self.logger.info(f"Initialized combinatorics analyzer with {len(self.spec.patterns)} patterns")
 
-    def analyze_pattern_pairs(self) -> Dict[str, Any]:
+    def analyze_pattern_pairs(self) -> dict[str, Any]:
         """Analyze all pairs of patterns for relationships.
 
         Returns:
@@ -132,7 +127,7 @@ class FPFCombinatoricsAnalyzer:
             "all_pairs": pairs_analysis[:100],  # Top 100
         }
 
-    def analyze_dependency_chains(self) -> Dict[str, Any]:
+    def analyze_dependency_chains(self) -> dict[str, Any]:
         """Analyze dependency chains in FPF patterns.
 
         Returns:
@@ -143,7 +138,7 @@ class FPFCombinatoricsAnalyzer:
         chains = []
         visited = set()
 
-        def build_chain(pattern_id: str, current_chain: List[str], depth: int, max_depth: int = 5):
+        def build_chain(pattern_id: str, current_chain: list[str], depth: int, max_depth: int = 5):
             """Recursively build dependency chains."""
             if depth > max_depth or pattern_id in visited:
                 return
@@ -198,7 +193,7 @@ class FPFCombinatoricsAnalyzer:
             "most_important_chains": chain_analysis[:20],
         }
 
-    def analyze_concept_cooccurrence(self) -> Dict[str, Any]:
+    def analyze_concept_cooccurrence(self) -> dict[str, Any]:
         """Analyze concept co-occurrence across patterns.
 
         Returns:
@@ -232,7 +227,7 @@ class FPFCombinatoricsAnalyzer:
             "concept_clusters": concept_clusters,
         }
 
-    def analyze_cross_part_relationships(self) -> Dict[str, Any]:
+    def analyze_cross_part_relationships(self) -> dict[str, Any]:
         """Analyze relationships between patterns in different parts.
 
         Returns:
@@ -279,7 +274,7 @@ class FPFCombinatoricsAnalyzer:
             "part_pair_counts": dict(sorted(part_pair_counts.items(), key=lambda x: x[1], reverse=True)),
         }
 
-    def generate_all_visualizations(self, analysis_results: Dict[str, Any]) -> None:
+    def generate_all_visualizations(self, analysis_results: dict[str, Any]) -> None:
         """Generate all possible visualizations.
 
         Args:
@@ -314,7 +309,7 @@ class FPFCombinatoricsAnalyzer:
         except Exception as e:
             self.logger.warning(f"Failed to visualize cross-part relationships: {e}")
 
-    def _visualize_pair_similarity(self, pairs_data: Dict[str, Any], viz_dir: Path) -> None:
+    def _visualize_pair_similarity(self, pairs_data: dict[str, Any], viz_dir: Path) -> None:
         """Visualize pattern pair similarities with enhanced styling."""
         try:
 
@@ -365,7 +360,7 @@ class FPFCombinatoricsAnalyzer:
             # Save
             heatmap_viz.save_figure(fig, str(viz_dir / "pair_similarity_heatmap.png"))
             self.logger.info("Saved pair similarity heatmap")
-            
+
             # Export raw data - pair list
             csv_path = viz_dir / "pair_similarity_heatmap.csv"
             with open(csv_path, "w", encoding="utf-8", newline="") as f:
@@ -383,7 +378,7 @@ class FPFCombinatoricsAnalyzer:
                     }
                     writer.writerow(row)
             self.logger.info(f"Exported pair similarity raw data to {csv_path}")
-            
+
             # Export similarity matrix
             matrix_path = viz_dir / "pair_similarity_matrix.csv"
             with open(matrix_path, "w", encoding="utf-8", newline="") as f:
@@ -398,7 +393,7 @@ class FPFCombinatoricsAnalyzer:
         except ImportError:
             self.logger.warning("matplotlib not available for visualization")
 
-    def _visualize_dependency_chains(self, chains_data: Dict[str, Any], viz_dir: Path) -> None:
+    def _visualize_dependency_chains(self, chains_data: dict[str, Any], viz_dir: Path) -> None:
         """Visualize dependency chains with enhanced styling."""
         try:
 
@@ -496,7 +491,7 @@ class FPFCombinatoricsAnalyzer:
         except ImportError:
             self.logger.warning("matplotlib/networkx not available")
 
-    def _visualize_concept_cooccurrence(self, cooccurrence_data: Dict[str, Any], viz_dir: Path) -> None:
+    def _visualize_concept_cooccurrence(self, cooccurrence_data: dict[str, Any], viz_dir: Path) -> None:
         """Visualize concept co-occurrence network with enhanced styling."""
         try:
 
@@ -607,7 +602,7 @@ class FPFCombinatoricsAnalyzer:
         except ImportError:
             self.logger.warning("matplotlib/networkx not available")
 
-    def _visualize_cross_part_relationships(self, cross_part_data: Dict[str, Any], viz_dir: Path) -> None:
+    def _visualize_cross_part_relationships(self, cross_part_data: dict[str, Any], viz_dir: Path) -> None:
         """Visualize cross-part relationships with enhanced styling."""
         try:
 
@@ -720,7 +715,7 @@ class FPFCombinatoricsAnalyzer:
             context={"pattern_id": pattern.id, "title": pattern.title},
         )
 
-    def _find_shared_concepts(self, pattern1, pattern2) -> List[str]:
+    def _find_shared_concepts(self, pattern1, pattern2) -> list[str]:
         """Find shared concepts between two patterns."""
         concepts1 = self.spec.get_concepts_by_pattern(pattern1.id)
         concepts2 = self.spec.get_concepts_by_pattern(pattern2.id)
@@ -730,7 +725,7 @@ class FPFCombinatoricsAnalyzer:
 
         return list(names1 & names2)
 
-    def _find_concept_clusters(self, cooccurrence: Dict[str, Dict[str, int]], min_weight: int = 3) -> List[List[str]]:
+    def _find_concept_clusters(self, cooccurrence: dict[str, dict[str, int]], min_weight: int = 3) -> list[list[str]]:
         """Find clusters of co-occurring concepts."""
         try:
 
@@ -748,34 +743,34 @@ class FPFCombinatoricsAnalyzer:
         except ImportError:
             return []
 
-    def run_comprehensive_combinatorics(self) -> Dict[str, Any]:
+    def run_comprehensive_combinatorics(self) -> dict[str, Any]:
         """Run all combinatorics analyses.
 
         Returns:
             Complete combinatorics analysis results
         """
         self.logger.info("Running comprehensive combinatorics analysis")
-        
+
         # Run analyses
         pair_analysis = self.analyze_pattern_pairs()
         chain_analysis = self.analyze_dependency_chains()
         cooccurrence_analysis = self.analyze_concept_cooccurrence()
         cross_part_analysis = self.analyze_cross_part_relationships()
-        
+
         results = {
             "pattern_pairs": pair_analysis,
             "dependency_chains": chain_analysis,
             "concept_cooccurrence": cooccurrence_analysis,
             "cross_part_relationships": cross_part_analysis,
         }
-        
+
         # Export results
         output_path = self.output_dir / "combinatorics_analysis.json"
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, default=str)
         self.logger.info(f"Exported analysis to {output_path}")
-        
+
         # Generate visualizations
         self.generate_all_visualizations(results)
-        
+
         return results

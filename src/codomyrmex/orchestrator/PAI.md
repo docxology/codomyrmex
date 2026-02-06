@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Orchestrator Context
+# Personal AI Infrastructure — Orchestrator Module
 
-**Module**: orchestrator
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-High-level orchestration engine for coordinating multiple agents and complex workflows.
+The Orchestrator module provides PAI integration for workflow orchestration.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Workflow Definition
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Define workflows:
 
-## Key Files
+```python
+from codomyrmex.orchestrator import Workflow, Step
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+workflow = Workflow("deployment")
+workflow.add_step(Step("build", build_func))
+workflow.add_step(Step("test", test_func))
+workflow.add_step(Step("deploy", deploy_func))
+```
 
-## Future Considerations
+### Workflow Execution
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Run workflows:
+
+```python
+from codomyrmex.orchestrator import Workflow
+
+result = workflow.run()
+print(f"Status: {result.status}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Workflow` | Define workflows |
+| `Step` | Define steps |
+| `run` | Execute workflows |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -1,40 +1,52 @@
-# pattern_matching
+# Pattern Matching Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Code pattern recognition and repository analysis using cased/kit.
 
-Code analysis and pattern recognition module that identifies structures, dependencies, and patterns within codebases. Built on the `cased/kit` toolkit, it provides repository indexing, dependency analysis, text search with context extraction, code summarization, docstring indexing, symbol extraction and usage analysis, and chunking utilities. The `get_embedding_function()` factory enables semantic search and similarity computations. All analysis functions operate on repository paths and return structured results.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.pattern_matching import (
+    run_full_analysis,
+    analyze_repository_path,
+    get_embedding_function
+)
 
-### Primary Functions
+# Run full repository analysis
+results = run_full_analysis("/path/to/repo")
+print(f"Analyzed: {results['summary']}")
 
-- **`get_embedding_function()`** -- Factory that returns an embedding function for semantic search and similarity
-- **`analyze_repository_path()`** -- Analyze a repository at a given path, returning structural information
-- **`run_full_analysis()`** -- Execute all analysis passes on a repository in sequence
-- **`print_once()`** -- Utility to print a message only once (deduplicates repeated output)
+# Analyze specific path
+analysis = analyze_repository_path("/path/to/repo/src")
 
-### Analysis Functions
+# Get embedding function for custom analysis
+embed = get_embedding_function()
+embeddings = embed(["def foo():", "class Bar:"])
+```
 
-- **`_perform_repository_index()`** -- Index a repository for fast file and symbol lookup
-- **`_perform_dependency_analysis()`** -- Analyze import/dependency relationships between modules
-- **`_perform_text_search()`** -- Search repository contents for text patterns
-- **`_perform_code_summarization()`** -- Generate natural-language summaries of code files
-- **`_perform_docstring_indexing()`** -- Index all docstrings for searchable documentation
-- **`_perform_symbol_extraction()`** -- Extract function, class, and variable definitions from source
-- **`_perform_symbol_usage_analysis()`** -- Analyze where and how extracted symbols are used
-- **`_perform_text_search_context_extraction()`** -- Extract surrounding context for text search matches
-- **`_perform_chunking_examples()`** -- Demonstrate code chunking strategies for embedding pipelines
+## Analysis Functions
 
-## Directory Contents
+| Function | Description |
+|----------|-------------|
+| `run_full_analysis(path)` | Full repository analysis |
+| `analyze_repository_path(path)` | Analyze specific directory |
+| `get_embedding_function()` | Get embeddings for code |
+| `_perform_repository_index(path)` | Index repository structure |
+| `_perform_dependency_analysis(path)` | Analyze dependencies |
+| `_perform_text_search(path, query)` | Search code text |
+| `_perform_code_summarization(path)` | Summarize code files |
+| `_perform_docstring_indexing(path)` | Index docstrings |
+| `_perform_symbol_extraction(path)` | Extract symbols |
+| `_perform_symbol_usage_analysis(path)` | Analyze symbol usage |
+| `_perform_chunking_examples(path)` | Generate code chunks |
 
-- `__init__.py` - Module entry point re-exporting all analysis functions
-- `run_codomyrmex_analysis.py` - Core implementation of all analysis and embedding functions
-- `requirements.txt` - Module-specific dependencies (cased/kit toolkit)
+## Prerequisites
+
+- Requires `cased/kit` toolkit for code analysis
+- Uses `logging_monitoring` for logging
+- Uses `environment_setup` for dependency checks
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/pattern_matching/](../../../docs/modules/pattern_matching/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

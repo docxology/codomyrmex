@@ -1,63 +1,10 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 import os
 import subprocess
 import tempfile
+from datetime import datetime
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Fabric Manager - Main integration class for Codomyrmex
 
@@ -87,7 +34,7 @@ class FabricManager:
         self.fabric_binary = fabric_binary
         self.logger = get_logger(__name__)
         self.fabric_available = self._check_fabric_availability()
-        self.results_history: List[Dict[str, Any]] = []
+        self.results_history: list[dict[str, Any]] = []
 
     def _check_fabric_availability(self) -> bool:
         """Check if Fabric binary is available."""
@@ -102,7 +49,7 @@ class FabricManager:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def list_patterns(self) -> List[str]:
+    def list_patterns(self) -> list[str]:
         """
         Get list of available Fabric patterns.
 
@@ -135,8 +82,8 @@ class FabricManager:
         self,
         pattern: str,
         input_text: str,
-        additional_args: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+        additional_args: list[str] | None = None
+    ) -> dict[str, Any]:
         """
         Run a Fabric pattern with given input.
 
@@ -165,7 +112,7 @@ class FabricManager:
                 tmp.write(input_text)
                 tmp.flush()
 
-                with open(tmp.name, 'r') as input_file:
+                with open(tmp.name) as input_file:
                     start_time = datetime.now()
                     result = subprocess.run(
                         cmd,
@@ -223,7 +170,7 @@ class FabricManager:
         """Check if Fabric is available."""
         return self.fabric_available
 
-    def get_results_history(self) -> List[Dict[str, Any]]:
+    def get_results_history(self) -> list[dict[str, Any]]:
         """Get history of pattern execution results."""
         return self.results_history.copy()
 

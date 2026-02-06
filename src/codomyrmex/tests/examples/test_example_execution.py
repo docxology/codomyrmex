@@ -5,27 +5,27 @@ Tests that all examples execute successfully, generate expected outputs,
 and follow consistent patterns.
 """
 
-import pytest
-import subprocess
 import json
-import time
+import subprocess
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import Any
+
+import pytest
 
 
 class TestExampleExecution:
     """Test execution of all Codomyrmex examples."""
 
-    def get_example_files(self, examples_dir: Path) -> List[Path]:
+    def get_example_files(self, examples_dir: Path) -> list[Path]:
         """Get all example_basic.py files."""
         return list(examples_dir.rglob("example_basic.py"))
 
-    def get_workflow_files(self, examples_dir: Path) -> List[Path]:
+    def get_workflow_files(self, examples_dir: Path) -> list[Path]:
         """Get all workflow example files."""
         workflow_dir = examples_dir / "multi_module"
         return list(workflow_dir.glob("example_workflow_*.py"))
 
-    def run_example_script(self, script_path: Path, timeout: int = 60) -> Tuple[int, str, str]:
+    def run_example_script(self, script_path: Path, timeout: int = 60) -> tuple[int, str, str]:
         """Run an example script and return exit code, stdout, stderr."""
         try:
             result = subprocess.run(
@@ -41,7 +41,7 @@ class TestExampleExecution:
         except Exception as e:
             return -1, "", str(e)
 
-    def check_output_files(self, example_dir: Path) -> Dict[str, bool]:
+    def check_output_files(self, example_dir: Path) -> dict[str, bool]:
         """Check if expected output files were generated."""
         results = {}
 
@@ -55,7 +55,7 @@ class TestExampleExecution:
 
         return results
 
-    def validate_results_format(self, example_dir: Path) -> Dict[str, Any]:
+    def validate_results_format(self, example_dir: Path) -> dict[str, Any]:
         """Validate the format of generated results."""
         results = {"valid": False, "errors": []}
 
@@ -65,7 +65,7 @@ class TestExampleExecution:
             return results
 
         try:
-            with open(results_file, 'r') as f:
+            with open(results_file) as f:
                 data = json.load(f)
 
             # Check for expected top-level keys
@@ -117,15 +117,15 @@ class TestExampleExecution:
                 # Check output files
                 output_checks = self.check_output_files(example_file.parent)
                 if output_checks["results_json"]:
-                    print(f"  ✓ Results file generated")
+                    print("  ✓ Results file generated")
                 else:
-                    print(f"  ⚠ Results file not found")
+                    print("  ⚠ Results file not found")
 
                 # Validate results format for workflows
                 if "workflow" in module_name:
                     validation = self.validate_results_format(example_file.parent)
                     if validation["valid"]:
-                        print(f"  ✓ Results format valid")
+                        print("  ✓ Results format valid")
                     else:
                         print(f"  ⚠ Results format issues: {validation['errors']}")
 
@@ -160,14 +160,14 @@ class TestExampleExecution:
                 # Check output files
                 output_checks = self.check_output_files(workflow_file.parent)
                 if output_checks["results_json"]:
-                    print(f"  ✓ Results file generated")
+                    print("  ✓ Results file generated")
                 else:
-                    print(f"  ⚠ Results file not found")
+                    print("  ⚠ Results file not found")
 
                 # Validate results format
                 validation = self.validate_results_format(workflow_file.parent)
                 if validation["valid"]:
-                    print(f"  ✓ Results format valid")
+                    print("  ✓ Results format valid")
                 else:
                     print(f"  ⚠ Results format issues: {validation['errors']}")
 
@@ -185,14 +185,14 @@ class TestExampleExecution:
         example_files = self.get_example_files(examples_dir)
         workflow_files = self.get_workflow_files(examples_dir)
 
-        print(f"\nExample discovery:")
+        print("\nExample discovery:")
         print(f"  Found {len(example_files)} basic examples")
         print(f"  Found {len(workflow_files)} workflow examples")
 
         # Should have at least some examples
         # assert len(example_files) >= 10, "Should find at least 10 basic examples"
         # assert len(workflow_files) >= 3, "Should find at least 3 workflow examples"
-        
+
         if len(example_files) == 0:
             print("Warning: No basic examples found. Skipping.")
         else:

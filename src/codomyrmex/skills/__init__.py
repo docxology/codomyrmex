@@ -7,20 +7,21 @@ enabling skill management, syncing with upstream, and support for custom skills.
 from pathlib import Path
 from typing import Optional
 
-from .skills_manager import SkillsManager
-from .skill_loader import SkillLoader
-from .skill_sync import SkillSync
-from .skill_registry import SkillRegistry
-
 # New submodule exports
-from . import discovery
-from . import execution
-from . import composition
-from . import testing
+from . import (
+    composition,
+    discovery,
+    execution,
+    marketplace,
+    permissions,
+    testing,
+    versioning,
+)
+from .skill_loader import SkillLoader
+from .skill_registry import SkillRegistry
+from .skill_sync import SkillSync
+from .skills_manager import SkillsManager
 
-from . import marketplace
-from . import versioning
-from . import permissions
 __all__ = [
     'permissions',
     'versioning',
@@ -43,9 +44,9 @@ DEFAULT_SKILLS_DIR = Path(__file__).parent / "skills"
 
 
 def get_skills_manager(
-    skills_dir: Optional[Path] = None,
-    upstream_repo: Optional[str] = None,
-    upstream_branch: Optional[str] = None,
+    skills_dir: Path | None = None,
+    upstream_repo: str | None = None,
+    upstream_branch: str | None = None,
     auto_sync: bool = False,
 ) -> SkillsManager:
     """

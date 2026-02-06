@@ -1,6 +1,7 @@
 """Unit tests for inference_optimization module."""
-import pytest
 import time
+
+import pytest
 
 
 @pytest.mark.unit
@@ -63,7 +64,10 @@ class TestOptimizationConfig:
 
     def test_config_defaults(self):
         """Verify default configuration values."""
-        from codomyrmex.inference_optimization import OptimizationConfig, QuantizationType
+        from codomyrmex.inference_optimization import (
+            OptimizationConfig,
+            QuantizationType,
+        )
 
         config = OptimizationConfig()
 
@@ -76,7 +80,10 @@ class TestOptimizationConfig:
 
     def test_config_custom_values(self):
         """Verify custom configuration values."""
-        from codomyrmex.inference_optimization import OptimizationConfig, QuantizationType
+        from codomyrmex.inference_optimization import (
+            OptimizationConfig,
+            QuantizationType,
+        )
 
         config = OptimizationConfig(
             quantization=QuantizationType.INT8,
@@ -293,7 +300,8 @@ class TestInferenceOptimizer:
     def test_optimizer_caching(self):
         """Verify caching behavior."""
         from codomyrmex.inference_optimization import (
-            InferenceOptimizer, OptimizationConfig
+            InferenceOptimizer,
+            OptimizationConfig,
         )
 
         call_count = [0]

@@ -13,38 +13,34 @@ Tests cover:
 10. Plugin metadata and versioning
 """
 
-import pytest
-import tempfile
-import os
 import json
-import sys
-import threading
+import os
+import tempfile
 import time
-from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
-from typing import Dict, Any, List, Optional
+from typing import Any
 
-from codomyrmex.plugin_system.plugin_registry import (
-    PluginRegistry,
-    Plugin,
-    PluginInfo,
-    PluginType,
-    PluginState,
-    Hook,
-    get_registry,
-    create_plugin_info,
-)
-from codomyrmex.plugin_system.plugin_validator import PluginValidator, validate_plugin
-from codomyrmex.plugin_system.plugin_loader import PluginLoader, LoadResult, discover_plugins as loader_discover
+import pytest
+
+from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
+from codomyrmex.plugin_system.plugin_loader import LoadResult, PluginLoader
 from codomyrmex.plugin_system.plugin_manager import (
     PluginManager,
-    get_plugin_manager,
     discover_plugins,
+    get_plugin_manager,
     load_plugin,
     unload_plugin,
 )
-from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
-
+from codomyrmex.plugin_system.plugin_registry import (
+    Hook,
+    Plugin,
+    PluginInfo,
+    PluginRegistry,
+    PluginState,
+    PluginType,
+    create_plugin_info,
+    get_registry,
+)
+from codomyrmex.plugin_system.plugin_validator import PluginValidator, validate_plugin
 
 # ============================================================================
 # Mock Plugin Classes for Testing
@@ -62,7 +58,7 @@ class MockPlugin:
         self.hooks = {}
         self._info = info
 
-    def initialize(self, config: Optional[Dict[str, Any]] = None) -> bool:
+    def initialize(self, config: dict[str, Any] | None = None) -> bool:
         self.config = config or {}
         self.initialized = True
         self.state = "active"
@@ -79,14 +75,14 @@ class MockPlugin:
     def get_config(self):
         return self.config
 
-    def set_config(self, config: Dict[str, Any]):
+    def set_config(self, config: dict[str, Any]):
         self.config = config
 
 
 class FaultyInitPlugin(MockPlugin):
     """Plugin that fails during initialization."""
 
-    def initialize(self, config: Optional[Dict[str, Any]] = None) -> bool:
+    def initialize(self, config: dict[str, Any] | None = None) -> bool:
         raise RuntimeError("Initialization failed intentionally")
 
 
@@ -100,7 +96,7 @@ class FaultyShutdownPlugin(MockPlugin):
 class SlowInitPlugin(MockPlugin):
     """Plugin with slow initialization."""
 
-    def initialize(self, config: Optional[Dict[str, Any]] = None) -> bool:
+    def initialize(self, config: dict[str, Any] | None = None) -> bool:
         time.sleep(0.1)  # Simulate slow init
         return super().initialize(config)
 
@@ -110,7 +106,7 @@ class ResourceLeakPlugin(MockPlugin):
 
     resources_acquired = []
 
-    def initialize(self, config: Optional[Dict[str, Any]] = None) -> bool:
+    def initialize(self, config: dict[str, Any] | None = None) -> bool:
         ResourceLeakPlugin.resources_acquired.append(f"resource_{id(self)}")
         return super().initialize(config)
 

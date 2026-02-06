@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -17,7 +16,7 @@ class DocumentsConfig:
         default_encoding: str = "utf-8",
         max_file_size: int = 100 * 1024 * 1024,  # 100MB
         enable_caching: bool = True,
-        cache_directory: Optional[Path] = None,
+        cache_directory: Path | None = None,
         strict_validation: bool = False,
     ):
         self.default_encoding = default_encoding
@@ -45,7 +44,7 @@ class DocumentsConfig:
 
 
 # Global configuration instance
-_config: Optional[DocumentsConfig] = None
+_config: DocumentsConfig | None = None
 
 
 def get_config() -> DocumentsConfig:

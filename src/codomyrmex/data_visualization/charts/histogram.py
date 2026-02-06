@@ -58,10 +58,10 @@ def create_histogram(
 class Histogram:
     """
     Histogram class wrapper for object-oriented usage.
-    
+
     Provides a class-based interface around the create_histogram function.
     """
-    
+
     def __init__(
         self,
         data: list = None,
@@ -74,7 +74,7 @@ class Histogram:
     ):
         """
         Initialize a histogram.
-        
+
         Args:
             data: Data values to plot
             bins: Number of bins
@@ -91,11 +91,11 @@ class Histogram:
         self.y_label = y_label
         self.hist_color = hist_color
         self.edge_color = edge_color
-    
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the histogram.
-        
+
         Args:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
@@ -111,11 +111,11 @@ class Histogram:
             hist_color=self.hist_color,
             edge_color=self.edge_color
         )
-    
+
     def save(self, output_path: str):
         """Save the chart to a file."""
         self.render(output_path=output_path, show_plot=False)
-    
+
     def show(self):
         """Display the chart interactively."""
         self.render(show_plot=True)

@@ -7,7 +7,7 @@ All exceptions inherit from CodomyrmexError for consistent error handling.
 
 from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError, ContainerError as BaseContainerError
+from codomyrmex.exceptions import ContainerError as BaseContainerError
 
 
 class ContainerError(BaseContainerError):

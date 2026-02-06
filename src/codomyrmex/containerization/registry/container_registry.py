@@ -1,25 +1,15 @@
+import base64
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
-import json
-import os
-import subprocess
+from typing import Any
 
-from dataclasses import dataclass, field
-from docker.errors import APIError, DockerException, ImageNotFound
-import base64
 import docker
-import hashlib
 import requests
+from docker.errors import APIError, DockerException, ImageNotFound
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Container Registry Module for Codomyrmex Containerization."""
 
@@ -51,7 +41,7 @@ class ContainerImage:
     registry_url: str
     size_mb: float
     created_at: datetime
-    digest: Optional[str] = None
+    digest: str | None = None
     layers: list[str] = field(default_factory=list)
     labels: dict[str, str] = field(default_factory=dict)
     vulnerabilities: list[dict[str, Any]] = field(default_factory=list)
@@ -62,7 +52,7 @@ class RegistryCredentials:
     username: str
     password: str
     registry_url: str
-    token: Optional[str] = None
+    token: str | None = None
 
     def get_auth_header(self) -> str:
         """Get authorization header value."""
@@ -81,7 +71,7 @@ class ContainerRegistry:
     def __init__(
         self,
         registry_url: str,
-        credentials: Optional[RegistryCredentials] = None
+        credentials: RegistryCredentials | None = None
     ):
         """Initialize container registry manager.
 
@@ -129,7 +119,7 @@ class ContainerRegistry:
         self,
         image_name: str,
         image_tag: str,
-        local_image: Optional[str] = None
+        local_image: str | None = None
     ) -> dict[str, Any]:
         """Push container image to registry.
 
@@ -279,7 +269,7 @@ class ContainerRegistry:
         dockerfile_path: str,
         image_name: str,
         image_tag: str,
-        build_args: Optional[dict[str, str]] = None,
+        build_args: dict[str, str] | None = None,
         no_cache: bool = False
     ) -> dict[str, Any]:
         """Build and push an image to the registry.
@@ -347,7 +337,7 @@ class ContainerRegistry:
 
     def list_images(
         self,
-        repository: Optional[str] = None
+        repository: str | None = None
     ) -> list[dict[str, Any]]:
         """List images in the local Docker cache or registry.
 
@@ -392,7 +382,7 @@ class ContainerRegistry:
 
     def list_registry_images(
         self,
-        repository: Optional[str] = None,
+        repository: str | None = None,
         limit: int = 100
     ) -> list[dict[str, Any]]:
         """List images directly from the registry API.
@@ -505,7 +495,7 @@ class ContainerRegistry:
         self,
         image_name: str,
         image_tag: str
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Get detailed information about an image.
 
         Args:
@@ -588,7 +578,7 @@ class ContainerRegistry:
         self,
         image_name: str,
         image_tag: str
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Inspect image manifest from registry.
 
         Args:
@@ -621,7 +611,7 @@ class ContainerRegistry:
 def manage_container_registry(
     operation: str,
     registry_url: str,
-    credentials: Optional[dict[str, str]] = None,
+    credentials: dict[str, str] | None = None,
     **kwargs: Any
 ) -> Any:
     """Manage container registry operations.

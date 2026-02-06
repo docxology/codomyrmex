@@ -1,11 +1,10 @@
-from pathlib import Path
+import cmd
 import logging
-import math
 import os
 import random
 import subprocess
+from pathlib import Path
 
-import cmd
 import numpy as np
 
 from codomyrmex.coding import execute_code
@@ -13,12 +12,6 @@ from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
-
-
-
-
-
-
 
 #!/usr/bin/env python3
 

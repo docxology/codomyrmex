@@ -11,13 +11,12 @@ Example:
 """
 
 import os
-import tempfile
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-from ..sandbox.container import run_code_in_docker, check_docker_available
-from ..sandbox.security import prepare_code_file, prepare_stdin_file, cleanup_temp_files
+from ..sandbox.container import check_docker_available, run_code_in_docker
+from ..sandbox.security import cleanup_temp_files, prepare_code_file, prepare_stdin_file
 from .language_support import SUPPORTED_LANGUAGES, validate_language
 from .session_manager import validate_session_id
 
@@ -29,7 +28,7 @@ MAX_TIMEOUT = 300
 MIN_TIMEOUT = 1
 
 
-def validate_timeout(timeout: Optional[int]) -> int:
+def validate_timeout(timeout: int | None) -> int:
     """Validate and normalize a timeout value to be within allowed bounds.
 
     Ensures the timeout is within the MIN_TIMEOUT and MAX_TIMEOUT range.
@@ -61,9 +60,9 @@ def validate_timeout(timeout: Optional[int]) -> int:
 def execute_code(
     language: str,
     code: str,
-    stdin: Optional[str] = None,
-    timeout: Optional[int] = None,
-    session_id: Optional[str] = None,
+    stdin: str | None = None,
+    timeout: int | None = None,
+    session_id: str | None = None,
 ) -> dict[str, Any]:
     """Execute a code snippet in a sandboxed Docker environment.
 

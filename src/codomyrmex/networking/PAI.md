@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Networking Context
+# Personal AI Infrastructure — Networking Module
 
-**Module**: networking
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Network communication infrastructure for HTTP clients, WebSocket support, and inter-service messaging.
+The Networking module provides PAI integration for HTTP clients and network operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### HTTP Client
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Make API requests:
 
-## Key Files
+```python
+from codomyrmex.networking import HTTPClient
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+client = HTTPClient(timeout=30, retries=3)
+response = await client.get("https://api.example.com/data")
 
-## Future Considerations
+data = response.json()
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Connection Management
+
+Manage connections:
+
+```python
+from codomyrmex.networking import ConnectionPool
+
+pool = ConnectionPool(max_connections=10)
+async with pool.connection() as conn:
+    result = await conn.fetch(url)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `HTTPClient` | API calls |
+| `ConnectionPool` | Connection management |
+| `DNSResolver` | DNS resolution |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

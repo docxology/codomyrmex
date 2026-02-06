@@ -10,11 +10,11 @@ with support for:
 - Cost estimation
 """
 
-from typing import Any, Callable, Iterator, Optional
 import random
 import time
+from typing import Any
+from collections.abc import Callable, Iterator
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -23,7 +23,6 @@ from codomyrmex.agents.core import (
 from codomyrmex.agents.core.exceptions import ClaudeError
 from codomyrmex.agents.core.session import AgentSession, SessionManager
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 try:
     import anthropic
@@ -63,8 +62,8 @@ class ClaudeClient(APIAgentBase):
 
     def __init__(
         self,
-        config: Optional[dict[str, Any]] = None,
-        session_manager: Optional[SessionManager] = None,
+        config: dict[str, Any] | None = None,
+        session_manager: SessionManager | None = None,
     ):
         """Initialize Claude client.
 
@@ -126,7 +125,7 @@ class ClaudeClient(APIAgentBase):
         name: str,
         description: str,
         input_schema: dict[str, Any],
-        handler: Optional[Callable] = None,
+        handler: Callable | None = None,
     ) -> None:
         """Register a tool for function calling.
 
@@ -458,7 +457,7 @@ class ClaudeClient(APIAgentBase):
 
     def _build_messages_with_system(
         self, request: AgentRequest
-    ) -> tuple[list[dict[str, Any]], Optional[str]]:
+    ) -> tuple[list[dict[str, Any]], str | None]:
         """Build Claude messages with proper system message handling.
 
         Args:
@@ -544,8 +543,8 @@ class ClaudeClient(APIAgentBase):
     def execute_with_session(
         self,
         request: AgentRequest,
-        session: Optional[AgentSession] = None,
-        session_id: Optional[str] = None,
+        session: AgentSession | None = None,
+        session_id: str | None = None,
     ) -> AgentResponse:
         """Execute request with session context for multi-turn conversations.
 
@@ -589,7 +588,7 @@ class ClaudeClient(APIAgentBase):
 
         return response
 
-    def create_session(self, session_id: Optional[str] = None) -> AgentSession:
+    def create_session(self, session_id: str | None = None) -> AgentSession:
         """Create a new conversation session.
 
         Args:
@@ -622,7 +621,7 @@ class ClaudeClient(APIAgentBase):
             ClaudeError: If tool not found or execution fails
         """
         if not hasattr(self, "_tool_handlers"):
-            raise ClaudeError(f"No tool handlers registered")
+            raise ClaudeError("No tool handlers registered")
 
         handler = self._tool_handlers.get(tool_name)
         if not handler:
@@ -745,7 +744,7 @@ class ClaudeClient(APIAgentBase):
         self,
         file_path: str,
         instructions: str,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> dict[str, Any]:
         """Apply AI-guided edits to a file.
 
@@ -786,7 +785,7 @@ class ClaudeClient(APIAgentBase):
             }
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 original_content = f.read()
         except Exception as e:
             return {
@@ -1018,8 +1017,8 @@ Structure your response with:
         self,
         path: str,
         max_depth: int = 3,
-        include_patterns: Optional[list[str]] = None,
-        exclude_patterns: Optional[list[str]] = None,
+        include_patterns: list[str] | None = None,
+        exclude_patterns: list[str] | None = None,
     ) -> dict[str, Any]:
         """Scan directory for project context.
 
@@ -1044,8 +1043,8 @@ Structure your response with:
             >>> result = client.scan_directory("/path/to/project")
             >>> print(result["structure"])
         """
-        import os
         import fnmatch
+        import os
 
         if not os.path.isdir(path):
             return {
@@ -1233,7 +1232,7 @@ Structure your response with:
     def run_command(
         self,
         command: str,
-        cwd: Optional[str] = None,
+        cwd: str | None = None,
         timeout: int = 60,
         capture_output: bool = True,
     ) -> dict[str, Any]:
@@ -1510,7 +1509,7 @@ Structure your response:
         self,
         code: str,
         language: str = "python",
-        framework: Optional[str] = None,
+        framework: str | None = None,
     ) -> dict[str, Any]:
         """Generate test suggestions for code.
 

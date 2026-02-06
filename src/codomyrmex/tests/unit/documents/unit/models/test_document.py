@@ -1,9 +1,10 @@
+import unittest
+from datetime import datetime
+
 import pytest
 
-import unittest
-from pathlib import Path
-from datetime import datetime
 from codomyrmex.documents.models.document import Document, DocumentFormat, DocumentType
+
 
 @pytest.mark.unit
 class TestDocument(unittest.TestCase):
@@ -12,7 +13,7 @@ class TestDocument(unittest.TestCase):
         content = "Test content"
         fmt = DocumentFormat.TEXT
         doc = Document(content=content, format=fmt)
-        
+
         self.assertEqual(doc.content, content)
         self.assertEqual(doc.format, fmt)
         self.assertIsNone(doc.file_path)
@@ -25,15 +26,15 @@ class TestDocument(unittest.TestCase):
         # Text
         doc = Document("content", DocumentFormat.TEXT)
         self.assertEqual(doc.type, DocumentType.TEXT)
-        
+
         # Structure
         doc = Document("content", DocumentFormat.JSON)
         self.assertEqual(doc.type, DocumentType.STRUCTURED)
-        
+
         # Markup
         doc = Document("content", DocumentFormat.MARKDOWN)
         self.assertEqual(doc.type, DocumentType.MARKUP)
-        
+
         # Binary
         doc = Document("content", DocumentFormat.PDF)
         self.assertEqual(doc.type, DocumentType.BINARY)
@@ -60,6 +61,6 @@ class TestDocument(unittest.TestCase):
         """Test that metadata defaults to empty dict."""
         doc = Document("content", DocumentFormat.TEXT)
         self.assertEqual(doc.metadata, {})
-        
+
         doc_with_meta = Document("content", DocumentFormat.TEXT, metadata={"author": "me"})
         self.assertEqual(doc_with_meta.metadata, {"author": "me"})

@@ -4,23 +4,18 @@ This module provides the VideoProcessor class for manipulating video files
 including resize, crop, rotate, convert, filter, trim, and merge operations.
 """
 
-import tempfile
 import time
 from pathlib import Path
-from typing import Optional, Union
 
 from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
     UnsupportedFormatError,
     VideoProcessingError,
     VideoReadError,
-    VideoWriteError,
 )
 from codomyrmex.video.models import (
     FilterType,
     ProcessingResult,
-    VideoCodec,
-    AudioCodec,
 )
 
 # Check for moviepy availability
@@ -74,7 +69,7 @@ class VideoProcessor:
         config: Video processing configuration
     """
 
-    def __init__(self, config: Optional[object] = None) -> None:
+    def __init__(self, config: object | None = None) -> None:
         """Initialize the video processor.
 
         Args:
@@ -91,7 +86,7 @@ class VideoProcessor:
                 "Install with: uv sync --extra video"
             )
 
-    def _validate_input(self, video_path: Union[str, Path]) -> Path:
+    def _validate_input(self, video_path: str | Path) -> Path:
         """Validate input video path.
 
         Args:
@@ -121,7 +116,7 @@ class VideoProcessor:
     def _get_output_path(
         self,
         input_path: Path,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
         suffix: str = "_processed",
     ) -> Path:
         """Generate output path if not provided.
@@ -141,10 +136,10 @@ class VideoProcessor:
 
     def resize(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         width: int,
         height: int,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
         maintain_aspect_ratio: bool = True,
     ) -> ProcessingResult:
         """Resize a video to specified dimensions.
@@ -219,12 +214,12 @@ class VideoProcessor:
 
     def crop(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         x: int,
         y: int,
         width: int,
         height: int,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
     ) -> ProcessingResult:
         """Crop a video to specified region.
 
@@ -285,9 +280,9 @@ class VideoProcessor:
 
     def rotate(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         angle: float,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
         expand: bool = True,
     ) -> ProcessingResult:
         """Rotate a video by specified angle.
@@ -349,12 +344,12 @@ class VideoProcessor:
 
     def convert(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         output_format: str,
-        output_path: Optional[Union[str, Path]] = None,
-        video_codec: Optional[str] = None,
-        audio_codec: Optional[str] = None,
-        bitrate: Optional[str] = None,
+        output_path: str | Path | None = None,
+        video_codec: str | None = None,
+        audio_codec: str | None = None,
+        bitrate: str | None = None,
     ) -> ProcessingResult:
         """Convert video to a different format.
 
@@ -443,10 +438,10 @@ class VideoProcessor:
 
     def apply_filter(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         filter_type: FilterType,
         intensity: float = 1.0,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
     ) -> ProcessingResult:
         """Apply a filter to a video.
 
@@ -532,10 +527,10 @@ class VideoProcessor:
 
     def trim(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         start: float,
         end: float,
-        output_path: Optional[Union[str, Path]] = None,
+        output_path: str | Path | None = None,
     ) -> ProcessingResult:
         """Trim video to specified time range.
 
@@ -607,9 +602,9 @@ class VideoProcessor:
 
     def merge(
         self,
-        video_paths: list[Union[str, Path]],
-        output_path: Union[str, Path],
-        transition: Optional[str] = None,
+        video_paths: list[str | Path],
+        output_path: str | Path,
+        transition: str | None = None,
         transition_duration: float = 1.0,
     ) -> ProcessingResult:
         """Merge multiple videos into one.

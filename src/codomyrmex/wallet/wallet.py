@@ -5,7 +5,7 @@ NaturalRitualRecovery into a single unified wallet object.
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -26,7 +26,7 @@ class Wallet:
     def __init__(
         self,
         user_id: str,
-        storage_path: Optional[Path] = None,
+        storage_path: Path | None = None,
     ):
         """Initialize a Wallet for a specific user.
 
@@ -37,11 +37,11 @@ class Wallet:
         self.user_id = user_id
         self._manager = WalletManager(storage_path=storage_path)
         self._recovery = NaturalRitualRecovery()
-        self._address: Optional[str] = None
+        self._address: str | None = None
         logger.info(f"Wallet initialized for user {user_id}")
 
     @property
-    def address(self) -> Optional[str]:
+    def address(self) -> str | None:
         """The wallet address, or None if not yet created."""
         return self._address
 
@@ -94,7 +94,7 @@ class Wallet:
         self._address = self._manager.rotate_keys(self.user_id, reason=reason)
         return self._address
 
-    def setup_recovery(self, steps: List[RitualStep]) -> None:
+    def setup_recovery(self, steps: list[RitualStep]) -> None:
         """Register recovery ritual steps.
 
         Args:
@@ -102,7 +102,7 @@ class Wallet:
         """
         self._recovery.register_ritual(self.user_id, steps)
 
-    def recover(self, responses: List[str]) -> bool:
+    def recover(self, responses: list[str]) -> bool:
         """Attempt recovery via natural ritual.
 
         Args:
@@ -113,7 +113,7 @@ class Wallet:
         """
         return self._recovery.initiate_recovery(self.user_id, responses)
 
-    def backup(self) -> Dict[str, Any]:
+    def backup(self) -> dict[str, Any]:
         """Create a backup snapshot.
 
         Returns:

@@ -1,15 +1,22 @@
 """Tests for GeminiClient."""
 
-import os
-import pytest
-from typing import Generator
+from collections.abc import Generator
 from unittest.mock import MagicMock, patch
 
-from codomyrmex.agents.gemini.gemini_client import GeminiClient
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
+import pytest
 
-# NOTE: We partially mock 'google.genai' ONLY because we cannot guarantee 
-# external API access in all test environments. 
+try:
+    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+    from codomyrmex.agents.gemini.gemini_client import GeminiClient
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
+
+# NOTE: We partially mock 'google.genai' ONLY because we cannot guarantee
+# external API access in all test environments.
 # In a real "No Mock" environment with a provided key, these should run against the real API.
 # Here we check if key is present; if not, we must simulate or skip.
 
@@ -30,7 +37,7 @@ def gemini_client(mock_genai_client) -> Generator[GeminiClient, None, None]:
 
 @pytest.mark.unit
 class TestGeminiClient:
-    
+
     def test_init(self, gemini_client):
         """Test initialization."""
         assert gemini_client.name == "gemini"
@@ -51,7 +58,7 @@ class TestGeminiClient:
         mock_cand.finish_reason = "STOP"
         mock_response.candidates = [mock_cand]
         mock_response.usage_metadata.model_dump.return_value = {"total_tokens": 10}
-        
+
         mock_genai_client.models.generate_content.return_value = mock_response
 
         request = AgentRequest(prompt="Hello")
@@ -60,7 +67,7 @@ class TestGeminiClient:
         assert response.is_success()
         assert response.content == "Generated text"
         assert response.metadata["finish_reason"] == "STOP"
-        
+
         # Verify call args
         args, kwargs = mock_genai_client.models.generate_content.call_args
         assert kwargs["model"] == "gemini-test"

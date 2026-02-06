@@ -5,7 +5,7 @@ This module defines the interface that all STT providers must implement.
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import AsyncIterator, Optional
+from collections.abc import AsyncIterator
 
 from ..models import TranscriptionConfig, TranscriptionResult, WhisperModelSize
 
@@ -46,7 +46,7 @@ class STTProvider(ABC):
     def transcribe(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> TranscriptionResult:
         """Transcribe an audio file.
 
@@ -67,7 +67,7 @@ class STTProvider(ABC):
     async def transcribe_async(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> TranscriptionResult:
         """Transcribe an audio file asynchronously.
 
@@ -87,7 +87,7 @@ class STTProvider(ABC):
     async def transcribe_stream(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> AsyncIterator[TranscriptionResult]:
         """Stream transcription results as they become available.
 

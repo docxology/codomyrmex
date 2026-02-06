@@ -1,33 +1,46 @@
-# privacy
+# Privacy Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Data sanitization and anonymous routing for privacy protection.
 
-The privacy module enforces data minimization and network anonymity. It provides a crumb cleaner that recursively strips identifying metadata (timestamps, IP addresses, device IDs, session tokens) from data structures, and a mixnet proxy that simulates anonymous multi-hop routing through overlay network nodes with randomized delays to thwart timing analysis.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.privacy import CrumbCleaner, MixnetProxy
 
-- **`CrumbCleaner`** -- Sanitizes dictionaries and nested structures by recursively removing blacklisted metadata keys (e.g., `ip_address`, `device_id`, `cookie_id`). Supports dynamic blacklist configuration and random noise generation to obscure activity patterns.
-- **`MixnetProxy`** -- Manages anonymous payload routing through a simulated 10-node mixnet. Routes data through randomly selected mix nodes with configurable hop counts and processing delays to prevent traffic analysis.
+# Data sanitization
+cleaner = CrumbCleaner()
 
-## Directory Contents
+# Remove PII from text
+sanitized = cleaner.clean("Contact me at john@example.com or 555-1234")
+# "Contact me at [EMAIL] or [PHONE]"
 
-- `__init__.py` - Module entry point; exports `CrumbCleaner` and `MixnetProxy`
-- `crumbs.py` - `CrumbCleaner` class with recursive scrubbing, noise generation, and configurable blacklist management
-- `mixnet.py` - `Packet` dataclass, `MixNode` relay node, and `MixnetProxy` routing manager
-- `privacy.py` - Additional privacy utilities
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `SPEC.md` - Module specification
-- `SECURITY.md` - Security considerations
-- `CHANGELOG.md` - Version history
-- `USAGE_EXAMPLES.md` - Usage examples and patterns
-- `PAI.md` - PAI integration notes
+# Configure patterns
+cleaner.add_pattern("ssn", r"\d{3}-\d{2}-\d{4}", "[SSN]")
+cleaner.add_pattern("credit_card", r"\d{4}-\d{4}-\d{4}-\d{4}", "[CARD]")
+
+# Anonymous routing via mixnet
+proxy = MixnetProxy()
+proxy.configure(hop_count=3, encryption="aes-256")
+
+# Route request anonymously
+response = proxy.route(request, destination="api.example.com")
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `CrumbCleaner` | PII detection and sanitization |
+| `MixnetProxy` | Anonymous multi-hop routing |
+
+## Use Cases
+
+- **Log sanitization** — Remove sensitive data before logging
+- **Data export** — Clean PII from datasets
+- **Anonymous requests** — Route API calls through mixnet
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/privacy/](../../../docs/modules/privacy/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

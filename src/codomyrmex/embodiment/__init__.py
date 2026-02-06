@@ -1,13 +1,9 @@
 """Embodiment module for Codomyrmex."""
 
+# Submodule exports
+from . import actuators, ros, sensors, transformation
 from .ros.ros_bridge import ROS2Bridge
 from .transformation.transformation import Transform3D
-
-# Submodule exports
-from . import ros
-from . import sensors
-from . import actuators
-from . import transformation
 
 __all__ = [
     "ROS2Bridge",

@@ -1,43 +1,63 @@
-# observability_dashboard
+# Observability Dashboard Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Metrics collection, alerting, and dashboard visualization.
 
-Unified monitoring dashboard system for collecting metrics, managing alerts, and composing visual panels. Provides thread-safe metric collection with configurable retention, rule-based alerting with severity levels, and dashboard composition with multiple panel types (graphs, stats, tables, heatmaps, gauges, and logs).
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.observability_dashboard import (
+    MetricCollector, AlertManager, DashboardManager,
+    Dashboard, Panel, PanelType, AlertSeverity
+)
 
-### Enums
+# Collect metrics
+collector = MetricCollector(retention_minutes=60)
+collector.record("http_requests_total", 1, labels={"method": "GET"})
+collector.record("cpu_usage", 0.75)
 
-- **`MetricType`** -- Metric classification: COUNTER, GAUGE, HISTOGRAM, SUMMARY
-- **`AlertSeverity`** -- Alert severity levels: INFO, WARNING, ERROR, CRITICAL
-- **`PanelType`** -- Dashboard panel types: GRAPH, STAT, TABLE, HEATMAP, GAUGE, LOG
+# Get latest values
+latest = collector.get_latest("cpu_usage")
+print(f"CPU: {latest.value}")
 
-### Data Classes
+# Set up alerts
+alerts = AlertManager()
+alerts.add_rule(
+    name="high_cpu",
+    condition=lambda m: m.get("cpu_usage", 0) > 0.9,
+    message="CPU usage is high",
+    severity=AlertSeverity.WARNING
+)
 
-- **`MetricValue`** -- A single metric data point with name, value, timestamp, labels, and type
-- **`Alert`** -- An alert notification with severity, fire/resolve timestamps, and active status tracking
-- **`Panel`** -- A dashboard panel with type, associated metrics, query, and grid position
-- **`Dashboard`** -- A complete dashboard containing panels with refresh interval and tags
+# Check metrics against rules
+new_alerts = alerts.check({"cpu_usage": 0.95})
 
-### Components
+# Create dashboard
+dashboards = DashboardManager(collector)
+dash = dashboards.create("System Overview")
+dash.add_panel(Panel(
+    id="cpu",
+    title="CPU Usage",
+    panel_type=PanelType.GRAPH,
+    metrics=["cpu_usage"]
+))
+```
 
-- **`MetricCollector`** -- Thread-safe metric recording and retrieval with configurable retention; supports time-range queries, latest-value access, and automatic cleanup of expired data
-- **`AlertManager`** -- Rule-based alert management; define conditions as callables, check metrics against rules, and track active/resolved alert history
-- **`DashboardManager`** -- Creates, retrieves, lists, and deletes dashboards; fetches panel-specific metric data from the underlying MetricCollector
+## Exports
 
-## Directory Contents
-
-- `__init__.py` - Module definition with all classes (MetricCollector, AlertManager, DashboardManager)
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Detailed API documentation
-- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+| Class | Description |
+|-------|-------------|
+| `MetricCollector` | Collect and store metrics |
+| `AlertManager` | Define rules and fire alerts |
+| `DashboardManager` | Create and manage dashboards |
+| `Dashboard` | Dashboard with panels |
+| `Panel` | Panel with type, metrics, position |
+| `Alert` | Alert with severity, timestamps |
+| `MetricValue` | Metric with value, labels, timestamp |
+| `PanelType` | Enum: graph, stat, table, heatmap, gauge, log |
+| `AlertSeverity` | Enum: info, warning, error, critical |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/observability_dashboard/](../../../docs/modules/observability_dashboard/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

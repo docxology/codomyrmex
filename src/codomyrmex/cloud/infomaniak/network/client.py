@@ -4,8 +4,8 @@ Infomaniak Network Client (Neutron/Octavia).
 Provides network, router, security group, and load balancer operations.
 """
 
-from typing import Any, Dict, List, Optional
 import logging
+from typing import Any
 
 from ..base import InfomaniakOpenStackBase
 
@@ -21,12 +21,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     """
 
     _service_name = "network"
-    
+
     # =========================================================================
     # Network Operations
     # =========================================================================
-    
-    def list_networks(self) -> List[Dict[str, Any]]:
+
+    def list_networks(self) -> list[dict[str, Any]]:
         """List all networks."""
         try:
             networks = list(self._conn.network.networks())
@@ -44,14 +44,14 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list networks: {e}")
             return []
-    
+
     def create_network(
         self,
         name: str,
-        description: Optional[str] = None,
+        description: str | None = None,
         is_shared: bool = False,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a new network."""
         try:
             network = self._conn.network.create_network(
@@ -65,7 +65,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create network {name}: {e}")
             return None
-    
+
     def delete_network(self, network_id: str) -> bool:
         """Delete a network."""
         try:
@@ -75,18 +75,18 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete network {network_id}: {e}")
             return False
-    
+
     def create_subnet(
         self,
         network_id: str,
         name: str,
         cidr: str,
         ip_version: int = 4,
-        gateway_ip: Optional[str] = None,
+        gateway_ip: str | None = None,
         enable_dhcp: bool = True,
-        dns_nameservers: Optional[List[str]] = None,
+        dns_nameservers: list[str] | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a subnet in a network."""
         try:
             subnet = self._conn.network.create_subnet(
@@ -104,12 +104,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create subnet {name}: {e}")
             return None
-    
+
     # =========================================================================
     # Router Operations
     # =========================================================================
-    
-    def list_routers(self) -> List[Dict[str, Any]]:
+
+    def list_routers(self) -> list[dict[str, Any]]:
         """List all routers."""
         try:
             routers = list(self._conn.network.routers())
@@ -125,29 +125,29 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list routers: {e}")
             return []
-    
+
     def create_router(
         self,
         name: str,
-        external_network: Optional[str] = None,
+        external_network: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a router with optional external gateway."""
         try:
             router_args = {"name": name, **kwargs}
-            
+
             if external_network:
                 ext_net = self._conn.network.find_network(external_network)
                 if ext_net:
                     router_args["external_gateway_info"] = {"network_id": ext_net.id}
-            
+
             router = self._conn.network.create_router(**router_args)
             logger.info(f"Created router: {router.id}")
             return {"id": router.id, "name": router.name}
         except Exception as e:
             logger.error(f"Failed to create router {name}: {e}")
             return None
-    
+
     def add_router_interface(
         self,
         router_id: str,
@@ -161,7 +161,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to add interface to router {router_id}: {e}")
             return False
-    
+
     def remove_router_interface(
         self,
         router_id: str,
@@ -185,12 +185,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete router {router_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Security Group Operations
     # =========================================================================
-    
-    def list_security_groups(self) -> List[Dict[str, Any]]:
+
+    def list_security_groups(self) -> list[dict[str, Any]]:
         """List all security groups."""
         try:
             sgs = list(self._conn.network.security_groups())
@@ -206,12 +206,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list security groups: {e}")
             return []
-    
+
     def create_security_group(
         self,
         name: str,
-        description: Optional[str] = None
-    ) -> Optional[Dict[str, Any]]:
+        description: str | None = None
+    ) -> dict[str, Any] | None:
         """Create a security group."""
         try:
             sg = self._conn.network.create_security_group(
@@ -223,21 +223,21 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create security group {name}: {e}")
             return None
-    
+
     def add_security_group_rule(
         self,
         security_group_id: str,
         direction: str = "ingress",
-        protocol: Optional[str] = None,
-        port_range_min: Optional[int] = None,
-        port_range_max: Optional[int] = None,
-        remote_ip_prefix: Optional[str] = None,
+        protocol: str | None = None,
+        port_range_min: int | None = None,
+        port_range_max: int | None = None,
+        remote_ip_prefix: str | None = None,
         ethertype: str = "IPv4",
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Add a rule to a security group.
-        
+
         Args:
             security_group_id: Target security group
             direction: "ingress" or "egress"
@@ -263,7 +263,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to add rule to {security_group_id}: {e}")
             return None
-    
+
     def delete_security_group(self, security_group_id: str) -> bool:
         """Delete a security group."""
         try:
@@ -273,12 +273,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete security group {security_group_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Floating IP Operations
     # =========================================================================
-    
-    def list_floating_ips(self) -> List[Dict[str, Any]]:
+
+    def list_floating_ips(self) -> list[dict[str, Any]]:
         """List all floating IPs."""
         try:
             fips = list(self._conn.network.ips())
@@ -295,25 +295,25 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list floating IPs: {e}")
             return []
-    
+
     def allocate_floating_ip(
         self,
         external_network: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Allocate a floating IP from an external network."""
         try:
             ext_net = self._conn.network.find_network(external_network)
             if not ext_net:
                 logger.error(f"External network not found: {external_network}")
                 return None
-            
+
             fip = self._conn.network.create_ip(floating_network_id=ext_net.id)
             logger.info(f"Allocated floating IP: {fip.floating_ip_address}")
             return {"id": fip.id, "floating_ip_address": fip.floating_ip_address}
         except Exception as e:
             logger.error(f"Failed to allocate floating IP: {e}")
             return None
-    
+
     def associate_floating_ip(
         self,
         floating_ip_id: str,
@@ -327,12 +327,12 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to associate floating IP: {e}")
             return False
-    
+
     # =========================================================================
     # Load Balancer Operations (Octavia)
     # =========================================================================
-    
-    def list_loadbalancers(self) -> List[Dict[str, Any]]:
+
+    def list_loadbalancers(self) -> list[dict[str, Any]]:
         """List all load balancers."""
         try:
             lbs = list(self._conn.load_balancer.load_balancers())
@@ -349,14 +349,14 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list load balancers: {e}")
             return []
-    
+
     def create_loadbalancer(
         self,
         name: str,
         subnet_id: str,
-        vip_address: Optional[str] = None,
+        vip_address: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a load balancer."""
         try:
             lb = self._conn.load_balancer.create_load_balancer(
@@ -370,7 +370,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create load balancer {name}: {e}")
             return None
-    
+
     def delete_loadbalancer(self, loadbalancer_id: str, cascade: bool = False) -> bool:
         """Delete a load balancer."""
         try:
@@ -388,7 +388,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # Subnet Operations
     # =========================================================================
 
-    def list_subnets(self) -> List[Dict[str, Any]]:
+    def list_subnets(self) -> list[dict[str, Any]]:
         """List all subnets."""
         try:
             subnets = list(self._conn.network.subnets())
@@ -408,7 +408,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to list subnets: {e}")
             return []
 
-    def get_subnet(self, subnet_id: str) -> Optional[Dict[str, Any]]:
+    def get_subnet(self, subnet_id: str) -> dict[str, Any] | None:
         """Get a specific subnet by ID."""
         try:
             subnet = self._conn.network.get_subnet(subnet_id)
@@ -465,8 +465,8 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_listeners(
-        self, loadbalancer_id: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, loadbalancer_id: str | None = None
+    ) -> list[dict[str, Any]]:
         """List listeners, optionally filtered by load balancer."""
         try:
             kwargs = {}
@@ -494,7 +494,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         protocol: str,
         port: int,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a listener on a load balancer."""
         try:
             listener = self._conn.load_balancer.create_listener(
@@ -525,8 +525,8 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_pools(
-        self, loadbalancer_id: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, loadbalancer_id: str | None = None
+    ) -> list[dict[str, Any]]:
         """List pools, optionally filtered by load balancer."""
         try:
             kwargs = {}
@@ -551,10 +551,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         name: str,
         protocol: str,
         lb_algorithm: str,
-        listener_id: Optional[str] = None,
-        loadbalancer_id: Optional[str] = None,
+        listener_id: str | None = None,
+        loadbalancer_id: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a pool."""
         try:
             pool = self._conn.load_balancer.create_pool(
@@ -585,7 +585,7 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # Pool Member Operations
     # =========================================================================
 
-    def list_pool_members(self, pool_id: str) -> List[Dict[str, Any]]:
+    def list_pool_members(self, pool_id: str) -> list[dict[str, Any]]:
         """List members in a pool."""
         try:
             members = list(self._conn.load_balancer.members(pool_id))
@@ -610,10 +610,10 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         address: str,
         port: int,
         weight: int = 1,
-        name: Optional[str] = None,
-        subnet_id: Optional[str] = None,
+        name: str | None = None,
+        subnet_id: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Add a member to a pool."""
         try:
             member = self._conn.load_balancer.create_member(
@@ -646,8 +646,8 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
     # =========================================================================
 
     def list_health_monitors(
-        self, pool_id: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, pool_id: str | None = None
+    ) -> list[dict[str, Any]]:
         """List health monitors, optionally filtered by pool."""
         try:
             kwargs = {}
@@ -677,9 +677,9 @@ class InfomaniakNetworkClient(InfomaniakOpenStackBase):
         delay: int,
         timeout: int,
         max_retries: int = 3,
-        name: Optional[str] = None,
+        name: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a health monitor for a pool.
 
         Args:

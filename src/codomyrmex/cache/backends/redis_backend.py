@@ -2,7 +2,7 @@
 Redis cache backend (optional).
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -21,7 +21,7 @@ except ImportError:
 class RedisCache(Cache):
     """Redis cache implementation."""
 
-    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0, default_ttl: Optional[int] = None):
+    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0, default_ttl: int | None = None):
         """Initialize Redis cache.
 
         Args:
@@ -37,7 +37,7 @@ class RedisCache(Cache):
         self.default_ttl = default_ttl
         self._stats = CacheStats()
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get a value from the cache."""
         self._stats.total_requests += 1
 
@@ -55,7 +55,7 @@ class RedisCache(Cache):
             self._stats.misses += 1
             return None
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set a value in the cache."""
         try:
             import pickle

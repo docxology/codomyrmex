@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Exporter for FPF specification to JSON and other formats.
 
 
@@ -9,7 +9,7 @@ to structured formats for use in context engineering.
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..core.models import FPFSpec, Pattern
 
@@ -19,7 +19,7 @@ class FPFExporter:
 
     def __init__(self):
         """Initialize the exporter."""
-        self.config: Dict[str, Any] = {}
+        self.config: dict[str, Any] = {}
 
     def export_json(self, spec: FPFSpec, output_path: Path) -> None:
         """Export the complete specification to JSON.
@@ -45,7 +45,7 @@ class FPFExporter:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
-    def export_patterns_json(self, patterns: List[Pattern], output_path: Path) -> None:
+    def export_patterns_json(self, patterns: list[Pattern], output_path: Path) -> None:
         """Export patterns to JSON.
 
         Args:
@@ -62,7 +62,7 @@ class FPFExporter:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
     def export_concepts_json(
-        self, concepts: List[Any], output_path: Path
+        self, concepts: list[Any], output_path: Path
     ) -> None:  # Using Any to avoid circular import
         """Export concepts to JSON.
 
@@ -79,7 +79,7 @@ class FPFExporter:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
-    def export_for_context(self, spec: FPFSpec, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def export_for_context(self, spec: FPFSpec, filters: dict[str, Any] | None = None) -> dict[str, Any]:
         """Export specification data optimized for context engineering.
 
         Args:
@@ -150,7 +150,7 @@ class FPFExporter:
 
         return context_data
 
-    def _pattern_to_dict(self, pattern: Pattern) -> Dict[str, Any]:
+    def _pattern_to_dict(self, pattern: Pattern) -> dict[str, Any]:
         """Convert a Pattern to a dictionary.
 
         Args:
@@ -173,7 +173,7 @@ class FPFExporter:
             "cluster": pattern.cluster,
         }
 
-    def _concept_to_dict(self, concept: Any) -> Dict[str, Any]:  # Using Any to avoid circular import
+    def _concept_to_dict(self, concept: Any) -> dict[str, Any]:  # Using Any to avoid circular import
         """Convert a Concept to a dictionary.
 
         Args:
@@ -192,7 +192,7 @@ class FPFExporter:
             "metadata": concept.metadata,
         }
 
-    def _relationship_to_dict(self, relationship: Any) -> Dict[str, Any]:  # Using Any to avoid circular import
+    def _relationship_to_dict(self, relationship: Any) -> dict[str, Any]:  # Using Any to avoid circular import
         """Convert a Relationship to a dictionary.
 
         Args:

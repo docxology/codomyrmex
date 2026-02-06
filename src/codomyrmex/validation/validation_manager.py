@@ -2,11 +2,12 @@
 Validation manager for registering and managing validators.
 """
 
-from typing import Any, Callable, Optional
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-from .validator import ValidationError, ValidationResult, Validator
+from .validator import ValidationResult, Validator
 
 logger = get_logger(__name__)
 
@@ -29,7 +30,7 @@ class ValidationManager:
         self._validators[name] = validator
         logger.info(f"Registered custom validator: {name}")
 
-    def get_validator(self, name: str) -> Optional[Callable]:
+    def get_validator(self, name: str) -> Callable | None:
         """Get a registered validator.
 
         Args:

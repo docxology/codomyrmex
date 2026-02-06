@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Tree Sitter Context
+# Personal AI Infrastructure — Tree Sitter Module
 
-**Module**: tree_sitter
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Tree-sitter AST parsing for multi-language code analysis, syntax highlighting, and code navigation.
+The Tree Sitter module provides PAI integration for AST parsing and code analysis.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Code Parsing
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Parse code into ASTs:
 
-## Key Files
+```python
+from codomyrmex.tree_sitter import Parser
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+parser = Parser(language="python")
+tree = parser.parse(source_code)
 
-## Future Considerations
+for node in tree.root_node.children:
+    print(f"{node.type}: {node.text}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Query Support
+
+Query code patterns:
+
+```python
+from codomyrmex.tree_sitter import Query
+
+query = Query("(function_definition name: (identifier) @name)")
+matches = query.execute(tree)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Parser` | Parse code |
+| `Query` | Pattern matching |
+| `Node` | AST navigation |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -6,17 +6,14 @@ pipeline management, deployment orchestration, monitoring, and
 external CI/CD API integrations (GitHub Actions, GitLab CI).
 """
 
-import pytest
-import tempfile
-import os
 import asyncio
-import yaml
 import json
-import subprocess
-import socket
-from pathlib import Path
-from datetime import datetime, timezone, timedelta
-from unittest.mock import Mock, MagicMock, patch, AsyncMock
+import os
+from datetime import datetime, timezone
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
+import yaml
 
 try:
     import docker
@@ -30,56 +27,39 @@ try:
 except ImportError:
     AIOHTTP_AVAILABLE = False
 
+from codomyrmex.ci_cd_automation.deployment_orchestrator import (
+    Deployment,
+    DeploymentOrchestrator,
+    DeploymentStatus,
+    Environment,
+    EnvironmentType,
+    manage_deployments,
+)
+from codomyrmex.ci_cd_automation.performance_optimizer import (
+    PipelineOptimizer,
+)
 from codomyrmex.ci_cd_automation.pipeline_manager import (
-    PipelineManager,
-    create_pipeline,
-    run_pipeline,
-    Pipeline,
-    PipelineStage,
-    PipelineJob,
-    PipelineStatus,
-    StageStatus,
-    JobStatus,
     AsyncPipelineManager,
     AsyncPipelineResult,
-    async_trigger_pipeline,
-    async_get_pipeline_status,
-    async_wait_for_completion,
+    JobStatus,
+    Pipeline,
+    PipelineJob,
+    PipelineManager,
+    PipelineStage,
+    PipelineStatus,
+    StageStatus,
+    create_pipeline,
+    run_pipeline,
 )
-
-from codomyrmex.ci_cd_automation.deployment_orchestrator import (
-    DeploymentOrchestrator,
-    manage_deployments,
-    Deployment,
-    Environment,
-    DeploymentStatus,
-    EnvironmentType
-)
-
 from codomyrmex.ci_cd_automation.pipeline_monitor import (
     PipelineMonitor,
     PipelineReport,
-    PipelineMetrics,
     ReportType,
-    monitor_pipeline_health,
-    generate_pipeline_reports,
 )
-
 from codomyrmex.ci_cd_automation.rollback_manager import (
+    RollbackExecution,
     RollbackManager,
     RollbackStrategy,
-    RollbackPlan,
-    RollbackExecution,
-    RollbackStep,
-    handle_rollback,
-)
-
-from codomyrmex.ci_cd_automation.performance_optimizer import (
-    PipelineOptimizer,
-    PerformanceMetric,
-    Bottleneck,
-    OptimizationSuggestion,
-    optimize_pipeline_performance,
 )
 
 
@@ -332,7 +312,7 @@ stages:
         assert os.path.exists(output_path)
 
         # Verify file contains valid YAML
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             config = yaml.safe_load(f)
             assert config["name"] == "test_pipeline"
 

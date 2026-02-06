@@ -9,10 +9,8 @@ and proper navigation signposting.
 
 import argparse
 import logging
-import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Set
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 
@@ -75,7 +73,7 @@ class DocumentationBootstrapper:
         # Allow both surface root directories and their subdirectories
         return True
 
-    def get_directory_inventory(self, dir_path: Path) -> List[str]:
+    def get_directory_inventory(self, dir_path: Path) -> list[str]:
         """Get inventory of immediate children for a directory."""
         inventory = []
 

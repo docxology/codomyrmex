@@ -1,26 +1,44 @@
-# Personal AI Infrastructure - Logging Monitoring Context
+# Personal AI Infrastructure — Logging & Monitoring Module
 
-**Module**: logging_monitoring
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Logging and monitoring infrastructure with structured logging, log aggregation, and health check endpoints.
+The Logging & Monitoring module provides PAI integration for observability.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Structured Logging
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Log with context:
 
-## Key Files
+```python
+from codomyrmex.logging_monitoring import get_logger
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+logger = get_logger("my_module")
+logger.info("Processing", extra={"file": "main.py", "line": 42})
+```
 
-## Future Considerations
+### Metrics Collection
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Collect metrics:
+
+```python
+from codomyrmex.logging_monitoring import MetricsCollector
+
+metrics = MetricsCollector()
+metrics.increment("requests_total")
+metrics.histogram("latency", 0.125)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `get_logger` | Structured logs |
+| `MetricsCollector` | Collect metrics |
+| `Tracer` | Distributed tracing |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

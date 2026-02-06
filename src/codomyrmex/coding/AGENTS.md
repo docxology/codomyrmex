@@ -1,38 +1,70 @@
-# Codomyrmex Agents — src/codomyrmex/coding
+# Agent Guidelines - Coding
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Code generation, editing, and transformation utilities.
 
-Provides code execution sandbox, automated code review, and programming language interaction capabilities. Enables safe code execution and comprehensive review workflows.
+## Key Classes
 
-## Active Components
+- **CodeGenerator** — Generate code from specs
+- **CodeEditor** — Edit existing code
+- **CodeTransformer** — AST-based transforms
+- **DiffApplier** — Apply code diffs
 
-- `API_SPECIFICATION.md` – Project file
-- `MIGRATION_COMPLETE.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `debugging/` – Directory containing debugging components
-- `exceptions.py` – Project file
-- `execution/` – Directory containing execution components
-- `generation/` – Directory containing generation components
-- `monitoring/` – Directory containing monitoring components
-- `refactoring/` – Directory containing refactoring components
-- `review/` – Directory containing review components
-- `sandbox/` – Directory containing sandbox components
-- `testing/` – Directory containing testing components
+## Agent Instructions
 
-## Operating Contracts
+1. **Parse before edit** — Use AST for safe edits
+2. **Preserve formatting** — Maintain style
+3. **Generate tests** — Create tests with code
+4. **Validate output** — Syntax check generated code
+5. **Document changes** — Explain transformations
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.coding import (
+    CodeGenerator, CodeEditor, CodeTransformer, DiffApplier
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Generate code
+generator = CodeGenerator()
+code = generator.generate_function(
+    name="calculate_tax",
+    params=["amount", "rate"],
+    return_type="float",
+    docstring="Calculate tax amount"
+)
+
+# Edit code
+editor = CodeEditor("src/main.py")
+editor.add_import("from datetime import datetime")
+editor.add_method("MyClass", method_code)
+editor.save()
+
+# Transform code
+transformer = CodeTransformer()
+new_code = transformer.rename_function(code, "old_name", "new_name")
+new_code = transformer.add_type_hints(code)
+
+# Apply diffs
+applier = DiffApplier()
+result = applier.apply(original, diff)
+```
+
+## Testing Patterns
+
+```python
+# Verify code generation
+gen = CodeGenerator()
+code = gen.generate_function("foo", ["x"])
+assert "def foo(x):" in code
+
+# Verify transformation
+transformer = CodeTransformer()
+result = transformer.rename_function("def old(): pass", "old", "new")
+assert "def new():" in result
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

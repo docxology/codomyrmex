@@ -1,10 +1,7 @@
 """Feature Flags module for Codomyrmex."""
 
 # Submodule exports - import first
-from . import strategies
-from . import storage
-from . import evaluation
-from . import rollout
+from . import evaluation, rollout, storage, strategies
 
 # Try optional submodules
 try:

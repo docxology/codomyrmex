@@ -11,10 +11,10 @@ from multiple sources:
 
 import json
 import os
-import yaml
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional, Dict, List, Union
+from typing import Any
+
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -28,15 +28,32 @@ except ImportError:
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
-    from .standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
-    from .standardization.api_versioning import APIVersionManager, APIVersion
+    from .standardization.api_versioning import APIVersion, APIVersionManager
+    from .standardization.graphql_api import (
+        GraphQLAPI,
+        GraphQLField,
+        GraphQLObjectType,
+        GraphQLSchema,
+    )
+    from .standardization.rest_api import RESTAPI, HTTPMethod
+    from .standardization.rest_api import APIEndpoint as StandardizationAPIEndpoint
 else:
     # Runtime imports - try to import, but handle gracefully if circular import occurs
     try:
-        from codomyrmex.api.standardization.rest_api import RESTAPI, APIEndpoint as StandardizationAPIEndpoint, HTTPMethod
-        from codomyrmex.api.standardization.graphql_api import GraphQLAPI, GraphQLSchema, GraphQLObjectType, GraphQLField
-        from codomyrmex.api.standardization.api_versioning import APIVersionManager, APIVersion
+        from codomyrmex.api.standardization.api_versioning import (
+            APIVersion,
+            APIVersionManager,
+        )
+        from codomyrmex.api.standardization.graphql_api import (
+            GraphQLAPI,
+            GraphQLField,
+            GraphQLObjectType,
+            GraphQLSchema,
+        )
+        from codomyrmex.api.standardization.rest_api import RESTAPI, HTTPMethod
+        from codomyrmex.api.standardization.rest_api import (
+            APIEndpoint as StandardizationAPIEndpoint,
+        )
     except (ImportError, AttributeError):
         # Handle case where standardization module isn't available or circular import
         RESTAPI = None
@@ -58,7 +75,7 @@ class APISchema:
     schema_type: str
     properties: dict[str, Any] = field(default_factory=dict)
     required: list[str] = field(default_factory=list)
-    example: Optional[dict[str, Any]] = None
+    example: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Convert schema to OpenAPI format."""
@@ -76,10 +93,10 @@ class APISchema:
 @dataclass
 class OpenAPISpecification:
     """OpenAPI specification container."""
-    spec: Dict[str, Any] = field(default_factory=dict)
+    spec: dict[str, Any] = field(default_factory=dict)
     version: str = "3.0.3"
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Get the specification as a dictionary."""
         return self.spec
 
@@ -472,7 +489,7 @@ class StandardizationOpenAPIGenerator:
                 _restapi_class = _RESTAPI
             except ImportError:
                 raise ImportError("RESTAPI class not available. Ensure standardization module is properly imported.")
-        
+
         # Verify the api object has required methods (don't check isinstance to avoid import issues)
         if not hasattr(api, 'get_endpoints'):
             raise TypeError("API object must have get_endpoints method")
@@ -499,7 +516,9 @@ class StandardizationOpenAPIGenerator:
         if _GraphQLAPI is None:
             # Lazy import to work around circular import at module load time
             try:
-                from codomyrmex.api.standardization.graphql_api import GraphQLAPI as _GQL
+                from codomyrmex.api.standardization.graphql_api import (
+                    GraphQLAPI as _GQL,
+                )
                 _GraphQLAPI = _GQL
             except ImportError:
                 raise ImportError("GraphQLAPI class not available. Ensure standardization module is properly imported.")
@@ -573,7 +592,9 @@ class StandardizationOpenAPIGenerator:
         _AVM = APIVersionManager
         if _AVM is None:
             try:
-                from codomyrmex.api.standardization.api_versioning import APIVersionManager as _AVM2
+                from codomyrmex.api.standardization.api_versioning import (
+                    APIVersionManager as _AVM2,
+                )
                 _AVM = _AVM2
             except ImportError:
                 raise ImportError("APIVersionManager class not available. Ensure standardization module is properly imported.")
@@ -748,7 +769,7 @@ class StandardizationOpenAPIGenerator:
 
         self.spec.spec["components"]["schemas"][name] = schema
 
-    def _convert_graphql_field_to_openapi(self, field: GraphQLField) -> Dict[str, Any]:
+    def _convert_graphql_field_to_openapi(self, field: GraphQLField) -> dict[str, Any]:
         """
         Convert a GraphQL field to OpenAPI schema.
 
@@ -782,7 +803,7 @@ class StandardizationOpenAPIGenerator:
 
         return schema
 
-    def add_security_schemes(self, schemes: Dict[str, Dict[str, Any]]) -> None:
+    def add_security_schemes(self, schemes: dict[str, dict[str, Any]]) -> None:
         """
         Add security schemes to the specification.
 
@@ -794,7 +815,7 @@ class StandardizationOpenAPIGenerator:
 
         self.spec.spec["components"]["securitySchemes"].update(schemes)
 
-    def add_global_responses(self, responses: Dict[str, Dict[str, Any]]) -> None:
+    def add_global_responses(self, responses: dict[str, dict[str, Any]]) -> None:
         """
         Add global response definitions.
 
@@ -803,7 +824,7 @@ class StandardizationOpenAPIGenerator:
         """
         self.spec.spec["components"]["responses"].update(responses)
 
-    def add_tags(self, tags: List[Dict[str, str]]) -> None:
+    def add_tags(self, tags: list[dict[str, str]]) -> None:
         """
         Add tag definitions.
 
@@ -825,7 +846,7 @@ class StandardizationOpenAPIGenerator:
             "url": url
         }
 
-    def validate_spec(self) -> List[str]:
+    def validate_spec(self) -> list[str]:
         """
         Validate the OpenAPI specification.
 

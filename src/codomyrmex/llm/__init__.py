@@ -16,20 +16,19 @@ Submodules:
 """
 
 # modular Ollama implementation
-from .ollama import (
-    OllamaManager,
-    ModelRunner,
-    OutputManager,
-    ConfigManager
+# Submodule exports
+from . import (
+    chains,
+    cost_tracking,
+    embeddings,
+    guardrails,
+    memory,
+    prompts,
+    providers,
+    rag,
+    streaming,
+    tools,
 )
-
-# Fabric integration
-from .fabric import (
-    FabricManager,
-    FabricOrchestrator,
-    FabricConfigManager
-)
-
 from .config import (
     LLMConfig,
     LLMConfigPresets,
@@ -38,34 +37,42 @@ from .config import (
     set_config,
 )
 
-# Submodule exports
-from . import providers
-from . import chains
-from . import memory
-from . import tools
-from . import guardrails
-from . import streaming
-from . import embeddings
-from . import rag
-from . import cost_tracking
-from . import prompts
+# Fabric integration
+from .fabric import FabricConfigManager, FabricManager, FabricOrchestrator
+
+# MCP integration
+from .mcp import (
+    MCPBridge,
+    MCPPrompt,
+    MCPResource,
+    convert_tool_to_mcp,
+    create_mcp_bridge_from_registry,
+)
+from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 
 __all__ = [
     'OllamaManager',
     'ModelRunner',
     'OutputManager',
     'ConfigManager',
-    
+
     'FabricManager',
     'FabricOrchestrator',
     'FabricConfigManager',
-    
+
     'LLMConfig',
     'LLMConfigPresets',
     'get_config',
     'set_config',
     'reset_config',
-    
+
+    # MCP Integration
+    'MCPBridge',
+    'MCPResource',
+    'MCPPrompt',
+    'convert_tool_to_mcp',
+    'create_mcp_bridge_from_registry',
+
     # Submodules
     'providers',
     'chains',
@@ -78,3 +85,4 @@ __all__ = [
     'cost_tracking',
     'prompts',
 ]
+

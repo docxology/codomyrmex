@@ -1,56 +1,55 @@
-import sys
 import argparse
 import json
-import logging
+import sys
 from pathlib import Path
 
 import codomyrmex.performance
-from .utils import (
-    get_logger,
-    TerminalFormatter,
-    TERMINAL_INTERFACE_AVAILABLE,
-    PERFORMANCE_MONITORING_AVAILABLE,
-)
 
 # Import all handlers
 from .handlers import (
     check_environment,
-    show_info,
-    show_modules,
-    show_system_status,
-    run_interactive_shell,
-    handle_workflow_create,
-    list_workflows,
-    run_workflow,
-    handle_project_create,
-    handle_project_list,
-    handle_orchestration_status,
-    handle_orchestration_health,
     handle_ai_generate,
     handle_ai_refactor,
     handle_code_analysis,
-    handle_git_analysis,
-    handle_project_build,
-    handle_module_test,
-    handle_module_demo,
+    handle_fpf_analyze,
+    handle_fpf_context,
+    handle_fpf_export,
+    handle_fpf_export_section,
     handle_fpf_fetch,
     handle_fpf_parse,
-    handle_fpf_export,
+    handle_fpf_report,
     handle_fpf_search,
     handle_fpf_visualize,
-    handle_fpf_context,
-    handle_fpf_export_section,
-    handle_fpf_analyze,
-    handle_fpf_report,
-    handle_skills_sync,
-    handle_skills_list,
-    handle_skills_get,
-    handle_skills_search,
-    handle_quick_run,
-    handle_quick_pipe,
+    handle_git_analysis,
+    handle_module_demo,
+    handle_module_test,
+    handle_orchestration_health,
+    handle_orchestration_status,
+    handle_project_build,
+    handle_project_create,
+    handle_project_list,
     handle_quick_batch,
     handle_quick_chain,
+    handle_quick_pipe,
+    handle_quick_run,
     handle_quick_workflow,
+    handle_skills_get,
+    handle_skills_list,
+    handle_skills_search,
+    handle_skills_sync,
+    handle_workflow_create,
+    list_workflows,
+    run_interactive_shell,
+    run_workflow,
+    show_info,
+    show_modules,
+    show_system_status,
+)
+from .utils import (
+    PERFORMANCE_MONITORING_AVAILABLE,
+    TERMINAL_INTERFACE_AVAILABLE,
+    TerminalFormatter,
+    get_logger,
 )
 
 # Add the src directory to Python path for development (legacy support)

@@ -1,21 +1,14 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
+import importlib
 import json
 import logging
 import subprocess
 import sys
-
-import importlib
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.terminal_interface.utils.terminal_utils import TerminalFormatter
-
-
-
-
-
-
 
 #!/usr/bin/env python3
 
@@ -40,7 +33,7 @@ class StatusReporter:
     diagnostics with beautiful terminal output.
     """
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Path | None = None):
         """Initialize the status reporter.
 
         Args:
@@ -557,7 +550,7 @@ class StatusReporter:
             for i, rec in enumerate(recommendations, 1):
                 print(f"   {i}. {rec}")
 
-    def export_report(self, filename: Optional[str] = None) -> str:
+    def export_report(self, filename: str | None = None) -> str:
         """Export comprehensive report to JSON file."""
         report = self.generate_comprehensive_report()
 

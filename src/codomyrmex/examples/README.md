@@ -1,27 +1,52 @@
-# examples
+# Examples Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
+
+Reference implementations, sample outputs, and learning resources.
 
 ## Overview
 
-Example implementations and demonstration data showcasing Codomyrmex capabilities. Contains reference configuration validation reports, link checking results, and module integration patterns. This module serves as a learning resource for developers working with the framework and does not export any public API -- all content is accessed directly as reference files.
+Example files demonstrating Codomyrmex capabilities. No programmatic exports — access content directly as reference files.
 
-## Key Exports
+## Quick Reference
 
-This module has an empty `__all__` -- it provides no programmatic exports. All content is accessed by reading the example files directly.
+```bash
+# View configuration validation example
+cat src/codomyrmex/examples/config_validation_report.json
 
-## Directory Contents
+# View link check example
+cat src/codomyrmex/examples/link_check_report.json
+```
 
-- `__init__.py` - Module definition with descriptive docstring (no exports)
-- `config_validation_report.json` - Example output from configuration validation showing report structure and fields
-- `link_check_report.json` - Example output from link checking showing report structure and detected issues
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - API documentation
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+## Example Files
+
+| File | Description |
+|------|-------------|
+| `config_validation_report.json` | Sample validation report structure |
+| `link_check_report.json` | Sample link checker output |
+
+## Using Examples
+
+```python
+import json
+from pathlib import Path
+
+# Load example report
+examples_dir = Path(__file__).parent / "examples"
+report = json.loads((examples_dir / "config_validation_report.json").read_text())
+
+# Understand report structure
+print(f"Report fields: {list(report.keys())}")
+```
+
+## For Developers
+
+Use these examples to:
+
+- Understand report formats before implementing
+- Test parsing logic against known-good data
+- Learn module integration patterns
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/examples/](../../../docs/modules/examples/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

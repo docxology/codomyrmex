@@ -1,16 +1,15 @@
 """Managed semaphores for resource throttling."""
 
-from abc import ABC, abstractmethod
 import asyncio
-import threading
 import logging
-from typing import Optional
+import threading
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 
 class BaseSemaphore(ABC):
     """Abstract base class for all semaphore implementations."""
-    
+
     def __init__(self, value: int = 1):
         self.initial_value = value
 
@@ -26,7 +25,7 @@ class BaseSemaphore(ABC):
 
 class LocalSemaphore(BaseSemaphore):
     """Local thread-safe semaphore wrapper."""
-    
+
     def __init__(self, value: int = 1):
         super().__init__(value)
         self._semaphore = threading.Semaphore(value)

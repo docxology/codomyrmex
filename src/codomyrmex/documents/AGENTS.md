@@ -1,39 +1,71 @@
-# Codomyrmex Agents — src/codomyrmex/documents
+# Agent Guidelines - Documents
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Document processing: parsing, extraction, and transformation.
 
-Document handling module providing document parsing, generation, and manipulation capabilities. Supports PDF, Office formats, and Markdown.
+## Key Classes
 
-## Active Components
+- **DocumentParser** — Parse various formats
+- **TextExtractor** — Extract text content
+- **DocumentConverter** — Format conversion
+- **ChunkSplitter** — Split into chunks
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `config.py` – Project file
-- `core/` – Directory containing core components
-- `exceptions.py` – Project file
-- `formats/` – Directory containing formats components
-- `metadata/` – Directory containing metadata components
-- `models/` – Directory containing models components
-- `requirements.txt` – Project file
-- `search/` – Directory containing search components
-- `templates/` – Directory containing templates components
-- `transformation/` – Directory containing transformation components
-- `utils/` – Directory containing utils components
+## Agent Instructions
 
-## Operating Contracts
+1. **Detect format** — Auto-detect document type
+2. **Extract metadata** — Title, author, date
+3. **Chunk for LLM** — Split large documents
+4. **Handle encoding** — UTF-8 by default
+5. **Preserve structure** — Maintain headings
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.documents import (
+    DocumentParser, TextExtractor, ChunkSplitter
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Parse document
+parser = DocumentParser()
+doc = parser.parse("report.pdf")
+print(f"Title: {doc.metadata.title}")
+print(f"Pages: {doc.page_count}")
+
+# Extract text
+extractor = TextExtractor()
+text = extractor.extract("document.docx")
+text = extractor.extract_from_bytes(pdf_bytes, format="pdf")
+
+# Split into chunks for RAG
+splitter = ChunkSplitter(
+    chunk_size=1000,
+    overlap=100,
+    separator="paragraph"
+)
+chunks = splitter.split(text)
+for chunk in chunks:
+    embed_and_store(chunk)
+
+# Convert formats
+from codomyrmex.documents import DocumentConverter
+pdf = DocumentConverter.to_pdf("input.docx")
+```
+
+## Testing Patterns
+
+```python
+# Verify parsing
+parser = DocumentParser()
+doc = parser.parse_string("# Heading\n\nText", format="markdown")
+assert doc.metadata is not None
+
+# Verify chunking
+splitter = ChunkSplitter(chunk_size=100)
+chunks = splitter.split("A" * 300)
+assert len(chunks) > 1
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

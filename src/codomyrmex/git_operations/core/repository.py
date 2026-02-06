@@ -1,11 +1,11 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Optional
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+
+from codomyrmex.logging_monitoring import get_logger
 
 from .git import (
     clone_repository,
@@ -13,16 +13,14 @@ from .git import (
     get_current_branch,
     get_status,
     is_git_repository,
+    prune_remote,
     pull_changes,
     push_changes,
-    prune_remote,
 )
 from .metadata import (
-    RepositoryMetadataManager,
     CloneStatus,
+    RepositoryMetadataManager,
 )
-from codomyrmex.logging_monitoring import get_logger
-
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
@@ -72,10 +70,10 @@ class RepositoryManager:
 
     def __init__(
         self,
-        library_file: Optional[str] = None,
-        base_path: Optional[str] = None,
-        metadata_file: Optional[str] = None,
-        github_token: Optional[str] = None,
+        library_file: str | None = None,
+        base_path: str | None = None,
+        metadata_file: str | None = None,
+        github_token: str | None = None,
     ):
         """
         Initialize the repository manager.
@@ -155,7 +153,7 @@ class RepositoryManager:
             logger.error(f"Error loading repository library: {e}")
 
     def list_repositories(
-        self, repo_type: Optional[RepositoryType] = None
+        self, repo_type: RepositoryType | None = None
     ) -> list[Repository]:
         """
         List repositories, optionally filtered by type.
@@ -173,7 +171,7 @@ class RepositoryManager:
 
         return sorted(repos, key=lambda r: (r.repo_type.value, r.owner, r.name))
 
-    def get_repository(self, full_name: str) -> Optional[Repository]:
+    def get_repository(self, full_name: str) -> Repository | None:
         """
         Get a repository by full name (owner/name).
 
@@ -221,7 +219,7 @@ class RepositoryManager:
         return self.base_path / repo.local_path_suggestion
 
     def clone_repository(
-        self, full_name: str, custom_path: Optional[str] = None
+        self, full_name: str, custom_path: str | None = None
     ) -> bool:
         """
         Clone a repository from the library with metadata tracking.
@@ -311,7 +309,7 @@ class RepositoryManager:
             )
 
     def update_repository(
-        self, full_name: str, custom_path: Optional[str] = None
+        self, full_name: str, custom_path: str | None = None
     ) -> bool:
         """
         Update a repository (pull latest changes).
@@ -356,8 +354,8 @@ class RepositoryManager:
         return success
 
     def get_repository_status(
-        self, full_name: str, custom_path: Optional[str] = None
-    ) -> Optional[dict]:
+        self, full_name: str, custom_path: str | None = None
+    ) -> dict | None:
         """
         Get the status of a local repository.
 
@@ -395,8 +393,8 @@ class RepositoryManager:
 
     def bulk_clone(
         self,
-        repo_type: Optional[RepositoryType] = None,
-        owner_filter: Optional[str] = None,
+        repo_type: RepositoryType | None = None,
+        owner_filter: str | None = None,
         max_workers: int = 4,
     ) -> dict[str, bool]:
         """
@@ -443,8 +441,8 @@ class RepositoryManager:
 
     def bulk_update(
         self,
-        repo_type: Optional[RepositoryType] = None,
-        owner_filter: Optional[str] = None,
+        repo_type: RepositoryType | None = None,
+        owner_filter: str | None = None,
         max_workers: int = 4,
     ) -> dict[str, bool]:
         """
@@ -500,7 +498,7 @@ class RepositoryManager:
         return results
 
     def sync_repository(
-        self, full_name: str, custom_path: Optional[str] = None
+        self, full_name: str, custom_path: str | None = None
     ) -> bool:
         """
         Sync a repository (pull and push).
@@ -521,13 +519,13 @@ class RepositoryManager:
             local_path = Path(custom_path)
         else:
             local_path = self.get_local_path(repo)
-        
+
         # Then push
         logger.info(f"Syncing (pushing) {repo.full_name}...")
         return push_changes(repository_path=str(local_path))
 
     def prune_repository(
-        self, full_name: str, custom_path: Optional[str] = None
+        self, full_name: str, custom_path: str | None = None
     ) -> bool:
         """
         Prune remote tracking branches for a repository.
@@ -542,7 +540,7 @@ class RepositoryManager:
         repo = self.get_repository(full_name)
         if not repo:
             return False
-            
+
         if custom_path:
             local_path = Path(custom_path)
         else:

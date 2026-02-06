@@ -10,7 +10,7 @@ import json
 import subprocess
 import time
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 import requests
 
@@ -24,9 +24,9 @@ class OllamaModel:
     id: str
     size: int  # Size in bytes
     modified: str
-    parameters: Optional[str] = None
-    family: Optional[str] = None
-    format: Optional[str] = None
+    parameters: str | None = None
+    family: str | None = None
+    format: str | None = None
     status: str = "available"
 
 
@@ -37,10 +37,10 @@ class ModelExecutionResult:
     prompt: str
     response: str
     execution_time: float
-    tokens_used: Optional[int] = None
+    tokens_used: int | None = None
     success: bool = True
-    error_message: Optional[str] = None
-    metadata: Optional[dict[str, Any]] = None
+    error_message: str | None = None
+    metadata: dict[str, Any] | None = None
 
 
 class OllamaManager:
@@ -83,8 +83,8 @@ class OllamaManager:
         self._initialize_sub_managers()
 
         # Model cache
-        self._models_cache: Optional[list[OllamaModel]] = None
-        self._cache_timestamp: Optional[float] = None
+        self._models_cache: list[OllamaModel] | None = None
+        self._cache_timestamp: float | None = None
         self._cache_ttl = 30  # Cache for 30 seconds
 
     def _ensure_server_running(self) -> bool:
@@ -206,7 +206,7 @@ class OllamaManager:
                             size = self._parse_size(size)
                         elif not isinstance(size, int):
                             size = int(size) if size else 0
-                        
+
                         # Parse modified_at - ensure it's a valid timestamp
                         modified_at = model_data.get('modified_at', time.time())
                         if isinstance(modified_at, str):
@@ -214,7 +214,7 @@ class OllamaManager:
                                 modified_at = float(modified_at)
                             except (ValueError, TypeError):
                                 modified_at = time.time()
-                        
+
                         model = OllamaModel(
                             name=model_data.get('name', ''),
                             id=model_data.get('digest', '')[:12] if model_data.get('digest') else '',
@@ -313,7 +313,7 @@ class OllamaManager:
         except (ValueError, IndexError, TypeError):
             return 0
 
-    def _get_model_info(self, model_name: str) -> Optional[dict[str, Any]]:
+    def _get_model_info(self, model_name: str) -> dict[str, Any] | None:
         """Get detailed information about a specific model."""
         try:
             result = subprocess.run(
@@ -378,7 +378,7 @@ class OllamaManager:
                                         if 'manifest' in status.lower() or 'digest' in status.lower() or 'layer' in status.lower():
                                             self.logger.info(f"Pull status: {status}")
                                     last_status = status
-                                
+
                                 # Check for completion
                                 if data.get('completed', False):
                                     completed = True
@@ -391,11 +391,11 @@ class OllamaManager:
                             except json.JSONDecodeError:
                                 # Skip non-JSON lines (like ANSI escape codes)
                                 continue
-                    
+
                     # Wait a moment for model to be registered
                     if completed:
                         time.sleep(3)  # Give more time for model registration
-                    
+
                     # Check if model is now available (with retry for cache refresh)
                     self._models_cache = None  # Clear cache
                     for attempt in range(5):  # More retries
@@ -404,7 +404,7 @@ class OllamaManager:
                             return True
                         time.sleep(2)  # Longer wait between retries
                         self._models_cache = None  # Clear cache again
-                    
+
                     # Final check - maybe model name has a tag or different format
                     models = self.list_models(force_refresh=True)
                     base_name = model_name.split(':')[0]
@@ -416,12 +416,12 @@ class OllamaManager:
                         if matching_models:
                             self.logger.info(f"Using model: {matching_models[0]}")
                         return True
-                    
+
                     # If pull completed, assume success even if not in list yet
                     if completed:
                         self.logger.info(f"Pull completed for {model_name}, model should be available")
                         return True
-                    
+
                     self.logger.warning(f"Pull may not have completed for {model_name}")
                     return False
                 else:
@@ -464,7 +464,7 @@ class OllamaManager:
         models = self.list_models()
         return any(model.name == model_name for model in models)
 
-    def get_model_by_name(self, model_name: str) -> Optional[OllamaModel]:
+    def get_model_by_name(self, model_name: str) -> OllamaModel | None:
         """Get model information by name."""
         models = self.list_models()
         for model in models:
@@ -476,9 +476,9 @@ class OllamaManager:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[dict[str, Any]] = None,
+        options: dict[str, Any] | None = None,
         save_output: bool = True,
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> ModelExecutionResult:
         """
         Run a model with the given prompt.
@@ -521,7 +521,7 @@ class OllamaManager:
                 if options:
                     # Map ExecutionOptions to Ollama API format
                     payload['options'] = payload.get('options', {})
-                    
+
                     if 'temperature' in options:
                         payload['options']['temperature'] = options['temperature']
                     if 'top_p' in options:
@@ -674,7 +674,7 @@ class OllamaManager:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[dict[str, Any]] = None
+        options: dict[str, Any] | None = None
     ) -> asyncio.Future[ModelExecutionResult]:
         """
         Run a model asynchronously.

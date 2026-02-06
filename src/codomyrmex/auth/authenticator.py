@@ -2,14 +2,13 @@
 Authentication and authorization.
 """
 
-from typing import Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 from .api_key_manager import APIKeyManager
-from .token import Token, TokenManager
 from .permissions import PermissionRegistry
+from .token import Token, TokenManager
 
 logger = get_logger(__name__)
 
@@ -31,7 +30,7 @@ class Authenticator:
         # In a real implementation, this would connect to a user database
         self._users: dict[str, dict] = {}
 
-    def authenticate(self, credentials: dict) -> Optional[Token]:
+    def authenticate(self, credentials: dict) -> Token | None:
         """Authenticate a user with provided credentials.
 
         Args:
@@ -87,7 +86,7 @@ class Authenticator:
         # Role-based check if roles are present in token (assumed role in user_id for placeholder)
         # In a real system, the token would carry roles or the user_id would be used to look up roles
         user_role = token.user_id if token.user_id in self.permissions._roles else "default"
-        
+
         if self.permissions.has_permission(user_role, permission):
             return True
 
@@ -97,7 +96,7 @@ class Authenticator:
 
         return False
 
-    def refresh_token(self, token: Token) -> Optional[Token]:
+    def refresh_token(self, token: Token) -> Token | None:
         """Refresh an expired or soon-to-expire token.
 
         Args:

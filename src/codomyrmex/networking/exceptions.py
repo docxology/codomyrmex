@@ -7,7 +7,7 @@ All exceptions inherit from CodomyrmexError for consistent error handling.
 
 from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError, NetworkError
+from codomyrmex.exceptions import NetworkError
 
 
 class ConnectionError(NetworkError):

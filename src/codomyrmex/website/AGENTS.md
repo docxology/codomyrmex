@@ -1,36 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/website
+# Agent Guidelines - Website
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Web dashboard generation and static site building.
 
-Website generation and hosting module for Codomyrmex project documentation and marketing pages. Provides static site generation and deployment.
+## Key Classes
 
-## Active Components
+- **WebsiteGenerator** — Generate static websites
+- **DataProvider** — Data for dashboards
+- **WebsiteServer** — Development server
+- **PageBuilder** — Build individual pages
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `assets/` – Directory containing assets components
-- `data_provider.py` – Project file
-- `generator.py` – Project file
-- `requirements.template.txt` – Project file
-- `server.py` – Project file
-- `templates/` – Directory containing templates components
+## Agent Instructions
 
-## Operating Contracts
+1. **Template-based** — Use templates for consistency
+2. **Mobile-first** — Responsive design
+3. **Fast loading** — Optimize assets
+4. **SEO ready** — Meta tags, sitemap
+5. **Accessible** — WCAG compliance
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.website import (
+    WebsiteGenerator, DataProvider, WebsiteServer
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Generate website
+generator = WebsiteGenerator(
+    template_dir="templates/",
+    output_dir="dist/"
+)
+
+# Add data
+provider = DataProvider()
+provider.add("metrics", get_metrics())
+provider.add("modules", list_modules())
+
+# Build pages
+generator.build([
+    ("index.html", "home.j2", provider.get("metrics")),
+    ("modules.html", "list.j2", provider.get("modules")),
+])
+
+# Development server
+server = WebsiteServer(port=8000)
+server.serve("dist/")  # http://localhost:8000
+```
+
+## Testing Patterns
+
+```python
+# Verify generation
+generator = WebsiteGenerator(output_dir="/tmp/site")
+generator.build([("index.html", "base.j2", {})])
+assert Path("/tmp/site/index.html").exists()
+
+# Verify data provider
+provider = DataProvider()
+provider.add("key", [1, 2, 3])
+assert provider.get("key") == [1, 2, 3]
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

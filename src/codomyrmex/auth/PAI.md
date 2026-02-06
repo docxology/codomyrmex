@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Auth Context
+# Personal AI Infrastructure — Auth Module
 
-**Module**: auth
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Authentication and authorization infrastructure supporting OAuth, JWT, API keys, and role-based access control.
+The Auth module provides PAI integration for authentication and authorization.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Token Management
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage authentication tokens:
 
-## Key Files
+```python
+from codomyrmex.auth import JWTManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+jwt = JWTManager(secret="your-secret")
+token = jwt.create_token(user_id="123", roles=["admin"])
 
-## Future Considerations
+claims = jwt.verify_token(token)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### API Key Authentication
+
+Manage API keys:
+
+```python
+from codomyrmex.auth import APIKeyManager
+
+keys = APIKeyManager()
+key = keys.create(name="development", scopes=["read"])
+
+is_valid = keys.validate(api_key)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `JWTManager` | Token management |
+| `APIKeyManager` | API key auth |
+| `RBACManager` | Role-based access |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

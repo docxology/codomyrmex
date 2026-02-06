@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Pattern Matching Context
+# Personal AI Infrastructure — Pattern Matching Module
 
-**Module**: pattern_matching
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Pattern matching utilities including regular expressions, glob patterns, and AST-based code pattern recognition.
+The Pattern Matching module provides PAI integration for code and text pattern matching.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Code Pattern Matching
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Find code patterns:
 
-## Key Files
+```python
+from codomyrmex.pattern_matching import ASTMatcher
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+matcher = ASTMatcher()
+functions = matcher.find_all(code, "FunctionDef")
 
-## Future Considerations
+for func in functions:
+    print(f"{func.name}: {len(func.args)} args")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Text Matching
+
+Match text patterns:
+
+```python
+from codomyrmex.pattern_matching import PatternMatcher
+
+matcher = PatternMatcher()
+if matcher.matches(text, "def *(*):"):
+    print("Found function definition")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ASTMatcher` | Code analysis |
+| `PatternMatcher` | Text matching |
+| `RegexBuilder` | Build patterns |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

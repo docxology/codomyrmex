@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -18,45 +17,45 @@ logger = get_logger(__name__)
 
 class DocumentReader:
     """Unified document reader supporting multiple formats."""
-    
+
     def __init__(self):
 
         self.config = get_config()
-    
+
     def read(
         self,
         file_path: str | Path,
-        format: Optional[DocumentFormat] = None,
-        encoding: Optional[str] = None,
+        format: DocumentFormat | None = None,
+        encoding: str | None = None,
     ) -> Document:
         """
         Read a document from a file.
-        
+
         Args:
             file_path: Path to the document file
             format: Optional format hint (auto-detected if not provided)
             encoding: Optional encoding hint (auto-detected if not provided)
-        
+
         Returns:
             Document object with content and metadata
-        
+
         Raises:
             DocumentReadError: If reading fails
             UnsupportedFormatError: If format is not supported
         """
         file_path = Path(file_path)
-        
+
         if not file_path.exists():
             raise DocumentReadError(f"File not found: {file_path}", file_path=str(file_path))
-        
+
         # Detect format if not provided
         if format is None:
             format = self._detect_format(file_path)
-        
+
         # Detect encoding if not provided
         if encoding is None:
             encoding = detect_encoding(file_path) or self.config.default_encoding
-        
+
         # Read based on format
         try:
             if format == DocumentFormat.MARKDOWN:
@@ -80,7 +79,7 @@ class DocumentReader:
                     f"Format {format.value} not yet implemented",
                     format=format.value
                 )
-            
+
             # Create document object
             document = Document(
                 content=content,
@@ -88,25 +87,25 @@ class DocumentReader:
                 file_path=file_path,
                 encoding=encoding,
             )
-            
+
             # Extract metadata
             from ..metadata.extractor import extract_metadata
             metadata = extract_metadata(str(file_path))
             document.metadata = metadata
-            
+
             return document
-            
+
         except Exception as e:
             logger.error(f"Error reading document {file_path}: {e}")
             raise DocumentReadError(
                 f"Failed to read document: {str(e)}",
                 file_path=str(file_path)
             ) from e
-    
+
     def _detect_format(self, file_path: Path) -> DocumentFormat:
         """Detect document format from file path."""
         format_str = detect_format_from_path(file_path)
-        
+
         format_mapping = {
             "markdown": DocumentFormat.MARKDOWN,
             "json": DocumentFormat.JSON,
@@ -119,25 +118,25 @@ class DocumentReader:
             "xml": DocumentFormat.XML,
             "csv": DocumentFormat.CSV,
         }
-        
+
         return format_mapping.get(format_str.lower(), DocumentFormat.TEXT)
 
 
 def read_document(
     file_path: str | Path,
-    format: Optional[DocumentFormat] = None,
-    encoding: Optional[str] = None,
+    format: DocumentFormat | None = None,
+    encoding: str | None = None,
 ) -> Document:
     """
     Read a document from a file.
-    
+
     Convenience function that creates a DocumentReader and reads the document.
-    
+
     Args:
         file_path: Path to the document file
         format: Optional format hint
         encoding: Optional encoding hint
-    
+
     Returns:
         Document object
     """

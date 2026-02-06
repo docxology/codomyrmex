@@ -2,9 +2,20 @@
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class MockAgent(BaseAgent):

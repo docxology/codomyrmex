@@ -8,12 +8,12 @@ patterns, and security best practices.
 
 try:
     from .principles import (
-        SecurityPrinciple,
         PrincipleCategory,
-        get_security_principles,
+        SecurityPrinciple,
+        apply_principle,
         get_principle,
         get_principles_by_category,
-        apply_principle,
+        get_security_principles,
         validate_principle_application,
     )
     PRINCIPLES_AVAILABLE = True
@@ -29,14 +29,14 @@ except ImportError:
 
 try:
     from .frameworks import (
-        SecurityFramework,
-        FrameworkStandard,
         FrameworkCategory,
-        get_framework,
-        get_all_frameworks,
-        get_frameworks_by_category,
+        FrameworkStandard,
+        SecurityFramework,
         apply_framework,
         check_framework_compliance,
+        get_all_frameworks,
+        get_framework,
+        get_frameworks_by_category,
     )
     FRAMEWORKS_AVAILABLE = True
 except ImportError:
@@ -53,12 +53,12 @@ except ImportError:
 try:
     from .threat_modeling import (
         Threat,
-        ThreatModel,
-        ThreatSeverity,
         ThreatCategory,
+        ThreatModel,
         ThreatModelBuilder,
-        create_threat_model,
+        ThreatSeverity,
         analyze_threats,
+        create_threat_model,
         prioritize_threats,
     )
     THREAT_MODELING_AVAILABLE = True
@@ -75,16 +75,16 @@ except ImportError:
 
 try:
     from .risk_assessment import (
+        ImpactLevel,
+        LikelihoodLevel,
         Risk,
         RiskAssessment,
-        RiskLevel,
-        LikelihoodLevel,
-        ImpactLevel,
         RiskAssessor,
+        RiskLevel,
         assess_risk,
+        calculate_aggregate_risk,
         calculate_risk_score,
         prioritize_risks,
-        calculate_aggregate_risk,
     )
     RISK_ASSESSMENT_AVAILABLE = True
 except ImportError:
@@ -102,12 +102,12 @@ except ImportError:
 
 try:
     from .architecture_patterns import (
-        SecurityPattern,
         PatternCategory,
-        get_security_patterns,
+        SecurityPattern,
+        apply_pattern,
         get_pattern,
         get_patterns_by_category,
-        apply_pattern,
+        get_security_patterns,
         validate_pattern_application,
     )
     ARCHITECTURE_PATTERNS_AVAILABLE = True
@@ -123,14 +123,14 @@ except ImportError:
 
 try:
     from .best_practices import (
-        SecurityBestPractice,
         PracticeCategory,
         PracticePriority,
+        SecurityBestPractice,
+        check_compliance_with_practices,
         get_best_practices,
         get_practice,
         get_practices_by_priority,
         get_practices_for_category,
-        check_compliance_with_practices,
         prioritize_practices,
     )
     BEST_PRACTICES_AVAILABLE = True

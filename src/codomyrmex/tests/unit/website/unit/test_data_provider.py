@@ -11,12 +11,11 @@ Tests cover:
 - Pipeline status
 """
 
-import pytest
-import tempfile
-from pathlib import Path
-from unittest.mock import Mock, patch
-
 import sys
+from pathlib import Path
+
+import pytest
+
 # Add src to path for imports
 TEST_DIR = Path(__file__).resolve().parent
 MODULE_DIR = TEST_DIR.parent.parent
@@ -57,7 +56,7 @@ class TestGetSystemSummary:
         """Test that required keys are present."""
         provider = DataProvider(tmp_path)
         result = provider.get_system_summary()
-        
+
         assert "status" in result
         assert "version" in result
         assert "environment" in result
@@ -99,15 +98,15 @@ class TestGetAgentsStatus:
         """Test that agent packages are discovered."""
         src_path = tmp_path / "src" / "codomyrmex"
         src_path.mkdir(parents=True)
-        
+
         # Create agent packages
         agent1_dir = src_path / "coding"
         agent1_dir.mkdir()
         (agent1_dir / "__init__.py").write_text('"""Code editing utilities."""')
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_agents_status()
-        
+
         assert len(result) == 1
         assert result[0]["name"] == "coding"
         assert "Code editing utilities" in result[0]["description"]
@@ -118,10 +117,10 @@ class TestGetAgentsStatus:
         src_path.mkdir(parents=True)
         (src_path / "test_agent" / "__init__.py").parent.mkdir()
         (src_path / "test_agent" / "__init__.py").write_text('"""Test"""')
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_agents_status()
-        
+
         assert len(result) == 1
         agent = result[0]
         assert "name" in agent
@@ -150,13 +149,13 @@ class TestGetAvailableScripts:
         """Test that Python scripts are discovered."""
         scripts_dir = tmp_path / "scripts"
         scripts_dir.mkdir()
-        
+
         script = scripts_dir / "run_tests.py"
         script.write_text('"""Run test suite."""\npass')
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_available_scripts()
-        
+
         assert len(result) == 1
         assert result[0]["name"] == "run_tests.py"
         assert "Run test suite" in result[0]["description"]
@@ -165,13 +164,13 @@ class TestGetAvailableScripts:
         """Test that __init__.py files are skipped."""
         scripts_dir = tmp_path / "scripts"
         scripts_dir.mkdir()
-        
+
         (scripts_dir / "__init__.py").write_text("")
         (scripts_dir / "real_script.py").write_text('"""Real script"""')
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_available_scripts()
-        
+
         assert len(result) == 1
         assert result[0]["name"] == "real_script.py"
 
@@ -179,13 +178,13 @@ class TestGetAvailableScripts:
         """Test that hidden files are skipped."""
         scripts_dir = tmp_path / "scripts"
         scripts_dir.mkdir()
-        
+
         (scripts_dir / ".hidden.py").write_text("")
         (scripts_dir / "visible.py").write_text('"""Visible"""')
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_available_scripts()
-        
+
         assert len(result) == 1
         assert result[0]["name"] == "visible.py"
 
@@ -203,28 +202,28 @@ class TestGetConfigFiles:
     def test_finds_toml_files(self, tmp_path):
         """Test that TOML files are found."""
         (tmp_path / "pyproject.toml").write_text("[tool.pytest]")
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_config_files()
-        
+
         assert any(c["name"] == "pyproject.toml" for c in result)
 
     def test_finds_yaml_files(self, tmp_path):
         """Test that YAML files are found."""
         (tmp_path / "config.yaml").write_text("key: value")
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_config_files()
-        
+
         assert any(c["name"] == "config.yaml" for c in result)
 
     def test_finds_json_files(self, tmp_path):
         """Test that JSON files are found."""
         (tmp_path / "settings.json").write_text("{}")
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_config_files()
-        
+
         assert any(c["name"] == "settings.json" for c in result)
 
 
@@ -235,31 +234,31 @@ class TestGetConfigContent:
     def test_reads_file_content(self, tmp_path):
         """Test that file content is read correctly."""
         (tmp_path / "test.toml").write_text("[section]\nkey = 'value'")
-        
+
         provider = DataProvider(tmp_path)
         content = provider.get_config_content("test.toml")
-        
+
         assert "[section]" in content
         assert "key = 'value'" in content
 
     def test_raises_for_traversal_attempt(self, tmp_path):
         """Test that path traversal is blocked."""
         provider = DataProvider(tmp_path)
-        
+
         with pytest.raises(ValueError):
             provider.get_config_content("../../../etc/passwd")
 
     def test_raises_for_absolute_path(self, tmp_path):
         """Test that absolute paths are blocked."""
         provider = DataProvider(tmp_path)
-        
+
         with pytest.raises(ValueError):
             provider.get_config_content("/etc/passwd")
 
     def test_raises_for_nonexistent_file(self, tmp_path):
         """Test that FileNotFoundError is raised for missing files."""
         provider = DataProvider(tmp_path)
-        
+
         with pytest.raises(FileNotFoundError):
             provider.get_config_content("nonexistent.toml")
 
@@ -271,23 +270,23 @@ class TestSaveConfigContent:
     def test_saves_content(self, tmp_path):
         """Test that content is saved correctly."""
         (tmp_path / "test.toml").write_text("old content")
-        
+
         provider = DataProvider(tmp_path)
         provider.save_config_content("test.toml", "new content")
-        
+
         assert (tmp_path / "test.toml").read_text() == "new content"
 
     def test_raises_for_traversal_attempt(self, tmp_path):
         """Test that path traversal is blocked."""
         provider = DataProvider(tmp_path)
-        
+
         with pytest.raises(ValueError):
             provider.save_config_content("../../../evil.txt", "malicious")
 
     def test_raises_for_absolute_path(self, tmp_path):
         """Test that absolute paths are blocked."""
         provider = DataProvider(tmp_path)
-        
+
         with pytest.raises(ValueError):
             provider.save_config_content("/evil.txt", "malicious")
 
@@ -313,10 +312,10 @@ class TestGetDocTree:
         docs_dir = tmp_path / "docs"
         docs_dir.mkdir()
         (docs_dir / "README.md").write_text("# Documentation")
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_doc_tree()
-        
+
         assert len(result["children"]) > 0
 
     def test_finds_readme_files(self, tmp_path):
@@ -324,10 +323,10 @@ class TestGetDocTree:
         src_dir = tmp_path / "src" / "module"
         src_dir.mkdir(parents=True)
         (src_dir / "README.md").write_text("# Module")
-        
+
         provider = DataProvider(tmp_path)
         result = provider.get_doc_tree()
-        
+
         # Should have Modules section with the README
         has_modules = any(c.get("name") == "Modules" for c in result["children"])
         assert has_modules or True  # May be empty if structure differs
@@ -347,7 +346,7 @@ class TestGetPipelineStatus:
         """Test that mock pipeline data is returned."""
         provider = DataProvider(tmp_path)
         result = provider.get_pipeline_status()
-        
+
         # Currently returns mock data
         assert len(result) > 0
         assert "name" in result[0]

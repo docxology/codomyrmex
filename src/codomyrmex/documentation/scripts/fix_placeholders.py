@@ -1,25 +1,4 @@
 from pathlib import Path
-import os
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 """
@@ -76,7 +55,7 @@ This directory contains **{doc_type}** documentation. It serves to educate users
 def fix_placeholders(root_dir):
     root = Path(root_dir)
     count = 0
-    
+
     for path in root.rglob("SPEC.md"):
         try:
             content = path.read_text(encoding='utf-8')
@@ -87,18 +66,18 @@ def fix_placeholders(root_dir):
         if "Requirement 1" in content or "Core Concept" in content:
             # It's a placeholder
             parent_name = path.parent.name
-            
+
             new_content = None
             if parent_name in ["tests", "unit", "integration", "fixtures"]:
                 print(f"Fixing Test SPEC: {path}")
                 test_type = "Unit Tests" if parent_name == "unit" else "Integration Tests" if parent_name == "integration" else "Tests"
                 new_content = TEST_SPEC_TEMPLATE.format(module_name=parent_name, test_type=test_type)
-            
+
             elif parent_name in ["docs", "tutorials", "examples"]:
                 print(f"Fixing Doc SPEC: {path}")
                 doc_type = "Tutorials" if parent_name == "tutorials" else "Documentation"
                 new_content = DOC_SPEC_TEMPLATE.format(module_name=parent_name, doc_type=doc_type)
-            
+
             if new_content:
                 path.write_text(new_content, encoding='utf-8')
                 count += 1

@@ -1,7 +1,9 @@
 """Unit tests for module_template module."""
 
-import pytest
 import sys
+
+import pytest
+
 # Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
 
@@ -118,7 +120,6 @@ class TestModuleTemplate:
 
     def test_module_template_files_exist(self, code_dir):
         """Test that expected template files exist."""
-        from pathlib import Path
 
         template_dir = code_dir / "codomyrmex" / "module_template"
 

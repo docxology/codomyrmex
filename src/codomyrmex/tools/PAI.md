@@ -1,26 +1,49 @@
-# Personal AI Infrastructure - Tools Context
+# Personal AI Infrastructure — Tools Module
 
-**Module**: tools
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-General-purpose development tools and utilities for code transformation, analysis, and project maintenance.
+The Tools module provides PAI integration for managing external development tools.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Tool Execution
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Run external tools:
 
-## Key Files
+```python
+from codomyrmex.tools import ToolRunner
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+runner = ToolRunner()
+result = runner.run("ruff", ["check", "src/"])
 
-## Future Considerations
+print(f"Exit code: {result.returncode}")
+print(result.stdout)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Tool Discovery
+
+Find available tools:
+
+```python
+from codomyrmex.tools import ToolRegistry
+
+registry = ToolRegistry()
+tools = registry.discover()
+
+for tool in tools:
+    print(f"{tool.name}: {tool.version}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ToolRunner` | Execute tools |
+| `ToolRegistry` | Discover tools |
+| `OutputParser` | Parse tool output |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

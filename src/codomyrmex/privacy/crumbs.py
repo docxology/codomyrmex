@@ -3,7 +3,8 @@
 Removes identifying metadata ("crumbs") from data structures to preserve privacy.
 """
 
-from typing import Any, Dict, List, Union, Set
+from typing import Any
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -12,7 +13,7 @@ class CrumbCleaner:
     """Sanitizes data by removing tracking crumbs and metadata."""
 
     def __init__(self):
-        self._blacklist: Set[str] = {
+        self._blacklist: set[str] = {
             "timestamp", "created_at", "updated_at",
             "ip_address", "device_id", "geo_lat", "geo_lon",
             "user_agent", "referrer", "cookie_id",
@@ -25,8 +26,8 @@ class CrumbCleaner:
         """
         if isinstance(data, dict):
             return {
-                k: self.scrub(v) 
-                for k, v in data.items() 
+                k: self.scrub(v)
+                for k, v in data.items()
                 if k.lower() not in self._blacklist
             }
         elif isinstance(data, list):
@@ -39,13 +40,13 @@ class CrumbCleaner:
         import os
         return os.urandom(size_bytes)
 
-    def configure_blacklist(self, add: List[str] = None, remove: List[str] = None) -> None:
+    def configure_blacklist(self, add: list[str] = None, remove: list[str] = None) -> None:
         """Dynamically configure the metadata blacklist."""
         if add:
             for key in add:
                 self._blacklist.add(key.lower())
                 logger.debug(f"Added to blacklist: {key}")
-        
+
         if remove:
             for key in remove:
                 if key.lower() in self._blacklist:

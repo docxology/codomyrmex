@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Environment Setup Context
+# Personal AI Infrastructure — Environment Setup Module
 
-**Module**: environment_setup
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Development environment configuration including Python version management, dependency resolution, and project initialization.
+The Environment Setup module provides PAI integration for environment validation and setup.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Environment Validation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Validate development environment:
 
-## Key Files
+```python
+from codomyrmex.environment_setup import validate_environment
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+result = validate_environment()
+if not result.valid:
+    for issue in result.issues:
+        print(f"Issue: {issue}")
+```
 
-## Future Considerations
+### Dependency Checking
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Check installed dependencies:
+
+```python
+from codomyrmex.environment_setup import check_dependencies
+
+deps = check_dependencies(["python", "git", "ollama"])
+for dep in deps:
+    print(f"{dep.name}: {dep.version}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `validate_environment` | Validate setup |
+| `check_dependencies` | Check deps |
+| `auto_setup` | Automated setup |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

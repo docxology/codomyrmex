@@ -7,10 +7,7 @@ accessible ways.
 """
 
 # Submodule exports - import first
-from . import shells
-from . import commands
-from . import rendering
-from . import completions
+from . import commands, completions, rendering, shells
 
 # Try optional submodules
 try:

@@ -1,57 +1,19 @@
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+from matplotlib.figure import Figure
 
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
-from codomyrmex.cerebrum.visualization.base import BaseChartVisualizer, BaseHeatmapVisualizer
-from codomyrmex.cerebrum.visualization.theme import VisualizationTheme, get_default_theme
+from codomyrmex.cerebrum.visualization.base import (
+    BaseChartVisualizer,
+    BaseHeatmapVisualizer,
+)
+from codomyrmex.cerebrum.visualization.theme import (
+    VisualizationTheme,
+    get_default_theme,
+)
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Concordance visualizations for cross-analysis comparisons.
 
@@ -77,9 +39,9 @@ class ConcordanceVisualizer:
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (14, 10),
+        figure_size: tuple[float, float] = (14, 10),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize concordance visualizer.
 
@@ -98,10 +60,10 @@ class ConcordanceVisualizer:
 
     def plot_analysis_concordance_matrix(
         self,
-        cbr_results: Dict[str, float],
-        bayesian_results: Dict[str, float],
-        active_inference_results: Optional[Dict[str, float]] = None,
-        pattern_ids: Optional[List[str]] = None,
+        cbr_results: dict[str, float],
+        bayesian_results: dict[str, float],
+        active_inference_results: dict[str, float] | None = None,
+        pattern_ids: list[str] | None = None,
     ) -> Figure:
         """Plot concordance matrix comparing different analysis methods.
 
@@ -124,8 +86,8 @@ class ConcordanceVisualizer:
             raise ValueError("No common patterns found for concordance analysis")
 
         # Normalize scores to [0, 1]
-        def normalize(scores: Dict[str, float]) -> Dict[str, float]:
-    
+        def normalize(scores: dict[str, float]) -> dict[str, float]:
+
             if not scores:
                 return {}
             min_val = min(scores.values())
@@ -207,8 +169,8 @@ class ConcordanceVisualizer:
 
     def plot_pattern_importance_concordance(
         self,
-        importance_metrics: Dict[str, Dict[str, float]],
-        pattern_ids: Optional[List[str]] = None,
+        importance_metrics: dict[str, dict[str, float]],
+        pattern_ids: list[str] | None = None,
     ) -> Figure:
         """Plot concordance of different importance metrics.
 
@@ -293,8 +255,8 @@ class ConcordanceVisualizer:
 
     def plot_agreement_heatmap(
         self,
-        analysis_results: Dict[str, Dict[str, Any]],
-        pattern_ids: List[str],
+        analysis_results: dict[str, dict[str, Any]],
+        pattern_ids: list[str],
         agreement_threshold: float = 0.7,
     ) -> Figure:
         """Plot heatmap showing agreement/disagreement between analyses.

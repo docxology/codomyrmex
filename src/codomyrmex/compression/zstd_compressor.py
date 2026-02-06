@@ -1,6 +1,5 @@
 """High-performance Zstd compressor."""
 
-from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,7 +12,7 @@ except ImportError:
 
 class ZstdCompressor:
     """Compressor using the Zstandard algorithm."""
-    
+
     def __init__(self, level: int = 3):
         if not ZSTD_AVAILABLE:
             raise ImportError("zstandard package not available. Install with: pip install zstandard")

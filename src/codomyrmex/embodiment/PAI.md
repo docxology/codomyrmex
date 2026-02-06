@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Embodiment Context
+# Personal AI Infrastructure — Embodiment Module
 
-**Module**: embodiment
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Robotics and physical embodiment integration for sensors, actuators, and coordinate transformations.
+The Embodiment module provides PAI integration for physical agent embodiment.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Robot Control
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Control physical robots:
 
-## Key Files
+```python
+from codomyrmex.embodiment import RobotController
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+robot = RobotController()
+robot.move_to(x=10, y=20)
+robot.pick_object("cube_1")
+```
 
-## Future Considerations
+### Sensor Integration
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Read sensor data:
+
+```python
+from codomyrmex.embodiment import SensorArray
+
+sensors = SensorArray()
+distance = sensors.read("proximity")
+temperature = sensors.read("thermal")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `RobotController` | Control robots |
+| `SensorArray` | Read sensors |
+| `Actuator` | Control actuators |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

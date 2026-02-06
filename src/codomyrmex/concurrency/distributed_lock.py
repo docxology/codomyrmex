@@ -1,17 +1,16 @@
 """Abstract base class and local implementation of distributed locks."""
 
-from abc import ABC, abstractmethod
+import fcntl
+import logging
 import os
 import time
-import logging
-import fcntl
-from typing import Optional
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 
 class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
-    
+
     def __init__(self, name: str):
         self.name = name
         self.is_held = False
@@ -19,11 +18,11 @@ class BaseLock(ABC):
     @abstractmethod
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
         """Acquire the lock.
-        
+
         Args:
             timeout: Maximum time to wait for the lock in seconds.
             retry_interval: Time between acquisition attempts.
-            
+
         Returns:
             True if acquired, False otherwise.
         """
@@ -44,7 +43,7 @@ class BaseLock(ABC):
 
 class LocalLock(BaseLock):
     """File-based lock for local multi-process synchronization."""
-    
+
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")

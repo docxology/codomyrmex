@@ -9,10 +9,8 @@ Provides thin, composable commands for rapid orchestration tasks:
 
 import asyncio
 import json
-import sys
-import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -21,7 +19,7 @@ logger = get_logger(__name__)
 
 def handle_quick_run(
     target: str,
-    args: Optional[List[str]] = None,
+    args: list[str] | None = None,
     timeout: int = 60,
     parallel: bool = False,
     verbose: bool = False
@@ -38,14 +36,17 @@ def handle_quick_run(
     Returns:
         True if successful
     """
-    from codomyrmex.orchestrator import run_script, run_parallel, discover_scripts, Workflow
+    from codomyrmex.orchestrator import (
+        discover_scripts,
+        run_script,
+    )
     from codomyrmex.orchestrator.parallel_runner import ParallelRunner
 
     args = args or []
     target_path = Path(target)
 
     # Progress callback for verbose mode
-    def progress(name: str, status: str, details: Dict[str, Any]):
+    def progress(name: str, status: str, details: dict[str, Any]):
         if verbose:
             print(f"  [{status.upper()}] {name}", end="")
             if "execution_time" in details:
@@ -115,7 +116,7 @@ def handle_quick_run(
         return False
 
 
-def handle_quick_pipe(commands: List[str], stop_on_error: bool = True) -> bool:
+def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
     """Pipe multiple commands together.
 
     Args:
@@ -125,12 +126,12 @@ def handle_quick_pipe(commands: List[str], stop_on_error: bool = True) -> bool:
     Returns:
         True if all commands succeeded
     """
-    from codomyrmex.orchestrator import Workflow, chain
+    from codomyrmex.orchestrator import Workflow
 
     print(f"Piping {len(commands)} commands")
 
     # Build workflow from commands
-    async def run_command(cmd: str, _task_results: Dict = None) -> Dict[str, Any]:
+    async def run_command(cmd: str, _task_results: dict = None) -> dict[str, Any]:
         """Run a single command."""
         import subprocess
         result = subprocess.run(
@@ -190,7 +191,7 @@ def handle_quick_pipe(commands: List[str], stop_on_error: bool = True) -> bool:
 
 
 def handle_quick_batch(
-    targets: List[str],
+    targets: list[str],
     workers: int = 4,
     timeout: int = 60,
     verbose: bool = False
@@ -227,7 +228,7 @@ def handle_quick_batch(
 
     print(f"Running {len(all_scripts)} scripts with {workers} workers")
 
-    def progress(name: str, status: str, details: Dict[str, Any]):
+    def progress(name: str, status: str, details: dict[str, Any]):
         if verbose:
             print(f"  [{status}] {name}")
 
@@ -244,7 +245,7 @@ def handle_quick_batch(
 
 
 def handle_quick_chain(
-    scripts: List[str],
+    scripts: list[str],
     timeout: int = 60,
     continue_on_error: bool = False
 ) -> bool:
@@ -303,7 +304,7 @@ def handle_quick_chain(
 
 def handle_quick_workflow(
     definition_file: str,
-    params: Optional[str] = None,
+    params: str | None = None,
     verbose: bool = False
 ) -> bool:
     """Execute a workflow from a definition file.
@@ -345,7 +346,7 @@ def handle_quick_workflow(
 
     # Execute workflow
     from codomyrmex.logistics.orchestration.project.orchestration_engine import (
-        get_orchestration_engine
+        get_orchestration_engine,
     )
 
     try:
@@ -373,7 +374,7 @@ def handle_quick_workflow(
         return False
 
 
-def _print_result(result: Dict[str, Any], verbose: bool = False):
+def _print_result(result: dict[str, Any], verbose: bool = False):
     """Print single script result."""
     status = result.get("status", "unknown")
     name = result.get("name", "unknown")
@@ -391,7 +392,7 @@ def _print_result(result: Dict[str, Any], verbose: bool = False):
 
 def _print_batch_result(result):
     """Print batch execution result."""
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total:   {result.total}")
     print(f"  Passed:  {result.passed}")
     print(f"  Failed:  {result.failed}")

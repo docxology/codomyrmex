@@ -1,50 +1,6 @@
-from typing import List
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security principles and fundamentals."""
 
@@ -54,11 +10,11 @@ logger = get_logger(__name__)
 @dataclass
 class SecurityPrinciple:
     """Represents a security principle."""
-    
+
     name: str
     description: str
     category: str  # confidentiality, integrity, availability, etc.
-    examples: List[str]
+    examples: list[str]
 
 
 # Common security principles
@@ -96,7 +52,7 @@ PRINCIPLES = {
 }
 
 
-def get_security_principles() -> List[SecurityPrinciple]:
+def get_security_principles() -> list[SecurityPrinciple]:
     """Get all security principles."""
     return list(PRINCIPLES.values())
 
@@ -107,7 +63,7 @@ def apply_principle(principle_name: str, context: dict) -> dict:
     if not principle:
         logger.warning(f"Unknown principle: {principle_name}")
         return {"applied": False, "error": "Unknown principle"}
-    
+
     # Placeholder for actual application logic
     return {
         "applied": True,

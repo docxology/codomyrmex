@@ -1,6 +1,8 @@
 
 import pytest
+
 from codomyrmex import scrape
+
 
 @pytest.mark.unit
 def test_scrape_module_import():

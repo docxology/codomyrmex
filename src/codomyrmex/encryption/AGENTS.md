@@ -1,31 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/encryption
+# Agent Guidelines - Encryption
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Cryptographic operations: symmetric, asymmetric, hashing, and key management.
 
-Encryption and cryptographic operations module. Provides secure key management, data encryption/decryption, and hashing capabilities.
+## Key Classes
 
-## Active Components
+- **SymmetricEncryptor** — AES encryption
+- **AsymmetricEncryptor** — RSA/EC encryption
+- **KeyManager** — Key generation and storage
+- **Hasher** — Secure hashing (SHA-256/512)
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `aes_gcm.py` – Project file
-- `container.py` – Project file
-- `encryptor.py` – Project file
-- `key_manager.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use strong keys** — AES-256, RSA-2048 minimum
+2. **Rotate keys** — Regular key rotation
+3. **Store securely** — Never log or expose keys
+4. **Use authenticated** — Prefer AEAD modes (GCM)
+5. **Salt hashes** — Always use salt for passwords
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.encryption import (
+    SymmetricEncryptor, AsymmetricEncryptor, KeyManager, Hasher
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Symmetric encryption
+encryptor = SymmetricEncryptor()
+key = encryptor.generate_key()
+ciphertext = encryptor.encrypt(plaintext, key)
+decrypted = encryptor.decrypt(ciphertext, key)
+
+# Asymmetric encryption
+asym = AsymmetricEncryptor()
+public_key, private_key = asym.generate_keypair()
+encrypted = asym.encrypt(data, public_key)
+decrypted = asym.decrypt(encrypted, private_key)
+
+# Key management
+manager = KeyManager()
+manager.store_key("api_key", key, rotate_days=90)
+
+# Secure hashing
+hasher = Hasher()
+hash_value = hasher.hash_password(password, salt=generate_salt())
+```
+
+## Testing Patterns
+
+```python
+# Verify encryption round-trip
+encryptor = SymmetricEncryptor()
+key = encryptor.generate_key()
+plaintext = b"secret data"
+ciphertext = encryptor.encrypt(plaintext, key)
+assert encryptor.decrypt(ciphertext, key) == plaintext
+
+# Verify different keys produce different ciphertext
+key2 = encryptor.generate_key()
+assert encryptor.encrypt(plaintext, key2) != ciphertext
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

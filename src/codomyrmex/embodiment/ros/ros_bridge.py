@@ -1,20 +1,21 @@
 """ROS2 bridge implementation."""
 
 import logging
-from typing import Dict, Any, Callable, Optional
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
 class ROS2Bridge:
     """Mock-friendly ROS2 bridge."""
-    
+
     def __init__(self, node_name: str):
         self.node_name = node_name
-        self.publishers: Dict[str, Any] = {}
-        self.subscribers: Dict[str, Callable] = {}
+        self.publishers: dict[str, Any] = {}
+        self.subscribers: dict[str, Callable] = {}
         logger.info(f"ROS2 node '{node_name}' initialized")
 
-    def publish(self, topic: str, message: Dict[str, Any]):
+    def publish(self, topic: str, message: dict[str, Any]):
         """Publish a message to a topic."""
         logger.debug(f"Publishing to {topic}: {message}")
         # In real ROS2, this would use rclpy
@@ -25,7 +26,7 @@ class ROS2Bridge:
         self.subscribers[topic] = callback
         logger.info(f"Subscribed to {topic}")
 
-    def simulate_message(self, topic: str, message: Dict[str, Any]):
+    def simulate_message(self, topic: str, message: dict[str, Any]):
         """Utility for testing: simulate an incoming message."""
         if topic in self.subscribers:
             self.subscribers[topic](message)

@@ -1,43 +1,21 @@
-from pathlib import Path
-from typing import Any, Dict, List
 import os
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 class DataProvider:
     """
     Aggregates data from various system modules to populate the website.
     """
-    
+
     def __init__(self, root_dir: Path):
 
 
         self.root_dir = root_dir
 
-    def get_system_summary(self) -> Dict[str, Any]:
+    def get_system_summary(self) -> dict[str, Any]:
         """Returns high-level system metrics."""
         return {
             "status": "Operational",
@@ -48,14 +26,14 @@ class DataProvider:
             "last_build": "N/A"  # Placeholder
         }
 
-    def get_modules(self) -> List[Dict[str, Any]]:
+    def get_modules(self) -> list[dict[str, Any]]:
         """
         Scans the `src/codomyrmex` directory for all modules (packages).
         This returns all Codomyrmex packages, not agents.
         """
         modules = []
         src_path = self.root_dir / "src/codomyrmex"
-        
+
         if not src_path.exists():
             return []
 
@@ -72,10 +50,10 @@ class DataProvider:
                     "description": description,
                     "submodules": self._get_submodules(item)
                 })
-        
+
         return sorted(modules, key=lambda x: x["name"])
 
-    def _get_submodules(self, module_path: Path) -> List[Dict[str, Any]]:
+    def _get_submodules(self, module_path: Path) -> list[dict[str, Any]]:
         """Get submodules of a module for hierarchical navigation."""
         submodules = []
         for item in module_path.iterdir():
@@ -87,14 +65,14 @@ class DataProvider:
                 })
         return sorted(submodules, key=lambda x: x["name"])
 
-    def get_actual_agents(self) -> List[Dict[str, Any]]:
+    def get_actual_agents(self) -> list[dict[str, Any]]:
         """
         Returns actual AI agent integrations from `src/codomyrmex/agents/`.
         These are the real agent frameworks (jules, claude, codex, etc.).
         """
         agents = []
         agents_path = self.root_dir / "src/codomyrmex/agents"
-        
+
         if not agents_path.exists():
             return []
 
@@ -107,7 +85,7 @@ class DataProvider:
                 description = self._get_description(item)
                 if description == "No description available":
                     description = self._get_description_from_markdown(item)
-                
+
                 agents.append({
                     "name": item.name,
                     "status": "Available",
@@ -115,7 +93,7 @@ class DataProvider:
                     "description": description,
                     "type": self._get_agent_type(item.name)
                 })
-        
+
         return sorted(agents, key=lambda x: x["name"])
 
     def _get_agent_type(self, agent_name: str) -> str:
@@ -123,7 +101,7 @@ class DataProvider:
         cli_agents = ["jules", "opencode", "gemini", "mistral_vibe", "droid"]
         api_agents = ["claude", "codex"]
         framework_agents = ["generic", "theory", "every_code", "ai_code_editing"]
-        
+
         if agent_name in cli_agents:
             return "CLI Integration"
         elif agent_name in api_agents:
@@ -132,7 +110,7 @@ class DataProvider:
             return "Framework"
         return "Agent"
 
-    def get_agents_status(self) -> List[Dict[str, Any]]:
+    def get_agents_status(self) -> list[dict[str, Any]]:
         """
         DEPRECATED: Use get_modules() instead.
         Kept for backwards compatibility.
@@ -144,26 +122,26 @@ class DataProvider:
 
         return len(self.get_actual_agents())
 
-    
-    def get_available_scripts(self) -> List[Dict[str, Any]]:
+
+    def get_available_scripts(self) -> list[dict[str, Any]]:
         """
         Scans the `scripts` directory for executable scripts.
         """
         scripts = []
         scripts_dir = self.root_dir / "scripts"
-        
+
         if not scripts_dir.exists():
             return []
-            
+
         # Recursive search for .py files
         for path in scripts_dir.rglob("*.py"):
             # Skip hidden files, __init__.py, and output directories
             if path.name.startswith(("_", ".")) or "output" in path.parts:
                 continue
-                
+
             rel_path = path.relative_to(scripts_dir)
             title, description = self._get_script_metadata(path)
-            
+
             scripts.append({
                 "name": str(rel_path),
                 "title": title,
@@ -171,7 +149,7 @@ class DataProvider:
                 "full_path": str(path),
                 "description": description
             })
-            
+
         return sorted(scripts, key=lambda x: x["name"])
 
     def _get_description(self, path: Path) -> str:
@@ -189,15 +167,15 @@ class DataProvider:
             except Exception:
                 pass
         return "No description available"
-        
+
     def _get_script_metadata(self, script_path: Path) -> tuple[str, str]:
         """Extracts title and description from script."""
         title = script_path.name
         description = "No description available"
-        
+
         try:
             content = script_path.read_text(encoding="utf-8")
-            
+
             # Extract docstring
             docstring = None
             if '"""' in content:
@@ -210,7 +188,7 @@ class DataProvider:
                 end = content.find("'''", start)
                 if end != -1:
                     docstring = content[start:end].strip()
-            
+
             if docstring:
                 lines = docstring.split('\n')
                 # Try to find a title
@@ -225,12 +203,12 @@ class DataProvider:
                         if line.strip():
                             title = line.strip()
                             break
-                
+
                 description = docstring
-                
+
         except Exception:
             pass
-            
+
         return title, description
 
     def _get_script_docstring(self, script_path: Path) -> str:
@@ -251,18 +229,18 @@ class DataProvider:
                         line = line.strip()
                         if line and not line.startswith("#"):
                             return line if len(line) < 100 else line[:97] + "..."
-                    return "Documented" 
+                    return "Documented"
                 except Exception:
                     continue
         return "No description available"
 
 
-    def get_config_files(self) -> List[Dict[str, str]]:
+    def get_config_files(self) -> list[dict[str, str]]:
         """Scans for configuration files."""
         configs = []
         # Look for typical config files in root
         patterns = ["*.toml", "*.yaml", "*.yml", "*.json", "requirements.txt"]
-        
+
         for pattern in patterns:
             for path in self.root_dir.glob(pattern):
                 if path.is_file():
@@ -271,7 +249,7 @@ class DataProvider:
                         "path": path.name, # Relative to root
                         "type": path.suffix.lstrip(".")
                     })
-        
+
         # Also look in config/ dir if it exists
         config_dir = self.root_dir / "config"
         if config_dir.exists():
@@ -283,7 +261,7 @@ class DataProvider:
                             "path": str(path.relative_to(self.root_dir)),
                             "type": path.suffix.lstrip(".")
                         })
-                        
+
         return sorted(configs, key=lambda x: x["name"])
 
     def get_config_content(self, filename: str) -> str:
@@ -291,11 +269,11 @@ class DataProvider:
         # Security: prevent traversal
         if ".." in filename or filename.startswith("/"):
              raise ValueError("Invalid filename")
-             
+
         file_path = self.root_dir / filename
         if not file_path.exists():
             raise FileNotFoundError(f"File {filename} not found")
-            
+
         return file_path.read_text(encoding="utf-8")
 
     def save_config_content(self, filename: str, content: str) -> None:
@@ -303,27 +281,27 @@ class DataProvider:
         # Security: prevent traversal
         if ".." in filename or filename.startswith("/"):
              raise ValueError("Invalid filename")
-             
+
         file_path = self.root_dir / filename
-        
-        # Only allow updating existing files for safety in MVP? 
+
+        # Only allow updating existing files for safety in MVP?
         # Or allow creating known config types?
         # Let's simple check it's in the allowed list from get_config_files roughly
         # For now, just write.
-        
+
         file_path.write_text(content, encoding="utf-8")
 
-    def get_doc_tree(self) -> Dict[str, Any]:
+    def get_doc_tree(self) -> dict[str, Any]:
         """Builds a tree of documentation files."""
         docs_root = self.root_dir / "docs"
         src_root = self.root_dir / "src"
-        
+
         tree = {"name": "Documentation", "children": []}
-        
+
         # Add docs/ folder
         if docs_root.exists():
             tree["children"].append(self._scan_directory_for_docs(docs_root))
-            
+
         # Add src/ READMEs
         src_docs = {"name": "Modules", "children": []}
         if src_root.exists():
@@ -335,18 +313,18 @@ class DataProvider:
                   })
         if src_docs["children"]:
             tree["children"].append(src_docs)
-            
+
         return tree
 
-    def _scan_directory_for_docs(self, path: Path) -> Dict[str, Any]:
+    def _scan_directory_for_docs(self, path: Path) -> dict[str, Any]:
 
 
         node = {"name": path.name, "children": []}
-        
+
         # Files first, then dirs
         for item in sorted(path.iterdir()):
             if item.name.startswith("."): continue
-            
+
             if item.is_file() and item.suffix == ".md":
                 node["children"].append({
                      "name": item.name,
@@ -358,10 +336,10 @@ class DataProvider:
                 # Only add if it has content
                 if child_node["children"]:
                     node["children"].append(child_node)
-                    
+
         return node
-        
-    def get_pipeline_status(self) -> List[Dict[str, Any]]:
+
+    def get_pipeline_status(self) -> list[dict[str, Any]]:
         """
         Retrieves CI/CD pipeline status.
         Currently mocks data until state persistence is implemented.

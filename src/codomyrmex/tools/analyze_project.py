@@ -1,73 +1,30 @@
-from pathlib import Path
-from typing import Dict, List, Any
 import argparse
 import json
 import os
-import sys
+from pathlib import Path
+from typing import Any
 
 import tomllib
 
 from codomyrmex.logging_monitoring import get_logger
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #!/usr/bin/env python3
 """Main entry point and utility functions
 
 This module provides analyze_project functionality including:
-    pass 
+    pass
 - 5 functions: analyze_project_structure, analyze_dependencies, analyze_code_quality...
-- 0 classes: 
-    pass 
+- 0 classes:
+    pass
 
 Usage:
-    pass 
+    pass
     # Example usage here
 """
 logger = get_logger(__name__)
 logger = get_logger(__name__)
 
-def analyze_project_structure() -> Dict[str, Any]:
+def analyze_project_structure() -> dict[str, Any]:
     """Analyze the overall project structure."""
     project_root = Path(__file__).parent.parent.parent.parent
 
@@ -111,7 +68,7 @@ def analyze_project_structure() -> Dict[str, Any]:
     return structure
 
 
-def analyze_dependencies() -> Dict[str, Any]:
+def analyze_dependencies() -> dict[str, Any]:
     """Analyze project dependencies."""
     deps = {
         "python_requires": ">=3.10",
@@ -142,7 +99,7 @@ def analyze_dependencies() -> Dict[str, Any]:
     return deps
 
 
-def analyze_code_quality() -> Dict[str, Any]:
+def analyze_code_quality() -> dict[str, Any]:
     """Analyze code quality metrics."""
     quality = {
         "total_python_files": 0,
@@ -182,7 +139,7 @@ def analyze_code_quality() -> Dict[str, Any]:
     return quality
 
 
-def generate_report(structure: Dict, deps: Dict, quality: Dict) -> str:
+def generate_report(structure: dict, deps: dict, quality: dict) -> str:
     """Generate an analysis report."""
     report = []
     report.append("# Codomyrmex Project Analysis Report")

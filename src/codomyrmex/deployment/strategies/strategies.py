@@ -1,7 +1,7 @@
 """Deployment strategies implementation."""
 
-from abc import ABC, abstractmethod
 import logging
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ class DeploymentStrategy(ABC):
 
 class CanaryStrategy(DeploymentStrategy):
     """Canary deployment strategy."""
-    
+
     def __init__(self, percentage: int = 10, step: int = 20):
         self.percentage = percentage
         self.step = step
@@ -24,8 +24,8 @@ class CanaryStrategy(DeploymentStrategy):
 
 class BlueGreenStrategy(DeploymentStrategy):
     """Blue-Green deployment strategy."""
-    
+
     def execute(self, service_name: str, version: str):
         logger.info(f"Starting Blue-Green deployment for {service_name}")
         logger.info(f"Deploying {version} to 'Green' slot")
-        logger.info(f"Shifting traffic from 'Blue' to 'Green'")
+        logger.info("Shifting traffic from 'Blue' to 'Green'")

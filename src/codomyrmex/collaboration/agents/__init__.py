@@ -5,9 +5,9 @@ Agent definitions and lifecycle management for collaborative workflows.
 """
 
 from .base import AbstractAgent, CollaborativeAgent
-from .worker import WorkerAgent, SpecializedWorker
-from .supervisor import SupervisorAgent
 from .registry import AgentRegistry, get_registry
+from .supervisor import SupervisorAgent
+from .worker import SpecializedWorker, WorkerAgent
 
 __all__ = [
     # Base classes

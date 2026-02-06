@@ -1,9 +1,9 @@
 """Language management for tree-sitter."""
 
 import importlib
-import os
 import logging
-from typing import Dict, Optional, Any
+import os
+from typing import Any
 
 # Import the external tree-sitter package explicitly to avoid shadowing
 # by the local codomyrmex.tree_sitter package.
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class LanguageManager:
     """Manages tree-sitter language libraries."""
 
-    _languages: Dict[str, Any] = {}
+    _languages: dict[str, Any] = {}
 
     @classmethod
     def load_language(cls, library_path: str, lang_name: str) -> bool:
@@ -30,7 +30,7 @@ class LanguageManager:
             return False
 
     @classmethod
-    def get_language(cls, lang_name: str) -> Optional[Any]:
+    def get_language(cls, lang_name: str) -> Any | None:
         """Get a loaded language instance."""
         return cls._languages.get(lang_name)
 

@@ -1,14 +1,16 @@
 """Asynchronous event emitter for non-blocking publishing."""
 
 import asyncio
-from typing import Any, Optional
+from typing import Any
+
 from .event_bus import get_event_bus
 from .event_schema import Event, EventType
 
+
 class AsyncEventEmitter:
     """Emits events asynchronously to the event bus."""
-    
-    def __init__(self, bus: Optional[Any] = None):
+
+    def __init__(self, bus: Any | None = None):
         self.bus = bus or get_event_bus()
 
     async def emit(self, event_type: EventType, payload: Any, priority: int = 0):

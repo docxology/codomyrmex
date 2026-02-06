@@ -5,48 +5,45 @@ This module tests all document operations including reading, writing, parsing,
 validation, format conversion, merging, splitting, metadata operations, and search.
 """
 
-import os
-import pytest
-import tempfile
 import json
-import yaml
 from pathlib import Path
-from datetime import datetime
+
+import pytest
+import yaml
 
 from codomyrmex.documents import (
-    read_document,
-    write_document,
     parse_document,
+    read_document,
     validate_document,
+    write_document,
 )
-
-from codomyrmex.documents.models.document import (
-    Document,
-    DocumentFormat,
-    DocumentType,
-)
-
-from codomyrmex.documents.models.metadata import (
-    DocumentMetadata,
-    MetadataField,
-)
-
-from codomyrmex.documents.core import (
-    DocumentReader,
-    DocumentWriter,
-    DocumentParser,
-    DocumentValidator,
-    ValidationResult,
-)
-
 from codomyrmex.documents.config import (
     DocumentsConfig,
     get_config,
     set_config,
 )
+from codomyrmex.documents.core import (
+    DocumentParser,
+    DocumentReader,
+    DocumentValidator,
+    DocumentWriter,
+    ValidationResult,
+)
+from codomyrmex.documents.models.document import (
+    Document,
+    DocumentFormat,
+    DocumentType,
+)
+from codomyrmex.documents.models.metadata import (
+    DocumentMetadata,
+    MetadataField,
+)
 
 try:
-    from codomyrmex.documents.formats.markdown_handler import read_markdown, write_markdown
+    from codomyrmex.documents.formats.markdown_handler import (
+        read_markdown,
+        write_markdown,
+    )
 except ImportError:
     read_markdown = None
     write_markdown = None
@@ -70,7 +67,11 @@ except ImportError:
     write_text = None
 
 try:
-    from codomyrmex.documents.formats.html_handler import read_html, write_html, strip_html_tags
+    from codomyrmex.documents.formats.html_handler import (
+        read_html,
+        strip_html_tags,
+        write_html,
+    )
 except ImportError:
     read_html = None
     write_html = None
@@ -119,13 +120,20 @@ except ImportError:
     update_metadata = None
 
 try:
-    from codomyrmex.documents.metadata.versioning import get_document_version, set_document_version
+    from codomyrmex.documents.metadata.versioning import (
+        get_document_version,
+        set_document_version,
+    )
 except ImportError:
     get_document_version = None
     set_document_version = None
 
 try:
-    from codomyrmex.documents.search.indexer import InMemoryIndex, index_document, create_index
+    from codomyrmex.documents.search.indexer import (
+        InMemoryIndex,
+        create_index,
+        index_document,
+    )
 except ImportError:
     InMemoryIndex = None
     index_document = None
@@ -143,19 +151,22 @@ except ImportError:
     QueryBuilder = None
     build_query = None
 
-from codomyrmex.documents.utils.encoding_detector import detect_encoding
-from codomyrmex.documents.utils.mime_type_detector import detect_format_from_path, detect_mime_type
-from codomyrmex.documents.utils.file_validator import validate_file_path, check_file_size
-
 from codomyrmex.documents.exceptions import (
-    DocumentReadError,
-    DocumentWriteError,
-    DocumentParseError,
-    DocumentValidationError,
     DocumentConversionError,
+    DocumentReadError,
+    DocumentValidationError,
+    DocumentWriteError,
     UnsupportedFormatError,
 )
-
+from codomyrmex.documents.utils.encoding_detector import detect_encoding
+from codomyrmex.documents.utils.file_validator import (
+    check_file_size,
+    validate_file_path,
+)
+from codomyrmex.documents.utils.mime_type_detector import (
+    detect_format_from_path,
+    detect_mime_type,
+)
 
 # ─── Document Model ────────────────────────────────────────────────────
 

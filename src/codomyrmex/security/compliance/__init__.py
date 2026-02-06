@@ -8,11 +8,11 @@ __version__ = "0.1.0"
 
 import json
 import threading
-from typing import Optional, List, Dict, Any, Set
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional, Set
 
 
 class ComplianceFramework(Enum):
@@ -42,10 +42,10 @@ class Control:
     description: str
     framework: ComplianceFramework
     category: str = ""
-    requirements: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    requirements: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -61,16 +61,16 @@ class ControlResult:
     control_id: str
     status: ControlStatus
     message: str = ""
-    evidence: List[str] = field(default_factory=list)
+    evidence: list[str] = field(default_factory=list)
     remediation: str = ""
     checked_at: datetime = field(default_factory=datetime.now)
-    
+
     @property
     def passed(self) -> bool:
         """Check if control passed."""
         return self.status == ControlStatus.PASSED
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "control_id": self.control_id,
@@ -84,33 +84,33 @@ class ComplianceReport:
     """A compliance assessment report."""
     report_id: str
     framework: ComplianceFramework
-    results: List[ControlResult] = field(default_factory=list)
+    results: list[ControlResult] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     @property
     def total_controls(self) -> int:
         """Get total controls checked."""
         return len(self.results)
-    
+
     @property
     def passed_controls(self) -> int:
         """Get passed control count."""
         return sum(1 for r in self.results if r.passed)
-    
+
     @property
     def failed_controls(self) -> int:
         """Get failed control count."""
         return sum(1 for r in self.results if r.status == ControlStatus.FAILED)
-    
+
     @property
     def compliance_score(self) -> float:
         """Get compliance score (0-100)."""
         if self.total_controls == 0:
             return 0.0
         return (self.passed_controls / self.total_controls) * 100
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "report_id": self.report_id,
@@ -124,22 +124,22 @@ class ComplianceReport:
 
 class ControlChecker(ABC):
     """Base class for control checkers."""
-    
+
     @property
     @abstractmethod
     def control_id(self) -> str:
         """Get control ID."""
         pass
-    
+
     @abstractmethod
-    def check(self, context: Dict[str, Any]) -> ControlResult:
+    def check(self, context: dict[str, Any]) -> ControlResult:
         """Check the control."""
         pass
 
 
 class PolicyChecker(ControlChecker):
     """Checker based on policy rules."""
-    
+
     def __init__(
         self,
         control_id: str,
@@ -153,12 +153,12 @@ class PolicyChecker(ControlChecker):
         self._pass_message = pass_message
         self._fail_message = fail_message
         self._remediation = remediation
-    
+
     @property
     def control_id(self) -> str:
         return self._control_id
-    
-    def check(self, context: Dict[str, Any]) -> ControlResult:
+
+    def check(self, context: dict[str, Any]) -> ControlResult:
         try:
             passed = self._check_fn(context)
             return ControlResult(
@@ -178,10 +178,10 @@ class PolicyChecker(ControlChecker):
 class ComplianceChecker:
     """
     Compliance checking engine.
-    
+
     Usage:
         checker = ComplianceChecker(ComplianceFramework.SOC2)
-        
+
         # Add controls
         checker.add_control(Control(
             id="SOC2-CC1.1",
@@ -189,55 +189,55 @@ class ComplianceChecker:
             description="Organization has access control policy",
             framework=ComplianceFramework.SOC2,
         ))
-        
+
         # Add checker
         checker.add_checker(PolicyChecker(
             control_id="SOC2-CC1.1",
             check_fn=lambda ctx: ctx.get("has_access_policy"),
         ))
-        
+
         # Run assessment
         report = checker.assess({"has_access_policy": True})
     """
-    
+
     def __init__(self, framework: ComplianceFramework):
         self.framework = framework
-        self._controls: Dict[str, Control] = {}
-        self._checkers: Dict[str, ControlChecker] = {}
+        self._controls: dict[str, Control] = {}
+        self._checkers: dict[str, ControlChecker] = {}
         self._counter = 0
         self._lock = threading.Lock()
-    
+
     def add_control(self, control: Control) -> "ComplianceChecker":
         """Add a control."""
         self._controls[control.id] = control
         return self
-    
+
     def add_checker(self, checker: ControlChecker) -> "ComplianceChecker":
         """Add a control checker."""
         self._checkers[checker.control_id] = checker
         return self
-    
-    def get_control(self, control_id: str) -> Optional[Control]:
+
+    def get_control(self, control_id: str) -> Control | None:
         """Get control by ID."""
         return self._controls.get(control_id)
-    
-    def list_controls(self) -> List[Control]:
+
+    def list_controls(self) -> list[Control]:
         """List all controls."""
         return list(self._controls.values())
-    
+
     def _get_report_id(self) -> str:
         """Generate report ID."""
         with self._lock:
             self._counter += 1
             return f"report_{self._counter}"
-    
-    def assess(self, context: Dict[str, Any]) -> ComplianceReport:
+
+    def assess(self, context: dict[str, Any]) -> ComplianceReport:
         """
         Run compliance assessment.
-        
+
         Args:
             context: Context data for checkers
-            
+
         Returns:
             ComplianceReport with results
         """
@@ -245,14 +245,14 @@ class ComplianceChecker:
             report_id=self._get_report_id(),
             framework=self.framework,
         )
-        
+
         for control_id, checker in self._checkers.items():
             result = checker.check(context)
             report.results.append(result)
-        
+
         return report
-    
-    def check_control(self, control_id: str, context: Dict[str, Any]) -> Optional[ControlResult]:
+
+    def check_control(self, control_id: str, context: dict[str, Any]) -> ControlResult | None:
         """Check a single control."""
         checker = self._checkers.get(control_id)
         if not checker:

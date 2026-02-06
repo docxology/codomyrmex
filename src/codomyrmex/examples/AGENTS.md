@@ -1,28 +1,65 @@
-# Codomyrmex Agents — src/codomyrmex/examples
+# Agent Guidelines - Examples
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Reference implementations, demonstrations, and validation reports.
 
-Reference implementations, demonstrations, and validation reports showcasing Codomyrmex capabilities. Learning resource and advanced usage patterns reference.
+## Contents
 
-## Active Components
+- **Usage patterns** — Common Codomyrmex usage patterns
+- **Integration examples** — Multi-module integration demos
+- **Validation reports** — Config and link check results
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `config_validation_report.json` – Project file
-- `link_check_report.json` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Reference first** — Check examples before implementing new patterns
+2. **Copy and adapt** — Use examples as starting points
+3. **Update examples** — Keep examples in sync with API changes
+4. **Test examples** — Examples should be runnable
+5. **Document patterns** — Examples explain the "how"
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+# Run an example
+from codomyrmex.examples import run_example
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+run_example("llm_chat")  # Interactive example
+
+# List available examples
+from codomyrmex.examples import list_examples
+
+for example in list_examples():
+    print(f"{example.name}: {example.description}")
+
+# Use example as template
+from codomyrmex.examples import get_example_code
+
+code = get_example_code("agentic_memory_basic")
+# Adapt code to your needs
+```
+
+## Key Examples
+
+| Example | Description |
+|---------|-------------|
+| `llm_chat` | Basic LLM chat interaction |
+| `agentic_memory` | Memory persistence patterns |
+| `multi_agent` | Multi-agent coordination |
+| `rag_pipeline` | RAG with vector store |
+
+## Testing Patterns
+
+```python
+# Verify examples are valid Python
+import ast
+from codomyrmex.examples import get_example_code
+
+for example in list_examples():
+    code = get_example_code(example.name)
+    ast.parse(code)  # Should not raise
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

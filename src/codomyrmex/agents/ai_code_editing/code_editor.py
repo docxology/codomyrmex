@@ -1,6 +1,8 @@
 """Code Editor Agent Implementation."""
-from typing import Any, Iterator, Optional
+from typing import Any
+from collections.abc import Iterator
 
+from codomyrmex.agents.ai_code_editing import ai_code_helpers
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -9,7 +11,6 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import AgentError
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.agents.ai_code_editing import ai_code_helpers
 
 logger = get_logger(__name__)
 
@@ -20,7 +21,7 @@ class CodeEditor(BaseAgent):
     Wraps functionality from ai_code_helpers.
     """
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize Code Editor.
         """
@@ -42,7 +43,7 @@ class CodeEditor(BaseAgent):
         try:
             # Extract language from context, metadata or default to python
             language = request.context.get("language") or request.metadata.get("language", "python")
-            
+
             # Simple dispatch based on prompt content keywords (naive routing)
             if "refactor" in request.prompt.lower():
                 # Naively assume the context has 'code'
@@ -53,7 +54,7 @@ class CodeEditor(BaseAgent):
                 context_str = str(request.context) if request.context else None
                 result_dict = ai_code_helpers.generate_code_snippet(request.prompt, language=language, context=context_str)
                 result = result_dict.get("generated_code", str(result_dict))
-            
+
             return AgentResponse(content=result, request_id=request.id)
         except Exception as e:
             raise AgentError(f"CodeEditor failed: {str(e)}") from e
@@ -73,7 +74,7 @@ class CodeEditor(BaseAgent):
         return True
 
     # First-class methods
-    def generate_code(self, prompt: str, context: Optional[str] = None) -> str:
+    def generate_code(self, prompt: str, context: str | None = None) -> str:
         """Directly generate code."""
         return ai_code_helpers.generate_code_snippet(prompt, context)
 
@@ -84,15 +85,15 @@ class CodeEditor(BaseAgent):
     def analyze_code(self, code: str) -> dict[str, Any]:
         """
         Analyze code for quality metrics and potential issues.
-        
+
         Args:
             code: Code to analyze
-            
+
         Returns:
             Analysis results including lines, complexity hints, and suggestions
         """
         lines = code.strip().split('\n')
-        
+
         # Basic static analysis
         analysis = {
             "total_lines": len(lines),
@@ -103,7 +104,7 @@ class CodeEditor(BaseAgent):
             "functions": [],
             "classes": [],
         }
-        
+
         # Find function and class definitions
         for i, line in enumerate(lines):
             stripped = line.strip()
@@ -113,41 +114,41 @@ class CodeEditor(BaseAgent):
             elif stripped.startswith('class '):
                 name = stripped.split('(')[0].split(':')[0].replace('class ', '')
                 analysis["classes"].append({"name": name, "line": i + 1})
-                
+
         logger.debug(f"Analyzed code: {analysis['total_lines']} lines, {len(analysis['functions'])} functions")
         return analysis
 
     def explain_code(self, code: str, detail_level: str = "summary") -> str:
         """
         Generate explanation for code.
-        
+
         Args:
             code: Code to explain
             detail_level: Level of detail ("summary", "detailed")
-            
+
         Returns:
             Human-readable explanation
         """
         analysis = self.analyze_code(code)
-        
+
         explanation = []
         explanation.append(f"This code has {analysis['total_lines']} lines.")
-        
+
         if analysis['classes']:
             class_names = [c['name'] for c in analysis['classes']]
             explanation.append(f"It defines {len(class_names)} class(es): {', '.join(class_names)}.")
-            
+
         if analysis['functions']:
             func_names = [f['name'] for f in analysis['functions']]
             explanation.append(f"It defines {len(func_names)} function(s): {', '.join(func_names)}.")
-            
+
         if analysis['imports']:
             explanation.append(f"It imports from {len(analysis['imports'])} module(s).")
-            
+
         if detail_level == "detailed":
             if analysis['has_docstring']:
                 explanation.append("The code includes documentation strings.")
             if analysis['comment_lines'] > 0:
                 explanation.append(f"There are {analysis['comment_lines']} comment lines.")
-                
+
         return " ".join(explanation)

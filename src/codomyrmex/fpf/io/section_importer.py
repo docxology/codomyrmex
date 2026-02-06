@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Section importer for merging FPF sections.
 
 
@@ -9,15 +9,22 @@ from separate JSON files into a unified FPF specification.
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional
 
-from ..core.models import FPFSpec, Pattern, Concept, Relationship, PatternStatus, ConceptType, RelationshipType
+from ..core.models import (
+    Concept,
+    ConceptType,
+    FPFSpec,
+    Pattern,
+    PatternStatus,
+    Relationship,
+    RelationshipType,
+)
 
 
 class SectionImporter:
     """Importer for FPF sections."""
 
-    def __init__(self, base_spec: Optional[FPFSpec] = None):
+    def __init__(self, base_spec: FPFSpec | None = None):
         """Initialize the section importer.
 
         Args:
@@ -34,7 +41,7 @@ class SectionImporter:
         Returns:
             Updated FPFSpec with imported part
         """
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Import patterns
@@ -60,7 +67,7 @@ class SectionImporter:
         Returns:
             Updated FPFSpec
         """
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
 
         patterns = [self._dict_to_pattern(p) for p in data.get("patterns", [])]
@@ -121,7 +128,7 @@ class SectionImporter:
         return merged
 
     def _merge_into_spec(
-        self, patterns: List[Pattern], concepts: List[Concept], relationships: List[Relationship]
+        self, patterns: list[Pattern], concepts: list[Concept], relationships: list[Relationship]
     ) -> FPFSpec:
         """Merge data into base specification.
 
@@ -158,7 +165,7 @@ class SectionImporter:
 
         return merged
 
-    def _dict_to_pattern(self, data: Dict) -> Pattern:
+    def _dict_to_pattern(self, data: dict) -> Pattern:
         """Convert dictionary to Pattern object."""
         return Pattern(
             id=data["id"],
@@ -174,7 +181,7 @@ class SectionImporter:
             cluster=data.get("cluster"),
         )
 
-    def _dict_to_concept(self, data: Dict) -> Concept:
+    def _dict_to_concept(self, data: dict) -> Concept:
         """Convert dictionary to Concept object."""
         return Concept(
             name=data["name"],
@@ -186,7 +193,7 @@ class SectionImporter:
             metadata=data.get("metadata", {}),
         )
 
-    def _dict_to_relationship(self, data: Dict) -> Relationship:
+    def _dict_to_relationship(self, data: dict) -> Relationship:
         """Convert dictionary to Relationship object."""
         return Relationship(
             source=data["source"],

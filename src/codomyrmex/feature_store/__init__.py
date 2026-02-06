@@ -8,14 +8,14 @@ __version__ = "0.1.0"
 
 import hashlib
 import json
+import threading
 import time
-from typing import Optional, List, Dict, Any, Callable, TypeVar, Union, Set
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from abc import ABC, abstractmethod
-import threading
-
+from typing import Any, Dict, List, Optional, Set, TypeVar, Union
+from collections.abc import Callable
 
 T = TypeVar('T')
 
@@ -48,15 +48,15 @@ class FeatureDefinition:
     value_type: ValueType
     description: str = ""
     default_value: Any = None
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
+    tags: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     @property
     def full_name(self) -> str:
         """Get fully qualified name."""
         return self.name
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "name": self.name,
@@ -77,7 +77,7 @@ class FeatureValue:
     value: Any
     timestamp: datetime = field(default_factory=datetime.now)
     version: int = 1
-    
+
     @property
     def age_seconds(self) -> float:
         """Get age of this value in seconds."""
@@ -88,15 +88,15 @@ class FeatureValue:
 class FeatureVector:
     """A collection of feature values for an entity."""
     entity_id: str
-    features: Dict[str, Any]
+    features: dict[str, Any]
     timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     def get(self, feature_name: str, default: Any = None) -> Any:
         """Get a feature value."""
         return self.features.get(feature_name, default)
-    
-    def to_list(self, feature_names: List[str]) -> List[Any]:
+
+    def to_list(self, feature_names: list[str]) -> list[Any]:
         """Convert to list in specified order."""
         return [self.features.get(name) for name in feature_names]
 
@@ -105,17 +105,17 @@ class FeatureVector:
 class FeatureGroup:
     """A group of related features."""
     name: str
-    features: List[FeatureDefinition]
+    features: list[FeatureDefinition]
     description: str = ""
     entity_type: str = "default"
-    tags: List[str] = field(default_factory=list)
-    
+    tags: list[str] = field(default_factory=list)
+
     @property
-    def feature_names(self) -> List[str]:
+    def feature_names(self) -> list[str]:
         """Get list of feature names."""
         return [f.name for f in self.features]
-    
-    def get_feature(self, name: str) -> Optional[FeatureDefinition]:
+
+    def get_feature(self, name: str) -> FeatureDefinition | None:
         """Get feature by name."""
         for f in self.features:
             if f.name == name:
@@ -125,29 +125,29 @@ class FeatureGroup:
 
 class FeatureStore(ABC):
     """Base class for feature storage backends."""
-    
+
     @abstractmethod
     def register_feature(self, definition: FeatureDefinition) -> None:
         """Register a feature definition."""
         pass
-    
+
     @abstractmethod
-    def get_feature_definition(self, name: str) -> Optional[FeatureDefinition]:
+    def get_feature_definition(self, name: str) -> FeatureDefinition | None:
         """Get feature definition by name."""
         pass
-    
+
     @abstractmethod
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
         """Set a feature value for an entity."""
         pass
-    
+
     @abstractmethod
-    def get_value(self, feature_name: str, entity_id: str) -> Optional[FeatureValue]:
+    def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
         """Get a feature value for an entity."""
         pass
-    
+
     @abstractmethod
-    def get_vector(self, entity_id: str, feature_names: List[str]) -> FeatureVector:
+    def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
         """Get multiple features for an entity."""
         pass
 
@@ -155,64 +155,64 @@ class FeatureStore(ABC):
 class InMemoryFeatureStore(FeatureStore):
     """
     In-memory feature store for development and testing.
-    
+
     Usage:
         store = InMemoryFeatureStore()
-        
+
         # Register features
         store.register_feature(FeatureDefinition(
             name="user_age",
             feature_type=FeatureType.NUMERIC,
             value_type=ValueType.INT,
         ))
-        
+
         # Set values
         store.set_value("user_age", "user_123", 25)
-        
+
         # Get values
         value = store.get_value("user_age", "user_123")
         print(value.value)  # 25
     """
-    
+
     def __init__(self):
-        self._definitions: Dict[str, FeatureDefinition] = {}
-        self._values: Dict[str, Dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
+        self._definitions: dict[str, FeatureDefinition] = {}
+        self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()
-    
+
     def register_feature(self, definition: FeatureDefinition) -> None:
         """Register a feature definition."""
         with self._lock:
             self._definitions[definition.name] = definition
             if definition.name not in self._values:
                 self._values[definition.name] = {}
-    
-    def get_feature_definition(self, name: str) -> Optional[FeatureDefinition]:
+
+    def get_feature_definition(self, name: str) -> FeatureDefinition | None:
         """Get feature definition by name."""
         return self._definitions.get(name)
-    
+
     def set_value(self, feature_name: str, entity_id: str, value: Any) -> None:
         """Set a feature value for an entity."""
         with self._lock:
             if feature_name not in self._values:
                 self._values[feature_name] = {}
-            
+
             existing = self._values[feature_name].get(entity_id)
             version = (existing.version + 1) if existing else 1
-            
+
             self._values[feature_name][entity_id] = FeatureValue(
                 feature_name=feature_name,
                 entity_id=entity_id,
                 value=value,
                 version=version,
             )
-    
-    def get_value(self, feature_name: str, entity_id: str) -> Optional[FeatureValue]:
+
+    def get_value(self, feature_name: str, entity_id: str) -> FeatureValue | None:
         """Get a feature value for an entity."""
         if feature_name not in self._values:
             return None
         return self._values[feature_name].get(entity_id)
-    
-    def get_vector(self, entity_id: str, feature_names: List[str]) -> FeatureVector:
+
+    def get_vector(self, entity_id: str, feature_names: list[str]) -> FeatureVector:
         """Get multiple features for an entity."""
         features = {}
         for name in feature_names:
@@ -224,13 +224,13 @@ class InMemoryFeatureStore(FeatureStore):
                 definition = self.get_feature_definition(name)
                 if definition and definition.default_value is not None:
                     features[name] = definition.default_value
-        
+
         return FeatureVector(entity_id=entity_id, features=features)
-    
-    def list_features(self) -> List[FeatureDefinition]:
+
+    def list_features(self) -> list[FeatureDefinition]:
         """List all registered features."""
         return list(self._definitions.values())
-    
+
     def delete_value(self, feature_name: str, entity_id: str) -> bool:
         """Delete a feature value."""
         with self._lock:
@@ -243,23 +243,23 @@ class InMemoryFeatureStore(FeatureStore):
 class FeatureTransform:
     """
     Transform features before serving.
-    
+
     Usage:
         transform = FeatureTransform()
         transform.add("age", lambda v: v / 100)  # Normalize
         transform.add("income", lambda v: math.log(v + 1))  # Log transform
-        
+
         transformed = transform.apply(vector)
     """
-    
+
     def __init__(self):
-        self._transforms: Dict[str, Callable[[Any], Any]] = {}
-    
+        self._transforms: dict[str, Callable[[Any], Any]] = {}
+
     def add(self, feature_name: str, func: Callable[[Any], Any]) -> "FeatureTransform":
         """Add a transform for a feature."""
         self._transforms[feature_name] = func
         return self
-    
+
     def apply(self, vector: FeatureVector) -> FeatureVector:
         """Apply transforms to a feature vector."""
         transformed = {}
@@ -268,7 +268,7 @@ class FeatureTransform:
                 transformed[name] = self._transforms[name](value)
             else:
                 transformed[name] = value
-        
+
         return FeatureVector(
             entity_id=vector.entity_id,
             features=transformed,
@@ -280,10 +280,10 @@ class FeatureTransform:
 class FeatureService:
     """
     High-level feature service for ML applications.
-    
+
     Usage:
         service = FeatureService(store=InMemoryFeatureStore())
-        
+
         # Register feature group
         user_features = FeatureGroup(
             name="user_features",
@@ -293,45 +293,45 @@ class FeatureService:
             ],
         )
         service.register_group(user_features)
-        
+
         # Ingest features
         service.ingest({"age": 25, "city": "NYC"}, entity_id="user_123")
-        
+
         # Get features for inference
         vector = service.get_features("user_123", ["age", "city"])
     """
-    
+
     def __init__(
         self,
-        store: Optional[FeatureStore] = None,
-        transform: Optional[FeatureTransform] = None,
+        store: FeatureStore | None = None,
+        transform: FeatureTransform | None = None,
     ):
         self.store = store or InMemoryFeatureStore()
         self.transform = transform
-        self._groups: Dict[str, FeatureGroup] = {}
-    
+        self._groups: dict[str, FeatureGroup] = {}
+
     def register_group(self, group: FeatureGroup) -> None:
         """Register a feature group."""
         self._groups[group.name] = group
         for feature in group.features:
             self.store.register_feature(feature)
-    
+
     def register_feature(self, definition: FeatureDefinition) -> None:
         """Register a single feature."""
         self.store.register_feature(definition)
-    
+
     def ingest(
         self,
-        features: Dict[str, Any],
+        features: dict[str, Any],
         entity_id: str,
     ) -> None:
         """Ingest feature values for an entity."""
         for name, value in features.items():
             self.store.set_value(name, entity_id, value)
-    
+
     def ingest_batch(
         self,
-        batch: List[Dict[str, Any]],
+        batch: list[dict[str, Any]],
         entity_id_field: str = "entity_id",
     ) -> int:
         """Ingest batch of feature values."""
@@ -343,21 +343,21 @@ class FeatureService:
                 self.ingest(features, entity_id)
                 count += 1
         return count
-    
+
     def get_features(
         self,
         entity_id: str,
-        feature_names: List[str],
+        feature_names: list[str],
         apply_transform: bool = True,
     ) -> FeatureVector:
         """Get features for an entity."""
         vector = self.store.get_vector(entity_id, feature_names)
-        
+
         if apply_transform and self.transform:
             vector = self.transform.apply(vector)
-        
+
         return vector
-    
+
     def get_group_features(
         self,
         entity_id: str,
@@ -367,10 +367,10 @@ class FeatureService:
         group = self._groups.get(group_name)
         if not group:
             return FeatureVector(entity_id=entity_id, features={})
-        
+
         return self.get_features(entity_id, group.feature_names)
-    
-    def list_groups(self) -> List[str]:
+
+    def list_groups(self) -> list[str]:
         """List registered feature groups."""
         return list(self._groups.keys())
 

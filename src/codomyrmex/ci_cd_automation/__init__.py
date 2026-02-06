@@ -36,6 +36,14 @@ from .deployment_orchestrator import (
     Environment,
     manage_deployments,
 )
+from .exceptions import (
+    ArtifactError,
+    BuildError,
+    DeploymentError,
+    PipelineError,
+    RollbackError,
+    StageError,
+)
 from .performance_optimizer import (
     PipelineOptimizer,
     optimize_pipeline_performance,
@@ -58,14 +66,6 @@ from .rollback_manager import (
     RollbackManager,
     RollbackStrategy,
     handle_rollback,
-)
-from .exceptions import (
-    PipelineError,
-    BuildError,
-    DeploymentError,
-    ArtifactError,
-    StageError,
-    RollbackError,
 )
 
 __all__ = [

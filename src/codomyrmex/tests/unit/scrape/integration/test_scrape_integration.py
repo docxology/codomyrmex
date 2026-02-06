@@ -6,9 +6,10 @@ with caution and proper API key configuration.
 """
 
 import os
+
 import pytest
 
-from codomyrmex.scrape import Scraper, ScrapeConfig, ScrapeOptions, ScrapeFormat
+from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeOptions, Scraper
 from codomyrmex.scrape.exceptions import ScrapeError
 
 
@@ -20,7 +21,7 @@ class TestScrapeIntegration:
     """Integration tests for scraping operations.
 
     These tests require:
-        pass 
+        pass
     - FIRECRAWL_API_KEY environment variable set
     - Network access
     - Firecrawl service availability
@@ -92,7 +93,7 @@ except ImportError:
 @pytest.mark.skipif(not FIRECRAWL_AVAILABLE, reason="firecrawl-py not installed")
 class TestScrapeErrorHandling:
     """Test error handling in integration scenarios.
-    
+
     Requires firecrawl-py to be installed.
     """
 

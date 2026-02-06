@@ -1,55 +1,13 @@
-from collections import defaultdict, deque
-from typing import Any, Callable, Optional
 import json
 import logging
-import time
-
-from dataclasses import dataclass, field
-from enum import Enum
 import statistics
 import threading
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+from collections.abc import Callable
 
 """Advanced analytics and data streaming for physical management."""
 
@@ -175,7 +133,7 @@ class DataStream:
         self._create_new_window()
 
     def add_data_point(
-        self, value: float, source_id: str, metadata: Optional[dict[str, Any]] = None
+        self, value: float, source_id: str, metadata: dict[str, Any] | None = None
     ) -> None:
         """Add a new data point to the stream."""
         point = DataPoint(
@@ -314,7 +272,7 @@ class StreamingAnalytics:
 
             return stream
 
-    def get_stream(self, stream_id: str) -> Optional[DataStream]:
+    def get_stream(self, stream_id: str) -> DataStream | None:
         """Get a stream by ID."""
         return self.streams.get(stream_id)
 
@@ -331,7 +289,7 @@ class StreamingAnalytics:
         stream_id: str,
         value: float,
         source_id: str,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> bool:
         """Add data to a stream."""
         stream = self.get_stream(stream_id)
@@ -415,7 +373,7 @@ class StreamingAnalytics:
 
             return summary
 
-    def export_stream_data(self, stream_id: str, format: str = "json") -> Optional[str]:
+    def export_stream_data(self, stream_id: str, format: str = "json") -> str | None:
         """Export stream data in specified format."""
         stream = self.get_stream(stream_id)
         if not stream:
@@ -476,7 +434,7 @@ class PredictiveAnalytics:
 
     def predict_linear_trend(
         self, data_points: list[DataPoint], future_seconds: float
-    ) -> Optional[float]:
+    ) -> float | None:
         """Predict future value using linear regression."""
         if len(data_points) < self.min_data_points:
             return None
@@ -539,7 +497,7 @@ class PredictiveAnalytics:
 
     def calculate_correlation(
         self, stream1_data: list[DataPoint], stream2_data: list[DataPoint]
-    ) -> Optional[float]:
+    ) -> float | None:
         """Calculate correlation between two data streams."""
         if (
             len(stream1_data) < self.min_data_points

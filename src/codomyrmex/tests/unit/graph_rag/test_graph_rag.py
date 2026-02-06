@@ -137,7 +137,7 @@ class TestGraphContext:
 
     def test_context_creation(self):
         """Verify GraphContext can be created."""
-        from codomyrmex.graph_rag import GraphContext, Entity, EntityType
+        from codomyrmex.graph_rag import Entity, EntityType, GraphContext
 
         context = GraphContext(
             query="Who is the CEO?",
@@ -150,7 +150,7 @@ class TestGraphContext:
 
     def test_context_entity_names(self):
         """Verify entity names property."""
-        from codomyrmex.graph_rag import GraphContext, Entity, EntityType
+        from codomyrmex.graph_rag import Entity, EntityType, GraphContext
 
         context = GraphContext(
             query="test",
@@ -166,7 +166,11 @@ class TestGraphContext:
     def test_context_to_text(self):
         """Verify text representation."""
         from codomyrmex.graph_rag import (
-            GraphContext, Entity, Relationship, EntityType, RelationType
+            Entity,
+            EntityType,
+            GraphContext,
+            Relationship,
+            RelationType,
         )
 
         context = GraphContext(
@@ -186,7 +190,7 @@ class TestKnowledgeGraph:
 
     def test_graph_add_entity(self):
         """Verify entities can be added."""
-        from codomyrmex.graph_rag import KnowledgeGraph, Entity, EntityType
+        from codomyrmex.graph_rag import Entity, EntityType, KnowledgeGraph
 
         graph = KnowledgeGraph()
         entity = Entity(id="test", name="Test", entity_type=EntityType.CONCEPT)
@@ -199,7 +203,11 @@ class TestKnowledgeGraph:
     def test_graph_add_relationship(self):
         """Verify relationships can be added."""
         from codomyrmex.graph_rag import (
-            KnowledgeGraph, Entity, Relationship, EntityType, RelationType
+            Entity,
+            EntityType,
+            KnowledgeGraph,
+            Relationship,
+            RelationType,
         )
 
         graph = KnowledgeGraph()
@@ -212,7 +220,11 @@ class TestKnowledgeGraph:
     def test_graph_get_neighbors(self):
         """Verify neighbor retrieval."""
         from codomyrmex.graph_rag import (
-            KnowledgeGraph, Entity, Relationship, EntityType, RelationType
+            Entity,
+            EntityType,
+            KnowledgeGraph,
+            Relationship,
+            RelationType,
         )
 
         graph = KnowledgeGraph()
@@ -232,7 +244,11 @@ class TestKnowledgeGraph:
     def test_graph_find_path(self):
         """Verify path finding."""
         from codomyrmex.graph_rag import (
-            KnowledgeGraph, Entity, Relationship, EntityType, RelationType
+            Entity,
+            EntityType,
+            KnowledgeGraph,
+            Relationship,
+            RelationType,
         )
 
         graph = KnowledgeGraph()
@@ -248,7 +264,7 @@ class TestKnowledgeGraph:
 
     def test_graph_search_entities(self):
         """Verify entity search."""
-        from codomyrmex.graph_rag import KnowledgeGraph, Entity, EntityType
+        from codomyrmex.graph_rag import Entity, EntityType, KnowledgeGraph
 
         graph = KnowledgeGraph()
         graph.add_entity(Entity(id="py", name="Python", entity_type=EntityType.CONCEPT))
@@ -262,7 +278,11 @@ class TestKnowledgeGraph:
     def test_graph_subgraph_extraction(self):
         """Verify subgraph extraction."""
         from codomyrmex.graph_rag import (
-            KnowledgeGraph, Entity, Relationship, EntityType, RelationType
+            Entity,
+            EntityType,
+            KnowledgeGraph,
+            Relationship,
+            RelationType,
         )
 
         graph = KnowledgeGraph()
@@ -297,7 +317,10 @@ class TestGraphRAGPipeline:
     def test_pipeline_extract_entities(self):
         """Verify entity extraction from query."""
         from codomyrmex.graph_rag import (
-            GraphRAGPipeline, KnowledgeGraph, Entity, EntityType
+            Entity,
+            EntityType,
+            GraphRAGPipeline,
+            KnowledgeGraph,
         )
 
         graph = KnowledgeGraph()
@@ -312,8 +335,12 @@ class TestGraphRAGPipeline:
     def test_pipeline_retrieve(self):
         """Verify context retrieval."""
         from codomyrmex.graph_rag import (
-            GraphRAGPipeline, KnowledgeGraph, Entity, Relationship,
-            EntityType, RelationType
+            Entity,
+            EntityType,
+            GraphRAGPipeline,
+            KnowledgeGraph,
+            Relationship,
+            RelationType,
         )
 
         graph = KnowledgeGraph()
@@ -330,7 +357,11 @@ class TestGraphRAGPipeline:
     def test_pipeline_combine_context(self):
         """Verify context combination."""
         from codomyrmex.graph_rag import (
-            GraphRAGPipeline, KnowledgeGraph, GraphContext, Entity, EntityType
+            Entity,
+            EntityType,
+            GraphContext,
+            GraphRAGPipeline,
+            KnowledgeGraph,
         )
 
         graph = KnowledgeGraph()

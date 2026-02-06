@@ -14,7 +14,6 @@ Example:
 
 from __future__ import annotations
 
-from typing import Optional
 from dataclasses import dataclass
 
 from codomyrmex.coding.debugging.patch_generator import Patch
@@ -67,7 +66,7 @@ class FixVerifier:
         >>> print(f"Verification {'passed' if result.success else 'failed'}")
     """
 
-    def verify(self, original_source: str, patch: Patch, test_input: Optional[str] = None) -> VerificationResult:
+    def verify(self, original_source: str, patch: Patch, test_input: str | None = None) -> VerificationResult:
         """Apply a patch and verify the fix by executing the patched code.
 
         Applies the patch to the original source code and runs it in a
@@ -94,14 +93,14 @@ class FixVerifier:
             ...     print("Fix verified!")
         """
         # 1. Apply patch to source (simplistic string replacement or patching lib needed)
-        # For this prototype, we'll assume the patch might contain the full replaced content 
-        # or we would need a proper `patch` utility. 
+        # For this prototype, we'll assume the patch might contain the full replaced content
+        # or we would need a proper `patch` utility.
         # Here we mock the application logic.
         patched_source = self._apply_patch(original_source, patch)
-        
+
         # 2. Execute patched code
         # result = execute_code("python", patched_source, stdin=test_input)
-        
+
         # Mock result for now
         return VerificationResult(
             success=False,

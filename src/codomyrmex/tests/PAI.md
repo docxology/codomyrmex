@@ -1,25 +1,47 @@
-# Personal AI Infrastructure - Tests Context
+# Personal AI Infrastructure — Tests Module
 
-**Module**: tests
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Unit and integration tests for the . module with pytest fixtures and mocks.
+The Tests module provides PAI integration for test automation and coverage.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+### Test Execution
 
-## Key Files
+Run tests programmatically:
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+```python
+from codomyrmex.tests import TestRunner
 
-## Future Considerations
+runner = TestRunner()
+result = runner.run("tests/")
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+print(f"Passed: {result.passed}")
+print(f"Failed: {result.failed}")
+```
+
+### Coverage Tracking
+
+Track test coverage:
+
+```python
+from codomyrmex.tests import CoverageReporter
+
+reporter = CoverageReporter()
+coverage = reporter.run("tests/")
+print(f"Coverage: {coverage.percent}%")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `TestRunner` | Execute tests |
+| `CoverageReporter` | Track coverage |
+| `TestGenerator` | AI-generated tests |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

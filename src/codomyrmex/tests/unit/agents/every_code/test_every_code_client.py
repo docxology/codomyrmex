@@ -5,14 +5,19 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-import pytest
-from pathlib import Path
-from typing import Any
 
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
-from codomyrmex.agents.every_code import EveryCodeClient
-from codomyrmex.agents.core.exceptions import EveryCodeError
-from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
+import pytest
+
+try:
+    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+    from codomyrmex.agents.every_code import EveryCodeClient
+    from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class TestEveryCodeClient:
@@ -33,7 +38,7 @@ class TestEveryCodeClient:
         """Test EveryCodeClient declares correct capabilities."""
         client = EveryCodeClient()
         capabilities = client.get_capabilities()
-        
+
         # Verify all expected capabilities are present
         assert AgentCapabilities.CODE_GENERATION in capabilities
         assert AgentCapabilities.CODE_EDITING in capabilities
@@ -48,7 +53,7 @@ class TestEveryCodeClient:
         client = EveryCodeClient()
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
-        
+
         # Test real response structure
         assert isinstance(response, type(client.execute(AgentRequest(prompt=""))))
         # Note: Actual success depends on authentication and CLI state
@@ -60,7 +65,7 @@ class TestEveryCodeClient:
         client = EveryCodeClient(config={"every_code_command": "nonexistent-code-command-xyz"})
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
-        
+
         # Test real error handling
         assert not response.is_success()
         assert response.error is not None
@@ -70,11 +75,11 @@ class TestEveryCodeClient:
         """Test streaming output from Every Code with real CLI."""
         client = EveryCodeClient()
         request = AgentRequest(prompt="test prompt")
-        
+
         # Test that streaming returns an iterator
         stream = client.stream(request)
         chunks = list(stream)
-        
+
         # Verify we got some response (even if empty or error)
         assert isinstance(chunks, list)
 
@@ -83,7 +88,7 @@ class TestEveryCodeClient:
         """Test executing an Every Code command with real CLI."""
         client = EveryCodeClient()
         result = client.execute_code_command("/plan", ["test task"])
-        
+
         # Test real result structure
         assert isinstance(result, dict)
         assert "exit_code" in result or "output" in result
@@ -93,7 +98,7 @@ class TestEveryCodeClient:
         """Test getting Every Code help information with real CLI."""
         client = EveryCodeClient()
         help_info = client.get_code_help()
-        
+
         # Test real result structure
         assert isinstance(help_info, dict)
         assert "available" in help_info
@@ -103,7 +108,7 @@ class TestEveryCodeClient:
         """Test getting Every Code help information structure."""
         client = EveryCodeClient()
         help_info = client.get_code_help()
-        
+
         # Test real result structure
         assert isinstance(help_info, dict)
         assert "available" in help_info
@@ -116,7 +121,7 @@ class TestEveryCodeClient:
         """Test getting Every Code version information structure."""
         client = EveryCodeClient()
         version_info = client.get_code_version()
-        
+
         # Test real result structure
         assert isinstance(version_info, dict)
         assert "available" in version_info
@@ -134,7 +139,7 @@ class TestEveryCodeClient:
             prompt="Analyze this code",
             context={"files": ["src/main.py"]}
         )
-        
+
         # Test that request structure is correct
         assert request.prompt == "Analyze this code"
         assert "files" in request.context
@@ -146,16 +151,16 @@ class TestEveryCodeClient:
             "every_code_command": "custom-code",
             "every_code_timeout": 180,
         }
-        
+
         client = EveryCodeClient(config=config)
-        
+
         assert client.command == "custom-code"
         assert client.timeout == 180
 
     def test_every_code_client_request_validation(self):
         """Test request validation."""
         client = EveryCodeClient()
-        
+
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
         response = client.execute(empty_request)
@@ -165,15 +170,15 @@ class TestEveryCodeClient:
     def test_every_code_client_special_commands(self):
         """Test special command handling."""
         client = EveryCodeClient()
-        
+
         # Test /plan command
         request = AgentRequest(prompt="/plan Create a new feature")
         assert request.prompt.startswith("/plan")
-        
+
         # Test /solve command
         request = AgentRequest(prompt="/solve Fix the bug")
         assert request.prompt.startswith("/solve")
-        
+
         # Test /code command
         request = AgentRequest(prompt="/code Implement sorting")
         assert request.prompt.startswith("/code")

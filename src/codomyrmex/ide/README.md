@@ -1,46 +1,64 @@
-# ide
+# IDE Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 
-Programmatic integration and automation framework for Integrated Development Environments. Provides an abstract `IDEClient` base class with a consistent API for connecting, executing commands, managing files, and handling events across multiple IDE backends. Enables AI agents to achieve full agentic operation of IDEs including Antigravity (Google DeepMind), Cursor, and VS Code.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.ide import (
+    IDEClient, CursorClient, IDECommand, IDECommandResult, FileInfo
+)
 
-### Core Classes
+# Connect to Cursor IDE
+client = CursorClient()
+client.connect()
 
-- **`IDEClient`** -- Abstract base class for IDE integrations; defines the contract for connect/disconnect, command execution, file operations, batch execution, event handling, and command history tracking with success rate metrics
-- **`CursorClient`** -- Concrete IDEClient implementation for the Cursor AI-first code editor
+# Execute commands
+client.execute_command("editor.action.formatDocument")
+result = client.execute_command_safe("workbench.action.files.save")
+print(f"Success: {result.success}, Time: {result.execution_time:.2f}s")
 
-### Data Classes and Enums
+# Get file information
+active = client.get_active_file()
+files = client.get_open_files()
+info = client.get_file_info(active)
+print(f"Language: {info.language}, Lines: {info.line_count}")
 
-- **`IDEStatus`** -- IDE session status: DISCONNECTED, CONNECTING, CONNECTED, ERROR
-- **`IDECommand`** -- Represents an IDE command with name, args dict, and timeout
-- **`IDECommandResult`** -- Result of command execution with success flag, output, error, and execution time
-- **`FileInfo`** -- File metadata including path, name, modification status, detected language, and line count
+# Batch execution
+commands = [
+    IDECommand("editor.action.formatDocument"),
+    IDECommand("workbench.action.files.save"),
+]
+results = client.execute_batch(commands, stop_on_error=True)
 
-### Exceptions
+# Event handling
+client.register_event_handler("file_saved", on_file_saved)
 
-- **`IDEError`** -- Base exception for IDE operations
-- **`ConnectionError`** -- Failed to connect to or communicate with the IDE (aliased from IDEConnectionError)
-- **`CommandExecutionError`** -- Command execution failed within the IDE
-- **`SessionError`** -- IDE session lifecycle error
-- **`ArtifactError`** -- Error working with IDE artifacts
+client.disconnect()
+```
 
-## Directory Contents
+## Exports
 
-- `__init__.py` - Module definition with IDEClient ABC, data classes, and submodule imports
-- `antigravity/` - Google DeepMind Antigravity IDE integration
-- `cursor/` - Cursor AI-first code editor integration (CursorClient)
-- `vscode/` - Visual Studio Code integration
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Detailed API documentation
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+| Class | Description |
+|-------|-------------|
+| `IDEClient` | Abstract base class for IDE integrations |
+| `CursorClient` | Cursor AI-first editor client |
+| `IDEStatus` | Enum: disconnected, connecting, connected, error |
+| `IDECommand` | Command with name, args, timeout |
+| `IDECommandResult` | Result with success, output, execution_time |
+| `FileInfo` | File path, name, language, line_count |
+| `IDEError` | Base IDE exception |
+| `ConnectionError` | Connection failure |
+| `CommandExecutionError` | Command execution failure |
+
+## Submodules
+
+- `antigravity/` — Google DeepMind Antigravity integration
+- `cursor/` — Cursor AI editor integration
+- `vscode/` — Visual Studio Code integration
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/ide/](../../../docs/modules/ide/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

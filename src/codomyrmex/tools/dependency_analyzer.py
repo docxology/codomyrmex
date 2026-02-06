@@ -1,44 +1,21 @@
-from collections import defaultdict
-from pathlib import Path
-from typing import Dict, List, Set, Tuple, Union
 import ast
 import logging
 import sys
+from collections import defaultdict
+from pathlib import Path
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #!/usr/bin/env python3
 """Main entry point and utility functions
 
 This module provides dependency_analyzer functionality including:
-    pass 
+    pass
 - 11 functions: main, __init__, extract_imports...
 - 1 classes: DependencyAnalyzer
 
 Usage:
-    pass 
+    pass
     # Example usage here
 """
 
@@ -57,7 +34,7 @@ except ImportError:
 class DependencyAnalyzer:
     """Analyzes module dependencies for circular imports and hierarchy violations."""
 
-    def __init__(self, project_root: Union[str, Path]):
+    def __init__(self, project_root: str | Path):
         """
         Initialize the analyzer.
 
@@ -67,10 +44,10 @@ class DependencyAnalyzer:
         self.project_root = Path(project_root).resolve()
         self.logger = get_logger(self.__class__.__name__)
         self.src_path = self.project_root / "src" / "codomyrmex"
-        self.imports: Dict[str, Set[str]] = defaultdict(set)
-        self.modules: Set[str] = set()
-        self.circular_deps: List[Tuple[str, str]] = []
-        self.violations: List[Dict[str, str]] = []
+        self.imports: dict[str, set[str]] = defaultdict(set)
+        self.modules: set[str] = set()
+        self.circular_deps: list[tuple[str, str]] = []
+        self.violations: list[dict[str, str]] = []
 
         # Define allowed dependency layers (from relationships.md)
         self.allowed_dependencies = {
@@ -109,11 +86,11 @@ class DependencyAnalyzer:
             "module_template": set(),
         }
 
-    def extract_imports(self, file_path: Path) -> Set[str]:
+    def extract_imports(self, file_path: Path) -> set[str]:
         """Extract all codomyrmex imports from a Python file."""
         imports = set()
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             tree = ast.parse(content, filename=str(file_path))
@@ -165,14 +142,14 @@ class DependencyAnalyzer:
             if item.is_dir() and not item.name.startswith("_") and item.name != "output":
                 self.scan_module(item.name)
 
-    def detect_circular_dependencies(self) -> List[Tuple[str, str]]:
+    def detect_circular_dependencies(self) -> list[tuple[str, str]]:
         """Detect circular import dependencies."""
         circular = []
 
         # Build dependency graph
-        graph: Dict[str, Set[str]] = {module: set(self.imports[module]) for module in self.modules}
+        graph: dict[str, set[str]] = {module: set(self.imports[module]) for module in self.modules}
 
-        def has_cycle(start: str, current: str, visited: Set[str], path: List[str]) -> bool:
+        def has_cycle(start: str, current: str, visited: set[str], path: list[str]) -> bool:
             """Check if there's a cycle from start to current."""
             if current in visited:
                 if current == start:
@@ -199,7 +176,7 @@ class DependencyAnalyzer:
         self.circular_deps = circular
         return circular
 
-    def validate_dependency_hierarchy(self) -> List[Dict[str, str]]:
+    def validate_dependency_hierarchy(self) -> list[dict[str, str]]:
         """Validate that modules follow the allowed dependency hierarchy."""
         violations = []
 
@@ -323,7 +300,7 @@ class DependencyAnalyzer:
 
         return "\n".join(lines)
 
-    def analyze(self) -> Dict[str, any]:
+    def analyze(self) -> dict[str, any]:
         """Run complete dependency analysis."""
         logger.info("Scanning modules for dependencies...")
         self.scan_all_modules()

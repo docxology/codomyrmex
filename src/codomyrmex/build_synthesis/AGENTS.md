@@ -1,33 +1,66 @@
-# Codomyrmex Agents — src/codomyrmex/build_synthesis
+# Agent Guidelines - Build Synthesis
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Build system generation and project scaffolding.
 
-Build automation module providing multi-language builds, artifact generation, and build pipelines. Orchestrates compilation, packaging, and deployment preparation workflows.
+## Key Classes
 
-## Active Components
+- **BuildGenerator** — Generate build configurations
+- **ProjectScaffold** — Create project structure
+- **DependencyResolver** — Resolve dependencies
+- **BuildConfig** — Build configuration
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `build_manager.py` – Project file
-- `build_orchestrator.py` – Project file
-- `requirements.txt` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Detect tooling** — Auto-detect build system
+2. **Template-based** — Use templates for consistency
+3. **Validate output** — Check generated files
+4. **Include tests** — Generate test configurations
+5. **Document builds** — Add build instructions
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.build_synthesis import (
+    BuildGenerator, ProjectScaffold, DependencyResolver
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Generate build config
+generator = BuildGenerator()
+config = generator.generate(
+    project_type="python",
+    build_system="pyproject",
+    dependencies=["fastapi", "pydantic"]
+)
+config.write("pyproject.toml")
+
+# Scaffold new project
+scaffold = ProjectScaffold("my_project")
+scaffold.add_src()
+scaffold.add_tests()
+scaffold.add_ci()
+scaffold.create()
+
+# Resolve dependencies
+resolver = DependencyResolver()
+resolved = resolver.resolve(requirements)
+```
+
+## Testing Patterns
+
+```python
+# Verify build generation
+generator = BuildGenerator()
+config = generator.generate(project_type="python")
+assert "pyproject.toml" in config.files
+
+# Verify scaffold
+scaffold = ProjectScaffold("test")
+files = scaffold.preview()
+assert "src/__init__.py" in files
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -5,9 +5,8 @@ timeouts, and error handling for network operations.
 """
 
 import json
-import logging
 from dataclasses import dataclass
-from typing import Any, Optional, Dict
+from typing import Any
 
 try:
     import requests
@@ -38,12 +37,12 @@ class Response:
     """HTTP response object."""
 
     status_code: int
-    headers: Dict[str, Any]
+    headers: dict[str, Any]
     content: bytes
     text: str
-    json_data: Optional[Dict[str, Any]] = None
+    json_data: dict[str, Any] | None = None
 
-    def json(self) -> Dict[str, Any]:
+    def json(self) -> dict[str, Any]:
         """Get JSON data from response."""
         if self.json_data is None:
             self.json_data = json.loads(self.text)
@@ -58,7 +57,7 @@ class HTTPClient:
         timeout: int = 30,
         max_retries: int = 3,
         retry_backoff: float = 1.0,
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
     ):
         """Initialize HTTP client.
 
@@ -86,7 +85,7 @@ class HTTPClient:
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
-        
+
         # Update session headers
         if self.default_headers:
             self.session.headers.update(self.default_headers)
@@ -126,7 +125,7 @@ class HTTPClient:
             request_headers = {}
             if "headers" in kwargs:
                 request_headers = kwargs.pop("headers")
-            
+
             # Use session options but allow overrides
             timeout = kwargs.pop("timeout", self.timeout)
 

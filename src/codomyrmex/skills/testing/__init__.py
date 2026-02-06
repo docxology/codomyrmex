@@ -19,14 +19,14 @@ except ImportError:
 class SkillTestResult:
     """Result of a single skill test case."""
 
-    def __init__(self, name: str, passed: bool, expected: Any = None, actual: Any = None, error: Optional[str] = None):
+    def __init__(self, name: str, passed: bool, expected: Any = None, actual: Any = None, error: str | None = None):
         self.name = name
         self.passed = passed
         self.expected = expected
         self.actual = actual
         self.error = error
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         result = {
             "name": self.name,
             "passed": self.passed,
@@ -43,7 +43,7 @@ class SkillTestResult:
 class SkillTestRunner:
     """Runs test cases against skills and produces reports."""
 
-    def test_skill(self, skill, test_cases: List[Dict[str, Any]]) -> List[SkillTestResult]:
+    def test_skill(self, skill, test_cases: list[dict[str, Any]]) -> list[SkillTestResult]:
         """
         Run test cases against a skill.
 
@@ -93,7 +93,7 @@ class SkillTestRunner:
         logger.info(f"Test results for {skill_name}: {passed_count}/{len(results)} passed")
         return results
 
-    def validate_skill(self, skill) -> Dict[str, Any]:
+    def validate_skill(self, skill) -> dict[str, Any]:
         """
         Validate a skill's metadata and parameter definitions.
 
@@ -129,7 +129,7 @@ class SkillTestRunner:
             "skill_name": getattr(metadata, 'name', 'unknown'),
         }
 
-    def benchmark_skill(self, skill, iterations: int = 100, **kwargs) -> Dict[str, Any]:
+    def benchmark_skill(self, skill, iterations: int = 100, **kwargs) -> dict[str, Any]:
         """
         Benchmark a skill's execution performance.
 

@@ -1,10 +1,9 @@
 """Document metadata models."""
 
 import copy
-from datetime import datetime
-from typing import Any, Optional
-
 from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -17,19 +16,19 @@ class MetadataField:
 
     name: str
     value: Any
-    data_type: Optional[str] = None
-    source: Optional[str] = None
+    data_type: str | None = None
+    source: str | None = None
 
 
 @dataclass
 class DocumentMetadata:
     """Document metadata container."""
 
-    title: Optional[str] = None
-    author: Optional[str] = None
-    created_at: Optional[datetime] = None
-    modified_at: Optional[datetime] = None
-    version: Optional[str] = None
+    title: str | None = None
+    author: str | None = None
+    created_at: datetime | None = None
+    modified_at: datetime | None = None
+    version: str | None = None
     tags: list[str] = field(default_factory=list)
     custom_fields: dict[str, Any] = field(default_factory=dict)
 

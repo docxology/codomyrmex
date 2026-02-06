@@ -12,8 +12,9 @@ Tests cover all identity operations:
 Total: ~22 tests in a single TestInfomaniakIdentity class.
 """
 
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
 
 
 class TestInfomaniakIdentity:

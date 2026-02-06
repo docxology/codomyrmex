@@ -1,14 +1,12 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Section manager for extracting and managing FPF sections.
 
 This module provides functionality to extract individual parts, pattern groups,
 and concept clusters from FPF specifications.
 """
 
-from collections import defaultdict
-from typing import Dict, List, Optional, Set
 
-from ..core.models import FPFSpec, Pattern, Concept, Relationship
+from ..core.models import FPFSpec
 
 
 class SectionManager:
@@ -22,7 +20,7 @@ class SectionManager:
         """
         self.spec = spec
 
-    def extract_part(self, part_id: str) -> Dict[str, any]:
+    def extract_part(self, part_id: str) -> dict[str, any]:
         """Extract all patterns, concepts, and relationships for a specific part.
 
         Args:
@@ -62,8 +60,8 @@ class SectionManager:
         }
 
     def extract_pattern_group(
-        self, pattern_ids: List[str], include_dependencies: bool = True
-    ) -> Dict[str, any]:
+        self, pattern_ids: list[str], include_dependencies: bool = True
+    ) -> dict[str, any]:
         """Extract a group of patterns and their related content.
 
         Args:
@@ -111,8 +109,8 @@ class SectionManager:
         }
 
     def extract_concept_cluster(
-        self, concept_names: List[str], include_related_patterns: bool = True
-    ) -> Dict[str, any]:
+        self, concept_names: list[str], include_related_patterns: bool = True
+    ) -> dict[str, any]:
         """Extract a cluster of concepts and their related patterns.
 
         Args:
@@ -159,8 +157,8 @@ class SectionManager:
         }
 
     def extract_relationship_subset(
-        self, relationship_types: List[str], include_patterns: bool = True
-    ) -> Dict[str, any]:
+        self, relationship_types: list[str], include_patterns: bool = True
+    ) -> dict[str, any]:
         """Extract relationships of specific types.
 
         Args:
@@ -203,7 +201,7 @@ class SectionManager:
 
         return result
 
-    def list_parts(self) -> List[str]:
+    def list_parts(self) -> list[str]:
         """List all part identifiers in the specification.
 
         Returns:
@@ -212,7 +210,7 @@ class SectionManager:
         parts = {p.part for p in self.spec.patterns if p.part}
         return sorted(list(parts))
 
-    def list_pattern_groups(self, by_part: bool = False) -> Dict[str, List[str]]:
+    def list_pattern_groups(self, by_part: bool = False) -> dict[str, list[str]]:
         """List pattern groups.
 
         Args:
@@ -222,7 +220,7 @@ class SectionManager:
             Dictionary mapping group names to pattern ID lists
         """
         if by_part:
-            groups: Dict[str, List[str]] = {}
+            groups: dict[str, list[str]] = {}
             for pattern in self.spec.patterns:
                 part = pattern.part or "Other"
                 if part not in groups:
@@ -232,7 +230,7 @@ class SectionManager:
         else:
             return {"all": [p.id for p in self.spec.patterns]}
 
-    def get_section_statistics(self) -> Dict[str, any]:
+    def get_section_statistics(self) -> dict[str, any]:
         """Get statistics about sections in the specification.
 
         Returns:

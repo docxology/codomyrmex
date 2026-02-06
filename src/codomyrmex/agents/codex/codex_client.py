@@ -1,7 +1,7 @@
-from typing import Any, Iterator, Optional
 import time
+from typing import Any
+from collections.abc import Iterator
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -9,7 +9,6 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import CodexError
 from codomyrmex.agents.generic.api_agent_base import APIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 try:
     import openai
@@ -20,7 +19,7 @@ except ImportError:
 class CodexClient(APIAgentBase):
     """Client for interacting with OpenAI Codex API."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize Codex client.
 
@@ -85,7 +84,7 @@ class CodexClient(APIAgentBase):
 
             # Extract content
             content = response.choices[0].text if response.choices else ""
-            
+
             # Extract tokens using base class helper
             input_tokens, output_tokens = self._extract_tokens_from_response(
                 response, "openai"

@@ -16,9 +16,9 @@ Features:
 import asyncio
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Set, Union
 from enum import Enum
-from functools import wraps
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -55,7 +55,7 @@ class TaskResult:
     """Result of a task execution."""
     success: bool
     value: Any = None
-    error: Optional[str] = None
+    error: str | None = None
     execution_time: float = 0.0
     attempts: int = 1
 
@@ -65,38 +65,38 @@ class Task:
     """Represents a single unit of work in a workflow."""
     name: str
     action: Callable[..., Any]
-    args: List[Any] = field(default_factory=list)
-    kwargs: Dict[str, Any] = field(default_factory=dict)
-    dependencies: Set[str] = field(default_factory=set)
-    timeout: Optional[float] = None
+    args: list[Any] = field(default_factory=list)
+    kwargs: dict[str, Any] = field(default_factory=dict)
+    dependencies: set[str] = field(default_factory=set)
+    timeout: float | None = None
 
     # Retry configuration
-    retry_policy: Optional[RetryPolicy] = None
+    retry_policy: RetryPolicy | None = None
 
     # Conditional execution: function that receives task results dict
     # and returns True if task should run
-    condition: Optional[Callable[[Dict[str, TaskResult]], bool]] = None
+    condition: Callable[[dict[str, TaskResult]], bool] | None = None
 
     # Result transformation: function to transform result before passing
-    transform_result: Optional[Callable[[Any], Any]] = None
+    transform_result: Callable[[Any], Any] | None = None
 
     # Tags for filtering and grouping
-    tags: Set[str] = field(default_factory=set)
+    tags: set[str] = field(default_factory=set)
 
     # Metadata
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     # State
     status: TaskStatus = TaskStatus.PENDING
     result: Any = None
-    error: Optional[Exception] = None
+    error: Exception | None = None
     attempts: int = 0
     execution_time: float = 0.0
 
     def __hash__(self):
         return hash(self.name)
 
-    def should_run(self, results: Dict[str, TaskResult]) -> bool:
+    def should_run(self, results: dict[str, TaskResult]) -> bool:
         """Check if task should run based on condition."""
         if self.condition is None:
             return True
@@ -131,7 +131,7 @@ class TaskFailedError(WorkflowError):
     pass
 
 
-ProgressCallback = Callable[[str, str, Dict[str, Any]], None]
+ProgressCallback = Callable[[str, str, dict[str, Any]], None]
 
 
 class Workflow:
@@ -149,9 +149,9 @@ class Workflow:
     def __init__(
         self,
         name: str,
-        timeout: Optional[float] = None,
+        timeout: float | None = None,
         fail_fast: bool = True,
-        progress_callback: Optional[ProgressCallback] = None
+        progress_callback: ProgressCallback | None = None
     ):
         """Initialize workflow.
 
@@ -165,25 +165,25 @@ class Workflow:
         self.timeout = timeout
         self.fail_fast = fail_fast
         self.progress_callback = progress_callback
-        self.tasks: Dict[str, Task] = {}
-        self.task_results: Dict[str, TaskResult] = {}
+        self.tasks: dict[str, Task] = {}
+        self.task_results: dict[str, TaskResult] = {}
         self.logger = get_logger(f"Workflow.{name}")
-        self._start_time: Optional[float] = None
+        self._start_time: float | None = None
         self._cancelled = False
 
     def add_task(
         self,
         name: str,
         action: Callable[..., Any],
-        dependencies: Optional[List[str]] = None,
-        args: Optional[List[Any]] = None,
-        kwargs: Optional[Dict[str, Any]] = None,
-        timeout: Optional[float] = None,
-        retry_policy: Optional[RetryPolicy] = None,
-        condition: Optional[Callable[[Dict[str, TaskResult]], bool]] = None,
-        transform_result: Optional[Callable[[Any], Any]] = None,
-        tags: Optional[List[str]] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        dependencies: list[str] | None = None,
+        args: list[Any] | None = None,
+        kwargs: dict[str, Any] | None = None,
+        timeout: float | None = None,
+        retry_policy: RetryPolicy | None = None,
+        condition: Callable[[dict[str, TaskResult]], bool] | None = None,
+        transform_result: Callable[[Any], Any] | None = None,
+        tags: list[str] | None = None,
+        metadata: dict[str, Any] | None = None
     ) -> 'Workflow':
         """Add a task to the workflow.
 
@@ -229,7 +229,7 @@ class Workflow:
         self._cancelled = True
         self.logger.info(f"Workflow '{self.name}' cancellation requested")
 
-    def _emit_progress(self, task_name: str, status: str, details: Dict[str, Any] = None):
+    def _emit_progress(self, task_name: str, status: str, details: dict[str, Any] = None):
         """Emit progress update if callback is registered."""
         if self.progress_callback:
             try:
@@ -252,20 +252,20 @@ class Workflow:
         def check_cycle(task_name):
             visited.add(task_name)
             path.add(task_name)
-            
+
             for dep in self.tasks[task_name].dependencies:
                 if dep in path:
                     raise CycleError(f"Circular dependency detected: {task_name} -> {dep}")
                 if dep not in visited:
                     check_cycle(dep)
-            
+
             path.remove(task_name)
 
         for name in self.tasks:
             if name not in visited:
                 check_cycle(name)
 
-    async def run(self) -> Dict[str, Any]:
+    async def run(self) -> dict[str, Any]:
         """Execute the workflow.
 
         Returns:
@@ -473,11 +473,11 @@ class Workflow:
         except Exception as e:
             raise
 
-    def get_task_result(self, task_name: str) -> Optional[TaskResult]:
+    def get_task_result(self, task_name: str) -> TaskResult | None:
         """Get result of a specific task."""
         return self.task_results.get(task_name)
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get workflow execution summary."""
         completed = sum(1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED)
         failed = sum(1 for t in self.tasks.values() if t.status == TaskStatus.FAILED)
@@ -512,7 +512,7 @@ class Workflow:
 # Convenience functions for creating common workflows
 
 
-def chain(*actions: Callable, names: Optional[List[str]] = None) -> Workflow:
+def chain(*actions: Callable, names: list[str] | None = None) -> Workflow:
     """Create a linear workflow where each task depends on the previous.
 
     Args:
@@ -534,7 +534,7 @@ def chain(*actions: Callable, names: Optional[List[str]] = None) -> Workflow:
     return workflow
 
 
-def parallel(*actions: Callable, names: Optional[List[str]] = None) -> Workflow:
+def parallel(*actions: Callable, names: list[str] | None = None) -> Workflow:
     """Create a workflow where all tasks run in parallel.
 
     Args:
@@ -555,7 +555,7 @@ def parallel(*actions: Callable, names: Optional[List[str]] = None) -> Workflow:
 
 def fan_out_fan_in(
     initial: Callable,
-    parallel_tasks: List[Callable],
+    parallel_tasks: list[Callable],
     final: Callable,
     initial_name: str = "initial",
     final_name: str = "final"

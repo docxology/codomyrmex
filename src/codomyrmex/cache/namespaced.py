@@ -1,12 +1,14 @@
 """Namespaced cache wrapper."""
 
-from typing import Any, Optional, List
+from typing import Any
+
 from .cache import Cache
 from .stats import CacheStats
 
+
 class NamespacedCache(Cache):
     """Wraps a cache with a namespace prefix."""
-    
+
     def __init__(self, cache: Cache, namespace: str):
         self.cache = cache
         self.namespace = namespace
@@ -14,10 +16,10 @@ class NamespacedCache(Cache):
     def _full_key(self, key: str) -> str:
         return f"{self.namespace}:{key}"
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         return self.cache.get(self._full_key(key))
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         return self.cache.set(self._full_key(key), value, ttl)
 
     def delete(self, key: str) -> bool:

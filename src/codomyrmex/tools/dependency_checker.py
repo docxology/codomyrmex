@@ -1,45 +1,27 @@
-from pathlib import Path
-from typing import List, Dict, Any
 import argparse
 import json
 import subprocess
 import sys
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #!/usr/bin/env python3
 """Main entry point and utility functions
 
 This module provides dependency_checker functionality including:
-    pass 
+    pass
 - 4 functions: check_dependencies, verify_versions, analyze_conflicts...
 - 1 classes: DependencyChecker
 
 Usage:
-    pass 
+    pass
     # Example usage here
 """
 logger = get_logger(__name__)
 
 
-def run_command(cmd: List[str]) -> tuple[bool, str, str]:
+def run_command(cmd: list[str]) -> tuple[bool, str, str]:
     """Run a shell command and return success status, stdout, and stderr."""
     try:
         result = subprocess.run(
@@ -55,7 +37,7 @@ def run_command(cmd: List[str]) -> tuple[bool, str, str]:
         return False, "", str(e)
 
 
-def check_python_version() -> Dict[str, Any]:
+def check_python_version() -> dict[str, Any]:
     """Check Python version requirements."""
     success, stdout, stderr = run_command([sys.executable, "--version"])
 
@@ -82,7 +64,7 @@ def check_python_version() -> Dict[str, Any]:
     return result
 
 
-def check_dependencies() -> Dict[str, Any]:
+def check_dependencies() -> dict[str, Any]:
     """Check if main dependencies can be imported."""
     deps = {
         "core": ["cased_kit", "python_dotenv"],
@@ -106,7 +88,7 @@ def check_dependencies() -> Dict[str, Any]:
     return results
 
 
-def check_security() -> Dict[str, Any]:
+def check_security() -> dict[str, Any]:
     """Check for security vulnerabilities in dependencies."""
     security = {
         "pip_audit_available": False,
@@ -136,7 +118,7 @@ def check_security() -> Dict[str, Any]:
     return security
 
 
-def check_environment() -> Dict[str, Any]:
+def check_environment() -> dict[str, Any]:
     """Check development environment setup."""
     env = {
         "virtual_env": False,
@@ -163,7 +145,7 @@ def check_environment() -> Dict[str, Any]:
     return env
 
 
-def generate_report(py_version: Dict, deps: Dict, security: Dict, env: Dict) -> str:
+def generate_report(py_version: dict, deps: dict, security: dict, env: dict) -> str:
     """Generate a dependency report."""
     report = []
     report.append("# Codomyrmex Dependency Check Report")
@@ -174,7 +156,7 @@ def generate_report(py_version: Dict, deps: Dict, security: Dict, env: Dict) -> 
     report.append("## Python Version")
     status_icon = "✅" if py_version["status"] == "ok" else "⚠️" if py_version["status"] == "warning" else "❌"
     report.append(f"- **Current**: {py_version['current_version']}")
-    report.append(f"- **Required**: >= 3.10")
+    report.append("- **Required**: >= 3.10")
     report.append(f"- **Status**: {status_icon} {'OK' if py_version['meets_requirement'] else 'Needs update'}")
     report.append("")
 
@@ -247,7 +229,7 @@ def main():
     print("✅ Dependency check complete!")
 
 
-def fix_dependencies(deps: Dict[str, Dict]) -> None:
+def fix_dependencies(deps: dict[str, dict]) -> None:
     """Attempt to install missing dependencies."""
     missing_packages = []
 

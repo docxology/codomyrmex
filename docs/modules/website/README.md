@@ -1,19 +1,38 @@
-# website
+# Website Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Web dashboard generation and static site building.
+
+## Key Features
+
+- **Static Sites** — Generate HTML
+- **Dashboards** — Data dashboards
+- **Templates** — Jinja2 templates
+- **Dev Server** — Local development
+
+## Quick Start
+
+```python
+from codomyrmex.website import WebsiteGenerator, WebsiteServer
+
+generator = WebsiteGenerator(output_dir="dist/")
+generator.build([("index.html", "home.j2", data)])
+
+server = WebsiteServer(port=8000)
+server.serve("dist/")
+```
 
 ## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `index.md` – File
-- `technical_overview.md` – File
-- `tutorials/` – Subdirectory
+
+| File | Description |
+|------|-------------|
+| `README.md` | This file |
+| `SPEC.md` | Technical specification |
 
 ## Navigation
+
 - **Source**: [src/codomyrmex/website/](../../../src/codomyrmex/website/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [Modules](../README.md)

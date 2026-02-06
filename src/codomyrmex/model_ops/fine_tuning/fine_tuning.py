@@ -1,19 +1,19 @@
 """Fine-tuning orchestration."""
 
-from typing import Optional
-from .datasets import Dataset
 import logging
+
+from .datasets import Dataset
 
 logger = logging.getLogger(__name__)
 
 class FineTuningJob:
     """Represents a fine-tuning job on a remote provider."""
-    
+
     def __init__(self, base_model: str, dataset: Dataset, provider: str = "openai"):
         self.base_model = base_model
         self.dataset = dataset
         self.provider = provider
-        self.job_id: Optional[str] = None
+        self.job_id: str | None = None
         self.status: str = "pending"
 
     def run(self):

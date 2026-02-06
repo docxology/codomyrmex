@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 # from codomyrmex.logging_monitoring import get_logger
 
@@ -9,12 +9,12 @@ from typing import Any, Optional, Union
 Core functionality module
 
 This module provides exceptions functionality including:
-    pass 
+    pass
 - 9 functions: format_exception_chain, create_error_context, __init__...
 - 48 classes: CodomyrmexError, ConfigurationError, EnvironmentError...
 
 Usage:
-    pass 
+    pass
     # Example usage here
 
 This module defines all the exception classes used throughout the Codomyrmex
@@ -24,7 +24,7 @@ and other operations.
 
 Exception Hierarchy:
     All exceptions inherit from CodomyrmexError, which provides:
-        pass 
+        pass
     - Context dictionaries for additional error information
     - Error codes for programmatic handling
     - Serialization to dictionaries
@@ -94,7 +94,7 @@ Exception Categories:
 
 Usage Guidelines:
     All modules should use exceptions from this module:
-        pass 
+        pass
 
     ```python
 
@@ -113,7 +113,7 @@ Usage Guidelines:
 
 Error Context:
     All exceptions support context dictionaries for additional information:
-        pass 
+        pass
 
     ```python
 
@@ -153,8 +153,8 @@ class CodomyrmexError(Exception):
     def __init__(
         self,
         message: str,
-        context: Optional[dict[str, Any]] = None,
-        error_code: Optional[str] = None,
+        context: dict[str, Any] | None = None,
+        error_code: str | None = None,
         **kwargs: Any,
     ):
 
@@ -189,8 +189,8 @@ class ConfigurationError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        config_key: Optional[str] = None,
-        config_file: Optional[Union[str, Path]] = None,
+        config_key: str | None = None,
+        config_file: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -217,7 +217,7 @@ class FileOperationError(CodomyrmexError):
     """Raised when file operations fail."""
 
     def __init__(
-        self, message: str, file_path: Optional[Union[str, Path]] = None, **kwargs: Any
+        self, message: str, file_path: str | Path | None = None, **kwargs: Any
     ) -> None:
 
         super().__init__(message, **kwargs)
@@ -282,9 +282,9 @@ class CodeExecutionError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        exit_code: Optional[int] = None,
-        stdout: Optional[str] = None,
-        stderr: Optional[str] = None,
+        exit_code: int | None = None,
+        stdout: str | None = None,
+        stderr: str | None = None,
         **kwargs: Any,
     ) -> None:
 
@@ -329,8 +329,8 @@ class GitOperationError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        git_command: Optional[str] = None,
-        repository_path: Optional[Union[str, Path]] = None,
+        git_command: str | None = None,
+        repository_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
 
@@ -483,8 +483,8 @@ class ValidationError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        field_name: Optional[str] = None,
-        validation_rule: Optional[str] = None,
+        field_name: str | None = None,
+        validation_rule: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -507,8 +507,8 @@ class NetworkError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        url: Optional[str] = None,
-        status_code: Optional[int] = None,
+        url: str | None = None,
+        status_code: int | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -529,7 +529,7 @@ class TimeoutError(CodomyrmexError):
     """Raised when operations timeout."""
 
     def __init__(
-        self, message: str, timeout_seconds: Optional[float] = None, **kwargs: Any
+        self, message: str, timeout_seconds: float | None = None, **kwargs: Any
     ) -> None:
 
         super().__init__(message, **kwargs)
@@ -633,8 +633,8 @@ class PluginError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        plugin_name: Optional[str] = None,
-        plugin_version: Optional[str] = None,
+        plugin_name: str | None = None,
+        plugin_version: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -708,8 +708,8 @@ class CacheError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        cache_key: Optional[str] = None,
-        backend: Optional[str] = None,
+        cache_key: str | None = None,
+        backend: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -726,8 +726,8 @@ class SerializationError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        format_type: Optional[str] = None,
-        data_type: Optional[str] = None,
+        format_type: str | None = None,
+        data_type: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -748,7 +748,7 @@ def format_exception_chain(exception: Exception) -> str:
         A formatted string representation of the exception chain
     """
     lines = []
-    current: Optional[BaseException] = exception
+    current: BaseException | None = exception
 
     while current:
         if isinstance(current, CodomyrmexError):

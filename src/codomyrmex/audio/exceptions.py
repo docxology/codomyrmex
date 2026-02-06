@@ -14,7 +14,7 @@ Exception Hierarchy:
 """
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 
@@ -31,7 +31,7 @@ class AudioError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        audio_path: Optional[Union[str, Path]] = None,
+        audio_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -52,9 +52,9 @@ class TranscriptionError(AudioError):
     def __init__(
         self,
         message: str,
-        audio_path: Optional[Union[str, Path]] = None,
-        language: Optional[str] = None,
-        model_size: Optional[str] = None,
+        audio_path: str | Path | None = None,
+        language: str | None = None,
+        model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, audio_path=audio_path, **kwargs)
@@ -77,8 +77,8 @@ class SynthesisError(AudioError):
     def __init__(
         self,
         message: str,
-        text: Optional[str] = None,
-        voice_id: Optional[str] = None,
+        text: str | None = None,
+        voice_id: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -100,8 +100,8 @@ class AudioFormatError(AudioError):
     def __init__(
         self,
         message: str,
-        format_type: Optional[str] = None,
-        supported_formats: Optional[list[str]] = None,
+        format_type: str | None = None,
+        supported_formats: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -124,8 +124,8 @@ class ModelNotLoadedError(AudioError):
     def __init__(
         self,
         message: str,
-        model_name: Optional[str] = None,
-        model_size: Optional[str] = None,
+        model_name: str | None = None,
+        model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -145,8 +145,8 @@ class ProviderNotAvailableError(AudioError):
     def __init__(
         self,
         message: str,
-        provider_name: Optional[str] = None,
-        missing_packages: Optional[list[str]] = None,
+        provider_name: str | None = None,
+        missing_packages: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -168,8 +168,8 @@ class VoiceNotFoundError(AudioError):
     def __init__(
         self,
         message: str,
-        voice_id: Optional[str] = None,
-        available_voices: Optional[list[str]] = None,
+        voice_id: str | None = None,
+        available_voices: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)

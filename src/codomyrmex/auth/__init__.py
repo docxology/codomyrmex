@@ -11,8 +11,8 @@ from codomyrmex.exceptions import CodomyrmexError
 
 from .api_key_manager import APIKeyManager
 from .authenticator import Authenticator
-from .token import Token, TokenManager
 from .permissions import PermissionRegistry
+from .token import Token, TokenManager
 from .validator import TokenValidator
 
 __all__ = [
@@ -33,7 +33,7 @@ __version__ = "0.1.0"
 from codomyrmex.exceptions import AuthenticationError
 
 
-def authenticate(credentials: dict) -> Optional[Token]:
+def authenticate(credentials: dict) -> Token | None:
     """Authenticate with credentials."""
     authenticator = Authenticator()
     return authenticator.authenticate(credentials)

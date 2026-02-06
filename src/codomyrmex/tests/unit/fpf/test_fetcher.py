@@ -1,10 +1,11 @@
 """Tests for FPF fetcher."""
 
-import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from codomyrmex.fpf import FPFFetcher, FPFSpec
+import pytest
+
+from codomyrmex.fpf import FPFFetcher
 
 
 @pytest.mark.unit

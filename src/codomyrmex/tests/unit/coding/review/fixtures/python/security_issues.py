@@ -1,14 +1,7 @@
-import os
-import pickle
-
 import base64
 import hashlib
-
-
-
-
-
-
+import os
+import pickle
 
 """Python file with security issues for testing security analysis.
 """

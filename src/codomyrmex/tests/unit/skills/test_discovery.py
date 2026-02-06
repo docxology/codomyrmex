@@ -8,7 +8,6 @@ from codomyrmex.skills.discovery import (
     DEFAULT_REGISTRY,
     FunctionSkill,
     ParameterSchema,
-    Skill,
     SkillCategory,
     SkillDiscoverer,
     SkillMetadata,

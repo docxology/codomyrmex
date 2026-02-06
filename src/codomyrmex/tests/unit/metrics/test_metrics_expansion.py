@@ -1,7 +1,9 @@
 """Unit tests for metrics expansion."""
 
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 from codomyrmex.metrics import Metrics
 
 try:
@@ -11,8 +13,9 @@ except ImportError:
     HAS_PROMETHEUS = False
 
 try:
-    from codomyrmex.metrics import StatsDClient
     import statsd  # noqa: F401
+
+    from codomyrmex.metrics import StatsDClient
     HAS_STATSD = StatsDClient is not None
 except (ImportError, ModuleNotFoundError):
     HAS_STATSD = False
@@ -35,11 +38,11 @@ def test_statsd_client_lifecycle():
     with patch('statsd.StatsClient') as mock_client_cls:
         mock_client = MagicMock()
         mock_client_cls.return_value = mock_client
-        
+
         client = StatsDClient(host="localhost", port=8125, prefix="test")
         client.incr("counter.name")
         mock_client.incr.assert_called_once_with("counter.name", 1, 1)
-        
+
         client.gauge("gauge.name", 100)
         mock_client.gauge.assert_called_once_with("gauge.name", 100, 1)
 
@@ -50,7 +53,7 @@ def test_existing_metrics_integration():
     c = metrics.counter("test_counter", labels={"env": "prod"})
     c.inc(5)
     assert c.value == 5
-    
+
     # Check prometheus export format
     prom_data = metrics.export_prometheus()
     assert 'test_counter_total{env="prod"} 5.0' in prom_data or 'test_counter_total{env="prod"} 5' in prom_data

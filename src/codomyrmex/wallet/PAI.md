@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Wallet Context
+# Personal AI Infrastructure — Wallet Module
 
-**Module**: wallet
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Self-custody key management with HMAC-SHA256 signing, natural ritual recovery, encrypted backups, and policy-driven key rotation for cognitive agents.
+The Wallet module provides PAI integration for cryptocurrency wallet management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Wallet Operations
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage crypto wallets:
 
-## Key Files
+```python
+from codomyrmex.wallet import WalletManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+wallet = WalletManager()
+address = wallet.create_address()
+balance = wallet.get_balance(address)
+```
 
-## Future Considerations
+### Transaction Support
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performance metrics.
+Send transactions:
+
+```python
+from codomyrmex.wallet import WalletManager
+
+wallet = WalletManager()
+tx = wallet.send(to="0x...", amount=0.1)
+print(f"TX: {tx.hash}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `WalletManager` | Manage wallets |
+| `send` | Send transactions |
+| `get_balance` | Check balances |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

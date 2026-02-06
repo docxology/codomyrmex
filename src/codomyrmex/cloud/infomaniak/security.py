@@ -4,10 +4,10 @@ Composable pre/post security checks that integrate with cognitive security
 modules (defense, identity, privacy) when available.
 """
 
+import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional
-import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -43,8 +43,8 @@ class SecurityCheckResult:
     allowed: bool = True
     reason: str = ""
     risk_level: OperationRisk = OperationRisk.READ
-    checks_passed: List[str] = field(default_factory=list)
-    checks_failed: List[str] = field(default_factory=list)
+    checks_passed: list[str] = field(default_factory=list)
+    checks_failed: list[str] = field(default_factory=list)
 
 
 # Prefix-based risk classification
@@ -102,9 +102,9 @@ class CloudSecurityPipeline:
 
     def __init__(
         self,
-        active_defense: Optional[Any] = None,
-        identity_manager: Optional[Any] = None,
-        crumb_cleaner: Optional[Any] = None,
+        active_defense: Any | None = None,
+        identity_manager: Any | None = None,
+        crumb_cleaner: Any | None = None,
     ):
         self._defense = active_defense
         if self._defense is None and ActiveDefense is not None:
@@ -121,8 +121,8 @@ class CloudSecurityPipeline:
     def pre_check(
         self,
         operation_name: str,
-        parameters: Dict[str, Any],
-        user_id: Optional[str] = None,
+        parameters: dict[str, Any],
+        user_id: str | None = None,
     ) -> SecurityCheckResult:
         """Run pre-execution security checks.
 

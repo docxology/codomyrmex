@@ -14,54 +14,52 @@ Integration:
 - Integrates with `static_analysis` for code security analysis
 """
 
-from . import scanning
-from . import secrets
-from . import compliance
-from . import audit
+from . import audit, compliance, scanning, secrets
+
 __version__ = "0.1.0"
 
 # Import from digital security
 try:
     from .digital import (
-        # Vulnerability scanning
-        VulnerabilityScanner,
-        scan_vulnerabilities,
-        audit_code_security,
-        VulnerabilityReport,
-        SecurityScanResult,
-        # Secrets detection
-        SecretsDetector,
-        audit_secrets_exposure,
-        scan_file_for_secrets,
-        scan_directory_for_secrets,
-        # Security analysis
-        SecurityAnalyzer,
-        SecurityFinding,
-        SecurityIssue,
-        analyze_file_security,
-        analyze_directory_security,
+        # Certificates
+        CertificateValidator,
         # Compliance
         ComplianceChecker,
         ComplianceCheckResult,
         ComplianceRequirement,
         ComplianceStandard,
-        check_compliance,
-        # Monitoring
-        SecurityMonitor,
-        monitor_security_events,
-        audit_access_logs,
-        SecurityEvent,
         # Encryption
         EncryptionManager,
-        encrypt_sensitive_data,
-        decrypt_sensitive_data,
-        # Certificates
-        CertificateValidator,
-        validate_ssl_certificates,
-        SSLValidationResult,
+        # Secrets detection
+        SecretsDetector,
+        # Security analysis
+        SecurityAnalyzer,
+        SecurityEvent,
+        SecurityFinding,
+        SecurityIssue,
+        # Monitoring
+        SecurityMonitor,
         # Reporting
         SecurityReportGenerator,
+        SecurityScanResult,
+        SSLValidationResult,
+        VulnerabilityReport,
+        # Vulnerability scanning
+        VulnerabilityScanner,
+        analyze_directory_security,
+        analyze_file_security,
+        audit_access_logs,
+        audit_code_security,
+        audit_secrets_exposure,
+        check_compliance,
+        decrypt_sensitive_data,
+        encrypt_sensitive_data,
         generate_security_report,
+        monitor_security_events,
+        scan_directory_for_secrets,
+        scan_file_for_secrets,
+        scan_vulnerabilities,
+        validate_ssl_certificates,
     )
     DIGITAL_AVAILABLE = True
 except ImportError:
@@ -71,22 +69,22 @@ except ImportError:
 try:
     from .physical import (
         AccessControlSystem,
-        check_access_permission,
-        grant_access,
-        revoke_access,
         AssetInventory,
-        register_asset,
-        track_asset,
-        get_asset_status,
-        SurveillanceMonitor,
-        monitor_physical_access,
-        log_physical_event,
-        PhysicalVulnerabilityScanner,
-        assess_physical_security,
-        scan_physical_vulnerabilities,
         PerimeterManager,
+        PhysicalVulnerabilityScanner,
+        SurveillanceMonitor,
+        assess_physical_security,
+        check_access_permission,
         check_perimeter_security,
+        get_asset_status,
+        grant_access,
+        log_physical_event,
         manage_access_points,
+        monitor_physical_access,
+        register_asset,
+        revoke_access,
+        scan_physical_vulnerabilities,
+        track_asset,
     )
     PHYSICAL_AVAILABLE = True
 except ImportError:
@@ -95,21 +93,21 @@ except ImportError:
 # Import from cognitive security
 try:
     from .cognitive import (
-        SocialEngineeringDetector,
-        detect_social_engineering,
-        analyze_communication,
-        PhishingAnalyzer,
-        analyze_email,
-        detect_phishing_attempt,
         AwarenessTrainer,
-        create_training_module,
-        assess_training_effectiveness,
-        CognitiveThreatAssessor,
-        assess_cognitive_threats,
-        evaluate_human_factors,
         BehaviorAnalyzer,
+        CognitiveThreatAssessor,
+        PhishingAnalyzer,
+        SocialEngineeringDetector,
+        analyze_communication,
+        analyze_email,
         analyze_user_behavior,
+        assess_cognitive_threats,
+        assess_training_effectiveness,
+        create_training_module,
         detect_anomalous_behavior,
+        detect_phishing_attempt,
+        detect_social_engineering,
+        evaluate_human_factors,
     )
     COGNITIVE_AVAILABLE = True
 except ImportError:
@@ -118,24 +116,24 @@ except ImportError:
 # Import from theory
 try:
     from .theory import (
-        SecurityPrinciple,
-        get_security_principles,
-        apply_principle,
-        SecurityFramework,
-        get_framework,
-        apply_framework,
-        ThreatModel,
-        create_threat_model,
-        analyze_threats,
         RiskAssessment,
+        SecurityBestPractice,
+        SecurityFramework,
+        SecurityPattern,
+        SecurityPrinciple,
+        ThreatModel,
+        analyze_threats,
+        apply_framework,
+        apply_pattern,
+        apply_principle,
         assess_risk,
         calculate_risk_score,
-        SecurityPattern,
-        get_security_patterns,
-        apply_pattern,
-        SecurityBestPractice,
-        get_best_practices,
         check_compliance_with_practices,
+        create_threat_model,
+        get_best_practices,
+        get_framework,
+        get_security_patterns,
+        get_security_principles,
     )
     THEORY_AVAILABLE = True
 except ImportError:

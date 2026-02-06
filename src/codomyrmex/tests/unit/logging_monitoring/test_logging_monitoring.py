@@ -1,11 +1,12 @@
 """Unit tests for logging_monitoring module."""
 
-import pytest
-import sys
-import os
 import json
 import logging
+import os
+import sys
 from pathlib import Path
+
+import pytest
 
 
 @pytest.mark.unit
@@ -51,7 +52,7 @@ class TestLoggingMonitoring:
 
     def test_setup_logging_with_file_output(self, tmp_path):
         """Test setup_logging with real file output configuration."""
-        from codomyrmex.logging_monitoring import setup_logging, get_logger
+        from codomyrmex.logging_monitoring import get_logger
 
         log_file = tmp_path / "test_setup.log"
 
@@ -95,7 +96,10 @@ class TestLoggingMonitoring:
 
     def test_environment_variable_configuration(self):
         """Test that environment variables are properly read."""
-        from codomyrmex.logging_monitoring.logger_config import DEFAULT_LOG_FORMAT, DETAILED_LOG_FORMAT
+        from codomyrmex.logging_monitoring.logger_config import (
+            DEFAULT_LOG_FORMAT,
+            DETAILED_LOG_FORMAT,
+        )
 
         # Test that default constants are defined
         assert DEFAULT_LOG_FORMAT is not None
@@ -186,7 +190,10 @@ class TestLoggingMonitoring:
 
     def test_log_context_manager(self, caplog):
         """Test LogContext context manager."""
-        from codomyrmex.logging_monitoring.logger_config import LogContext, log_with_context
+        from codomyrmex.logging_monitoring.logger_config import (
+            LogContext,
+            log_with_context,
+        )
 
         correlation_id = "test-correlation-123"
 
@@ -264,8 +271,9 @@ class TestLogRotationManager:
 
     def test_attach_rotating_handler(self, tmp_path):
         """Test attaching a rotating handler returns a RotatingFileHandler on the logger."""
-        from codomyrmex.logging_monitoring.rotation import LogRotationManager
         from logging.handlers import RotatingFileHandler
+
+        from codomyrmex.logging_monitoring.rotation import LogRotationManager
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)
@@ -283,8 +291,8 @@ class TestLogRotationManager:
 
     def test_rotation_parameters(self, tmp_path):
         """Test that max_bytes and backup_count are correctly set on the handler."""
+
         from codomyrmex.logging_monitoring.rotation import LogRotationManager
-        from logging.handlers import RotatingFileHandler
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)

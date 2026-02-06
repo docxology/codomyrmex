@@ -1,11 +1,8 @@
 """Unit tests for pattern_matching module."""
 
-import pytest
 import sys
-import os
-import tempfile
-import json
-from pathlib import Path
+
+import pytest
 
 
 @pytest.mark.unit
@@ -39,7 +36,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import get_embedding_function
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            get_embedding_function,
+        )
 
         embed_fn = get_embedding_function()
         # The stub returns a lambda that produces a list of floats
@@ -65,7 +64,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_repository_index
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_repository_index,
+        )
 
         # Stub takes a single path string, should not raise
         _perform_repository_index("/some/path")
@@ -75,7 +76,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_text_search
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_text_search,
+        )
 
         results = _perform_text_search("TODO", "/some/path")
         assert isinstance(results, list)
@@ -85,7 +88,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_dependency_analysis
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_dependency_analysis,
+        )
 
         # Stub takes a single path string, should not raise
         _perform_dependency_analysis("/some/path")
@@ -95,7 +100,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_symbol_extraction
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_symbol_extraction,
+        )
 
         symbols = _perform_symbol_extraction("/some/path")
         assert isinstance(symbols, list)
@@ -105,7 +112,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_symbol_usage_analysis
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_symbol_usage_analysis,
+        )
 
         usage = _perform_symbol_usage_analysis("/some/path")
         assert isinstance(usage, dict)
@@ -115,7 +124,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_chunking_examples
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_chunking_examples,
+        )
 
         chunks = _perform_chunking_examples("some text to chunk")
         assert isinstance(chunks, list)
@@ -126,7 +137,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import _perform_text_search_context_extraction
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_text_search_context_extraction,
+        )
 
         context = _perform_text_search_context_extraction("TODO", "/some/path")
         assert isinstance(context, str)
@@ -136,7 +149,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import run_full_analysis
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            run_full_analysis,
+        )
 
         assert callable(run_full_analysis)
         result = run_full_analysis("/some/path")
@@ -148,7 +163,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            analyze_repository_path,
+        )
 
         result = analyze_repository_path("/some/path")
         assert isinstance(result, dict)
@@ -177,7 +194,10 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer, AnalysisResult
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            AnalysisResult,
+            PatternAnalyzer,
+        )
 
         # Create test files
         (tmp_path / "a.py").write_text("# FIXME: broken\n")
@@ -198,8 +218,8 @@ class TestPatternMatching:
             sys.path.insert(0, str(code_dir))
 
         from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
-            run_codomyrmex_analysis,
             AnalysisResult,
+            run_codomyrmex_analysis,
         )
 
         (tmp_path / "sample.py").write_text("import os\n# HACK: temp workaround\n")

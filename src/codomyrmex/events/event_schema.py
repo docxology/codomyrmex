@@ -1,18 +1,12 @@
-from typing import Dict, List, Any, Optional, Union, Tuple
 import json
 import logging
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
+
 import jsonschema
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """
 Event Schema for Codomyrmex Event System
@@ -112,12 +106,12 @@ class Event:
     source: str
     event_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
     timestamp: float = field(default_factory=lambda: __import__('time').time())
-    correlation_id: Optional[str] = None
-    data: Dict[str, Any] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    priority: Union[int, EventPriority] = 0  # 0=normal, 1=high, 2=critical or EventPriority
+    correlation_id: str | None = None
+    data: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    priority: int | EventPriority = 0  # 0=normal, 1=high, 2=critical or EventPriority
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert event to dictionary."""
         return {
             "event_type": self.event_type.value,
@@ -134,7 +128,7 @@ class Event:
         return json.dumps(self.to_dict(), default=str)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Event':
+    def from_dict(cls, data: dict[str, Any]) -> 'Event':
         """Create event from dictionary."""
         event_type = EventType(data["event_type"])
         return cls(
@@ -164,10 +158,10 @@ class EventSchema:
 
     def __init__(self):
         """Initialize the event schema validator."""
-        self.schemas: Dict[str, Dict[str, Any]] = {}
+        self.schemas: dict[str, dict[str, Any]] = {}
         self._load_standard_schemas()
 
-    def validate_event(self, event: Event) -> Tuple[bool, List[str]]:
+    def validate_event(self, event: Event) -> tuple[bool, list[str]]:
         """
         Validate an event against its schema.
 
@@ -191,7 +185,7 @@ class EventSchema:
         except Exception as e:
             return False, [f"Validation error: {str(e)}"]
 
-    def register_event_schema(self, event_type: EventType, schema: Dict[str, Any]) -> None:
+    def register_event_schema(self, event_type: EventType, schema: dict[str, Any]) -> None:
         """
         Register a schema for an event type.
 
@@ -202,7 +196,7 @@ class EventSchema:
         self.schemas[event_type.value] = schema
         logger.info(f"Registered schema for event type: {event_type.value}")
 
-    def get_event_schema(self, event_type: EventType) -> Optional[Dict[str, Any]]:
+    def get_event_schema(self, event_type: EventType) -> dict[str, Any] | None:
         """
         Get the schema for an event type.
 
@@ -214,7 +208,7 @@ class EventSchema:
         """
         return self.schemas.get(event_type.value)
 
-    def list_registered_schemas(self) -> List[str]:
+    def list_registered_schemas(self) -> list[str]:
         """
         List all registered event type schemas.
 
@@ -368,7 +362,7 @@ class EventSchema:
 
 # Convenience functions for creating common events
 
-def create_system_startup_event(version: str, components: List[str]) -> Event:
+def create_system_startup_event(version: str, components: list[str]) -> Event:
     """Create a system startup event."""
     return Event(
         event_type=EventType.SYSTEM_STARTUP,
@@ -392,7 +386,7 @@ def create_module_load_event(module_name: str, version: str, load_time: float) -
         }
     )
 
-def create_analysis_start_event(analysis_type: str, target: str, parameters: Optional[Dict[str, Any]] = None) -> Event:
+def create_analysis_start_event(analysis_type: str, target: str, parameters: dict[str, Any] | None = None) -> Event:
     """Create an analysis start event."""
     return Event(
         event_type=EventType.ANALYSIS_START,
@@ -404,7 +398,7 @@ def create_analysis_start_event(analysis_type: str, target: str, parameters: Opt
         }
     )
 
-def create_analysis_complete_event(analysis_type: str, target: str, results: Dict[str, Any], duration: float, success: bool) -> Event:
+def create_analysis_complete_event(analysis_type: str, target: str, results: dict[str, Any], duration: float, success: bool) -> Event:
     """Create an analysis complete event."""
     return Event(
         event_type=EventType.ANALYSIS_COMPLETE,
@@ -418,7 +412,7 @@ def create_analysis_complete_event(analysis_type: str, target: str, results: Dic
         }
     )
 
-def create_error_event(event_type: EventType, source: str, error_message: str, error_type: str = "unknown", context: Optional[Dict[str, Any]] = None) -> Event:
+def create_error_event(event_type: EventType, source: str, error_message: str, error_type: str = "unknown", context: dict[str, Any] | None = None) -> Event:
     """Create an error event."""
     return Event(
         event_type=event_type,
@@ -431,7 +425,7 @@ def create_error_event(event_type: EventType, source: str, error_message: str, e
         priority=2  # High priority for errors
     )
 
-def create_metric_event(metric_name: str, value: Union[int, float, str, bool], metric_type: str = "gauge", labels: Optional[Dict[str, str]] = None) -> Event:
+def create_metric_event(metric_name: str, value: int | float | str | bool, metric_type: str = "gauge", labels: dict[str, str] | None = None) -> Event:
     """Create a metric update event."""
     return Event(
         event_type=EventType.METRIC_UPDATE,

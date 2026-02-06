@@ -2,8 +2,14 @@
 
 import pytest
 
-from codomyrmex.fpf import ContextBuilder
-from codomyrmex.fpf import FPFSpec, Pattern, PatternStatus, Concept, ConceptType
+from codomyrmex.fpf import (
+    Concept,
+    ConceptType,
+    ContextBuilder,
+    FPFSpec,
+    Pattern,
+    PatternStatus,
+)
 
 
 @pytest.mark.unit

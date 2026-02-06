@@ -1,27 +1,51 @@
-# environment_setup
+# Environment Setup Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Development environment validation, dependency management, and uv integration.
 
-Foundation-layer module that validates and configures the development environment for Codomyrmex. Provides functions to detect the `uv` package manager, verify Python version compatibility (requires 3.10+), check that required dependencies (`kit`, `python-dotenv`) are installed, and load environment variables from `.env` files. This is a core dependency that other modules rely on for environment validation.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.environment_setup import (
+    is_uv_available,
+    is_uv_environment,
+    ensure_dependencies_installed,
+    check_and_setup_env_vars,
+    validate_python_version,
+)
 
-- **`is_uv_available()`** -- Checks whether the `uv` package manager binary is available on the system PATH using `shutil.which`
-- **`is_uv_environment()`** -- Returns True if running inside a uv-managed virtual environment (checks `VIRTUAL_ENV` env var) or if uv is installed
-- **`ensure_dependencies_installed()`** -- Verifies that required dependencies (`kit` and `python-dotenv`) are importable, prints status messages, and returns a boolean
-- **`check_and_setup_env_vars()`** -- Loads environment variables from a `.env` file in the specified repository root using `python-dotenv`, returns True on success
-- **`validate_python_version()`** -- Validates that the current Python interpreter meets the minimum version requirement (3.10+), takes no arguments
+# Validate Python version
+validate_python_version(min_version="3.11")
 
-## Directory Contents
+# Check uv package manager
+if is_uv_available():
+    print("uv is installed")
+if is_uv_environment():
+    print("Running in uv-managed environment")
 
-- `env_checker.py` -- All environment validation functions (uv detection, dependency checks, Python version, env var loading)
-- `scripts/` -- Setup and automation scripts
-- `requirements.txt` -- Module-specific dependency list (deprecated, use pyproject.toml)
+# Ensure dependencies are installed
+ensure_dependencies_installed(["pydantic", "httpx", "pytest"])
+
+# Setup and validate environment variables
+missing = check_and_setup_env_vars(
+    required=["OPENAI_API_KEY", "DATABASE_URL"],
+    optional=["DEBUG", "LOG_LEVEL"]
+)
+if missing:
+    print(f"Missing required variables: {missing}")
+```
+
+## Exports
+
+| Function | Description |
+|----------|-------------|
+| `validate_python_version(min)` | Check Python meets minimum version |
+| `is_uv_available()` | Check if uv package manager is installed |
+| `is_uv_environment()` | Check if running in uv environment |
+| `ensure_dependencies_installed(list)` | Install missing packages |
+| `check_and_setup_env_vars(req, opt)` | Validate and load env vars from .env |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/environment_setup/](../../../docs/modules/environment_setup/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

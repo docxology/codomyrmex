@@ -1,34 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/events
+# Agent Guidelines - Events
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Event-driven architecture with pub/sub, event sourcing, and handlers.
 
-Event system module providing event emission, subscription, and handling capabilities. Enables loosely-coupled component communication.
+## Key Classes
 
-## Active Components
+- **EventBus** — Publish/subscribe hub
+- **Event** — Base event class
+- **EventHandler** — Event processing
+- **EventStore** — Event persistence
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `emitter.py` – Project file
-- `event_bus.py` – Project file
-- `event_emitter.py` – Project file
-- `event_listener.py` – Project file
-- `event_logger.py` – Project file
-- `event_schema.py` – Project file
-- `exceptions.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Name events** — Use past tense (UserCreated)
+2. **Include context** — Event ID, timestamp, actor
+3. **Idempotent handlers** — Handle duplicates
+4. **Order matters** — Preserve event order
+5. **Log all events** — Audit trail
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.events import EventBus, Event, event_handler
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Define events
+class UserCreated(Event):
+    user_id: str
+    email: str
+
+# Event handlers
+@event_handler(UserCreated)
+async def send_welcome_email(event: UserCreated):
+    await send_email(event.email, "Welcome!")
+
+# Publish events
+bus = EventBus()
+bus.register(send_welcome_email)
+
+event = UserCreated(user_id="u1", email="user@example.com")
+await bus.publish(event)
+
+# Event store
+store = EventStore()
+store.append("user-stream", event)
+events = store.load("user-stream")
+```
+
+## Testing Patterns
+
+```python
+# Verify event handling
+handled = []
+@event_handler(UserCreated)
+def track(event):
+    handled.append(event)
+
+bus = EventBus()
+bus.register(track)
+await bus.publish(UserCreated(user_id="1", email="test@test.com"))
+assert len(handled) == 1
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

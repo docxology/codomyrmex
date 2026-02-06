@@ -7,24 +7,30 @@ monitoring, ensuring that visualization components work correctly with performan
 tracking and monitoring systems.
 """
 
-import pytest
-import tempfile
-import os
-import json
-import time
-from pathlib import Path
-from typing import Dict, Any, List
 import statistics
+import tempfile
+import time
+from typing import Any
+
+import pytest
 
 # Import modules for integration testing
 try:
-    from codomyrmex.data_visualization import create_plot, create_bar_chart, create_line_plot
+    from codomyrmex.data_visualization import (
+        create_bar_chart,
+        create_line_plot,
+        create_plot,
+    )
     DATA_VISUALIZATION_AVAILABLE = True
 except ImportError:
     DATA_VISUALIZATION_AVAILABLE = False
 
 try:
-    from codomyrmex.performance import profile_function, run_benchmark, PerformanceProfiler
+    from codomyrmex.performance import (
+        PerformanceProfiler,
+        profile_function,
+        run_benchmark,
+    )
     PERFORMANCE_AVAILABLE = True
 except ImportError:
     PERFORMANCE_AVAILABLE = False
@@ -36,7 +42,7 @@ except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -64,7 +70,7 @@ class TestVisualizationPerformanceWorkflow:
         import shutil
         shutil.rmtree(self.output_dir, ignore_errors=True)
 
-    def _generate_test_data(self) -> Dict[str, Any]:
+    def _generate_test_data(self) -> dict[str, Any]:
         """Generate test data for visualization and performance testing."""
         return {
             "simple_list": [1, 2, 3, 4, 5],

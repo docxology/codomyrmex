@@ -20,7 +20,7 @@ LLM module providing language model integration, prompt management, and output h
 
 ## Detailed Architecture and Implementation
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+
 
 ### Design Principles
 

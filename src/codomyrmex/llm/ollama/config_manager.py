@@ -9,7 +9,7 @@ import json
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -20,10 +20,10 @@ from .model_runner import ExecutionOptions
 class OllamaConfig:
     """
     Complete Ollama configuration for Codomyrmex.
-    
+
     All configuration parameters are modular and independently configurable.
     Settings are organized into logical groups for clarity.
-    
+
     Configuration Groups:
         General Settings: Server and binary configuration
         Output Settings: File output and cleanup configuration
@@ -71,7 +71,7 @@ class ConfigManager:
     execution settings, and integration preferences.
     """
 
-    def __init__(self, config_file: Optional[str] = None):
+    def __init__(self, config_file: str | None = None):
         """
         Initialize the configuration manager.
 
@@ -87,7 +87,7 @@ class ConfigManager:
             self.config_file = Path("examples/output/ollama/configs/ollama_config.json")
 
         # Current configuration
-        self.config: Optional[OllamaConfig] = None
+        self.config: OllamaConfig | None = None
 
         # Initialize with defaults first, then try to load
         self.config = OllamaConfig()
@@ -181,7 +181,7 @@ class ConfigManager:
             self.logger.error(f"Error updating configuration: {e}")
             return False
 
-    def get_model_config(self, model_name: str) -> Optional[dict[str, Any]]:
+    def get_model_config(self, model_name: str) -> dict[str, Any] | None:
         """
         Get configuration for a specific model.
 

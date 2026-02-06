@@ -7,10 +7,8 @@ use cases, plus batch processing support.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, Union
 
 from .filters import DarkPDFFilter
-
 
 # Preset configurations matching common use cases
 _PRESETS: dict[str, dict[str, float]] = {
@@ -67,13 +65,13 @@ class DarkPDF:
 
     def __init__(
         self,
-        input_path: Union[str, Path],
+        input_path: str | Path,
         *,
-        preset: Optional[str] = None,
-        inversion: Optional[float] = None,
-        brightness: Optional[float] = None,
-        contrast: Optional[float] = None,
-        sepia: Optional[float] = None,
+        preset: str | None = None,
+        inversion: float | None = None,
+        brightness: float | None = None,
+        contrast: float | None = None,
+        sepia: float | None = None,
         dpi: int = 150,
     ) -> None:
         """Initialize with an input PDF and filter configuration.
@@ -125,7 +123,7 @@ class DarkPDF:
             dpi=dpi,
         )
 
-    def save(self, output_path: Union[str, Path]) -> Path:
+    def save(self, output_path: str | Path) -> Path:
         """Apply dark mode and save the result.
 
         Args:
@@ -141,8 +139,8 @@ class DarkPDF:
     @classmethod
     def dark(
         cls,
-        input_path: Union[str, Path],
-        output_path: Union[str, Path],
+        input_path: str | Path,
+        output_path: str | Path,
         **kwargs: float,
     ) -> Path:
         """Apply the 'dark' preset and save.
@@ -160,8 +158,8 @@ class DarkPDF:
     @classmethod
     def sepia(
         cls,
-        input_path: Union[str, Path],
-        output_path: Union[str, Path],
+        input_path: str | Path,
+        output_path: str | Path,
         **kwargs: float,
     ) -> Path:
         """Apply the 'sepia' preset and save.
@@ -179,9 +177,9 @@ class DarkPDF:
     @classmethod
     def batch(
         cls,
-        input_paths: list[Union[str, Path]],
+        input_paths: list[str | Path],
         *,
-        output_dir: Union[str, Path],
+        output_dir: str | Path,
         preset: str = "dark",
         suffix: str = "_dark",
         **kwargs: float,

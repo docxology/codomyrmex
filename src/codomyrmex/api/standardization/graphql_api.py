@@ -1,18 +1,10 @@
-from typing import Dict, List, Any, Optional, Callable, Type, Union
-import inspect
-import json
 import logging
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Union
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """GraphQL API Implementation for Codomyrmex
 
@@ -39,40 +31,40 @@ class GraphQLField:
     """Represents a GraphQL field definition."""
     name: str
     type: Union[str, 'GraphQLObjectType']
-    description: Optional[str] = None
-    args: Dict[str, Union[str, 'GraphQLObjectType']] = field(default_factory=dict)
-    resolver: Optional[Callable] = None
+    description: str | None = None
+    args: dict[str, Union[str, 'GraphQLObjectType']] = field(default_factory=dict)
+    resolver: Callable | None = None
     required: bool = False
 
 @dataclass
 class GraphQLObjectType:
     """Represents a GraphQL object type."""
     name: str
-    fields: Dict[str, GraphQLField] = field(default_factory=dict)
-    description: Optional[str] = None
-    interfaces: List[str] = field(default_factory=list)
+    fields: dict[str, GraphQLField] = field(default_factory=dict)
+    description: str | None = None
+    interfaces: list[str] = field(default_factory=list)
 
     def add_field(self, field: GraphQLField) -> None:
         """Add a field to the object type."""
         self.fields[field.name] = field
 
-    def get_field(self, name: str) -> Optional[GraphQLField]:
+    def get_field(self, name: str) -> GraphQLField | None:
         """Get a field by name."""
         return self.fields.get(name)
 
 @dataclass
 class GraphQLSchema:
     """GraphQL schema definition."""
-    query_type: Optional[GraphQLObjectType] = None
-    mutation_type: Optional[GraphQLObjectType] = None
-    subscription_type: Optional[GraphQLObjectType] = None
-    types: Dict[str, GraphQLObjectType] = field(default_factory=dict)
+    query_type: GraphQLObjectType | None = None
+    mutation_type: GraphQLObjectType | None = None
+    subscription_type: GraphQLObjectType | None = None
+    types: dict[str, GraphQLObjectType] = field(default_factory=dict)
 
     def add_type(self, type_def: GraphQLObjectType) -> None:
         """Add a type to the schema."""
         self.types[type_def.name] = type_def
 
-    def get_type(self, name: str) -> Optional[GraphQLObjectType]:
+    def get_type(self, name: str) -> GraphQLObjectType | None:
         """Get a type by name."""
         return self.types.get(name)
 
@@ -104,7 +96,7 @@ class GraphQLSchema:
 
         # Add Query type
         if self.query_type:
-            lines.append(f"type Query {{")
+            lines.append("type Query {")
             for field_name, field in self.query_type.fields.items():
                 args_str = ""
                 if field.args:
@@ -121,7 +113,7 @@ class GraphQLSchema:
 
         # Add Mutation type
         if self.mutation_type:
-            lines.append(f"type Mutation {{")
+            lines.append("type Mutation {")
             for field_name, field in self.mutation_type.fields.items():
                 args_str = ""
                 if field.args:
@@ -145,7 +137,7 @@ class GraphQLResolver:
     resolver_func: Callable
     complexity: int = 1
 
-    def resolve(self, parent: Any, args: Dict[str, Any], context: Dict[str, Any]) -> Any:
+    def resolve(self, parent: Any, args: dict[str, Any], context: dict[str, Any]) -> Any:
         """
         Resolve the field value.
 
@@ -168,11 +160,11 @@ class GraphQLMutation:
     """GraphQL mutation definition."""
     name: str
     input_type: GraphQLObjectType
-    output_type: Union[str, GraphQLObjectType]
+    output_type: str | GraphQLObjectType
     resolver: Callable
-    description: Optional[str] = None
+    description: str | None = None
 
-    def execute(self, input_data: Dict[str, Any], context: Dict[str, Any]) -> Any:
+    def execute(self, input_data: dict[str, Any], context: dict[str, Any]) -> Any:
         """
         Execute the mutation.
 
@@ -193,9 +185,9 @@ class GraphQLMutation:
 class GraphQLQuery:
     """GraphQL query representation."""
     operation: str  # 'query', 'mutation', or 'subscription'
-    selection_set: Dict[str, Any]
-    variables: Dict[str, Any] = field(default_factory=dict)
-    operation_name: Optional[str] = None
+    selection_set: dict[str, Any]
+    variables: dict[str, Any] = field(default_factory=dict)
+    operation_name: str | None = None
 
 class GraphQLAPI:
     """
@@ -210,8 +202,8 @@ class GraphQLAPI:
             schema: GraphQL schema
         """
         self.schema = schema
-        self.resolvers: Dict[str, Dict[str, GraphQLResolver]] = {}
-        self.mutations: Dict[str, GraphQLMutation] = {}
+        self.resolvers: dict[str, dict[str, GraphQLResolver]] = {}
+        self.mutations: dict[str, GraphQLMutation] = {}
         self.query_complexity_limit = 1000
         self.request_count = 0
         self.error_count = 0
@@ -247,8 +239,8 @@ class GraphQLAPI:
         self.mutations[mutation.name] = mutation
         logger.debug(f"Registered mutation: {mutation.name}")
 
-    def execute_query(self, query: str, variables: Optional[Dict[str, Any]] = None,
-                     context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def execute_query(self, query: str, variables: dict[str, Any] | None = None,
+                     context: dict[str, Any] | None = None) -> dict[str, Any]:
         """
         Execute a GraphQL query.
 
@@ -325,8 +317,8 @@ class GraphQLAPI:
         # Simplified complexity calculation
         return 1
 
-    def _execute_operation(self, query: GraphQLQuery, variables: Dict[str, Any],
-                          context: Dict[str, Any]) -> Any:
+    def _execute_operation(self, query: GraphQLQuery, variables: dict[str, Any],
+                          context: dict[str, Any]) -> Any:
         """
         Execute a GraphQL operation.
 
@@ -347,7 +339,7 @@ class GraphQLAPI:
         return {}
 
     def _execute_selection_set(self, object_type: GraphQLObjectType, parent: Any,
-                              context: Dict[str, Any]) -> Dict[str, Any]:
+                              context: dict[str, Any]) -> dict[str, Any]:
         """
         Execute a selection set against an object type.
 
@@ -391,7 +383,7 @@ class GraphQLAPI:
         """
         return self.schema.generate_sdl()
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """
         Get API metrics.
 
@@ -406,7 +398,7 @@ class GraphQLAPI:
             "registered_mutations": len(self.mutations)
         }
 
-    def validate_query(self, query: str) -> List[str]:
+    def validate_query(self, query: str) -> list[str]:
         """
         Validate a GraphQL query.
 
@@ -449,7 +441,7 @@ def resolver(field_name: str, complexity: int = 1):
 
 # Decorator for GraphQL mutations
 def mutation(name: str, input_type: GraphQLObjectType,
-             output_type: Union[str, GraphQLObjectType], description: Optional[str] = None):
+             output_type: str | GraphQLObjectType, description: str | None = None):
     """
     Decorator to mark functions as GraphQL mutations.
 
@@ -483,7 +475,7 @@ def create_schema() -> GraphQLSchema:
     """
     return GraphQLSchema()
 
-def create_object_type(name: str, description: Optional[str] = None) -> GraphQLObjectType:
+def create_object_type(name: str, description: str | None = None) -> GraphQLObjectType:
     """
     Create a new GraphQL object type.
 
@@ -496,8 +488,8 @@ def create_object_type(name: str, description: Optional[str] = None) -> GraphQLO
     """
     return GraphQLObjectType(name=name, description=description)
 
-def create_field(name: str, type: Union[str, GraphQLObjectType],
-                description: Optional[str] = None, required: bool = False) -> GraphQLField:
+def create_field(name: str, type: str | GraphQLObjectType,
+                description: str | None = None, required: bool = False) -> GraphQLField:
     """
     Create a new GraphQL field.
 

@@ -1,33 +1,65 @@
-# Codomyrmex Agents — src/codomyrmex/tests
+# Agent Guidelines - Tests
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Test framework with fixtures, utilities, and test patterns.
 
-Comprehensive test suites following test-driven development practices with real data analysis (no mock methods). Ensures code quality and reliability.
+## Key Directories
 
-## Active Components
+- `unit/` — Unit tests
+- `integration/` — Integration tests
+- `performance/` — Performance tests
+- `fixtures/` — Shared fixtures
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `RUNNING_TESTS.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `conftest.py` – Project file
-- `examples/` – Directory containing examples components
-- `fixtures/` – Directory containing fixtures components
-- `integration/` – Directory containing integration components
-- `performance/` – Directory containing performance components
-- `unit/` – Directory containing unit components
+## Agent Instructions
 
-## Operating Contracts
+1. **Follow AAA** — Arrange, Act, Assert
+2. **Use fixtures** — Share setup with fixtures
+3. **Mock external** — Mock APIs and databases
+4. **Test edge cases** — Not just happy path
+5. **Name descriptively** — `test_user_login_fails_with_wrong_password`
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+import pytest
+from codomyrmex.tests.fixtures import mock_db, mock_api
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Basic test
+def test_function_returns_expected():
+    result = function_under_test(input_data)
+    assert result == expected_output
+
+# Using fixtures
+@pytest.fixture
+def sample_user():
+    return {"id": 1, "name": "Test"}
+
+def test_user_creation(sample_user):
+    user = create_user(sample_user)
+    assert user.id == 1
+
+# Parametrized tests
+@pytest.mark.parametrize("input,expected", [
+    ("a", 1), ("b", 2), ("c", 3)
+])
+def test_mapping(input, expected):
+    assert map_value(input) == expected
+```
+
+## Running Tests
+
+```bash
+# All tests
+pytest
+
+# Specific module
+pytest tests/unit/test_auth.py
+
+# With coverage
+pytest --cov=codomyrmex
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

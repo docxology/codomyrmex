@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Context builder for prompt engineering.
 
 logger = get_logger(__name__)
@@ -6,7 +6,6 @@ This module provides functionality to build context strings
 from FPF specifications for use in prompt engineering.
 """
 
-from typing import Dict, List, Optional
 
 from .models import FPFSpec, Pattern
 
@@ -114,7 +113,7 @@ class ContextBuilder:
 
         return "\n".join(context_lines)
 
-    def build_minimal_context(self, filters: Optional[Dict[str, any]] = None) -> str:
+    def build_minimal_context(self, filters: dict[str, any] | None = None) -> str:
         """Build a minimal context with only essential information.
 
         Args:
@@ -186,7 +185,7 @@ class ContextBuilder:
 
         return "\n".join(context_lines)
 
-    def _get_related_patterns(self, pattern_id: str, depth: int) -> List[Pattern]:
+    def _get_related_patterns(self, pattern_id: str, depth: int) -> list[Pattern]:
         """Get patterns related to the given pattern.
 
         Args:

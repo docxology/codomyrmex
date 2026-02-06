@@ -4,9 +4,7 @@ This module provides OpenTelemetry-compatible tracing and observability tools.
 """
 
 # Submodule exports - import first
-from . import exporters
-from . import spans
-from . import metrics
+from . import exporters, metrics, spans
 
 # Try optional submodules
 try:
@@ -18,10 +16,10 @@ except ImportError:
 try:
     from .context.trace_context import (
         TraceContext,
-        start_span,
         get_current_span,
-        traced,
         link_span,
+        start_span,
+        traced,
     )
     HAS_TRACE_CONTEXT = True
 except ImportError:
@@ -30,8 +28,8 @@ except ImportError:
 
 try:
     from .spans.span_processor import (
-        SimpleSpanProcessor,
         BatchSpanProcessor,
+        SimpleSpanProcessor,
     )
     HAS_SPAN_PROCESSOR = True
 except ImportError:
@@ -44,9 +42,8 @@ except ImportError:
     HAS_OTLP_EXPORTER = False
     OTLPExporter = None
 
-from . import tracing
-from . import sampling
-from . import alerting
+from . import alerting, sampling, tracing
+
 __all__ = [
     'alerting',
     'sampling',

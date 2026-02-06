@@ -11,8 +11,8 @@ Tests cover:
 Total: ~11 tests in a single TestInfomaniakModuleExports class.
 """
 
-import pytest
 from unittest.mock import MagicMock
+
 
 
 class TestInfomaniakModuleExports:
@@ -74,12 +74,12 @@ class TestInfomaniakModuleExports:
     def test_exception_hierarchy(self):
         """All error classes inherit from InfomaniakCloudError which inherits from Exception."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            InfomaniakCloudError,
             InfomaniakAuthError,
-            InfomaniakNotFoundError,
+            InfomaniakCloudError,
             InfomaniakConflictError,
-            InfomaniakQuotaExceededError,
             InfomaniakConnectionError,
+            InfomaniakNotFoundError,
+            InfomaniakQuotaExceededError,
             InfomaniakTimeoutError,
         )
 
@@ -101,13 +101,13 @@ class TestInfomaniakModuleExports:
     def test_classify_openstack_error_known_codes(self):
         """classify_openstack_error maps known patterns to correct exception types."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_openstack_error,
             InfomaniakAuthError,
-            InfomaniakNotFoundError,
             InfomaniakConflictError,
+            InfomaniakConnectionError,
+            InfomaniakNotFoundError,
             InfomaniakQuotaExceededError,
             InfomaniakTimeoutError,
-            InfomaniakConnectionError,
+            classify_openstack_error,
         )
 
         cases = [
@@ -183,8 +183,8 @@ class TestInfomaniakModuleExports:
 
     def test_compute_client_has_terminate_instance(self):
         """InfomaniakComputeClient implements the ComputeClient ABC terminate_instance method."""
-        from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
         from codomyrmex.cloud.common import ComputeClient
+        from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
 
         assert issubclass(InfomaniakComputeClient, ComputeClient)
         assert hasattr(InfomaniakComputeClient, "terminate_instance")
@@ -196,8 +196,8 @@ class TestInfomaniakModuleExports:
 
     def test_s3_client_has_delete_file(self):
         """InfomaniakS3Client implements the StorageClient ABC delete_file method."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
         from codomyrmex.cloud.common import StorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
 
         assert issubclass(InfomaniakS3Client, StorageClient)
         assert hasattr(InfomaniakS3Client, "delete_file")
@@ -246,12 +246,12 @@ class TestInfomaniakModuleExports:
     def test_exception_carries_service_operation_resource_id(self):
         """All InfomaniakCloudError subclasses propagate service, operation, resource_id."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            InfomaniakCloudError,
             InfomaniakAuthError,
-            InfomaniakNotFoundError,
+            InfomaniakCloudError,
             InfomaniakConflictError,
-            InfomaniakQuotaExceededError,
             InfomaniakConnectionError,
+            InfomaniakNotFoundError,
+            InfomaniakQuotaExceededError,
             InfomaniakTimeoutError,
         )
 
@@ -284,8 +284,8 @@ class TestInfomaniakModuleExports:
     def test_classify_openstack_error_unknown_returns_base(self):
         """classify_openstack_error returns InfomaniakCloudError for unrecognized errors."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_openstack_error,
             InfomaniakCloudError,
+            classify_openstack_error,
         )
 
         result = classify_openstack_error(

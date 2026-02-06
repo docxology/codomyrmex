@@ -5,9 +5,9 @@ CacheStats, CacheManager, TTLManager, TTL handling, eviction, and cache operatio
 """
 
 import time
+from unittest.mock import MagicMock
+
 import pytest
-from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 from codomyrmex.cache.backends.in_memory import InMemoryCache
 from codomyrmex.cache.stats import CacheStats
@@ -715,8 +715,8 @@ class TestCacheManager:
 
     def test_get_file_based_backend(self):
         """Test getting file-based backend."""
-        from codomyrmex.cache.cache_manager import CacheManager
         from codomyrmex.cache.backends.file_based import FileBasedCache
+        from codomyrmex.cache.cache_manager import CacheManager
 
         manager = CacheManager()
         cache = manager.get_cache(backend="file_based")

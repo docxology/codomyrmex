@@ -1,17 +1,18 @@
 """StatsD metrics client."""
 
-import statsd
 import logging
 import os
+
+import statsd
 
 logger = logging.getLogger(__name__)
 
 class StatsDClient:
     """Wrapper for statsd client to send metrics to a StatsD collector."""
-    
+
     def __init__(self, host: str = None, port: int = None, prefix: str = "codomyrmex"):
         """Initialize the StatsD client.
-        
+
         Args:
             host: StatsD host (default: localhost)
             port: StatsD port (default: 8125)

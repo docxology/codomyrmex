@@ -6,8 +6,8 @@ All exceptions inherit from CodomyrmexError for consistent error handling.
 """
 
 from codomyrmex.exceptions import (
-    CodomyrmexError,
     CodeExecutionError,
+    CodomyrmexError,
     SandboxError,
 )
 

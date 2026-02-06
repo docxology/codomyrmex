@@ -14,17 +14,21 @@ affecting ALL agent tests in this environment.
 """
 
 import json
+from unittest.mock import MagicMock
+
 import pytest
-from unittest.mock import MagicMock, patch
 
 # Guard: the entire agents package may fail to import if optional
 # dependencies (google.genai, etc.) are missing.
 try:
+    from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
     from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
     from codomyrmex.agents.infrastructure.tool_factory import (
-        CloudToolFactory, Tool, _method_to_args_schema, _is_public_method,
+        CloudToolFactory,
+        Tool,
+        _is_public_method,
+        _method_to_args_schema,
     )
-    from codomyrmex.agents.core.base import AgentCapabilities, AgentRequest
     _AGENTS_AVAILABLE = True
 except ImportError:
     _AGENTS_AVAILABLE = False
@@ -52,16 +56,16 @@ class TestInfrastructureAgentInit:
 
     def test_init_with_s3_adds_storage(self):
         """S3 client adds CLOUD_STORAGE capability."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         from codomyrmex.agents.core.base import AgentCapabilities
+        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
 
         agent = InfrastructureAgent(clients={"s3": MagicMock()})
         assert AgentCapabilities.CLOUD_STORAGE in agent.get_capabilities()
 
     def test_init_empty_clients(self):
         """Empty clients dict results in only CLOUD_INFRASTRUCTURE."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         from codomyrmex.agents.core.base import AgentCapabilities
+        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
 
         agent = InfrastructureAgent(clients={})
         caps = agent.get_capabilities()
@@ -207,8 +211,8 @@ class TestInfrastructureAgentExecute:
 
     def test_security_pipeline_blocks(self):
         """Security pipeline can block execution."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         from codomyrmex.agents.core.base import AgentRequest
+        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
 
         mock_pipeline = MagicMock()
         check_result = MagicMock()
@@ -315,8 +319,8 @@ class TestInfrastructureAgentToolRegistry:
 
     def test_stream_yields_execute_result(self):
         """stream() yields the execute result content."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         from codomyrmex.agents.core.base import AgentRequest
+        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
 
         mock_compute = MagicMock()
         mock_compute.list_instances.return_value = []

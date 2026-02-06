@@ -1,23 +1,23 @@
 """Hot-reloading configuration watcher."""
 
-import os
-import time
-import threading
-from typing import Callable, Optional
 import logging
+import os
+import threading
+import time
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
 class ConfigWatcher:
     """Watches a configuration file for changes and triggers a callback."""
-    
+
     def __init__(self, file_path: str, callback: Callable[[], None], interval: int = 5):
         self.file_path = file_path
         self.callback = callback
         self.interval = interval
         self._last_mtime = os.path.getmtime(file_path) if os.path.exists(file_path) else 0
         self._stop_event = threading.Event()
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
 
     def start(self):
         """Start the watcher thread."""
@@ -44,5 +44,5 @@ class ConfigWatcher:
                         self.callback()
             except Exception as e:
                 logger.error(f"Error watching config file: {e}")
-            
+
             time.sleep(self.interval)

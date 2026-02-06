@@ -3,10 +3,9 @@
 Handles indexing, categorizing, and searching skills.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import logging
 import re
+from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -27,11 +26,11 @@ class SkillRegistry:
             skill_loader: SkillLoader instance to use for loading skills
         """
         self.skill_loader = skill_loader
-        self._index: Dict[str, Dict[str, Dict[str, Any]]] = {}
-        self._metadata: Dict[str, Dict[str, Dict[str, Any]]] = {}
+        self._index: dict[str, dict[str, dict[str, Any]]] = {}
+        self._metadata: dict[str, dict[str, dict[str, Any]]] = {}
         logger.info("SkillRegistry initialized")
 
-    def build_index(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
+    def build_index(self) -> dict[str, dict[str, dict[str, Any]]]:
         """
         Build the skill index from all available skills.
 
@@ -52,8 +51,8 @@ class SkillRegistry:
         return self._index
 
     def _extract_metadata(
-        self, category: str, name: str, skill_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, category: str, name: str, skill_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Extract metadata from a skill.
 
@@ -93,7 +92,7 @@ class SkillRegistry:
         metadata["search_text"] = " ".join(search_text).lower()
         return metadata
 
-    def get_categories(self) -> List[str]:
+    def get_categories(self) -> list[str]:
         """
         Get all available skill categories.
 
@@ -104,7 +103,7 @@ class SkillRegistry:
             self.build_index()
         return sorted(self._index.keys())
 
-    def get_skill_metadata(self, category: str, name: str) -> Optional[Dict[str, Any]]:
+    def get_skill_metadata(self, category: str, name: str) -> dict[str, Any] | None:
         """
         Get metadata for a specific skill.
 
@@ -120,7 +119,7 @@ class SkillRegistry:
 
         return self._metadata.get(category, {}).get(name)
 
-    def search_by_pattern(self, pattern: str, case_sensitive: bool = False) -> List[Dict[str, Any]]:
+    def search_by_pattern(self, pattern: str, case_sensitive: bool = False) -> list[dict[str, Any]]:
         """
         Search skills by pattern (regex or text).
 
@@ -158,7 +157,7 @@ class SkillRegistry:
 
         return results
 
-    def search_skills(self, query: str) -> List[Dict[str, Any]]:
+    def search_skills(self, query: str) -> list[dict[str, Any]]:
         """
         Search skills by query string.
 
@@ -187,7 +186,7 @@ class SkillRegistry:
 
         return results
 
-    def get_index(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
+    def get_index(self) -> dict[str, dict[str, dict[str, Any]]]:
         """
         Get the current skill index.
 

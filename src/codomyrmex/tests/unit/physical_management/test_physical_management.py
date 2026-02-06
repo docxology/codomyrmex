@@ -1,8 +1,8 @@
 """Unit tests for physical_management module."""
 
 import sys
+
 import pytest
-from pathlib import Path
 
 
 @pytest.mark.unit
@@ -113,12 +113,12 @@ class TestPhysicalManagement:
 
         try:
             from codomyrmex.physical_management import (
-                ObjectType,
-                ObjectStatus,
-                MaterialType,
-                EventType,
-                SensorType,
                 DeviceStatus,
+                EventType,
+                MaterialType,
+                ObjectStatus,
+                ObjectType,
+                SensorType,
             )
             assert ObjectType is not None
             assert ObjectStatus is not None

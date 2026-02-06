@@ -10,8 +10,8 @@ Three base classes cover all auth mechanisms:
 - InfomaniakRESTBase: REST API with OAuth2 Bearer token
 """
 
-from typing import Any, Optional
 import logging
+from typing import Any
 
 import requests
 
@@ -52,7 +52,7 @@ class InfomaniakOpenStackBase:
         cls,
         application_credential_id: str,
         application_credential_secret: str,
-        auth_url: Optional[str] = None,
+        auth_url: str | None = None,
         region: str = "dc3-a",
     ) -> "InfomaniakOpenStackBase":
         """
@@ -138,8 +138,8 @@ class InfomaniakS3Base:
         cls,
         access_key: str,
         secret_key: str,
-        endpoint_url: Optional[str] = None,
-        region: Optional[str] = None,
+        endpoint_url: str | None = None,
+        region: str | None = None,
     ) -> "InfomaniakS3Base":
         """Create client with explicit credentials."""
         try:

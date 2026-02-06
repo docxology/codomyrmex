@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Parser for FPF specification markdown.
 
 
@@ -8,8 +8,6 @@ file into structured data models.
 """
 
 import re
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 from .models import FPFSpec, Pattern, PatternStatus
 
@@ -26,7 +24,7 @@ class FPFParser:
         self.subsection_regex = re.compile(r"^####\s+(.+)$")
         self.subsubsection_regex = re.compile(r"^#####\s+(.+)$")
 
-    def parse_spec(self, markdown_content: str, source_path: Optional[str] = None) -> FPFSpec:
+    def parse_spec(self, markdown_content: str, source_path: str | None = None) -> FPFSpec:
         """Parse the complete FPF specification.
 
         Args:
@@ -62,7 +60,7 @@ class FPFParser:
             metadata={"total_patterns": len(patterns)},
         )
 
-    def extract_table_of_contents(self, content: str) -> Dict[str, any]:
+    def extract_table_of_contents(self, content: str) -> dict[str, any]:
         """Extract the table of contents from the FPF specification.
 
         Args:
@@ -108,7 +106,7 @@ class FPFParser:
 
         return toc
 
-    def extract_patterns(self, content: str) -> List[Pattern]:
+    def extract_patterns(self, content: str) -> list[Pattern]:
         """Extract all patterns from the FPF specification.
 
         Args:
@@ -203,7 +201,7 @@ class FPFParser:
 
         return patterns
 
-    def _extract_status(self, lines: List[str], pattern_line: int) -> PatternStatus:
+    def _extract_status(self, lines: list[str], pattern_line: int) -> PatternStatus:
         """Extract pattern status from surrounding lines.
 
         Args:
@@ -325,7 +323,7 @@ class FPFParser:
             deps = self._parse_dependency_list(constrains_match.group(1))
             pattern.dependencies["constrains"] = deps
 
-    def _parse_dependency_list(self, dep_string: str) -> List[str]:
+    def _parse_dependency_list(self, dep_string: str) -> list[str]:
         """Parse a dependency list string into individual pattern IDs.
 
         Args:
@@ -338,7 +336,7 @@ class FPFParser:
         pattern_ids = re.findall(r"([A-Z]\.\d+(?:\.\d+)?(?:\.[A-Z])?)", dep_string)
         return pattern_ids
 
-    def extract_sections(self, pattern_content: str) -> Dict[str, str]:
+    def extract_sections(self, pattern_content: str) -> dict[str, str]:
         """Extract sections from a pattern's content.
 
         Args:

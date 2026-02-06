@@ -5,14 +5,20 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-import pytest
-from typing import Any
 
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
-from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
-from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.core.exceptions import GeminiError
-from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+import pytest
+
+try:
+    from codomyrmex.agents.core import AgentRequest
+    from codomyrmex.agents.gemini import GeminiClient, GeminiIntegrationAdapter
+    from codomyrmex.agents.generic import AgentOrchestrator
+    from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class TestGeminiIntegrationAdapter:
@@ -22,7 +28,7 @@ class TestGeminiIntegrationAdapter:
         """Test GeminiIntegrationAdapter can be initialized."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         assert adapter.agent == client
 
     @pytest.mark.skipif(not GEMINI_AVAILABLE, reason="gemini CLI not installed")
@@ -30,7 +36,7 @@ class TestGeminiIntegrationAdapter:
         """Test adapting Gemini for AI code editing with real CLI."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         try:
             code = adapter.adapt_for_ai_code_editing(
                 prompt="Create a fibonacci function",
@@ -47,7 +53,7 @@ class TestGeminiIntegrationAdapter:
         """Test adapting Gemini for AI code editing with file context."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         try:
             code = adapter.adapt_for_ai_code_editing(
                 prompt="Create a function",
@@ -65,15 +71,15 @@ class TestGeminiIntegrationAdapter:
         """Test adapting Gemini for LLM module with real CLI."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         messages = [
             {"role": "user", "content": "Hello"},
             {"role": "assistant", "content": "Hi there"}
         ]
-        
+
         try:
             result = adapter.adapt_for_llm(messages)
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert "content" in result
@@ -88,12 +94,12 @@ class TestGeminiIntegrationAdapter:
         """Test adapting Gemini for LLM module with specific model."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         messages = [{"role": "user", "content": "Test"}]
-        
+
         try:
             result = adapter.adapt_for_llm(messages, model="gemini-1.5-pro")
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert result["model"] == "gemini-1.5-pro"
@@ -106,13 +112,13 @@ class TestGeminiIntegrationAdapter:
         """Test adapting Gemini for code execution with real CLI."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         try:
             result = adapter.adapt_for_code_execution(
                 code="def test(): pass",
                 language="python"
             )
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert "success" in result
@@ -125,7 +131,7 @@ class TestGeminiIntegrationAdapter:
         """Test code execution adapter structure (without executing)."""
         client = GeminiClient()
         adapter = GeminiIntegrationAdapter(client)
-        
+
         # Test that adapter has required methods
         assert hasattr(adapter, "adapt_for_ai_code_editing")
         assert hasattr(adapter, "adapt_for_llm")
@@ -139,7 +145,7 @@ class TestGeminiOrchestration:
         """Test GeminiClient with AgentOrchestrator structure."""
         gemini = GeminiClient()
         orchestrator = AgentOrchestrator([gemini])
-        
+
         # Test orchestrator structure
         assert len(orchestrator.agents) == 1
         assert orchestrator.agents[0] == gemini
@@ -149,12 +155,12 @@ class TestGeminiOrchestration:
         """Test GeminiClient with AgentOrchestrator execution."""
         gemini = GeminiClient()
         orchestrator = AgentOrchestrator([gemini])
-        
+
         request = AgentRequest(prompt="test prompt")
-        
+
         try:
             responses = orchestrator.execute_parallel(request)
-            
+
             # Test real response structure
             assert len(responses) == 1
             assert isinstance(responses[0], type(gemini.execute(AgentRequest(prompt=""))))
@@ -167,12 +173,12 @@ class TestGeminiOrchestration:
         """Test Gemini with fallback orchestration."""
         gemini = GeminiClient()
         orchestrator = AgentOrchestrator([gemini])
-        
+
         request = AgentRequest(prompt="test prompt")
-        
+
         try:
             response = orchestrator.execute_with_fallback(request)
-            
+
             # Test real response structure
             assert isinstance(response, type(gemini.execute(AgentRequest(prompt=""))))
         except Exception:

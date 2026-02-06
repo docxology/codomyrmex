@@ -6,17 +6,24 @@ ensuring code generation, refactoring, and analysis work with local LLMs.
 
 import pytest
 
-from codomyrmex.agents.ai_code_editing.ai_code_helpers import (
-    OLLAMA_AVAILABLE,
-    generate_code_snippet,
-    refactor_code_snippet,
-    analyze_code_quality,
-    compare_code_versions,
-    generate_code_documentation,
-    get_llm_client,
-    get_supported_providers,
-    get_available_models,
-)
+try:
+    from codomyrmex.agents.ai_code_editing.ai_code_helpers import (
+        OLLAMA_AVAILABLE,
+        analyze_code_quality,
+        compare_code_versions,
+        generate_code_documentation,
+        generate_code_snippet,
+        get_available_models,
+        get_llm_client,
+        get_supported_providers,
+        refactor_code_snippet,
+    )
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class TestOllamaProviderIntegration:
@@ -79,7 +86,7 @@ class TestOllamaCodeGeneration:
             model_name="llama3.1:latest",
             max_length=256,
         )
-        
+
         assert "generated_code" in result, "Result should have generated_code"
         assert result["provider"] == "ollama"
         assert result["language"] == "python"
@@ -101,7 +108,7 @@ def add(a, b):
             provider="ollama",
             model_name="llama3.1:latest",
         )
-        
+
         assert "refactored_code" in result, "Result should have refactored_code"
         assert result["provider"] == "ollama"
         assert result["original_code"] == code
@@ -123,7 +130,7 @@ def factorial(n):
             provider="ollama",
             model_name="llama3.1:latest",
         )
-        
+
         assert "analysis" in result, "Result should have analysis"
         assert result["provider"] == "ollama"
         assert result["analysis_type"] == "comprehensive"
@@ -145,7 +152,7 @@ def add(a: int, b: int) -> int:
             provider="ollama",
             model_name="llama3.1:latest",
         )
-        
+
         assert "comparison" in result, "Result should have comparison"
         assert result["provider"] == "ollama"
         assert len(result["comparison"]) > 50
@@ -157,7 +164,7 @@ def add(a: int, b: int) -> int:
 class Calculator:
     def add(self, a, b):
         return a + b
-    
+
     def subtract(self, a, b):
         return a - b
 """
@@ -168,7 +175,7 @@ class Calculator:
             provider="ollama",
             model_name="llama3.1:latest",
         )
-        
+
         assert "documentation" in result, "Result should have documentation"
         assert result["provider"] == "ollama"
         assert result["doc_type"] == "api"

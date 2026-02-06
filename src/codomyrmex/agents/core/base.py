@@ -1,71 +1,10 @@
-from typing import Any, Iterator, Optional
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Core agent interfaces and base classes."""
 
@@ -103,9 +42,9 @@ class AgentRequest:
     prompt: str
     context: dict[str, Any] = None
     capabilities: list[AgentCapabilities] = None
-    timeout: Optional[int] = None
+    timeout: int | None = None
     metadata: dict[str, Any] = None
-    id: Optional[str] = None
+    id: str | None = None
 
     def __post_init__(self):
         """Initialize default values."""
@@ -123,11 +62,11 @@ class AgentResponse:
 
     content: str
     metadata: dict[str, Any] = None
-    error: Optional[str] = None
-    execution_time: Optional[float] = None
-    tokens_used: Optional[int] = None
-    cost: Optional[float] = None
-    request_id: Optional[str] = None
+    error: str | None = None
+    execution_time: float | None = None
+    tokens_used: int | None = None
+    cost: float | None = None
+    request_id: str | None = None
 
     def __post_init__(self):
         """Initialize default values."""
@@ -142,7 +81,7 @@ class AgentResponse:
 class AgentInterface(ABC):
     """Abstract base class for all agent implementations."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize agent.
         """
@@ -206,7 +145,7 @@ class BaseAgent(AgentInterface):
         self,
         name: str,
         capabilities: list[AgentCapabilities],
-        config: Optional[dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
     ):
         """
         Initialize base agent.
@@ -349,7 +288,7 @@ class BaseAgent(AgentInterface):
         return capability in self.get_capabilities()
 
     def get_config_value(
-        self, key: str, default: Any = None, config: Optional[dict[str, Any]] = None
+        self, key: str, default: Any = None, config: dict[str, Any] | None = None
     ) -> Any:
         """
         Get configuration value.

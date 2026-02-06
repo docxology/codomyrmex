@@ -4,7 +4,7 @@ Fabric Orchestrator - Workflow orchestration for Fabric + Codomyrmex
 Provides high-level orchestration combining Fabric patterns with Codomyrmex capabilities.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -33,7 +33,7 @@ class FabricOrchestrator:
         self,
         code_content: str,
         analysis_type: str = "comprehensive"
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Analyze code using appropriate Fabric patterns.
 
@@ -72,7 +72,7 @@ class FabricOrchestrator:
             "summary": self._create_analysis_summary(results)
         }
 
-    def _create_analysis_summary(self, results: Dict[str, Dict]) -> Dict[str, Any]:
+    def _create_analysis_summary(self, results: dict[str, dict]) -> dict[str, Any]:
         """Create summary of analysis results."""
         successful_patterns = sum(1 for r in results.values() if r["success"])
         total_patterns = len(results)
@@ -157,7 +157,7 @@ class FabricOrchestrator:
         """Check if Fabric is available."""
         return self.fabric_manager.is_available()
 
-    def list_patterns(self) -> List[str]:
+    def list_patterns(self) -> list[str]:
         """Get list of available Fabric patterns."""
         return self.fabric_manager.list_patterns()
 

@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Defense Context
+# Personal AI Infrastructure — Defense Module
 
-**Module**: defense
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Fiduciary defense capabilities with active countermeasures against cognitive exploits, including exploit detection, context poisoning, and rabbit hole containment.
+The Defense module provides PAI integration for security defenses and threat mitigation.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Threat Detection
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Detect threats:
 
-## Key Files
+```python
+from codomyrmex.defense import ThreatDetector
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+detector = ThreatDetector()
+threats = detector.scan(input_data)
 
-## Future Considerations
+for threat in threats:
+    print(f"Threat: {threat.type} - {threat.severity}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performance metrics.
+### Defense Policies
+
+Apply defense policies:
+
+```python
+from codomyrmex.defense import DefensePolicy
+
+policy = DefensePolicy()
+policy.add_rule("block_injections", pattern=r"DROP TABLE")
+safe = policy.apply(user_input)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ThreatDetector` | Scan for threats |
+| `DefensePolicy` | Apply defenses |
+| `Firewall` | Block attacks |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

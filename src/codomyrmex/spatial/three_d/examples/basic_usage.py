@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 try:
     from codomyrmex.spatial.three_d import (
         ARSession,

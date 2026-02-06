@@ -5,12 +5,10 @@ cryptographic keys from shared secrets or other high-entropy material.
 For password-based key derivation see ``Encryptor.derive_key()`` (PBKDF2).
 """
 
-from typing import Optional, Union
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-
 
 _ALGORITHMS = {
     "sha256": hashes.SHA256,
@@ -20,10 +18,10 @@ _ALGORITHMS = {
 
 
 def derive_key_hkdf(
-    input_key_material: Union[bytes, str],
+    input_key_material: bytes | str,
     length: int = 32,
-    salt: Optional[bytes] = None,
-    info: Optional[bytes] = None,
+    salt: bytes | None = None,
+    info: bytes | None = None,
     algorithm: str = "sha256",
 ) -> bytes:
     """Derive a cryptographic key using HKDF.

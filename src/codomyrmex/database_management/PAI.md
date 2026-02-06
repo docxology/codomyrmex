@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Database Management Context
+# Personal AI Infrastructure — Database Management Module
 
-**Module**: database_management
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Database operations for SQL, NoSQL, and ORM integrations with connection pooling and query builders.
+The Database Management module provides PAI integration for database operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Database Connection
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Connect to databases:
 
-## Key Files
+```python
+from codomyrmex.database_management import DatabaseConnection
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+db = DatabaseConnection(
+    host="localhost", database="mydb", pool_size=10
+)
 
-## Future Considerations
+with db.connection() as conn:
+    result = conn.execute("SELECT * FROM users")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Migrations
+
+Run database migrations:
+
+```python
+from codomyrmex.database_management import Migrator
+
+migrator = Migrator(db)
+migrator.migrate_to("v2.0.0")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `DatabaseConnection` | Connect to DB |
+| `Migrator` | Run migrations |
+| `QueryBuilder` | Build queries |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

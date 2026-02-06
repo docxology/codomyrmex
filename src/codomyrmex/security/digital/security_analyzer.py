@@ -9,12 +9,11 @@ Provides advanced security analysis capabilities including:
 """
 
 import ast
-import logging
 import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -46,8 +45,8 @@ class SecurityFinding:
     code_snippet: str
     description: str
     recommendation: str
-    cwe_id: Optional[str] = None
-    context: Optional[Dict[str, Any]] = None
+    cwe_id: str | None = None
+    context: dict[str, Any] | None = None
 
 
 class SecurityAnalyzer:
@@ -58,7 +57,7 @@ class SecurityAnalyzer:
         self.vulnerable_patterns = self._load_vulnerable_patterns()
         self.safe_functions = self._load_safe_functions()
 
-    def _load_vulnerable_patterns(self) -> Dict[str, re.Pattern]:
+    def _load_vulnerable_patterns(self) -> dict[str, re.Pattern]:
         """Load regex patterns for vulnerable code detection."""
         return {
             "sql_string_concat": re.compile(r'(?:execute|query|cursor\.execute).*[\+\%]', re.IGNORECASE),
@@ -72,17 +71,17 @@ class SecurityAnalyzer:
             "random_random": re.compile(r'\brandom\.(?:random|randint|choice|sample)\b'),
         }
 
-    def _load_safe_functions(self) -> Set[str]:
+    def _load_safe_functions(self) -> set[str]:
         """Load set of known safe functions."""
         return {
             "hashlib.sha256", "secrets.token_bytes", "os.urandom",
             "cryptography.hazmat.primitives.ciphers.algorithms.AES"
         }
 
-    def analyze_file(self, filepath: str) -> List[SecurityFinding]:
+    def analyze_file(self, filepath: str) -> list[SecurityFinding]:
         """Analyze a file for security vulnerabilities."""
         try:
-            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(filepath, encoding='utf-8', errors='ignore') as f:
                 content = f.read()
 
             findings = []
@@ -96,7 +95,7 @@ class SecurityAnalyzer:
             logger.error(f"Could not analyze file {filepath}: {e}")
             return []
 
-    def _analyze_patterns(self, content: str, filepath: str) -> List[SecurityFinding]:
+    def _analyze_patterns(self, content: str, filepath: str) -> list[SecurityFinding]:
         """Analyze content using pattern matching."""
         findings = []
         lines = content.split('\n')
@@ -117,7 +116,7 @@ class SecurityAnalyzer:
                      ))
         return findings
 
-    def _analyze_ast(self, content: str, filepath: str) -> List[SecurityFinding]:
+    def _analyze_ast(self, content: str, filepath: str) -> list[SecurityFinding]:
         """Analyze Python code using AST parsing."""
         findings = []
         try:
@@ -129,17 +128,17 @@ class SecurityAnalyzer:
             logger.warning(f"AST analysis failed for {filepath}: {e}")
         return findings
 
-    def analyze_directory(self, directory: str, recursive: bool = True) -> List[SecurityFinding]:
+    def analyze_directory(self, directory: str, recursive: bool = True) -> list[SecurityFinding]:
         """Analyze all files in a directory."""
         all_findings = []
         path = Path(directory)
         pattern = "**/*" if recursive else "*"
         supported = {'.py', '.js', '.ts', '.java', '.cpp', '.rb'}
-        
+
         for file_path in path.glob(pattern):
             if file_path.is_file() and file_path.suffix.lower() in supported:
                 all_findings.extend(self.analyze_file(str(file_path)))
-                
+
         return all_findings
 
 
@@ -148,7 +147,7 @@ class ASTSecurityAnalyzer(ast.NodeVisitor):
 
     def __init__(self, filepath: str):
         self.filepath = filepath
-        self.findings: List[SecurityFinding] = []
+        self.findings: list[SecurityFinding] = []
 
     def visit_Call(self, node: ast.Call) -> None:
         """Check for dangerous calls."""
@@ -168,12 +167,12 @@ class ASTSecurityAnalyzer(ast.NodeVisitor):
 
 
 # Convenience functions
-def analyze_file_security(filepath: str) -> List[SecurityFinding]:
+def analyze_file_security(filepath: str) -> list[SecurityFinding]:
     """Convenience function to analyze a file."""
     analyzer = SecurityAnalyzer()
     return analyzer.analyze_file(filepath)
 
-def analyze_directory_security(directory: str, recursive: bool = True) -> List[SecurityFinding]:
+def analyze_directory_security(directory: str, recursive: bool = True) -> list[SecurityFinding]:
     """Convenience function to analyze a directory."""
     analyzer = SecurityAnalyzer()
     return analyzer.analyze_directory(directory, recursive)

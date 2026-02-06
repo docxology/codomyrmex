@@ -1,20 +1,11 @@
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-import json
 import logging
-import os
 import re
-
 from dataclasses import dataclass, field
+from typing import Any
+
 import docker
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Image Optimizer for Codomyrmex Containerization."""
 
@@ -36,16 +27,16 @@ class ImageAnalysis:
     """Analysis results for a Docker image."""
     image_name: str
     size_bytes: int
-    layers: List[Dict[str, Any]]
+    layers: list[dict[str, Any]]
     base_image: str
-    exposed_ports: List[str]
-    volumes: List[str]
-    environment_vars: List[str]
-    commands: List[str]
-    potential_optimizations: List[str] = field(default_factory=list)
+    exposed_ports: list[str]
+    volumes: list[str]
+    environment_vars: list[str]
+    commands: list[str]
+    potential_optimizations: list[str] = field(default_factory=list)
     optimization_score: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "image_name": self.image_name,
@@ -67,10 +58,10 @@ class OptimizationSuggestion:
     description: str
     impact: str  # "high", "medium", "low"
     effort: str  # "easy", "medium", "hard"
-    dockerfile_changes: List[str] = field(default_factory=list)
-    size_reduction_mb: Optional[float] = None
+    dockerfile_changes: list[str] = field(default_factory=list)
+    size_reduction_mb: float | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "category": self.category,
@@ -150,7 +141,7 @@ class ImageOptimizer:
             logger.error(f"Error analyzing image {image_name}: {e}")
             raise
 
-    def optimize_image(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def optimize_image(self, config: dict[str, Any]) -> dict[str, Any]:
         """
         Optimize an image configuration.
 
@@ -171,7 +162,7 @@ class ImageOptimizer:
 
         return optimized
 
-    def suggest_optimizations(self, image_name: str) -> List[OptimizationSuggestion]:
+    def suggest_optimizations(self, image_name: str) -> list[OptimizationSuggestion]:
         """
         Generate specific optimization suggestions for an image.
 
@@ -188,7 +179,7 @@ class ImageOptimizer:
             logger.error(f"Error generating suggestions for {image_name}: {e}")
             return []
 
-    def compare_images(self, image1: str, image2: str) -> Dict[str, Any]:
+    def compare_images(self, image1: str, image2: str) -> dict[str, Any]:
         """
         Compare two images and provide detailed comparison.
 
@@ -231,7 +222,7 @@ class ImageOptimizer:
             logger.error(f"Error comparing images {image1} and {image2}: {e}")
             return {"error": str(e)}
 
-    def get_optimization_report(self, image_name: str) -> Dict[str, Any]:
+    def get_optimization_report(self, image_name: str) -> dict[str, Any]:
         """
         Generate a comprehensive optimization report for an image.
 
@@ -263,7 +254,7 @@ class ImageOptimizer:
             logger.error(f"Error generating optimization report for {image_name}: {e}")
             return {"error": str(e)}
 
-    def _extract_base_image(self, image_attrs: Dict[str, Any]) -> str:
+    def _extract_base_image(self, image_attrs: dict[str, Any]) -> str:
         """Extract base image information from image attributes."""
         try:
             # Look for base image in history
@@ -280,7 +271,7 @@ class ImageOptimizer:
 
         return "unknown"
 
-    def _analyze_optimizations(self, analysis: ImageAnalysis) -> List[str]:
+    def _analyze_optimizations(self, analysis: ImageAnalysis) -> list[str]:
         """Analyze an image and return potential optimizations."""
         optimizations = []
 
@@ -302,7 +293,7 @@ class ImageOptimizer:
 
         return optimizations
 
-    def _check_package_optimizations(self, analysis: ImageAnalysis) -> List[str]:
+    def _check_package_optimizations(self, analysis: ImageAnalysis) -> list[str]:
         """Check for package management optimizations."""
         optimizations = []
 
@@ -356,7 +347,7 @@ class ImageOptimizer:
 
         return max(0.0, min(100.0, score))
 
-    def _generate_suggestions(self, analysis: ImageAnalysis) -> List[OptimizationSuggestion]:
+    def _generate_suggestions(self, analysis: ImageAnalysis) -> list[OptimizationSuggestion]:
         """Generate detailed optimization suggestions."""
         suggestions = []
 
@@ -434,7 +425,7 @@ class ImageOptimizer:
 
         return suggestions
 
-    def _optimize_base_image(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _optimize_base_image(self, config: dict[str, Any]) -> dict[str, Any]:
         """Optimize base image selection."""
         # Suggest smaller base images
         base_image = config.get("base_image", "").lower()
@@ -446,7 +437,7 @@ class ImageOptimizer:
 
         return config
 
-    def _optimize_package_management(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _optimize_package_management(self, config: dict[str, Any]) -> dict[str, Any]:
         """Optimize package management commands."""
         # Add cache cleaning for apt
         if "apt-get" in str(config.get("commands", [])):
@@ -455,7 +446,7 @@ class ImageOptimizer:
 
         return config
 
-    def _optimize_layer_caching(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _optimize_layer_caching(self, config: dict[str, Any]) -> dict[str, Any]:
         """Optimize Docker layer caching."""
         # Suggest ordering commands for better caching
         config["optimization_notes"] = config.get("optimization_notes", [])
@@ -463,7 +454,7 @@ class ImageOptimizer:
 
         return config
 
-    def _optimize_security(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _optimize_security(self, config: dict[str, Any]) -> dict[str, Any]:
         """Add security optimizations."""
         if not config.get("user"):
             config["optimization_notes"] = config.get("optimization_notes", [])
@@ -471,14 +462,14 @@ class ImageOptimizer:
 
         return config
 
-    def _optimize_size(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _optimize_size(self, config: dict[str, Any]) -> dict[str, Any]:
         """Optimize for size reduction."""
         config["optimization_notes"] = config.get("optimization_notes", [])
         config["optimization_notes"].append("Use .dockerignore to exclude unnecessary files")
 
         return config
 
-    def _create_implementation_plan(self, suggestions: List[OptimizationSuggestion]) -> List[Dict[str, Any]]:
+    def _create_implementation_plan(self, suggestions: list[OptimizationSuggestion]) -> list[dict[str, Any]]:
         """Create an implementation plan from suggestions."""
         # Sort by impact and effort
         priority_order = {"high": 3, "medium": 2, "low": 1}

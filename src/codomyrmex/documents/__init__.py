@@ -23,10 +23,14 @@ __version__ = "0.1.0"
 
 # Import core document operations
 try:
-    from .core.document_reader import DocumentReader, read_document
-    from .core.document_writer import DocumentWriter, write_document
     from .core.document_parser import DocumentParser, parse_document
-    from .core.document_validator import DocumentValidator, ValidationResult, validate_document
+    from .core.document_reader import DocumentReader, read_document
+    from .core.document_validator import (
+        DocumentValidator,
+        ValidationResult,
+        validate_document,
+    )
+    from .core.document_writer import DocumentWriter, write_document
     CORE_AVAILABLE = True
 except ImportError:
     DocumentReader = None
@@ -42,10 +46,10 @@ except ImportError:
 
 # Import format handlers
 try:
-    from .formats.markdown_handler import read_markdown, write_markdown
     from .formats.json_handler import read_json, write_json
-    from .formats.yaml_handler import read_yaml, write_yaml
+    from .formats.markdown_handler import read_markdown, write_markdown
     from .formats.text_handler import read_text, write_text
+    from .formats.yaml_handler import read_yaml, write_yaml
     FORMATS_AVAILABLE = True
 except ImportError:
     read_markdown = None
@@ -60,7 +64,7 @@ except ImportError:
 
 # Import PDF handler (optional)
 try:
-    from .formats.pdf_handler import read_pdf, write_pdf, PDFDocument
+    from .formats.pdf_handler import PDFDocument, read_pdf, write_pdf
     PDF_AVAILABLE = True
 except ImportError:
     read_pdf = None
@@ -96,9 +100,9 @@ except ImportError:
 # Import transformation capabilities
 try:
     from .transformation.converter import convert_document
+    from .transformation.formatter import format_document
     from .transformation.merger import merge_documents
     from .transformation.splitter import split_document
-    from .transformation.formatter import format_document
     TRANSFORMATION_AVAILABLE = True
 except ImportError:
     convert_document = None
@@ -121,9 +125,9 @@ except ImportError:
 
 # Import search capabilities
 try:
-    from .search.indexer import InMemoryIndex, index_document, create_index
-    from .search.searcher import search_documents, search_index
+    from .search.indexer import InMemoryIndex, create_index, index_document
     from .search.query_builder import QueryBuilder, build_query
+    from .search.searcher import search_documents, search_index
     SEARCH_AVAILABLE = True
 except ImportError:
     InMemoryIndex = None

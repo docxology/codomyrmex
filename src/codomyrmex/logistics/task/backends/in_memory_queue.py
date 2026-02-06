@@ -5,7 +5,6 @@ In-memory queue backend.
 import heapq
 import time
 from datetime import datetime
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -30,7 +29,7 @@ class InMemoryQueue:
         self._jobs[job.job_id] = job
         return job.job_id
 
-    def dequeue(self) -> Optional[Job]:
+    def dequeue(self) -> Job | None:
         """Remove and return the next job from the queue."""
         # Check scheduled jobs
         now = datetime.now()

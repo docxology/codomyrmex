@@ -1,34 +1,64 @@
-# Codomyrmex Agents — src/codomyrmex/performance
+# Agent Guidelines - Performance
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Lazy loading, caching, profiling, and performance monitoring.
 
-Manages resource usage, caching, and lazy loading to ensure system responsiveness. Provides profiling, benchmarking, and optimization capabilities for the Codomyrmex platform.
+## Key Classes
 
-## Active Components
+- **LazyLoader** — Defer module loading until first use
+- **CacheManager** — Cache with TTL and multiple backends
+- **PerformanceMonitor** — System metrics (requires psutil)
+- **AsyncProfiler** — Profile async code execution
+- **ResourceTracker** — Track memory and CPU usage
 
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `async_profiler.py` – Project file
-- `cache_manager.py` – Project file
-- `lazy_loader.py` – Project file
-- `performance_monitor.py` – Project file
-- `requirements.txt` – Project file
-- `resource_tracker.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Lazy load heavy modules** — Use `lazy_import()` for numpy, pandas, etc.
+2. **Cache expensive operations** — Use `@cached_function` decorator
+3. **Profile hot paths** — Use `@monitor_performance` on performance-critical code
+4. **Set appropriate TTL** — Cache TTL should match data freshness requirements
+5. **Track resources in long-running code** — Use `ResourceTracker` for memory leaks
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Patterns
 
-## Navigation Links
+```python
+from codomyrmex.performance import (
+    lazy_import, cached_function, CacheManager, monitor_performance
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Lazy import heavy modules
+np = lazy_import("numpy")
+pd = lazy_import("pandas")
+
+# Cache expensive functions
+cache = CacheManager(ttl=300)
+
+@cached_function(cache, key_fn=lambda x: f"result_{x}")
+def expensive_computation(x):
+    return x ** 2
+
+# Profile functions
+@monitor_performance(name="process_batch")
+async def process_batch(items):
+    for item in items:
+        await process(item)
+```
+
+## Testing Patterns
+
+```python
+# Verify lazy loading works
+np = lazy_import("numpy")
+assert not hasattr(np, "_loaded")  # Not loaded yet
+_ = np.array([1, 2, 3])  # Now loaded
+
+# Verify caching
+cache = CacheManager()
+cache.set("key", "value", ttl=60)
+assert cache.get("key") == "value"
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

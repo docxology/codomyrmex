@@ -12,13 +12,17 @@ from .lazy_loader import LazyLoader, lazy_import
 
 # Import PerformanceMonitor with fallback if psutil is not available
 try:
-    from .performance_monitor import PerformanceMonitor, monitor_performance, performance_context
+    from .performance_monitor import (
+        PerformanceMonitor,
+        monitor_performance,
+        performance_context,
+    )
 
     PERFORMANCE_MONITOR_AVAILABLE = True
 except ImportError:
     PerformanceMonitor = None
     PERFORMANCE_MONITOR_AVAILABLE = False
-    
+
     def monitor_performance(*args, **kwargs):
         """No-op decorator if dependencies missing."""
         def decorator(func):
@@ -33,11 +37,11 @@ except ImportError:
         def __enter__(self): return self
 
         def __exit__(self, *args): pass
-        
+
     def profile_function(*args, **kwargs):
         """No-op."""
         return monitor_performance(*args, **kwargs)
-        
+
     def get_system_metrics(*args, **kwargs):
         return {}
 

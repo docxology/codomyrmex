@@ -1,40 +1,46 @@
 """Unit tests for monitoring and health checking functionality."""
 
-import pytest
-import time
+import asyncio
 import json
 import os
-import asyncio
 import tempfile
+import time
 
-import psutil
+import pytest
 
-from codomyrmex.performance.performance_monitor import (
-    SystemMonitor,
-    HAS_PSUTIL,
-    get_system_metrics,
-)
-from codomyrmex.performance.resource_tracker import (
-    ResourceTracker,
-    HAS_PSUTIL as RT_HAS_PSUTIL,
-    ResourceTrackingResult,
-    create_resource_report,
-)
-from codomyrmex.performance.async_profiler import AsyncProfiler
-from codomyrmex.system_discovery.health_checker import (
-    HealthChecker,
-    HealthStatus,
-    HealthCheckResult,
-)
-from codomyrmex.system_discovery.health_reporter import (
-    HealthReporter,
-    HealthReport,
-    HealthStatus as ReporterHealthStatus,
-    HealthCheckResult as ReporterHealthCheckResult,
-    generate_health_report,
-    format_health_report,
-    export_health_report,
-)
+try:
+    from codomyrmex.performance.async_profiler import AsyncProfiler
+    from codomyrmex.performance.performance_monitor import (
+        HAS_PSUTIL,
+        SystemMonitor,
+        get_system_metrics,
+    )
+    from codomyrmex.performance.resource_tracker import (
+        HAS_PSUTIL as RT_HAS_PSUTIL,
+    )
+    from codomyrmex.performance.resource_tracker import (
+        ResourceTracker,
+        ResourceTrackingResult,
+        create_resource_report,
+    )
+    from codomyrmex.system_discovery.health_checker import (
+        HealthChecker,
+        HealthCheckResult,
+        HealthStatus,
+    )
+    from codomyrmex.system_discovery.health_reporter import (
+        HealthReport,
+        HealthReporter,
+        export_health_report,
+        format_health_report,
+        generate_health_report,
+    )
+    _HAS_MONITORING = True
+except ImportError:
+    _HAS_MONITORING = False
+
+if not _HAS_MONITORING:
+    pytest.skip("monitoring deps not available", allow_module_level=True)
 
 
 # Test SystemMonitor
@@ -253,7 +259,8 @@ class TestHealthChecker:
         # perform_health_check does not exist as a standalone function
         try:
             from codomyrmex.system_discovery.health_checker import (
-                perform_health_check, check_module_availability
+                check_module_availability,
+                perform_health_check,
             )
         except ImportError:
             pytest.skip("Health checker convenience functions not available")

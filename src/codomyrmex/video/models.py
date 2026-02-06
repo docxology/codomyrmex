@@ -7,7 +7,7 @@ processing results, and extraction results.
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any
 
 try:
     from PIL import Image
@@ -85,11 +85,11 @@ class VideoInfo:
     fps: float = 0.0
     frame_count: int = 0
     video_codec: str = ""
-    audio_codec: Optional[str] = None
+    audio_codec: str | None = None
     bitrate: int = 0
     file_size: int = 0
     has_audio: bool = False
-    creation_time: Optional[str] = None
+    creation_time: str | None = None
     rotation: int = 0
 
     @property
@@ -192,7 +192,7 @@ class ExtractionResult:
     frames: list = field(default_factory=list)  # List of PIL.Image
     timestamps: list[float] = field(default_factory=list)
     output_paths: list[Path] = field(default_factory=list)
-    audio_path: Optional[Path] = None
+    audio_path: Path | None = None
     frame_count: int = 0
     processing_time: float = 0.0
 

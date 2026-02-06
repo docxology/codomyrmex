@@ -22,21 +22,21 @@ Example:
 
 from .models import (
     AudioFormat,
+    SSMLOptions,
     SynthesisResult,
     TTSConfig,
     VoiceGender,
     VoiceInfo,
-    SSMLOptions,
 )
-from .synthesizer import Synthesizer
 
 # Provider imports
 from .providers import (
-    TTSProvider,
-    PYTTSX3_AVAILABLE,
     EDGE_TTS_AVAILABLE,
+    PYTTSX3_AVAILABLE,
+    TTSProvider,
     get_provider,
 )
+from .synthesizer import Synthesizer
 
 # Conditionally export providers
 try:
@@ -45,7 +45,7 @@ except ImportError:
     Pyttsx3Provider = None  # type: ignore
 
 try:
-    from .providers import EdgeTTSProvider, POPULAR_VOICES
+    from .providers import POPULAR_VOICES, EdgeTTSProvider
 except ImportError:
     EdgeTTSProvider = None  # type: ignore
     POPULAR_VOICES = {}

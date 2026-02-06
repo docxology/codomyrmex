@@ -1,34 +1,68 @@
-# Codomyrmex Agents — src/codomyrmex/config_management
+# Agent Guidelines - Config Management
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Configuration loading, validation, and environment management.
 
-Configuration management module providing centralized configuration loading, environment variable handling, and settings management. Foundation for all configurable components.
+## Key Classes
 
-## Active Components
+- **ConfigLoader** — Load from YAML/JSON/env
+- **ConfigValidator** — Validate configurations
+- **Environment** — Environment-specific configs
+- **SecretManager** — Secure secret handling
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `config_deployer.py` – Project file
-- `config_loader.py` – Project file
-- `config_migrator.py` – Project file
-- `config_monitor.py` – Project file
-- `config_validator.py` – Project file
-- `secret_manager.py` – Project file
-- `watcher.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Layer configs** — defaults → file → env → args
+2. **Validate early** — Check config at startup
+3. **No secrets in code** — Use SecretManager
+4. **Document settings** — List all config options
+5. **Type coercion** — Handle string→int conversion
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.config_management import (
+    ConfigLoader, Environment, SecretManager
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Load configuration
+config = ConfigLoader.load(
+    path="config.yaml",
+    environment="production",
+    env_prefix="MYAPP_"
+)
+
+# Access values
+db_host = config.get("database.host")
+debug = config.get("debug", default=False)
+
+# Secrets
+secrets = SecretManager()
+api_key = secrets.get("API_KEY")
+
+# Environment-aware
+env = Environment.detect()
+if env.is_production:
+    log_level = "WARNING"
+```
+
+## Testing Patterns
+
+```python
+# Verify config loading
+config = ConfigLoader.load("test_config.yaml")
+assert config.get("key") is not None
+
+# Verify environment detection
+env = Environment.detect()
+assert env.name in ["development", "production", "test"]
+
+# Verify validation
+errors = ConfigValidator.validate(config, schema)
+assert len(errors) == 0
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

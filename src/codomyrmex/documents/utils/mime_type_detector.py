@@ -2,7 +2,6 @@
 
 import mimetypes
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -42,7 +41,7 @@ def detect_format_from_path(file_path: Path) -> str:
     return format_mapping.get(suffix, "text")
 
 
-def detect_mime_type(file_path: Path) -> Optional[str]:
+def detect_mime_type(file_path: Path) -> str | None:
     """
     Detect MIME type of a file.
 

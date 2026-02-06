@@ -1,53 +1,13 @@
-from typing import Any, Optional
-
 from dataclasses import dataclass
 
-from codomyrmex.agents.core import AgentCapabilities
-from codomyrmex.agents.core import AgentInterface, AgentRequest, AgentResponse
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentInterface,
+    AgentRequest,
+    AgentResponse,
+)
 from codomyrmex.agents.core.exceptions import AgentError
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Multi-agent orchestration utilities."""
 
@@ -81,7 +41,7 @@ class AgentOrchestrator:
     def execute_parallel(
         self,
         request: AgentRequest,
-        agents: Optional[list[AgentInterface]] = None,
+        agents: list[AgentInterface] | None = None,
     ) -> list[AgentResponse]:
         """
         Execute request on multiple agents in parallel.
@@ -122,7 +82,7 @@ class AgentOrchestrator:
     def execute_sequential(
         self,
         request: AgentRequest,
-        agents: Optional[list[AgentInterface]] = None,
+        agents: list[AgentInterface] | None = None,
         stop_on_success: bool = False,
     ) -> list[AgentResponse]:
         """
@@ -171,7 +131,7 @@ class AgentOrchestrator:
     def execute_with_fallback(
         self,
         request: AgentRequest,
-        agents: Optional[list[AgentInterface]] = None,
+        agents: list[AgentInterface] | None = None,
     ) -> AgentResponse:
         """
         Execute request with fallback to next agent on failure.
@@ -220,7 +180,7 @@ class AgentOrchestrator:
         raise AgentError("No agents available and no error response")
 
     def select_agent_by_capability(
-        self, capability: str, agents: Optional[list[AgentInterface]] = None
+        self, capability: str, agents: list[AgentInterface] | None = None
     ) -> list[AgentInterface]:
         """
         Select agents that support a specific capability.

@@ -1,10 +1,12 @@
-import pytest
-
 import unittest
 from unittest.mock import patch
+
+import pytest
+
 from codomyrmex.documents.core.document_parser import DocumentParser, parse_document
-from codomyrmex.documents.models.document import DocumentFormat, Document
-from codomyrmex.documents.exceptions import DocumentParseError, UnsupportedFormatError
+from codomyrmex.documents.exceptions import DocumentParseError
+from codomyrmex.documents.models.document import DocumentFormat
+
 
 @pytest.mark.unit
 class TestDocumentParser(unittest.TestCase):

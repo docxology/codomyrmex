@@ -27,11 +27,11 @@ Data structures:
 """
 
 from .pyrefly_runner import (
-    PyreflyRunner,
-    PyreflyResult,
     PyreflyIssue,
-    run_pyrefly,
+    PyreflyResult,
+    PyreflyRunner,
     check_pyrefly_available,
+    run_pyrefly,
 )
 from .static_analyzer import (
     AnalysisResult,
@@ -56,21 +56,21 @@ def analyze_codebase(*args, **kwargs):
 def analyze_code_quality(path: str = None, **kwargs) -> dict:
     """
     Analyze code quality for workflow integration.
-    
+
     Args:
         path: Path to analyze (defaults to current directory)
         **kwargs: Additional options
-        
+
     Returns:
         Dictionary with analysis results
     """
     import os
     target_path = path or os.getcwd()
-    
+
     try:
         analyzer = StaticAnalyzer()
         result = analyzer.analyze(target_path)
-        
+
         return {
             "success": True,
             "path": target_path,

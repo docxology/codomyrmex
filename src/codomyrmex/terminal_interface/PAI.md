@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Terminal Interface Context
+# Personal AI Infrastructure — Terminal Interface Module
 
-**Module**: terminal_interface
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Terminal and shell integration for command execution, process management, and interactive CLI operations.
+The Terminal Interface module provides PAI integration for command execution and terminal output.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Command Execution
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Run shell commands:
 
-## Key Files
+```python
+from codomyrmex.terminal_interface import CommandRunner
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+runner = CommandRunner()
+result = runner.run("ls -la")
 
-## Future Considerations
+print(result.stdout)
+print(f"Exit code: {result.returncode}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Rich Output
+
+Format terminal output:
+
+```python
+from codomyrmex.terminal_interface import TerminalFormatter
+
+fmt = TerminalFormatter()
+fmt.print_success("Build completed!")
+fmt.print_table(data, headers=["File", "Status"])
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `CommandRunner` | Execute commands |
+| `TerminalFormatter` | Format output |
+| `Shell` | Interactive shell |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

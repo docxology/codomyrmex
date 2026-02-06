@@ -1,7 +1,7 @@
 """Codomyrmex - A Modular, Extensible Coding Workspace.
 
-This package provides a comprehensive suite of specialized modules organized in a 
-four-layer architecture for AI-assisted software development, code analysis, 
+This package provides a comprehensive suite of specialized modules organized in a
+four-layer architecture for AI-assisted software development, code analysis,
 testing, documentation generation, and workflow automation.
 """
 
@@ -12,6 +12,7 @@ import pkgutil
 from pathlib import Path
 from typing import List
 
+
 def get_version() -> str:
     """Get the package version."""
     return __version__
@@ -20,7 +21,7 @@ def get_module_path() -> Path:
     """Get the absolute path to the package directory."""
     return Path(__file__).parent
 
-def list_modules() -> List[str]:
+def list_modules() -> list[str]:
     """List all available submodules in the package."""
     return [name for _, name, _ in pkgutil.iter_modules([str(get_module_path())])]
 
@@ -130,8 +131,7 @@ def __getattr__(name):
 # For backwards compatibility, still try to import core modules that don't have optional deps
 # These are the "always available" modules
 try:
-    from . import exceptions
-    from . import utils
+    from . import exceptions, utils
 except ImportError:
     pass
 

@@ -1,26 +1,7 @@
-from pathlib import Path
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Clean up AGENTS.md files by removing incorrectly added items from Operating Contracts sections.

@@ -3,7 +3,7 @@ Base cache interface.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -16,7 +16,7 @@ class Cache(ABC):
     """Abstract base class for cache implementations."""
 
     @abstractmethod
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get a value from the cache.
 
         Args:
@@ -28,7 +28,7 @@ class Cache(ABC):
         pass
 
     @abstractmethod
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set a value in the cache.
 
         Args:
@@ -94,7 +94,6 @@ class Cache(ABC):
             Number of keys deleted
         """
         # Default implementation - override in subclasses for better performance
-        import fnmatch
         keys_to_delete = []
         # This is a basic implementation - subclasses should override
         return 0

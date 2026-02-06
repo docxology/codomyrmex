@@ -1,50 +1,6 @@
-from typing import List
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Risk assessment methodologies."""
 
@@ -54,7 +10,7 @@ logger = get_logger(__name__)
 @dataclass
 class Risk:
     """Represents a security risk."""
-    
+
     risk_id: str
     description: str
     likelihood: str  # low, medium, high
@@ -65,48 +21,48 @@ class Risk:
 @dataclass
 class RiskAssessment:
     """Results of a risk assessment."""
-    
+
     assessment_id: str
-    risks: List[Risk]
+    risks: list[Risk]
     overall_risk_level: str
-    recommendations: List[str]
+    recommendations: list[str]
 
 
 class RiskAssessor:
     """Performs risk assessments."""
-    
+
     def __init__(self):
 
         logger.info("RiskAssessor initialized")
-    
+
     def assess(self, context: dict) -> RiskAssessment:
         """Perform a risk assessment."""
         risks = self._identify_risks(context)
-        
+
         overall_risk = self._calculate_overall_risk(risks)
         recommendations = self._generate_recommendations(risks)
-        
+
         assessment = RiskAssessment(
             assessment_id=f"assessment_{len(risks)}",
             risks=risks,
             overall_risk_level=overall_risk,
             recommendations=recommendations,
         )
-        
+
         logger.info("Completed risk assessment")
         return assessment
-    
-    def _identify_risks(self, context: dict) -> List[Risk]:
+
+    def _identify_risks(self, context: dict) -> list[Risk]:
         """Identify risks in context."""
         risks = []
         # Placeholder for actual risk identification
         return risks
-    
-    def _calculate_overall_risk(self, risks: List[Risk]) -> str:
+
+    def _calculate_overall_risk(self, risks: list[Risk]) -> str:
         """Calculate overall risk level."""
         if not risks:
             return "low"
-        
+
         avg_score = sum(r.risk_score for r in risks) / len(risks)
         if avg_score > 0.7:
             return "high"
@@ -114,8 +70,8 @@ class RiskAssessor:
             return "medium"
         else:
             return "low"
-    
-    def _generate_recommendations(self, risks: List[Risk]) -> List[str]:
+
+    def _generate_recommendations(self, risks: list[Risk]) -> list[str]:
         """Generate risk mitigation recommendations."""
         recommendations = []
         # Placeholder for actual recommendation generation
@@ -136,6 +92,6 @@ def calculate_risk_score(likelihood: str, impact: str) -> float:
     """Calculate risk score from likelihood and impact."""
     likelihood_scores = {"low": 0.25, "medium": 0.5, "high": 0.75}
     impact_scores = {"low": 0.25, "medium": 0.5, "high": 0.75, "critical": 1.0}
-    
+
     return likelihood_scores.get(likelihood, 0.5) * impact_scores.get(impact, 0.5)
 

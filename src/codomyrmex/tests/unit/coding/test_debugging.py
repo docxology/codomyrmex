@@ -1,20 +1,22 @@
-import pytest
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
+
+import pytest
+
 from codomyrmex.coding.debugging import (
+    Debugger,
     ErrorAnalyzer,
     ErrorDiagnosis,
-    PatchGenerator,
-    FixVerifier,
     Patch,
-    Debugger
+    PatchGenerator,
 )
+
 
 @pytest.mark.unit
 class TestErrorAnalyzer(unittest.TestCase):
     def setUp(self):
         self.analyzer = ErrorAnalyzer()
-        
+
     def test_parse_python_syntax_error(self):
         stderr = 'File "test.py", line 1\n    if True\n          ^\nSyntaxError: invalid syntax'
         diagnosis = self.analyzer.analyze("", stderr, 1)
@@ -42,12 +44,12 @@ class TestPatchGenerator(unittest.TestCase):
     def setUp(self):
         self.mock_llm = MagicMock()
         self.generator = PatchGenerator(llm_client=self.mock_llm)
-        
+
     def test_generate_no_file_path(self):
         diagnosis = ErrorDiagnosis("Error", "msg")
         patches = self.generator.generate("code", diagnosis)
         self.assertEqual(patches, [])
-        
+
     def test_generate_llm_call(self):
         # We just test that the prompt construction doesn't crash
         # Since we mocked the LLM response to be empty/nothing in our placeholder impl
@@ -63,23 +65,23 @@ class TestDebugger(unittest.TestCase):
         self.debugger.analyzer = MagicMock()
         self.debugger.patcher = MagicMock()
         self.debugger.verifier = MagicMock()
-        
+
     def test_debug_flow_success(self):
         # Setup mocks
         diagnosis = ErrorDiagnosis("ValError", "fail", "f.py", 1)
         self.debugger.analyzer.analyze.return_value = diagnosis
-        
+
         mypatch = Patch("f.py", "diff", "fix it", 0.9)
         self.debugger.patcher.generate.return_value = [mypatch]
-        
+
         # Verify success
         verification = MagicMock()
         verification.success = True
         self.debugger.verifier.verify.return_value = verification
-        
+
         # Run
         result = self.debugger.debug("source", "out", "err", 1)
-        
+
         # Assertions
         self.debugger.analyzer.analyze.assert_called_once()
         self.debugger.patcher.generate.assert_called_once()

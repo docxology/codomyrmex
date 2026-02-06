@@ -1,26 +1,50 @@
-# Personal AI Infrastructure - Cache Context
+# Personal AI Infrastructure — Cache Module
 
-**Module**: cache
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Caching infrastructure with pluggable backends (memory, Redis, file) for improved performance and data persistence.
+The Cache module provides PAI integration for caching LLM responses and computed results.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Response Caching
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Cache LLM responses:
 
-## Key Files
+```python
+from codomyrmex.cache import LLMCache
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+cache = LLMCache()
 
-## Future Considerations
+# Check cache first
+cached = cache.get(prompt_hash)
+if cached:
+    return cached
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+# Store new response
+cache.set(prompt_hash, response, ttl=3600)
+```
+
+### Multi-Backend
+
+Use different cache backends:
+
+```python
+from codomyrmex.cache import MemoryCache, RedisCache
+
+memory = MemoryCache(max_size=1000)
+redis = RedisCache(url="redis://localhost")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `LLMCache` | Cache LLM responses |
+| `MemoryCache` | In-memory caching |
+| `RedisCache` | Distributed caching |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

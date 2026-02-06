@@ -5,9 +5,8 @@ This module provides the main plugin management interface, coordinating
 plugin discovery, validation, loading, and lifecycle management.
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Callable
-from concurrent.futures import ThreadPoolExecutor
+from typing import Any
+from collections.abc import Callable
 
 # Import logging
 try:
@@ -18,9 +17,16 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 # Import plugin system components
-from .plugin_registry import PluginRegistry, Plugin, PluginInfo, PluginType, PluginState, Hook
+from .plugin_loader import LoadResult, PluginLoader
+from .plugin_registry import (
+    Hook,
+    Plugin,
+    PluginInfo,
+    PluginRegistry,
+    PluginState,
+    PluginType,
+)
 from .plugin_validator import PluginValidator, ValidationResult
-from .plugin_loader import PluginLoader, LoadResult
 
 
 class PluginManager:
@@ -28,7 +34,7 @@ class PluginManager:
     Central plugin management system for Codomyrmex.
     """
 
-    def __init__(self, plugin_directories: Optional[List[str]] = None):
+    def __init__(self, plugin_directories: list[str] | None = None):
         """Initialize the plugin manager."""
         self.registry = PluginRegistry()
         self.validator = PluginValidator()
@@ -41,7 +47,7 @@ class PluginManager:
 
         logger.info("PluginManager initialized")
 
-    def discover_plugins(self) -> List[PluginInfo]:
+    def discover_plugins(self) -> list[PluginInfo]:
         """Discover available plugins."""
         logger.info("Discovering plugins...")
         plugins = self.loader.discover_plugins()
@@ -51,7 +57,7 @@ class PluginManager:
         """Validate a plugin for security and compatibility."""
         return self.validator.validate_plugin(plugin_path)
 
-    def load_plugin(self, plugin_name: str, config: Optional[Dict[str, Any]] = None) -> LoadResult:
+    def load_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
         """Load and initialize a plugin."""
         logger.info(f"Loading plugin: {plugin_name}")
 
@@ -75,7 +81,7 @@ class PluginManager:
                 return LoadResult(
                     plugin_name=plugin_name,
                     success=False,
-                    error_message=f"Plugin validation failed",
+                    error_message="Plugin validation failed",
                     warnings=[issue['message'] for issue in validation_result.issues + validation_result.warnings]
                 )
 
@@ -95,7 +101,7 @@ class PluginManager:
             self.registry.unregister(plugin_name)
         return success
 
-    def reload_plugin(self, plugin_name: str, config: Optional[Dict[str, Any]] = None) -> LoadResult:
+    def reload_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
         """Reload a plugin."""
         return self.loader.reload_plugin(plugin_name, config)
 
@@ -115,15 +121,15 @@ class PluginManager:
             return True
         return False
 
-    def get_plugin(self, plugin_name: str) -> Optional[Plugin]:
+    def get_plugin(self, plugin_name: str) -> Plugin | None:
         """Get a loaded plugin instance."""
         return self.registry.get(plugin_name)
 
-    def list_plugins(self, filter_type: Optional[PluginType] = None, include_loaded: bool = True) -> List[PluginInfo]:
+    def list_plugins(self, filter_type: PluginType | None = None, include_loaded: bool = True) -> list[PluginInfo]:
         """List available plugins."""
         return self.registry.list_plugins(filter_type)
 
-    def get_plugin_status(self, plugin_name: str) -> Dict[str, Any]:
+    def get_plugin_status(self, plugin_name: str) -> dict[str, Any]:
         """Get status of a plugin."""
         status = {
             "name": plugin_name,
@@ -154,7 +160,7 @@ class PluginManager:
 
         return status
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> dict[str, Any]:
         """Get overall plugin system status."""
         all_plugins = self.registry.list_plugins()
         loaded_plugins = self.loader.get_loaded_plugins()
@@ -170,13 +176,13 @@ class PluginManager:
             status_counts["by_state"][plugin.get_state().value] = status_counts["by_state"].get(plugin.get_state().value, 0) + 1
         return {"status_counts": status_counts, "system_health": "healthy"}
 
-    def register_hook(self, hook_name: str, signature: Optional[Callable] = None, description: str = "") -> Hook:
+    def register_hook(self, hook_name: str, signature: Callable | None = None, description: str = "") -> Hook:
         """Register a global hook."""
         hook = self.registry.register_global_hook(hook_name, signature, description)
         logger.info(f"Registered global hook: {hook_name}")
         return hook
 
-    def emit_hook(self, hook_name: str, *args, **kwargs) -> List[Any]:
+    def emit_hook(self, hook_name: str, *args, **kwargs) -> list[Any]:
         """Emit a global hook."""
         return self.registry.emit_global_hook(hook_name, *args, **kwargs)
 
@@ -192,6 +198,6 @@ def get_plugin_manager() -> PluginManager:
         get_plugin_manager._manager = PluginManager()
     return get_plugin_manager._manager
 
-def discover_plugins() -> List[PluginInfo]: return get_plugin_manager().discover_plugins()
+def discover_plugins() -> list[PluginInfo]: return get_plugin_manager().discover_plugins()
 def load_plugin(name: str, config=None) -> LoadResult: return get_plugin_manager().load_plugin(name, config)
 def unload_plugin(name: str) -> bool: return get_plugin_manager().unload_plugin(name)

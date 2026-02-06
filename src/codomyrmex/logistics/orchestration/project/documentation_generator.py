@@ -4,10 +4,10 @@ This module generates README.md and AGENTS.md files for projects and their
 nested directories based on templates and project metadata.
 """
 
-from pathlib import Path
-from typing import Any, Optional
 import logging
 import re
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -20,7 +20,7 @@ except ImportError:
 class DocumentationGenerator:
     """Generates documentation files for projects and nested directories."""
 
-    def __init__(self, templates_dir: Optional[Path] = None):
+    def __init__(self, templates_dir: Path | None = None):
         """Initialize the documentation generator."""
         self.templates_dir = (
             templates_dir
@@ -29,7 +29,7 @@ class DocumentationGenerator:
         )
         self.templates_dir.mkdir(parents=True, exist_ok=True)
 
-    def _load_template(self, template_name: str) -> Optional[str]:
+    def _load_template(self, template_name: str) -> str | None:
         """Load a template file."""
         template_path = self.templates_dir / template_name
         if template_path.exists():
@@ -91,7 +91,7 @@ class DocumentationGenerator:
         version: str,
         author: str,
         created_at: str,
-        template: Optional[str] = None,
+        template: str | None = None,
     ) -> bool:
         """Generate README.md for the project root."""
         # Try to load custom template, otherwise use default
@@ -133,7 +133,7 @@ class DocumentationGenerator:
         project_type: str,
         description: str,
         nested_dirs: list[str],
-        template: Optional[str] = None,
+        template: str | None = None,
     ) -> bool:
         """Generate AGENTS.md for the project root."""
         template_content = None
@@ -176,8 +176,8 @@ class DocumentationGenerator:
         dir_name: str,
         project_name: str,
         project_type: str,
-        parent_path: Optional[Path] = None,
-        template: Optional[str] = None,
+        parent_path: Path | None = None,
+        template: str | None = None,
     ) -> bool:
         """Generate README.md for a nested directory."""
         template_content = None
@@ -229,8 +229,8 @@ class DocumentationGenerator:
         dir_name: str,
         project_name: str,
         project_type: str,
-        parent_path: Optional[Path] = None,
-        template: Optional[str] = None,
+        parent_path: Path | None = None,
+        template: str | None = None,
     ) -> bool:
         """Generate AGENTS.md for a nested directory."""
         template_content = None
@@ -284,8 +284,8 @@ class DocumentationGenerator:
         author: str,
         created_at: str,
         nested_dirs: list[str],
-        template: Optional[str] = None,
-        doc_links: Optional[dict[str, Any]] = None,
+        template: str | None = None,
+        doc_links: dict[str, Any] | None = None,
     ) -> bool:
         """Generate all documentation for a project and its nested directories."""
         if doc_links is None:

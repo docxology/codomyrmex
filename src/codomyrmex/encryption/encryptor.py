@@ -9,20 +9,19 @@ This module provides cryptographic operations including:
 - Secure hashing functions
 """
 import base64
+import hashlib
 import os
 import warnings
-from typing import Optional, Tuple
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, padding, serialization
-from cryptography.hazmat.primitives.asymmetric import padding as asym_padding, rsa
+from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import hashlib
 
 from codomyrmex.exceptions import EncryptionError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
 
 logger = get_logger(__name__)
 
@@ -367,7 +366,7 @@ class Encryptor:
         """
         return os.urandom(length)
 
-    def generate_key_pair(self, key_size: int = 2048) -> Tuple[bytes, bytes]:
+    def generate_key_pair(self, key_size: int = 2048) -> tuple[bytes, bytes]:
         """Generate RSA key pair.
 
         Args:

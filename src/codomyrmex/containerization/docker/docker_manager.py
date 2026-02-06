@@ -1,116 +1,12 @@
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
 import os
 import sys
-
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Any
 
 import docker
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Docker Manager for Codomyrmex Containerization Module."""
 
@@ -133,7 +29,7 @@ class ContainerConfig:
 
     image_name: str
     tag: str = "latest"
-    dockerfile_path: Optional[str] = None
+    dockerfile_path: str | None = None
     build_context: str = "."
     build_args: dict[str, str] = field(default_factory=dict)
     environment: dict[str, str] = field(default_factory=dict)
@@ -160,7 +56,7 @@ class DockerManager:
     - Docker Compose integration
     """
 
-    def __init__(self, docker_host: Optional[str] = None):
+    def __init__(self, docker_host: str | None = None):
         """
         Initialize the Docker manager.
 
@@ -191,7 +87,7 @@ class DockerManager:
         self,
         config: ContainerConfig,
         push: bool = False,
-        registry_auth: Optional[dict[str, str]] = None,
+        registry_auth: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """
         Build a Docker image from configuration.
@@ -628,7 +524,7 @@ class DockerManager:
             logger.error(f"Failed to get Docker info: {e}")
             return {"available": False, "error": str(e)}
 
-    def optimize_container_image(self, base_image: str, requirements: List[str]) -> str:
+    def optimize_container_image(self, base_image: str, requirements: list[str]) -> str:
         """
         Optimize container image selection based on requirements.
 
@@ -671,7 +567,7 @@ class DockerManager:
 
         return base_image  # Return original if no optimization found
 
-    def analyze_image_size(self, image_name: str) -> Dict[str, Any]:
+    def analyze_image_size(self, image_name: str) -> dict[str, Any]:
         """
         Analyze Docker image size and layer information.
 
@@ -733,7 +629,7 @@ class DockerManager:
             logger.error(f"Failed to analyze image {image_name}: {e}")
             return {"error": str(e)}
 
-    def get_image_layers(self, image_name: str) -> List[Dict[str, Any]]:
+    def get_image_layers(self, image_name: str) -> list[dict[str, Any]]:
         """
         Get detailed information about image layers.
 
@@ -775,7 +671,7 @@ class DockerManager:
 def build_containers(
     config: ContainerConfig,
     push: bool = False,
-    registry_auth: Optional[dict[str, str]] = None,
+    registry_auth: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """
     Convenience function to build containers.

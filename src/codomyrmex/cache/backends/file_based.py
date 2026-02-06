@@ -7,7 +7,7 @@ import pickle
 import tempfile
 import time
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 class FileBasedCache(Cache):
     """File-based cache implementation."""
 
-    def __init__(self, cache_dir: Optional[Path] = None, default_ttl: Optional[int] = None):
+    def __init__(self, cache_dir: Path | None = None, default_ttl: int | None = None):
         """Initialize file-based cache.
 
         Args:
@@ -44,7 +44,7 @@ class FileBasedCache(Cache):
         key_hash = hashlib.md5(key.encode()).hexdigest()
         return self.cache_dir / f"{key_hash}.meta"
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get a value from the cache."""
         self._stats.total_requests += 1
 
@@ -57,7 +57,7 @@ class FileBasedCache(Cache):
 
         try:
             # Read metadata
-            with open(meta_path, "r") as f:
+            with open(meta_path) as f:
                 meta = json.load(f)
 
             # Check expiration
@@ -79,7 +79,7 @@ class FileBasedCache(Cache):
             self._stats.misses += 1
             return None
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set a value in the cache."""
         file_path = self._get_file_path(key)
         meta_path = self._get_meta_path(key)
@@ -145,7 +145,7 @@ class FileBasedCache(Cache):
 
         try:
             # Check expiration
-            with open(meta_path, "r") as f:
+            with open(meta_path) as f:
                 meta = json.load(f)
 
             if meta.get("ttl") is not None:

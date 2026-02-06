@@ -4,7 +4,6 @@ This module provides the main Scraper class that serves as the primary
 interface for scraping operations, delegating to provider-specific adapters.
 """
 
-from typing import List, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -40,7 +39,7 @@ class Scraper(BaseScraper):
         ```
     """
 
-    def __init__(self, config: Optional[ScrapeConfig] = None, adapter: Optional[BaseScraper] = None):
+    def __init__(self, config: ScrapeConfig | None = None, adapter: BaseScraper | None = None):
         """Initialize the scraper.
 
         Args:
@@ -74,7 +73,7 @@ class Scraper(BaseScraper):
 
         logger.debug(f"Scraper initialized with config: {self.config.to_dict()}")
 
-    def scrape(self, url: str, options: Optional[ScrapeOptions] = None) -> ScrapeResult:
+    def scrape(self, url: str, options: ScrapeOptions | None = None) -> ScrapeResult:
         """Scrape a single URL.
 
         Args:
@@ -103,7 +102,7 @@ class Scraper(BaseScraper):
             logger.error(f"Unexpected error scraping {url}: {e}")
             raise ScrapeError(f"Failed to scrape {url}: {e}") from e
 
-    def crawl(self, url: str, options: Optional[ScrapeOptions] = None) -> CrawlResult:
+    def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
         """Crawl a website starting from a URL.
 
         Args:
@@ -131,7 +130,7 @@ class Scraper(BaseScraper):
             logger.error(f"Unexpected error crawling {url}: {e}")
             raise ScrapeError(f"Failed to crawl {url}: {e}") from e
 
-    def map(self, url: str, search: Optional[str] = None) -> MapResult:
+    def map(self, url: str, search: str | None = None) -> MapResult:
         """Map the structure of a website.
 
         Args:
@@ -160,7 +159,7 @@ class Scraper(BaseScraper):
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
     def search(
-        self, query: str, options: Optional[ScrapeOptions] = None
+        self, query: str, options: ScrapeOptions | None = None
     ) -> SearchResult:
         """Search the web and optionally scrape results.
 
@@ -191,9 +190,9 @@ class Scraper(BaseScraper):
 
     def extract(
         self,
-        urls: List[str],
-        schema: Optional[dict] = None,
-        prompt: Optional[str] = None,
+        urls: list[str],
+        schema: dict | None = None,
+        prompt: str | None = None,
     ) -> ExtractResult:
         """Extract structured data from URLs using LLM.
 

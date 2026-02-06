@@ -1,27 +1,28 @@
+import unittest
+from unittest.mock import patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, MagicMock
 from codomyrmex.git_operations.api.github import (
+    add_comment,
+    close_issue,
     create_issue,
     list_issues,
-    close_issue,
-    add_comment,
-    GitHubAPIError
 )
+
 
 @pytest.mark.unit
 class TestGitHubIssues(unittest.TestCase):
-    
+
     @patch('codomyrmex.git_operations.api.github.requests.post')
     @patch('codomyrmex.git_operations.api.github._validate_github_token')
     def test_create_issue(self, mock_validate, mock_post):
         mock_validate.return_value = "fake_token"
         mock_post.return_value.status_code = 201
         mock_post.return_value.json.return_value = {"number": 1, "title": "Test Issue"}
-        
+
         result = create_issue("owner", "repo", "Test Issue", "Body", ["bug"])
-        
+
         self.assertEqual(result["number"], 1)
         mock_post.assert_called_with(
             "https://api.github.com/repos/owner/repo/issues",
@@ -43,9 +44,9 @@ class TestGitHubIssues(unittest.TestCase):
             {"number": 1, "title": "Issue 1"},
             {"number": 2, "title": "PR 1", "pull_request": {}}
         ]
-        
+
         result = list_issues("owner", "repo")
-        
+
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["number"], 1)
 
@@ -55,9 +56,9 @@ class TestGitHubIssues(unittest.TestCase):
         mock_validate.return_value = "fake_token"
         mock_patch.return_value.status_code = 200
         mock_patch.return_value.json.return_value = {"number": 1, "state": "closed"}
-        
+
         result = close_issue("owner", "repo", 1)
-        
+
         self.assertEqual(result["state"], "closed")
         mock_patch.assert_called_with(
             "https://api.github.com/repos/owner/repo/issues/1",
@@ -75,9 +76,9 @@ class TestGitHubIssues(unittest.TestCase):
         mock_validate.return_value = "fake_token"
         mock_post.return_value.status_code = 201
         mock_post.return_value.json.return_value = {"id": 123, "body": "Comment"}
-        
+
         result = add_comment("owner", "repo", 1, "Comment")
-        
+
         self.assertEqual(result["id"], 123)
         mock_post.assert_called_with(
             "https://api.github.com/repos/owner/repo/issues/1/comments",

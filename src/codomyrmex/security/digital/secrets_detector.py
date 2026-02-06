@@ -6,8 +6,9 @@ Provides automated detection of secrets, credentials, and sensitive data in code
 import math
 import os
 import re
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Pattern, Tuple
+from dataclasses import dataclass
+from typing import Any
+from re import Pattern
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -27,7 +28,7 @@ class SecretFinding:
     end_index: int = 0
     entropy: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert finding to dictionary."""
         return {
             "file_path": self.file_path,
@@ -55,17 +56,17 @@ class SecretsDetector:
 
     # Files to exclude
     EXCLUDE_FILES = {
-        ".git", ".env.example", "package-lock.json", "yarn.lock", 
+        ".git", ".env.example", "package-lock.json", "yarn.lock",
         ".jpg", ".png", ".gif", ".ico", ".pdf", ".pyc"
     }
-    
+
     # Entropy threshold (Shannon entropy)
     ENTROPY_THRESHOLD = 4.5
 
-    def __init__(self, patterns: Optional[Dict[str, str]] = None):
+    def __init__(self, patterns: dict[str, str] | None = None):
         """Initialize detector."""
         self.patterns = patterns or self.PATTERNS.copy()
-        self.compiled_patterns: Dict[str, Pattern] = {}
+        self.compiled_patterns: dict[str, Pattern] = {}
         self._compile_patterns()
 
     def _compile_patterns(self):
@@ -76,46 +77,46 @@ class SecretsDetector:
             except re.error as e:
                 logger.error(f"Invalid regex for {name}: {e}")
 
-    def scan_file(self, file_path: str) -> List[SecretFinding]:
+    def scan_file(self, file_path: str) -> list[SecretFinding]:
         """Scan a single file for secrets."""
         findings = []
         if self._should_skip(file_path):
             return findings
 
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding='utf-8', errors='ignore') as f:
                 lines = f.readlines()
-                
+
             for i, line in enumerate(lines, 1):
                 findings.extend(self._scan_line(line, i, file_path))
-                
+
         except Exception as e:
             logger.debug(f"Error scanning file {file_path}: {e}")
-            
+
         return findings
 
-    def scan_directory(self, directory_path: str, recursive: bool = True) -> List[SecretFinding]:
+    def scan_directory(self, directory_path: str, recursive: bool = True) -> list[SecretFinding]:
         """Scan a directory for secrets."""
         all_findings = []
-        
+
         for root, dirs, files in os.walk(directory_path):
             # Skip excluded dirs
             dirs[:] = [d for d in dirs if d not in self.EXCLUDE_FILES and not d.startswith('.')]
-            
+
             for file in files:
                 file_path = os.path.join(root, file)
                 all_findings.extend(self.scan_file(file_path))
-                
+
             if not recursive:
                 break
-                
+
         return all_findings
 
-    def _scan_line(self, line: str, line_number: int, file_path: str) -> List[SecretFinding]:
+    def _scan_line(self, line: str, line_number: int, file_path: str) -> list[SecretFinding]:
         """Scan a line for secrets."""
         line_findings = []
         stripped = line.strip()
-        
+
         if not stripped or stripped.startswith(('#', '//', '/*', '*', '"""', "'''")):
             return []
 
@@ -151,7 +152,7 @@ class SecretsDetector:
                         description=f"High entropy string detected (entropy: {entropy:.2f})",
                         entropy=entropy
                     ))
-        
+
         return line_findings
 
     def _shannon_entropy(self, data: str) -> float:
@@ -177,12 +178,12 @@ class SecretsDetector:
 
 
 # Convenience functions
-def scan_secrets(target_path: str, recursive: bool = True) -> List[Dict[str, Any]]:
+def scan_secrets(target_path: str, recursive: bool = True) -> list[dict[str, Any]]:
     """Convenience function to scan for secrets."""
     detector = SecretsDetector()
     if os.path.isfile(target_path):
         findings = detector.scan_file(target_path)
     else:
         findings = detector.scan_directory(target_path, recursive)
-        
+
     return [f.to_dict() for f in findings]

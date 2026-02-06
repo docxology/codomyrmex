@@ -1,32 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/networking
+# Agent Guidelines - Networking
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Network utilities: HTTP clients, sockets, protocols, and DNS.
 
-Networking module providing HTTP client utilities, WebSocket support, and API client generation. Integrates with api and scrape modules for network operations.
+## Key Classes
 
-## Active Components
+- **HTTPClient** — Async HTTP client with retries
+- **SocketManager** — TCP/UDP socket handling
+- **DNSResolver** — DNS lookups and caching
+- **NetworkMonitor** — Network health checks
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `exceptions.py` – Project file
-- `http_client.py` – Project file
-- `raw_sockets.py` – Project file
-- `ssh_sftp.py` – Project file
-- `websocket_client.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use async** — Prefer async for concurrent requests
+2. **Set timeouts** — Always configure timeouts
+3. **Retry transients** — Retry on network errors
+4. **Pool connections** — Reuse HTTP connections
+5. **Cache DNS** — Cache DNS lookups
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.networking import (
+    HTTPClient, SocketManager, DNSResolver
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# HTTP client with retry
+client = HTTPClient(
+    timeout=30,
+    retries=3,
+    backoff_factor=1.5
+)
+
+response = await client.get("https://api.example.com/data")
+print(response.json())
+
+# Socket communication
+socket = SocketManager()
+socket.connect("server.example.com", 8080)
+socket.send(b"Hello")
+data = socket.receive()
+
+# DNS resolution
+resolver = DNSResolver(cache_ttl=300)
+ips = resolver.resolve("example.com")
+```
+
+## Testing Patterns
+
+```python
+# Verify HTTP client
+client = HTTPClient()
+# Use mock server or responses library
+response = await client.get("http://httpbin.org/get")
+assert response.status_code == 200
+
+# Verify DNS resolver
+resolver = DNSResolver()
+ips = resolver.resolve("localhost")
+assert "127.0.0.1" in ips
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

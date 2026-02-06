@@ -1,26 +1,44 @@
-# Personal AI Infrastructure - Fpf Context
+# Personal AI Infrastructure — FPF Module
 
-**Module**: fpf
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Fractal Percolation Field framework for emergent computation patterns and scale-invariant processing.
+The FPF module provides PAI integration for Firewall-Proxy-Format security patterns.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Input Filtering
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Filter AI inputs:
 
-## Key Files
+```python
+from codomyrmex.fpf import Firewall
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+firewall = Firewall()
+firewall.add_rule("block_pii", patterns=[r"\d{3}-\d{2}-\d{4}"])
+safe = firewall.filter(user_input)
+```
 
-## Future Considerations
+### Output Formatting
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Format AI outputs:
+
+```python
+from codomyrmex.fpf import Formatter
+
+formatter = Formatter()
+formatted = formatter.apply(ai_response, format="json")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Firewall` | Filter inputs |
+| `Proxy` | Intercept requests |
+| `Formatter` | Format outputs |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

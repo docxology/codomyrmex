@@ -3,9 +3,9 @@
 Handles loading and parsing YAML skill files with merge logic.
 """
 
-from pathlib import Path
-from typing import Any, Dict, Optional
 import logging
+from pathlib import Path
+from typing import Any
 
 try:
     import yaml
@@ -23,7 +23,7 @@ except ImportError:
 class SkillLoader:
     """Loads and parses YAML skill files with merge logic."""
 
-    def __init__(self, upstream_dir: Path, custom_dir: Path, cache_dir: Optional[Path] = None):
+    def __init__(self, upstream_dir: Path, custom_dir: Path, cache_dir: Path | None = None):
         """
         Initialize SkillLoader.
 
@@ -35,7 +35,7 @@ class SkillLoader:
         self.upstream_dir = Path(upstream_dir)
         self.custom_dir = Path(custom_dir)
         self.cache_dir = Path(cache_dir) if cache_dir else None
-        self._cache: Dict[str, Dict[str, Any]] = {}
+        self._cache: dict[str, dict[str, Any]] = {}
 
         # Ensure directories exist
         self.custom_dir.mkdir(parents=True, exist_ok=True)
@@ -46,7 +46,7 @@ class SkillLoader:
             f"SkillLoader initialized: upstream={upstream_dir}, custom={custom_dir}, cache={cache_dir}"
         )
 
-    def load_skill_file(self, path: Path) -> Optional[Dict[str, Any]]:
+    def load_skill_file(self, path: Path) -> dict[str, Any] | None:
         """
         Load a skill file from disk.
 
@@ -65,7 +65,7 @@ class SkillLoader:
             return None
 
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 data = yaml.safe_load(f)
                 if not isinstance(data, dict):
                     logger.warning(f"Skill file does not contain a dictionary: {path}")
@@ -78,7 +78,7 @@ class SkillLoader:
             logger.error(f"Error loading skill file {path}: {e}")
             return None
 
-    def get_skill_paths(self, category: str, name: str) -> tuple[Optional[Path], Optional[Path]]:
+    def get_skill_paths(self, category: str, name: str) -> tuple[Path | None, Path | None]:
         """
         Get paths for upstream and custom skill files.
 
@@ -104,7 +104,7 @@ class SkillLoader:
 
         return upstream_path, custom_path
 
-    def get_merged_skill(self, category: str, name: str) -> Optional[Dict[str, Any]]:
+    def get_merged_skill(self, category: str, name: str) -> dict[str, Any] | None:
         """
         Get a skill with custom overrides applied.
 
@@ -162,14 +162,14 @@ class SkillLoader:
 
         return merged
 
-    def load_all_skills(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
+    def load_all_skills(self) -> dict[str, dict[str, dict[str, Any]]]:
         """
         Load all available skills from both upstream and custom directories.
 
         Returns:
             Dictionary mapping category -> name -> skill_data
         """
-        all_skills: Dict[str, Dict[str, Dict[str, Any]]] = {}
+        all_skills: dict[str, dict[str, dict[str, Any]]] = {}
 
         # Load from upstream
         if self.upstream_dir.exists():
@@ -220,7 +220,7 @@ class SkillLoader:
 
         return all_skills
 
-    def merge_skills(self, upstream: Dict[str, Any], custom: Dict[str, Any]) -> Dict[str, Any]:
+    def merge_skills(self, upstream: dict[str, Any], custom: dict[str, Any]) -> dict[str, Any]:
         """
         Merge upstream and custom skills (custom overrides upstream).
 

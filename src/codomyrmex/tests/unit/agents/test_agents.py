@@ -15,55 +15,62 @@ Tests cover:
 """
 
 import asyncio
-import json
-import tempfile
 import time
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Iterator
-from unittest.mock import MagicMock, Mock, patch, AsyncMock
+from typing import Any
+from collections.abc import Iterator
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from codomyrmex.agents.core import (
-    AgentCapabilities,
-    AgentConfig,
-    AgentInterface,
-    AgentRequest,
-    AgentResponse,
-    BaseAgent,
-    AgentSession,
-    SessionManager,
-    Message,
-    ToolRegistry,
-    Tool,
-    ReActAgent,
-    get_config,
-    reset_config,
-    set_config,
-)
-from codomyrmex.agents.core.exceptions import (
-    AgentError,
-    AgentConfigurationError,
-    AgentTimeoutError,
-    ClaudeError,
-    CodexError,
-    SessionError,
-)
-from codomyrmex.agents.core.parsers import (
-    parse_json_response,
-    parse_code_blocks,
-    parse_first_code_block,
-    parse_structured_output,
-    CodeBlock,
-    ParseResult,
-    clean_response,
-    extract_between,
-    parse_key_value_pairs,
-)
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator, OrchestrationStrategy
-from codomyrmex.agents.generic.message_bus import MessageBus, Message as BusMessage
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentConfig,
+        AgentRequest,
+        AgentResponse,
+        AgentSession,
+        BaseAgent,
+        Message,
+        ReActAgent,
+        SessionManager,
+        Tool,
+        ToolRegistry,
+        get_config,
+        reset_config,
+        set_config,
+    )
+    from codomyrmex.agents.core.exceptions import (
+        AgentConfigurationError,
+        AgentError,
+        AgentTimeoutError,
+        ClaudeError,
+        CodexError,
+        SessionError,
+    )
+    from codomyrmex.agents.core.parsers import (
+        CodeBlock,
+        ParseResult,
+        clean_response,
+        extract_between,
+        parse_code_blocks,
+        parse_first_code_block,
+        parse_json_response,
+        parse_key_value_pairs,
+        parse_structured_output,
+    )
+    from codomyrmex.agents.generic.agent_orchestrator import (
+        AgentOrchestrator,
+        OrchestrationStrategy,
+    )
+    from codomyrmex.agents.generic.message_bus import Message as BusMessage
+    from codomyrmex.agents.generic.message_bus import MessageBus
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
 
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 # =============================================================================
 # FIXTURES

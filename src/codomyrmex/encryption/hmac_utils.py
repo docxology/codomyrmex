@@ -6,8 +6,6 @@ standard library ``hmac`` module.
 
 import hashlib
 import hmac as _hmac
-from typing import Union
-
 
 _ALGORITHMS = {
     "sha256": hashlib.sha256,
@@ -17,8 +15,8 @@ _ALGORITHMS = {
 
 
 def compute_hmac(
-    data: Union[bytes, str],
-    key: Union[bytes, str],
+    data: bytes | str,
+    key: bytes | str,
     algorithm: str = "sha256",
 ) -> bytes:
     """Compute an HMAC digest.
@@ -48,8 +46,8 @@ def compute_hmac(
 
 
 def verify_hmac(
-    data: Union[bytes, str],
-    key: Union[bytes, str],
+    data: bytes | str,
+    key: bytes | str,
     expected_mac: bytes,
     algorithm: str = "sha256",
 ) -> bool:

@@ -19,8 +19,8 @@ except ImportError:
 
 # Only import the dark PDF modules if fitz is available
 if FITZ_AVAILABLE:
+    from codomyrmex.dark.pdf.dark_pdf_wrapper import _PRESETS, DarkPDF
     from codomyrmex.dark.pdf.filters import DarkPDFFilter, apply_dark_mode
-    from codomyrmex.dark.pdf.dark_pdf_wrapper import DarkPDF, _PRESETS
 else:
     DarkPDFFilter = None
     apply_dark_mode = None

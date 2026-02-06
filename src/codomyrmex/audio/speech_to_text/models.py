@@ -7,7 +7,6 @@ audio segments, word-level timing, and model configuration.
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 
 class WhisperModelSize(Enum):
@@ -149,8 +148,8 @@ class TranscriptionResult:
     language_probability: float = 1.0
     duration: float = 0.0
     processing_time: float = 0.0
-    model_size: Optional[WhisperModelSize] = None
-    source_path: Optional[Path] = None
+    model_size: WhisperModelSize | None = None
+    source_path: Path | None = None
 
     @property
     def word_count(self) -> int:
@@ -274,7 +273,7 @@ class TranscriptionConfig:
         vad_parameters: VAD filter parameters
     """
 
-    language: Optional[str] = None
+    language: str | None = None
     task: str = "transcribe"
     beam_size: int = 5
     best_of: int = 5
@@ -285,7 +284,7 @@ class TranscriptionConfig:
     no_speech_threshold: float = 0.6
     word_timestamps: bool = True
     vad_filter: bool = True
-    vad_parameters: Optional[dict] = None
+    vad_parameters: dict | None = None
 
 
 __all__ = [

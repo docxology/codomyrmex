@@ -5,7 +5,8 @@ Follows the GitAgent pattern — BaseAgent subclass with JSON command dispatch.
 
 import json
 import logging
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
@@ -36,9 +37,9 @@ class InfrastructureAgent(BaseAgent):
 
     def __init__(
         self,
-        clients: Optional[Dict[str, Any]] = None,
+        clients: dict[str, Any] | None = None,
         security_pipeline: Any = None,
-        config: Optional[Dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
     ):
         capabilities = [AgentCapabilities.CLOUD_INFRASTRUCTURE]
         if clients and any(
@@ -52,11 +53,11 @@ class InfrastructureAgent(BaseAgent):
             config=config,
         )
 
-        self._clients: Dict[str, Any] = clients or {}
+        self._clients: dict[str, Any] = clients or {}
         self._pipeline = security_pipeline
         if self._pipeline is None and CloudSecurityPipeline is not None:
             self._pipeline = CloudSecurityPipeline()
-        self._tool_registry: Dict[str, Tool] = {}
+        self._tool_registry: dict[str, Tool] = {}
 
     # ------------------------------------------------------------------
     # Class methods
@@ -68,7 +69,7 @@ class InfrastructureAgent(BaseAgent):
 
         Attempts to create each client type, silently skipping unavailable ones.
         """
-        clients: Dict[str, Any] = {}
+        clients: dict[str, Any] = {}
 
         # Compute
         try:
@@ -199,8 +200,8 @@ class InfrastructureAgent(BaseAgent):
     # ------------------------------------------------------------------
 
     def populate_tool_registry(
-        self, registry: Optional[Dict[str, Tool]] = None
-    ) -> Dict[str, Tool]:
+        self, registry: dict[str, Tool] | None = None
+    ) -> dict[str, Tool]:
         """Auto-generate Tool objects from client methods.
 
         Args:
@@ -219,7 +220,7 @@ class InfrastructureAgent(BaseAgent):
     # Introspection
     # ------------------------------------------------------------------
 
-    def available_services(self) -> List[str]:
+    def available_services(self) -> list[str]:
         """Return names of configured services."""
         return list(self._clients.keys())
 

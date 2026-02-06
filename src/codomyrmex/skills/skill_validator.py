@@ -3,9 +3,9 @@
 Validates YAML skill files against schema.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import logging
+from pathlib import Path
+from typing import Any
 
 try:
     import yaml
@@ -39,7 +39,7 @@ class SkillValidator:
         ]
         logger.info("SkillValidator initialized")
 
-    def validate_skill(self, skill_data: Dict[str, Any]) -> tuple[bool, List[str]]:
+    def validate_skill(self, skill_data: dict[str, Any]) -> tuple[bool, list[str]]:
         """
         Validate a skill data dictionary.
 
@@ -91,7 +91,7 @@ class SkillValidator:
         is_valid = len(errors) == 0
         return is_valid, errors
 
-    def validate_file(self, file_path: Path) -> tuple[bool, List[str]]:
+    def validate_file(self, file_path: Path) -> tuple[bool, list[str]]:
         """
         Validate a skill file.
 
@@ -108,7 +108,7 @@ class SkillValidator:
             return False, ["PyYAML not installed. Install with: pip install pyyaml"]
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 skill_data = yaml.safe_load(f)
 
             return self.validate_skill(skill_data)
@@ -116,7 +116,7 @@ class SkillValidator:
         except Exception as e:
             return False, [f"Error reading file: {e}"]
 
-    def validate_directory(self, directory: Path) -> Dict[str, tuple[bool, List[str]]]:
+    def validate_directory(self, directory: Path) -> dict[str, tuple[bool, list[str]]]:
         """
         Validate all skill files in a directory.
 

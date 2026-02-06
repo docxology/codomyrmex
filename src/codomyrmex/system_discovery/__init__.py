@@ -7,9 +7,9 @@ reports on system status, and provides interactive exploration tools.
 """
 
 from .capability_scanner import CapabilityScanner
+from .context import get_system_context
 from .discovery_engine import SystemDiscovery
 from .status_reporter import StatusReporter
-from .context import get_system_context
 
 __all__ = ["SystemDiscovery", "StatusReporter", "CapabilityScanner", "get_system_context"]
 

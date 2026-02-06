@@ -1,50 +1,8 @@
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 
@@ -58,7 +16,7 @@ class MCPErrorDetail(BaseModel):
     error_message: str = Field(
         ..., description="A descriptive message explaining the error."
     )
-    error_details: Optional[Union[dict[str, Any], str]] = Field(
+    error_details: dict[str, Any] | str | None = Field(
         None,
         description="Optional structured details or a string containing more info about the error.",
     )
@@ -83,14 +41,14 @@ class MCPToolResult(BaseModel):
         ...,
         description="The outcome of the tool execution (e.g., success, failure, no_change_needed).",
     )
-    data: Optional[dict[str, Any]] = Field(
+    data: dict[str, Any] | None = Field(
         None,
         description="The output data from the tool if successful. Schema is tool-specific.",
     )
-    error: Optional[MCPErrorDetail] = Field(
+    error: MCPErrorDetail | None = Field(
         None, description="Details of the error if execution failed."
     )
-    explanation: Optional[str] = Field(
+    explanation: str | None = Field(
         None, description="Optional human-readable explanation of the result."
     )
 
@@ -154,28 +112,28 @@ class MCPToolResult(BaseModel):
 
 class MCPMessage(BaseModel):
     """Represents a message in an MCP conversation."""
-    
+
     role: str = Field(..., description="Role of the message sender (e.g., 'user', 'assistant', 'system', 'tool').")
-    content: Optional[str] = Field(None, description="Text content of the message.")
-    tool_calls: Optional[list[MCPToolCall]] = Field(None, description="Tool calls made in this message.")
-    tool_results: Optional[list[MCPToolResult]] = Field(None, description="Results from tool executions.")
-    metadata: Optional[dict[str, Any]] = Field(None, description="Additional metadata for the message.")
-    
+    content: str | None = Field(None, description="Text content of the message.")
+    tool_calls: list[MCPToolCall] | None = Field(None, description="Tool calls made in this message.")
+    tool_results: list[MCPToolResult] | None = Field(None, description="Results from tool executions.")
+    metadata: dict[str, Any] | None = Field(None, description="Additional metadata for the message.")
+
     model_config = ConfigDict(extra="allow")
 
 
 class MCPToolRegistry:
     """Registry for managing available MCP tools."""
-    
+
     def __init__(self):
         """Initialize the tool registry."""
         self._tools: dict[str, dict[str, Any]] = {}
         logger.info("MCPToolRegistry initialized")
-        
+
     def register(self, tool_name: str, schema: dict[str, Any], handler: Optional[callable] = None) -> None:
         """
         Register a tool with the registry.
-        
+
         Args:
             tool_name: Unique name for the tool
             schema: JSON Schema describing the tool's arguments
@@ -187,14 +145,14 @@ class MCPToolRegistry:
             "handler": handler,
         }
         logger.debug(f"Registered tool: {tool_name}")
-        
+
     def unregister(self, tool_name: str) -> bool:
         """
         Remove a tool from the registry.
-        
+
         Args:
             tool_name: Name of the tool to remove
-            
+
         Returns:
             True if removed, False if not found
         """
@@ -203,53 +161,53 @@ class MCPToolRegistry:
             logger.debug(f"Unregistered tool: {tool_name}")
             return True
         return False
-        
-    def get(self, tool_name: str) -> Optional[dict[str, Any]]:
+
+    def get(self, tool_name: str) -> dict[str, Any] | None:
         """
         Get a tool's metadata by name.
-        
+
         Args:
             tool_name: Name of the tool
-            
+
         Returns:
             Tool metadata dict or None
         """
         return self._tools.get(tool_name)
-        
+
     def list_tools(self) -> list[str]:
         """
         List all registered tool names.
-        
+
         Returns:
             List of tool names
         """
         return list(self._tools.keys())
-        
-    def validate_call(self, tool_call: MCPToolCall) -> tuple[bool, Optional[str]]:
+
+    def validate_call(self, tool_call: MCPToolCall) -> tuple[bool, str | None]:
         """
         Validate a tool call against the registry.
-        
+
         Args:
             tool_call: The tool call to validate
-            
+
         Returns:
             Tuple of (is_valid, error_message)
         """
         tool = self._tools.get(tool_call.tool_name)
         if not tool:
             return False, f"Unknown tool: {tool_call.tool_name}"
-            
+
         # Basic schema validation could be added here
         # For now, just check tool exists
         return True, None
-        
+
     def execute(self, tool_call: MCPToolCall) -> MCPToolResult:
         """
         Execute a tool call using its registered handler.
-        
+
         Args:
             tool_call: The tool call to execute
-            
+
         Returns:
             MCPToolResult with execution outcome
         """
@@ -262,17 +220,17 @@ class MCPToolRegistry:
                     error_message=f"Tool '{tool_call.tool_name}' not registered"
                 )
             )
-            
+
         handler = tool.get("handler")
         if not handler:
             return MCPToolResult(
-                status="failure", 
+                status="failure",
                 error=MCPErrorDetail(
                     error_type="NoHandler",
                     error_message=f"No handler registered for tool '{tool_call.tool_name}'"
                 )
             )
-            
+
         try:
             result = handler(**tool_call.arguments)
             return MCPToolResult(

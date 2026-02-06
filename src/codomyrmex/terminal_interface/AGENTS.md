@@ -1,33 +1,62 @@
-# Codomyrmex Agents — src/codomyrmex/terminal_interface
+# Agent Guidelines - Terminal Interface
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Interactive shell, command execution, and terminal rendering.
 
-Provides rich CLI capabilities: colored output, progress bars, interactive prompts, and a custom shell (`codomyrmex>`). Foundation layer for all terminal-based user interactions.
+## Key Classes
 
-## Active Components
+- **InteractiveShell** — Interactive command shell
+- **CommandRunner** — Execute commands
+- **TerminalFormatter** — Rich terminal output
+- **CompletionProvider** — Tab completion
 
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `commands/` – Directory containing commands components
-- `completions/` – Directory containing completions components
-- `rendering/` – Directory containing rendering components
-- `shells/` – Directory containing shells components
-- `utils/` – Directory containing utils components
+## Agent Instructions
 
-## Operating Contracts
+1. **Use rich output** — Colors and formatting
+2. **Stream long output** — Don't buffer everything
+3. **Handle signals** — Ctrl+C gracefully
+4. **Validate input** — Check before execute
+5. **Log commands** — Track command history
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.terminal_interface import (
+    InteractiveShell, CommandRunner, TerminalFormatter
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Execute commands
+runner = CommandRunner()
+result = runner.run("ls -la")
+print(result.stdout)
+
+# Rich formatting
+fmt = TerminalFormatter()
+fmt.print_success("Operation completed!")
+fmt.print_error("Something went wrong")
+fmt.print_table(data, headers=["Name", "Value"])
+
+# Interactive shell
+shell = InteractiveShell()
+shell.register_command("status", show_status)
+shell.run()  # Start REPL
+```
+
+## Testing Patterns
+
+```python
+# Verify command execution
+runner = CommandRunner()
+result = runner.run("echo hello")
+assert "hello" in result.stdout
+
+# Verify formatter
+fmt = TerminalFormatter()
+output = fmt.format_success("Test")
+assert "Test" in output
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

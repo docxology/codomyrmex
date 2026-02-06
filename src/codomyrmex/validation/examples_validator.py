@@ -1,90 +1,25 @@
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
 import argparse
 import ast
 import concurrent.futures
 import json
-import os
-import re
 import subprocess
 import sys
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-import importlib.util
+from pathlib import Path
+from typing import Any
 
 try:
     import yaml
 except ImportError:
     yaml = None
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.utils.cli_helpers import (
     ensure_output_directory,
-    format_output,
-    print_error,
-    print_info,
     print_section,
-    print_success,
-    validate_file_path,
-    determine_language_from_file,
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__) if get_logger else None
 
@@ -113,9 +48,9 @@ class ValidationIssue:
     validation_type: ValidationType
     severity: ValidationSeverity
     message: str
-    details: Optional[str] = None
-    file_path: Optional[str] = None
-    line_number: Optional[int] = None
+    details: str | None = None
+    file_path: str | None = None
+    line_number: int | None = None
 
 
 @dataclass
@@ -123,8 +58,8 @@ class ModuleValidationResult:
     """Result of validating a single module."""
     module: str
     success: bool
-    issues: List[ValidationIssue] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    issues: list[ValidationIssue] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     duration: float = 0.0
 
 
@@ -143,41 +78,41 @@ class ExamplesValidator:
         self.root_dir = root_dir
         self.output_dir = output_dir
         self.parallel_jobs = parallel_jobs
-        
+
         # Ensure output directory exists
         ensure_output_directory(self.output_dir)
-        
+
         # Discover modules
         self.modules = self._discover_modules()
         logger.info(f"Discovered {len(self.modules)} modules to validate")
 
-    def _discover_modules(self) -> List[str]:
+    def _discover_modules(self) -> list[str]:
         """Discover all module directories in the examples/scripts folder."""
         # This logic needs to be robust to where it's called from.
         # Assuming typical structure: repo_root/scripts/[module]
-        
+
         # If root_dir is scripts/, look for subdirs
         modules = []
         skip_dirs = {
-            '__pycache__', '.git', '.idea', '.vscode', 'venv', 'node_modules', 
+            '__pycache__', '.git', '.idea', '.vscode', 'venv', 'node_modules',
             'examples', 'tests', 'validation', 'documentation', '_common', '_templates'
         }
-        
+
         # We might need to adjust this depending on if root_dir is 'scripts/' or repo root
         if (self.root_dir / 'scripts').exists():
             search_dir = self.root_dir / 'scripts'
         else:
             search_dir = self.root_dir
-            
+
         for item in search_dir.iterdir():
             if item.is_dir() and item.name not in skip_dirs and not item.name.startswith('_'):
                 # Check if it has an orchestrate.py or pure python scripts
                 if (item / 'orchestrate.py').exists() or any(item.glob('*.py')):
                     modules.append(item.name)
-                    
+
         return sorted(modules)
 
-    def validate_all(self, types: List[ValidationType], verbose: bool = False, fix: bool = False) -> Dict[str, Any]:
+    def validate_all(self, types: list[ValidationType], verbose: bool = False, fix: bool = False) -> dict[str, Any]:
         """
         Run all validation checks.
 
@@ -190,7 +125,7 @@ class ExamplesValidator:
             Dictionary containing the full validation report
         """
         start_time = time.time()
-        results: Dict[str, ModuleValidationResult] = {}
+        results: dict[str, ModuleValidationResult] = {}
 
         print_section("Starting Validation")
         print(f"checking {len(self.modules)} modules...")
@@ -201,18 +136,18 @@ class ExamplesValidator:
                 executor.submit(self._validate_module, module, types, fix): module
                 for module in self.modules
             }
-            
+
             for i, future in enumerate(concurrent.futures.as_completed(future_to_module)):
                 module = future_to_module[future]
                 try:
                     result = future.result()
                     results[module] = result
-                    
+
                     # Progress update
                     if verbose:
                         status = "✅" if result.success else "❌"
                         print(f"{status} {module} ({result.duration:.2f}s)")
-                        
+
                 except Exception as e:
                     logger.error(f"Error validating module {module}: {e}")
                     results[module] = ModuleValidationResult(
@@ -229,14 +164,14 @@ class ExamplesValidator:
         # Generate Report
         report = self._compile_report(results, time.time() - start_time)
         self._save_report(report)
-        
+
         return report
 
-    def _validate_module(self, module: str, types: List[ValidationType], fix: bool) -> ModuleValidationResult:
+    def _validate_module(self, module: str, types: list[ValidationType], fix: bool) -> ModuleValidationResult:
         """Validate a single module."""
         start_time = time.time()
         issues = []
-        
+
         module_path = self.root_dir / 'scripts' / module \
             if (self.root_dir / 'scripts').exists() else self.root_dir / module
 
@@ -258,7 +193,7 @@ class ExamplesValidator:
 
         duration = time.time() - start_time
         success = not any(i.severity in [ValidationSeverity.CRITICAL, ValidationSeverity.ERROR] for i in issues)
-        
+
         return ModuleValidationResult(
             module=module,
             success=success,
@@ -266,10 +201,10 @@ class ExamplesValidator:
             duration=duration
         )
 
-    def _validate_documentation(self, module: str, path: Path) -> List[ValidationIssue]:
+    def _validate_documentation(self, module: str, path: Path) -> list[ValidationIssue]:
         """Validate module documentation."""
         issues = []
-        
+
         # Check for README.md
         readme = path / "README.md"
         if not readme.exists():
@@ -279,12 +214,12 @@ class ExamplesValidator:
                 severity=ValidationSeverity.WARNING,
                 message="Missing README.md"
             ))
-        
+
         # Check orchestrate.py docstring
         orchestrator = path / "orchestrate.py"
         if orchestrator.exists():
             try:
-                with open(orchestrator, 'r') as f:
+                with open(orchestrator) as f:
                     tree = ast.parse(f.read())
                     if not ast.get_docstring(tree):
                          issues.append(ValidationIssue(
@@ -299,13 +234,13 @@ class ExamplesValidator:
 
         return issues
 
-    def _validate_configuration(self, module: str, path: Path) -> List[ValidationIssue]:
+    def _validate_configuration(self, module: str, path: Path) -> list[ValidationIssue]:
         """Validate configuration files."""
         issues = []
         # basic check for yaml/json validity
         for config_file in path.glob("*.yaml"):
             try:
-                with open(config_file, 'r') as f:
+                with open(config_file) as f:
                     yaml.safe_load(f)
             except Exception as e:
                 issues.append(ValidationIssue(
@@ -316,17 +251,17 @@ class ExamplesValidator:
                     details=str(e),
                     file_path=str(config_file)
                 ))
-                
+
         return issues
 
-    def _validate_test_references(self, module: str, path: Path) -> List[ValidationIssue]:
+    def _validate_test_references(self, module: str, path: Path) -> list[ValidationIssue]:
         """Validate references to tests."""
         issues = []
         # Scan python files for 'test_' imports or references
         # This is a placeholder for the more complex logic in the original script
         return issues
 
-    def _validate_execution(self, module: str, path: Path) -> List[ValidationIssue]:
+    def _validate_execution(self, module: str, path: Path) -> list[ValidationIssue]:
         """Validate execution (dry run)."""
         issues = []
         orchestrator = path / "orchestrate.py"
@@ -356,11 +291,11 @@ class ExamplesValidator:
                 ))
         return issues
 
-    def _compile_report(self, results: Dict[str, ModuleValidationResult], total_time: float) -> Dict[str, Any]:
+    def _compile_report(self, results: dict[str, ModuleValidationResult], total_time: float) -> dict[str, Any]:
         """Compile final report from results."""
         total_modules = len(results)
         successful_modules = sum(1 for r in results.values() if r.success)
-        
+
         all_issues = []
         for r in results.values():
             for i in r.issues:
@@ -371,14 +306,14 @@ class ExamplesValidator:
                     "message": i.message,
                     "details": i.details
                 })
-                
+
         severity_counts = {
             "critical":  len([i for i in all_issues if i["severity"] == "critical"]),
             "error": len([i for i in all_issues if i["severity"] == "error"]),
             "warning": len([i for i in all_issues if i["severity"] == "warning"]),
             "info": len([i for i in all_issues if i["severity"] == "info"]),
         }
-        
+
         # Calculate health score (0-100)
         # Deduct points for errors
         health_score = 100
@@ -411,7 +346,7 @@ class ExamplesValidator:
             "recommendations": self._generate_recommendations(results, severity_counts)
         }
 
-    def _generate_recommendations(self, results, severity_counts) -> List[str]:
+    def _generate_recommendations(self, results, severity_counts) -> list[str]:
         """Generate actionable recommendations."""
         recs = []
         if severity_counts["critical"] > 0:
@@ -422,15 +357,15 @@ class ExamplesValidator:
              recs.append("🟡 CLEANUP: High number of warnings, consider a cleanup sprint.")
         return recs
 
-    def _save_report(self, report: Dict[str, Any]) -> None:
+    def _save_report(self, report: dict[str, Any]) -> None:
         """Save validation report."""
         timestamp = time.strftime("%Y%m%d_%H%M%S")
-        
+
         # JSON
         json_file = self.output_dir / f"validation_report_{timestamp}.json"
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2)
-            
+
         print(f"\n📊 Report saved to {json_file}")
 
 
@@ -461,7 +396,7 @@ def main():
         default=[vt for vt in ValidationType],
         help="Comma-separated validation types"
     )
-    
+
     parser.add_argument(
         "--modules", "-m",
         action="append",
@@ -485,14 +420,14 @@ def main():
     # No, usually this is run from the project root.
     # Let's assume cwd is project root if it contains 'scripts' and 'src'
     # Otherwise try to resolve from __file__
-    
+
     cwd = Path.cwd()
     if (cwd / "scripts").exists() and (cwd / "src").exists():
         root_dir = cwd
     else:
         # Fallback: ../../../.. from src/codomyrmex/validation/validator.py
         root_dir = Path(__file__).resolve().parent.parent.parent.parent
-        
+
     args = parser.parse_args()
 
     validator = ExamplesValidator(root_dir, args.output_dir, args.parallel)

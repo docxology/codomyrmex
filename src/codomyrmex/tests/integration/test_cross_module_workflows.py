@@ -6,13 +6,11 @@ This integration test validates end-to-end workflows that span multiple modules,
 ensuring that different components work together seamlessly in complex scenarios.
 """
 
-import pytest
-import tempfile
 import os
-import json
+import tempfile
 import time
-from pathlib import Path
-from typing import Dict, Any, List
+
+import pytest
 
 # Import modules for integration testing (with availability checks)
 MODULE_AVAILABILITY = {}
@@ -24,7 +22,7 @@ except ImportError:
     MODULE_AVAILABILITY["ai_code_editing"] = False
 
 try:
-    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
+    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
@@ -66,7 +64,7 @@ except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -94,7 +92,7 @@ class TestCrossModuleWorkflows:
         import shutil
         shutil.rmtree(self.test_dir, ignore_errors=True)
 
-    def _create_test_project(self) -> Dict[str, str]:
+    def _create_test_project(self) -> dict[str, str]:
         """Create a test project with multiple files."""
         files = {}
 
@@ -356,7 +354,7 @@ for email in emails:
             benchmark_b = run_benchmark(lambda: algorithm_b(10000), iterations=5)
 
             # Step 3: Execute algorithms with resource monitoring
-            from codomyrmex.coding import execute_with_limits, ExecutionLimits
+            from codomyrmex.coding import ExecutionLimits, execute_with_limits
 
             code_a = f'''
 def algorithm_a(n):

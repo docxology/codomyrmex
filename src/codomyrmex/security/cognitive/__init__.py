@@ -9,8 +9,8 @@ assessment, and human factor security analysis.
 try:
     from .social_engineering_detector import (
         SocialEngineeringDetector,
-        detect_social_engineering,
         analyze_communication,
+        detect_social_engineering,
     )
     SOCIAL_ENGINEERING_AVAILABLE = True
 except ImportError:
@@ -35,8 +35,8 @@ except ImportError:
 try:
     from .awareness_training import (
         AwarenessTrainer,
-        create_training_module,
         assess_training_effectiveness,
+        create_training_module,
     )
     AWARENESS_TRAINING_AVAILABLE = True
 except ImportError:

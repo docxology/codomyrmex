@@ -7,7 +7,6 @@ voice information, and configuration.
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 
 class AudioFormat(Enum):
@@ -146,15 +145,15 @@ class TTSConfig:
         emotion: Emotion to convey (if supported)
     """
 
-    voice: Optional[str] = None
+    voice: str | None = None
     language: str = "en-US"
     rate: float = 1.0
     pitch: float = 1.0
     volume: float = 1.0
     format: AudioFormat = AudioFormat.WAV
     sample_rate: int = 22050
-    style: Optional[str] = None
-    emotion: Optional[str] = None
+    style: str | None = None
+    emotion: str | None = None
 
 
 @dataclass

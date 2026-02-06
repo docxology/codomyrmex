@@ -1,25 +1,25 @@
 
-import os
-import subprocess
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
 import pytest
+
 from codomyrmex.git_operations.core.git import (
     add_remote,
-    remove_remote,
-    list_remotes,
-    fetch_remote,
-    reset_changes,
-    revert_commit,
+    cherry_pick,
     clean_repository,
-    get_diff,
-    get_blame,
+    fetch_remote,
     get_commit_details,
     get_config,
-    set_config,
-    cherry_pick,
+    get_diff,
     init_submodules,
-    update_submodules
+    list_remotes,
+    remove_remote,
+    reset_changes,
+    revert_commit,
+    set_config,
+    update_submodules,
 )
+
 
 @pytest.fixture
 def repo_path(tmp_path):
@@ -42,7 +42,7 @@ def test_add_remote(mock_run, repo_path):
 def test_list_remotes(mock_run, repo_path):
     mock_run.return_value.returncode = 0
     mock_run.return_value.stdout = "origin\thttps://github.com/test/repo.git (fetch)\norigin\thttps://github.com/test/repo.git (push)\n"
-    
+
     remotes = list_remotes(repo_path)
     assert len(remotes) == 1
     assert remotes[0]["name"] == "origin"
@@ -105,7 +105,7 @@ def test_get_commit_details(mock_run, repo_path):
     mock_run.return_value.returncode = 0
     # format: hash|author|email|date|subject|body
     mock_run.return_value.stdout = "abc1234|Test User|test@example.com|2023-01-01|Commit Msg|Body content"
-    
+
     details = get_commit_details("abc1234", repo_path)
     assert details["hash"] == "abc1234"
     assert details["author"] == "Test User"
@@ -116,7 +116,7 @@ def test_config_ops(mock_run, repo_path):
     # Set config
     mock_run.return_value.returncode = 0
     assert set_config("user.name", "Tester", "local", repo_path) is True
-    
+
     # Get config
     mock_run.return_value.stdout = "Tester\n"
     assert get_config("user.name", repo_path) == "Tester"

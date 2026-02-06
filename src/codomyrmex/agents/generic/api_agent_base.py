@@ -1,33 +1,10 @@
-from typing import Any, Callable, Iterator, Optional, Type
-import time
+from typing import Any
+from collections.abc import Callable, Iterator
 
-from codomyrmex.agents.core.config import AgentConfig, get_config
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
-from codomyrmex.agents.core.exceptions import AgentError, AgentConfigurationError
+from codomyrmex.agents.core.config import AgentConfig, get_config
+from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Base class for API-based agents with common API patterns."""
 
@@ -46,11 +23,11 @@ class APIAgentBase(BaseAgent):
         timeout_config_key: str,
         max_tokens_config_key: str,
         temperature_config_key: str,
-        client_class: Type,
+        client_class: type,
         client_init_func: Callable[[str], Any],
-        error_class: Type[AgentError],
-        config: Optional[dict[str, Any]] = None,
-        agent_config: Optional[AgentConfig] = None,
+        error_class: type[AgentError],
+        config: dict[str, Any] | None = None,
+        agent_config: AgentConfig | None = None,
     ):
         """
         Initialize API agent base.
@@ -125,8 +102,8 @@ class APIAgentBase(BaseAgent):
         self,
         key: str,
         default: Any = None,
-        config: Optional[dict[str, Any]] = None,
-        agent_config: Optional[AgentConfig] = None,
+        config: dict[str, Any] | None = None,
+        agent_config: AgentConfig | None = None,
     ) -> Any:
         """
         Extract configuration value with fallback chain.
@@ -188,7 +165,7 @@ class APIAgentBase(BaseAgent):
         if not api_key:
             self.logger.warning(f"Connection test failed for {self.name}: No API key found")
             return False
-        
+
         # We could try a simple generation here if we want to be thorough
         # For now, presence of key is a basic check
         self.logger.info(f"Connection test passed for {self.name} (Key present)")
@@ -198,7 +175,7 @@ class APIAgentBase(BaseAgent):
         self,
         error: Exception,
         execution_time: float,
-        api_error_class: Optional[Type] = None,
+        api_error_class: type | None = None,
     ) -> None:
         """
         Handle API errors with standardized error conversion.
@@ -288,8 +265,8 @@ class APIAgentBase(BaseAgent):
         self,
         content: str,
         metadata: dict[str, Any],
-        tokens_used: Optional[int] = None,
-        execution_time: Optional[float] = None,
+        tokens_used: int | None = None,
+        execution_time: float | None = None,
     ) -> AgentResponse:
         """
         Build standardized AgentResponse from API response data.

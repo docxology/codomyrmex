@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Spatial Context
+# Personal AI Infrastructure — Spatial Module
 
-**Module**: spatial
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Spatial computing infrastructure for 2D/3D/4D geometry, physics, and world model rendering.
+The Spatial module provides PAI integration for geospatial operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Geospatial Operations
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Work with coordinates:
 
-## Key Files
+```python
+from codomyrmex.spatial import GeoPoint, distance
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+point1 = GeoPoint(lat=37.7749, lon=-122.4194)
+point2 = GeoPoint(lat=34.0522, lon=-118.2437)
 
-## Future Considerations
+dist = distance(point1, point2)
+print(f"Distance: {dist:.2f} km")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Spatial Indexing
+
+Index spatial data:
+
+```python
+from codomyrmex.spatial import SpatialIndex
+
+index = SpatialIndex()
+index.add(point, data)
+nearby = index.query_radius(center, radius=10)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `GeoPoint` | Coordinates |
+| `distance` | Calculate distance |
+| `SpatialIndex` | Spatial queries |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

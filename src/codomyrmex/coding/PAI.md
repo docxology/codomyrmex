@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Coding Context
+# Personal AI Infrastructure — Coding Module
 
-**Module**: coding
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Code development infrastructure for analysis, debugging, execution, review, and automated refactoring.
+The Coding module provides PAI integration for code generation and editing.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Code Generation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Generate code:
 
-## Key Files
+```python
+from codomyrmex.coding import CodeGenerator
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+generator = CodeGenerator()
+code = generator.generate_function(
+    name="greet", params=["name"], return_type="str"
+)
+```
 
-## Future Considerations
+### Code Editing
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Edit existing code:
+
+```python
+from codomyrmex.coding import CodeEditor
+
+editor = CodeEditor("src/main.py")
+editor.add_import("from datetime import datetime")
+editor.save()
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `CodeGenerator` | Generate code |
+| `CodeEditor` | Modify code |
+| `DiffApplier` | Apply diffs |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

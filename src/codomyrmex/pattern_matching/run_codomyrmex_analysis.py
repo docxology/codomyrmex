@@ -3,10 +3,9 @@
 Provides pattern matching analysis functionality.
 """
 
-import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -28,24 +27,24 @@ class AnalysisResult:
     """Result of pattern analysis."""
     total_files: int
     files_analyzed: int
-    matches: List[PatternMatch] = field(default_factory=list)
-    errors: List[str] = field(default_factory=list)
+    matches: list[PatternMatch] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
 
 class PatternAnalyzer:
     """Analyzes code for patterns."""
 
-    def __init__(self, patterns: Optional[Dict[str, str]] = None):
+    def __init__(self, patterns: dict[str, str] | None = None):
         """Initialize analyzer."""
         self.patterns = patterns or {}
 
-    def analyze_file(self, file_path: str) -> List[PatternMatch]:
+    def analyze_file(self, file_path: str) -> list[PatternMatch]:
         """Analyze a single file for patterns."""
         matches = []
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding='utf-8', errors='ignore') as f:
                 lines = f.readlines()
-            
+
             for i, line in enumerate(lines, 1):
                 for name, pattern in self.patterns.items():
                     if pattern in line:
@@ -57,10 +56,10 @@ class PatternAnalyzer:
                         ))
         except Exception as e:
             logger.error(f"Error analyzing {file_path}: {e}")
-        
+
         return matches
 
-    def analyze_directory(self, directory: str, extensions: Optional[List[str]] = None) -> AnalysisResult:
+    def analyze_directory(self, directory: str, extensions: list[str] | None = None) -> AnalysisResult:
         """Analyze all files in a directory."""
         extensions = extensions or ['.py', '.js', '.ts']
         all_matches = []
@@ -88,7 +87,7 @@ class PatternAnalyzer:
 
 
 # Convenience functions
-def run_codomyrmex_analysis(directory: str, patterns: Optional[Dict[str, str]] = None) -> AnalysisResult:
+def run_codomyrmex_analysis(directory: str, patterns: dict[str, str] | None = None) -> AnalysisResult:
     """Run pattern analysis on a directory."""
     analyzer = PatternAnalyzer(patterns or {})
     return analyzer.analyze_directory(directory)
@@ -102,11 +101,11 @@ def get_embedding_function() -> Any:
     # Placeholder for actual embedding logic
     return lambda x: [0.1] * 128
 
-def analyze_repository_path(path: str) -> Dict[str, Any]:
+def analyze_repository_path(path: str) -> dict[str, Any]:
     """Analyze a repository path."""
     return {"path": path, "status": "analyzed"}
 
-def run_full_analysis(path: str) -> Dict[str, Any]:
+def run_full_analysis(path: str) -> dict[str, Any]:
     """Run full analysis sequence."""
     return {"path": path, "full_analysis": True}
 
@@ -122,7 +121,7 @@ def _perform_dependency_analysis(path: str) -> None:
     """Analyze dependencies."""
     logger.info(f"Analyzing dependencies for {path}")
 
-def _perform_text_search(query: str, path: str) -> List[Any]:
+def _perform_text_search(query: str, path: str) -> list[Any]:
     """Perform text search."""
     return []
 
@@ -134,11 +133,11 @@ def _perform_docstring_indexing(path: str) -> None:
     """Index docstrings."""
     logger.info(f"Indexing docstrings for {path}")
 
-def _perform_symbol_extraction(path: str) -> List[str]:
+def _perform_symbol_extraction(path: str) -> list[str]:
     """Extract symbols."""
     return []
 
-def _perform_symbol_usage_analysis(path: str) -> Dict[str, int]:
+def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
     """Analyze symbol usage."""
     return {}
 
@@ -146,6 +145,6 @@ def _perform_text_search_context_extraction(query: str, path: str) -> str:
     """Extract context for search."""
     return "Context placeholder"
 
-def _perform_chunking_examples(text: str) -> List[str]:
+def _perform_chunking_examples(text: str) -> list[str]:
     """Demonstrate chunking."""
     return [text]

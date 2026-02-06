@@ -1,16 +1,63 @@
 # Smart Contracts Module
 
+**Version**: v0.1.0 | **Status**: Active
+
 Web3 and blockchain smart contract interfaces.
+
+## Quick Start
 
 ```python
 from codomyrmex.smart_contracts import (
-    Contract, Address, TransactionBuilder, Network,
-    ether_to_wei,
+    Address, Contract, TransactionBuilder, Network,
+    wei_to_ether, ether_to_wei
 )
 
-# Build transaction
-tx = (TransactionBuilder(Address("0x...", Network.ETHEREUM))
-    .to(Address("0x..."))
+# Build a transaction
+tx = (TransactionBuilder(Address("0x742d...1234"))
+    .to(Address("0x8ba1...5678"))
     .value(ether_to_wei(0.1))
+    .gas_limit(21000)
+    .nonce(5)
     .build())
+
+print(f"Tx Hash: {tx.hash}")
+print(f"Value: {wei_to_ether(tx.value)} ETH")
+
+# Load a contract
+contract = Contract(
+    address=Address("0xContractAddress"),
+    abi=[{"type": "function", "name": "transfer", "inputs": [...]}]
+)
+
+print(contract.list_functions())  # ['transfer', ...]
 ```
+
+## Exports
+
+| Class/Function | Description |
+|----------------|-------------|
+| `Address` | Blockchain address with network validation |
+| `Transaction` | Transaction with hash, value, gas, data |
+| `TransactionStatus` | Enum: pending, confirmed, failed |
+| `TransactionBuilder` | Fluent API for building transactions |
+| `Contract` | Smart contract with ABI parsing |
+| `ContractFunction` | Single contract function with inputs/outputs |
+| `ContractCall` | Build contract method calls |
+| `ContractRegistry` | Registry of named contracts |
+| `Network` | Enum: ethereum, polygon, arbitrum, optimism, base, solana |
+| `wei_to_ether(wei)` | Convert wei to ether |
+| `ether_to_wei(eth)` | Convert ether to wei |
+| `gwei_to_wei(gwei)` | Convert gwei to wei |
+
+## Supported Networks
+
+- Ethereum
+- Polygon
+- Arbitrum
+- Optimism
+- Base
+- Solana
+
+## Navigation
+
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

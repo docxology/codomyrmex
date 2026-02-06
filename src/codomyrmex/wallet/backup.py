@@ -8,12 +8,12 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.encryption.key_manager import KeyManager
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
-from .exceptions import WalletError, WalletNotFoundError
+from .exceptions import WalletNotFoundError
 
 logger = get_logger(__name__)
 
@@ -28,8 +28,8 @@ class BackupManager:
 
     def __init__(
         self,
-        backup_dir: Optional[Path] = None,
-        key_manager: Optional[KeyManager] = None,
+        backup_dir: Path | None = None,
+        key_manager: KeyManager | None = None,
     ):
         """Initialize BackupManager.
 
@@ -46,8 +46,8 @@ class BackupManager:
         self,
         user_id: str,
         wallet_id: str,
-        metadata: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Create an encrypted backup snapshot for a user's wallet.
 
         Args:
@@ -87,7 +87,7 @@ class BackupManager:
         logger.info(f"Created backup {backup_id} for user {user_id}")
         return backup_record
 
-    def list_backups(self, user_id: str) -> List[Dict[str, Any]]:
+    def list_backups(self, user_id: str) -> list[dict[str, Any]]:
         """List all backups for a user.
 
         Args:

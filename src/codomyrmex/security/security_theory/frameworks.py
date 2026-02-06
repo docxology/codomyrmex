@@ -1,50 +1,6 @@
-from typing import List, Optional
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security frameworks (OWASP, NIST, etc.)."""
 
@@ -54,12 +10,12 @@ logger = get_logger(__name__)
 @dataclass
 class SecurityFramework:
     """Represents a security framework."""
-    
+
     name: str
     description: str
     version: str
-    categories: List[str]
-    standards: List[str]
+    categories: list[str]
+    standards: list[str]
 
 
 # Common security frameworks
@@ -88,7 +44,7 @@ FRAMEWORKS = {
 }
 
 
-def get_framework(framework_name: str) -> Optional[SecurityFramework]:
+def get_framework(framework_name: str) -> SecurityFramework | None:
     """Get a security framework by name."""
     return FRAMEWORKS.get(framework_name)
 
@@ -99,7 +55,7 @@ def apply_framework(framework_name: str, context: dict) -> dict:
     if not framework:
         logger.warning(f"Unknown framework: {framework_name}")
         return {"applied": False, "error": "Unknown framework"}
-    
+
     # Placeholder for actual application logic
     return {
         "applied": True,

@@ -1,27 +1,7 @@
-from pathlib import Path
 import argparse
-import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Clean AGENTS.md files by removing conceptual items from Active Components.

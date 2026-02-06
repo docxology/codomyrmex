@@ -1,17 +1,16 @@
 import pytest
+
 #!/usr/bin/env python3
 """
 Unit tests for the Build Synthesis module.
 """
 
-import unittest
-import tempfile
+import json
 import os
 import sys
-import json
+import tempfile
 import time
-import threading
-from pathlib import Path
+import unittest
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
@@ -20,23 +19,23 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 try:
     from codomyrmex.build_synthesis.build_orchestrator import (
         check_build_environment,
-        synthesize_build_artifact,
-        validate_build_output,
-        orchestrate_build_pipeline,
-        get_supported_languages,
-        create_build_manifest,
-        optimize_build_config,
-        validate_build_dependencies,
-        parallel_build_execution,
-        incremental_build_check,
         cleanup_build_artifacts,
-        get_build_metrics,
+        create_build_manifest,
         export_build_report,
-        import_build_config,
-        validate_build_config,
         get_build_history,
+        get_build_metrics,
+        get_supported_languages,
+        import_build_config,
+        incremental_build_check,
+        monitor_build_progress,
+        optimize_build_config,
+        orchestrate_build_pipeline,
+        parallel_build_execution,
         rollback_build,
-        monitor_build_progress
+        synthesize_build_artifact,
+        validate_build_config,
+        validate_build_dependencies,
+        validate_build_output,
     )
     FULL_BUILD_AVAILABLE = True
 except ImportError:
@@ -44,9 +43,9 @@ except ImportError:
     try:
         from codomyrmex.build_synthesis.build_orchestrator import (
             check_build_environment,
+            orchestrate_build_pipeline,
             synthesize_build_artifact,
             validate_build_output,
-            orchestrate_build_pipeline
         )
         FULL_BUILD_AVAILABLE = False
     except ImportError:
@@ -99,7 +98,7 @@ if __name__ == "__main__":
         self.assertTrue(os.path.exists(output_file))
 
         # Check that the output contains expected content
-        with open(output_file, 'r') as f:
+        with open(output_file) as f:
             content = f.read()
             self.assertIn("import", content)
             # The synthesized executable may use exec() or main() depending on implementation
@@ -157,7 +156,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_supported_languages(self):
         """Test getting supported languages."""
-        from codomyrmex.build_synthesis.build_orchestrator import get_supported_languages
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            get_supported_languages,
+        )
 
         languages = get_supported_languages()
         self.assertIsInstance(languages, list)
@@ -209,7 +210,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_validate_build_dependencies(self):
         """Test build dependency validation."""
-        from codomyrmex.build_synthesis.build_orchestrator import validate_build_dependencies
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            validate_build_dependencies,
+        )
 
         dependencies = ["os", "sys", "json"]  # Built-in modules
         result = validate_build_dependencies(dependencies)
@@ -225,7 +228,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_parallel_build_execution(self):
         """Test parallel build execution."""
-        from codomyrmex.build_synthesis.build_orchestrator import parallel_build_execution
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            parallel_build_execution,
+        )
 
         build_tasks = [
             {"name": "task1", "command": ["echo", "task1"]},
@@ -246,7 +251,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_incremental_build_check(self):
         """Test incremental build checking."""
-        from codomyrmex.build_synthesis.build_orchestrator import incremental_build_check
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            incremental_build_check,
+        )
 
         # Create test files with different modification times
         old_file = os.path.join(self.test_dir, "old.py")
@@ -269,7 +276,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_cleanup_build_artifacts(self):
         """Test build artifact cleanup."""
-        from codomyrmex.build_synthesis.build_orchestrator import cleanup_build_artifacts
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            cleanup_build_artifacts,
+        )
 
         # Create some test artifacts
         artifacts = []
@@ -418,7 +427,9 @@ if __name__ == "__main__":
         if not FULL_BUILD_AVAILABLE:
             self.skipTest("Full build synthesis not available")
 
-        from codomyrmex.build_synthesis.build_orchestrator import parallel_build_execution
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            parallel_build_execution,
+        )
 
         # Create multiple build tasks
         tasks = []
@@ -463,7 +474,9 @@ if __name__ == "__main__":
         if not FULL_BUILD_AVAILABLE:
             self.skipTest("Full build synthesis not available")
 
-        from codomyrmex.build_synthesis.build_orchestrator import parallel_build_execution
+        from codomyrmex.build_synthesis.build_orchestrator import (
+            parallel_build_execution,
+        )
 
         # Test with very limited workers
         tasks = [

@@ -7,16 +7,19 @@ from .distributed_lock import (
     BaseLock,
     LocalLock,
 )
-from .semaphore import (
-    BaseSemaphore,
-    LocalSemaphore,
-)
-from .redis_lock import (
-    RedisLock,
-)
 from .lock_manager import (
     LockManager,
     ReadWriteLock,
+)
+try:
+    from .redis_lock import (
+        RedisLock,
+    )
+except ImportError:
+    RedisLock = None
+from .semaphore import (
+    BaseSemaphore,
+    LocalSemaphore,
 )
 
 __all__ = [

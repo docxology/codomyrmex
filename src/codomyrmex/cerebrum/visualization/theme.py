@@ -1,57 +1,10 @@
-from typing import Dict, List, Optional, Tuple
-
 from dataclasses import dataclass
-from matplotlib import font_manager
-from matplotlib.patches import Patch
-from matplotlib.ticker import PercentFormatter
-from matplotlib.ticker import ScalarFormatter
-import matplotlib
+
 import matplotlib.pyplot as plt
-import numpy as np
+from matplotlib.patches import Patch
+from matplotlib.ticker import PercentFormatter, ScalarFormatter
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Professional academic visualization theme system for CEREBRUM.
 
@@ -90,9 +43,9 @@ class ColorPalette:
     """Colorblind-safe color palette for academic visualizations."""
 
     # Primary colors (colorblind-safe)
-    primary: List[str] = None
-    secondary: List[str] = None
-    accent: List[str] = None
+    primary: list[str] = None
+    secondary: list[str] = None
+    accent: list[str] = None
 
     # Status colors (semantic)
     stable: str = "#2ecc71"  # Green
@@ -151,7 +104,7 @@ class ColorPalette:
 class FigureConfig:
     """Figure configuration."""
 
-    default_size: Tuple[float, float] = (12.0, 8.0)
+    default_size: tuple[float, float] = (12.0, 8.0)
     default_dpi: int = 300
     tight_layout_pad: float = 1.5
     save_bbox_inches: str = "tight"
@@ -198,11 +151,11 @@ class VisualizationTheme:
 
     def __init__(
         self,
-        font_config: Optional[FontConfig] = None,
-        color_palette: Optional[ColorPalette] = None,
-        figure_config: Optional[FigureConfig] = None,
-        axis_config: Optional[AxisConfig] = None,
-        legend_config: Optional[LegendConfig] = None,
+        font_config: FontConfig | None = None,
+        color_palette: ColorPalette | None = None,
+        figure_config: FigureConfig | None = None,
+        axis_config: AxisConfig | None = None,
+        legend_config: LegendConfig | None = None,
     ):
         """Initialize theme.
 
@@ -301,9 +254,9 @@ class VisualizationTheme:
     def create_legend(
         self,
         ax,
-        handles: List,
-        labels: List[str],
-        title: Optional[str] = None,
+        handles: list,
+        labels: list[str],
+        title: str | None = None,
         **kwargs,
     ):
         """Create a styled legend.
@@ -375,7 +328,7 @@ class VisualizationTheme:
         }
         return level_map.get(level.lower(), self.colors.low)
 
-    def get_color_sequence(self, n: int, palette: str = "primary") -> List[str]:
+    def get_color_sequence(self, n: int, palette: str = "primary") -> list[str]:
         """Get a sequence of colors from palette.
 
         Args:
@@ -438,7 +391,7 @@ class VisualizationTheme:
         if axis in ("y", "both"):
             ax.yaxis.set_major_formatter(PercentFormatter(1.0))
 
-    def create_status_legend(self, ax, statuses: List[str]) -> None:
+    def create_status_legend(self, ax, statuses: list[str]) -> None:
         """Create legend for pattern statuses.
 
         Args:
@@ -457,7 +410,7 @@ class VisualizationTheme:
 
         self.create_legend(ax, handles, labels, title="Pattern Status")
 
-    def create_importance_legend(self, ax, levels: List[str]) -> None:
+    def create_importance_legend(self, ax, levels: list[str]) -> None:
         """Create legend for importance levels.
 
         Args:
@@ -478,7 +431,7 @@ class VisualizationTheme:
 
 
 # Global theme instance
-_default_theme: Optional[VisualizationTheme] = None
+_default_theme: VisualizationTheme | None = None
 
 
 def get_default_theme() -> VisualizationTheme:

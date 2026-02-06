@@ -1,8 +1,8 @@
-from typing import Optional
-from pathlib import Path
 import json
+from pathlib import Path
+
 import yaml
-import traceback
+
 from ..utils import get_logger
 
 logger = get_logger(__name__)
@@ -25,7 +25,7 @@ def handle_skills_sync(force: bool) -> bool:
         return False
 
 
-def handle_skills_list(category: Optional[str]) -> bool:
+def handle_skills_list(category: str | None) -> bool:
     """Handle skills list command."""
     try:
         from codomyrmex.skills import get_skills_manager
@@ -52,7 +52,7 @@ def handle_skills_list(category: Optional[str]) -> bool:
         return False
 
 
-def handle_skills_get(category: str, name: str, output: Optional[str]) -> bool:
+def handle_skills_get(category: str, name: str, output: str | None) -> bool:
     """Handle skills get command."""
     try:
         from codomyrmex.skills import get_skills_manager

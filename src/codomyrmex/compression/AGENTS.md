@@ -1,30 +1,58 @@
-# Codomyrmex Agents — src/codomyrmex/compression
+# Agent Guidelines - Compression
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Data compression with gzip, zlib, ZIP, and Zstandard support.
 
-Compression module providing archive creation, extraction, and streaming compression. Supports multiple formats including zip, tar, gzip, and bz2.
+## Key Classes
 
-## Active Components
+- **Compressor** — Configurable compression with format detection
+- **ArchiveManager** — ZIP/tar archive creation and extraction
+- **ZstdCompressor** — High-performance Zstandard compression
+- **ParallelCompressor** — Multi-threaded compression
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `archive_manager.py` – Project file
-- `compressor.py` – Project file
-- `parallel.py` – Project file
-- `zstd_compressor.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Choose format wisely** — Use gzip for general, zstd for performance
+2. **Use appropriate level** — Higher levels = slower but smaller
+3. **Stream large files** — Use streaming for memory efficiency
+4. **Handle errors** — Catch `CompressionError` for corrupt data
+5. **Use parallel for batches** — `ParallelCompressor` for multiple files
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.compression import compress, decompress, ArchiveManager
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Compress data
+compressed = compress(data, level=6, format="gzip")
+
+# Create archive with multiple files
+with ArchiveManager("output.zip", mode="w") as archive:
+    for file in files:
+        archive.add_file(file)
+
+# High-performance for large data
+from codomyrmex.compression import ZstdCompressor
+zstd = ZstdCompressor(level=3)
+result = zstd.compress(large_data)
+```
+
+## Testing Patterns
+
+```python
+# Verify round-trip
+from codomyrmex.compression import compress, decompress
+
+data = b"test data " * 100
+compressed = compress(data)
+decompressed = decompress(compressed)
+assert decompressed == data
+
+# Verify compression ratio
+assert len(compressed) < len(data)
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

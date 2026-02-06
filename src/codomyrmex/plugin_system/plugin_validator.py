@@ -5,10 +5,10 @@ This module provides validation logic for plugins, including metadata
 checks, dependency verification, and security scanning.
 """
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Tuple, Union
 import os
 import re
+from dataclasses import dataclass, field
+from typing import Any
 
 from .plugin_registry import Plugin, PluginInfo
 
@@ -17,10 +17,10 @@ from .plugin_registry import Plugin, PluginInfo
 class ValidationResult:
     """Represents the results of a plugin validation."""
     valid: bool = True
-    issues: List[Dict[str, Any]] = field(default_factory=list)
-    warnings: List[Dict[str, Any]] = field(default_factory=list)
+    issues: list[dict[str, Any]] = field(default_factory=list)
+    warnings: list[dict[str, Any]] = field(default_factory=list)
     security_score: float = 100.0
-    
+
 
 
 class PluginValidator:
@@ -59,7 +59,7 @@ class PluginValidator:
                 })
         return result
 
-    def validate_plugin_metadata(self, metadata: Dict[str, Any]) -> ValidationResult:
+    def validate_plugin_metadata(self, metadata: dict[str, Any]) -> ValidationResult:
         """Validate plugin metadata dictionary."""
         result = ValidationResult()
         required_fields = ['name', 'version']
@@ -69,8 +69,8 @@ class PluginValidator:
                 result.issues.append({'type': 'metadata', 'message': f"Missing field: {field}", 'severity': 'error'})
         return result
 
-    def check_plugin_dependencies(self, dependencies_or_info: Union[PluginInfo, List[str]], 
-                                 available_plugins: Optional[List[str]] = None) -> ValidationResult:
+    def check_plugin_dependencies(self, dependencies_or_info: PluginInfo | list[str],
+                                 available_plugins: list[str] | None = None) -> ValidationResult:
         """Check if plugin dependencies are satisfied."""
         result = ValidationResult()
         deps = []
@@ -78,7 +78,7 @@ class PluginValidator:
             deps = dependencies_or_info.dependencies
         else:
             deps = dependencies_or_info
-            
+
         for dep in deps:
             # If available_plugins is provided, use it for strict check
             if available_plugins is not None:
@@ -101,14 +101,14 @@ class PluginValidator:
         if "FROM" not in content:
             result.valid = False
             result.issues.append({'type': 'docker', 'message': "Missing FROM instruction", 'severity': 'error'})
-        
+
         # Security checks
         if "chmod 777" in content:
             result.valid = False
             result.issues.append({'type': 'security', 'message': "Broad permissions detected", 'severity': 'error'})
         if "USER root" in content:
             result.warnings.append({'type': 'security', 'message': "Running as root is discouraged", 'severity': 'warning'})
-            
+
         return result
 
     def validate_plugin(self, target: Any) -> ValidationResult:
@@ -126,7 +126,7 @@ class PluginValidator:
         """Perform security scan on a plugin file."""
         result = ValidationResult()
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding='utf-8', errors='ignore') as f:
                 content = f.read()
             issues_found = 0
             for imp in self.risky_imports:

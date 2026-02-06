@@ -8,9 +8,9 @@ of plugins in the Codomyrmex system.
 import importlib.util
 import re
 import sys
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Type
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 # Import logging
 try:
@@ -29,9 +29,9 @@ class LoadResult:
     """Result of plugin loading operation."""
     plugin_name: str
     success: bool
-    plugin_instance: Optional[Plugin] = None
-    error_message: Optional[str] = None
-    warnings: List[str] = None
+    plugin_instance: Plugin | None = None
+    error_message: str | None = None
+    warnings: list[str] = None
 
     def __post_init__(self):
 
@@ -47,7 +47,7 @@ class PluginLoader:
     and proper initialization with configuration.
     """
 
-    def __init__(self, plugin_directories: Optional[List[str]] = None):
+    def __init__(self, plugin_directories: list[str] | None = None):
         """
         Initialize the plugin loader.
 
@@ -63,10 +63,10 @@ class PluginLoader:
         for directory in self.plugin_directories:
             Path(directory).mkdir(parents=True, exist_ok=True)
 
-        self.loaded_plugins: Dict[str, Plugin] = {}
-        self.load_cache: Dict[str, Any] = {}
+        self.loaded_plugins: dict[str, Plugin] = {}
+        self.load_cache: dict[str, Any] = {}
 
-    def discover_plugins(self) -> List[PluginInfo]:
+    def discover_plugins(self) -> list[PluginInfo]:
         """
         Discover available plugins in configured directories.
 
@@ -96,7 +96,7 @@ class PluginLoader:
         logger.info(f"Discovered {len(discovered_plugins)} plugins")
         return discovered_plugins
 
-    def load_plugin(self, plugin_info: PluginInfo, config: Optional[Dict[str, Any]] = None) -> LoadResult:
+    def load_plugin(self, plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
         """
         Load and initialize a plugin.
 
@@ -188,7 +188,7 @@ class PluginLoader:
             plugin.state = PluginState.ERROR
             return False
 
-    def reload_plugin(self, plugin_name: str, config: Optional[Dict[str, Any]] = None) -> LoadResult:
+    def reload_plugin(self, plugin_name: str, config: dict[str, Any] | None = None) -> LoadResult:
         """
         Reload a plugin.
 
@@ -217,7 +217,7 @@ class PluginLoader:
         # Load again
         return self.load_plugin(plugin_info, config)
 
-    def get_loaded_plugins(self) -> Dict[str, Plugin]:
+    def get_loaded_plugins(self) -> dict[str, Plugin]:
         """
         Get all currently loaded plugins.
 
@@ -226,7 +226,7 @@ class PluginLoader:
         """
         return self.loaded_plugins.copy()
 
-    def get_plugin(self, plugin_name: str) -> Optional[Plugin]:
+    def get_plugin(self, plugin_name: str) -> Plugin | None:
         """
         Get a loaded plugin by name.
 
@@ -238,7 +238,7 @@ class PluginLoader:
         """
         return self.loaded_plugins.get(plugin_name)
 
-    def validate_plugin_dependencies(self, plugin_info: PluginInfo) -> List[str]:
+    def validate_plugin_dependencies(self, plugin_info: PluginInfo) -> list[str]:
         """
         Validate that plugin dependencies are available.
 
@@ -259,7 +259,7 @@ class PluginLoader:
 
         return missing
 
-    def _load_plugin_module(self, plugin_info: PluginInfo) -> Optional[Any]:
+    def _load_plugin_module(self, plugin_info: PluginInfo) -> Any | None:
         """
         Load a plugin module from its entry point.
 
@@ -311,7 +311,7 @@ class PluginLoader:
                 logger.error(f"Could not import plugin module {entry_point}: {e}")
                 return None
 
-    def _find_plugin_class(self, module: Any, plugin_info: PluginInfo) -> Optional[Type[Plugin]]:
+    def _find_plugin_class(self, module: Any, plugin_info: PluginInfo) -> type[Plugin] | None:
         """
         Find the plugin class in a loaded module.
 
@@ -341,7 +341,7 @@ class PluginLoader:
 
         return None
 
-    def _load_plugin_metadata(self, plugin_dir: Path) -> Optional[PluginInfo]:
+    def _load_plugin_metadata(self, plugin_dir: Path) -> PluginInfo | None:
         """
         Load plugin metadata from a plugin directory.
 
@@ -364,11 +364,11 @@ class PluginLoader:
                 try:
                     if metadata_file.suffix == '.json':
                         import json
-                        with open(metadata_file, 'r') as f:
+                        with open(metadata_file) as f:
                             data = json.load(f)
                     elif metadata_file.suffix in ['.yaml', '.yml']:
                         import yaml
-                        with open(metadata_file, 'r') as f:
+                        with open(metadata_file) as f:
                             data = yaml.safe_load(f)
                     elif metadata_file.name == 'pyproject.toml':
                         import tomllib
@@ -403,7 +403,7 @@ class PluginLoader:
 
         return None
 
-    def _load_plugin_metadata_from_file(self, plugin_file: Path) -> Optional[PluginInfo]:
+    def _load_plugin_metadata_from_file(self, plugin_file: Path) -> PluginInfo | None:
         """
         Load plugin metadata from a single plugin file.
 
@@ -415,7 +415,7 @@ class PluginLoader:
         """
         # For single-file plugins, extract metadata from docstring or comments
         try:
-            with open(plugin_file, 'r', encoding='utf-8') as f:
+            with open(plugin_file, encoding='utf-8') as f:
                 content = f.read()
 
             # Look for plugin metadata in comments or docstring
@@ -449,7 +449,7 @@ class PluginLoader:
 
 # Convenience functions
 
-def discover_plugins() -> List[PluginInfo]:
+def discover_plugins() -> list[PluginInfo]:
     """
     Convenience function to discover plugins.
 
@@ -460,7 +460,7 @@ def discover_plugins() -> List[PluginInfo]:
     return loader.discover_plugins()
 
 
-def load_plugin(plugin_info: PluginInfo, config: Optional[Dict[str, Any]] = None) -> LoadResult:
+def load_plugin(plugin_info: PluginInfo, config: dict[str, Any] | None = None) -> LoadResult:
     """
     Convenience function to load a plugin.
 

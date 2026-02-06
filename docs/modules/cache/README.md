@@ -1,16 +1,39 @@
-# cache
+# Cache Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Multi-backend caching with memory, Redis, and disk storage options.
+
+## Key Features
+
+- **Memory** — In-memory LRU cache
+- **Redis** — Redis-backed caching
+- **Disk** — Persistent file cache
+- **TTL** — Time-to-live expiration
+
+## Quick Start
+
+```python
+from codomyrmex.cache import MemoryCache, cached
+
+cache = MemoryCache(max_size=1000)
+cache.set("key", "value", ttl=300)
+
+@cached(ttl=60)
+def expensive_function(x):
+    return compute(x)
+```
 
 ## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
+
+| File | Description |
+|------|-------------|
+| `README.md` | This file |
+| `SPEC.md` | Technical specification |
 
 ## Navigation
+
 - **Source**: [src/codomyrmex/cache/](../../../src/codomyrmex/cache/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [Modules](../README.md)

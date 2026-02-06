@@ -15,7 +15,6 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
@@ -52,14 +51,14 @@ class PageInfo:
 
     has_next_page: bool = False
     has_previous_page: bool = False
-    total_items: Optional[int] = None
-    total_pages: Optional[int] = None
-    current_page: Optional[int] = None
+    total_items: int | None = None
+    total_pages: int | None = None
+    current_page: int | None = None
     page_size: int = 20
-    start_cursor: Optional[str] = None
-    end_cursor: Optional[str] = None
+    start_cursor: str | None = None
+    end_cursor: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize page info to a plain dictionary.
 
         Returns:
@@ -77,7 +76,7 @@ class PageInfo:
             "end_cursor": self.end_cursor,
         }
 
-    def to_headers(self) -> Dict[str, str]:
+    def to_headers(self) -> dict[str, str]:
         """Convert page info to HTTP response headers.
 
         Produces standard pagination headers commonly used by REST APIs:
@@ -94,7 +93,7 @@ class PageInfo:
         Returns:
             Dictionary of header name to header value strings.
         """
-        headers: Dict[str, str] = {
+        headers: dict[str, str] = {
             "X-Per-Page": str(self.page_size),
             "X-Has-Next-Page": str(self.has_next_page).lower(),
             "X-Has-Previous-Page": str(self.has_previous_page).lower(),
@@ -127,10 +126,10 @@ class PaginatedResponse:
     implementations.
     """
 
-    items: List[Any] = field(default_factory=list)
+    items: list[Any] = field(default_factory=list)
     page_info: PageInfo = field(default_factory=PageInfo)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize the response to a dictionary.
 
         Returns:
@@ -156,10 +155,10 @@ class PaginationRequest:
     """
 
     page_size: int = 20
-    page: Optional[int] = None
-    cursor: Optional[str] = None
-    after_key: Optional[Any] = None
-    sort_field: Optional[str] = None
+    page: int | None = None
+    cursor: str | None = None
+    after_key: Any | None = None
+    sort_field: str | None = None
     sort_direction: SortDirection = SortDirection.ASC
 
 
@@ -179,7 +178,7 @@ class Paginator(ABC):
     @abstractmethod
     def paginate(
         self,
-        items: List[Any],
+        items: list[Any],
         request: PaginationRequest,
     ) -> PaginatedResponse:
         """Paginate a list of items according to the request parameters.
@@ -215,7 +214,7 @@ class OffsetPaginator(Paginator):
 
     def paginate(
         self,
-        items: List[Any],
+        items: list[Any],
         request: PaginationRequest,
     ) -> PaginatedResponse:
         """Paginate using offset / page number strategy.
@@ -316,7 +315,7 @@ class CursorPaginator(Paginator):
 
     def paginate(
         self,
-        items: List[Any],
+        items: list[Any],
         request: PaginationRequest,
     ) -> PaginatedResponse:
         """Paginate using cursor-based strategy.
@@ -348,8 +347,8 @@ class CursorPaginator(Paginator):
         page_items = items[start:end]
 
         # Build cursors
-        start_cursor: Optional[str] = None
-        end_cursor: Optional[str] = None
+        start_cursor: str | None = None
+        end_cursor: str | None = None
         if page_items:
             start_cursor = self.encode_cursor(start)
             end_cursor = self.encode_cursor(end - 1)
@@ -412,7 +411,7 @@ class KeysetPaginator(Paginator):
 
     def paginate(
         self,
-        items: List[Any],
+        items: list[Any],
         request: PaginationRequest,
     ) -> PaginatedResponse:
         """Paginate using keyset / seek strategy.
@@ -466,8 +465,8 @@ class KeysetPaginator(Paginator):
         page_items = sorted_items[start:end]
 
         # Build cursors from the sort field values of boundary items
-        start_cursor: Optional[str] = None
-        end_cursor: Optional[str] = None
+        start_cursor: str | None = None
+        end_cursor: str | None = None
         if page_items:
             try:
                 first_value = self._get_field_value(page_items[0], sort_field)
@@ -524,7 +523,7 @@ def create_paginator(
         paginator = create_paginator(PaginationStrategy.CURSOR)
         response = paginator.paginate(items, PaginationRequest(page_size=25))
     """
-    _strategy_map: Dict[PaginationStrategy, type] = {
+    _strategy_map: dict[PaginationStrategy, type] = {
         PaginationStrategy.OFFSET: OffsetPaginator,
         PaginationStrategy.CURSOR: CursorPaginator,
         PaginationStrategy.KEYSET: KeysetPaginator,

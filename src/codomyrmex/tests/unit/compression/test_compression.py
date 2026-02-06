@@ -6,27 +6,26 @@ and file operations.
 """
 
 import os
-import tempfile
 import unittest
 from io import BytesIO
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.compression import (
+    ArchiveManager,
     Compressor,
-    ZstdCompressor,
     ParallelCompressor,
-    compress_data,
-    decompress_data,
+    ZstdCompressor,
     auto_decompress,
     compress,
-    decompress,
-    get_compressor,
+    compress_data,
     compress_file,
+    decompress,
+    decompress_data,
     decompress_file,
-    ArchiveManager,
+    get_compressor,
 )
+
 # Import CompressionError from the actual source to match the raised exception class
 from codomyrmex.compression.compressor import CompressionError
 

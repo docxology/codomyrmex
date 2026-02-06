@@ -1,50 +1,6 @@
-from typing import List, Optional
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """User behavior analysis for security."""
 
@@ -54,7 +10,7 @@ logger = get_logger(__name__)
 @dataclass
 class BehaviorPattern:
     """Represents a user behavior pattern."""
-    
+
     pattern_type: str
     frequency: int
     risk_level: str  # low, medium, high
@@ -64,7 +20,7 @@ class BehaviorPattern:
 @dataclass
 class Anomaly:
     """Represents a behavioral anomaly."""
-    
+
     anomaly_type: str
     severity: str  # low, medium, high, critical
     description: str
@@ -73,34 +29,34 @@ class Anomaly:
 
 class BehaviorAnalyzer:
     """Analyzes user behavior for security purposes."""
-    
+
     def __init__(self):
 
-        self.behavior_history: dict[str, List[dict]] = {}
+        self.behavior_history: dict[str, list[dict]] = {}
         logger.info("BehaviorAnalyzer initialized")
-    
-    def analyze_behavior(self, user_id: str, behavior_data: dict) -> List[BehaviorPattern]:
+
+    def analyze_behavior(self, user_id: str, behavior_data: dict) -> list[BehaviorPattern]:
         """Analyze user behavior patterns."""
         if user_id not in self.behavior_history:
             self.behavior_history[user_id] = []
-        
+
         self.behavior_history[user_id].append(behavior_data)
-        
+
         patterns = []
         # Placeholder for actual pattern analysis
-        
+
         logger.debug(f"Analyzed behavior for user {user_id}")
         return patterns
-    
-    def detect_anomalies(self, user_id: str, current_behavior: dict) -> List[Anomaly]:
+
+    def detect_anomalies(self, user_id: str, current_behavior: dict) -> list[Anomaly]:
         """Detect anomalous behavior."""
         if user_id not in self.behavior_history:
             return []
-        
+
         anomalies = []
         # Placeholder for actual anomaly detection
         # Would compare against historical patterns
-        
+
         logger.debug(f"Checked for anomalies for user {user_id}")
         return anomalies
 
@@ -108,8 +64,8 @@ class BehaviorAnalyzer:
 def analyze_user_behavior(
     user_id: str,
     behavior_data: dict,
-    analyzer: Optional[BehaviorAnalyzer] = None,
-) -> List[BehaviorPattern]:
+    analyzer: BehaviorAnalyzer | None = None,
+) -> list[BehaviorPattern]:
     """Analyze user behavior."""
     if analyzer is None:
         analyzer = BehaviorAnalyzer()
@@ -119,8 +75,8 @@ def analyze_user_behavior(
 def detect_anomalous_behavior(
     user_id: str,
     current_behavior: dict,
-    analyzer: Optional[BehaviorAnalyzer] = None,
-) -> List[Anomaly]:
+    analyzer: BehaviorAnalyzer | None = None,
+) -> list[Anomaly]:
     """Detect anomalous behavior."""
     if analyzer is None:
         analyzer = BehaviorAnalyzer()

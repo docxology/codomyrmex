@@ -5,9 +5,9 @@ Provides mock OpenStack connections, S3 clients, and factory helpers
 used across all per-client test files.
 """
 
-import pytest
 from unittest.mock import MagicMock
 
+import pytest
 
 # =========================================================================
 # Connection Fixtures

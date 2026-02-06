@@ -1,54 +1,12 @@
-from typing import Any, Optional
 import os
 import re
 import time
-
 from dataclasses import dataclass, field
+from typing import Any
+
 from openai import OpenAI
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """OpenAI Codex Integration Module.
 
@@ -76,7 +34,7 @@ class CodexRequest:
     max_tokens: int = MAX_TOKENS
     temperature: float = DEFAULT_TEMPERATURE
     stop_sequences: list[str] = field(default_factory=list)
-    context: Optional[str] = None
+    context: str | None = None
 
 
 @dataclass
@@ -92,7 +50,7 @@ class CodexResponse:
 class OpenAICodex:
     """OpenAI Codex integration for code generation and completion."""
 
-    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+    def __init__(self, api_key: str | None = None, model: str | None = None):
         """Initialize OpenAI Codex integration.
 
         Args:
@@ -127,7 +85,7 @@ class OpenAICodex:
         self,
         prompt: str,
         language: str = "python",
-        context: Optional[str] = None,
+        context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
         **kwargs: Any
@@ -398,7 +356,7 @@ class OpenAICodex:
             "no explanations unless specifically requested."
         )
 
-    def _build_user_prompt(self, prompt: str, context: Optional[str]) -> str:
+    def _build_user_prompt(self, prompt: str, context: str | None) -> str:
         """Build user prompt with optional context."""
         if context:
             return f"Context: {context}\n\nTask: {prompt}"

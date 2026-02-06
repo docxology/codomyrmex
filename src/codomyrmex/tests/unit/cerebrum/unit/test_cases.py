@@ -2,8 +2,13 @@
 
 import pytest
 
-from codomyrmex.cerebrum import Case, CaseBase, CaseRetriever
-from codomyrmex.cerebrum import CaseNotFoundError, InvalidCaseError
+from codomyrmex.cerebrum import (
+    Case,
+    CaseBase,
+    CaseNotFoundError,
+    CaseRetriever,
+    InvalidCaseError,
+)
 
 
 @pytest.mark.unit
@@ -78,20 +83,20 @@ class TestCaseBase:
     def test_retrieve_similar(self):
         """Test retrieving similar cases."""
         case_base = CaseBase()
-        
+
         # Add cases
         case1 = Case(case_id="case1", features={"x": 1, "y": 1})
         case2 = Case(case_id="case2", features={"x": 2, "y": 2})
         case3 = Case(case_id="case3", features={"x": 10, "y": 10})
-        
+
         case_base.add_case(case1)
         case_base.add_case(case2)
         case_base.add_case(case3)
-        
+
         # Query
         query = Case(case_id="query", features={"x": 1.5, "y": 1.5})
         similar = case_base.retrieve_similar(query, k=2)
-        
+
         assert len(similar) == 2
         # case1 and case2 should be more similar than case3
         assert similar[0][0].case_id in ["case1", "case2"]
@@ -102,10 +107,10 @@ class TestCaseBase:
         case1 = Case(case_id="case1", features={"x": 1, "y": 1})
         case2 = Case(case_id="case2", features={"x": 1, "y": 1})
         case3 = Case(case_id="case3", features={"x": 10, "y": 10})
-        
+
         similarity_same = case_base.compute_similarity(case1, case2)
         similarity_different = case_base.compute_similarity(case1, case3)
-        
+
         assert similarity_same > similarity_different
         assert 0 <= similarity_same <= 1
         assert 0 <= similarity_different <= 1
@@ -122,11 +127,11 @@ class TestCaseRetriever:
         case2 = Case(case_id="case2", features={"x": 2}, metadata={"frequency": 1.0})
         case_base.add_case(case1)
         case_base.add_case(case2)
-        
+
         retriever = CaseRetriever(case_base, weighting_strategy="frequency")
         query = Case(case_id="query", features={"x": 1.5})
         results = retriever.retrieve(query, k=2)
-        
+
         assert len(results) == 2
 
 

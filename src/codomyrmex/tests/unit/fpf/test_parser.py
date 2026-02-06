@@ -1,9 +1,9 @@
 """Tests for FPF parser."""
 
-import pytest
-from pathlib import Path
 
-from codomyrmex.fpf import FPFParser, FPFSpec, Pattern
+import pytest
+
+from codomyrmex.fpf import FPFParser
 
 
 @pytest.mark.unit

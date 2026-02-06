@@ -4,7 +4,6 @@ Job scheduler for executing scheduled jobs.
 
 import threading
 import time
-from datetime import datetime
 from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -28,7 +27,7 @@ class JobScheduler:
         self.queue = queue
         self.check_interval = check_interval
         self._running = False
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
 
     def start(self) -> None:
         """Start the scheduler."""
@@ -65,7 +64,7 @@ class JobScheduler:
     def get_all_job_statuses(self) -> dict[str, str]:
         """
         Get status of all jobs in the queue.
-        
+
         Returns:
             Dict mapping job_id to status string
         """
@@ -76,14 +75,14 @@ class JobScheduler:
             for job_id, job in backend._jobs.items():
                 statuses[job_id] = job.status.value
         return statuses
-        
+
     def cancel_job(self, job_id: str) -> bool:
         """
         Cancel a pending or running job.
-        
+
         Args:
             job_id: ID of the job to cancel
-            
+
         Returns:
             True if job was found and cancelled, False otherwise
         """
@@ -94,14 +93,14 @@ class JobScheduler:
         else:
             logger.warning(f"Failed to cancel job: {job_id}")
         return result
-        
+
     def get_job(self, job_id: str) -> Optional["Job"]:
         """
         Get a job by its ID.
-        
+
         Args:
             job_id: ID of the job
-            
+
         Returns:
             Job instance or None if not found
         """

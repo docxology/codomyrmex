@@ -1,16 +1,41 @@
-# api
+# API Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+RESTful API framework with routing, middleware, OpenAPI support, and request/response handling.
+
+## Key Features
+
+- **Routing** — Decorators for GET, POST, PUT, DELETE endpoints
+- **Middleware** — Authentication, logging, validation
+- **OpenAPI** — Auto-generated API documentation
+- **Async** — Full async/await support
+
+## Quick Start
+
+```python
+from codomyrmex.api import APIRouter, APIApp
+
+router = APIRouter(prefix="/v1")
+
+@router.get("/users")
+async def list_users():
+    return {"users": [...]}
+
+app = APIApp()
+app.include_router(router)
+```
 
 ## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
+
+| File | Description |
+|------|-------------|
+| `README.md` | This file |
+| `SPEC.md` | Technical specification |
 
 ## Navigation
+
 - **Source**: [src/codomyrmex/api/](../../../src/codomyrmex/api/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [Modules](../README.md)

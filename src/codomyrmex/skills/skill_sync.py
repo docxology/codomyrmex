@@ -1,8 +1,6 @@
-from pathlib import Path
-from typing import Optional
-import logging
 import shutil
 import subprocess
+from pathlib import Path
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -14,7 +12,7 @@ try:
     )
 except ImportError:
     # Fallback functions defined below
-    def clone_repository(url: str, destination: str, branch: Optional[str] = None) -> bool:
+    def clone_repository(url: str, destination: str, branch: str | None = None) -> bool:
         """Fallback clone function."""
         try:
             cmd = ["git", "clone"]
@@ -210,7 +208,7 @@ class SkillSync:
 
         return status
 
-    def get_upstream_version(self) -> Optional[str]:
+    def get_upstream_version(self) -> str | None:
         """
         Get the current version/commit of the upstream repository.
 

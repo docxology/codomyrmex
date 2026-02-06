@@ -29,6 +29,7 @@ Integration:
 
 from codomyrmex.exceptions import CodomyrmexError
 
+from .documentation_generator import DocumentationGenerator
 from .mcp_tools import execute_mcp_tool, get_mcp_tool_definitions, get_mcp_tools
 from .orchestration_engine import (
     OrchestrationContext,
@@ -36,7 +37,6 @@ from .orchestration_engine import (
     OrchestrationSession,
     SessionStatus,
 )
-from .documentation_generator import DocumentationGenerator
 from .project_manager import (
     Project,
     ProjectManager,

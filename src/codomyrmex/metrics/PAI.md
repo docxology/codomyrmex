@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Metrics Context
+# Personal AI Infrastructure — Metrics Module
 
-**Module**: metrics
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Metrics collection, aggregation, and export infrastructure for runtime monitoring, performance tracking, and observability.
+The Metrics module provides PAI integration for tracking AI agent performance, usage, and system health.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Agent Metrics
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Track AI agent performance:
 
-## Key Files
+```python
+from codomyrmex.metrics import MetricsCollector
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+metrics = MetricsCollector()
+metrics.increment("llm_requests_total")
+metrics.histogram("llm_latency_seconds", 0.125)
+metrics.gauge("active_agents", 5)
+```
 
-## Future Considerations
+### Usage Tracking
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Monitor resource consumption:
+
+```python
+from codomyrmex.metrics import UsageTracker
+
+tracker = UsageTracker()
+tracker.record_tokens(prompt=100, completion=50)
+
+print(f"Total tokens: {tracker.total_tokens}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `MetricsCollector` | General metrics |
+| `UsageTracker` | Token/cost tracking |
+| `PerformanceMonitor` | Latency monitoring |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -4,8 +4,8 @@ Resource Tracking
 Monitors resource usage during code execution.
 """
 
-from typing import Any, Dict
 import time
+from typing import Any
 
 try:
     import psutil
@@ -63,7 +63,7 @@ class ResourceMonitor:
         except (AttributeError, psutil.NoSuchProcess, psutil.AccessDenied):
             pass  # Process may have ended
 
-    def get_resource_usage(self) -> Dict[str, Any]:
+    def get_resource_usage(self) -> dict[str, Any]:
         """Get current resource usage statistics."""
         execution_time = time.time() - self.start_time if self.start_time else 0
 

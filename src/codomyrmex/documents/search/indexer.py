@@ -3,7 +3,6 @@
 import json
 import re
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -80,7 +79,7 @@ class InMemoryIndex:
 
         return list(result)
 
-    def get_document(self, doc_id: str) -> Optional[Document]:
+    def get_document(self, doc_id: str) -> Document | None:
         """Retrieve a document by ID."""
         return self._documents.get(doc_id)
 
@@ -111,7 +110,7 @@ class InMemoryIndex:
     def load(cls, path: Path) -> "InMemoryIndex":
         """Load index from a JSON file (index only, documents are metadata)."""
         path = Path(path)
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             data = json.load(f)
 
         instance = cls()
@@ -122,7 +121,7 @@ class InMemoryIndex:
         return instance
 
 
-def index_document(document: Document, index: Optional[InMemoryIndex] = None) -> InMemoryIndex:
+def index_document(document: Document, index: InMemoryIndex | None = None) -> InMemoryIndex:
     """
     Index a document for search.
 

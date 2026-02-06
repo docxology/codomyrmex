@@ -1,26 +1,48 @@
-# Personal AI Infrastructure - Config Management Context
+# Personal AI Infrastructure — Config Management Module
 
-**Module**: config_management
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Configuration management with environment-aware settings, validation, and hot-reload capabilities.
+The Config Management module provides PAI integration for configuration loading and validation.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Configuration Loading
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Load configuration:
 
-## Key Files
+```python
+from codomyrmex.config_management import ConfigLoader
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+config = ConfigLoader.load(
+    path="config.yaml",
+    env_prefix="APP_"
+)
 
-## Future Considerations
+db_host = config.get("database.host")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Schema Validation
+
+Validate configuration:
+
+```python
+from codomyrmex.config_management import ConfigValidator
+
+validator = ConfigValidator(schema)
+if not validator.validate(config):
+    print(validator.errors)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ConfigLoader` | Load config |
+| `ConfigValidator` | Validate schema |
+| `Secrets` | Secret management |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

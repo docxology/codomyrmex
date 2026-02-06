@@ -8,44 +8,44 @@ risk assessment, architecture patterns, and best practices.
 import pytest
 
 from codomyrmex.security.theory import (
-    get_security_principles,
-    apply_principle,
-    SecurityPrinciple,
-    get_framework,
-    apply_framework,
+    RiskAssessment,
+    SecurityBestPractice,
     SecurityFramework,
-    create_threat_model,
-    analyze_threats,
+    SecurityPattern,
+    SecurityPrinciple,
     ThreatModel,
+    analyze_threats,
+    apply_framework,
+    apply_pattern,
+    apply_principle,
     assess_risk,
     calculate_risk_score,
-    RiskAssessment,
-    get_security_patterns,
-    apply_pattern,
-    SecurityPattern,
-    get_best_practices,
     check_compliance_with_practices,
-    SecurityBestPractice,
+    create_threat_model,
+    get_best_practices,
+    get_framework,
+    get_security_patterns,
+    get_security_principles,
 )
 
 
 @pytest.mark.unit
 class TestSecurityPrinciples:
     """Test security principles."""
-    
+
     def test_get_security_principles(self):
         """Test getting all security principles."""
         principles = get_security_principles()
         assert isinstance(principles, list)
         assert len(principles) > 0
         assert all(isinstance(p, SecurityPrinciple) for p in principles)
-    
+
     def test_apply_principle(self):
         """Test applying a security principle."""
         result = apply_principle("least_privilege", {"user": "admin", "resource": "database"})
         assert isinstance(result, dict)
         assert "applied" in result
-    
+
     def test_apply_unknown_principle(self):
         """Test applying unknown principle returns error."""
         result = apply_principle("unknown_principle", {})
@@ -56,31 +56,31 @@ class TestSecurityPrinciples:
 @pytest.mark.unit
 class TestSecurityFrameworks:
     """Test security frameworks."""
-    
+
     def test_get_framework(self):
         """Test getting a security framework."""
         framework = get_framework("owasp_top_10")
         assert framework is not None
         assert isinstance(framework, SecurityFramework)
         assert framework.name == "OWASP Top 10"
-    
+
     def test_get_unknown_framework(self):
         """Test getting unknown framework returns None."""
         framework = get_framework("unknown_framework")
         assert framework is None
-    
+
     def test_apply_framework(self):
         """Test applying a security framework."""
         result = apply_framework("owasp_top_10", {"system": "web_app"})
         assert isinstance(result, dict)
         assert "applied" in result
-    
+
     def test_nist_csf_framework(self):
         """Test NIST CSF framework."""
         framework = get_framework("nist_csf")
         assert framework is not None
         assert framework.name == "NIST Cybersecurity Framework"
-    
+
     def test_iso_27001_framework(self):
         """Test ISO 27001 framework."""
         framework = get_framework("iso_27001")
@@ -91,7 +91,7 @@ class TestSecurityFrameworks:
 @pytest.mark.unit
 class TestThreatModeling:
     """Test threat modeling."""
-    
+
     def test_create_threat_model(self):
         """Test creating a threat model."""
         threat_model = create_threat_model(
@@ -104,7 +104,7 @@ class TestThreatModeling:
         assert threat_model.system_name == "web_application"
         assert len(threat_model.assets) == 2
         assert len(threat_model.attack_surface) == 2
-    
+
     def test_analyze_threats(self):
         """Test analyzing threats in a threat model."""
         threat_model = create_threat_model(
@@ -121,18 +121,18 @@ class TestThreatModeling:
 @pytest.mark.unit
 class TestRiskAssessment:
     """Test risk assessment."""
-    
+
     def test_calculate_risk_score(self):
         """Test calculating risk score."""
         score = calculate_risk_score("high", "critical")
         assert isinstance(score, float)
         assert 0.0 <= score <= 1.0
-        
+
         # Test different combinations
         score_low_low = calculate_risk_score("low", "low")
         score_high_high = calculate_risk_score("high", "high")
         assert score_high_high > score_low_low
-    
+
     def test_assess_risk(self):
         """Test performing risk assessment."""
         context = {
@@ -149,20 +149,20 @@ class TestRiskAssessment:
 @pytest.mark.unit
 class TestArchitecturePatterns:
     """Test security architecture patterns."""
-    
+
     def test_get_security_patterns(self):
         """Test getting all security patterns."""
         patterns = get_security_patterns()
         assert isinstance(patterns, list)
         assert len(patterns) > 0
         assert all(isinstance(p, SecurityPattern) for p in patterns)
-    
+
     def test_apply_pattern(self):
         """Test applying a security pattern."""
         result = apply_pattern("zero_trust", {"network": "internal"})
         assert isinstance(result, dict)
         assert "applied" in result
-    
+
     def test_zero_trust_pattern(self):
         """Test zero trust pattern."""
         patterns = get_security_patterns()
@@ -174,20 +174,20 @@ class TestArchitecturePatterns:
 @pytest.mark.unit
 class TestBestPractices:
     """Test security best practices."""
-    
+
     def test_get_best_practices(self):
         """Test getting all best practices."""
         practices = get_best_practices()
         assert isinstance(practices, list)
         assert len(practices) > 0
         assert all(isinstance(p, SecurityBestPractice) for p in practices)
-    
+
     def test_get_best_practices_by_category(self):
         """Test getting best practices filtered by category."""
         practices = get_best_practices(category="authentication")
         assert isinstance(practices, list)
         assert all(p.category == "authentication" for p in practices)
-    
+
     def test_check_compliance_with_practices(self):
         """Test checking compliance with best practices."""
         context = {"system": "web_app"}

@@ -1,19 +1,13 @@
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any
+from collections.abc import Callable
 
 from jinja2 import Environment, FileSystemLoader
-from jinja2 import Environment, Template as Jinja2Template
-from mako.template import Template as MakoTemplate
+from jinja2 import Template as Jinja2Template
 from mako.template import Template as MakoTemplate
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Template engine implementations.
 """
@@ -124,7 +118,7 @@ class TemplateEngine:
         """
         self._filters[name] = func
 
-    def get_filter(self, name: str) -> Optional[Callable]:
+    def get_filter(self, name: str) -> Callable | None:
         """Get a registered filter.
 
         Args:

@@ -6,8 +6,6 @@ Manages configuration for Fabric AI framework integration.
 import json
 import os
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -29,20 +27,20 @@ class FabricPattern:
 @dataclass
 class FabricConfig:
     """Fabric configuration."""
-    api_key: Optional[str] = None
+    api_key: str | None = None
     default_model: str = "gpt-4"
-    patterns_dir: Optional[str] = None
-    custom_patterns: Dict[str, FabricPattern] = field(default_factory=dict)
+    patterns_dir: str | None = None
+    custom_patterns: dict[str, FabricPattern] = field(default_factory=dict)
 
 
 class FabricConfigManager:
     """Manages Fabric configuration and patterns."""
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """Initialize config manager."""
         self.config_path = config_path or os.path.expanduser("~/.config/fabric/config.json")
         self.config = self._load_config()
-        self.patterns: Dict[str, FabricPattern] = {}
+        self.patterns: dict[str, FabricPattern] = {}
 
     def _load_config(self) -> FabricConfig:
         """Load configuration from file."""
@@ -69,7 +67,7 @@ class FabricConfigManager:
                 "patterns_dir": self.config.patterns_dir
             }, f, indent=2)
 
-    def get_pattern(self, name: str) -> Optional[FabricPattern]:
+    def get_pattern(self, name: str) -> FabricPattern | None:
         """Get a pattern by name."""
         return self.patterns.get(name)
 
@@ -78,7 +76,7 @@ class FabricConfigManager:
         self.patterns[pattern.name] = pattern
         self.config.custom_patterns[pattern.name] = pattern
 
-    def list_patterns(self) -> List[str]:
+    def list_patterns(self) -> list[str]:
         """List available patterns."""
         return list(self.patterns.keys())
 

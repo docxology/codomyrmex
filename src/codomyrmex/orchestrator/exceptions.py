@@ -10,10 +10,10 @@ defined in workflow.py for backward compatibility and are re-exported here.
 
 from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError, OrchestrationError
+from codomyrmex.exceptions import OrchestrationError
 
 # Re-export workflow exceptions for centralized access
-from .workflow import WorkflowError, CycleError, TaskFailedError
+from .workflow import CycleError, TaskFailedError, WorkflowError
 
 
 class StepError(OrchestrationError):

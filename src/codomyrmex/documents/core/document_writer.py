@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -16,27 +15,27 @@ logger = get_logger(__name__)
 
 class DocumentWriter:
     """Unified document writer supporting multiple formats."""
-    
+
     def __init__(self):
 
         self.config = get_config()
-    
+
     def write(
         self,
         document: Document,
         file_path: str | Path,
-        format: Optional[DocumentFormat] = None,
-        encoding: Optional[str] = None,
+        format: DocumentFormat | None = None,
+        encoding: str | None = None,
     ) -> None:
         """
         Write a document to a file.
-        
+
         Args:
             document: Document object to write
             file_path: Path where document should be written
             format: Optional format override (uses document.format if not provided)
             encoding: Optional encoding override (uses document.encoding if not provided)
-        
+
         Raises:
             DocumentWriteError: If writing fails
             UnsupportedFormatError: If format is not supported
@@ -44,10 +43,10 @@ class DocumentWriter:
         file_path = Path(file_path)
         format = format or document.format
         encoding = encoding or document.encoding or self.config.default_encoding
-        
+
         # Ensure parent directory exists
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         try:
             if format == DocumentFormat.MARKDOWN:
                 from ..formats.markdown_handler import write_markdown
@@ -82,9 +81,9 @@ class DocumentWriter:
                     f"Format {format.value} not yet implemented",
                     format=format.value
                 )
-            
+
             logger.info(f"Successfully wrote document to {file_path}")
-            
+
         except Exception as e:
             logger.error(f"Error writing document to {file_path}: {e}")
             raise DocumentWriteError(
@@ -96,14 +95,14 @@ class DocumentWriter:
 def write_document(
     document: Document,
     file_path: str | Path,
-    format: Optional[DocumentFormat] = None,
-    encoding: Optional[str] = None,
+    format: DocumentFormat | None = None,
+    encoding: str | None = None,
 ) -> None:
     """
     Write a document to a file.
-    
+
     Convenience function that creates a DocumentWriter and writes the document.
-    
+
     Args:
         document: Document object to write
         file_path: Path where document should be written

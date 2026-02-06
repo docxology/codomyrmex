@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -14,7 +13,7 @@ from ..exceptions import DocumentReadError, DocumentWriteError
 logger = get_logger(__name__)
 
 
-def read_xml(file_path: str | Path, encoding: Optional[str] = None) -> str:
+def read_xml(file_path: str | Path, encoding: str | None = None) -> str:
     """
     Read XML content from a file.
 
@@ -32,7 +31,7 @@ def read_xml(file_path: str | Path, encoding: Optional[str] = None) -> str:
     encoding = encoding or get_config().default_encoding
 
     try:
-        with open(file_path, 'r', encoding=encoding) as f:
+        with open(file_path, encoding=encoding) as f:
             content = f.read()
         # Validate it parses as XML
         ET.fromstring(content)
@@ -51,7 +50,7 @@ def read_xml(file_path: str | Path, encoding: Optional[str] = None) -> str:
         ) from e
 
 
-def write_xml(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None:
+def write_xml(content: str, file_path: str | Path, encoding: str | None = None) -> None:
     """
     Write XML content to a file.
 

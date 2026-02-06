@@ -1,8 +1,8 @@
 """Document search and indexing operations."""
 
-from .indexer import InMemoryIndex, index_document, create_index
-from .searcher import search_documents, search_index
+from .indexer import InMemoryIndex, create_index, index_document
 from .query_builder import QueryBuilder, build_query
+from .searcher import search_documents, search_index
 
 __all__ = [
     "InMemoryIndex",

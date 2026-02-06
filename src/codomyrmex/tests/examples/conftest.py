@@ -1,116 +1,12 @@
-from pathlib import Path
-from typing import Dict, Any, Generator
 import shutil
 import sys
 import tempfile
+from pathlib import Path
+from typing import Any
+from collections.abc import Generator
 
 # from conftest import FunctionName, ClassName
 import pytest
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Pytest configuration and fixtures for example testing.
 
@@ -148,7 +44,7 @@ def temp_output_dir() -> Generator[Path, None, None]:
 
 
 @pytest.fixture
-def mock_config() -> Dict[str, Any]:
+def mock_config() -> dict[str, Any]:
     """Provide a mock configuration for testing."""
     return {
         "output": {

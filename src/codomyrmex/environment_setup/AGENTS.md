@@ -1,33 +1,64 @@
-# Codomyrmex Agents — src/codomyrmex/environment_setup
+# Agent Guidelines - Environment Setup
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Environment validation, dependency checking, and setup automation.
 
-Foundation module providing environment validation and dependency checking for the Codomyrmex platform. Manages API key validation, dependency verification, and automated setup workflows.
+## Key Classes
 
-## Active Components
+- **validate_environment()** — Check system requirements
+- **check_dependencies()** — Verify installed packages
+- **install_dependencies(source)** — Install from requirements
+- **get_uv_path()** — Get uv package manager path
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `env_checker.py` – Project file
-- `requirements.txt` – Project file
-- `scripts/` – Directory containing scripts components
+## Agent Instructions
 
-## Operating Contracts
+1. **Validate first** — Call `validate_environment()` before running
+2. **Check API keys** — Verify required keys are set
+3. **Use uv** — Prefer uv over pip for faster installs
+4. **Cache results** — Environment rarely changes
+5. **Report missing** — List all missing deps, not just first
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.environment_setup import (
+    validate_environment, check_dependencies, install_dependencies
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Full environment validation
+report = validate_environment()
+if not report.valid:
+    print(f"Missing: {report.missing_items}")
+    install_dependencies("requirements.txt")
+
+# Check specific dependencies
+deps = check_dependencies(["numpy", "pandas", "openai"])
+for dep in deps:
+    if not dep.installed:
+        print(f"Install {dep.name}: pip install {dep.name}")
+
+# Verify API keys
+from codomyrmex.environment_setup import check_api_keys
+keys = check_api_keys(["OPENAI_API_KEY", "ANTHROPIC_API_KEY"])
+if not keys.all_present:
+    print(f"Missing: {keys.missing}")
+```
+
+## Testing Patterns
+
+```python
+# Verify environment check
+report = validate_environment()
+assert hasattr(report, "valid")
+assert hasattr(report, "missing_items")
+
+# Verify dependency check
+deps = check_dependencies(["pip"])
+assert len(deps) == 1
+assert deps[0].installed  # pip should exist
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

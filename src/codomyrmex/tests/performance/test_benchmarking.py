@@ -6,13 +6,16 @@ This module tests the benchmarking utilities and performance measurement
 capabilities of the Codomyrmex performance module.
 """
 
-import pytest
 import time
-import statistics
-from typing import Dict, Any, List, Callable
+
+import pytest
 
 try:
-    from codomyrmex.performance import profile_function, run_benchmark, PerformanceProfiler
+    from codomyrmex.performance import (
+        PerformanceProfiler,
+        profile_function,
+        run_benchmark,
+    )
     PERFORMANCE_AVAILABLE = True
 except ImportError:
     PERFORMANCE_AVAILABLE = False
@@ -256,8 +259,8 @@ class TestBenchmarkingScenarios:
                        reason="Performance module not available")
     def test_io_bound_benchmark(self):
         """Test benchmarking I/O bound operations."""
-        import tempfile
         import os
+        import tempfile
 
         from codomyrmex.performance import profile_function
 
@@ -269,7 +272,7 @@ class TestBenchmarkingScenarios:
                 temp_file = f.name
 
             # Read the file
-            with open(temp_file, 'r') as f:
+            with open(temp_file) as f:
                 content = f.read()
 
             os.unlink(temp_file)
@@ -286,6 +289,7 @@ class TestBenchmarkingScenarios:
     def test_concurrent_benchmark(self):
         """Test benchmarking with concurrent operations."""
         import threading
+
         from codomyrmex.performance import run_benchmark
 
         results = []
@@ -350,8 +354,9 @@ class TestBenchmarkingEdgeCases:
                        reason="Performance module not available")
     def test_high_variance_benchmark(self):
         """Test benchmarking functions with high timing variance."""
-        from codomyrmex.performance import run_benchmark
         import random
+
+        from codomyrmex.performance import run_benchmark
 
         def variable_time_function():
             # Random sleep to create variance
@@ -444,8 +449,8 @@ class TestBenchmarkingIntegration:
         if not PERFORMANCE_AVAILABLE:
             pytest.skip("Performance module not available")
 
-        from codomyrmex.performance import run_benchmark
         from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.performance import run_benchmark
 
         perf_logger = PerformanceLogger("benchmark_integration")
 

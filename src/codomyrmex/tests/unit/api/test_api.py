@@ -4,11 +4,11 @@ This module tests REST API, API versioning, and OpenAPI generation functionality
 """
 
 import json
-import pytest
-import tempfile
 import os
-from datetime import datetime, timedelta
-from unittest.mock import MagicMock, patch
+import tempfile
+from datetime import datetime
+
+import pytest
 
 
 # REST API Tests
@@ -184,7 +184,9 @@ class TestAPIRouter:
     def test_add_endpoint_via_decorator(self):
         """Test adding endpoint via decorator."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse, HTTPStatus
+            APIRequest,
+            APIResponse,
+            APIRouter,
         )
 
         router = APIRouter()
@@ -200,7 +202,10 @@ class TestAPIRouter:
     def test_match_endpoint(self):
         """Test matching an endpoint."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse, HTTPMethod
+            APIRequest,
+            APIResponse,
+            APIRouter,
+            HTTPMethod,
         )
 
         router = APIRouter()
@@ -217,7 +222,10 @@ class TestAPIRouter:
     def test_match_endpoint_with_params(self):
         """Test matching an endpoint with path parameters."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse, HTTPMethod
+            APIRequest,
+            APIResponse,
+            APIRouter,
+            HTTPMethod,
         )
 
         router = APIRouter()
@@ -247,7 +255,9 @@ class TestRESTAPI:
     def test_handle_request(self):
         """Test handling a request."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         api = RESTAPI()
@@ -273,7 +283,9 @@ class TestRESTAPI:
     def test_metrics(self):
         """Test API metrics."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         api = RESTAPI()
@@ -350,7 +362,8 @@ class TestAPIVersion:
     def test_create_semver_version(self):
         """Test creating a semantic version."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersion, VersionFormat
+            APIVersion,
+            VersionFormat,
         )
 
         version = APIVersion(
@@ -366,7 +379,8 @@ class TestAPIVersion:
     def test_create_date_version(self):
         """Test creating a date-based version."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersion, VersionFormat
+            APIVersion,
+            VersionFormat,
         )
 
         version = APIVersion(
@@ -380,7 +394,8 @@ class TestAPIVersion:
     def test_create_integer_version(self):
         """Test creating an integer version."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersion, VersionFormat
+            APIVersion,
+            VersionFormat,
         )
 
         version = APIVersion(
@@ -394,7 +409,8 @@ class TestAPIVersion:
     def test_invalid_semver_format(self):
         """Test that invalid semver raises error."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersion, VersionFormat
+            APIVersion,
+            VersionFormat,
         )
 
         with pytest.raises(ValueError):
@@ -407,7 +423,8 @@ class TestAPIVersion:
     def test_version_compatibility(self):
         """Test version compatibility checking."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersion, VersionFormat
+            APIVersion,
+            VersionFormat,
         )
 
         v1 = APIVersion(
@@ -439,7 +456,9 @@ class TestAPIVersionManager:
     def test_register_version(self):
         """Test registering a new version."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersionManager, APIVersion, VersionFormat
+            APIVersion,
+            APIVersionManager,
+            VersionFormat,
         )
 
         manager = APIVersionManager()
@@ -467,7 +486,9 @@ class TestAPIVersionManager:
     def test_get_supported_versions(self):
         """Test getting supported versions."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersionManager, APIVersion, VersionFormat
+            APIVersion,
+            APIVersionManager,
+            VersionFormat,
         )
 
         manager = APIVersionManager(default_version="1.0.0")
@@ -901,7 +922,9 @@ class TestConvenienceFunctions:
 
     def test_create_versioned_endpoint_function(self):
         """Test create_versioned_endpoint convenience function."""
-        from codomyrmex.api.standardization.api_versioning import create_versioned_endpoint
+        from codomyrmex.api.standardization.api_versioning import (
+            create_versioned_endpoint,
+        )
 
         endpoint = create_versioned_endpoint("/api/users", "1.0.0")
 
@@ -942,7 +965,10 @@ class TestAPIIntegration:
     def test_rest_api_with_router(self):
         """Test REST API with nested router."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRouter, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
+            APIRouter,
         )
 
         api = RESTAPI(title="Integration Test API")
@@ -971,7 +997,9 @@ class TestAPIIntegration:
     def test_api_with_version_manager(self):
         """Test API with version management."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersionManager, APIVersion, VersionFormat
+            APIVersion,
+            APIVersionManager,
+            VersionFormat,
         )
 
         manager = APIVersionManager(default_version="1.0.0")
@@ -1000,11 +1028,11 @@ class TestAPIIntegration:
 
     def test_full_openapi_generation_workflow(self):
         """Test complete OpenAPI generation workflow."""
+        from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
-        )
-        from codomyrmex.api.openapi_generator import (
-            StandardizationOpenAPIGenerator
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         # Create API
@@ -1155,7 +1183,9 @@ class TestAPIRouterEdgeCases:
     def test_router_with_nested_routers(self):
         """Test router with nested sub-routers."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse, HTTPMethod
+            APIRequest,
+            APIResponse,
+            APIRouter,
         )
 
         main_router = APIRouter(prefix="/api")
@@ -1175,7 +1205,8 @@ class TestAPIRouterEdgeCases:
     def test_router_middleware(self):
         """Test router middleware functionality."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse
+            APIRequest,
+            APIRouter,
         )
 
         router = APIRouter()
@@ -1202,7 +1233,9 @@ class TestAPIRouterEdgeCases:
     def test_router_multiple_methods_same_path(self):
         """Test multiple HTTP methods on same path."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse, HTTPMethod
+            APIRequest,
+            APIResponse,
+            APIRouter,
         )
 
         router = APIRouter()
@@ -1248,7 +1281,9 @@ class TestRESTAPIEdgeCases:
     def test_api_request_with_query_string(self):
         """Test handling request with query string."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         api = RESTAPI()
@@ -1265,7 +1300,9 @@ class TestRESTAPIEdgeCases:
     def test_api_error_in_handler(self):
         """Test error handling when handler raises exception."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         api = RESTAPI()
@@ -1310,7 +1347,9 @@ class TestVersionManagerEdgeCases:
     def test_get_latest_version(self):
         """Test getting latest version."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersionManager, APIVersion, VersionFormat
+            APIVersion,
+            APIVersionManager,
+            VersionFormat,
         )
 
         manager = APIVersionManager(default_version="1.0.0")
@@ -1395,7 +1434,9 @@ class TestVersionMigration:
     def test_check_deprecated_usage(self):
         """Test checking deprecated version usage."""
         from codomyrmex.api.standardization.api_versioning import (
-            APIVersionManager, APIVersion, VersionFormat
+            APIVersion,
+            APIVersionManager,
+            VersionFormat,
         )
 
         manager = APIVersionManager(default_version="1.0.0")
@@ -1480,7 +1521,9 @@ class TestGraphQLAPI:
     def test_create_graphql_schema(self):
         """Test creating GraphQL schema."""
         from codomyrmex.api.standardization.graphql_api import (
-            GraphQLSchema, GraphQLObjectType, GraphQLField
+            GraphQLField,
+            GraphQLObjectType,
+            GraphQLSchema,
         )
 
         schema = GraphQLSchema()
@@ -1497,7 +1540,9 @@ class TestGraphQLAPI:
     def test_graphql_schema_sdl_generation(self):
         """Test SDL generation from GraphQL schema."""
         from codomyrmex.api.standardization.graphql_api import (
-            GraphQLSchema, GraphQLObjectType, GraphQLField
+            GraphQLField,
+            GraphQLObjectType,
+            GraphQLSchema,
         )
 
         schema = GraphQLSchema()
@@ -1518,9 +1563,7 @@ class TestGraphQLAPI:
 
     def test_graphql_api_metrics(self):
         """Test GraphQL API metrics."""
-        from codomyrmex.api.standardization.graphql_api import (
-            GraphQLAPI, GraphQLSchema
-        )
+        from codomyrmex.api.standardization.graphql_api import GraphQLAPI, GraphQLSchema
 
         schema = GraphQLSchema()
         api = GraphQLAPI(schema)
@@ -1537,7 +1580,9 @@ class TestGraphQLAPI:
     def test_graphql_mutation_execution(self):
         """Test GraphQL mutation execution."""
         from codomyrmex.api.standardization.graphql_api import (
-            GraphQLMutation, GraphQLObjectType, GraphQLField
+            GraphQLField,
+            GraphQLMutation,
+            GraphQLObjectType,
         )
 
         input_type = GraphQLObjectType(name="CreateUserInput")
@@ -1576,10 +1621,13 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_rest_api_to_generator(self):
         """Test adding REST API to OpenAPI generator."""
-        from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse, HTTPMethod, APIEndpoint
-        )
         from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.standardization.rest_api import (
+            RESTAPI,
+            APIEndpoint,
+            APIResponse,
+            HTTPMethod,
+        )
 
         api = RESTAPI(title="Test REST API", version="1.0.0")
 
@@ -1604,10 +1652,8 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_graphql_api_to_generator(self):
         """Test adding GraphQL API to OpenAPI generator."""
-        from codomyrmex.api.standardization.graphql_api import (
-            GraphQLAPI, GraphQLSchema
-        )
         from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.standardization.graphql_api import GraphQLAPI, GraphQLSchema
 
         schema = GraphQLSchema()
         api = GraphQLAPI(schema)
@@ -1629,8 +1675,8 @@ class TestOpenAPIGeneratorFromAPIs:
 
     def test_add_version_manager_to_generator(self):
         """Test adding version manager to OpenAPI generator."""
-        from codomyrmex.api.standardization.api_versioning import APIVersionManager
         from codomyrmex.api.openapi_generator import StandardizationOpenAPIGenerator
+        from codomyrmex.api.standardization.api_versioning import APIVersionManager
 
         manager = APIVersionManager(default_version="1.0.0")
 
@@ -1706,9 +1752,10 @@ class TestHTMLDocGeneration:
 
     def test_generate_html_docs(self):
         """Test HTML documentation generation."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
-        import tempfile
         import os
+        import tempfile
+
+        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -1750,9 +1797,10 @@ class TestHTMLDocGeneration:
 
     def test_generate_html_empty_spec(self):
         """Test HTML generation with minimal spec."""
-        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
-        import tempfile
         import os
+        import tempfile
+
+        from codomyrmex.api.openapi_generator import DocumentationOpenAPIGenerator
 
         generator = DocumentationOpenAPIGenerator()
 
@@ -1781,13 +1829,8 @@ class TestModuleImports:
         from codomyrmex.api import (
             RESTAPI,
             APIResponse,
-            APIRouter,
-            HTTPMethod,
-            HTTPStatus,
-            GraphQLAPI,
-            GraphQLSchema,
             APIVersionManager,
-            OpenAPISpecification
+            GraphQLSchema,
         )
 
         assert RESTAPI is not None
@@ -1801,7 +1844,7 @@ class TestModuleImports:
             create_api,
             create_router,
             create_schema,
-            create_version_manager
+            create_version_manager,
         )
 
         assert create_api is not None
@@ -1812,10 +1855,9 @@ class TestModuleImports:
     def test_documentation_module_imports(self):
         """Test documentation submodule imports."""
         from codomyrmex.api.documentation import (
+            APIDocumentation,
             APIDocumentationGenerator,
             generate_api_docs,
-            APIDocumentation,
-            APIEndpoint
         )
 
         assert APIDocumentationGenerator is not None
@@ -1831,7 +1873,9 @@ class TestAPIPerformance:
     def test_router_many_endpoints(self):
         """Test router with many endpoints."""
         from codomyrmex.api.standardization.rest_api import (
-            APIRouter, APIRequest, APIResponse
+            APIRequest,
+            APIResponse,
+            APIRouter,
         )
 
         router = APIRouter()
@@ -1848,7 +1892,9 @@ class TestAPIPerformance:
     def test_api_multiple_requests(self):
         """Test handling multiple requests."""
         from codomyrmex.api.standardization.rest_api import (
-            RESTAPI, APIRequest, APIResponse
+            RESTAPI,
+            APIRequest,
+            APIResponse,
         )
 
         api = RESTAPI()

@@ -1,35 +1,68 @@
-# Codomyrmex Agents — src/codomyrmex/model_context_protocol
+# Agent Guidelines - Model Context Protocol
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+MCP server/client implementation for AI agent tool access.
 
-Defines the standard schemas (MCP) for communication between AI agents and platform tools. It is the syntax layer of the agent system, providing standardized interfaces for LLM interactions.
+## Key Classes
 
-## Active Components
+- **MCPServer** — MCP server implementation
+- **MCPClient** — Client to connect to servers
+- **Tool** — Tool definition
+- **Resource** — Resource definition
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `adapters/` – Directory containing adapters components
-- `discovery/` – Directory containing discovery components
-- `requirements.txt` – Project file
-- `schemas/` – Directory containing schemas components
-- `validators/` – Directory containing validators components
+## Agent Instructions
 
-## Operating Contracts
+1. **Define tools clearly** — Schema and descriptions
+2. **Validate input** — Check tool parameters
+3. **Return structured** — Consistent response format
+4. **Handle errors** — Graceful error responses
+5. **Document capabilities** — List all available tools
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.model_context_protocol import (
+    MCPServer, Tool, Resource, run_server
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Define tools
+@Tool(name="search", description="Search codebase")
+def search_code(query: str, limit: int = 10):
+    return find_matches(query, limit)
+
+# Create server
+server = MCPServer(name="codomyrmex")
+server.register_tool(search_code)
+
+# Add resources
+server.register_resource(Resource(
+    uri="file:///project",
+    name="Project Files",
+    mimeType="text/plain"
+))
+
+# Run server
+run_server(server, port=8080)
+
+# Client usage
+client = MCPClient("http://localhost:8080")
+result = client.call_tool("search", query="function")
+```
+
+## Testing Patterns
+
+```python
+# Verify tool registration
+server = MCPServer("test")
+server.register_tool(search_code)
+assert "search" in server.list_tools()
+
+# Verify tool execution
+result = server.call_tool("search", query="test")
+assert result is not None
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

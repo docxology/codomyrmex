@@ -1,48 +1,59 @@
-# AI Agent Guidelines - Data Lineage
+# Agent Guidelines - Data Lineage
 
-**Module**: `codomyrmex.data_lineage`  
-**Version**: v0.1.0  
-**Status**: Active
+## Module Overview
 
-## Purpose
+Data provenance and lineage tracking for datasets, transformations, and models.
 
-Data provenance tracking and transformation audit trails
+## Key Classes
+
+- **LineageGraph** — Graph of nodes and edges
+- **LineageTracker** — Track datasets and transformations
+- **LineageNode** — Node with id, type, version, metadata
+- **LineageEdge** — Edge with source, target, type
+- **ImpactAnalyzer** — Analyze change impact
 
 ## Agent Instructions
 
-When working with this module:
+1. **Register all data sources** — Use `register_dataset()` for all inputs
+2. **Track transformations** — Use `register_transformation()` with inputs/outputs
+3. **Version everything** — Include version in node metadata
+4. **Query before changes** — Use `get_downstream()` to check impact
+5. **Export for audit** — Use `graph.to_dict()` for serialization
 
-### Key Patterns
+## Common Patterns
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.data_lineage import <specific_import>
-   ```
+```python
+from codomyrmex.data_lineage import LineageTracker, ImpactAnalyzer
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+tracker = LineageTracker()
 
-### Common Operations
+# Register data pipeline
+tracker.register_dataset("raw", "Raw Data", "/data/raw")
+tracker.register_dataset("clean", "Clean Data", "/data/clean")
+tracker.register_transformation(
+    "etl", "ETL Job", inputs=["raw"], outputs=["clean"]
+)
 
-- Operation 1: Description
-- Operation 2: Description
+# Check impact before changing raw data
+analyzer = ImpactAnalyzer(tracker.graph)
+impact = analyzer.analyze_change("raw")
+if impact["risk_level"] == "high":
+    notify_stakeholders()
+```
 
-### Integration Points
+## Testing Patterns
 
-- Integrates with: `None` (parent module)
-- Dependencies: Listed in `__init__.py`
+```python
+# Verify lineage tracking
+tracker = LineageTracker()
+tracker.register_dataset("a", "A", "/a")
+tracker.register_dataset("b", "B", "/b")
+tracker.register_transformation("t", "T", ["a"], ["b"])
 
-## File Reference
+upstream = tracker.graph.get_upstream("b")
+assert len(upstream) == 2  # a and t
+```
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
+## Navigation
 
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

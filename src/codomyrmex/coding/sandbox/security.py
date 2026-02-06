@@ -7,7 +7,6 @@ Handles security validation and file preparation for code execution.
 import os
 import shutil
 import tempfile
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -44,7 +43,7 @@ def prepare_code_file(code: str, language: str) -> tuple[str, str]:
     return temp_dir, rel_file_path
 
 
-def prepare_stdin_file(stdin: Optional[str], temp_dir: str) -> Optional[str]:
+def prepare_stdin_file(stdin: str | None, temp_dir: str) -> str | None:
     """
     Prepare a file with stdin content if provided.
 

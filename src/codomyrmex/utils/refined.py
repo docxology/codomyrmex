@@ -1,19 +1,19 @@
 """Comprehensive refined utilities."""
 
-import os
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable
-import time
-import random
 import logging
+import random
+import time
+from pathlib import Path
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
 class RefinedUtilities:
     """A collection of hardened utility methods."""
-    
+
     @staticmethod
-    def deep_merge(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
+    def deep_merge(dict1: dict[str, Any], dict2: dict[str, Any]) -> dict[str, Any]:
         """Deeply merge two dictionaries."""
         result = dict1.copy()
         for key, value in dict2.items():
@@ -41,7 +41,7 @@ class RefinedUtilities:
         return decorator
 
     @staticmethod
-    def resolve_path(path_str: str, base_dir: Optional[str] = None) -> Path:
+    def resolve_path(path_str: str, base_dir: str | None = None) -> Path:
         """Resolve a path string to an absolute Path object."""
         path = Path(path_str)
         if not path.is_absolute():

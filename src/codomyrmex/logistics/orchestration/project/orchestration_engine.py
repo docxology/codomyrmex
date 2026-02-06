@@ -11,7 +11,8 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Callable, Optional, Union
+from typing import Any
+from collections.abc import Callable
 
 # Import Codomyrmex modules
 try:
@@ -87,15 +88,15 @@ class OrchestrationSession:
     mode: OrchestrationMode = OrchestrationMode.RESOURCE_AWARE
     max_parallel_tasks: int = 4
     max_parallel_workflows: int = 2
-    timeout_seconds: Optional[int] = None
+    timeout_seconds: int | None = None
     resource_requirements: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     # Execution tracking
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    started_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    started_at: datetime | None = None
+    updated_at: datetime | None = None
+    completed_at: datetime | None = None
     status: SessionStatus = SessionStatus.PENDING
 
     def to_dict(self) -> dict[str, Any]:
@@ -168,7 +169,7 @@ OrchestrationContext = OrchestrationSession
 class OrchestrationEngine:
     """Main orchestration engine coordinating all components."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """Initialize the orchestration engine."""
         self.config = config or {}
 
@@ -241,7 +242,7 @@ class OrchestrationEngine:
 
         return context.session_id
 
-    def get_session(self, session_id: str) -> Optional[OrchestrationContext]:
+    def get_session(self, session_id: str) -> OrchestrationContext | None:
         """Get a session by ID."""
         with self.session_lock:
             return self.active_sessions.get(session_id)
@@ -266,7 +267,7 @@ class OrchestrationEngine:
 
     @monitor_performance(function_name="execute_workflow")
     def execute_workflow(
-        self, workflow_name: str, session_id: Optional[str] = None, **params
+        self, workflow_name: str, session_id: str | None = None, **params
     ) -> dict[str, Any]:
         """Execute a workflow with orchestration."""
         if not session_id:
@@ -372,7 +373,7 @@ class OrchestrationEngine:
 
     @monitor_performance(function_name="execute_task")
     def execute_task(
-        self, task: Union[Task, dict[str, Any]], session_id: Optional[str] = None
+        self, task: Task | dict[str, Any], session_id: str | None = None
     ) -> dict[str, Any]:
         """Execute a single task with orchestration."""
         if not session_id:
@@ -420,7 +421,7 @@ class OrchestrationEngine:
         self,
         project_name: str,
         workflow_name: str,
-        session_id: Optional[str] = None,
+        session_id: str | None = None,
         **params,
     ) -> dict[str, Any]:
         """Execute a workflow for a specific project."""
@@ -451,7 +452,7 @@ class OrchestrationEngine:
             return {"success": False, "error": str(e)}
 
     def execute_complex_workflow(
-        self, workflow_definition: dict[str, Any], session_id: Optional[str] = None
+        self, workflow_definition: dict[str, Any], session_id: str | None = None
     ) -> dict[str, Any]:
         """Execute a complex workflow with multiple interdependent steps."""
         if not session_id:

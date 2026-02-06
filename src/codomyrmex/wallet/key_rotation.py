@@ -4,9 +4,9 @@ Provides automated and manual key rotation for wallet keys with
 audit trail and configurable rotation policies.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Callable, Dict, List, Optional
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -48,18 +48,18 @@ class KeyRotation:
     hooks for pre/post rotation callbacks.
     """
 
-    def __init__(self, policy: Optional[RotationPolicy] = None):
+    def __init__(self, policy: RotationPolicy | None = None):
         """Initialize KeyRotation manager.
 
         Args:
             policy: Rotation policy to enforce. Uses defaults if not provided.
         """
         self.policy = policy or RotationPolicy()
-        self._history: Dict[str, List[RotationRecord]] = {}
-        self._signature_counts: Dict[str, int] = {}
-        self._creation_times: Dict[str, datetime] = {}
-        self._pre_rotate_hooks: List[Callable] = []
-        self._post_rotate_hooks: List[Callable] = []
+        self._history: dict[str, list[RotationRecord]] = {}
+        self._signature_counts: dict[str, int] = {}
+        self._creation_times: dict[str, datetime] = {}
+        self._pre_rotate_hooks: list[Callable] = []
+        self._post_rotate_hooks: list[Callable] = []
         logger.info(
             f"KeyRotation initialized: max_age={self.policy.max_age_days}d, "
             f"max_sigs={self.policy.max_signatures}"
@@ -153,7 +153,7 @@ class KeyRotation:
         logger.info(f"Recorded rotation for {user_id}: {old_wallet_id} -> {new_wallet_id}")
         return record
 
-    def get_rotation_history(self, user_id: str) -> List[RotationRecord]:
+    def get_rotation_history(self, user_id: str) -> list[RotationRecord]:
         """Get the rotation history for a user.
 
         Args:

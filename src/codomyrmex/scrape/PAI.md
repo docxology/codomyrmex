@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Scrape Context
+# Personal AI Infrastructure — Scrape Module
 
-**Module**: scrape
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Web scraping utilities for content extraction, page crawling, and data harvesting from web sources.
+The Scrape module provides PAI integration for web scraping and data extraction.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Web Scraping
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Scrape web pages:
 
-## Key Files
+```python
+from codomyrmex.scrape import Scraper
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+scraper = Scraper(rate_limit=1.0)
+page = await scraper.get("https://example.com")
 
-## Future Considerations
+title = page.select("h1").text
+links = page.select_all("a.link").attrs("href")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Data Extraction
+
+Extract structured data:
+
+```python
+from codomyrmex.scrape import DataExtractor
+
+extractor = DataExtractor()
+data = extractor.extract_tables(page)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Scraper` | Web requests |
+| `DataExtractor` | Extract data |
+| `Selector` | CSS/XPath selection |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

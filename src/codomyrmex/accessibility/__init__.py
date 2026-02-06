@@ -42,11 +42,11 @@ class AccessibilityIssue:
 class AccessibilityReport:
     """Accessibility audit report."""
     url: str = ""
-    issues: List[AccessibilityIssue] = field(default_factory=list)
+    issues: list[AccessibilityIssue] = field(default_factory=list)
     passed: int = 0
     warnings: int = 0
     errors: int = 0
-    
+
     @property
     def score(self) -> float:
         total = self.passed + self.errors
@@ -57,7 +57,7 @@ class AccessibilityReport:
 
 class WCAGRule:
     """A WCAG accessibility rule."""
-    
+
     def __init__(
         self,
         code: str,
@@ -73,8 +73,8 @@ class WCAGRule:
         self.check_fn = check_fn
         self.message = message
         self.suggestion = suggestion
-    
-    def check(self, element: Dict[str, Any]) -> Optional[AccessibilityIssue]:
+
+    def check(self, element: dict[str, Any]) -> AccessibilityIssue | None:
         if not self.check_fn(element):
             return AccessibilityIssue(
                 code=self.code,
@@ -89,12 +89,12 @@ class WCAGRule:
 
 class A11yChecker:
     """Accessibility checker."""
-    
+
     def __init__(self, level: WCAGLevel = WCAGLevel.AA):
         self.level = level
-        self._rules: List[WCAGRule] = []
+        self._rules: list[WCAGRule] = []
         self._setup_default_rules()
-    
+
     def _setup_default_rules(self):
         # Image alt text
         self._rules.append(WCAGRule(
@@ -105,7 +105,7 @@ class A11yChecker:
             message="Images must have alt text",
             suggestion="Add alt attribute to img element",
         ))
-        
+
         # Form labels
         self._rules.append(WCAGRule(
             code="form-label",
@@ -115,7 +115,7 @@ class A11yChecker:
             message="Form elements must have labels",
             suggestion="Add a label element or aria-label attribute",
         ))
-        
+
         # Link text
         self._rules.append(WCAGRule(
             code="link-text",
@@ -125,7 +125,7 @@ class A11yChecker:
             message="Links must have descriptive text",
             suggestion="Add meaningful link text or aria-label",
         ))
-        
+
         # Color contrast (simplified)
         self._rules.append(WCAGRule(
             code="color-contrast",
@@ -135,7 +135,7 @@ class A11yChecker:
             message="Text must have sufficient color contrast",
             suggestion="Increase color contrast ratio to at least 4.5:1",
         ))
-        
+
         # Focus indicator
         self._rules.append(WCAGRule(
             code="focus-visible",
@@ -145,14 +145,14 @@ class A11yChecker:
             message="Interactive elements must have visible focus indicator",
             suggestion="Add :focus-visible styles",
         ))
-    
+
     def add_rule(self, rule: WCAGRule) -> None:
         self._rules.append(rule)
-    
-    def check_elements(self, elements: List[Dict[str, Any]]) -> AccessibilityReport:
+
+    def check_elements(self, elements: list[dict[str, Any]]) -> AccessibilityReport:
         """Check a list of elements."""
         report = AccessibilityReport()
-        
+
         for element in elements:
             for rule in self._rules:
                 # Skip rules above target level
@@ -160,7 +160,7 @@ class A11yChecker:
                     continue
                 if self.level == WCAGLevel.AA and rule.level == WCAGLevel.AAA:
                     continue
-                
+
                 issue = rule.check(element)
                 if issue:
                     report.issues.append(issue)
@@ -170,7 +170,7 @@ class A11yChecker:
                         report.warnings += 1
                 else:
                     report.passed += 1
-        
+
         return report
 
 
@@ -179,12 +179,12 @@ def calculate_contrast_ratio(fg: str, bg: str) -> float:
     def hex_to_luminance(hex_color: str) -> float:
         hex_color = hex_color.lstrip('#')
         r, g, b = [int(hex_color[i:i+2], 16) / 255 for i in (0, 2, 4)]
-        
+
         def adjust(c):
             return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
-        
+
         return 0.2126 * adjust(r) + 0.7152 * adjust(g) + 0.0722 * adjust(b)
-    
+
     try:
         l1 = hex_to_luminance(fg)
         l2 = hex_to_luminance(bg)
@@ -195,19 +195,19 @@ def calculate_contrast_ratio(fg: str, bg: str) -> float:
         return 0.0
 
 
-def check_heading_hierarchy(headings: List[int]) -> List[str]:
+def check_heading_hierarchy(headings: list[int]) -> list[str]:
     """Check heading level hierarchy."""
     issues = []
     prev_level = 0
-    
+
     for level in headings:
         if level > prev_level + 1:
             issues.append(f"Skipped heading level: h{prev_level} to h{level}")
         prev_level = level
-    
+
     if headings and headings[0] != 1:
         issues.append("Document should start with h1")
-    
+
     return issues
 
 

@@ -4,7 +4,7 @@ This module provides FirecrawlAdapter, which implements BaseScraper
 using the Firecrawl service via FirecrawlClient.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -19,8 +19,7 @@ from ..core import (
     ScrapeResult,
     SearchResult,
 )
-from ..exceptions import FirecrawlError, ScrapeError
-
+from ..exceptions import ScrapeError
 from .client import FirecrawlClient
 
 logger = get_logger(__name__)
@@ -45,7 +44,7 @@ class FirecrawlAdapter(BaseScraper):
         ```
     """
 
-    def __init__(self, config: Optional[ScrapeConfig] = None):
+    def __init__(self, config: ScrapeConfig | None = None):
         """Initialize the Firecrawl adapter.
 
         Args:
@@ -60,7 +59,7 @@ class FirecrawlAdapter(BaseScraper):
         self.client = FirecrawlClient(self.config)
         logger.debug("FirecrawlAdapter initialized")
 
-    def scrape(self, url: str, options: Optional[ScrapeOptions] = None) -> ScrapeResult:
+    def scrape(self, url: str, options: ScrapeOptions | None = None) -> ScrapeResult:
         """Scrape a single URL using Firecrawl.
 
         Args:
@@ -99,7 +98,7 @@ class FirecrawlAdapter(BaseScraper):
             logger.error(f"Error in FirecrawlAdapter.scrape: {e}")
             raise ScrapeError(f"Failed to scrape {url}: {e}") from e
 
-    def crawl(self, url: str, options: Optional[ScrapeOptions] = None) -> CrawlResult:
+    def crawl(self, url: str, options: ScrapeOptions | None = None) -> CrawlResult:
         """Crawl a website starting from a URL using Firecrawl.
 
         Args:
@@ -120,7 +119,7 @@ class FirecrawlAdapter(BaseScraper):
             ```
         """
         options = options or ScrapeOptions()
-        scrape_options: Dict[str, Any] = {}
+        scrape_options: dict[str, Any] = {}
 
         if options.formats:
             scrape_options["formats"] = [
@@ -143,7 +142,7 @@ class FirecrawlAdapter(BaseScraper):
             logger.error(f"Error in FirecrawlAdapter.crawl: {e}")
             raise ScrapeError(f"Failed to crawl {url}: {e}") from e
 
-    def map(self, url: str, search: Optional[str] = None) -> MapResult:
+    def map(self, url: str, search: str | None = None) -> MapResult:
         """Map the structure of a website using Firecrawl.
 
         Args:
@@ -175,7 +174,7 @@ class FirecrawlAdapter(BaseScraper):
             raise ScrapeError(f"Failed to map {url}: {e}") from e
 
     def search(
-        self, query: str, options: Optional[ScrapeOptions] = None
+        self, query: str, options: ScrapeOptions | None = None
     ) -> SearchResult:
         """Search the web and optionally scrape results using Firecrawl.
 
@@ -197,7 +196,7 @@ class FirecrawlAdapter(BaseScraper):
             ```
         """
         options = options or ScrapeOptions()
-        scrape_options: Dict[str, Any] = {}
+        scrape_options: dict[str, Any] = {}
 
         if options.formats:
             scrape_options["formats"] = [
@@ -222,9 +221,9 @@ class FirecrawlAdapter(BaseScraper):
 
     def extract(
         self,
-        urls: List[str],
-        schema: Optional[Dict[str, Any]] = None,
-        prompt: Optional[str] = None,
+        urls: list[str],
+        schema: dict[str, Any] | None = None,
+        prompt: str | None = None,
     ) -> ExtractResult:
         """Extract structured data from URLs using Firecrawl LLM extraction.
 
@@ -263,7 +262,7 @@ class FirecrawlAdapter(BaseScraper):
             logger.error(f"Error in FirecrawlAdapter.extract: {e}")
             raise ScrapeError(f"Failed to extract data: {e}") from e
 
-    def _convert_scrape_result(self, firecrawl_data: Dict[str, Any], url: str) -> ScrapeResult:
+    def _convert_scrape_result(self, firecrawl_data: dict[str, Any], url: str) -> ScrapeResult:
         """Convert Firecrawl scrape result to ScrapeResult.
 
         Args:
@@ -321,7 +320,7 @@ class FirecrawlAdapter(BaseScraper):
             success=True,
         )
 
-    def _convert_crawl_result(self, firecrawl_data: Dict[str, Any], url: str) -> CrawlResult:
+    def _convert_crawl_result(self, firecrawl_data: dict[str, Any], url: str) -> CrawlResult:
         """Convert Firecrawl crawl result to CrawlResult.
 
         Args:
@@ -368,7 +367,7 @@ class FirecrawlAdapter(BaseScraper):
                 results=[],
             )
 
-    def _convert_map_result(self, firecrawl_data: Dict[str, Any]) -> MapResult:
+    def _convert_map_result(self, firecrawl_data: dict[str, Any]) -> MapResult:
         """Convert Firecrawl map result to MapResult.
 
         Args:
@@ -383,7 +382,7 @@ class FirecrawlAdapter(BaseScraper):
         else:
             return MapResult(links=[], total=0)
 
-    def _convert_search_result(self, firecrawl_data: Dict[str, Any], query: str) -> SearchResult:
+    def _convert_search_result(self, firecrawl_data: dict[str, Any], query: str) -> SearchResult:
         """Convert Firecrawl search result to SearchResult.
 
         Args:
@@ -407,7 +406,7 @@ class FirecrawlAdapter(BaseScraper):
             return SearchResult(query=query, results=[], total=0)
 
     def _convert_extract_result(
-        self, firecrawl_data: Dict[str, Any], urls: List[str]
+        self, firecrawl_data: dict[str, Any], urls: list[str]
     ) -> ExtractResult:
         """Convert Firecrawl extract result to ExtractResult.
 

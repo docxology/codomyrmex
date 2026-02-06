@@ -6,10 +6,9 @@ This module provides token functionality including:
 - Token revocation and refreshing
 """
 
-from typing import Optional
 import time
-from dataclasses import dataclass, field
 import uuid
+from dataclasses import dataclass, field
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -23,9 +22,9 @@ class Token:
     token_id: str
     user_id: str
     permissions: list[str] = field(default_factory=list)
-    expires_at: Optional[float] = None
+    expires_at: float | None = None
     created_at: float = field(default_factory=time.time)
-    secret: Optional[str] = None
+    secret: str | None = None
 
     def is_expired(self) -> bool:
         """Check if token is expired."""
@@ -57,12 +56,13 @@ class Token:
 
 from .validator import TokenValidator
 
+
 class TokenManager:
     """Manager for token operations."""
-    
-    def __init__(self, secret: Optional[str] = None):
+
+    def __init__(self, secret: str | None = None):
         """Initialize token manager.
-        
+
         Args:
             secret: Secret key for token signing
         """
@@ -125,7 +125,7 @@ class TokenManager:
         self._tokens.pop(token.token_id, None)
         return True
 
-    def refresh_token(self, token: Token, ttl: int = 3600) -> Optional[Token]:
+    def refresh_token(self, token: Token, ttl: int = 3600) -> Token | None:
         """Refresh an expired or soon-to-expire token.
 
         Args:

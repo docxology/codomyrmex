@@ -7,12 +7,11 @@ the First Principles Framework specification for use in prompt/context engineeri
 from pathlib import Path
 
 from .analysis.analyzer import FPFAnalyzer
-from .core.context_builder import ContextBuilder
-from .io.exporter import FPFExporter
-from .core.extractor import FPFExtractor
-from .io.fetcher import FPFFetcher
-from .visualization.graph_generator import GraphGenerator
 from .analysis.indexer import FPFIndexer
+from .analysis.report_generator import ReportGenerator
+from .analysis.term_analyzer import TermAnalyzer
+from .core.context_builder import ContextBuilder
+from .core.extractor import FPFExtractor
 from .core.models import (
     Concept,
     ConceptType,
@@ -24,11 +23,12 @@ from .core.models import (
     RelationshipType,
 )
 from .core.parser import FPFParser
-from .analysis.report_generator import ReportGenerator
+from .io.exporter import FPFExporter
+from .io.fetcher import FPFFetcher
 from .io.section_exporter import SectionExporter
 from .io.section_importer import SectionImporter
 from .io.section_manager import SectionManager
-from .analysis.term_analyzer import TermAnalyzer
+from .visualization.graph_generator import GraphGenerator
 from .visualization.visualizer import FPFVisualizer
 from .visualization.visualizer_png import FPFVisualizerPNG
 

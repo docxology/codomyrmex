@@ -2,10 +2,8 @@
 Cron-like scheduling with pattern parsing.
 """
 
-import re
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -18,11 +16,11 @@ logger = get_logger(__name__)
 class CronExpression:
     """Cron expression parser and evaluator."""
 
-    minute: List[int]
-    hour: List[int]
-    day_of_month: List[int]
-    month: List[int]
-    day_of_week: List[int]
+    minute: list[int]
+    hour: list[int]
+    day_of_month: list[int]
+    month: list[int]
+    day_of_week: list[int]
 
     @classmethod
     def parse(cls, expression: str) -> "CronExpression":
@@ -50,7 +48,7 @@ class CronExpression:
         )
 
     @staticmethod
-    def _parse_field(field: str, min_val: int, max_val: int) -> List[int]:
+    def _parse_field(field: str, min_val: int, max_val: int) -> list[int]:
         """Parse a cron field.
 
         Args:
@@ -111,7 +109,7 @@ class CronScheduler:
         """
         self.timezone_manager = timezone_manager
 
-    def should_run(self, cron: CronExpression, now: Optional[datetime] = None) -> bool:
+    def should_run(self, cron: CronExpression, now: datetime | None = None) -> bool:
         """Check if a cron expression should run now.
 
         Args:

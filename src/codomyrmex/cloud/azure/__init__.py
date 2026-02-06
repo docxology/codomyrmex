@@ -1,20 +1,21 @@
 """Azure integration submodule."""
 
-from azure.storage.blob import BlobServiceClient
-from azure.identity import DefaultAzureCredential
-from typing import Optional
 import logging
 import os
+from typing import Optional
+
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient
 
 logger = logging.getLogger(__name__)
 
 class AzureBlobClient:
     """Wrapper for Azure Blob Storage operations."""
-    
-    def __init__(self, account_url: Optional[str] = None):
+
+    def __init__(self, account_url: str | None = None):
         if not account_url:
             account_url = os.environ.get("AZURE_STORAGE_ACCOUNT_URL")
-            
+
         if account_url:
             self.client = BlobServiceClient(account_url, credential=DefaultAzureCredential())
         else:
@@ -25,7 +26,7 @@ class AzureBlobClient:
         """Upload a blob to a container."""
         if not self.client:
             return False
-            
+
         try:
             blob_client = self.client.get_blob_client(container=container_name, blob=blob_name)
             with open(file_path, "rb") as data:
@@ -39,7 +40,7 @@ class AzureBlobClient:
         """List blobs in a container."""
         if not self.client:
             return []
-            
+
         try:
             container_client = self.client.get_container_client(container_name)
             blob_list = container_client.list_blobs()

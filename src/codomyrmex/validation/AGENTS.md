@@ -1,33 +1,75 @@
-# Codomyrmex Agents — src/codomyrmex/validation
+# Agent Guidelines - Validation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Data validation, schema checking, and input sanitization.
 
-Validation module providing unified input validation framework with support for JSON Schema, Pydantic models, and custom validators. Consolidates validation logic across modules.
+## Key Classes
 
-## Active Components
+- **Validator** — General validation
+- **SchemaValidator** — JSON Schema validation
+- **EmailValidator** — Email format validation
+- **URLValidator** — URL format validation
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `contextual.py` – Project file
-- `examples_validator.py` – Project file
-- `exceptions.py` – Project file
-- `parser.py` – Project file
-- `summary.py` – Project file
-- `validation_manager.py` – Project file
-- `validator.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Validate early** — Check at API boundaries
+2. **Return all errors** — Don't stop at first error
+3. **Use schemas** — Define validation schemas
+4. **Custom messages** — User-friendly error messages
+5. **Whitelist** — Prefer whitelist over blacklist
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.validation import (
+    Validator, SchemaValidator, validate, ValidationError
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Simple validation
+validator = Validator()
+errors = validator.validate({
+    "email": "user@example.com",
+    "age": 25
+}, rules={
+    "email": ["required", "email"],
+    "age": ["required", "min:18"]
+})
+
+if errors:
+    raise ValidationError(errors)
+
+# Schema validation
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "count": {"type": "integer"}
+    },
+    "required": ["name"]
+}
+SchemaValidator.validate(data, schema)
+```
+
+## Testing Patterns
+
+```python
+# Verify validation
+validator = Validator()
+errors = validator.validate(
+    {"email": "invalid"},
+    rules={"email": ["email"]}
+)
+assert len(errors) > 0
+
+# Verify valid input
+errors = validator.validate(
+    {"email": "test@test.com"},
+    rules={"email": ["email"]}
+)
+assert len(errors) == 0
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

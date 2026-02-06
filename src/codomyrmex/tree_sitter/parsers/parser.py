@@ -1,9 +1,8 @@
 """Tree-sitter parser implementation."""
 
 import importlib
-from typing import Optional, Any
 import logging
-import os
+from typing import Any
 
 # Import the external tree-sitter package explicitly to avoid shadowing
 # by the local codomyrmex.tree_sitter package.

@@ -47,7 +47,7 @@ except ImportError:
         ):
             """
             Initialize MCPToolResult.
-            
+
             Args:
                 success: Whether the operation was successful
                 data: The result data
@@ -69,7 +69,7 @@ except ImportError:
         def __init__(self, type: str, message: str):
             """
             Initialize MCPErrorDetail.
-            
+
             Args:
                 type: The error type
                 message: The error message

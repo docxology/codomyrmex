@@ -1,32 +1,70 @@
-# Codomyrmex Agents — src/codomyrmex/database_management
+# Agent Guidelines - Database Management
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Database connections, migrations, and query execution.
 
-Database operations module providing schema management, migrations, and backup capabilities. Enables programmatic database interactions and administration.
+## Key Classes
 
-## Active Components
+- **DatabaseConnection** — Connection pooling
+- **MigrationManager** — Schema migrations
+- **QueryBuilder** — Safe query construction
+- **TransactionManager** — Transaction handling
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `backup_manager.py` – Project file
-- `db_manager.py` – Project file
-- `migration_manager.py` – Project file
-- `performance_monitor.py` – Project file
-- `schema_generator.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use connection pool** — Don't create per-request
+2. **Parameterize queries** — Never string concatenation
+3. **Migrate safely** — Test migrations first
+4. **Transaction scope** — Explicit transaction boundaries
+5. **Close connections** — Use context managers
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.database_management import (
+    DatabaseConnection, QueryBuilder, MigrationManager
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Connection pooling
+db = DatabaseConnection(
+    host="localhost",
+    database="mydb",
+    pool_size=10
+)
+
+# Safe query execution
+with db.connection() as conn:
+    result = conn.execute(
+        "SELECT * FROM users WHERE id = ?",
+        [user_id]
+    )
+
+# Query builder
+query = QueryBuilder("users")
+query.select("id", "name").where("active", True).limit(10)
+result = db.execute(query.build())
+
+# Migrations
+migrations = MigrationManager(db)
+migrations.migrate_up()
+```
+
+## Testing Patterns
+
+```python
+# Verify connection
+db = DatabaseConnection(url="sqlite:///:memory:")
+assert db.is_connected()
+
+# Verify query builder
+query = QueryBuilder("test")
+query.select("*").where("id", 1)
+sql, params = query.build()
+assert "SELECT" in sql
+assert 1 in params
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

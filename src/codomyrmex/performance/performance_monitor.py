@@ -1,13 +1,12 @@
 
-from pathlib import Path
-from typing import Any, Callable, Optional, Union
 import functools
 import json
 import time
-
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-import threading
+from pathlib import Path
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -53,7 +52,7 @@ class SystemMonitor:
     def start_monitoring(self):
         # Implementation placeholder
         pass
-    
+
     def stop_monitoring(self):
         # Implementation placeholder
         pass
@@ -61,11 +60,11 @@ class SystemMonitor:
     def get_current_metrics(self) -> SystemMetrics:
         if not HAS_PSUTIL:
             return SystemMetrics(0,0,0,0,0,0,0,0)
-            
+
         mem = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         net = psutil.net_io_counters()
-        
+
         return SystemMetrics(
             cpu_percent=psutil.cpu_percent(),
             memory_percent=mem.percent,
@@ -85,7 +84,7 @@ class PerformanceMonitor:
     track resource usage, and generate performance reports.
     """
 
-    def __init__(self, log_file: Optional[Union[str, Path]] = None):
+    def __init__(self, log_file: str | Path | None = None):
         """
         Initialize the performance monitor.
 
@@ -112,9 +111,9 @@ class PerformanceMonitor:
         self,
         function_name: str,
         execution_time: float,
-        memory_usage_mb: Optional[float] = None,
-        cpu_percent: Optional[float] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        memory_usage_mb: float | None = None,
+        cpu_percent: float | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """
         Record performance metrics.
@@ -166,7 +165,7 @@ class PerformanceMonitor:
             # If we can't write to the log file, that's okay
             pass
 
-    def get_stats(self, function_name: Optional[str] = None) -> dict[str, Any]:
+    def get_stats(self, function_name: str | None = None) -> dict[str, Any]:
         """
         Get performance statistics.
 
@@ -215,7 +214,7 @@ class PerformanceMonitor:
         """Clear all recorded metrics."""
         self.metrics.clear()
 
-    def export_metrics(self, file_path: Union[str, Path]) -> None:
+    def export_metrics(self, file_path: str | Path) -> None:
         """
         Export metrics to a JSON file.
 
@@ -244,7 +243,7 @@ _performance_monitor = PerformanceMonitor()
 
 
 def monitor_performance(
-    function_name: Optional[str] = None, monitor: Optional[PerformanceMonitor] = None
+    function_name: str | None = None, monitor: PerformanceMonitor | None = None
 ) -> Callable:
     """
     Decorator for monitoring function performance.
@@ -364,9 +363,9 @@ def track_resource_usage(operation: str):
     finally:
         end_time = time.time()
         end_metrics = monitor.get_current_metrics()
-        
+
         # Stop not strictly needed if start didn't spawn thread, but good for completeness
-        monitor.stop_monitoring() 
+        monitor.stop_monitoring()
 
         duration = end_time - start_time
         cpu_used = end_metrics.cpu_percent - start_metrics.cpu_percent

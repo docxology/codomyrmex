@@ -1,51 +1,7 @@
-from typing import Any, Dict, List, Optional
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from typing import Any
 
 
 """Core scraping abstractions and data structures.
@@ -83,11 +39,11 @@ class ScrapeResult:
 
     url: str
     content: str = ""
-    formats: Dict[str, Any] = field(default_factory=dict)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    status_code: Optional[int] = None
+    formats: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    status_code: int | None = None
     success: bool = True
-    error: Optional[str] = None
+    error: str | None = None
 
     def get_format(self, format_type: ScrapeFormat | str) -> Any:
         """Get content in a specific format."""
@@ -118,21 +74,21 @@ class ScrapeOptions:
         respect_robots_txt: Whether to respect robots.txt
     """
 
-    formats: List[ScrapeFormat | str] = field(default_factory=lambda: [ScrapeFormat.MARKDOWN])
-    timeout: Optional[float] = None
-    headers: Dict[str, str] = field(default_factory=dict)
-    wait_for: Optional[str] = None
-    actions: List[Dict[str, Any]] = field(default_factory=list)
-    exclude_tags: List[str] = field(default_factory=list)
-    include_tags: List[str] = field(default_factory=list)
-    max_depth: Optional[int] = None
-    limit: Optional[int] = None
+    formats: list[ScrapeFormat | str] = field(default_factory=lambda: [ScrapeFormat.MARKDOWN])
+    timeout: float | None = None
+    headers: dict[str, str] = field(default_factory=dict)
+    wait_for: str | None = None
+    actions: list[dict[str, Any]] = field(default_factory=list)
+    exclude_tags: list[str] = field(default_factory=list)
+    include_tags: list[str] = field(default_factory=list)
+    max_depth: int | None = None
+    limit: int | None = None
     follow_links: bool = True
     respect_robots_txt: bool = True
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert options to dictionary format."""
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "formats": [
                 f.value if isinstance(f, ScrapeFormat) else f for f in self.formats
             ],
@@ -172,9 +128,9 @@ class CrawlResult:
     status: str
     total: int = 0
     completed: int = 0
-    results: List[ScrapeResult] = field(default_factory=list)
+    results: list[ScrapeResult] = field(default_factory=list)
     credits_used: int = 0
-    expires_at: Optional[str] = None
+    expires_at: str | None = None
 
 
 @dataclass
@@ -186,7 +142,7 @@ class MapResult:
         total: Total number of links found (auto-calculated from links if not set)
     """
 
-    links: List[Dict[str, Any]] = field(default_factory=list)
+    links: list[dict[str, Any]] = field(default_factory=list)
     total: int = 0
 
     def __post_init__(self):
@@ -206,7 +162,7 @@ class SearchResult:
     """
 
     query: str
-    results: List[ScrapeResult] = field(default_factory=list)
+    results: list[ScrapeResult] = field(default_factory=list)
     total: int = 0
 
 
@@ -221,10 +177,10 @@ class ExtractResult:
         urls: URLs that were processed
     """
 
-    job_id: Optional[str] = None
+    job_id: str | None = None
     status: str = "completed"
-    data: Dict[str, Any] = field(default_factory=dict)
-    urls: List[str] = field(default_factory=list)
+    data: dict[str, Any] = field(default_factory=dict)
+    urls: list[str] = field(default_factory=list)
 
 
 class BaseScraper(ABC):
@@ -235,7 +191,7 @@ class BaseScraper(ABC):
     """
 
     @abstractmethod
-    def scrape(self, url: str, options: Optional[ScrapeOptions] = None) -> ScrapeResult:
+    def scrape(self, url: str, options: ScrapeOptions | None = None) -> ScrapeResult:
         """Scrape a single URL.
 
         Args:
@@ -249,7 +205,7 @@ class BaseScraper(ABC):
 
     @abstractmethod
     def crawl(
-        self, url: str, options: Optional[ScrapeOptions] = None
+        self, url: str, options: ScrapeOptions | None = None
     ) -> CrawlResult:
         """Crawl a website starting from a URL.
 
@@ -263,7 +219,7 @@ class BaseScraper(ABC):
         pass
 
     @abstractmethod
-    def map(self, url: str, search: Optional[str] = None) -> MapResult:
+    def map(self, url: str, search: str | None = None) -> MapResult:
         """Map the structure of a website.
 
         Args:
@@ -277,7 +233,7 @@ class BaseScraper(ABC):
 
     @abstractmethod
     def search(
-        self, query: str, options: Optional[ScrapeOptions] = None
+        self, query: str, options: ScrapeOptions | None = None
     ) -> SearchResult:
         """Search the web and optionally scrape results.
 
@@ -293,9 +249,9 @@ class BaseScraper(ABC):
     @abstractmethod
     def extract(
         self,
-        urls: List[str],
-        schema: Optional[Dict[str, Any]] = None,
-        prompt: Optional[str] = None,
+        urls: list[str],
+        schema: dict[str, Any] | None = None,
+        prompt: str | None = None,
     ) -> ExtractResult:
         """Extract structured data from URLs using LLM.
 

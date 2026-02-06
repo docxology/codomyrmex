@@ -1,11 +1,13 @@
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, MagicMock
-from pathlib import Path
 from codomyrmex.documents.core.document_writer import DocumentWriter, write_document
+from codomyrmex.documents.exceptions import DocumentWriteError
 from codomyrmex.documents.models.document import Document, DocumentFormat
-from codomyrmex.documents.exceptions import DocumentWriteError, UnsupportedFormatError
+
 
 @pytest.mark.unit
 class TestDocumentWriter(unittest.TestCase):
@@ -20,7 +22,7 @@ class TestDocumentWriter(unittest.TestCase):
         path = Path("some/dir/file.txt")
         # We need mock_parent to be what path.parent returns, which is a bit tricky with PropertyMock
         # Easier to mock the mkdir call on the Path object that is created inside write
-        
+
         with patch('pathlib.Path.mkdir', side_effect=OSError("Permission denied")):
             with self.assertRaises(DocumentWriteError):
                 self.writer.write(self.doc, path)
@@ -32,7 +34,7 @@ class TestDocumentWriter(unittest.TestCase):
         """Test writing a text document."""
         self.writer.write(self.doc, "test.txt")
         mock_write_text.assert_called_once()
-    
+
     @patch('codomyrmex.documents.formats.json_handler.write_json')
     def test_write_json(self, mock_write_json):
         """Test writing a JSON document."""

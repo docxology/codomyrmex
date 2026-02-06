@@ -6,7 +6,8 @@ Provides runtime execution of skills with error handling, timeouts, and chaining
 
 import logging
 import time
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from typing import Any, Dict, List, Optional
 
 try:
@@ -33,7 +34,7 @@ class SkillExecutor:
             max_workers: Maximum number of concurrent workers for parallel execution
         """
         self.max_workers = max_workers
-        self._execution_log: List[Dict[str, Any]] = []
+        self._execution_log: list[dict[str, Any]] = []
 
     def execute(self, skill, **kwargs) -> Any:
         """
@@ -134,7 +135,7 @@ class SkillExecutor:
 
         return result
 
-    def get_execution_log(self) -> List[Dict[str, Any]]:
+    def get_execution_log(self) -> list[dict[str, Any]]:
         """Get the execution log."""
         return list(self._execution_log)
 

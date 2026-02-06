@@ -1,50 +1,6 @@
-from typing import List
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Threat modeling methodologies."""
 
@@ -54,7 +10,7 @@ logger = get_logger(__name__)
 @dataclass
 class Threat:
     """Represents a security threat."""
-    
+
     threat_id: str
     threat_type: str
     description: str
@@ -65,30 +21,30 @@ class Threat:
 @dataclass
 class ThreatModel:
     """Represents a threat model."""
-    
+
     model_id: str
     system_name: str
-    threats: List[Threat]
-    assets: List[str]
-    attack_surface: List[str]
+    threats: list[Threat]
+    assets: list[str]
+    attack_surface: list[str]
 
 
 class ThreatModelBuilder:
     """Builds threat models."""
-    
+
     def __init__(self):
 
         logger.info("ThreatModelBuilder initialized")
-    
+
     def create_model(
         self,
         system_name: str,
-        assets: List[str],
-        attack_surface: List[str],
+        assets: list[str],
+        attack_surface: list[str],
     ) -> ThreatModel:
         """Create a threat model for a system."""
         threats = self._identify_threats(assets, attack_surface)
-        
+
         model = ThreatModel(
             model_id=f"model_{system_name}",
             system_name=system_name,
@@ -96,11 +52,11 @@ class ThreatModelBuilder:
             assets=assets,
             attack_surface=attack_surface,
         )
-        
+
         logger.info(f"Created threat model for {system_name}")
         return model
-    
-    def _identify_threats(self, assets: List[str], attack_surface: List[str]) -> List[Threat]:
+
+    def _identify_threats(self, assets: list[str], attack_surface: list[str]) -> list[Threat]:
         """Identify threats based on assets and attack surface."""
         threats = []
         # Placeholder for actual threat identification
@@ -109,8 +65,8 @@ class ThreatModelBuilder:
 
 def create_threat_model(
     system_name: str,
-    assets: List[str],
-    attack_surface: List[str],
+    assets: list[str],
+    attack_surface: list[str],
     builder: ThreatModelBuilder = None,
 ) -> ThreatModel:
     """Create a threat model."""

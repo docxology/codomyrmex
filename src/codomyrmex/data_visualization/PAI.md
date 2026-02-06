@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Data Visualization Context
+# Personal AI Infrastructure — Data Visualization Module
 
-**Module**: data_visualization
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Data visualization utilities for charts, graphs, and interactive dashboards using Plotly and matplotlib.
+The Data Visualization module provides PAI integration for charts and graphs.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Chart Generation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Create visualizations:
 
-## Key Files
+```python
+from codomyrmex.data_visualization import Chart
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+chart = Chart(type="line")
+chart.add_data(x=[1, 2, 3], y=[10, 20, 15])
+chart.title = "Metrics Over Time"
+chart.export("metrics.png")
+```
 
-## Future Considerations
+### Dashboard Building
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Build data dashboards:
+
+```python
+from codomyrmex.data_visualization import Dashboard
+
+dashboard = Dashboard()
+dashboard.add_chart("users", users_chart)
+dashboard.add_chart("revenue", revenue_chart)
+dashboard.render("dashboard.html")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Chart` | Create charts |
+| `Dashboard` | Multi-chart layouts |
+| `Exporter` | Export to formats |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

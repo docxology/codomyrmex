@@ -90,8 +90,8 @@ try:
     from .secrets_detector import (
         SecretsDetector,
         audit_secrets_exposure,
-        scan_file_for_secrets,
         scan_directory_for_secrets,
+        scan_file_for_secrets,
     )
     SECRETS_DETECTION_AVAILABLE = True
 except ImportError:
@@ -106,8 +106,8 @@ try:
         SecurityAnalyzer,
         SecurityFinding,
         SecurityIssue,
-        analyze_file_security,
         analyze_directory_security,
+        analyze_file_security,
     )
     SECURITY_ANALYSIS_AVAILABLE = True
 except ImportError:
@@ -124,6 +124,8 @@ try:
         ComplianceCheckResult,
         ComplianceRequirement,
         ComplianceStandard,
+    )
+    from .compliance_checker import (
         check_compliance as check_compliance_new,
     )
     COMPLIANCE_CHECKING_AVAILABLE = True

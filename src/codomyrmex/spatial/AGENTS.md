@@ -1,32 +1,56 @@
-# Codomyrmex Agents — src/codomyrmex/spatial
+# Agent Guidelines - Spatial
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+3D/4D spatial modeling, physics, coordinates, and rendering.
 
-Spatial module providing 3D/4D visualization, modeling, and world model capabilities for the Codomyrmex platform. Consolidates all spatial computing functionality.
+## Key Submodules
 
-## Active Components
+- **three_d** — 3D geometry: Vec3, Quaternion, Mesh, Transform
+- **four_d** — 4D Synergetics modeling
+- **coordinates** — Coordinate systems and projections
+- **rendering** — Visualization and rendering
+- **physics** — Physics simulation, rigid bodies
+- **world_models** — Spatial world representations
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `coordinates/` – Directory containing coordinates components
-- `four_d/` – Directory containing four_d components
-- `physics/` – Directory containing physics components
-- `rendering/` – Directory containing rendering components
-- `three_d/` – Directory containing three_d components
-- `world_models/` – Directory containing world_models components
+## Agent Instructions
 
-## Operating Contracts
+1. **Use Vec3 for positions** — All 3D positions should use `Vec3` class
+2. **Quaternions for rotation** — Avoid Euler angles; use `Quaternion` for rotation
+3. **Coordinate transforms** — Use `Transform3D` for position + rotation + scale
+4. **Choose projection** — Use appropriate projection (mercator, orthographic, perspective)
+5. **Physics timestep** — Use fixed timestep for deterministic physics
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.spatial.three_d import Vec3, Quaternion, Mesh
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Create positioned mesh
+mesh = Mesh.cube(size=1.0)
+mesh.position = Vec3(1, 2, 3)
+mesh.rotation = Quaternion.from_euler(0, 45, 0)
+
+# Coordinate conversion
+from codomyrmex.spatial.coordinates import GeoCoordinate
+geo = GeoCoordinate(lat=37.7749, lon=-122.4194)
+cartesian = geo.to_cartesian()
+```
+
+## Testing Patterns
+
+```python
+# Verify vector operations
+v1 = Vec3(1, 0, 0)
+v2 = Vec3(0, 1, 0)
+assert v1.dot(v2) == 0  # Perpendicular
+
+# Verify quaternion rotation
+q = Quaternion.from_euler(0, 90, 0)
+rotated = q.rotate(Vec3(1, 0, 0))
+assert abs(rotated.z - 1.0) < 0.001  # Rotated 90° around Y
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

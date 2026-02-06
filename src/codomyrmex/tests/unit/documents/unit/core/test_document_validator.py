@@ -1,10 +1,14 @@
+import unittest
+from unittest.mock import patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, MagicMock
-from codomyrmex.documents.core.document_validator import DocumentValidator, validate_document
+from codomyrmex.documents.core.document_validator import (
+    DocumentValidator,
+    validate_document,
+)
 from codomyrmex.documents.models.document import Document, DocumentFormat
-from codomyrmex.documents.exceptions import DocumentValidationError
+
 
 @pytest.mark.unit
 class TestDocumentValidator(unittest.TestCase):

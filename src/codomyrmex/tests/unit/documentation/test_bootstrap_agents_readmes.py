@@ -3,12 +3,15 @@
 Unit tests for the bootstrap_agents_readmes script.
 """
 
-import pytest
 import tempfile
 from pathlib import Path
-# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
 
-from codomyrmex.documentation.scripts.bootstrap_agents_readmes import DocumentationBootstrapper
+import pytest
+
+# Removed mock imports to follow TDD principle: no mock methods, always do real data analysis
+from codomyrmex.documentation.scripts.bootstrap_agents_readmes import (
+    DocumentationBootstrapper,
+)
 
 
 @pytest.mark.unit

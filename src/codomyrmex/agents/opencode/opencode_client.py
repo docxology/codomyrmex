@@ -1,20 +1,24 @@
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, OpenCodeError
+from codomyrmex.agents.core.exceptions import (
+    AgentError,
+    AgentTimeoutError,
+    OpenCodeError,
+)
 from codomyrmex.agents.generic import CLIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 
 class OpenCodeClient(CLIAgentBase):
     """Client for interacting with OpenCode CLI tool."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize OpenCode client.
 
@@ -36,7 +40,7 @@ class OpenCodeClient(CLIAgentBase):
             timeout=60,
             working_dir=None,
         )
-        
+
         opencode_command = self.get_config_value("opencode_command", config=config)
         timeout = self.get_config_value("opencode_timeout", config=config)
         working_dir_str = self.get_config_value("opencode_working_dir", config=config)
@@ -110,7 +114,7 @@ class OpenCodeClient(CLIAgentBase):
 
         return args
 
-    def initialize_project(self, project_path: Optional[Path] = None) -> dict[str, Any]:
+    def initialize_project(self, project_path: Path | None = None) -> dict[str, Any]:
         """Initialize OpenCode for a project."""
         working_path = project_path or (self.working_dir if self.working_dir else Path.cwd())
 

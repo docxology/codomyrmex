@@ -1,51 +1,8 @@
-from typing import Any, Optional
 import math
-
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Physical simulation engine for object interactions."""
 
@@ -226,7 +183,7 @@ class PhysicsSimulator:
             obj_data["velocity"] = velocity
             obj_data["position"] = position
 
-    def get_object_state(self, object_id: str) -> Optional[dict[str, Any]]:
+    def get_object_state(self, object_id: str) -> dict[str, Any] | None:
         """Get the current state of an object."""
         return self.objects.get(object_id)
 

@@ -1,29 +1,9 @@
+import argparse
+import re
 from datetime import datetime
 from pathlib import Path
-import argparse
-import os
-import re
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Script to generate README.md files for directories that have AGENTS.md but no README.md.
@@ -40,7 +20,7 @@ def parse_agents_file(agents_path):
     if not agents_path.exists():
         return None
 
-    with open(agents_path, 'r') as f:
+    with open(agents_path) as f:
         content = f.read()
 
     # Extract basic information
@@ -123,7 +103,7 @@ def generate_readme_content(module_info, dir_path, repo_root):
             if link_type == 'parent':
                 readme_content += f"- **Parent Directory**: [{dir_path.parent.name}](../README.md)\n"
             elif link_type == 'root':
-                readme_content += f"- **Project Root**: [README](../../../README.md)\n"
+                readme_content += "- **Project Root**: [README](../../../README.md)\n"
             elif link_type == 'surface':
                 surface_name = rel_path.split('/')[0]
                 readme_content += f"- **{surface_name.title()} Hub**: [{surface_name}](../../../{surface_name}/README.md)\n"

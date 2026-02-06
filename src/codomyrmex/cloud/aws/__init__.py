@@ -1,23 +1,24 @@
 """AWS integration submodule."""
 
+import logging
+from typing import Any, Dict, Optional
+
 import boto3
 from botocore.exceptions import ClientError
-from typing import Any, Optional, Dict
-import logging
 
 logger = logging.getLogger(__name__)
 
 class S3Client:
     """Wrapper for AWS S3 operations."""
-    
-    def __init__(self, region_name: Optional[str] = None):
+
+    def __init__(self, region_name: str | None = None):
         self.client = boto3.client('s3', region_name=region_name)
 
-    def upload_file(self, file_path: str, bucket: str, object_name: Optional[str] = None) -> bool:
+    def upload_file(self, file_path: str, bucket: str, object_name: str | None = None) -> bool:
         """Upload a file to an S3 bucket."""
         if object_name is None:
             object_name = file_path
-            
+
         try:
             self.client.upload_file(file_path, bucket, object_name)
             return True
@@ -43,7 +44,7 @@ class S3Client:
             logger.error(f"S3 download error: {e}")
             return False
 
-    def get_metadata(self, bucket: str, object_name: str) -> Dict[str, Any]:
+    def get_metadata(self, bucket: str, object_name: str) -> dict[str, Any]:
         """Get object metadata."""
         try:
             response = self.client.head_object(Bucket=bucket, Key=object_name)
@@ -52,7 +53,7 @@ class S3Client:
             logger.error(f"S3 metadata error: {e}")
             return {}
 
-    def ensure_bucket(self, bucket: str, region: Optional[str] = None) -> bool:
+    def ensure_bucket(self, bucket: str, region: str | None = None) -> bool:
         """Ensure an S3 bucket exists."""
         try:
             self.client.head_bucket(Bucket=bucket)

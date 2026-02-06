@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Evolutionary Ai Context
+# Personal AI Infrastructure — Evolutionary AI Module
 
-**Module**: evolutionary_ai
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Evolutionary algorithms for genetic optimization, population management, and fitness evaluation.
+The Evolutionary AI module provides PAI integration for genetic algorithms and evolutionary optimization.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Genetic Algorithms
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Evolve solutions:
 
-## Key Files
+```python
+from codomyrmex.evolutionary_ai import GeneticAlgorithm
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+ga = GeneticAlgorithm(
+    fitness_fn=evaluate, population_size=100
+)
+best = ga.evolve(generations=50)
+```
 
-## Future Considerations
+### Parameter Optimization
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Optimize hyperparameters:
+
+```python
+from codomyrmex.evolutionary_ai import Optimizer
+
+optimizer = Optimizer(search_space=params)
+best_params = optimizer.search(objective_fn)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `GeneticAlgorithm` | Evolve solutions |
+| `Optimizer` | Hyperparameters |
+| `Population` | Manage candidates |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

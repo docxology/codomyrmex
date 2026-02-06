@@ -1,25 +1,25 @@
-from pathlib import Path
-from typing import Any, Iterator, Optional
 import os
 import subprocess
 import time
+from pathlib import Path
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
-from codomyrmex.logging_monitoring import get_logger
 
 
 def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
     """
     Decorator for retrying failed operations with exponential backoff.
-    
+
     Args:
         max_retries: Maximum number of retry attempts
         backoff_factor: Base delay multiplier (delay = factor * 2^attempt)
     """
     import functools
     import time as time_module
-    
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -62,10 +62,10 @@ class CLIAgentBase(BaseAgent):
         name: str,
         command: str,
         capabilities: list,
-        config: Optional[dict[str, Any]] = None,
-        timeout: Optional[int] = None,
-        working_dir: Optional[Path] = None,
-        env_vars: Optional[dict[str, str]] = None,
+        config: dict[str, Any] | None = None,
+        timeout: int | None = None,
+        working_dir: Path | None = None,
+        env_vars: dict[str, str] | None = None,
     ):
         """
         Initialize CLI agent base.
@@ -119,14 +119,14 @@ class CLIAgentBase(BaseAgent):
     def health_check(self) -> dict[str, Any]:
         """
         Perform comprehensive health check.
-        
+
         Returns:
             Dict with status, available, version, and response_time
         """
         start_time = time.time()
         available = self._check_command_available()
         response_time = time.time() - start_time
-        
+
         version = None
         if available:
             try:
@@ -139,9 +139,9 @@ class CLIAgentBase(BaseAgent):
                 version = result.stdout.strip() or result.stderr.strip()
             except Exception:
                 pass
-        
+
         status = "healthy" if available else "unavailable"
-        
+
         return {
             "status": status,
             "available": available,
@@ -153,7 +153,7 @@ class CLIAgentBase(BaseAgent):
 
 
     def _check_command_available(
-        self, command: Optional[str] = None, check_args: Optional[list[str]] = None
+        self, command: str | None = None, check_args: list[str] | None = None
     ) -> bool:
         """
         Check if command is available.
@@ -218,11 +218,11 @@ class CLIAgentBase(BaseAgent):
 
     def _execute_command(
         self,
-        args: Optional[list[str]] = None,
-        input_text: Optional[str] = None,
-        timeout: Optional[int] = None,
-        cwd: Optional[Path] = None,
-        env: Optional[dict[str, str]] = None,
+        args: list[str] | None = None,
+        input_text: str | None = None,
+        timeout: int | None = None,
+        cwd: Path | None = None,
+        env: dict[str, str] | None = None,
     ) -> dict[str, Any]:
         """
         Execute CLI command and return result.
@@ -337,10 +337,10 @@ class CLIAgentBase(BaseAgent):
 
     def _stream_command(
         self,
-        args: Optional[list[str]] = None,
-        input_text: Optional[str] = None,
-        cwd: Optional[Path] = None,
-        env: Optional[dict[str, str]] = None,
+        args: list[str] | None = None,
+        input_text: str | None = None,
+        cwd: Path | None = None,
+        env: dict[str, str] | None = None,
     ) -> Iterator[str]:
         """
         Stream CLI command output line by line.
@@ -428,8 +428,8 @@ class CLIAgentBase(BaseAgent):
         self,
         result: dict[str, Any],
         request: AgentRequest,
-        execution_time: Optional[float] = None,
-        additional_metadata: Optional[dict[str, Any]] = None,
+        execution_time: float | None = None,
+        additional_metadata: dict[str, Any] | None = None,
     ) -> AgentResponse:
         """
         Build AgentResponse from command result.

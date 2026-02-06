@@ -21,16 +21,14 @@ from typing import Any
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
-from ..mermaid.mermaid_generator import (
-    MermaidDiagramGenerator,
-    create_git_workflow_diagram,
-)
-
 # Import from data_visualization module
 from ..charts.plot_utils import (
     apply_common_aesthetics,
     get_codomyrmex_logger,
     save_plot,
+)
+from ..mermaid.mermaid_generator import (
+    MermaidDiagramGenerator,
 )
 
 # Import git_operations if available

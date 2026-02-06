@@ -11,9 +11,8 @@ Example:
 """
 
 import logging
-from logging.handlers import RotatingFileHandler
 import os
-from typing import Optional
+from logging.handlers import RotatingFileHandler
 
 
 class LogRotationManager:

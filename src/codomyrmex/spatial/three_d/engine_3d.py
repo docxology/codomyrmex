@@ -1,50 +1,7 @@
-from typing import Any, Optional, Tuple
-
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Core 3D Engine for modeling and rendering."""
 
@@ -117,7 +74,7 @@ class PhysicsEngine:
 class Light3D:
     """3D Light representation."""
     position: Vector3D = field(default_factory=Vector3D)
-    color: Tuple[float, float, float] = (1.0, 1.0, 1.0)
+    color: tuple[float, float, float] = (1.0, 1.0, 1.0)
     intensity: float = 1.0
 
 

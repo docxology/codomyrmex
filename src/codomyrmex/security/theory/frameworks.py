@@ -1,51 +1,8 @@
-from typing import List, Optional, Dict, Any
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security frameworks (OWASP, NIST, ISO 27001, etc.)."""
 
@@ -76,15 +33,15 @@ class FrameworkStandard:
 @dataclass
 class SecurityFramework:
     """Represents a security framework."""
-    
+
     name: str
     description: str
     version: str
-    categories: List[str]
-    standards: List[str]
-    framework_standards: List[FrameworkStandard] = field(default_factory=list)
-    website: Optional[str] = None
-    documentation_url: Optional[str] = None
+    categories: list[str]
+    standards: list[str]
+    framework_standards: list[FrameworkStandard] = field(default_factory=list)
+    website: str | None = None
+    documentation_url: str | None = None
 
 
 # Comprehensive security frameworks
@@ -255,29 +212,29 @@ FRAMEWORKS = {
 }
 
 
-def get_framework(framework_name: str) -> Optional[SecurityFramework]:
+def get_framework(framework_name: str) -> SecurityFramework | None:
     """Get a security framework by name."""
     return FRAMEWORKS.get(framework_name)
 
 
-def get_all_frameworks() -> List[SecurityFramework]:
+def get_all_frameworks() -> list[SecurityFramework]:
     """Get all available security frameworks."""
     return list(FRAMEWORKS.values())
 
 
-def get_frameworks_by_category(category: str) -> List[SecurityFramework]:
+def get_frameworks_by_category(category: str) -> list[SecurityFramework]:
     """Get frameworks filtered by category."""
     return [f for f in FRAMEWORKS.values() if category in f.categories]
 
 
-def apply_framework(framework_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def apply_framework(framework_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Apply a security framework to a context.
-    
+
     Args:
         framework_name: Name of the framework to apply
         context: Context dictionary with system information
-        
+
     Returns:
         Dictionary with application results and recommendations
     """
@@ -289,30 +246,30 @@ def apply_framework(framework_name: str, context: Dict[str, Any]) -> Dict[str, A
             "error": f"Unknown framework: {framework_name}",
             "available_frameworks": list(FRAMEWORKS.keys())
         }
-    
+
     logger.info(f"Applying framework '{framework.name}' version {framework.version} to context")
-    
+
     # Generate recommendations based on framework
     recommendations = []
-    
+
     if framework_name == "owasp_top_10":
         recommendations.append("Review OWASP Top 10 risks for web applications")
         recommendations.append("Implement secure coding practices")
         recommendations.append("Conduct regular security testing")
-    
+
     elif framework_name == "nist_csf":
         recommendations.append("Implement Identify function: Asset management and risk assessment")
         recommendations.append("Implement Protect function: Access control and data security")
         recommendations.append("Implement Detect function: Security monitoring and detection")
         recommendations.append("Implement Respond function: Incident response planning")
         recommendations.append("Implement Recover function: Recovery planning and improvements")
-    
+
     elif framework_name == "iso_27001":
         recommendations.append("Establish Information Security Management System (ISMS)")
         recommendations.append("Conduct risk assessment and treatment")
         recommendations.append("Implement security controls")
         recommendations.append("Establish continuous improvement process")
-    
+
     return {
         "applied": True,
         "framework": framework_name,
@@ -333,14 +290,14 @@ def apply_framework(framework_name: str, context: Dict[str, Any]) -> Dict[str, A
     }
 
 
-def check_framework_compliance(framework_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def check_framework_compliance(framework_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Check compliance with a security framework.
-    
+
     Args:
         framework_name: Name of the framework
         context: Context dictionary with compliance information
-        
+
     Returns:
         Compliance check results
     """
@@ -350,7 +307,7 @@ def check_framework_compliance(framework_name: str, context: Dict[str, Any]) -> 
             "compliant": False,
             "error": f"Unknown framework: {framework_name}"
         }
-    
+
     # Basic compliance checking
     compliance_checks = []
     for standard in framework.framework_standards:
@@ -360,7 +317,7 @@ def check_framework_compliance(framework_name: str, context: Dict[str, Any]) -> 
             "status": "unknown",  # Would be determined by actual checks
             "severity": standard.severity
         })
-    
+
     return {
         "compliant": True,
         "framework": framework_name,

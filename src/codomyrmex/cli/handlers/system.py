@@ -1,6 +1,11 @@
 import sys
-from typing import Optional
-from ..utils import get_logger, TerminalFormatter, TERMINAL_INTERFACE_AVAILABLE, PERFORMANCE_MONITORING_AVAILABLE
+
+from ..utils import (
+    PERFORMANCE_MONITORING_AVAILABLE,
+    TERMINAL_INTERFACE_AVAILABLE,
+    TerminalFormatter,
+    get_logger,
+)
 
 logger = get_logger(__name__)
 
@@ -99,7 +104,7 @@ def show_info():
 🐜 Codomyrmex - A Modular, Extensible Coding Workspace
 
 Codomyrmex provides a comprehensive suite of tools for:
-    pass 
+    pass
 • AI-enhanced code editing and generation
 • Automated build and synthesis processes
 • Static analysis and code quality checking
@@ -111,7 +116,7 @@ Codomyrmex provides a comprehensive suite of tools for:
 • Project management and orchestration
 
 Available modules:
-    pass 
+    pass
 📝 ai_code_editing      - AI-powered code assistance
 🔨 build_synthesis      - Build automation and code generation
 📚 documentation        - Rich documentation with Docusaurus
@@ -128,7 +133,7 @@ Available modules:
 💻 terminal_interface   - Interactive CLI and terminal utilities
 
 Get started:
-    pass 
+    pass
 1. Run 'codomyrmex check' to verify your setup
 2. Run 'codomyrmex shell' for interactive mode
 3. Run 'codomyrmex workflow list' to see available workflows

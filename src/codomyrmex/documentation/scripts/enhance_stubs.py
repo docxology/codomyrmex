@@ -1,25 +1,4 @@
 from pathlib import Path
-import os
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 """
@@ -30,7 +9,7 @@ STANDARD_CONTENT =
 
 Enhance Stub READMEs.
 
-Adds "Getting Started" and "Contributing" sections to short READMEs 
+Adds "Getting Started" and "Contributing" sections to short READMEs
 to improve quality scores by increasing word count, section count, and code examples.
 
 
@@ -102,17 +81,17 @@ See the root `CONTRIBUTING.md` for more details.
 def enhance_stubs(root_dir):
     root = Path(root_dir)
     count = 0
-    
+
     for path in root.rglob("README.md"):
         if any(x in str(path) for x in ["node_modules", ".git", ".venv", "output", ".pytest_cache"]):
             continue
-            
+
         try:
             content = path.read_text(encoding="utf-8")
-            
+
             # Simple heuristic for "stub": short content
             if len(content.split()) < 50 or "Getting Started" not in content:
-                
+
                 # Determine module path for the code example
                 try:
                     rel_path = path.relative_to(root / "src")
@@ -122,14 +101,14 @@ def enhance_stubs(root_dir):
 
                 # Append content if not present
                 new_section = STANDARD_CONTENT.replace("{module_parts}", module_parts)
-                
+
                 if "## Getting Started" not in content:
                     path.write_text(content + new_section, encoding="utf-8")
                     print(f"Enhanced {path}")
                     count += 1
         except Exception as e:
             print(f"Error processing {path}: {e}")
-            
+
     print(f"Enhanced {count} stub READMEs.")
 
 if __name__ == "__main__":

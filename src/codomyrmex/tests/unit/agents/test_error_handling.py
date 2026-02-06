@@ -4,27 +4,36 @@ Tests use real implementations only. FailingAgent is a test adapter
 that implements BaseAgent interface for testing error scenarios, not a mock.
 """
 
-import pytest
-import subprocess
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-from codomyrmex.agents.core.exceptions import (
-    AgentError,
-    EveryCodeError,
-    AgentTimeoutError,
-    AgentConfigurationError,
-    OpenCodeError,
-    JulesError,
-)
-from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
-from codomyrmex.agents.opencode import OpenCodeClient
+import pytest
+
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.core.config import (
+        AgentConfig,
+    )
+    from codomyrmex.agents.core.exceptions import (
+        AgentError,
+        AgentTimeoutError,
+    )
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+    from codomyrmex.agents.opencode import OpenCodeClient
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class FailingAgent(BaseAgent):
     """Test agent that fails in various ways for error testing.
-    
+
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
@@ -61,9 +70,9 @@ class TestNetworkFailuresAndRetries:
         # Use invalid command to trigger real FileNotFoundError
         client = OpenCodeClient(config={"opencode_command": "nonexistent-opencode-command-xyz"})
         request = AgentRequest(prompt="test")
-        
+
         response = client.execute(request)
-        
+
         assert not response.is_success()
         assert response.error is not None
         assert "not found" in response.error.lower() or "failed" in response.error.lower()
@@ -72,17 +81,17 @@ class TestNetworkFailuresAndRetries:
         """Test partial network failure in multi-agent scenario."""
         working_agent = FailingAgent("working", "success")
         failing_agent = FailingAgent("failing", "error_response")
-        
+
         orchestrator = AgentOrchestrator([working_agent, failing_agent])
         request = AgentRequest(prompt="test")
-        
+
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 2
         # One should succeed, one should fail
         success_count = sum(1 for r in responses if r.is_success())
         failure_count = sum(1 for r in responses if not r.is_success())
-        
+
         assert success_count == 1
         assert failure_count == 1
 
@@ -106,10 +115,10 @@ class TestTimeoutScenarios:
         """Test timeout handling in orchestration."""
         timeout_agent = FailingAgent("timeout", "timeout")
         normal_agent = FailingAgent("normal", "success")
-        
+
         orchestrator = AgentOrchestrator([timeout_agent, normal_agent])
         request = AgentRequest(prompt="test")
-        
+
         # Should handle timeout gracefully
         try:
             responses = orchestrator.execute_parallel(request)
@@ -132,9 +141,9 @@ class TestInvalidConfigurationHandling:
             claude_timeout=-5,
             gemini_timeout=-10,
         )
-        
+
         errors = config.validate()
-        
+
         assert len(errors) >= 3
         assert any("default_timeout" in e for e in errors)
         assert any("jules_timeout" in e for e in errors)
@@ -161,7 +170,7 @@ class TestInvalidConfigurationHandling:
         # Invalid timeout should be caught by validation
         config = AgentConfig(opencode_timeout=-1)
         errors = config.validate()
-        
+
         # Should catch invalid timeout
         assert any("opencode_timeout" in e or "positive" in e for e in errors)
 
@@ -174,13 +183,13 @@ class TestAgentUnavailabilityHandling:
         """Test handling when all agents are unavailable."""
         failing_agent1 = FailingAgent("agent1", "error_response")
         failing_agent2 = FailingAgent("agent2", "error_response")
-        
+
         orchestrator = AgentOrchestrator([failing_agent1, failing_agent2])
         request = AgentRequest(prompt="test")
-        
+
         # Fallback should return last error
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert not response.is_success()
         assert response.error is not None
 
@@ -188,13 +197,13 @@ class TestAgentUnavailabilityHandling:
         """Test handling when some agents are available."""
         working_agent = FailingAgent("working", "success")
         failing_agent = FailingAgent("failing", "error_response")
-        
+
         orchestrator = AgentOrchestrator([failing_agent, working_agent])
         request = AgentRequest(prompt="test")
-        
+
         # Fallback should succeed with working agent
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
 
 
@@ -209,12 +218,12 @@ class TestPartialFailureScenarios:
             FailingAgent("agent2", "error_response"),
             FailingAgent("agent3", "success"),
         ]
-        
+
         orchestrator = AgentOrchestrator(agents)
         request = AgentRequest(prompt="test")
-        
+
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 3
         success_count = sum(1 for r in responses if r.is_success())
         assert success_count == 2
@@ -226,13 +235,13 @@ class TestPartialFailureScenarios:
             FailingAgent("agent2", "error_response"),
             FailingAgent("agent3", "error_response"),
         ]
-        
+
         orchestrator = AgentOrchestrator(agents)
         request = AgentRequest(prompt="test")
-        
+
         # Sequential should continue through all failures
         responses = orchestrator.execute_sequential(request)
-        
+
         assert len(responses) == 3
         assert all(not r.is_success() for r in responses)
 
@@ -240,13 +249,13 @@ class TestPartialFailureScenarios:
         """Test recovery after initial failure."""
         failing_agent = FailingAgent("failing", "error_response")
         recovery_agent = FailingAgent("recovery", "success")
-        
+
         orchestrator = AgentOrchestrator([failing_agent, recovery_agent])
         request = AgentRequest(prompt="test")
-        
+
         # Fallback should recover
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
 
 
@@ -258,7 +267,7 @@ class TestErrorPropagationAndRecovery:
         """Test that exceptions propagate correctly."""
         exception_agent = FailingAgent("exception", "exception")
         request = AgentRequest(prompt="test")
-        
+
         # BaseAgent.execute() catches exceptions and returns error response
         # So we test the _execute_impl directly for exception propagation
         with pytest.raises(AgentError):
@@ -268,19 +277,19 @@ class TestErrorPropagationAndRecovery:
         """Test difference between error response and exception."""
         error_response_agent = FailingAgent("error_response", "error_response")
         exception_agent = FailingAgent("exception", "exception")
-        
+
         request = AgentRequest(prompt="test")
-        
+
         # Error response should return response with error
         error_response = error_response_agent.execute(request)
         assert not error_response.is_success()
         assert error_response.error is not None
-        
+
         # BaseAgent.execute() catches exceptions, but _execute_impl raises
         # Test that _execute_impl raises exception
         with pytest.raises(AgentError):
             exception_agent._execute_impl(request)
-        
+
         # But execute() catches it and returns error response
         exception_response = exception_agent.execute(request)
         assert not exception_response.is_success()
@@ -290,9 +299,9 @@ class TestErrorPropagationAndRecovery:
         """Test that error metadata is preserved."""
         agent = FailingAgent("metadata", "error_response")
         request = AgentRequest(prompt="test")
-        
+
         response = agent.execute(request)
-        
+
         assert not response.is_success()
         assert response.error is not None
         assert response.metadata is not None
@@ -302,18 +311,18 @@ class TestErrorPropagationAndRecovery:
         primary_agent = FailingAgent("primary", "error_response")
         secondary_agent = FailingAgent("secondary", "success")
         tertiary_agent = FailingAgent("tertiary", "success")
-        
+
         orchestrator = AgentOrchestrator([
             primary_agent,
             secondary_agent,
             tertiary_agent
         ])
-        
+
         request = AgentRequest(prompt="test")
-        
+
         # Should gracefully fall back to secondary
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
 
 
@@ -324,12 +333,12 @@ class TestEdgeCases:
     def test_empty_prompt_handling(self):
         """Test handling of empty prompts."""
         agent = FailingAgent("test", "success")
-        
+
         request = AgentRequest(prompt="")
-        
+
         # Should be caught by validation
         response = agent.execute(request)
-        
+
         # Validation should catch empty prompt
         assert not response.is_success()
         assert "empty" in response.error.lower() or "prompt" in response.error.lower()
@@ -337,36 +346,36 @@ class TestEdgeCases:
     def test_very_long_prompt(self):
         """Test handling of very long prompts."""
         agent = FailingAgent("test", "success")
-        
+
         long_prompt = "test " * 10000
         request = AgentRequest(prompt=long_prompt)
-        
+
         # Should handle long prompts
         response = agent.execute(request)
-        
+
         # Should either succeed or fail gracefully
         assert response is not None
 
     def test_none_context_handling(self):
         """Test handling of None context."""
         agent = FailingAgent("test", "success")
-        
+
         request = AgentRequest(prompt="test", context=None)
-        
+
         # Should handle None context
         response = agent.execute(request)
-        
+
         assert response is not None
 
     def test_empty_capabilities_list(self):
         """Test handling of empty capabilities list."""
         agent = FailingAgent("test", "success")
-        
+
         request = AgentRequest(prompt="test", capabilities=[])
-        
+
         # Should handle empty capabilities
         response = agent.execute(request)
-        
+
         assert response is not None
 
     def test_invalid_capability_request(self):

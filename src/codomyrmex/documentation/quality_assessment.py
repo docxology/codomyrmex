@@ -1,26 +1,7 @@
-from pathlib import Path
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Documentation Quality Assessment Module.
 

@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Indexer for FPF specification search and relationship traversal.
 
 
@@ -7,7 +7,7 @@ This module provides indexing and search capabilities for FPF patterns
 and concepts.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from ..core.models import FPFIndex, FPFSpec, Pattern
 
@@ -17,7 +17,7 @@ class FPFIndexer:
 
     def __init__(self):
         """Initialize the indexer."""
-        self.index: Optional[FPFIndex] = None
+        self.index: FPFIndex | None = None
 
     def build_index(self, spec: FPFSpec) -> FPFIndex:
         """Build a search index from the FPF specification.
@@ -28,11 +28,11 @@ class FPFIndexer:
         Returns:
             FPFIndex object containing all indexes
         """
-        pattern_index: Dict[str, Pattern] = {}
-        concept_index: Dict[str, List] = {}  # concept_name -> List[Concept]
-        keyword_index: Dict[str, List[str]] = {}  # keyword -> pattern_ids
-        title_index: Dict[str, List[str]] = {}  # word -> pattern_ids
-        relationship_graph: Dict[str, List[str]] = {}  # pattern_id -> related_ids
+        pattern_index: dict[str, Pattern] = {}
+        concept_index: dict[str, list] = {}  # concept_name -> List[Concept]
+        keyword_index: dict[str, list[str]] = {}  # keyword -> pattern_ids
+        title_index: dict[str, list[str]] = {}  # word -> pattern_ids
+        relationship_graph: dict[str, list[str]] = {}  # pattern_id -> related_ids
 
         # Build pattern index
         for pattern in spec.patterns:
@@ -88,8 +88,8 @@ class FPFIndexer:
         return self.index
 
     def search_patterns(
-        self, query: str, filters: Optional[Dict[str, Any]] = None
-    ) -> List[Pattern]:
+        self, query: str, filters: dict[str, Any] | None = None
+    ) -> list[Pattern]:
         """Search patterns using the built index.
 
         Args:
@@ -104,7 +104,7 @@ class FPFIndexer:
 
         return self.index.search_patterns(query, filters)
 
-    def get_pattern_by_id(self, pattern_id: str) -> Optional[Pattern]:
+    def get_pattern_by_id(self, pattern_id: str) -> Pattern | None:
         """Get a pattern by its ID.
 
         Args:
@@ -118,7 +118,7 @@ class FPFIndexer:
 
         return self.index.get_pattern(pattern_id)
 
-    def get_related_patterns(self, pattern_id: str, depth: int = 1) -> List[Pattern]:
+    def get_related_patterns(self, pattern_id: str, depth: int = 1) -> list[Pattern]:
         """Get patterns related to the given pattern.
 
         Args:

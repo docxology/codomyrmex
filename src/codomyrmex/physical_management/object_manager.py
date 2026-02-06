@@ -13,8 +13,8 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Optional
-
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +107,7 @@ class ObjectEvent:
     object_id: str
     timestamp: float = field(default_factory=time.time)
     data: dict[str, Any] = field(default_factory=dict)
-    source: Optional[str] = None
+    source: str | None = None
 
 
 @dataclass
@@ -197,7 +197,7 @@ class PhysicalObject:
 
     # New advanced properties
     material: MaterialType = MaterialType.UNKNOWN
-    material_properties: Optional[MaterialProperties] = None
+    material_properties: MaterialProperties | None = None
     mass: float = 1.0  # kg
     volume: float = 1.0  # m³
     temperature: float = 293.15  # K (20°C)
@@ -249,7 +249,7 @@ class PhysicalObject:
         self.properties[key] = value
         self.last_updated = time.time()
 
-    def remove_property(self, key: str) -> Optional[Any]:
+    def remove_property(self, key: str) -> Any | None:
         """Remove a property and return its value."""
         if key in self.properties:
             value = self.properties.pop(key)
@@ -376,7 +376,7 @@ class ObjectRegistry:
 
             logger.info(f"Registered physical object: {obj.id}")
 
-    def unregister_object(self, object_id: str) -> Optional[PhysicalObject]:
+    def unregister_object(self, object_id: str) -> PhysicalObject | None:
         """Unregister a physical object."""
         if object_id in self.objects:
             obj = self.objects.pop(object_id)
@@ -385,7 +385,7 @@ class ObjectRegistry:
             return obj
         return None
 
-    def get_object(self, object_id: str) -> Optional[PhysicalObject]:
+    def get_object(self, object_id: str) -> PhysicalObject | None:
         """Get a physical object by ID."""
         return self.objects.get(object_id)
 
@@ -434,8 +434,8 @@ class ObjectRegistry:
         ]
 
     def find_nearest_object(
-        self, x: float, y: float, z: float, object_type: Optional[ObjectType] = None
-    ) -> Optional[PhysicalObject]:
+        self, x: float, y: float, z: float, object_type: ObjectType | None = None
+    ) -> PhysicalObject | None:
         """Find the nearest object to a point, optionally filtered by type."""
         min_distance = float("inf")
         nearest_object = None
@@ -532,9 +532,9 @@ class ObjectRegistry:
 
     def get_events(
         self,
-        event_type: Optional[EventType] = None,
-        object_id: Optional[str] = None,
-        since: Optional[float] = None,
+        event_type: EventType | None = None,
+        object_id: str | None = None,
+        since: float | None = None,
     ) -> list[ObjectEvent]:
         """Get events filtered by type, object ID, and/or timestamp."""
         events = self.event_history
@@ -577,7 +577,7 @@ class ObjectRegistry:
 
     def find_path_through_network(
         self, start_id: str, end_id: str, max_hops: int = 10
-    ) -> Optional[list[str]]:
+    ) -> list[str] | None:
         """Find path between objects through network connections (BFS)."""
         if start_id not in self.objects or end_id not in self.objects:
             return None
@@ -760,7 +760,7 @@ class PhysicalObjectManager:
         self.registry.register_object(obj)
         return obj
 
-    def get_object_status(self, object_id: str) -> Optional[ObjectStatus]:
+    def get_object_status(self, object_id: str) -> ObjectStatus | None:
         """Get the status of an object."""
         obj = self.registry.get_object(object_id)
         return obj.status if obj else None
@@ -836,7 +836,7 @@ class PhysicalObjectManager:
 
     def find_path_between_objects(
         self, start_object_id: str, end_object_id: str, max_steps: int = 10
-    ) -> Optional[list[PhysicalObject]]:
+    ) -> list[PhysicalObject] | None:
         """Find a path between two objects using nearby objects as waypoints."""
         start_obj = self.registry.get_object(start_object_id)
         end_obj = self.registry.get_object(end_object_id)
@@ -874,7 +874,7 @@ class PhysicalObjectManager:
         return None  # No path found
 
     def calculate_center_of_mass(
-        self, object_ids: Optional[list[str]] = None
+        self, object_ids: list[str] | None = None
     ) -> tuple[float, float, float]:
         """Calculate center of mass for specified objects or all objects."""
         if object_ids is None:
@@ -901,7 +901,7 @@ class PhysicalObjectManager:
         return [group for group in groups if len(group) >= min_cluster_size]
 
     def get_boundary_box(
-        self, object_ids: Optional[list[str]] = None
+        self, object_ids: list[str] | None = None
     ) -> dict[str, tuple[float, float]]:
         """Get the bounding box containing all or specified objects."""
         if object_ids is None:

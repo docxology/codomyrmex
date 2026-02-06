@@ -1,7 +1,8 @@
 """Visualization themes and styling."""
 
-from dataclasses import dataclass, field
-from typing import Any, List, Dict
+from dataclasses import dataclass
+from typing import Any
+
 
 @dataclass
 class ThemeColors:
@@ -27,26 +28,26 @@ class ThemeFont:
 
 class Theme:
     """Visualization theme manager."""
-    
+
     def __init__(self, name: str = "default"):
         self.name = name
         self.colors = ThemeColors()
         self.font = ThemeFont()
-        
-    def get_color_sequence(self, n: int, base_color: str = "primary") -> List[str]:
+
+    def get_color_sequence(self, n: int, base_color: str = "primary") -> list[str]:
         """Get a sequence of n colors based on a base color."""
         import matplotlib.pyplot as plt
         import numpy as np
-        
+
         if base_color == "primary":
             base = self.colors.primary
         else:
             base = base_color
-            
+
         # Generate varied colors
         cmap = plt.get_cmap("viridis")
         return [cmap(i) for i in np.linspace(0, 1, n)]
-        
+
     def get_status_color(self, status: str) -> str:
         """Get color for a status string."""
         status = status.lower()
@@ -64,7 +65,7 @@ class Theme:
         # ax.set_facecolor(self.colors.background)
         pass # Minimal implementation
 
-    def create_legend(self, ax: Any, handles: List[Any], labels: List[str], **kwargs) -> None:
+    def create_legend(self, ax: Any, handles: list[Any], labels: list[str], **kwargs) -> None:
         """Create styled legend."""
         ax.legend(handles, labels, **kwargs)
 

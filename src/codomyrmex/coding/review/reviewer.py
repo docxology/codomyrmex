@@ -10,40 +10,30 @@ import os
 import re
 import shutil
 import subprocess
-import sys
-import tempfile
 import time
-from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError
 
 # Import logger setup
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+# Import analyzer
+from .analyzer import PyscnAnalyzer
 
 # Import models from this module
 from .models import (
     AnalysisResult,
     AnalysisSummary,
-    AnalysisType,
     ArchitectureViolation,
     CodeMetrics,
-    CodeReviewError,
     ComplexityReductionSuggestion,
-    ConfigurationError,
     DeadCodeFinding,
     Language,
-    PyscnError,
     QualityDashboard,
     QualityGateResult,
     SeverityLevel,
-    ToolNotFoundError,
 )
-
-# Import analyzer
-from .analyzer import PyscnAnalyzer
 
 logger = get_logger(__name__)
 
@@ -816,7 +806,7 @@ class CodeReviewer:
 
         return suggestions
 
-    def _generate_complexity_suggestion(self, func_data: dict[str, Any]) -> Optional[ComplexityReductionSuggestion]:
+    def _generate_complexity_suggestion(self, func_data: dict[str, Any]) -> ComplexityReductionSuggestion | None:
         """Generate a specific suggestion for reducing complexity."""
         function_name = func_data.get("name", "unknown")
         complexity = func_data.get("complexity", 0)
@@ -888,7 +878,7 @@ def complex_function(data):
 
         return findings
 
-    def _enhance_dead_code_finding(self, finding: dict[str, Any]) -> Optional[DeadCodeFinding]:
+    def _enhance_dead_code_finding(self, finding: dict[str, Any]) -> DeadCodeFinding | None:
         """Enhance a dead code finding with better suggestions."""
         location = finding.get("location", {})
         file_path = location.get("file_path", "")
@@ -1353,7 +1343,7 @@ def complex_function(data):
                         filepath = os.path.join(root, f)
                         python_files.append(filepath)
                         try:
-                            with open(filepath, 'r', encoding='utf-8', errors='ignore') as fh:
+                            with open(filepath, encoding='utf-8', errors='ignore') as fh:
                                 total_lines += len(fh.readlines())
                         except (OSError, IOError):
                             continue
@@ -1594,7 +1584,7 @@ def complex_function(data):
                         if f.endswith('.py'):
                             filepath = os.path.join(root, f)
                             try:
-                                with open(filepath, 'r', encoding='utf-8', errors='ignore') as fh:
+                                with open(filepath, encoding='utf-8', errors='ignore') as fh:
                                     content = fh.read()
                                     # Count try/except blocks as a proxy for error handling
                                     try_count = content.count('try:')
@@ -1645,7 +1635,7 @@ def complex_function(data):
                         if f.endswith('.py'):
                             filepath = os.path.join(root, f)
                             try:
-                                with open(filepath, 'r', encoding='utf-8', errors='ignore') as fh:
+                                with open(filepath, encoding='utf-8', errors='ignore') as fh:
                                     content = fh.read()
                                     files_analyzed += 1
 
@@ -1703,7 +1693,7 @@ def complex_function(data):
                         if f.endswith('.py'):
                             filepath = os.path.join(root, f)
                             try:
-                                with open(filepath, 'r', encoding='utf-8', errors='ignore') as fh:
+                                with open(filepath, encoding='utf-8', errors='ignore') as fh:
                                     content = fh.read()
 
                                     for pattern, penalty in performance_patterns.items():

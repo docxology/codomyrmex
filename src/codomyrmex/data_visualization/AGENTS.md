@@ -1,36 +1,65 @@
-# Codomyrmex Agents — src/codomyrmex/data_visualization
+# Agent Guidelines - Data Visualization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Charts, graphs, and visual data representations.
 
-Provides data visualization capabilities including charts, plots, and interactive visualizations. Supports multiple output formats and integrates with data analysis workflows.
+## Key Classes
 
-## Active Components
+- **Chart** — Base chart class
+- **LineChart** — Time series visualization
+- **BarChart** — Categorical comparisons
+- **Dashboard** — Multiple chart layout
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `charts/` – Directory containing charts components
-- `engines/` – Directory containing engines components
-- `git/` – Directory containing git components
-- `mermaid/` – Directory containing mermaid components
-- `requirements.txt` – Project file
-- `themes/` – Directory containing themes components
+## Agent Instructions
 
-## Operating Contracts
+1. **Choose chart type** — Match data to visualization
+2. **Label clearly** — Axes, legends, titles
+3. **Use color wisely** — Accessible palettes
+4. **Interactive** — Add tooltips and zoom
+5. **Export formats** — PNG, SVG, PDF support
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.data_visualization import (
+    LineChart, BarChart, Dashboard, export_chart
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Line chart for time series
+chart = LineChart(title="User Growth")
+chart.add_series("Users", dates, counts)
+chart.set_axis("x", label="Date")
+chart.set_axis("y", label="Active Users")
+
+# Bar chart for comparisons
+bar = BarChart(title="Module Usage")
+bar.add_data(module_names, usage_counts)
+bar.set_colors(["#3498db", "#2ecc71", "#e74c3c"])
+
+# Dashboard with multiple charts
+dashboard = Dashboard(title="Analytics")
+dashboard.add_chart(chart, row=0, col=0)
+dashboard.add_chart(bar, row=0, col=1)
+dashboard.render("dashboard.html")
+
+# Export
+export_chart(chart, "growth.png", dpi=300)
+```
+
+## Testing Patterns
+
+```python
+# Verify chart creation
+chart = LineChart()
+chart.add_series("test", [1, 2], [10, 20])
+assert len(chart.series) == 1
+
+# Verify export
+export_chart(chart, "/tmp/test.png")
+assert Path("/tmp/test.png").exists()
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

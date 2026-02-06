@@ -1,26 +1,49 @@
-# Personal AI Infrastructure - Examples Context
+# Personal AI Infrastructure — Examples Module
 
-**Module**: examples
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Example implementations and usage patterns demonstrating module capabilities and best practices.
+The Examples module provides PAI integration demonstrations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Running Examples
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Execute example code:
 
-## Key Files
+```bash
+# List all examples
+python -m codomyrmex.examples --list
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+# Run a specific example
+python -m codomyrmex.examples.basic_llm
+```
 
-## Future Considerations
+### Creating Examples
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Add new examples:
+
+```python
+# examples/my_example.py
+\"\"\"Example: Using the LLM module.\"\"\"
+
+
+from codomyrmex.llm import LLMClient
+
+client = LLMClient()
+response = client.complete("Hello!")
+print(response)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `examples` | Runnable demos |
+| `--list` | List examples |
+| `docs` | Example docs |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

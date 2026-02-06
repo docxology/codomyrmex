@@ -1,20 +1,21 @@
 """Distributed lock backed by Redis."""
 
-from .distributed_lock import BaseLock
-import redis
+import logging
 import time
 import uuid
-import logging
-from typing import Optional
+
+import redis
+
+from .distributed_lock import BaseLock
 
 logger = logging.getLogger(__name__)
 
 class RedisLock(BaseLock):
     """Distributed lock using Redis SETNX and TTL."""
-    
+
     def __init__(self, name: str, redis_client: redis.Redis, ttl: int = 30):
         """Initialize the Redis lock.
-        
+
         Args:
             name: The name of the lock.
             redis_client: A redis.Redis instance.
@@ -39,7 +40,7 @@ class RedisLock(BaseLock):
     def release(self) -> None:
         if not self.is_held:
             return
-            
+
         # Use Lua script for atomic check-and-delete to ensure we only release our own lock
         script = """
         if redis.call("get", KEYS[1]) == ARGV[1] then
@@ -55,7 +56,7 @@ class RedisLock(BaseLock):
         """Extend the lock TTL if held."""
         if not self.is_held:
             return False
-            
+
         script = """
         if redis.call("get", KEYS[1]) == ARGV[1] then
             return redis.call("expire", KEYS[1], ARGV[2])

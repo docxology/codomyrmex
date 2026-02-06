@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """PNG visualization engine for FPF specifications.
 
 
@@ -10,7 +10,6 @@ academic styling.
 
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -19,15 +18,15 @@ import numpy as np
 from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
 from codomyrmex.cerebrum.visualization_theme import get_default_theme
 
+from ..core.models import FPFSpec
 from .graph_generator import GraphGenerator
-from ..core.models import FPFSpec, Pattern
 from .term_analyzer import TermAnalyzer
 
 
 class FPFVisualizerPNG:
     """PNG visualizer for FPF specifications with enhanced styling."""
 
-    def __init__(self, figsize: Tuple[int, int] = (16, 12), dpi: int = 300):
+    def __init__(self, figsize: tuple[int, int] = (16, 12), dpi: int = 300):
         """Initialize the PNG visualizer.
 
         Args:
@@ -272,7 +271,7 @@ class FPFVisualizerPNG:
         G = nx.DiGraph()
 
         # Group patterns by part
-        part_patterns: Dict[str, List[str]] = defaultdict(list)
+        part_patterns: dict[str, list[str]] = defaultdict(list)
         for pattern in spec.patterns:
             part = pattern.part or "Other"
             part_patterns[part].append(pattern.id)
@@ -285,7 +284,7 @@ class FPFVisualizerPNG:
         for relationship in spec.relationships:
             source_pattern = next((p for p in spec.patterns if p.id == relationship.source), None)
             target_pattern = next((p for p in spec.patterns if p.id == relationship.target), None)
-            
+
             if source_pattern and target_pattern:
                 source_part = source_pattern.part or "Other"
                 target_part = target_pattern.part or "Other"
@@ -381,7 +380,7 @@ class FPFVisualizerPNG:
             )
             chart_viz.format_axes_labels(ax, xlabel="Status", ylabel="Count")
             chart_viz.format_title(ax, "Pattern Status Distribution")
-            
+
             # Add value labels on bars
             chart_viz.add_value_labels(ax, bars, format_str="{:.0f}")
 

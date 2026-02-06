@@ -23,9 +23,9 @@ except ImportError:
 try:
     from .asset_inventory import (
         AssetInventory,
+        get_asset_status,
         register_asset,
         track_asset,
-        get_asset_status,
     )
     ASSET_INVENTORY_AVAILABLE = True
 except ImportError:
@@ -38,8 +38,8 @@ except ImportError:
 try:
     from .surveillance import (
         SurveillanceMonitor,
-        monitor_physical_access,
         log_physical_event,
+        monitor_physical_access,
     )
     SURVEILLANCE_AVAILABLE = True
 except ImportError:

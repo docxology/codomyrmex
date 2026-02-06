@@ -3,20 +3,22 @@ Tests for Security Secrets Module
 """
 
 import os
-import pytest
 import tempfile
 from pathlib import Path
+
+import pytest
+
 from codomyrmex.security.secrets import (
-    SecretType,
-    SecretSeverity,
     DetectedSecret,
     ScanResult,
     SecretPatterns,
     SecretScanner,
+    SecretSeverity,
+    SecretType,
     SecretVault,
+    generate_secret,
     get_secret_from_env,
     mask_secret,
-    generate_secret,
 )
 
 

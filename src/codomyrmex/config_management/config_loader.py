@@ -8,7 +8,7 @@ import json
 import os
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from typing import Any
 
 import jsonschema
 import requests
@@ -116,7 +116,7 @@ class Configuration:
     data: dict[str, Any]
     source: str = "unknown"
     loaded_at: datetime = field(init=False)
-    schema: Optional[ConfigSchema] = None
+    schema: ConfigSchema | None = None
     environment: str = "default"
     version: str = "1.0.0"
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -184,7 +184,7 @@ class ConfigurationManager:
     - Configuration encryption/decryption
     """
 
-    def __init__(self, config_dir: Optional[str] = None):
+    def __init__(self, config_dir: str | None = None):
         """
         Initialize the configuration manager.
 
@@ -208,8 +208,8 @@ class ConfigurationManager:
     def load_configuration(
         self,
         name: str,
-        sources: Optional[list[str]] = None,
-        schema_path: Optional[str] = None,
+        sources: list[str] | None = None,
+        schema_path: str | None = None,
     ) -> Configuration:
         """
         Load configuration from multiple sources.
@@ -282,7 +282,7 @@ class ConfigurationManager:
 
         return config
 
-    def _load_source(self, source: str) -> Optional[dict[str, Any]]:
+    def _load_source(self, source: str) -> dict[str, Any] | None:
         """Load configuration from a specific source."""
         # Handle different source types
         if source.startswith("env://"):
@@ -305,7 +305,7 @@ class ConfigurationManager:
             file_path = os.path.join(self.config_dir, source)
             return self._load_file(file_path)
 
-    def _load_file(self, file_path: str) -> Optional[dict[str, Any]]:
+    def _load_file(self, file_path: str) -> dict[str, Any] | None:
         """Load configuration from file."""
         if not os.path.exists(file_path):
             return None
@@ -321,7 +321,7 @@ class ConfigurationManager:
             logger.error(f"Failed to load config file {file_path}: {e}")
             return None
 
-    def _load_from_url(self, url: str) -> Optional[dict[str, Any]]:
+    def _load_from_url(self, url: str) -> dict[str, Any] | None:
         """Load configuration from URL."""
         try:
             response = requests.get(url, timeout=30)
@@ -349,7 +349,7 @@ class ConfigurationManager:
 
         return env_config
 
-    def _load_schema(self, schema_path: str) -> Optional[ConfigSchema]:
+    def _load_schema(self, schema_path: str) -> ConfigSchema | None:
         """Load JSON schema for configuration validation."""
         try:
             with open(schema_path) as f:
@@ -448,7 +448,7 @@ class ConfigurationManager:
             logger.error(f"Failed to reload configuration {name}: {e}")
             return False
 
-    def get_configuration(self, name: str) -> Optional[Configuration]:
+    def get_configuration(self, name: str) -> Configuration | None:
         """Get loaded configuration by name."""
         return self.configurations.get(name)
 
@@ -519,7 +519,7 @@ class ConfigurationManager:
         else:
             return None
 
-    def load_configuration_from_file(self, path: str) -> Optional[Configuration]:
+    def load_configuration_from_file(self, path: str) -> Configuration | None:
         """
         Load configuration directly from a file path.
 
@@ -540,7 +540,7 @@ class ConfigurationManager:
         )
         return config
 
-    def load_config_with_validation(self, path: str, schema: Optional[Dict[str, Any]] = None) -> Optional[Configuration]:
+    def load_config_with_validation(self, path: str, schema: dict[str, Any] | None = None) -> Configuration | None:
         """
         Load configuration with automatic validation.
 
@@ -628,7 +628,7 @@ class ConfigurationManager:
             logger.error(f"Migration error for {name}: {e}")
             return False
 
-    def validate_config_schema(self, config_data: Dict[str, Any], schema: Dict[str, Any]) -> tuple[bool, list[str]]:
+    def validate_config_schema(self, config_data: dict[str, Any], schema: dict[str, Any]) -> tuple[bool, list[str]]:
         """
         Validate configuration data against a schema.
 
@@ -646,7 +646,7 @@ class ConfigurationManager:
             logger.warning("ConfigValidator not available, skipping schema validation")
             return True, []
 
-    def get_validation_report(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_validation_report(self, name: str) -> dict[str, Any] | None:
         """
         Get detailed validation report for a configuration.
 
@@ -662,7 +662,11 @@ class ConfigurationManager:
         config = self.configurations[name]
 
         try:
-            from .config_validator import ConfigValidator, get_logging_config_schema, get_database_config_schema
+            from .config_validator import (
+                ConfigValidator,
+                get_database_config_schema,
+                get_logging_config_schema,
+            )
 
             # Try different schemas based on configuration content
             schema = None
@@ -729,7 +733,7 @@ class ConfigurationManager:
 
 # Convenience functions
 def load_configuration(
-    name: str, sources: Optional[list[str]] = None, schema_path: Optional[str] = None
+    name: str, sources: list[str] | None = None, schema_path: str | None = None
 ) -> Configuration:
     """
     Convenience function to load configuration.

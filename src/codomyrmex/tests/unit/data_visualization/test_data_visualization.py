@@ -1,9 +1,10 @@
 """Comprehensive unit tests for the data_visualization module."""
 
-import pytest
+from pathlib import Path
+
 import matplotlib
 import matplotlib.pyplot as plt
-from pathlib import Path
+import pytest
 
 # Use non-interactive backend for testing
 matplotlib.use('Agg')
@@ -42,13 +43,9 @@ class TestImports:
 
     def test_import_exceptions(self):
         from codomyrmex.data_visualization.exceptions import (
-            DataVisualizationError,
             ChartCreationError,
+            DataVisualizationError,
             InvalidDataError,
-            ThemeError,
-            MermaidGenerationError,
-            GitVisualizationError,
-            PlotSaveError,
         )
         assert DataVisualizationError is not None
         assert ChartCreationError is not None
@@ -56,9 +53,14 @@ class TestImports:
 
     def test_import_chart_functions_from_charts(self):
         from codomyrmex.data_visualization.charts import (
-            create_bar_chart, create_line_plot, create_scatter_plot,
-            create_histogram, create_pie_chart, create_heatmap,
-            create_box_plot, create_area_chart,
+            create_area_chart,
+            create_bar_chart,
+            create_box_plot,
+            create_heatmap,
+            create_histogram,
+            create_line_plot,
+            create_pie_chart,
+            create_scatter_plot,
         )
         assert all(callable(f) for f in [
             create_bar_chart, create_line_plot, create_scatter_plot,
@@ -68,8 +70,14 @@ class TestImports:
 
     def test_import_chart_classes_from_charts(self):
         from codomyrmex.data_visualization.charts import (
-            BarChart, LinePlot, ScatterPlot, Histogram, PieChart,
-            Heatmap, BoxPlot, AreaChart,
+            AreaChart,
+            BarChart,
+            BoxPlot,
+            Heatmap,
+            Histogram,
+            LinePlot,
+            PieChart,
+            ScatterPlot,
         )
         assert all(c is not None for c in [
             BarChart, LinePlot, ScatterPlot, Histogram, PieChart,
@@ -101,7 +109,10 @@ class TestImports:
         assert callable(create_heatmap)
 
     def test_backward_compat_plot_utils_import(self):
-        from codomyrmex.data_visualization.plot_utils import save_plot, get_codomyrmex_logger
+        from codomyrmex.data_visualization.plot_utils import (
+            get_codomyrmex_logger,
+            save_plot,
+        )
         assert callable(save_plot)
         assert callable(get_codomyrmex_logger)
 
@@ -138,7 +149,9 @@ class TestPlotUtils:
     """Test plot utility functions."""
 
     def test_get_codomyrmex_logger(self):
-        from codomyrmex.data_visualization.charts.plot_utils import get_codomyrmex_logger
+        from codomyrmex.data_visualization.charts.plot_utils import (
+            get_codomyrmex_logger,
+        )
         logger = get_codomyrmex_logger("test_module")
         assert logger is not None
         assert hasattr(logger, 'info')
@@ -178,7 +191,9 @@ class TestPlotUtils:
         plt.close(fig)
 
     def test_apply_common_aesthetics(self):
-        from codomyrmex.data_visualization.charts.plot_utils import apply_common_aesthetics
+        from codomyrmex.data_visualization.charts.plot_utils import (
+            apply_common_aesthetics,
+        )
         fig, ax = plt.subplots()
         result = apply_common_aesthetics(ax, title="Test", x_label="X", y_label="Y")
         assert result is ax
@@ -222,7 +237,10 @@ class TestPlotUtils:
         plt.close(fig)
 
     def test_save_figure_alias(self):
-        from codomyrmex.data_visualization.charts.plot_utils import save_figure, save_plot
+        from codomyrmex.data_visualization.charts.plot_utils import (
+            save_figure,
+            save_plot,
+        )
         assert save_figure is save_plot
 
     def test_default_figure_size(self):
@@ -331,22 +349,30 @@ class TestScatterPlot:
     """Test scatter plot generation."""
 
     def test_basic_scatter_plot(self, tmp_path):
-        from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+        from codomyrmex.data_visualization.charts.scatter_plot import (
+            create_scatter_plot,
+        )
         output = str(tmp_path / "scatter.png")
         fig = create_scatter_plot([1, 2, 3], [4, 5, 6], output_path=output)
         assert fig is not None
         assert Path(output).exists()
 
     def test_empty_data_returns_none(self):
-        from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+        from codomyrmex.data_visualization.charts.scatter_plot import (
+            create_scatter_plot,
+        )
         assert create_scatter_plot([], []) is None
 
     def test_mismatched_data_returns_none(self):
-        from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+        from codomyrmex.data_visualization.charts.scatter_plot import (
+            create_scatter_plot,
+        )
         assert create_scatter_plot([1, 2], [1, 2, 3]) is None
 
     def test_custom_styling(self, tmp_path):
-        from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+        from codomyrmex.data_visualization.charts.scatter_plot import (
+            create_scatter_plot,
+        )
         output = str(tmp_path / "scatter_styled.png")
         fig = create_scatter_plot(
             [1, 2, 3, 4], [2, 4, 6, 8],
@@ -356,7 +382,9 @@ class TestScatterPlot:
         assert fig is not None
 
     def test_scatter_with_theme(self, tmp_path):
-        from codomyrmex.data_visualization.charts.scatter_plot import create_scatter_plot
+        from codomyrmex.data_visualization.charts.scatter_plot import (
+            create_scatter_plot,
+        )
         fig = create_scatter_plot([1, 2, 3], [3, 2, 1], theme="vibrant")
         assert fig is not None
 
@@ -634,7 +662,11 @@ class TestThemes:
         assert 'font.family' in params
 
     def test_apply_theme(self):
-        from codomyrmex.data_visualization.themes import ThemeName, get_theme, apply_theme
+        from codomyrmex.data_visualization.themes import (
+            ThemeName,
+            apply_theme,
+            get_theme,
+        )
         theme = get_theme(ThemeName.LIGHT)
         apply_theme(theme)
         assert plt.rcParams['figure.facecolor'] == theme.figure_facecolor
@@ -675,7 +707,9 @@ class TestAdvancedPlotter:
     """Test the AdvancedPlotter class."""
 
     def test_create_figure(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         fig, ax = plotter.create_figure()
         assert fig is not None
@@ -683,7 +717,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_line(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         line = plotter.plot_line([1, 2, 3], [4, 5, 6], label="test")
@@ -691,7 +727,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_scatter(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         scatter = plotter.plot_scatter([1, 2, 3], [4, 5, 6])
@@ -699,7 +737,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_bar(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bars = plotter.plot_bar(['A', 'B'], [10, 20])
@@ -707,7 +747,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_histogram(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         result = plotter.plot_histogram([1, 2, 2, 3, 3, 3])
@@ -715,7 +757,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_plot_heatmap(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         try:
@@ -728,7 +772,9 @@ class TestAdvancedPlotter:
             plotter.clear_figures()
 
     def test_plot_box(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bp = plotter.plot_box({"A": [1, 2, 3], "B": [4, 5, 6]})
@@ -736,7 +782,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_save_plot(self, tmp_path):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         plotter.plot_line([1, 2, 3], [1, 4, 9])
@@ -747,7 +795,9 @@ class TestAdvancedPlotter:
         plotter.clear_figures()
 
     def test_clear_figures(self):
-        from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+        from codomyrmex.data_visualization.engines.advanced_plotter import (
+            AdvancedPlotter,
+        )
         plotter = AdvancedPlotter()
         plotter.create_figure()
         plotter.create_figure()
@@ -758,12 +808,12 @@ class TestAdvancedPlotter:
 
     def test_convenience_functions(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import (
+            create_advanced_bar_chart,
             create_advanced_line_plot,
             create_advanced_scatter_plot,
-            create_advanced_bar_chart,
-            get_available_styles,
             get_available_palettes,
             get_available_plot_types,
+            get_available_styles,
         )
         assert callable(create_advanced_line_plot)
         assert callable(create_advanced_scatter_plot)
@@ -781,7 +831,9 @@ class TestAdvancedPlotter:
 
     def test_enums(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import (
-            PlotType, ChartStyle, ColorPalette,
+            ChartStyle,
+            ColorPalette,
+            PlotType,
         )
         assert PlotType.LINE.value == "line"
         assert ChartStyle.DARK.value == "dark"
@@ -797,7 +849,9 @@ class TestMermaidBuilders:
 
     def test_flowchart_creation(self):
         from codomyrmex.data_visualization.mermaid import (
-            Flowchart, FlowDirection, NodeShape,
+            Flowchart,
+            FlowDirection,
+            NodeShape,
         )
         fc = Flowchart(direction=FlowDirection.TOP_DOWN)
         fc.add_node("A", "Start", NodeShape.ROUND)
@@ -829,7 +883,9 @@ class TestMermaidBuilders:
 
     def test_flowchart_subgraph(self):
         from codomyrmex.data_visualization.mermaid import (
-            Flowchart, FlowDirection, NodeShape,
+            Flowchart,
+            FlowDirection,
+            NodeShape,
         )
         fc = Flowchart(direction=FlowDirection.LEFT_RIGHT)
         fc.add_node("A", "Node A", NodeShape.RECTANGLE)
@@ -854,7 +910,9 @@ class TestMermaidGenerator:
     """Test MermaidDiagramGenerator."""
 
     def test_git_branch_diagram(self):
-        from codomyrmex.data_visualization.mermaid.mermaid_generator import MermaidDiagramGenerator
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+            MermaidDiagramGenerator,
+        )
         gen = MermaidDiagramGenerator()
         branches = [{"name": "main", "created_at": "2024-01-01"}]
         commits = [
@@ -864,7 +922,9 @@ class TestMermaidGenerator:
         assert content  # non-empty
 
     def test_git_workflow_diagram(self):
-        from codomyrmex.data_visualization.mermaid.mermaid_generator import MermaidDiagramGenerator
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+            MermaidDiagramGenerator,
+        )
         gen = MermaidDiagramGenerator()
         workflow_steps = [
             {"name": "checkout", "description": "Checkout code"},
@@ -875,7 +935,9 @@ class TestMermaidGenerator:
         assert len(content) > 0
 
     def test_commit_timeline_diagram(self):
-        from codomyrmex.data_visualization.mermaid.mermaid_generator import create_commit_timeline_diagram
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+            create_commit_timeline_diagram,
+        )
         commits = [
             {"hash": "abc", "message": "First", "date": "2024-01-01"},
             {"hash": "def", "message": "Second", "date": "2024-01-02"},
@@ -884,14 +946,18 @@ class TestMermaidGenerator:
         assert content
 
     def test_repository_structure_diagram(self):
-        from codomyrmex.data_visualization.mermaid.mermaid_generator import MermaidDiagramGenerator
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+            MermaidDiagramGenerator,
+        )
         gen = MermaidDiagramGenerator()
         structure = {"src": {"main.py": "file"}, "README.md": "file"}
         content = gen.create_repository_structure_diagram(repo_structure=structure)
         assert content
 
     def test_save_mermaid_to_file(self, tmp_path):
-        from codomyrmex.data_visualization.mermaid.mermaid_generator import MermaidDiagramGenerator
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import (
+            MermaidDiagramGenerator,
+        )
         gen = MermaidDiagramGenerator()
         output = str(tmp_path / "test.mmd")
         workflow_steps = [
@@ -970,7 +1036,8 @@ class TestGitVisualizer:
 
     def test_convenience_functions(self, tmp_path):
         from codomyrmex.data_visualization.git.git_visualizer import (
-            create_git_tree_png, create_git_tree_mermaid,
+            create_git_tree_mermaid,
+            create_git_tree_png,
         )
         png_output = str(tmp_path / "conv_tree.png")
         result = create_git_tree_png(output_path=png_output, title="Conv PNG")
@@ -990,15 +1057,15 @@ class TestExceptions:
 
     def test_exception_hierarchy(self):
         from codomyrmex.data_visualization.exceptions import (
-            DataVisualizationError,
             ChartCreationError,
-            InvalidDataError,
-            ThemeError,
-            MermaidGenerationError,
+            DataVisualizationError,
             GitVisualizationError,
+            InvalidDataError,
+            MermaidGenerationError,
             PlotSaveError,
+            ThemeError,
         )
-        from codomyrmex.exceptions import VisualizationError, PlottingError
+        from codomyrmex.exceptions import PlottingError, VisualizationError
 
         # DataVisualizationError inherits from VisualizationError
         assert issubclass(DataVisualizationError, VisualizationError)
@@ -1015,8 +1082,8 @@ class TestExceptions:
 
     def test_exceptions_are_raisable(self):
         from codomyrmex.data_visualization.exceptions import (
-            DataVisualizationError,
             ChartCreationError,
+            DataVisualizationError,
             InvalidDataError,
         )
 
@@ -1061,6 +1128,9 @@ class TestPlotter:
         assert fig is not None
 
     def test_plotter_default_figure_size(self):
-        from codomyrmex.data_visualization.engines.plotter import Plotter, DEFAULT_FIGURE_SIZE
+        from codomyrmex.data_visualization.engines.plotter import (
+            DEFAULT_FIGURE_SIZE,
+            Plotter,
+        )
         p = Plotter()
         assert p.figure_size == DEFAULT_FIGURE_SIZE

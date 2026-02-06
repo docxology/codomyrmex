@@ -4,8 +4,8 @@ Infomaniak Orchestration Client (Heat).
 Provides stack management via OpenStack Heat templates.
 """
 
-from typing import Any, Dict, List, Optional
 import logging
+from typing import Any
 
 from ..base import InfomaniakOpenStackBase
 
@@ -20,12 +20,12 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
     """
 
     _service_name = "orchestration"
-    
+
     # =========================================================================
     # Stack Operations
     # =========================================================================
-    
-    def list_stacks(self) -> List[Dict[str, Any]]:
+
+    def list_stacks(self) -> list[dict[str, Any]]:
         """List all Heat stacks."""
         try:
             stacks = list(self._conn.orchestration.stacks())
@@ -42,8 +42,8 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list stacks: {e}")
             return []
-    
-    def get_stack(self, stack_id: str) -> Optional[Dict[str, Any]]:
+
+    def get_stack(self, stack_id: str) -> dict[str, Any] | None:
         """Get a specific stack by ID or name."""
         try:
             stack = self._conn.orchestration.find_stack(stack_id)
@@ -63,20 +63,20 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to get stack {stack_id}: {e}")
             return None
-    
+
     def create_stack(
         self,
         name: str,
         template: str,
-        parameters: Optional[Dict[str, Any]] = None,
-        environment: Optional[Dict[str, Any]] = None,
+        parameters: dict[str, Any] | None = None,
+        environment: dict[str, Any] | None = None,
         timeout_mins: int = 60,
         disable_rollback: bool = False,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Create a new Heat stack.
-        
+
         Args:
             name: Stack name
             template: Heat template (YAML string or dict)
@@ -100,29 +100,29 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create stack {name}: {e}")
             return None
-    
+
     def create_stack_from_file(
         self,
         name: str,
         template_path: str,
-        parameters: Optional[Dict[str, Any]] = None,
+        parameters: dict[str, Any] | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a stack from a template file."""
         try:
-            with open(template_path, 'r') as f:
+            with open(template_path) as f:
                 template = f.read()
             return self.create_stack(name, template, parameters, **kwargs)
         except Exception as e:
             logger.error(f"Failed to read template {template_path}: {e}")
             return None
-    
+
     def update_stack(
         self,
         stack_id: str,
-        template: Optional[str] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        environment: Optional[Dict[str, Any]] = None,
+        template: str | None = None,
+        parameters: dict[str, Any] | None = None,
+        environment: dict[str, Any] | None = None,
         **kwargs
     ) -> bool:
         """Update an existing stack."""
@@ -135,14 +135,14 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
             if environment:
                 updates["environment"] = environment
             updates.update(kwargs)
-            
+
             self._conn.orchestration.update_stack(stack_id, **updates)
             logger.info(f"Updated stack: {stack_id}")
             return True
         except Exception as e:
             logger.error(f"Failed to update stack {stack_id}: {e}")
             return False
-    
+
     def delete_stack(self, stack_id: str) -> bool:
         """Delete a stack."""
         try:
@@ -152,7 +152,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete stack {stack_id}: {e}")
             return False
-    
+
     def suspend_stack(self, stack_id: str) -> bool:
         """Suspend a stack."""
         try:
@@ -162,7 +162,7 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to suspend stack {stack_id}: {e}")
             return False
-    
+
     def resume_stack(self, stack_id: str) -> bool:
         """Resume a suspended stack."""
         try:
@@ -172,12 +172,12 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to resume stack {stack_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Stack Resources
     # =========================================================================
-    
-    def list_stack_resources(self, stack_id: str) -> List[Dict[str, Any]]:
+
+    def list_stack_resources(self, stack_id: str) -> list[dict[str, Any]]:
         """List resources in a stack."""
         try:
             resources = list(self._conn.orchestration.resources(stack_id))
@@ -194,12 +194,12 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list resources for stack {stack_id}: {e}")
             return []
-    
+
     def get_stack_resource(
         self,
         stack_id: str,
         resource_name: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Get a specific resource in a stack."""
         try:
             resource = self._conn.orchestration.get_resource(stack_id, resource_name)
@@ -215,16 +215,16 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to get resource {resource_name}: {e}")
             return None
-    
+
     # =========================================================================
     # Stack Events
     # =========================================================================
-    
+
     def list_stack_events(
         self,
         stack_id: str,
-        resource_name: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        resource_name: str | None = None
+    ) -> list[dict[str, Any]]:
         """List events for a stack or specific resource."""
         try:
             events = list(self._conn.orchestration.events(stack_id, resource_name))
@@ -241,23 +241,23 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list events for stack {stack_id}: {e}")
             return []
-    
+
     # =========================================================================
     # Template Operations
     # =========================================================================
-    
+
     def validate_template(
         self,
         template: str,
-        environment: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        environment: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """
         Validate a Heat template.
-        
+
         Args:
             template: Heat template (YAML string)
             environment: Optional environment file contents
-            
+
         Returns:
             Validation result with parameters and description
         """
@@ -274,8 +274,8 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Template validation failed: {e}")
             return {"valid": False, "error": str(e)}
-    
-    def get_stack_template(self, stack_id: str) -> Optional[str]:
+
+    def get_stack_template(self, stack_id: str) -> str | None:
         """Get the template for an existing stack."""
         try:
             template = self._conn.orchestration.get_stack_template(stack_id)
@@ -283,12 +283,12 @@ class InfomaniakHeatClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to get template for stack {stack_id}: {e}")
             return None
-    
+
     # =========================================================================
     # Stack Outputs
     # =========================================================================
-    
-    def get_stack_outputs(self, stack_id: str) -> Dict[str, Any]:
+
+    def get_stack_outputs(self, stack_id: str) -> dict[str, Any]:
         """Get outputs from a stack."""
         try:
             stack = self._conn.orchestration.find_stack(stack_id)

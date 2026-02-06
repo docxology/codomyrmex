@@ -1,34 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/tools
+# Agent Guidelines - Tools
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+External tool integration and management.
 
-Utility scripts for project analysis and maintenance, including dependency checking, consolidation, and project health tools.
+## Key Classes
 
-## Active Components
+- **ToolRegistry** — Registry of available tools
+- **ToolRunner** — Execute tools
+- **ToolConfig** — Tool configuration
+- **ToolResult** — Execution result
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `add_deprecation_notices.py` – Project file
-- `analyze_project.py` – Project file
-- `dependency_analyzer.py` – Project file
-- `dependency_checker.py` – Project file
-- `dependency_consolidation_report.md` – Project file
-- `dependency_consolidator.py` – Project file
-- `validate_dependencies.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Discover tools** — Check availability first
+2. **Version check** — Verify tool versions
+3. **Timeout** — Set execution timeouts
+4. **Parse output** — Structure tool output
+5. **Log execution** — Track tool usage
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.tools import ToolRegistry, ToolRunner
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Check available tools
+registry = ToolRegistry()
+available = registry.discover()
+print(f"Found: {[t.name for t in available]}")
+
+# Check specific tool
+if registry.is_available("git"):
+    version = registry.get_version("git")
+    print(f"git version: {version}")
+
+# Run tools
+runner = ToolRunner()
+result = runner.run("ruff", ["check", "src/"])
+
+if result.success:
+    print(result.stdout)
+else:
+    print(f"Error: {result.stderr}")
+
+# With timeout
+result = runner.run("slow_tool", [], timeout=60)
+```
+
+## Testing Patterns
+
+```python
+# Verify tool discovery
+registry = ToolRegistry()
+tools = registry.discover()
+assert len(tools) > 0
+
+# Verify tool execution
+runner = ToolRunner()
+result = runner.run("echo", ["test"])
+assert result.success
+assert "test" in result.stdout
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

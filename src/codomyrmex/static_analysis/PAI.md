@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Static Analysis Context
+# Personal AI Infrastructure — Static Analysis Module
 
-**Module**: static_analysis
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Static code analysis tooling for linting, type checking, security scanning, and code quality enforcement.
+The Static Analysis module provides PAI integration for code quality analysis.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Code Analysis
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Analyze code quality:
 
-## Key Files
+```python
+from codomyrmex.static_analysis import Analyzer
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+analyzer = Analyzer()
+report = analyzer.analyze("src/")
 
-## Future Considerations
+print(f"Issues: {len(report.issues)}")
+print(f"Score: {report.quality_score}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Lint Integration
+
+Run linters:
+
+```python
+from codomyrmex.static_analysis import LintRunner
+
+linter = LintRunner(tool="ruff")
+issues = linter.run("src/")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Analyzer` | Code analysis |
+| `LintRunner` | Run linters |
+| `TypeChecker` | Type checking |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

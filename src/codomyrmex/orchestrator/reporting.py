@@ -1,11 +1,12 @@
 from codomyrmex.logging_monitoring import get_logger
+
 """Orchestrator Reporting.
 
 Handles logging, summary generation, and documentation.
 
 This module provides reporting functionality including:
 - 3 functions: save_log, generate_report, generate_script_documentation
-- 0 classes: 
+- 0 classes:
 
 Usage:
     from reporting import FunctionName, ClassName
@@ -19,28 +20,28 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any
 
-from .discovery import discover_scripts
 from codomyrmex.utils.cli_helpers import (
-    print_section,
     print_info,
+    print_section,
     print_success,
-    print_warning,
-    print_error,
 )
 
+from .discovery import discover_scripts
+
+
 def save_log(
-    result: Dict[str, Any],
+    result: dict[str, Any],
     output_dir: Path,
     run_id: str,
 ) -> Path:
     """Save individual script log."""
     log_dir = output_dir / run_id / result["subdirectory"]
     log_dir.mkdir(parents=True, exist_ok=True)
-    
+
     log_file = log_dir / f"{result['name']}.log"
-    
+
     with open(log_file, "w", encoding="utf-8") as f:
         f.write(f"Script: {result['script']}\n")
         f.write(f"Status: {result['status']}\n")
@@ -62,21 +63,21 @@ def save_log(
         if isinstance(stderr, bytes):
             stderr = stderr.decode("utf-8", errors="replace")
         f.write(stderr)
-        
+
         if result["error"]:
             f.write("\n" + "=" * 60 + "\n")
             f.write("ERROR:\n")
             f.write("=" * 60 + "\n")
             f.write(result["error"] + "\n")
-    
+
     return log_file
 
 
 def generate_report(
-    results: List[Dict[str, Any]],
+    results: list[dict[str, Any]],
     output_dir: Path,
     run_id: str,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Generate summary report."""
     summary = {
         "run_id": run_id,
@@ -91,7 +92,7 @@ def generate_report(
         "by_subdirectory": {},
         "results": results,
     }
-    
+
     # Group by subdirectory
     for result in results:
         subdir = result["subdirectory"]
@@ -106,12 +107,12 @@ def generate_report(
             summary["by_subdirectory"][subdir]["passed"] += 1
         else:
             summary["by_subdirectory"][subdir]["failed"] += 1
-    
+
     # Save JSON report
     report_dir = output_dir / run_id
     report_dir.mkdir(parents=True, exist_ok=True)
     report_file = report_dir / "summary.json"
-    
+
     with open(report_file, "w", encoding="utf-8") as f:
         # Don't include full stdout/stderr in JSON summary
         summary_clean = summary.copy()
@@ -120,7 +121,7 @@ def generate_report(
             for r in results
         ]
         json.dump(summary_clean, f, indent=2)
-    
+
     # Log RUN_SUMMARY event
     logger.info("Run summary generated", extra={
         "event": "RUN_SUMMARY",
@@ -133,7 +134,7 @@ def generate_report(
         "skipped": summary["skipped"],
         "total_execution_time": summary["total_execution_time"],
     })
-    
+
     return summary
 
 
@@ -150,17 +151,17 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
     """
     scripts = discover_scripts(scripts_dir)
     total_scripts = len(scripts)
-    
+
     print_section("Generating Script Documentation")
     print_info(f"Target: {output_file}")
     print_info(f"Scripts to process: {total_scripts}")
-    
+
     with open(output_file, "w") as f:
         # Write Header
         f.write("# Codomyrmex Script Reference\n\n")
         f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         f.write("This document contains auto-generated documentation for all scripts in the `scripts/` directory.\n\n")
-        
+
         # Table of Contents
         f.write("## Table of Contents\n\n")
         categories = {}
@@ -170,25 +171,25 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
             if category not in categories:
                 categories[category] = []
             categories[category].append(script)
-            
+
         for category in sorted(categories.keys()):
             f.write(f"- [{category}](#{category.lower()})\n")
-            
+
         f.write("\n---\n\n")
-        
+
         success_count = 0
         fail_count = 0
-        
+
         # Process Categories
         for category in sorted(categories.keys()):
             f.write(f"## {category}\n\n")
-            
+
             for script in sorted(categories[category]):
                 rel_path = script.relative_to(scripts_dir)
                 script_name = script.name
-                
+
                 print(f"Processing: {rel_path}...", end="", flush=True)
-                
+
                 # Get Help Text
                 try:
                     # Run with --help
@@ -200,9 +201,9 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                     if src_path.exists():
                         pythonpath = env.get("PYTHONPATH", "")
                         env["PYTHONPATH"] = f"{src_path}:{pythonpath}" if pythonpath else str(src_path)
-                    
+
                     cmd = [sys.executable, str(script), "--help"]
-                    
+
                     process = subprocess.run(
                         cmd,
                         capture_output=True,
@@ -212,7 +213,7 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                         cwd=script.parent,
                         stdin=subprocess.DEVNULL
                     )
-                    
+
                     if process.returncode == 0:
                         help_text = process.stdout
                         success_count += 1
@@ -221,7 +222,7 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                         help_text = f"Failed to get help text (Exit Code: {process.returncode})\n\nStderr:\n{process.stderr}"
                         fail_count += 1
                         print(" ❌")
-                        
+
                 except subprocess.TimeoutExpired:
                     help_text = "Timed out getting help text"
                     fail_count += 1
@@ -230,19 +231,19 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                     help_text = f"Error generating docs: {str(e)}"
                     fail_count += 1
                     print(" 💥")
-                
+
                 # Write Entry
                 f.write(f"### {script_name}\n\n")
                 f.write(f"**Path**: `{rel_path}`\n\n")
                 f.write("```text\n")
                 f.write(help_text.strip())
                 f.write("\n```\n\n")
-                
+
             f.write("---\n\n")
-            
+
     print_section("Documentation Generation Complete")
     print_info(f"Successful: {success_count}")
     print_info(f"Failed: {fail_count}")
     print_success(f"Documentation written to {output_file}")
-    
+
     return True

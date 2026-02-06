@@ -1,28 +1,8 @@
-from pathlib import Path
-from typing import Dict, List
 import json
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Validate all child references in AGENTS.md files.
@@ -34,7 +14,7 @@ Check that children point to existing directories with AGENTS.md files.
 
 logger = get_logger(__name__)
 
-def extract_children_references(content: str) -> List[Dict]:
+def extract_children_references(content: str) -> list[dict]:
     """Extract all child references from AGENTS.md content."""
     children = []
     # Find the Children section
@@ -58,7 +38,7 @@ def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> tuple[
     try:
         if relative_path.startswith('http://') or relative_path.startswith('https://'):
             return (True, None)  # External links
-        
+
         # Handle relative paths
         if relative_path.startswith('../'):
             levels_up = relative_path.count('../')
@@ -75,20 +55,20 @@ def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> tuple[
             target = repo_root / relative_path.lstrip('/')
         else:
             target = base_path.parent / relative_path
-        
+
         target = target.resolve()
         # Check if within repo
         try:
             target.relative_to(repo_root)
         except ValueError:
             return (False, None)
-        
+
         exists = target.exists()
         return (exists, target)
     except Exception:
         return (False, None)
 
-def validate_agents_file(file_path: Path, repo_root: Path) -> Dict:
+def validate_agents_file(file_path: Path, repo_root: Path) -> dict:
     """Validate child references in a single AGENTS.md file."""
     try:
         content = file_path.read_text(encoding='utf-8')
@@ -97,13 +77,13 @@ def validate_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'file': str(file_path.relative_to(repo_root)),
             'error': f'Could not read file: {e}'
         }
-    
+
     relative_path = file_path.relative_to(repo_root)
     children = extract_children_references(content)
-    
+
     issues = []
     validated_children = []
-    
+
     for child in children:
         exists, resolved = resolve_path(file_path, child['path'], repo_root)
         child_info = {
@@ -112,7 +92,7 @@ def validate_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'resolved': str(resolved) if resolved else None
         }
         validated_children.append(child_info)
-        
+
         if not exists:
             issues.append({
                 'type': 'broken_child_path',
@@ -143,7 +123,7 @@ def validate_agents_file(file_path: Path, repo_root: Path) -> Dict:
                         'path': child['path'],
                         'message': f"Child directory does not have AGENTS.md: {child['path']}"
                     })
-    
+
     return {
         'file': str(relative_path),
         'children': validated_children,
@@ -153,16 +133,16 @@ def validate_agents_file(file_path: Path, repo_root: Path) -> Dict:
 def main():
     """Main validation function."""
     repo_root = Path(__file__).parent.parent.parent
-    
+
     # Find all AGENTS.md files
     agents_files = []
     for path in repo_root.rglob("AGENTS.md"):
         if ".venv" in str(path) or "node_modules" in str(path):
             continue
         agents_files.append(path)
-    
+
     print(f"Validating {len(agents_files)} AGENTS.md files...")
-    
+
     results = []
     total_issues = 0
     for agents_file in sorted(agents_files):
@@ -173,11 +153,11 @@ def main():
             print(f"  {result['file']}: {len(result['issues'])} issues")
             for issue in result['issues']:
                 print(f"    - {issue['message']}")
-    
+
     # Save results
     output_file = repo_root / 'output' / 'child_references_validation.json'
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    
+
     report = {
         'summary': {
             'total_files': len(agents_files),
@@ -186,11 +166,11 @@ def main():
         },
         'results': results
     }
-    
+
     with output_file.open('w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
-    
-    print(f"\nValidation complete!")
+
+    print("\nValidation complete!")
     print(f"  Total files: {report['summary']['total_files']}")
     print(f"  Files with issues: {report['summary']['files_with_issues']}")
     print(f"  Total issues: {report['summary']['total_issues']}")

@@ -1,6 +1,5 @@
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring import get_logger
 
 """Scrape Module Exception Classes
 

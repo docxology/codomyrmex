@@ -1,51 +1,9 @@
-from functools import wraps
-from typing import Any, Callable, Optional
-
 import importlib
+from functools import wraps
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 
@@ -65,7 +23,7 @@ class LazyLoader:
     until they are actually needed.
     """
 
-    def __init__(self, module_name: str, package: Optional[str] = None):
+    def __init__(self, module_name: str, package: str | None = None):
         """
         Initialize the lazy loader.
 
@@ -75,7 +33,7 @@ class LazyLoader:
         """
         self.module_name = module_name
         self.package = package
-        self._module: Optional[Any] = None
+        self._module: Any | None = None
         self._loading = False
 
     def __getattr__(self, name: str) -> Any:
@@ -100,7 +58,7 @@ class LazyLoader:
         return f"LazyLoader({self.module_name}, status={status})"
 
 
-def lazy_import(module_name: str, package: Optional[str] = None) -> LazyLoader:
+def lazy_import(module_name: str, package: str | None = None) -> LazyLoader:
     """
     Create a lazy loader for the specified module.
 
@@ -123,7 +81,7 @@ def lazy_import(module_name: str, package: Optional[str] = None) -> LazyLoader:
 _lazy_loaders: dict[str, LazyLoader] = {}
 
 
-def get_lazy_loader(module_name: str, package: Optional[str] = None) -> LazyLoader:
+def get_lazy_loader(module_name: str, package: str | None = None) -> LazyLoader:
     """
     Get or create a lazy loader for the specified module.
 
@@ -146,7 +104,7 @@ def get_lazy_loader(module_name: str, package: Optional[str] = None) -> LazyLoad
 
 
 def lazy_function(
-    module_name: str, function_name: str, package: Optional[str] = None
+    module_name: str, function_name: str, package: str | None = None
 ) -> Callable:
     """
     Create a lazy-loaded function from a module.
@@ -169,7 +127,7 @@ def lazy_function(
     @wraps(lambda: None)  # Placeholder for the actual function
     def lazy_wrapper(*args, **kwargs):
 
-    
+
         func = getattr(loader, function_name)
         return func(*args, **kwargs)
 

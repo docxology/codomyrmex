@@ -6,7 +6,6 @@ generating thumbnails, and extracting audio from video files.
 
 import time
 from pathlib import Path
-from typing import Optional, Union
 
 from codomyrmex.video.config import get_config
 from codomyrmex.video.exceptions import (
@@ -74,7 +73,7 @@ class FrameExtractor:
         config: Video configuration
     """
 
-    def __init__(self, config: Optional[object] = None) -> None:
+    def __init__(self, config: object | None = None) -> None:
         """Initialize the frame extractor.
 
         Args:
@@ -94,7 +93,7 @@ class FrameExtractor:
                 "PIL/Pillow is required. Install with: uv sync --extra video"
             )
 
-    def _validate_input(self, video_path: Union[str, Path]) -> Path:
+    def _validate_input(self, video_path: str | Path) -> Path:
         """Validate input video path.
 
         Args:
@@ -119,7 +118,7 @@ class FrameExtractor:
 
     def extract_frame(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         timestamp: float,
     ) -> "Image.Image":
         """Extract a single frame at specified timestamp.
@@ -196,10 +195,10 @@ class FrameExtractor:
 
     def extract_frames(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         interval: float,
         start: float = 0.0,
-        end: Optional[float] = None,
+        end: float | None = None,
     ) -> list["Image.Image"]:
         """Extract frames at regular intervals.
 
@@ -258,7 +257,7 @@ class FrameExtractor:
 
     def extract_frames_at_timestamps(
         self,
-        video_path: Union[str, Path],
+        video_path: str | Path,
         timestamps: list[float],
     ) -> ExtractionResult:
         """Extract frames at specific timestamps.
@@ -290,8 +289,8 @@ class FrameExtractor:
 
     def generate_thumbnail(
         self,
-        video_path: Union[str, Path],
-        timestamp: Optional[float] = None,
+        video_path: str | Path,
+        timestamp: float | None = None,
         width: int = 320,
     ) -> "Image.Image":
         """Generate a thumbnail from a video.
@@ -333,8 +332,8 @@ class FrameExtractor:
 
     def extract_audio(
         self,
-        video_path: Union[str, Path],
-        output_path: Optional[Union[str, Path]] = None,
+        video_path: str | Path,
+        output_path: str | Path | None = None,
         audio_format: str = "mp3",
         bitrate: str = "192k",
     ) -> Path:
@@ -394,7 +393,7 @@ class FrameExtractor:
     def save_frames(
         self,
         frames: list["Image.Image"],
-        output_directory: Union[str, Path],
+        output_directory: str | Path,
         prefix: str = "frame",
         format: str = "png",
     ) -> list[Path]:

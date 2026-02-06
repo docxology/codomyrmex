@@ -15,9 +15,8 @@ Default values match dark-pdf's defaults (90% inversion, 90% brightness,
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 from PIL import Image
@@ -129,8 +128,8 @@ class DarkPDFFilter:
 
     def apply_to_pdf(
         self,
-        input_path: Union[str, Path],
-        output_path: Union[str, Path],
+        input_path: str | Path,
+        output_path: str | Path,
     ) -> None:
         """Apply dark mode filters to an entire PDF.
 
@@ -191,8 +190,8 @@ class DarkPDFFilter:
 
 
 def apply_dark_mode(
-    input_path: Union[str, Path],
-    output_path: Union[str, Path],
+    input_path: str | Path,
+    output_path: str | Path,
     *,
     inversion: float = 0.90,
     brightness: float = 0.90,

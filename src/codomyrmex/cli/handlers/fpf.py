@@ -1,12 +1,11 @@
-from typing import Optional
-from pathlib import Path
 import json
-import traceback
+from pathlib import Path
+
 from ..utils import get_logger
 
 logger = get_logger(__name__)
 
-def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
+def handle_fpf_fetch(repo: str, branch: str, output: str | None) -> bool:
     """Handle FPF fetch command."""
     try:
         from codomyrmex.fpf import FPFFetcher
@@ -26,7 +25,7 @@ def handle_fpf_fetch(repo: str, branch: str, output: Optional[str]) -> bool:
         return False
 
 
-def handle_fpf_parse(file: str, output: Optional[str]) -> bool:
+def handle_fpf_parse(file: str, output: str | None) -> bool:
     """Handle FPF parse command."""
     try:
         from codomyrmex.fpf import FPFClient
@@ -62,7 +61,7 @@ def handle_fpf_export(file: str, output: str, format: str) -> bool:
         return False
 
 
-def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
+def handle_fpf_search(query: str, file: str | None, filters: dict) -> bool:
     """Handle FPF search command."""
     try:
         if not file:
@@ -96,8 +95,9 @@ def handle_fpf_search(query: str, file: Optional[str], filters: dict) -> bool:
 def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, layout: str, chart_type: str) -> bool:
     """Handle FPF visualize command."""
     try:
-        from codomyrmex.fpf import FPFClient, FPFVisualizer
         from codomyrmex.fpf.visualizer_png import FPFVisualizerPNG
+
+        from codomyrmex.fpf import FPFClient, FPFVisualizer
 
         client = FPFClient()
         client.load_from_file(file)
@@ -140,7 +140,7 @@ def handle_fpf_visualize(file: str, viz_type: str, output: str, format: str, lay
         return False
 
 
-def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str], depth: int) -> bool:
+def handle_fpf_context(file: str, pattern: str | None, output: str | None, depth: int) -> bool:
     """Handle FPF context command."""
     try:
         from codomyrmex.fpf import FPFClient
@@ -165,12 +165,13 @@ def handle_fpf_context(file: str, pattern: Optional[str], output: Optional[str],
         return False
 
 
-def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[str], output: str, include_dependencies: bool) -> bool:
+def handle_fpf_export_section(file: str, part: str | None, pattern: str | None, output: str, include_dependencies: bool) -> bool:
     """Handle FPF export-section command."""
     try:
-        from codomyrmex.fpf import FPFClient
-        from codomyrmex.fpf.section_manager import SectionManager
         from codomyrmex.fpf.section_exporter import SectionExporter
+        from codomyrmex.fpf.section_manager import SectionManager
+
+        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)
@@ -195,11 +196,12 @@ def handle_fpf_export_section(file: str, part: Optional[str], pattern: Optional[
         return False
 
 
-def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
+def handle_fpf_analyze(file: str, output: str | None) -> bool:
     """Handle FPF analyze command."""
     try:
-        from codomyrmex.fpf import FPFClient
         from codomyrmex.fpf.analyzer import FPFAnalyzer
+
+        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)
@@ -224,8 +226,9 @@ def handle_fpf_analyze(file: str, output: Optional[str]) -> bool:
 def handle_fpf_report(file: str, output: str, include_analysis: bool) -> bool:
     """Handle FPF report command."""
     try:
-        from codomyrmex.fpf import FPFClient
         from codomyrmex.fpf.report_generator import ReportGenerator
+
+        from codomyrmex.fpf import FPFClient
 
         client = FPFClient()
         client.load_from_file(file)

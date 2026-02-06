@@ -1,20 +1,14 @@
-from datetime import datetime, timezone
-from typing import Any, Optional
 import ast
 import json
 import os
 import sys
-
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Any
+
 import yaml
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """API Documentation Generator for Codomyrmex API Documentation Module.
 
@@ -39,7 +33,7 @@ class APIEndpoint:
     summary: str
     description: str = ""
     parameters: list[dict[str, Any]] = field(default_factory=list)
-    request_body: Optional[dict[str, Any]] = None
+    request_body: dict[str, Any] | None = None
     responses: dict[str, dict[str, Any]] = field(default_factory=dict)
     tags: list[str] = field(default_factory=list)
     deprecated: bool = False
@@ -72,7 +66,7 @@ class APIDocumentation:
     schemas: dict[str, dict[str, Any]] = field(default_factory=dict)
     security_schemes: dict[str, dict[str, Any]] = field(default_factory=dict)
     tags: list[dict[str, Any]] = field(default_factory=list)
-    generated_at: Optional[datetime] = None
+    generated_at: datetime | None = None
     contact_info: dict[str, str] = field(default_factory=dict)
     license_info: dict[str, str] = field(default_factory=dict)
 
@@ -125,7 +119,7 @@ class APIDocumentationGenerator:
     - Documentation versioning
     """
 
-    def __init__(self, source_paths: Optional[list[str]] = None):
+    def __init__(self, source_paths: list[str] | None = None):
         """
         Initialize the API documentation generator.
 
@@ -134,7 +128,7 @@ class APIDocumentationGenerator:
         """
         self.source_paths = source_paths or ["src"]
         self.discovered_endpoints: list[APIEndpoint] = []
-        self.documentation: Optional[APIDocumentation] = None
+        self.documentation: APIDocumentation | None = None
 
     def generate_documentation(
         self, title: str, version: str, base_url: str = "http://localhost:8000"
@@ -220,7 +214,7 @@ class APIDocumentationGenerator:
 
     def _extract_endpoint_from_function(
         self, node: ast.FunctionDef, content: str
-    ) -> Optional[APIEndpoint]:
+    ) -> APIEndpoint | None:
         """Extract API endpoint information from function."""
         # Look for common API patterns
         decorators = []
@@ -479,7 +473,7 @@ class APIDocumentationGenerator:
 def generate_api_docs(
     title: str,
     version: str,
-    source_paths: Optional[list[str]] = None,
+    source_paths: list[str] | None = None,
     base_url: str = "http://localhost:8000",
 ) -> APIDocumentation:
     """

@@ -179,7 +179,10 @@ class TestFeatureGroup:
     def test_feature_group_creation(self):
         """Verify FeatureGroup can be created."""
         from codomyrmex.feature_store import (
-            FeatureGroup, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureGroup,
+            FeatureType,
+            ValueType,
         )
 
         group = FeatureGroup(
@@ -197,7 +200,10 @@ class TestFeatureGroup:
     def test_feature_group_feature_names(self):
         """Verify feature names property."""
         from codomyrmex.feature_store import (
-            FeatureGroup, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureGroup,
+            FeatureType,
+            ValueType,
         )
 
         group = FeatureGroup(
@@ -213,7 +219,10 @@ class TestFeatureGroup:
     def test_feature_group_get_feature(self):
         """Verify feature retrieval by name."""
         from codomyrmex.feature_store import (
-            FeatureGroup, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureGroup,
+            FeatureType,
+            ValueType,
         )
 
         group = FeatureGroup(
@@ -238,7 +247,10 @@ class TestInMemoryFeatureStore:
     def test_store_register_and_get_definition(self):
         """Verify feature registration and retrieval."""
         from codomyrmex.feature_store import (
-            InMemoryFeatureStore, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureType,
+            InMemoryFeatureStore,
+            ValueType,
         )
 
         store = InMemoryFeatureStore()
@@ -340,7 +352,10 @@ class TestFeatureService:
     def test_service_register_and_ingest(self):
         """Verify feature registration and ingestion."""
         from codomyrmex.feature_store import (
-            FeatureService, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureService,
+            FeatureType,
+            ValueType,
         )
 
         service = FeatureService()
@@ -359,7 +374,11 @@ class TestFeatureService:
     def test_service_register_group(self):
         """Verify feature group registration."""
         from codomyrmex.feature_store import (
-            FeatureService, FeatureGroup, FeatureDefinition, FeatureType, ValueType
+            FeatureDefinition,
+            FeatureGroup,
+            FeatureService,
+            FeatureType,
+            ValueType,
         )
 
         service = FeatureService()

@@ -1,10 +1,11 @@
 """Unit tests for cloud module expansion."""
 
-import pytest
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 try:
-    from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient
+    from codomyrmex.cloud import AzureBlobClient, GCSClient, S3Client
     # The cloud module may import successfully but set classes to None
     # when underlying SDKs (boto3, google-cloud-storage, azure) aren't installed
     CLOUD_DEPS_AVAILABLE = (
@@ -29,7 +30,7 @@ def test_s3_client_list():
         mock_s3.list_objects_v2.return_value = {
             'Contents': [{'Key': 'file1.txt'}, {'Key': 'file2.txt'}]
         }
-        
+
         client = S3Client()
         objects = client.list_objects("my-bucket")
         assert objects == ['file1.txt', 'file2.txt']
@@ -56,7 +57,7 @@ def test_gcs_client_list():
         mock_blob2 = MagicMock()
         mock_blob2.name = "blob2"
         mock_client.list_blobs.return_value = [mock_blob1, mock_blob2]
-        
+
         client = GCSClient(project="test-project")
         blobs = client.list_blobs("my-bucket")
         assert blobs == ["blob1", "blob2"]
@@ -72,7 +73,7 @@ def test_gcs_client_download():
         mock_client.bucket.return_value = mock_bucket
         mock_blob = MagicMock()
         mock_bucket.blob.return_value = mock_blob
-        
+
         client = GCSClient(project="test-project")
         assert client.download_blob("bucket", "blob", "local") is True
         mock_blob.download_to_filename.assert_called_once_with("local")
@@ -86,11 +87,11 @@ def test_azure_blob_client_list():
         mock_blob_service.return_value = mock_client
         mock_container = MagicMock()
         mock_client.get_container_client.return_value = mock_container
-        
+
         mock_blob1 = MagicMock()
         mock_blob1.name = "azure-blob1"
         mock_container.list_blobs.return_value = [mock_blob1]
-        
+
         client = AzureBlobClient(account_url="https://test.blob.core.windows.net")
         blobs = client.list_blobs("my-container")
         assert blobs == ["azure-blob1"]

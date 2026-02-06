@@ -1,11 +1,11 @@
-from typing import Optional, Any
-from pathlib import Path
 import json
-from ..utils import get_logger, TerminalFormatter, TERMINAL_INTERFACE_AVAILABLE
+from pathlib import Path
+
+from ..utils import TERMINAL_INTERFACE_AVAILABLE, TerminalFormatter, get_logger
 
 logger = get_logger(__name__)
 
-def handle_project_build(config_file: Optional[str]) -> bool:
+def handle_project_build(config_file: str | None) -> bool:
     """Handle project build command."""
     try:
         from codomyrmex.build_synthesis import orchestrate_build_pipeline
@@ -34,10 +34,13 @@ def handle_project_build(config_file: Optional[str]) -> bool:
         return False
 
 
-def handle_workflow_create(name: str, template: Optional[str] = None) -> bool:
+def handle_workflow_create(name: str, template: str | None = None) -> bool:
     """Handle workflow creation command."""
     try:
-        from codomyrmex.logistics.orchestration.project import get_workflow_manager, WorkflowStep
+        from codomyrmex.logistics.orchestration.project import (
+            WorkflowStep,
+            get_workflow_manager,
+        )
         manager = get_workflow_manager()
 
         # Create a simple workflow based on template

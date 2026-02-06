@@ -34,7 +34,7 @@ except ImportError:
     TEXT_AVAILABLE = False
 
 try:
-    from .pdf_handler import read_pdf, write_pdf, PDFDocument
+    from .pdf_handler import PDFDocument, read_pdf, write_pdf
     PDF_AVAILABLE = True
 except ImportError:
     read_pdf = None
@@ -43,7 +43,7 @@ except ImportError:
     PDF_AVAILABLE = False
 
 try:
-    from .html_handler import read_html, write_html, strip_html_tags
+    from .html_handler import read_html, strip_html_tags, write_html
     HTML_AVAILABLE = True
 except ImportError:
     read_html = None

@@ -4,14 +4,14 @@ Telemetry exporters for sending trace data to backends.
 Provides implementations for OTLP and other telemetry protocols.
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
-from datetime import datetime
 import json
 import threading
-from queue import Queue
 import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from queue import Queue
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -19,23 +19,23 @@ class SpanData:
     """Data for a single trace span."""
     trace_id: str
     span_id: str
-    parent_span_id: Optional[str] = None
+    parent_span_id: str | None = None
     name: str = ""
     kind: str = "internal"  # client, server, producer, consumer, internal
     start_time: datetime = field(default_factory=datetime.now)
-    end_time: Optional[datetime] = None
+    end_time: datetime | None = None
     status: str = "ok"  # ok, error
-    attributes: Dict[str, Any] = field(default_factory=dict)
-    events: List[Dict[str, Any]] = field(default_factory=list)
-    
+    attributes: dict[str, Any] = field(default_factory=dict)
+    events: list[dict[str, Any]] = field(default_factory=list)
+
     @property
     def duration_ms(self) -> float:
         """Get span duration in milliseconds."""
         if self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "trace_id": self.trace_id,
             "span_id": self.span_id,
@@ -53,12 +53,12 @@ class SpanData:
 
 class SpanExporter(ABC):
     """Abstract base class for span exporters."""
-    
+
     @abstractmethod
-    def export(self, spans: List[SpanData]) -> bool:
+    def export(self, spans: list[SpanData]) -> bool:
         """Export spans to the backend. Returns True on success."""
         pass
-    
+
     @abstractmethod
     def shutdown(self) -> None:
         """Shutdown the exporter."""
@@ -67,11 +67,11 @@ class SpanExporter(ABC):
 
 class ConsoleExporter(SpanExporter):
     """Exports spans to the console for debugging."""
-    
+
     def __init__(self, pretty: bool = True):
         self.pretty = pretty
-    
-    def export(self, spans: List[SpanData]) -> bool:
+
+    def export(self, spans: list[SpanData]) -> bool:
         for span in spans:
             data = span.to_dict()
             if self.pretty:
@@ -79,19 +79,19 @@ class ConsoleExporter(SpanExporter):
             else:
                 print(json.dumps(data))
         return True
-    
+
     def shutdown(self) -> None:
         pass
 
 
 class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
-    
+
     def __init__(self, filepath: str):
         self.filepath = filepath
         self._lock = threading.Lock()
-    
-    def export(self, spans: List[SpanData]) -> bool:
+
+    def export(self, spans: list[SpanData]) -> bool:
         try:
             with self._lock:
                 with open(self.filepath, 'a') as f:
@@ -100,18 +100,18 @@ class FileExporter(SpanExporter):
             return True
         except Exception:
             return False
-    
+
     def shutdown(self) -> None:
         pass
 
 
 class OTLPExporter(SpanExporter):
     """Exports spans using the OTLP protocol."""
-    
+
     def __init__(
         self,
         endpoint: str = "http://localhost:4317",
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
         timeout: float = 10.0,
         compression: str = "none",  # none, gzip
     ):
@@ -120,18 +120,18 @@ class OTLPExporter(SpanExporter):
         self.timeout = timeout
         self.compression = compression
         self._session = None
-    
-    def _convert_to_otlp_format(self, spans: List[SpanData]) -> Dict[str, Any]:
+
+    def _convert_to_otlp_format(self, spans: list[SpanData]) -> dict[str, Any]:
         """Convert spans to OTLP format."""
         resource_spans = []
-        
+
         # Group spans by trace
-        trace_spans: Dict[str, List[SpanData]] = {}
+        trace_spans: dict[str, list[SpanData]] = {}
         for span in spans:
             if span.trace_id not in trace_spans:
                 trace_spans[span.trace_id] = []
             trace_spans[span.trace_id].append(span)
-        
+
         for trace_id, trace_span_list in trace_spans.items():
             scope_spans = []
             for span in trace_span_list:
@@ -154,7 +154,7 @@ class OTLPExporter(SpanExporter):
                         for e in span.events
                     ],
                 })
-            
+
             resource_spans.append({
                 "resource": {
                     "attributes": [
@@ -163,9 +163,9 @@ class OTLPExporter(SpanExporter):
                 },
                 "scopeSpans": [{"spans": scope_spans}],
             })
-        
+
         return {"resourceSpans": resource_spans}
-    
+
     def _map_span_kind(self, kind: str) -> int:
         """Map span kind to OTLP enum."""
         mapping = {
@@ -176,8 +176,8 @@ class OTLPExporter(SpanExporter):
             "consumer": 5,
         }
         return mapping.get(kind, 1)
-    
-    def _convert_attributes(self, attributes: Dict[str, Any]) -> List[Dict]:
+
+    def _convert_attributes(self, attributes: dict[str, Any]) -> list[dict]:
         """Convert attributes to OTLP format."""
         result = []
         for key, value in attributes.items():
@@ -194,44 +194,44 @@ class OTLPExporter(SpanExporter):
                 attr["value"] = {"stringValue": str(value)}
             result.append(attr)
         return result
-    
-    def export(self, spans: List[SpanData]) -> bool:
+
+    def export(self, spans: list[SpanData]) -> bool:
         try:
             import urllib.request
-            
+
             payload = self._convert_to_otlp_format(spans)
             data = json.dumps(payload).encode('utf-8')
-            
+
             headers = {
                 "Content-Type": "application/json",
                 **self.headers,
             }
-            
+
             if self.compression == "gzip":
                 import gzip
                 data = gzip.compress(data)
                 headers["Content-Encoding"] = "gzip"
-            
+
             req = urllib.request.Request(
                 f"{self.endpoint}/v1/traces",
                 data=data,
                 headers=headers,
                 method='POST'
             )
-            
+
             with urllib.request.urlopen(req, timeout=self.timeout) as response:
                 return response.status == 200
-                
+
         except Exception:
             return False
-    
+
     def shutdown(self) -> None:
         pass
 
 
 class BatchExporter(SpanExporter):
     """Batches spans before exporting to reduce network calls."""
-    
+
     def __init__(
         self,
         exporter: SpanExporter,
@@ -243,44 +243,44 @@ class BatchExporter(SpanExporter):
         self.max_batch_size = max_batch_size
         self.max_queue_size = max_queue_size
         self.scheduled_delay_ms = scheduled_delay_ms
-        
+
         self._queue: Queue = Queue(maxsize=max_queue_size)
         self._shutdown = threading.Event()
         self._worker_thread = threading.Thread(target=self._worker, daemon=True)
         self._worker_thread.start()
-    
+
     def _worker(self) -> None:
         """Background worker that batches and exports spans."""
         while not self._shutdown.is_set():
             batch = []
             deadline = time.time() + self.scheduled_delay_ms / 1000
-            
+
             while len(batch) < self.max_batch_size:
                 remaining = deadline - time.time()
                 if remaining <= 0:
                     break
-                
+
                 try:
                     span = self._queue.get(timeout=remaining)
                     batch.append(span)
                 except Exception:
                     break
-            
+
             if batch:
                 self.exporter.export(batch)
-    
-    def export(self, spans: List[SpanData]) -> bool:
+
+    def export(self, spans: list[SpanData]) -> bool:
         for span in spans:
             try:
                 self._queue.put_nowait(span)
             except Exception:
                 return False
         return True
-    
+
     def shutdown(self) -> None:
         self._shutdown.set()
         self._worker_thread.join(timeout=5.0)
-        
+
         # Export remaining spans
         remaining = []
         while not self._queue.empty():
@@ -288,20 +288,20 @@ class BatchExporter(SpanExporter):
                 remaining.append(self._queue.get_nowait())
             except Exception:
                 break
-        
+
         if remaining:
             self.exporter.export(remaining)
-        
+
         self.exporter.shutdown()
 
 
 class MultiExporter(SpanExporter):
     """Exports to multiple backends simultaneously."""
-    
-    def __init__(self, exporters: List[SpanExporter]):
+
+    def __init__(self, exporters: list[SpanExporter]):
         self.exporters = exporters
-    
-    def export(self, spans: List[SpanData]) -> bool:
+
+    def export(self, spans: list[SpanData]) -> bool:
         results = []
         for exporter in self.exporters:
             try:
@@ -309,7 +309,7 @@ class MultiExporter(SpanExporter):
             except Exception:
                 results.append(False)
         return any(results)
-    
+
     def shutdown(self) -> None:
         for exporter in self.exporters:
             try:
@@ -328,11 +328,11 @@ def create_exporter(
         "file": FileExporter,
         "otlp": OTLPExporter,
     }
-    
+
     exporter_class = exporters.get(exporter_type)
     if not exporter_class:
         raise ValueError(f"Unknown exporter type: {exporter_type}")
-    
+
     return exporter_class(**kwargs)
 
 

@@ -1,11 +1,13 @@
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, MagicMock
-from pathlib import Path
 from codomyrmex.documents.core.document_reader import DocumentReader, read_document
+from codomyrmex.documents.exceptions import DocumentReadError
 from codomyrmex.documents.models.document import DocumentFormat
-from codomyrmex.documents.exceptions import DocumentReadError, UnsupportedFormatError
+
 
 @pytest.mark.unit
 class TestDocumentReader(unittest.TestCase):
@@ -37,7 +39,7 @@ class TestDocumentReader(unittest.TestCase):
         self.assertEqual(doc.content, "file content")
         self.assertEqual(doc.format, DocumentFormat.TEXT)
         self.assertEqual(doc.encoding, "utf-8")
-        
+
         mock_read_text.assert_called_once()
 
     @patch('pathlib.Path.exists')
@@ -60,7 +62,7 @@ class TestDocumentReader(unittest.TestCase):
     def test_read_unsupported_format(self, mock_exists):
         """Test error for unsupported format."""
         mock_exists.return_value = True
-        # It handles MARKDOWN, JSON, YAML, PDF, TEXT. 
+        # It handles MARKDOWN, JSON, YAML, PDF, TEXT.
         # So XML should raise UnsupportedFormatError wrapped in DocumentReadError
         with self.assertRaises(DocumentReadError):
             self.reader.read("test.xml", format=DocumentFormat.XML)
@@ -73,7 +75,7 @@ class TestDocumentReader(unittest.TestCase):
             mock_detect.return_value = "json"
             fmt = self.reader._detect_format(Path("test.json"))
             self.assertEqual(fmt, DocumentFormat.JSON)
-            
+
             mock_detect.return_value = "markdown"
             fmt = self.reader._detect_format(Path("test.md"))
             self.assertEqual(fmt, DocumentFormat.MARKDOWN)

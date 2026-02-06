@@ -1,34 +1,56 @@
-# terminal_interface
+# Terminal Interface Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Interactive terminal shells, command runners, and rich rendering.
 
-Interactive terminal interface module providing shells, command processing, output rendering, and tab-completion for the Codomyrmex platform. Serves as the foundation layer for all terminal-based user interactions, offering an interactive shell mode (`codomyrmex>`), command execution utilities, rich terminal formatting, and autocomplete support. Optional utilities include `CommandRunner` for subprocess management and `TerminalFormatter` for styled output.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.terminal_interface import shells, commands, rendering
 
-### Submodules
-- **`shells`** -- Interactive shell implementations including the main `InteractiveShell` REPL
-- **`commands`** -- Command definitions and dispatch logic for shell commands
-- **`rendering`** -- Terminal output rendering (colored text, tables, progress indicators)
-- **`completions`** -- Tab-completion providers for shell commands and arguments
+# Interactive shell
+from codomyrmex.terminal_interface.shells import InteractiveShell
 
-### Optional Classes (available when dependencies are installed)
-- **`InteractiveShell`** -- REPL-style interactive shell with command history, prompt customization, and integrated help
-- **`CommandRunner`** -- Subprocess execution utility with timeout support and output capture
-- **`TerminalFormatter`** -- Rich text formatting for terminal output (colors, bold, tables, status indicators)
+shell = InteractiveShell()
+shell.register_command("status", show_status)
+shell.register_command("run", run_task)
+shell.start()  # Enter REPL
 
-## Directory Contents
+# Command execution
+from codomyrmex.terminal_interface.utils import CommandRunner
 
-- `shells/` -- Interactive shell implementations (InteractiveShell REPL)
-- `commands/` -- Command definitions and dispatch handlers
-- `rendering/` -- Output rendering utilities (colors, tables, progress bars)
-- `completions/` -- Tab-completion providers and argument suggestion logic
-- `utils/` -- Optional utilities including CommandRunner and TerminalFormatter
+runner = CommandRunner()
+result = runner.run("ls -la")
+print(result.stdout, result.exit_code)
+
+# Rich formatting
+from codomyrmex.terminal_interface.utils import TerminalFormatter
+
+fmt = TerminalFormatter()
+print(fmt.success("Operation completed"))
+print(fmt.error("Something went wrong"))
+print(fmt.table(data, headers=["Name", "Value"]))
+```
+
+## Submodules
+
+| Module | Description |
+|--------|-------------|
+| `shells` | Interactive shell implementations |
+| `commands` | Command registration and execution |
+| `rendering` | Output formatting and styling |
+| `completions` | Tab completion support |
+| `utils` | Terminal utilities and helpers |
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `InteractiveShell` | REPL-style interactive shell |
+| `CommandRunner` | Execute shell commands with capture |
+| `TerminalFormatter` | Colored output and tables |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/terminal_interface/](../../../docs/modules/terminal_interface/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

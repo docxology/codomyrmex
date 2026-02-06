@@ -1,52 +1,10 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
-
 from enum import Enum
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Data models for FPF specification parsing and analysis.
 
@@ -106,24 +64,24 @@ class Pattern(BaseModel):
     id: str = Field(..., description="Pattern identifier (e.g., 'A.1', 'A.2.1')")
     title: str = Field(..., description="Pattern title")
     status: PatternStatus = Field(..., description="Pattern status")
-    keywords: List[str] = Field(default_factory=list, description="Keywords for search")
-    search_queries: List[str] = Field(
+    keywords: list[str] = Field(default_factory=list, description="Keywords for search")
+    search_queries: list[str] = Field(
         default_factory=list, description="Example search queries"
     )
-    dependencies: Dict[str, List[str]] = Field(
+    dependencies: dict[str, list[str]] = Field(
         default_factory=dict,
         description="Dependency relationships (builds_on, prerequisite_for, etc.)",
     )
-    sections: Dict[str, str] = Field(
+    sections: dict[str, str] = Field(
         default_factory=dict,
         description="Pattern sections (Problem, Solution, etc.)",
     )
     content: str = Field(..., description="Full markdown content of the pattern")
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )
-    part: Optional[str] = Field(None, description="Part identifier (A, B, C, etc.)")
-    cluster: Optional[str] = Field(None, description="Cluster identifier if applicable")
+    part: str | None = Field(None, description="Part identifier (A, B, C, etc.)")
+    cluster: str | None = Field(None, description="Cluster identifier if applicable")
 
 
 class Concept(BaseModel):
@@ -139,13 +97,13 @@ class Concept(BaseModel):
     definition: str = Field(..., description="Concept definition or description")
     pattern_id: str = Field(..., description="Pattern ID where concept is defined")
     type: ConceptType = Field(..., description="Type of concept")
-    references: List[str] = Field(
+    references: list[str] = Field(
         default_factory=list, description="Other patterns/concepts that reference this"
     )
-    aliases: List[str] = Field(
+    aliases: list[str] = Field(
         default_factory=list, description="Alternative names for the concept"
     )
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )
 
@@ -162,13 +120,13 @@ class Relationship(BaseModel):
     source: str = Field(..., description="Source pattern/concept ID")
     target: str = Field(..., description="Target pattern/concept ID")
     type: RelationshipType = Field(..., description="Type of relationship")
-    strength: Optional[str] = Field(
+    strength: str | None = Field(
         None, description="Relationship strength (optional)"
     )
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None, description="Human-readable description of the relationship"
     )
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )
 
@@ -180,8 +138,8 @@ class FPFSpec(BaseModel):
     and metadata for the entire FPF specification.
     """
 
-    version: Optional[str] = Field(None, description="FPF specification version")
-    last_updated: Optional[Union[datetime, str]] = Field(
+    version: str | None = Field(None, description="FPF specification version")
+    last_updated: datetime | str | None = Field(
         None, description="Last update timestamp"
     )
 
@@ -195,40 +153,40 @@ class FPFSpec(BaseModel):
             except ValueError:
                 return None
         return v
-    source_url: Optional[str] = Field(None, description="Source URL or path")
-    source_hash: Optional[str] = Field(None, description="Content hash for versioning")
-    patterns: List[Pattern] = Field(
+    source_url: str | None = Field(None, description="Source URL or path")
+    source_hash: str | None = Field(None, description="Content hash for versioning")
+    patterns: list[Pattern] = Field(
         default_factory=list, description="All patterns in the specification"
     )
-    concepts: List[Concept] = Field(
+    concepts: list[Concept] = Field(
         default_factory=list, description="All concepts in the specification"
     )
-    relationships: List[Relationship] = Field(
+    relationships: list[Relationship] = Field(
         default_factory=list, description="All relationships in the specification"
     )
-    table_of_contents: Dict[str, Any] = Field(
+    table_of_contents: dict[str, Any] = Field(
         default_factory=dict, description="Table of contents structure"
     )
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict, description="Additional specification metadata"
     )
 
-    def get_pattern_by_id(self, pattern_id: str) -> Optional[Pattern]:
+    def get_pattern_by_id(self, pattern_id: str) -> Pattern | None:
         """Get a pattern by its ID."""
         for pattern in self.patterns:
             if pattern.id == pattern_id:
                 return pattern
         return None
 
-    def get_concepts_by_pattern(self, pattern_id: str) -> List[Concept]:
+    def get_concepts_by_pattern(self, pattern_id: str) -> list[Concept]:
         """Get all concepts defined in a specific pattern."""
         return [c for c in self.concepts if c.pattern_id == pattern_id]
 
-    def get_relationships_by_source(self, source_id: str) -> List[Relationship]:
+    def get_relationships_by_source(self, source_id: str) -> list[Relationship]:
         """Get all relationships where the given ID is the source."""
         return [r for r in self.relationships if r.source == source_id]
 
-    def get_relationships_by_target(self, target_id: str) -> List[Relationship]:
+    def get_relationships_by_target(self, target_id: str) -> list[Relationship]:
         """Get all relationships where the given ID is the target."""
         return [r for r in self.relationships if r.target == target_id]
 
@@ -239,29 +197,29 @@ class FPFIndex(BaseModel):
     Provides fast lookup and search capabilities over the FPF specification.
     """
 
-    pattern_index: Dict[str, Pattern] = Field(
+    pattern_index: dict[str, Pattern] = Field(
         default_factory=dict, description="Pattern ID to Pattern mapping"
     )
-    concept_index: Dict[str, List[Concept]] = Field(
+    concept_index: dict[str, list[Concept]] = Field(
         default_factory=dict, description="Concept name to Concepts mapping"
     )
-    keyword_index: Dict[str, List[str]] = Field(
+    keyword_index: dict[str, list[str]] = Field(
         default_factory=dict, description="Keyword to pattern IDs mapping"
     )
-    title_index: Dict[str, List[str]] = Field(
+    title_index: dict[str, list[str]] = Field(
         default_factory=dict, description="Title words to pattern IDs mapping"
     )
-    relationship_graph: Dict[str, List[str]] = Field(
+    relationship_graph: dict[str, list[str]] = Field(
         default_factory=dict, description="Adjacency list for relationships"
     )
 
-    def get_pattern(self, pattern_id: str) -> Optional[Pattern]:
+    def get_pattern(self, pattern_id: str) -> Pattern | None:
         """Get a pattern by ID."""
         return self.pattern_index.get(pattern_id)
 
     def search_patterns(
-        self, query: str, filters: Optional[Dict[str, Any]] = None
-    ) -> List[Pattern]:
+        self, query: str, filters: dict[str, Any] | None = None
+    ) -> list[Pattern]:
         """Search patterns by query string."""
         query_lower = query.lower()
         matches = set()
@@ -291,7 +249,7 @@ class FPFIndex(BaseModel):
 
         return results
 
-    def get_related_patterns(self, pattern_id: str, depth: int = 1) -> List[Pattern]:
+    def get_related_patterns(self, pattern_id: str, depth: int = 1) -> list[Pattern]:
         """Get patterns related to the given pattern through relationships."""
         visited = set()
         to_visit = [(pattern_id, 0)]

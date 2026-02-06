@@ -3,64 +3,14 @@
 This module provides AI-powered code generation, refactoring, analysis,
 and documentation utilities using multiple LLM providers (OpenAI, Anthropic, Google).
 """
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Any, Optional
-from dataclasses import dataclass
-from enum import Enum
 import logging
 import os
 import sys
 import time
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
 
 # Optional LLM client imports
 try:
@@ -82,7 +32,7 @@ except ImportError:
 
 # Optional Ollama integration
 try:
-    from codomyrmex.llm.ollama import OllamaManager, ModelRunner
+    from codomyrmex.llm.ollama import ModelRunner, OllamaManager
     from codomyrmex.llm.ollama.model_runner import ExecutionOptions
     OLLAMA_AVAILABLE = True
 except ImportError:
@@ -273,10 +223,10 @@ class CodeGenerationRequest:
     language: CodeLanguage
     complexity: CodeComplexity = CodeComplexity.INTERMEDIATE
     style: CodeStyle = CodeStyle.CLEAN
-    context: Optional[str] = None
-    requirements: Optional[list[str]] = None
-    examples: Optional[list[str]] = None
-    max_length: Optional[int] = None
+    context: str | None = None
+    requirements: list[str] | None = None
+    examples: list[str] | None = None
+    max_length: int | None = None
     temperature: float = 0.7
 
 
@@ -287,7 +237,7 @@ class CodeRefactoringRequest:
     code: str
     language: CodeLanguage
     refactoring_type: str  # e.g., "optimize", "simplify", "add_error_handling"
-    context: Optional[str] = None
+    context: str | None = None
     preserve_functionality: bool = True
     add_tests: bool = False
     add_documentation: bool = False
@@ -300,7 +250,7 @@ class CodeAnalysisRequest:
     code: str
     language: CodeLanguage
     analysis_type: str  # e.g., "quality", "security", "performance", "maintainability"
-    context: Optional[str] = None
+    context: str | None = None
     include_suggestions: bool = True
 
 
@@ -312,8 +262,8 @@ class CodeGenerationResult:
     language: CodeLanguage
     metadata: dict[str, Any]
     execution_time: float
-    tokens_used: Optional[int] = None
-    confidence_score: Optional[float] = None
+    tokens_used: int | None = None
+    confidence_score: float | None = None
 
 
 # Default LLM configurations
@@ -332,7 +282,7 @@ RETRY_DELAY = 1.0  # seconds
 
 # LLM client initialization
 @monitor_performance("llm_client_initialization")
-def get_llm_client(provider: str, model_name: Optional[str] = None) -> tuple[Any, str]:
+def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, str]:
     """
     Initialize and return an LLM client based on the specified provider.
 
@@ -420,9 +370,9 @@ def generate_code_snippet(
     prompt: str,
     language: str,
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
-    context: Optional[str] = None,
-    max_length: Optional[int] = None,
+    model_name: str | None = None,
+    context: str | None = None,
+    max_length: int | None = None,
     temperature: float = 0.7,
     **kwargs,
 ) -> dict[str, Any]:
@@ -522,7 +472,7 @@ def generate_code_snippet(
             }
             if max_length:
                 options["max_tokens"] = max_length
-            
+
             result = client.run_model(
                 model_name=model,
                 prompt=full_prompt,
@@ -573,8 +523,8 @@ def refactor_code_snippet(
     refactoring_type: str,
     language: str,
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
-    context: Optional[str] = None,
+    model_name: str | None = None,
+    context: str | None = None,
     preserve_functionality: bool = True,
     **kwargs,
 ) -> dict[str, Any]:
@@ -705,8 +655,8 @@ def analyze_code_quality(
     language: str,
     analysis_type: str = "comprehensive",
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
-    context: Optional[str] = None,
+    model_name: str | None = None,
+    context: str | None = None,
     **kwargs,
 ) -> dict[str, Any]:
     """
@@ -827,7 +777,7 @@ def analyze_code_quality(
 def generate_code_batch(
     requests: list[CodeGenerationRequest],
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
+    model_name: str | None = None,
     parallel: bool = False,
     max_workers: int = 4,
     **kwargs,
@@ -931,8 +881,8 @@ def compare_code_versions(
     code2: str,
     language: str,
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
-    context: Optional[str] = None,
+    model_name: str | None = None,
+    context: str | None = None,
     **kwargs,
 ) -> dict[str, Any]:
     """
@@ -1061,8 +1011,8 @@ def generate_code_documentation(
     language: str,
     doc_type: str = "comprehensive",
     provider: str = DEFAULT_LLM_PROVIDER,
-    model_name: Optional[str] = None,
-    context: Optional[str] = None,
+    model_name: str | None = None,
+    context: str | None = None,
     **kwargs,
 ) -> dict[str, Any]:
     """

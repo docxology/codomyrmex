@@ -3,14 +3,8 @@ Spatial modeling module for Codomyrmex.
 Provides submodules for 3D modeling, 4D modeling (Synergetics), and world models.
 """
 
-from . import three_d
-from . import four_d
-from . import world_models
-
 # New submodules
-from . import coordinates
-from . import rendering
-from . import physics
+from . import coordinates, four_d, physics, rendering, three_d, world_models
 
 __all__ = [
     "three_d",

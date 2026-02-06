@@ -4,11 +4,12 @@ LLM Provider abstractions for unified API access.
 Provides a common interface for interacting with different LLM providers.
 """
 
+import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Iterator, AsyncIterator
 from enum import Enum
-import json
+from typing import Any, Dict, List, Optional
+from collections.abc import AsyncIterator, Iterator
 
 
 class ProviderType(Enum):
@@ -41,11 +42,11 @@ class Message:
     """A chat message."""
     role: str  # "system", "user", "assistant", "tool"
     content: str
-    name: Optional[str] = None
-    tool_calls: Optional[List[Dict]] = None
-    tool_call_id: Optional[str] = None
-    
-    def to_dict(self) -> Dict[str, Any]:
+    name: str | None = None
+    tool_calls: list[dict] | None = None
+    tool_call_id: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary format."""
         result = {"role": self.role, "content": self.content}
         if self.name:
@@ -63,11 +64,11 @@ class CompletionResponse:
     content: str
     model: str
     provider: ProviderType
-    finish_reason: Optional[str] = None
-    usage: Optional[Dict[str, int]] = None
-    tool_calls: Optional[List[Dict]] = None
-    raw_response: Optional[Any] = None
-    
+    finish_reason: str | None = None
+    usage: dict[str, int] | None = None
+    tool_calls: list[dict] | None = None
+    raw_response: Any | None = None
+
     @property
     def total_tokens(self) -> int:
         """Get total tokens used."""
@@ -79,13 +80,13 @@ class CompletionResponse:
 @dataclass
 class ProviderConfig:
     """Configuration for an LLM provider."""
-    api_key: Optional[str] = None
-    base_url: Optional[str] = None
-    organization: Optional[str] = None
+    api_key: str | None = None
+    base_url: str | None = None
+    organization: str | None = None
     timeout: float = 60.0
     max_retries: int = 3
-    default_model: Optional[str] = None
-    extra_headers: Dict[str, str] = field(default_factory=dict)
+    default_model: str | None = None
+    extra_headers: dict[str, str] = field(default_factory=dict)
 
 
 class LLMProvider(ABC):
@@ -119,48 +120,48 @@ class LLMProvider(ABC):
     @abstractmethod
     def complete(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         """Generate a completion from messages."""
         pass
-    
+
     @abstractmethod
     def complete_stream(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
         """Generate a streaming completion."""
         pass
-    
+
     @abstractmethod
     async def complete_async(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         """Generate a completion asynchronously."""
         pass
-    
+
     @abstractmethod
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         """List available models for this provider."""
         pass
-    
-    def get_model(self, model: Optional[str] = None) -> str:
+
+    def get_model(self, model: str | None = None) -> str:
         """Get model name, using default if not specified."""
         return model or self.config.default_model or self._default_model()
-    
+
     @abstractmethod
     def _default_model(self) -> str:
         """Get the default model for this provider."""
@@ -169,13 +170,13 @@ class LLMProvider(ABC):
 
 class OpenAIProvider(LLMProvider):
     """OpenAI API provider."""
-    
+
     provider_type = ProviderType.OPENAI
-    
+
     def __init__(self, config: ProviderConfig):
         super().__init__(config)
         self._init_client()
-    
+
     def _init_client(self):
         """Initialize the OpenAI client."""
         try:
@@ -189,18 +190,18 @@ class OpenAIProvider(LLMProvider):
             )
         except ImportError:
             self._client = None
-    
+
     def complete(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized. Install openai package.")
-        
+
         response = self._client.chat.completions.create(
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
@@ -208,7 +209,7 @@ class OpenAIProvider(LLMProvider):
             max_tokens=max_tokens,
             **kwargs
         )
-        
+
         choice = response.choices[0]
         return CompletionResponse(
             content=choice.message.content or "",
@@ -223,18 +224,18 @@ class OpenAIProvider(LLMProvider):
             tool_calls=[tc.model_dump() for tc in choice.message.tool_calls] if choice.message.tool_calls else None,
             raw_response=response,
         )
-    
+
     def complete_stream(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("OpenAI client not initialized.")
-        
+
         stream = self._client.chat.completions.create(
             model=self.get_model(model),
             messages=[m.to_dict() for m in messages],
@@ -243,17 +244,17 @@ class OpenAIProvider(LLMProvider):
             stream=True,
             **kwargs
         )
-        
+
         for chunk in stream:
             if chunk.choices and chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
-    
+
     async def complete_async(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         try:
@@ -285,44 +286,44 @@ class OpenAIProvider(LLMProvider):
             )
         except ImportError:
             raise RuntimeError("OpenAI async client not available.")
-    
-    def list_models(self) -> List[str]:
+
+    def list_models(self) -> list[str]:
         if not self._client:
             return []
         models = self._client.models.list()
         return [m.id for m in models.data if "gpt" in m.id.lower()]
-    
+
     def _default_model(self) -> str:
         return "gpt-4o"
 
 
 class AnthropicProvider(LLMProvider):
     """Anthropic Claude API provider."""
-    
+
     provider_type = ProviderType.ANTHROPIC
-    
+
     def __init__(self, config: ProviderConfig):
         super().__init__(config)
         self._init_client()
-    
+
     def _init_client(self):
         try:
             from anthropic import Anthropic
             self._client = Anthropic(api_key=self.config.api_key)
         except ImportError:
             self._client = None
-    
+
     def complete(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
-        
+
         # Extract system message
         system = None
         chat_messages = []
@@ -331,7 +332,7 @@ class AnthropicProvider(LLMProvider):
                 system = m.content
             else:
                 chat_messages.append({"role": m.role, "content": m.content})
-        
+
         response = self._client.messages.create(
             model=self.get_model(model),
             messages=chat_messages,
@@ -340,7 +341,7 @@ class AnthropicProvider(LLMProvider):
             max_tokens=max_tokens or 4096,
             **kwargs
         )
-        
+
         return CompletionResponse(
             content=response.content[0].text if response.content else "",
             model=response.model,
@@ -353,18 +354,18 @@ class AnthropicProvider(LLMProvider):
             },
             raw_response=response,
         )
-    
+
     def complete_stream(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
         if not self._client:
             raise RuntimeError("Anthropic client not initialized.")
-        
+
         system = None
         chat_messages = []
         for m in messages:
@@ -372,7 +373,7 @@ class AnthropicProvider(LLMProvider):
                 system = m.content
             else:
                 chat_messages.append({"role": m.role, "content": m.content})
-        
+
         with self._client.messages.stream(
             model=self.get_model(model),
             messages=chat_messages,
@@ -383,19 +384,19 @@ class AnthropicProvider(LLMProvider):
         ) as stream:
             for text in stream.text_stream:
                 yield text
-    
+
     async def complete_async(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         try:
             from anthropic import AsyncAnthropic
             async_client = AsyncAnthropic(api_key=self.config.api_key)
-            
+
             system = None
             chat_messages = []
             for m in messages:
@@ -403,7 +404,7 @@ class AnthropicProvider(LLMProvider):
                     system = m.content
                 else:
                     chat_messages.append({"role": m.role, "content": m.content})
-            
+
             response = await async_client.messages.create(
                 model=self.get_model(model),
                 messages=chat_messages,
@@ -412,7 +413,7 @@ class AnthropicProvider(LLMProvider):
                 max_tokens=max_tokens or 4096,
                 **kwargs
             )
-            
+
             return CompletionResponse(
                 content=response.content[0].text if response.content else "",
                 model=response.model,
@@ -427,8 +428,8 @@ class AnthropicProvider(LLMProvider):
             )
         except ImportError:
             raise RuntimeError("Anthropic async client not available.")
-    
-    def list_models(self) -> List[str]:
+
+    def list_models(self) -> list[str]:
         return [
             "claude-3-5-sonnet-20241022",
             "claude-3-5-haiku-20241022",
@@ -436,7 +437,7 @@ class AnthropicProvider(LLMProvider):
             "claude-3-sonnet-20240229",
             "claude-3-haiku-20240307",
         ]
-    
+
     def _default_model(self) -> str:
         return "claude-3-5-sonnet-20241022"
 
@@ -501,10 +502,10 @@ class OpenRouterProvider(LLMProvider):
 
     def complete(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         if not self._client:
@@ -535,10 +536,10 @@ class OpenRouterProvider(LLMProvider):
 
     def complete_stream(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> Iterator[str]:
         if not self._client:
@@ -559,10 +560,10 @@ class OpenRouterProvider(LLMProvider):
 
     async def complete_async(
         self,
-        messages: List[Message],
-        model: Optional[str] = None,
+        messages: list[Message],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs
     ) -> CompletionResponse:
         try:
@@ -596,7 +597,7 @@ class OpenRouterProvider(LLMProvider):
         except ImportError:
             raise RuntimeError("OpenRouter async client not available. Install openai package.")
 
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         """List free models available on OpenRouter.
 
         For a full list of models, see: https://openrouter.ai/models
@@ -609,23 +610,23 @@ class OpenRouterProvider(LLMProvider):
 
 def get_provider(
     provider_type: ProviderType,
-    config: Optional[ProviderConfig] = None,
+    config: ProviderConfig | None = None,
     **kwargs
 ) -> LLMProvider:
     """Get an LLM provider instance."""
     if config is None:
         config = ProviderConfig(**kwargs)
-    
+
     providers = {
         ProviderType.OPENAI: OpenAIProvider,
         ProviderType.ANTHROPIC: AnthropicProvider,
         ProviderType.OPENROUTER: OpenRouterProvider,
     }
-    
+
     provider_class = providers.get(provider_type)
     if not provider_class:
         raise ValueError(f"Unsupported provider: {provider_type}")
-    
+
     return provider_class(config)
 
 

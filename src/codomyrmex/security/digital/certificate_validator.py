@@ -3,12 +3,12 @@
 Provides SSL/TLS certificate validation, monitoring, and security assessment.
 """
 
-from datetime import datetime, timezone
-from typing import Any, Optional, Dict, List
 import socket
 import ssl
-
 from dataclasses import dataclass
+from datetime import datetime, timezone
+from typing import Any
+
 import OpenSSL
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -23,12 +23,12 @@ class SSLValidationResult:
     hostname: str
     port: int
     valid: bool
-    certificate_info: Dict[str, Any]
-    validation_errors: Optional[List[str]] = None
-    expiration_days: Optional[int] = None
-    issuer: Optional[str] = None
-    subject: Optional[str] = None
-    serial_number: Optional[str] = None
+    certificate_info: dict[str, Any]
+    validation_errors: list[str] | None = None
+    expiration_days: int | None = None
+    issuer: str | None = None
+    subject: str | None = None
+    serial_number: str | None = None
 
 
 class CertificateValidator:
@@ -55,15 +55,15 @@ class CertificateValidator:
         try:
             # Get certificate from server
             cert_pem = self._get_certificate(hostname, port)
-            
+
             # Parse with OpenSSL
             x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert_pem)
-            
+
             # Extract info
             subject = dict(x509.get_subject().get_components())
             issuer = dict(x509.get_issuer().get_components())
             serial = x509.get_serial_number()
-            
+
             # Check expiration
             not_after_bytes = x509.get_notAfter()
             if not_after_bytes:
@@ -76,7 +76,7 @@ class CertificateValidator:
             else:
                 days_left = None
                 is_expired = False
-                
+
             # Basic validation status
             is_valid = not x509.has_expired() and not is_expired
             errors = []
@@ -88,7 +88,7 @@ class CertificateValidator:
             # Simplify subject/issuer for display
             subject_str = self._format_x509_name(subject)
             issuer_str = self._format_x509_name(issuer)
-            
+
             return SSLValidationResult(
                 hostname=hostname,
                 port=port,
@@ -121,7 +121,7 @@ class CertificateValidator:
         context = ssl.create_default_context()
         context.check_hostname = False
         context.verify_mode = ssl.CERT_NONE  # We just want to fetch it, not enforce validation during fetch
-        
+
         with socket.create_connection((hostname, port), timeout=self.timeout) as sock:
             with context.wrap_socket(sock, server_hostname=hostname) as ssock:
                 cert_bin = ssock.getpeercert(binary_form=True)
@@ -129,7 +129,7 @@ class CertificateValidator:
                     raise ValueError("No certificate retrieved")
                 return ssl.DER_cert_to_PEM_cert(cert_bin)
 
-    def _format_x509_name(self, components: Dict[bytes, bytes]) -> str:
+    def _format_x509_name(self, components: dict[bytes, bytes]) -> str:
         """Format OpenSSL X509 Name components to string."""
         parts = []
         # Common Name
@@ -138,5 +138,5 @@ class CertificateValidator:
         # Organization
         if b'O' in components:
             parts.append(f"O={components[b'O'].decode('utf-8', errors='ignore')}")
-            
+
         return ", ".join(parts) or "Unknown"

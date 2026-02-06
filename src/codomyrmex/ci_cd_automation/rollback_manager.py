@@ -4,15 +4,14 @@ This module provides comprehensive rollback capabilities for failed deployments,
 including rollback strategies, execution tracking, and recovery mechanisms.
 """
 
-from datetime import datetime
-from pathlib import Path
-from typing import Callable, Optional
 import asyncio
 import json
 import time
-
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+from collections.abc import Callable
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -60,7 +59,7 @@ class RollbackExecution:
     strategy: RollbackStrategy
     status: str
     start_time: datetime
-    end_time: Optional[datetime] = None
+    end_time: datetime | None = None
     current_step: int = 0
     completed_steps: int = 0
     failed_steps: int = 0
@@ -71,7 +70,7 @@ class RollbackExecution:
 class RollbackManager:
     """Rollback management and execution system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize rollback manager.
 
         Args:
@@ -96,7 +95,7 @@ class RollbackManager:
         deployment_id: str,
         strategy: RollbackStrategy,
         reason: str,
-        custom_steps: Optional[list[RollbackStep]] = None
+        custom_steps: list[RollbackStep] | None = None
     ) -> RollbackPlan:
         """Create a rollback plan for a failed deployment.
 
@@ -359,7 +358,7 @@ class RollbackManager:
         logger.info("Executing rollback...")
         # Implementation would execute the main rollback logic
 
-    def get_rollback_status(self, execution_id: str) -> Optional[RollbackExecution]:
+    def get_rollback_status(self, execution_id: str) -> RollbackExecution | None:
         """Get status of a rollback execution.
 
         Args:
@@ -402,7 +401,7 @@ def handle_rollback(
     deployment_id: str,
     strategy: RollbackStrategy = RollbackStrategy.IMMEDIATE,
     reason: str = "Deployment failure",
-    workspace_dir: Optional[str] = None
+    workspace_dir: str | None = None
 ) -> RollbackExecution:
     """Handle rollback for a failed deployment.
 

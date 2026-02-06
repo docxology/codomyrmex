@@ -1,6 +1,7 @@
 """Unit tests for workflow_testing module."""
-import pytest
 import time
+
+import pytest
 
 
 @pytest.mark.unit
@@ -146,7 +147,7 @@ class TestWorkflowResult:
 
     def test_result_creation(self):
         """Verify WorkflowResult can be created."""
-        from codomyrmex.workflow_testing import WorkflowResult, StepStatus
+        from codomyrmex.workflow_testing import StepStatus, WorkflowResult
 
         result = WorkflowResult(
             workflow_id="wf_1",
@@ -158,7 +159,7 @@ class TestWorkflowResult:
 
     def test_result_metrics(self):
         """Verify workflow result metrics."""
-        from codomyrmex.workflow_testing import WorkflowResult, StepResult, StepStatus
+        from codomyrmex.workflow_testing import StepResult, StepStatus, WorkflowResult
 
         result = WorkflowResult(workflow_id="test", status=StepStatus.PASSED)
         result.step_results = [
@@ -174,7 +175,7 @@ class TestWorkflowResult:
 
     def test_result_to_dict(self):
         """Verify result serialization."""
-        from codomyrmex.workflow_testing import WorkflowResult, StepStatus
+        from codomyrmex.workflow_testing import StepStatus, WorkflowResult
 
         result = WorkflowResult(workflow_id="test", status=StepStatus.PASSED)
 
@@ -260,7 +261,10 @@ class TestAssertionExecutor:
     def test_executor_equals_pass(self):
         """Verify equals assertion passes."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -277,7 +281,10 @@ class TestAssertionExecutor:
     def test_executor_equals_fail(self):
         """Verify equals assertion fails."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -294,7 +301,10 @@ class TestAssertionExecutor:
     def test_executor_contains(self):
         """Verify contains assertion."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -311,7 +321,10 @@ class TestAssertionExecutor:
     def test_executor_not_null(self):
         """Verify not_null assertion."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -328,7 +341,10 @@ class TestAssertionExecutor:
     def test_executor_from_context(self):
         """Verify assertion using context value."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -346,7 +362,10 @@ class TestAssertionExecutor:
     def test_executor_greater_than(self):
         """Verify greater_than assertion."""
         from codomyrmex.workflow_testing import (
-            AssertionExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            AssertionExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = AssertionExecutor()
@@ -368,7 +387,10 @@ class TestWaitExecutor:
     def test_executor_wait(self):
         """Verify wait execution."""
         from codomyrmex.workflow_testing import (
-            WaitExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            StepStatus,
+            WaitExecutor,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = WaitExecutor()
@@ -394,7 +416,10 @@ class TestScriptExecutor:
     def test_executor_with_function(self):
         """Verify script execution with function."""
         from codomyrmex.workflow_testing import (
-            ScriptExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            ScriptExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = ScriptExecutor()
@@ -412,7 +437,10 @@ class TestScriptExecutor:
     def test_executor_with_expression(self):
         """Verify script execution with expression."""
         from codomyrmex.workflow_testing import (
-            ScriptExecutor, WorkflowStep, WorkflowStepType, StepStatus
+            ScriptExecutor,
+            StepStatus,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         executor = ScriptExecutor()
@@ -434,9 +462,7 @@ class TestWorkflowRunner:
 
     def test_runner_run_workflow(self):
         """Verify workflow execution."""
-        from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, StepStatus
-        )
+        from codomyrmex.workflow_testing import StepStatus, Workflow, WorkflowRunner
 
         runner = WorkflowRunner()
 
@@ -453,9 +479,7 @@ class TestWorkflowRunner:
 
     def test_runner_workflow_with_variables(self):
         """Verify workflow variables are available."""
-        from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, StepStatus
-        )
+        from codomyrmex.workflow_testing import StepStatus, Workflow, WorkflowRunner
 
         runner = WorkflowRunner()
 
@@ -479,7 +503,11 @@ class TestWorkflowRunner:
     def test_runner_step_output_in_context(self):
         """Verify step output is stored in context."""
         from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, WorkflowStep, WorkflowStepType, StepStatus
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         runner = WorkflowRunner()
@@ -506,7 +534,11 @@ class TestWorkflowRunner:
     def test_runner_stops_on_error(self):
         """Verify runner stops on error."""
         from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, WorkflowStep, WorkflowStepType, StepStatus
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         runner = WorkflowRunner()
@@ -535,8 +567,13 @@ class TestWorkflowRunner:
     def test_runner_register_executor(self):
         """Verify custom executor registration."""
         from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, WorkflowStep, WorkflowStepType,
-            StepExecutor, StepResult, StepStatus
+            StepExecutor,
+            StepResult,
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         class CustomExecutor(StepExecutor):
@@ -565,7 +602,11 @@ class TestWorkflowRunner:
     def test_runner_retry_support(self):
         """Verify retry functionality."""
         from codomyrmex.workflow_testing import (
-            WorkflowRunner, Workflow, WorkflowStep, WorkflowStepType, StepStatus
+            StepStatus,
+            Workflow,
+            WorkflowRunner,
+            WorkflowStep,
+            WorkflowStepType,
         )
 
         attempt_count = [0]

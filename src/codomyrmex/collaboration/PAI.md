@@ -1,26 +1,52 @@
-# Personal AI Infrastructure - Collaboration Context
+# Personal AI Infrastructure — Collaboration Module
 
-**Module**: collaboration
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Real-time collaboration infrastructure for shared editing, code review, and team synchronization across distributed environments.
+The Collaboration module provides PAI integration for multi-agent coordination.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Agent Communication
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Enable agents to collaborate:
 
-## Key Files
+```python
+from codomyrmex.collaboration import MessageBus, Channel
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+bus = MessageBus()
+channel = bus.create_channel("code_review")
 
-## Future Considerations
+# Send message
+channel.publish({"action": "review", "file": "main.py"})
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+# Receive messages
+messages = channel.receive()
+```
+
+### Shared State
+
+Share context between agents:
+
+```python
+from codomyrmex.collaboration import SharedContext
+
+context = SharedContext()
+context.set("current_task", "refactoring")
+
+# Other agents can read
+task = context.get("current_task")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `MessageBus` | Inter-agent messaging |
+| `SharedContext` | State sharing |
+| `TaskQueue` | Work distribution |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

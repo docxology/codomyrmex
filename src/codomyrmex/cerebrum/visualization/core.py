@@ -1,25 +1,21 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from matplotlib.figure import Figure
-from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from matplotlib.figure import Figure
+from matplotlib.patches import Patch
 
-from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork
 from codomyrmex.cerebrum.core.cases import Case
-from codomyrmex.cerebrum.core.exceptions import VisualizationError
+from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork
 from codomyrmex.cerebrum.visualization.base import (
     BaseChartVisualizer,
     BaseNetworkVisualizer,
-    BaseVisualizer,
 )
 from codomyrmex.cerebrum.visualization.theme import (
     VisualizationTheme,
-    get_default_theme,
 )
 from codomyrmex.logging_monitoring import get_logger
-
 
 try:
     HAS_MATPLOTLIB = True
@@ -42,9 +38,9 @@ class ModelVisualizer(BaseNetworkVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (14, 10),
+        figure_size: tuple[float, float] = (14, 10),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize visualizer.
 
@@ -175,7 +171,7 @@ class ModelVisualizer(BaseNetworkVisualizer):
 
     def visualize_inference_results(
         self,
-        results: Dict[str, Any],
+        results: dict[str, Any],
         chart_type: str = "bar",
         show_values: bool = True,
     ) -> Figure:
@@ -276,9 +272,9 @@ class CaseVisualizer(BaseChartVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12, 10),
+        figure_size: tuple[float, float] = (12, 10),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize case visualizer.
 
@@ -291,9 +287,9 @@ class CaseVisualizer(BaseChartVisualizer):
 
     def plot_case_similarity(
         self,
-        cases: List[Tuple[Case, float]],
-        query_case: Optional[Case] = None,
-        group_by: Optional[str] = None,
+        cases: list[tuple[Case, float]],
+        query_case: Case | None = None,
+        group_by: str | None = None,
         show_threshold: bool = True,
         threshold: float = 0.5,
     ) -> Figure:
@@ -399,7 +395,7 @@ class CaseVisualizer(BaseChartVisualizer):
         return fig
 
     def plot_case_features(
-        self, cases: List[Case], features: List[str], chart_type: str = "bar"
+        self, cases: list[Case], features: list[str], chart_type: str = "bar"
     ) -> Figure:
         """Plot case features comparison with enhanced styling.
 
@@ -459,9 +455,9 @@ class InferenceVisualizer(BaseChartVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12, 8),
+        figure_size: tuple[float, float] = (12, 8),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize inference visualizer.
 
@@ -472,7 +468,7 @@ class InferenceVisualizer(BaseChartVisualizer):
         """
         super().__init__(figure_size, dpi, theme)
 
-    def plot_inference_results(self, results: Dict[str, Any]) -> Figure:
+    def plot_inference_results(self, results: dict[str, Any]) -> Figure:
         """Plot inference results using ModelVisualizer.
 
         Args:
@@ -486,7 +482,7 @@ class InferenceVisualizer(BaseChartVisualizer):
 
     def plot_belief_evolution(
         self,
-        belief_history: List[Dict[str, float]],
+        belief_history: list[dict[str, float]],
         show_confidence: bool = False,
     ) -> Figure:
         """Plot evolution of beliefs over time with enhanced styling.

@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Graph generator for FPF visualizations using NetworkX and Matplotlib.
 
 
@@ -7,19 +7,18 @@ This module provides graph generation utilities for creating various
 types of network visualizations from FPF specifications.
 """
 
-from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-from ..core.models import FPFSpec, Pattern, Relationship
+from ..core.models import FPFSpec
 
 
 class GraphGenerator:
     """Generator for graph visualizations from FPF specifications."""
 
-    def __init__(self, figsize: Tuple[int, int] = (12, 8), dpi: int = 300):
+    def __init__(self, figsize: tuple[int, int] = (12, 8), dpi: int = 300):
         """Initialize the graph generator.
 
         Args:
@@ -64,7 +63,7 @@ class GraphGenerator:
         return G
 
     def create_term_cooccurrence_graph(
-        self, cooccurrence: Dict[str, Dict[str, int]], min_weight: int = 2
+        self, cooccurrence: dict[str, dict[str, int]], min_weight: int = 2
     ) -> nx.Graph:
         """Create an undirected graph of term co-occurrences.
 
@@ -109,7 +108,7 @@ class GraphGenerator:
             )
 
         # Add edges based on shared patterns
-        concept_patterns: Dict[str, Set[str]] = {}
+        concept_patterns: dict[str, Set[str]] = {}
         for concept in spec.concepts:
             concept_patterns[concept.name] = {concept.pattern_id}
             concept_patterns[concept.name].update(concept.references)
@@ -125,7 +124,7 @@ class GraphGenerator:
 
         return G
 
-    def apply_hierarchical_layout(self, G: nx.DiGraph) -> Dict[str, Tuple[float, float]]:
+    def apply_hierarchical_layout(self, G: nx.DiGraph) -> dict[str, tuple[float, float]]:
         """Apply hierarchical layout to a directed graph.
 
         Args:
@@ -144,7 +143,7 @@ class GraphGenerator:
 
     def apply_force_directed_layout(
         self, G: nx.Graph, k: float = None, iterations: int = 50
-    ) -> Dict[str, Tuple[float, float]]:
+    ) -> dict[str, tuple[float, float]]:
         """Apply force-directed layout to a graph.
 
         Args:
@@ -161,7 +160,7 @@ class GraphGenerator:
         pos = nx.spring_layout(G, k=k, iterations=iterations)
         return pos
 
-    def apply_circular_layout(self, G: nx.Graph) -> Dict[str, Tuple[float, float]]:
+    def apply_circular_layout(self, G: nx.Graph) -> dict[str, tuple[float, float]]:
         """Apply circular layout to a graph.
 
         Args:
@@ -172,7 +171,7 @@ class GraphGenerator:
         """
         return nx.circular_layout(G)
 
-    def apply_tree_layout(self, G: nx.Graph, root: Optional[str] = None) -> Dict[str, Tuple[float, float]]:
+    def apply_tree_layout(self, G: nx.Graph, root: str | None = None) -> dict[str, tuple[float, float]]:
         """Apply tree layout to a graph.
 
         Args:
@@ -194,8 +193,8 @@ class GraphGenerator:
         return pos
 
     def get_node_colors_by_attribute(
-        self, G: nx.Graph, attribute: str, color_map: Dict[str, str] = None
-    ) -> List[str]:
+        self, G: nx.Graph, attribute: str, color_map: dict[str, str] = None
+    ) -> list[str]:
         """Get node colors based on a node attribute.
 
         Args:
@@ -236,7 +235,7 @@ class GraphGenerator:
 
     def get_node_sizes_by_importance(
         self, G: nx.Graph, importance_metric: str = "degree"
-    ) -> List[float]:
+    ) -> list[float]:
         """Get node sizes based on importance metric.
 
         Args:

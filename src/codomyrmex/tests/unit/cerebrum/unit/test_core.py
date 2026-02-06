@@ -2,10 +2,8 @@
 
 import pytest
 
-from codomyrmex.cerebrum.core import CerebrumEngine, ModelManager, ReasoningEngine
-from codomyrmex.cerebrum import Case, CaseBase
-from codomyrmex.cerebrum import Model
-from codomyrmex.cerebrum import ModelError
+from codomyrmex.cerebrum import Case, ModelError
+from codomyrmex.cerebrum.core import CerebrumEngine, ModelManager
 
 
 @pytest.mark.unit
@@ -60,17 +58,17 @@ class TestCerebrumEngine:
     def test_reason(self):
         """Test reasoning."""
         engine = CerebrumEngine()
-        
+
         # Add cases
         case1 = Case(case_id="case1", features={"x": 1}, outcome="success")
         case2 = Case(case_id="case2", features={"x": 2}, outcome="failure")
         engine.add_case(case1)
         engine.add_case(case2)
-        
+
         # Query
         query = Case(case_id="query", features={"x": 1.5})
         result = engine.reason(query)
-        
+
         assert result.prediction is not None
         assert 0 <= result.confidence <= 1
 
@@ -85,7 +83,7 @@ class TestCerebrumEngine:
         engine = CerebrumEngine()
         case = Case(case_id="test", features={"x": 1})
         engine.learn_from_case(case, "success")
-        
+
         retrieved = engine.case_base.get_case("test")
         assert retrieved.outcome == "success"
 

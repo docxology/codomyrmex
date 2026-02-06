@@ -22,7 +22,7 @@ class SkillPermissionManager:
 
     def __init__(self):
         """Initialize SkillPermissionManager."""
-        self._permissions: Dict[str, Set[str]] = {}  # skill_id -> set of granted actions
+        self._permissions: dict[str, set[str]] = {}  # skill_id -> set of granted actions
 
     def check_permission(self, skill_id: str, action: str) -> bool:
         """
@@ -68,7 +68,7 @@ class SkillPermissionManager:
             return True
         return False
 
-    def list_permissions(self, skill_id: str) -> List[str]:
+    def list_permissions(self, skill_id: str) -> list[str]:
         """
         List all permissions granted to a skill.
 
@@ -80,7 +80,7 @@ class SkillPermissionManager:
         """
         return sorted(self._permissions.get(skill_id, set()))
 
-    def grant_all(self, skill_id: str, permissions: List[str]) -> None:
+    def grant_all(self, skill_id: str, permissions: list[str]) -> None:
         """
         Grant multiple permissions at once.
 

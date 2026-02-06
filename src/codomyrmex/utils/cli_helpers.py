@@ -1,79 +1,15 @@
-from pathlib import Path
-from typing import Any, Dict, Optional, Union, List
 import argparse
 import json
 import sys
 import time
-
 from contextlib import contextmanager
-
-from codomyrmex.logging_monitoring.logger_config import get_logger, LogContext, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from pathlib import Path
+from typing import Any
+
+from codomyrmex.logging_monitoring.logger_config import (
+    LogContext,
+    get_logger,
+)
 
 """CLI Helper Utilities
 
@@ -119,7 +55,7 @@ class ProgressReporter:
         self.start_time = time.time()
         self.last_update = 0
 
-    def update(self, increment: int = 1, message: Optional[str] = None) -> None:
+    def update(self, increment: int = 1, message: str | None = None) -> None:
         """
         Update progress.
 
@@ -138,7 +74,7 @@ class ProgressReporter:
         self.last_update = current_time
         self._display_progress(message)
 
-    def set_current(self, current: int, message: Optional[str] = None) -> None:
+    def set_current(self, current: int, message: str | None = None) -> None:
         """
         Set current progress value.
 
@@ -155,7 +91,7 @@ class ProgressReporter:
         self._display_progress(message)
         print()  # New line after progress bar
 
-    def _display_progress(self, message: Optional[str] = None) -> None:
+    def _display_progress(self, message: str | None = None) -> None:
         """Display current progress."""
         percentage = int(100 * self.current / self.total)
         filled_length = int(OUTPUT_WIDTH * self.current // self.total)
@@ -175,7 +111,7 @@ class ProgressReporter:
         print(status, end="", flush=True)
 
 
-def format_table(data: List[Dict[str, Any]], headers: List[str]) -> str:
+def format_table(data: list[dict[str, Any]], headers: list[str]) -> str:
     """
     Format data as a table.
 
@@ -256,7 +192,7 @@ def validate_dry_run(args: argparse.Namespace) -> bool:
 
 
 @contextmanager
-def enhanced_error_context(operation: str, context: Optional[Dict[str, Any]] = None):
+def enhanced_error_context(operation: str, context: dict[str, Any] | None = None):
     """
     Context manager for enhanced error reporting.
 
@@ -287,7 +223,7 @@ def enhanced_error_context(operation: str, context: Optional[Dict[str, Any]] = N
         raise enhanced_error from e
 
 
-def create_dry_run_plan(args: argparse.Namespace, operations: List[Dict[str, Any]]) -> str:
+def create_dry_run_plan(args: argparse.Namespace, operations: list[dict[str, Any]]) -> str:
     """
     Create a dry-run execution plan.
 
@@ -396,7 +332,7 @@ def format_output(
 
 
 def validate_file_path(
-    path: Union[str, Path],
+    path: str | Path,
     must_exist: bool = True,
     must_be_file: bool = False,
     must_be_dir: bool = False,
@@ -430,7 +366,7 @@ def validate_file_path(
     return path_obj
 
 
-def load_json_file(path: Union[str, Path]) -> Dict[str, Any]:
+def load_json_file(path: str | Path) -> dict[str, Any]:
     """Load JSON file with consistent error handling.
 
     Args:
@@ -446,7 +382,7 @@ def load_json_file(path: Union[str, Path]) -> Dict[str, Any]:
     file_path = validate_file_path(path, must_exist=True, must_be_file=True)
 
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             return json.load(f)
     except json.JSONDecodeError as e:
         logger.error(f"Invalid JSON in file {path}: {e}")
@@ -458,7 +394,7 @@ def load_json_file(path: Union[str, Path]) -> Dict[str, Any]:
 
 def save_json_file(
     data: Any,
-    path: Union[str, Path],
+    path: str | Path,
     indent: int = 2,
     create_parents: bool = True,
 ) -> Path:
@@ -511,7 +447,7 @@ def print_section(
     print(separator * width)
 
 
-def print_success(message: str, context: Optional[str] = None) -> None:
+def print_success(message: str, context: str | None = None) -> None:
     """Print a success message consistently.
 
     Args:
@@ -526,8 +462,8 @@ def print_success(message: str, context: Optional[str] = None) -> None:
 
 def print_error(
     message: str,
-    context: Optional[str] = None,
-    exception: Optional[Exception] = None,
+    context: str | None = None,
+    exception: Exception | None = None,
 ) -> None:
     """Print an error message consistently.
 
@@ -544,7 +480,7 @@ def print_error(
     print(error_msg)
 
 
-def print_warning(message: str, context: Optional[str] = None) -> None:
+def print_warning(message: str, context: str | None = None) -> None:
     """Print a warning message consistently.
 
     Args:
@@ -568,7 +504,7 @@ def print_info(message: str) -> None:
 
 def handle_common_exceptions(
     operation_name: str,
-    context: Optional[str] = None,
+    context: str | None = None,
     verbose: bool = False,
 ):
     """Decorator for handling common exceptions consistently.
@@ -618,8 +554,8 @@ def handle_common_exceptions(
 def format_result(
     result: Any,
     success_key: str = "success",
-    output_key: Optional[str] = None,
-) -> tuple[bool, Optional[str]]:
+    output_key: str | None = None,
+) -> tuple[bool, str | None]:
     """Extract success status and optional message from result.
 
     Args:
@@ -640,7 +576,7 @@ def format_result(
         return (bool(result), str(result) if result else None)
 
 
-def determine_language_from_file(file_path: Union[str, Path]) -> str:
+def determine_language_from_file(file_path: str | Path) -> str:
     """Determine programming language from file extension.
 
     Args:
@@ -671,7 +607,7 @@ def determine_language_from_file(file_path: Union[str, Path]) -> str:
     return language_map.get(ext, "python")  # Default to python
 
 
-def ensure_output_directory(output_path: Union[str, Path]) -> Path:
+def ensure_output_directory(output_path: str | Path) -> Path:
     """Ensure output directory exists, creating if necessary.
 
     Args:
@@ -685,7 +621,7 @@ def ensure_output_directory(output_path: Union[str, Path]) -> Path:
     return path_obj
 
 
-def parse_common_args(args: Any) -> Dict[str, Any]:
+def parse_common_args(args: Any) -> dict[str, Any]:
     """Extract common arguments from argparse namespace.
 
     Args:

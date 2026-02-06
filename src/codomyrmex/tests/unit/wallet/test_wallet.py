@@ -1,18 +1,17 @@
 """Tests for the wallet module (recovery, key_rotation, exceptions, core)."""
 
 import hashlib
+
 import pytest
-from unittest.mock import MagicMock, patch
-from pathlib import Path
 
 from codomyrmex.wallet.exceptions import (
-    WalletError,
-    WalletNotFoundError,
-    WalletKeyError,
     RitualError,
+    WalletError,
+    WalletKeyError,
+    WalletNotFoundError,
 )
-from codomyrmex.wallet.recovery import RitualStep, hash_response, NaturalRitualRecovery
-from codomyrmex.wallet.key_rotation import RotationPolicy, RotationRecord, KeyRotation
+from codomyrmex.wallet.key_rotation import KeyRotation, RotationPolicy, RotationRecord
+from codomyrmex.wallet.recovery import NaturalRitualRecovery, RitualStep, hash_response
 
 
 @pytest.mark.unit

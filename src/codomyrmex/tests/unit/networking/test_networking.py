@@ -12,10 +12,8 @@ Tests cover:
 - Port scanning utilities
 """
 
-import asyncio
-import json
 import socket
-from unittest.mock import MagicMock, AsyncMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -23,13 +21,13 @@ try:
     from codomyrmex import networking
     from codomyrmex.networking import (
         HTTPClient,
+        PortScanner,
         Response,
-        WebSocketClient,
         SSHClient,
         TCPClient,
         TCPServer,
         UDPClient,
-        PortScanner,
+        WebSocketClient,
         get_http_client,
     )
     from codomyrmex.networking.http_client import NetworkingError
@@ -281,8 +279,6 @@ class TestHTTPClient:
     def test_request_error_handling(self):
         """Test that request errors are wrapped in NetworkingError."""
         import requests
-        from requests.adapters import HTTPAdapter
-        from urllib3.util.retry import Retry
 
         with patch.object(requests.Session, 'request') as mock_request:
             mock_request.side_effect = requests.exceptions.RequestException("Connection failed")

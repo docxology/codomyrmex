@@ -8,9 +8,9 @@ Tests cover:
 Total: ~25 tests across 3 test classes.
 """
 
-import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+import pytest
 
 # =========================================================================
 # Test Operation Risk Classification
@@ -20,35 +20,59 @@ class TestOperationRiskClassification:
     """Tests for classify_operation_risk() mapping."""
 
     def test_list_is_read(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("list_instances") == OperationRisk.READ
 
     def test_get_is_read(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("get_volume") == OperationRisk.READ
 
     def test_create_is_write(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("create_network") == OperationRisk.WRITE
 
     def test_delete_is_delete(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("delete_bucket") == OperationRisk.DELETE
 
     def test_terminate_is_admin(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("terminate_instance") == OperationRisk.ADMIN
 
     def test_unknown_defaults_to_read(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("some_unknown_operation") == OperationRisk.READ
 
     def test_upload_is_write(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("upload_file") == OperationRisk.WRITE
 
     def test_remove_is_delete(self):
-        from codomyrmex.cloud.infomaniak.security import classify_operation_risk, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            classify_operation_risk,
+        )
         assert classify_operation_risk("remove_pool_member") == OperationRisk.DELETE
 
 
@@ -60,7 +84,10 @@ class TestSecurityCheckResult:
     """Tests for SecurityCheckResult dataclass."""
 
     def test_default_values(self):
-        from codomyrmex.cloud.infomaniak.security import SecurityCheckResult, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            SecurityCheckResult,
+        )
         r = SecurityCheckResult()
         assert r.allowed is True
         assert r.reason == ""
@@ -69,7 +96,10 @@ class TestSecurityCheckResult:
         assert r.checks_failed == []
 
     def test_custom_values(self):
-        from codomyrmex.cloud.infomaniak.security import SecurityCheckResult, OperationRisk
+        from codomyrmex.cloud.infomaniak.security import (
+            OperationRisk,
+            SecurityCheckResult,
+        )
         r = SecurityCheckResult(
             allowed=False,
             reason="blocked",

@@ -1,26 +1,44 @@
-# Personal AI Infrastructure - Logistics Context
+# Personal AI Infrastructure — Logistics Module
 
-**Module**: logistics
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Logistics and workflow management for scheduling, resource allocation, and task orchestration.
+The Logistics module provides PAI integration for supply chain and inventory management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Inventory Management
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Track inventory:
 
-## Key Files
+```python
+from codomyrmex.logistics import InventoryManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+inventory = InventoryManager()
+inventory.add_item("SKU-001", quantity=100)
+level = inventory.get_level("SKU-001")
+```
 
-## Future Considerations
+### Route Optimization
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Optimize delivery routes:
+
+```python
+from codomyrmex.logistics import RouteOptimizer
+
+optimizer = RouteOptimizer()
+route = optimizer.optimize(deliveries, start_location)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `InventoryManager` | Track stock |
+| `RouteOptimizer` | Optimize routes |
+| `ShipmentTracker` | Track shipments |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

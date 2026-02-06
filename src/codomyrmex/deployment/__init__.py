@@ -11,13 +11,13 @@ from typing import Any, Dict, List, Optional
 
 # Import strategies and create aliases for common naming conventions
 from .strategies import (
-    DeploymentState,
-    DeploymentTarget,
-    DeploymentResult,
-    DeploymentStrategy,
-    RollingDeployment,
     BlueGreenDeployment,
     CanaryDeployment,
+    DeploymentResult,
+    DeploymentState,
+    DeploymentStrategy,
+    DeploymentTarget,
+    RollingDeployment,
     create_strategy,
 )
 
@@ -26,10 +26,8 @@ CanaryStrategy = CanaryDeployment
 BlueGreenStrategy = BlueGreenDeployment
 RollingStrategy = RollingDeployment
 
-# Submodule exports  
-from . import health_checks
-from . import strategies
-from . import rollback
+# Submodule exports
+from . import health_checks, rollback, strategies
 
 # Try optional submodules
 try:
@@ -46,38 +44,38 @@ except ImportError:
 class DeploymentManager:
     """
     High-level deployment manager for orchestrating deployments.
-    
+
     Provides a simple interface for deploying services using
     different strategies.
     """
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the deployment manager.
-        
+
         Args:
             config: Optional configuration dictionary
         """
         self.config = config or {}
-        self._deployments: List[Dict[str, Any]] = []
+        self._deployments: list[dict[str, Any]] = []
         self._default_strategy = RollingDeployment()
-    
+
     def deploy(
         self,
         service_name: str,
         version: str,
-        strategy: Optional[DeploymentStrategy] = None,
-        targets: Optional[List[DeploymentTarget]] = None,
+        strategy: DeploymentStrategy | None = None,
+        targets: list[DeploymentTarget] | None = None,
     ) -> bool:
         """
         Deploy a service version using the specified strategy.
-        
+
         Args:
             service_name: Name of the service to deploy
             version: Version to deploy
             strategy: Deployment strategy (defaults to rolling)
             targets: Optional list of deployment targets
-            
+
         Returns:
             True if deployment was successful
         """
@@ -120,25 +118,25 @@ class DeploymentManager:
         })
 
         return result.success
-    
-    def get_deployment_history(self) -> List[Dict[str, Any]]:
+
+    def get_deployment_history(self) -> list[dict[str, Any]]:
         """Get history of deployments."""
         return list(self._deployments)
-    
+
     def rollback(
         self,
         service_name: str,
         previous_version: str,
-        strategy: Optional[DeploymentStrategy] = None,
+        strategy: DeploymentStrategy | None = None,
     ) -> bool:
         """
         Rollback a service to a previous version.
-        
+
         Args:
             service_name: Service to rollback
             previous_version: Version to rollback to
             strategy: Rollback strategy (defaults to rolling)
-            
+
         Returns:
             True if rollback was successful
         """
@@ -148,19 +146,19 @@ class DeploymentManager:
 class GitOpsSynchronizer:
     """
     GitOps synchronization manager.
-    
+
     Synchronizes deployment configurations from a Git repository.
     """
-    
+
     def __init__(
         self,
-        repo_url: Optional[str] = None,
-        local_path: Optional[str] = None,
+        repo_url: str | None = None,
+        local_path: str | None = None,
         branch: str = "main",
     ):
         """
         Initialize GitOps synchronizer.
-        
+
         Args:
             repo_url: URL of the Git repository
             local_path: Local path to clone repository
@@ -170,18 +168,18 @@ class GitOpsSynchronizer:
         self.local_path = local_path
         self.branch = branch
         self._synced = False
-    
+
     def sync(self) -> bool:
         """
         Synchronize from Git repository.
-        
+
         Returns:
             True if sync was successful
         """
         # Stub implementation
         self._synced = True
         return True
-    
+
     def get_version(self) -> str:
         """
         Get the current synced version via git rev-parse.
@@ -204,7 +202,7 @@ class GitOpsSynchronizer:
         if not self._synced:
             return "unknown"
         return "v1.0.0"
-    
+
     def is_synced(self) -> bool:
         """Check if currently synced."""
         return self._synced

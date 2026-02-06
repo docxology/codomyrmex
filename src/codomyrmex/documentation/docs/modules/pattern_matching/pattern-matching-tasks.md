@@ -47,7 +47,7 @@ This document tracks the remaining documentation tasks for the Pattern Matching 
 
 ## Detailed Architecture and Implementation
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+
 
 ### Design Principles
 1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.

@@ -38,6 +38,8 @@ Example:
 """
 
 # Import models
+# Import analyzer
+from .analyzer import PyscnAnalyzer
 from .models import (
     AnalysisResult,
     AnalysisSummary,
@@ -56,11 +58,14 @@ from .models import (
     ToolNotFoundError,
 )
 
-# Import analyzer
-from .analyzer import PyscnAnalyzer
-
 # Import reviewer
-from .reviewer import CodeReviewer, analyze_file, analyze_project, check_quality_gates, generate_report
+from .reviewer import (
+    CodeReviewer,
+    analyze_file,
+    analyze_project,
+    check_quality_gates,
+    generate_report,
+)
 
 __all__ = [
     # Models

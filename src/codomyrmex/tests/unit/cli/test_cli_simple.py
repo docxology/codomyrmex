@@ -4,17 +4,17 @@ Simple and focused CLI tests for Codomyrmex.
 This module provides basic testing for CLI functionality without complex mocking.
 """
 
-import pytest
-import sys
 import os
-from pathlib import Path
+import sys
+
+import pytest
 
 # Add src to path for imports
 src_path = os.path.join(os.path.dirname(__file__), '..', '..', 'src')
 sys.path.insert(0, src_path)
 
 try:
-    from codomyrmex.cli import check_environment, show_info, demo_data_visualization
+    from codomyrmex.cli import check_environment, demo_data_visualization, show_info
 except ImportError as e:
     print(f"Import error: {e}")
     print(f"Python path: {sys.path[:3]}")
@@ -100,7 +100,7 @@ class TestCLIModuleStructure:
 
     def test_cli_functions_are_functions(self):
         """Test that CLI exports are actually functions."""
-        from codomyrmex.cli import check_environment, show_info, main
+        from codomyrmex.cli import check_environment, main, show_info
 
         assert callable(main)
         assert callable(check_environment)
@@ -108,8 +108,9 @@ class TestCLIModuleStructure:
 
     def test_cli_main_function_signature(self):
         """Test that main function has expected signature."""
-        from codomyrmex.cli import main
         import inspect
+
+        from codomyrmex.cli import main
 
         sig = inspect.signature(main)
         # Main function should accept no required arguments

@@ -15,8 +15,9 @@ Total: ~16 tests in 1 test class.
 """
 
 import sys
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 
 class TestInfomaniakAuthModule:
@@ -78,8 +79,8 @@ class TestInfomaniakAuthModule:
     def test_credentials_from_env_missing_raises(self):
         """Missing required env vars raise InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
-            InfomaniakCredentials,
             InfomaniakAuthError,
+            InfomaniakCredentials,
         )
 
         with patch.dict("os.environ", {}, clear=True):
@@ -146,8 +147,8 @@ class TestInfomaniakAuthModule:
     def test_s3_credentials_from_env_missing_raises(self):
         """Missing required S3 env vars raise InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
-            InfomaniakS3Credentials,
             InfomaniakAuthError,
+            InfomaniakS3Credentials,
         )
 
         with patch.dict("os.environ", {}, clear=True):
@@ -205,8 +206,8 @@ class TestInfomaniakAuthModule:
     def test_create_openstack_connection_auth_failure(self):
         """create_openstack_connection raises InfomaniakAuthError on SDK failure."""
         from codomyrmex.cloud.infomaniak.auth import (
-            InfomaniakCredentials,
             InfomaniakAuthError,
+            InfomaniakCredentials,
             create_openstack_connection,
         )
 

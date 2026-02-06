@@ -1,37 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/llm
+# Agent Guidelines - LLM
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Large Language Model integration: providers, chains, and prompts.
 
-LLM module providing language model integration, prompt management, and output handling for the Codomyrmex platform. Supports multi-provider backends (OpenAI, Anthropic, Ollama) and streaming responses.
+## Key Classes
 
-## Active Components
+- **LLMClient** — Multi-provider LLM client
+- **ChatSession** — Stateful conversations
+- **PromptTemplate** — Template-based prompts
+- **LLMChain** — Chained LLM operations
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `chains/` – Directory containing chains components
-- `config.py` – Project file
-- `exceptions.py` – Project file
-- `fabric/` – Directory containing fabric components
-- `memory/` – Directory containing memory components
-- `ollama/` – Directory containing ollama components
-- `outputs/` – Directory containing outputs components
-- `prompt_templates/` – Directory containing prompt_templates components
-- `providers/` – Directory containing providers components
-- `tools/` – Directory containing tools components
+## Agent Instructions
 
-## Operating Contracts
+1. **Use templates** — Structured, reusable prompts
+2. **Handle streaming** — Stream for long responses
+3. **Token awareness** — Track token usage
+4. **Error handling** — Retry on transient failures
+5. **Cache responses** — Cache where appropriate
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.llm import LLMClient, ChatSession, PromptTemplate
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Initialize client
+client = LLMClient(provider="openai", model="gpt-4")
+
+# Simple completion
+response = client.complete("Explain quantum computing")
+
+# Chat session
+session = ChatSession(client)
+session.add_system("You are a helpful coding assistant")
+response = session.chat("How do I implement a binary tree?")
+response = session.chat("Now add a delete method")  # Has context
+
+# Prompt templates
+template = PromptTemplate(
+    "Summarize {document} in {num_sentences} sentences."
+)
+prompt = template.format(document=text, num_sentences=3)
+summary = client.complete(prompt)
+
+# Streaming
+async for chunk in client.stream("Long response needed"):
+    print(chunk, end="")
+```
+
+## Testing Patterns
+
+```python
+# Verify client (mock)
+client = LLMClient(mock=True)
+response = client.complete("Test")
+assert response is not None
+
+# Verify template
+template = PromptTemplate("Hello {name}")
+prompt = template.format(name="World")
+assert prompt == "Hello World"
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

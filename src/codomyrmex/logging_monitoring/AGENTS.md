@@ -1,35 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/logging_monitoring
+# Agent Guidelines - Logging Monitoring
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Centralized logging with structured output, rotation, and audit trails.
 
-Foundation module providing centralized logging infrastructure for the Codomyrmex platform. Implements unified logging system with consistent formatting, configurable output destinations, and proper log level management.
+## Key Classes
 
-## Active Components
+- **get_logger(name)** — Get configured logger
+- **configure_logging(config)** — Set logging configuration
+- **JSONFormatter** — Structured JSON log output
+- **LogRotator** — Log file rotation
+- **AuditLogger** — Security audit logging
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `audit.py` – Project file
-- `json_formatter.py` – Project file
-- `logger_config.py` – Project file
-- `requirements.txt` – Project file
-- `rotation.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use structured** — Prefer JSON for machine parsing
+2. **Add context** — Include request_id, user_id in logs
+3. **Set levels correctly** — DEBUG for dev, WARNING for prod
+4. **Rotate logs** — Use `LogRotator` for long-running
+5. **Audit sensitive** — Use `AuditLogger` for security events
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.logging_monitoring import (
+    get_logger, configure_logging, AuditLogger
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Configure logging
+configure_logging({
+    "level": "INFO",
+    "format": "json",
+    "output": ["console", "file"]
+})
+
+# Get module logger
+log = get_logger("my_module")
+log.info("Processing started", extra={"request_id": req_id})
+log.error("Failed to process", extra={"error": str(e)})
+
+# Audit logging
+audit = AuditLogger("auth")
+audit.log_event("login", user_id=user.id, success=True)
+audit.log_event("access_denied", user_id=user.id, resource="admin")
+```
+
+## Testing Patterns
+
+```python
+# Verify logger creation
+log = get_logger("test")
+assert log is not None
+assert hasattr(log, "info")
+
+# Verify JSON formatting
+from codomyrmex.logging_monitoring import JSONFormatter
+fmt = JSONFormatter()
+record = create_log_record("test")
+output = fmt.format(record)
+import json
+assert json.loads(output)  # Valid JSON
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

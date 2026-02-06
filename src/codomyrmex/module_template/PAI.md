@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Module Template Context
+# Personal AI Infrastructure — Module Template
 
-**Module**: module_template
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Module scaffolding template for generating new codomyrmex modules with consistent structure and documentation.
+The Module Template provides PAI integration patterns for creating new Codomyrmex modules.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Standard Module Structure
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Every module follows this structure:
 
-## Key Files
+```
+my_module/
+├── README.md      # Human documentation
+├── AGENTS.md      # AI agent guidelines
+├── SPEC.md        # Functional specification
+├── PAI.md         # PAI integration (this file)
+├── __init__.py    # Module exports
+├── core.py        # Core implementation
+└── tests/         # Module tests
+```
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+### PAI Pattern Template
 
-## Future Considerations
+Standard PAI.md template:
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+```markdown
+# Personal AI Infrastructure — [Module] Module
+
+## Overview
+Brief module description for AI context.
+
+## PAI Capabilities
+Working code examples.
+
+## PAI Integration Points
+Table of key components.
+```
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -1,23 +1,22 @@
 """Dataset management utilities."""
 
 import json
-from typing import List, Dict, Any
 import logging
-import os
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 class Dataset:
     """Represents a collection of training/eval data."""
-    
-    def __init__(self, data: List[Dict[str, Any]]):
+
+    def __init__(self, data: list[dict[str, Any]]):
         self.data = data
 
     @classmethod
     def from_file(cls, file_path: str):
         """Load dataset from a JSONL file."""
         data = []
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             for line in f:
                 data.append(json.loads(line))
         return cls(data)
@@ -39,9 +38,9 @@ class Dataset:
 
 class DatasetSanitizer:
     """Utilities for sanitizing datasets (removing PII, etc.)."""
-    
+
     @staticmethod
-    def strip_keys(dataset: Dataset, keys_to_remove: List[str]) -> Dataset:
+    def strip_keys(dataset: Dataset, keys_to_remove: list[str]) -> Dataset:
         """Remove specific keys from all items in the dataset."""
         new_data = []
         for item in dataset.data:

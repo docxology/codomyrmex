@@ -1,23 +1,15 @@
-from pathlib import Path
-from typing import Any, Optional, Union
 import ast
 import datetime
-
+import importlib
 import inspect
 import json
 import logging
 import sys
-
 from dataclasses import dataclass
-import importlib
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """
 Capability Scanner for Codomyrmex System Discovery
@@ -90,7 +82,7 @@ class CapabilityScanner:
     methods, and their relationships.
     """
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Path | None = None):
         """Initialize the capability scanner.
 
         Args:
@@ -139,7 +131,7 @@ class CapabilityScanner:
 
     def scan_module(
         self, module_name: str, module_path: Path
-    ) -> Optional[ModuleCapability]:
+    ) -> ModuleCapability | None:
         """Scan a specific module for capabilities using both runtime and static analysis.
 
         Attempts to import the module for runtime introspection (exports, ``__all__``).
@@ -294,7 +286,7 @@ class CapabilityScanner:
 
         return functions, classes, constants, imports
 
-    def _extract_parameters(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> list[dict[str, Any]]:
+    def _extract_parameters(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[dict[str, Any]]:
         """Extract parameter information from function node."""
         parameters = []
 
@@ -344,7 +336,7 @@ class CapabilityScanner:
 
         return parameters
 
-    def _extract_return_annotation(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> str:
+    def _extract_return_annotation(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
         """Extract return type annotation from function node."""
         if node.returns:
             try:
@@ -369,7 +361,7 @@ class CapabilityScanner:
             signature += f" -> {return_annotation}"
         return signature
 
-    def _extract_decorators(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> list[str]:
+    def _extract_decorators(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
         """Extract decorator information from function node."""
         decorators = []
         for decorator in node.decorator_list:
@@ -379,7 +371,7 @@ class CapabilityScanner:
                 decorators.append("complex_decorator")
         return decorators
 
-    def _is_generator(self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> bool:
+    def _is_generator(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
         """Check if function is a generator."""
         return any(
             isinstance(n, ast.Yield) or isinstance(n, ast.YieldFrom)
@@ -388,10 +380,10 @@ class CapabilityScanner:
 
     def _analyze_function(
         self,
-        node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
+        node: ast.FunctionDef | ast.AsyncFunctionDef,
         file_path: Path,
         is_async: bool = False,
-    ) -> Optional[FunctionCapability]:
+    ) -> FunctionCapability | None:
         """Analyze a function node and extract detailed information."""
         try:
             # Get basic information
@@ -429,7 +421,7 @@ class CapabilityScanner:
 
     def _analyze_class(
         self, node: ast.ClassDef, file_path: Path
-    ) -> Optional[ClassCapability]:
+    ) -> ClassCapability | None:
         """Analyze a class node and extract detailed information."""
         try:
             name = node.name
@@ -609,7 +601,7 @@ class CapabilityScanner:
         return relationships
 
     def export_capabilities_report(
-        self, capabilities: dict[str, ModuleCapability], filename: Optional[str] = None
+        self, capabilities: dict[str, ModuleCapability], filename: str | None = None
     ) -> str:
         """Export detailed capabilities report to JSON."""
         if filename is None:

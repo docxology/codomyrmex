@@ -1,54 +1,10 @@
-from typing import Any, Optional
-
 from abc import ABC, abstractmethod
-
+from typing import Any
 
 from codomyrmex.cerebrum.core.cases import Case
 from codomyrmex.cerebrum.core.exceptions import TransformationError
-from codomyrmex.cerebrum.core.models import Model, ModelBase
+from codomyrmex.cerebrum.core.models import Model
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Model transformation and adaptation algorithms."""
 
@@ -59,7 +15,7 @@ logger = get_logger(__name__)
 class ModelTransformer(ABC):
     """Base class for model transformations."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """Initialize transformer.
 
         Args:
@@ -86,7 +42,7 @@ class ModelTransformer(ABC):
 class AdaptationTransformer(ModelTransformer):
     """Adapts models based on new cases."""
 
-    def __init__(self, adaptation_rate: float = 0.1, config: Optional[dict[str, Any]] = None):
+    def __init__(self, adaptation_rate: float = 0.1, config: dict[str, Any] | None = None):
         """Initialize adaptation transformer.
 
         Args:
@@ -179,7 +135,7 @@ class AdaptationTransformer(ModelTransformer):
 class LearningTransformer(ModelTransformer):
     """Updates models through learning from feedback."""
 
-    def __init__(self, learning_rate: float = 0.01, config: Optional[dict[str, Any]] = None):
+    def __init__(self, learning_rate: float = 0.01, config: dict[str, Any] | None = None):
         """Initialize learning transformer.
 
         Args:
@@ -293,7 +249,7 @@ class TransformationManager:
         self.logger.debug(f"Registered transformer: {name}")
 
     def transform(
-        self, model: Model, transformation_type: str, transformer_name: Optional[str] = None, **kwargs
+        self, model: Model, transformation_type: str, transformer_name: str | None = None, **kwargs
     ) -> Model:
         """Transform a model.
 

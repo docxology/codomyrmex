@@ -5,27 +5,25 @@ This module tests all API documentation functionality including
 generation, OpenAPI specification, and schema management.
 """
 
-import pytest
-import tempfile
-import os
 import json
-import yaml
-import ast
-from pathlib import Path
+import os
 from datetime import datetime, timezone
 
-from codomyrmex.api.documentation.doc_generator import (
-    APIDocumentationGenerator,
-    generate_api_docs,
-    extract_api_specs,
-    APIDocumentation,
-    APIEndpoint
-)
+import pytest
 
+from codomyrmex.api.documentation.doc_generator import (
+    APIDocumentation,
+    APIDocumentationGenerator,
+    APIEndpoint,
+    extract_api_specs,
+    generate_api_docs,
+)
 from codomyrmex.api.openapi_generator import (
     DocumentationOpenAPIGenerator as OpenAPIGenerator,
+)
+from codomyrmex.api.openapi_generator import (
     generate_openapi_spec,
-    validate_openapi_spec
+    validate_openapi_spec,
 )
 
 
@@ -325,7 +323,7 @@ def get_user(user_id: int, name: str = "default"):
 
         # Verify file was created and contains valid JSON
         assert os.path.exists(output_path)
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             data = json.load(f)
             assert "info" in data
             assert data["info"]["title"] == "Test"
@@ -520,7 +518,7 @@ class TestOpenAPIGenerator:
         assert result is True
 
         # Verify file contents
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             exported_spec = json.load(f)
             assert exported_spec["info"]["title"] == "Test"
 
@@ -562,7 +560,7 @@ class TestOpenAPIGenerator:
         assert os.path.exists(output_path)
 
         # Check basic HTML content
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             html_content = f.read()
             assert "Test API" in html_content
             assert "/users" in html_content
@@ -693,7 +691,7 @@ class TestIntegration:
         assert result is True
 
         # Read back and validate
-        with open(json_path, 'r') as f:
+        with open(json_path) as f:
             exported_data = json.load(f)
 
         # Validate with OpenAPI generator

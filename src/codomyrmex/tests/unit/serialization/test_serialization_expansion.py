@@ -3,7 +3,11 @@
 import pytest
 
 try:
-    from codomyrmex.serialization import MsgpackSerializer, AvroSerializer, ParquetSerializer
+    from codomyrmex.serialization import (
+        AvroSerializer,
+        MsgpackSerializer,
+        ParquetSerializer,
+    )
     SERIALIZATION_AVAILABLE = True
 except ImportError:
     SERIALIZATION_AVAILABLE = False
@@ -48,6 +52,6 @@ def test_parquet_serialization():
     ]
     serialized = ParquetSerializer.serialize(data)
     deserialized = ParquetSerializer.deserialize(serialized)
-    # Pandas might return records in different order or with slightly different types, 
+    # Pandas might return records in different order or with slightly different types,
     # but for simple dicts it should match.
     assert deserialized == data

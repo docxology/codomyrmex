@@ -1,32 +1,71 @@
-# Codomyrmex Agents — src/codomyrmex/containerization
+# Agent Guidelines - Containerization
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Docker container management, image building, and orchestration.
 
-Container management module providing Docker lifecycle management and Kubernetes orchestration capabilities. Enables containerized deployment workflows.
+## Key Classes
 
-## Active Components
+- **ContainerManager** — Manage container lifecycle
+- **ImageBuilder** — Build Docker images
+- **DockerCompose** — Compose file management
+- **Container** — Container operations
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `docker/` – Directory containing docker components
-- `exceptions.py` – Project file
-- `kubernetes/` – Directory containing kubernetes components
-- `registry/` – Directory containing registry components
-- `security/` – Directory containing security components
+## Agent Instructions
 
-## Operating Contracts
+1. **Use multi-stage** — Smaller images
+2. **Pin versions** — Specific base image tags
+3. **Clean build** — Remove build artifacts
+4. **Health checks** — Add container health checks
+5. **Log to stdout** — Container logging best practice
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.containerization import (
+    ContainerManager, ImageBuilder, DockerCompose
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Build image
+builder = ImageBuilder()
+image = builder.build(
+    dockerfile="./Dockerfile",
+    tag="myapp:v1.0",
+    build_args={"ENV": "production"}
+)
+
+# Manage containers
+manager = ContainerManager()
+container = manager.run(
+    image="myapp:v1.0",
+    ports={"8080/tcp": 8080},
+    environment={"API_KEY": key}
+)
+
+# Container operations
+manager.logs(container.id)
+manager.stop(container.id)
+
+# Docker Compose
+compose = DockerCompose("docker-compose.yml")
+compose.up(detach=True)
+compose.down()
+```
+
+## Testing Patterns
+
+```python
+# Verify image build
+builder = ImageBuilder()
+image = builder.build("./test/Dockerfile", tag="test:latest")
+assert image is not None
+
+# Verify container management
+manager = ContainerManager()
+containers = manager.list()
+assert isinstance(containers, list)
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

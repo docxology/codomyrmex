@@ -18,7 +18,6 @@ from ..charts.scatter_plot import create_scatter_plot
 from .plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
-    get_codomyrmex_logger,
     save_plot,
 )
 

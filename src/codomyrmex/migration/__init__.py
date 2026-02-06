@@ -6,15 +6,15 @@ Provider and data migration tools.
 
 __version__ = "0.1.0"
 
-import time
 import json
 import threading
-from typing import Optional, List, Dict, Any, Callable, TypeVar
+import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from abc import ABC, abstractmethod
-
+from typing import Any, Dict, List, Optional, TypeVar
+from collections.abc import Callable
 
 T = TypeVar('T')
 
@@ -40,16 +40,16 @@ class MigrationStep:
     id: str
     name: str
     description: str = ""
-    up_fn: Optional[Callable[[], bool]] = None
-    down_fn: Optional[Callable[[], bool]] = None
-    dependencies: List[str] = field(default_factory=list)
-    
+    up_fn: Callable[[], bool] | None = None
+    down_fn: Callable[[], bool] | None = None
+    dependencies: list[str] = field(default_factory=list)
+
     def run_up(self) -> bool:
         """Run migration up."""
         if self.up_fn:
             return self.up_fn()
         return True
-    
+
     def run_down(self) -> bool:
         """Run migration down (rollback)."""
         if self.down_fn:
@@ -63,25 +63,25 @@ class MigrationResult:
     migration_id: str
     status: MigrationStatus
     started_at: datetime = field(default_factory=datetime.now)
-    completed_at: Optional[datetime] = None
+    completed_at: datetime | None = None
     steps_completed: int = 0
     steps_total: int = 0
-    error: Optional[str] = None
-    
+    error: str | None = None
+
     @property
     def progress(self) -> float:
         """Get progress percentage."""
         if self.steps_total == 0:
             return 0.0
         return self.steps_completed / self.steps_total
-    
+
     @property
     def duration_seconds(self) -> float:
         """Get duration in seconds."""
         end = self.completed_at or datetime.now()
         return (end - self.started_at).total_seconds()
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "migration_id": self.migration_id,
@@ -100,20 +100,20 @@ class Migration:
     name: str
     version: str
     description: str = ""
-    steps: List[MigrationStep] = field(default_factory=list)
+    steps: list[MigrationStep] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
-    
+
     def add_step(self, step: MigrationStep) -> "Migration":
         """Add a step to migration."""
         self.steps.append(step)
         return self
-    
+
     def add_simple_step(
         self,
         id: str,
         name: str,
         up_fn: Callable[[], bool],
-        down_fn: Optional[Callable[[], bool]] = None,
+        down_fn: Callable[[], bool] | None = None,
     ) -> "Migration":
         """Add a simple step with functions."""
         step = MigrationStep(
@@ -127,7 +127,7 @@ class Migration:
 
 class DataTransformer(ABC):
     """Base class for data transformation."""
-    
+
     @abstractmethod
     def transform(self, data: Any) -> Any:
         """Transform data."""
@@ -136,11 +136,11 @@ class DataTransformer(ABC):
 
 class FieldRenameTransformer(DataTransformer):
     """Renames fields in dictionaries."""
-    
-    def __init__(self, mapping: Dict[str, str]):
+
+    def __init__(self, mapping: dict[str, str]):
         self.mapping = mapping
-    
-    def transform(self, data: Dict[str, Any]) -> Dict[str, Any]:
+
+    def transform(self, data: dict[str, Any]) -> dict[str, Any]:
         """Rename fields according to mapping."""
         result = {}
         for key, value in data.items():
@@ -151,11 +151,11 @@ class FieldRenameTransformer(DataTransformer):
 
 class FieldTypeTransformer(DataTransformer):
     """Converts field types."""
-    
-    def __init__(self, conversions: Dict[str, type]):
+
+    def __init__(self, conversions: dict[str, type]):
         self.conversions = conversions
-    
-    def transform(self, data: Dict[str, Any]) -> Dict[str, Any]:
+
+    def transform(self, data: dict[str, Any]) -> dict[str, Any]:
         """Convert field types."""
         result = dict(data)
         for field, target_type in self.conversions.items():
@@ -169,10 +169,10 @@ class FieldTypeTransformer(DataTransformer):
 
 class CompositeTransformer(DataTransformer):
     """Combines multiple transformers."""
-    
-    def __init__(self, transformers: List[DataTransformer]):
+
+    def __init__(self, transformers: list[DataTransformer]):
         self.transformers = transformers
-    
+
     def transform(self, data: Any) -> Any:
         """Apply all transformers in sequence."""
         result = data
@@ -184,10 +184,10 @@ class CompositeTransformer(DataTransformer):
 class MigrationRunner:
     """
     Runs migrations.
-    
+
     Usage:
         runner = MigrationRunner()
-        
+
         migration = Migration(id="v1_to_v2", name="Upgrade to V2", version="2.0")
         migration.add_simple_step(
             id="add_column",
@@ -195,14 +195,14 @@ class MigrationRunner:
             up_fn=lambda: db.execute("ALTER TABLE..."),
             down_fn=lambda: db.execute("ALTER TABLE DROP..."),
         )
-        
+
         result = runner.run(migration)
     """
-    
+
     def __init__(self):
-        self._completed: List[str] = []
+        self._completed: list[str] = []
         self._lock = threading.Lock()
-    
+
     def run(
         self,
         migration: Migration,
@@ -210,11 +210,11 @@ class MigrationRunner:
     ) -> MigrationResult:
         """
         Run a migration.
-        
+
         Args:
             migration: The migration to run
             direction: UP (migrate) or DOWN (rollback)
-            
+
         Returns:
             MigrationResult with status
         """
@@ -223,20 +223,20 @@ class MigrationRunner:
             status=MigrationStatus.RUNNING,
             steps_total=len(migration.steps),
         )
-        
+
         steps = migration.steps if direction == MigrationDirection.UP else reversed(migration.steps)
-        
+
         try:
             for step in steps:
                 success = step.run_up() if direction == MigrationDirection.UP else step.run_down()
-                
+
                 if success:
                     result.steps_completed += 1
                 else:
                     result.status = MigrationStatus.FAILED
                     result.error = f"Step '{step.id}' failed"
                     break
-            
+
             if result.status == MigrationStatus.RUNNING:
                 result.status = MigrationStatus.COMPLETED
                 with self._lock:
@@ -245,22 +245,22 @@ class MigrationRunner:
                     else:
                         if migration.id in self._completed:
                             self._completed.remove(migration.id)
-        
+
         except Exception as e:
             result.status = MigrationStatus.FAILED
             result.error = str(e)
-        
+
         result.completed_at = datetime.now()
         return result
-    
+
     def rollback(self, migration: Migration) -> MigrationResult:
         """Rollback a migration."""
         return self.run(migration, direction=MigrationDirection.DOWN)
-    
-    def get_completed(self) -> List[str]:
+
+    def get_completed(self) -> list[str]:
         """Get list of completed migration IDs."""
         return list(self._completed)
-    
+
     def is_completed(self, migration_id: str) -> bool:
         """Check if migration is completed."""
         return migration_id in self._completed
@@ -269,38 +269,38 @@ class MigrationRunner:
 class DataMigrator:
     """
     Migrates data with transformations.
-    
+
     Usage:
         migrator = DataMigrator()
-        
+
         # Add transformers
         migrator.add_transformer(FieldRenameTransformer({"old_field": "new_field"}))
-        
+
         # Migrate data
         old_data = [{"old_field": "value1"}, {"old_field": "value2"}]
         new_data = migrator.migrate(old_data)
     """
-    
+
     def __init__(self):
-        self._transformers: List[DataTransformer] = []
-    
+        self._transformers: list[DataTransformer] = []
+
     def add_transformer(self, transformer: DataTransformer) -> "DataMigrator":
         """Add a transformer."""
         self._transformers.append(transformer)
         return self
-    
-    def migrate(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+
+    def migrate(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """Migrate a list of records."""
         result = []
         transformer = CompositeTransformer(self._transformers)
-        
+
         for record in data:
             transformed = transformer.transform(record)
             result.append(transformed)
-        
+
         return result
-    
-    def migrate_single(self, record: Dict[str, Any]) -> Dict[str, Any]:
+
+    def migrate_single(self, record: dict[str, Any]) -> dict[str, Any]:
         """Migrate a single record."""
         transformer = CompositeTransformer(self._transformers)
         return transformer.transform(record)

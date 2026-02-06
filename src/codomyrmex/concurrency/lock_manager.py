@@ -1,11 +1,11 @@
 """Unified lock management and advanced synchronization primitives."""
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
 import threading
-from .distributed_lock import BaseLock
+from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+
+from .distributed_lock import BaseLock
 
 logger = get_logger(__name__)
 
@@ -20,9 +20,9 @@ class LockStats:
 
 class LockManager:
     """Orchestrates multiple locks and provides multi-resource acquisition."""
-    
+
     def __init__(self):
-        self._locks: Dict[str, BaseLock] = {}
+        self._locks: dict[str, BaseLock] = {}
         self._total_acquisitions = 0
         self._total_releases = 0
 
@@ -39,7 +39,7 @@ class LockManager:
             active_locks=sum(1 for lock in self._locks.values() if getattr(lock, '_acquired', False))
         )
 
-    def acquire_all(self, names: List[str], timeout: float = 10.0) -> bool:
+    def acquire_all(self, names: list[str], timeout: float = 10.0) -> bool:
         """Acquire multiple locks safely to avoid deadlocks (sorts by name)."""
         sorted_names = sorted(names)
         acquired = []
@@ -61,7 +61,7 @@ class LockManager:
                 self._total_releases += 1
             return False
 
-    def release_all(self, names: List[str]):
+    def release_all(self, names: list[str]):
         """Release multiple locks."""
         for name in names:
             if name in self._locks:
@@ -70,7 +70,7 @@ class LockManager:
 
 class ReadWriteLock:
     """In-process Read-Write lock (shared/exclusive)."""
-    
+
     def __init__(self):
         self._read_ready = threading.Condition(threading.Lock())
         self._readers = 0

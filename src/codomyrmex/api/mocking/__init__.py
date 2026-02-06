@@ -19,7 +19,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
@@ -62,9 +61,9 @@ class MockRequest:
 
     method: str = "GET"
     path: str = "/"
-    headers: Dict[str, str] = field(default_factory=dict)
-    query_params: Dict[str, str] = field(default_factory=dict)
-    body_pattern: Optional[str] = None
+    headers: dict[str, str] = field(default_factory=dict)
+    query_params: dict[str, str] = field(default_factory=dict)
+    body_pattern: str | None = None
     match_strategy: MatchStrategy = MatchStrategy.EXACT
 
 
@@ -82,10 +81,10 @@ class MockResponse:
     """
 
     status_code: int = 200
-    headers: Dict[str, str] = field(default_factory=dict)
+    headers: dict[str, str] = field(default_factory=dict)
     body: Any = None
     latency_ms: float = 0.0
-    error: Optional[str] = None
+    error: str | None = None
 
 
 @dataclass
@@ -101,11 +100,11 @@ class MockRoute:
     """
 
     request: MockRequest = field(default_factory=MockRequest)
-    responses: List[MockResponse] = field(default_factory=list)
+    responses: list[MockResponse] = field(default_factory=list)
     mode: MockResponseMode = MockResponseMode.STATIC
     call_count: int = 0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize the route to a plain dictionary."""
         return {
             "request": {
@@ -148,11 +147,11 @@ class RequestLog:
 
     method: str = ""
     path: str = ""
-    headers: Dict[str, str] = field(default_factory=dict)
-    body: Optional[str] = None
+    headers: dict[str, str] = field(default_factory=dict)
+    body: str | None = None
     timestamp: datetime = field(default_factory=datetime.now)
-    matched_route: Optional[str] = None
-    response_status: Optional[int] = None
+    matched_route: str | None = None
+    response_status: int | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -173,7 +172,7 @@ class RequestMatcher:
 
     def match(
         self,
-        incoming_request: Dict[str, Any],
+        incoming_request: dict[str, Any],
         mock_request: MockRequest,
     ) -> bool:
         """
@@ -253,9 +252,9 @@ class MockAPIServer:
     """
 
     def __init__(self) -> None:
-        self._routes: Dict[str, MockRoute] = {}
-        self._route_order: List[str] = []
-        self._request_log: List[RequestLog] = []
+        self._routes: dict[str, MockRoute] = {}
+        self._route_order: list[str] = []
+        self._request_log: list[RequestLog] = []
         self._matcher = RequestMatcher()
 
     # ------------------------------------------------------------------
@@ -292,8 +291,8 @@ class MockAPIServer:
         self,
         method: str,
         path: str,
-        headers: Optional[Dict[str, str]] = None,
-        body: Optional[str] = None,
+        headers: dict[str, str] | None = None,
+        body: str | None = None,
     ) -> MockResponse:
         """
         Dispatch a request through registered routes and return a response.
@@ -394,7 +393,7 @@ class MockAPIServer:
     # Request log
     # ------------------------------------------------------------------
 
-    def get_request_log(self) -> List[RequestLog]:
+    def get_request_log(self) -> list[RequestLog]:
         """Return a copy of the request log."""
         return list(self._request_log)
 
@@ -421,7 +420,7 @@ class MockAPIServer:
     def assert_called(
         self,
         route_name: str,
-        times: Optional[int] = None,
+        times: int | None = None,
     ) -> None:
         """
         Assert that a route was called.
@@ -490,7 +489,7 @@ class ResponseFixture:
     @staticmethod
     def success(
         body: Any = None,
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
     ) -> MockResponse:
         """Return a 200 OK response."""
         return MockResponse(

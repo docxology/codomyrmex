@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Encryption Context
+# Personal AI Infrastructure — Encryption Module
 
-**Module**: encryption
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Cryptographic operations including symmetric/asymmetric encryption, hashing, digital signatures, and key management.
+The Encryption module provides PAI integration for secure data handling, key management, and cryptographic operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Secure Data Handling
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Encrypt sensitive AI data:
 
-## Key Files
+```python
+from codomyrmex.encryption import encrypt, decrypt
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+# Encrypt API keys and secrets
+encrypted = encrypt(api_key, password)
 
-## Future Considerations
+# Decrypt when needed
+decrypted = decrypt(encrypted, password)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Password Hashing
+
+Secure password storage:
+
+```python
+from codomyrmex.encryption import hash_password, verify_password
+
+hashed = hash_password("user_secret")
+is_valid = verify_password("user_secret", hashed)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `encrypt/decrypt` | Secure data storage |
+| `hash_password` | Credential management |
+| `KeyManager` | Key rotation and storage |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

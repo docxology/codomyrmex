@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Visualizer for FPF specification.
 
 
@@ -8,7 +8,6 @@ and reports from FPF specifications.
 """
 
 from pathlib import Path
-from typing import List, Optional
 
 from ..core.models import FPFSpec, Pattern
 
@@ -21,7 +20,7 @@ class FPFVisualizer:
         self.config: dict[str, Any] = {}
         self.theme: str = "default"
 
-    def visualize_pattern_hierarchy(self, patterns: List[Pattern]) -> str:
+    def visualize_pattern_hierarchy(self, patterns: list[Pattern]) -> str:
         """Generate a Mermaid diagram of the pattern hierarchy.
 
         Args:
@@ -31,7 +30,7 @@ class FPFVisualizer:
             Mermaid diagram string
         """
         # Group patterns by part
-        parts: dict[str, List[Pattern]] = {}
+        parts: dict[str, list[Pattern]] = {}
         for pattern in patterns:
             part = pattern.part or "Other"
             if part not in parts:
@@ -59,7 +58,7 @@ class FPFVisualizer:
 
         return "\n".join(mermaid_lines)
 
-    def visualize_dependencies(self, patterns: List[Pattern]) -> str:
+    def visualize_dependencies(self, patterns: list[Pattern]) -> str:
         """Generate a Mermaid diagram of pattern dependencies.
 
         Args:
@@ -117,7 +116,7 @@ class FPFVisualizer:
         ]
 
         # Group patterns by status
-        by_status: dict[str, List[Pattern]] = {}
+        by_status: dict[str, list[Pattern]] = {}
         for pattern in spec.patterns:
             status = pattern.status
             if status not in by_status:
@@ -133,7 +132,7 @@ class FPFVisualizer:
         # Patterns by part
         report_lines.append("## Patterns by Part")
         report_lines.append("")
-        by_part: dict[str, List[Pattern]] = {}
+        by_part: dict[str, list[Pattern]] = {}
         for pattern in spec.patterns:
             part = pattern.part or "Other"
             if part not in by_part:

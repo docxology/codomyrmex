@@ -1,22 +1,15 @@
+import os
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
-import os
-import time
+from typing import Any
 
-from dataclasses import dataclass, field
+import yaml
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
-import yaml
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Kubernetes Orchestration Module for Codomyrmex Containerization."""
 
@@ -61,7 +54,7 @@ class KubernetesService:
     type: str = "ClusterIP"  # ClusterIP, NodePort, LoadBalancer
     port: int = 80
     target_port: int = 80
-    node_port: Optional[int] = None
+    node_port: int | None = None
     selector: dict[str, str] = field(default_factory=dict)
     labels: dict[str, str] = field(default_factory=dict)
 
@@ -70,7 +63,7 @@ class KubernetesOrchestrator:
 
     def __init__(
         self,
-        kubeconfig_path: Optional[str] = None,
+        kubeconfig_path: str | None = None,
         in_cluster: bool = False
     ):
         """Initialize Kubernetes orchestrator.
@@ -314,7 +307,7 @@ class KubernetesOrchestrator:
         self,
         deployment_name: str,
         namespace: str = "default"
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Get deployment status.
 
         Args:
@@ -470,7 +463,7 @@ class KubernetesOrchestrator:
         self,
         pod_name: str,
         namespace: str = "default",
-        container: Optional[str] = None,
+        container: str | None = None,
         tail_lines: int = 100
     ) -> str:
         """Get logs from a pod.
@@ -503,7 +496,7 @@ class KubernetesOrchestrator:
     def list_pods(
         self,
         namespace: str = "default",
-        label_selector: Optional[str] = None
+        label_selector: str | None = None
     ) -> list[dict[str, Any]]:
         """List pods in a namespace.
 
@@ -598,7 +591,7 @@ class KubernetesOrchestrator:
         if not path.exists():
             raise CodomyrmexError(f"YAML file not found: {yaml_path}")
 
-        with open(path, 'r') as f:
+        with open(path) as f:
             documents = list(yaml.safe_load_all(f))
 
         for doc in documents:
@@ -610,7 +603,7 @@ class KubernetesOrchestrator:
 
 def orchestrate_kubernetes(
     deployment_config: dict[str, Any],
-    kubeconfig_path: Optional[str] = None
+    kubeconfig_path: str | None = None
 ) -> dict[str, Any]:
     """Orchestrate Kubernetes deployment.
 

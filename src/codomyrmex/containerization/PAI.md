@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Containerization Context
+# Personal AI Infrastructure — Containerization Module
 
-**Module**: containerization
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Docker and container orchestration for reproducible environments, image management, and deployment automation.
+The Containerization module provides PAI integration for Docker container management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Container Management
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage Docker containers:
 
-## Key Files
+```python
+from codomyrmex.containerization import ContainerManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+manager = ContainerManager()
+container = manager.run("python:3.11", command="python app.py")
 
-## Future Considerations
+logs = container.logs()
+container.stop()
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Image Building
+
+Build Docker images:
+
+```python
+from codomyrmex.containerization import ImageBuilder
+
+builder = ImageBuilder()
+image = builder.build("./Dockerfile", tag="myapp:v1")
+builder.push(image, registry="docker.io")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ContainerManager` | Run containers |
+| `ImageBuilder` | Build images |
+| `ComposeManager` | Docker Compose |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

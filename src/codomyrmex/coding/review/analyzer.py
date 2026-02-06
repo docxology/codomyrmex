@@ -15,17 +15,13 @@ Example:
 import glob
 import json
 import os
-import re
 import subprocess
 import tempfile
-from typing import Any, Dict, List
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 from .models import (
-    AnalysisResult,
-    Language,
-    SeverityLevel,
     ToolNotFoundError,
 )
 
@@ -73,7 +69,7 @@ class PyscnAnalyzer:
         >>> clones = analyzer.find_clones(["file1.py", "file2.py"])
     """
 
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: dict[str, Any] = None):
         """Initialize pyscn analyzer with configuration.
 
         Args:
@@ -111,7 +107,7 @@ class PyscnAnalyzer:
             )
 
     @monitor_performance("pyscn_analyze_complexity")
-    def analyze_complexity(self, file_path: str) -> List[Dict[str, Any]]:
+    def analyze_complexity(self, file_path: str) -> list[dict[str, Any]]:
         """Analyze cyclomatic complexity using pyscn.
 
         Calculates cyclomatic complexity for all functions in the specified
@@ -170,7 +166,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_detect_dead_code")
-    def detect_dead_code(self, file_path: str) -> List[Dict[str, Any]]:
+    def detect_dead_code(self, file_path: str) -> list[dict[str, Any]]:
         """Detect dead code using control flow graph (CFG) analysis.
 
         Identifies unreachable code, unused variables, and other dead code
@@ -217,7 +213,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_find_clones")
-    def find_clones(self, files: List[str], threshold: float = 0.8) -> List[Dict[str, Any]]:
+    def find_clones(self, files: list[str], threshold: float = 0.8) -> list[dict[str, Any]]:
         """Find code clones using APTED with LSH acceleration.
 
         Detects duplicate or similar code patterns across the specified files
@@ -286,7 +282,7 @@ class PyscnAnalyzer:
             return []
 
     @monitor_performance("pyscn_analyze_coupling")
-    def analyze_coupling(self, file_path: str) -> List[Dict[str, Any]]:
+    def analyze_coupling(self, file_path: str) -> list[dict[str, Any]]:
         """Analyze Coupling Between Objects (CBO) metrics.
 
         Measures the coupling between classes/modules to identify

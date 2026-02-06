@@ -1,16 +1,44 @@
-# Personal AI Context - Streaming
+# Personal AI Infrastructure — Streaming Module
 
-## Role in PAI Stack
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-Streaming enables real-time PAI communication:
+## Overview
 
-- **Live updates**: Stream agent thinking/actions to UI
-- **Multi-agent**: Inter-agent message passing
-- **Sensor data**: Process continuous input streams
-- **Notifications**: Real-time alerts and updates
+The Streaming module provides PAI integration for streaming data processing.
 
-## Autonomy Considerations
+## PAI Capabilities
 
-- Agents can create dynamic topic subscriptions
-- Event replay for session recovery
-- Backpressure handling for high-volume streams
+### Stream Processing
+
+Process streaming data:
+
+```python
+from codomyrmex.streaming import Stream
+
+async for chunk in Stream.from_llm(response):
+    print(chunk, end="", flush=True)
+```
+
+### Event Streaming
+
+Stream events:
+
+```python
+from codomyrmex.streaming import EventStream
+
+stream = EventStream()
+async for event in stream.subscribe("logs"):
+    print(f"Event: {event}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Stream` | Process streams |
+| `EventStream` | Event streaming |
+| `StreamBuffer` | Buffer management |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

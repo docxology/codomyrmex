@@ -6,9 +6,9 @@ Tools are functions or methods that are exposed to the LLM.
 """
 
 import inspect
-import json
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Type
+from dataclasses import dataclass
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -20,10 +20,10 @@ class Tool:
     name: str
     func: Callable
     description: str
-    args_schema: Dict[str, Any]
-    return_schema: Optional[Dict[str, Any]] = None
-    
-    def to_schema(self) -> Dict[str, Any]:
+    args_schema: dict[str, Any]
+    return_schema: dict[str, Any] | None = None
+
+    def to_schema(self) -> dict[str, Any]:
         """Convert tool to JSON schema format (e.g. for OpenAI functions)."""
         return {
             "name": self.name,
@@ -33,9 +33,9 @@ class Tool:
 
 class ToolRegistry:
     """Registry for managing available tools."""
-    
+
     def __init__(self):
-        self._tools: Dict[str, Tool] = {}
+        self._tools: dict[str, Tool] = {}
         self.logger = get_logger(self.__class__.__name__)
 
     def register(self, tool: Tool):
@@ -45,11 +45,11 @@ class ToolRegistry:
         self._tools[tool.name] = tool
         self.logger.debug(f"Registered tool: {tool.name}")
 
-    def register_function(self, func: Callable, name: Optional[str] = None, description: Optional[str] = None):
+    def register_function(self, func: Callable, name: str | None = None, description: str | None = None):
         """Register a python function as a tool."""
         tool_name = name or func.__name__
         tool_desc = description or func.__doc__ or "No description provided."
-        
+
         # Simple schema extraction (can be enhanced with Pydantic)
         sig = inspect.signature(func)
         parameters = {
@@ -57,7 +57,7 @@ class ToolRegistry:
             "properties": {},
             "required": []
         }
-        
+
         for param_name, param in sig.parameters.items():
             param_type = "string" # Default
             if param.annotation != inspect.Parameter.empty:
@@ -71,15 +71,15 @@ class ToolRegistry:
                     param_type = "object"
                 elif param.annotation == list:
                     param_type = "array"
-            
+
             parameters["properties"][param_name] = {
                 "type": param_type,
                 "description": f"Parameter {param_name}"
             }
-            
+
             if param.default == inspect.Parameter.empty:
                 parameters["required"].append(param_name)
-        
+
         tool = Tool(
             name=tool_name,
             func=func,
@@ -88,15 +88,15 @@ class ToolRegistry:
         )
         self.register(tool)
 
-    def get_tool(self, name: str) -> Optional[Tool]:
+    def get_tool(self, name: str) -> Tool | None:
         """Get a tool by name."""
         return self._tools.get(name)
 
-    def list_tools(self) -> List[Tool]:
+    def list_tools(self) -> list[Tool]:
         """List all registered tools."""
         return list(self._tools.values())
-    
-    def get_schemas(self) -> List[Dict[str, Any]]:
+
+    def get_schemas(self) -> list[dict[str, Any]]:
         """Get all tool schemas."""
         return [tool.to_schema() for tool in self._tools.values()]
 
@@ -105,5 +105,5 @@ class ToolRegistry:
         tool = self.get_tool(tool_name)
         if not tool:
             raise ValueError(f"Tool '{tool_name}' not found")
-        
+
         return tool.func(**kwargs)

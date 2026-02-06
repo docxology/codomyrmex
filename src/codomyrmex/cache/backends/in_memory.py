@@ -3,7 +3,7 @@ In-memory cache backend.
 """
 
 import time
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -16,19 +16,19 @@ logger = get_logger(__name__)
 class InMemoryCache(Cache):
     """In-memory cache implementation."""
 
-    def __init__(self, max_size: int = 1000, default_ttl: Optional[int] = None):
+    def __init__(self, max_size: int = 1000, default_ttl: int | None = None):
         """Initialize in-memory cache.
 
         Args:
             max_size: Maximum number of items
             default_ttl: Default time-to-live in seconds
         """
-        self._cache: dict[str, tuple[Any, float, Optional[int]]] = {}
+        self._cache: dict[str, tuple[Any, float, int | None]] = {}
         self.max_size = max_size
         self.default_ttl = default_ttl
         self._stats = CacheStats(max_size=max_size)
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get a value from the cache."""
         self._stats.total_requests += 1
 
@@ -48,7 +48,7 @@ class InMemoryCache(Cache):
         self._stats.hits += 1
         return value
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set a value in the cache."""
         # Evict if at max size
         if len(self._cache) >= self.max_size and key not in self._cache:

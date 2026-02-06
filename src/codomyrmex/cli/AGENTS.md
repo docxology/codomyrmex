@@ -1,34 +1,70 @@
-# Codomyrmex Agents — src/codomyrmex/cli
+# Agent Guidelines - CLI
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Command-line interface framework with argument parsing and subcommands.
 
-Command-line interface module providing the `codomyrmex` CLI tool. Enables terminal-based interaction with all platform capabilities.
+## Key Classes
 
-## Active Components
+- **CLI** — Main CLI application
+- **Command** — Command definition
+- **Option** — Command-line options
+- **Argument** — Positional arguments
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `__main__.py` – Project file
-- `completions/` – Directory containing completions components
-- `core.py` – Project file
-- `formatters/` – Directory containing formatters components
-- `handlers/` – Directory containing handlers components
-- `parsers/` – Directory containing parsers components
-- `themes/` – Directory containing themes components
-- `utils.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use subcommands** — Group related commands
+2. **Add help text** — Describe every option
+3. **Exit codes** — Return proper exit codes
+4. **Progress output** — Show progress for long ops
+5. **Configuration** — Support config files
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.cli import CLI, Command, Option, Argument
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+cli = CLI(name="myapp", version="1.0.0")
+
+@cli.command()
+@Option("--verbose", "-v", is_flag=True)
+@Argument("name")
+def greet(name: str, verbose: bool):
+    \"\"\"Greet a user.\"\"\"
+    if verbose:
+        print(f"Verbose mode enabled")
+    print(f"Hello, {name}!")
+
+@cli.group()
+def users():
+    \"\"\"User management commands.\"\"\"
+    pass
+
+@users.command()
+def list():
+    \"\"\"List all users.\"\"\"
+    for user in get_users():
+        print(user.name)
+
+if __name__ == "__main__":
+    cli.run()
+```
+
+## Testing Patterns
+
+```python
+from codomyrmex.cli.testing import CliRunner
+
+runner = CliRunner()
+
+result = runner.invoke(cli, ["greet", "World"])
+assert result.exit_code == 0
+assert "Hello, World!" in result.output
+
+result = runner.invoke(cli, ["--help"])
+assert "Usage:" in result.output
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

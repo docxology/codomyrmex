@@ -4,14 +4,13 @@ This module provides performance optimization capabilities for CI/CD pipelines,
 including bottleneck identification, resource optimization, and performance tuning.
 """
 
+import json
+import statistics
+import time
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
-import json
-import time
-
-from dataclasses import dataclass, field
-import statistics
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -55,7 +54,7 @@ class OptimizationSuggestion:
 class PipelineOptimizer:
     """Pipeline performance optimization system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize pipeline optimizer.
 
         Args:
@@ -74,7 +73,7 @@ class PipelineOptimizer:
         """Ensure required directories exist."""
         self.optimization_data_dir.mkdir(parents=True, exist_ok=True)
 
-    def record_metric(self, name: str, value: float, unit: str, tags: Optional[dict[str, str]] = None):
+    def record_metric(self, name: str, value: float, unit: str, tags: dict[str, str] | None = None):
         """Record a performance metric.
 
         Args:
@@ -400,7 +399,7 @@ class PipelineOptimizer:
 def optimize_pipeline_performance(
     pipeline_name: str,
     target_improvement: float = 0.2,
-    workspace_dir: Optional[str] = None
+    workspace_dir: str | None = None
 ) -> dict[str, Any]:
     """Optimize pipeline performance.
 

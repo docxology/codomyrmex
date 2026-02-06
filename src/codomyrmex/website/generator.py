@@ -1,11 +1,11 @@
 import shutil
 from pathlib import Path
-from typing import Optional
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .data_provider import DataProvider
 from codomyrmex.logging_monitoring import get_logger
 
+from .data_provider import DataProvider
 
 logger = get_logger(__name__)
 class WebsiteGenerator:
@@ -13,7 +13,7 @@ class WebsiteGenerator:
     Generates the static website.
     """
 
-    def __init__(self, output_dir: str, root_dir: Optional[str] = None):
+    def __init__(self, output_dir: str, root_dir: str | None = None):
 
 
         self.output_dir = Path(output_dir)
@@ -28,9 +28,9 @@ class WebsiteGenerator:
         self.module_dir = Path(__file__).resolve().parent
         self.templates_dir = self.module_dir / "templates"
         self.assets_dir = self.module_dir / "assets"
-        
+
         self.data_provider = DataProvider(self.root_dir)
-        
+
         self.env = Environment(
             loader=FileSystemLoader(self.templates_dir),
             autoescape=select_autoescape(['html', 'xml'])
@@ -39,7 +39,7 @@ class WebsiteGenerator:
     def generate(self):
         """Executes the generation process."""
         print(f"Generating website to {self.output_dir}...")
-        
+
         # 1. Prepare output directory
         if self.output_dir.exists():
             shutil.rmtree(self.output_dir)
@@ -60,10 +60,10 @@ class WebsiteGenerator:
         pages = ["index.html", "modules.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html"]
         for page in pages:
             self._render_page(page, context)
-        
+
         # 4. Copy Assets
         self._copy_assets()
-        
+
         print("Website generation complete.")
 
     def _render_page(self, template_name: str, context: dict):

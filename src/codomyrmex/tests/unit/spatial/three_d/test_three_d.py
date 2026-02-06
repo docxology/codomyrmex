@@ -1,8 +1,7 @@
 """Unit tests for spatial.three_d module."""
 
-import sys
+
 import pytest
-from pathlib import Path
 
 
 @pytest.mark.unit

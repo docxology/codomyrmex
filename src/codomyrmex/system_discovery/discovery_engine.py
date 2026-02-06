@@ -4,130 +4,24 @@ This module provides comprehensive system discovery capabilities, scanning all
 modules, methods, classes, and functions to create a complete map of the
 Codomyrmex ecosystem capabilities.
 """
-from pathlib import Path
-from typing import Any, Optional
 import ast
 import datetime
+import importlib
 import inspect
 import json
 import logging
 import subprocess
 import sys
-
 from dataclasses import asdict, dataclass
-import importlib
+from pathlib import Path
+from typing import Any
+
 import numpy as np
 
 from codomyrmex.coding import execute_code
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 try:
 
@@ -178,7 +72,7 @@ class SystemDiscovery:
     their capabilities, system status, and interactive exploration.
     """
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Path | None = None):
         """Initialize the system discovery engine.
 
         Args:
@@ -225,13 +119,13 @@ class SystemDiscovery:
     def scan_system(self) -> dict[str, Any]:
         """
         Programmatically scan the system and return the inventory.
-        
+
         Returns:
             Dictionary containing system status and module inventory.
         """
         # Discover all modules
         self._discover_modules()
-        
+
         system_inventory = {
             "project_root": str(self.project_root),
             "status": {
@@ -254,16 +148,16 @@ class SystemDiscovery:
     def export_inventory(self, output_path: Path) -> bool:
         """
         Export system inventory to a JSON file.
-        
+
         Args:
             output_path: Path to save the JSON file.
-            
+
         Returns:
             True if successful, False otherwise.
         """
         try:
             inventory = self.scan_system()
-            
+
             # Simple recursive helper to handle non-serializable objects if any slip through
             def default_serializer(obj):
                 if isinstance(obj, (Path, set)):
@@ -272,7 +166,7 @@ class SystemDiscovery:
 
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(inventory, f, indent=2, default=default_serializer)
-                
+
             logger.info(f"System inventory exported to {output_path}")
             return True
         except Exception as e:
@@ -308,7 +202,7 @@ class SystemDiscovery:
 
     def _analyze_module(
         self, module_name: str, module_path: Path
-    ) -> Optional[ModuleInfo]:
+    ) -> ModuleInfo | None:
         """Analyze a single module directory, extracting metadata, dependencies, and capabilities."""
         try:
             # Try to import the module
@@ -442,7 +336,7 @@ class SystemDiscovery:
 
     def _analyze_object(
         self, name: str, obj: Any, module_path: Path
-    ) -> Optional[ModuleCapability]:
+    ) -> ModuleCapability | None:
         """Inspect a runtime object (function, class, method, or constant) and build a ModuleCapability."""
         try:
             obj_type = "unknown"

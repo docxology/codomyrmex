@@ -1,21 +1,23 @@
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from typing import Any, Optional
 import json
 import os
-
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta, timezone
 from enum import Enum
+from pathlib import Path
+from typing import Any
+
 import requests
 
 from codomyrmex.logging_monitoring import get_logger
+
 from .git import (
     get_commit_history,
     get_current_branch,
-    get_status as get_git_status,
     is_git_repository,
 )
-
+from .git import (
+    get_status as get_git_status,
+)
 
 # Add src to path for imports
 current_dir = Path(__file__).parent
@@ -67,7 +69,7 @@ class RepositoryStats:
     pull_requests: int = 0
     size_kb: int = 0
     languages: dict[str, int] = field(default_factory=dict)
-    last_activity: Optional[str] = None
+    last_activity: str | None = None
 
 
 @dataclass
@@ -83,7 +85,7 @@ class LocalRepositoryInfo:
     modified_files: list[str] = field(default_factory=list)
     staged_files: list[str] = field(default_factory=list)
     last_commit_hash: str = ""
-    last_commit_date: Optional[str] = None
+    last_commit_date: str | None = None
     last_commit_message: str = ""
     total_local_commits: int = 0
 
@@ -112,9 +114,9 @@ class RepositoryMetadata:
     clone_status: CloneStatus = CloneStatus.NOT_CLONED
     sync_status: SyncStatus = SyncStatus.UNKNOWN
     local_path: str = ""
-    clone_date: Optional[str] = None
-    last_sync_date: Optional[str] = None
-    last_fetch_date: Optional[str] = None
+    clone_date: str | None = None
+    last_sync_date: str | None = None
+    last_fetch_date: str | None = None
 
     # Version Information
     default_branch: str = "main"
@@ -131,8 +133,8 @@ class RepositoryMetadata:
     local_info: LocalRepositoryInfo = field(default_factory=LocalRepositoryInfo)
 
     # Metadata Management
-    created_date: Optional[str] = None
-    updated_date: Optional[str] = None
+    created_date: str | None = None
+    updated_date: str | None = None
     metadata_version: str = "1.0"
     last_metadata_update: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
@@ -177,7 +179,7 @@ class RepositoryMetadataManager:
     """Manager for repository metadata with persistence."""
 
     def __init__(
-        self, metadata_file: Optional[str] = None, github_token: Optional[str] = None
+        self, metadata_file: str | None = None, github_token: str | None = None
     ):
         """
         Initialize metadata manager.
@@ -250,7 +252,7 @@ class RepositoryMetadataManager:
             logger.error(f"Error saving metadata: {e}")
             return False
 
-    def get_repository_metadata(self, full_name: str) -> Optional[RepositoryMetadata]:
+    def get_repository_metadata(self, full_name: str) -> RepositoryMetadata | None:
         """Get metadata for a specific repository."""
         return self.metadata.get(full_name)
 
@@ -259,7 +261,7 @@ class RepositoryMetadataManager:
         metadata.last_metadata_update = datetime.now(timezone.utc).isoformat()
         self.metadata[metadata.full_name] = metadata
 
-    def fetch_github_metadata(self, owner: str, repo: str) -> Optional[dict[str, Any]]:
+    def fetch_github_metadata(self, owner: str, repo: str) -> dict[str, Any] | None:
         """Fetch repository metadata from GitHub API."""
         url = f"https://api.github.com/repos/{owner}/{repo}"
 

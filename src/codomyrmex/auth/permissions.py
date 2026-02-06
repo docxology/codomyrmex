@@ -1,18 +1,17 @@
 """Permission registry for role-based access control (RBAC)."""
 
-from typing import Dict, List, Set, Optional
 import logging
 
 logger = logging.getLogger(__name__)
 
 class PermissionRegistry:
     """Manages roles and their associated permissions."""
-    
-    def __init__(self):
-        self._roles: Dict[str, Set[str]] = {}
-        self._role_hierarchy: Dict[str, Set[str]] = {}
 
-    def register_role(self, role: str, permissions: List[str]):
+    def __init__(self):
+        self._roles: dict[str, set[str]] = {}
+        self._role_hierarchy: dict[str, set[str]] = {}
+
+    def register_role(self, role: str, permissions: list[str]):
         """Register a role with a list of direct permissions."""
         if role not in self._roles:
             self._roles[role] = set()
@@ -24,14 +23,14 @@ class PermissionRegistry:
             self._role_hierarchy[role] = set()
         self._role_hierarchy[role].add(parent_role)
 
-    def get_permissions(self, role: str) -> Set[str]:
+    def get_permissions(self, role: str) -> set[str]:
         """Get all permissions for a role, including inherited ones."""
         permissions = self._roles.get(role, set()).copy()
-        
+
         parents = self._role_hierarchy.get(role, set())
         for parent in parents:
             permissions.update(self.get_permissions(parent))
-            
+
         return permissions
 
     def has_permission(self, role: str, permission: str) -> bool:

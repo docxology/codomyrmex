@@ -1,33 +1,63 @@
-# Codomyrmex Agents — src/codomyrmex/physical_management
+# Agent Guidelines - Physical Management
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Physical device and hardware management for IoT and robotics.
 
-Bridges the gap between digital codebase and physical world sensors/actuators. Manages SensorIntegration and SimulationEngine components.
+## Key Classes
 
-## Active Components
+- **DeviceManager** — Manage physical devices
+- **SensorHub** — Collect sensor data
+- **ActuatorController** — Control actuators
+- **ResourceMonitor** — Monitor physical resources
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analytics.py` – Project file
-- `examples/` – Directory containing examples components
-- `object_manager.py` – Project file
-- `requirements.txt` – Project file
-- `sensor_integration.py` – Project file
-- `simulation_engine.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Verify connections** — Check device connectivity
+2. **Handle timeouts** — Physical devices may be slow
+3. **Safe defaults** — Use safe actuator defaults
+4. **Rate limit** — Don't overwhelm hardware
+5. **Log all actions** — Audit trail for physical changes
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.physical_management import (
+    DeviceManager, SensorHub, ActuatorController
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Manage devices
+devices = DeviceManager()
+devices.discover()  # Auto-discover devices
+
+for device in devices.list():
+    print(f"{device.id}: {device.status}")
+
+# Collect sensor data
+sensors = SensorHub()
+temp = sensors.read("temperature_01")
+humidity = sensors.read_batch(["humidity_01", "humidity_02"])
+
+# Control actuators
+actuator = ActuatorController("motor_01")
+actuator.set_position(90)  # degrees
+actuator.wait_for_completion()
+```
+
+## Testing Patterns
+
+```python
+# Verify device discovery (mock)
+devices = DeviceManager(mock=True)
+devices.add_mock_device("test_device")
+assert len(devices.list()) == 1
+
+# Verify sensor reading
+sensors = SensorHub(mock=True)
+value = sensors.read("mock_sensor")
+assert value is not None
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

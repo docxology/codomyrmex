@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Git Operations Context
+# Personal AI Infrastructure — Git Operations Module
 
-**Module**: git_operations
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Git version control operations for repository management, branching, and commit workflows.
+The Git Operations module provides PAI integration for git repository management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Repository Operations
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage git repos:
 
-## Key Files
+```python
+from codomyrmex.git_operations import GitRepo
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+repo = GitRepo("./my_project")
+status = repo.status()
+repo.add(["src/main.py"])
+repo.commit("Add feature")
+```
 
-## Future Considerations
+### Branch Management
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Work with branches:
+
+```python
+from codomyrmex.git_operations import GitRepo
+
+repo = GitRepo(".")
+repo.checkout("feature-branch", create=True)
+repo.merge("main")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `GitRepo` | Repo operations |
+| `commit` | Commit changes |
+| `push/pull` | Remote sync |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

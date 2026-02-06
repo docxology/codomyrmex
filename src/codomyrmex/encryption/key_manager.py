@@ -4,7 +4,6 @@ Key management for encryption keys.
 
 import tempfile
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -14,7 +13,7 @@ logger = get_logger(__name__)
 class KeyManager:
     """Manager for encryption key storage and retrieval."""
 
-    def __init__(self, key_dir: Optional[Path] = None):
+    def __init__(self, key_dir: Path | None = None):
         """Initialize key manager.
 
         Args:
@@ -45,7 +44,7 @@ class KeyManager:
             logger.error(f"Error storing key: {e}")
             return False
 
-    def get_key(self, key_id: str) -> Optional[bytes]:
+    def get_key(self, key_id: str) -> bytes | None:
         """Retrieve a stored encryption key.
 
         Args:
@@ -104,7 +103,7 @@ class KeyManager:
         """
         return (self.key_dir / f"{key_id}.key").exists()
 
-    def rotate_key(self, key_id: str, new_key: bytes) -> Optional[bytes]:
+    def rotate_key(self, key_id: str, new_key: bytes) -> bytes | None:
         """Rotate a key: store a new key and return the old one.
 
         The old key is returned so callers can re-encrypt data that was

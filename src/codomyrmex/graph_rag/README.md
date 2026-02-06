@@ -1,42 +1,73 @@
-# graph_rag
+# Graph RAG Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Knowledge graph-enhanced RAG with entity relationships.
 
-Knowledge graph-enhanced Retrieval-Augmented Generation (RAG) with entity relationships. Provides an in-memory knowledge graph for storing entities and typed relationships, with neighbor traversal, BFS shortest-path finding, subgraph extraction, and text search. The `GraphRAGPipeline` retrieves structured graph context from queries and formats it as text for LLM consumption, combining entity/relationship knowledge with traditional document context.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.graph_rag import (
+    KnowledgeGraph, Entity, Relationship, EntityType, RelationType,
+    GraphRAGPipeline, GraphContext
+)
 
-### Enums
+# Build knowledge graph
+graph = KnowledgeGraph()
 
-- **`EntityType`** -- Types of entities: PERSON, ORGANIZATION, LOCATION, CONCEPT, EVENT, DOCUMENT, CUSTOM
-- **`RelationType`** -- Types of relationships: IS_A, PART_OF, RELATED_TO, AUTHORED_BY, LOCATED_IN, OCCURRED_ON, REFERENCES, CUSTOM
+# Add entities
+graph.add_entity(Entity(id="python", name="Python", entity_type=EntityType.CONCEPT))
+graph.add_entity(Entity(id="ai", name="Artificial Intelligence", entity_type=EntityType.CONCEPT))
+graph.add_entity(Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT))
 
-### Data Classes
+# Add relationships
+graph.add_relationship(Relationship(
+    source_id="ml",
+    target_id="ai",
+    relation_type=RelationType.PART_OF
+))
+graph.add_relationship(Relationship(
+    source_id="python",
+    target_id="ml",
+    relation_type=RelationType.RELATED_TO
+))
 
-- **`Entity`** -- An entity in the knowledge graph with ID, name, type, properties, and optional embedding vector; provides a unique `key` property
-- **`Relationship`** -- A weighted, directed relationship between two entities with type, properties, and a unique `key` property
-- **`GraphContext`** -- Context retrieved from the knowledge graph for a query; contains matched entities, relationships, and paths; includes `to_text()` for generating LLM-ready text representation
+# Query graph
+neighbors = graph.get_neighbors("python")
+path = graph.find_path("python", "ai")
+```
 
-### Services
+## RAG Pipeline
 
-- **`KnowledgeGraph`** -- Thread-safe in-memory knowledge graph; supports entity and relationship CRUD, bidirectional neighbor traversal, BFS shortest-path finding, subgraph extraction with optional neighbor expansion, and case-insensitive entity search by name
-- **`GraphRAGPipeline`** -- RAG pipeline enhanced with knowledge graph context; extracts entities from queries via word matching and text search, expands to neighbors, collects inter-entity relationships, and combines graph context with document context for LLM prompts
+```python
+# Create pipeline
+pipeline = GraphRAGPipeline(graph=graph)
 
-## Directory Contents
+# Retrieve context for query
+context = pipeline.retrieve("What programming languages are used in AI?")
 
-- `__init__.py` -- Module implementation with knowledge graph, RAG pipeline, and data models
-- `README.md` -- This file
-- `AGENTS.md` -- Agent integration documentation
-- `API_SPECIFICATION.md` -- Programmatic API specification
-- `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
-- `PAI.md` -- PAI integration notes
-- `SPEC.md` -- Module specification
-- `py.typed` -- PEP 561 type stub marker
+# Use in LLM prompt
+print(context.to_text())
+# Knowledge Graph Context:
+# Entities:
+#   - Python (concept)
+#   - Machine Learning (concept)
+# Relationships:
+#   - python --[related_to]--> ml
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `KnowledgeGraph` | Entity and relationship storage |
+| `Entity` | Node with id, name, type, properties |
+| `Relationship` | Edge with source, target, type, weight |
+| `EntityType` | Enum: person, organization, location, concept, etc. |
+| `RelationType` | Enum: is_a, part_of, related_to, authored_by, etc. |
+| `GraphRAGPipeline` | Query graph for LLM context |
+| `GraphContext` | Retrieved entities and relationships |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/graph_rag/](../../../docs/modules/graph_rag/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

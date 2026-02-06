@@ -1,26 +1,44 @@
-# Personal AI Infrastructure - Telemetry Context
+# Personal AI Infrastructure — Telemetry Module
 
-**Module**: telemetry
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Distributed tracing and telemetry infrastructure with OpenTelemetry integration for observability.
+The Telemetry module provides PAI integration for usage tracking and telemetry.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Event Tracking
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Track events:
 
-## Key Files
+```python
+from codomyrmex.telemetry import TelemetryClient
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+client = TelemetryClient()
+client.track("llm_request", {"model": "gpt-4", "tokens": 150})
+```
 
-## Future Considerations
+### Usage Analytics
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Collect analytics:
+
+```python
+from codomyrmex.telemetry import UsageAnalytics
+
+analytics = UsageAnalytics()
+report = analytics.generate_report(period="month")
+print(f"Total requests: {report.total_requests}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `TelemetryClient` | Track events |
+| `UsageAnalytics` | Reports |
+| `Privacy` | Data anonymization |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

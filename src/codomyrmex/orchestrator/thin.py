@@ -24,18 +24,20 @@ Example usage:
 import asyncio
 import os
 import subprocess
-import sys
 import time
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Sequence, Union
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .workflow import Workflow, Task, TaskStatus, RetryPolicy, chain, parallel, fan_out_fan_in
-from .runner import run_script, run_function
-from .parallel_runner import run_parallel, ExecutionResult
+from .parallel_runner import ExecutionResult, run_parallel
+from .runner import run_function, run_script
+from .workflow import (
+    RetryPolicy,
+    Workflow,
+)
 
 logger = get_logger(__name__)
 
@@ -64,17 +66,17 @@ class StepResult:
     """Result from a workflow step."""
     success: bool
     value: Any = None
-    error: Optional[str] = None
+    error: str | None = None
     execution_time: float = 0.0
 
 
 def run(
-    target: Union[str, Path],
+    target: str | Path,
     timeout: int = 60,
-    args: List[str] = None,
-    env: Dict[str, str] = None,
+    args: list[str] = None,
+    env: dict[str, str] = None,
     cwd: Path = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a single script or command.
 
     Args:
@@ -97,10 +99,10 @@ def run(
 
 
 async def run_async(
-    target: Union[str, Path],
+    target: str | Path,
     timeout: int = 60,
-    args: List[str] = None
-) -> Dict[str, Any]:
+    args: list[str] = None
+) -> dict[str, Any]:
     """Async version of run."""
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(
@@ -112,10 +114,10 @@ async def run_async(
 def shell(
     command: str,
     timeout: int = 60,
-    env: Dict[str, str] = None,
+    env: dict[str, str] = None,
     cwd: Path = None,
     check: bool = False
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Execute a shell command.
 
     Args:
@@ -181,10 +183,10 @@ def shell(
 
 
 def pipe(
-    commands: List[str],
+    commands: list[str],
     timeout_per_command: int = 30,
     stop_on_error: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Pipe commands together sequentially.
 
     Args:
@@ -225,7 +227,7 @@ def pipe(
 
 
 def batch(
-    targets: List[Union[str, Path]],
+    targets: list[str | Path],
     workers: int = None,
     timeout: int = 60
 ) -> ExecutionResult:
@@ -256,11 +258,11 @@ def batch(
 
 
 def chain_scripts(
-    scripts: List[Union[str, Path]],
+    scripts: list[str | Path],
     timeout_per_script: int = 60,
     pass_results: bool = True,
     stop_on_error: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Chain scripts sequentially with result passing.
 
     Args:
@@ -319,13 +321,13 @@ class Steps:
     def __init__(self, name: str = "workflow"):
         """Initialize steps builder."""
         self._workflow = Workflow(name=name)
-        self._steps: List[str] = []
+        self._steps: list[str] = []
 
     def add(
         self,
         name: str,
         action: Callable,
-        depends_on: List[str] = None,
+        depends_on: list[str] = None,
         timeout: float = None,
         retry: int = 1
     ) -> "Steps":
@@ -358,8 +360,8 @@ class Steps:
 
     def add_parallel(
         self,
-        steps: List[tuple],
-        depends_on: List[str] = None
+        steps: list[tuple],
+        depends_on: list[str] = None
     ) -> "Steps":
         """Add parallel steps.
 
@@ -383,7 +385,7 @@ class Steps:
 
         return self
 
-    async def run(self) -> Dict[str, Any]:
+    async def run(self) -> dict[str, Any]:
         """Execute the workflow.
 
         Returns:
@@ -391,7 +393,7 @@ class Steps:
         """
         return await self._workflow.run()
 
-    def run_sync(self) -> Dict[str, Any]:
+    def run_sync(self) -> dict[str, Any]:
         """Execute the workflow synchronously.
 
         Returns:
@@ -447,7 +449,7 @@ def python_func(
     args: tuple = (),
     kwargs: dict = None,
     timeout: int = 60
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a Python function with monitoring.
 
     Args:
@@ -527,7 +529,7 @@ def timeout(seconds: float) -> Callable:
     return decorator
 
 
-def condition(predicate: Callable[[Dict], bool]) -> Callable:
+def condition(predicate: Callable[[dict], bool]) -> Callable:
     """Create a condition function for conditional task execution.
 
     Args:

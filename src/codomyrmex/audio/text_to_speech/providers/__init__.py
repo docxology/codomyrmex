@@ -9,16 +9,16 @@ from .base import TTSProvider
 
 # Conditionally import providers based on availability
 try:
-    from .pyttsx3_provider import Pyttsx3Provider, PYTTSX3_AVAILABLE
+    from .pyttsx3_provider import PYTTSX3_AVAILABLE, Pyttsx3Provider
 except ImportError:
     Pyttsx3Provider = None  # type: ignore
     PYTTSX3_AVAILABLE = False
 
 try:
     from .edge_tts_provider import (
-        EdgeTTSProvider,
         EDGE_TTS_AVAILABLE,
         POPULAR_VOICES,
+        EdgeTTSProvider,
     )
 except ImportError:
     EdgeTTSProvider = None  # type: ignore

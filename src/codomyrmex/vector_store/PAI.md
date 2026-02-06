@@ -1,21 +1,45 @@
-# Personal AI Context - Vector Store
+# Personal AI Infrastructure — Vector Store Module
 
-## Role in PAI Stack
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-The vector store is the semantic memory backbone of the Personal AI Infrastructure, enabling:
+## Overview
 
-- **Semantic Retrieval**: Find relevant information by meaning, not keywords
-- **Context Augmentation**: Retrieve relevant context for LLM prompts
-- **Knowledge Persistence**: Store learned embeddings for reuse
+The Vector Store module provides PAI integration for embedding storage and similarity search.
 
-## Privacy Considerations
+## PAI Capabilities
 
-- Embeddings may encode sensitive information
-- Use namespaces to isolate personal vs. shared data
-- Consider encryption at rest for persistent stores
+### Embedding Storage
 
-## Autonomy Integration
+Store and retrieve embeddings:
 
-- Agents can self-organize knowledge by namespace
-- Automatic pruning of low-relevance vectors
-- Cross-session memory persistence
+```python
+from codomyrmex.vector_store import VectorStore
+
+store = VectorStore()
+store.add(id="doc_1", embedding=embedding_vector, metadata={"title": "Doc 1"})
+
+results = store.search(query_embedding, limit=5)
+```
+
+### Namespace Management
+
+Organize embeddings:
+
+```python
+from codomyrmex.vector_store import VectorStore
+
+store = VectorStore(namespace="code_snippets")
+store.add(id="func_1", embedding=code_embedding)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `VectorStore` | Store embeddings |
+| `search` | Similarity search |
+| `Namespace` | Organize data |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

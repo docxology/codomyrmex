@@ -1,10 +1,10 @@
+import unittest
+from unittest.mock import ANY, mock_open, patch
+
 import pytest
 
-import unittest
-import json
-from unittest.mock import patch, mock_open, ANY
 from codomyrmex.documents.formats.json_handler import read_json, write_json
-from codomyrmex.documents.exceptions import DocumentValidationError
+
 
 @pytest.mark.unit
 class TestJsonHandler(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestJsonHandler(unittest.TestCase):
         with patch("builtins.open", new_callable=mock_open) as mock_file:
             with patch('pathlib.Path.mkdir'):
                 write_json(data, "test.json")
-                
+
             mock_file.assert_called_with(ANY, 'w', encoding='utf-8')
             # Verify json.dump called write on the handle
             # json.dump usually does multiple writes or one write

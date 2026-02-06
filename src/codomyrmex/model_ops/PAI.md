@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Model Ops Context
+# Personal AI Infrastructure — Model Ops Module
 
-**Module**: model_ops
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-ML model operations for training, inference, model versioning, and deployment lifecycle management.
+The Model Ops module provides PAI integration for ML model lifecycle management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Model Registry
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Track model versions:
 
-## Key Files
+```python
+from codomyrmex.model_ops import ModelRegistry
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+registry = ModelRegistry()
+registry.register("my_model", model, version="1.0.0")
 
-## Future Considerations
+model = registry.load("my_model", version="latest")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Experiment Tracking
+
+Track ML experiments:
+
+```python
+from codomyrmex.model_ops import ExperimentTracker
+
+tracker = ExperimentTracker("experiment_1")
+tracker.log_params({"lr": 0.01})
+tracker.log_metrics({"accuracy": 0.95})
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ModelRegistry` | Version models |
+| `ExperimentTracker` | Track experiments |
+| `ModelDeployer` | Deploy models |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

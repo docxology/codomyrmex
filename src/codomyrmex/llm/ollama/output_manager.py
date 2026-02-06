@@ -10,7 +10,7 @@ import json
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -25,7 +25,7 @@ class OutputManager:
     provides integration with Codomyrmex data visualization and logging.
     """
 
-    def __init__(self, base_output_dir: Optional[str] = None):
+    def __init__(self, base_output_dir: str | None = None):
         """
         Initialize the output manager.
 
@@ -68,8 +68,8 @@ class OutputManager:
         prompt: str,
         response: str,
         execution_time: float,
-        output_dir: Optional[str] = None,
-        metadata: Optional[dict[str, Any]] = None
+        output_dir: str | None = None,
+        metadata: dict[str, Any] | None = None
     ) -> str:
         """
         Save model execution output to files.
@@ -127,7 +127,7 @@ class OutputManager:
     def save_execution_result(
         self,
         result: ModelExecutionResult,
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> str:
         """
         Save complete execution result as JSON.
@@ -165,7 +165,7 @@ class OutputManager:
         self,
         model_name: str,
         config: dict[str, Any],
-        config_name: Optional[str] = None
+        config_name: str | None = None
     ) -> str:
         """
         Save model configuration.
@@ -206,8 +206,8 @@ class OutputManager:
     def load_model_config(
         self,
         model_name: str,
-        config_name: Optional[str] = None
-    ) -> Optional[dict[str, Any]]:
+        config_name: str | None = None
+    ) -> dict[str, Any] | None:
         """
         Load model configuration.
 
@@ -244,7 +244,7 @@ class OutputManager:
         self,
         results: list[ModelExecutionResult],
         batch_name: str,
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> str:
         """
         Save batch execution results.
@@ -288,7 +288,7 @@ class OutputManager:
         self,
         benchmark_results: dict[str, Any],
         model_name: str,
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> str:
         """
         Save benchmark results as a comprehensive report.
@@ -327,7 +327,7 @@ class OutputManager:
     def save_model_comparison(
         self,
         comparison_results: dict[str, Any],
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> str:
         """
         Save model comparison results.
@@ -363,7 +363,7 @@ class OutputManager:
 
     def list_saved_outputs(
         self,
-        model_name: Optional[str] = None,
+        model_name: str | None = None,
         output_type: str = "outputs"
     ) -> list[dict[str, Any]]:
         """

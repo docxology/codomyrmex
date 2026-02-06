@@ -1,52 +1,9 @@
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
-
-from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Optional
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 """
@@ -120,12 +77,12 @@ class ValueFormat(Enum):
 @dataclass
 class Icon:
     """Icon information."""
-    name: Optional[str] = None
-    type: Optional[str] = None
-    browser_link: Optional[str] = None
-    
+    name: str | None = None
+    type: str | None = None
+    browser_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["Icon"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["Icon"]:
 
         if not data:
             return None
@@ -139,13 +96,13 @@ class Icon:
 @dataclass
 class Image:
     """Image information."""
-    browser_link: Optional[str] = None
-    type: Optional[str] = None
-    width: Optional[int] = None
-    height: Optional[int] = None
-    
+    browser_link: str | None = None
+    type: str | None = None
+    width: int | None = None
+    height: int | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["Image"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["Image"]:
 
         if not data:
             return None
@@ -162,12 +119,12 @@ class WorkspaceReference:
     """Reference to a Coda workspace."""
     id: str
     type: str = "workspace"
-    name: Optional[str] = None
-    organization_id: Optional[str] = None
-    browser_link: Optional[str] = None
-    
+    name: str | None = None
+    organization_id: str | None = None
+    browser_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["WorkspaceReference"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["WorkspaceReference"]:
 
         if not data:
             return None
@@ -185,11 +142,11 @@ class FolderReference:
     """Reference to a Coda folder."""
     id: str
     type: str = "folder"
-    name: Optional[str] = None
-    browser_link: Optional[str] = None
-    
+    name: str | None = None
+    browser_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["FolderReference"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["FolderReference"]:
 
         if not data:
             return None
@@ -208,9 +165,9 @@ class DocSize:
     table_and_view_count: int = 0
     page_count: int = 0
     over_api_size_limit: bool = False
-    
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["DocSize"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["DocSize"]:
 
         if not data:
             return None
@@ -227,12 +184,12 @@ class PageReference:
     """Reference to a page."""
     id: str
     type: str = "page"
-    href: Optional[str] = None
-    browser_link: Optional[str] = None
-    name: Optional[str] = None
-    
+    href: str | None = None
+    browser_link: str | None = None
+    name: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["PageReference"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["PageReference"]:
 
         if not data:
             return None
@@ -250,13 +207,13 @@ class TableReference:
     """Reference to a table."""
     id: str
     type: str = "table"
-    table_type: Optional[str] = None
-    href: Optional[str] = None
-    browser_link: Optional[str] = None
-    name: Optional[str] = None
-    
+    table_type: str | None = None
+    href: str | None = None
+    browser_link: str | None = None
+    name: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["TableReference"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["TableReference"]:
 
         if not data:
             return None
@@ -275,10 +232,10 @@ class ColumnReference:
     """Reference to a column."""
     id: str
     type: str = "column"
-    href: Optional[str] = None
-    
+    href: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["ColumnReference"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["ColumnReference"]:
 
         if not data:
             return None
@@ -303,19 +260,19 @@ class Doc:
     name: str
     owner: str
     owner_name: str
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    workspace: Optional[WorkspaceReference] = None
-    folder: Optional[FolderReference] = None
-    workspace_id: Optional[str] = None  # Deprecated
-    folder_id: Optional[str] = None  # Deprecated
-    icon: Optional[Icon] = None
-    doc_size: Optional[DocSize] = None
-    source_doc: Optional[Dict[str, Any]] = None
-    published: Optional[Dict[str, Any]] = None
-    
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    workspace: WorkspaceReference | None = None
+    folder: FolderReference | None = None
+    workspace_id: str | None = None  # Deprecated
+    folder_id: str | None = None  # Deprecated
+    icon: Icon | None = None
+    doc_size: DocSize | None = None
+    source_doc: dict[str, Any] | None = None
+    published: dict[str, Any] | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Doc":
+    def from_dict(cls, data: dict[str, Any]) -> "Doc":
 
         return cls(
             id=data.get("id", ""),
@@ -341,13 +298,13 @@ class Doc:
 @dataclass
 class DocList:
     """List of docs with pagination."""
-    items: List[Doc]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Doc]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DocList":
+    def from_dict(cls, data: dict[str, Any]) -> "DocList":
 
         return cls(
             items=[Doc.from_dict(item) for item in data.get("items", [])],
@@ -360,11 +317,11 @@ class DocList:
 @dataclass
 class PersonValue:
     """A person reference."""
-    name: Optional[str] = None
-    email: Optional[str] = None
-    
+    name: str | None = None
+    email: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Optional[Dict[str, Any]]) -> Optional["PersonValue"]:
+    def from_dict(cls, data: dict[str, Any] | None) -> Optional["PersonValue"]:
 
         if not data:
             return None
@@ -384,27 +341,27 @@ class Page:
     is_hidden: bool
     is_effectively_hidden: bool
     browser_link: str
-    children: List[PageReference]
+    children: list[PageReference]
     content_type: str
-    subtitle: Optional[str] = None
-    icon: Optional[Icon] = None
-    image: Optional[Image] = None
-    parent: Optional[PageReference] = None
-    authors: Optional[List[PersonValue]] = None
-    created_at: Optional[datetime] = None
-    created_by: Optional[PersonValue] = None
-    updated_at: Optional[datetime] = None
-    updated_by: Optional[PersonValue] = None
-    
+    subtitle: str | None = None
+    icon: Icon | None = None
+    image: Image | None = None
+    parent: PageReference | None = None
+    authors: list[PersonValue] | None = None
+    created_at: datetime | None = None
+    created_by: PersonValue | None = None
+    updated_at: datetime | None = None
+    updated_by: PersonValue | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Page":
+    def from_dict(cls, data: dict[str, Any]) -> "Page":
 
         children_data = data.get("children", [])
         children = [PageReference.from_dict(c) for c in children_data if c]
-        
+
         authors_data = data.get("authors", [])
         authors = [PersonValue.from_dict(a) for a in authors_data if a] if authors_data else None
-        
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "page"),
@@ -430,13 +387,13 @@ class Page:
 @dataclass
 class PageList:
     """List of pages with pagination."""
-    items: List[Page]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Page]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PageList":
+    def from_dict(cls, data: dict[str, Any]) -> "PageList":
 
         return cls(
             items=[Page.from_dict(item) for item in data.get("items", [])],
@@ -451,10 +408,10 @@ class PageContentItem:
     """A content item within a page."""
     id: str
     type: str
-    text: Optional[str] = None
-    
+    text: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PageContentItem":
+    def from_dict(cls, data: dict[str, Any]) -> "PageContentItem":
 
         return cls(
             id=data.get("id", ""),
@@ -468,9 +425,9 @@ class Sort:
     """Sort configuration for a table."""
     column: ColumnReference
     direction: str  # "ascending" or "descending"
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Sort":
+    def from_dict(cls, data: dict[str, Any]) -> "Sort":
 
         return cls(
             column=ColumnReference.from_dict(data.get("column")) or ColumnReference(id=""),
@@ -489,20 +446,20 @@ class Table:
     browser_link: str
     row_count: int
     layout: str
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    parent: Optional[PageReference] = None
-    parent_table: Optional[TableReference] = None
-    display_column: Optional[ColumnReference] = None
-    sorts: Optional[List[Sort]] = None
-    filter: Optional[Dict[str, Any]] = None
-    
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    parent: PageReference | None = None
+    parent_table: TableReference | None = None
+    display_column: ColumnReference | None = None
+    sorts: list[Sort] | None = None
+    filter: dict[str, Any] | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Table":
+    def from_dict(cls, data: dict[str, Any]) -> "Table":
 
         sorts_data = data.get("sorts", [])
         sorts = [Sort.from_dict(s) for s in sorts_data] if sorts_data else None
-        
+
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "table"),
@@ -525,13 +482,13 @@ class Table:
 @dataclass
 class TableList:
     """List of tables with pagination."""
-    items: List[Table]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Table]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TableList":
+    def from_dict(cls, data: dict[str, Any]) -> "TableList":
 
         return cls(
             items=[Table.from_dict(item) for item in data.get("items", [])],
@@ -548,15 +505,15 @@ class Column:
     type: str
     href: str
     name: str
-    format: Dict[str, Any]
+    format: dict[str, Any]
     display: bool = False
     calculated: bool = False
-    formula: Optional[str] = None
-    default_value: Optional[str] = None
-    parent: Optional[TableReference] = None
-    
+    formula: str | None = None
+    default_value: str | None = None
+    parent: TableReference | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Column":
+    def from_dict(cls, data: dict[str, Any]) -> "Column":
 
         return cls(
             id=data.get("id", ""),
@@ -575,13 +532,13 @@ class Column:
 @dataclass
 class ColumnList:
     """List of columns with pagination."""
-    items: List[Column]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Column]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ColumnList":
+    def from_dict(cls, data: dict[str, Any]) -> "ColumnList":
 
         return cls(
             items=[Column.from_dict(item) for item in data.get("items", [])],
@@ -600,13 +557,13 @@ class Row:
     name: str
     index: int
     browser_link: str
-    values: Dict[str, Any]
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    parent: Optional[TableReference] = None
-    
+    values: dict[str, Any]
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    parent: TableReference | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Row":
+    def from_dict(cls, data: dict[str, Any]) -> "Row":
 
         return cls(
             id=data.get("id", ""),
@@ -625,14 +582,14 @@ class Row:
 @dataclass
 class RowList:
     """List of rows with pagination."""
-    items: List[Row]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    next_sync_token: Optional[str] = None
-    
+    items: list[Row]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+    next_sync_token: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "RowList":
+    def from_dict(cls, data: dict[str, Any]) -> "RowList":
 
         return cls(
             items=[Row.from_dict(item) for item in data.get("items", [])],
@@ -648,8 +605,8 @@ class CellEdit:
     """A cell value edit."""
     column: str  # Column ID or name
     value: Any
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "column": self.column,
             "value": self.value,
@@ -659,9 +616,9 @@ class CellEdit:
 @dataclass
 class RowEdit:
     """A row edit with cell values."""
-    cells: List[CellEdit]
-    
-    def to_dict(self) -> Dict[str, Any]:
+    cells: list[CellEdit]
+
+    def to_dict(self) -> dict[str, Any]:
         return {"cells": [cell.to_dict() for cell in self.cells]}
 
 
@@ -673,10 +630,10 @@ class Formula:
     href: str
     name: str
     value: Any
-    parent: Optional[PageReference] = None
-    
+    parent: PageReference | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Formula":
+    def from_dict(cls, data: dict[str, Any]) -> "Formula":
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "formula"),
@@ -690,13 +647,13 @@ class Formula:
 @dataclass
 class FormulaList:
     """List of formulas with pagination."""
-    items: List[Formula]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Formula]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "FormulaList":
+    def from_dict(cls, data: dict[str, Any]) -> "FormulaList":
 
         return cls(
             items=[Formula.from_dict(item) for item in data.get("items", [])],
@@ -715,10 +672,10 @@ class Control:
     name: str
     control_type: str
     value: Any
-    parent: Optional[PageReference] = None
-    
+    parent: PageReference | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Control":
+    def from_dict(cls, data: dict[str, Any]) -> "Control":
 
         return cls(
             id=data.get("id", ""),
@@ -734,13 +691,13 @@ class Control:
 @dataclass
 class ControlList:
     """List of controls with pagination."""
-    items: List[Control]
-    href: Optional[str] = None
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    items: list[Control]
+    href: str | None = None
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ControlList":
+    def from_dict(cls, data: dict[str, Any]) -> "ControlList":
 
         return cls(
             items=[Control.from_dict(item) for item in data.get("items", [])],
@@ -758,17 +715,17 @@ class ControlList:
 class Principal:
     """A principal (user or group) for permissions."""
     type: str  # "email", "domain", "anyone"
-    email: Optional[str] = None
-    
+    email: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Principal":
+    def from_dict(cls, data: dict[str, Any]) -> "Principal":
 
         return cls(
             type=data.get("type", ""),
             email=data.get("email"),
         )
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
 
         result = {"type": self.type}
         if self.email:
@@ -782,9 +739,9 @@ class Permission:
     id: str
     principal: Principal
     access: str
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Permission":
+    def from_dict(cls, data: dict[str, Any]) -> "Permission":
 
         return cls(
             id=data.get("id", ""),
@@ -796,13 +753,13 @@ class Permission:
 @dataclass
 class PermissionList:
     """List of permissions with pagination."""
-    items: List[Permission]
+    items: list[Permission]
     href: str
-    next_page_token: Optional[str] = None
-    next_page_link: Optional[str] = None
-    
+    next_page_token: str | None = None
+    next_page_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PermissionList":
+    def from_dict(cls, data: dict[str, Any]) -> "PermissionList":
 
         return cls(
             items=[Permission.from_dict(item) for item in data.get("items", [])],
@@ -819,9 +776,9 @@ class SharingMetadata:
     can_share_with_workspace: bool
     can_share_with_org: bool
     can_copy: bool
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SharingMetadata":
+    def from_dict(cls, data: dict[str, Any]) -> "SharingMetadata":
 
         return cls(
             can_share=data.get("canShare", False),
@@ -837,9 +794,9 @@ class ACLSettings:
     allow_editors_to_change_permissions: bool
     allow_copying: bool
     allow_viewers_to_request_editing: bool
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ACLSettings":
+    def from_dict(cls, data: dict[str, Any]) -> "ACLSettings":
 
         return cls(
             allow_editors_to_change_permissions=data.get("allowEditorsToChangePermissions", False),
@@ -861,11 +818,11 @@ class User:
     scoped: bool
     token_name: str
     href: str
-    workspace: Optional[WorkspaceReference] = None
-    picture_link: Optional[str] = None
-    
+    workspace: WorkspaceReference | None = None
+    picture_link: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "User":
+    def from_dict(cls, data: dict[str, Any]) -> "User":
 
         return cls(
             name=data.get("name", ""),
@@ -887,10 +844,10 @@ class User:
 class MutationStatus:
     """Status of an asynchronous mutation."""
     completed: bool
-    warning: Optional[str] = None
-    
+    warning: str | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MutationStatus":
+    def from_dict(cls, data: dict[str, Any]) -> "MutationStatus":
 
         return cls(
             completed=data.get("completed", False),
@@ -902,10 +859,10 @@ class MutationStatus:
 class InsertRowsResult:
     """Result of inserting rows."""
     request_id: str
-    added_row_ids: Optional[List[str]] = None
-    
+    added_row_ids: list[str] | None = None
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "InsertRowsResult":
+    def from_dict(cls, data: dict[str, Any]) -> "InsertRowsResult":
         return cls(
             request_id=data.get("requestId", ""),
             added_row_ids=data.get("addedRowIds"),
@@ -916,7 +873,7 @@ class InsertRowsResult:
 # Helpers
 # ============================================================================
 
-def _parse_datetime(value: Optional[str]) -> Optional[datetime]:
+def _parse_datetime(value: str | None) -> datetime | None:
     """Parse ISO 8601 datetime string."""
     if not value:
         return None

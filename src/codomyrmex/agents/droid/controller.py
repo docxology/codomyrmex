@@ -5,61 +5,19 @@ metrics tracking, and task execution capabilities.
 """
 from __future__ import annotations
 
+import json
+import os
+import time
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from threading import RLock
-from typing import Any, Callable
-import json
-import logging
-import os
-import time
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.performance import monitor_performance, performance_context
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Droid controller and configuration utilities."""
 
@@ -413,7 +371,7 @@ def save_config_to_file(config: DroidConfig, path: str | os.PathLike[str]) -> No
 
 
 def load_config_from_file(path: str | os.PathLike[str]) -> DroidConfig:
-    
+
     return DroidConfig.from_file(path)
 
 

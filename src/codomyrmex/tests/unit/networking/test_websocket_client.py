@@ -1,9 +1,10 @@
 """Unit tests for WebSocketClient."""
 
-import pytest
 import asyncio
-import json
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import MagicMock
+
+import pytest
+
 from codomyrmex.networking.websocket_client import WebSocketClient
 
 

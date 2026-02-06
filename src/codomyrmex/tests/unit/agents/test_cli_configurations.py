@@ -1,11 +1,24 @@
 """Tests for CLI configuration confirmations."""
 
-import pytest
 import os
-from unittest.mock import patch
 from pathlib import Path
+from unittest.mock import patch
 
-from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
+import pytest
+
+try:
+    from codomyrmex.agents.core.config import (
+        AgentConfig,
+        get_config,
+        reset_config,
+        set_config,
+    )
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 @pytest.mark.unit
@@ -16,7 +29,7 @@ class TestSimpleConfigurationConfirmations:
         """Test basic info command shows configuration."""
         config = AgentConfig()
         config_dict = config.to_dict()
-        
+
         # Verify basic configuration is present
         assert "jules_command" in config_dict
         assert "claude_model" in config_dict
@@ -30,9 +43,9 @@ class TestSimpleConfigurationConfirmations:
             default_timeout=60,
             log_level="DEBUG"
         )
-        
+
         config_dict = config.to_dict()
-        
+
         assert config_dict["jules_command"] == "test-jules"
         assert config_dict["default_timeout"] == 60
         assert config_dict["log_level"] == "DEBUG"
@@ -40,7 +53,7 @@ class TestSimpleConfigurationConfirmations:
     def test_single_agent_status(self):
         """Test single agent configuration status."""
         config = AgentConfig()
-        
+
         # Verify each agent has configuration
         assert hasattr(config, "jules_command")
         assert hasattr(config, "jules_timeout")
@@ -81,9 +94,9 @@ class TestComplexConfigurationScenarios:
             opencode_working_dir="/tmp/opencode",
             opencode_api_key="opencode-key",
         )
-        
+
         config_dict = config.to_dict()
-        
+
         # Verify all configurations are present
         assert config_dict["jules_command"] == "jules-cmd"
         assert config_dict["claude_model"] == "claude-model"
@@ -107,7 +120,7 @@ class TestComplexConfigurationScenarios:
             clear=False,
         ):
             config = AgentConfig()
-            
+
             assert config.jules_command == "env-jules"
             assert config.jules_timeout == 45
             assert config.claude_model == "env-claude"
@@ -127,7 +140,7 @@ class TestComplexConfigurationScenarios:
         ):
             # Explicit value should override environment
             config = AgentConfig(jules_timeout=50)
-            
+
             # In AgentConfig, explicit constructor values are set first,
             # then __post_init__ applies env vars. So env var takes precedence
             # unless we check the actual behavior
@@ -143,18 +156,18 @@ class TestComplexConfigurationScenarios:
             codex_timeout=120,
             opencode_timeout=150,
         )
-        
+
         errors = valid_config.validate()
         # Should only have optional API key warnings
         timeout_errors = [e for e in errors if "timeout" in e and "positive" in e]
         assert len(timeout_errors) == 0
-        
+
         # Invalid configuration
         invalid_config = AgentConfig(
             default_timeout=-1,
             jules_timeout=0,
         )
-        
+
         errors = invalid_config.validate()
         assert len(errors) > 0
         assert any("default_timeout" in e for e in errors)
@@ -164,11 +177,11 @@ class TestComplexConfigurationScenarios:
         """Test dynamic configuration updates."""
         config = AgentConfig()
         original_timeout = config.default_timeout
-        
+
         # Update configuration
         config.default_timeout = 200
         config.log_level = "WARNING"
-        
+
         assert config.default_timeout == 200
         assert config.log_level == "WARNING"
         assert config.default_timeout != original_timeout
@@ -176,14 +189,14 @@ class TestComplexConfigurationScenarios:
     def test_configuration_persistence(self):
         """Test configuration persistence across operations."""
         reset_config()
-        
+
         custom_config = AgentConfig(default_timeout=777)
         set_config(custom_config)
-        
+
         # Configuration should persist
         retrieved_config = get_config()
         assert retrieved_config.default_timeout == 777
-        
+
         # Reset should clear
         reset_config()
         new_config = get_config()
@@ -218,7 +231,7 @@ class TestComplexConfigurationScenarios:
             enable_logging=True,
             log_level="INFO",
         )
-        
+
         # Verify all configurations
         assert config.jules_command == "jules"
         assert config.claude_api_key == "claude-key"

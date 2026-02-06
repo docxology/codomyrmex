@@ -1,6 +1,7 @@
-from pathlib import Path
 import os
 import re
+from pathlib import Path
+
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -21,30 +22,30 @@ def check_links(root_dir):
     root_path = Path(root_dir).absolute()
     link_pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
     broken_links = []
-    
+
     for md_file in find_markdown_files(root_path):
-        with open(md_file, "r", encoding="utf-8") as f:
+        with open(md_file, encoding="utf-8") as f:
             content = f.read()
-            
+
         for match in link_pattern.finditer(content):
             text, link = match.groups()
-            
+
             # Skip external links
             if link.startswith("http") or link.startswith("mailto:"):
                 continue
-            
+
             # Skip anchor links within same file (simplified)
             if link.startswith("#"):
                 continue
-                
+
             # Handle links with anchors
             clean_link = link.split("#")[0]
             if not clean_link:
                 continue
-                
+
             # Resolve target path relative to current markdown file
             target = (md_file.parent / clean_link).resolve()
-            
+
             if not target.exists():
                 broken_links.append({
                     "file": str(md_file.relative_to(root_path)),
@@ -52,7 +53,7 @@ def check_links(root_dir):
                     "text": text,
                     "target": str(target)
                 })
-                
+
     return broken_links
 
 if __name__ == "__main__":

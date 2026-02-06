@@ -1,17 +1,11 @@
-from typing import Dict, List, Any, Optional, Callable, Tuple
 import copy
 import logging
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Configuration Migrator for Codomyrmex."""
 
@@ -41,14 +35,14 @@ class MigrationRule:
     to_version: str
 
     # Action-specific parameters
-    old_path: Optional[str] = None
-    new_path: Optional[str] = None
-    old_paths: Optional[List[str]] = None
+    old_path: str | None = None
+    new_path: str | None = None
+    old_paths: list[str] | None = None
     new_value: Any = None
-    transform_func: Optional[Callable] = None
-    condition: Optional[Callable[[Dict[str, Any]], bool]] = None
+    transform_func: Callable | None = None
+    condition: Callable[[dict[str, Any]], bool] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         result = {
             "action": self.action.value,
@@ -76,13 +70,13 @@ class MigrationResult:
     success: bool
     original_version: str
     target_version: str
-    migrated_config: Dict[str, Any]
-    applied_rules: List[MigrationRule] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
-    errors: List[str] = field(default_factory=list)
-    backup_config: Optional[Dict[str, Any]] = None
+    migrated_config: dict[str, Any]
+    applied_rules: list[MigrationRule] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    backup_config: dict[str, Any] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "success": self.success,
@@ -104,7 +98,7 @@ class ConfigMigrator:
 
     def __init__(self):
         """Initialize the configuration migrator."""
-        self.migration_rules: Dict[Tuple[str, str], List[MigrationRule]] = {}
+        self.migration_rules: dict[tuple[str, str], list[MigrationRule]] = {}
         self.version_order = []  # Ordered list of versions for path finding
 
     def add_migration_rule(self, rule: MigrationRule) -> None:
@@ -124,7 +118,7 @@ class ConfigMigrator:
             if version not in self.version_order:
                 self.version_order.append(version)
 
-    def migrate_config(self, config: Dict[str, Any], from_version: str, to_version: str) -> MigrationResult:
+    def migrate_config(self, config: dict[str, Any], from_version: str, to_version: str) -> MigrationResult:
         """
         Migrate a configuration from one version to another.
 
@@ -185,11 +179,11 @@ class ConfigMigrator:
         if result.success and applied_rules:
             logger.info(f"Successfully migrated config from {from_version} to {to_version} using {len(applied_rules)} rules")
         elif result.success and not applied_rules:
-            logger.info(f"No migration rules applied (config may already be compatible)")
+            logger.info("No migration rules applied (config may already be compatible)")
 
         return result
 
-    def get_migration_path(self, from_version: str, to_version: str) -> List[Tuple[str, str]]:
+    def get_migration_path(self, from_version: str, to_version: str) -> list[tuple[str, str]]:
         """
         Get the migration path between two versions.
 
@@ -223,7 +217,7 @@ class ConfigMigrator:
             # Version not in order
             return []
 
-    def validate_migration(self, config: Dict[str, Any], target_version: str) -> bool:
+    def validate_migration(self, config: dict[str, Any], target_version: str) -> bool:
         """
         Validate that a configuration is compatible with a target version.
 
@@ -271,7 +265,7 @@ class ConfigMigrator:
         )
         self.add_migration_rule(rule)
 
-    def _apply_migration_rule(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _apply_migration_rule(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Apply a single migration rule to the configuration."""
         if rule.condition and not rule.condition(config):
             logger.debug(f"Migration rule '{rule.description}' condition not met, skipping")
@@ -296,7 +290,7 @@ class ConfigMigrator:
         else:
             result.errors.append(f"Unknown migration action: {rule.action}")
 
-    def _rename_field(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _rename_field(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Rename a field in the configuration."""
         if not rule.old_path or not rule.new_path:
             result.errors.append("Rename rule missing old_path or new_path")
@@ -310,7 +304,7 @@ class ConfigMigrator:
         else:
             result.warnings.append(f"Field {rule.old_path} not found for renaming")
 
-    def _move_field(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _move_field(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Move a field to a new location."""
         if not rule.old_path or not rule.new_path:
             result.errors.append("Move rule missing old_path or new_path")
@@ -324,7 +318,7 @@ class ConfigMigrator:
         else:
             result.warnings.append(f"Field {rule.old_path} not found for moving")
 
-    def _transform_value(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _transform_value(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Transform a field value."""
         if not rule.old_path:
             result.errors.append("Transform rule missing old_path")
@@ -346,7 +340,7 @@ class ConfigMigrator:
         else:
             result.warnings.append(f"Field {rule.old_path} not found for transformation")
 
-    def _add_field(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _add_field(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Add a new field to the configuration."""
         if not rule.new_path:
             result.errors.append("Add field rule missing new_path")
@@ -358,7 +352,7 @@ class ConfigMigrator:
         else:
             result.warnings.append(f"Field {rule.new_path} already exists, not adding")
 
-    def _remove_field(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _remove_field(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Remove a field from the configuration."""
         if not rule.old_path:
             result.errors.append("Remove field rule missing old_path")
@@ -370,17 +364,17 @@ class ConfigMigrator:
         else:
             result.warnings.append(f"Field {rule.old_path} not found for removal")
 
-    def _split_field(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _split_field(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Split a field into multiple fields."""
         # Implementation would depend on specific splitting logic
         result.warnings.append("Split field migration not fully implemented")
 
-    def _merge_fields(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _merge_fields(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Merge multiple fields into one."""
         # Implementation would depend on specific merging logic
         result.warnings.append("Merge fields migration not fully implemented")
 
-    def _custom_transform(self, config: Dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
+    def _custom_transform(self, config: dict[str, Any], rule: MigrationRule, result: MigrationResult) -> None:
         """Apply custom transformation function."""
         if rule.transform_func:
             try:
@@ -393,7 +387,7 @@ class ConfigMigrator:
         else:
             result.errors.append("Custom transform rule missing transform function")
 
-    def _get_nested_value(self, config: Dict[str, Any], path: str) -> Any:
+    def _get_nested_value(self, config: dict[str, Any], path: str) -> Any:
         """Get a nested value from configuration using dot notation."""
         keys = path.split('.')
         current = config
@@ -406,7 +400,7 @@ class ConfigMigrator:
 
         return current
 
-    def _set_nested_value(self, config: Dict[str, Any], path: str, value: Any) -> None:
+    def _set_nested_value(self, config: dict[str, Any], path: str, value: Any) -> None:
         """Set a nested value in configuration using dot notation."""
         keys = path.split('.')
         current = config
@@ -418,7 +412,7 @@ class ConfigMigrator:
 
         current[keys[-1]] = value
 
-    def _delete_nested_value(self, config: Dict[str, Any], path: str) -> None:
+    def _delete_nested_value(self, config: dict[str, Any], path: str) -> None:
         """Delete a nested value from configuration using dot notation."""
         keys = path.split('.')
         current = config
@@ -434,7 +428,7 @@ class ConfigMigrator:
 
 # Predefined migration rules for common Codomyrmex configurations
 
-def create_logging_migration_rules() -> List[MigrationRule]:
+def create_logging_migration_rules() -> list[MigrationRule]:
     """Create migration rules for logging configuration."""
     return [
         MigrationRule(
@@ -463,7 +457,7 @@ def create_logging_migration_rules() -> List[MigrationRule]:
         )
     ]
 
-def create_database_migration_rules() -> List[MigrationRule]:
+def create_database_migration_rules() -> list[MigrationRule]:
     """Create migration rules for database configuration."""
     return [
         MigrationRule(
@@ -494,7 +488,7 @@ def create_database_migration_rules() -> List[MigrationRule]:
 
 # Convenience functions
 
-def migrate_config(config: Dict[str, Any], from_version: str, to_version: str) -> MigrationResult:
+def migrate_config(config: dict[str, Any], from_version: str, to_version: str) -> MigrationResult:
     """
     Convenience function to migrate configuration.
 

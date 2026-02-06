@@ -1,13 +1,12 @@
 """Swarm coordination implementation."""
 
-from typing import List, Any, Dict
 import logging
 
 logger = logging.getLogger(__name__)
 
 class AgentProxy:
     """Mock-friendly proxy for a Codomyrmex agent."""
-    
+
     def __init__(self, name: str, role: str):
         self.name = name
         self.role = role
@@ -18,15 +17,15 @@ class AgentProxy:
 
 class SwarmManager:
     """Orchestrates multiple agents working together."""
-    
+
     def __init__(self):
-        self.agents: List[AgentProxy] = []
+        self.agents: list[AgentProxy] = []
 
     def add_agent(self, agent: AgentProxy):
         self.agents.append(agent)
         logger.info(f"Agent {agent.name} ({agent.role}) joined the swarm")
 
-    def execute(self, mission: str) -> Dict[str, str]:
+    def execute(self, mission: str) -> dict[str, str]:
         """Distribute a mission across the swarm."""
         logger.info(f"Starting mission: {mission}")
         results = {}
@@ -44,9 +43,9 @@ class SwarmManager:
 
 class TaskDecomposer:
     """Utilities for breaking down complex missions."""
-    
+
     @staticmethod
-    def decompose(mission: str) -> List[str]:
+    def decompose(mission: str) -> list[str]:
         """Break down a mission into primitive tasks."""
         # Simple heuristic decomposition
         if " and " in mission:

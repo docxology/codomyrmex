@@ -1,6 +1,5 @@
 """Document splitting operations."""
 
-from typing import List
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -21,7 +20,7 @@ def _make_split_metadata(document_metadata, extra: dict):
     return extra
 
 
-def split_document(document: Document, criteria: dict) -> List[Document]:
+def split_document(document: Document, criteria: dict) -> list[Document]:
     """
     Split a document into multiple documents based on criteria.
 
@@ -53,7 +52,7 @@ def split_document(document: Document, criteria: dict) -> List[Document]:
         raise DocumentConversionError(f"Failed to split document: {str(e)}") from e
 
 
-def _split_by_sections(document: Document, criteria: dict) -> List[Document]:
+def _split_by_sections(document: Document, criteria: dict) -> list[Document]:
     """Split document by sections (markdown headers, etc.)."""
     content = document.get_content_as_string()
     sections = []
@@ -82,7 +81,7 @@ def _split_by_sections(document: Document, criteria: dict) -> List[Document]:
     return split_docs
 
 
-def _split_by_size(document: Document, criteria: dict) -> List[Document]:
+def _split_by_size(document: Document, criteria: dict) -> list[Document]:
     """Split document by size (characters)."""
     max_size = criteria.get("max_size", 10000)
     content = document.get_content_as_string()
@@ -100,12 +99,12 @@ def _split_by_size(document: Document, criteria: dict) -> List[Document]:
     return split_docs
 
 
-def _split_by_pages(document: Document, criteria: dict) -> List[Document]:
+def _split_by_pages(document: Document, criteria: dict) -> list[Document]:
     """Split PDF document by pages."""
     return [document]
 
 
-def _split_by_lines(document: Document, criteria: dict) -> List[Document]:
+def _split_by_lines(document: Document, criteria: dict) -> list[Document]:
     """Split document by number of lines."""
     lines_per_chunk = criteria.get("lines_per_chunk", 100)
     content = document.get_content_as_string()

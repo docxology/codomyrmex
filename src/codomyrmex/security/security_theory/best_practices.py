@@ -1,50 +1,6 @@
-from typing import List
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security best practices."""
 
@@ -54,7 +10,7 @@ logger = get_logger(__name__)
 @dataclass
 class SecurityBestPractice:
     """Represents a security best practice."""
-    
+
     name: str
     description: str
     category: str  # coding, configuration, operations, etc.
@@ -102,7 +58,7 @@ BEST_PRACTICES = {
 }
 
 
-def get_best_practices(category: str = None) -> List[SecurityBestPractice]:
+def get_best_practices(category: str = None) -> list[SecurityBestPractice]:
     """Get security best practices, optionally filtered by category."""
     practices = list(BEST_PRACTICES.values())
     if category:
@@ -118,7 +74,7 @@ def check_compliance_with_practices(context: dict) -> dict:
         "non_compliant": 0,
         "details": [],
     }
-    
+
     # Placeholder for actual compliance checking
     return compliance
 

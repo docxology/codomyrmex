@@ -3,10 +3,10 @@
 Enables agents to post anonymous demands and receive bids from providers.
 """
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional
-from datetime import datetime
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -24,14 +24,14 @@ class AuctionRequest:
     requester_persona_id: str  # Anonymous ID
     item_description: str
     max_price: float
-    bids: List[Bid] = field(default_factory=list)
+    bids: list[Bid] = field(default_factory=list)
     status: str = "OPEN"
 
 class ReverseAuction:
     """Manages anonymous reverse auctions."""
 
     def __init__(self):
-        self._auctions: Dict[str, AuctionRequest] = {}
+        self._auctions: dict[str, AuctionRequest] = {}
 
     def create_request(self, persona_id: str, description: str, max_price: float) -> str:
         """Create a new auction request."""
@@ -50,23 +50,23 @@ class ReverseAuction:
         """Place a bid on an active auction."""
         if auction_id not in self._auctions:
             return False
-            
+
         auction = self._auctions[auction_id]
         if auction.status != "OPEN":
             return False
-            
+
         if amount > auction.max_price:
             logger.debug(f"Bid rejected: {amount} > {auction.max_price}")
             return False
-            
+
         bid = Bid(provider_id=provider_id, amount=amount, details=details)
         auction.bids.append(bid)
-        
+
         # Sort bids by amount ascending (best price first)
         auction.bids.sort(key=lambda x: x.amount)
         return True
 
-    def get_best_bid(self, auction_id: str) -> Optional[Bid]:
+    def get_best_bid(self, auction_id: str) -> Bid | None:
         """Get the current best bid."""
         if auction_id not in self._auctions:
             return None
@@ -82,7 +82,7 @@ class ReverseAuction:
         auction = self._auctions[auction_id]
         if auction.requester_persona_id != requester_id:
             return False # Not the owner
-            
+
         auction.status = "CLOSED"
         return True
 
@@ -95,12 +95,12 @@ class ReverseAuction:
             return False
         if auction.status != "OPEN":
             return False
-            
+
         auction.status = "CANCELLED"
         logger.info(f"Auction {auction_id} cancelled by {requester_id}")
         return True
 
-    def get_history(self, persona_id: str) -> List[AuctionRequest]:
+    def get_history(self, persona_id: str) -> list[AuctionRequest]:
         """Get auction history for a persona."""
         return [
             a for a in self._auctions.values()

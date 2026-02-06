@@ -8,7 +8,6 @@ import hmac
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Optional
 
 from codomyrmex.encryption.key_manager import KeyManager
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -29,15 +28,15 @@ class WalletManager:
         key_manager: KeyManager instance for secure key storage.
     """
 
-    def __init__(self, storage_path: Optional[Path] = None):
+    def __init__(self, storage_path: Path | None = None):
         """Initialize WalletManager.
 
         Args:
             storage_path: Directory for key storage. Uses temp dir if None.
         """
         self.key_manager = KeyManager(key_dir=storage_path)
-        self._wallets: Dict[str, str] = {}  # user_id -> wallet_address
-        self._created_at: Dict[str, str] = {}  # user_id -> ISO timestamp
+        self._wallets: dict[str, str] = {}  # user_id -> wallet_address
+        self._created_at: dict[str, str] = {}  # user_id -> ISO timestamp
 
     def create_wallet(self, user_id: str) -> str:
         """Create a new wallet for the user.
@@ -69,7 +68,7 @@ class WalletManager:
         else:
             raise WalletKeyError(f"Failed to store wallet key for user {user_id}")
 
-    def get_wallet_address(self, user_id: str) -> Optional[str]:
+    def get_wallet_address(self, user_id: str) -> str | None:
         """Retrieve wallet address for a user.
 
         Args:
@@ -217,7 +216,7 @@ class WalletManager:
         logger.info(f"Deleted wallet for user {user_id}")
         return True
 
-    def list_wallets(self) -> Dict[str, str]:
+    def list_wallets(self) -> dict[str, str]:
         """List all registered wallets.
 
         Returns:

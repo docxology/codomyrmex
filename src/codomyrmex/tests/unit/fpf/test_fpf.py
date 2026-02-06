@@ -1,6 +1,8 @@
 
 import pytest
+
 from codomyrmex import fpf
+
 
 @pytest.mark.unit
 def test_fpf_module_import():

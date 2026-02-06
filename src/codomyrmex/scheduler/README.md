@@ -1,39 +1,75 @@
 # Scheduler Module
 
-Task scheduling and job queuing with cron and interval triggers.
+**Version**: v0.1.0 | **Status**: Active
 
-## Features
-
-- **Multiple Trigger Types**: One-time, interval, and cron-style scheduling
-- **Concurrent Execution**: Thread pool for parallel job execution
-- **Job Management**: Cancel, reschedule, and monitor jobs
-- **Convenience Functions**: `every()`, `at()`, `cron()` helpers
+Task scheduling with cron, interval, and one-time triggers.
 
 ## Quick Start
 
 ```python
-from codomyrmex.scheduler import Scheduler, every, cron
+from codomyrmex.scheduler import (
+    Scheduler, IntervalTrigger, CronTrigger, every, at, cron
+)
+from datetime import timedelta
 
 scheduler = Scheduler()
 
-# Run every 5 minutes
+# Interval job: every 5 minutes
+def cleanup():
+    print("Running cleanup...")
+
 scheduler.schedule(
-    func=cleanup_temp_files,
-    trigger=every(minutes=5),
+    func=cleanup,
+    trigger=IntervalTrigger(minutes=5),
 )
 
-# Run at specific cron schedule (every day at 3am)
+# Cron job: every day at midnight
 scheduler.schedule(
     func=backup_database,
-    trigger=cron("0 3 * * *"),
+    trigger=cron("0 0 * * *"),  # minute hour day month weekday
+)
+
+# One-time job: tomorrow at 9 AM
+scheduler.schedule(
+    func=send_reminder,
+    trigger=at("09:00"),
 )
 
 # Start scheduler
 scheduler.start()
+
+# List and manage jobs
+for job in scheduler.list_jobs():
+    print(f"{job.name}: next run at {job.next_run}")
+
+scheduler.cancel(job_id)
+scheduler.run_now(job_id)  # Execute immediately
 ```
+
+## Convenience Functions
+
+```python
+every(seconds=30)        # IntervalTrigger
+every(hours=1)           # IntervalTrigger
+at("14:30")              # OnceTrigger at 2:30 PM today (or tomorrow)
+cron("*/5 * * * *")      # CronTrigger: every 5 minutes
+cron("0 9 * * 1-5")      # CronTrigger: 9 AM weekdays
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `Scheduler` | Main scheduler with start/stop control |
+| `Job` | Scheduled job with status, run history |
+| `JobStatus` | Enum: pending, running, completed, failed, cancelled |
+| `IntervalTrigger` | Recurring at fixed intervals |
+| `CronTrigger` | Cron expression scheduling |
+| `OnceTrigger` | Single execution at specific time |
+| `every(...)` | Create interval trigger |
+| `at("HH:MM")` | Create one-time trigger |
+| `cron("...")` | Parse cron expression |
 
 ## Navigation
 
-- [Technical Spec](SPEC.md)
-- [Agent Guidelines](AGENTS.md)
-- [PAI Context](PAI.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

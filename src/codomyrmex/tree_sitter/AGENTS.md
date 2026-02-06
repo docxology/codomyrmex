@@ -1,30 +1,57 @@
-# Codomyrmex Agents — src/codomyrmex/tree_sitter
+# Agent Guidelines - Tree-sitter
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Code parsing with tree-sitter for syntax analysis and AST transformations.
 
-High-fidelity source code parsing across multiple programming languages. Enables advanced static analysis, code transformation, and intelligent auditing within the Codomyrmex ecosystem.
+## Key Classes
 
-## Active Components
+- **TreeSitterParser** — Parse code to syntax tree
+- **LanguageManager** — Load and manage language grammars
+- **QueryEngine** — Execute tree-sitter queries
+- **ASTTransformer** — Transform parsed ASTs
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `languages/` – Directory containing languages components
-- `parsers/` – Directory containing parsers components
-- `queries/` – Directory containing queries components
-- `transformers/` – Directory containing transformers components
+## Agent Instructions
 
-## Operating Contracts
+1. **Load languages first** — Call `LanguageManager.load(lang)` before parsing
+2. **Use queries for search** — Tree-sitter queries are faster than tree traversal
+3. **Cache parsers** — Reuse parser instances for same language
+4. **Handle parse errors** — Trees may have ERROR nodes; check `tree.root_node.has_error`
+5. **Use node types** — Query by node type (e.g., `function_definition`, `class_definition`)
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Queries
 
-## Navigation Links
+```python
+# Find all functions
+functions = parser.query("(function_definition name: (identifier) @name)")
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Find all classes
+classes = parser.query("(class_definition name: (identifier) @name)")
+
+# Find all imports
+imports = parser.query("(import_statement) @import")
+
+# Find function calls
+calls = parser.query("(call expression: (identifier) @fn)")
+```
+
+## Testing Patterns
+
+```python
+# Verify parser loads language
+manager = LanguageManager()
+assert manager.load("python")
+
+# Verify parsing works
+parser = TreeSitterParser(language="python")
+tree = parser.parse("def foo(): pass")
+assert not tree.root_node.has_error
+
+# Verify query results
+results = parser.query("(function_definition) @fn")
+assert len(results) == 1
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

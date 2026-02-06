@@ -1,54 +1,12 @@
-from typing import Any, Optional
 import math
-
 from dataclasses import dataclass, field
+from typing import Any
+
 import numpy as np
 
 from codomyrmex.cerebrum.core.exceptions import ActiveInferenceError
 from codomyrmex.cerebrum.core.utils import softmax
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Active inference implementation based on the free energy principle."""
 
@@ -308,7 +266,7 @@ class ActiveInferenceAgent:
         self.likelihood = model  # Alias for compatibility
         self.logger.debug("Set observation model")
 
-    def predict(self, observation: Optional[dict[str, Any]] = None) -> dict[str, float]:
+    def predict(self, observation: dict[str, Any] | None = None) -> dict[str, float]:
         """Predict state distribution given observation.
 
         Args:
@@ -341,7 +299,7 @@ class ActiveInferenceAgent:
 
         return updated_beliefs
 
-    def select_action(self, state: Optional[dict[str, Any]] = None) -> str:
+    def select_action(self, state: dict[str, Any] | None = None) -> str:
         """Select action based on expected free energy.
 
         Args:
@@ -417,7 +375,7 @@ class ActiveInferenceAgent:
         self.logger.debug("Updated beliefs")
 
     def compute_free_energy(
-        self, beliefs: Optional[BeliefState] = None, observations: Optional[dict[str, Any]] = None
+        self, beliefs: BeliefState | None = None, observations: dict[str, Any] | None = None
     ) -> float:
         """Compute variational free energy.
 

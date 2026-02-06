@@ -1,25 +1,4 @@
 from pathlib import Path
-import os
-
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 """
@@ -72,12 +51,12 @@ This module contains the **automation scripts** and **CLI entry points** for the
 def fix_script_specs(root_dir):
     root = Path(root_dir)
     count = 0
-    
+
     for path in root.iterdir():
         if path.is_dir() and not path.name.startswith(('.', '__')):
             spec_path = path / "SPEC.md"
             module_name = path.name
-            
+
             # Check if it needs fixing (small size or placeholder text)
             should_fix = False
             if not spec_path.exists():
@@ -89,13 +68,13 @@ def fix_script_specs(root_dir):
                     should_fix = True
                 elif len(content) < 500: # Very small files
                     should_fix = True
-            
+
             if should_fix:
                 print(f"Fixing {module_name} SPEC.md...")
                 new_content = WRAPPER_TEMPLATE.format(module_name=module_name)
                 spec_path.write_text(new_content, encoding='utf-8')
                 count += 1
-    
+
     print(f"Fixed {count} files.")
 
 if __name__ == "__main__":

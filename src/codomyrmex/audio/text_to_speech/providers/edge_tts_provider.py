@@ -15,11 +15,8 @@ Requirements:
 """
 
 import asyncio
-import io
-import tempfile
 import time
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.audio.exceptions import (
     ProviderNotAvailableError,
@@ -139,7 +136,7 @@ class EdgeTTSProvider(TTSProvider):
     def synthesize(
         self,
         text: str,
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
     ) -> SynthesisResult:
         """Synthesize speech from text (synchronous wrapper).
 
@@ -157,7 +154,7 @@ class EdgeTTSProvider(TTSProvider):
     async def synthesize_async(
         self,
         text: str,
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
     ) -> SynthesisResult:
         """Synthesize speech from text asynchronously.
 
@@ -250,7 +247,7 @@ class EdgeTTSProvider(TTSProvider):
         self,
         text: str,
         output_path: str | Path,
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
     ) -> Path:
         """Synthesize speech directly to a file.
 
@@ -283,7 +280,7 @@ class EdgeTTSProvider(TTSProvider):
 
     def list_voices(
         self,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> list[VoiceInfo]:
         """List available voices.
 
@@ -306,7 +303,7 @@ class EdgeTTSProvider(TTSProvider):
 
     async def list_voices_async(
         self,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> list[VoiceInfo]:
         """List available voices asynchronously.
 
@@ -325,7 +322,7 @@ class EdgeTTSProvider(TTSProvider):
             ]
         return self._voices.copy()
 
-    def get_voice(self, voice_id: str) -> Optional[VoiceInfo]:
+    def get_voice(self, voice_id: str) -> VoiceInfo | None:
         """Get information about a specific voice.
 
         Args:

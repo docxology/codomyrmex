@@ -6,11 +6,9 @@ using various TTS providers.
 
 import asyncio
 from pathlib import Path
-from typing import Optional
 
-from codomyrmex.audio.exceptions import ProviderNotAvailableError
 
-from .models import AudioFormat, SynthesisResult, TTSConfig, VoiceInfo
+from .models import SynthesisResult, TTSConfig, VoiceInfo
 from .providers import TTSProvider, get_provider
 
 
@@ -43,7 +41,7 @@ class Synthesizer:
     def __init__(
         self,
         provider: str = "pyttsx3",
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize the synthesizer.
@@ -69,7 +67,7 @@ class Synthesizer:
     def synthesize(
         self,
         text: str,
-        voice: Optional[str] = None,
+        voice: str | None = None,
         rate: float = 1.0,
         pitch: float = 1.0,
         volume: float = 1.0,
@@ -107,7 +105,7 @@ class Synthesizer:
     async def synthesize_async(
         self,
         text: str,
-        voice: Optional[str] = None,
+        voice: str | None = None,
         rate: float = 1.0,
         pitch: float = 1.0,
         volume: float = 1.0,
@@ -140,7 +138,7 @@ class Synthesizer:
         self,
         text: str,
         output_path: str | Path,
-        voice: Optional[str] = None,
+        voice: str | None = None,
         rate: float = 1.0,
         **kwargs: object,
     ) -> Path:
@@ -163,7 +161,7 @@ class Synthesizer:
         self,
         text: str,
         output_path: str | Path,
-        voice: Optional[str] = None,
+        voice: str | None = None,
         rate: float = 1.0,
         **kwargs: object,
     ) -> Path:
@@ -185,7 +183,7 @@ class Synthesizer:
     def synthesize_batch(
         self,
         texts: list[str],
-        voice: Optional[str] = None,
+        voice: str | None = None,
         **kwargs: object,
     ) -> list[SynthesisResult]:
         """Synthesize multiple texts.
@@ -207,7 +205,7 @@ class Synthesizer:
     async def synthesize_batch_async(
         self,
         texts: list[str],
-        voice: Optional[str] = None,
+        voice: str | None = None,
         max_concurrent: int = 5,
         **kwargs: object,
     ) -> list[SynthesisResult]:
@@ -233,7 +231,7 @@ class Synthesizer:
 
     def list_voices(
         self,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> list[VoiceInfo]:
         """List available voices.
 
@@ -245,7 +243,7 @@ class Synthesizer:
         """
         return self._provider.list_voices(language)
 
-    def get_voice(self, voice_id: str) -> Optional[VoiceInfo]:
+    def get_voice(self, voice_id: str) -> VoiceInfo | None:
         """Get information about a specific voice.
 
         Args:

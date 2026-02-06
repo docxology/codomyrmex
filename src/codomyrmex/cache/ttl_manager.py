@@ -1,20 +1,20 @@
 """TTL manager for periodic cache cleanup."""
 
-import time
-import threading
-from typing import Dict, Set, Optional, Any
 import logging
+import threading
+import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 class TTLManager:
     """Periodically cleans up expired keys from a cache."""
-    
+
     def __init__(self, cleanup_interval: int = 60):
         self.cleanup_interval = cleanup_interval
-        self._cache_registry: Set[Any] = set()
+        self._cache_registry: set[Any] = set()
         self._stop_event = threading.Event()
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
 
     def register_cache(self, cache: Any):
         """Register a cache instance for periodic cleanup."""
@@ -26,7 +26,7 @@ class TTLManager:
         """Start the cleanup thread."""
         if self._thread and self._thread.is_alive():
             return
-            
+
         self._stop_event.clear()
         self._thread = threading.Thread(target=self._run, daemon=True)
         self._thread.start()

@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Extractor for FPF patterns, concepts, and relationships.
 
 
@@ -8,9 +8,15 @@ from parsed FPF specifications.
 """
 
 import re
-from typing import Dict, List, Optional
 
-from .models import Concept, ConceptType, FPFSpec, Pattern, Relationship, RelationshipType
+from .models import (
+    Concept,
+    ConceptType,
+    FPFSpec,
+    Pattern,
+    Relationship,
+    RelationshipType,
+)
 
 
 class FPFExtractor:
@@ -24,7 +30,7 @@ class FPFExtractor:
             r"`?([A-Z][a-zA-Z0-9]*(?:\.[A-Z][a-zA-Z0-9]*)*)`?"
         )
 
-    def extract_patterns(self, spec: FPFSpec) -> List[Pattern]:
+    def extract_patterns(self, spec: FPFSpec) -> list[Pattern]:
         """Extract all patterns from the specification.
 
         Args:
@@ -37,7 +43,7 @@ class FPFExtractor:
         # This method can be used for post-processing
         return spec.patterns
 
-    def extract_concepts(self, spec: FPFSpec) -> List[Concept]:
+    def extract_concepts(self, spec: FPFSpec) -> list[Concept]:
         """Extract all concepts from the specification.
 
         Args:
@@ -86,7 +92,7 @@ class FPFExtractor:
 
         return concepts
 
-    def extract_relationships(self, spec: FPFSpec) -> List[Relationship]:
+    def extract_relationships(self, spec: FPFSpec) -> list[Relationship]:
         """Extract relationships between patterns.
 
         Args:
@@ -177,7 +183,7 @@ class FPFExtractor:
 
         return relationships
 
-    def extract_keywords(self, spec: FPFSpec) -> Dict[str, List[str]]:
+    def extract_keywords(self, spec: FPFSpec) -> dict[str, list[str]]:
         """Extract keywords indexed by pattern ID.
 
         Args:
@@ -191,7 +197,7 @@ class FPFExtractor:
             keywords[pattern.id] = pattern.keywords
         return keywords
 
-    def extract_dependencies(self, spec: FPFSpec) -> Dict[str, Dict[str, List[str]]]:
+    def extract_dependencies(self, spec: FPFSpec) -> dict[str, dict[str, list[str]]]:
         """Extract dependency graph.
 
         Args:
@@ -205,7 +211,7 @@ class FPFExtractor:
             dependencies[pattern.id] = pattern.dependencies
         return dependencies
 
-    def _extract_u_types(self, pattern: Pattern) -> List[str]:
+    def _extract_u_types(self, pattern: Pattern) -> list[str]:
         """Extract U.Type names from a pattern.
 
         Args:
@@ -223,7 +229,7 @@ class FPFExtractor:
 
         return list(u_types)
 
-    def _extract_other_concepts(self, pattern: Pattern) -> List[tuple[str, ConceptType]]:
+    def _extract_other_concepts(self, pattern: Pattern) -> list[tuple[str, ConceptType]]:
         """Extract other concepts (not U.Types) from a pattern.
 
         Args:
@@ -285,7 +291,7 @@ class FPFExtractor:
 
         return ""
 
-    def _find_references(self, spec: FPFSpec, concept_name: str) -> List[str]:
+    def _find_references(self, spec: FPFSpec, concept_name: str) -> list[str]:
         """Find patterns that reference a concept.
 
         Args:

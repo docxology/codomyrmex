@@ -1,48 +1,66 @@
-# AI Agent Guidelines - Observability Dashboard
+# Agent Guidelines - Observability Dashboard
 
-**Module**: `codomyrmex.observability_dashboard`  
-**Version**: v0.1.0  
-**Status**: Active
+## Module Overview
 
-## Purpose
+Metrics collection, alerting, and dashboard visualization.
 
-Unified dashboards for telemetry visualization and monitoring
+## Key Classes
+
+- **MetricCollector** — Collect and store metrics with retention
+- **AlertManager** — Define rules and fire alerts
+- **DashboardManager** — Create and manage dashboards
+- **Dashboard** — Dashboard with panels
+- **Panel** — Visualization panel
 
 ## Agent Instructions
 
-When working with this module:
+1. **Use semantic metric names** — Name like `http_requests_total` not `counter1`
+2. **Add labels sparingly** — Labels create cardinality; use for dimensions
+3. **Set appropriate retention** — Balance memory vs history needs
+4. **Define alerts early** — Set up rules before collecting metrics
+5. **Cleanup old data** — Call `collector.cleanup_old()` periodically
 
-### Key Patterns
+## Common Patterns
 
-1. **Import Convention**:
-   ```python
-   from codomyrmex.observability_dashboard import <specific_import>
-   ```
+```python
+from codomyrmex.observability_dashboard import (
+    MetricCollector, AlertManager, DashboardManager, PanelType
+)
 
-2. **Error Handling**: Always handle exceptions gracefully
-3. **Configuration**: Check for required environment variables
+# Set up observability stack
+collector = MetricCollector(retention_minutes=60)
+alerts = AlertManager()
+dashboards = DashboardManager(collector)
 
-### Common Operations
+# Record metrics
+collector.record("api_latency_ms", 45.2, labels={"endpoint": "/users"})
 
-- Operation 1: Description
-- Operation 2: Description
+# Alert on high latency
+alerts.add_rule(
+    name="slow_api",
+    condition=lambda m: m.get("api_latency_ms", 0) > 100,
+    message="API is slow"
+)
 
-### Integration Points
+# Create dashboard
+dash = dashboards.create("API Metrics")
+```
 
-- Integrates with: `None` (parent module)
-- Dependencies: Listed in `__init__.py`
+## Testing Patterns
 
-## File Reference
+```python
+# Verify metric recording
+collector = MetricCollector()
+collector.record("test", 42.0)
+assert collector.get_latest("test").value == 42.0
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module exports and initialization |
-| `README.md` | User documentation |
-| `SPEC.md` | Technical specification |
+# Verify alert firing
+alerts = AlertManager()
+alerts.add_rule("high", lambda m: m.get("v", 0) > 10, "High")
+new = alerts.check({"v": 15})
+assert len(new) == 1
+```
 
-## Troubleshooting
+## Navigation
 
-Common issues and solutions:
-
-1. **Issue**: Description
-   **Solution**: Resolution steps
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

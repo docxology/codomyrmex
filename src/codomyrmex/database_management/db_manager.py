@@ -8,12 +8,12 @@ import sqlite3
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, Generator, List, Optional, Tuple
+from enum import Enum
+from typing import Any
+from collections.abc import Generator
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-from enum import Enum, auto
 
 logger = get_logger(__name__)
 
@@ -32,11 +32,11 @@ class DatabaseType(Enum):
 class QueryResult:
     """Result of a query execution."""
     success: bool
-    rows: List[Tuple]
-    columns: List[str]
+    rows: list[tuple]
+    columns: list[str]
     row_count: int
     execution_time: float
-    error_message: Optional[str] = None
+    error_message: str | None = None
 
     @property
     def valid(self) -> bool:
@@ -58,7 +58,7 @@ class DatabaseConnection:
     connection_pool_size: int = 10
     connection_timeout: int = 30
     max_retries: int = 3
-    connection_string: Optional[str] = None
+    connection_string: str | None = None
     created_at: datetime = field(default_factory=datetime.now)
     _connection: Any = None
     connection_count: int = 0
@@ -101,25 +101,25 @@ class DatabaseConnection:
             self._connection.close()
             self._connection = None
 
-    def execute_query(self, query: str, params: Optional[Tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(self, query: str, params: tuple | None = None) -> list[dict[str, Any]]:
         """Execute a query and return results as list of dicts."""
         if not self._connection:
             self.connect()
-        
+
         cursor = self._connection.cursor()
         if params:
             cursor.execute(query, params)
         else:
             cursor.execute(query)
-        
+
         if cursor.description:
             columns = [desc[0] for desc in cursor.description]
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
+
         self._connection.commit()
         return []
 
-    def get_database_info(self) -> Dict[str, Any]:
+    def get_database_info(self) -> dict[str, Any]:
         """Get database information."""
         return {
             "name": self.name,
@@ -128,7 +128,7 @@ class DatabaseConnection:
             "tables": [] if not self._connection else [] # Simplified
         }
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Check database health."""
         return {
             "status": "healthy" if self._connection else "unhealthy",
@@ -140,10 +140,10 @@ class DatabaseConnection:
 class DatabaseManager:
     """Database connection and query management."""
 
-    def __init__(self, database_url: Optional[str] = None):
+    def __init__(self, database_url: str | None = None):
         """Initialize database manager."""
         self.database_url = database_url
-        self.connections: Dict[str, DatabaseConnection] = {}
+        self.connections: dict[str, DatabaseConnection] = {}
 
     def add_connection(self, connection: DatabaseConnection):
         """Add a database connection."""
@@ -154,11 +154,11 @@ class DatabaseManager:
         if name in self.connections:
             del self.connections[name]
 
-    def get_connection(self, name: str) -> Optional[DatabaseConnection]:
+    def get_connection(self, name: str) -> DatabaseConnection | None:
         """Get a database connection."""
         return self.connections.get(name)
 
-    def list_connections(self) -> List[str]:
+    def list_connections(self) -> list[str]:
         """List all connection names."""
         return list(self.connections.keys())
 
@@ -172,18 +172,18 @@ class DatabaseManager:
         for conn in self.connections.values():
             conn.disconnect()
 
-    def execute_query(self, name: str, query: str, params: Optional[Tuple] = None) -> List[Dict[str, Any]]:
+    def execute_query(self, name: str, query: str, params: tuple | None = None) -> list[dict[str, Any]]:
         """Execute query on a specific connection."""
         conn = self.get_connection(name)
         if not conn:
             raise ValueError(f"Database connection not found: {name}")
         return conn.execute_query(query, params)
 
-    def health_check_all(self) -> Dict[str, Dict[str, Any]]:
+    def health_check_all(self) -> dict[str, dict[str, Any]]:
         """Check health of all connections."""
         return {name: conn.health_check() for name, conn in self.connections.items()}
 
-    def get_database_stats(self) -> Dict[str, Any]:
+    def get_database_stats(self) -> dict[str, Any]:
         """Get overall database statistics."""
         return {
             "total_connections": len(self.connections),
@@ -206,7 +206,7 @@ class DatabaseManager:
             raise ValueError(f"Database connection not found: {connection_name}")
         return True
 
-    def connect(self, database_url: Optional[str] = None) -> DatabaseConnection:
+    def connect(self, database_url: str | None = None) -> DatabaseConnection:
         """Establish a database connection."""
         url = database_url or self.database_url
         if not url:
@@ -232,17 +232,17 @@ class DatabaseManager:
         logger.info(f"Connected to {db_type} database: {db_name}")
         return connection_info
 
-    def disconnect(self, connection_id: Optional[str] = None):
+    def disconnect(self, connection_id: str | None = None):
         """Close database connection."""
         if self._connection:
             self._connection.close()
             self._connection = None
             logger.info("Database connection closed")
 
-    def execute(self, query: str, params: Optional[Tuple] = None) -> QueryResult:
+    def execute(self, query: str, params: tuple | None = None) -> QueryResult:
         """Execute a query."""
         import time
-        
+
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
 
@@ -285,10 +285,10 @@ class DatabaseManager:
                 error_message=str(e)
             )
 
-    def execute_many(self, query: str, params_list: List[Tuple]) -> QueryResult:
+    def execute_many(self, query: str, params_list: list[tuple]) -> QueryResult:
         """Execute a query with multiple parameter sets."""
         import time
-        
+
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
 
@@ -333,7 +333,7 @@ class DatabaseManager:
             logger.error(f"Transaction rolled back: {e}")
             raise
 
-    def get_tables(self) -> List[str]:
+    def get_tables(self) -> list[str]:
         """Get list of tables in the database."""
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
@@ -343,7 +343,7 @@ class DatabaseManager:
         )
         return [row[0] for row in result.rows]
 
-    def get_table_info(self, table_name: str) -> List[Dict[str, Any]]:
+    def get_table_info(self, table_name: str) -> list[dict[str, Any]]:
         """Get column information for a table."""
         if not self._connection:
             raise CodomyrmexError("Not connected to database")
@@ -369,7 +369,7 @@ def connect_database(database_url: str) -> DatabaseManager:
     manager.connect()
     return manager
 
-def execute_query(database_url: str, query: str, params: Optional[Tuple] = None) -> QueryResult:
+def execute_query(database_url: str, query: str, params: tuple | None = None) -> QueryResult:
     """Convenience function to execute a single query."""
     manager = DatabaseManager(database_url)
     manager.connect()
@@ -379,12 +379,12 @@ def execute_query(database_url: str, query: str, params: Optional[Tuple] = None)
         manager.disconnect()
 
 
-def manage_databases(database_url: Optional[str] = None) -> DatabaseManager:
+def manage_databases(database_url: str | None = None) -> DatabaseManager:
     """Create and return a DatabaseManager instance for database administration.
-    
+
     Args:
         database_url: Optional database URL. If provided, connects automatically.
-        
+
     Returns:
         DatabaseManager instance ready for use.
     """

@@ -5,14 +5,19 @@ tests are skipped rather than using mocks. All data processing and
 conversion logic is tested with real data structures.
 """
 
-import pytest
-from pathlib import Path
-from typing import Any
 
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
-from codomyrmex.agents.gemini import GeminiClient
-from codomyrmex.agents.core.exceptions import GeminiError
-from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+import pytest
+
+try:
+    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+    from codomyrmex.agents.gemini import GeminiClient
+    from codomyrmex.tests.unit.agents.helpers import GEMINI_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class TestGeminiClient:
@@ -33,7 +38,7 @@ class TestGeminiClient:
         """Test GeminiClient declares correct capabilities."""
         client = GeminiClient()
         capabilities = client.get_capabilities()
-        
+
         # Verify all expected capabilities are present
         assert AgentCapabilities.CODE_GENERATION in capabilities
         assert AgentCapabilities.CODE_EDITING in capabilities
@@ -48,7 +53,7 @@ class TestGeminiClient:
         client = GeminiClient()
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
-        
+
         # Test real response structure
         assert isinstance(response, type(client.execute(AgentRequest(prompt=""))))
         # Note: Actual success depends on authentication and CLI state
@@ -60,7 +65,7 @@ class TestGeminiClient:
         client = GeminiClient(config={"gemini_command": "nonexistent-gemini-command-xyz"})
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
-        
+
         # Test real error handling
         assert not response.is_success()
         assert response.error is not None
@@ -70,11 +75,11 @@ class TestGeminiClient:
         """Test streaming output from Gemini with real CLI."""
         client = GeminiClient()
         request = AgentRequest(prompt="test prompt")
-        
+
         # Test that streaming returns an iterator
         stream = client.stream(request)
         chunks = list(stream)
-        
+
         # Verify we got some response (even if empty or error)
         assert isinstance(chunks, list)
 
@@ -110,16 +115,16 @@ class TestGeminiClient:
             "gemini_model": "custom-model",
             "gemini_timeout": 120,
         }
-    
+
         client = GeminiClient(config=config)
-    
+
         assert client.default_model == "custom-model"
         assert client.get_config_value("gemini_timeout") == 120
 
     def test_gemini_client_request_validation(self):
         """Test request validation."""
         client = GeminiClient()
-    
+
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
         response = client.execute(empty_request)

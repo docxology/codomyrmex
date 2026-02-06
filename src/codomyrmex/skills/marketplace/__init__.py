@@ -20,7 +20,7 @@ __version__ = "0.1.0"
 class SkillMarketplace:
     """Discovers and installs skills from remote sources."""
 
-    def __init__(self, sources: Optional[List[Dict[str, str]]] = None):
+    def __init__(self, sources: list[dict[str, str]] | None = None):
         """
         Initialize SkillMarketplace.
 
@@ -35,9 +35,9 @@ class SkillMarketplace:
                 "type": "git",
             }
         ]
-        self._installed: Dict[str, Dict[str, Any]] = {}
+        self._installed: dict[str, dict[str, Any]] = {}
 
-    def search_remote(self, query: str) -> List[Dict[str, Any]]:
+    def search_remote(self, query: str) -> list[dict[str, Any]]:
         """
         Search remote skill sources for matching skills.
 
@@ -59,7 +59,7 @@ class SkillMarketplace:
             })
         return results
 
-    def install(self, skill_id: str, source: Optional[str] = None) -> Dict[str, Any]:
+    def install(self, skill_id: str, source: str | None = None) -> dict[str, Any]:
         """
         Install a skill from a remote source.
 
@@ -80,7 +80,7 @@ class SkillMarketplace:
             "message": "Remote installation requires network access and is not yet implemented",
         }
 
-    def list_sources(self) -> List[Dict[str, str]]:
+    def list_sources(self) -> list[dict[str, str]]:
         """
         List configured remote sources.
 

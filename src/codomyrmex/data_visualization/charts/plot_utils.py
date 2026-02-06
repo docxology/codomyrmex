@@ -8,9 +8,9 @@ Provides shared utility functions for chart generation including:
 - Theme integration
 """
 
-import matplotlib.pyplot as plt
-from pathlib import Path
 import logging
+from pathlib import Path
+
 
 # Try to import from codomyrmex logging, fallback to standard logging
 try:
@@ -178,7 +178,7 @@ def apply_theme_to_axes(ax, theme_name):
         The styled axes object.
     """
     try:
-        from ..themes import get_theme, apply_theme, ThemeName
+        from ..themes import ThemeName, apply_theme, get_theme
         if isinstance(theme_name, str):
             theme_name = ThemeName(theme_name)
         theme = get_theme(theme_name)

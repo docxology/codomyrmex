@@ -1,51 +1,7 @@
-from datetime import datetime
-from typing import Optional
-
 from dataclasses import dataclass
+from datetime import datetime
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Physical surveillance monitoring."""
 
@@ -55,7 +11,7 @@ logger = get_logger(__name__)
 @dataclass
 class PhysicalEvent:
     """Represents a physical security event."""
-    
+
     event_id: str
     event_type: str  # access, movement, alarm, etc.
     location: str
@@ -66,12 +22,12 @@ class PhysicalEvent:
 
 class SurveillanceMonitor:
     """Monitors physical security events."""
-    
+
     def __init__(self):
 
         self.events: list[PhysicalEvent] = []
         logger.info("SurveillanceMonitor initialized")
-    
+
     def log_event(
         self,
         event_type: str,
@@ -91,7 +47,7 @@ class SurveillanceMonitor:
         self.events.append(event)
         logger.info(f"Logged {severity} event: {event_type} at {location}")
         return event
-    
+
     def monitor_physical_access(self, location: str, user_id: str) -> PhysicalEvent:
         """Monitor physical access event."""
         return self.log_event(
@@ -105,7 +61,7 @@ class SurveillanceMonitor:
 def monitor_physical_access(
     location: str,
     user_id: str,
-    monitor: Optional[SurveillanceMonitor] = None,
+    monitor: SurveillanceMonitor | None = None,
 ) -> PhysicalEvent:
     """Monitor physical access."""
     if monitor is None:
@@ -118,7 +74,7 @@ def log_physical_event(
     location: str,
     description: str,
     severity: str = "medium",
-    monitor: Optional[SurveillanceMonitor] = None,
+    monitor: SurveillanceMonitor | None = None,
 ) -> PhysicalEvent:
     """Log a physical event."""
     if monitor is None:

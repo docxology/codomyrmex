@@ -40,27 +40,26 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Exception hierarchy
-from .exceptions import (
-    InfomaniakCloudError,
-    InfomaniakAuthError,
-    InfomaniakNotFoundError,
-    InfomaniakConflictError,
-    InfomaniakQuotaExceededError,
-    InfomaniakConnectionError,
-    InfomaniakTimeoutError,
-    classify_openstack_error,
-    classify_http_error,
-)
-
-# Base classes
-from .base import InfomaniakOpenStackBase, InfomaniakS3Base, InfomaniakRESTBase
-
 # Core authentication
 from .auth import (
     InfomaniakCredentials,
     InfomaniakS3Credentials,
     create_openstack_connection,
     create_s3_client,
+)
+
+# Base classes
+from .base import InfomaniakOpenStackBase, InfomaniakRESTBase, InfomaniakS3Base
+from .exceptions import (
+    InfomaniakAuthError,
+    InfomaniakCloudError,
+    InfomaniakConflictError,
+    InfomaniakConnectionError,
+    InfomaniakNotFoundError,
+    InfomaniakQuotaExceededError,
+    InfomaniakTimeoutError,
+    classify_http_error,
+    classify_openstack_error,
 )
 
 # Direct imports for type checking and direct access

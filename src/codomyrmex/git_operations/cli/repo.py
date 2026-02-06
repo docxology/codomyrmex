@@ -1,19 +1,19 @@
-from pathlib import Path
 import argparse
 import traceback
+from pathlib import Path
 
+from codomyrmex.git_operations.core.git import (
+    add_remote,
+    clean_repository,
+    list_remotes,
+    prune_remote,
+    remove_remote,
+)
 from codomyrmex.git_operations.core.repository import (
     RepositoryManager,
     RepositoryType,
 )
 from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.git_operations.core.git import (
-    add_remote,
-    remove_remote,
-    list_remotes,
-    prune_remote,
-    clean_repository,
-)
 
 logger = get_logger(__name__)
 
@@ -296,7 +296,7 @@ def cmd_clean(manager: RepositoryManager, args) -> None:
     if not repo:
         print(f"❌ Repository '{args.repository}' not found")
         return
-    
+
     local_path = str(manager.get_local_path(repo))
     if args.path:
         local_path = args.path

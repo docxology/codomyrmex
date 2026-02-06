@@ -1,33 +1,8 @@
-from pathlib import Path
-from typing import Optional, Union
-import json
 import json
 import os
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Configuration management for Language Models module."""
 
@@ -83,14 +58,14 @@ class LLMConfig:
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        top_p: Optional[float] = None,
-        top_k: Optional[int] = None,
-        timeout: Optional[int] = None,
-        base_url: Optional[str] = None,
-        output_root: Optional[Union[str, Path]] = None,
+        model: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
+        top_p: float | None = None,
+        top_k: int | None = None,
+        timeout: int | None = None,
+        base_url: str | None = None,
+        output_root: str | Path | None = None,
     ):
         """
         Initialize LLM configuration with optional overrides.
@@ -211,7 +186,7 @@ class LLMConfig:
             "reports_dir": str(self.reports_dir),
         }
 
-    def save_config(self, filepath: Optional[Union[str, Path]] = None):
+    def save_config(self, filepath: str | Path | None = None):
         """
         Save configuration to JSON file.
 
@@ -238,7 +213,7 @@ class LLMConfig:
             json.dump(core_config, f, indent=2, ensure_ascii=False)
 
     @classmethod
-    def from_file(cls, filepath: Union[str, Path]) -> "LLMConfig":
+    def from_file(cls, filepath: str | Path) -> "LLMConfig":
         """
         Load configuration from JSON file.
 
@@ -267,7 +242,7 @@ class LLMConfig:
 
 
 # Global configuration instance
-_config_instance: Optional[LLMConfig] = None
+_config_instance: LLMConfig | None = None
 
 
 def get_config() -> LLMConfig:

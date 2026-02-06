@@ -44,36 +44,35 @@ Quick Start:
 __version__ = "0.1.0"
 
 # Import exceptions
-from .exceptions import (
-    VideoError,
-    VideoReadError,
-    VideoWriteError,
-    VideoProcessingError,
-    FrameExtractionError,
-    AudioExtractionError,
-    UnsupportedFormatError,
-    VideoAnalysisError,
-)
-
 # Import configuration
 from .config import (
     VideoConfig,
-    get_config,
-    set_config,
-    reset_config,
     configure,
+    get_config,
+    reset_config,
+    set_config,
+)
+from .exceptions import (
+    AudioExtractionError,
+    FrameExtractionError,
+    UnsupportedFormatError,
+    VideoAnalysisError,
+    VideoError,
+    VideoProcessingError,
+    VideoReadError,
+    VideoWriteError,
 )
 
 # Import models
 from .models import (
-    FilterType,
-    VideoCodec,
-    AudioCodec,
-    VideoInfo,
-    ProcessingResult,
-    ExtractionResult,
-    VideoComparison,
     PIL_AVAILABLE,
+    AudioCodec,
+    ExtractionResult,
+    FilterType,
+    ProcessingResult,
+    VideoCodec,
+    VideoComparison,
+    VideoInfo,
 )
 
 # Import processing

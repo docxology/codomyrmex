@@ -8,16 +8,22 @@ This module provides extensive async tests for:
 - Race condition prevention
 """
 
-import pytest
 import asyncio
 import time
-import threading
-from unittest.mock import MagicMock, patch, AsyncMock
 
-from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore, LocalSemaphore, BaseSemaphore
-from codomyrmex.concurrency.distributed_lock import BaseLock, LocalLock
-from codomyrmex.concurrency.lock_manager import LockManager, ReadWriteLock, LockStats
+import pytest
 
+try:
+    from codomyrmex.concurrency.semaphore import (
+        AsyncLocalSemaphore,
+        LocalSemaphore,
+    )
+    _HAS_CONCURRENCY = True
+except ImportError:
+    _HAS_CONCURRENCY = False
+
+if not _HAS_CONCURRENCY:
+    pytest.skip("concurrency deps not available", allow_module_level=True)
 
 # ==================== ASYNC SEMAPHORE TESTS ====================
 

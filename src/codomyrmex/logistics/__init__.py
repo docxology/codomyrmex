@@ -14,6 +14,8 @@ Submodules:
 - tracking: Progress and status tracking
 """
 
+# New submodule exports
+from . import optimization, resources, routing, tracking
 from .orchestration import (
     OrchestrationEngine,
     OrchestrationSession,
@@ -31,12 +33,6 @@ from .schedule import (
     TimezoneManager,
 )
 from .task import Job, JobScheduler, Queue
-
-# New submodule exports
-from . import routing
-from . import optimization
-from . import resources
-from . import tracking
 
 __version__ = "0.1.0"
 

@@ -11,9 +11,8 @@ Environment Variables:
 
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-import requests
 
 from ..base import InfomaniakRESTBase
 from ..exceptions import classify_http_error
@@ -81,7 +80,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         """Build full API URL."""
         return f"{self._base_url}/1/newsletters/{self._newsletter_id}/{path}"
 
-    def _get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Optional[Any]:
+    def _get(self, path: str, params: dict[str, Any] | None = None) -> Any | None:
         """Perform GET request."""
         try:
             resp = self._session.get(self._url(path), params=params)
@@ -95,7 +94,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
             logger.error("GET %s failed: %s", path, classified)
             return None
 
-    def _post(self, path: str, json_data: Optional[Dict[str, Any]] = None) -> Optional[Any]:
+    def _post(self, path: str, json_data: dict[str, Any] | None = None) -> Any | None:
         """Perform POST request."""
         try:
             resp = self._session.post(self._url(path), json=json_data)
@@ -109,7 +108,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
             logger.error("POST %s failed: %s", path, classified)
             return None
 
-    def _put(self, path: str, json_data: Optional[Dict[str, Any]] = None) -> Optional[Any]:
+    def _put(self, path: str, json_data: dict[str, Any] | None = None) -> Any | None:
         """Perform PUT request."""
         try:
             resp = self._session.put(self._url(path), json=json_data)
@@ -140,7 +139,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # Campaigns
     # ------------------------------------------------------------------
 
-    def list_campaigns(self) -> List[Dict[str, Any]]:
+    def list_campaigns(self) -> list[dict[str, Any]]:
         """List all campaigns."""
         result = self._get("campaigns")
         if isinstance(result, list):
@@ -149,7 +148,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
             return result.get("items", result.get("data", []))
         return []
 
-    def get_campaign(self, campaign_id: str) -> Optional[Dict[str, Any]]:
+    def get_campaign(self, campaign_id: str) -> dict[str, Any] | None:
         """Get campaign details."""
         return self._get(f"campaigns/{campaign_id}")
 
@@ -160,7 +159,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         sender_name: str,
         content_html: str,
         mailing_list_id: str,
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a new campaign."""
         payload = {
             "subject": subject,
@@ -171,7 +170,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         }
         return self._post("campaigns", json_data=payload)
 
-    def update_campaign(self, campaign_id: str, **kwargs: Any) -> Optional[Dict[str, Any]]:
+    def update_campaign(self, campaign_id: str, **kwargs: Any) -> dict[str, Any] | None:
         """Update a campaign. Pass keyword arguments for fields to update."""
         return self._put(f"campaigns/{campaign_id}", json_data=kwargs)
 
@@ -210,7 +209,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         result = self._post(f"campaigns/{campaign_id}/send")
         return result is not None
 
-    def get_campaign_statistics(self, campaign_id: str) -> Optional[Dict[str, Any]]:
+    def get_campaign_statistics(self, campaign_id: str) -> dict[str, Any] | None:
         """Get campaign statistics (opens, clicks, bounces, etc.)."""
         return self._get(f"campaigns/{campaign_id}/statistics")
 
@@ -218,7 +217,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # Mailing Lists
     # ------------------------------------------------------------------
 
-    def list_mailing_lists(self) -> List[Dict[str, Any]]:
+    def list_mailing_lists(self) -> list[dict[str, Any]]:
         """List all mailing lists."""
         result = self._get("mailing-lists")
         if isinstance(result, list):
@@ -227,15 +226,15 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
             return result.get("items", result.get("data", []))
         return []
 
-    def get_mailing_list(self, list_id: str) -> Optional[Dict[str, Any]]:
+    def get_mailing_list(self, list_id: str) -> dict[str, Any] | None:
         """Get mailing list details."""
         return self._get(f"mailing-lists/{list_id}")
 
-    def create_mailing_list(self, name: str) -> Optional[Dict[str, Any]]:
+    def create_mailing_list(self, name: str) -> dict[str, Any] | None:
         """Create a new mailing list."""
         return self._post("mailing-lists", json_data={"name": name})
 
-    def update_mailing_list(self, list_id: str, **kwargs: Any) -> Optional[Dict[str, Any]]:
+    def update_mailing_list(self, list_id: str, **kwargs: Any) -> dict[str, Any] | None:
         """Update a mailing list."""
         return self._put(f"mailing-lists/{list_id}", json_data=kwargs)
 
@@ -243,7 +242,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         """Delete a mailing list."""
         return self._delete(f"mailing-lists/{list_id}")
 
-    def get_list_contacts(self, list_id: str) -> List[Dict[str, Any]]:
+    def get_list_contacts(self, list_id: str) -> list[dict[str, Any]]:
         """Get contacts in a mailing list."""
         result = self._get(f"mailing-lists/{list_id}/contacts")
         if isinstance(result, list):
@@ -253,8 +252,8 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
         return []
 
     def import_contacts(
-        self, list_id: str, contacts: List[Dict[str, Any]]
-    ) -> Optional[Dict[str, Any]]:
+        self, list_id: str, contacts: list[dict[str, Any]]
+    ) -> dict[str, Any] | None:
         """Import contacts into a mailing list.
 
         Args:
@@ -294,11 +293,11 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # Contacts
     # ------------------------------------------------------------------
 
-    def get_contact(self, contact_id: str) -> Optional[Dict[str, Any]]:
+    def get_contact(self, contact_id: str) -> dict[str, Any] | None:
         """Get contact details."""
         return self._get(f"contacts/{contact_id}")
 
-    def update_contact(self, contact_id: str, **kwargs: Any) -> Optional[Dict[str, Any]]:
+    def update_contact(self, contact_id: str, **kwargs: Any) -> dict[str, Any] | None:
         """Update a contact."""
         return self._put(f"contacts/{contact_id}", json_data=kwargs)
 
@@ -310,10 +309,10 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     # Utility
     # ------------------------------------------------------------------
 
-    def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
+    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
         """Check the status of an asynchronous task."""
         return self._get(f"tasks/{task_id}")
 
-    def get_credits(self) -> Optional[Dict[str, Any]]:
+    def get_credits(self) -> dict[str, Any] | None:
         """Get newsletter credit balance."""
         return self._get("credits")

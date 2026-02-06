@@ -1,8 +1,9 @@
 """Tests for the market module (auction + aggregator)."""
 
 import pytest
-from codomyrmex.market.auction import Bid, AuctionRequest, ReverseAuction
+
 from codomyrmex.market.aggregator import DemandAggregator
+from codomyrmex.market.auction import AuctionRequest, Bid, ReverseAuction
 
 
 @pytest.mark.unit

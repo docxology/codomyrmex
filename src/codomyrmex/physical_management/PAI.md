@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Physical Management Context
+# Personal AI Infrastructure — Physical Management Module
 
-**Module**: physical_management
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Physical file and directory management for path resolution, file operations, and filesystem utilities.
+The Physical Management module provides PAI integration for hardware and IoT devices.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Device Discovery
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Find connected devices:
 
-## Key Files
+```python
+from codomyrmex.physical_management import DeviceManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+manager = DeviceManager()
+devices = manager.discover()
 
-## Future Considerations
+for device in devices:
+    print(f"{device.name}: {device.type}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Device Control
+
+Control devices:
+
+```python
+from codomyrmex.physical_management import DeviceManager
+
+manager = DeviceManager()
+device = manager.get("sensor_1")
+data = device.read()
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `DeviceManager` | Device management |
+| `discover` | Find devices |
+| `control` | Control hardware |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -8,10 +8,8 @@ from __future__ import annotations
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-import logging
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
 
 logger = get_logger(__name__)
 

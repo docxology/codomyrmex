@@ -1,5 +1,5 @@
-from typing import Optional, Any
 import logging
+from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -8,7 +8,10 @@ except ImportError:
         return logging.getLogger(name)
 
 try:
-    from codomyrmex.terminal_interface.terminal_utils import CommandRunner, TerminalFormatter
+    from codomyrmex.terminal_interface.terminal_utils import (
+        CommandRunner,
+        TerminalFormatter,
+    )
     TERMINAL_INTERFACE_AVAILABLE = True
 except ImportError:
     TERMINAL_INTERFACE_AVAILABLE = False
@@ -16,14 +19,17 @@ except ImportError:
     CommandRunner = None
 
 try:
-    from codomyrmex.performance.performance_monitor import PerformanceMonitor, monitor_performance
+    from codomyrmex.performance.performance_monitor import (
+        PerformanceMonitor,
+        monitor_performance,
+    )
     PERFORMANCE_MONITORING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_MONITORING_AVAILABLE = False
     PerformanceMonitor = None
     monitor_performance = None
 
-def get_formatter() -> Optional[Any]:
+def get_formatter() -> Any | None:
     """Get TerminalFormatter if available."""
     if TERMINAL_INTERFACE_AVAILABLE:
         return TerminalFormatter()

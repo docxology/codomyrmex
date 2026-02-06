@@ -5,7 +5,6 @@ and metadata from video files.
 """
 
 from pathlib import Path
-from typing import Optional, Union
 
 from codomyrmex.video.exceptions import (
     UnsupportedFormatError,
@@ -67,7 +66,7 @@ class VideoAnalyzer:
                 "No video backend available. Install with: uv sync --extra video"
             )
 
-    def _validate_input(self, video_path: Union[str, Path]) -> Path:
+    def _validate_input(self, video_path: str | Path) -> Path:
         """Validate input video path.
 
         Args:
@@ -90,7 +89,7 @@ class VideoAnalyzer:
 
         return path
 
-    def get_info(self, video_path: Union[str, Path]) -> VideoInfo:
+    def get_info(self, video_path: str | Path) -> VideoInfo:
         """Get complete information about a video file.
 
         Args:
@@ -163,7 +162,7 @@ class VideoAnalyzer:
                 video_path=video_path,
             ) from e
 
-    def get_duration(self, video_path: Union[str, Path]) -> float:
+    def get_duration(self, video_path: str | Path) -> float:
         """Get video duration in seconds.
 
         Args:
@@ -175,7 +174,7 @@ class VideoAnalyzer:
         info = self.get_info(video_path)
         return info.duration
 
-    def get_resolution(self, video_path: Union[str, Path]) -> tuple[int, int]:
+    def get_resolution(self, video_path: str | Path) -> tuple[int, int]:
         """Get video resolution.
 
         Args:
@@ -187,7 +186,7 @@ class VideoAnalyzer:
         info = self.get_info(video_path)
         return (info.width, info.height)
 
-    def get_codec(self, video_path: Union[str, Path]) -> str:
+    def get_codec(self, video_path: str | Path) -> str:
         """Get video codec.
 
         Args:
@@ -199,7 +198,7 @@ class VideoAnalyzer:
         info = self.get_info(video_path)
         return info.video_codec
 
-    def get_fps(self, video_path: Union[str, Path]) -> float:
+    def get_fps(self, video_path: str | Path) -> float:
         """Get video frames per second.
 
         Args:
@@ -211,7 +210,7 @@ class VideoAnalyzer:
         info = self.get_info(video_path)
         return info.fps
 
-    def get_frame_count(self, video_path: Union[str, Path]) -> int:
+    def get_frame_count(self, video_path: str | Path) -> int:
         """Get total number of frames.
 
         Args:
@@ -223,7 +222,7 @@ class VideoAnalyzer:
         info = self.get_info(video_path)
         return info.frame_count
 
-    def has_audio(self, video_path: Union[str, Path]) -> bool:
+    def has_audio(self, video_path: str | Path) -> bool:
         """Check if video has an audio track.
 
         Args:
@@ -245,7 +244,7 @@ class VideoAnalyzer:
             # Return False as we can't determine
             return False
 
-    def is_valid_video(self, video_path: Union[str, Path]) -> bool:
+    def is_valid_video(self, video_path: str | Path) -> bool:
         """Check if file is a valid, readable video.
 
         Args:
@@ -284,8 +283,8 @@ class VideoAnalyzer:
 
     def compare_videos(
         self,
-        video_path1: Union[str, Path],
-        video_path2: Union[str, Path],
+        video_path1: str | Path,
+        video_path2: str | Path,
         duration_tolerance: float = 0.5,
     ) -> VideoComparison:
         """Compare two videos and report differences.
@@ -321,7 +320,7 @@ class VideoAnalyzer:
             },
         )
 
-    def get_aspect_ratio(self, video_path: Union[str, Path]) -> float:
+    def get_aspect_ratio(self, video_path: str | Path) -> float:
         """Get video aspect ratio.
 
         Args:

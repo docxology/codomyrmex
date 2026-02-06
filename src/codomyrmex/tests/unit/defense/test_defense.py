@@ -1,6 +1,7 @@
 """Tests for the defense module (active defense + rabbithole)."""
 
 import pytest
+
 from codomyrmex.defense.active import ActiveDefense
 from codomyrmex.defense.rabbithole import RabbitHole
 
@@ -97,6 +98,5 @@ class TestRabbitHole:
 
     @pytest.mark.asyncio
     async def test_stall(self):
-        import asyncio
         # Just verify it doesn't error with a very short duration
         await self.rh.stall(duration=0.01)

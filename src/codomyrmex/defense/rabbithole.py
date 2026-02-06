@@ -3,9 +3,9 @@
 Provides distraction and containment environments for attackers.
 """
 
-import time
 import asyncio
-from typing import Dict, Any
+import time
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -16,7 +16,7 @@ class RabbitHole:
     """
 
     def __init__(self):
-        self._active_sessions: Dict[str, float] = {} # attacker_id -> start_time
+        self._active_sessions: dict[str, float] = {} # attacker_id -> start_time
 
     def engage(self, attacker_id: str) -> str:
         """
@@ -33,7 +33,7 @@ class RabbitHole:
         """
         if attacker_id not in self._active_sessions:
             return "Connection refused."
-            
+
         # Simulated "infinite loop" or bureaucracy logic
         responses = [
             "Verifying biometrics... 12% complete...",
@@ -41,7 +41,7 @@ class RabbitHole:
             "Compliance Check: Please submit Form 27B-6.",
             "Processing... Processing... Processing..."
         ]
-        
+
         import random
         return random.choice(responses)
 

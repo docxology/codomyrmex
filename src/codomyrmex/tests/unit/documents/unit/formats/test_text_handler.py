@@ -1,8 +1,10 @@
+import unittest
+from unittest.mock import ANY, mock_open, patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, mock_open, ANY
 from codomyrmex.documents.formats.text_handler import read_text, write_text
+
 
 @pytest.mark.unit
 class TestTextHandler(unittest.TestCase):
@@ -31,6 +33,6 @@ class TestTextHandler(unittest.TestCase):
         with patch("builtins.open", new_callable=mock_open) as mock_file:
             with patch('pathlib.Path.mkdir'):
                 write_text("content", "dummy.txt")
-            
+
             mock_file.assert_called_with(ANY, "w", encoding="utf-8")
             mock_file().write.assert_called_with("content")

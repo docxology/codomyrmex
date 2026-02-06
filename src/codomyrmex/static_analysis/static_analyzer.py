@@ -1,6 +1,7 @@
-from pathlib import Path
-from typing import Optional
 import ast
+
+# from performance import monitor_performance, performance_context # Moved to try/except
+import csv
 import json
 import math
 import os
@@ -8,118 +9,12 @@ import re
 import subprocess
 import sys
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-# from performance import monitor_performance, performance_context # Moved to try/except
-
-import csv
+from pathlib import Path
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Comprehensive static analysis functionality for Codomyrmex.
@@ -215,8 +110,8 @@ class AnalysisResult:
     message: str
     rule_id: str
     category: str
-    suggestion: Optional[str] = None
-    context: Optional[str] = None
+    suggestion: str | None = None
+    context: str | None = None
     fix_available: bool = False
     confidence: float = 1.0
 
@@ -231,7 +126,7 @@ class AnalysisSummary:
     by_rule: dict[str, int] = field(default_factory=dict)
     files_analyzed: int = 0
     analysis_time: float = 0.0
-    language: Optional[Language] = None
+    language: Language | None = None
 
 
 @dataclass
@@ -243,8 +138,8 @@ class CodeMetrics:
     maintainability_index: float
     technical_debt: float
     code_duplication: float
-    test_coverage: Optional[float] = None
-    documentation_coverage: Optional[float] = None
+    test_coverage: float | None = None
+    documentation_coverage: float | None = None
 
 
 class StaticAnalyzer:

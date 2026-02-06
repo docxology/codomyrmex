@@ -1,13 +1,9 @@
 """Tree-sitter parsing module for Codomyrmex."""
 
-from .parsers.parser import TreeSitterParser
-from .languages.languages import LanguageManager
-
 # Submodule exports
-from . import parsers
-from . import languages
-from . import queries
-from . import transformers
+from . import languages, parsers, queries, transformers
+from .languages.languages import LanguageManager
+from .parsers.parser import TreeSitterParser
 
 __all__ = [
     "TreeSitterParser",

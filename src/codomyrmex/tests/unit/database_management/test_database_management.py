@@ -14,59 +14,40 @@ This module tests all database management functionality including:
 10. Error handling (connection failures, query errors)
 """
 
-import os
 import sqlite3
-import tempfile
-import time
-from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import MagicMock, patch, PropertyMock
 
 import pytest
 
 from codomyrmex.database_management import (
+    BackupManager,
     DatabaseConnection,
     DatabaseManager,
-    manage_databases,
-    DatabaseMetrics,
-    DatabaseMonitor,
-    monitor_database,
-    optimize_database,
     Migration,
     MigrationManager,
-    run_migrations,
-    Backup,
-    BackupManager,
-    backup_database,
     SchemaDefinition,
     SchemaGenerator,
-    generate_schema,
+    manage_databases,
+    monitor_database,
+    optimize_database,
 )
 from codomyrmex.database_management.db_manager import (
     DatabaseType,
     QueryResult,
-    connect_database,
-    execute_query,
 )
 from codomyrmex.database_management.migration_manager import (
     DatabaseConnector,
-    MigrationResult,
+)
+from codomyrmex.database_management.performance_monitor import (
+    DatabasePerformanceMonitor,
 )
 from codomyrmex.database_management.schema_generator import (
     Column,
     Index,
     SchemaTable,
-    SchemaMigration,
-)
-from codomyrmex.database_management.backup_manager import BackupResult
-from codomyrmex.database_management.performance_monitor import (
-    QueryMetrics,
-    PerformanceAlert,
-    DatabasePerformanceMonitor,
 )
 from codomyrmex.exceptions import CodomyrmexError
-
 
 # ==============================================================================
 # Connection Management Tests

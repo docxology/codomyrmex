@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - System Discovery Context
+# Personal AI Infrastructure — System Discovery Module
 
-**Module**: system_discovery
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-System discovery utilities for hardware detection, environment scanning, and capability detection.
+The System Discovery module provides PAI integration for system introspection.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Service Discovery
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Find running services:
 
-## Key Files
+```python
+from codomyrmex.system_discovery import SystemScanner
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+scanner = SystemScanner()
+services = scanner.discover_services()
 
-## Future Considerations
+for svc in services:
+    print(f"{svc.name}: {svc.port}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Health Checks
+
+Check service health:
+
+```python
+from codomyrmex.system_discovery import SystemScanner
+
+scanner = SystemScanner()
+health = scanner.health_check("api_server")
+print(f"Status: {health.status}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `SystemScanner` | Discover services |
+| `health_check` | Check health |
+| `Inventory` | System inventory |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

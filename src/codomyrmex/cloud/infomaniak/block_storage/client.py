@@ -4,8 +4,8 @@ Infomaniak Block Storage Client (Cinder).
 Provides volume and backup operations via the OpenStack Cinder API.
 """
 
-from typing import Any, Dict, List, Optional
 import logging
+from typing import Any
 
 from ..base import InfomaniakOpenStackBase
 
@@ -26,15 +26,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
     """
 
     _service_name = "block_storage"
-    
+
     # =========================================================================
     # Volume Operations
     # =========================================================================
-    
-    def list_volumes(self) -> List[Dict[str, Any]]:
+
+    def list_volumes(self) -> list[dict[str, Any]]:
         """
         List all block storage volumes.
-        
+
         Returns:
             List of volume dictionaries
         """
@@ -44,14 +44,14 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list volumes: {e}")
             return []
-    
-    def get_volume(self, volume_id: str) -> Optional[Dict[str, Any]]:
+
+    def get_volume(self, volume_id: str) -> dict[str, Any] | None:
         """
         Get details for a specific volume.
-        
+
         Args:
             volume_id: Volume UUID
-            
+
         Returns:
             Volume details dict or None if not found
         """
@@ -61,21 +61,21 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to get volume {volume_id}: {e}")
             return None
-    
+
     def create_volume(
         self,
         size: int,
         name: str,
-        description: Optional[str] = None,
-        volume_type: Optional[str] = None,
-        availability_zone: Optional[str] = None,
-        snapshot_id: Optional[str] = None,
-        image_id: Optional[str] = None,
+        description: str | None = None,
+        volume_type: str | None = None,
+        availability_zone: str | None = None,
+        snapshot_id: str | None = None,
+        image_id: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Create a new block storage volume.
-        
+
         Args:
             size: Volume size in GB
             name: Volume name
@@ -85,7 +85,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
             snapshot_id: Create from snapshot
             image_id: Create from image
             **kwargs: Additional Cinder create parameters
-            
+
         Returns:
             Created volume dict or None on failure
         """
@@ -105,15 +105,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create volume {name}: {e}")
             return None
-    
+
     def delete_volume(self, volume_id: str, force: bool = False) -> bool:
         """
         Delete a volume.
-        
+
         Args:
             volume_id: Volume UUID
             force: Force delete even if attached
-            
+
         Returns:
             True if successful
         """
@@ -124,15 +124,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete volume {volume_id}: {e}")
             return False
-    
+
     def extend_volume(self, volume_id: str, new_size: int) -> bool:
         """
         Extend a volume's size.
-        
+
         Args:
             volume_id: Volume UUID
             new_size: New size in GB (must be larger than current)
-            
+
         Returns:
             True if successful
         """
@@ -143,21 +143,21 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to extend volume {volume_id}: {e}")
             return False
-    
+
     def attach_volume(
         self,
         volume_id: str,
         instance_id: str,
-        device: Optional[str] = None
+        device: str | None = None
     ) -> bool:
         """
         Attach a volume to an instance.
-        
+
         Args:
             volume_id: Volume UUID
             instance_id: Instance UUID to attach to
             device: Device path (e.g., /dev/vdb) or None for auto
-            
+
         Returns:
             True if successful
         """
@@ -172,15 +172,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to attach volume {volume_id}: {e}")
             return False
-    
+
     def detach_volume(self, volume_id: str, instance_id: str) -> bool:
         """
         Detach a volume from an instance.
-        
+
         Args:
             volume_id: Volume UUID
             instance_id: Instance UUID
-            
+
         Returns:
             True if successful
         """
@@ -200,15 +200,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to detach volume {volume_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Backup Operations
     # =========================================================================
-    
-    def list_backups(self) -> List[Dict[str, Any]]:
+
+    def list_backups(self) -> list[dict[str, Any]]:
         """
         List volume backups.
-        
+
         Returns:
             List of backup dictionaries
         """
@@ -228,25 +228,25 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list backups: {e}")
             return []
-    
+
     def create_backup(
         self,
         volume_id: str,
         name: str,
-        description: Optional[str] = None,
+        description: str | None = None,
         incremental: bool = False,
         force: bool = False
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Create a backup of a volume.
-        
+
         Args:
             volume_id: Volume UUID to backup
             name: Backup name
             description: Optional description
             incremental: Create incremental backup
             force: Force backup even if volume is in-use
-            
+
         Returns:
             Created backup dict or None on failure
         """
@@ -268,21 +268,21 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create backup for {volume_id}: {e}")
             return None
-    
+
     def restore_backup(
         self,
         backup_id: str,
-        volume_id: Optional[str] = None,
-        name: Optional[str] = None
-    ) -> Optional[Dict[str, Any]]:
+        volume_id: str | None = None,
+        name: str | None = None
+    ) -> dict[str, Any] | None:
         """
         Restore a backup to a new or existing volume.
-        
+
         Args:
             backup_id: Backup UUID to restore
             volume_id: Optional existing volume to restore to
             name: Name for new volume (if volume_id not specified)
-            
+
         Returns:
             Restored volume dict or None on failure
         """
@@ -297,15 +297,15 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to restore backup {backup_id}: {e}")
             return None
-    
+
     def delete_backup(self, backup_id: str, force: bool = False) -> bool:
         """
         Delete a backup.
-        
+
         Args:
             backup_id: Backup UUID
             force: Force delete
-            
+
         Returns:
             True if successful
         """
@@ -316,12 +316,12 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete backup {backup_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Snapshot Operations
     # =========================================================================
-    
-    def list_snapshots(self) -> List[Dict[str, Any]]:
+
+    def list_snapshots(self) -> list[dict[str, Any]]:
         """List volume snapshots."""
         try:
             snapshots = list(self._conn.block_storage.snapshots())
@@ -339,14 +339,14 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to list snapshots: {e}")
             return []
-    
+
     def create_snapshot(
         self,
         volume_id: str,
         name: str,
-        description: Optional[str] = None,
+        description: str | None = None,
         force: bool = False
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Create a volume snapshot."""
         try:
             snapshot = self._conn.block_storage.create_snapshot(
@@ -365,7 +365,7 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to create snapshot for {volume_id}: {e}")
             return None
-    
+
     def delete_snapshot(self, snapshot_id: str, force: bool = False) -> bool:
         """Delete a snapshot."""
         try:
@@ -375,12 +375,12 @@ class InfomaniakVolumeClient(InfomaniakOpenStackBase):
         except Exception as e:
             logger.error(f"Failed to delete snapshot {snapshot_id}: {e}")
             return False
-    
+
     # =========================================================================
     # Helper Methods
     # =========================================================================
-    
-    def _volume_to_dict(self, volume: Any) -> Dict[str, Any]:
+
+    def _volume_to_dict(self, volume: Any) -> dict[str, Any]:
         """Convert OpenStack volume object to dict."""
         return {
             "id": volume.id,

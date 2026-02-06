@@ -5,13 +5,11 @@ event history, and monitoring dashboards.
 """
 
 import json
-import time
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Union
-from collections import defaultdict, deque
-import threading
-
 import logging
+import threading
+from collections import defaultdict, deque
+from datetime import datetime
+from typing import Any
 
 # Import logger config
 try:
@@ -20,19 +18,19 @@ try:
 except ImportError:
     logger = logging.getLogger(__name__)
 
-from .event_bus import get_event_bus, subscribe_to_events, EventBus
-from .event_schema import Event, EventType, EventPriority
+from .event_bus import EventBus, get_event_bus
+from .event_schema import Event, EventType
 
 
 class EventLogEntry:
-    def __init__(self, event: Event, handler_count: int = 0, processing_time: Optional[float] = None):
+    def __init__(self, event: Event, handler_count: int = 0, processing_time: float | None = None):
         self.event = event
         self.timestamp = datetime.now()
         self.handler_count = handler_count
         self.processing_time = processing_time
         self.event_id = event.event_id
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         etype = self.event.event_type.value if hasattr(self.event.event_type, 'value') else str(self.event.event_type)
         priority = self.event.priority.value if hasattr(self.event.priority, 'value') else str(self.event.priority)
         return {
@@ -49,17 +47,17 @@ class EventLogEntry:
 
 
 class EventLogger:
-    def __init__(self, max_entries: int = 10000, event_bus: Optional[EventBus] = None):
+    def __init__(self, max_entries: int = 10000, event_bus: EventBus | None = None):
         self.max_entries = max_entries
         self.event_bus = event_bus or get_event_bus()
         self.entries: deque[EventLogEntry] = deque(maxlen=max_entries)
-        self.event_counts: Dict[str, int] = defaultdict(int)
-        self.error_counts: Dict[str, int] = defaultdict(int)
-        self.processing_times: Dict[str, List[float]] = defaultdict(list)
+        self.event_counts: dict[str, int] = defaultdict(int)
+        self.error_counts: dict[str, int] = defaultdict(int)
+        self.processing_times: dict[str, list[float]] = defaultdict(list)
         self.lock = threading.Lock()
         self.event_bus.subscribe(["*"], self.log_event)
 
-    def log_event(self, event: Event, handler_count: int = 0, processing_time: Optional[float] = 0.0) -> None:
+    def log_event(self, event: Event, handler_count: int = 0, processing_time: float | None = 0.0) -> None:
         with self.lock:
             entry = EventLogEntry(event, handler_count, processing_time)
             self.entries.append(entry)
@@ -69,7 +67,7 @@ class EventLogger:
                 self.error_counts[etype] += 1
             self.processing_times[etype].append(processing_time or 0.0)
 
-    def get_event_statistics(self) -> Dict[str, Any]:
+    def get_event_statistics(self) -> dict[str, Any]:
         with self.lock:
             return {
                 "total_events": sum(self.event_counts.values()),
@@ -77,7 +75,7 @@ class EventLogger:
                 "error_counts": dict(self.error_counts)
             }
 
-    def get_events(self, event_type: Optional[str] = None, start_time=None, end_time=None) -> List[EventLogEntry]:
+    def get_events(self, event_type: str | None = None, start_time=None, end_time=None) -> list[EventLogEntry]:
         with self.lock:
             res = list(self.entries)
             if event_type:
@@ -86,18 +84,18 @@ class EventLogger:
             if end_time: res = [e for e in res if e.timestamp <= end_time]
             return res
 
-    def get_events_by_type(self, event_type: Union[EventType, str]) -> List[EventLogEntry]:
+    def get_events_by_type(self, event_type: EventType | str) -> list[EventLogEntry]:
         t = event_type.value if hasattr(event_type, 'value') else str(event_type)
         return self.get_events(event_type=t)
 
-    def get_error_events(self) -> List[EventLogEntry]:
+    def get_error_events(self) -> list[EventLogEntry]:
         with self.lock:
             return [e for e in self.entries if "error" in (e.event.event_type.value if hasattr(e.event.event_type, 'value') else str(e.event.event_type)).lower()]
 
-    def get_events_in_time_range(self, start, end) -> List[EventLogEntry]:
+    def get_events_in_time_range(self, start, end) -> list[EventLogEntry]:
         return self.get_events(start_time=start, end_time=end)
 
-    def get_recent_events(self, limit: int = 50) -> List[EventLogEntry]:
+    def get_recent_events(self, limit: int = 50) -> list[EventLogEntry]:
         with self.lock: return list(self.entries)[-limit:]
 
     def clear(self) -> None:
@@ -108,7 +106,7 @@ class EventLogger:
             self.processing_times.clear()
 
 
-    def get_performance_report(self) -> Dict[str, Any]:
+    def get_performance_report(self) -> dict[str, Any]:
         with self.lock:
             total_time = sum(sum(t) for t in self.processing_times.values())
             total_count = sum(len(t) for t in self.processing_times.values())

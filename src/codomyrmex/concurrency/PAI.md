@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Concurrency Context
+# Personal AI Infrastructure — Concurrency Module
 
-**Module**: concurrency
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Concurrency primitives for async/await patterns, thread management, and parallel task execution.
+The Concurrency module provides PAI integration for async operations and parallel execution.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Parallel Execution
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Run tasks in parallel:
 
-## Key Files
+```python
+from codomyrmex.concurrency import gather, Semaphore
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+results = await gather([
+    process_file(f) for f in files
+])
+```
 
-## Future Considerations
+### Rate Limiting
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Control concurrency:
+
+```python
+from codomyrmex.concurrency import Semaphore
+
+sem = Semaphore(10)  # Max 10 concurrent
+async with sem:
+    await make_api_call()
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `gather` | Parallel execution |
+| `Semaphore` | Limit concurrency |
+| `Lock` | Resource locking |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

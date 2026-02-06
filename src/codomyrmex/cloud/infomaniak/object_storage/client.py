@@ -10,12 +10,11 @@ S3 Endpoints:
     - https://s3.pub2.infomaniak.cloud/
 """
 
-from typing import Any, Dict, List, Optional
-import json
 import logging
+from typing import Any
 
-from ..base import InfomaniakOpenStackBase, InfomaniakS3Base
 from ...common import StorageClient
+from ..base import InfomaniakOpenStackBase, InfomaniakS3Base
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     # Container Operations
     # =========================================================================
 
-    def list_containers(self) -> List[str]:
+    def list_containers(self) -> list[str]:
         """List all containers."""
         try:
             containers = list(self._conn.object_store.containers())
@@ -62,7 +61,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to delete container {name}: {e}")
             return False
 
-    def get_container_metadata(self, name: str) -> Dict[str, Any]:
+    def get_container_metadata(self, name: str) -> dict[str, Any]:
         """Get container metadata."""
         try:
             container = self._conn.object_store.get_container_metadata(name)
@@ -75,7 +74,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
     # Object Operations
     # =========================================================================
 
-    def list_objects(self, container: str, prefix: Optional[str] = None) -> List[str]:
+    def list_objects(self, container: str, prefix: str | None = None) -> list[str]:
         """List objects in a container."""
         try:
             objects = list(self._conn.object_store.objects(container, prefix=prefix))
@@ -89,7 +88,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
         container: str,
         name: str,
         data: bytes,
-        content_type: Optional[str] = None
+        content_type: str | None = None
     ) -> bool:
         """Upload an object to a container."""
         try:
@@ -110,7 +109,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
         container: str,
         name: str,
         file_path: str,
-        content_type: Optional[str] = None
+        content_type: str | None = None
     ) -> bool:
         """Upload a local file to a container."""
         try:
@@ -121,7 +120,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to upload file {file_path}: {e}")
             return False
 
-    def download_object(self, container: str, name: str) -> Optional[bytes]:
+    def download_object(self, container: str, name: str) -> bytes | None:
         """Download an object from a container."""
         try:
             obj = self._conn.object_store.download_object(container, name)
@@ -158,7 +157,7 @@ class InfomaniakObjectStorageClient(InfomaniakOpenStackBase):
             logger.error(f"Failed to delete object {container}/{name}: {e}")
             return False
 
-    def get_object_metadata(self, container: str, name: str) -> Dict[str, Any]:
+    def get_object_metadata(self, container: str, name: str) -> dict[str, Any]:
         """Get object metadata."""
         try:
             obj = self._conn.object_store.get_object_metadata(name, container=container)
@@ -227,7 +226,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     # Bucket Operations
     # =========================================================================
 
-    def list_buckets(self) -> List[str]:
+    def list_buckets(self) -> list[str]:
         """List all buckets."""
         try:
             response = self._client.list_buckets()
@@ -271,9 +270,9 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def list_objects(
         self,
         bucket: str,
-        prefix: Optional[str] = None,
+        prefix: str | None = None,
         max_keys: int = 1000
-    ) -> List[str]:
+    ) -> list[str]:
         """List objects in a bucket."""
         try:
             params = {"Bucket": bucket, "MaxKeys": max_keys}
@@ -291,7 +290,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         key: str,
         file_path: str,
-        extra_args: Optional[Dict[str, Any]] = None
+        extra_args: dict[str, Any] | None = None
     ) -> bool:
         """Upload a local file to a bucket."""
         try:
@@ -307,11 +306,11 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         bucket: str,
         key: str,
         data: bytes,
-        content_type: Optional[str] = None
+        content_type: str | None = None
     ) -> bool:
         """Upload raw data to a bucket."""
         try:
-            params: Dict[str, Any] = {"Bucket": bucket, "Key": key, "Body": data}
+            params: dict[str, Any] = {"Bucket": bucket, "Key": key, "Body": data}
             if content_type:
                 params["ContentType"] = content_type
 
@@ -332,7 +331,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error(f"Failed to download {bucket}/{key}: {e}")
             return False
 
-    def download_data(self, bucket: str, key: str) -> Optional[bytes]:
+    def download_data(self, bucket: str, key: str) -> bytes | None:
         """Download an object as bytes."""
         try:
             response = self._client.get_object(Bucket=bucket, Key=key)
@@ -355,7 +354,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         """Delete a file. ABC-compatible alias for delete_object."""
         return self.delete_object(bucket, key)
 
-    def get_metadata(self, bucket: str, key: str) -> Dict[str, Any]:
+    def get_metadata(self, bucket: str, key: str) -> dict[str, Any]:
         """Get object metadata."""
         try:
             response = self._client.head_object(Bucket=bucket, Key=key)
@@ -376,7 +375,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         key: str,
         expires_in: int = 3600,
         http_method: str = "GET"
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Generate a presigned URL for temporary access.
 
@@ -425,16 +424,16 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def list_objects_paginated(
         self,
         bucket: str,
-        prefix: Optional[str] = None
-    ) -> List[str]:
+        prefix: str | None = None
+    ) -> list[str]:
         """List all objects using pagination (handles >1000 objects)."""
         try:
             paginator = self._client.get_paginator("list_objects_v2")
-            params: Dict[str, Any] = {"Bucket": bucket}
+            params: dict[str, Any] = {"Bucket": bucket}
             if prefix:
                 params["Prefix"] = prefix
 
-            keys: List[str] = []
+            keys: list[str] = []
             for page in paginator.paginate(**params):
                 for obj in page.get("Contents", []):
                     keys.append(obj["Key"])
@@ -446,8 +445,8 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
     def delete_objects_batch(
         self,
         bucket: str,
-        keys: List[str]
-    ) -> Dict[str, Any]:
+        keys: list[str]
+    ) -> dict[str, Any]:
         """
         Delete multiple objects in a single request.
 
@@ -457,7 +456,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             Dict with 'deleted' count and 'errors' list
         """
         deleted_count = 0
-        errors: List[Dict[str, Any]] = []
+        errors: list[dict[str, Any]] = []
 
         try:
             # Batch in groups of 1000
@@ -493,7 +492,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error(f"Failed to enable versioning on {bucket}: {e}")
             return False
 
-    def get_versioning(self, bucket: str) -> Optional[str]:
+    def get_versioning(self, bucket: str) -> str | None:
         """
         Get versioning status of a bucket.
 
@@ -507,7 +506,7 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
             logger.error(f"Failed to get versioning for {bucket}: {e}")
             return None
 
-    def get_bucket_policy(self, bucket: str) -> Optional[str]:
+    def get_bucket_policy(self, bucket: str) -> str | None:
         """
         Get the bucket policy as a JSON string.
 

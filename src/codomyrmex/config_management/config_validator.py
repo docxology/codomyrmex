@@ -1,17 +1,11 @@
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 import logging
 import re
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Configuration Validator for Codomyrmex."""
 
@@ -33,11 +27,11 @@ class ValidationIssue:
     field_path: str
     message: str
     severity: ValidationSeverity
-    suggestion: Optional[str] = None
+    suggestion: str | None = None
     actual_value: Any = None
     expected_value: Any = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "field_path": self.field_path,
@@ -52,9 +46,9 @@ class ValidationIssue:
 class ValidationResult:
     """Result of a configuration validation."""
     is_valid: bool
-    issues: List[ValidationIssue] = field(default_factory=list)
-    warnings: List[ValidationIssue] = field(default_factory=list)
-    errors: List[ValidationIssue] = field(default_factory=list)
+    issues: list[ValidationIssue] = field(default_factory=list)
+    warnings: list[ValidationIssue] = field(default_factory=list)
+    errors: list[ValidationIssue] = field(default_factory=list)
 
     def add_issue(self, issue: ValidationIssue) -> None:
         """Add a validation issue."""
@@ -65,7 +59,7 @@ class ValidationResult:
         elif issue.severity == ValidationSeverity.WARNING:
             self.warnings.append(issue)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "is_valid": self.is_valid,
@@ -82,10 +76,10 @@ class ConfigSchema:
     required: bool = False
     default: Any = None
     description: str = ""
-    constraints: Dict[str, Any] = field(default_factory=dict)
-    nested_schema: Optional[Dict[str, 'ConfigSchema']] = None
+    constraints: dict[str, Any] = field(default_factory=dict)
+    nested_schema: dict[str, 'ConfigSchema'] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         result = {
             "type": self.type,
@@ -107,7 +101,7 @@ class ConfigValidator:
     required field checking, and detailed error reporting with suggestions.
     """
 
-    def __init__(self, schema: Optional[Dict[str, ConfigSchema]] = None):
+    def __init__(self, schema: dict[str, ConfigSchema] | None = None):
         """
         Initialize the configuration validator.
 
@@ -115,9 +109,9 @@ class ConfigValidator:
             schema: Configuration schema for validation
         """
         self.schema = schema or {}
-        self.custom_validators: Dict[str, Callable] = {}
+        self.custom_validators: dict[str, Callable] = {}
 
-    def validate(self, config: Dict[str, Any]) -> ValidationResult:
+    def validate(self, config: dict[str, Any]) -> ValidationResult:
         """
         Validate a configuration against the schema.
 
@@ -159,7 +153,7 @@ class ConfigValidator:
 
         return result
 
-    def validate_required_fields(self, config: Dict[str, Any], required: List[str]) -> List[str]:
+    def validate_required_fields(self, config: dict[str, Any], required: list[str]) -> list[str]:
         """
         Validate that required fields are present.
 
@@ -176,7 +170,7 @@ class ConfigValidator:
                 missing.append(field)
         return missing
 
-    def validate_types(self, config: Dict[str, Any], schema: Dict[str, Any]) -> List[ValidationIssue]:
+    def validate_types(self, config: dict[str, Any], schema: dict[str, Any]) -> list[ValidationIssue]:
         """
         Validate types of configuration values.
 
@@ -204,7 +198,7 @@ class ConfigValidator:
 
         return issues
 
-    def validate_values(self, config: Dict[str, Any], constraints: Dict[str, Dict[str, Any]]) -> List[ValidationIssue]:
+    def validate_values(self, config: dict[str, Any], constraints: dict[str, dict[str, Any]]) -> list[ValidationIssue]:
         """
         Validate configuration values against constraints.
 
@@ -225,7 +219,7 @@ class ConfigValidator:
 
         return issues
 
-    def add_custom_validator(self, name: str, validator: Callable[[Dict[str, Any]], Union[ValidationResult, List[ValidationIssue]]]) -> None:
+    def add_custom_validator(self, name: str, validator: Callable[[dict[str, Any]], ValidationResult | list[ValidationIssue]]) -> None:
         """
         Add a custom validation function.
 
@@ -235,7 +229,7 @@ class ConfigValidator:
         """
         self.custom_validators[name] = validator
 
-    def _validate_against_schema(self, config: Dict[str, Any], schema: Dict[str, ConfigSchema], path: str) -> ValidationResult:
+    def _validate_against_schema(self, config: dict[str, Any], schema: dict[str, ConfigSchema], path: str) -> ValidationResult:
         """Validate configuration against a schema."""
         result = ValidationResult(is_valid=True)
 
@@ -271,7 +265,7 @@ class ConfigValidator:
 
         return result
 
-    def _validate_field_schema(self, field_name: str, value: Any, schema: ConfigSchema, path: str) -> List[ValidationIssue]:
+    def _validate_field_schema(self, field_name: str, value: Any, schema: ConfigSchema, path: str) -> list[ValidationIssue]:
         """Validate a single field against its schema."""
         issues = []
 
@@ -298,7 +292,7 @@ class ConfigValidator:
 
         return issues
 
-    def _validate_field_constraints(self, field_path: str, value: Any, constraints: Dict[str, Any]) -> List[ValidationIssue]:
+    def _validate_field_constraints(self, field_path: str, value: Any, constraints: dict[str, Any]) -> list[ValidationIssue]:
         """Validate field value against constraints."""
         issues = []
 
@@ -343,7 +337,7 @@ class ConfigValidator:
                 if isinstance(value, str) and not re.match(constraint_value, value):
                     issues.append(ValidationIssue(
                         field_path=field_path,
-                        message=f"Value does not match required pattern",
+                        message="Value does not match required pattern",
                         severity=ValidationSeverity.ERROR,
                         suggestion=f"Value must match pattern: {constraint_value}"
                     ))
@@ -400,7 +394,7 @@ class ConfigValidator:
 
 # Predefined schemas for common Codomyrmex configurations
 
-def get_logging_config_schema() -> Dict[str, ConfigSchema]:
+def get_logging_config_schema() -> dict[str, ConfigSchema]:
     """Get schema for logging configuration."""
     return {
         "level": ConfigSchema(
@@ -428,7 +422,7 @@ def get_logging_config_schema() -> Dict[str, ConfigSchema]:
         )
     }
 
-def get_database_config_schema() -> Dict[str, ConfigSchema]:
+def get_database_config_schema() -> dict[str, ConfigSchema]:
     """Get schema for database configuration."""
     return {
         "host": ConfigSchema(type="str", required=True),
@@ -453,7 +447,7 @@ def get_database_config_schema() -> Dict[str, ConfigSchema]:
         )
     }
 
-def get_ai_model_config_schema() -> Dict[str, ConfigSchema]:
+def get_ai_model_config_schema() -> dict[str, ConfigSchema]:
     """Get schema for AI model configuration."""
     return {
         "provider": ConfigSchema(
@@ -479,7 +473,7 @@ def get_ai_model_config_schema() -> Dict[str, ConfigSchema]:
 
 # Convenience functions
 
-def validate_config_schema(config: Dict[str, Any], schema: Dict[str, ConfigSchema]) -> Tuple[bool, List[str]]:
+def validate_config_schema(config: dict[str, Any], schema: dict[str, ConfigSchema]) -> tuple[bool, list[str]]:
     """
     Convenience function to validate config against schema.
 

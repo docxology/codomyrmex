@@ -1,26 +1,7 @@
-from pathlib import Path
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Remove placeholder content from README.md files.
@@ -44,19 +25,19 @@ def remove_placeholders(filepath: Path) -> bool:
     try:
         content = filepath.read_text(encoding='utf-8')
         original = content
-        
+
         # Remove placeholder sections
         for pattern in PLACEHOLDER_PATTERNS:
             content = re.sub(pattern, '', content, flags=re.MULTILINE | re.DOTALL)
-        
+
         # Remove standalone placeholder lines
         content = re.sub(r'## detailed_overview\s*', '', content)
         content = re.sub(r'from codomyrmex\.your_module import main_component', '', content)
         content = re.sub(r'result = main_component\.process\(\)', '', content)
-        
+
         # Clean up extra blank lines
         content = re.sub(r'\n{3,}', '\n\n', content)
-        
+
         if content != original:
             filepath.write_text(content, encoding='utf-8')
             return True
@@ -69,13 +50,13 @@ def main():
     """Process all README.md files."""
     readme_files = list(REPO_ROOT.rglob("README.md"))
     readme_files = [f for f in readme_files if ".venv" not in str(f) and "node_modules" not in str(f)]
-    
+
     updated = 0
     for filepath in readme_files:
         if remove_placeholders(filepath):
             updated += 1
             print(f"Updated: {filepath.relative_to(REPO_ROOT)}")
-    
+
     print(f"\nUpdated {updated} files")
 
 if __name__ == "__main__":

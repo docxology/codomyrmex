@@ -1,19 +1,14 @@
-from typing import Dict, List, Any, Optional, Callable
 import logging
+import threading
 import time
-
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from typing import Any
+from collections.abc import Callable
+
 import psutil
-import threading
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """
 # Resource Tracker for Codomyrmex Performance Monitoring
@@ -47,9 +42,9 @@ class ResourceSnapshot:
     cpu_times_system: float
     num_threads: int
     num_fds: int = 0  # File descriptors (Unix only)
-    context: Dict[str, Any] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "timestamp": self.timestamp,
@@ -71,15 +66,15 @@ class ResourceTrackingResult:
     start_time: float
     end_time: float
     duration: float
-    snapshots: List[ResourceSnapshot]
+    snapshots: list[ResourceSnapshot]
     peak_memory_rss_mb: float
     peak_memory_vms_mb: float
     average_cpu_percent: float
     total_cpu_time: float
     memory_delta_mb: float
-    summary: Dict[str, Any] = field(default_factory=dict)
+    summary: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "operation": self.operation,
@@ -114,13 +109,13 @@ class ResourceTracker:
         self.sample_interval = sample_interval
         self.max_snapshots = max_snapshots
         self._tracking = False
-        self._snapshots: List[ResourceSnapshot] = []
+        self._snapshots: list[ResourceSnapshot] = []
         self._lock = threading.Lock()
 
         if not HAS_PSUTIL:
             logger.warning("psutil not available, resource tracking will be limited")
 
-    def start_tracking(self, operation: str, context: Optional[Dict[str, Any]] = None) -> None:
+    def start_tracking(self, operation: str, context: dict[str, Any] | None = None) -> None:
         """
         Start tracking resources for an operation.
 
@@ -282,7 +277,7 @@ class ResourceTracker:
             summary={"error": "No tracking data available"}
         )
 
-    def get_current_snapshot(self) -> Optional[ResourceSnapshot]:
+    def get_current_snapshot(self) -> ResourceSnapshot | None:
         """Get the most recent snapshot."""
         with self._lock:
             return self._snapshots[-1] if self._snapshots else None
@@ -327,7 +322,7 @@ def track_memory_usage(func: Callable):
 
     yield wrapper
 
-def create_resource_report(results: List[ResourceTrackingResult]) -> Dict[str, Any]:
+def create_resource_report(results: list[ResourceTrackingResult]) -> dict[str, Any]:
     """
     Create a comprehensive resource usage report from multiple tracking results.
 
@@ -377,7 +372,7 @@ def create_resource_report(results: List[ResourceTrackingResult]) -> Dict[str, A
         "generated_at": time.time()
     }
 
-def benchmark_resource_usage(func: Callable, iterations: int = 10, *args, **kwargs) -> Dict[str, Any]:
+def benchmark_resource_usage(func: Callable, iterations: int = 10, *args, **kwargs) -> dict[str, Any]:
     """
     Benchmark resource usage of a function over multiple iterations.
 

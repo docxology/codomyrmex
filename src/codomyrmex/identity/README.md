@@ -1,36 +1,51 @@
-# identity
+# Identity Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Persona management and bio-cognitive verification for agent identity.
 
-The identity module provides multi-persona management and bio-cognitive verification. It enables agents to maintain distinct, verifiable identities with graduated trust levels (unverified, anonymous verified, verified anonymous with reputation, and full KYC) while supporting behavioral biometric authentication through keystroke dynamics and decision latency analysis.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.identity import (
+    Persona, VerificationLevel, IdentityManager, BioCognitiveVerifier
+)
 
-- **`Persona`** -- Dataclass representing a distinct identity persona with an ID, name, verification level, timestamps, key-value attributes, and siloed interaction crumbs (tracking data). Supports `add_attribute()` and `add_crumb()` methods.
-- **`VerificationLevel`** -- Enum defining four trust tiers: `UNVERIFIED`, `ANON` (anonymous verified via bio-cognitive metrics), `VERIFIED_ANON` (anonymous with persistent reputation), and `KYC` (full legal identity link).
-- **`IdentityManager`** -- Orchestrates multiple personas with lifecycle operations: `create_persona()`, `get_persona()`, `set_active_persona()`, `list_personas()`, `revoke_persona()`, and `export_persona()` for portable identity claims.
-- **`BioCognitiveVerifier`** -- Statistical verification engine that authenticates users by comparing current behavioral metrics (e.g., keystroke flight time, decision latency) against stored baselines using Z-score analysis with a 2.5-sigma threshold. Maintains a rolling window of 100 samples per metric.
+# Create and manage personas
+manager = IdentityManager()
 
-## Directory Contents
+persona = Persona(
+    id="agent-001",
+    name="ResearchAssistant",
+    capabilities=["search", "summarize", "cite"],
+    trust_level=VerificationLevel.VERIFIED
+)
 
-- `__init__.py` - Module entry point; exports all identity classes
-- `persona.py` - `Persona` dataclass and `VerificationLevel` enum
-- `manager.py` - `IdentityManager` for persona lifecycle orchestration
-- `biocognitive.py` - `BioCognitiveVerifier` for behavioral biometric authentication using numpy-based statistics
-- `identity.py` - Additional identity utilities
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `SPEC.md` - Module specification
-- `SECURITY.md` - Security considerations
-- `CHANGELOG.md` - Version history
-- `USAGE_EXAMPLES.md` - Usage examples and patterns
-- `PAI.md` - PAI integration notes
+manager.register(persona)
+active = manager.get("agent-001")
+
+# Bio-cognitive verification
+verifier = BioCognitiveVerifier()
+
+# Challenge-response verification
+challenge = verifier.create_challenge(persona)
+response = agent.respond_to_challenge(challenge)
+is_authentic = verifier.verify(persona, response)
+
+# Update trust level based on verification
+if is_authentic:
+    manager.promote("agent-001", VerificationLevel.TRUSTED)
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `Persona` | Agent identity with capabilities |
+| `VerificationLevel` | Enum: unverified, verified, trusted |
+| `IdentityManager` | Register and manage personas |
+| `BioCognitiveVerifier` | Challenge-response authentication |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/identity/](../../../docs/modules/identity/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

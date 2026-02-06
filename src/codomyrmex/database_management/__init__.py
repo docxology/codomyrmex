@@ -28,6 +28,7 @@ Data structures:
 - SchemaDefinition: Database schema definition and management
 """
 
+from . import audit, connections, replication, sharding
 from .backup_manager import (
     Backup,
     BackupManager,
@@ -55,10 +56,6 @@ from .schema_generator import (
     generate_schema,
 )
 
-from . import connections
-from . import replication
-from . import sharding
-from . import audit
 __all__ = [
     'audit',
     'sharding',

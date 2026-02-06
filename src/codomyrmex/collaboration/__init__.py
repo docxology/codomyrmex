@@ -8,53 +8,48 @@ Provides multi-agent collaboration capabilities including:
 """
 
 # Core data models
-from .models import (
-    TaskPriority,
-    TaskStatus,
-    Task,
-    TaskResult,
-    SwarmStatus,
-    AgentStatus,
-)
+# Submodule exports
+from . import agents, communication, coordination, protocols
 
 # Exceptions
 from .exceptions import (
-    CollaborationError,
-    AgentNotFoundError,
     AgentBusyError,
-    TaskExecutionError,
-    TaskNotFoundError,
-    TaskDependencyError,
-    ConsensusError,
+    AgentNotFoundError,
+    CapabilityMismatchError,
     ChannelError,
-    MessageDeliveryError,
+    CollaborationError,
+    ConsensusError,
     CoordinationError,
     LeaderElectionError,
-    CapabilityMismatchError,
+    MessageDeliveryError,
+    TaskDependencyError,
+    TaskExecutionError,
+    TaskNotFoundError,
+)
+from .models import (
+    AgentStatus,
+    SwarmStatus,
+    Task,
+    TaskPriority,
+    TaskResult,
+    TaskStatus,
 )
 
 # Protocol classes (existing)
 from .protocols import (
-    AgentState,
-    MessageType,
-    AgentMessage,
     AgentCapability,
-    AgentProtocol,
-    BaseAgent,
     AgentCoordinator,
-    RoundRobinProtocol,
+    AgentMessage,
+    AgentProtocol,
+    AgentState,
+    BaseAgent,
     BroadcastProtocol,
     CapabilityRoutingProtocol,
     ConsensusProtocol,
+    MessageType,
+    RoundRobinProtocol,
 )
-
-from .protocols.swarm import SwarmManager, AgentProxy, TaskDecomposer
-
-# Submodule exports
-from . import agents
-from . import communication
-from . import coordination
-from . import protocols
+from .protocols.swarm import AgentProxy, SwarmManager, TaskDecomposer
 
 __all__ = [
     # Data models

@@ -16,7 +16,7 @@ class DocumentsError(CodomyrmexError):
 
 class DocumentReadError(DocumentsError):
     """Raised when document reading fails."""
-    
+
     def __init__(self, message: str, file_path: str = None, **kwargs):
         super().__init__(message, **kwargs)
         if file_path:
@@ -25,7 +25,7 @@ class DocumentReadError(DocumentsError):
 
 class DocumentWriteError(DocumentsError):
     """Raised when document writing fails."""
-    
+
     def __init__(self, message: str, file_path: str = None, **kwargs):
         super().__init__(message, **kwargs)
         if file_path:
@@ -39,7 +39,7 @@ class DocumentParseError(DocumentsError):
 
 class DocumentValidationError(DocumentsError):
     """Raised when document validation fails."""
-    
+
     def __init__(self, message: str, validation_errors: list = None, **kwargs):
         super().__init__(message, **kwargs)
         if validation_errors:
@@ -53,7 +53,7 @@ class DocumentConversionError(DocumentsError):
 
 class UnsupportedFormatError(DocumentsError):
     """Raised when an unsupported document format is requested."""
-    
+
     def __init__(self, message: str, format: str = None, **kwargs):
         super().__init__(message, **kwargs)
         if format:

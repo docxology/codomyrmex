@@ -1,10 +1,11 @@
 """Genetic operators implementation."""
 
 import random
-from typing import List, Tuple
+
 from .genome import Genome
 
-def crossover(parent1: Genome, parent2: Genome) -> Tuple[Genome, Genome]:
+
+def crossover(parent1: Genome, parent2: Genome) -> tuple[Genome, Genome]:
     """Perform single-point crossover."""
     if len(parent1) < 2:
         return parent1, parent2
@@ -22,7 +23,7 @@ def mutate(genome: Genome, rate: float = 0.01, amount: float = 0.1) -> Genome:
         new_genes.append(gene)
     return Genome(new_genes)
 
-def tournament_selection(population: List[Genome], size: int = 3) -> Genome:
+def tournament_selection(population: list[Genome], size: int = 3) -> Genome:
     """Select the best individual from a random sample."""
     sample = random.sample(population, size)
     return max(sample, key=lambda g: g.fitness if g.fitness is not None else -float('inf'))

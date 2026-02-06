@@ -2,7 +2,6 @@
 Template manager for managing multiple templates.
 """
 
-from typing import Optional, Union
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -21,9 +20,9 @@ class TemplateManager:
             engine: Template engine to use
         """
         self.engine = TemplateEngine(engine=engine)
-        self._templates: dict[str, Union[str, Template]] = {}
+        self._templates: dict[str, str | Template] = {}
 
-    def add_template(self, name: str, template: Union[str, Template]) -> None:
+    def add_template(self, name: str, template: str | Template) -> None:
         """Add a template to the template manager.
 
         Args:
@@ -33,7 +32,7 @@ class TemplateManager:
         self._templates[name] = template
         logger.info(f"Added template: {name}")
 
-    def get_template(self, name: str) -> Optional[Template]:
+    def get_template(self, name: str) -> Template | None:
         """Get a template by name.
 
         Args:

@@ -5,7 +5,7 @@ and current time retrieval across different timezones.
 """
 
 from datetime import datetime
-from typing import Optional
+
 import pytz
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 class TimezoneManager:
     """Timezone manager for timezone-aware scheduling."""
 
-    def __init__(self, timezone: Optional[str] = None):
+    def __init__(self, timezone: str | None = None):
         """Initialize timezone manager.
 
         Args:

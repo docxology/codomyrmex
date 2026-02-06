@@ -1,46 +1,61 @@
-# templating
+# Templating Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Template engine support (Jinja2, Mako) for code generation and dynamic content.
 
-The templating module provides template engine support for code generation, documentation templates, and dynamic content rendering. It supports Jinja2 and Mako engines through a unified interface, with convenience functions for rendering template strings and files, custom filter support, configurable template loaders, and a template manager for organized template collections.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.templating import render, render_file, TemplateEngine
 
-### Submodules (always available)
+# Simple template rendering
+result = render("Hello {{ name }}!", {"name": "World"})
+print(result)  # Hello World!
 
-- **`engines`** -- Template engine implementations (Jinja2, Mako)
-- **`filters`** -- Custom template filters for data transformation
-- **`context`** -- Template context management and variable injection
+# Render from file
+output = render_file("templates/email.html", {
+    "recipient": "John",
+    "subject": "Welcome"
+})
 
-### Functions
+# Use specific engine
+jinja_output = render("{% for i in items %}{{ i }}{% endfor %}", 
+                      {"items": [1, 2, 3]}, engine="jinja2")
 
-- **`render()`** -- Convenience function to render a template string with context data using a specified engine (defaults to Jinja2). Example: `render("Hello {{ name }}!", {"name": "World"})`
-- **`render_file()`** -- Load and render a template file from disk with context data and optional engine selection.
-- **`get_default_engine()`** -- Get or create the default template engine instance, with lazy initialization and engine type switching.
+# Use TemplateEngine directly
+from codomyrmex.templating import TemplateEngine
 
-### Classes (conditionally available)
+engine = TemplateEngine(engine="jinja2")
+template = engine.load_template("report.html.j2")
+result = template.render({"data": report_data})
+```
 
-- **`TemplateEngine`** -- Core engine class supporting Jinja2 and Mako rendering backends. Provides `render()` and `load_template()` methods.
-- **`Template`** -- Represents a loaded, renderable template with context binding.
-- **`TemplateManager`** -- Manages template collections, loading from directories via configurable template loaders.
-- **`TemplatingError`** -- Exception raised when templating operations fail. Extends `CodomyrmexError`.
+## Exports
 
-## Directory Contents
+| Item | Description |
+|------|-------------|
+| `render(template, context)` | Render template string |
+| `render_file(path, context)` | Render template file |
+| `get_default_engine()` | Get singleton engine instance |
+| `TemplateEngine` | Configurable template engine |
+| `Template` | Loaded template object |
+| `TemplateManager` | Template directory management |
 
-- `__init__.py` - Module entry point with convenience functions and conditional class exports
-- `engines/` - Template engine implementations (`template_engine.py`)
-- `filters/` - Custom template filter definitions
-- `context/` - Template context management
-- `loaders/` - Template loading and management (`template_manager.py`)
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+## Submodules
+
+- `engines/` — Jinja2 and Mako engine implementations
+- `filters/` — Custom template filters
+- `context/` — Context processors
+- `loaders/` — Template loaders
+
+## Engines
+
+| Engine | Syntax | Best For |
+|--------|--------|----------|
+| jinja2 | `{{ }}` | HTML, configs, general |
+| mako | `${}` | Python-heavy templates |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/templating/](../../../docs/modules/templating/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

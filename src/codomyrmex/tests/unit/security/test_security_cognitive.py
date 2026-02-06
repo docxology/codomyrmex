@@ -8,39 +8,39 @@ phishing analysis, awareness training, cognitive threat assessment, and behavior
 import pytest
 
 from codomyrmex.security.cognitive import (
-    detect_social_engineering,
-    analyze_communication,
-    SocialEngineeringDetector,
-    analyze_email,
-    detect_phishing_attempt,
-    PhishingAnalyzer,
-    create_training_module,
-    assess_training_effectiveness,
     AwarenessTrainer,
-    assess_cognitive_threats,
-    evaluate_human_factors,
-    CognitiveThreatAssessor,
-    analyze_user_behavior,
-    detect_anomalous_behavior,
     BehaviorAnalyzer,
+    CognitiveThreatAssessor,
+    PhishingAnalyzer,
+    SocialEngineeringDetector,
+    analyze_communication,
+    analyze_email,
+    analyze_user_behavior,
+    assess_cognitive_threats,
+    assess_training_effectiveness,
+    create_training_module,
+    detect_anomalous_behavior,
+    detect_phishing_attempt,
+    detect_social_engineering,
+    evaluate_human_factors,
 )
 
 
 @pytest.mark.unit
 class TestSocialEngineeringDetection:
     """Test social engineering detection."""
-    
+
     def test_social_engineering_detector_initialization(self):
         """Test SocialEngineeringDetector can be initialized."""
         detector = SocialEngineeringDetector()
         assert detector is not None
-    
+
     def test_detect_social_engineering(self):
         """Test detecting social engineering indicators."""
         communication = "URGENT: Your account will be closed. Click here immediately!"
         indicators = detect_social_engineering(communication)
         assert isinstance(indicators, list)
-    
+
     def test_analyze_communication(self):
         """Test analyzing communication for social engineering."""
         communication = "This is an urgent request for your password..."
@@ -54,12 +54,12 @@ class TestSocialEngineeringDetection:
 @pytest.mark.unit
 class TestPhishingAnalysis:
     """Test phishing analysis."""
-    
+
     def test_phishing_analyzer_initialization(self):
         """Test PhishingAnalyzer can be initialized."""
         analyzer = PhishingAnalyzer()
         assert analyzer is not None
-    
+
     def test_analyze_email(self):
         """Test analyzing email for phishing."""
         email_content = "Click here to verify your account: http://fake-bank.com"
@@ -69,7 +69,7 @@ class TestPhishingAnalysis:
         assert hasattr(analysis, "confidence")
         assert hasattr(analysis, "risk_level")
         assert 0.0 <= analysis.confidence <= 1.0
-    
+
     def test_detect_phishing_attempt(self):
         """Test detecting phishing attempt."""
         email_content = "Click here to verify your account"
@@ -80,14 +80,14 @@ class TestPhishingAnalysis:
 @pytest.mark.unit
 class TestAwarenessTraining:
     """Test awareness training."""
-    
+
     def test_awareness_trainer_initialization(self):
         """Test AwarenessTrainer can be initialized."""
         trainer = AwarenessTrainer()
         assert trainer is not None
         assert trainer.modules == {}
         assert trainer.results == []
-    
+
     def test_create_training_module(self):
         """Test creating a training module."""
         module = create_training_module(
@@ -102,7 +102,7 @@ class TestAwarenessTraining:
         assert module.title == "Phishing Awareness"
         assert module.difficulty == "beginner"
         assert module.created_at is not None
-    
+
     def test_assess_training_effectiveness(self):
         """Test assessing training effectiveness."""
         effectiveness = assess_training_effectiveness("user123")
@@ -116,12 +116,12 @@ class TestAwarenessTraining:
 @pytest.mark.unit
 class TestCognitiveThreatAssessment:
     """Test cognitive threat assessment."""
-    
+
     def test_cognitive_threat_assessor_initialization(self):
         """Test CognitiveThreatAssessor can be initialized."""
         assessor = CognitiveThreatAssessor()
         assert assessor is not None
-    
+
     def test_assess_cognitive_threats(self):
         """Test assessing cognitive threats."""
         context = {
@@ -131,7 +131,7 @@ class TestCognitiveThreatAssessment:
         assessment = assess_cognitive_threats(context)
         assert isinstance(assessment, dict)
         assert "total_threats" in assessment
-    
+
     def test_evaluate_human_factors(self):
         """Test evaluating human factors."""
         scenario = {
@@ -148,13 +148,13 @@ class TestCognitiveThreatAssessment:
 @pytest.mark.unit
 class TestBehaviorAnalysis:
     """Test behavior analysis."""
-    
+
     def test_behavior_analyzer_initialization(self):
         """Test BehaviorAnalyzer can be initialized."""
         analyzer = BehaviorAnalyzer()
         assert analyzer is not None
         assert analyzer.behavior_history == {}
-    
+
     def test_analyze_user_behavior(self):
         """Test analyzing user behavior."""
         behavior_data = {
@@ -164,7 +164,7 @@ class TestBehaviorAnalysis:
         }
         patterns = analyze_user_behavior("user123", behavior_data)
         assert isinstance(patterns, list)
-    
+
     def test_detect_anomalous_behavior(self):
         """Test detecting anomalous behavior."""
         current_behavior = {

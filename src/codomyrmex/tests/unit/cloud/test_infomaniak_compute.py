@@ -15,14 +15,13 @@ Tests cover:
 Total: ~24 tests across 7 test classes.
 """
 
-import pytest
 from unittest.mock import MagicMock, patch
 
-from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
-from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
-from codomyrmex.cloud.common import ComputeClient
-from codomyrmex.tests.unit.cloud.conftest import make_mock_server, make_mock_image
 
+from codomyrmex.cloud.common import ComputeClient
+from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
+from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
+from codomyrmex.tests.unit.cloud.conftest import make_mock_image, make_mock_server
 
 # =========================================================================
 # Base Class & Construction

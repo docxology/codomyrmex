@@ -6,8 +6,8 @@ from codomyrmex.cerebrum import (
     BayesianNetwork,
     Distribution,
     InferenceEngine,
-    NetworkStructureError,
     InferenceError,
+    NetworkStructureError,
 )
 
 
@@ -77,12 +77,12 @@ class TestBayesianNetwork:
         network.add_node("A", values=[0, 1])
         network.add_node("B", values=[0, 1])
         network.add_edge("A", "B")
-        
+
         network.set_cpt("B", {
             (0,): {0: 0.8, 1: 0.2},
             (1,): {0: 0.3, 1: 0.7},
         })
-        
+
         assert () in network.cpt["A"]  # Root node has empty parent config
         assert (0,) in network.cpt["B"]
 
@@ -101,10 +101,10 @@ class TestInferenceEngine:
             (0,): {0: 0.8, 1: 0.2},
             (1,): {0: 0.3, 1: 0.7},
         })
-        
+
         inference = InferenceEngine(network)
         result = inference.compute_marginal("A")
-        
+
         assert 0 in result.values
         assert 1 in result.values
         assert abs(sum(result.probabilities) - 1.0) < 1e-6
@@ -119,11 +119,11 @@ class TestInferenceEngine:
             (0,): {0: 0.8, 1: 0.2},
             (1,): {0: 0.3, 1: 0.7},
         })
-        
+
         inference = InferenceEngine(network)
         evidence = {"B": 1}
         result = inference.compute_marginal("A", evidence)
-        
+
         assert 0 in result.values
         assert 1 in result.values
         assert abs(sum(result.probabilities) - 1.0) < 1e-6
@@ -132,7 +132,7 @@ class TestInferenceEngine:
         """Test inference with invalid variable."""
         network = BayesianNetwork()
         network.add_node("A", values=[0, 1])
-        
+
         inference = InferenceEngine(network)
         with pytest.raises(InferenceError):
             inference.compute_marginal("B")  # B doesn't exist

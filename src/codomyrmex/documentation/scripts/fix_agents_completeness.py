@@ -1,30 +1,10 @@
-from pathlib import Path
-from typing import Dict, List, Set
 import argparse
 import json
 import os
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 AGENTS.md Completeness Fixer for Codomyrmex
@@ -111,13 +91,13 @@ def get_file_description(filename: str) -> str:
     return 'Project file'
 
 
-def load_validation_report(report_path: Path) -> Dict:
+def load_validation_report(report_path: Path) -> dict:
     """Load the validation report JSON."""
-    with open(report_path, 'r', encoding='utf-8') as f:
+    with open(report_path, encoding='utf-8') as f:
         return json.load(f)
 
 
-def get_missing_items(validation: Dict) -> Set[str]:
+def get_missing_items(validation: dict) -> set[str]:
     """Extract missing directory items from validation issues."""
     missing_items = set()
 
@@ -139,11 +119,11 @@ def read_agents_file(agents_path: Path) -> str:
     if not agents_path.exists():
         return ""
 
-    with open(agents_path, 'r', encoding='utf-8') as f:
+    with open(agents_path, encoding='utf-8') as f:
         return f.read()
 
 
-def parse_active_components(content: str) -> List[str]:
+def parse_active_components(content: str) -> list[str]:
     """Parse the Active Components section to extract current items."""
     lines = content.split('\n')
     active_components = []
@@ -179,7 +159,7 @@ def parse_active_components(content: str) -> List[str]:
     return active_components
 
 
-def update_active_components(content: str, missing_items: Set[str]) -> str:
+def update_active_components(content: str, missing_items: set[str]) -> str:
     """Add missing items to the Active Components section."""
     if not missing_items:
         return content

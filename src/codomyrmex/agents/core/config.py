@@ -1,52 +1,9 @@
-from pathlib import Path
-from typing import Any, Optional
 import os
-
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Configuration management for agents module."""
 
@@ -58,17 +15,17 @@ class AgentConfig:
     # Jules configuration
     jules_command: str = "jules"
     jules_timeout: int = 30
-    jules_working_dir: Optional[str] = None
+    jules_working_dir: str | None = None
 
     # Claude configuration
-    claude_api_key: Optional[str] = None
+    claude_api_key: str | None = None
     claude_model: str = "claude-3-opus-20240229"
     claude_timeout: int = 60
     claude_max_tokens: int = 4096
     claude_temperature: float = 0.7
 
     # Codex configuration
-    codex_api_key: Optional[str] = None
+    codex_api_key: str | None = None
     codex_model: str = "code-davinci-002"
     codex_timeout: int = 60
     codex_max_tokens: int = 4096
@@ -77,37 +34,37 @@ class AgentConfig:
     # OpenCode configuration
     opencode_command: str = "opencode"
     opencode_timeout: int = 60
-    opencode_working_dir: Optional[str] = None
-    opencode_api_key: Optional[str] = None
+    opencode_working_dir: str | None = None
+    opencode_api_key: str | None = None
 
     # Gemini configuration
     gemini_command: str = "gemini"
     gemini_timeout: int = 60
-    gemini_working_dir: Optional[str] = None
-    gemini_api_key: Optional[str] = None
+    gemini_working_dir: str | None = None
+    gemini_api_key: str | None = None
     gemini_model: str = "gemini-2.0-flash"
     gemini_auth_method: str = "oauth"  # "oauth" or "api_key"
-    gemini_settings_path: Optional[str] = None
+    gemini_settings_path: str | None = None
 
     # Mistral Vibe configuration
     mistral_vibe_command: str = "vibe"
     mistral_vibe_timeout: int = 60
-    mistral_vibe_working_dir: Optional[str] = None
-    mistral_vibe_api_key: Optional[str] = None
+    mistral_vibe_working_dir: str | None = None
+    mistral_vibe_api_key: str | None = None
 
     # Every Code configuration
     every_code_command: str = "code"
     every_code_alt_command: str = "coder"  # Alternative command to avoid VS Code conflicts
     every_code_timeout: int = 120
-    every_code_working_dir: Optional[str] = None
-    every_code_api_key: Optional[str] = None
-    every_code_config_path: Optional[str] = None  # Path to ~/.code/config.toml
+    every_code_working_dir: str | None = None
+    every_code_api_key: str | None = None
+    every_code_config_path: str | None = None  # Path to ~/.code/config.toml
 
     # General agent configuration
     default_timeout: int = 30
     enable_logging: bool = True
     log_level: str = "INFO"
-    output_dir: Optional[Path] = None
+    output_dir: Path | None = None
 
     def __post_init__(self):
         """Initialize configuration from environment variables.
@@ -282,7 +239,7 @@ class AgentConfig:
 
 
 # Global configuration instance
-_config_instance: Optional[AgentConfig] = None
+_config_instance: AgentConfig | None = None
 
 
 def get_config() -> AgentConfig:

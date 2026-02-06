@@ -5,7 +5,7 @@ providing unified access to the main codomyrmex package and template system.
 
 Package Structure:
     The src/ directory contains:
-    - codomyrmex/: Main Python package with 30+ specialized modules
+    - codomyrmex/: Main Python package with 94 specialized modules
     - __init__.py: Package initialization and re-exports
 
     The codomyrmex package is organized in a four-layer architecture:
@@ -63,28 +63,41 @@ __author__ = "Codomyrmex Contributors"
 __email__ = "codomyrmex@example.com"
 __license__ = "MIT"
 
-# Import main package for easy access
-from codomyrmex import (
-    get_module_path,
-    list_modules,
-)
+# Import main package for easy access (guarded for environments where
+# the package is not pip-installed, e.g. pytest discovery with PYTHONPATH)
+try:
+    from codomyrmex import (
+        get_module_path,
+        list_modules,
+    )
 
-# Re-export key functionality from main package
-from codomyrmex import (
-    get_version as get_codomyrmex_version,
-)
+    # Re-export key functionality from main package
+    from codomyrmex import (
+        get_version as get_codomyrmex_version,
+    )
 
-# Re-export common exceptions for convenience
-from codomyrmex.exceptions import (
-    CodeExecutionError,
-    CodeGenerationError,
-    CodomyrmexError,
-    ConfigurationError,
-    EnvironmentError,
-    StaticAnalysisError,
-)
+    # Re-export common exceptions for convenience
+    from codomyrmex.exceptions import (
+        CodeExecutionError,
+        CodeGenerationError,
+        CodomyrmexError,
+        ConfigurationError,
+        EnvironmentError,
+        StaticAnalysisError,
+    )
 
-from . import codomyrmex
+    from . import codomyrmex
+except (ImportError, ModuleNotFoundError):
+    get_module_path = None
+    list_modules = None
+    get_codomyrmex_version = None
+    CodeExecutionError = None
+    CodeGenerationError = None
+    CodomyrmexError = None
+    ConfigurationError = None
+    EnvironmentError = None
+    StaticAnalysisError = None
+    codomyrmex = None
 
 
 def get_source_version() -> str:
@@ -145,7 +158,6 @@ def get_template_info() -> dict:
 __all__ = [
     # Main components
     "codomyrmex",
-    "module_template",
     # Re-exported functions
     "get_codomyrmex_version",
     "list_modules",

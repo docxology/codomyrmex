@@ -1,31 +1,54 @@
-# Codomyrmex Agents — src/codomyrmex/metrics
+# Agent Guidelines - Metrics
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Metrics collection, aggregation, and export to Prometheus/StatsD.
 
-Metrics module providing metrics collection, aggregation, and Prometheus integration. Integrates with performance and logging_monitoring modules for observability.
+## Key Classes
 
-## Active Components
+- **Counter** — Monotonically increasing values
+- **Gauge** — Values that can go up and down
+- **Histogram** — Value distributions with buckets
+- **Summary** — Quantile-based summaries
+- **PrometheusExporter** — Expose /metrics endpoint
+- **MetricAggregator** — Aggregate across sources
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `aggregator.py` – Project file
-- `metrics.py` – Project file
-- `prometheus_exporter.py` – Project file
-- `statsd_client.py` – Project file
+## Agent Instructions
+
+1. **Use semantic names** — Name metrics like `http_requests_total`, not `counter1`
+2. **Add labels sparingly** — Labels create new time series; use for method, status, path
+3. **Choose metric type correctly** — Counter for totals, Gauge for current state, Histogram for latency
+4. **Initialize at startup** — Define metrics once, not per-request
+5. **Aggregate for dashboards** — Use `MetricAggregator` for consolidated views
+
+## Integration Points
+
+- **performance** — Use with `monitor_performance` decorator
+- **logging_monitoring** — Correlate metrics with logs
+- **api** — Instrument request handling
+
+## Testing Patterns
+
+```python
+# Verify counter increments
+counter = Counter("test_counter", "Test")
+counter.inc()
+counter.inc(5)
+assert counter.value() == 6
+
+# Verify histogram observations
+histogram = Histogram("latency", "Request latency")
+histogram.observe(0.1)
+histogram.observe(0.2)
+assert histogram.count() == 2
+```
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Maintain alignment between code, documentation, and workflows
+- Ensure MCP interfaces remain available for sibling agents
+- Record outcomes in shared telemetry
 
-## Navigation Links
+## Navigation
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

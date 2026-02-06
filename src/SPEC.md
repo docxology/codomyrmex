@@ -4,41 +4,47 @@
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 30+ specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 94 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
 ### Modularity
+
 - Each module is self-contained with clear boundaries
 - Minimal inter-module dependencies
 - Independent development and testing
 - Composable functionality
 
 ### Internal Coherence
+
 - Layered architecture: Foundation → Core → Service → Specialized
 - Consistent module structure across all modules
 - Unified naming conventions and patterns
 - Logical dependency flow (no circular dependencies)
 
 ### Parsimony
+
 - Essential functionality per module
 - Minimal public API surface
 - Direct implementations without unnecessary abstractions
 - Focus on core capabilities
 
 ### Functionality
+
 - Working implementations over theoretical designs
 - Forward-looking architecture
 - No legacy compatibility layers
 - Current and future needs focus
 
 ### Testing
+
 - ≥80% test coverage per module
 - Unit tests for all public functions
 - Integration tests for module interactions
 - Real data analysis (no mocks)
 
 ### Documentation
+
 - Self-documenting code structure
 - Complete API specifications
 - Usage examples for all modules
@@ -108,18 +114,21 @@ graph TD
 ### Package Organization
 
 The `src/` directory contains:
+
 - `codomyrmex/` - Main Python package with all modules
 - `__init__.py` - Package initialization and re-exports
 - Documentation files (README.md, AGENTS.md, SPEC.md)
 
 The `codomyrmex/` package contains:
-- 30+ module subdirectories organized by layer
-- Package-level files (__init__.py, cli.py, exceptions.py)
+
+- 94 module subdirectories organized by layer
+- Package-level files (**init**.py, cli.py, exceptions.py)
 - Comprehensive documentation for each module
 
 ## Module Discovery
 
 ### Foundation Layer Modules
+
 - `logging_monitoring` - Structured logging system
 - `environment_setup` - Environment validation
 - `model_context_protocol` - MCP integration
@@ -128,6 +137,7 @@ The `codomyrmex/` package contains:
 - `metrics` - Metrics collection
 
 ### Core Layer Modules
+
 - `static_analysis` - Code quality analysis
 - `coding` - Code execution and sandboxing
 - `data_visualization` - Charts and plots
@@ -140,6 +150,7 @@ The `codomyrmex/` package contains:
 - `scrape`, `documents` - Web scraping and document processing
 
 ### Service Layer Modules
+
 - `build_synthesis` - Build automation
 - `documentation` - Documentation generation
 - `api` - API infrastructure
@@ -150,6 +161,7 @@ The `codomyrmex/` package contains:
 - `auth`, `cloud` - Authentication and cloud services
 
 ### Specialized Layer Modules
+
 - `spatial` - 3D/4D modeling
 - `cerebrum` - Reasoning engine
 - `fpf` - First Principles Framework
@@ -164,7 +176,9 @@ The `codomyrmex/` package contains:
 ## Functional Requirements
 
 ### Package Structure
+
 Each module must provide:
+
 1. Core functionality implementation
 2. Public API with clear interfaces
 3. Configuration management
@@ -174,6 +188,7 @@ Each module must provide:
 7. Documentation (README, AGENTS, SPEC, API_SPEC)
 
 ### Package Organization
+
 - `codomyrmex/` - Main package with all modules
 - `codomyrmex/module_template/` - Code generation templates
 - Consistent module structure across all modules
@@ -182,6 +197,7 @@ Each module must provide:
 ## Quality Standards
 
 ### Code Quality
+
 - Type hints for all public functions
 - PEP 8 compliance
 - Docstrings (Google/NumPy style)
@@ -189,12 +205,14 @@ Each module must provide:
 - Clear module boundaries
 
 ### Testing Standards
+
 - ≥80% coverage per module
 - Unit tests for public APIs
 - Integration tests for workflows
 - Performance benchmarks where applicable
 
 ### Documentation Standards
+
 - README.md for overview
 - AGENTS.md for technical specs
 - SPEC.md for functional design
@@ -204,12 +222,14 @@ Each module must provide:
 ## Interface Contracts
 
 ### Module Interface
+
 - Consistent public API patterns
 - Standardized error handling
 - Unified configuration interfaces
 - Integrated logging
 
 ### Package Interface
+
 - Clear import paths
 - Consistent module naming
 - Standardized initialization
@@ -218,6 +238,7 @@ Each module must provide:
 ## Implementation Guidelines
 
 ### Module Development
+
 1. Define module purpose and boundaries
 2. Implement core functionality
 3. Add comprehensive tests
@@ -225,6 +246,7 @@ Each module must provide:
 5. Integrate with foundation services
 
 ### Code Organization
+
 - Follow established module structure
 - Maintain layer boundaries
 - Respect dependency hierarchy
@@ -233,6 +255,7 @@ Each module must provide:
 ## Development Workflow
 
 ### Creating New Modules
+
 1. Use `module_template` to generate structure
 2. Implement core functionality
 3. Add comprehensive tests
@@ -241,6 +264,7 @@ Each module must provide:
 6. Validate dependencies and tests
 
 ### Module Maintenance
+
 1. Keep documentation synchronized
 2. Maintain test coverage
 3. Review dependencies regularly
@@ -250,6 +274,7 @@ Each module must provide:
 ## Module Template
 
 The `codomyrmex/module_template/` provides:
+
 - Template structure for new modules
 - Documentation templates
 - Test suite templates

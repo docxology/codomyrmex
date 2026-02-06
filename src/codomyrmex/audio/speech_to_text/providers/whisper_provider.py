@@ -12,7 +12,7 @@ using CTranslate2 for efficient inference. It provides:
 import asyncio
 import time
 from pathlib import Path
-from typing import AsyncIterator, Optional
+from collections.abc import AsyncIterator
 
 from codomyrmex.audio.exceptions import (
     AudioFormatError,
@@ -83,7 +83,7 @@ class WhisperProvider(STTProvider):
         model_size: WhisperModelSize = WhisperModelSize.BASE,
         device: str = "auto",
         compute_type: str = "auto",
-        download_root: Optional[str] = None,
+        download_root: str | None = None,
         local_files_only: bool = False,
         **kwargs: object,
     ) -> None:
@@ -112,7 +112,7 @@ class WhisperProvider(STTProvider):
         self.compute_type = compute_type
         self._download_root = download_root
         self._local_files_only = local_files_only
-        self._model: Optional[WhisperModel] = None
+        self._model: WhisperModel | None = None
         self._kwargs = kwargs
 
         # Load model immediately
@@ -168,7 +168,7 @@ class WhisperProvider(STTProvider):
     def transcribe(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> TranscriptionResult:
         """Transcribe an audio file.
 
@@ -273,7 +273,7 @@ class WhisperProvider(STTProvider):
     async def transcribe_async(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> TranscriptionResult:
         """Transcribe an audio file asynchronously.
 
@@ -296,7 +296,7 @@ class WhisperProvider(STTProvider):
     async def transcribe_stream(
         self,
         audio_path: str | Path,
-        config: Optional[TranscriptionConfig] = None,
+        config: TranscriptionConfig | None = None,
     ) -> AsyncIterator[TranscriptionResult]:
         """Stream transcription results as segments complete.
 

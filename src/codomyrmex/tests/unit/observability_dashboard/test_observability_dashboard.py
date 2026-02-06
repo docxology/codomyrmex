@@ -1,6 +1,7 @@
 """Unit tests for observability_dashboard module."""
-import pytest
 from datetime import datetime, timedelta
+
+import pytest
 
 
 @pytest.mark.unit
@@ -81,7 +82,7 @@ class TestMetricValue:
 
     def test_metric_value_creation(self):
         """Verify MetricValue can be created."""
-        from codomyrmex.observability_dashboard import MetricValue, MetricType
+        from codomyrmex.observability_dashboard import MetricType, MetricValue
 
         metric = MetricValue(
             name="cpu_usage",
@@ -522,7 +523,10 @@ class TestDashboardManager:
     def test_manager_get_panel_data(self):
         """Verify panel data retrieval."""
         from codomyrmex.observability_dashboard import (
-            DashboardManager, MetricCollector, Panel, PanelType
+            DashboardManager,
+            MetricCollector,
+            Panel,
+            PanelType,
         )
 
         collector = MetricCollector()

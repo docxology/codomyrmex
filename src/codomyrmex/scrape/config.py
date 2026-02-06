@@ -6,7 +6,7 @@ for scraping operations, including API key management and default settings.
 
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -29,13 +29,13 @@ class ScrapeConfig:
         respect_robots_txt: Whether to respect robots.txt by default
     """
 
-    api_key: Optional[str] = None
+    api_key: str | None = None
     base_url: str = "https://api.firecrawl.dev"
     default_timeout: float = 30.0
     default_formats: list[str] = field(default_factory=lambda: ["markdown"])
     max_retries: int = 3
     retry_delay: float = 1.0
-    rate_limit: Optional[float] = None
+    rate_limit: float | None = None
     user_agent: str = "Codomyrmex-Scraper/0.1.0"
     respect_robots_txt: bool = True
 
@@ -103,9 +103,9 @@ class ScrapeConfig:
                 value=str(self.max_retries),
             )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert configuration to dictionary."""
-        result: Dict[str, any] = {
+        result: dict[str, any] = {
             "base_url": self.base_url,
             "default_timeout": self.default_timeout,
             "default_formats": self.default_formats,
@@ -122,7 +122,7 @@ class ScrapeConfig:
 
 
 # Global configuration instance
-_config: Optional[ScrapeConfig] = None
+_config: ScrapeConfig | None = None
 
 
 def get_config() -> ScrapeConfig:

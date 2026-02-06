@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Serialization Context
+# Personal AI Infrastructure — Serialization Module
 
-**Module**: serialization
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Data serialization and deserialization for JSON, YAML, MessagePack, and Protocol Buffers with schema validation.
+The Serialization module provides PAI integration for data serialization and deserialization.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Multi-Format Serialization
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Serialize to various formats:
 
-## Key Files
+```python
+from codomyrmex.serialization import serialize, deserialize
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+json_data = serialize(obj, format="json")
+yaml_data = serialize(obj, format="yaml")
 
-## Future Considerations
+original = deserialize(json_data, format="json")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Custom Encoders
+
+Handle complex types:
+
+```python
+from codomyrmex.serialization import Serializer
+
+serializer = Serializer()
+serializer.register_encoder(MyClass, my_encoder)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `serialize` | Convert to bytes |
+| `deserialize` | Parse from bytes |
+| `Serializer` | Custom serialization |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

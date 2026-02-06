@@ -1,9 +1,11 @@
+import sys
+import unittest
+from unittest.mock import MagicMock, mock_open, patch
+
 import pytest
 
-import unittest
-import sys
-from unittest.mock import patch, mock_open, MagicMock
 from codomyrmex.documents.utils.encoding_detector import detect_encoding
+
 
 @pytest.mark.unit
 class TestEncodingDetector(unittest.TestCase):
@@ -18,7 +20,7 @@ class TestEncodingDetector(unittest.TestCase):
         """Test delegation to chardet (mocked)."""
         mock_chardet = MagicMock()
         mock_chardet.detect.return_value = {'encoding': 'ascii', 'confidence': 1.0}
-        
+
         with patch.dict(sys.modules, {'chardet': mock_chardet}):
             with patch("builtins.open", new_callable=mock_open, read_data=b'content'):
                 enc = detect_encoding("test.txt")

@@ -1,26 +1,51 @@
-# Personal AI Infrastructure - Cli Context
+# Personal AI Infrastructure — CLI Module
 
-**Module**: cli
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Command-line interface framework with argument parsing, command routing, and interactive shell capabilities.
+The CLI module provides PAI integration for building command-line interfaces.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Command Definition
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Define CLI commands:
 
-## Key Files
+```python
+from codomyrmex.cli import CLI, Option
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+cli = CLI(name="myapp")
 
-## Future Considerations
+@cli.command()
+@Option("--name", "-n", required=True)
+def greet(name: str):
+    \"\"\"Greet a user.\"\"\"
+    print(f"Hello, {name}!")
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+cli.run()
+```
+
+### Rich Output
+
+Formatted terminal output:
+
+```python
+from codomyrmex.cli import Console
+
+console = Console()
+console.print_success("Done!")
+console.print_table(data)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `CLI` | Build CLI apps |
+| `Console` | Rich output |
+| `Option` | Parse arguments |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

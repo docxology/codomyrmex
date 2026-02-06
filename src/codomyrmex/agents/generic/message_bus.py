@@ -1,51 +1,9 @@
-from typing import Any, Callable, Optional
-
 from dataclasses import dataclass, field
+from typing import Any
+from collections.abc import Callable
 from uuid import uuid4
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Inter-agent communication system."""
 
@@ -58,7 +16,7 @@ class Message:
 
     id: str = field(default_factory=lambda: str(uuid4()))
     sender: str = ""
-    recipient: Optional[str] = None
+    recipient: str | None = None
     message_type: str = ""
     content: Any = None
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -148,7 +106,7 @@ class MessageBus:
         recipient: str,
         message_type: str,
         content: Any,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Message:
         """
         Send a message to a specific recipient.
@@ -179,7 +137,7 @@ class MessageBus:
         sender: str,
         message_type: str,
         content: Any,
-        metadata: Optional[dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Message:
         """
         Broadcast a message to all subscribers.
@@ -205,7 +163,7 @@ class MessageBus:
         return message
 
     def get_message_history(
-        self, message_type: Optional[str] = None, limit: Optional[int] = None
+        self, message_type: str | None = None, limit: int | None = None
     ) -> list[Message]:
         """
         Get message history.

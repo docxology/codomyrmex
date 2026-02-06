@@ -1,30 +1,73 @@
 # Chaos Engineering Module
 
-Fault injection and resilience testing for system hardening.
+**Version**: v0.1.0 | **Status**: Active
+
+Fault injection and resilience testing.
 
 ## Quick Start
 
 ```python
 from codomyrmex.chaos_engineering import (
-    FaultInjector, FaultConfig, FaultType,
-    ChaosExperiment, SteadyStateHypothesis,
+    FaultInjector, FaultType, FaultConfig,
+    ChaosExperiment, ChaosMonkey, SteadyStateHypothesis
 )
 
-# Inject latency
+# Inject faults
 injector = FaultInjector()
-injector.register_fault("api", FaultConfig(
+injector.register_fault("db-slow", FaultConfig(
     fault_type=FaultType.LATENCY,
-    probability=0.3,
-    duration_seconds=2.0,
+    probability=0.3,  # 30% of calls
+    duration_seconds=2.0
 ))
 
-# Run experiment
-exp = ChaosExperiment(
-    name="api-latency-test",
-    hypothesis=SteadyStateHypothesis("api-responsive", check_api),
-    action=lambda: injector.inject("api"),
+# Use in code
+injector.maybe_inject("db-slow")  # Probabilistically adds 2s delay
+
+# Define a chaos experiment
+hypothesis = SteadyStateHypothesis(
+    name="Service responds under 500ms",
+    check_fn=lambda: check_response_time() < 0.5
 )
-result = exp.run()
+
+experiment = ChaosExperiment(
+    name="Database Latency Test",
+    hypothesis=hypothesis,
+    action=lambda: injector.inject("db-slow"),
+    rollback=lambda: injector.remove_fault("db-slow")
+)
+
+result = experiment.run()
+print(f"Passed: {result.success}, Duration: {result.duration_seconds:.2f}s")
 ```
+
+## ChaosMonkey
+
+```python
+# Automated chaos testing
+monkey = ChaosMonkey()
+monkey.add_experiment(experiment)
+
+# Run all experiments
+results = monkey.run_all()
+
+# Run random experiment
+result = monkey.run_random()
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `FaultInjector` | Register and trigger faults |
+| `FaultType` | Enum: latency, error, timeout, resource_exhaustion, network_partition |
+| `FaultConfig` | Fault settings: type, probability, duration |
+| `ChaosExperiment` | Define hypothesis, action, rollback |
+| `ChaosMonkey` | Run experiments automatically |
+| `SteadyStateHypothesis` | Expected system behavior |
+| `ExperimentResult` | Experiment outcome with timing |
+| `InjectedFaultError` | Error raised by fault injection |
+| `with_chaos` | Decorator for chaos-protected functions |
+
+## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

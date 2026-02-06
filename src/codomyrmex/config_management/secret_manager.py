@@ -1,116 +1,12 @@
+import secrets
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from cryptography.fernet import Fernet
 
-import secrets
-
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Secret Management Module for Codomyrmex Configuration Management."""
 
@@ -123,7 +19,7 @@ logger = get_logger(__name__)
 class SecretManager:
     """Secure secret management system."""
 
-    def __init__(self, key_file: Optional[str] = None):
+    def __init__(self, key_file: str | None = None):
         """Initialize secret manager.
 
         Args:
@@ -144,7 +40,7 @@ class SecretManager:
         self.fernet = Fernet(self.key)
         self._secrets: dict[str, dict[str, Any]] = {}
 
-    def store_secret(self, name: str, value: str, metadata: Optional[dict[str, Any]] = None) -> str:
+    def store_secret(self, name: str, value: str, metadata: dict[str, Any] | None = None) -> str:
         """Store a secret securely.
 
         Args:
@@ -170,7 +66,7 @@ class SecretManager:
 
         return secret_id
 
-    def get_secret(self, secret_id: str) -> Optional[str]:
+    def get_secret(self, secret_id: str) -> str | None:
         """Retrieve a secret by ID.
 
         Args:
@@ -185,7 +81,7 @@ class SecretManager:
         encrypted_value = self._secrets[secret_id]["value"]
         return self.fernet.decrypt(encrypted_value.encode()).decode()
 
-    def get_secret_by_name(self, name: str) -> Optional[str]:
+    def get_secret_by_name(self, name: str) -> str | None:
         """Retrieve a secret by name.
 
         Args:

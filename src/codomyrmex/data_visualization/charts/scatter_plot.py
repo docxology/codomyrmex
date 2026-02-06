@@ -62,10 +62,10 @@ def create_scatter_plot(
 class ScatterPlot:
     """
     Scatter plot class wrapper for object-oriented usage.
-    
+
     Provides a class-based interface around the create_scatter_plot function.
     """
-    
+
     def __init__(
         self,
         x_data: list = None,
@@ -79,7 +79,7 @@ class ScatterPlot:
     ):
         """
         Initialize a scatter plot.
-        
+
         Args:
             x_data: X-axis data points
             y_data: Y-axis data points
@@ -98,11 +98,11 @@ class ScatterPlot:
         self.dot_size = dot_size
         self.dot_color = dot_color
         self.alpha = alpha
-    
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the scatter plot.
-        
+
         Args:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
@@ -119,11 +119,11 @@ class ScatterPlot:
             dot_color=self.dot_color,
             alpha=self.alpha
         )
-    
+
     def save(self, output_path: str):
         """Save the chart to a file."""
         self.render(output_path=output_path, show_plot=False)
-    
+
     def show(self):
         """Display the chart interactively."""
         self.render(show_plot=True)

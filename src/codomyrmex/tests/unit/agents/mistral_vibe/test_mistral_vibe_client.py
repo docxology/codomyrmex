@@ -4,15 +4,20 @@ Tests use real implementations only. When Mistral Vibe CLI is not available
 or API key is not configured, tests are skipped rather than using mocks.
 """
 
-import pytest
-from pathlib import Path
-from typing import Any
 import os
 
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
-from codomyrmex.agents.mistral_vibe import MistralVibeClient
-from codomyrmex.agents.core.exceptions import MistralVibeError
-from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+import pytest
+
+try:
+    from codomyrmex.agents.core import AgentCapabilities, AgentRequest
+    from codomyrmex.agents.mistral_vibe import MistralVibeClient
+    from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
@@ -39,7 +44,7 @@ class TestMistralVibeClient:
         """Test MistralVibeClient declares correct capabilities."""
         client = MistralVibeClient()
         capabilities = client.get_capabilities()
-        
+
         # Verify all expected capabilities are present
         assert AgentCapabilities.CODE_GENERATION in capabilities
         assert AgentCapabilities.CODE_EDITING in capabilities
@@ -54,7 +59,7 @@ class TestMistralVibeClient:
         client = MistralVibeClient()
         request = AgentRequest(prompt="test prompt")
         response = client.execute(request)
-        
+
         # Test real response structure
         assert isinstance(response, type(client.execute(AgentRequest(prompt=""))))
         # Note: Actual success depends on authentication and CLI state
@@ -137,7 +142,7 @@ class TestMistralVibeClient:
             prompt="Analyze this code",
             context={"files": ["src/main.py"]}
         )
-        
+
         # Test that request structure is correct
         assert request.prompt == "Analyze this code"
         assert "files" in request.context
@@ -149,16 +154,16 @@ class TestMistralVibeClient:
             "mistral_vibe_command": "custom-vibe",
             "mistral_vibe_timeout": 120,
         }
-        
+
         client = MistralVibeClient(config=config)
-        
+
         assert client.command == "custom-vibe"
         assert client.timeout == 120
 
     def test_mistral_vibe_client_request_validation(self):
         """Test request validation."""
         client = MistralVibeClient()
-        
+
         # Test empty prompt validation
         empty_request = AgentRequest(prompt="")
         response = client.execute(empty_request)

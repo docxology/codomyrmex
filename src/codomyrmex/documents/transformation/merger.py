@@ -1,6 +1,5 @@
 """Document merging operations."""
 
-from typing import List
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -21,7 +20,7 @@ def _metadata_as_dict(metadata):
     return {}
 
 
-def merge_documents(documents: List[Document], target_format: DocumentFormat = None) -> Document:
+def merge_documents(documents: list[Document], target_format: DocumentFormat = None) -> Document:
     """
     Merge multiple documents into a single document.
 
@@ -82,7 +81,7 @@ def merge_documents(documents: List[Document], target_format: DocumentFormat = N
         raise DocumentConversionError(f"Failed to merge documents: {str(e)}") from e
 
 
-def _merge_markdown(documents: List[Document]) -> str:
+def _merge_markdown(documents: list[Document]) -> str:
     """Merge markdown documents."""
     parts = []
     for i, doc in enumerate(documents):
@@ -93,7 +92,7 @@ def _merge_markdown(documents: List[Document]) -> str:
     return "".join(parts)
 
 
-def _merge_json(documents: List[Document]) -> dict:
+def _merge_json(documents: list[Document]) -> dict:
     """Merge JSON documents."""
     merged = {}
     for doc in documents:
@@ -106,7 +105,7 @@ def _merge_json(documents: List[Document]) -> dict:
     return merged
 
 
-def _merge_yaml(documents: List[Document]) -> dict:
+def _merge_yaml(documents: list[Document]) -> dict:
     """Merge YAML documents."""
     merged = {}
     for doc in documents:
@@ -119,7 +118,7 @@ def _merge_yaml(documents: List[Document]) -> dict:
     return merged
 
 
-def _merge_text(documents: List[Document]) -> str:
+def _merge_text(documents: list[Document]) -> str:
     """Merge text documents."""
     parts = []
     for doc in documents:

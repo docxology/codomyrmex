@@ -6,9 +6,7 @@ visualizations, and interactive dashboards.
 """
 
 # Submodule exports - import first to make available
-from . import themes
-from . import mermaid
-from . import charts
+from . import charts, mermaid, themes
 
 # Try optional submodules
 try:
@@ -86,11 +84,11 @@ except ImportError:
 
     # Fallback to basic chart functions from charts module
     try:
-        from .charts.bar_chart import create_bar_chart, BarChart
-        from .charts.line_plot import create_line_plot, LinePlot
-        from .charts.scatter_plot import create_scatter_plot, ScatterPlot
-        from .charts.histogram import create_histogram, Histogram
-        from .charts.pie_chart import create_pie_chart, PieChart
+        from .charts.bar_chart import BarChart, create_bar_chart
+        from .charts.histogram import Histogram, create_histogram
+        from .charts.line_plot import LinePlot, create_line_plot
+        from .charts.pie_chart import PieChart, create_pie_chart
+        from .charts.scatter_plot import ScatterPlot, create_scatter_plot
         HAS_BASIC_CHARTS = True
     except ImportError:
         HAS_BASIC_CHARTS = False
@@ -102,20 +100,20 @@ except ImportError:
 
 # Import heatmap from charts (always available)
 try:
-    from .charts.heatmap import create_heatmap, Heatmap
+    from .charts.heatmap import Heatmap, create_heatmap
 except ImportError:
     create_heatmap = None
     Heatmap = None
 
 # Import new chart types
 try:
-    from .charts.box_plot import create_box_plot, BoxPlot
+    from .charts.box_plot import BoxPlot, create_box_plot
 except ImportError:
     create_box_plot = None
     BoxPlot = None
 
 try:
-    from .charts.area_chart import create_area_chart, AreaChart
+    from .charts.area_chart import AreaChart, create_area_chart
 except ImportError:
     create_area_chart = None
     AreaChart = None
@@ -148,7 +146,15 @@ except ImportError:
 # Backward-compatibility: register charts submodules as direct children of data_visualization
 # so that `from codomyrmex.data_visualization.line_plot import ...` still works
 import sys as _sys
-from .charts import line_plot, bar_chart, scatter_plot, histogram, pie_chart, plot_utils  # noqa: F401
+
+from .charts import (  # noqa: F401
+    bar_chart,
+    histogram,
+    line_plot,
+    pie_chart,
+    plot_utils,
+    scatter_plot,
+)
 
 _pkg = "codomyrmex.data_visualization"
 _sys.modules[f"{_pkg}.line_plot"] = line_plot

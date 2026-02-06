@@ -1,12 +1,22 @@
 """Tests for APIAgentBase class."""
 
-import pytest
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core.exceptions import AgentError, AgentConfigurationError
-from codomyrmex.agents.generic import APIAgentBase
-from codomyrmex.agents.core.config import AgentConfig, get_config, set_config, reset_config
+import pytest
+
+try:
+    from codomyrmex.agents.core import AgentCapabilities, AgentRequest, AgentResponse
+    from codomyrmex.agents.core.config import (
+        AgentConfig,
+    )
+    from codomyrmex.agents.core.exceptions import AgentConfigurationError, AgentError
+    from codomyrmex.agents.generic import APIAgentBase
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 @pytest.mark.unit

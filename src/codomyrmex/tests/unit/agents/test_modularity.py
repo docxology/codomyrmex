@@ -6,17 +6,28 @@ that implements BaseAgent interface for testing, not a mock.
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
-from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+    from codomyrmex.agents.jules import JulesClient, JulesIntegrationAdapter
+    from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 @pytest.mark.unit
 class TestAgent(BaseAgent):
     """Test agent for testing modularity.
-    
+
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
@@ -47,14 +58,14 @@ class TestAgentSwapping:
         """Test switching between different agent implementations."""
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        
+
         request = AgentRequest(prompt="test")
-        
+
         # Use agent1
         response1 = agent1.execute(request)
         assert response1.is_success()
         assert "agent1" in response1.content
-        
+
         # Switch to agent2
         response2 = agent2.execute(request)
         assert response2.is_success()
@@ -64,15 +75,15 @@ class TestAgentSwapping:
         """Test hot-swapping agents in orchestrator."""
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
-        
+
         orchestrator = AgentOrchestrator([agent1])
         request = AgentRequest(prompt="test")
-        
+
         # Execute with agent1
         responses1 = orchestrator.execute_parallel(request)
         assert len(responses1) == 1
         assert "agent1" in responses1[0].content
-        
+
         # Hot-swap to agent2
         orchestrator.agents = [agent2]
         responses2 = orchestrator.execute_parallel(request)
@@ -89,12 +100,12 @@ class TestAgentSwapping:
             AgentCapabilities.CODE_ANALYSIS,
             AgentCapabilities.TEXT_COMPLETION
         ])
-        
+
         # Check capabilities
         assert agent1.supports_capability(AgentCapabilities.CODE_GENERATION)
         assert agent1.supports_capability(AgentCapabilities.CODE_EDITING)
         assert not agent1.supports_capability(AgentCapabilities.CODE_ANALYSIS)
-        
+
         assert agent2.supports_capability(AgentCapabilities.CODE_ANALYSIS)
         assert not agent2.supports_capability(AgentCapabilities.CODE_GENERATION)
 
@@ -106,14 +117,14 @@ class TestAgentSwapping:
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
-        
+
         # Select agents with CODE_GENERATION
         code_gen_agents = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_GENERATION.value
         )
-        
+
         assert len(code_gen_agents) == 2
         assert agent1 in code_gen_agents
         assert agent3 in code_gen_agents
@@ -124,19 +135,19 @@ class TestAgentSwapping:
         code_gen_agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
         code_edit_agent = TestAgent("code_edit", [AgentCapabilities.CODE_EDITING])
         analysis_agent = TestAgent("analysis", [AgentCapabilities.CODE_ANALYSIS])
-        
+
         orchestrator = AgentOrchestrator([
             code_gen_agent,
             code_edit_agent,
             analysis_agent
         ])
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 3
         assert all(r.is_success() for r in responses)
-        
+
         # Verify each agent executed
         assert code_gen_agent.execution_count == 1
         assert code_edit_agent.execution_count == 1
@@ -153,7 +164,7 @@ class TestModularIntegration:
         opencode_client = OpenCodeClient()
         opencode_adapter = OpenCodeIntegrationAdapter(opencode_client)
         assert opencode_adapter.agent == opencode_client
-        
+
         # Test with Jules
         jules_client = JulesClient()
         jules_adapter = JulesIntegrationAdapter(jules_client)
@@ -163,49 +174,49 @@ class TestModularIntegration:
         """Test that different agents can work together."""
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2])
         request = AgentRequest(prompt="test")
-        
+
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 2
         assert all(r.is_success() for r in responses)
 
     def test_plugin_style_agent_addition(self):
         """Test adding agents in plugin-style."""
         orchestrator = AgentOrchestrator([])
-        
+
         # Add agents dynamically
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         orchestrator.agents.append(agent1)
-        
+
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
         orchestrator.agents.append(agent2)
-        
+
         assert len(orchestrator.agents) == 2
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 2
 
     def test_agent_lifecycle_management(self):
         """Test agent lifecycle management."""
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2])
-        
+
         # Execute
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
         assert len(responses) == 2
-        
+
         # Remove agent
         orchestrator.agents.remove(agent1)
         assert len(orchestrator.agents) == 1
-        
+
         # Execute with remaining agent
         responses2 = orchestrator.execute_parallel(request)
         assert len(responses2) == 1
@@ -215,9 +226,9 @@ class TestModularIntegration:
         """Test mixing different agent types structure."""
         test_agent = TestAgent("test", [AgentCapabilities.CODE_GENERATION])
         opencode_agent = OpenCodeClient()
-        
+
         orchestrator = AgentOrchestrator([test_agent, opencode_agent])
-        
+
         # Test structure without requiring execution
         assert len(orchestrator.agents) == 2
         assert orchestrator.agents[0] == test_agent
@@ -232,9 +243,9 @@ class TestModularIntegration:
             AgentCapabilities.CODE_EDITING,
             AgentCapabilities.CODE_ANALYSIS
         ])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
-        
+
         # Request CODE_GENERATION capability
         code_gen_agents = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_GENERATION.value
@@ -242,7 +253,7 @@ class TestModularIntegration:
         assert len(code_gen_agents) == 2
         assert agent1 in code_gen_agents
         assert agent3 in code_gen_agents
-        
+
         # Request CODE_ANALYSIS capability
         analysis_agents = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_ANALYSIS.value

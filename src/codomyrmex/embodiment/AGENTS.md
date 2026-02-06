@@ -1,30 +1,57 @@
-# Codomyrmex Agents — src/codomyrmex/embodiment
+# Agent Guidelines - Embodiment
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Robotics integration with ROS2, sensors, actuators, and 3D coordinate transforms.
 
-Embodiment module providing physical/robotic system integration capabilities. Bridges digital systems with physical world through sensor/actuator interfaces.
+## Key Classes
 
-## Active Components
+- **ROS2Bridge** — WebSocket bridge to ROS2 nodes
+- **Transform3D** — Position, rotation, and scale transforms
+- **SensorInterface** — Abstract sensor data handling
+- **ActuatorController** — Motor/actuator control
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `actuators/` – Directory containing actuators components
-- `ros/` – Directory containing ros components
-- `sensors/` – Directory containing sensors components
-- `transformation/` – Directory containing transformation components
+## Agent Instructions
 
-## Operating Contracts
+1. **Connect before use** — Call `bridge.connect()` before pub/sub operations
+2. **Handle disconnects** — Implement reconnection logic for ROS2 bridge
+3. **Transform frame** — Always specify coordinate frame for transforms
+4. **Rate limit commands** — Don't flood actuators with commands
+5. **Validate sensor data** — Check timestamps and validity flags
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## ROS2 Patterns
 
-## Navigation Links
+```python
+from codomyrmex.embodiment import ROS2Bridge
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+bridge = ROS2Bridge(uri="ws://localhost:9090")
+await bridge.connect()
+
+# Subscribe to topics
+await bridge.subscribe("/camera/image", on_image_callback)
+await bridge.subscribe("/odom", on_odometry_callback)
+
+# Publish commands
+await bridge.publish("/cmd_vel", {
+    "linear": {"x": 0.5, "y": 0, "z": 0},
+    "angular": {"x": 0, "y": 0, "z": 0.1}
+})
+```
+
+## Testing Patterns
+
+```python
+# Test transform operations
+from codomyrmex.embodiment import Transform3D
+
+t = Transform3D()
+t.translate(1, 0, 0)
+t.rotate_euler(0, 0, 90)
+
+point = t.apply([0, 1, 0])
+assert abs(point[0] - 0) < 0.01  # Rotated 90°
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -4,7 +4,7 @@ Metrics Collection
 Collects and aggregates execution metrics for analysis and reporting.
 """
 
-from typing import Any, Dict, List
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -15,9 +15,9 @@ class MetricsCollector:
 
     def __init__(self):
         """Initialize the metrics collector."""
-        self.metrics: List[Dict[str, Any]] = []
+        self.metrics: list[dict[str, Any]] = []
 
-    def record_execution(self, execution_result: Dict[str, Any]) -> None:
+    def record_execution(self, execution_result: dict[str, Any]) -> None:
         """Record an execution result for metrics collection."""
         metric = {
             "timestamp": execution_result.get("timestamp"),
@@ -29,7 +29,7 @@ class MetricsCollector:
         }
         self.metrics.append(metric)
 
-    def get_language_stats(self) -> Dict[str, Dict[str, Any]]:
+    def get_language_stats(self) -> dict[str, dict[str, Any]]:
         """Get statistics grouped by programming language."""
         language_stats = {}
 
@@ -59,7 +59,7 @@ class MetricsCollector:
 
         return language_stats
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get summary statistics for all collected metrics."""
         if not self.metrics:
             return {

@@ -14,8 +14,8 @@ Uses mock_openstack_connection fixture and make_mock_stack factory from conftest
 Total: ~26 tests in TestInfomaniakOrchestration class.
 """
 
-import pytest
 from unittest.mock import MagicMock, mock_open, patch
+
 
 from codomyrmex.cloud.infomaniak.orchestration.client import InfomaniakHeatClient
 

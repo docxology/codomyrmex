@@ -1,50 +1,6 @@
-from typing import List, Optional
-
 from dataclasses import dataclass
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security architecture patterns."""
 
@@ -54,11 +10,11 @@ logger = get_logger(__name__)
 @dataclass
 class SecurityPattern:
     """Represents a security architecture pattern."""
-    
+
     name: str
     description: str
     category: str  # authentication, authorization, encryption, etc.
-    use_cases: List[str]
+    use_cases: list[str]
     implementation: str
 
 
@@ -88,7 +44,7 @@ PATTERNS = {
 }
 
 
-def get_security_patterns() -> List[SecurityPattern]:
+def get_security_patterns() -> list[SecurityPattern]:
     """Get all security patterns."""
     return list(PATTERNS.values())
 
@@ -99,7 +55,7 @@ def apply_pattern(pattern_name: str, context: dict) -> dict:
     if not pattern:
         logger.warning(f"Unknown pattern: {pattern_name}")
         return {"applied": False, "error": "Unknown pattern"}
-    
+
     # Placeholder for actual application logic
     return {
         "applied": True,

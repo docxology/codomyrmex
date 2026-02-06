@@ -1,34 +1,55 @@
-# tree_sitter
+# Tree-sitter Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Code parsing with tree-sitter for syntax analysis and transformations.
 
-The tree_sitter module provides high-fidelity source code parsing across multiple programming languages using the tree-sitter parsing library. It wraps the tree-sitter `Parser` and `Language` APIs for syntax tree construction, pattern-based querying via S-expression queries, and code transformation -- enabling advanced static analysis, refactoring, and intelligent code auditing within the Codomyrmex ecosystem.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager
 
-- **`TreeSitterParser`** -- Wrapper around tree-sitter's `Parser` class. Accepts a language instance, parses source code strings into syntax trees via `parse()`, and executes S-expression queries against trees via `query()` to capture matching nodes.
-- **`LanguageManager`** -- Manages tree-sitter language libraries. Provides `load_language()` to load languages from shared libraries (.so/.dll/.dylib), `get_language()` to retrieve loaded instances, and `discover_languages()` to auto-detect all language libraries in a directory.
-- **`parsers`** -- Submodule containing the `TreeSitterParser` implementation
-- **`languages`** -- Submodule containing `LanguageManager` for multi-language support
-- **`queries`** -- Submodule for S-expression query definitions and tree pattern matching
-- **`transformers`** -- Submodule for syntax tree transformations and code rewriting
+# Load language
+manager = LanguageManager()
+manager.load("python")
+manager.load("javascript")
 
-## Directory Contents
+# Parse code
+parser = TreeSitterParser(language="python")
+tree = parser.parse('''
+def hello(name):
+    return f"Hello, {name}!"
+''')
 
-- `__init__.py` - Module entry point; exports parser, language manager, and submodules
-- `parsers/` - Parser implementation (`parser.py`) wrapping tree-sitter's core `Parser`
-- `languages/` - Language management (`languages.py`) for loading and discovering language grammars
-- `queries/` - S-expression query definitions for structural code pattern matching
-- `transformers/` - Syntax tree transformation utilities for code rewriting
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+# Query syntax tree
+functions = parser.query("(function_definition) @func")
+for node in functions:
+    print(f"Function: {node.text}")
+
+# Extract structure
+classes = parser.query("(class_definition name: (identifier) @name)")
+```
+
+## Submodules
+
+| Module | Description |
+|--------|-------------|
+| `parsers` | Parser implementation |
+| `languages` | Language loading and management |
+| `queries` | Tree-sitter query patterns |
+| `transformers` | AST transformations |
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `TreeSitterParser` | Parse code to syntax tree |
+| `LanguageManager` | Load and manage languages |
+
+## Supported Languages
+
+Python, JavaScript, TypeScript, Go, Rust, C, C++, Java, and more via language packs.
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/tree_sitter/](../../../docs/modules/tree_sitter/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

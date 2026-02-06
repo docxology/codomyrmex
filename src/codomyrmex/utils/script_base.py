@@ -36,20 +36,23 @@ Usage:
 import argparse
 import json
 import os
-import sys
-import time
 import traceback
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable
+from typing import Any
+from collections.abc import Callable
+
 import yaml
 
 # Ensure codomyrmex is importable
 try:
     from codomyrmex.logging_monitoring import get_logger, setup_logging
-    from codomyrmex.logging_monitoring.logger_config import LogContext, PerformanceLogger
+    from codomyrmex.logging_monitoring.logger_config import (
+        LogContext,
+        PerformanceLogger,
+    )
 except ImportError:
     # Fallback for standalone execution
     import logging
@@ -80,13 +83,13 @@ class ScriptConfig:
     quiet: bool = False
 
     # Output settings
-    output_dir: Optional[Path] = None
+    output_dir: Path | None = None
     output_format: str = "json"  # json, yaml, text
     save_output: bool = True
 
     # Logging settings
     log_level: str = "INFO"
-    log_file: Optional[Path] = None
+    log_file: Path | None = None
     log_format: str = "text"  # text, json
 
     # Runtime settings
@@ -95,10 +98,10 @@ class ScriptConfig:
     retry_delay: float = 1.0
 
     # Custom config from file/env
-    custom: Dict[str, Any] = field(default_factory=dict)
+    custom: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ScriptConfig":
+    def from_dict(cls, data: dict[str, Any]) -> "ScriptConfig":
         """Create config from dictionary."""
         known_fields = {f.name for f in cls.__dataclass_fields__.values()}
         known_data = {k: v for k, v in data.items() if k in known_fields}
@@ -108,7 +111,7 @@ class ScriptConfig:
         config.custom.update(custom_data)
         return config
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return asdict(self)
 
@@ -122,13 +125,13 @@ class ScriptResult:
     end_time: str
     duration_seconds: float
     exit_code: int
-    data: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
-    metrics: Dict[str, Any] = field(default_factory=dict)
-    config_used: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    config_used: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return asdict(self)
 
@@ -154,7 +157,7 @@ class ScriptBase(ABC):
         name: str,
         description: str,
         version: str = "1.0.0",
-        default_output_dir: Optional[Path] = None,
+        default_output_dir: Path | None = None,
     ):
         """Initialize script base.
 
@@ -172,12 +175,12 @@ class ScriptBase(ABC):
         # Will be set during execution
         self.logger = None
         self.perf_logger = None
-        self.config: Optional[ScriptConfig] = None
-        self.run_id: Optional[str] = None
-        self.output_path: Optional[Path] = None
-        self._warnings: List[str] = []
-        self._errors: List[str] = []
-        self._metrics: Dict[str, Any] = {}
+        self.config: ScriptConfig | None = None
+        self.run_id: str | None = None
+        self.output_path: Path | None = None
+        self._warnings: list[str] = []
+        self._errors: list[str] = []
+        self._metrics: dict[str, Any] = {}
 
     def create_parser(self) -> argparse.ArgumentParser:
         """Create argument parser with standard arguments."""
@@ -336,7 +339,7 @@ Environment Variables:
 
         return ScriptConfig.from_dict(config_data)
 
-    def _load_config_file(self, path: Path) -> Dict[str, Any]:
+    def _load_config_file(self, path: Path) -> dict[str, Any]:
         """Load configuration from file."""
         try:
             with open(path) as f:
@@ -351,7 +354,7 @@ Environment Variables:
             self.log_warning(f"Failed to load config file: {e}")
             return {}
 
-    def _load_env_config(self, prefix: str) -> Dict[str, Any]:
+    def _load_env_config(self, prefix: str) -> dict[str, Any]:
         """Load configuration from environment variables."""
         config = {}
         prefix = prefix.upper() + "_"
@@ -448,7 +451,7 @@ Environment Variables:
         """Add a metric to the result."""
         self._metrics[name] = value
 
-    def save_result(self, result: ScriptResult) -> Optional[Path]:
+    def save_result(self, result: ScriptResult) -> Path | None:
         """Save execution result to file."""
         if not self.config.save_output or not self.output_path:
             return None
@@ -496,7 +499,7 @@ Environment Variables:
         return "\n".join(lines)
 
     @abstractmethod
-    def run(self, args: argparse.Namespace, config: ScriptConfig) -> Dict[str, Any]:
+    def run(self, args: argparse.Namespace, config: ScriptConfig) -> dict[str, Any]:
         """Execute the script logic.
 
         Override this method to implement script functionality.
@@ -510,7 +513,7 @@ Environment Variables:
         """
         pass
 
-    def execute(self, argv: Optional[List[str]] = None) -> int:
+    def execute(self, argv: list[str] | None = None) -> int:
         """Execute the script with full lifecycle management.
 
         Args:
@@ -640,7 +643,7 @@ class ConfigurableScript(ScriptBase):
                 return default
         return value
 
-    def require_config(self, key: str, message: Optional[str] = None) -> Any:
+    def require_config(self, key: str, message: str | None = None) -> Any:
         """Get a required configuration value.
 
         Args:
@@ -663,8 +666,8 @@ class ConfigurableScript(ScriptBase):
 def run_script(
     name: str,
     description: str,
-    run_func: Callable[[argparse.Namespace, ScriptConfig], Dict[str, Any]],
-    add_args_func: Optional[Callable[[argparse.ArgumentParser], None]] = None,
+    run_func: Callable[[argparse.Namespace, ScriptConfig], dict[str, Any]],
+    add_args_func: Callable[[argparse.ArgumentParser], None] | None = None,
     version: str = "1.0.0",
 ) -> int:
     """Convenience function to run a simple script.

@@ -1,21 +1,21 @@
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from codomyrmex.cerebrum.inference.active_inference import ActiveInferenceAgent
-    from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork, InferenceEngine, PriorBuilder
+    from codomyrmex.cerebrum.inference.bayesian import (
+        BayesianNetwork,
+        InferenceEngine,
+    )
 from codomyrmex.cerebrum.core.cases import Case, CaseBase, CaseRetriever
 from codomyrmex.cerebrum.core.config import CerebrumConfig
-from codomyrmex.cerebrum.core.exceptions import CerebrumError, ModelError
+from codomyrmex.cerebrum.core.exceptions import ModelError
 from codomyrmex.cerebrum.core.models import Model, ReasoningResult
-from codomyrmex.logging_monitoring import get_logger
-
 from codomyrmex.cerebrum.core.transformations import (
     AdaptationTransformer,
     LearningTransformer,
     TransformationManager,
-
-
 )
+from codomyrmex.logging_monitoring import get_logger
 
 """Main CEREBRUM engine that orchestrates case-based reasoning and Bayesian inference."""
 
@@ -31,7 +31,7 @@ class ModelManager:
         self.models: dict[str, Model] = {}
         self.logger = get_logger(__name__)
 
-    def create_model(self, name: str, model_type: str, config: Optional[dict[str, Any]] = None) -> Model:
+    def create_model(self, name: str, model_type: str, config: dict[str, Any] | None = None) -> Model:
         """Create a new model.
 
         Args:
@@ -88,7 +88,7 @@ class ReasoningEngine:
         self,
         case_base: CaseBase,
         bayesian_network: Optional["BayesianNetwork"] = None,
-        config: Optional[CerebrumConfig] = None,
+        config: CerebrumConfig | None = None,
     ):
         """Initialize reasoning engine.
 
@@ -105,7 +105,7 @@ class ReasoningEngine:
             case_base, weighting_strategy=self.config.case_weighting_strategy
         )
 
-        self.inference_engine: Optional["InferenceEngine"] = None
+        self.inference_engine: "InferenceEngine" | None = None
         if bayesian_network:
             from codomyrmex.cerebrum.inference.bayesian import InferenceEngine
             self.inference_engine = InferenceEngine(
@@ -114,7 +114,7 @@ class ReasoningEngine:
 
         self.logger = get_logger(__name__)
 
-    def reason(self, query: Case, context: Optional[dict[str, Any]] = None) -> ReasoningResult:
+    def reason(self, query: Case, context: dict[str, Any] | None = None) -> ReasoningResult:
         """Perform reasoning combining case-based and Bayesian inference.
 
         Args:
@@ -199,7 +199,7 @@ class ReasoningEngine:
 class CerebrumEngine:
     """Main CEREBRUM engine orchestrating all components."""
 
-    def __init__(self, config: Optional[CerebrumConfig] = None):
+    def __init__(self, config: CerebrumConfig | None = None):
         """Initialize CEREBRUM engine.
 
         Args:
@@ -222,13 +222,13 @@ class CerebrumEngine:
         )
 
         # Optional components
-        self.bayesian_network: Optional["BayesianNetwork"] = None
-        self.active_inference_agent: Optional["ActiveInferenceAgent"] = None
-        self.reasoning_engine: Optional[ReasoningEngine] = None
+        self.bayesian_network: "BayesianNetwork" | None = None
+        self.active_inference_agent: "ActiveInferenceAgent" | None = None
+        self.reasoning_engine: ReasoningEngine | None = None
 
         self.logger.info("Initialized CEREBRUM engine")
 
-    def create_model(self, name: str, model_type: str, config: Optional[dict[str, Any]] = None) -> Model:
+    def create_model(self, name: str, model_type: str, config: dict[str, Any] | None = None) -> Model:
         """Create a new cognitive model.
 
         Args:
@@ -250,7 +250,7 @@ class CerebrumEngine:
         self.case_base.add_case(case)
         self.logger.debug(f"Added case: {case.case_id}")
 
-    def reason(self, case: Case, context: Optional[dict[str, Any]] = None) -> ReasoningResult:
+    def reason(self, case: Case, context: dict[str, Any] | None = None) -> ReasoningResult:
         """Perform reasoning on a case.
 
         Args:

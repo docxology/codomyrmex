@@ -5,8 +5,8 @@ This module provides components with the ability to listen to events from the ev
 with filtering, prioritization, and lifecycle management.
 """
 
-import asyncio
-from typing import Dict, List, Any, Optional, Callable, Union, Awaitable
+from typing import Any
+from collections.abc import Callable
 
 # Import logging
 try:
@@ -16,7 +16,12 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-from .event_bus import get_event_bus, EventBus, subscribe_to_events, unsubscribe_from_events
+from .event_bus import (
+    EventBus,
+    get_event_bus,
+    subscribe_to_events,
+    unsubscribe_from_events,
+)
 from .event_schema import Event, EventType
 
 
@@ -25,18 +30,18 @@ class EventListener:
     Event listener for components that want to receive events.
     """
 
-    def __init__(self, listener_id: str, event_bus: Optional[EventBus] = None):
+    def __init__(self, listener_id: str, event_bus: EventBus | None = None):
         """Initialize the event listener."""
         self.listener_id = listener_id
         self.event_bus = event_bus or get_event_bus()
-        self.subscriptions: Dict[str, str] = {}  # handler_name -> subscriber_id
-        self.handlers: Dict[str, Callable[[Event], Any]] = {}
+        self.subscriptions: dict[str, str] = {}  # handler_name -> subscriber_id
+        self.handlers: dict[str, Callable[[Event], Any]] = {}
         self.enabled = True
 
 
-    def on(self, event_types: Union[EventType, List[EventType]],
-           handler: Callable[[Event], Any], handler_name: Optional[str] = None,
-           filter_func: Optional[Callable[[Event], bool]] = None,
+    def on(self, event_types: EventType | list[EventType],
+           handler: Callable[[Event], Any], handler_name: str | None = None,
+           filter_func: Callable[[Event], bool] | None = None,
            priority: int = 0) -> str:
         """Register an event handler."""
         if not self.enabled:
@@ -60,20 +65,20 @@ class EventListener:
         self.handlers[handler_name] = handler
         return handler_name
 
-    def once(self, event_types: Union[EventType, List[EventType]],
-             handler: Callable[[Event], Any], handler_name: Optional[str] = None,
-             filter_func: Optional[Callable[[Event], bool]] = None,
+    def once(self, event_types: EventType | list[EventType],
+             handler: Callable[[Event], Any], handler_name: str | None = None,
+             filter_func: Callable[[Event], bool] | None = None,
              priority: int = 0) -> str:
         """Register a one-time event handler."""
         if handler_name is None:
             handler_name = f"{self.listener_id}_once_{len(self.handlers)}"
-            
+
         def one_time_wrapper(event: Event):
             try:
                 handler(event)
             finally:
                 self.off(handler_name)
-                
+
         return self.on(event_types, one_time_wrapper, handler_name, filter_func, priority)
 
     def off(self, handler_name: str) -> bool:
@@ -86,19 +91,19 @@ class EventListener:
             return True
         return False
 
-    def listen_to_analysis_events(self, handler: Callable[[Event], Any]) -> List[str]:
-        event_types = [EventType.ANALYSIS_START, EventType.ANALYSIS_PROGRESS, 
+    def listen_to_analysis_events(self, handler: Callable[[Event], Any]) -> list[str]:
+        event_types = [EventType.ANALYSIS_START, EventType.ANALYSIS_PROGRESS,
                        EventType.ANALYSIS_COMPLETE, EventType.ANALYSIS_ERROR]
         return [self.on(et, handler) for et in event_types]
 
-    def listen_to_build_events(self, handler: Callable[[Event], Any]) -> List[str]:
-        event_types = [EventType.BUILD_START, EventType.BUILD_PROGRESS, 
+    def listen_to_build_events(self, handler: Callable[[Event], Any]) -> list[str]:
+        event_types = [EventType.BUILD_START, EventType.BUILD_PROGRESS,
                        EventType.BUILD_COMPLETE, EventType.BUILD_ERROR]
         return [self.on(et, handler) for et in event_types]
 
 
-def event_handler(event_types: Union[EventType, List[EventType]], 
-                 filter_func: Optional[Callable[[Event], bool]] = None,
+def event_handler(event_types: EventType | list[EventType],
+                 filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0):
     def decorator(func):
         func._event_types = event_types if isinstance(event_types, list) else [event_types]

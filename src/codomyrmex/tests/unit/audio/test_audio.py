@@ -8,8 +8,10 @@ Tests cover:
 - Model serialization (to_srt, to_vtt, to_json)
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
+
 
 # Test imports
 def test_audio_module_imports() -> None:
@@ -22,11 +24,11 @@ def test_audio_exceptions_import() -> None:
     """Test that all exception classes can be imported."""
     from codomyrmex.audio.exceptions import (
         AudioError,
-        TranscriptionError,
-        SynthesisError,
         AudioFormatError,
         ModelNotLoadedError,
         ProviderNotAvailableError,
+        SynthesisError,
+        TranscriptionError,
         VoiceNotFoundError,
     )
 
@@ -164,8 +166,8 @@ class TestTranscriptionModels:
     def test_transcription_result_dataclass(self) -> None:
         """Test TranscriptionResult dataclass."""
         from codomyrmex.audio.speech_to_text.models import (
-            TranscriptionResult,
             Segment,
+            TranscriptionResult,
             WhisperModelSize,
         )
 
@@ -190,8 +192,8 @@ class TestTranscriptionModels:
     def test_transcription_result_to_srt(self) -> None:
         """Test TranscriptionResult SRT export."""
         from codomyrmex.audio.speech_to_text.models import (
-            TranscriptionResult,
             Segment,
+            TranscriptionResult,
         )
 
         segments = [
@@ -214,8 +216,8 @@ class TestTranscriptionModels:
     def test_transcription_result_to_vtt(self) -> None:
         """Test TranscriptionResult VTT export."""
         from codomyrmex.audio.speech_to_text.models import (
-            TranscriptionResult,
             Segment,
+            TranscriptionResult,
         )
 
         segments = [
@@ -235,8 +237,8 @@ class TestTranscriptionModels:
     def test_transcription_result_to_json(self) -> None:
         """Test TranscriptionResult JSON export."""
         from codomyrmex.audio.speech_to_text.models import (
-            TranscriptionResult,
             Segment,
+            TranscriptionResult,
             WhisperModelSize,
         )
 
@@ -294,7 +296,7 @@ class TestSynthesisModels:
 
     def test_voice_info_dataclass(self) -> None:
         """Test VoiceInfo dataclass."""
-        from codomyrmex.audio.text_to_speech.models import VoiceInfo, VoiceGender
+        from codomyrmex.audio.text_to_speech.models import VoiceGender, VoiceInfo
 
         voice = VoiceInfo(
             id="en-US-AriaNeural",
@@ -314,8 +316,8 @@ class TestSynthesisModels:
     def test_synthesis_result_dataclass(self) -> None:
         """Test SynthesisResult dataclass."""
         from codomyrmex.audio.text_to_speech.models import (
-            SynthesisResult,
             AudioFormat,
+            SynthesisResult,
         )
 
         result = SynthesisResult(
@@ -352,7 +354,7 @@ class TestSynthesisModels:
 
     def test_tts_config(self) -> None:
         """Test TTSConfig defaults."""
-        from codomyrmex.audio.text_to_speech.models import TTSConfig, AudioFormat
+        from codomyrmex.audio.text_to_speech.models import AudioFormat, TTSConfig
 
         config = TTSConfig()
 
@@ -370,8 +372,8 @@ class TestProviders:
 
     def test_stt_provider_interface(self) -> None:
         """Test STTProvider abstract interface."""
+
         from codomyrmex.audio.speech_to_text.providers.base import STTProvider
-        import abc
 
         # Verify it's an abstract class
         assert hasattr(STTProvider, "__abstractmethods__")

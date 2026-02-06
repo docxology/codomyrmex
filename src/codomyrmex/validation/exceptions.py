@@ -7,7 +7,8 @@ All exceptions inherit from CodomyrmexError for consistent error handling.
 
 from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError, ValidationError as BaseValidationError
+from codomyrmex.exceptions import CodomyrmexError
+from codomyrmex.exceptions import ValidationError as BaseValidationError
 
 
 class ValidationError(BaseValidationError):

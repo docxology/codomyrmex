@@ -3,9 +3,9 @@
 Main interface for skill operations.
 """
 
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 import logging
+from pathlib import Path
+from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -119,7 +119,7 @@ class SkillsManager:
 
         return success
 
-    def get_skill(self, category: str, name: str) -> Optional[Dict[str, Any]]:
+    def get_skill(self, category: str, name: str) -> dict[str, Any] | None:
         """
         Get a specific skill.
 
@@ -132,7 +132,7 @@ class SkillsManager:
         """
         return self.loader.get_merged_skill(category, name)
 
-    def list_skills(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_skills(self, category: str | None = None) -> list[dict[str, Any]]:
         """
         List available skills.
 
@@ -171,7 +171,7 @@ class SkillsManager:
 
         return results
 
-    def search_skills(self, query: str) -> List[Dict[str, Any]]:
+    def search_skills(self, query: str) -> list[dict[str, Any]]:
         """
         Search skills by query.
 
@@ -184,7 +184,7 @@ class SkillsManager:
         return self.registry.search_skills(query)
 
     def add_custom_skill(
-        self, category: str, name: str, skill_data: Dict[str, Any]
+        self, category: str, name: str, skill_data: dict[str, Any]
     ) -> bool:
         """
         Add a custom skill (overrides upstream).
@@ -222,7 +222,7 @@ class SkillsManager:
             logger.error(f"Error adding custom skill: {e}")
             return False
 
-    def get_merged_skill(self, category: str, name: str) -> Optional[Dict[str, Any]]:
+    def get_merged_skill(self, category: str, name: str) -> dict[str, Any] | None:
         """
         Get skill with custom overrides applied.
 
@@ -235,7 +235,7 @@ class SkillsManager:
         """
         return self.loader.get_merged_skill(category, name)
 
-    def get_categories(self) -> List[str]:
+    def get_categories(self) -> list[str]:
         """
         Get all available skill categories.
 
@@ -244,7 +244,7 @@ class SkillsManager:
         """
         return self.registry.get_categories()
 
-    def get_upstream_status(self) -> Dict[str, Any]:
+    def get_upstream_status(self) -> dict[str, Any]:
         """
         Get status of upstream repository.
 

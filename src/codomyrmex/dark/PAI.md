@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Dark Context
+# Personal AI Infrastructure — Dark Module
 
-**Module**: dark
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Dark mode utilities with domain-specific submodules (PDF, network, hardware, software) for visual transformation and accessibility improvements.
+The Dark module provides PAI integration for dark mode and theming support.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Theme Management
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage themes:
 
-## Key Files
+```python
+from codomyrmex.dark import ThemeManager
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+themes = ThemeManager()
+themes.set_theme("dark")
 
-## Future Considerations
+current = themes.current_theme()
+print(f"Current: {current}")
+```
 
-- Modularization: Keep dependencies minimal per submodule.
-- Telemetry: Ensure operations emit performance metrics.
+### Color Schemes
+
+Access color schemes:
+
+```python
+from codomyrmex.dark import ColorScheme
+
+scheme = ColorScheme("monokai")
+bg = scheme.get("background")
+fg = scheme.get("foreground")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `ThemeManager` | Manage themes |
+| `ColorScheme` | Color palettes |
+| `DarkMode` | Toggle dark mode |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

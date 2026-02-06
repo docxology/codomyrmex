@@ -10,23 +10,23 @@ Example:
     >>> rules = client.get_rules()
 """
 
-from pathlib import Path
-from typing import Any, Optional, Dict, List
 import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from codomyrmex.ide import IDEClient, IDEError, ConnectionError, CommandExecutionError
+from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
 
 
 class CursorClient(IDEClient):
     """Client for interacting with Cursor IDE.
-    
+
     Provides programmatic access to Cursor's AI-assisted development capabilities
     including Composer automation, rules management, and model configuration.
     """
-    
-    def __init__(self, workspace_path: Optional[str] = None):
+
+    def __init__(self, workspace_path: str | None = None):
         """Initialize the Cursor client.
-        
+
         Args:
             workspace_path: Optional path to the workspace root.
         """
@@ -34,30 +34,30 @@ class CursorClient(IDEClient):
         self._connected = False
         self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
         self._cursorrules_path = self.workspace_path / ".cursorrules"
-    
+
     def connect(self) -> bool:
         """Establish connection to Cursor workspace."""
         cursor_dir = self.workspace_path / ".cursor"
         if cursor_dir.exists() or self._cursorrules_path.exists():
             self._connected = True
             return True
-        
+
         if self.workspace_path.exists():
             self._connected = True
             return True
-        
+
         self._connected = False
         return False
-    
+
     def disconnect(self) -> None:
         """Disconnect from Cursor."""
         self._connected = False
-    
+
     def is_connected(self) -> bool:
         """Check if currently connected."""
         return self._connected
-    
-    def get_capabilities(self) -> Dict[str, Any]:
+
+    def get_capabilities(self) -> dict[str, Any]:
         """Get Cursor capabilities."""
         return {
             "name": "Cursor",
@@ -74,27 +74,27 @@ class CursorClient(IDEClient):
             "connected": self._connected,
             "workspace": str(self.workspace_path),
         }
-    
-    def execute_command(self, command: str, args: Optional[Dict] = None) -> Any:
+
+    def execute_command(self, command: str, args: dict | None = None) -> Any:
         """Execute a Cursor command."""
         if not self._connected:
             raise CommandExecutionError("Not connected to Cursor")
-        
+
         return {"status": "success", "command": command, "args": args or {}}
-    
-    def get_active_file(self) -> Optional[str]:
+
+    def get_active_file(self) -> str | None:
         """Get the currently active file."""
         return None
-    
+
     def open_file(self, path: str) -> bool:
         """Open a file in Cursor."""
         return Path(path).exists()
-    
-    def get_open_files(self) -> List[str]:
+
+    def get_open_files(self) -> list[str]:
         """Get list of open files."""
         return []
-    
-    def get_rules(self) -> Dict[str, Any]:
+
+    def get_rules(self) -> dict[str, Any]:
         """Get current .cursorrules configuration."""
         if self._cursorrules_path.exists():
             try:
@@ -103,12 +103,12 @@ class CursorClient(IDEClient):
             except Exception as e:
                 return {"error": str(e)}
         return {"content": "", "path": str(self._cursorrules_path), "exists": False}
-    
-    def update_rules(self, rules: Dict[str, Any]) -> bool:
+
+    def update_rules(self, rules: dict[str, Any]) -> bool:
         """Update .cursorrules configuration."""
         if not self._connected:
             raise IDEError("Not connected to Cursor")
-        
+
         try:
             content = rules.get("content", "")
             if isinstance(content, dict):
@@ -117,11 +117,11 @@ class CursorClient(IDEClient):
             return True
         except Exception:
             return False
-    
-    def get_models(self) -> List[str]:
+
+    def get_models(self) -> list[str]:
         """Get available AI models."""
         return self.get_capabilities()["models"]
-    
+
     def set_model(self, model: str) -> bool:
         """Set the active AI model."""
         return model in self.get_models()

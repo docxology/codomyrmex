@@ -6,8 +6,8 @@ This module provides APIKeyManager functionality including:
 - API key revocation
 """
 
-from typing import Optional
 import secrets
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -39,7 +39,7 @@ class APIKeyManager:
         logger.info(f"Generated API key for user: {user_id}")
         return api_key
 
-    def validate_api_key(self, api_key: str) -> Optional[dict]:
+    def validate_api_key(self, api_key: str) -> dict | None:
         """Validate an API key and return associated user/permission information.
 
         Args:

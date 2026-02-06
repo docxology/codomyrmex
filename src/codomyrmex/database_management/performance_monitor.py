@@ -5,14 +5,13 @@ This module provides database performance monitoring, query optimization,
 and performance analytics capabilities.
 """
 
+import json
+import statistics
+import time
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Optional
-import json
-import time
-
-from dataclasses import dataclass, field
-import statistics
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -58,7 +57,7 @@ class PerformanceAlert:
 class DatabasePerformanceMonitor:
     """Database performance monitoring and optimization system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize performance monitor.
 
         Args:
@@ -462,7 +461,7 @@ class DatabasePerformanceMonitor:
 # Alias for backward compatibility
 DatabaseMonitor = DatabasePerformanceMonitor
 
-def monitor_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
+def monitor_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
     """Monitor database performance.
 
     Args:
@@ -475,7 +474,7 @@ def monitor_database(database_name: str, workspace_dir: Optional[str] = None) ->
     monitor = DatabasePerformanceMonitor(workspace_dir)
     return monitor.analyze_database_performance(database_name)
 
-def optimize_database(database_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
+def optimize_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
     """Optimize database performance.
 
     Args:

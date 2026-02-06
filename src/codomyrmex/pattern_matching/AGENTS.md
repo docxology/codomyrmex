@@ -1,32 +1,64 @@
-# Codomyrmex Agents — src/codomyrmex/pattern_matching
+# Agent Guidelines - Pattern Matching
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Code analysis through AST parsing, pattern recognition, and embeddings.
 
-Provides code analysis through AST parsing, pattern recognition, and embedding generation for semantic search and similarity. Core capability for intelligent code understanding.
+## Key Classes
 
-## Active Components
+- **PatternAnalyzer** — Analyze code patterns
+- **ASTParser** — Parse code to AST
+- **EmbeddingGenerator** — Generate code embeddings
+- **SimilarityFinder** — Find similar code
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `requirements.txt` – Project file
-- `run_codomyrmex_analysis.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Parse first** — Use AST for structural analysis
+2. **Cache embeddings** — Compute once, reuse often
+3. **Normalize code** — Remove formatting variations
+4. **Set thresholds** — Configure similarity thresholds
+5. **Batch process** — Use batch embedding for large codebases
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.pattern_matching import (
+    PatternAnalyzer, EmbeddingGenerator, SimilarityFinder, analyze_code
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Quick analysis
+result = analyze_code("path/to/file.py")
+print(f"Patterns found: {result.patterns}")
+print(f"Complexity: {result.complexity}")
+
+# Pattern analyzer
+analyzer = PatternAnalyzer()
+patterns = analyzer.find_patterns(code, pattern_type="function")
+
+# Embedding-based similarity
+embedder = EmbeddingGenerator()
+embedding = embedder.generate(code_snippet)
+
+finder = SimilarityFinder()
+similar = finder.find_similar(embedding, codebase, top_k=5)
+for match in similar:
+    print(f"{match.file}:{match.line} - {match.similarity:.2f}")
+```
+
+## Testing Patterns
+
+```python
+# Verify pattern detection
+analyzer = PatternAnalyzer()
+patterns = analyzer.find_patterns("def foo(): pass")
+assert len(patterns) > 0
+
+# Verify embedding generation
+embedder = EmbeddingGenerator()
+emb = embedder.generate("def foo(): return 1")
+assert len(emb) > 0  # Non-empty embedding
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

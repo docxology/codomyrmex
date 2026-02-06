@@ -1,16 +1,10 @@
-from pathlib import Path
-from typing import Any, Optional
 import json
+from pathlib import Path
+from typing import Any
 
-from dataclasses import fields
-
-from codomyrmex.agents import get_config, AgentRequest
+from codomyrmex.agents import AgentRequest, get_config
 from codomyrmex.agents.claude import ClaudeClient
 from codomyrmex.agents.codex import CodexClient
-from codomyrmex.agents.gemini import GeminiClient
-from codomyrmex.agents.jules import JulesClient
-from codomyrmex.agents.opencode import OpenCodeClient
-
 from codomyrmex.agents.core.exceptions import (
     AgentError,
     ClaudeError,
@@ -19,6 +13,9 @@ from codomyrmex.agents.core.exceptions import (
     JulesError,
     OpenCodeError,
 )
+from codomyrmex.agents.gemini import GeminiClient
+from codomyrmex.agents.jules import JulesClient
+from codomyrmex.agents.opencode import OpenCodeClient
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.utils.cli_helpers import (
     format_output,
@@ -77,7 +74,7 @@ def handle_info(args):
 # Common Agent Operations (execute, stream, check)
 # ============================================================================
 
-def _parse_context(context_str: Optional[str]) -> dict[str, Any]:
+def _parse_context(context_str: str | None) -> dict[str, Any]:
     """Parse context JSON string."""
     if not context_str:
         return {}
@@ -189,7 +186,7 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
         if client_class is None:
              print_error(f"{client_name} client not available", context="Module not imported")
              return False
-        
+
         client = client_class(config=get_config())
         print_section(f"Setting up {client_name}")
         client.setup()
@@ -654,10 +651,10 @@ def handle_gemini_chat_list(args):
 # ============================================================================
 
 # Global droid controller instance (singleton pattern)
-_droid_controller: Optional[Any] = None
+_droid_controller: Any | None = None
 
 
-def _get_droid_controller() -> Optional[Any]:
+def _get_droid_controller() -> Any | None:
     """Get or create droid controller instance."""
     global _droid_controller
     if _droid_controller is None and create_default_controller is not None:

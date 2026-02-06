@@ -1,31 +1,64 @@
-# Codomyrmex Agents — src/codomyrmex/evolutionary_ai
+# Agent Guidelines - Evolutionary AI
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Genetic algorithms, neural evolution, and evolutionary optimization.
 
-Evolutionary AI module providing genetic algorithms, neural architecture search, and evolutionary optimization. Enables automated AI model optimization.
+## Key Classes
 
-## Active Components
+- **GeneticAlgorithm** — Classic GA with selection, crossover, mutation
+- **NEATEvolver** — NeuroEvolution of Augmenting Topologies
+- **PopulationManager** — Manage populations across generations
+- **FitnessEvaluator** — Parallel fitness evaluation
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `fitness/` – Directory containing fitness components
-- `genome/` – Directory containing genome components
-- `operators/` – Directory containing operators components
-- `population/` – Directory containing population components
-- `selection/` – Directory containing selection components
+## Agent Instructions
 
-## Operating Contracts
+1. **Define fitness clearly** — Fitness function drives evolution
+2. **Use diverse populations** — Prevent premature convergence
+3. **Save checkpoints** — Evolution takes time, save progress
+4. **Tune hyperparameters** — Mutation rate, population size matter
+5. **Parallelize evaluation** — Use `FitnessEvaluator` for speed
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.evolutionary_ai import (
+    GeneticAlgorithm, PopulationManager, FitnessEvaluator
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Define fitness function
+def fitness(individual):
+    return evaluate_performance(individual)
+
+# Set up GA
+ga = GeneticAlgorithm(
+    population_size=100,
+    mutation_rate=0.1,
+    crossover_rate=0.7
+)
+
+# Evolve
+for generation in range(100):
+    population = ga.evolve(fitness)
+    best = ga.get_best()
+    print(f"Gen {generation}: fitness={best.fitness:.4f}")
+
+# Parallel evaluation
+evaluator = FitnessEvaluator(workers=8)
+evaluated = evaluator.evaluate_batch(population, fitness)
+```
+
+## Testing Patterns
+
+```python
+# Verify evolution improves fitness
+ga = GeneticAlgorithm(population_size=10)
+initial_fitness = ga.get_best().fitness
+for _ in range(10):
+    ga.evolve(lambda x: sum(x.genes))
+assert ga.get_best().fitness >= initial_fitness
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

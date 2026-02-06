@@ -41,16 +41,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import (
     Any,
-    Callable,
-    Dict,
-    Generator,
-    Iterator,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Union,
 )
+from collections.abc import Callable, Generator, Mapping, Sequence
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -87,11 +79,11 @@ class CommandError(Exception):
         self,
         message: str,
         error_type: CommandErrorType = CommandErrorType.EXECUTION_FAILED,
-        command: Optional[Union[str, List[str]]] = None,
-        return_code: Optional[int] = None,
+        command: str | list[str] | None = None,
+        return_code: int | None = None,
         stdout: str = "",
         stderr: str = "",
-        original_exception: Optional[Exception] = None,
+        original_exception: Exception | None = None,
     ) -> None:
         """Initialize CommandError.
 
@@ -153,10 +145,10 @@ class SubprocessResult:
     stderr: str = ""
     return_code: int = 0
     duration: float = 0.0
-    command: Union[str, List[str]] = field(default_factory=list)
+    command: str | list[str] = field(default_factory=list)
     success: bool = True
     timed_out: bool = False
-    error_message: Optional[str] = None
+    error_message: str | None = None
 
     def __post_init__(self) -> None:
         """Update success based on return_code."""
@@ -179,7 +171,7 @@ class SubprocessResult:
             return self.command
         return " ".join(self.command)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert result to dictionary."""
         return {
             "stdout": self.stdout,
@@ -192,7 +184,7 @@ class SubprocessResult:
             "error_message": self.error_message,
         }
 
-    def raise_on_error(self, message: Optional[str] = None) -> "SubprocessResult":
+    def raise_on_error(self, message: str | None = None) -> "SubprocessResult":
         """Raise CommandError if the command failed.
 
         Args:
@@ -219,9 +211,9 @@ class SubprocessResult:
 
 
 def _prepare_command(
-    command: Union[str, List[str]],
+    command: str | list[str],
     shell: bool = False,
-) -> Union[str, List[str]]:
+) -> str | list[str]:
     """Prepare command for execution.
 
     Args:
@@ -244,9 +236,9 @@ def _prepare_command(
 
 
 def _prepare_environment(
-    env: Optional[Mapping[str, str]] = None,
+    env: Mapping[str, str] | None = None,
     inherit_env: bool = True,
-) -> Optional[Dict[str, str]]:
+) -> dict[str, str] | None:
     """Prepare environment variables for subprocess.
 
     Args:
@@ -268,7 +260,7 @@ def _prepare_environment(
     return dict(env) if env else {}
 
 
-def _validate_working_directory(cwd: Optional[str]) -> Optional[str]:
+def _validate_working_directory(cwd: str | None) -> str | None:
     """Validate and resolve working directory.
 
     Args:
@@ -293,16 +285,16 @@ def _validate_working_directory(cwd: Optional[str]) -> Optional[str]:
 
 
 def run_command(
-    command: Union[str, List[str]],
+    command: str | list[str],
     *,
-    cwd: Optional[str] = None,
-    env: Optional[Mapping[str, str]] = None,
-    timeout: Optional[float] = None,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    timeout: float | None = None,
     shell: bool = False,
     capture_output: bool = True,
     check: bool = False,
     inherit_env: bool = True,
-    input_data: Optional[str] = None,
+    input_data: str | None = None,
     encoding: str = "utf-8",
     errors: str = "replace",
 ) -> SubprocessResult:
@@ -507,14 +499,14 @@ def run_command(
 
 
 async def run_command_async(
-    command: Union[str, List[str]],
+    command: str | list[str],
     *,
-    cwd: Optional[str] = None,
-    env: Optional[Mapping[str, str]] = None,
-    timeout: Optional[float] = None,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    timeout: float | None = None,
     shell: bool = False,
     inherit_env: bool = True,
-    input_data: Optional[str] = None,
+    input_data: str | None = None,
     encoding: str = "utf-8",
     errors: str = "replace",
 ) -> SubprocessResult:
@@ -652,11 +644,11 @@ async def run_command_async(
 
 
 def stream_command(
-    command: Union[str, List[str]],
+    command: str | list[str],
     *,
-    cwd: Optional[str] = None,
-    env: Optional[Mapping[str, str]] = None,
-    timeout: Optional[float] = None,
+    cwd: str | None = None,
+    env: Mapping[str, str] | None = None,
+    timeout: float | None = None,
     shell: bool = False,
     inherit_env: bool = True,
     combine_streams: bool = False,
@@ -707,9 +699,9 @@ def stream_command(
         ...     result = e.value
     """
     start_time = time.perf_counter()
-    stdout_lines: List[str] = []
-    stderr_lines: List[str] = []
-    process: Optional[subprocess.Popen] = None
+    stdout_lines: list[str] = []
+    stderr_lines: list[str] = []
+    process: subprocess.Popen | None = None
 
     try:
         # Validate working directory
@@ -848,14 +840,14 @@ def stream_command(
 
 
 def run_with_retry(
-    command: Union[str, List[str]],
+    command: str | list[str],
     *,
     max_attempts: int = 3,
     delay: float = 1.0,
     backoff: float = 2.0,
-    retry_on_codes: Optional[Sequence[int]] = None,
+    retry_on_codes: Sequence[int] | None = None,
     retry_on_timeout: bool = True,
-    on_retry: Optional[Callable[[int, SubprocessResult], None]] = None,
+    on_retry: Callable[[int, SubprocessResult], None] | None = None,
     **kwargs: Any,
 ) -> SubprocessResult:
     """Execute a command with retry logic for flaky commands.
@@ -897,7 +889,7 @@ def run_with_retry(
         >>> result = run_with_retry(cmd, on_retry=log_retry)
     """
     current_delay = delay
-    last_result: Optional[SubprocessResult] = None
+    last_result: SubprocessResult | None = None
 
     for attempt in range(1, max_attempts + 1):
         logger.debug(f"Executing command (attempt {attempt}/{max_attempts})")
@@ -968,7 +960,7 @@ def check_command_available(command: str) -> bool:
 def get_command_version(
     command: str,
     version_args: Sequence[str] = ("--version",),
-) -> Optional[str]:
+) -> str | None:
     """Get the version string of a command.
 
     Args:
@@ -991,7 +983,7 @@ def get_command_version(
     return None
 
 
-def quote_command(command: Union[str, List[str]]) -> str:
+def quote_command(command: str | list[str]) -> str:
     """Safely quote a command for shell execution.
 
     Args:
@@ -1009,7 +1001,7 @@ def quote_command(command: Union[str, List[str]]) -> str:
     return shlex.join(command)
 
 
-def split_command(command: str) -> List[str]:
+def split_command(command: str) -> list[str]:
     """Split a command string into list of arguments.
 
     Args:

@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Term analyzer for extracting shared terms and variables across FPF sections.
 
 
@@ -9,7 +9,6 @@ that appear across different patterns and sections of the FPF specification.
 
 import re
 from collections import Counter, defaultdict
-from typing import Dict, List, Set, Tuple
 
 from ..core.models import FPFSpec, Pattern
 
@@ -25,7 +24,7 @@ class TermAnalyzer:
         self.term_pattern = re.compile(r"\b([A-Z][a-z]+(?:[A-Z][a-z]+)*)\b")  # CamelCase terms
         self.keyword_pattern = re.compile(r"\*\*?([A-Z][a-zA-Z\s-]+?)\*\*?")  # Bold terms
 
-    def extract_terms_from_pattern(self, pattern: Pattern) -> Set[str]:
+    def extract_terms_from_pattern(self, pattern: Pattern) -> set[str]:
         """Extract all terms from a pattern.
 
         Args:
@@ -58,7 +57,7 @@ class TermAnalyzer:
 
         return terms
 
-    def build_term_cooccurrence_matrix(self, spec: FPFSpec) -> Dict[str, Dict[str, int]]:
+    def build_term_cooccurrence_matrix(self, spec: FPFSpec) -> dict[str, dict[str, int]]:
         """Build a co-occurrence matrix of terms across patterns.
 
         Args:
@@ -67,8 +66,8 @@ class TermAnalyzer:
         Returns:
             Dictionary mapping term pairs to co-occurrence counts
         """
-        term_patterns: Dict[str, Set[str]] = defaultdict(set)
-        
+        term_patterns: dict[str, set[str]] = defaultdict(set)
+
         # Collect terms for each pattern
         for pattern in spec.patterns:
             terms = self.extract_terms_from_pattern(pattern)
@@ -76,7 +75,7 @@ class TermAnalyzer:
                 term_patterns[term].add(pattern.id)
 
         # Build co-occurrence matrix
-        cooccurrence: Dict[str, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
+        cooccurrence: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
         terms_list = list(term_patterns.keys())
 
         for i, term1 in enumerate(terms_list):
@@ -85,14 +84,14 @@ class TermAnalyzer:
                 patterns1 = term_patterns[term1]
                 patterns2 = term_patterns[term2]
                 overlap = len(patterns1 & patterns2)
-                
+
                 if overlap > 0:
                     cooccurrence[term1][term2] = overlap
                     cooccurrence[term2][term1] = overlap
 
         return dict(cooccurrence)
 
-    def get_shared_terms(self, spec: FPFSpec, min_occurrences: int = 2) -> List[Tuple[str, int, List[str]]]:
+    def get_shared_terms(self, spec: FPFSpec, min_occurrences: int = 2) -> list[tuple[str, int, list[str]]]:
         """Get terms that appear in multiple patterns.
 
         Args:
@@ -102,7 +101,7 @@ class TermAnalyzer:
         Returns:
             List of tuples (term, occurrence_count, pattern_ids)
         """
-        term_patterns: Dict[str, Set[str]] = defaultdict(set)
+        term_patterns: dict[str, set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
             terms = self.extract_terms_from_pattern(pattern)
@@ -120,7 +119,7 @@ class TermAnalyzer:
 
         return shared
 
-    def get_term_frequency(self, spec: FPFSpec) -> Dict[str, int]:
+    def get_term_frequency(self, spec: FPFSpec) -> dict[str, int]:
         """Get frequency of each term across all patterns.
 
         Args:
@@ -139,7 +138,7 @@ class TermAnalyzer:
 
     def get_important_terms(
         self, spec: FPFSpec, top_n: int = 50
-    ) -> List[Tuple[str, int, float]]:
+    ) -> list[tuple[str, int, float]]:
         """Get most important terms based on frequency and distribution.
 
         Args:
@@ -150,7 +149,7 @@ class TermAnalyzer:
             List of tuples (term, frequency, importance_score)
         """
         term_frequency = self.get_term_frequency(spec)
-        term_patterns: Dict[str, Set[str]] = defaultdict(set)
+        term_patterns: dict[str, set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
             terms = self.extract_terms_from_pattern(pattern)
@@ -172,7 +171,7 @@ class TermAnalyzer:
 
         return importance_scores[:top_n]
 
-    def analyze_section_terms(self, spec: FPFSpec, part: str = None) -> Dict[str, List[str]]:
+    def analyze_section_terms(self, spec: FPFSpec, part: str = None) -> dict[str, list[str]]:
         """Analyze terms by section/part.
 
         Args:
@@ -182,7 +181,7 @@ class TermAnalyzer:
         Returns:
             Dictionary mapping section/part to list of unique terms
         """
-        section_terms: Dict[str, Set[str]] = defaultdict(set)
+        section_terms: dict[str, set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
             if part and pattern.part != part:
@@ -196,7 +195,7 @@ class TermAnalyzer:
 
     def find_cross_section_terms(
         self, spec: FPFSpec, min_sections: int = 2
-    ) -> List[Tuple[str, int, List[str]]]:
+    ) -> list[tuple[str, int, list[str]]]:
         """Find terms that appear across multiple sections/parts.
 
         Args:
@@ -206,7 +205,7 @@ class TermAnalyzer:
         Returns:
             List of tuples (term, section_count, section_names)
         """
-        term_sections: Dict[str, Set[str]] = defaultdict(set)
+        term_sections: dict[str, set[str]] = defaultdict(set)
 
         for pattern in spec.patterns:
             section = pattern.part or "Other"

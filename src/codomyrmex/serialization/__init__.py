@@ -7,19 +7,19 @@ for JSON, YAML, TOML, MessagePack, and other formats.
 
 from typing import Any, Optional, Union
 
-from .serializer import Serializer, SerializationFormat
-from .serialization_manager import SerializationManager
-from .binary_formats import MsgpackSerializer, AvroSerializer, ParquetSerializer
+from .binary_formats import AvroSerializer, MsgpackSerializer, ParquetSerializer
 from .exceptions import (
-    SerializationError,
+    BinaryFormatError,
+    CircularReferenceError,
     DeserializationError,
-    SchemaValidationError,
     EncodingError,
     FormatNotSupportedError,
-    CircularReferenceError,
+    SchemaValidationError,
+    SerializationError,
     TypeConversionError,
-    BinaryFormatError,
 )
+from .serialization_manager import SerializationManager
+from .serializer import SerializationFormat, Serializer
 
 __all__ = [
     # Core classes
@@ -46,14 +46,14 @@ __all__ = [
 __version__ = "0.1.0"
 
 
-def serialize(obj: Any, format: Union[str, SerializationFormat] = "json") -> bytes:
+def serialize(obj: Any, format: str | SerializationFormat = "json") -> bytes:
     """Serialize an object to bytes."""
     fmt = SerializationFormat(format) if isinstance(format, str) else format
     serializer = Serializer(default_format=fmt)
     return serializer.serialize(obj)
 
 
-def deserialize(data: bytes, format: Union[str, SerializationFormat] = "json") -> Any:
+def deserialize(data: bytes, format: str | SerializationFormat = "json") -> Any:
     """Deserialize data to an object."""
     fmt = SerializationFormat(format) if isinstance(format, str) else format
     serializer = Serializer(default_format=fmt)

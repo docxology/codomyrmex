@@ -1,28 +1,59 @@
-# website
+# Website Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Dynamic web dashboard and control interface for Codomyrmex.
 
-Dynamic web dashboard and control interface for the Codomyrmex ecosystem. Generates a static website from Jinja2 templates, aggregates system data from multiple modules, and serves it via an HTTP server with API endpoints. Provides a central hub for viewing system status, executing scripts from the browser, chatting with local Ollama models, editing configuration files, browsing documentation, monitoring CI/CD pipelines, and listing agent definitions.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.website import WebsiteGenerator, DataProvider, WebsiteServer
 
-- **`WebsiteGenerator`** -- Generates a static website from Jinja2 templates into a configurable output directory. Renders pages for the dashboard, documentation browser, configuration editor, pipeline visualization, and agent overview
-- **`DataProvider`** -- Aggregates data from various Codomyrmex modules (system discovery, agents, configuration, pipelines) into a unified format consumed by the website templates and API endpoints
-- **`WebsiteServer`** -- HTTP server with both static file serving and dynamic API endpoints for script execution, Ollama chat, configuration editing, and real-time system status queries
+# Generate static website
+generator = WebsiteGenerator(output_dir="./build")
+generator.generate()
 
-## Directory Contents
+# Start development server
+server = WebsiteServer(port=8080)
+server.start()  # Serves at http://localhost:8080
+```
 
-- `generator.py` -- `WebsiteGenerator` class with Jinja2 template rendering and static file output
-- `data_provider.py` -- `DataProvider` class aggregating system data from discovery, agents, and config modules
-- `server.py` -- `WebsiteServer` HTTP handler with API routes for dynamic functionality
-- `templates/` -- Jinja2 HTML templates for dashboard, documentation, config editor, and other pages
-- `assets/` -- Static assets (CSS, JavaScript, images) served by the website
-- `requirements.template.txt` -- Template for website-specific Python dependencies
+## Features
+
+- **Dashboard** — System status, module health, quick actions
+- **Documentation Browser** — Browse all README/SPEC/AGENTS files
+- **Configuration Editor** — Edit YAML/JSON configs in browser
+- **Pipeline Visualization** — CI/CD pipeline status
+- **Ollama Chat** — Chat with local LLM models
+- **Agent Overview** — List all agent definitions
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `WebsiteGenerator` | Generate static site from Jinja2 templates |
+| `DataProvider` | Aggregate data from Codomyrmex modules |
+| `WebsiteServer` | HTTP server with API endpoints |
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/status` | GET | System health status |
+| `/api/config` | GET/POST | Read/write configuration |
+| `/api/chat` | POST | Chat with Ollama |
+| `/api/scripts/run` | POST | Execute scripts |
+
+## Directory Structure
+
+| Path | Description |
+|------|-------------|
+| `generator.py` | Static site generator |
+| `data_provider.py` | Data aggregation |
+| `server.py` | HTTP server |
+| `templates/` | Jinja2 HTML templates |
+| `assets/` | CSS, JS, images |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/website/](../../../docs/modules/website/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

@@ -11,7 +11,8 @@ Example:
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
+
 from .json_formatter import JSONFormatter
 
 
@@ -46,7 +47,7 @@ class AuditLogger:
             handler.setFormatter(JSONFormatter())
             self.logger.addHandler(handler)
 
-    def log_event(self, event_type: str, user_id: str, details: Dict[str, Any], status: str = "success") -> None:
+    def log_event(self, event_type: str, user_id: str, details: dict[str, Any], status: str = "success") -> None:
         """Record an audit event with structured data.
 
         Creates an immutable audit record containing the event type, user

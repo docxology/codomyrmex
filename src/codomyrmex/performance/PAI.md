@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Performance Context
+# Personal AI Infrastructure — Performance Module
 
-**Module**: performance
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Performance profiling and optimization utilities for benchmarking and resource analysis.
+The Performance module provides PAI integration for profiling and optimization.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Profiling
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Profile code:
 
-## Key Files
+```python
+from codomyrmex.performance import profile
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+@profile
+def slow_operation():
+    return compute()
+```
 
-## Future Considerations
+### Benchmarking
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Benchmark functions:
+
+```python
+from codomyrmex.performance import benchmark
+
+@benchmark(iterations=100)
+def operation_to_test():
+    return process()
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `profile` | Profile code |
+| `benchmark` | Benchmark |
+| `MemoryTracker` | Memory usage |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

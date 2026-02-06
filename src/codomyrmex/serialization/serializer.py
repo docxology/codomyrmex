@@ -6,6 +6,7 @@ Provides serialization and deserialization of objects to various formats.
 import json
 import pickle
 from pathlib import Path
+
 try:
     import yaml
     YAML_AVAILABLE = True
@@ -14,7 +15,7 @@ except ImportError:
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, TypeVar
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -42,7 +43,7 @@ class Serializer:
         """Initialize serializer."""
         self.default_format = default_format
 
-    def serialize(self, obj: Any, format: Optional[SerializationFormat] = None) -> bytes:
+    def serialize(self, obj: Any, format: SerializationFormat | None = None) -> bytes:
         """Serialize an object to bytes."""
         fmt = format or self.default_format
 
@@ -58,8 +59,8 @@ class Serializer:
         except Exception as e:
             raise SerializationError(f"Serialization failed: {e}") from e
 
-    def deserialize(self, data: bytes, format: Optional[SerializationFormat] = None, 
-                    target_type: Optional[Type[T]] = None) -> Any:
+    def deserialize(self, data: bytes, format: SerializationFormat | None = None,
+                    target_type: type[T] | None = None) -> Any:
         """Deserialize bytes to an object."""
         fmt = format or self.default_format
 
@@ -79,7 +80,7 @@ class Serializer:
         """Serialize to JSON bytes."""
         return json.dumps(self._to_jsonable(obj), indent=2).encode('utf-8')
 
-    def _deserialize_json(self, data: bytes, target_type: Optional[Type[T]]) -> Any:
+    def _deserialize_json(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from JSON bytes."""
         parsed = json.loads(data.decode('utf-8'))
         if target_type and is_dataclass(target_type):
@@ -92,7 +93,7 @@ class Serializer:
             raise SerializationError("PyYAML not installed")
         return yaml.dump(self._to_jsonable(obj), default_flow_style=False).encode('utf-8')
 
-    def _deserialize_yaml(self, data: bytes, target_type: Optional[Type[T]]) -> Any:
+    def _deserialize_yaml(self, data: bytes, target_type: type[T] | None) -> Any:
         """Deserialize from YAML bytes."""
         if not YAML_AVAILABLE:
             raise SerializationError("PyYAML not installed")
@@ -120,14 +121,14 @@ class Serializer:
         else:
             return str(obj)
 
-    def to_file(self, obj: Any, file_path: str, format: Optional[SerializationFormat] = None):
+    def to_file(self, obj: Any, file_path: str, format: SerializationFormat | None = None):
         """Serialize object to file."""
         data = self.serialize(obj, format)
         with open(file_path, 'wb') as f:
             f.write(data)
 
-    def from_file(self, file_path: str, format: Optional[SerializationFormat] = None,
-                  target_type: Optional[Type[T]] = None) -> Any:
+    def from_file(self, file_path: str, format: SerializationFormat | None = None,
+                  target_type: type[T] | None = None) -> Any:
         """Deserialize object from file."""
         with open(file_path, 'rb') as f:
             data = f.read()

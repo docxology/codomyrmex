@@ -11,12 +11,12 @@ Example:
     >>> result.is_valid
     True
 """
-from typing import Any, Callable, Optional
-import json
-
 from dataclasses import dataclass, field
-from pydantic import ValidationError as PydanticValidationError
+from typing import Any
+from collections.abc import Callable
+
 import jsonschema
+from pydantic import ValidationError as PydanticValidationError
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -31,7 +31,7 @@ class ValidationError(CodomyrmexError):
         '[ValidationError] message' with the error_code prefix.
     """
 
-    def __init__(self, message: str, field: Optional[str] = None, code: Optional[str] = None, path: Optional[list[str]] = None):
+    def __init__(self, message: str, field: str | None = None, code: str | None = None, path: list[str] | None = None):
 
         super().__init__(message)
         self.field = field
@@ -44,7 +44,7 @@ class ValidationWarning:
 
     field: str
     message: str
-    code: Optional[str] = None
+    code: str | None = None
     path: list[str] = field(default_factory=list)
 
 @dataclass

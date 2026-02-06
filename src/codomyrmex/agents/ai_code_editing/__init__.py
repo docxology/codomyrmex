@@ -30,6 +30,18 @@ Data structures:
 - CodeStyle: Enum of code style preferences
 """
 
+from ..droid import (
+    DroidConfig,
+    DroidController,
+    DroidMetrics,
+    DroidMode,
+    DroidStatus,
+    TodoItem,
+    TodoManager,
+    create_default_controller,
+    load_config_from_file,
+    save_config_to_file,
+)
 from .ai_code_helpers import (
     CodeAnalysisRequest,
     CodeComplexity,
@@ -49,18 +61,6 @@ from .ai_code_helpers import (
     refactor_code_snippet,
     setup_environment,
     validate_api_keys,
-)
-from ..droid import (
-    DroidConfig,
-    DroidController,
-    DroidMetrics,
-    DroidMode,
-    DroidStatus,
-    TodoItem,
-    TodoManager,
-    create_default_controller,
-    load_config_from_file,
-    save_config_to_file,
 )
 
 __all__ = [

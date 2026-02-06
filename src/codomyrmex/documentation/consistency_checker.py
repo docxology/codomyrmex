@@ -8,7 +8,7 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -23,7 +23,7 @@ class ConsistencyIssue:
     issue_type: str
     description: str
     severity: str = "warning"
-    suggestion: Optional[str] = None
+    suggestion: str | None = None
 
 
 @dataclass
@@ -31,19 +31,19 @@ class ConsistencyReport:
     """Report of consistency check results."""
     total_files: int
     files_checked: int
-    issues: List[ConsistencyIssue] = field(default_factory=list)
+    issues: list[ConsistencyIssue] = field(default_factory=list)
     passed: bool = True
 
 
 class DocumentationConsistencyChecker:
     """Checks documentation for consistency issues."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """Initialize checker."""
         self.config = config or {}
         self.naming_patterns = self._load_naming_patterns()
 
-    def _load_naming_patterns(self) -> Dict[str, re.Pattern]:
+    def _load_naming_patterns(self) -> dict[str, re.Pattern]:
         """Load naming convention patterns."""
         return {
             "snake_case": re.compile(r'^[a-z][a-z0-9_]*$'),
@@ -51,11 +51,11 @@ class DocumentationConsistencyChecker:
             "PascalCase": re.compile(r'^[A-Z][a-zA-Z0-9]*$'),
         }
 
-    def check_file(self, file_path: str) -> List[ConsistencyIssue]:
+    def check_file(self, file_path: str) -> list[ConsistencyIssue]:
         """Check a single file for consistency issues."""
         issues = []
         try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(file_path, encoding='utf-8', errors='ignore') as f:
                 content = f.read()
                 lines = content.split('\n')
 

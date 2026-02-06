@@ -4,24 +4,20 @@ Tests for DependencyAnalyzer, DependencyChecker, project analysis functions,
 dependency consolidator, deprecation notice utilities, and validate_dependencies.
 """
 
-import pytest
-import tempfile
 from pathlib import Path
-import json
-import ast
-import os
-import re
 
-# Test with real implementations
-from codomyrmex.tools.dependency_analyzer import DependencyAnalyzer
-from codomyrmex.tools.dependency_checker import check_python_version, check_dependencies
+import pytest
+
 from codomyrmex.tools.analyze_project import (
-    analyze_project_structure,
-    analyze_dependencies,
     analyze_code_quality,
+    analyze_dependencies,
+    analyze_project_structure,
     generate_report,
 )
 
+# Test with real implementations
+from codomyrmex.tools.dependency_analyzer import DependencyAnalyzer
+from codomyrmex.tools.dependency_checker import check_dependencies, check_python_version
 
 # ==================== Module Import Tests ====================
 

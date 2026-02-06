@@ -7,7 +7,6 @@ import json
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -22,22 +21,22 @@ class PyreflyIssue:
     column: int
     severity: str
     message: str
-    rule_id: Optional[str] = None
+    rule_id: str | None = None
 
 
 @dataclass
 class PyreflyResult:
     """Result of Pyrefly analysis."""
     success: bool
-    issues: List[PyreflyIssue] = field(default_factory=list)
-    error_message: Optional[str] = None
+    issues: list[PyreflyIssue] = field(default_factory=list)
+    error_message: str | None = None
     files_analyzed: int = 0
 
 
 class PyreflyRunner:
     """Runs Pyrefly static analysis."""
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """Initialize runner."""
         self.config_path = config_path
         self.pyrefly_available = self._check_pyrefly()
@@ -96,7 +95,7 @@ class PyreflyRunner:
 
             issues = self._parse_output(result.stdout)
             files_count = len(list(Path(directory).rglob("*.py")))
-            
+
             return PyreflyResult(
                 success=True,
                 issues=issues,
@@ -108,7 +107,7 @@ class PyreflyRunner:
         except Exception as e:
             return PyreflyResult(success=False, error_message=str(e))
 
-    def _parse_output(self, output: str) -> List[PyreflyIssue]:
+    def _parse_output(self, output: str) -> list[PyreflyIssue]:
         """Parse Pyrefly JSON output."""
         issues = []
         if not output.strip():

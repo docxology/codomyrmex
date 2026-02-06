@@ -28,14 +28,14 @@ from .models import (
     WhisperModelSize,
     Word,
 )
-from .transcriber import Transcriber
 
 # Provider imports
 from .providers import (
-    STTProvider,
     WHISPER_AVAILABLE,
+    STTProvider,
     get_provider,
 )
+from .transcriber import Transcriber
 
 # Conditionally export WhisperProvider
 try:

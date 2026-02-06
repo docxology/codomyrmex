@@ -3,14 +3,15 @@ Integration tests to ensure all documented methods actually exist and work as de
 This validates that documentation is accurate and methods are functionally up to standard.
 """
 
-import pytest
-import sys
-import os
-import tempfile
-from pathlib import Path
 import importlib
 import inspect
+import sys
+import tempfile
+from pathlib import Path
+
 import matplotlib
+import pytest
+
 matplotlib.use('Agg')  # Non-interactive backend for testing
 
 
@@ -63,7 +64,10 @@ class TestDocumentationAccuracy:
 
     def test_static_analysis_api_exists(self):
         """Test that documented static analysis functions exist."""
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
+        from codomyrmex.static_analysis.pyrefly_runner import (
+            parse_pyrefly_output,
+            run_pyrefly_analysis,
+        )
 
         # Verify function signatures
         run_sig = inspect.signature(run_pyrefly_analysis)
@@ -94,8 +98,6 @@ class TestDocumentationAccuracy:
     def test_code_execution_api_exists(self):
         """Test that documented code execution functions exist."""
         from codomyrmex.coding.execution.executor import execute_code
-        from codomyrmex.coding.sandbox.container import check_docker_available
-        from codomyrmex.coding.execution.language_support import validate_language
         return
 
         # Verify function signatures match documentation
@@ -133,9 +135,9 @@ class TestDocumentationAccuracy:
         """Test that documented git operations functions exist."""
         from codomyrmex.git_operations.core.git import (
             check_git_availability,
-            is_git_repository,
             create_branch,
-            get_current_branch
+            get_current_branch,
+            is_git_repository,
         )
 
         # Verify functions exist and are callable
@@ -151,9 +153,9 @@ class TestDocumentationAccuracy:
     def test_environment_setup_api_exists(self):
         """Test that documented environment setup functions exist."""
         from codomyrmex.environment_setup.env_checker import (
+            ensure_dependencies_installed,
             is_uv_available,
             is_uv_environment,
-            ensure_dependencies_installed
         )
 
         # Verify functions exist and work
@@ -175,8 +177,6 @@ class TestDocumentationAccuracy:
         """Test that documented build synthesis functions exist."""
         from codomyrmex.build_synthesis.build_orchestrator import (
             check_build_environment,
-            synthesize_build_artifact,
-            validate_build_output
         )
 
         # Test environment check as documented
@@ -186,7 +186,10 @@ class TestDocumentationAccuracy:
 
     def test_logging_api_exists(self):
         """Test that documented logging functions exist."""
-        from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+        from codomyrmex.logging_monitoring.logger_config import (
+            get_logger,
+            setup_logging,
+        )
 
         # Test logger creation
         logger = get_logger("test_logger")
@@ -201,9 +204,9 @@ class TestDocumentationAccuracy:
     def test_plot_utilities_api_exists(self):
         """Test that documented plot utilities exist."""
         from codomyrmex.data_visualization.plot_utils import (
+            apply_common_aesthetics,
             get_codomyrmex_logger,
             save_plot,
-            apply_common_aesthetics
         )
 
         # Test logger utility
@@ -252,7 +255,6 @@ class TestDocumentationAccuracy:
         from codomyrmex.model_context_protocol.mcp_schemas import (
             MCPErrorDetail,
             MCPToolCall,
-            MCPToolResult
         )
 
         # Test schema instantiation
@@ -266,8 +268,10 @@ class TestDocumentationAccuracy:
 
     def test_repository_management_classes_exist(self):
         """Test that documented repository management classes exist."""
-        from codomyrmex.git_operations.core.repository import Repository, RepositoryManager
-        from codomyrmex.git_operations.core.repository import RepositoryType
+        from codomyrmex.git_operations.core.repository import (
+            Repository,
+            RepositoryType,
+        )
 
         # Test Repository class
         repo = Repository(
@@ -289,9 +293,10 @@ class TestDocumentationAccuracy:
 
     def test_comprehensive_workflow_functions_work_together(self):
         """Test that documented workflow actually works end-to-end."""
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
-        from codomyrmex.coding.execution.executor import execute_code
         from codomyrmex.data_visualization.line_plot import create_line_plot
+
+        from codomyrmex.coding.execution.executor import execute_code
+        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         with tempfile.TemporaryDirectory() as temp_dir:
             project_path = Path(temp_dir)
@@ -367,9 +372,10 @@ class TestRealMethodsInDocumentation:
 
     def test_performance_benchmarks_use_real_functions(self):
         """Test that performance documentation examples work."""
-        from codomyrmex.data_visualization.line_plot import create_line_plot
-        import numpy as np
         import time
+
+        import numpy as np
+        from codomyrmex.data_visualization.line_plot import create_line_plot
 
         # Test actual benchmark code from documentation
         x_data = list(np.linspace(0, 10, 100))
@@ -391,8 +397,9 @@ class TestRealMethodsInDocumentation:
 
     def test_testing_strategy_examples_work(self):
         """Test that testing strategy documentation examples work."""
-        from codomyrmex.data_visualization.line_plot import create_line_plot
         from pathlib import Path
+
+        from codomyrmex.data_visualization.line_plot import create_line_plot
 
         # Example from testing strategy documentation
         x_data = [1, 2, 3, 4, 5]

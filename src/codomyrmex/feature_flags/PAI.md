@@ -1,26 +1,52 @@
-# Personal AI Infrastructure - Feature Flags Context
+# Personal AI Infrastructure — Feature Flags Module
 
-**Module**: feature_flags
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Feature flag management system for controlled feature rollouts, A/B testing, and runtime configuration toggles.
+The Feature Flags module provides PAI integration for progressive rollouts and A/B testing.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Feature Toggle
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Control features dynamically:
 
-## Key Files
+```python
+from codomyrmex.feature_flags import FeatureFlags
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+flags = FeatureFlags()
 
-## Future Considerations
+if flags.is_enabled("new_llm_model"):
+    response = new_model.complete(prompt)
+else:
+    response = old_model.complete(prompt)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### A/B Testing
+
+Run experiments:
+
+```python
+from codomyrmex.feature_flags import ABTest
+
+test = ABTest("prompt_style")
+variant = test.get_variant(user_id)
+
+if variant == "concise":
+    prompt = short_prompt
+else:
+    prompt = detailed_prompt
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `FeatureFlags` | Toggle features |
+| `ABTest` | Run experiments |
+| `Rollout` | Progressive rollouts |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

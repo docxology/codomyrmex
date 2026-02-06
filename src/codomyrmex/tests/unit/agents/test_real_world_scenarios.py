@@ -6,16 +6,27 @@ that implements BaseAgent interface for testing, not a mock.
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
-from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+    from codomyrmex.agents.opencode import OpenCodeClient, OpenCodeIntegrationAdapter
+    from codomyrmex.tests.unit.agents.helpers import OPENCODE_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 class TestAgent(BaseAgent):
     """Test agent for real-world scenario testing.
-    
+
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
@@ -32,10 +43,10 @@ class TestAgent(BaseAgent):
             "context": request.context,
             "capabilities": request.capabilities
         })
-        
+
         if not self.should_succeed:
             return AgentResponse(content="", error="Simulated failure")
-        
+
         # Simulate different responses based on prompt
         if "generate" in request.prompt.lower():
             return AgentResponse(
@@ -70,14 +81,14 @@ class TestSimpleScenarios:
     def test_basic_code_generation_request(self):
         """Test basic code generation request."""
         agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
-        
+
         request = AgentRequest(
             prompt="Generate a Python function to calculate fibonacci",
             capabilities=[AgentCapabilities.CODE_GENERATION]
         )
-        
+
         response = agent.execute(request)
-        
+
         assert response.is_success()
         assert "def" in response.content
         assert response.metadata["type"] == "code_generation"
@@ -85,36 +96,36 @@ class TestSimpleScenarios:
     def test_simple_text_completion(self):
         """Test simple text completion."""
         agent = TestAgent("text", [AgentCapabilities.TEXT_COMPLETION])
-        
+
         request = AgentRequest(
             prompt="Complete this sentence: The weather today is",
             capabilities=[AgentCapabilities.TEXT_COMPLETION]
         )
-        
+
         response = agent.execute(request)
-        
+
         assert response.is_success()
         assert len(response.content) > 0
 
     def test_single_file_code_analysis(self):
         """Test analyzing a single file."""
         agent = TestAgent("analyzer", [AgentCapabilities.CODE_ANALYSIS])
-        
+
         code_content = """
 def example_function():
     x = 1
     y = 2
     return x + y
 """
-        
+
         request = AgentRequest(
             prompt="Analyze this code",
             context={"code": code_content, "language": "python"},
             capabilities=[AgentCapabilities.CODE_ANALYSIS]
         )
-        
+
         response = agent.execute(request)
-        
+
         assert response.is_success()
         assert response.metadata["type"] == "analysis"
 
@@ -125,17 +136,17 @@ class TestComplexScenarios:
     def test_multi_step_code_generation_with_context(self):
         """Test multi-step code generation with context passing."""
         agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
-        
+
         # Step 1: Generate initial function
         request1 = AgentRequest(
             prompt="Generate a function to calculate factorial",
             context={"step": 1}
         )
         response1 = agent.execute(request1)
-        
+
         assert response1.is_success()
         generated_code = response1.content
-        
+
         # Step 2: Enhance with context from step 1
         request2 = AgentRequest(
             prompt="Add error handling to this function",
@@ -146,7 +157,7 @@ class TestComplexScenarios:
             }
         )
         response2 = agent.execute(request2)
-        
+
         assert response2.is_success()
         assert len(agent.execution_history) == 2
 
@@ -154,9 +165,9 @@ class TestComplexScenarios:
         """Test code review workflow using multiple agents."""
         code_gen_agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
         review_agent = TestAgent("reviewer", [AgentCapabilities.CODE_ANALYSIS])
-        
+
         orchestrator = AgentOrchestrator([code_gen_agent, review_agent])
-        
+
         # Step 1: Generate code
         gen_request = AgentRequest(
             prompt="Generate a REST API endpoint",
@@ -164,7 +175,7 @@ class TestComplexScenarios:
         )
         gen_responses = orchestrator.execute_parallel(gen_request)
         generated_code = gen_responses[0].content
-        
+
         # Step 2: Review the generated code
         review_request = AgentRequest(
             prompt="Review this code for best practices",
@@ -172,10 +183,10 @@ class TestComplexScenarios:
             capabilities=[AgentCapabilities.CODE_ANALYSIS]
         )
         review_responses = orchestrator.execute_parallel(review_request)
-        
+
         assert len(gen_responses) == 2
         assert len(review_responses) == 2
-        assert any("review" in r.content.lower() or "analysis" in r.content.lower() 
+        assert any("review" in r.content.lower() or "analysis" in r.content.lower()
                   for r in review_responses)
 
     def test_complex_refactoring_across_multiple_files(self):
@@ -184,20 +195,20 @@ class TestComplexScenarios:
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
-        
+
         files = {
             "file1.py": "class OldClass:\n    pass",
             "file2.py": "from file1 import OldClass",
             "file3.py": "def use_old_class():\n    obj = OldClass()"
         }
-        
+
         # Step 1: Analyze all files
         analyze_request = AgentRequest(
             prompt="Analyze these files for refactoring opportunities",
             context={"files": files}
         )
         analyze_response = agent.execute(analyze_request)
-        
+
         # Step 2: Generate refactored version
         refactor_request = AgentRequest(
             prompt="Refactor OldClass to NewClass across all files",
@@ -207,7 +218,7 @@ class TestComplexScenarios:
             }
         )
         refactor_response = agent.execute(refactor_request)
-        
+
         assert analyze_response.is_success()
         assert refactor_response.is_success()
         assert len(agent.execution_history) == 2
@@ -217,24 +228,24 @@ class TestComplexScenarios:
         structure_agent = TestAgent("structure", [AgentCapabilities.CODE_ANALYSIS])
         quality_agent = TestAgent("quality", [AgentCapabilities.CODE_ANALYSIS])
         security_agent = TestAgent("security", [AgentCapabilities.CODE_ANALYSIS])
-        
+
         orchestrator = AgentOrchestrator([
             structure_agent,
             quality_agent,
             security_agent
         ])
-        
+
         request = AgentRequest(
             prompt="Analyze codebase structure, quality, and security",
             context={"codebase_path": "/path/to/codebase"},
             capabilities=[AgentCapabilities.CODE_ANALYSIS]
         )
-        
+
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 3
         assert all(r.is_success() for r in responses)
-        
+
         # Each agent should have executed
         assert structure_agent.execution_count == 1
         assert quality_agent.execution_count == 1
@@ -244,17 +255,17 @@ class TestComplexScenarios:
         """Test error recovery and retry scenarios."""
         failing_agent = TestAgent("failing", [AgentCapabilities.CODE_GENERATION])
         backup_agent = TestAgent("backup", [AgentCapabilities.CODE_GENERATION])
-        
+
         # Make first agent fail
         failing_agent.should_succeed = False
-        
+
         orchestrator = AgentOrchestrator([failing_agent, backup_agent])
-        
+
         request = AgentRequest(prompt="Generate code")
-        
+
         # Use fallback strategy
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
         # The backup agent handled the request (failing agent returned error)
         assert backup_agent.execution_count >= 1
@@ -262,26 +273,26 @@ class TestComplexScenarios:
     def test_context_management_across_operations(self):
         """Test managing context across multiple operations."""
         agent = TestAgent("context_agent", [AgentCapabilities.CODE_GENERATION])
-        
+
         # Build up context across operations
         context = {"project": "test_project", "language": "python"}
-        
+
         request1 = AgentRequest(
             prompt="Generate initial structure",
             context=context
         )
         response1 = agent.execute(request1)
-        
+
         # Update context with results
         context["initial_structure"] = response1.content
         context["step"] = 2
-        
+
         request2 = AgentRequest(
             prompt="Add implementation details",
             context=context
         )
         response2 = agent.execute(request2)
-        
+
         # Verify context was maintained
         assert len(agent.execution_history) == 2
         assert agent.execution_history[0]["context"]["project"] == "test_project"
@@ -293,9 +304,9 @@ class TestComplexScenarios:
         code_gen = TestAgent("gen", [AgentCapabilities.CODE_GENERATION])
         code_edit = TestAgent("edit", [AgentCapabilities.CODE_EDITING])
         code_analyze = TestAgent("analyze", [AgentCapabilities.CODE_ANALYSIS])
-        
+
         orchestrator = AgentOrchestrator([code_gen, code_edit, code_analyze])
-        
+
         # Workflow: Generate -> Edit -> Analyze
         # Step 1: Generate
         gen_agents = orchestrator.select_agent_by_capability(
@@ -306,7 +317,7 @@ class TestComplexScenarios:
             capabilities=[AgentCapabilities.CODE_GENERATION]
         )
         gen_response = gen_agents[0].execute(gen_request)
-        
+
         # Step 2: Edit
         edit_agents = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_EDITING.value
@@ -317,7 +328,7 @@ class TestComplexScenarios:
             capabilities=[AgentCapabilities.CODE_EDITING]
         )
         edit_response = edit_agents[0].execute(edit_request)
-        
+
         # Step 3: Analyze
         analyze_agents = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_ANALYSIS.value
@@ -328,7 +339,7 @@ class TestComplexScenarios:
             capabilities=[AgentCapabilities.CODE_ANALYSIS]
         )
         analyze_response = analyze_agents[0].execute(analyze_request)
-        
+
         assert gen_response.is_success()
         assert edit_response.is_success()
         assert analyze_response.is_success()
@@ -338,14 +349,14 @@ class TestComplexScenarios:
         """Test integration adapter in real-world usage with real CLI."""
         client = OpenCodeClient()
         adapter = OpenCodeIntegrationAdapter(client)
-        
+
         try:
             # Use adapter for code generation
             code = adapter.adapt_for_ai_code_editing(
                 prompt="Create a REST API endpoint",
                 language="python"
             )
-            
+
             # Test real result structure
             assert isinstance(code, str)
             assert len(code) > 0

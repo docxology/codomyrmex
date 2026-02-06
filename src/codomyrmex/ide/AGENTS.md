@@ -1,29 +1,60 @@
-# Codomyrmex Agents — src/codomyrmex/ide
+# Agent Guidelines - IDE
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 
-IDE module providing programmatic integration and automation capabilities for various Integrated Development Environments. Enables AI agents to achieve maximum agentic operation of IDEs themselves.
+## Key Classes
 
-## Active Components
+- **IDEClient** — Abstract base for all IDE integrations
+- **CursorClient** — Cursor AI-first editor client
+- **IDECommand** — Command with name, args, timeout
+- **IDECommandResult** — Result with success, output, error
+- **FileInfo** — File metadata (path, language, lines)
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `antigravity/` – Directory containing antigravity components
-- `cursor/` – Directory containing cursor components
-- `vscode/` – Directory containing vscode components
+## Agent Instructions
 
-## Operating Contracts
+1. **Connect before use** — Call `connect()` before executing commands
+2. **Use safe execution** — Prefer `execute_command_safe()` for error handling
+3. **Batch related commands** — Use `execute_batch()` for sequences
+4. **Check success rate** — Monitor `get_success_rate()` for reliability
+5. **Handle disconnects** — Catch `ConnectionError` and reconnect
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.ide import CursorClient, IDECommand
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+client = CursorClient()
+client.connect()
+
+# Safe command execution
+result = client.execute_command_safe("editor.action.formatDocument")
+if not result.success:
+    log.error(f"Format failed: {result.error}")
+
+# Batch execution
+commands = [
+    IDECommand("editor.action.formatDocument"),
+    IDECommand("workbench.action.files.save"),
+]
+results = client.execute_batch(commands)
+```
+
+## Testing Patterns
+
+```python
+# Verify connection
+client = CursorClient()
+assert client.connect()
+assert client.is_connected()
+assert client.status == IDEStatus.CONNECTED
+
+# Verify command execution
+result = client.execute_command_safe("test.command")
+assert "success" in dir(result)
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

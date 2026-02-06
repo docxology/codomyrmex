@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Identity Context
+# Personal AI Infrastructure — Identity Module
 
-**Module**: identity
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Multi-persona management with 3-tier verification (KYC, Verified Anon, Anon) and bio-cognitive authentication via behavioral biometrics.
+The Identity module provides PAI integration for agent identity and context management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Agent Identity
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Manage agent identities:
 
-## Key Files
+```python
+from codomyrmex.identity import AgentIdentity
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+identity = AgentIdentity(
+    name="code_reviewer",
+    capabilities=["code_analysis", "suggestion"]
+)
+```
 
-## Future Considerations
+### Context Management
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performance metrics.
+Manage agent context:
+
+```python
+from codomyrmex.identity import ContextManager
+
+context = ContextManager()
+context.set_workspace("/path/to/project")
+context.set_user("developer_123")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `AgentIdentity` | Define agent roles |
+| `ContextManager` | Manage context |
+| `SessionManager` | Track sessions |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

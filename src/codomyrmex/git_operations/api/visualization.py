@@ -28,6 +28,8 @@ try:
         create_git_branch_diagram,
         create_git_tree_mermaid,
         create_git_tree_png,
+    )
+    from codomyrmex.data_visualization import (
         create_git_workflow_diagram as generate_git_workflow_diagram,
     )
 

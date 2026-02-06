@@ -1,26 +1,43 @@
-# Personal AI Infrastructure - Deployment Context
+# Personal AI Infrastructure — Deployment Module
 
-**Module**: deployment
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Deployment automation for CI/CD pipelines, infrastructure as code, and release management.
+The Deployment module provides PAI integration for application deployment.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Deployment Automation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Deploy applications:
 
-## Key Files
+```python
+from codomyrmex.deployment import Deployer
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+deployer = Deployer(target="production")
+deployer.deploy(version="v1.2.0")
+```
 
-## Future Considerations
+### Rollback Support
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Rollback deployments:
+
+```python
+from codomyrmex.deployment import Deployer
+
+deployer = Deployer(target="production")
+deployer.rollback(to_version="v1.1.0")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Deployer` | Deploy apps |
+| `rollback` | Rollback versions |
+| `HealthCheck` | Verify deployment |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

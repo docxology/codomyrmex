@@ -1,19 +1,52 @@
-# Technical Specification - Rate Limiting
+# Rate Limiting - Functional Specification
 
-**Module**: `codomyrmex.rate_limiting` | **Version**: v0.1.0 | **Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Public API
+## Purpose
 
-```python
-from codomyrmex.rate_limiting import (
-    RateLimiter, FixedWindowLimiter, SlidingWindowLimiter,
-    TokenBucketLimiter, QuotaManager, RateLimitResult,
-    RateLimitExceeded, create_limiter,
-)
-```
+Rate limiting module providing request throttling with multiple algorithms: fixed window, sliding window, and token bucket.
 
-## Testing
+## Functional Requirements
 
-```bash
-pytest tests/unit/test_rate_limiting.py -v
-```
+- Multiple rate limiting algorithms
+- Configurable limits per resource/user
+- Quota management and tracking
+- Graceful limit exceeded handling
+- Distributed rate limiting (Redis backend)
+
+## Core Classes
+
+| Class | Description |
+|-------|-------------|
+| `RateLimiter` | Abstract rate limiter |
+| `FixedWindowLimiter` | Fixed time windows |
+| `SlidingWindowLimiter` | Sliding time windows |
+| `TokenBucketLimiter` | Token bucket algorithm |
+| `QuotaManager` | Manage usage quotas |
+
+## Algorithms
+
+| Algorithm | Best For |
+|-----------|----------|
+| Fixed Window | Simple, low overhead |
+| Sliding Window | Smooth rate limiting |
+| Token Bucket | Burst handling |
+
+## Key Functions
+
+| Function | Description |
+|----------|-------------|
+| `create_limiter(type, limit, window)` | Factory function |
+| `check_limit(key)` | Check if allowed |
+| `get_remaining(key)` | Get remaining quota |
+
+## Design Principles
+
+1. **Low Latency**: Minimal overhead per request
+2. **Accurate**: Precise rate enforcement
+3. **Distributed**: Redis for multi-instance
+4. **Observable**: Metrics on rate limits
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

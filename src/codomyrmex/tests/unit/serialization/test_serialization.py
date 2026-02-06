@@ -12,14 +12,11 @@ Tests cover:
 """
 
 import json
-import os
-import pickle
 import tempfile
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
 
 import pytest
 
@@ -53,15 +50,16 @@ except ImportError:
 try:
     from codomyrmex import serialization
     from codomyrmex.serialization import (
-        Serializer,
+        AvroSerializer,
+        MsgpackSerializer,
+        ParquetSerializer,
         SerializationFormat,
         SerializationManager,
-        serialize,
+        Serializer,
         deserialize,
-        MsgpackSerializer,
-        AvroSerializer,
-        ParquetSerializer,
+        serialize,
     )
+
     # Import SerializationError from the serializer module directly since
     # the Serializer uses its local definition
     from codomyrmex.serialization.serializer import SerializationError
@@ -121,7 +119,7 @@ class Person:
     """Test dataclass for serialization tests."""
     name: str
     age: int
-    email: Optional[str] = None
+    email: str | None = None
 
 
 @dataclass
@@ -136,8 +134,8 @@ class Address:
 class Company:
     """Complex dataclass with nested structure."""
     name: str
-    employees: List[str]
-    headquarters: Optional[Address] = None
+    employees: list[str]
+    headquarters: Address | None = None
 
 
 class Status(Enum):

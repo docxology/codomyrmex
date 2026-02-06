@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Model Context Protocol Context
+# Personal AI Infrastructure — Model Context Protocol Module
 
-**Module**: model_context_protocol
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Model Context Protocol implementation for standardized AI model communication and tool usage.
+The Model Context Protocol module provides PAI integration for MCP server and client operations.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### MCP Server
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Run an MCP server:
 
-## Key Files
+```python
+from codomyrmex.model_context_protocol import MCPServer
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+server = MCPServer()
+server.register_tool("search", search_function)
+server.register_resource("config", config_data)
+server.start(port=8080)
+```
 
-## Future Considerations
+### MCP Client
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Connect to MCP servers:
+
+```python
+from codomyrmex.model_context_protocol import MCPClient
+
+client = MCPClient("http://localhost:8080")
+result = client.call_tool("search", query="hello")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `MCPServer` | Host tools |
+| `MCPClient` | Use tools |
+| `Resources` | Share resources |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

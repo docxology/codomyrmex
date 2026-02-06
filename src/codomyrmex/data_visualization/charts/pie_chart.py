@@ -83,10 +83,10 @@ def create_pie_chart(
 class PieChart:
     """
     Pie chart class wrapper for object-oriented usage.
-    
+
     Provides a class-based interface around the create_pie_chart function.
     """
-    
+
     def __init__(
         self,
         labels: list = None,
@@ -98,7 +98,7 @@ class PieChart:
     ):
         """
         Initialize a pie chart.
-        
+
         Args:
             labels: Labels for each slice
             sizes: Size/value for each slice
@@ -113,11 +113,11 @@ class PieChart:
         self.autopct = autopct
         self.startangle = startangle
         self.explode = explode
-    
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the pie chart.
-        
+
         Args:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
@@ -132,11 +132,11 @@ class PieChart:
             startangle=self.startangle,
             explode=self.explode
         )
-    
+
     def save(self, output_path: str):
         """Save the chart to a file."""
         self.render(output_path=output_path, show_plot=False)
-    
+
     def show(self):
         """Display the chart interactively."""
         self.render(show_plot=True)

@@ -1,13 +1,13 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
+from abc import ABC
+from typing import TYPE_CHECKING, Any
 
-from abc import ABC, abstractmethod
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
 import matplotlib
 import matplotlib.colors
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 
 from codomyrmex.cerebrum.core.exceptions import VisualizationError
 from codomyrmex.cerebrum.visualization.theme import (
@@ -15,7 +15,6 @@ from codomyrmex.cerebrum.visualization.theme import (
     get_default_theme,
 )
 from codomyrmex.logging_monitoring import get_logger
-
 
 try:
     HAS_MATPLOTLIB = True
@@ -50,9 +49,9 @@ class BaseVisualizer(ABC):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12.0, 8.0),
+        figure_size: tuple[float, float] = (12.0, 8.0),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize base visualizer.
 
@@ -69,7 +68,7 @@ class BaseVisualizer(ABC):
         self.theme = theme or get_default_theme()
         self.logger = get_logger(__name__)
 
-    def create_figure(self, nrows: int = 1, ncols: int = 1, **kwargs) -> Tuple[Figure, Any]:
+    def create_figure(self, nrows: int = 1, ncols: int = 1, **kwargs) -> tuple[Figure, Any]:
         """Create a figure with theme applied.
 
         Args:
@@ -111,7 +110,7 @@ class BaseVisualizer(ABC):
         ax.set_title(title, fontsize=fontsize, fontweight=fontweight, pad=pad, **kwargs)
 
     def format_axes_labels(
-        self, ax: Axes, xlabel: Optional[str] = None, ylabel: Optional[str] = None, **kwargs
+        self, ax: Axes, xlabel: str | None = None, ylabel: str | None = None, **kwargs
     ) -> None:
         """Format and set axis labels.
 
@@ -156,9 +155,9 @@ class BaseNetworkVisualizer(BaseVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12.0, 8.0),
+        figure_size: tuple[float, float] = (12.0, 8.0),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize network visualizer.
 
@@ -173,8 +172,8 @@ class BaseNetworkVisualizer(BaseVisualizer):
         self,
         G: nx.Graph,
         attribute: str,
-        color_map: Optional[Dict[str, str]] = None,
-    ) -> List[str]:
+        color_map: dict[str, str] | None = None,
+    ) -> list[str]:
         """Get node colors based on attribute.
 
         Args:
@@ -211,7 +210,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
         metric: str = "degree",
         min_size: float = 100.0,
         max_size: float = 2000.0,
-    ) -> List[float]:
+    ) -> list[float]:
         """Get node sizes based on importance metric.
 
         Args:
@@ -258,7 +257,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
         weight_attr: str = "weight",
         min_width: float = 0.5,
         max_width: float = 3.0,
-    ) -> List[float]:
+    ) -> list[float]:
         """Get edge widths based on weight attribute.
 
         Args:
@@ -297,7 +296,7 @@ class BaseNetworkVisualizer(BaseVisualizer):
         G: nx.Graph,
         layout: str = "spring",
         **kwargs,
-    ) -> Dict[str, Tuple[float, float]]:
+    ) -> dict[str, tuple[float, float]]:
         """Apply layout algorithm to graph.
 
         Args:
@@ -333,9 +332,9 @@ class BaseChartVisualizer(BaseVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12.0, 8.0),
+        figure_size: tuple[float, float] = (12.0, 8.0),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize chart visualizer.
 
@@ -458,9 +457,9 @@ class BaseHeatmapVisualizer(BaseVisualizer):
 
     def __init__(
         self,
-        figure_size: Tuple[float, float] = (12.0, 8.0),
+        figure_size: tuple[float, float] = (12.0, 8.0),
         dpi: int = 300,
-        theme: Optional[VisualizationTheme] = None,
+        theme: VisualizationTheme | None = None,
     ):
         """Initialize heatmap visualizer.
 
@@ -474,12 +473,12 @@ class BaseHeatmapVisualizer(BaseVisualizer):
     def create_heatmap(
         self,
         data: np.ndarray,
-        row_labels: List[str],
-        col_labels: List[str],
-        ax: Optional[Axes] = None,
+        row_labels: list[str],
+        col_labels: list[str],
+        ax: Axes | None = None,
         colormap: str = "YlOrRd",
         **kwargs,
-    ) -> Tuple[Figure, Axes]:
+    ) -> tuple[Figure, Axes]:
         """Create a heatmap.
 
         Args:

@@ -12,14 +12,13 @@ bucket policies, and error paths.
 Total: ~28 tests across 2 test classes.
 """
 
-import pytest
 from unittest.mock import MagicMock, mock_open, patch
+
 
 from codomyrmex.cloud.infomaniak.object_storage.client import (
     InfomaniakObjectStorageClient,
     InfomaniakS3Client,
 )
-
 
 # =========================================================================
 # Test InfomaniakObjectStorageClient (Swift)

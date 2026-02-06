@@ -15,7 +15,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -35,8 +35,8 @@ class Backup:
     created_at: datetime
     compression: str = "none"
     encryption: bool = False
-    checksum: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    checksum: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -46,9 +46,9 @@ class BackupResult:
     success: bool
     duration: float
     file_size_mb: float
-    error_message: Optional[str] = None
-    warnings: List[str] = field(default_factory=list)
-    checksum: Optional[str] = None
+    error_message: str | None = None
+    warnings: list[str] = field(default_factory=list)
+    checksum: str | None = None
 
 
 class BackupManager:
@@ -56,21 +56,21 @@ class BackupManager:
 
     def __init__(
         self,
-        workspace_dir: Optional[str] = None,
-        database_url: Optional[str] = None
+        workspace_dir: str | None = None,
+        database_url: str | None = None
     ):
         """Initialize backup manager."""
         self.workspace_dir = Path(workspace_dir) if workspace_dir else Path.cwd()
         self.backups_dir = self.workspace_dir / "database_backups"
         self._ensure_directories()
-        self._backups: Dict[str, Backup] = {}
+        self._backups: dict[str, Backup] = {}
         self._database_url = database_url
 
     def _ensure_directories(self):
         """Ensure required directories exist."""
         self.backups_dir.mkdir(parents=True, exist_ok=True)
 
-    def _parse_database_url(self, url: str) -> Dict[str, Any]:
+    def _parse_database_url(self, url: str) -> dict[str, Any]:
         """Parse database URL into components."""
         if url.startswith("sqlite"):
             match = re.match(r'sqlite:///(.+)', url)
@@ -103,7 +103,7 @@ class BackupManager:
     def create_backup(
         self,
         database_name: str,
-        database_url: Optional[str] = None,
+        database_url: str | None = None,
         backup_type: str = "full",
         compression: str = "gzip",
         include_schema: bool = True,
@@ -199,7 +199,7 @@ class BackupManager:
 
     def _backup_postgresql(
         self,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         backup_path: str,
         compression: str,
         include_schema: bool,
@@ -239,7 +239,7 @@ class BackupManager:
 
     def _backup_mysql(
         self,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         backup_path: str,
         compression: str,
         include_schema: bool,
@@ -274,7 +274,7 @@ class BackupManager:
             with open(backup_path, 'wb') as f:
                 f.write(result.stdout)
 
-    def list_backups(self, database_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    def list_backups(self, database_name: str | None = None) -> list[dict[str, Any]]:
         """List available backups."""
         backups = []
         for backup in self._backups.values():
@@ -305,7 +305,7 @@ class BackupManager:
 # Convenience functions
 def backup_database(
     database_name: str,
-    database_url: Optional[str] = None,
+    database_url: str | None = None,
     backup_type: str = "full",
     compression: str = "gzip"
 ) -> BackupResult:

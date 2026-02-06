@@ -4,14 +4,12 @@ SBOM (Software Bill of Materials) Generation
 Generate and manage SBOMs for supply chain security.
 """
 
+import hashlib
 import json
-import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
-from pathlib import Path
-import hashlib
+from typing import Any
 
 
 class SBOMFormat(Enum):
@@ -40,11 +38,11 @@ class Component:
     license: LicenseType = LicenseType.UNKNOWN
     supplier: str = ""
     checksum: str = ""
-    dependencies: List[str] = field(default_factory=list)
-    vulnerabilities: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    dependencies: list[str] = field(default_factory=list)
+    vulnerabilities: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "version": self.version,
@@ -62,12 +60,12 @@ class SBOM:
     """Software Bill of Materials."""
     name: str
     version: str
-    components: List[Component] = field(default_factory=list)
+    components: list[Component] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.now)
     format: SBOMFormat = SBOMFormat.CYCLONEDX
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "version": self.version,
@@ -76,10 +74,10 @@ class SBOM:
             "components": [c.to_dict() for c in self.components],
             "metadata": self.metadata,
         }
-    
+
     def to_json(self, indent: int = 2) -> str:
         return json.dumps(self.to_dict(), indent=indent)
-    
+
     def save(self, path: str) -> None:
         with open(path, 'w') as f:
             f.write(self.to_json())
@@ -87,21 +85,21 @@ class SBOM:
 
 class SBOMGenerator:
     """Generate SBOMs from various sources."""
-    
+
     def __init__(self):
-        self._components: List[Component] = []
-    
-    def from_requirements(self, requirements_path: str) -> List[Component]:
+        self._components: list[Component] = []
+
+    def from_requirements(self, requirements_path: str) -> list[Component]:
         """Parse requirements.txt file."""
         components = []
-        
+
         try:
-            with open(requirements_path, 'r') as f:
+            with open(requirements_path) as f:
                 for line in f:
                     line = line.strip()
                     if not line or line.startswith('#'):
                         continue
-                    
+
                     # Parse package==version
                     if '==' in line:
                         name, version = line.split('==', 1)
@@ -109,10 +107,10 @@ class SBOMGenerator:
                         name, version = line.split('>=', 1)
                     else:
                         name, version = line, "unknown"
-                    
+
                     name = name.strip()
                     version = version.split('[')[0].strip()  # Remove extras
-                    
+
                     components.append(Component(
                         name=name,
                         version=version,
@@ -120,21 +118,21 @@ class SBOMGenerator:
                     ))
         except FileNotFoundError:
             pass
-        
+
         self._components.extend(components)
         return components
-    
-    def from_package_json(self, package_json_path: str) -> List[Component]:
+
+    def from_package_json(self, package_json_path: str) -> list[Component]:
         """Parse package.json file."""
         components = []
-        
+
         try:
-            with open(package_json_path, 'r') as f:
+            with open(package_json_path) as f:
                 data = json.load(f)
-            
+
             deps = data.get("dependencies", {})
             deps.update(data.get("devDependencies", {}))
-            
+
             for name, version in deps.items():
                 # Clean version string
                 version = version.lstrip('^~>=<')
@@ -145,19 +143,19 @@ class SBOMGenerator:
                 ))
         except (FileNotFoundError, json.JSONDecodeError):
             pass
-        
+
         self._components.extend(components)
         return components
-    
-    def from_pyproject(self, pyproject_path: str) -> List[Component]:
+
+    def from_pyproject(self, pyproject_path: str) -> list[Component]:
         """Parse pyproject.toml dependencies."""
         components = []
-        
+
         try:
             import tomllib
             with open(pyproject_path, 'rb') as f:
                 data = tomllib.load(f)
-            
+
             deps = data.get("project", {}).get("dependencies", [])
             for dep in deps:
                 # Simple parsing
@@ -167,7 +165,7 @@ class SBOMGenerator:
                     name, version = dep.split('==', 1)
                 else:
                     name, version = dep, "latest"
-                
+
                 components.append(Component(
                     name=name.strip(),
                     version=version.strip(),
@@ -175,10 +173,10 @@ class SBOMGenerator:
                 ))
         except (FileNotFoundError, ImportError):
             pass
-        
+
         self._components.extend(components)
         return components
-    
+
     def generate(
         self,
         name: str,
@@ -196,39 +194,39 @@ class SBOMGenerator:
 
 class VulnerabilityScanner:
     """Scan components for known vulnerabilities."""
-    
+
     def __init__(self):
-        self._known_vulns: Dict[str, List[str]] = {}
-    
-    def add_vulnerability_db(self, vulns: Dict[str, List[str]]) -> None:
+        self._known_vulns: dict[str, list[str]] = {}
+
+    def add_vulnerability_db(self, vulns: dict[str, list[str]]) -> None:
         """Add vulnerability database."""
         self._known_vulns.update(vulns)
-    
-    def scan(self, sbom: SBOM) -> Dict[str, List[str]]:
+
+    def scan(self, sbom: SBOM) -> dict[str, list[str]]:
         """Scan SBOM for vulnerabilities."""
         findings = {}
-        
+
         for component in sbom.components:
             key = f"{component.name}:{component.version}"
             if key in self._known_vulns:
                 findings[key] = self._known_vulns[key]
                 component.vulnerabilities = self._known_vulns[key]
-        
+
         return findings
 
 
 class SupplyChainVerifier:
     """Verify supply chain integrity."""
-    
+
     def verify_checksum(self, component: Component, expected: str) -> bool:
         """Verify component checksum."""
         return component.checksum == expected
-    
+
     def verify_signature(self, path: str, signature_path: str) -> bool:
         """Verify file signature (placeholder)."""
         # Would integrate with GPG or similar
         return True
-    
+
     def compute_file_hash(self, path: str, algorithm: str = "sha256") -> str:
         """Compute file hash."""
         h = hashlib.new(algorithm)

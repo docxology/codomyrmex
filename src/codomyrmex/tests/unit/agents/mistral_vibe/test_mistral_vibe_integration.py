@@ -4,15 +4,22 @@ Tests use real implementations only. When Mistral Vibe CLI is not available
 or API key is not configured, tests are skipped.
 """
 
-import pytest
 import os
-from typing import Any
 
-from codomyrmex.agents.core import AgentRequest, AgentCapabilities
-from codomyrmex.agents.mistral_vibe import MistralVibeClient, MistralVibeIntegrationAdapter
-from codomyrmex.agents.generic import AgentOrchestrator
-from codomyrmex.agents.core.exceptions import MistralVibeError
-from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+import pytest
+
+try:
+    from codomyrmex.agents.mistral_vibe import (
+        MistralVibeClient,
+        MistralVibeIntegrationAdapter,
+    )
+    from codomyrmex.tests.unit.agents.helpers import VIBE_AVAILABLE
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 # Skip entire module if vibe CLI is not properly configured
 pytestmark = pytest.mark.skipif(
@@ -28,7 +35,7 @@ class TestMistralVibeIntegrationAdapter:
         """Test MistralVibeIntegrationAdapter can be initialized."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         assert adapter.agent == client
 
     @pytest.mark.skipif(not VIBE_AVAILABLE, reason="vibe CLI not installed")
@@ -36,7 +43,7 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for AI code editing with real CLI."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         try:
             code = adapter.adapt_for_ai_code_editing(
                 prompt="Create a fibonacci function",
@@ -53,7 +60,7 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for AI code editing with file context."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         try:
             code = adapter.adapt_for_ai_code_editing(
                 prompt="Create a function",
@@ -71,15 +78,15 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for LLM module with real CLI."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         messages = [
             {"role": "user", "content": "Hello"},
             {"role": "assistant", "content": "Hi there"}
         ]
-        
+
         try:
             result = adapter.adapt_for_llm(messages)
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert "content" in result
@@ -95,12 +102,12 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for LLM module with model specification."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         messages = [{"role": "user", "content": "Hello"}]
-        
+
         try:
             result = adapter.adapt_for_llm(messages, model="mistral-large-latest")
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert result["model"] == "mistral-large-latest"
@@ -113,12 +120,12 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for code execution with real CLI."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         code = "def hello(): return 'world'"
-        
+
         try:
             result = adapter.adapt_for_code_execution(code, language="python")
-            
+
             # Test real result structure
             assert isinstance(result, dict)
             assert "success" in result
@@ -132,7 +139,7 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for AI code editing structure."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         # Test that adapter structure is correct
         assert adapter.agent == client
         assert hasattr(adapter, "adapt_for_ai_code_editing")
@@ -143,9 +150,9 @@ class TestMistralVibeIntegrationAdapter:
         """Test adapting Mistral Vibe for LLM structure."""
         client = MistralVibeClient()
         adapter = MistralVibeIntegrationAdapter(client)
-        
+
         messages = [{"role": "user", "content": "test"}]
-        
+
         # Test that adapter can be called (may fail if CLI not available)
         try:
             result = adapter.adapt_for_llm(messages)

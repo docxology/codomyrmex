@@ -1,15 +1,14 @@
 """GitOps synchronization utilities."""
 
+import logging
 import os
 import subprocess
-import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
 class GitOpsSynchronizer:
     """Synchronizes target state from a Git repository."""
-    
+
     def __init__(self, repo_url: str, local_path: str):
         self.repo_url = repo_url
         self.local_path = local_path
@@ -30,7 +29,7 @@ class GitOpsSynchronizer:
             logger.error(f"GitOps sync failed: {e}")
             return False
 
-    def get_version(self) -> Optional[str]:
+    def get_version(self) -> str | None:
         """Get the current commit SHA of the synchronized repo."""
         try:
             result = subprocess.run(

@@ -5,28 +5,28 @@ Task distribution, consensus protocols, and leader election
 for multi-agent collaboration.
 """
 
-from .task_manager import (
-    SchedulingStrategy,
-    TaskQueue,
-    DependencyGraph,
-    TaskManager,
-)
 from .consensus import (
-    VoteType,
-    Vote,
-    Proposal,
-    VotingResult,
-    VotingMechanism,
     ConsensusBuilder,
+    Proposal,
+    Vote,
+    VoteType,
+    VotingMechanism,
+    VotingResult,
 )
 from .leader_election import (
-    ElectionState,
-    ElectionResult,
-    LeaderElection,
     BullyElection,
-    RingElection,
+    ElectionResult,
+    ElectionState,
+    LeaderElection,
     RandomElection,
+    RingElection,
     RotatingLeadership,
+)
+from .task_manager import (
+    DependencyGraph,
+    SchedulingStrategy,
+    TaskManager,
+    TaskQueue,
 )
 
 __all__ = [

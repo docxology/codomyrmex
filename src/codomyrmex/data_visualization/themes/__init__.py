@@ -5,8 +5,8 @@ Provides predefined color schemes and styling configurations.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
 from enum import Enum
+from typing import Dict, List, Optional
 
 
 class ThemeName(Enum):
@@ -31,8 +31,8 @@ class ColorPalette:
     warning: str = "#ffc107"
     error: str = "#dc3545"
     info: str = "#17a2b8"
-    series: List[str] = field(default_factory=list)
-    
+    series: list[str] = field(default_factory=list)
+
     def get_series_color(self, index: int) -> str:
         """Get color for a series by index (cycles through available colors)."""
         if not self.series:
@@ -72,8 +72,8 @@ class Theme:
     axes_facecolor: str = "#ffffff"
     spine_color: str = "#cccccc"
     spine_width: float = 1.0
-    
-    def to_matplotlib_rcparams(self) -> Dict:
+
+    def to_matplotlib_rcparams(self) -> dict:
         """Convert theme to matplotlib rcParams."""
         return {
             'figure.facecolor': self.figure_facecolor,
@@ -100,7 +100,7 @@ class Theme:
 
 
 # Predefined themes
-THEMES: Dict[ThemeName, Theme] = {
+THEMES: dict[ThemeName, Theme] = {
     ThemeName.DEFAULT: Theme(
         name=ThemeName.DEFAULT,
         colors=ColorPalette(
@@ -198,7 +198,7 @@ def apply_theme(theme: Theme) -> None:
         pass  # matplotlib not available
 
 
-def list_themes() -> List[str]:
+def list_themes() -> list[str]:
     """List available theme names."""
     return [t.value for t in ThemeName]
 

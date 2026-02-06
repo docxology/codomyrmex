@@ -4,14 +4,13 @@ This module provides comprehensive pipeline monitoring, health checks,
 and reporting capabilities for CI/CD pipelines.
 """
 
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Optional
 import json
 import time
-
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from enum import Enum
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -37,7 +36,7 @@ class PipelineMetrics:
     job_count: int
     success_rate: float
     start_time: datetime
-    end_time: Optional[datetime] = None
+    end_time: datetime | None = None
     error_count: int = 0
     warning_count: int = 0
 
@@ -49,8 +48,8 @@ class PipelineReport:
     execution_id: str
     status: str
     start_time: datetime
-    end_time: Optional[datetime]
-    duration: Optional[float]
+    end_time: datetime | None
+    duration: float | None
     stages_executed: int
     jobs_executed: int
     jobs_passed: int
@@ -65,7 +64,7 @@ class PipelineReport:
 class PipelineMonitor:
     """Pipeline monitoring and reporting system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize pipeline monitor.
 
         Args:
@@ -285,7 +284,7 @@ class PipelineMonitor:
         }
 
 
-def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = None) -> dict[str, Any]:
+def monitor_pipeline_health(pipeline_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
     """Monitor pipeline health and return status.
 
     Args:
@@ -302,7 +301,7 @@ def monitor_pipeline_health(pipeline_name: str, workspace_dir: Optional[str] = N
 def generate_pipeline_reports(
     execution_id: str,
     report_types: list[ReportType],
-    workspace_dir: Optional[str] = None
+    workspace_dir: str | None = None
 ) -> dict[str, PipelineReport]:
     """Generate multiple types of pipeline reports.
 

@@ -21,11 +21,9 @@ Tests cover:
 Total: 316 tests across 33 test classes.
 """
 
-import pytest
-from unittest.mock import MagicMock, patch, PropertyMock
-from dataclasses import asdict
-from datetime import datetime, timezone
+from unittest.mock import MagicMock, patch
 
+import pytest
 
 # =========================================================================
 # Test Authentication Module
@@ -77,8 +75,8 @@ class TestAuthErrorPaths:
     def test_credentials_missing_env_vars(self):
         """Missing INFOMANIAK_APP_CREDENTIAL_ID/SECRET raises InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
-            InfomaniakCredentials,
             InfomaniakAuthError,
+            InfomaniakCredentials,
         )
 
         with patch.dict("os.environ", {}, clear=True):
@@ -88,8 +86,8 @@ class TestAuthErrorPaths:
     def test_s3_credentials_missing_env_vars(self):
         """Missing INFOMANIAK_S3_ACCESS_KEY/SECRET raises InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
-            InfomaniakS3Credentials,
             InfomaniakAuthError,
+            InfomaniakS3Credentials,
         )
 
         with patch.dict("os.environ", {}, clear=True):
@@ -188,7 +186,9 @@ class TestFactoryMethods:
             mock_conn = MagicMock()
             mock_connect.return_value = mock_conn
 
-            from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+            from codomyrmex.cloud.infomaniak.object_storage import (
+                InfomaniakObjectStorageClient,
+            )
 
             client = InfomaniakObjectStorageClient.from_credentials(
                 application_credential_id="oc-id",
@@ -774,7 +774,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_list_containers(self, mock_connection):
         """Test listing Swift containers."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
 
         mock_container_1 = MagicMock()
         mock_container_1.name = "container-a"
@@ -795,7 +797,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_create_container(self, mock_connection):
         """Test creating a Swift container."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
 
         client = InfomaniakObjectStorageClient(mock_connection)
         result = client.create_container("my-container")
@@ -805,7 +809,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_upload_object(self, mock_connection):
         """Test uploading an object to a Swift container."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
 
         client = InfomaniakObjectStorageClient(mock_connection)
         result = client.upload_object("my-container", "test.txt", b"hello swift")
@@ -820,7 +826,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_download_object(self, mock_connection):
         """Test downloading an object from a Swift container."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
 
         mock_connection.object_store.download_object.return_value = b"swift data"
 
@@ -834,7 +842,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_delete_object(self, mock_connection):
         """Test deleting an object from a Swift container."""
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
 
         client = InfomaniakObjectStorageClient(mock_connection)
         result = client.delete_object("my-container", "test.txt")
@@ -2124,12 +2134,12 @@ class TestInfomaniakExceptionHierarchy:
     def test_all_exceptions_inherit_from_cloud_error(self):
         """All custom exceptions inherit from InfomaniakCloudError."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            InfomaniakCloudError,
             InfomaniakAuthError,
-            InfomaniakNotFoundError,
+            InfomaniakCloudError,
             InfomaniakConflictError,
-            InfomaniakQuotaExceededError,
             InfomaniakConnectionError,
+            InfomaniakNotFoundError,
+            InfomaniakQuotaExceededError,
             InfomaniakTimeoutError,
         )
 
@@ -2277,8 +2287,10 @@ class TestClassifyHttpError:
     def test_connection_error_instance(self):
         """requests.ConnectionError maps to InfomaniakConnectionError."""
         import requests
+
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakConnectionError,
+            InfomaniakConnectionError,
+            classify_http_error,
         )
         err = requests.exceptions.ConnectionError("refused")
         result = classify_http_error(err, service="newsletter")
@@ -2288,8 +2300,10 @@ class TestClassifyHttpError:
     def test_timeout_instance(self):
         """requests.Timeout maps to InfomaniakTimeoutError."""
         import requests
+
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakTimeoutError,
+            InfomaniakTimeoutError,
+            classify_http_error,
         )
         err = requests.exceptions.Timeout("timed out")
         result = classify_http_error(err, operation="GET credits")
@@ -2298,42 +2312,48 @@ class TestClassifyHttpError:
 
     def test_401_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakAuthError,
+            InfomaniakAuthError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(401))
         assert isinstance(result, InfomaniakAuthError)
 
     def test_403_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakAuthError,
+            InfomaniakAuthError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(403))
         assert isinstance(result, InfomaniakAuthError)
 
     def test_404_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakNotFoundError,
+            InfomaniakNotFoundError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(404))
         assert isinstance(result, InfomaniakNotFoundError)
 
     def test_409_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakConflictError,
+            InfomaniakConflictError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(409))
         assert isinstance(result, InfomaniakConflictError)
 
     def test_413_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakQuotaExceededError,
+            InfomaniakQuotaExceededError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(413))
         assert isinstance(result, InfomaniakQuotaExceededError)
 
     def test_429_response(self):
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakQuotaExceededError,
+            InfomaniakQuotaExceededError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(429))
         assert isinstance(result, InfomaniakQuotaExceededError)
@@ -2341,7 +2361,8 @@ class TestClassifyHttpError:
     def test_no_response_attribute(self):
         """Error without response falls back to string classification."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakCloudError,
+            InfomaniakCloudError,
+            classify_http_error,
         )
         err = Exception("Something generic happened")
         result = classify_http_error(err)
@@ -2358,7 +2379,8 @@ class TestClassifyHttpError:
     def test_500_falls_through_to_string_classification(self):
         """HTTP 500 has no explicit mapping, falls to string classifier."""
         from codomyrmex.cloud.infomaniak.exceptions import (
-            classify_http_error, InfomaniakCloudError,
+            InfomaniakCloudError,
+            classify_http_error,
         )
         result = classify_http_error(self._make_http_error(500))
         assert isinstance(result, InfomaniakCloudError)
@@ -2578,6 +2600,7 @@ class TestAuthFunctions:
     def test_create_openstack_connection_import_error(self):
         """create_openstack_connection raises ImportError when openstacksdk missing."""
         import sys
+
         from codomyrmex.cloud.infomaniak.auth import create_openstack_connection
 
         # Temporarily hide openstack module
@@ -2597,10 +2620,11 @@ class TestAuthFunctions:
     def test_create_openstack_connection_auth_failure(self):
         """create_openstack_connection raises InfomaniakAuthError on connection failure."""
         import sys
+
         from codomyrmex.cloud.infomaniak.auth import (
-            create_openstack_connection,
-            InfomaniakCredentials,
             InfomaniakAuthError,
+            InfomaniakCredentials,
+            create_openstack_connection,
         )
 
         mock_openstack = MagicMock()
@@ -2619,9 +2643,10 @@ class TestAuthFunctions:
     def test_create_openstack_connection_success(self):
         """create_openstack_connection returns Connection on success."""
         import sys
+
         from codomyrmex.cloud.infomaniak.auth import (
-            create_openstack_connection,
             InfomaniakCredentials,
+            create_openstack_connection,
         )
 
         mock_conn = MagicMock()
@@ -2642,6 +2667,7 @@ class TestAuthFunctions:
     def test_create_s3_client_import_error(self):
         """create_s3_client raises ImportError when boto3 missing."""
         import sys
+
         from codomyrmex.cloud.infomaniak.auth import create_s3_client
 
         saved = sys.modules.get("boto3")
@@ -2658,9 +2684,10 @@ class TestAuthFunctions:
     def test_create_s3_client_success(self):
         """create_s3_client returns boto3 client on success."""
         import sys
+
         from codomyrmex.cloud.infomaniak.auth import (
-            create_s3_client,
             InfomaniakS3Credentials,
+            create_s3_client,
         )
 
         mock_s3 = MagicMock()
@@ -3216,7 +3243,9 @@ class TestInfomaniakSwiftClientExpanded:
     """Tests for InfomaniakObjectStorageClient (Swift) untested methods."""
 
     def _make_client(self):
-        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakObjectStorageClient
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
         mock_conn = MagicMock()
         return InfomaniakObjectStorageClient(connection=mock_conn), mock_conn
 

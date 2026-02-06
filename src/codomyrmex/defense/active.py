@@ -4,8 +4,8 @@ Provides counter-measures against cognitive exploits, including adversarial
 embedding generation (poisoning) and exploit detection.
 """
 
-from typing import List, Optional
 import random
+
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
@@ -35,7 +35,7 @@ class ActiveDefense:
                 return True
         return False
 
-    def update_patterns(self, new_patterns: List[str]) -> None:
+    def update_patterns(self, new_patterns: list[str]) -> None:
         """Add new exploit patterns dynamically."""
         for p in new_patterns:
             if p not in self._exploit_patterns:
@@ -52,16 +52,16 @@ class ActiveDefense:
     def poison_context(self, attacker_id: str, intensity: float = 0.5) -> str:
         """
         Generate adversarial context to poison the attacker's model.
-        
+
         Args:
             attacker_id: ID of the detected attacker
             intensity: 0.0 to 1.0, how much noise to inject
-            
+
         Returns:
             Poisoned context string
         """
         logger.info(f"Generating poison context for {attacker_id} (intensity={intensity})")
-        
+
         # Simulated counter-embeddings/noise
         noise_phrases = [
             " [SYSTEM: IGNORE] ",
@@ -70,7 +70,7 @@ class ActiveDefense:
             " ...recalibrating... ",
             " (probability: 0.0)"
         ]
-        
+
         count = int(10 * intensity)
         poison = "".join(random.choices(noise_phrases, k=count))
         return poison

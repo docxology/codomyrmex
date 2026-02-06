@@ -1,51 +1,8 @@
-from typing import List, Dict, Any, Optional
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security best practices."""
 
@@ -77,17 +34,17 @@ class PracticePriority(Enum):
 @dataclass
 class SecurityBestPractice:
     """Represents a security best practice."""
-    
+
     name: str
     description: str
     category: str  # coding, configuration, operations, etc.
     priority: str  # low, medium, high, critical
     implementation: str
-    rationale: Optional[str] = None
-    examples: List[str] = field(default_factory=list)
-    related_practices: List[str] = field(default_factory=list)
-    compliance_requirements: List[str] = field(default_factory=list)
-    tools: List[str] = field(default_factory=list)
+    rationale: str | None = None
+    examples: list[str] = field(default_factory=list)
+    related_practices: list[str] = field(default_factory=list)
+    compliance_requirements: list[str] = field(default_factory=list)
+    tools: list[str] = field(default_factory=list)
 
 
 # Comprehensive security best practices
@@ -356,13 +313,13 @@ BEST_PRACTICES = {
 }
 
 
-def get_best_practices(category: Optional[str] = None) -> List[SecurityBestPractice]:
+def get_best_practices(category: str | None = None) -> list[SecurityBestPractice]:
     """
     Get security best practices, optionally filtered by category.
-    
+
     Args:
         category: Optional category filter (authentication, data_protection, operations, coding)
-        
+
     Returns:
         List of security best practices
     """
@@ -372,23 +329,23 @@ def get_best_practices(category: Optional[str] = None) -> List[SecurityBestPract
     return practices
 
 
-def get_practice(practice_name: str) -> Optional[SecurityBestPractice]:
+def get_practice(practice_name: str) -> SecurityBestPractice | None:
     """Get a specific security best practice by name."""
     return BEST_PRACTICES.get(practice_name)
 
 
-def get_practices_by_priority(priority: str) -> List[SecurityBestPractice]:
+def get_practices_by_priority(priority: str) -> list[SecurityBestPractice]:
     """Get security best practices filtered by priority."""
     return [p for p in BEST_PRACTICES.values() if p.priority == priority]
 
 
-def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
+def check_compliance_with_practices(context: dict[str, Any]) -> dict[str, Any]:
     """
     Check compliance with security best practices.
-    
+
     Args:
         context: Context dictionary with system information and compliance data
-        
+
     Returns:
         Compliance check results with pass/fail status and recommendations
     """
@@ -397,7 +354,7 @@ def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
     compliant_count = 0
     non_compliant_count = 0
     not_applicable_count = 0
-    
+
     # Check each practice
     for practice_name, practice in BEST_PRACTICES.items():
         check_result = {
@@ -408,7 +365,7 @@ def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
             "status": "unknown",  # Would be determined by actual checks
             "recommendations": []
         }
-        
+
         # Basic compliance logic based on practice type
         if practice.category == PracticeCategory.AUTHENTICATION.value:
             if "authentication" in str(context).lower():
@@ -418,7 +375,7 @@ def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
                 check_result["status"] = "non_compliant"
                 check_result["recommendations"].append(f"Implement {practice.name}")
                 non_compliant_count += 1
-        
+
         elif practice.category == PracticeCategory.DATA_PROTECTION.value:
             if "encryption" in str(context).lower():
                 check_result["status"] = "compliant"
@@ -427,23 +384,23 @@ def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
                 check_result["status"] = "non_compliant"
                 check_result["recommendations"].append(f"Implement {practice.name}")
                 non_compliant_count += 1
-        
+
         else:
             check_result["status"] = "not_applicable"
             not_applicable_count += 1
-        
+
         compliance_checks.append(check_result)
-    
+
     # Calculate compliance percentage
     applicable_practices = total_practices - not_applicable_count
     compliance_percentage = (compliant_count / applicable_practices * 100) if applicable_practices > 0 else 0
-    
+
     # Generate recommendations for non-compliant practices
     recommendations = []
     for check in compliance_checks:
         if check["status"] == "non_compliant" and check["priority"] in ["high", "critical"]:
             recommendations.extend(check["recommendations"])
-    
+
     return {
         "total_practices": total_practices,
         "applicable_practices": applicable_practices,
@@ -461,26 +418,26 @@ def check_compliance_with_practices(context: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_practices_for_category(category: str) -> List[SecurityBestPractice]:
+def get_practices_for_category(category: str) -> list[SecurityBestPractice]:
     """
     Get all best practices for a specific category.
-    
+
     Args:
         category: Practice category
-        
+
     Returns:
         List of practices in the category
     """
     return [p for p in BEST_PRACTICES.values() if p.category == category]
 
 
-def prioritize_practices(practices: List[SecurityBestPractice]) -> List[SecurityBestPractice]:
+def prioritize_practices(practices: list[SecurityBestPractice]) -> list[SecurityBestPractice]:
     """
     Prioritize practices by priority level.
-    
+
     Args:
         practices: List of practices
-        
+
     Returns:
         Sorted list (critical first)
     """
@@ -490,7 +447,7 @@ def prioritize_practices(practices: List[SecurityBestPractice]) -> List[Security
         PracticePriority.MEDIUM.value: 2,
         PracticePriority.LOW.value: 1
     }
-    
+
     return sorted(
         practices,
         key=lambda p: priority_order.get(p.priority, 0),

@@ -19,7 +19,7 @@ Quick Start:
     from codomyrmex.website import WebsiteGenerator
     generator = WebsiteGenerator(output_dir="./output/website")
     generator.generate()
-    
+
     # Serve the website
     from codomyrmex.website import WebsiteServer, DataProvider
     # Use with socketserver.TCPServer
@@ -30,13 +30,13 @@ Public API:
 - WebsiteServer: HTTP server with API endpoints for dynamic functionality.
 """
 
-from .generator import WebsiteGenerator
 from .data_provider import DataProvider
+from .generator import WebsiteGenerator
 from .server import WebsiteServer
 
 __all__ = [
     "WebsiteGenerator",
-    "DataProvider", 
+    "DataProvider",
     "WebsiteServer",
 ]
 

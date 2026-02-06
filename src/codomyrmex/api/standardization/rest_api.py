@@ -1,21 +1,14 @@
-from typing import Dict, List, Any, Optional, Callable, Union, Type
-import inspect
 import json
 import logging
 import re
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-from urllib.parse import urlparse, parse_qs
+from typing import Any
+from collections.abc import Callable
+from urllib.parse import parse_qs, urlparse
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """REST API Implementation for Codomyrmex
 
@@ -60,14 +53,14 @@ class APIRequest:
     """Represents an API request."""
     method: HTTPMethod
     path: str
-    headers: Dict[str, str] = field(default_factory=dict)
-    query_params: Dict[str, List[str]] = field(default_factory=dict)
-    body: Optional[bytes] = None
-    path_params: Dict[str, str] = field(default_factory=dict)
-    context: Dict[str, Any] = field(default_factory=dict)
+    headers: dict[str, str] = field(default_factory=dict)
+    query_params: dict[str, list[str]] = field(default_factory=dict)
+    body: bytes | None = None
+    path_params: dict[str, str] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
 
     @property
-    def json_body(self) -> Optional[Dict[str, Any]]:
+    def json_body(self) -> dict[str, Any] | None:
         """Parse JSON body if present."""
         if self.body:
             try:
@@ -80,8 +73,8 @@ class APIRequest:
 class APIResponse:
     """Represents an API response."""
     status_code: HTTPStatus
-    body: Optional[Union[str, bytes, Dict[str, Any]]] = None
-    headers: Dict[str, str] = field(default_factory=dict)
+    body: str | bytes | dict[str, Any] | None = None
+    headers: dict[str, str] = field(default_factory=dict)
     content_type: str = "application/json"
 
     def __post_init__(self):
@@ -123,13 +116,13 @@ class APIEndpoint:
     path: str
     method: HTTPMethod
     handler: Callable[[APIRequest], APIResponse]
-    summary: Optional[str] = None
-    description: Optional[str] = None
-    tags: List[str] = field(default_factory=list)
-    parameters: List[Dict[str, Any]] = field(default_factory=list)
-    request_body: Optional[Dict[str, Any]] = None
-    responses: Dict[int, Dict[str, Any]] = field(default_factory=dict)
-    middleware: List[Callable[[APIRequest], Optional[APIResponse]]] = field(default_factory=list)
+    summary: str | None = None
+    description: str | None = None
+    tags: list[str] = field(default_factory=list)
+    parameters: list[dict[str, Any]] = field(default_factory=list)
+    request_body: dict[str, Any] | None = None
+    responses: dict[int, dict[str, Any]] = field(default_factory=dict)
+    middleware: list[Callable[[APIRequest], APIResponse | None]] = field(default_factory=list)
 
 class APIRouter:
     """Router for managing API endpoints."""
@@ -142,9 +135,9 @@ class APIRouter:
             prefix: URL prefix for all routes in this router
         """
         self.prefix = prefix.rstrip('/')
-        self.endpoints: Dict[str, APIEndpoint] = {}
-        self.sub_routers: List['APIRouter'] = []
-        self.middleware: List[Callable[[APIRequest], Optional[APIResponse]]] = []
+        self.endpoints: dict[str, APIEndpoint] = {}
+        self.sub_routers: list['APIRouter'] = []
+        self.middleware: list[Callable[[APIRequest], APIResponse | None]] = []
 
     def add_endpoint(self, endpoint: APIEndpoint) -> None:
         """
@@ -166,7 +159,7 @@ class APIRouter:
         """
         self.sub_routers.append(router)
 
-    def add_middleware(self, middleware: Callable[[APIRequest], Optional[APIResponse]]) -> None:
+    def add_middleware(self, middleware: Callable[[APIRequest], APIResponse | None]) -> None:
         """
         Add middleware to the router.
 
@@ -175,28 +168,28 @@ class APIRouter:
         """
         self.middleware.append(middleware)
 
-    def get(self, path: str, summary: Optional[str] = None, **kwargs) -> Callable:
+    def get(self, path: str, summary: str | None = None, **kwargs) -> Callable:
         """Decorator for GET endpoints."""
         return self._method_decorator(HTTPMethod.GET, path, summary, **kwargs)
 
-    def post(self, path: str, summary: Optional[str] = None, **kwargs) -> Callable:
+    def post(self, path: str, summary: str | None = None, **kwargs) -> Callable:
         """Decorator for POST endpoints."""
         return self._method_decorator(HTTPMethod.POST, path, summary, **kwargs)
 
-    def put(self, path: str, summary: Optional[str] = None, **kwargs) -> Callable:
+    def put(self, path: str, summary: str | None = None, **kwargs) -> Callable:
         """Decorator for PUT endpoints."""
         return self._method_decorator(HTTPMethod.PUT, path, summary, **kwargs)
 
-    def delete(self, path: str, summary: Optional[str] = None, **kwargs) -> Callable:
+    def delete(self, path: str, summary: str | None = None, **kwargs) -> Callable:
         """Decorator for DELETE endpoints."""
         return self._method_decorator(HTTPMethod.DELETE, path, summary, **kwargs)
 
-    def patch(self, path: str, summary: Optional[str] = None, **kwargs) -> Callable:
+    def patch(self, path: str, summary: str | None = None, **kwargs) -> Callable:
         """Decorator for PATCH endpoints."""
         return self._method_decorator(HTTPMethod.PATCH, path, summary, **kwargs)
 
-    def _method_decorator(self, method: HTTPMethod, path: str, summary: Optional[str] = None,
-                         tags: Optional[List[str]] = None, **kwargs) -> Callable:
+    def _method_decorator(self, method: HTTPMethod, path: str, summary: str | None = None,
+                         tags: list[str] | None = None, **kwargs) -> Callable:
         """Create a decorator for the specified HTTP method."""
         def decorator(func: Callable[[APIRequest], APIResponse]) -> Callable[[APIRequest], APIResponse]:
 
@@ -220,7 +213,7 @@ class APIRouter:
             path = self.prefix + path
         return path
 
-    def match_endpoint(self, method: HTTPMethod, path: str) -> Optional[tuple[APIEndpoint, Dict[str, str]]]:
+    def match_endpoint(self, method: HTTPMethod, path: str) -> tuple[APIEndpoint, dict[str, str]] | None:
         """
         Match an incoming request to an endpoint.
 
@@ -273,7 +266,7 @@ class APIRouter:
 
         return re.compile(regex_pattern), param_names
 
-    def get_all_endpoints(self) -> List[APIEndpoint]:
+    def get_all_endpoints(self) -> list[APIEndpoint]:
         """
         Get all endpoints from this router and sub-routers.
 
@@ -306,7 +299,7 @@ class RESTAPI:
         self.version = version
         self.description = description
         self.router = APIRouter()
-        self.global_middleware: List[Callable[[APIRequest], Optional[APIResponse]]] = []
+        self.global_middleware: list[Callable[[APIRequest], APIResponse | None]] = []
         self.request_count = 0
         self.error_count = 0
 
@@ -316,7 +309,7 @@ class RESTAPI:
 
         logger.info(f"REST API initialized: {title} v{version}")
 
-    def add_middleware(self, middleware: Callable[[APIRequest], Optional[APIResponse]]) -> None:
+    def add_middleware(self, middleware: Callable[[APIRequest], APIResponse | None]) -> None:
         """
         Add global middleware.
 
@@ -334,8 +327,8 @@ class RESTAPI:
         """
         self.router.add_router(router)
 
-    def handle_request(self, method: str, path: str, headers: Optional[Dict[str, str]] = None,
-                      body: Optional[bytes] = None, query_string: Optional[str] = None) -> APIResponse:
+    def handle_request(self, method: str, path: str, headers: dict[str, str] | None = None,
+                      body: bytes | None = None, query_string: str | None = None) -> APIResponse:
         """
         Handle an incoming HTTP request.
 
@@ -422,12 +415,12 @@ class RESTAPI:
             logger.error(f"Request error: {method} {path} - {e}")
             return APIResponse.error("Internal server error", HTTPStatus.INTERNAL_SERVER_ERROR)
 
-    def _logging_middleware(self, request: APIRequest) -> Optional[APIResponse]:
+    def _logging_middleware(self, request: APIRequest) -> APIResponse | None:
         """Middleware for request logging."""
         logger.debug(f"Incoming request: {request.method.value} {request.path}")
         return None
 
-    def _error_handling_middleware(self, request: APIRequest) -> Optional[APIResponse]:
+    def _error_handling_middleware(self, request: APIRequest) -> APIResponse | None:
         """Middleware for basic error handling."""
         # Add CORS headers for all requests
         if request.method == HTTPMethod.OPTIONS:
@@ -441,7 +434,7 @@ class RESTAPI:
             )
         return None
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """
         Get API metrics.
 
@@ -455,7 +448,7 @@ class RESTAPI:
             "endpoints_count": len(self.router.get_all_endpoints())
         }
 
-    def get_endpoints(self) -> List[APIEndpoint]:
+    def get_endpoints(self) -> list[APIEndpoint]:
         """
         Get all registered endpoints.
 

@@ -1,10 +1,10 @@
 """Custom span processing logic."""
 
-from opentelemetry.sdk.trace import SpanProcessor
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor as OTSimpleSpanProcessor
-from opentelemetry.sdk.trace.export import BatchSpanProcessor as OTBatchSpanProcessor
-from opentelemetry.trace import Span as TraceSpan
 from opentelemetry import trace
+from opentelemetry.sdk.trace import SpanProcessor
+from opentelemetry.sdk.trace.export import BatchSpanProcessor as OTBatchSpanProcessor
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor as OTSimpleSpanProcessor
+
 
 class SimpleSpanProcessor(OTSimpleSpanProcessor):
     """Processor that exports spans immediately."""

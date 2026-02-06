@@ -17,8 +17,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
-
+from typing import Any, Dict, List, Optional, Tuple
+from collections.abc import Callable
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -68,12 +68,12 @@ class WebhookEvent:
     """
 
     event_type: WebhookEventType
-    payload: Dict[str, Any]
+    payload: dict[str, Any]
     event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     timestamp: datetime = field(default_factory=datetime.now)
     source: str = ""
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize the event to a JSON-compatible dictionary."""
         return {
             "event_id": self.event_id,
@@ -105,7 +105,7 @@ class WebhookConfig:
 
     url: str
     secret: str
-    events: List[WebhookEventType] = field(default_factory=list)
+    events: list[WebhookEventType] = field(default_factory=list)
     max_retries: int = 3
     retry_delay: float = 1.0
     timeout: float = 30.0
@@ -130,12 +130,12 @@ class DeliveryResult:
     webhook_id: str
     event_id: str
     status: WebhookStatus
-    status_code: Optional[int] = None
+    status_code: int | None = None
     attempt: int = 1
-    error: Optional[str] = None
+    error: str | None = None
     timestamp: datetime = field(default_factory=datetime.now)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize the delivery result to a dictionary."""
         return {
             "webhook_id": self.webhook_id,
@@ -165,9 +165,9 @@ class WebhookTransport(ABC):
         self,
         url: str,
         payload: str,
-        headers: Dict[str, str],
+        headers: dict[str, str],
         timeout: float,
-    ) -> Tuple[int, str]:
+    ) -> tuple[int, str]:
         """Send a webhook payload to the given URL.
 
         Args:
@@ -202,7 +202,7 @@ class HTTPWebhookTransport(WebhookTransport):
     def __init__(
         self,
         handler: Callable[
-            [str, str, Dict[str, str], float], Tuple[int, str]
+            [str, str, dict[str, str], float], tuple[int, str]
         ],
     ) -> None:
         self._handler = handler
@@ -211,9 +211,9 @@ class HTTPWebhookTransport(WebhookTransport):
         self,
         url: str,
         payload: str,
-        headers: Dict[str, str],
+        headers: dict[str, str],
         timeout: float,
-    ) -> Tuple[int, str]:
+    ) -> tuple[int, str]:
         """Delegate delivery to the configured handler callable.
 
         Args:
@@ -235,7 +235,7 @@ class WebhookSignature:
     without instantiation.
     """
 
-    _ALGORITHM_MAP: Dict[SignatureAlgorithm, str] = {
+    _ALGORITHM_MAP: dict[SignatureAlgorithm, str] = {
         SignatureAlgorithm.HMAC_SHA256: "sha256",
         SignatureAlgorithm.HMAC_SHA512: "sha512",
     }
@@ -295,7 +295,7 @@ class WebhookRegistry:
     """
 
     def __init__(self) -> None:
-        self._webhooks: Dict[str, WebhookConfig] = {}
+        self._webhooks: dict[str, WebhookConfig] = {}
 
     def register(self, webhook_id: str, config: WebhookConfig) -> None:
         """Register a new webhook or update an existing one.
@@ -319,7 +319,7 @@ class WebhookRegistry:
             raise KeyError(f"Webhook '{webhook_id}' not found in registry")
         del self._webhooks[webhook_id]
 
-    def get(self, webhook_id: str) -> Optional[WebhookConfig]:
+    def get(self, webhook_id: str) -> WebhookConfig | None:
         """Retrieve a webhook config by identifier.
 
         Args:
@@ -330,7 +330,7 @@ class WebhookRegistry:
         """
         return self._webhooks.get(webhook_id)
 
-    def list_all(self) -> Dict[str, WebhookConfig]:
+    def list_all(self) -> dict[str, WebhookConfig]:
         """Return a copy of all registered webhooks.
 
         Returns:
@@ -340,7 +340,7 @@ class WebhookRegistry:
 
     def list_for_event(
         self, event_type: WebhookEventType
-    ) -> Dict[str, WebhookConfig]:
+    ) -> dict[str, WebhookConfig]:
         """Return all active webhooks subscribed to a given event type.
 
         A webhook matches if it is active **and** either has the event type
@@ -396,7 +396,7 @@ class WebhookDispatcher:
         event: WebhookEvent,
         config: WebhookConfig,
         payload_json: str,
-    ) -> Dict[str, str]:
+    ) -> dict[str, str]:
         """Build HTTP headers including the HMAC signature.
 
         Args:
@@ -474,7 +474,7 @@ class WebhookDispatcher:
                 error=str(exc),
             )
 
-    def dispatch(self, event: WebhookEvent) -> List[DeliveryResult]:
+    def dispatch(self, event: WebhookEvent) -> list[DeliveryResult]:
         """Dispatch an event to all matching registered webhooks.
 
         Iterates over all active webhooks subscribed to the event type,
@@ -487,7 +487,7 @@ class WebhookDispatcher:
             List of ``DeliveryResult`` objects, one per targeted webhook.
         """
         targets = self._registry.list_for_event(event.event_type)
-        results: List[DeliveryResult] = []
+        results: list[DeliveryResult] = []
 
         for webhook_id, config in targets.items():
             result = self._deliver(webhook_id, event, config, attempt=1)
@@ -498,8 +498,8 @@ class WebhookDispatcher:
     def dispatch_with_retry(
         self,
         event: WebhookEvent,
-        max_retries: Optional[int] = None,
-    ) -> List[DeliveryResult]:
+        max_retries: int | None = None,
+    ) -> list[DeliveryResult]:
         """Dispatch an event with automatic retries on failure.
 
         For each targeted webhook, if the initial delivery fails, retries
@@ -518,11 +518,11 @@ class WebhookDispatcher:
             (whether successful or the final failure).
         """
         targets = self._registry.list_for_event(event.event_type)
-        results: List[DeliveryResult] = []
+        results: list[DeliveryResult] = []
 
         for webhook_id, config in targets.items():
             retries = max_retries if max_retries is not None else config.max_retries
-            last_result: Optional[DeliveryResult] = None
+            last_result: DeliveryResult | None = None
 
             for attempt in range(1, retries + 2):  # attempts = retries + 1
                 result = self._deliver(
@@ -561,8 +561,8 @@ def create_webhook_registry() -> WebhookRegistry:
 
 
 def create_webhook_dispatcher(
-    registry: Optional[WebhookRegistry] = None,
-    transport: Optional[WebhookTransport] = None,
+    registry: WebhookRegistry | None = None,
+    transport: WebhookTransport | None = None,
 ) -> WebhookDispatcher:
     """Create a webhook dispatcher with optional defaults.
 

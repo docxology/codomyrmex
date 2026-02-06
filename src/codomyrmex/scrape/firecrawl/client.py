@@ -4,7 +4,7 @@ This module wraps the firecrawl-py SDK, providing typed interfaces
 and error translation to module exceptions.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -56,10 +56,10 @@ class FirecrawlClient:
     def scrape_url(
         self,
         url: str,
-        formats: Optional[List[str]] = None,
-        actions: Optional[List[Dict[str, Any]]] = None,
-        wait_for: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        formats: list[str] | None = None,
+        actions: list[dict[str, Any]] | None = None,
+        wait_for: str | None = None,
+    ) -> dict[str, Any]:
         """Scrape a single URL.
 
         Args:
@@ -110,9 +110,9 @@ class FirecrawlClient:
     def crawl_url(
         self,
         url: str,
-        limit: Optional[int] = None,
-        scrape_options: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        limit: int | None = None,
+        scrape_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Start a crawl job for a URL.
 
         Args:
@@ -122,7 +122,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing crawl job information with keys:
-                pass 
+                pass
             - id: Job identifier
             - status: Current job status
             - total: Total pages found
@@ -160,7 +160,7 @@ class FirecrawlClient:
             else:
                 raise FirecrawlError(f"Firecrawl error crawling {url}: {e}", firecrawl_error=e) from e
 
-    def map_url(self, url: str, search: Optional[str] = None) -> Dict[str, Any]:
+    def map_url(self, url: str, search: str | None = None) -> dict[str, Any]:
         """Map the structure of a website.
 
         Args:
@@ -169,7 +169,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing discovered links with structure:
-                pass 
+                pass
             - links: List of link dictionaries with url, title, description
 
         Raises:
@@ -202,9 +202,9 @@ class FirecrawlClient:
     def search_web(
         self,
         query: str,
-        limit: Optional[int] = None,
-        scrape_options: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        limit: int | None = None,
+        scrape_options: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Search the web and optionally scrape results.
 
         Args:
@@ -214,7 +214,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing search results with structure:
-                pass 
+                pass
             - data: List of result dictionaries with url, title, content
 
         Raises:
@@ -249,10 +249,10 @@ class FirecrawlClient:
 
     def extract_data(
         self,
-        urls: List[str],
-        schema: Optional[Dict[str, Any]] = None,
-        prompt: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        urls: list[str],
+        schema: dict[str, Any] | None = None,
+        prompt: str | None = None,
+    ) -> dict[str, Any]:
         """Extract structured data from URLs using LLM.
 
         Args:
@@ -262,7 +262,7 @@ class FirecrawlClient:
 
         Returns:
             Dictionary containing extracted data with structure:
-                pass 
+                pass
             - id: Job identifier (if async)
             - status: Extraction status
             - data: Extracted structured data

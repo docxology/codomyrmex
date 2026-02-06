@@ -7,7 +7,7 @@ All exceptions inherit from CodomyrmexError for consistent error handling.
 
 from typing import Any
 
-from codomyrmex.exceptions import CodomyrmexError, EventError
+from codomyrmex.exceptions import EventError
 
 
 class EventPublishError(EventError):

@@ -1,8 +1,10 @@
+import unittest
+from unittest.mock import mock_open, patch
+
 import pytest
 
-import unittest
-from unittest.mock import patch, mock_open, MagicMock
 from codomyrmex.documents.formats.markdown_handler import read_markdown, write_markdown
+
 
 @pytest.mark.unit
 class TestMarkdownHandler(unittest.TestCase):
@@ -24,7 +26,7 @@ class TestMarkdownHandler(unittest.TestCase):
             # We should mock mkdir to be safe
             with patch('pathlib.Path.mkdir'):
                 write_markdown(content, "test.md")
-            
+
             mock_file.assert_called_with(unittest.mock.ANY, 'w', encoding='utf-8')
             handle = mock_file()
             handle.write.assert_called_with(content)

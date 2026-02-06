@@ -4,15 +4,15 @@ This module provides integration between the thin orchestrator and
 other Codomyrmex modules like CI/CD, logistics, and agents.
 """
 
-import asyncio
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .thin import run, shell, pipe, batch, chain_scripts, workflow, Steps
-from .workflow import Workflow, Task, TaskStatus, RetryPolicy
+from .thin import Steps, run, shell, workflow
+from .workflow import RetryPolicy, Workflow
 
 logger = get_logger(__name__)
 
@@ -30,21 +30,21 @@ __all__ = [
 class StageConfig:
     """Configuration for a CI/CD stage."""
     name: str
-    commands: List[str]
+    commands: list[str]
     parallel: bool = True
     allow_failure: bool = False
     timeout: int = 300
     retry: int = 0
-    environment: Dict[str, str] = field(default_factory=dict)
-    condition: Optional[Callable[[Dict], bool]] = None
+    environment: dict[str, str] = field(default_factory=dict)
+    condition: Callable[[dict], bool] | None = None
 
 
 @dataclass
 class PipelineConfig:
     """Configuration for a CI/CD pipeline."""
     name: str
-    stages: List[StageConfig]
-    variables: Dict[str, str] = field(default_factory=dict)
+    stages: list[StageConfig]
+    variables: dict[str, str] = field(default_factory=dict)
     timeout: int = 3600
     fail_fast: bool = True
 
@@ -72,7 +72,7 @@ class OrchestratorBridge:
                 logger.warning("Logistics orchestration not available")
         return self._engine
 
-    def create_session(self, **kwargs) -> Optional[str]:
+    def create_session(self, **kwargs) -> str | None:
         """Create an orchestration session.
 
         Args:
@@ -98,7 +98,7 @@ class OrchestratorBridge:
         self,
         workflow_name: str,
         **params
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a logistics workflow via thin orchestration.
 
         Args:
@@ -118,10 +118,10 @@ class OrchestratorBridge:
 
     def run_quick(
         self,
-        target: Union[str, Path],
+        target: str | Path,
         timeout: int = 60,
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Quick run using thin orchestration.
 
         Args:
@@ -149,7 +149,7 @@ class OrchestratorBridge:
 class CICDBridge:
     """Bridge between thin orchestrator and CI/CD pipeline manager."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize CI/CD bridge.
 
         Args:
@@ -171,7 +171,7 @@ class CICDBridge:
 
     def create_workflow_from_pipeline(
         self,
-        pipeline_config: Union[PipelineConfig, Dict[str, Any]]
+        pipeline_config: PipelineConfig | dict[str, Any]
     ) -> Workflow:
         """Create a thin workflow from pipeline config.
 
@@ -232,7 +232,7 @@ class CICDBridge:
         Returns:
             Async action function
         """
-        async def stage_action(_task_results: dict = None) -> Dict[str, Any]:
+        async def stage_action(_task_results: dict = None) -> dict[str, Any]:
             results = []
             overall_success = True
 
@@ -260,8 +260,8 @@ class CICDBridge:
     async def run_stage(
         self,
         stage_config: StageConfig,
-        env: Optional[Dict[str, str]] = None
-    ) -> Dict[str, Any]:
+        env: dict[str, str] | None = None
+    ) -> dict[str, Any]:
         """Run a single CI/CD stage.
 
         Args:
@@ -283,7 +283,7 @@ class AgentOrchestrator:
 
     def __init__(self):
         """Initialize agent orchestrator."""
-        self._agents: Dict[str, Any] = {}
+        self._agents: dict[str, Any] = {}
 
     def register_agent(self, name: str, agent: Any):
         """Register an agent.
@@ -294,7 +294,7 @@ class AgentOrchestrator:
         """
         self._agents[name] = agent
 
-    def get_agent(self, name: str) -> Optional[Any]:
+    def get_agent(self, name: str) -> Any | None:
         """Get registered agent.
 
         Args:
@@ -310,7 +310,7 @@ class AgentOrchestrator:
         agent_name: str,
         task: str,
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Run a task using an agent.
 
         Args:
@@ -357,7 +357,7 @@ class AgentOrchestrator:
 
     def create_agent_workflow(
         self,
-        tasks: List[Dict[str, Any]],
+        tasks: list[dict[str, Any]],
         name: str = "agent_workflow"
     ) -> Workflow:
         """Create a workflow from agent tasks.
@@ -383,7 +383,7 @@ class AgentOrchestrator:
                 _agent=agent_name,
                 _task=task_content,
                 _kwargs=task_def.get("kwargs", {})
-            ) -> Dict[str, Any]:
+            ) -> dict[str, Any]:
                 return await self.run_agent_task(_agent, _task, **_kwargs)
 
             wf.add_task(
@@ -397,7 +397,7 @@ class AgentOrchestrator:
 
 
 def create_pipeline_workflow(
-    stages: List[Dict[str, Any]],
+    stages: list[dict[str, Any]],
     name: str = "pipeline",
     fail_fast: bool = True
 ) -> Workflow:
@@ -422,11 +422,11 @@ def create_pipeline_workflow(
 
 async def run_ci_stage(
     name: str,
-    commands: List[str],
+    commands: list[str],
     timeout: int = 300,
-    env: Optional[Dict[str, str]] = None,
+    env: dict[str, str] | None = None,
     allow_failure: bool = False
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a CI/CD stage.
 
     Args:
@@ -453,9 +453,9 @@ async def run_ci_stage(
 async def run_agent_task(
     agent_name: str,
     task: str,
-    orchestrator: Optional[AgentOrchestrator] = None,
+    orchestrator: AgentOrchestrator | None = None,
     **kwargs
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a task using an agent.
 
     Args:

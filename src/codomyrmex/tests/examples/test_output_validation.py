@@ -5,17 +5,17 @@ Tests that examples generate correct output formats, required fields,
 and follow consistent output patterns.
 """
 
-import pytest
 import json
-import os
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any
+
+import pytest
 
 
 class TestOutputValidation:
     """Test validation of example output files."""
 
-    def get_output_files(self, examples_dir: Path) -> List[Path]:
+    def get_output_files(self, examples_dir: Path) -> list[Path]:
         """Get all output JSON files from examples."""
         output_files = []
 
@@ -25,17 +25,17 @@ class TestOutputValidation:
 
         return output_files
 
-    def load_output_file(self, file_path: Path) -> Optional[Dict[str, Any]]:
+    def load_output_file(self, file_path: Path) -> dict[str, Any] | None:
         """Load and parse output JSON file."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 return json.load(f)
         except json.JSONDecodeError:
             return None
         except Exception:
             return None
 
-    def validate_output_structure(self, output: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_output_structure(self, output: dict[str, Any]) -> dict[str, Any]:
         """Validate the basic structure of output data."""
         validation = {"valid": True, "errors": [], "warnings": []}
 
@@ -62,7 +62,7 @@ class TestOutputValidation:
 
         return validation
 
-    def validate_output_types(self, output: Dict[str, Any]) -> List[str]:
+    def validate_output_types(self, output: dict[str, Any]) -> list[str]:
         """Validate that output values have reasonable types."""
         type_errors = []
 
@@ -83,7 +83,7 @@ class TestOutputValidation:
 
         return type_errors
 
-    def validate_output_completeness(self, output: Dict[str, Any], module_name: str) -> Dict[str, Any]:
+    def validate_output_completeness(self, output: dict[str, Any], module_name: str) -> dict[str, Any]:
         """Validate that output contains expected information for the module."""
         validation = {"complete": True, "missing": []}
 
@@ -176,7 +176,7 @@ class TestOutputValidation:
             else:
                 print("✗ Output file does not exist")
 
-        print(f"\nOutput file summary:")
+        print("\nOutput file summary:")
         print(f"  Generated: {generated_files}/{len(output_files)}")
         print(f"  Valid JSON: {valid_files}/{len(output_files)}")
 
@@ -265,7 +265,7 @@ class TestOutputValidation:
                 log_files = list(logs_dir.glob("*.log"))
                 log_stats["log_files"] += len(log_files)
 
-        print(f"\nLog file statistics:")
+        print("\nLog file statistics:")
         print(f"  Examples with logs: {log_stats['with_logs']}/{log_stats['total_examples']}")
         print(f"  Total log files: {log_stats['log_files']}")
 

@@ -1,8 +1,8 @@
 """Population management and evolution cycle."""
 
-import random
 import logging
-from typing import List, Callable, Optional
+from collections.abc import Callable
+
 from .genome import Genome
 from .operators import crossover, mutate, tournament_selection
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Population:
     """Manages a collection of genomes and their evolution."""
-    
+
     def __init__(self, size: int, genome_length: int):
         self.individuals = [Genome.random(genome_length) for _ in range(size)]
         self.generation = 0
@@ -24,18 +24,18 @@ class Population:
         """Perform one generation of evolution."""
         # Sort by fitness
         self.individuals.sort(key=lambda g: g.fitness if g.fitness is not None else -float('inf'), reverse=True)
-        
+
         new_population = self.individuals[:elitism]
-        
+
         while len(new_population) < len(self.individuals):
             p1 = tournament_selection(self.individuals)
             p2 = tournament_selection(self.individuals)
-            
+
             c1, c2 = crossover(p1, p2)
             new_population.append(mutate(c1, rate=mutation_rate))
             if len(new_population) < len(self.individuals):
                 new_population.append(mutate(c2, rate=mutation_rate))
-                
+
         self.individuals = new_population
         self.generation += 1
         logger.info(f"Generation {self.generation} complete. Best fitness: {self.individuals[0].fitness}")

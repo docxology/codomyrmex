@@ -3,9 +3,8 @@
 This module provides configuration management for video processing operations.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 
 @dataclass
@@ -24,7 +23,7 @@ class VideoConfig:
         cleanup_temp_files: Auto-cleanup temporary files
     """
 
-    temp_directory: Optional[Path] = None
+    temp_directory: Path | None = None
     default_output_format: str = "mp4"
     default_codec: str = "libx264"
     default_audio_codec: str = "aac"
@@ -33,7 +32,7 @@ class VideoConfig:
     thumbnail_width: int = 320
     max_concurrent_operations: int = 2
     cleanup_temp_files: bool = True
-    ffmpeg_path: Optional[str] = None
+    ffmpeg_path: str | None = None
     opencv_backend: str = "auto"
 
 
@@ -67,11 +66,11 @@ def reset_config() -> None:
 
 
 def configure(
-    temp_directory: Optional[Path] = None,
-    default_output_format: Optional[str] = None,
-    default_codec: Optional[str] = None,
-    default_fps: Optional[int] = None,
-    thumbnail_width: Optional[int] = None,
+    temp_directory: Path | None = None,
+    default_output_format: str | None = None,
+    default_codec: str | None = None,
+    default_fps: int | None = None,
+    thumbnail_width: int | None = None,
     **kwargs: object,
 ) -> VideoConfig:
     """Configure video processing settings.

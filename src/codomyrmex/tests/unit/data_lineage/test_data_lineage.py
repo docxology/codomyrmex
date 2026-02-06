@@ -106,7 +106,7 @@ class TestLineageEdge:
 
     def test_edge_creation(self):
         """Verify LineageEdge can be created."""
-        from codomyrmex.data_lineage import LineageEdge, EdgeType
+        from codomyrmex.data_lineage import EdgeType, LineageEdge
 
         edge = LineageEdge(
             source_id="raw_data",
@@ -120,7 +120,7 @@ class TestLineageEdge:
 
     def test_edge_key_property(self):
         """Verify edge key generation."""
-        from codomyrmex.data_lineage import LineageEdge, EdgeType
+        from codomyrmex.data_lineage import EdgeType, LineageEdge
 
         edge = LineageEdge(
             source_id="A",
@@ -179,7 +179,11 @@ class TestLineageGraph:
     def test_graph_add_edge(self):
         """Verify edges can be added to graph."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType
+            EdgeType,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()
@@ -196,7 +200,11 @@ class TestLineageGraph:
     def test_graph_get_upstream(self):
         """Verify upstream node retrieval."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType
+            EdgeType,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()
@@ -216,7 +224,11 @@ class TestLineageGraph:
     def test_graph_get_downstream(self):
         """Verify downstream node retrieval."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType
+            EdgeType,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()
@@ -236,7 +248,11 @@ class TestLineageGraph:
     def test_graph_get_path(self):
         """Verify path finding between nodes."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType
+            EdgeType,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()
@@ -254,7 +270,11 @@ class TestLineageGraph:
     def test_graph_to_dict(self):
         """Verify graph serialization."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType
+            EdgeType,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()
@@ -314,7 +334,12 @@ class TestImpactAnalyzer:
     def test_analyzer_analyze_change(self):
         """Verify impact analysis of changes."""
         from codomyrmex.data_lineage import (
-            LineageGraph, LineageNode, LineageEdge, NodeType, EdgeType, ImpactAnalyzer
+            EdgeType,
+            ImpactAnalyzer,
+            LineageEdge,
+            LineageGraph,
+            LineageNode,
+            NodeType,
         )
 
         graph = LineageGraph()

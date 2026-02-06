@@ -5,11 +5,11 @@ Provides Task, TaskResult, SwarmStatus, and AgentStatus dataclasses
 for multi-agent collaboration workflows.
 """
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
 from enum import Enum
-import uuid
+from typing import Any
 
 
 class TaskPriority(Enum):
@@ -34,7 +34,7 @@ class TaskStatus(Enum):
 class Task:
     """
     A task to be executed by agents in the swarm.
-    
+
     Attributes:
         id: Unique task identifier.
         name: Human-readable task name.
@@ -50,15 +50,15 @@ class Task:
     name: str
     description: str = ""
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    required_capabilities: List[str] = field(default_factory=list)
+    required_capabilities: list[str] = field(default_factory=list)
     priority: int = 5
-    dependencies: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     status: TaskStatus = TaskStatus.PENDING
-    assigned_agent_id: Optional[str] = None
-    
-    def to_dict(self) -> Dict[str, Any]:
+    assigned_agent_id: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         """Serialize task to dictionary."""
         return {
             "id": self.id,
@@ -72,9 +72,9 @@ class Task:
             "status": self.status.value,
             "assigned_agent_id": self.assigned_agent_id,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Task":
+    def from_dict(cls, data: dict[str, Any]) -> "Task":
         """Deserialize task from dictionary."""
         return cls(
             id=data.get("id", str(uuid.uuid4())),
@@ -88,8 +88,8 @@ class Task:
             status=TaskStatus(data.get("status", "pending")),
             assigned_agent_id=data.get("assigned_agent_id"),
         )
-    
-    def is_ready(self, completed_task_ids: List[str]) -> bool:
+
+    def is_ready(self, completed_task_ids: list[str]) -> bool:
         """Check if all dependencies are satisfied."""
         return all(dep_id in completed_task_ids for dep_id in self.dependencies)
 
@@ -98,7 +98,7 @@ class Task:
 class TaskResult:
     """
     Result of a task execution.
-    
+
     Attributes:
         task_id: ID of the executed task.
         success: Whether the task completed successfully.
@@ -111,12 +111,12 @@ class TaskResult:
     task_id: str
     success: bool
     output: Any = None
-    error: Optional[str] = None
+    error: str | None = None
     duration: float = 0.0
     agent_id: str = ""
     completed_at: datetime = field(default_factory=datetime.now)
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Serialize result to dictionary."""
         return {
             "task_id": self.task_id,
@@ -127,9 +127,9 @@ class TaskResult:
             "agent_id": self.agent_id,
             "completed_at": self.completed_at.isoformat(),
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TaskResult":
+    def from_dict(cls, data: dict[str, Any]) -> "TaskResult":
         """Deserialize result from dictionary."""
         return cls(
             task_id=data["task_id"],
@@ -146,7 +146,7 @@ class TaskResult:
 class SwarmStatus:
     """
     Status of the entire swarm.
-    
+
     Attributes:
         total_agents: Total number of agents in the swarm.
         active_agents: Number of currently active agents.
@@ -165,8 +165,8 @@ class SwarmStatus:
     completed_tasks: int = 0
     failed_tasks: int = 0
     uptime_seconds: float = 0.0
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Serialize status to dictionary."""
         return {
             "total_agents": self.total_agents,
@@ -184,7 +184,7 @@ class SwarmStatus:
 class AgentStatus:
     """
     Status of an individual agent.
-    
+
     Attributes:
         agent_id: Unique agent identifier.
         name: Agent name.
@@ -198,13 +198,13 @@ class AgentStatus:
     agent_id: str
     name: str = ""
     status: str = "idle"
-    current_task_id: Optional[str] = None
-    capabilities: List[str] = field(default_factory=list)
+    current_task_id: str | None = None
+    capabilities: list[str] = field(default_factory=list)
     tasks_completed: int = 0
     tasks_failed: int = 0
     last_heartbeat: datetime = field(default_factory=datetime.now)
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Serialize status to dictionary."""
         return {
             "agent_id": self.agent_id,
@@ -216,9 +216,9 @@ class AgentStatus:
             "tasks_failed": self.tasks_failed,
             "last_heartbeat": self.last_heartbeat.isoformat(),
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "AgentStatus":
+    def from_dict(cls, data: dict[str, Any]) -> "AgentStatus":
         """Deserialize status from dictionary."""
         return cls(
             agent_id=data["agent_id"],

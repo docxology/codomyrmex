@@ -1,6 +1,8 @@
 
 import pytest
+
 from codomyrmex import cerebrum
+
 
 @pytest.mark.unit
 def test_cerebrum_module_import():

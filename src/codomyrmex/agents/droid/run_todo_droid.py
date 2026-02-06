@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import importlib
 import sys
 import time
 from collections.abc import Iterable
-from typing import Callable
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
@@ -110,7 +109,7 @@ CODOMYRMEX_ENHANCED_PROMPT = (
 def resolve_handler(handler_path: str) -> Callable:
     """Resolve a handler string to a callable function."""
     import importlib
-    
+
     if ":" not in handler_path:
         # Default to droid.tasks if no module specified
         module_name = "codomyrmex.agents.droid.tasks"

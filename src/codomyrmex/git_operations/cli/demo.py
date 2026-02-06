@@ -1,29 +1,24 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-import json
-import os
-import shutil
 
 from codomyrmex.git_operations import (
     check_git_availability,
     is_git_repository,
 )
 from codomyrmex.git_operations.api.visualization import (
-    create_git_workflow_diagram as generate_git_workflow_diagram,
-    create_git_analysis_report,
-    visualize_git_branches,
-    visualize_commit_activity,
     analyze_repository_structure,
+    create_git_analysis_report,
+    visualize_commit_activity,
+    visualize_git_branches,
 )
 from codomyrmex.logging_monitoring import get_logger
 
 # Optional import for data visualization
 try:
     from codomyrmex.data_visualization import (
-        GitVisualizer,
-        MermaidDiagramGenerator,
         BaseChartVisualizer,
         BaseNetworkVisualizer,
+        GitVisualizer,
+        MermaidDiagramGenerator,
     )
     VISUALIZATION_AVAILABLE = True
 except ImportError:
@@ -41,7 +36,7 @@ class GitVisualizationDemo:
             self.output_dir = Path(output_dir)
         else:
             self.output_dir = Path.cwd() / "@output" / "git_visualization_demo"
-        
+
         # Create output directory
         self.output_dir.mkdir(parents=True, exist_ok=True)
         logger.info(f"Initialized demo with output directory: {self.output_dir}")
@@ -73,19 +68,19 @@ class GitVisualizationDemo:
 
         # Generate summary
         self._generate_overall_summary(results, repository_path)
-        
+
         success_count = sum(1 for r in results.values() if r)
         logger.info(f"Demo run completed. Successful: {success_count}/{len(results)}")
-        
+
         return success_count > 0
 
     def demo_sample_data_visualizations(self) -> bool:
         """Demonstrate Git visualizations with sample data."""
         output_dir = self.output_dir / "sample_data"
         output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         logger.info("=== Demonstrating Git Visualizations with Sample Data ===")
-        
+
         # Sample data definitions
         sample_branches = [
             {"name": "main", "commits": 10, "created_at": "2024-01-01"},
@@ -94,7 +89,7 @@ class GitVisualizationDemo:
             {"name": "feature/api-endpoints", "commits": 6, "created_at": "2024-01-05", "merged": True},
             {"name": "hotfix/security-fix", "commits": 2, "created_at": "2024-01-10", "merged": True}
         ]
-        
+
         sample_commits = [
             {"hash": "a1b2c3d", "message": "Initial commit", "author_name": "Alice", "author_email": "alice@example.com", "date": "2024-01-01T10:00:00Z", "branch": "main"},
             {"hash": "e4f5g6h", "message": "Add project structure", "author_name": "Alice", "author_email": "alice@example.com", "date": "2024-01-01T14:30:00Z", "branch": "main"},
@@ -107,7 +102,7 @@ class GitVisualizationDemo:
             {"hash": "g7h8i9j", "message": "Update documentation", "author_name": "Alice", "author_email": "alice@example.com", "date": "2024-01-12T15:20:00Z", "branch": "develop"},
             {"hash": "k1l2m3n", "message": "Prepare release v1.0", "author_name": "Alice", "author_email": "alice@example.com", "date": "2024-01-15T12:00:00Z", "branch": "main"}
         ]
-        
+
         sample_workflow_steps = [
             {"name": "Start", "type": "terminal", "description": "Start Development"},
             {"name": "Clone", "type": "process", "description": "git clone repository"},
@@ -124,7 +119,7 @@ class GitVisualizationDemo:
             {"name": "Deploy", "type": "process", "description": "Deploy to production"},
             {"name": "End", "type": "terminal", "description": "Complete"}
         ]
-        
+
         sample_repo_structure = {
             "src": {
                 "codomyrmex": {
@@ -200,20 +195,20 @@ class GitVisualizationDemo:
 
         success_count = sum(1 for success in results.values() if success)
         logger.info(f"Sample data demo: {success_count}/{len(results)} successful")
-        
+
         return success_count > 0
 
     def demo_real_repository_analysis(self, repository_path: str) -> bool:
         """Demonstrate Git visualizations with a real repository."""
         output_dir = self.output_dir / "real_repository"
         output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         logger.info(f"=== Analyzing Real Git Repository: {repository_path} ===")
-        
+
         if not check_git_availability():
             logger.error("Git is not available on this system")
             return False
-            
+
         if not is_git_repository(repository_path):
             logger.error(f"Path {repository_path} is not a Git repository")
             return False
@@ -224,20 +219,20 @@ class GitVisualizationDemo:
             output_dir=str(output_dir / "comprehensive_report"),
             report_name="live_repo_analysis"
         )
-        
+
         # 2. Individual Visualizations
         visualize_git_branches(
             repository_path=repository_path,
             output_path=str(output_dir / "live_branches.png"),
             format_type="png"
         )
-        
+
         visualize_commit_activity(
             repository_path=repository_path,
             output_path=str(output_dir / "live_commit_activity.png"),
             days_back=30
         )
-        
+
         analyze_repository_structure(
             repository_path=repository_path,
             output_path=str(output_dir / "live_repo_structure.mmd")
@@ -249,10 +244,10 @@ class GitVisualizationDemo:
         """Demonstrate workflow diagram generation."""
         output_dir = self.output_dir / "workflows"
         output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         workflow_types = ["feature_branch", "gitflow", "github_flow"]
         results = {}
-        
+
         for workflow_type in workflow_types:
             result = create_git_workflow_diagram(
                 workflow_type=workflow_type,
@@ -260,10 +255,10 @@ class GitVisualizationDemo:
                 title=f"{workflow_type.replace('_', ' ').title()} Workflow"
             )
             results[workflow_type] = result.get('success', False)
-            
+
         return any(results.values())
 
-    def _generate_overall_summary(self, results: Dict[str, bool], repository_path: Optional[str]):
+    def _generate_overall_summary(self, results: dict[str, bool], repository_path: str | None):
         """Generate overall summary markdown file."""
         summary = [
             "# Git Visualization Demo Results",
@@ -273,13 +268,13 @@ class GitVisualizationDemo:
             "## Results",
             ""
         ]
-        
+
         for name, success in results.items():
             summary.append(f"- {name}: {'✅' if success else '❌'}")
-            
+
         if repository_path:
             summary.append(f"\nAnalyzed Repository: {repository_path}")
-            
+
         summary_path = self.output_dir / "demo_summary.md"
         with open(summary_path, 'w') as f:
             f.write('\n'.join(summary))

@@ -1,41 +1,69 @@
 # Streaming Module
 
-Real-time data streaming patterns with SSE and message routing.
+**Version**: v0.1.0 | **Status**: Active
 
-## Features
-
-- **Multiple Stream Types**: InMemory, SSE, Topic-based
-- **Event Processing**: Map, filter, and route events
-- **Async-first**: Built on asyncio for high performance
-- **SSE Support**: Server-Sent Events for web clients
+Real-time data streaming with SSE, pub/sub, and stream processing.
 
 ## Quick Start
 
 ```python
+import asyncio
 from codomyrmex.streaming import (
-    InMemoryStream, SSEStream, TopicStream,
-    Event, EventType, create_event,
+    InMemoryStream, SSEStream, Event, EventType, TopicStream, create_event
 )
 
-# Basic streaming
+# Basic pub/sub streaming
 stream = InMemoryStream()
 
 async def handler(event):
     print(f"Received: {event.data}")
 
-await stream.subscribe(handler)
-await stream.publish(create_event({"message": "hello"}))
+sub = await stream.subscribe(handler)
+await stream.publish(Event(data={"message": "Hello!"}))
+
+# Server-Sent Events (SSE)
+sse = SSEStream()
+sub = await sse.subscribe(lambda e: None, topic="updates")
+
+# In your web framework
+async for line in sse.sse_generator(sub.id):
+    yield line  # "id: ...\nevent: message\ndata: {...}\n\n"
 
 # Topic-based routing
 topics = TopicStream()
-await topics.subscribe("orders", handle_order)
-await topics.subscribe("alerts", handle_alert)
-
-await topics.publish("orders", create_event({"id": 123}))
+await topics.subscribe("orders", order_handler)
+await topics.publish("orders", Event(data={"order_id": "123"}))
 ```
+
+## Stream Processor
+
+```python
+from codomyrmex.streaming import StreamProcessor
+
+# Transform and filter events
+processor = (
+    StreamProcessor(source_stream)
+    .filter(lambda e: e.data.get("priority") == "high")
+    .map(lambda e: Event(data={**e.data, "processed": True}))
+    .sink(target_stream)
+)
+await processor.start()
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `InMemoryStream` | In-memory pub/sub with event buffer |
+| `SSEStream` | Server-Sent Events stream |
+| `TopicStream` | Topic-based message routing |
+| `StreamProcessor` | Transform/filter/sink pipeline |
+| `Event` | Event with id, type, data, metadata |
+| `EventType` | Enum: message, error, connect, disconnect, heartbeat |
+| `Subscription` | Active subscription with cancel() |
+| `create_event(data)` | Create event with defaults |
+| `broadcast(streams, event)` | Send to multiple streams |
 
 ## Navigation
 
-- [Technical Spec](SPEC.md)
-- [Agent Guidelines](AGENTS.md)
-- [PAI Context](PAI.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

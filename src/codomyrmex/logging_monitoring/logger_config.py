@@ -17,19 +17,18 @@ Example:
     >>> logger.info("Application started")
 """
 
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, Any, Optional, Iterator
 import json
 import logging
 import os
 import sys
-import time
-
-from contextlib import contextmanager
 import threading
+import time
 import uuid
-
+from contextlib import contextmanager
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from collections.abc import Iterator
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -75,15 +74,15 @@ class JSONFormatter(logging.Formatter):
             "function": record.funcName,
             "line": record.lineno,
         }
-        
+
         if record.exc_info:
             log_data["exception"] = self.formatException(record.exc_info)
-            
+
         if hasattr(record, "context"):
             log_data["context"] = record.context
         if hasattr(record, "correlation_id"):
             log_data["correlation_id"] = record.correlation_id
-            
+
         for key, value in record.__dict__.items():
             if key not in [
                 "name", "msg", "args", "created", "filename", "funcName",
@@ -93,7 +92,7 @@ class JSONFormatter(logging.Formatter):
                 "message", "context", "correlation_id"
             ]:
                 log_data[key] = value
-                
+
         return json.dumps(log_data)
 
 def setup_logging(force: bool = True) -> None:
@@ -180,7 +179,7 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 
-def log_with_context(level: str, message: str, context: Dict[str, Any]) -> None:
+def log_with_context(level: str, message: str, context: dict[str, Any]) -> None:
     """Log a message with additional context data.
 
     Logs a message at the specified level with context dictionary attached.
@@ -244,7 +243,7 @@ class LogContext:
         ...     logger.info("Back to outer context")  # Original correlation_id
     """
 
-    def __init__(self, correlation_id: Optional[str] = None, additional_context: Optional[Dict[str, Any]] = None):
+    def __init__(self, correlation_id: str | None = None, additional_context: dict[str, Any] | None = None):
         """Initialize a new LogContext.
 
         Args:
@@ -303,9 +302,9 @@ class PerformanceLogger:
             logger_name: Name for the underlying logger. Defaults to "performance".
         """
         self.logger = get_logger(logger_name)
-        self._timers: Dict[str, float] = {}
+        self._timers: dict[str, float] = {}
 
-    def start_timer(self, operation: str, context: Optional[Dict[str, Any]] = None) -> None:
+    def start_timer(self, operation: str, context: dict[str, Any] | None = None) -> None:
         """Start timing an operation.
 
         Records the start time for the named operation. Use end_timer() to
@@ -326,7 +325,7 @@ class PerformanceLogger:
         self._timers[operation] = time.time()
         self.logger.debug(f"Started timing: {operation}", extra={"operation": operation, "context": context or {}})
 
-    def end_timer(self, operation: str, context: Optional[Dict[str, Any]] = None) -> float:
+    def end_timer(self, operation: str, context: dict[str, Any] | None = None) -> float:
         """End timing an operation and log the duration.
 
         Calculates and logs the elapsed time since start_timer() was called
@@ -353,7 +352,7 @@ class PerformanceLogger:
         return duration
 
     @contextmanager
-    def time_operation(self, operation: str, context: Optional[Dict[str, Any]] = None) -> Iterator[None]:
+    def time_operation(self, operation: str, context: dict[str, Any] | None = None) -> Iterator[None]:
         """Context manager for timing a code block.
 
         Automatically starts and ends timing around the enclosed code block.
@@ -377,7 +376,7 @@ class PerformanceLogger:
         finally:
             self.end_timer(operation, context)
 
-    def log_metric(self, name: str, value: Any, unit: Optional[str] = None, context: Optional[Dict[str, Any]] = None) -> None:
+    def log_metric(self, name: str, value: Any, unit: str | None = None, context: dict[str, Any] | None = None) -> None:
         """Log a performance metric.
 
         Records a named metric value with optional unit and context. Useful
@@ -418,7 +417,7 @@ class AuditLogger:
         >>> audit.log_access("user:jane", "file:/etc/passwd", "read", granted=False)
     """
 
-    def __init__(self, logger_name: str = "audit", log_file: Optional[str] = None):
+    def __init__(self, logger_name: str = "audit", log_file: str | None = None):
         """Initialize an AuditLogger.
 
         Args:
@@ -434,7 +433,7 @@ class AuditLogger:
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
 
-    def log(self, actor: str, action: str, resource: str, outcome: str = "success", details: Optional[Dict[str, Any]] = None) -> None:
+    def log(self, actor: str, action: str, resource: str, outcome: str = "success", details: dict[str, Any] | None = None) -> None:
         """Record an audit event.
 
         Creates an immutable audit record with a unique ID, timestamp, and

@@ -1,20 +1,21 @@
 """Hardware and environment profilers."""
 
-import sys
+import logging
+import multiprocessing
 import os
 import platform
-import multiprocessing
+import sys
+from typing import Any
+
 import psutil
-from typing import Any, Dict
-import logging
 
 logger = logging.getLogger(__name__)
 
 class HardwareProfiler:
     """Detects and profiles system hardware capabilities."""
-    
+
     @staticmethod
-    def get_hardware_info() -> Dict[str, Any]:
+    def get_hardware_info() -> dict[str, Any]:
         """Get CPU, RAM, and OS information."""
         return {
             "cpu_count": multiprocessing.cpu_count(),
@@ -27,7 +28,7 @@ class HardwareProfiler:
 
 class EnvironmentProfiler:
     """Detects the current execution environment (CI, Docker, etc.)."""
-    
+
     @staticmethod
     def get_environment_type() -> str:
         """Detect environment type."""
@@ -42,7 +43,7 @@ class EnvironmentProfiler:
         return "local"
 
     @staticmethod
-    def get_python_info() -> Dict[str, Any]:
+    def get_python_info() -> dict[str, Any]:
         """Get Python runtime information."""
         return {
             "python_version": sys.version,

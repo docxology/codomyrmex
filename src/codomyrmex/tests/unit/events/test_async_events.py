@@ -8,17 +8,17 @@ This module provides extensive async tests for:
 - Error handling in async handlers
 """
 
-import pytest
 import asyncio
 import time
-from typing import List, Dict, Any
-from unittest.mock import MagicMock, AsyncMock, patch
+from typing import Any
 
-from codomyrmex.events.event_schema import Event, EventType, EventPriority, EventSchema
-from codomyrmex.events.event_bus import EventBus, get_event_bus, publish_event, subscribe_to_events
-from codomyrmex.events.emitter import AsyncEventEmitter
+import pytest
+
+from codomyrmex.events.event_bus import (
+    EventBus,
+)
 from codomyrmex.events.event_emitter import EventEmitter
-
+from codomyrmex.events.event_schema import Event, EventSchema, EventType
 
 # ==================== ASYNC EVENT PUBLISHING TESTS ====================
 
@@ -679,7 +679,7 @@ class TestAsyncEventEmitterClass:
         bus.subscribe([EventType.CUSTOM], handler, "pattern_handler")
 
         # Demonstrate proper async event publishing
-        async def emit_async_event(data: Dict[str, Any]):
+        async def emit_async_event(data: dict[str, Any]):
             event = Event(
                 event_type=EventType.CUSTOM,
                 source="async_pattern",
@@ -707,7 +707,7 @@ class TestAsyncEventEmitterClass:
 
         bus.subscribe([EventType.CUSTOM], handler, "delayed_handler")
 
-        async def emit_with_delay(data: Dict[str, Any], delay: float):
+        async def emit_with_delay(data: dict[str, Any], delay: float):
             await asyncio.sleep(delay)
             event = Event(
                 event_type=EventType.CUSTOM,

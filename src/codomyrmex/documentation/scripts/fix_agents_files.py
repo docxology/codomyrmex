@@ -1,29 +1,7 @@
-from pathlib import Path
-from typing import List, Dict, Set
 import argparse
-import json
-import os
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Batch fix AGENTS.md files throughout the repository.
@@ -47,11 +25,11 @@ class AgentsFileFixer:
         self.fixed_count = 0
         self.error_count = 0
 
-    def find_agents_files(self) -> List[Path]:
+    def find_agents_files(self) -> list[Path]:
         """Find all AGENTS.md files in the repository."""
         return list(self.repo_root.rglob("AGENTS.md"))
 
-    def get_actual_files(self, directory: Path) -> Set[str]:
+    def get_actual_files(self, directory: Path) -> set[str]:
         """Get all actual files and directories in a given directory."""
         if not directory.exists():
             return set()
@@ -70,7 +48,7 @@ class AgentsFileFixer:
 
         return items
 
-    def parse_agents_file(self, agents_file: Path) -> Dict:
+    def parse_agents_file(self, agents_file: Path) -> dict:
         """Parse an AGENTS.md file and extract its sections."""
         if not agents_file.exists():
             return {}
@@ -95,7 +73,7 @@ class AgentsFileFixer:
 
         return sections
 
-    def extract_active_components(self, active_components_text: str) -> Set[str]:
+    def extract_active_components(self, active_components_text: str) -> set[str]:
         """Extract listed items from Active Components section."""
         items = set()
 
@@ -193,7 +171,7 @@ class AgentsFileFixer:
             self.error_count += 1
             return False
 
-    def fix_all_agents_files(self, dry_run: bool = True) -> Dict:
+    def fix_all_agents_files(self, dry_run: bool = True) -> dict:
         """Fix all AGENTS.md files in the repository."""
         agents_files = self.find_agents_files()
         print(f"Found {len(agents_files)} AGENTS.md files")

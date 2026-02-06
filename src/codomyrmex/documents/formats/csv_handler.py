@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import csv
-import io
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -15,7 +13,7 @@ from ..exceptions import DocumentReadError, DocumentWriteError
 logger = get_logger(__name__)
 
 
-def read_csv(file_path: str | Path, encoding: Optional[str] = None) -> list[dict]:
+def read_csv(file_path: str | Path, encoding: str | None = None) -> list[dict]:
     """
     Read CSV content from a file.
 
@@ -33,7 +31,7 @@ def read_csv(file_path: str | Path, encoding: Optional[str] = None) -> list[dict
     encoding = encoding or get_config().default_encoding
 
     try:
-        with open(file_path, 'r', encoding=encoding, newline='') as f:
+        with open(file_path, encoding=encoding, newline='') as f:
             reader = csv.DictReader(f)
             rows = list(reader)
         return rows
@@ -48,8 +46,8 @@ def read_csv(file_path: str | Path, encoding: Optional[str] = None) -> list[dict
 def write_csv(
     data: list[dict],
     file_path: str | Path,
-    encoding: Optional[str] = None,
-    fieldnames: Optional[list[str]] = None,
+    encoding: str | None = None,
+    fieldnames: list[str] | None = None,
 ) -> None:
     """
     Write CSV data to a file.

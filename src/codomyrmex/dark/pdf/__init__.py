@@ -12,8 +12,8 @@ Functions:
 """
 
 try:
-    from .filters import DarkPDFFilter, apply_dark_mode
     from .dark_pdf_wrapper import DarkPDF
+    from .filters import DarkPDFFilter, apply_dark_mode
 
     FILTERS_AVAILABLE = True
 except ImportError:

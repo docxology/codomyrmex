@@ -1,6 +1,5 @@
-from typing import Optional
-from pathlib import Path
-from ..utils import get_logger, TERMINAL_INTERFACE_AVAILABLE, TerminalFormatter
+
+from ..utils import get_logger
 
 # Lazy imports for demos to avoid hard dependencies
 logger = get_logger(__name__)
@@ -10,13 +9,13 @@ def demo_data_visualization() -> bool:
     try:
         import matplotlib
         matplotlib.use('Agg')
-        from codomyrmex.data_visualization import create_bar_chart, create_line_plot
-
         import os
+
+        from codomyrmex.data_visualization import create_bar_chart, create_line_plot
         # Generate sample data
         output_dir = "output"
         os.makedirs(output_dir, exist_ok=True)
-        
+
         x = list(range(10))
         y = [i**2 for i in x]
 

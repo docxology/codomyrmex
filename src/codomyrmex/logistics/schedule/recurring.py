@@ -5,7 +5,6 @@ Recurring schedule definitions (daily, weekly, monthly, etc.).
 from dataclasses import dataclass
 from datetime import datetime, time
 from enum import Enum
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -29,10 +28,10 @@ class RecurringSchedule:
 
     recurrence_type: RecurrenceType
     time: time
-    day_of_week: Optional[int] = None  # 0-6, Monday=0
-    day_of_month: Optional[int] = None  # 1-31
-    month: Optional[int] = None  # 1-12
-    last_run: Optional[datetime] = None
+    day_of_week: int | None = None  # 0-6, Monday=0
+    day_of_month: int | None = None  # 1-31
+    month: int | None = None  # 1-12
+    last_run: datetime | None = None
 
     def __post_init__(self):
         """Validate schedule configuration."""
@@ -57,7 +56,7 @@ class RecurringScheduler:
         self.timezone_manager = timezone_manager
 
     def should_run(
-        self, schedule: RecurringSchedule, now: Optional[datetime] = None
+        self, schedule: RecurringSchedule, now: datetime | None = None
     ) -> bool:
         """Check if a recurring schedule should run now.
 

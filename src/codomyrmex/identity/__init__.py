@@ -3,8 +3,8 @@
 Provides Persona management and Bio-Cognitive Verification.
 """
 
-from .persona import Persona, VerificationLevel
-from .manager import IdentityManager
 from .biocognitive import BioCognitiveVerifier
+from .manager import IdentityManager
+from .persona import Persona, VerificationLevel
 
 __all__ = ["Persona", "VerificationLevel", "IdentityManager", "BioCognitiveVerifier"]

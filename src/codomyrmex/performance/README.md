@@ -1,39 +1,72 @@
-# performance
+# Performance Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Lazy loading, caching, and performance monitoring utilities.
 
-Performance optimization module providing lazy loading, function caching, and system monitoring for the Codomyrmex platform. The `LazyLoader` defers module imports until first access to reduce startup time, `CacheManager` stores expensive computation results with configurable TTL and eviction, and the optional `PerformanceMonitor` (requires `psutil`) provides real-time CPU, memory, and disk metrics along with function profiling decorators.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.performance import (
+    LazyLoader, lazy_import, CacheManager, cached_function
+)
 
-### Core (always available)
-- **`LazyLoader`** -- Proxy object that defers module import until an attribute is first accessed, reducing startup time
-- **`lazy_import()`** -- Convenience function that returns a `LazyLoader` for a given module name
-- **`CacheManager`** -- In-memory and file-backed cache with TTL expiration, max-size eviction, and JSON/pickle serialization
-- **`cached_function()`** -- Decorator that caches function return values based on argument hashing
+# Lazy import heavy modules
+numpy = lazy_import("numpy")  # Only loads when first accessed
+pandas = lazy_import("pandas")
 
-### Monitoring (optional, requires `psutil`)
-- **`PerformanceMonitor`** -- Collects system metrics (CPU, memory, disk, network) and tracks function execution times
-- **`monitor_performance()`** -- Decorator that instruments a function with timing and resource tracking
-- **`performance_context()`** -- Context manager for measuring resource usage within a code block
-- **`profile_function()`** -- Profiles a function call and returns detailed timing breakdown
-- **`get_system_metrics()`** -- Returns a snapshot of current system resource usage
+# Caching
+cache = CacheManager(backend="memory", ttl=300)
 
-Note: When `psutil` is not installed, `monitor_performance`, `performance_context`, `profile_function`, and `get_system_metrics` are exported as no-op stubs that pass through without effect.
+@cached_function(cache, ttl=60)
+def expensive_computation(x):
+    return x ** 2
 
-## Directory Contents
+result = expensive_computation(5)  # Computed
+result = expensive_computation(5)  # Cached
 
-- `lazy_loader.py` -- LazyLoader class and lazy_import convenience function for deferred imports
-- `cache_manager.py` -- CacheManager with TTL, eviction policies, and the cached_function decorator
-- `performance_monitor.py` -- PerformanceMonitor, system metrics collection, and profiling (requires psutil)
-- `async_profiler.py` -- Async-compatible profiling utilities for coroutine performance measurement
-- `resource_tracker.py` -- Resource usage tracking and reporting over time
-- `requirements.txt` -- Optional dependencies (psutil) for monitoring features
+# Manual cache operations
+cache.set("key", {"data": 123})
+value = cache.get("key")
+cache.delete("key")
+```
+
+## Performance Monitoring
+
+```python
+from codomyrmex.performance import (
+    PerformanceMonitor, monitor_performance, performance_context
+)
+
+# Decorator-based monitoring
+@monitor_performance(name="process_data")
+def process_data():
+    # ... processing ...
+    pass
+
+# Context manager
+with performance_context("batch_job") as ctx:
+    run_batch()
+    print(f"Duration: {ctx.duration}s, Memory: {ctx.memory_delta}MB")
+
+# System metrics
+monitor = PerformanceMonitor()
+metrics = monitor.get_system_metrics()
+print(f"CPU: {metrics['cpu_percent']}%, Memory: {metrics['memory_percent']}%")
+```
+
+## Exports
+
+| Class/Function | Description |
+|----------------|-------------|
+| `LazyLoader` | Defer module loading |
+| `lazy_import(name)` | Lazy import a module |
+| `CacheManager` | Cache with TTL and backends |
+| `cached_function` | Decorator for function caching |
+| `PerformanceMonitor` | System metrics (requires psutil) |
+| `monitor_performance` | Decorator for timing |
+| `performance_context` | Context manager for profiling |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/performance/](../../../docs/modules/performance/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

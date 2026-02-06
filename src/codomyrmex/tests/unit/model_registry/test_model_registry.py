@@ -98,9 +98,7 @@ class TestModelVersion:
 
     def test_version_creation(self):
         """Verify ModelVersion can be created."""
-        from codomyrmex.model_registry import (
-            ModelVersion, ModelStage, ModelFramework
-        )
+        from codomyrmex.model_registry import ModelFramework, ModelStage, ModelVersion
 
         version = ModelVersion(
             version="1.0.0",
@@ -123,9 +121,7 @@ class TestModelVersion:
 
     def test_version_to_dict(self):
         """Verify version serialization."""
-        from codomyrmex.model_registry import (
-            ModelVersion, ModelMetrics, ModelFramework
-        )
+        from codomyrmex.model_registry import ModelFramework, ModelMetrics, ModelVersion
 
         version = ModelVersion(
             version="1.0",
@@ -159,8 +155,9 @@ class TestRegisteredModel:
 
     def test_model_latest_version(self):
         """Verify latest version retrieval."""
-        from codomyrmex.model_registry import RegisteredModel, ModelVersion
         from datetime import datetime, timedelta
+
+        from codomyrmex.model_registry import ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
 
@@ -176,9 +173,7 @@ class TestRegisteredModel:
 
     def test_model_production_version(self):
         """Verify production version retrieval."""
-        from codomyrmex.model_registry import (
-            RegisteredModel, ModelVersion, ModelStage
-        )
+        from codomyrmex.model_registry import ModelStage, ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
 
@@ -191,7 +186,7 @@ class TestRegisteredModel:
 
     def test_model_get_version(self):
         """Verify version retrieval by version string."""
-        from codomyrmex.model_registry import RegisteredModel, ModelVersion
+        from codomyrmex.model_registry import ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
         model.versions = [
@@ -250,7 +245,9 @@ class TestModelRegistry:
     def test_registry_register_model(self):
         """Verify model registration."""
         from codomyrmex.model_registry import (
-            ModelRegistry, ModelFramework, ModelMetrics
+            ModelFramework,
+            ModelMetrics,
+            ModelRegistry,
         )
 
         registry = ModelRegistry()

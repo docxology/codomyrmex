@@ -4,15 +4,12 @@ This module provides comprehensive plotting capabilities including statistical p
 interactive visualizations, dashboard generation, and data analysis charts.
 """
 
-from datetime import datetime
-from typing import Any, Optional, Union
-import logging
-import os
-import sys
 import warnings
-
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
+from typing import Any
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -122,11 +119,11 @@ class PlotConfig:
 class DataPoint:
     """Individual data point for plotting."""
 
-    x: Union[float, int, str, datetime]
-    y: Union[float, int, str, datetime]
-    label: Optional[str] = None
-    color: Optional[str] = None
-    size: Optional[float] = None
+    x: float | int | str | datetime
+    y: float | int | str | datetime
+    label: str | None = None
+    color: str | None = None
+    size: float | None = None
     alpha: float = 1.0
 
 @dataclass
@@ -136,8 +133,8 @@ class Dataset:
     name: str
     data: list[DataPoint]
     plot_type: PlotType
-    color: Optional[str] = None
-    label: Optional[str] = None
+    color: str | None = None
+    label: str | None = None
     alpha: float = 1.0
     linewidth: float = 2.0
     markersize: float = 6.0
@@ -200,7 +197,7 @@ class AdvancedPlotter:
     @monitor_performance("create_figure")
     def create_figure(
         self, subplots: tuple[int, int] = (1, 1), **kwargs
-    ) -> tuple[plt.Figure, Union[plt.Axes, np.ndarray]]:
+    ) -> tuple[plt.Figure, plt.Axes | np.ndarray]:
         """
         Create a new figure and axes.
 
@@ -233,8 +230,8 @@ class AdvancedPlotter:
     @monitor_performance("plot_line")
     def plot_line(
         self,
-        x_data: list[Union[float, int, str, datetime]],
-        y_data: list[Union[float, int, str, datetime]],
+        x_data: list[float | int | str | datetime],
+        y_data: list[float | int | str | datetime],
         label: str = "",
         color: str = None,
         linewidth: float = 2.0,
@@ -289,11 +286,11 @@ class AdvancedPlotter:
     @monitor_performance("plot_scatter")
     def plot_scatter(
         self,
-        x_data: list[Union[float, int, str, datetime]],
-        y_data: list[Union[float, int, str, datetime]],
+        x_data: list[float | int | str | datetime],
+        y_data: list[float | int | str | datetime],
         label: str = "",
         color: str = None,
-        size: Union[float, list[float]] = 50,
+        size: float | list[float] = 50,
         alpha: float = 0.7,
         marker: str = "o",
         **kwargs,
@@ -339,10 +336,10 @@ class AdvancedPlotter:
     @monitor_performance("plot_bar")
     def plot_bar(
         self,
-        x_data: list[Union[str, int, float]],
-        y_data: list[Union[float, int]],
+        x_data: list[str | int | float],
+        y_data: list[float | int],
         label: str = "",
-        color: Union[str, list[str]] = None,
+        color: str | list[str] = None,
         alpha: float = 0.8,
         width: float = 0.8,
         orientation: str = "vertical",
@@ -399,8 +396,8 @@ class AdvancedPlotter:
     @monitor_performance("plot_histogram")
     def plot_histogram(
         self,
-        data: list[Union[float, int]],
-        bins: Union[int, list[float]] = 30,
+        data: list[float | int],
+        bins: int | list[float] = 30,
         label: str = "",
         color: str = None,
         alpha: float = 0.7,
@@ -449,7 +446,7 @@ class AdvancedPlotter:
     @monitor_performance("plot_heatmap")
     def plot_heatmap(
         self,
-        data: Union[list[list[float]], np.ndarray, pd.DataFrame],
+        data: list[list[float]] | np.ndarray | pd.DataFrame,
         x_labels: list[str] = None,
         y_labels: list[str] = None,
         cmap: str = "viridis",
@@ -503,9 +500,9 @@ class AdvancedPlotter:
     @monitor_performance("plot_box")
     def plot_box(
         self,
-        data: Union[list[Union[float, int]], dict[str, list[Union[float, int]]]],
+        data: list[float | int] | dict[str, list[float | int]],
         labels: list[str] = None,
-        color: Union[str, list[str]] = None,
+        color: str | list[str] = None,
         notch: bool = False,
         patch_artist: bool = True,
         **kwargs,
@@ -555,9 +552,9 @@ class AdvancedPlotter:
     @monitor_performance("plot_violin")
     def plot_violin(
         self,
-        data: Union[list[Union[float, int]], dict[str, list[Union[float, int]]]],
+        data: list[float | int] | dict[str, list[float | int]],
         labels: list[str] = None,
-        color: Union[str, list[str]] = None,
+        color: str | list[str] = None,
         alpha: float = 0.7,
         **kwargs,
     ) -> list[plt.Polygon]:
@@ -619,7 +616,7 @@ class AdvancedPlotter:
     @monitor_performance("plot_correlation")
     def plot_correlation(
         self,
-        data: Union[pd.DataFrame, np.ndarray],
+        data: pd.DataFrame | np.ndarray,
         method: str = "pearson",
         cmap: str = "coolwarm",
         annot: bool = True,
@@ -929,8 +926,8 @@ class AdvancedPlotter:
 
 # Convenience functions
 def create_advanced_line_plot(
-    x_data: list[Union[float, int, str, datetime]],
-    y_data: list[Union[float, int, str, datetime]],
+    x_data: list[float | int | str | datetime],
+    y_data: list[float | int | str | datetime],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -944,8 +941,8 @@ def create_advanced_line_plot(
     return plotter.finalize_plot(title, xlabel, ylabel, save_path=save_path)
 
 def create_advanced_scatter_plot(
-    x_data: list[Union[float, int, str, datetime]],
-    y_data: list[Union[float, int, str, datetime]],
+    x_data: list[float | int | str | datetime],
+    y_data: list[float | int | str | datetime],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -958,8 +955,8 @@ def create_advanced_scatter_plot(
     return plotter.finalize_plot(title, xlabel, ylabel)
 
 def create_advanced_bar_chart(
-    x_data: list[Union[str, int, float]],
-    y_data: list[Union[float, int]],
+    x_data: list[str | int | float],
+    y_data: list[float | int],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -973,7 +970,7 @@ def create_advanced_bar_chart(
     return plotter.finalize_plot(title, xlabel, ylabel, save_path=save_path)
 
 def create_advanced_histogram(
-    data: list[Union[float, int]],
+    data: list[float | int],
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",
@@ -986,7 +983,7 @@ def create_advanced_histogram(
     return plotter.finalize_plot(title, xlabel, ylabel)
 
 def create_advanced_heatmap(
-    data: Union[list[list[float]], np.ndarray, pd.DataFrame],
+    data: list[list[float]] | np.ndarray | pd.DataFrame,
     title: str = "",
     xlabel: str = "",
     ylabel: str = "",

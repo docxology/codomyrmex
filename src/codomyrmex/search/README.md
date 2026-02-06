@@ -1,19 +1,72 @@
 # Search Module
 
-Full-text search, semantic search, and indexing.
+**Version**: v0.1.0 | **Status**: Active
+
+Full-text search with TF-IDF, fuzzy matching, and query parsing.
 
 ## Quick Start
 
 ```python
-from codomyrmex.search import InMemoryIndex, Document
+from codomyrmex.search import InMemoryIndex, Document, quick_search
 
+# Index documents
 index = InMemoryIndex()
-index.index(Document("1", "Python programming guide"))
-index.index(Document("2", "JavaScript tutorial"))
+index.index(Document(id="1", content="Python programming language"))
+index.index(Document(id="2", content="JavaScript web development"))
+index.index(Document(id="3", content="Python data science and ML"))
 
+# Search with TF-IDF scoring
 results = index.search("python", k=5)
 for r in results:
-    print(f"{r.document.id}: {r.score:.2f}")
+    print(f"{r.score:.2f}: {r.document.content}")
+    print(f"  Highlights: {r.highlights}")
+
+# Quick one-liner search
+docs = ["apple pie recipe", "orange juice", "apple cider"]
+results = quick_search(docs, "apple", k=2)
 ```
+
+## Exports
+
+| Class/Function | Description |
+|----------------|-------------|
+| `InMemoryIndex` | In-memory inverted index with TF-IDF |
+| `Document` | Searchable document with id, content, metadata |
+| `SearchResult` | Result with document, score, highlights |
+| `SimpleTokenizer` | Whitespace tokenizer with lowercase/min_length |
+| `FuzzyMatcher` | Levenshtein distance fuzzy matching |
+| `QueryParser` | Parse `+must -exclude "phrase"` queries |
+| `create_index(backend)` | Factory for search indexes |
+| `quick_search(docs, query)` | One-liner search over strings |
+
+## Query Syntax
+
+```python
+from codomyrmex.search import QueryParser
+
+parser = QueryParser()
+parsed = parser.parse('+python -java "machine learning"')
+# {
+#   'terms': [],
+#   'must': ['python'],
+#   'must_not': ['java'],
+#   'phrases': ['machine learning']
+# }
+```
+
+## Fuzzy Matching
+
+```python
+from codomyrmex.search import FuzzyMatcher
+
+# Similarity ratio (0-1)
+FuzzyMatcher.similarity_ratio("apple", "aple")  # 0.8
+
+# Find best match
+candidates = ["python", "java", "javascript"]
+FuzzyMatcher.find_best_match("pythn", candidates)  # "python"
+```
+
+## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

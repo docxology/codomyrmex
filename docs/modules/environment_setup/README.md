@@ -1,19 +1,39 @@
-# environment_setup
+# Environment Setup Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Environment validation, dependency checking, and automated setup.
+
+## Key Features
+
+- **Validation** — Check requirements
+- **Dependencies** — Verify installations
+- **Auto Setup** — Install missing deps
+- **API Keys** — Validate API keys
+
+## Quick Start
+
+```python
+from codomyrmex.environment_setup import validate_environment
+
+result = validate_environment()
+if result.valid:
+    print("Environment ready")
+else:
+    for issue in result.issues:
+        print(f"Issue: {issue}")
+```
 
 ## Directory Contents
-- `README.md` – File
-- `SPEC.md` – File
-- `index.md` – File
-- `technical_overview.md` – File
-- `tutorials/` – Subdirectory
+
+| File | Description |
+|------|-------------|
+| `README.md` | This file |
+| `SPEC.md` | Technical specification |
 
 ## Navigation
+
 - **Source**: [src/codomyrmex/environment_setup/](../../../src/codomyrmex/environment_setup/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [Modules](../README.md)

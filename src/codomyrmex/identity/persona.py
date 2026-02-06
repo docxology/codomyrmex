@@ -4,9 +4,9 @@ Defines the core Persona structure and verification levels for the identity syst
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional
 from datetime import datetime
+from enum import Enum
+
 
 class VerificationLevel(Enum):
     """Level of identity verification."""
@@ -19,12 +19,12 @@ class VerificationLevel(Enum):
 class Persona:
     """Represents a distinct identity persona."""
     id: str
-    name: str 
+    name: str
     level: VerificationLevel
     created_at: datetime = field(default_factory=datetime.now)
-    attributes: Dict[str, str] = field(default_factory=dict)
+    attributes: dict[str, str] = field(default_factory=dict)
     # Crumbs (tracking data) are siloed per persona
-    crumbs: List[str] = field(default_factory=list) 
+    crumbs: list[str] = field(default_factory=list)
 
     def add_attribute(self, key: str, value: str) -> None:
         """Add an attribute to the persona."""

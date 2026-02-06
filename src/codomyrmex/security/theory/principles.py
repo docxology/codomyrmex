@@ -1,51 +1,8 @@
-from typing import List, Dict, Any, Optional
-
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security principles and fundamentals."""
 
@@ -68,14 +25,14 @@ class PrincipleCategory(Enum):
 @dataclass
 class SecurityPrinciple:
     """Represents a security principle."""
-    
+
     name: str
     description: str
     category: str  # confidentiality, integrity, availability, etc.
-    examples: List[str]
-    rationale: Optional[str] = None
-    related_principles: List[str] = None
-    
+    examples: list[str]
+    rationale: str | None = None
+    related_principles: list[str] = None
+
     def __post_init__(self):
         """Initialize related principles if not provided."""
         if self.related_principles is None:
@@ -246,29 +203,29 @@ PRINCIPLES = {
 }
 
 
-def get_security_principles() -> List[SecurityPrinciple]:
+def get_security_principles() -> list[SecurityPrinciple]:
     """Get all security principles."""
     return list(PRINCIPLES.values())
 
 
-def get_principle(principle_name: str) -> Optional[SecurityPrinciple]:
+def get_principle(principle_name: str) -> SecurityPrinciple | None:
     """Get a specific security principle by name."""
     return PRINCIPLES.get(principle_name)
 
 
-def get_principles_by_category(category: str) -> List[SecurityPrinciple]:
+def get_principles_by_category(category: str) -> list[SecurityPrinciple]:
     """Get security principles filtered by category."""
     return [p for p in PRINCIPLES.values() if p.category == category]
 
 
-def apply_principle(principle_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def apply_principle(principle_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Apply a security principle to a context.
-    
+
     Args:
         principle_name: Name of the principle to apply
         context: Context dictionary with system information
-        
+
     Returns:
         Dictionary with application results and recommendations
     """
@@ -280,35 +237,35 @@ def apply_principle(principle_name: str, context: Dict[str, Any]) -> Dict[str, A
             "error": f"Unknown principle: {principle_name}",
             "available_principles": list(PRINCIPLES.keys())
         }
-    
+
     logger.info(f"Applying principle '{principle.name}' to context")
-    
+
     # Generate recommendations based on principle and context
     recommendations = []
-    
+
     if principle_name == "least_privilege":
         if "user_permissions" in context:
             recommendations.append("Review and minimize user permissions")
         if "service_accounts" in context:
             recommendations.append("Ensure service accounts have minimal required permissions")
-    
+
     elif principle_name == "defense_in_depth":
         recommendations.append("Implement multiple security layers")
         recommendations.append("Use network, application, and data-level controls")
-    
+
     elif principle_name == "secure_by_default":
         recommendations.append("Review default configurations")
         recommendations.append("Ensure secure defaults are in place")
         recommendations.append("Document any security-reducing changes")
-    
+
     elif principle_name == "fail_secure":
         recommendations.append("Configure systems to deny access on failure")
         recommendations.append("Implement secure error handling")
-    
+
     elif principle_name == "separation_of_duties":
         recommendations.append("Separate development and deployment roles")
         recommendations.append("Require multiple approvals for critical actions")
-    
+
     return {
         "applied": True,
         "principle": principle_name,
@@ -319,14 +276,14 @@ def apply_principle(principle_name: str, context: Dict[str, Any]) -> Dict[str, A
     }
 
 
-def validate_principle_application(principle_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def validate_principle_application(principle_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Validate that a principle is properly applied in a context.
-    
+
     Args:
         principle_name: Name of the principle to validate
         context: Context dictionary with system information
-        
+
     Returns:
         Validation results with compliance status
     """
@@ -336,22 +293,22 @@ def validate_principle_application(principle_name: str, context: Dict[str, Any])
             "valid": False,
             "error": f"Unknown principle: {principle_name}"
         }
-    
+
     # Basic validation logic
     compliance_checks = []
-    
+
     if principle_name == "least_privilege":
         compliance_checks.append({
             "check": "User permissions reviewed",
             "status": "unknown"
         })
-    
+
     elif principle_name == "defense_in_depth":
         compliance_checks.append({
             "check": "Multiple security layers present",
             "status": "unknown"
         })
-    
+
     return {
         "valid": True,
         "principle": principle_name,

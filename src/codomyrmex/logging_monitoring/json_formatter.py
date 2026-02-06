@@ -17,7 +17,7 @@ Example:
 
 import json
 import logging
-from typing import Any, Dict
+from typing import Any
 
 
 class JSONFormatter(logging.Formatter):
@@ -63,7 +63,7 @@ class JSONFormatter(logging.Formatter):
             >>> data = json.loads(json_str)
             >>> print(data["level"])  # "INFO"
         """
-        log_entry: Dict[str, Any] = {
+        log_entry: dict[str, Any] = {
             "timestamp": self.formatTime(record, self.datefmt),
             "level": record.levelname,
             "name": record.name,

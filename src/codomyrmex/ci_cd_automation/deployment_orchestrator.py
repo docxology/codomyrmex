@@ -5,17 +5,16 @@ Provides comprehensive deployment orchestration, environment management,
 and release coordination capabilities.
 """
 
-from datetime import datetime, timezone
-from typing import Any, Optional
 import json
 import os
 import shutil
+import socket
 import subprocess
-import sys
 import tempfile
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
-import socket
+from typing import Any
 
 # Optional imports handled gracefully at runtime usually, but here we import at top-level
 # If these fail, the module fails. Based on original file they were top-level.
@@ -61,9 +60,9 @@ class Environment:
     host: str
     port: int = 22
     user: str = "deploy"
-    key_path: Optional[str] = None
-    docker_registry: Optional[str] = None
-    kubernetes_context: Optional[str] = None
+    key_path: str | None = None
+    docker_registry: str | None = None
+    kubernetes_context: str | None = None
     variables: dict[str, str] = field(default_factory=dict)
     pre_deploy_hooks: list[str] = field(default_factory=list)
     post_deploy_hooks: list[str] = field(default_factory=list)
@@ -97,9 +96,9 @@ class Deployment:
     timeout: int = 1800  # 30 minutes
     rollback_on_failure: bool = True
     status: DeploymentStatus = DeploymentStatus.PENDING
-    created_at: Optional[datetime] = None
-    started_at: Optional[datetime] = None
-    finished_at: Optional[datetime] = None
+    created_at: datetime | None = None
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
     duration: float = 0.0
     logs: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
@@ -140,7 +139,7 @@ class DeploymentOrchestrator:
     - Pre and post-deployment hooks
     """
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """
         Initialize the deployment orchestrator.
 
@@ -609,7 +608,7 @@ class DeploymentOrchestrator:
             # Implementation for Kubernetes rollback
             pass
 
-    def get_deployment_status(self, deployment_name: str) -> Optional[Deployment]:
+    def get_deployment_status(self, deployment_name: str) -> Deployment | None:
         """Get current status of a deployment."""
         return self.deployments.get(deployment_name)
 
@@ -639,7 +638,7 @@ class DeploymentOrchestrator:
         return False
 
 # Convenience functions
-def manage_deployments(config_path: Optional[str] = None) -> DeploymentOrchestrator:
+def manage_deployments(config_path: str | None = None) -> DeploymentOrchestrator:
     """
     Convenience function to create deployment orchestrator.
 

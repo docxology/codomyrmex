@@ -8,11 +8,11 @@ __version__ = "0.1.0"
 
 import json
 import threading
-from typing import Optional, List, Dict, Any, Set
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional, Set
 
 
 class CostCategory(Enum):
@@ -42,11 +42,11 @@ class CostEntry:
     category: CostCategory
     description: str = ""
     resource_id: str = ""
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: dict[str, str] = field(default_factory=dict)
     timestamp: datetime = field(default_factory=datetime.now)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -66,14 +66,14 @@ class Budget:
     name: str
     amount: float
     period: BudgetPeriod
-    category: Optional[CostCategory] = None
-    tags_filter: Dict[str, str] = field(default_factory=dict)
-    alert_thresholds: List[float] = field(default_factory=lambda: [0.5, 0.8, 0.9, 1.0])
-    
+    category: CostCategory | None = None
+    tags_filter: dict[str, str] = field(default_factory=dict)
+    alert_thresholds: list[float] = field(default_factory=lambda: [0.5, 0.8, 0.9, 1.0])
+
     def get_period_start(self, reference: datetime = None) -> datetime:
         """Get the start of the current budget period."""
         ref = reference or datetime.now()
-        
+
         if self.period == BudgetPeriod.HOURLY:
             return ref.replace(minute=0, second=0, microsecond=0)
         elif self.period == BudgetPeriod.DAILY:
@@ -83,7 +83,7 @@ class Budget:
             return start.replace(hour=0, minute=0, second=0, microsecond=0)
         elif self.period == BudgetPeriod.MONTHLY:
             return ref.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        
+
         return ref
 
 
@@ -91,14 +91,14 @@ class Budget:
 class CostSummary:
     """Summary of costs."""
     total: float = 0.0
-    by_category: Dict[str, float] = field(default_factory=dict)
-    by_resource: Dict[str, float] = field(default_factory=dict)
-    by_tag: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    by_category: dict[str, float] = field(default_factory=dict)
+    by_resource: dict[str, float] = field(default_factory=dict)
+    by_tag: dict[str, dict[str, float]] = field(default_factory=dict)
     entry_count: int = 0
-    period_start: Optional[datetime] = None
-    period_end: Optional[datetime] = None
-    
-    def to_dict(self) -> Dict[str, Any]:
+    period_start: datetime | None = None
+    period_end: datetime | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "total": self.total,
@@ -116,12 +116,12 @@ class BudgetAlert:
     current_spend: float
     budget_amount: float
     timestamp: datetime = field(default_factory=datetime.now)
-    
+
     @property
     def utilization(self) -> float:
         """Get budget utilization percentage."""
         return self.current_spend / self.budget_amount if self.budget_amount > 0 else 0
-    
+
     @property
     def message(self) -> str:
         """Get alert message."""
@@ -131,41 +131,41 @@ class BudgetAlert:
 
 class CostStore(ABC):
     """Base class for cost storage."""
-    
+
     @abstractmethod
     def save_entry(self, entry: CostEntry) -> None:
         """Save a cost entry."""
         pass
-    
+
     @abstractmethod
     def get_entries(
         self,
         start: datetime,
         end: datetime,
-        category: Optional[CostCategory] = None,
-    ) -> List[CostEntry]:
+        category: CostCategory | None = None,
+    ) -> list[CostEntry]:
         """Get entries in date range."""
         pass
 
 
 class InMemoryCostStore(CostStore):
     """In-memory cost storage."""
-    
+
     def __init__(self):
-        self._entries: List[CostEntry] = []
+        self._entries: list[CostEntry] = []
         self._lock = threading.Lock()
-    
+
     def save_entry(self, entry: CostEntry) -> None:
         """Save a cost entry."""
         with self._lock:
             self._entries.append(entry)
-    
+
     def get_entries(
         self,
         start: datetime,
         end: datetime,
-        category: Optional[CostCategory] = None,
-    ) -> List[CostEntry]:
+        category: CostCategory | None = None,
+    ) -> list[CostEntry]:
         """Get entries in date range."""
         results = []
         for entry in self._entries:
@@ -173,11 +173,11 @@ class InMemoryCostStore(CostStore):
                 if category is None or entry.category == category:
                     results.append(entry)
         return results
-    
-    def get_all(self) -> List[CostEntry]:
+
+    def get_all(self) -> list[CostEntry]:
         """Get all entries."""
         return list(self._entries)
-    
+
     def clear(self) -> None:
         """Clear all entries."""
         with self._lock:
@@ -187,10 +187,10 @@ class InMemoryCostStore(CostStore):
 class CostTracker:
     """
     Main cost tracking service.
-    
+
     Usage:
         tracker = CostTracker()
-        
+
         # Record costs
         tracker.record(
             amount=0.05,
@@ -198,35 +198,35 @@ class CostTracker:
             description="GPT-4 completion",
             tags={"model": "gpt-4", "user": "alice"},
         )
-        
+
         # Get summary
         summary = tracker.get_summary(period=BudgetPeriod.DAILY)
         print(f"Today's spend: ${summary.total:.2f}")
     """
-    
-    def __init__(self, store: Optional[CostStore] = None):
+
+    def __init__(self, store: CostStore | None = None):
         self.store = store or InMemoryCostStore()
         self._counter = 0
         self._lock = threading.Lock()
-    
+
     def _generate_id(self) -> str:
         """Generate unique entry ID."""
         with self._lock:
             self._counter += 1
             return f"cost_{self._counter}"
-    
+
     def record(
         self,
         amount: float,
         category: CostCategory = CostCategory.LLM_INFERENCE,
         description: str = "",
         resource_id: str = "",
-        tags: Optional[Dict[str, str]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        tags: dict[str, str] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> CostEntry:
         """
         Record a cost entry.
-        
+
         Args:
             amount: Cost amount in dollars
             category: Cost category
@@ -234,7 +234,7 @@ class CostTracker:
             resource_id: ID of the resource that incurred the cost
             tags: Key-value tags for filtering
             metadata: Additional metadata
-            
+
         Returns:
             The created CostEntry
         """
@@ -247,24 +247,24 @@ class CostTracker:
             tags=tags or {},
             metadata=metadata or {},
         )
-        
+
         self.store.save_entry(entry)
         return entry
-    
+
     def get_summary(
         self,
-        period: Optional[BudgetPeriod] = None,
-        start: Optional[datetime] = None,
-        end: Optional[datetime] = None,
+        period: BudgetPeriod | None = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
     ) -> CostSummary:
         """
         Get cost summary for a period.
-        
+
         Args:
             period: Budget period (uses current period)
             start: Custom start date
             end: Custom end date
-            
+
         Returns:
             CostSummary with aggregated costs
         """
@@ -274,31 +274,31 @@ class CostTracker:
                 start = budget.get_period_start()
             else:
                 start = datetime.min
-        
+
         if end is None:
             end = datetime.now()
-        
+
         entries = self.store.get_entries(start, end)
-        
+
         summary = CostSummary(
             entry_count=len(entries),
             period_start=start,
             period_end=end,
         )
-        
+
         for entry in entries:
             summary.total += entry.amount
-            
+
             # By category
             cat = entry.category.value
             summary.by_category[cat] = summary.by_category.get(cat, 0) + entry.amount
-            
+
             # By resource
             if entry.resource_id:
                 summary.by_resource[entry.resource_id] = (
                     summary.by_resource.get(entry.resource_id, 0) + entry.amount
                 )
-            
+
             # By tag
             for tag_key, tag_value in entry.tags.items():
                 if tag_key not in summary.by_tag:
@@ -306,30 +306,30 @@ class CostTracker:
                 summary.by_tag[tag_key][tag_value] = (
                     summary.by_tag[tag_key].get(tag_value, 0) + entry.amount
                 )
-        
+
         return summary
-    
+
     def get_total(
         self,
-        period: Optional[BudgetPeriod] = None,
-        category: Optional[CostCategory] = None,
+        period: BudgetPeriod | None = None,
+        category: CostCategory | None = None,
     ) -> float:
         """Get total cost for period and optional category."""
         summary = self.get_summary(period=period)
-        
+
         if category:
             return summary.by_category.get(category.value, 0)
-        
+
         return summary.total
 
 
 class BudgetManager:
     """
     Budget management and alerting.
-    
+
     Usage:
         budgets = BudgetManager(tracker)
-        
+
         # Create budget
         budgets.create(
             name="Daily LLM",
@@ -337,27 +337,27 @@ class BudgetManager:
             period=BudgetPeriod.DAILY,
             category=CostCategory.LLM_INFERENCE,
         )
-        
+
         # Check budgets
         alerts = budgets.check_budgets()
         for alert in alerts:
             print(alert.message)
     """
-    
+
     def __init__(self, tracker: CostTracker):
         self.tracker = tracker
-        self._budgets: Dict[str, Budget] = {}
-        self._triggered_alerts: Set[str] = set()  # Track which thresholds were triggered
+        self._budgets: dict[str, Budget] = {}
+        self._triggered_alerts: set[str] = set()  # Track which thresholds were triggered
         self._lock = threading.Lock()
-    
+
     def create(
         self,
         name: str,
         amount: float,
         period: BudgetPeriod,
-        category: Optional[CostCategory] = None,
-        tags_filter: Optional[Dict[str, str]] = None,
-        alert_thresholds: Optional[List[float]] = None,
+        category: CostCategory | None = None,
+        tags_filter: dict[str, str] | None = None,
+        alert_thresholds: list[float] | None = None,
     ) -> Budget:
         """Create a budget."""
         budget = Budget(
@@ -369,51 +369,51 @@ class BudgetManager:
             tags_filter=tags_filter or {},
             alert_thresholds=alert_thresholds or [0.5, 0.8, 0.9, 1.0],
         )
-        
+
         with self._lock:
             self._budgets[budget.id] = budget
-        
+
         return budget
-    
-    def get_budget(self, budget_id: str) -> Optional[Budget]:
+
+    def get_budget(self, budget_id: str) -> Budget | None:
         """Get budget by ID."""
         return self._budgets.get(budget_id)
-    
-    def list_budgets(self) -> List[Budget]:
+
+    def list_budgets(self) -> list[Budget]:
         """List all budgets."""
         return list(self._budgets.values())
-    
+
     def get_utilization(self, budget: Budget) -> float:
         """Get current budget utilization."""
         start = budget.get_period_start()
         summary = self.tracker.get_summary(start=start)
-        
+
         # Filter by category if specified
         if budget.category:
             spend = summary.by_category.get(budget.category.value, 0)
         else:
             spend = summary.total
-        
+
         return spend / budget.amount if budget.amount > 0 else 0
-    
-    def check_budgets(self) -> List[BudgetAlert]:
+
+    def check_budgets(self) -> list[BudgetAlert]:
         """Check all budgets and return new alerts."""
         alerts = []
-        
+
         for budget in self._budgets.values():
             start = budget.get_period_start()
             summary = self.tracker.get_summary(start=start)
-            
+
             if budget.category:
                 spend = summary.by_category.get(budget.category.value, 0)
             else:
                 spend = summary.total
-            
+
             utilization = spend / budget.amount if budget.amount > 0 else 0
-            
+
             for threshold in budget.alert_thresholds:
                 alert_key = f"{budget.id}_{threshold}"
-                
+
                 if utilization >= threshold and alert_key not in self._triggered_alerts:
                     alerts.append(BudgetAlert(
                         budget_id=budget.id,
@@ -422,32 +422,32 @@ class BudgetManager:
                         budget_amount=budget.amount,
                     ))
                     self._triggered_alerts.add(alert_key)
-        
+
         return alerts
-    
+
     def reset_period_alerts(self) -> None:
         """Reset triggered alerts (call at period boundary)."""
         with self._lock:
             self._triggered_alerts.clear()
-    
-    def can_spend(self, amount: float, budget_id: Optional[str] = None) -> bool:
+
+    def can_spend(self, amount: float, budget_id: str | None = None) -> bool:
         """Check if spending amount is within budget."""
         if budget_id:
             budget = self.get_budget(budget_id)
             if not budget:
                 return True
-            
+
             utilization = self.get_utilization(budget)
             remaining = budget.amount * (1 - utilization)
             return amount <= remaining
-        
+
         # Check all budgets
         for budget in self._budgets.values():
             utilization = self.get_utilization(budget)
             remaining = budget.amount * (1 - utilization)
             if amount > remaining:
                 return False
-        
+
         return True
 
 

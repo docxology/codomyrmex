@@ -1,28 +1,8 @@
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
 import json
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Audit all AGENTS.md files for filepath and signpost issues.
@@ -34,7 +14,7 @@ Catalogs parent references, child references, and navigation links.
 
 logger = get_logger(__name__)
 
-def find_agents_files(repo_root: Path) -> List[Path]:
+def find_agents_files(repo_root: Path) -> list[Path]:
     """Find all AGENTS.md files in the repository."""
     agents_files = []
     for path in repo_root.rglob("AGENTS.md"):
@@ -44,7 +24,7 @@ def find_agents_files(repo_root: Path) -> List[Path]:
         agents_files.append(path)
     return sorted(agents_files)
 
-def extract_parent_reference(content: str, file_path: Path) -> Optional[Dict]:
+def extract_parent_reference(content: str, file_path: Path) -> dict | None:
     """Extract parent reference from AGENTS.md content."""
     pattern = r'- \*\*Parent\*\*: \[([^\]]+)\]\(([^)]+)\)'
     match = re.search(pattern, content)
@@ -58,7 +38,7 @@ def extract_parent_reference(content: str, file_path: Path) -> Optional[Dict]:
         }
     return None
 
-def extract_children_references(content: str, file_path: Path) -> List[Dict]:
+def extract_children_references(content: str, file_path: Path) -> list[dict]:
     """Extract all child references from AGENTS.md content."""
     children = []
     # Find the Children section
@@ -77,7 +57,7 @@ def extract_children_references(content: str, file_path: Path) -> List[Dict]:
             })
     return children
 
-def extract_navigation_links(content: str, file_path: Path) -> List[Dict]:
+def extract_navigation_links(content: str, file_path: Path) -> list[dict]:
     """Extract navigation links from AGENTS.md content."""
     links = []
     # Find Navigation Links section
@@ -97,7 +77,7 @@ def extract_navigation_links(content: str, file_path: Path) -> List[Dict]:
             })
     return links
 
-def extract_key_artifacts(content: str, file_path: Path) -> List[Dict]:
+def extract_key_artifacts(content: str, file_path: Path) -> list[dict]:
     """Extract key artifacts references."""
     artifacts = []
     pattern = r'- \*\*Key Artifacts\*\*:\s*\n((?:    - \[[^\]]+\]\([^)]+\)\s*\n?)*)'
@@ -114,12 +94,12 @@ def extract_key_artifacts(content: str, file_path: Path) -> List[Dict]:
             })
     return artifacts
 
-def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> Tuple[bool, Optional[Path]]:
+def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> tuple[bool, Path | None]:
     """Resolve a relative path and check if it exists."""
     try:
         if relative_path.startswith('http://') or relative_path.startswith('https://'):
             return (True, None)  # External links
-        
+
         # Handle relative paths
         if relative_path.startswith('../'):
             levels_up = relative_path.count('../')
@@ -136,20 +116,20 @@ def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> Tuple[
             target = repo_root / relative_path.lstrip('/')
         else:
             target = base_path.parent / relative_path
-        
+
         target = target.resolve()
         # Check if within repo
         try:
             target.relative_to(repo_root)
         except ValueError:
             return (False, target)
-        
+
         exists = target.exists()
         return (exists, target)
     except Exception as e:
         return (False, None)
 
-def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
+def audit_agents_file(file_path: Path, repo_root: Path) -> dict:
     """Audit a single AGENTS.md file."""
     try:
         content = file_path.read_text(encoding='utf-8')
@@ -158,9 +138,9 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'file': str(file_path.relative_to(repo_root)),
             'error': f'Could not read file: {e}'
         }
-    
+
     relative_path = file_path.relative_to(repo_root)
-    
+
     result = {
         'file': str(relative_path),
         'parent': None,
@@ -169,7 +149,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
         'key_artifacts': [],
         'issues': []
     }
-    
+
     # Extract parent reference
     parent_ref = extract_parent_reference(content, file_path)
     if parent_ref:
@@ -178,7 +158,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
             result['issues'].append({
                 'type': 'generic_parent_label',
                 'line': parent_ref['line'],
-                'message': f"Parent reference uses generic '[Parent]' label"
+                'message': "Parent reference uses generic '[Parent]' label"
             })
         # Validate parent path
         exists, resolved = resolve_path(file_path, parent_ref['path'], repo_root)
@@ -190,7 +170,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
                 'resolved': str(resolved) if resolved else None,
                 'message': f"Parent path does not exist: {parent_ref['path']}"
             })
-    
+
     # Extract children references
     children = extract_children_references(content, file_path)
     for child in children:
@@ -201,7 +181,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'resolved': str(resolved) if resolved else None
         }
         result['children'].append(child_info)
-        
+
         if not exists:
             result['issues'].append({
                 'type': 'broken_child_path',
@@ -232,7 +212,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
                     'path': child['path'],
                     'message': f"Child directory does not have AGENTS.md: {child['path']}"
                 })
-    
+
     # Extract navigation links
     nav_links = extract_navigation_links(content, file_path)
     for link in nav_links:
@@ -243,7 +223,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'resolved': str(resolved) if resolved else None
         }
         result['navigation_links'].append(link_info)
-        
+
         if not exists:
             result['issues'].append({
                 'type': 'broken_nav_link',
@@ -253,7 +233,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
                 'resolved': str(resolved) if resolved else None,
                 'message': f"Navigation link does not exist: {link['path']}"
             })
-    
+
     # Extract key artifacts
     artifacts = extract_key_artifacts(content, file_path)
     for artifact in artifacts:
@@ -264,7 +244,7 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
             'resolved': str(resolved) if resolved else None
         }
         result['key_artifacts'].append(artifact_info)
-        
+
         if not exists:
             result['issues'].append({
                 'type': 'broken_artifact',
@@ -274,19 +254,19 @@ def audit_agents_file(file_path: Path, repo_root: Path) -> Dict:
                 'resolved': str(resolved) if resolved else None,
                 'message': f"Key artifact does not exist: {artifact['path']}"
             })
-    
+
     return result
 
 def main():
     """Main audit function."""
     repo_root = Path(__file__).parent.parent.parent
     print(f"Repository root: {repo_root}")
-    
+
     # Find all AGENTS.md files
     print("Finding AGENTS.md files...")
     agents_files = find_agents_files(repo_root)
     print(f"Found {len(agents_files)} AGENTS.md files")
-    
+
     # Audit each file
     print("Auditing files...")
     results = []
@@ -295,12 +275,12 @@ def main():
         results.append(result)
         if result.get('issues'):
             print(f"  {result['file']}: {len(result['issues'])} issues")
-    
+
     # Generate summary
     total_issues = sum(len(r.get('issues', [])) for r in results)
     generic_parents = sum(1 for r in results if r.get('parent') and r.get('parent', {}).get('is_generic'))
     broken_paths = sum(1 for r in results for issue in r.get('issues', []) if 'broken' in issue.get('type', ''))
-    
+
     summary = {
         'total_files': len(agents_files),
         'total_issues': total_issues,
@@ -308,27 +288,27 @@ def main():
         'broken_paths': broken_paths,
         'files_with_issues': sum(1 for r in results if r.get('issues'))
     }
-    
+
     # Save results
     output_file = repo_root / 'output' / 'agents_filepath_audit.json'
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    
+
     report = {
         'summary': summary,
         'results': results
     }
-    
+
     with output_file.open('w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
-    
-    print(f"\nAudit complete!")
+
+    print("\nAudit complete!")
     print(f"  Total files: {summary['total_files']}")
     print(f"  Files with issues: {summary['files_with_issues']}")
     print(f"  Total issues: {summary['total_issues']}")
     print(f"  Generic parent labels: {summary['generic_parent_labels']}")
     print(f"  Broken paths: {summary['broken_paths']}")
     print(f"\nResults saved to: {output_file}")
-    
+
     return report
 
 if __name__ == '__main__':

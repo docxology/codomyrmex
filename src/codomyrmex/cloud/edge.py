@@ -8,8 +8,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
-import json
+from typing import Any
 
 
 class EdgeProvider(Enum):
@@ -39,10 +38,10 @@ class EdgeFunctionConfig:
     runtime: str = "javascript"
     memory_mb: int = 128
     timeout_seconds: int = 30
-    environment: Dict[str, str] = field(default_factory=dict)
-    routes: List[str] = field(default_factory=list)
-    regions: List[EdgeRegion] = field(default_factory=lambda: [EdgeRegion.GLOBAL])
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    environment: dict[str, str] = field(default_factory=dict)
+    routes: list[str] = field(default_factory=list)
+    regions: list[EdgeRegion] = field(default_factory=lambda: [EdgeRegion.GLOBAL])
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -54,52 +53,52 @@ class EdgeDeployment:
     version: str
     url: str = ""
     deployed_at: datetime = field(default_factory=datetime.now)
-    regions: List[EdgeRegion] = field(default_factory=list)
+    regions: list[EdgeRegion] = field(default_factory=list)
     status: str = "active"
 
 
 class EdgeClient(ABC):
     """Abstract base class for edge provider clients."""
-    
+
     @property
     @abstractmethod
     def provider(self) -> EdgeProvider:
         pass
-    
+
     @abstractmethod
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
         """Deploy edge function."""
         pass
-    
+
     @abstractmethod
-    def list_deployments(self) -> List[EdgeDeployment]:
+    def list_deployments(self) -> list[EdgeDeployment]:
         """List all deployments."""
         pass
-    
+
     @abstractmethod
     def delete(self, deployment_id: str) -> bool:
         """Delete a deployment."""
         pass
-    
+
     @abstractmethod
-    def get_logs(self, deployment_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
         """Get deployment logs."""
         pass
 
 
 class CloudflareWorkersClient(EdgeClient):
     """Cloudflare Workers client (mock implementation for structure)."""
-    
+
     def __init__(self, account_id: str, api_token: str):
         self.account_id = account_id
         self.api_token = api_token
-        self._deployments: Dict[str, EdgeDeployment] = {}
+        self._deployments: dict[str, EdgeDeployment] = {}
         self._counter = 0
-    
+
     @property
     def provider(self) -> EdgeProvider:
         return EdgeProvider.CLOUDFLARE_WORKERS
-    
+
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
         """Deploy to Cloudflare Workers."""
         self._counter += 1
@@ -113,33 +112,33 @@ class CloudflareWorkersClient(EdgeClient):
         )
         self._deployments[deployment.id] = deployment
         return deployment
-    
-    def list_deployments(self) -> List[EdgeDeployment]:
+
+    def list_deployments(self) -> list[EdgeDeployment]:
         return list(self._deployments.values())
-    
+
     def delete(self, deployment_id: str) -> bool:
         if deployment_id in self._deployments:
             del self._deployments[deployment_id]
             return True
         return False
-    
-    def get_logs(self, deployment_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+
+    def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
         return []
 
 
 class FastlyComputeClient(EdgeClient):
     """Fastly Compute@Edge client (mock implementation for structure)."""
-    
+
     def __init__(self, api_key: str, service_id: str = ""):
         self.api_key = api_key
         self.service_id = service_id
-        self._deployments: Dict[str, EdgeDeployment] = {}
+        self._deployments: dict[str, EdgeDeployment] = {}
         self._counter = 0
-    
+
     @property
     def provider(self) -> EdgeProvider:
         return EdgeProvider.FASTLY_COMPUTE
-    
+
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
         """Deploy to Fastly Compute@Edge."""
         self._counter += 1
@@ -153,34 +152,34 @@ class FastlyComputeClient(EdgeClient):
         )
         self._deployments[deployment.id] = deployment
         return deployment
-    
-    def list_deployments(self) -> List[EdgeDeployment]:
+
+    def list_deployments(self) -> list[EdgeDeployment]:
         return list(self._deployments.values())
-    
+
     def delete(self, deployment_id: str) -> bool:
         if deployment_id in self._deployments:
             del self._deployments[deployment_id]
             return True
         return False
-    
-    def get_logs(self, deployment_id: str, limit: int = 100) -> List[Dict[str, Any]]:
+
+    def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
         return []
 
 
 class EdgeManager:
     """Manage edge deployments across providers."""
-    
+
     def __init__(self):
-        self._clients: Dict[EdgeProvider, EdgeClient] = {}
-    
+        self._clients: dict[EdgeProvider, EdgeClient] = {}
+
     def register_client(self, client: EdgeClient) -> None:
         """Register an edge provider client."""
         self._clients[client.provider] = client
-    
-    def get_client(self, provider: EdgeProvider) -> Optional[EdgeClient]:
+
+    def get_client(self, provider: EdgeProvider) -> EdgeClient | None:
         """Get a registered client."""
         return self._clients.get(provider)
-    
+
     def deploy(
         self,
         config: EdgeFunctionConfig,
@@ -191,8 +190,8 @@ class EdgeManager:
         if not client:
             raise ValueError(f"No client registered for {config.provider}")
         return client.deploy(config, code)
-    
-    def list_all_deployments(self) -> Dict[EdgeProvider, List[EdgeDeployment]]:
+
+    def list_all_deployments(self) -> dict[EdgeProvider, list[EdgeDeployment]]:
         """List deployments from all providers."""
         return {
             provider: client.list_deployments()

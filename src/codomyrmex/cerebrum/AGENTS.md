@@ -1,36 +1,67 @@
-# Codomyrmex Agents — src/codomyrmex/cerebrum
+# Agent Guidelines - Cerebrum
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Cognitive architecture for reasoning, planning, and decision-making.
 
-Central intelligence coordination module. Provides cognitive architecture, reasoning capabilities, and high-level AI orchestration for the platform.
+## Key Classes
 
-## Active Components
+- **CerebrumEngine** — Core reasoning engine
+- **WorkingMemory** — Short-term context
+- **ReasoningChain** — Chain-of-thought reasoning
+- **DecisionModule** — Decision making
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `core/` – Directory containing core components
-- `fpf/` – Directory containing fpf components
-- `inference/` – Directory containing inference components
-- `visualization/` – Directory containing visualization components
-- `visualization_base.py` – Project file
-- `visualization_theme.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Context management** — Update working memory as needed
+2. **Chain reasoning** — Use step-by-step reasoning
+3. **Validate decisions** — Check decision consistency
+4. **Track uncertainty** — Maintain confidence scores
+5. **Explain reasoning** — Provide rationale
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.cerebrum import (
+    CerebrumEngine, WorkingMemory, ReasoningChain
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Initialize engine
+engine = CerebrumEngine()
+engine.load_knowledge("domain_knowledge.json")
+
+# Working memory
+memory = WorkingMemory()
+memory.store("user_goal", "Refactor authentication")
+memory.store("constraints", ["maintain compatibility", "add tests"])
+
+# Reasoning chain
+chain = ReasoningChain()
+chain.add_step("Analyze current implementation")
+chain.add_step("Identify refactoring patterns")
+chain.add_step("Generate implementation plan")
+result = chain.execute(memory)
+
+# Decision making
+decision = engine.decide(options, criteria, context)
+print(f"Decision: {decision.choice} (confidence: {decision.confidence})")
+```
+
+## Testing Patterns
+
+```python
+# Verify reasoning
+chain = ReasoningChain()
+chain.add_step("Analyze")
+result = chain.execute(context)
+assert result.steps_completed == 1
+
+# Verify working memory
+memory = WorkingMemory()
+memory.store("key", "value")
+assert memory.retrieve("key") == "value"
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

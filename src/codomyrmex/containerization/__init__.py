@@ -6,10 +6,10 @@ orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 """
 
 # Submodule exports - import first
-from . import docker
-from . import kubernetes
-from . import registry
-from . import security
+try:
+    from . import docker, kubernetes, registry, security
+except ImportError:
+    docker = kubernetes = registry = security = None
 
 # Try to import from existing modules, but don't fail if they don't exist
 try:
@@ -71,10 +71,10 @@ try:
     from .exceptions import (
         ContainerError,
         ImageBuildError,
-        NetworkError,
-        VolumeError,
-        RegistryError,
         KubernetesError,
+        NetworkError,
+        RegistryError,
+        VolumeError,
     )
     HAS_EXCEPTIONS = True
 except ImportError:

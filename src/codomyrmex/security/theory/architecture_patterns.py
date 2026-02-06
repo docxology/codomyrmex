@@ -1,51 +1,8 @@
-from typing import List, Optional, Dict, Any
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Security architecture patterns."""
 
@@ -68,17 +25,17 @@ class PatternCategory(Enum):
 @dataclass
 class SecurityPattern:
     """Represents a security architecture pattern."""
-    
+
     name: str
     description: str
     category: str  # authentication, authorization, encryption, etc.
-    use_cases: List[str]
+    use_cases: list[str]
     implementation: str
-    benefits: List[str] = field(default_factory=list)
-    trade_offs: List[str] = field(default_factory=list)
-    related_patterns: List[str] = field(default_factory=list)
-    examples: List[str] = field(default_factory=list)
-    anti_patterns: List[str] = field(default_factory=list)
+    benefits: list[str] = field(default_factory=list)
+    trade_offs: list[str] = field(default_factory=list)
+    related_patterns: list[str] = field(default_factory=list)
+    examples: list[str] = field(default_factory=list)
+    anti_patterns: list[str] = field(default_factory=list)
 
 
 # Comprehensive security architecture patterns
@@ -396,29 +353,29 @@ PATTERNS = {
 }
 
 
-def get_security_patterns() -> List[SecurityPattern]:
+def get_security_patterns() -> list[SecurityPattern]:
     """Get all security architecture patterns."""
     return list(PATTERNS.values())
 
 
-def get_pattern(pattern_name: str) -> Optional[SecurityPattern]:
+def get_pattern(pattern_name: str) -> SecurityPattern | None:
     """Get a specific security pattern by name."""
     return PATTERNS.get(pattern_name)
 
 
-def get_patterns_by_category(category: str) -> List[SecurityPattern]:
+def get_patterns_by_category(category: str) -> list[SecurityPattern]:
     """Get security patterns filtered by category."""
     return [p for p in PATTERNS.values() if p.category == category]
 
 
-def apply_pattern(pattern_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def apply_pattern(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Apply a security pattern to a context.
-    
+
     Args:
         pattern_name: Pattern name (e.g., "zero_trust", "defense_in_depth")
         context: Context dictionary with system information
-        
+
     Returns:
         Dictionary with application results and recommendations
     """
@@ -430,41 +387,41 @@ def apply_pattern(pattern_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
             "error": f"Unknown pattern: {pattern_name}",
             "available_patterns": list(PATTERNS.keys())
         }
-    
+
     logger.info(f"Applying pattern '{pattern.name}' to context")
-    
+
     # Generate recommendations based on pattern
     recommendations = []
-    
+
     if pattern_name == "zero_trust":
         recommendations.append("Implement identity-based access control")
         recommendations.append("Verify every request regardless of location")
         recommendations.append("Use micro-segmentation")
         recommendations.append("Implement continuous monitoring")
-    
+
     elif pattern_name == "defense_in_depth":
         recommendations.append("Implement multiple security layers")
         recommendations.append("Use network, application, and data-level controls")
         recommendations.append("Ensure redundancy in security controls")
-    
+
     elif pattern_name == "principle_of_least_privilege":
         recommendations.append("Review and minimize all permissions")
         recommendations.append("Implement regular access reviews")
         recommendations.append("Use role-based access control (RBAC)")
-    
+
     elif pattern_name == "encryption_at_rest":
         recommendations.append("Enable encryption for all stored data")
         recommendations.append("Implement secure key management")
         recommendations.append("Use strong encryption algorithms")
-    
+
     elif pattern_name == "encryption_in_transit":
         recommendations.append("Use TLS/SSL for all communications")
         recommendations.append("Enforce strong cipher suites")
         recommendations.append("Implement certificate pinning where appropriate")
-    
+
     else:
         recommendations.extend(pattern.benefits)
-    
+
     return {
         "applied": True,
         "pattern": pattern_name,
@@ -478,14 +435,14 @@ def apply_pattern(pattern_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def validate_pattern_application(pattern_name: str, context: Dict[str, Any]) -> Dict[str, Any]:
+def validate_pattern_application(pattern_name: str, context: dict[str, Any]) -> dict[str, Any]:
     """
     Validate that a pattern is properly applied in a context.
-    
+
     Args:
         pattern_name: Name of the pattern
         context: Context dictionary
-        
+
     Returns:
         Validation results
     """
@@ -495,9 +452,9 @@ def validate_pattern_application(pattern_name: str, context: Dict[str, Any]) -> 
             "valid": False,
             "error": f"Unknown pattern: {pattern_name}"
         }
-    
+
     validation_checks = []
-    
+
     if pattern_name == "zero_trust":
         validation_checks.append({
             "check": "Identity-based access control implemented",
@@ -507,7 +464,7 @@ def validate_pattern_application(pattern_name: str, context: Dict[str, Any]) -> 
             "check": "Continuous verification in place",
             "status": "unknown"
         })
-    
+
     elif pattern_name == "encryption_at_rest":
         validation_checks.append({
             "check": "Data encryption enabled",
@@ -517,7 +474,7 @@ def validate_pattern_application(pattern_name: str, context: Dict[str, Any]) -> 
             "check": "Key management implemented",
             "status": "unknown"
         })
-    
+
     return {
         "valid": True,
         "pattern": pattern_name,

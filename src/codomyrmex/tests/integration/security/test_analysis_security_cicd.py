@@ -7,12 +7,10 @@ through security auditing to CI/CD pipeline automation, ensuring that code
 quality checks, security scans, and deployment automation work together seamlessly.
 """
 
-import pytest
-import tempfile
 import os
-import json
-from pathlib import Path
-from typing import Dict, Any, List
+import tempfile
+
+import pytest
 
 # Import modules for integration testing
 try:
@@ -22,7 +20,11 @@ except ImportError:
     STATIC_ANALYSIS_AVAILABLE = False
 
 try:
-    from codomyrmex.security.digital import scan_vulnerabilities, check_compliance, analyze_file_security
+    from codomyrmex.security.digital import (
+        analyze_file_security,
+        check_compliance,
+        scan_vulnerabilities,
+    )
     SECURITY_AVAILABLE = True
 except ImportError:
     SECURITY_AVAILABLE = False
@@ -34,7 +36,7 @@ except ImportError:
     CI_CD_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -62,7 +64,7 @@ class TestAnalysisSecurityCICDWorkflow:
         import shutil
         shutil.rmtree(self.test_dir, ignore_errors=True)
 
-    def _create_test_files(self) -> Dict[str, str]:
+    def _create_test_files(self) -> dict[str, str]:
         """Create test files with various code quality and security issues."""
         files = {}
 

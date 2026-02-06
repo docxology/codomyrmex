@@ -68,10 +68,6 @@ dependencies = [
     "requests>=2.31.0",
     # For dependency graph visualization (optional)
     # "graphviz",  # Also requires Graphviz system package to be installed
-    # For testing (minimum versions, see dev-dependencies for exact)
-    "pytest>=8.0.0",
-    "pytest-mock>=3.10.0",
-    "pytest-cov>=4.0.0",
     # FastAPI - For creating API endpoints
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
@@ -260,12 +256,6 @@ dev = [
 
 [project.scripts]
 codomyrmex = "codomyrmex.cli:main"
-
-# uv-specific optimizations
-[tool.uv.sources]
-# Use local workspace for development
-codomyrmex = { workspace = true }
-
 
 [tool.coverage.run]
 source = ["src/codomyrmex"]

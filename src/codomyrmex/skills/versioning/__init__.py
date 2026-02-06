@@ -18,7 +18,7 @@ except ImportError:
 __version__ = "0.1.0"
 
 
-def parse_version(version_str: str) -> Tuple[int, ...]:
+def parse_version(version_str: str) -> tuple[int, ...]:
     """Parse a semver-like version string into a tuple of ints."""
     parts = re.findall(r'\d+', version_str)
     return tuple(int(p) for p in parts)
@@ -29,7 +29,7 @@ class SkillVersionManager:
 
     def __init__(self):
         """Initialize SkillVersionManager."""
-        self._version_history: Dict[str, List[str]] = {}
+        self._version_history: dict[str, list[str]] = {}
 
     def get_version(self, skill) -> str:
         """
@@ -47,7 +47,7 @@ class SkillVersionManager:
             return skill.get('version', '0.0.0')
         return '0.0.0'
 
-    def check_compatibility(self, skill, required_version: str) -> Dict[str, Any]:
+    def check_compatibility(self, skill, required_version: str) -> dict[str, Any]:
         """
         Check if a skill's version is compatible with a required version.
 
@@ -79,7 +79,7 @@ class SkillVersionManager:
             "required_version": required_version,
         }
 
-    def list_versions(self, skill_id: str) -> List[str]:
+    def list_versions(self, skill_id: str) -> list[str]:
         """
         List known versions for a skill.
 

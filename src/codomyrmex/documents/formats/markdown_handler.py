@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -13,25 +12,25 @@ from ..exceptions import DocumentReadError, DocumentWriteError
 logger = get_logger(__name__)
 
 
-def read_markdown(file_path: str | Path, encoding: Optional[str] = None) -> str:
+def read_markdown(file_path: str | Path, encoding: str | None = None) -> str:
     """
     Read markdown content from a file.
-    
+
     Args:
         file_path: Path to markdown file
         encoding: Optional encoding (auto-detected if not provided)
-    
+
     Returns:
         Markdown content as string
-    
+
     Raises:
         DocumentReadError: If reading fails
     """
     file_path = Path(file_path)
     encoding = encoding or get_config().default_encoding
-    
+
     try:
-        with open(file_path, 'r', encoding=encoding) as f:
+        with open(file_path, encoding=encoding) as f:
             content = f.read()
         return content
     except Exception as e:
@@ -42,21 +41,21 @@ def read_markdown(file_path: str | Path, encoding: Optional[str] = None) -> str:
         ) from e
 
 
-def write_markdown(content: str, file_path: str | Path, encoding: Optional[str] = None) -> None:
+def write_markdown(content: str, file_path: str | Path, encoding: str | None = None) -> None:
     """
     Write markdown content to a file.
-    
+
     Args:
         content: Markdown content to write
         file_path: Path where file should be written
         encoding: Optional encoding (defaults to utf-8)
-    
+
     Raises:
         DocumentWriteError: If writing fails
     """
     file_path = Path(file_path)
     encoding = encoding or get_config().default_encoding
-    
+
     try:
         file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(file_path, 'w', encoding=encoding) as f:

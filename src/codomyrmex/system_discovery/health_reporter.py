@@ -8,8 +8,7 @@ generating detailed reports on system and module health status.
 import json
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
-from pathlib import Path
+from typing import Any
 
 # Import logging
 try:
@@ -21,7 +20,7 @@ except ImportError:
 
 # Import health checker
 try:
-    from .health_checker import HealthChecker, HealthStatus, HealthCheckResult
+    from .health_checker import HealthChecker, HealthCheckResult, HealthStatus
 except ImportError:
     HealthChecker = None
     HealthStatus = None
@@ -39,12 +38,12 @@ class HealthReport:
     degraded_modules: int = 0
     unhealthy_modules: int = 0
     unknown_modules: int = 0
-    module_results: Dict[str, HealthCheckResult] = field(default_factory=dict)
-    system_metrics: Dict[str, Any] = field(default_factory=dict)
-    recommendations: List[str] = field(default_factory=list)
-    critical_issues: List[str] = field(default_factory=list)
+    module_results: dict[str, HealthCheckResult] = field(default_factory=dict)
+    system_metrics: dict[str, Any] = field(default_factory=dict)
+    recommendations: list[str] = field(default_factory=list)
+    critical_issues: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "timestamp": self.timestamp,
@@ -61,7 +60,7 @@ class HealthReport:
             "summary": self._generate_summary()
         }
 
-    def _generate_summary(self) -> Dict[str, Any]:
+    def _generate_summary(self) -> dict[str, Any]:
         """Generate a summary of the health report."""
         health_score = 0.0
         if self.total_modules > 0:
@@ -100,7 +99,7 @@ class HealthReporter:
         """Initialize the health reporter."""
         self.checker = HealthChecker() if HealthChecker else None
 
-    def generate_health_report(self, modules: List[str], include_system_metrics: bool = True) -> HealthReport:
+    def generate_health_report(self, modules: list[str], include_system_metrics: bool = True) -> HealthReport:
         """
         Generate a health report for specified modules.
 
@@ -155,7 +154,9 @@ class HealthReporter:
         # Collect system metrics if requested
         if include_system_metrics:
             try:
-                from codomyrmex.performance.performance_monitor import get_system_metrics
+                from codomyrmex.performance.performance_monitor import (
+                    get_system_metrics,
+                )
                 report.system_metrics = get_system_metrics()
             except Exception as e:
                 logger.warning(f"Failed to collect system metrics: {e}")
@@ -345,7 +346,7 @@ class HealthReporter:
 
         return "\n".join(lines)
 
-    def export_health_report(self, report: HealthReport, filepath: str, format: Optional[str] = None) -> None:
+    def export_health_report(self, report: HealthReport, filepath: str, format: str | None = None) -> None:
         """
         Export a health report to a file.
 
@@ -373,7 +374,7 @@ class HealthReporter:
             logger.error(f"Failed to export health report to {filepath}: {e}")
             raise
 
-    def compare_health_reports(self, current: HealthReport, previous: HealthReport) -> Dict[str, Any]:
+    def compare_health_reports(self, current: HealthReport, previous: HealthReport) -> dict[str, Any]:
         """
         Compare two health reports to identify changes.
 
@@ -440,7 +441,7 @@ class HealthReporter:
         return comparison
 
 
-def generate_health_report(modules: List[str]) -> HealthReport:
+def generate_health_report(modules: list[str]) -> HealthReport:
     """
     Convenience function to generate a health report.
 

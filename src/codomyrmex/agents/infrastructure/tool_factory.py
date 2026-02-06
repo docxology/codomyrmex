@@ -6,7 +6,8 @@ Auto-generates Tool objects from Infomaniak client methods via introspection.
 import inspect
 import logging
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -16,11 +17,11 @@ class Tool:
     """Lightweight tool descriptor for agent registries."""
     name: str
     description: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
-    handler: Optional[Callable] = None
+    parameters: dict[str, Any] = field(default_factory=dict)
+    handler: Callable | None = None
 
 
-def _method_to_args_schema(method: Callable) -> Dict[str, Any]:
+def _method_to_args_schema(method: Callable) -> dict[str, Any]:
     """Extract a JSON-schema-like parameter dict from a method signature."""
     sig = inspect.signature(method)
     properties = {}
@@ -32,7 +33,7 @@ def _method_to_args_schema(method: Callable) -> Dict[str, Any]:
         if param_name.startswith("_"):
             continue
 
-        prop: Dict[str, Any] = {}
+        prop: dict[str, Any] = {}
         annotation = param.annotation
 
         if annotation is inspect.Parameter.empty:
@@ -57,7 +58,7 @@ def _method_to_args_schema(method: Callable) -> Dict[str, Any]:
 
         properties[param_name] = prop
 
-    schema: Dict[str, Any] = {
+    schema: dict[str, Any] = {
         "type": "object",
         "properties": properties,
     }
@@ -82,9 +83,9 @@ class CloudToolFactory:
     def register_client(
         client: Any,
         service_name: str,
-        registry: Dict[str, Tool],
+        registry: dict[str, Tool],
         security_pipeline: Any = None,
-    ) -> List[str]:
+    ) -> list[str]:
         """Register all public methods of a client as tools.
 
         Args:
@@ -128,10 +129,10 @@ class CloudToolFactory:
 
     @staticmethod
     def register_all_clients(
-        registry: Dict[str, Tool],
-        clients: Dict[str, Any],
+        registry: dict[str, Tool],
+        clients: dict[str, Any],
         security_pipeline: Any = None,
-    ) -> Dict[str, List[str]]:
+    ) -> dict[str, list[str]]:
         """Register tools from multiple clients.
 
         Args:
@@ -142,7 +143,7 @@ class CloudToolFactory:
         Returns:
             Mapping of service_name -> list of tool names.
         """
-        result: Dict[str, List[str]] = {}
+        result: dict[str, list[str]] = {}
         for service_name, client in clients.items():
             names = CloudToolFactory.register_client(
                 client, service_name, registry, security_pipeline

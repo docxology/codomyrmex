@@ -4,8 +4,7 @@ Main scheduler interface for advanced scheduling capabilities.
 
 import threading
 import time
-from datetime import datetime
-from typing import Callable, Dict, List, Optional
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -19,7 +18,7 @@ logger = get_logger(__name__)
 class ScheduleManager:
     """Main scheduler interface for managing scheduled tasks."""
 
-    def __init__(self, timezone: Optional[str] = None):
+    def __init__(self, timezone: str | None = None):
         """Initialize schedule manager.
 
         Args:
@@ -28,9 +27,9 @@ class ScheduleManager:
         self.timezone_manager = TimezoneManager(timezone)
         self.cron_scheduler = CronScheduler(self.timezone_manager)
         self.recurring_scheduler = RecurringScheduler(self.timezone_manager)
-        self._scheduled_tasks: Dict[str, Dict] = {}
+        self._scheduled_tasks: dict[str, dict] = {}
         self._running = False
-        self._thread: Optional[threading.Thread] = None
+        self._thread: threading.Thread | None = None
 
     def schedule_cron(
         self,
@@ -160,7 +159,7 @@ class ScheduleManager:
                 logger.error(f"Error in scheduler loop: {e}")
                 time.sleep(check_interval)
 
-    def list_tasks(self) -> List[str]:
+    def list_tasks(self) -> list[str]:
         """List all scheduled task IDs.
 
         Returns:

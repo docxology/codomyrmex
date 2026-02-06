@@ -5,14 +5,11 @@ This module provides parallel execution capabilities for workflow tasks,
 including dependency management, worker pools, and execution monitoring.
 """
 
-import asyncio
-import concurrent.futures
-import threading
 import time
-from dataclasses import dataclass, field
-from typing import Dict, List, Set, Any, Callable, Optional, Union
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 # Import logging
 try:
@@ -39,12 +36,12 @@ class ExecutionResult:
     task_name: str
     status: ExecutionStatus
     result: Any = None
-    error: Optional[str] = None
-    start_time: Optional[float] = None
-    end_time: Optional[float] = None
-    duration: Optional[float] = None
+    error: str | None = None
+    start_time: float | None = None
+    end_time: float | None = None
+    duration: float | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "task_name": self.task_name,
@@ -84,10 +81,10 @@ class ParallelExecutor:
 
     def execute_tasks(
         self,
-        tasks: List[Dict[str, Any]],
-        dependencies: Dict[str, List[str]],
-        timeout: Optional[float] = None
-    ) -> Dict[str, ExecutionResult]:
+        tasks: list[dict[str, Any]],
+        dependencies: dict[str, list[str]],
+        timeout: float | None = None
+    ) -> dict[str, ExecutionResult]:
         """
         Execute tasks with dependency management.
 
@@ -185,7 +182,7 @@ class ParallelExecutor:
 
         return results
 
-    def execute_task_group(self, tasks: List[Dict[str, Any]], timeout: Optional[float] = None) -> List[ExecutionResult]:
+    def execute_task_group(self, tasks: list[dict[str, Any]], timeout: float | None = None) -> list[ExecutionResult]:
         """
         Execute a group of independent tasks in parallel.
 
@@ -244,7 +241,7 @@ class ParallelExecutor:
 
         return results
 
-    def wait_for_dependencies(self, task: Dict[str, Any], completed: Set[str]) -> bool:
+    def wait_for_dependencies(self, task: dict[str, Any], completed: set[str]) -> bool:
         """
         Check if all dependencies of a task are completed.
 
@@ -258,8 +255,8 @@ class ParallelExecutor:
         dependencies = task.get("dependencies", [])
         return all(dep in completed for dep in dependencies)
 
-    def _get_ready_tasks(self, tasks: List[Dict[str, Any]], completed: Set[str],
-                        dependencies: Dict[str, List[str]]) -> List[Dict[str, Any]]:
+    def _get_ready_tasks(self, tasks: list[dict[str, Any]], completed: set[str],
+                        dependencies: dict[str, list[str]]) -> list[dict[str, Any]]:
         """
         Get tasks that are ready to execute (all dependencies completed).
 
@@ -283,7 +280,7 @@ class ParallelExecutor:
 
         return ready
 
-    def _execute_task(self, task: Dict[str, Any]) -> ExecutionResult:
+    def _execute_task(self, task: dict[str, Any]) -> ExecutionResult:
         """
         Execute a single task.
 
@@ -336,7 +333,7 @@ class ParallelExecutor:
                 duration=duration
             )
 
-    def _simulate_task_execution(self, task: Dict[str, Any]) -> Any:
+    def _simulate_task_execution(self, task: dict[str, Any]) -> Any:
         """
         Simulate task execution (replace with actual module calls).
 
@@ -387,7 +384,7 @@ class ParallelExecutor:
 
 # Utility functions for workflow management
 
-def validate_workflow_dependencies(tasks: List[Dict[str, Any]]) -> List[str]:
+def validate_workflow_dependencies(tasks: list[dict[str, Any]]) -> list[str]:
     """
     Validate workflow task dependencies.
 
@@ -416,7 +413,7 @@ def validate_workflow_dependencies(tasks: List[Dict[str, Any]]) -> List[str]:
     return errors
 
 
-def get_workflow_execution_order(tasks: List[Dict[str, Any]]) -> List[List[str]]:
+def get_workflow_execution_order(tasks: list[dict[str, Any]]) -> list[list[str]]:
     """
     Get the topological execution order for workflow tasks.
 

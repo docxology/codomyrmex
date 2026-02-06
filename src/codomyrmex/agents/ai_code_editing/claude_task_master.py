@@ -15,15 +15,16 @@ Features:
 Reference: https://docs.anthropic.com/claude/docs
 """
 
-from typing import Any, Iterator, Optional
 import os
 import random
 import re
 import time
-
-from anthropic import Anthropic
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
+from collections.abc import Iterator
+
+from anthropic import Anthropic
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -66,9 +67,9 @@ class Task:
     """Task definition for Claude Task Master."""
     description: str
     priority: TaskPriority = TaskPriority.MEDIUM
-    context: Optional[str] = None
+    context: str | None = None
     dependencies: list[str] = field(default_factory=list)
-    timeout: Optional[float] = None
+    timeout: float | None = None
     tags: list[str] = field(default_factory=list)
 
 
@@ -81,7 +82,7 @@ class TaskResult:
     execution_time: float
     tokens_used: int
     cost_usd: float = 0.0
-    error: Optional[str] = None
+    error: str | None = None
     retries: int = 0
 
 
@@ -118,8 +119,8 @@ class ClaudeTaskMaster:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
-        model: Optional[str] = None,
+        api_key: str | None = None,
+        model: str | None = None,
         max_retries: int = DEFAULT_MAX_RETRIES,
     ):
         """Initialize Claude Task Master integration.
@@ -135,7 +136,7 @@ class ClaudeTaskMaster:
         self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
         self.model = model or DEFAULT_MODEL
         self.max_retries = max_retries
-        self._client: Optional[Anthropic] = None
+        self._client: Anthropic | None = None
         self._task_counter = 0
         self._total_cost = 0.0
         self._total_tokens = 0
@@ -225,7 +226,7 @@ class ClaudeTaskMaster:
     def execute_task(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
         **kwargs: Any
@@ -316,7 +317,7 @@ class ClaudeTaskMaster:
     def execute_task_stream(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         max_tokens: int = MAX_TOKENS,
         temperature: float = DEFAULT_TEMPERATURE,
         **kwargs: Any
@@ -357,7 +358,7 @@ class ClaudeTaskMaster:
         self,
         task: str,
         max_subtasks: int = 10,
-        context: Optional[str] = None,
+        context: str | None = None,
         include_dependencies: bool = False,
         **kwargs: Any
     ) -> dict[str, Any]:
@@ -439,7 +440,7 @@ class ClaudeTaskMaster:
     def analyze_task(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         **kwargs: Any
     ) -> dict[str, Any]:
         """Analyze a task for complexity, requirements, and approach.
@@ -514,8 +515,8 @@ class ClaudeTaskMaster:
     def plan_workflow(
         self,
         goal: str,
-        constraints: Optional[list[str]] = None,
-        context: Optional[str] = None,
+        constraints: list[str] | None = None,
+        context: str | None = None,
         **kwargs: Any
     ) -> dict[str, Any]:
         """Create a workflow plan to achieve a goal.
@@ -592,7 +593,7 @@ class ClaudeTaskMaster:
         self,
         description: str,
         language: str = "python",
-        context: Optional[str] = None,
+        context: str | None = None,
         **kwargs: Any
     ) -> dict[str, Any]:
         """Generate code based on a description.
@@ -690,7 +691,7 @@ class ClaudeTaskMaster:
             "response for easy parsing when appropriate."
         )
 
-    def _build_task_message(self, task: str, context: Optional[str]) -> str:
+    def _build_task_message(self, task: str, context: str | None) -> str:
         """Build task message with optional context."""
         if context:
             return f"Context: {context}\n\nTask: {task}"

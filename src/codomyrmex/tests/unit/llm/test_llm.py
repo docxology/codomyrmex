@@ -16,18 +16,15 @@ This test suite covers all aspects of the LLM module including:
 Uses mocks for actual LLM API calls to avoid requiring running services.
 """
 
-import asyncio
 import json
-import tempfile
 import shutil
+import tempfile
 import time
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
 from unittest import TestCase
-from unittest.mock import AsyncMock, MagicMock, Mock, patch, PropertyMock
-import pytest
+from unittest.mock import MagicMock, patch
 
+import pytest
 
 # ============================================================================
 # Test the LLM Config Module
@@ -94,6 +91,7 @@ class TestLLMConfig(TestCase):
     def test_llm_config_environment_variables(self):
         """Test LLMConfig reads from environment variables."""
         import os
+
         from codomyrmex.llm.config import LLMConfig
 
         os.environ['LLM_MODEL'] = 'env-model:v1'
@@ -407,7 +405,6 @@ class TestModelRunner(TestCase):
 
     def test_run_with_context_adds_context_to_system_prompt(self):
         """Test run_with_context adds context documents to system prompt."""
-        from codomyrmex.llm.ollama.model_runner import ExecutionOptions
         from codomyrmex.llm.ollama.ollama_manager import ModelExecutionResult
 
         self.mock_manager.run_model.return_value = ModelExecutionResult(
@@ -428,7 +425,6 @@ class TestModelRunner(TestCase):
 
     def test_run_streaming_calls_callback(self):
         """Test run_streaming calls chunk callback."""
-        from codomyrmex.llm.ollama.model_runner import ExecutionOptions, StreamingChunk
         from codomyrmex.llm.ollama.ollama_manager import ModelExecutionResult
 
         self.mock_manager.run_model.return_value = ModelExecutionResult(
@@ -570,7 +566,10 @@ class TestOllamaManager(TestCase):
     @patch('codomyrmex.llm.ollama.ollama_manager.subprocess')
     def test_run_model_returns_result_on_success(self, mock_subprocess, mock_requests):
         """Test run_model returns ModelExecutionResult on success."""
-        from codomyrmex.llm.ollama.ollama_manager import OllamaManager, ModelExecutionResult
+        from codomyrmex.llm.ollama.ollama_manager import (
+            ModelExecutionResult,
+            OllamaManager,
+        )
 
         # Mock model list for availability check
         mock_requests.get.return_value = MagicMock(
@@ -618,8 +617,9 @@ class TestOllamaManager(TestCase):
     @patch('codomyrmex.llm.ollama.ollama_manager.subprocess')
     def test_run_model_handles_timeout(self, mock_subprocess, mock_requests):
         """Test run_model handles request timeout."""
-        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
         import requests
+
+        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         # Mock model list
         mock_requests.get.return_value = MagicMock(
@@ -720,7 +720,7 @@ class TestOutputManager(TestCase):
 
         assert Path(output_path).exists()
 
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             content = f.read()
 
         assert 'test-model' in content
@@ -745,7 +745,7 @@ class TestOutputManager(TestCase):
 
         assert Path(output_path).exists()
 
-        with open(output_path, 'r') as f:
+        with open(output_path) as f:
             data = json.load(f)
 
         assert data['model_name'] == 'test-model'
@@ -801,7 +801,7 @@ class TestOutputManager(TestCase):
 
         assert Path(batch_path).exists()
 
-        with open(batch_path, 'r') as f:
+        with open(batch_path) as f:
             data = json.load(f)
 
         assert data['batch_name'] == 'test_batch'
@@ -1046,8 +1046,9 @@ class TestFabricManager(TestCase):
     @patch('codomyrmex.llm.fabric.fabric_manager.subprocess')
     def test_fabric_not_available(self, mock_subprocess):
         """Test FabricManager handles unavailable fabric."""
-        from codomyrmex.llm.fabric.fabric_manager import FabricManager
         from subprocess import TimeoutExpired
+
+        from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
         mock_subprocess.TimeoutExpired = TimeoutExpired
         mock_subprocess.run.side_effect = TimeoutExpired("fabric", 10)
@@ -1095,8 +1096,9 @@ class TestFabricManager(TestCase):
     @patch('codomyrmex.llm.fabric.fabric_manager.subprocess')
     def test_run_pattern_unavailable(self, mock_subprocess):
         """Test run_pattern returns error when fabric unavailable."""
-        from codomyrmex.llm.fabric.fabric_manager import FabricManager
         from subprocess import TimeoutExpired
+
+        from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
         mock_subprocess.TimeoutExpired = TimeoutExpired
         mock_subprocess.run.side_effect = TimeoutExpired("fabric", 10)
@@ -1260,7 +1262,7 @@ class TestGlobalConfigFunctions(TestCase):
     @patch('codomyrmex.llm.config.LLMConfig._ensure_directories')
     def test_set_config_updates_global(self, mock_dirs):
         """Test set_config updates global config."""
-        from codomyrmex.llm.config import get_config, set_config, LLMConfig
+        from codomyrmex.llm.config import LLMConfig, get_config, set_config
 
         custom_config = LLMConfig(model="custom-model")
         set_config(custom_config)
@@ -1344,8 +1346,9 @@ class TestErrorRecovery(TestCase):
     @patch('codomyrmex.llm.ollama.ollama_manager.subprocess')
     def test_http_failure_falls_back_to_cli(self, mock_subprocess, mock_requests):
         """Test that HTTP API failure falls back to CLI."""
-        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
         import requests
+
+        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         # HTTP fails
         mock_requests.get.side_effect = requests.exceptions.ConnectionError()

@@ -6,12 +6,13 @@ subscription handling, and asynchronous event processing.
 """
 
 import asyncio
-import threading
-import inspect
 import fnmatch
+import inspect
+import threading
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, List, Any, Optional, Callable, Set, Awaitable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Any
+from collections.abc import Callable
 
 # Import logging
 try:
@@ -21,24 +22,24 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-from .event_schema import Event, EventType, EventSchema
+from .event_schema import Event, EventSchema
 
 
 @dataclass
 class Subscription:
     """Represents an event subscription."""
     subscriber_id: str
-    event_patterns: Set[str]
+    event_patterns: set[str]
     handler: Callable[[Event], Any]
     is_async: bool = False
-    filter_func: Optional[Callable[[Event], bool]] = None
+    filter_func: Callable[[Event], bool] | None = None
     priority: int = 0  # Higher numbers = higher priority
 
     def matches_event(self, event: Event) -> bool:
         """Check if this subscription matches an event."""
         # Check event type against patterns
         event_type_str = event.event_type.value if hasattr(event.event_type, 'value') else str(event.event_type)
-        
+
         match_found = False
         for pattern in self.event_patterns:
             # Ensure pattern is a string for fnmatch
@@ -46,7 +47,7 @@ class Subscription:
             if fnmatch.fnmatch(event_type_str, p_str):
                 match_found = True
                 break
-                
+
         if not match_found:
             return False
 
@@ -67,20 +68,20 @@ class EventBus:
         Initialize the event bus.
         Default to sync processing for backward compatibility with tests.
         """
-        self.subscriptions: Dict[str, Subscription] = {}
+        self.subscriptions: dict[str, Subscription] = {}
         self.event_schema = EventSchema()
         self.enable_async = enable_async
 
         # Processing infrastructure
         self.executor = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="event_bus")
         self.event_queue: asyncio.Queue[Event] = asyncio.Queue() if enable_async else None
-        self.processing_task: Optional[asyncio.Task] = None
+        self.processing_task: asyncio.Task | None = None
 
         # Metrics and monitoring
         self.events_published = 0
         self.events_processed = 0
         self.events_failed = 0
-        self.dead_letter_queue: List[Event] = []
+        self.dead_letter_queue: list[Event] = []
 
         # Thread safety
         self._lock = threading.RLock()
@@ -88,8 +89,8 @@ class EventBus:
 
         logger.info(f"EventBus initialized with {max_workers} workers, async={enable_async}")
 
-    def subscribe(self, event_patterns: List[Any], handler: Callable[[Event], Any],
-                 subscriber_id: Optional[str] = None, filter_func: Optional[Callable[[Event], bool]] = None,
+    def subscribe(self, event_patterns: list[Any], handler: Callable[[Event], Any],
+                 subscriber_id: str | None = None, filter_func: Callable[[Event], bool] | None = None,
                  priority: int = 0) -> str:
         """Subscribe to events."""
         if subscriber_id is None:
@@ -188,7 +189,7 @@ class EventBus:
         finally:
             loop.close()
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get stats."""
         with self._lock:
             subs = {}
@@ -225,7 +226,7 @@ def publish_event(event: Event) -> None:
 async def publish_event_async(event: Event) -> None:
     await get_event_bus().publish_async(event)
 
-def subscribe_to_events(event_types: List[Any], handler: Callable, subscriber_id: Optional[str] = None, **kwargs) -> str:
+def subscribe_to_events(event_types: list[Any], handler: Callable, subscriber_id: str | None = None, **kwargs) -> str:
     return get_event_bus().subscribe(event_types, handler, subscriber_id, **kwargs)
 
 def unsubscribe_from_events(subscriber_id: str) -> bool:

@@ -9,7 +9,8 @@ import asyncio
 import json
 import time
 from dataclasses import dataclass
-from typing import Any, AsyncIterator, Callable, Optional
+from typing import Any
+from collections.abc import AsyncIterator, Callable
 
 import aiohttp
 
@@ -72,9 +73,9 @@ class ExecutionOptions:
     max_tokens: int = 2048
     timeout: int = 300
     stream: bool = False
-    format: Optional[str] = None  # "json" for structured output
-    system_prompt: Optional[str] = None
-    context_window: Optional[int] = None
+    format: str | None = None  # "json" for structured output
+    system_prompt: str | None = None
+    context_window: int | None = None
 
 
 @dataclass
@@ -82,7 +83,7 @@ class StreamingChunk:
     """A chunk of streaming response."""
     content: str
     done: bool = False
-    token_count: Optional[int] = None
+    token_count: int | None = None
 
 
 class ModelRunner:
@@ -107,9 +108,9 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         save_output: bool = True,
-        output_dir: Optional[str] = None
+        output_dir: str | None = None
     ) -> ModelExecutionResult:
         """
         Run a model with custom execution options.
@@ -164,8 +165,8 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[ExecutionOptions] = None,
-        chunk_callback: Optional[Callable[[StreamingChunk], None]] = None
+        options: ExecutionOptions | None = None,
+        chunk_callback: Callable[[StreamingChunk], None] | None = None
     ) -> ModelExecutionResult:
         """
         Run a model with streaming output.
@@ -204,7 +205,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompts: list[str],
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         max_concurrent: int = 3
     ) -> list[ModelExecutionResult]:
         """
@@ -264,7 +265,7 @@ class ModelRunner:
         self,
         model_name: str,
         messages: list[dict[str, str]],
-        options: Optional[ExecutionOptions] = None
+        options: ExecutionOptions | None = None
     ) -> ModelExecutionResult:
         """
         Run a conversational model execution.
@@ -303,7 +304,7 @@ class ModelRunner:
         model_name: str,
         prompt: str,
         context_docs: list[str],
-        options: Optional[ExecutionOptions] = None
+        options: ExecutionOptions | None = None
     ) -> ModelExecutionResult:
         """
         Run a model with additional context documents.
@@ -335,7 +336,7 @@ class ModelRunner:
         self,
         model_name: str,
         test_prompts: list[str],
-        options: Optional[ExecutionOptions] = None
+        options: ExecutionOptions | None = None
     ) -> dict[str, Any]:
         """
         Benchmark a model with multiple test prompts.
@@ -393,7 +394,7 @@ class ModelRunner:
         self,
         model_names: list[str],
         test_prompt: str,
-        options: Optional[ExecutionOptions] = None
+        options: ExecutionOptions | None = None
     ) -> dict[str, Any]:
         """
         Compare multiple models on the same prompt.
@@ -460,7 +461,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         timeout: int = 300
     ) -> ModelExecutionResult:
         """
@@ -586,7 +587,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         timeout: int = 300
     ) -> ModelExecutionResult:
         """
@@ -610,7 +611,7 @@ class ModelRunner:
         self,
         model_name: str,
         messages: list[dict[str, str]],
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         timeout: int = 300
     ) -> ModelExecutionResult:
         """
@@ -744,7 +745,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompt: str,
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         timeout: int = 300
     ) -> AsyncIterator[StreamingChunk]:
         """
@@ -824,7 +825,7 @@ class ModelRunner:
 
                                 if is_done:
                                     self.logger.info(
-                                        f"[ASYNC] Streaming generation completed"
+                                        "[ASYNC] Streaming generation completed"
                                     )
                                     return
 
@@ -845,7 +846,7 @@ class ModelRunner:
         self,
         model_name: str,
         prompts: list[str],
-        options: Optional[ExecutionOptions] = None,
+        options: ExecutionOptions | None = None,
         max_concurrent: int = 3
     ) -> list[ModelExecutionResult]:
         """

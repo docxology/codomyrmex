@@ -1,8 +1,9 @@
 """Tests for the identity module (persona, manager, biocognitive)."""
 
 import pytest
-from codomyrmex.identity.persona import Persona, VerificationLevel
+
 from codomyrmex.identity.manager import IdentityManager
+from codomyrmex.identity.persona import Persona, VerificationLevel
 
 try:
     import numpy as np
@@ -180,3 +181,27 @@ class TestBioCognitiveVerifier:
             self.verifier.record_metric("u1", "kft", 0.1)
         result = self.verifier.verify("u1", "kft", 10.0)
         assert bool(result) is False
+
+
+# Additional tests migrated from root /tests/unit/identity/
+@pytest.mark.unit
+@pytest.mark.skipif(not HAS_NUMPY, reason="numpy not installed")
+def test_biocognitive_verification_standalone():
+    """Test BioCognitiveVerifier with inline baseline training."""
+    from codomyrmex.identity.biocognitive import BioCognitiveVerifier
+    bio = BioCognitiveVerifier()
+    user_id = "u1"
+
+    # Train baseline
+    for _ in range(20):
+        bio.record_metric(user_id, "keystroke", 0.15)
+
+    # Test valid
+    assert bio.verify(user_id, "keystroke", 0.16)
+
+    # Test invalid (z-score high)
+    assert not bio.verify(user_id, "keystroke", 0.50)
+
+    # Test missing baseline
+    assert not bio.verify("u2", "keystroke", 0.15)
+

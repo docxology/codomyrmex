@@ -9,10 +9,10 @@ Provides compliance validation against security standards including:
 - HIPAA
 """
 
-from datetime import datetime
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -39,7 +39,7 @@ class ComplianceControl:
     category: str
     level: str = "required"
     automated: bool = False
-    
+
 @dataclass
 class ComplianceResult:
     """Result of a compliance check."""
@@ -47,8 +47,8 @@ class ComplianceResult:
     status: str
     evidence: str
     timestamp: datetime
-    details: Dict[str, Any] = field(default_factory=dict)
-    remediation: Optional[str] = None
+    details: dict[str, Any] = field(default_factory=dict)
+    remediation: str | None = None
 
 
 class ComplianceChecker:
@@ -58,7 +58,7 @@ class ComplianceChecker:
         """Initialize compliance checker."""
         self.controls = self._load_controls()
 
-    def _load_controls(self) -> Dict[str, ComplianceControl]:
+    def _load_controls(self) -> dict[str, ComplianceControl]:
         """Load compliance controls."""
         # Simplified loading of controls
         return {
@@ -72,15 +72,15 @@ class ComplianceChecker:
             # Add more controls as needed
         }
 
-    def check_compliance(self, target_config: Dict[str, Any], standards: Optional[List[ComplianceStandard]] = None) -> List[ComplianceResult]:
+    def check_compliance(self, target_config: dict[str, Any], standards: list[ComplianceStandard] | None = None) -> list[ComplianceResult]:
         """Check compliance against standards."""
         results = []
         # Mock compliance check logic
         # In a real implementation, this would check configurations against controls
-        
+
         # Determine standards to check
         target_standards = standards or list(ComplianceStandard)
-        
+
         for control_id, control in self.controls.items():
             if control.standard in target_standards:
                 # Mock result -> assumed compliant for demo unless specified
@@ -91,20 +91,20 @@ class ComplianceChecker:
                     timestamp=datetime.now(),
                     details={"checked_config": "config1"}
                 ))
-                
+
         return results
 
-    def get_compliance_score(self, results: List[ComplianceResult]) -> float:
+    def get_compliance_score(self, results: list[ComplianceResult]) -> float:
         """Calculate compliance score."""
         if not results:
             return 0.0
-            
+
         compliant = sum(1 for r in results if r.status == "compliant")
         return (compliant / len(results)) * 100.0
 
 
 # Convenience functions
-def check_compliance_standards(config: Dict[str, Any], standards: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+def check_compliance_standards(config: dict[str, Any], standards: list[str] | None = None) -> list[dict[str, Any]]:
     """Convenience function to check complianc standards."""
     checker = ComplianceChecker()
     enum_standards = []
@@ -114,7 +114,7 @@ def check_compliance_standards(config: Dict[str, Any], standards: Optional[List[
                 enum_standards.append(ComplianceStandard[s])
             except KeyError:
                 logger.warning(f"Unknown standard: {s}")
-                
+
     results = checker.check_compliance(config, enum_standards if enum_standards else None)
     return [
         {

@@ -4,9 +4,9 @@ Defines the core plugin interfaces and registry for managing plugins.
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -46,17 +46,17 @@ class PluginInfo:
     name: str = ""
     version: str = "0.0.0"
     description: str = ""
-    author: Optional[str] = None
+    author: str | None = None
     plugin_type: PluginType = PluginType.UTILITY
     entry_point: str = ""
-    dependencies: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
     enabled: bool = True
-    tags: List[str] = field(default_factory=list)
-    config_schema: Optional[Dict[str, Any]] = None
-    homepage: Optional[str] = None
-    license: Optional[str] = None
+    tags: list[str] = field(default_factory=list)
+    config_schema: dict[str, Any] | None = None
+    homepage: str | None = None
+    license: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert PluginInfo to dictionary."""
         return {
             "name": self.name,
@@ -79,12 +79,12 @@ class Hook:
     def __init__(self, name: str, description: str = ""):
         self.name = name
         self.description = description
-        self.handlers: List[Callable] = []
+        self.handlers: list[Callable] = []
 
     def register(self, handler: Callable):
         self.handlers.append(handler)
 
-    def emit(self, *args, **kwargs) -> List[Any]:
+    def emit(self, *args, **kwargs) -> list[Any]:
         results = []
         for handler in self.handlers:
             try:
@@ -97,27 +97,27 @@ class Hook:
 class Plugin:
     """Base class for all plugins."""
 
-    def __init__(self, info: Union[PluginInfo, Any] = None):
+    def __init__(self, info: PluginInfo | Any = None):
         """Initialize plugin with metadata."""
         if isinstance(info, PluginInfo):
             self._info = info
         elif info is not None:
-             self._info = PluginInfo(name=getattr(info, 'name', 'unnamed'), 
+             self._info = PluginInfo(name=getattr(info, 'name', 'unnamed'),
                                      version=getattr(info, 'version', '0.0.0'),
                                      description=getattr(info, 'description', ''))
         else:
              self._info = PluginInfo()
-             
+
         self.state = PluginState.UNLOADED
-        self.config: Dict[str, Any] = {}
-        self.hooks: Dict[str, Hook] = {}
+        self.config: dict[str, Any] = {}
+        self.hooks: dict[str, Hook] = {}
 
     @property
     def info(self) -> PluginInfo:
         """Get plugin info."""
         return self._info
 
-    def initialize(self, config: Optional[Dict[str, Any]] = None) -> bool:
+    def initialize(self, config: dict[str, Any] | None = None) -> bool:
         """Initialize the plugin."""
         if config:
             self.config.update(config)
@@ -135,7 +135,7 @@ class Plugin:
             self.hooks[name] = Hook(name)
         self.hooks[name].register(handler)
 
-    def emit_hook(self, name: str, *args, **kwargs) -> List[Any]:
+    def emit_hook(self, name: str, *args, **kwargs) -> list[Any]:
         """Emit a hook for this plugin."""
         if name in self.hooks:
             return self.hooks[name].emit(*args, **kwargs)
@@ -145,11 +145,11 @@ class Plugin:
         """Return current plugin state."""
         return self.state
 
-    def set_config(self, config: Dict[str, Any]):
+    def set_config(self, config: dict[str, Any]):
         """Set plugin configuration."""
         self.config = config
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """Get plugin configuration."""
         return self.config
 
@@ -159,20 +159,20 @@ class PluginRegistry:
 
     def __init__(self):
         """Initialize registry."""
-        self._plugins: Dict[str, Plugin] = {}
-        self._plugin_info: Dict[str, PluginInfo] = {}
-        self._global_hooks: Dict[str, Hook] = {}
-        self.categories: Dict[str, List[str]] = {}
-        self.capabilities: Dict[str, List[str]] = {}
+        self._plugins: dict[str, Plugin] = {}
+        self._plugin_info: dict[str, PluginInfo] = {}
+        self._global_hooks: dict[str, Hook] = {}
+        self.categories: dict[str, list[str]] = {}
+        self.capabilities: dict[str, list[str]] = {}
 
 
-    def register_global_hook(self, name: str, signature: Optional[Callable] = None, description: str = "") -> Hook:
+    def register_global_hook(self, name: str, signature: Callable | None = None, description: str = "") -> Hook:
         """Register a global entry point for hooks."""
         if name not in self._global_hooks:
             self._global_hooks[name] = Hook(name, description)
         return self._global_hooks[name]
 
-    def emit_global_hook(self, name: str, *args, **kwargs) -> List[Any]:
+    def emit_global_hook(self, name: str, *args, **kwargs) -> list[Any]:
         """Emit a global hook."""
         if name in self._global_hooks:
             return self._global_hooks[name].emit(*args, **kwargs)
@@ -188,7 +188,7 @@ class PluginRegistry:
 
         self._plugins[info.name] = plugin
         self._plugin_info[info.name] = info
-        
+
         # Update categories
         cat_key = info.plugin_type.value if hasattr(info.plugin_type, 'value') else str(info.plugin_type)
         if cat_key not in self.categories:
@@ -206,7 +206,7 @@ class PluginRegistry:
 
         plugin = self._plugins[name]
         plugin.shutdown()
-        
+
         info = self._plugin_info[name]
         cat_key = info.plugin_type.value if hasattr(info.plugin_type, 'value') else str(info.plugin_type)
         if cat_key in self.categories and name in self.categories[cat_key]:
@@ -217,26 +217,26 @@ class PluginRegistry:
         logger.info(f"Unregistered plugin: {name}")
         return True
 
-    def get(self, name: str) -> Optional[Plugin]:
+    def get(self, name: str) -> Plugin | None:
         """Get a plugin by name."""
         return self._plugins.get(name)
 
-    def get_plugin_info(self, name: str) -> Optional[PluginInfo]:
+    def get_plugin_info(self, name: str) -> PluginInfo | None:
         """Get plugin metadata by name."""
         return self._plugin_info.get(name)
 
-    def list_plugins(self, plugin_type: Optional[PluginType] = None) -> List[PluginInfo]:
+    def list_plugins(self, plugin_type: PluginType | None = None) -> list[PluginInfo]:
         """List all plugins, optionally filtered by type."""
         plugins = list(self._plugin_info.values())
         if plugin_type:
             plugins = [p for p in plugins if p.plugin_type == plugin_type]
         return plugins
 
-    def check_dependencies(self, name: str) -> List[str]:
+    def check_dependencies(self, name: str) -> list[str]:
         """Check if plugin dependencies are satisfied."""
         if name not in self._plugin_info:
             return []
-        
+
         info = self._plugin_info[name]
         missing = []
         for dep in info.dependencies:
@@ -244,7 +244,7 @@ class PluginRegistry:
                 missing.append(dep)
         return missing
 
-    def initialize_all(self) -> Dict[str, bool]:
+    def initialize_all(self) -> dict[str, bool]:
         """Initialize all plugins."""
         results = {}
         for name, plugin in self._plugins.items():
@@ -255,7 +255,7 @@ class PluginRegistry:
                 results[name] = False
         return results
 
-    def shutdown_all(self) -> Dict[str, bool]:
+    def shutdown_all(self) -> dict[str, bool]:
         """Shutdown all plugins."""
         results = {}
         for name, plugin in self._plugins.items():
@@ -268,7 +268,7 @@ class PluginRegistry:
 
 
 # Global registry instance
-_registry: Optional[PluginRegistry] = None
+_registry: PluginRegistry | None = None
 
 def get_registry() -> PluginRegistry:
     """Get the global plugin registry."""

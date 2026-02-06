@@ -1,13 +1,13 @@
-from typing import Optional
-from pathlib import Path
 import json
 import subprocess
 import sys
+from pathlib import Path
+
 from ..utils import get_logger
 
 logger = get_logger(__name__)
 
-def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
+def handle_code_analysis(path: str, output_dir: str | None) -> bool:
     """Handle code analysis command."""
     try:
         from codomyrmex.static_analysis import analyze_project
@@ -38,7 +38,9 @@ def handle_code_analysis(path: str, output_dir: Optional[str]) -> bool:
 def handle_git_analysis(repo_path: str) -> bool:
     """Handle git repository analysis command."""
     try:
-        from codomyrmex.data_visualization.git.git_visualizer import visualize_git_repository
+        from codomyrmex.data_visualization.git.git_visualizer import (
+            visualize_git_repository,
+        )
 
         result = visualize_git_repository(repo_path, output_dir="./git_analysis")
 

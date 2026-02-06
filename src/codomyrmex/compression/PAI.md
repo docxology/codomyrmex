@@ -1,26 +1,43 @@
-# Personal AI Infrastructure - Compression Context
+# Personal AI Infrastructure — Compression Module
 
-**Module**: compression
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Data compression utilities for gzip, zlib, and archive handling with streaming support.
+The Compression module provides PAI integration for data compression.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Data Compression
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Compress data:
 
-## Key Files
+```python
+from codomyrmex.compression import compress, decompress
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+compressed = compress(data, algorithm="gzip", level=9)
+original = decompress(compressed)
+```
 
-## Future Considerations
+### Stream Compression
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Stream large data:
+
+```python
+from codomyrmex.compression import CompressStream
+
+with CompressStream("output.gz", algorithm="gzip") as f:
+    f.write(large_data)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `compress` | Compress data |
+| `decompress` | Decompress data |
+| `CompressStream` | Streaming |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -1,6 +1,5 @@
 """Query builder for document search."""
 
-from typing import List, Optional
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -11,9 +10,9 @@ class QueryBuilder:
     """Builder for constructing search queries."""
 
     def __init__(self):
-        self.terms: List[str] = []
+        self.terms: list[str] = []
         self.filters: dict = {}
-        self.sort_by: Optional[str] = None
+        self.sort_by: str | None = None
 
     def add_term(self, term: str) -> "QueryBuilder":
         """Add a search term."""
@@ -44,7 +43,7 @@ class QueryBuilder:
         }
 
 
-def build_query(terms: List[str], filters: dict = None, sort_by: str = None) -> str:
+def build_query(terms: list[str], filters: dict = None, sort_by: str = None) -> str:
     """
     Build a search query.
 

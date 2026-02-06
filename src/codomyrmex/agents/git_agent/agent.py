@@ -1,22 +1,24 @@
 
-from typing import Any, Iterator, Optional
 import json
+from typing import Any
+from collections.abc import Iterator
 
-from codomyrmex.agents.core.base import BaseAgent, AgentCapabilities, AgentRequest, AgentResponse
-from codomyrmex.git_operations.core.repository import RepositoryManager
-from codomyrmex.git_operations.core.git import (
-    add_remote,
-    remove_remote,
-    list_remotes,
-    clean_repository,
-    get_status,
+from codomyrmex.agents.core.base import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
 )
 from codomyrmex.git_operations.api.github import (
     create_issue,
     list_issues,
-    close_issue,
-    add_comment,
 )
+from codomyrmex.git_operations.core.git import (
+    add_remote,
+    clean_repository,
+    list_remotes,
+)
+from codomyrmex.git_operations.core.repository import RepositoryManager
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -24,7 +26,7 @@ logger = get_logger(__name__)
 class GitAgent(BaseAgent):
     """
     Agent specialized for Git and GitHub operations.
-    
+
     Capabilities:
     - Repository Management (Sync, Clean, Prune)
     - Remote Management
@@ -33,8 +35,8 @@ class GitAgent(BaseAgent):
 
     def __init__(
         self,
-        config: Optional[dict[str, Any]] = None,
-        repository_manager: Optional[RepositoryManager] = None,
+        config: dict[str, Any] | None = None,
+        repository_manager: RepositoryManager | None = None,
     ):
         super().__init__(
             name="GitAgent",
@@ -46,10 +48,10 @@ class GitAgent(BaseAgent):
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """
         Execute a git-related request.
-        
+
         The prompt is expected to be a JSON string or a structured command string
         defining the action and parameters.
-        
+
         Format: "action: param1=value1, param2=value2"
         OR JSON: {"action": "sync", "repository": "owner/repo"}
         """
@@ -64,7 +66,7 @@ class GitAgent(BaseAgent):
                 # Basic string parsing "action: key=value"
                 if ":" not in request.prompt:
                     return AgentResponse(content="Invalid format. Use 'action: key=value' or JSON.", error="InvalidFormat")
-                
+
                 action, param_str = request.prompt.split(":", 1)
                 action = action.strip()
                 params = {}
@@ -73,7 +75,7 @@ class GitAgent(BaseAgent):
                         if "=" in part:
                             k, v = part.split("=", 1)
                             params[k.strip()] = v.strip()
-            
+
             result = self._handle_action(action, params)
             return AgentResponse(content=str(result))
 
@@ -84,17 +86,17 @@ class GitAgent(BaseAgent):
     def _handle_action(self, action: str, params: dict) -> Any:
         """Dispatch action to specific handlers."""
         repo_name = params.get("repository")
-        
+
         if action == "sync":
             if not repo_name:
                 raise ValueError("Repository name required for sync")
             return self.repo_manager.sync_repository(repo_name)
-            
+
         elif action == "prune":
              if not repo_name:
                 raise ValueError("Repository name required for prune")
              return self.repo_manager.prune_repository(repo_name)
-             
+
         elif action == "clean":
             if not repo_name:
                 raise ValueError("Repository name required for clean")
@@ -125,7 +127,7 @@ class GitAgent(BaseAgent):
             url = params.get("url")
             if not name or not url:
                 raise ValueError("Name and URL required for add_remote")
-            
+
             repo = self.repo_manager.get_repository(repo_name)
             if not repo:
                  raise ValueError(f"Repository {repo_name} not found")
@@ -141,7 +143,7 @@ class GitAgent(BaseAgent):
                 body=params.get("body", ""),
                 labels=params.get("labels", "").split(",") if params.get("labels") else None
             )
-            
+
         elif action == "list_issues":
              return list_issues(
                 owner=params.get("owner"),

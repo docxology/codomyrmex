@@ -8,13 +8,14 @@ __version__ = "0.1.0"
 
 import hashlib
 import json
+import threading
 import time
-from typing import Optional, List, Dict, Any, Callable, TypeVar
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from abc import ABC, abstractmethod
-import threading
+from typing import Any, Dict, List, Optional, TypeVar
+from collections.abc import Callable
 
 
 class MemoryType(Enum):
@@ -40,29 +41,29 @@ class Memory:
     content: str
     memory_type: MemoryType = MemoryType.EPISODIC
     importance: MemoryImportance = MemoryImportance.MEDIUM
-    embedding: Optional[List[float]] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    embedding: list[float] | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
     created_at: datetime = field(default_factory=datetime.now)
     accessed_at: datetime = field(default_factory=datetime.now)
     access_count: int = 0
-    
+
     @property
     def age_hours(self) -> float:
         """Get memory age in hours."""
         return (datetime.now() - self.created_at).total_seconds() / 3600
-    
+
     @property
     def recency_score(self) -> float:
         """Get recency score (decays over time)."""
         hours_since_access = (datetime.now() - self.accessed_at).total_seconds() / 3600
         return 1.0 / (1.0 + hours_since_access)
-    
+
     def access(self) -> None:
         """Record an access to this memory."""
         self.accessed_at = datetime.now()
         self.access_count += 1
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -74,9 +75,9 @@ class Memory:
             "accessed_at": self.accessed_at.isoformat(),
             "access_count": self.access_count,
         }
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Memory":
+    def from_dict(cls, data: dict[str, Any]) -> "Memory":
         """Create from dictionary."""
         return cls(
             id=data["id"],
@@ -97,7 +98,7 @@ class RetrievalResult:
     relevance_score: float
     recency_score: float
     importance_score: float
-    
+
     @property
     def combined_score(self) -> float:
         """Get combined ranking score."""
@@ -110,44 +111,44 @@ class RetrievalResult:
 
 class MemoryStore(ABC):
     """Base class for memory storage backends."""
-    
+
     @abstractmethod
     def save(self, memory: Memory) -> None:
         """Save a memory."""
         pass
-    
+
     @abstractmethod
-    def get(self, memory_id: str) -> Optional[Memory]:
+    def get(self, memory_id: str) -> Memory | None:
         """Get a memory by ID."""
         pass
-    
+
     @abstractmethod
     def delete(self, memory_id: str) -> bool:
         """Delete a memory."""
         pass
-    
+
     @abstractmethod
-    def list_all(self) -> List[Memory]:
+    def list_all(self) -> list[Memory]:
         """List all memories."""
         pass
 
 
 class InMemoryStore(MemoryStore):
     """In-memory storage for memories."""
-    
+
     def __init__(self):
-        self._memories: Dict[str, Memory] = {}
+        self._memories: dict[str, Memory] = {}
         self._lock = threading.Lock()
-    
+
     def save(self, memory: Memory) -> None:
         """Save a memory."""
         with self._lock:
             self._memories[memory.id] = memory
-    
-    def get(self, memory_id: str) -> Optional[Memory]:
+
+    def get(self, memory_id: str) -> Memory | None:
         """Get a memory by ID."""
         return self._memories.get(memory_id)
-    
+
     def delete(self, memory_id: str) -> bool:
         """Delete a memory."""
         with self._lock:
@@ -155,48 +156,48 @@ class InMemoryStore(MemoryStore):
                 del self._memories[memory_id]
                 return True
         return False
-    
-    def list_all(self) -> List[Memory]:
+
+    def list_all(self) -> list[Memory]:
         """List all memories."""
         return list(self._memories.values())
 
 
 class JSONFileStore(MemoryStore):
     """JSON file storage for memories."""
-    
+
     def __init__(self, file_path: str):
         self.file_path = file_path
-        self._memories: Dict[str, Memory] = {}
+        self._memories: dict[str, Memory] = {}
         self._lock = threading.Lock()
         self._load()
-    
+
     def _load(self) -> None:
         """Load memories from file."""
         try:
-            with open(self.file_path, 'r') as f:
+            with open(self.file_path) as f:
                 data = json.load(f)
                 for item in data:
                     memory = Memory.from_dict(item)
                     self._memories[memory.id] = memory
         except (FileNotFoundError, json.JSONDecodeError):
             self._memories = {}
-    
+
     def _save_to_file(self) -> None:
         """Save all memories to file."""
         data = [m.to_dict() for m in self._memories.values()]
         with open(self.file_path, 'w') as f:
             json.dump(data, f, indent=2)
-    
+
     def save(self, memory: Memory) -> None:
         """Save a memory."""
         with self._lock:
             self._memories[memory.id] = memory
             self._save_to_file()
-    
-    def get(self, memory_id: str) -> Optional[Memory]:
+
+    def get(self, memory_id: str) -> Memory | None:
         """Get a memory by ID."""
         return self._memories.get(memory_id)
-    
+
     def delete(self, memory_id: str) -> bool:
         """Delete a memory."""
         with self._lock:
@@ -205,8 +206,8 @@ class JSONFileStore(MemoryStore):
                 self._save_to_file()
                 return True
         return False
-    
-    def list_all(self) -> List[Memory]:
+
+    def list_all(self) -> list[Memory]:
         """List all memories."""
         return list(self._memories.values())
 
@@ -214,28 +215,28 @@ class JSONFileStore(MemoryStore):
 class AgentMemory:
     """
     Long-term memory system for AI agents.
-    
+
     Usage:
         memory = AgentMemory(store=InMemoryStore())
-        
+
         # Add memories
         memory.remember(
             "User prefers Python over JavaScript",
             memory_type=MemoryType.SEMANTIC,
             importance=MemoryImportance.HIGH,
         )
-        
+
         # Retrieve relevant memories
         results = memory.recall("programming language preferences", k=5)
-        
+
         # Get context for LLM
         context = memory.get_context("What language should I use?")
     """
-    
+
     def __init__(
         self,
-        store: Optional[MemoryStore] = None,
-        embedding_fn: Optional[Callable[[str], List[float]]] = None,
+        store: MemoryStore | None = None,
+        embedding_fn: Callable[[str], list[float]] | None = None,
         max_memories: int = 10000,
     ):
         self.store = store or InMemoryStore()
@@ -243,35 +244,35 @@ class AgentMemory:
         self.max_memories = max_memories
         self._counter = 0
         self._lock = threading.Lock()
-    
+
     def _generate_id(self) -> str:
         """Generate unique memory ID."""
         with self._lock:
             self._counter += 1
             return f"mem_{self._counter}_{int(time.time())}"
-    
-    def _compute_embedding(self, text: str) -> Optional[List[float]]:
+
+    def _compute_embedding(self, text: str) -> list[float] | None:
         """Compute embedding for text."""
         if self.embedding_fn:
             return self.embedding_fn(text)
         return None
-    
+
     def remember(
         self,
         content: str,
         memory_type: MemoryType = MemoryType.EPISODIC,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Memory:
         """
         Store a new memory.
-        
+
         Args:
             content: The memory content
             memory_type: Type of memory
             importance: Importance level
             metadata: Additional metadata
-            
+
         Returns:
             The created Memory object
         """
@@ -283,45 +284,45 @@ class AgentMemory:
             metadata=metadata or {},
             embedding=self._compute_embedding(content),
         )
-        
+
         self.store.save(memory)
-        
+
         # Prune if over limit
         self._prune_if_needed()
-        
+
         return memory
-    
+
     def recall(
         self,
         query: str,
         k: int = 5,
-        memory_type: Optional[MemoryType] = None,
-        min_importance: Optional[MemoryImportance] = None,
-    ) -> List[RetrievalResult]:
+        memory_type: MemoryType | None = None,
+        min_importance: MemoryImportance | None = None,
+    ) -> list[RetrievalResult]:
         """
         Retrieve relevant memories.
-        
+
         Args:
             query: Search query
             k: Number of results
             memory_type: Filter by type
             min_importance: Minimum importance
-            
+
         Returns:
             List of retrieval results ranked by relevance
         """
         all_memories = self.store.list_all()
-        
+
         # Filter
         if memory_type:
             all_memories = [m for m in all_memories if m.memory_type == memory_type]
         if min_importance:
             all_memories = [m for m in all_memories if m.importance.value >= min_importance.value]
-        
+
         # Score each memory
         results = []
         query_embedding = self._compute_embedding(query)
-        
+
         for memory in all_memories:
             # Relevance score (keyword or embedding based)
             if query_embedding and memory.embedding:
@@ -332,82 +333,82 @@ class AgentMemory:
                 content_words = set(memory.content.lower().split())
                 overlap = len(query_words & content_words)
                 relevance = overlap / max(len(query_words), 1)
-            
+
             # Importance score (normalized to 0-1)
             importance_score = memory.importance.value / 4.0
-            
+
             results.append(RetrievalResult(
                 memory=memory,
                 relevance_score=relevance,
                 recency_score=memory.recency_score,
                 importance_score=importance_score,
             ))
-        
+
         # Sort by combined score and take top k
         results.sort(key=lambda r: r.combined_score, reverse=True)
         top_results = results[:k]
-        
+
         # Mark accessed
         for result in top_results:
             result.memory.access()
             self.store.save(result.memory)
-        
+
         return top_results
-    
-    def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
+
+    def _cosine_similarity(self, vec1: list[float], vec2: list[float]) -> float:
         """Compute cosine similarity."""
         if len(vec1) != len(vec2):
             return 0.0
-        
+
         dot = sum(a * b for a, b in zip(vec1, vec2))
         mag1 = sum(x * x for x in vec1) ** 0.5
         mag2 = sum(x * x for x in vec2) ** 0.5
-        
+
         if mag1 == 0 or mag2 == 0:
             return 0.0
-        
+
         return dot / (mag1 * mag2)
-    
+
     def forget(self, memory_id: str) -> bool:
         """Remove a memory."""
         return self.store.delete(memory_id)
-    
+
     def get_context(
         self,
         query: str,
         k: int = 5,
-        format_fn: Optional[Callable[[List[Memory]], str]] = None,
+        format_fn: Callable[[list[Memory]], str] | None = None,
     ) -> str:
         """
         Get formatted context for LLM prompt.
-        
+
         Args:
             query: The query to find relevant memories for
             k: Number of memories to include
             format_fn: Optional custom formatter
-            
+
         Returns:
             Formatted string of relevant memories
         """
         results = self.recall(query, k=k)
         memories = [r.memory for r in results]
-        
+
         if format_fn:
             return format_fn(memories)
-        
+
         # Default formatting
         lines = ["Relevant memories:"]
         for i, memory in enumerate(memories, 1):
             lines.append(f"{i}. [{memory.memory_type.value}] {memory.content}")
-        
+
         return "\n".join(lines)
-    
+
     def _prune_if_needed(self) -> None:
         """Remove old memories if over limit."""
         all_memories = self.store.list_all()
         if len(all_memories) <= self.max_memories:
             return
-        
+
         # Sort by combined score (lower = more forgettable)
         scored = []
         for memory in all_memories:
@@ -417,14 +418,14 @@ class AgentMemory:
                 (memory.access_count / max(memory.access_count + 1, 1)) * 0.2
             )
             scored.append((memory, score))
-        
+
         scored.sort(key=lambda x: x[1])
-        
+
         # Remove lowest scoring
         to_remove = len(all_memories) - self.max_memories
         for memory, _ in scored[:to_remove]:
             self.store.delete(memory.id)
-    
+
     @property
     def memory_count(self) -> int:
         """Get total number of memories."""
@@ -434,7 +435,7 @@ class AgentMemory:
 # Specialized memory types
 class ConversationMemory(AgentMemory):
     """Memory optimized for conversation history."""
-    
+
     def add_turn(
         self,
         role: str,
@@ -452,11 +453,11 @@ class ConversationMemory(AgentMemory):
 
 class KnowledgeMemory(AgentMemory):
     """Memory optimized for knowledge/facts."""
-    
+
     def add_fact(
         self,
         fact: str,
-        source: Optional[str] = None,
+        source: str | None = None,
         confidence: float = 1.0,
     ) -> Memory:
         """Add a factual memory."""
@@ -470,29 +471,29 @@ class KnowledgeMemory(AgentMemory):
 
 class VectorStoreMemory(AgentMemory):
     """Memory with integrated vector store for hybrid retrieval."""
-    
+
     def __init__(
         self,
-        store: Optional[MemoryStore] = None,
+        store: MemoryStore | None = None,
         vector_store=None,  # VectorStore instance
-        embedding_fn: Optional[Callable[[str], List[float]]] = None,
+        embedding_fn: Callable[[str], list[float]] | None = None,
         max_memories: int = 10000,
         hybrid_weight: float = 0.5,  # Balance between vector and keyword
     ):
         super().__init__(store, embedding_fn, max_memories)
         self._vector_store = vector_store
         self.hybrid_weight = hybrid_weight
-    
+
     def remember(
         self,
         content: str,
         memory_type: MemoryType = MemoryType.EPISODIC,
         importance: MemoryImportance = MemoryImportance.MEDIUM,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Memory:
         """Store memory with vector indexing."""
         memory = super().remember(content, memory_type, importance, metadata)
-        
+
         # Also index in vector store
         if self._vector_store and memory.embedding:
             self._vector_store.add(
@@ -500,22 +501,22 @@ class VectorStoreMemory(AgentMemory):
                 memory.embedding,
                 {"content": content, "type": memory_type.value},
             )
-        
+
         return memory
-    
+
     def hybrid_recall(
         self,
         query: str,
         k: int = 5,
-        vector_weight: Optional[float] = None,
-    ) -> List[RetrievalResult]:
+        vector_weight: float | None = None,
+    ) -> list[RetrievalResult]:
         """Hybrid search using both vector similarity and keyword matching."""
         weight = vector_weight if vector_weight is not None else self.hybrid_weight
-        
+
         # Get keyword results
         keyword_results = self.recall(query, k=k * 2)
         keyword_scores = {r.memory.id: r.combined_score for r in keyword_results}
-        
+
         # Get vector results
         vector_scores = {}
         if self._vector_store and self.embedding_fn:
@@ -523,30 +524,30 @@ class VectorStoreMemory(AgentMemory):
             vector_results = self._vector_store.search(query_embedding, k=k * 2)
             for vr in vector_results:
                 vector_scores[vr.id] = vr.score
-        
+
         # Combine scores
         all_ids = set(keyword_scores.keys()) | set(vector_scores.keys())
         combined = []
-        
+
         for mem_id in all_ids:
             memory = self.store.get(mem_id)
             if not memory:
                 continue
-            
+
             kw_score = keyword_scores.get(mem_id, 0)
             vec_score = vector_scores.get(mem_id, 0)
             hybrid_score = (1 - weight) * kw_score + weight * vec_score
-            
+
             combined.append(RetrievalResult(
                 memory=memory,
                 relevance_score=hybrid_score,
                 recency_score=memory.recency_score,
                 importance_score=memory.importance.value / 4.0,
             ))
-        
+
         combined.sort(key=lambda r: r.combined_score, reverse=True)
         return combined[:k]
-    
+
     def forget(self, memory_id: str) -> bool:
         """Remove from both stores."""
         if self._vector_store:
@@ -556,12 +557,12 @@ class VectorStoreMemory(AgentMemory):
 
 class SummaryMemory(AgentMemory):
     """Memory that auto-summarizes old memories."""
-    
+
     def __init__(
         self,
-        store: Optional[MemoryStore] = None,
-        embedding_fn: Optional[Callable[[str], List[float]]] = None,
-        summarize_fn: Optional[Callable[[List[str]], str]] = None,
+        store: MemoryStore | None = None,
+        embedding_fn: Callable[[str], list[float]] | None = None,
+        summarize_fn: Callable[[list[str]], str] | None = None,
         max_memories: int = 1000,
         summarize_threshold: int = 100,
     ):
@@ -569,27 +570,27 @@ class SummaryMemory(AgentMemory):
         self.summarize_fn = summarize_fn
         self.summarize_threshold = summarize_threshold
         self._summary_count = 0
-    
+
     def _prune_if_needed(self) -> None:
         """Summarize old memories instead of deleting."""
         all_memories = self.store.list_all()
         if len(all_memories) <= self.summarize_threshold:
             return
-        
+
         if not self.summarize_fn:
             return super()._prune_if_needed()
-        
+
         # Get oldest memories
         sorted_mems = sorted(all_memories, key=lambda m: m.created_at)
         to_summarize = sorted_mems[:self.summarize_threshold // 2]
-        
+
         if len(to_summarize) < 5:
             return
-        
+
         # Summarize them
         contents = [m.content for m in to_summarize]
         summary = self.summarize_fn(contents)
-        
+
         # Create summary memory
         self._summary_count += 1
         self.remember(
@@ -598,7 +599,7 @@ class SummaryMemory(AgentMemory):
             importance=MemoryImportance.HIGH,
             metadata={"is_summary": True, "source_count": len(to_summarize)},
         )
-        
+
         # Delete summarized memories
         for mem in to_summarize:
             self.store.delete(mem.id)

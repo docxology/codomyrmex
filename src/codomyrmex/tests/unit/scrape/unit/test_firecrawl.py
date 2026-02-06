@@ -8,15 +8,11 @@ logic is tested with real data structures.
 import pytest
 
 from codomyrmex.scrape.config import ScrapeConfig
-from codomyrmex.scrape.core import ScrapeFormat, ScrapeOptions
 from codomyrmex.scrape.exceptions import (
     FirecrawlError,
-    ScrapeConnectionError,
-    ScrapeTimeoutError,
 )
 from codomyrmex.scrape.firecrawl.adapter import FirecrawlAdapter
 from codomyrmex.scrape.firecrawl.client import FirecrawlClient
-
 
 # Check if firecrawl-py is available
 try:

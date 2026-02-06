@@ -2,7 +2,6 @@
 Cache manager for multiple cache backends.
 """
 
-from typing import Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -21,7 +20,7 @@ class CacheManager:
         self._caches: dict[str, Cache] = {}
         self._default_backend = "in_memory"
 
-    def get_cache(self, name: str = "default", backend: Optional[str] = None) -> Cache:
+    def get_cache(self, name: str = "default", backend: str | None = None) -> Cache:
         """Get a cache instance by name.
 
         Args:

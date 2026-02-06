@@ -1,26 +1,45 @@
-# Personal AI Infrastructure - Ci Cd Automation Context
+# Personal AI Infrastructure — CI/CD Automation Module
 
-**Module**: ci_cd_automation
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Continuous integration and deployment automation for build pipelines, testing, and release workflows.
+The CI/CD Automation module provides PAI integration for continuous integration and deployment.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Pipeline Definition
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Define CI/CD pipelines:
 
-## Key Files
+```python
+from codomyrmex.ci_cd_automation import PipelineBuilder
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+pipeline = PipelineBuilder("main")
+pipeline.add_stage("lint", ["ruff check ."])
+pipeline.add_stage("test", ["pytest"])
+pipeline.add_stage("build", ["python -m build"])
+```
 
-## Future Considerations
+### Workflow Execution
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Run workflows:
+
+```python
+from codomyrmex.ci_cd_automation import WorkflowRunner
+
+runner = WorkflowRunner()
+result = runner.execute("deploy.yaml")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `PipelineBuilder` | Build pipelines |
+| `WorkflowRunner` | Run workflows |
+| `ArtifactManager` | Manage artifacts |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

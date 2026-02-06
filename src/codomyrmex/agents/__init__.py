@@ -36,45 +36,92 @@ Available submodules:
 """
 
 
-from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
-from codomyrmex.agents.claude import ClaudeClient
-from codomyrmex.agents.codex import CodexClient
-from codomyrmex.agents.droid import DroidController
-from codomyrmex.agents.every_code import EveryCodeClient
-from codomyrmex.agents.gemini import GeminiClient
-from codomyrmex.agents.jules import JulesClient
-from codomyrmex.agents.mistral_vibe import MistralVibeClient
-from codomyrmex.agents.opencode import OpenCodeClient
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-from codomyrmex.agents.theory.agent_architectures import (
-    ReactiveArchitecture,
-    DeliberativeArchitecture,
-    HybridArchitecture,
-    KnowledgeBase,
-)
+try:
+    from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
+except ImportError:
+    CodeEditor = None
+
+try:
+    from codomyrmex.agents.claude import ClaudeClient
+except ImportError:
+    ClaudeClient = None
+
+try:
+    from codomyrmex.agents.codex import CodexClient
+except ImportError:
+    CodexClient = None
+
+try:
+    from codomyrmex.agents.droid import DroidController
+except ImportError:
+    DroidController = None
+
+try:
+    from codomyrmex.agents.every_code import EveryCodeClient
+except ImportError:
+    EveryCodeClient = None
+
+try:
+    from codomyrmex.agents.gemini import GeminiClient
+except ImportError:
+    GeminiClient = None
+
+try:
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+except ImportError:
+    AgentOrchestrator = None
+
+try:
+    from codomyrmex.agents.jules import JulesClient
+except ImportError:
+    JulesClient = None
+
+try:
+    from codomyrmex.agents.mistral_vibe import MistralVibeClient
+except ImportError:
+    MistralVibeClient = None
+
+try:
+    from codomyrmex.agents.opencode import OpenCodeClient
+except ImportError:
+    OpenCodeClient = None
+
+try:
+    from codomyrmex.agents.theory.agent_architectures import (
+        DeliberativeArchitecture,
+        HybridArchitecture,
+        KnowledgeBase,
+        ReactiveArchitecture,
+    )
+except ImportError:
+    DeliberativeArchitecture = None
+    HybridArchitecture = None
+    KnowledgeBase = None
+    ReactiveArchitecture = None
 
 from .core import (
-    AgentConfig,
-    get_config,
-    reset_config,
-    set_config,
-    BaseAgent,
     AgentCapabilities,
-    AgentInterface,
+    AgentConfig,
     AgentIntegrationAdapter,
+    AgentInterface,
     AgentRequest,
     AgentResponse,
     AgentSession,
-    SessionManager,
+    BaseAgent,
+    CodeBlock,
     Message,
-    parse_json_response,
+    ParseResult,
+    SessionManager,
+    clean_response,
+    get_config,
     parse_code_blocks,
     parse_first_code_block,
+    parse_json_response,
     parse_structured_output,
-    CodeBlock,
-    ParseResult,
-    clean_response,
+    reset_config,
+    set_config,
 )
+
 # Lazy imports for submodules that may not be installed yet
 try:
     from .o1 import O1Client
@@ -111,17 +158,35 @@ try:
 except ImportError:
     InfrastructureAgent = None
 
-from .git_agent import GitAgent
-from .generic import APIAgentBase, CLIAgentBase
-from .exceptions import (
-    AgentError,
-    AgentTimeoutError,
-    AgentConfigurationError,
-    ExecutionError,
-    ToolError,
-    ContextError,
-    SessionError,
-)
+try:
+    from .exceptions import (
+        AgentConfigurationError,
+        AgentError,
+        AgentTimeoutError,
+        ContextError,
+        ExecutionError,
+        SessionError,
+        ToolError,
+    )
+except ImportError:
+    AgentConfigurationError = None
+    AgentError = None
+    AgentTimeoutError = None
+    ContextError = None
+    ExecutionError = None
+    SessionError = None
+    ToolError = None
+
+try:
+    from .generic import APIAgentBase, CLIAgentBase
+except ImportError:
+    APIAgentBase = None
+    CLIAgentBase = None
+
+try:
+    from .git_agent import GitAgent
+except ImportError:
+    GitAgent = None
 
 __all__ = [
     "AgentInterface",

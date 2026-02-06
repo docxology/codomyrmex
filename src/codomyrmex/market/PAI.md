@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Market Context
+# Personal AI Infrastructure — Market Module
 
-**Module**: market
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Anonymous economic coordination with reverse auctions and demand aggregation for collective bargaining, using persona-based anonymity.
+The Market module provides PAI integration for market data and trading.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Market Data
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Fetch market data:
 
-## Key Files
+```python
+from codomyrmex.market import MarketData
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+data = MarketData()
+price = data.get_price("BTC/USD")
+history = data.get_history("ETH/USD", period="1d")
+```
 
-## Future Considerations
+### Trading Operations
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performance metrics.
+Execute trades:
+
+```python
+from codomyrmex.market import TradingClient
+
+client = TradingClient()
+order = client.place_order(
+    symbol="BTC/USD", side="buy", amount=0.1
+)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `MarketData` | Fetch prices |
+| `TradingClient` | Execute trades |
+| `Portfolio` | Track positions |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

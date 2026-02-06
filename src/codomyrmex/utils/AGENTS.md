@@ -1,30 +1,71 @@
-# Codomyrmex Agents — src/codomyrmex/utils
+# Agent Guidelines - Utils
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Common utility functions: subprocess, JSON, file handling, retry, hashing.
 
-Shared utility functions and helpers used across all Codomyrmex modules. Provides common operations for file handling, string manipulation, and data processing.
+## Key Functions
 
-## Active Components
+- **run_command(cmd)** — Execute shell command
+- **safe_json_loads/dumps** — Safe JSON parsing
+- **ensure_directory(path)** — Create directory if needed
+- **hash_file(path)** — Hash file contents
+- **retry(max_attempts)** — Retry decorator
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `cli_helpers.py` – Project file
-- `refined.py` – Project file
-- `script_base.py` – Project file
-- `subprocess.py` – Project file
+## Agent Instructions
 
-## Operating Contracts
+1. **Use safe JSON** — Always use `safe_json_loads` for untrusted input
+2. **Retry transients** — Use `@retry()` for network calls
+3. **Hash for verification** — Use `hash_file` for integrity
+4. **Get env safely** — Use `get_env(key, required=True)`
+5. **Time operations** — Use `@timing_decorator` for monitoring
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.utils import (
+    run_command, safe_json_loads, ensure_directory,
+    hash_file, retry, get_env, deep_merge
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Execute command safely
+result = run_command(["git", "status"])
+if result.success:
+    print(result.stdout)
+
+# Parse JSON with fallback
+data = safe_json_loads(response.text, default={})
+
+# Ensure output directory
+output_dir = ensure_directory("./output/reports")
+
+# Retry with exponential backoff
+@retry(max_attempts=3, delay=1.0, backoff=2.0)
+def call_api():
+    return requests.get(url)
+
+# Merge configs
+config = deep_merge(defaults, user_overrides)
+```
+
+## Testing Patterns
+
+```python
+# Verify safe JSON
+result = safe_json_loads("invalid", default=None)
+assert result is None
+
+# Verify retry
+attempts = []
+@retry(max_attempts=3)
+def flaky():
+    attempts.append(1)
+    if len(attempts) < 3:
+        raise ValueError()
+    return "ok"
+assert flaky() == "ok"
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

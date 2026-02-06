@@ -6,9 +6,7 @@ documentation templates, and dynamic content.
 """
 
 # Submodule exports - import first to make available
-from . import engines
-from . import filters
-from . import context
+from . import context, engines, filters
 
 # Try to import optional submodules
 try:
@@ -50,24 +48,24 @@ def get_default_engine(engine_type: str = "jinja2"):
 def render(template: str, context: dict = None, engine: str = "jinja2") -> str:
     """
     Render a template string with context data.
-    
+
     This is a convenience function that uses the default template engine.
-    
+
     Args:
         template: Template string (e.g., "Hello {{ name }}!")
         context: Dictionary of data to pass to template
         engine: Template engine to use ('jinja2' or 'mako')
-    
+
     Returns:
         Rendered string
-    
+
     Example:
         >>> render("Hello {{ name }}!", {"name": "World"})
         'Hello World!'
     """
     if context is None:
         context = {}
-    
+
     eng = get_default_engine(engine)
     return eng.render(template, context)
 
@@ -75,18 +73,18 @@ def render(template: str, context: dict = None, engine: str = "jinja2") -> str:
 def render_file(path: str, context: dict = None, engine: str = "jinja2") -> str:
     """
     Load and render a template file.
-    
+
     Args:
         path: Path to template file
         context: Dictionary of data to pass to template
         engine: Template engine to use ('jinja2' or 'mako')
-    
+
     Returns:
         Rendered string
     """
     if context is None:
         context = {}
-    
+
     eng = get_default_engine(engine)
     template = eng.load_template(path)
     return template.render(context)

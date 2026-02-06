@@ -7,17 +7,13 @@ to secure execution in the sandbox environment, ensuring that generated code
 executes correctly and safely.
 """
 
+
 import pytest
-import tempfile
-import os
-import json
-from pathlib import Path
-from typing import Dict, Any, List
 
 try:
     from codomyrmex.agents.ai_code_editing import generate_code_snippet
-    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
     setup_logging = None
@@ -274,7 +270,7 @@ def broken_function(
         assert total_time < 10  # Less than 10 seconds for the whole workflow
         if result["status"] == "setup_error" and "docker" in result.get("error_message", "").lower():
             pytest.skip("Docker not available")
-            
+
         assert result["status"] == "success"
         assert result["execution_time"] < 5  # Code execution itself should be fast
 

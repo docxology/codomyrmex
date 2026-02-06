@@ -1,6 +1,6 @@
 """Custom exceptions for the data_visualization module."""
 
-from codomyrmex.exceptions import VisualizationError, PlottingError
+from codomyrmex.exceptions import PlottingError, VisualizationError
 
 
 class DataVisualizationError(VisualizationError):

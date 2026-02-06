@@ -1,34 +1,47 @@
-# spatial
+# Spatial Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+3D/4D spatial modeling, coordinates, physics, and rendering.
 
-Spatial modeling module providing 3D geometry, 4D Synergetics (Buckminster Fuller-inspired tetrahedral coordinate systems), and world model capabilities. Organized into six submodules: `three_d` for standard 3D mesh and geometry operations, `four_d` for Synergetics-based 4D coordinate transformations, `world_models` for environmental and scene representations, `coordinates` for coordinate system conversions, `rendering` for visualization and rendering pipelines, and `physics` for spatial physics simulation.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.spatial import three_d, four_d, coordinates, physics, rendering
 
-### Submodules
+# 3D modeling
+from codomyrmex.spatial.three_d import Mesh, Vec3, Quaternion
 
-- **`three_d`** -- 3D geometry, mesh operations, and spatial transformations
-- **`four_d`** -- Synergetics-based 4D modeling using tetrahedral coordinate systems
-- **`world_models`** -- Environmental and scene representation models
-- **`coordinates`** -- Coordinate system definitions and conversions (Cartesian, spherical, tetrahedral)
-- **`rendering`** -- Visualization and rendering pipeline utilities
-- **`physics`** -- Spatial physics simulation (collision, forces, constraints)
+mesh = Mesh.cube(size=1.0)
+mesh.translate(Vec3(1, 0, 0))
+mesh.rotate(Quaternion.from_euler(45, 0, 0))
 
-## Directory Contents
+# Coordinate systems
+from codomyrmex.spatial.coordinates import GeoCoordinate, ScreenCoordinate
 
-- `__init__.py` - Module entry point exporting all six submodules
-- `three_d/` - 3D geometry and mesh operations
-- `four_d/` - Synergetics 4D coordinate systems and transformations
-- `world_models/` - Scene and environment model definitions
-- `coordinates/` - Coordinate system conversions and utilities
-- `rendering/` - Rendering pipeline and visualization
-- `physics/` - Physics simulation for spatial objects
+geo = GeoCoordinate(lat=37.7749, lon=-122.4194, alt=0)
+screen = geo.to_screen(projection="mercator")
+
+# Physics simulation
+from codomyrmex.spatial.physics import RigidBody, World
+
+world = World(gravity=Vec3(0, -9.81, 0))
+body = RigidBody(mass=1.0, position=Vec3(0, 10, 0))
+world.add(body)
+world.step(dt=0.016)
+```
+
+## Submodules
+
+| Module | Description |
+|--------|-------------|
+| `three_d` | 3D geometry, meshes, vectors, quaternions |
+| `four_d` | 4D Synergetics modeling |
+| `coordinates` | Coordinate systems and projections |
+| `rendering` | Visualization and rendering |
+| `physics` | Physics simulation and rigid bodies |
+| `world_models` | Spatial world representations |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/spatial/](../../../docs/modules/spatial/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

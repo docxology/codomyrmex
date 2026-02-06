@@ -1,28 +1,8 @@
-from pathlib import Path
-from typing import Dict, List
 import argparse
 import re
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Fix navigation links in AGENTS.md files that point to non-existent files.
@@ -40,7 +20,7 @@ class NavigationLinkFixer:
         self.repo_root = repo_root
         self.fixed_count = 0
 
-    def get_repo_structure(self) -> Dict[str, List[str]]:
+    def get_repo_structure(self) -> dict[str, list[str]]:
         """Get the repository structure for validation."""
         structure = {}
         for path in self.repo_root.rglob('*'):
@@ -137,7 +117,7 @@ class NavigationLinkFixer:
         self.fixed_count += 1
         return True
 
-    def fix_all_navigation_links(self, dry_run: bool = True) -> Dict:
+    def fix_all_navigation_links(self, dry_run: bool = True) -> dict:
         """Fix navigation links in all AGENTS.md files."""
         agents_files = list(self.repo_root.rglob("AGENTS.md"))
 

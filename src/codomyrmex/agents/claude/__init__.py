@@ -41,7 +41,7 @@ Example:
 Version: v0.2.0
 """
 
-from .claude_client import ClaudeClient, CLAUDE_PRICING
+from .claude_client import CLAUDE_PRICING, ClaudeClient
 from .claude_integration import ClaudeIntegrationAdapter
 
 __all__ = [

@@ -1,133 +1,31 @@
-from typing import Dict, List, Any, Optional, Callable
+import importlib
 import inspect
 import logging
 import os
-import os
-import os
-import tempfile
 import tempfile
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-import docker
-import importlib
-import matplotlib
+from typing import Any
+
+try:
+    import docker
+    HAS_DOCKER = True
+except ImportError:
+    HAS_DOCKER = False
+    docker = None
 
 from codomyrmex.coding.execution.executor import execute_code
 from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 from codomyrmex.git_operations.core.git import check_git_availability
-from codomyrmex.logging_monitoring.logger_config import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-from codomyrmex.logging_monitoring.logger_config import log_with_context
+from codomyrmex.logging_monitoring.logger_config import (
+    get_logger,
+    log_with_context,
+)
 from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
-from codomyrmex.performance import profile_function
-from codomyrmex.performance import profile_function, get_system_metrics
+from codomyrmex.performance import get_system_metrics, profile_function
 from codomyrmex.security.digital import analyze_file_security
 from codomyrmex.static_analysis import analyze_file
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Health Checker for Codomyrmex System Discovery
@@ -160,13 +58,13 @@ class HealthCheckResult:
     module_name: str
     status: HealthStatus
     timestamp: float = field(default_factory=time.time)
-    checks_performed: List[str] = field(default_factory=list)
-    issues: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
-    metrics: Dict[str, Any] = field(default_factory=dict)
-    dependencies: Dict[str, HealthStatus] = field(default_factory=dict)
+    checks_performed: list[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    dependencies: dict[str, HealthStatus] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
         return {
             "module_name": self.module_name,
@@ -179,7 +77,7 @@ class HealthCheckResult:
             "dependencies": {k: v.value for k, v in self.dependencies.items()}
         }
 
-    def add_issue(self, issue: str, recommendation: Optional[str] = None) -> None:
+    def add_issue(self, issue: str, recommendation: str | None = None) -> None:
         """Add an issue with optional recommendation."""
         self.issues.append(issue)
         if recommendation:
@@ -524,7 +422,7 @@ class HealthChecker:
     def _check_ollama_integration(self, result: HealthCheckResult) -> None:
         """Check Ollama integration module health."""
         result.checks_performed.append("llm_availability")
-        
+
         try:
             # Check if LLM module is available
             importlib.import_module("codomyrmex.llm")

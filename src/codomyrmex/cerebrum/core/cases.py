@@ -1,7 +1,6 @@
-from typing import Any, Optional
-
 from dataclasses import dataclass, field
-import numpy as np
+from typing import Any
+
 
 from codomyrmex.cerebrum.core.exceptions import CaseNotFoundError, InvalidCaseError
 from codomyrmex.cerebrum.core.utils import (
@@ -27,7 +26,7 @@ class Case:
     case_id: str
     features: dict[str, Any]
     context: dict[str, Any] = field(default_factory=dict)
-    outcome: Optional[Any] = None
+    outcome: Any | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):

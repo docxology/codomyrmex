@@ -1,33 +1,6 @@
 from typing import Any
 
-from codomyrmex.agents.core import AgentIntegrationAdapter
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.agents.core import AgentRequest
-from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 
 """Gemini integration adapters for Codomyrmex modules."""
 
@@ -58,7 +31,7 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
             context["files"] = kwargs["files"]
         if "directories" in kwargs:
             context["directories"] = kwargs["directories"]
-        
+
         # Forward multimodal data if present
         if "images" in kwargs:
             context["images"] = kwargs["images"]
@@ -109,7 +82,7 @@ class GeminiIntegrationAdapter(AgentIntegrationAdapter):
             Completion result dictionary
         """
 
-        # Convert messages to prompt (naive implementation for now, 
+        # Convert messages to prompt (naive implementation for now,
         # ideally we should map to history or structured content if supported)
         prompt_parts = []
         for msg in messages:

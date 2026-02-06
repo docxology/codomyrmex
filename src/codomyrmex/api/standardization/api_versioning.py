@@ -4,12 +4,13 @@ This module provides API versioning capabilities with version management,
 backward compatibility, and migration support.
 """
 
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Callable, Union, Type
 import logging
 import re
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -68,9 +69,9 @@ class APIVersion:
     release_date: datetime
     description: str = ""
     deprecated: bool = False
-    deprecated_date: Optional[datetime] = None
-    breaking_changes: List[str] = field(default_factory=list)
-    features: List[str] = field(default_factory=list)
+    deprecated_date: datetime | None = None
+    breaking_changes: list[str] = field(default_factory=list)
+    features: list[str] = field(default_factory=list)
 
     def __post_init__(self):
         """Validate version format."""
@@ -129,12 +130,12 @@ class APIVersion:
 class VersionedEndpoint:
     """Represents a versioned API endpoint."""
     path: str
-    versions: Dict[str, Callable]  # version -> handler
+    versions: dict[str, Callable]  # version -> handler
     default_version: str
-    supported_methods: List[str] = field(default_factory=list)
-    deprecated_versions: List[str] = field(default_factory=list)
+    supported_methods: list[str] = field(default_factory=list)
+    deprecated_versions: list[str] = field(default_factory=list)
 
-    def get_handler(self, version: Optional[str] = None) -> Callable:
+    def get_handler(self, version: str | None = None) -> Callable:
         """
         Get the handler for a specific version.
 
@@ -194,10 +195,10 @@ class APIVersionManager:
         """
         self.default_version = default_version
         self.version_format = version_format
-        self.versions: Dict[str, APIVersion] = {}
-        self.endpoints: Dict[str, VersionedEndpoint] = {}
+        self.versions: dict[str, APIVersion] = {}
+        self.endpoints: dict[str, VersionedEndpoint] = {}
         self.version_headers = ["X-API-Version", "X-Version"]
-        self.migration_rules: Dict[str, Dict[str, Callable]] = {}  # from_version -> {to_version: migrator}
+        self.migration_rules: dict[str, dict[str, Callable]] = {}  # from_version -> {to_version: migrator}
 
         # Register default version
         self.register_version(APIVersion(
@@ -222,7 +223,7 @@ class APIVersionManager:
         self.versions[version.version] = version
         logger.info(f"Registered API version: {version}")
 
-    def get_version(self, version_str: str) -> Optional[APIVersion]:
+    def get_version(self, version_str: str) -> APIVersion | None:
         """
         Get a version by string.
 
@@ -234,7 +235,7 @@ class APIVersionManager:
         """
         return self.versions.get(version_str)
 
-    def get_supported_versions(self) -> List[APIVersion]:
+    def get_supported_versions(self) -> list[APIVersion]:
         """
         Get all supported versions.
 
@@ -257,7 +258,7 @@ class APIVersionManager:
         versions = list(self.versions.values())
         return max(versions, key=lambda v: v.version) # type: ignore
 
-    def parse_version_from_request(self, headers: Dict[str, str], query_params: Dict[str, List[str]]) -> str:
+    def parse_version_from_request(self, headers: dict[str, str], query_params: dict[str, list[str]]) -> str:
         """
         Parse API version from request headers or query parameters.
 
@@ -309,7 +310,7 @@ class APIVersionManager:
         self.endpoints[endpoint.path] = endpoint
         logger.debug(f"Registered versioned endpoint: {endpoint.path}")
 
-    def get_endpoint(self, path: str, version: Optional[str] = None) -> Optional[VersionedEndpoint]:
+    def get_endpoint(self, path: str, version: str | None = None) -> VersionedEndpoint | None:
         """
         Get a versioned endpoint.
 
@@ -383,7 +384,7 @@ class APIVersionManager:
 
         return migrated_data
 
-    def get_version_info(self) -> Dict[str, Any]:
+    def get_version_info(self) -> dict[str, Any]:
         """
         Get information about all versions.
 

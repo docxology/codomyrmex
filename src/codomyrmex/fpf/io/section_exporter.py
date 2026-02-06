@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Section exporter for FPF sections.
 
 
@@ -9,9 +9,8 @@ and concept clusters to separate JSON files.
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional
 
-from ..core.models import Pattern, Concept, Relationship
+from ..core.models import Concept, Pattern, Relationship
 from .section_manager import SectionManager
 
 
@@ -56,7 +55,7 @@ class SectionExporter:
 
     def export_pattern_group(
         self,
-        pattern_ids: List[str],
+        pattern_ids: list[str],
         output_path: Path,
         include_dependencies: bool = True,
         include_metadata: bool = True,
@@ -116,7 +115,7 @@ class SectionExporter:
 
     def export_concept_cluster(
         self,
-        concept_names: List[str],
+        concept_names: list[str],
         output_path: Path,
         include_related_patterns: bool = True,
         include_metadata: bool = True,
@@ -149,7 +148,7 @@ class SectionExporter:
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
 
-    def export_all_parts(self, output_dir: Path, include_metadata: bool = True) -> List[Path]:
+    def export_all_parts(self, output_dir: Path, include_metadata: bool = True) -> list[Path]:
         """Export all parts to separate JSON files.
 
         Args:
@@ -169,7 +168,7 @@ class SectionExporter:
 
         return exported_paths
 
-    def _pattern_to_dict(self, pattern: Pattern) -> Dict[str, any]:
+    def _pattern_to_dict(self, pattern: Pattern) -> dict[str, any]:
         """Convert Pattern to dictionary."""
         return {
             "id": pattern.id,
@@ -185,7 +184,7 @@ class SectionExporter:
             "cluster": pattern.cluster,
         }
 
-    def _concept_to_dict(self, concept: Concept) -> Dict[str, any]:
+    def _concept_to_dict(self, concept: Concept) -> dict[str, any]:
         """Convert Concept to dictionary."""
         return {
             "name": concept.name,
@@ -197,7 +196,7 @@ class SectionExporter:
             "metadata": concept.metadata,
         }
 
-    def _relationship_to_dict(self, relationship: Relationship) -> Dict[str, any]:
+    def _relationship_to_dict(self, relationship: Relationship) -> dict[str, any]:
         """Convert Relationship to dictionary."""
         return {
             "source": relationship.source,

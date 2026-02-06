@@ -7,17 +7,19 @@ detects performance regressions by comparing current performance against
 historical baselines.
 """
 
-import pytest
-import time
 import statistics
-from typing import Dict, Any, List, Callable
+import time
 from dataclasses import dataclass
+from typing import Any
+from collections.abc import Callable
+
+import pytest
 
 # Import modules for performance testing
 MODULE_AVAILABILITY = {}
 
 try:
-    from codomyrmex.coding import execute_code, execute_with_limits, ExecutionLimits
+    from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
     MODULE_AVAILABILITY["code_execution"] = True
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
@@ -47,7 +49,11 @@ except ImportError:
     MODULE_AVAILABILITY["data_visualization"] = False
 
 try:
-    from codomyrmex.performance import profile_function, run_benchmark, PerformanceProfiler
+    from codomyrmex.performance import (
+        PerformanceProfiler,
+        profile_function,
+        run_benchmark,
+    )
     MODULE_AVAILABILITY["performance"] = True
 except ImportError:
     MODULE_AVAILABILITY["performance"] = False
@@ -59,7 +65,7 @@ except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import setup_logging, get_logger
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -73,7 +79,7 @@ class PerformanceBaseline:
     baseline_time: float  # seconds
     baseline_memory: float  # MB
     tolerance_percent: float = 50.0  # Allow 50% degradation before flagging
-    measurements: List[float] = None
+    measurements: list[float] = None
 
     def __post_init__(self):
         if self.measurements is None:
@@ -89,14 +95,14 @@ class PerformanceResult:
     cpu_usage: float = 0.0
     status: str = "success"  # "success", "failed", "timeout"
     regression_detected: bool = False
-    baseline_comparison: Dict[str, Any] = None
+    baseline_comparison: dict[str, Any] = None
 
 
 class PerformanceBaselineManager:
     """Manages performance baselines and regression detection."""
 
     def __init__(self):
-        self.baselines: Dict[str, PerformanceBaseline] = {}
+        self.baselines: dict[str, PerformanceBaseline] = {}
         self._load_baselines()
 
     def _load_baselines(self):
@@ -127,7 +133,7 @@ class PerformanceBaselineManager:
         }
 
     def check_regression(self, operation: str, execution_time: float,
-                        memory_usage: float) -> Dict[str, Any]:
+                        memory_usage: float) -> dict[str, Any]:
         """Check if performance regressed against baseline."""
         if operation not in self.baselines:
             return {"regression": False, "reason": "no_baseline"}
@@ -159,13 +165,14 @@ class PerformanceTestSuite:
 
     def __init__(self, baseline_manager: PerformanceBaselineManager = None):
         self.baseline_manager = baseline_manager or PerformanceBaselineManager()
-        self.results: List[PerformanceResult] = []
+        self.results: list[PerformanceResult] = []
 
     def run_performance_test(self, operation_name: str, test_function: Callable,
                            iterations: int = 5, warmup_iterations: int = 2) -> PerformanceResult:
         """Run a performance test and return results."""
-        import psutil
         import os
+
+        import psutil
 
         # Warmup iterations
         for _ in range(warmup_iterations):
@@ -233,7 +240,7 @@ class PerformanceTestSuite:
         self.results.append(result)
         return result
 
-    def get_summary_report(self) -> Dict[str, Any]:
+    def get_summary_report(self) -> dict[str, Any]:
         """Generate a summary report of all performance tests."""
         if not self.results:
             return {"status": "no_tests_run"}

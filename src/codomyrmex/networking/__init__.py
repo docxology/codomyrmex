@@ -4,24 +4,27 @@ Networking module for Codomyrmex.
 This module provides HTTP client utilities, WebSocket support, and API client generation.
 """
 
-from .http_client import HTTPClient, Response
-from .websocket_client import WebSocketClient
-from .ssh_sftp import SSHClient
-from .raw_sockets import TCPClient, TCPServer, UDPClient, PortScanner
+# Re-export base NetworkError from main exceptions module
+from codomyrmex.exceptions import NetworkError
+
 from .exceptions import (
     ConnectionError,
-    NetworkTimeoutError,
-    SSLError,
-    HTTPError,
     DNSResolutionError,
-    WebSocketError,
+    HTTPError,
+    NetworkTimeoutError,
     ProxyError,
     RateLimitError,
     SSHError,
+    SSLError,
+    WebSocketError,
 )
-
-# Re-export base NetworkError from main exceptions module
-from codomyrmex.exceptions import NetworkError
+from .http_client import HTTPClient, Response
+from .raw_sockets import PortScanner, TCPClient, TCPServer, UDPClient
+try:
+    from .ssh_sftp import SSHClient
+except ImportError:
+    SSHClient = None
+from .websocket_client import WebSocketClient
 
 __all__ = [
     # Core classes

@@ -1,10 +1,7 @@
-from typing import Any, Dict, Optional
 import time
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
 
 """
 Execution Monitoring
@@ -35,7 +32,7 @@ class ExecutionMonitor:
         })
         logger.info(f"Started execution {execution_id} ({language})")
 
-    def end_execution(self, execution_id: str, status: str, result: Optional[Dict[str, Any]] = None) -> None:
+    def end_execution(self, execution_id: str, status: str, result: dict[str, Any] | None = None) -> None:
         """End tracking an execution."""
         self.end_time = time.time()
         execution_time = self.end_time - self.start_time if self.start_time else 0
@@ -51,7 +48,7 @@ class ExecutionMonitor:
 
         logger.info(f"Ended execution {execution_id} ({status}) in {execution_time:.3f}s")
 
-    def get_execution_stats(self) -> Dict[str, Any]:
+    def get_execution_stats(self) -> dict[str, Any]:
         """Get statistics about all tracked executions."""
         if not self.executions:
             return {

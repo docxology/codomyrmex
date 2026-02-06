@@ -10,7 +10,7 @@ import threading
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any
 
 try:
     import psutil
@@ -24,8 +24,6 @@ except ImportError:
     psutil = _DummyPSUtil()
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
 
 logger = get_logger(__name__)
 
@@ -97,9 +95,9 @@ def execute_with_limits(
     language: str,
     code: str,
     limits: ExecutionLimits,
-    stdin: Optional[str] = None,
-    session_id: Optional[str] = None,
-) -> Dict[str, Any]:
+    stdin: str | None = None,
+    session_id: str | None = None,
+) -> dict[str, Any]:
     """
     Execute code with resource limits and monitoring.
 
@@ -160,8 +158,8 @@ def sandbox_process_isolation(
     language: str,
     code: str,
     limits: ExecutionLimits,
-    stdin: Optional[str] = None,
-) -> Dict[str, Any]:
+    stdin: str | None = None,
+) -> dict[str, Any]:
     """
     Execute code in a completely isolated process environment.
 

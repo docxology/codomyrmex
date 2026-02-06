@@ -4,7 +4,6 @@ This module defines the interface that all TTS providers must implement.
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from ..models import SynthesisResult, TTSConfig, VoiceInfo
 
@@ -36,7 +35,7 @@ class TTSProvider(ABC):
     def synthesize(
         self,
         text: str,
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
     ) -> SynthesisResult:
         """Synthesize speech from text.
 
@@ -57,7 +56,7 @@ class TTSProvider(ABC):
     async def synthesize_async(
         self,
         text: str,
-        config: Optional[TTSConfig] = None,
+        config: TTSConfig | None = None,
     ) -> SynthesisResult:
         """Synthesize speech asynchronously.
 
@@ -73,7 +72,7 @@ class TTSProvider(ABC):
     @abstractmethod
     def list_voices(
         self,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> list[VoiceInfo]:
         """List available voices.
 
@@ -86,7 +85,7 @@ class TTSProvider(ABC):
         pass
 
     @abstractmethod
-    def get_voice(self, voice_id: str) -> Optional[VoiceInfo]:
+    def get_voice(self, voice_id: str) -> VoiceInfo | None:
         """Get information about a specific voice.
 
         Args:

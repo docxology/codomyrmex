@@ -30,9 +30,7 @@ Quick Start:
 __version__ = "0.1.0"
 
 # Lazy imports to avoid pulling in heavy dependencies at module level
-from . import network
-from . import hardware
-from . import software
+from . import hardware, network, software
 
 # PDF submodule uses optional dependencies
 try:

@@ -4,16 +4,30 @@ Unit Tests for Event-Driven Architecture
 Tests for the event system components including EventBus, EventEmitter, EventListener, and EventLogger.
 """
 
-import pytest
-import time
 import asyncio
+import time
 from datetime import datetime, timedelta
 
-from codomyrmex.events.event_schema import Event, EventType, EventPriority, EventSchema
-from codomyrmex.events.event_bus import EventBus, get_event_bus, publish_event, subscribe_to_events, unsubscribe_from_events
+import pytest
+
+from codomyrmex.events.event_bus import (
+    EventBus,
+    get_event_bus,
+    publish_event,
+)
 from codomyrmex.events.event_emitter import EventEmitter
-from codomyrmex.events.event_listener import EventListener, AutoEventListener, event_handler, create_listener, create_auto_listener
-from codomyrmex.events.event_logger import EventLogger, EventLogEntry, get_event_logger, log_event_to_monitoring, get_event_stats, get_recent_events, export_event_logs, generate_performance_report
+from codomyrmex.events.event_listener import (
+    AutoEventListener,
+    EventListener,
+    create_auto_listener,
+    create_listener,
+    event_handler,
+)
+from codomyrmex.events.event_logger import (
+    EventLogger,
+    get_event_logger,
+)
+from codomyrmex.events.event_schema import Event, EventPriority, EventSchema, EventType
 
 
 class TestEventSchema:
@@ -179,15 +193,15 @@ class TestEventEmitter:
         # Use real event bus
         bus = get_event_bus()
         emitter = EventEmitter("test_emitter")
-        
+
         # Track events
         received_events = []
         def handler(event):
             received_events.append(event)
-        
+
         # Subscribe to events
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "test_handler")
-        
+
         # Emit event with required fields for validation
         emitter.emit(EventType.SYSTEM_STARTUP, data={"message": "test", "version": "1.0.0"})
 
@@ -202,14 +216,14 @@ class TestEventEmitter:
         """Test synchronous and asynchronous event emission with real event bus."""
         bus = get_event_bus()
         emitter = EventEmitter("test_emitter")
-        
+
         # Track events
         received_events = []
         def handler(event):
             received_events.append(event)
-        
+
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "test_handler")
-        
+
         # Sync emit
         emitter.emit_sync(EventType.SYSTEM_STARTUP)
         assert len(received_events) == 1
@@ -225,7 +239,7 @@ class TestEventListener:
     def test_event_listener_registration(self):
         """Test registering event handlers with real event bus."""
         listener = EventListener("test_listener")
-        
+
         received_events = []
         def handler(event):
             received_events.append(event)
@@ -240,14 +254,14 @@ class TestEventListener:
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         bus = get_event_bus()
         bus.publish(event)
-        
+
         # Handler should have been called
         assert len(received_events) >= 0  # May be 0 if subscription didn't work, but shouldn't error
 
     def test_event_listener_unregistration(self):
         """Test unregistering event handlers with real event bus."""
         listener = EventListener("test_listener")
-        
+
         received_events = []
         def handler(event):
             received_events.append(event)
@@ -274,7 +288,7 @@ class TestEventListener:
         # Publish events
         event = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         bus = get_event_bus()
-        
+
         # First publish should trigger handler
         bus.publish(event)
         # Handler may be called, but we can't easily verify one-time behavior without internal access
@@ -283,7 +297,7 @@ class TestEventListener:
     def test_convenience_listeners(self):
         """Test convenience methods for listening to event groups with real event bus."""
         listener = EventListener("test_listener")
-        
+
         def handler(event):
             pass
 
@@ -393,17 +407,17 @@ class TestEventLogger:
         # Log events at different times
         event1 = Event(event_type=EventType.SYSTEM_STARTUP, source="test")
         event2 = Event(event_type=EventType.ANALYSIS_START, source="test")
-        
+
         # Log events with a small delay
         self.logger.log_event(event1)
         time.sleep(0.01)  # Small delay to ensure different timestamps
         self.logger.log_event(event2)
-        
+
         # Get events in a time range that includes both
         start_time = datetime.now() - timedelta(seconds=1)
         end_time = datetime.now() + timedelta(seconds=1)
         events_in_range = self.logger.get_events_in_time_range(start_time, end_time)
-        
+
         # Should have at least the events we just logged
         assert len(events_in_range) >= 0
 
@@ -473,7 +487,7 @@ class TestGlobalFunctions:
         received_events = []
         def handler(event):
             received_events.append(event)
-        
+
         bus = get_event_bus()
         bus.subscribe([EventType.SYSTEM_STARTUP], handler, "test_handler")
 

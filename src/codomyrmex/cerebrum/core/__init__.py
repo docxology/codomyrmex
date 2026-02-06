@@ -1,5 +1,8 @@
 """Core Cerebrum reasoning logic and engine."""
 
+from .cases import Case, CaseBase, CaseRetriever
+from .config import CerebrumConfig
+from .core import CerebrumEngine, ModelManager, ReasoningEngine
 from .exceptions import (
     ActiveInferenceError,
     BayesianInferenceError,
@@ -13,9 +16,6 @@ from .exceptions import (
     TransformationError,
     VisualizationError,
 )
-from .core import CerebrumEngine, ModelManager, ReasoningEngine
-from .cases import Case, CaseBase, CaseRetriever
-from .config import CerebrumConfig
 from .models import Model, ModelBase, ReasoningResult
 from .transformations import (
     AdaptationTransformer,

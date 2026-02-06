@@ -1,19 +1,12 @@
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Optional
 import json
-
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """
 This module provides configuration deployment, environment management,
@@ -58,12 +51,12 @@ class ConfigDeployment:
     deployed_by: str
     config_files: list[str]
     changes: dict[str, Any]
-    rollback_info: Optional[dict[str, Any]] = None
+    rollback_info: dict[str, Any] | None = None
 
 class ConfigurationDeployer:
     """Configuration deployment and environment management system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize configuration deployer.
 
         Args:
@@ -87,7 +80,7 @@ class ConfigurationDeployer:
         name: str,
         env_type: EnvironmentType,
         config_path: str,
-        variables: Optional[dict[str, str]] = None
+        variables: dict[str, str] | None = None
     ) -> Environment:
         """Create a deployment environment.
 
@@ -288,7 +281,7 @@ class ConfigurationDeployer:
         # For now, just log the operation
         logger.info(f"Executing rollback for deployment {deployment.deployment_id}")
 
-    def get_deployment_status(self, deployment_id: str) -> Optional[ConfigDeployment]:
+    def get_deployment_status(self, deployment_id: str) -> ConfigDeployment | None:
         """Get status of a configuration deployment.
 
         Args:
@@ -299,7 +292,7 @@ class ConfigurationDeployer:
         """
         return self._deployments.get(deployment_id)
 
-    def list_deployments(self, environment: Optional[str] = None) -> list[ConfigDeployment]:
+    def list_deployments(self, environment: str | None = None) -> list[ConfigDeployment]:
         """List configuration deployments.
 
         Args:
@@ -318,7 +311,7 @@ class ConfigurationDeployer:
 
         return deployments
 
-    def get_environment_config(self, environment_name: str) -> Optional[Environment]:
+    def get_environment_config(self, environment_name: str) -> Environment | None:
         """Get environment configuration.
 
         Args:

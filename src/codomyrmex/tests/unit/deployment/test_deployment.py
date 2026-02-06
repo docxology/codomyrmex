@@ -1,8 +1,16 @@
 """Unit tests for deployment module."""
 
-import pytest
 from unittest.mock import MagicMock, patch
-from codomyrmex.deployment import DeploymentManager, CanaryStrategy, BlueGreenStrategy, GitOpsSynchronizer
+
+import pytest
+
+from codomyrmex.deployment import (
+    BlueGreenStrategy,
+    CanaryStrategy,
+    DeploymentManager,
+    GitOpsSynchronizer,
+)
+
 
 @pytest.mark.unit
 def test_canary_deployment():

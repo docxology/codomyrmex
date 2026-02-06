@@ -1,9 +1,10 @@
 """Unit tests for ai_code_editing module."""
 
 import os
-import pytest
 import signal
 import sys
+
+import pytest
 
 # Guard against hanging imports (google.genai init blocks in sandbox)
 _AI_CODE_HELPERS_AVAILABLE = False
@@ -207,7 +208,7 @@ class TestAICodeEditing:
         # Test with invalid API key to trigger error
         original_key = os.environ.get("OPENAI_API_KEY")
         os.environ["OPENAI_API_KEY"] = "invalid-key-for-testing"
-        
+
         try:
             # Should raise RuntimeError when API call fails
             with pytest.raises(RuntimeError) as exc_info:

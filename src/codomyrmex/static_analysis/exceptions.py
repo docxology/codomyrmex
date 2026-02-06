@@ -4,7 +4,7 @@ This module defines exceptions specific to static analysis operations.
 All exceptions inherit from CodomyrmexError for consistent error handling.
 """
 
-from codomyrmex.exceptions import CodomyrmexError, StaticAnalysisError
+from codomyrmex.exceptions import StaticAnalysisError
 
 
 class ParserError(StaticAnalysisError):

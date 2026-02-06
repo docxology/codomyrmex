@@ -14,9 +14,9 @@ Example:
 
 from __future__ import annotations
 
-from typing import Optional, List, Any
 import logging
 from dataclasses import dataclass
+from typing import Any
 
 from codomyrmex.coding.debugging.error_analyzer import ErrorDiagnosis
 
@@ -71,7 +71,7 @@ class PatchGenerator:
         >>> best_patch = max(patches, key=lambda p: p.confidence)
     """
 
-    def __init__(self, llm_client: Optional[Any] = None):
+    def __init__(self, llm_client: Any | None = None):
         """Initialize the PatchGenerator.
 
         Args:
@@ -80,7 +80,7 @@ class PatchGenerator:
         """
         self.llm_client = llm_client
 
-    def generate(self, source_code: str, diagnosis: ErrorDiagnosis) -> List[Patch]:
+    def generate(self, source_code: str, diagnosis: ErrorDiagnosis) -> list[Patch]:
         """Generate candidate patches for the given error diagnosis.
 
         Uses the LLM client to analyze the error and source code,
@@ -110,17 +110,17 @@ class PatchGenerator:
              return []
 
         prompt = self._construct_prompt(source_code, diagnosis)
-        
+
         # If no LLM client is available, return an empty list or mock for now
         if not self.llm_client:
             logger.warning("No LLM client configured for PatchGenerator.")
             return []
-            
+
         try:
             # This is a placeholder for the actual LLM call
             # response = self.llm_client.complete(prompt)
             # patches = self._parse_response(response)
-            return [] 
+            return []
         except Exception as e:
             logger.error(f"Failed to generate patch: {e}")
             return []
@@ -155,6 +155,6 @@ SOURCE CODE:
 {source_code}
 ```
 
-Please provide a unified diff patch to fix this error. 
+Please provide a unified diff patch to fix this error.
 Explain your fix briefly.
 """

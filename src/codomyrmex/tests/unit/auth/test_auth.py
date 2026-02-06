@@ -9,15 +9,15 @@ Tests cover:
 """
 
 import time
+
 import pytest
 
 from codomyrmex import auth
-from codomyrmex.auth.token import Token, TokenManager
 from codomyrmex.auth.api_key_manager import APIKeyManager
+from codomyrmex.auth.authenticator import Authenticator
 from codomyrmex.auth.permissions import PermissionRegistry
-from codomyrmex.auth.authenticator import Authenticator, AuthenticationError
+from codomyrmex.auth.token import Token, TokenManager
 from codomyrmex.auth.validator import TokenValidator
-
 
 # ==============================================================================
 # Module Import Tests

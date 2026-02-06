@@ -5,49 +5,9 @@ import os
 import shutil  # For checking if command exists
 import subprocess
 import sys
-
 import webbrowser
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Standard logging import kept for compatibility with basicConfig structure
 
@@ -594,7 +554,7 @@ def assess_site():
 
 
 def main():
-    
+
     parser = argparse.ArgumentParser(
         description=(
             "Manage and assess the Codomyrmex documentation website. "

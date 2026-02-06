@@ -6,21 +6,19 @@ RateLimiterMiddleware, and the create_rate_limiter factory.
 """
 
 import time
-import pytest
 from datetime import datetime, timedelta
 
+import pytest
+
 from codomyrmex.api.rate_limiting import (
-    RateLimitResult,
-    RateLimitStrategy,
-    RateLimiter,
+    CompositeRateLimiter,
     FixedWindowLimiter,
+    RateLimiterMiddleware,
+    RateLimitResult,
     SlidingWindowLimiter,
     TokenBucketLimiter,
-    CompositeRateLimiter,
-    RateLimiterMiddleware,
     create_rate_limiter,
 )
-
 
 # ---------------------------------------------------------------------------
 # RateLimitResult

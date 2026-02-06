@@ -5,7 +5,7 @@ including API calls, prompt processing, and response handling.
 All exceptions inherit from CodomyrmexError for consistent error handling.
 """
 
-from codomyrmex.exceptions import CodomyrmexError, AIProviderError
+from codomyrmex.exceptions import AIProviderError
 
 
 class LLMError(AIProviderError):

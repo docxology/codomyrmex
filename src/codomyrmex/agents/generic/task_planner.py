@@ -1,51 +1,8 @@
-from typing import Any, Optional
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Task planning and decomposition utilities."""
 
@@ -71,7 +28,7 @@ class Task:
     status: TaskStatus = TaskStatus.PENDING
     dependencies: list[str] = field(default_factory=list)
     result: Any = None
-    error: Optional[str] = None
+    error: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -86,8 +43,8 @@ class TaskPlanner:
     def create_task(
         self,
         description: str,
-        dependencies: Optional[list[str]] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        dependencies: list[str] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Task:
         """
         Create a new task.
@@ -142,7 +99,7 @@ class TaskPlanner:
 
         return subtasks
 
-    def get_task(self, task_id: str) -> Optional[Task]:
+    def get_task(self, task_id: str) -> Task | None:
         """
         Get a task by ID.
 
@@ -155,7 +112,7 @@ class TaskPlanner:
         return self.tasks.get(task_id)
 
     def update_task_status(
-        self, task_id: str, status: TaskStatus, result: Any = None, error: Optional[str] = None
+        self, task_id: str, status: TaskStatus, result: Any = None, error: str | None = None
     ) -> None:
         """
         Update task status.

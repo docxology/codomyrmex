@@ -4,7 +4,8 @@ Provides adapters that bridge the ClaudeClient with other Codomyrmex modules,
 enabling seamless integration for code editing, LLM operations, and code execution.
 """
 
-from typing import Any, Iterator, Optional
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 from codomyrmex.logging_monitoring import get_logger
@@ -48,10 +49,10 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
         self,
         prompt: str,
         language: str = "python",
-        style: Optional[str] = None,
-        context_code: Optional[str] = None,
-        max_tokens: Optional[int] = None,
-        temperature: Optional[float] = None,
+        style: str | None = None,
+        context_code: str | None = None,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
         **kwargs: Any
     ) -> str:
         """Adapt Claude for AI code editing module.
@@ -176,8 +177,8 @@ class ClaudeIntegrationAdapter(AgentIntegrationAdapter):
     def adapt_for_llm(
         self,
         messages: list[dict],
-        model: Optional[str] = None,
-        system_prompt: Optional[str] = None,
+        model: str | None = None,
+        system_prompt: str | None = None,
         **kwargs: Any
     ) -> dict[str, Any]:
         """Adapt Claude for LLM module.
@@ -375,7 +376,7 @@ Provide:
     def _build_code_generation_system_prompt(
         self,
         language: str,
-        style: Optional[str] = None
+        style: str | None = None
     ) -> str:
         """Build optimized system prompt for code generation.
 

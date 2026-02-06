@@ -1,19 +1,18 @@
-from pathlib import Path
-from typing import Any, Iterator, Optional, List, Dict, Union
 import os
+from typing import Any
+from collections.abc import Iterator
 
-from PIL import Image
 from google import genai
 from google.genai import types
+from PIL import Image
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
     BaseAgent,
 )
-from codomyrmex.agents.core.exceptions import AgentError, GeminiError
+from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -22,7 +21,7 @@ logger = get_logger(__name__)
 class GeminiClient(BaseAgent):
     """Client for interacting with Gemini API via google-genai SDK."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         super().__init__(
             name="gemini",
             capabilities=[
@@ -60,13 +59,13 @@ class GeminiClient(BaseAgent):
         prompt = request.prompt
         context = request.context or {}
         model = context.get("model", self.default_model)
-        
+
         config_params = {}
-        
+
         if "response_schema" in context:
              config_params["response_mime_type"] = "application/json"
              config_params["response_schema"] = context["response_schema"]
-        
+
         if "system_instruction" in context:
              config_params["system_instruction"] = context["system_instruction"]
 
@@ -111,7 +110,7 @@ class GeminiClient(BaseAgent):
         context = request.context or {}
         model = context.get("model", self.default_model)
         contents = self._build_contents(prompt, context)
-        
+
         config_params = {}
         if "system_instruction" in context:
             config_params["system_instruction"] = context["system_instruction"]
@@ -129,10 +128,10 @@ class GeminiClient(BaseAgent):
             logger.error(f"Gemini streaming failed: {e}")
             yield f"\n[Error: {e}]"
 
-    def _build_contents(self, prompt: str, context: Dict[str, Any]) -> List[Any]:
+    def _build_contents(self, prompt: str, context: dict[str, Any]) -> list[Any]:
         if "contents" in context:
             return context["contents"]
-        
+
         parts = [prompt]
         if "images" in context:
              for img_path in context["images"]:
@@ -146,10 +145,10 @@ class GeminiClient(BaseAgent):
     def _build_response_from_api_result(self, response: Any, request: AgentRequest) -> AgentResponse:
         if not response.candidates:
              return AgentResponse(content="", error="No candidates returned", metadata={"raw": str(response)})
-        
+
         cand = response.candidates[0]
         content = ""
-        
+
         if cand.content and cand.content.parts:
              for part in cand.content.parts:
                  if part.text:
@@ -171,7 +170,7 @@ class GeminiClient(BaseAgent):
             }
         )
 
-    def list_models(self) -> List[Dict[str, Any]]:
+    def list_models(self) -> list[dict[str, Any]]:
         if not self.client:
             return []
         try:
@@ -180,7 +179,7 @@ class GeminiClient(BaseAgent):
             logger.error(f"Failed to list models: {e}")
             return []
 
-    def get_model(self, model_name: str) -> Optional[Dict[str, Any]]:
+    def get_model(self, model_name: str) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -188,7 +187,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return None
 
-    def count_tokens(self, content: Union[str, List[Any]], model: Optional[str] = None) -> int:
+    def count_tokens(self, content: str | list[Any], model: str | None = None) -> int:
         if not self.client:
             return 0
         try:
@@ -196,7 +195,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return 0
 
-    def embed_content(self, content: Union[str, List[str]], model: str = "text-embedding-004") -> List[List[float]]:
+    def embed_content(self, content: str | list[str], model: str = "text-embedding-004") -> list[list[float]]:
         if not self.client:
             return []
         try:
@@ -209,7 +208,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return []
 
-    def upload_file(self, file_path: str, mime_type: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    def upload_file(self, file_path: str, mime_type: str | None = None) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -222,7 +221,7 @@ class GeminiClient(BaseAgent):
             logger.error(f"Failed to upload file: {e}")
             return None
 
-    def list_files(self) -> List[Dict[str, Any]]:
+    def list_files(self) -> list[dict[str, Any]]:
         if not self.client:
             return []
         try:
@@ -239,7 +238,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return False
 
-    def create_cached_content(self, model: str, contents: Any, ttl: Optional[str] = None, display_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    def create_cached_content(self, model: str, contents: Any, ttl: str | None = None, display_name: str | None = None) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -248,7 +247,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return None
 
-    def list_cached_contents(self) -> List[Dict[str, Any]]:
+    def list_cached_contents(self) -> list[dict[str, Any]]:
         if not self.client:
             return []
         try:
@@ -256,7 +255,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return []
 
-    def get_cached_content(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_cached_content(self, name: str) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -273,7 +272,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return False
 
-    def update_cached_content(self, name: str, ttl: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    def update_cached_content(self, name: str, ttl: str | None = None) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -281,7 +280,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return None
 
-    def create_tuned_model(self, source_model: str, training_data: Any, display_name: Optional[str] = None, epochs: Optional[int] = None) -> Optional[Dict[str, Any]]:
+    def create_tuned_model(self, source_model: str, training_data: Any, display_name: str | None = None, epochs: int | None = None) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:
@@ -290,7 +289,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return None
 
-    def list_tuned_models(self) -> List[Dict[str, Any]]:
+    def list_tuned_models(self) -> list[dict[str, Any]]:
         if not self.client:
             return []
         try:
@@ -298,7 +297,7 @@ class GeminiClient(BaseAgent):
         except Exception:
             return []
 
-    def get_tuned_model(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_tuned_model(self, name: str) -> dict[str, Any] | None:
         if not self.client:
             return None
         try:

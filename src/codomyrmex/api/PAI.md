@@ -1,26 +1,49 @@
-# Personal AI Infrastructure - Api Context
+# Personal AI Infrastructure — API Module
 
-**Module**: api
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-API development infrastructure for REST, GraphQL, versioning, rate limiting, and authentication.
+The API module provides PAI integration for building REST APIs.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### API Development
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Build REST APIs:
 
-## Key Files
+```python
+from codomyrmex.api import APIRouter, APIApp
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+router = APIRouter(prefix="/v1")
 
-## Future Considerations
+@router.get("/users")
+async def list_users():
+    return {"users": [...]}
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+app = APIApp()
+app.include_router(router)
+```
+
+### Middleware Support
+
+Add middleware:
+
+```python
+from codomyrmex.api import APIApp, AuthMiddleware
+
+app = APIApp()
+app.add_middleware(AuthMiddleware())
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `APIRouter` | Define routes |
+| `APIApp` | Application setup |
+| `Middleware` | Request processing |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

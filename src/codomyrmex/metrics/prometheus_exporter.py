@@ -1,13 +1,19 @@
 """Prometheus metrics exporter."""
 
-from prometheus_client import start_http_server, Counter, Gauge, Histogram, Summary, REGISTRY
 import logging
+
+from prometheus_client import (
+    Counter,
+    Gauge,
+    Histogram,
+    start_http_server,
+)
 
 logger = logging.getLogger(__name__)
 
 class PrometheusExporter:
     """Wrapper for prometheus_client to expose metrics via HTTP."""
-    
+
     def __init__(self, port: int = 8000, addr: str = "0.0.0.0"):
         self.port = port
         self.addr = addr

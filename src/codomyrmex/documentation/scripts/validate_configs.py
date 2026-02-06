@@ -18,13 +18,12 @@ Output:
     - Suggestions for fixes
 """
 
-import sys
-import os
-import json
 import argparse
+import json
 import logging
+import sys
 from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Any
 
 try:
     import yaml
@@ -62,7 +61,7 @@ class ConfigValidator:
             "file_results": {}
         }
 
-    def validate_all_configs(self, fix: bool = False, verbose: bool = False) -> Dict[str, Any]:
+    def validate_all_configs(self, fix: bool = False, verbose: bool = False) -> dict[str, Any]:
         """Validate all configuration files."""
         logger.info("Starting configuration validation...")
 
@@ -94,7 +93,7 @@ class ConfigValidator:
         logger.info(f"Validation complete. {self.validation_results['valid_files']}/{self.validation_results['total_files']} files valid.")
         return self.validation_results
 
-    def _find_config_files(self) -> List[Tuple[Path, str]]:
+    def _find_config_files(self) -> list[tuple[Path, str]]:
         """Find all configuration files in config directory."""
         config_files = []
 
@@ -115,7 +114,7 @@ class ConfigValidator:
         logger.info(f"Found {len(config_files)} configuration files")
         return config_files
 
-    def _validate_config_file(self, file_path: Path, file_type: str, fix: bool, verbose: bool) -> Dict[str, Any]:
+    def _validate_config_file(self, file_path: Path, file_type: str, fix: bool, verbose: bool) -> dict[str, Any]:
         """Validate a single configuration file."""
         result = {
             "file": str(file_path),
@@ -153,10 +152,10 @@ class ConfigValidator:
 
         return result
 
-    def _load_config_file(self, file_path: Path, file_type: str, result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def _load_config_file(self, file_path: Path, file_type: str, result: dict[str, Any]) -> dict[str, Any] | None:
         """Load configuration from file."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 if file_type == "yaml":
                     if not YAML_AVAILABLE:
                         result["valid"] = False
@@ -178,7 +177,7 @@ class ConfigValidator:
 
         return None
 
-    def _validate_syntax(self, config: Dict[str, Any], result: Dict[str, Any]):
+    def _validate_syntax(self, config: dict[str, Any], result: dict[str, Any]):
         """Validate basic syntax and structure."""
         if not isinstance(config, dict):
             result["valid"] = False
@@ -189,11 +188,11 @@ class ConfigValidator:
         if len(config) == 0:
             result["warnings"].append("Configuration file is empty")
 
-    def _validate_structure(self, config: Dict[str, Any], result: Dict[str, Any]):
+    def _validate_structure(self, config: dict[str, Any], result: dict[str, Any]):
         """Validate configuration structure."""
         # Required top-level sections for examples
         expected_sections = ["output", "logging"]
-        
+
         missing_required = []
         for section in expected_sections:
             if section not in config:
@@ -219,7 +218,7 @@ class ConfigValidator:
             elif "level" not in logging_config:
                 result["warnings"].append("logging section missing 'level' field")
 
-    def _validate_content(self, config: Dict[str, Any], result: Dict[str, Any]):
+    def _validate_content(self, config: dict[str, Any], result: dict[str, Any]):
         """Validate configuration content and values."""
         # Validate logging level
         if "logging" in config and "level" in config["logging"]:
@@ -228,24 +227,24 @@ class ConfigValidator:
             if log_level not in valid_levels:
                 result["warnings"].append(f"logging.level '{log_level}' not in valid levels: {valid_levels}")
 
-    def _attempt_fixes(self, file_path: Path, file_type: str, result: Dict[str, Any]):
+    def _attempt_fixes(self, file_path: Path, file_type: str, result: dict[str, Any]):
         """Attempt to automatically fix common issues."""
         # Implementation for fixes if needed
         pass
 
-    def print_report(self, results: Dict[str, Any], verbose: bool = False):
+    def print_report(self, results: dict[str, Any], verbose: bool = False):
         """Print validation results."""
         print("\n" + "="*80)
         print("🔧 CONFIGURATION VALIDATION REPORT")
         print("="*80)
-        print(f"\n📊 SUMMARY:")
+        print("\n📊 SUMMARY:")
         print(f"   Total Files: {results['total_files']}")
         print(f"   Valid Files: {results['valid_files']}")
         print(f"   Invalid Files: {results['invalid_files']}")
         print(f"   Success Rate: {results['success_rate']:.1f}%")
         print("\n" + "="*80)
 
-    def save_report(self, results: Dict[str, Any], output_file: str = None):
+    def save_report(self, results: dict[str, Any], output_file: str = None):
         """Save validation results to file."""
         if output_file is None:
             output_file = self.project_root / "src" / "codomyrmex" / "examples" / "config_validation_report.json"

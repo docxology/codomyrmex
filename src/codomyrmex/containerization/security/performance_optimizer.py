@@ -7,8 +7,8 @@ Provides container performance optimization and metrics:
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from typing import Any
 
 
 @dataclass
@@ -21,15 +21,15 @@ class ContainerMetrics:
     network_io_mb: float = 0.0
     disk_io_mb: float = 0.0
     timestamp: datetime = field(default_factory=datetime.now)
-    
+
     @property
     def memory_percent(self) -> float:
         """Calculate memory usage percentage."""
         if self.memory_limit_mb > 0:
             return (self.memory_usage_mb / self.memory_limit_mb) * 100
         return 0.0
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "container_id": self.container_id,
@@ -45,10 +45,10 @@ class ContainerMetrics:
 
 class PerformanceOptimizer:
     """Placeholder performance optimizer (legacy alias)."""
-    
+
     def __init__(self):
         pass
-    
+
     def optimize(self, config: dict) -> dict:
         """Optimize container configuration."""
         return config
@@ -57,30 +57,30 @@ class PerformanceOptimizer:
 class ContainerOptimizer:
     """
     Container performance optimizer.
-    
+
     Provides resource optimization for containers including:
     - CPU and memory allocation optimization
     - Resource limit recommendations
     - Performance tuning suggestions
     """
-    
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the container optimizer.
-        
+
         Args:
             config: Optional configuration dictionary
         """
         self.config = config or {}
-        self._metrics_history: List[ContainerMetrics] = []
-    
+        self._metrics_history: list[ContainerMetrics] = []
+
     def collect_metrics(self, container_id: str) -> ContainerMetrics:
         """
         Collect current metrics for a container.
-        
+
         Args:
             container_id: Container ID or name
-        
+
         Returns:
             ContainerMetrics with current values
         """
@@ -93,14 +93,14 @@ class ContainerOptimizer:
         )
         self._metrics_history.append(metrics)
         return metrics
-    
-    def optimize_resources(self, container_id: str) -> Dict[str, Any]:
+
+    def optimize_resources(self, container_id: str) -> dict[str, Any]:
         """
         Optimize container resources.
-        
+
         Args:
             container_id: Container ID or name
-        
+
         Returns:
             Optimization recommendations
         """
@@ -110,14 +110,14 @@ class ContainerOptimizer:
             "optimized": True,
             "note": "Stub implementation - integrate with Docker API for production"
         }
-    
-    def get_recommendations(self, container_id: str) -> List[str]:
+
+    def get_recommendations(self, container_id: str) -> list[str]:
         """
         Get performance recommendations for a container.
-        
+
         Args:
             container_id: Container ID or name
-        
+
         Returns:
             List of recommendations
         """
@@ -126,32 +126,32 @@ class ContainerOptimizer:
             "Enable resource monitoring",
             "Review CPU allocation"
         ]
-    
-    def get_metrics_history(self) -> List[ContainerMetrics]:
+
+    def get_metrics_history(self) -> list[ContainerMetrics]:
         """Get history of collected metrics."""
         return self._metrics_history.copy()
 
 
 def optimize_containers(
-    container_ids: List[str],
-    optimizer: Optional[ContainerOptimizer] = None
-) -> Dict[str, Dict[str, Any]]:
+    container_ids: list[str],
+    optimizer: ContainerOptimizer | None = None
+) -> dict[str, dict[str, Any]]:
     """
     Optimize multiple containers.
-    
+
     Args:
         container_ids: List of container IDs to optimize
         optimizer: Optional pre-configured optimizer instance
-    
+
     Returns:
         Dictionary mapping container IDs to optimization results
     """
     if optimizer is None:
         optimizer = ContainerOptimizer()
-    
+
     results = {}
     for container_id in container_ids:
         results[container_id] = optimizer.optimize_resources(container_id)
-    
+
     return results
 

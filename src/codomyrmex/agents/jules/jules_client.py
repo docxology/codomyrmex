@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import Any, Iterator, Optional
-import json
+from typing import Any
+from collections.abc import Iterator
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
@@ -10,13 +9,12 @@ from codomyrmex.agents.core import (
 )
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, JulesError
 from codomyrmex.agents.generic import CLIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 
 class JulesClient(CLIAgentBase):
     """Client for interacting with Jules CLI tool."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize Jules client.
 
@@ -37,7 +35,7 @@ class JulesClient(CLIAgentBase):
             timeout=30,
             working_dir=None,
         )
-        
+
         jules_command = self.get_config_value("jules_command", config=config)
         timeout = self.get_config_value("jules_timeout", config=config)
         working_dir_str = self.get_config_value("jules_working_dir", config=config)
@@ -59,20 +57,20 @@ class JulesClient(CLIAgentBase):
         prompt = request.prompt
         context = request.context or {}
         jules_args = self._build_jules_args(prompt, context)
-        
+
         retries = 3
         last_error = None
-        
+
         for attempt in range(retries):
             try:
                 result = self._execute_command(args=jules_args)
-                
+
                 # Check for auth errors in output
                 stdout = result.get("stdout", "")
                 stderr = result.get("stderr", "")
                 if any(x in stdout.lower() or x in stderr.lower() for x in ["unauthorized", "unauthenticated", "401"]):
                     raise JulesError("Jules authentication failed. Please run 'jules auth login'.", command=self.command)
-                
+
                 return self._build_response_from_result(
                     result,
                     request,
@@ -104,7 +102,7 @@ class JulesClient(CLIAgentBase):
 
     def _build_jules_args(self, prompt: str, context: dict[str, Any]) -> list[str]:
         """Build jules command arguments from prompt and context."""
-        
+
         # Check for direct commands
         if context.get("command"):
             cmd = context["command"]
@@ -138,21 +136,21 @@ class JulesClient(CLIAgentBase):
             self.logger.warning(f"Failed to get Jules help: {e}")
             return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
 
-    def execute_jules_command(self, command: str, args: Optional[list[str]] = None, config_path: Optional[Path] = None) -> dict[str, Any]:
+    def execute_jules_command(self, command: str, args: list[str] | None = None, config_path: Path | None = None) -> dict[str, Any]:
         """
         Execute a jules command.
-        
+
         Args:
             command: The jules subcommand (e.g., 'auth', 'config').
             args: Additional arguments.
             config_path: Path to a custom config file to use with --config.
         """
         jules_args = [command]
-        
+
         if config_path:
             jules_args.extend(["--config", str(config_path)])
-            
+
         if args:
             jules_args.extend(args)
-            
+
         return self._execute_command(args=jules_args)

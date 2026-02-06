@@ -89,10 +89,10 @@ def create_line_plot(
 class LinePlot:
     """
     Line plot class wrapper for object-oriented usage.
-    
+
     Provides a class-based interface around the create_line_plot function.
     """
-    
+
     def __init__(
         self,
         x_data: list = None,
@@ -106,7 +106,7 @@ class LinePlot:
     ):
         """
         Initialize a line plot.
-        
+
         Args:
             x_data: X-axis data points
             y_data: Y-axis data points (can be list of lists for multiple lines)
@@ -125,11 +125,11 @@ class LinePlot:
         self.line_labels = line_labels
         self.markers = markers
         self.figure_size = figure_size or DEFAULT_FIGURE_SIZE
-    
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the line plot.
-        
+
         Args:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
@@ -146,11 +146,11 @@ class LinePlot:
             markers=self.markers,
             figure_size=self.figure_size
         )
-    
+
     def save(self, output_path: str):
         """Save the chart to a file."""
         self.render(output_path=output_path, show_plot=False)
-    
+
     def show(self):
         """Display the chart interactively."""
         self.render(show_plot=True)

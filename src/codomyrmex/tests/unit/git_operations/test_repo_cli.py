@@ -1,15 +1,16 @@
-import pytest
-
 import unittest
 from unittest.mock import MagicMock, patch
-import argparse
+
+import pytest
+
 from codomyrmex.git_operations.cli.repo import (
+    cmd_clean,
+    cmd_prune,
     cmd_remote,
     cmd_sync,
-    cmd_prune,
-    cmd_clean
 )
 from codomyrmex.git_operations.core.repository import RepositoryManager
+
 
 @pytest.mark.unit
 class TestRepoCLI(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestRepoCLI(unittest.TestCase):
         self.args.repository = "owner/repo"
         self.args.path = None
         self.args.verbose = False
-        
+
         # Mock repo object
         self.repo = MagicMock()
         self.repo.full_name = "owner/repo"
@@ -33,7 +34,7 @@ class TestRepoCLI(unittest.TestCase):
     @patch('codomyrmex.git_operations.cli.repo.Path')
     def test_cmd_remote(self, mock_path, mock_prune, mock_remove, mock_add, mock_list):
         mock_path.return_value.exists.return_value = True
-        
+
         # Test List
         self.args.list = True
         self.args.add = None
@@ -50,14 +51,14 @@ class TestRepoCLI(unittest.TestCase):
         mock_add.return_value = True
         cmd_remote(self.manager, self.args)
         mock_add.assert_called_with("upstream", "new_url", "/tmp/repo")
-        
+
         # Test Remove
         self.args.add = None
         self.args.remove = "upstream"
         mock_remove.return_value = True
         cmd_remote(self.manager, self.args)
         mock_remove.assert_called_with("upstream", "/tmp/repo")
-        
+
         # Test Prune
         self.args.remove = None
         self.args.prune = "origin"

@@ -15,7 +15,7 @@ Exception Hierarchy:
 """
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 
@@ -32,7 +32,7 @@ class VideoError(CodomyrmexError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
+        video_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -66,8 +66,8 @@ class VideoWriteError(VideoError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
-        output_path: Optional[Union[str, Path]] = None,
+        video_path: str | Path | None = None,
+        output_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, video_path=video_path, **kwargs)
@@ -90,8 +90,8 @@ class VideoProcessingError(VideoError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
-        operation: Optional[str] = None,
+        video_path: str | Path | None = None,
+        operation: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, video_path=video_path, **kwargs)
@@ -111,9 +111,9 @@ class FrameExtractionError(VideoError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
-        timestamp: Optional[float] = None,
-        frame_number: Optional[int] = None,
+        video_path: str | Path | None = None,
+        timestamp: float | None = None,
+        frame_number: int | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, video_path=video_path, **kwargs)
@@ -135,8 +135,8 @@ class AudioExtractionError(VideoError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
-        audio_format: Optional[str] = None,
+        video_path: str | Path | None = None,
+        audio_format: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, video_path=video_path, **kwargs)
@@ -155,8 +155,8 @@ class UnsupportedFormatError(VideoError):
     def __init__(
         self,
         message: str,
-        format_type: Optional[str] = None,
-        supported_formats: Optional[list[str]] = None,
+        format_type: str | None = None,
+        supported_formats: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, **kwargs)
@@ -179,8 +179,8 @@ class VideoAnalysisError(VideoError):
     def __init__(
         self,
         message: str,
-        video_path: Optional[Union[str, Path]] = None,
-        analysis_type: Optional[str] = None,
+        video_path: str | Path | None = None,
+        analysis_type: str | None = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(message, video_path=video_path, **kwargs)

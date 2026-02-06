@@ -4,19 +4,18 @@ Pipeline Manager for Codomyrmex CI/CD Automation Module.
 Provides comprehensive pipeline orchestration, management, and execution capabilities.
 """
 
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
-from typing import Any, Optional, Tuple, List
 import asyncio
 import concurrent.futures
 import fnmatch
 import json
 import os
 import subprocess
-import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum
+from typing import Any
 
 import aiohttp
 import yaml
@@ -76,8 +75,8 @@ class PipelineJob:
     retry_count: int = 0
     allow_failure: bool = False
     status: JobStatus = JobStatus.PENDING
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
     output: str = ""
     error: str = ""
 
@@ -111,8 +110,8 @@ class PipelineStage:
     allow_failure: bool = False
     parallel: bool = True
     status: StageStatus = StageStatus.PENDING
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Convert stage to dictionary format."""
@@ -140,9 +139,9 @@ class Pipeline:
     triggers: dict[str, Any] = field(default_factory=dict)
     timeout: int = 7200  # 2 hours
     status: PipelineStatus = PipelineStatus.PENDING
-    created_at: Optional[datetime] = None
-    started_at: Optional[datetime] = None
-    finished_at: Optional[datetime] = None
+    created_at: datetime | None = None
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
     duration: float = 0.0
 
     def __post_init__(self):
@@ -179,7 +178,7 @@ class PipelineManager:
     - Real-time monitoring
     """
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """
         Initialize the pipeline manager.
 
@@ -261,7 +260,7 @@ class PipelineManager:
         return pipeline
 
     async def run_pipeline_async(
-        self, pipeline_name: str, variables: Optional[dict[str, str]] = None
+        self, pipeline_name: str, variables: dict[str, str] | None = None
     ) -> Pipeline:
         """
         Run a pipeline asynchronously.
@@ -321,7 +320,7 @@ class PipelineManager:
         return pipeline
 
     def run_pipeline(
-        self, pipeline_name: str, variables: Optional[dict[str, str]] = None
+        self, pipeline_name: str, variables: dict[str, str] | None = None
     ) -> Pipeline:
         """
         Run a pipeline synchronously.
@@ -507,7 +506,7 @@ class PipelineManager:
             text = text.replace(f"${key}", value)
         return text
 
-    def get_pipeline_status(self, pipeline_name: str) -> Optional[Pipeline]:
+    def get_pipeline_status(self, pipeline_name: str) -> Pipeline | None:
         """Get current status of a pipeline."""
         return self.pipelines.get(pipeline_name)
 
@@ -537,7 +536,7 @@ class PipelineManager:
         logger.info(f"Cancelled pipeline: {pipeline_name}")
         return True
 
-    def validate_pipeline_config(self, config: dict) -> Tuple[bool, List[str]]:
+    def validate_pipeline_config(self, config: dict) -> tuple[bool, list[str]]:
         """
         Validate pipeline configuration with detailed error reporting.
 
@@ -584,7 +583,7 @@ class PipelineManager:
 
         return len(errors) == 0, errors
 
-    def _validate_stage_config(self, stage: dict, stage_index: int) -> List[str]:
+    def _validate_stage_config(self, stage: dict, stage_index: int) -> list[str]:
         """Validate a single stage configuration."""
         errors = []
         prefix = f"Stage {stage_index}"
@@ -612,7 +611,7 @@ class PipelineManager:
 
         return errors
 
-    def _validate_job_config(self, job: dict, stage_index: int, job_index: int) -> List[str]:
+    def _validate_job_config(self, job: dict, stage_index: int, job_index: int) -> list[str]:
         """Validate a single job configuration."""
         errors = []
         prefix = f"Stage {stage_index}, Job {job_index}"
@@ -694,7 +693,7 @@ class PipelineManager:
 
         return "\\n".join(lines)
 
-    def parallel_pipeline_execution(self, stages: List[dict]) -> dict:
+    def parallel_pipeline_execution(self, stages: list[dict]) -> dict:
         """
         Execute pipeline stages in parallel where possible.
 
@@ -910,7 +909,7 @@ class PipelineManager:
 
         return optimization
 
-    def _calculate_execution_levels(self, stages: List, dependencies: dict) -> List[List[str]]:
+    def _calculate_execution_levels(self, stages: list, dependencies: dict) -> list[list[str]]:
         """Calculate execution levels for optimal parallelism."""
         # Kahn's algorithm for topological levels
         in_degree = {stage.name: len(stage.dependencies) for stage in stages}
@@ -937,7 +936,7 @@ class PipelineManager:
 
         return levels
 
-    def get_stage_dependencies(self, stages: List[dict]) -> dict[str, List[str]]:
+    def get_stage_dependencies(self, stages: list[dict]) -> dict[str, list[str]]:
         """
         Extract stage dependencies from stage list.
 
@@ -955,7 +954,7 @@ class PipelineManager:
 
         return dependencies
 
-    def validate_stage_dependencies(self, stages: List[dict]) -> Tuple[bool, List[str]]:
+    def validate_stage_dependencies(self, stages: list[dict]) -> tuple[bool, list[str]]:
         """
         Validate stage dependency graph.
 
@@ -1070,8 +1069,8 @@ def create_pipeline(config_path: str) -> Pipeline:
 
 def run_pipeline(
     pipeline_name: str,
-    config_path: Optional[str] = None,
-    variables: Optional[dict[str, str]] = None,
+    config_path: str | None = None,
+    variables: dict[str, str] | None = None,
 ) -> Pipeline:
     """
     Convenience function to run a pipeline.
@@ -1103,8 +1102,8 @@ class AsyncPipelineResult:
     pipeline_id: str
     status: PipelineStatus
     message: str
-    data: Optional[dict[str, Any]] = None
-    error: Optional[str] = None
+    data: dict[str, Any] | None = None
+    error: str | None = None
     timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def to_dict(self) -> dict[str, Any]:
@@ -1129,9 +1128,9 @@ class AsyncPipelineManager:
 
     def __init__(
         self,
-        base_url: Optional[str] = None,
-        api_token: Optional[str] = None,
-        workspace_dir: Optional[str] = None,
+        base_url: str | None = None,
+        api_token: str | None = None,
+        workspace_dir: str | None = None,
     ):
         """
         Initialize the async pipeline manager.
@@ -1169,7 +1168,7 @@ class AsyncPipelineManager:
         repo_name: str,
         workflow_id: str,
         ref: str = "main",
-        inputs: Optional[dict[str, str]] = None,
+        inputs: dict[str, str] | None = None,
         timeout: int = 30,
     ) -> AsyncPipelineResult:
         """
@@ -1263,8 +1262,8 @@ class AsyncPipelineManager:
         self,
         repo_owner: str,
         repo_name: str,
-        run_id: Optional[int] = None,
-        workflow_id: Optional[str] = None,
+        run_id: int | None = None,
+        workflow_id: str | None = None,
         timeout: int = 30,
     ) -> AsyncPipelineResult:
         """
@@ -1538,9 +1537,9 @@ class AsyncPipelineManager:
         self,
         repo_owner: str,
         repo_name: str,
-        workflow_id: Optional[str] = None,
-        status: Optional[str] = None,
-        branch: Optional[str] = None,
+        workflow_id: str | None = None,
+        status: str | None = None,
+        branch: str | None = None,
         per_page: int = 10,
         timeout: int = 30,
     ) -> AsyncPipelineResult:
@@ -1643,7 +1642,7 @@ class AsyncPipelineManager:
     async def async_run_local_pipeline(
         self,
         pipeline_name: str,
-        variables: Optional[dict[str, str]] = None,
+        variables: dict[str, str] | None = None,
     ) -> Pipeline:
         """
         Run a locally configured pipeline asynchronously.
@@ -1691,8 +1690,8 @@ async def async_trigger_pipeline(
     repo_name: str,
     workflow_id: str,
     ref: str = "main",
-    inputs: Optional[dict[str, str]] = None,
-    api_token: Optional[str] = None,
+    inputs: dict[str, str] | None = None,
+    api_token: str | None = None,
 ) -> AsyncPipelineResult:
     """
     Convenience function to trigger a pipeline asynchronously.
@@ -1722,9 +1721,9 @@ async def async_trigger_pipeline(
 async def async_get_pipeline_status(
     repo_owner: str,
     repo_name: str,
-    run_id: Optional[int] = None,
-    workflow_id: Optional[str] = None,
-    api_token: Optional[str] = None,
+    run_id: int | None = None,
+    workflow_id: str | None = None,
+    api_token: str | None = None,
 ) -> AsyncPipelineResult:
     """
     Convenience function to get pipeline status asynchronously.
@@ -1754,7 +1753,7 @@ async def async_wait_for_completion(
     run_id: int,
     poll_interval: int = 30,
     timeout: int = 3600,
-    api_token: Optional[str] = None,
+    api_token: str | None = None,
 ) -> AsyncPipelineResult:
     """
     Convenience function to wait for pipeline completion asynchronously.

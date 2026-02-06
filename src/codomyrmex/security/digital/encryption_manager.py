@@ -6,7 +6,6 @@ and secure data handling.
 
 import base64
 import os
-from typing import Optional, Tuple, Union
 
 try:
     from cryptography.fernet import Fernet
@@ -31,7 +30,7 @@ class EncryptionError(CodomyrmexError):
 class EncryptionManager:
     """Manages encryption keys and operations."""
 
-    def __init__(self, key: Optional[bytes] = None):
+    def __init__(self, key: bytes | None = None):
         """Initialize encryption manager.
 
         Args:
@@ -43,7 +42,7 @@ class EncryptionManager:
         self.key = key or Fernet.generate_key()
         self.cipher = Fernet(self.key)
 
-    def encrypt(self, data: Union[str, bytes]) -> bytes:
+    def encrypt(self, data: str | bytes) -> bytes:
         """Encrypt data using symmetric key."""
         if isinstance(data, str):
             data = data.encode('utf-8')
@@ -61,7 +60,7 @@ class EncryptionManager:
         return self.decrypt(token).decode('utf-8')
 
     @staticmethod
-    def generate_key_pair() -> Tuple[bytes, bytes]:
+    def generate_key_pair() -> tuple[bytes, bytes]:
         """Generate RSA key pair.
 
         Returns:
@@ -69,28 +68,28 @@ class EncryptionManager:
         """
         if not CRYPTOGRAPHY_AVAILABLE:
              raise ImportError("cryptography package not available")
-             
+
         private_key = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048,
         )
-        
+
         private_pem = private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()
         )
-        
+
         public_key = private_key.public_key()
         public_pem = public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
-        
+
         return private_pem, public_pem
 
     @staticmethod
-    def derive_key(password: str, salt: Optional[bytes] = None) -> Tuple[bytes, bytes]:
+    def derive_key(password: str, salt: bytes | None = None) -> tuple[bytes, bytes]:
         """Derive a key from a password using PBKDF2.
 
         Args:
@@ -102,16 +101,16 @@ class EncryptionManager:
         """
         if not CRYPTOGRAPHY_AVAILABLE:
              raise ImportError("cryptography package not available")
-             
+
         if salt is None:
             salt = os.urandom(16)
-            
+
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
             iterations=100000,
         )
-        
+
         key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
         return key, salt

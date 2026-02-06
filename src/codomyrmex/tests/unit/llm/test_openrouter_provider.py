@@ -4,15 +4,15 @@ Tests for OpenRouterProvider.
 Unit tests for the OpenRouter LLM provider implementation.
 """
 
+from unittest.mock import MagicMock
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
 
 from codomyrmex.llm.providers import (
+    Message,
     OpenRouterProvider,
     ProviderConfig,
     ProviderType,
-    Message,
-    CompletionResponse,
     get_provider,
 )
 

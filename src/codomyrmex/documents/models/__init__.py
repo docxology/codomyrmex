@@ -1,6 +1,6 @@
 """Document data models."""
 
-from .document import Document, DocumentType, DocumentFormat
+from .document import Document, DocumentFormat, DocumentType
 from .metadata import DocumentMetadata, MetadataField
 
 __all__ = [

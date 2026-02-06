@@ -1,51 +1,8 @@
-from typing import Any, Optional
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Model base classes and implementations for CEREBRUM."""
 
@@ -111,7 +68,7 @@ class ReasoningResult:
 class ModelBase(ABC):
     """Abstract base class for model implementations."""
 
-    def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
+    def __init__(self, name: str, config: dict[str, Any] | None = None):
         """Initialize model.
 
         Args:

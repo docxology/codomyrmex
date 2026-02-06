@@ -1,35 +1,65 @@
 # Agent Guidelines - Vector Store
 
-## Module Context
+## Module Overview
 
-The `vector_store` module provides embeddings storage for similarity search, commonly used in RAG pipelines and semantic retrieval systems.
+Embeddings storage for similarity search and RAG pipelines.
 
 ## Key Classes
 
-- `VectorStore` - Abstract base class defining the interface
-- `InMemoryVectorStore` - Fast, volatile storage for development/testing
-- `NamespacedVectorStore` - Multi-tenant vector isolation
+- **VectorStore** — Abstract base class
+- **InMemoryVectorStore** — Fast in-memory storage
+- **NamespacedVectorStore** — Multi-tenant isolation
 
-## Integration Points
+## Agent Instructions
 
-- **agentic_memory**: Use for embedding-based memory retrieval
-- **graph_rag**: Backend storage for knowledge graph embeddings
-- **llm**: Store and retrieve context embeddings
-
-## Best Practices
-
-1. **Normalize embeddings** before storage for consistent cosine similarity
-2. **Use namespaces** to isolate different embedding models or datasets
-3. **Batch inserts** for large datasets using `add_batch()`
-4. **Filter first** using metadata filters to reduce search space
+1. **Normalize embeddings** — Use `normalize_embedding()` for consistent cosine similarity
+2. **Use namespaces** — Isolate different embedding models or datasets
+3. **Batch inserts** — Use `add_batch()` for large datasets
+4. **Filter first** — Use metadata filters to reduce search space
+5. **Choose distance metric** — Cosine for normalized, euclidean for raw
 
 ## Common Patterns
 
 ```python
-# With agentic_memory
-from codomyrmex.vector_store import InMemoryVectorStore
-from codomyrmex.agentic_memory import AgentMemory
+from codomyrmex.vector_store import InMemoryVectorStore, normalize_embedding
 
-store = InMemoryVectorStore()
-memory = AgentMemory(embedding_store=store)
+store = InMemoryVectorStore(dimension=384)
+
+# Add normalized embeddings
+embedding = normalize_embedding(raw_embedding)
+store.add("doc_1", embedding, metadata={"source": "wiki"})
+
+# Search with filters
+results = store.search(
+    query_embedding,
+    k=10,
+    filter={"source": "wiki"}
+)
+
+# Namespaced storage for multi-tenant
+from codomyrmex.vector_store import NamespacedVectorStore
+ns_store = NamespacedVectorStore()
+ns_store.add("doc_1", embedding, namespace="user_123")
 ```
+
+## Testing Patterns
+
+```python
+# Verify storage and retrieval
+store = InMemoryVectorStore(dimension=3)
+store.add("a", [1.0, 0.0, 0.0])
+store.add("b", [0.0, 1.0, 0.0])
+
+results = store.search([1.0, 0.0, 0.0], k=1)
+assert results[0].id == "a"
+
+# Verify namespace isolation
+ns_store = NamespacedVectorStore()
+ns_store.add("a", [1, 0, 0], namespace="n1")
+ns_store.add("a", [0, 1, 0], namespace="n2")
+assert ns_store.count("n1") == 1
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

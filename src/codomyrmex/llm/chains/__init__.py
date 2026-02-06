@@ -4,13 +4,13 @@ Chain implementations for LLM reasoning.
 Provides chain-of-thought, reasoning, and multi-step processing patterns.
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable, TypeVar, Generic
-from enum import Enum
 import json
 import re
-
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, Generic, List, Optional, TypeVar
+from collections.abc import Callable
 
 T = TypeVar('T')
 
@@ -31,16 +31,16 @@ class ChainStep:
     name: str
     prompt_template: str
     output_key: str = "output"
-    input_keys: List[str] = field(default_factory=list)
-    parser: Optional[Callable[[str], Any]] = None
-    
-    def format_prompt(self, context: Dict[str, Any]) -> str:
+    input_keys: list[str] = field(default_factory=list)
+    parser: Callable[[str], Any] | None = None
+
+    def format_prompt(self, context: dict[str, Any]) -> str:
         """Format the prompt template with context values."""
         prompt = self.prompt_template
         for key, value in context.items():
             prompt = prompt.replace(f"{{{key}}}", str(value))
         return prompt
-    
+
     def parse_output(self, output: str) -> Any:
         """Parse the output using the configured parser."""
         if self.parser:
@@ -53,11 +53,11 @@ class ChainResult:
     """Result of running a chain."""
     success: bool
     output: Any
-    steps: List[Dict[str, Any]] = field(default_factory=list)
-    context: Dict[str, Any] = field(default_factory=dict)
-    error: Optional[str] = None
-    
-    def get_step_output(self, step_name: str) -> Optional[Any]:
+    steps: list[dict[str, Any]] = field(default_factory=list)
+    context: dict[str, Any] = field(default_factory=dict)
+    error: str | None = None
+
+    def get_step_output(self, step_name: str) -> Any | None:
         """Get output from a specific step."""
         for step in self.steps:
             if step.get("name") == step_name:
@@ -67,18 +67,18 @@ class ChainResult:
 
 class Chain(ABC):
     """Abstract base class for chains."""
-    
+
     chain_type: ChainType
-    
+
     def __init__(self, name: str = "chain"):
         self.name = name
-        self.steps: List[ChainStep] = []
-    
+        self.steps: list[ChainStep] = []
+
     @abstractmethod
-    def run(self, input_data: Dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
         """Run the chain with input data."""
         pass
-    
+
     def add_step(self, step: ChainStep) -> 'Chain':
         """Add a step to the chain."""
         self.steps.append(step)
@@ -87,21 +87,21 @@ class Chain(ABC):
 
 class SimpleChain(Chain):
     """A simple single-step chain."""
-    
+
     chain_type = ChainType.SIMPLE
-    
+
     def __init__(self, prompt_template: str, name: str = "simple_chain"):
         super().__init__(name)
         self.prompt_template = prompt_template
-    
-    def run(self, input_data: Dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+
+    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
         try:
             prompt = self.prompt_template
             for key, value in input_data.items():
                 prompt = prompt.replace(f"{{{key}}}", str(value))
-            
+
             output = llm_func(prompt)
-            
+
             return ChainResult(
                 success=True,
                 output=output,
@@ -114,26 +114,26 @@ class SimpleChain(Chain):
 
 class SequentialChain(Chain):
     """A chain that runs steps sequentially, passing context between them."""
-    
+
     chain_type = ChainType.SEQUENTIAL
-    
-    def run(self, input_data: Dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+
+    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
         context = dict(input_data)
         step_results = []
-        
+
         try:
             for step in self.steps:
                 prompt = step.format_prompt(context)
                 output = llm_func(prompt)
                 parsed_output = step.parse_output(output)
-                
+
                 context[step.output_key] = parsed_output
                 step_results.append({
                     "name": step.name,
                     "prompt": prompt,
                     "output": parsed_output,
                 })
-            
+
             return ChainResult(
                 success=True,
                 output=context.get(self.steps[-1].output_key if self.steps else "output"),
@@ -152,10 +152,10 @@ class SequentialChain(Chain):
 
 class ChainOfThought(SequentialChain):
     """A chain that implements chain-of-thought reasoning."""
-    
+
     def __init__(self, name: str = "cot_chain"):
         super().__init__(name)
-        
+
         # Add reasoning step
         self.add_step(ChainStep(
             name="reasoning",
@@ -171,7 +171,7 @@ Let's approach this systematically:
 Reasoning:""",
             output_key="reasoning",
         ))
-        
+
         # Add answer extraction step
         self.add_step(ChainStep(
             name="answer",
@@ -187,29 +187,29 @@ Answer:""",
 
 class ReActChain(Chain):
     """A chain implementing the ReAct (Reason + Act) pattern."""
-    
+
     chain_type = ChainType.SEQUENTIAL
-    
+
     def __init__(
         self,
-        tools: Dict[str, Callable[[str], str]],
+        tools: dict[str, Callable[[str], str]],
         max_iterations: int = 5,
         name: str = "react_chain"
     ):
         super().__init__(name)
         self.tools = tools
         self.max_iterations = max_iterations
-    
-    def run(self, input_data: Dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
+
+    def run(self, input_data: dict[str, Any], llm_func: Callable[[str], str]) -> ChainResult:
         context = dict(input_data)
         step_results = []
         scratchpad = ""
-        
+
         tool_descriptions = "\n".join(
             f"- {name}: Use this tool by writing 'Action: {name}[input]'"
             for name in self.tools.keys()
         )
-        
+
         base_prompt = f"""Answer the following question using the available tools.
 
 Available Tools:
@@ -225,22 +225,22 @@ Action: [ToolName][input to the tool]
 {{scratchpad}}
 
 Thought:"""
-        
+
         try:
             for i in range(self.max_iterations):
                 prompt = base_prompt.format(
                     question=context.get("question", ""),
                     scratchpad=scratchpad
                 )
-                
+
                 response = llm_func(prompt)
-                
+
                 # Parse action
                 action_match = re.search(r'Action:\s*(\w+)\[(.*?)\]', response, re.DOTALL)
                 if action_match:
                     tool_name = action_match.group(1)
                     tool_input = action_match.group(2).strip()
-                    
+
                     if tool_name == "Finish":
                         return ChainResult(
                             success=True,
@@ -248,7 +248,7 @@ Thought:"""
                             steps=step_results,
                             context=context,
                         )
-                    
+
                     if tool_name in self.tools:
                         observation = self.tools[tool_name](tool_input)
                         scratchpad += f"\nThought: {response}\nObservation: {observation}"
@@ -263,7 +263,7 @@ Thought:"""
                         scratchpad += f"\nThought: {response}\nObservation: Tool '{tool_name}' not found."
                 else:
                     scratchpad += f"\nThought: {response}"
-            
+
             return ChainResult(
                 success=False,
                 output=None,
@@ -286,16 +286,16 @@ def create_chain(chain_type: ChainType, **kwargs) -> Chain:
         ChainType.SIMPLE: SimpleChain,
         ChainType.SEQUENTIAL: SequentialChain,
     }
-    
+
     chain_class = chains.get(chain_type)
     if not chain_class:
         raise ValueError(f"Unsupported chain type: {chain_type}")
-    
+
     return chain_class(**kwargs)
 
 
 # Output parsers
-def json_parser(output: str) -> Dict:
+def json_parser(output: str) -> dict:
     """Parse JSON from output."""
     # Try to extract JSON from markdown code blocks
     json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', output)
@@ -304,7 +304,7 @@ def json_parser(output: str) -> Dict:
     return json.loads(output)
 
 
-def list_parser(output: str) -> List[str]:
+def list_parser(output: str) -> list[str]:
     """Parse a numbered or bulleted list."""
     lines = output.strip().split('\n')
     items = []

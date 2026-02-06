@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Documentation Context
+# Personal AI Infrastructure — Documentation Module
 
-**Module**: documentation
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Automated documentation generation and management including API docs, code comments, and markdown processing.
+The Documentation module provides PAI integration for auto-generating docs from code.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Documentation Generation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Generate docs from source:
 
-## Key Files
+```python
+from codomyrmex.documentation import DocGenerator
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+generator = DocGenerator()
+generator.scan("src/")
+generator.generate_api_docs("docs/api/")
+```
 
-## Future Considerations
+### Docstring Extraction
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Extract and validate docstrings:
+
+```python
+from codomyrmex.documentation import DocstringParser
+
+parser = DocstringParser()
+docs = parser.extract("src/main.py")
+
+for func in docs.functions:
+    print(f"{func.name}: {func.docstring}")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `DocGenerator` | Auto-generate docs |
+| `DocstringParser` | Extract docstrings |
+| `MarkdownRenderer` | Render markdown |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

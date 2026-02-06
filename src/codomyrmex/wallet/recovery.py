@@ -8,7 +8,6 @@ whether the prover knows them.
 
 import hashlib
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -51,8 +50,8 @@ class NaturalRitualRecovery:
     """
 
     def __init__(self):
-        self._rituals: Dict[str, List[RitualStep]] = {}
-        self._attempt_counts: Dict[str, int] = {}
+        self._rituals: dict[str, list[RitualStep]] = {}
+        self._attempt_counts: dict[str, int] = {}
         self._max_attempts: int = 5
 
     @property
@@ -66,7 +65,7 @@ class NaturalRitualRecovery:
             raise ValueError("max_attempts must be at least 1")
         self._max_attempts = value
 
-    def register_ritual(self, user_id: str, steps: List[RitualStep]) -> None:
+    def register_ritual(self, user_id: str, steps: list[RitualStep]) -> None:
         """Define the user's unique recovery ritual.
 
         Args:
@@ -93,7 +92,7 @@ class NaturalRitualRecovery:
         """
         return user_id in self._rituals
 
-    def get_prompts(self, user_id: str) -> List[str]:
+    def get_prompts(self, user_id: str) -> list[str]:
         """Get the ritual prompts for a user (without revealing hashes).
 
         Args:
@@ -141,7 +140,7 @@ class NaturalRitualRecovery:
         self._attempt_counts[user_id] = 0
         logger.info(f"Reset attempt counter for {user_id}")
 
-    def initiate_recovery(self, user_id: str, responses: List[str]) -> bool:
+    def initiate_recovery(self, user_id: str, responses: list[str]) -> bool:
         """Attempt recovery by enacting the ritual.
 
         All responses must match their expected hashes for recovery to succeed.

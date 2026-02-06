@@ -9,7 +9,11 @@ import pytest
 
 from codomyrmex.scrape.config import ScrapeConfig, reset_config
 from codomyrmex.scrape.core import BaseScraper, ScrapeFormat, ScrapeOptions
-from codomyrmex.scrape.exceptions import ScrapeError, ScrapeValidationError, ScrapeConnectionError
+from codomyrmex.scrape.exceptions import (
+    ScrapeConnectionError,
+    ScrapeError,
+    ScrapeValidationError,
+)
 from codomyrmex.scrape.scraper import Scraper
 
 

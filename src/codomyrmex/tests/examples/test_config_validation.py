@@ -5,18 +5,19 @@ Tests YAML and JSON configuration files for syntax correctness,
 required fields, and schema compliance.
 """
 
-import pytest
-import yaml
 import json
 import os
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any
+
+import pytest
+import yaml
 
 
 class TestConfigValidation:
     """Test validation of example configuration files."""
 
-    def get_config_files(self, examples_dir: Path) -> List[Tuple[Path, str]]:
+    def get_config_files(self, examples_dir: Path) -> list[tuple[Path, str]]:
         """Get all config files (yaml and json)."""
         config_files = []
 
@@ -30,10 +31,10 @@ class TestConfigValidation:
 
         return config_files
 
-    def validate_yaml_syntax(self, file_path: Path) -> Tuple[bool, Optional[str]]:
+    def validate_yaml_syntax(self, file_path: Path) -> tuple[bool, str | None]:
         """Validate YAML syntax."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 yaml.safe_load(f)
             return True, None
         except yaml.YAMLError as e:
@@ -41,10 +42,10 @@ class TestConfigValidation:
         except Exception as e:
             return False, f"Unexpected error: {e}"
 
-    def validate_json_syntax(self, file_path: Path) -> Tuple[bool, Optional[str]]:
+    def validate_json_syntax(self, file_path: Path) -> tuple[bool, str | None]:
         """Validate JSON syntax."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 json.load(f)
             return True, None
         except json.JSONDecodeError as e:
@@ -52,10 +53,10 @@ class TestConfigValidation:
         except Exception as e:
             return False, f"Unexpected error: {e}"
 
-    def load_config(self, file_path: Path, file_type: str) -> Optional[Dict[str, Any]]:
+    def load_config(self, file_path: Path, file_type: str) -> dict[str, Any] | None:
         """Load configuration from file."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 if file_type == "yaml":
                     return yaml.safe_load(f)
                 elif file_type == "json":
@@ -65,7 +66,7 @@ class TestConfigValidation:
         except Exception:
             return None
 
-    def validate_required_fields(self, config: Dict[str, Any], required_fields: List[str]) -> List[str]:
+    def validate_required_fields(self, config: dict[str, Any], required_fields: list[str]) -> list[str]:
         """Validate presence of required fields."""
         missing_fields = []
         for field in required_fields:
@@ -73,7 +74,7 @@ class TestConfigValidation:
                 missing_fields.append(field)
         return missing_fields
 
-    def validate_field_types(self, config: Dict[str, Any], type_requirements: Dict[str, str]) -> List[str]:
+    def validate_field_types(self, config: dict[str, Any], type_requirements: dict[str, str]) -> list[str]:
         """Validate field types."""
         type_errors = []
         for field, expected_type in type_requirements.items():
@@ -248,7 +249,7 @@ class TestConfigValidation:
         yaml_files = [f for f, t in config_files if t == "yaml"]
         json_files = [f for f, t in config_files if t == "json"]
 
-        print(f"\nConfig file discovery:")
+        print("\nConfig file discovery:")
         print(f"  Found {len(yaml_files)} YAML files")
         print(f"  Found {len(json_files)} JSON files")
         print(f"  Total config files: {len(config_files)}")
@@ -259,7 +260,7 @@ class TestConfigValidation:
         # Should have both YAML and JSON for most examples
         # assert len(yaml_files) >= 10, f"Should find at least 10 YAML files, found {len(yaml_files)}"
         # assert len(json_files) >= 10, f"Should find at least 10 JSON files, found {len(json_files)}"
-        
+
         # Relaxed checks
         if len(config_files) == 0:
             print("Warning: No config files found. Skipping validation.")

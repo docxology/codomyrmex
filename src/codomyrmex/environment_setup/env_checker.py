@@ -16,23 +16,13 @@ Example:
     ...     print("uv package manager found")
 """
 
-from pathlib import Path
-from typing import Dict, Any, Optional
 import os
 import shutil
-import subprocess
 import sys
 
 import dotenv
-import kit
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 
@@ -170,7 +160,7 @@ def generate_environment_report() -> str:
     """
     return "Environment report generation placeholder."
 
-def validate_environment_completeness(repo_root: Optional[str] = None) -> bool:
+def validate_environment_completeness(repo_root: str | None = None) -> bool:
     """Validate that the environment is fully configured for Codomyrmex.
 
     Performs a comprehensive check of all environment requirements including

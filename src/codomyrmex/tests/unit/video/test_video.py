@@ -8,8 +8,9 @@ Tests cover:
 - VideoProcessor, FrameExtractor, VideoAnalyzer initialization
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 # Test imports
@@ -22,14 +23,14 @@ def test_video_module_imports() -> None:
 def test_video_exceptions_import() -> None:
     """Test that all exception classes can be imported."""
     from codomyrmex.video.exceptions import (
-        VideoError,
-        VideoReadError,
-        VideoWriteError,
-        VideoProcessingError,
-        FrameExtractionError,
         AudioExtractionError,
+        FrameExtractionError,
         UnsupportedFormatError,
         VideoAnalysisError,
+        VideoError,
+        VideoProcessingError,
+        VideoReadError,
+        VideoWriteError,
     )
 
     # Verify exception hierarchy
@@ -75,12 +76,12 @@ def test_frame_extraction_error_context() -> None:
 def test_availability_flags() -> None:
     """Test that availability flags are defined."""
     from codomyrmex.video import (
-        PROCESSING_AVAILABLE,
-        EXTRACTION_AVAILABLE,
         ANALYSIS_AVAILABLE,
+        EXTRACTION_AVAILABLE,
         MOVIEPY_AVAILABLE,
         OPENCV_AVAILABLE,
         PIL_AVAILABLE,
+        PROCESSING_AVAILABLE,
     )
 
     # These should be boolean values
@@ -114,10 +115,10 @@ class TestVideoConfig:
     def test_get_set_config(self) -> None:
         """Test get_config and set_config."""
         from codomyrmex.video.config import (
-            get_config,
-            set_config,
-            reset_config,
             VideoConfig,
+            get_config,
+            reset_config,
+            set_config,
         )
 
         # Get default config

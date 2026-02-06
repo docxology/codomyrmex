@@ -12,74 +12,75 @@ Features:
 - Progress streaming and callbacks
 """
 
-from .core import main as run_orchestrator
-from .config import load_config, get_script_config
-from .workflow import (
-    Workflow,
-    Task,
-    TaskStatus,
-    TaskResult,
-    RetryPolicy,
-    WorkflowError,
-    CycleError,
-    TaskFailedError,
-    chain,
-    parallel,
-    fan_out_fan_in,
+# New submodule exports
+from . import (
+    engines,
+    monitors,
+    pipelines,
+    schedulers,
+    state,
+    templates,
+    triggers,
+    workflows,
 )
+from .config import get_script_config, load_config
+from .core import main as run_orchestrator
+from .discovery import discover_scripts
 from .exceptions import (
-    StepError,
+    ConcurrencyError,
+    DependencyResolutionError,
     OrchestratorTimeoutError,
     StateError,
-    DependencyResolutionError,
-    ConcurrencyError,
+    StepError,
 )
-from .runner import run_script, run_function
+from .integration import (
+    AgentOrchestrator,
+    CICDBridge,
+    OrchestratorBridge,
+    PipelineConfig,
+    StageConfig,
+    create_pipeline_workflow,
+    run_agent_task,
+    run_ci_stage,
+)
 from .parallel_runner import (
-    ParallelRunner,
     BatchRunner,
     ExecutionResult,
+    ParallelRunner,
     run_parallel,
     run_parallel_async,
 )
-from .discovery import discover_scripts
+from .runner import run_function, run_script
 from .thin import (
-    run,
-    run_async,
-    pipe,
+    StepResult,
+    Steps,
     batch,
     chain_scripts,
-    workflow,
-    step,
-    Steps,
-    shell,
+    condition,
+    pipe,
     python_func,
     retry,
+    run,
+    run_async,
+    shell,
+    step,
     timeout,
-    condition,
-    StepResult,
+    workflow,
 )
-from .integration import (
-    OrchestratorBridge,
-    CICDBridge,
-    AgentOrchestrator,
-    StageConfig,
-    PipelineConfig,
-    create_pipeline_workflow,
-    run_ci_stage,
-    run_agent_task,
+from .workflow import (
+    CycleError,
+    RetryPolicy,
+    Task,
+    TaskFailedError,
+    TaskResult,
+    TaskStatus,
+    Workflow,
+    WorkflowError,
+    chain,
+    fan_out_fan_in,
+    parallel,
 )
 
-# New submodule exports
-from . import engines
-from . import schedulers
-from . import workflows
-from . import monitors
-
-from . import pipelines
-from . import triggers
-from . import state
-from . import templates
 __all__ = [
     'templates',
     'state',

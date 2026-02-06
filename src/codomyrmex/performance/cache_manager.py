@@ -1,57 +1,14 @@
-from pathlib import Path
-from typing import Any, Callable, Optional, Union
 import functools
+import hashlib
 import json
 import pickle
 import tempfile
 import time
-
-
-import hashlib
+from pathlib import Path
+from typing import Any
+from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Caching utilities for Codomyrmex modules.
 
@@ -71,7 +28,7 @@ class CacheManager:
 
     def __init__(
         self,
-        cache_dir: Optional[Union[str, Path]] = None,
+        cache_dir: str | Path | None = None,
         max_memory_items: int = 1000,
         default_ttl: int = 3600,
     ):  # 1 hour default TTL
@@ -128,7 +85,7 @@ class CacheManager:
         self._memory_cache.pop(oldest_key, None)
         self._access_times.pop(oldest_key, None)
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Get a value from the cache."""
         # Check memory cache first
         if key in self._memory_cache:
@@ -178,7 +135,7 @@ class CacheManager:
 
         return None
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None) -> None:
         """Set a value in the cache."""
         ttl = ttl or self.default_ttl
         timestamp = time.time()
@@ -224,9 +181,9 @@ _cache_manager = CacheManager()
 
 
 def cached_function(
-    ttl: Optional[int] = None,
-    cache_key_prefix: Optional[str] = None,
-    cache_manager: Optional[CacheManager] = None,
+    ttl: int | None = None,
+    cache_key_prefix: str | None = None,
+    cache_manager: CacheManager | None = None,
 ) -> Callable:
     """
     Decorator for caching function results.

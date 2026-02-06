@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Templating Context
+# Personal AI Infrastructure — Templating Module
 
-**Module**: templating
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Template engine integration for code generation, document rendering, and configuration templating with Jinja2 support.
+The Templating module provides PAI integration for template rendering.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Template Rendering
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Render templates:
 
-## Key Files
+```python
+from codomyrmex.templating import TemplateEngine
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+engine = TemplateEngine()
+result = engine.render("Hello, {{ name }}!", name="World")
 
-## Future Considerations
+# From file
+html = engine.render_file("templates/email.j2", context)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Custom Filters
+
+Add custom template filters:
+
+```python
+from codomyrmex.templating import TemplateEngine
+
+engine = TemplateEngine()
+engine.add_filter("capitalize_all", str.upper)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `TemplateEngine` | Render templates |
+| `JinjaLoader` | Template loading |
+| `Filters` | Custom filters |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

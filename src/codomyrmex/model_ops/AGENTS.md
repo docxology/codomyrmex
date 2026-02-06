@@ -1,32 +1,70 @@
-# Codomyrmex Agents — src/codomyrmex/model_ops
+# Agent Guidelines - Model Ops
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+ML model lifecycle: training, deployment, versioning, and monitoring.
 
-Structured and scalable framework for LLM operations. Enables reproducible model optimization and rigorous performance verification.
+## Key Classes
 
-## Active Components
+- **ModelRegistry** — Model versioning and storage
+- **ModelDeployer** — Deploy models to endpoints
+- **ExperimentTracker** — Track training experiments
+- **ModelMonitor** — Monitor deployed models
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `datasets/` – Directory containing datasets components
-- `evaluation/` – Directory containing evaluation components
-- `evaluators.py` – Project file
-- `fine_tuning/` – Directory containing fine_tuning components
-- `training/` – Directory containing training components
+## Agent Instructions
 
-## Operating Contracts
+1. **Version models** — Every model gets a version
+2. **Track experiments** — Log hyperparameters and metrics
+3. **Validate before deploy** — Test on held-out data
+4. **Monitor drift** — Watch for data/model drift
+5. **Rollback ready** — Keep previous versions
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.model_ops import (
+    ModelRegistry, ExperimentTracker, ModelDeployer
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Track experiment
+with ExperimentTracker.start("training_v1") as exp:
+    exp.log_params({"lr": 0.01, "epochs": 100})
+    model = train_model(...)
+    exp.log_metrics({"accuracy": 0.95, "loss": 0.05})
+    exp.log_model(model)
+
+# Register model
+registry = ModelRegistry()
+registry.register(
+    name="classifier",
+    version="1.0.0",
+    model=model,
+    metadata={"framework": "pytorch"}
+)
+
+# Deploy model
+deployer = ModelDeployer()
+endpoint = deployer.deploy(
+    model_uri="models:/classifier/1.0.0",
+    instance_type="gpu.small"
+)
+```
+
+## Testing Patterns
+
+```python
+# Verify registry
+registry = ModelRegistry()
+registry.register("test", "1.0", dummy_model)
+loaded = registry.load("test", "1.0")
+assert loaded is not None
+
+# Verify experiment tracking
+with ExperimentTracker.start("test") as exp:
+    exp.log_metrics({"acc": 0.9})
+    assert exp.get_metrics()["acc"] == 0.9
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

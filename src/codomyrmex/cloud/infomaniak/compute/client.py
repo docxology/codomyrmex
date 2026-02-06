@@ -5,11 +5,11 @@ Provides instance, image, keypair, and availability zone operations
 via the OpenStack Nova API.
 """
 
-from typing import Any, Dict, List, Optional
 import logging
+from typing import Any
 
-from ..base import InfomaniakOpenStackBase
 from ...common import ComputeClient
+from ..base import InfomaniakOpenStackBase
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +29,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     """
 
     _service_name = "compute"
-    
+
     # =========================================================================
     # Instance Operations
     # =========================================================================
-    
-    def list_instances(self) -> List[Dict[str, Any]]:
+
+    def list_instances(self) -> list[dict[str, Any]]:
         """
         List all compute instances.
-        
+
         Returns:
             List of instance dictionaries with id, name, status, etc.
         """
@@ -47,14 +47,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to list instances: {e}")
             return []
-    
-    def get_instance(self, instance_id: str) -> Optional[Dict[str, Any]]:
+
+    def get_instance(self, instance_id: str) -> dict[str, Any] | None:
         """
         Get details for a specific instance.
-        
+
         Args:
             instance_id: Instance UUID
-            
+
         Returns:
             Instance details dict or None if not found
         """
@@ -64,22 +64,22 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to get instance {instance_id}: {e}")
             return None
-    
+
     def create_instance(
         self,
         name: str,
         flavor: str,
         image: str,
         network: str,
-        key_name: Optional[str] = None,
-        security_groups: Optional[List[str]] = None,
-        user_data: Optional[str] = None,
-        availability_zone: Optional[str] = None,
+        key_name: str | None = None,
+        security_groups: list[str] | None = None,
+        user_data: str | None = None,
+        availability_zone: str | None = None,
         **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Create a new compute instance.
-        
+
         Args:
             name: Instance name
             flavor: Flavor name or ID
@@ -90,7 +90,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             user_data: Cloud-init user data script
             availability_zone: Target availability zone
             **kwargs: Additional Nova create parameters
-            
+
         Returns:
             Created instance dict or None on failure
         """
@@ -100,19 +100,19 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             if not flavor_obj:
                 logger.error(f"Flavor not found: {flavor}")
                 return None
-            
+
             # Resolve image
             image_obj = self._conn.image.find_image(image)
             if not image_obj:
                 logger.error(f"Image not found: {image}")
                 return None
-            
+
             # Resolve network
             network_obj = self._conn.network.find_network(network)
             if not network_obj:
                 logger.error(f"Network not found: {network}")
                 return None
-            
+
             server = self._conn.compute.create_server(
                 name=name,
                 flavor_id=flavor_obj.id,
@@ -124,23 +124,23 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
                 availability_zone=availability_zone,
                 **kwargs
             )
-            
+
             # Wait for server to be active
             server = self._conn.compute.wait_for_server(server)
             logger.info(f"Created instance: {server.id}")
             return self._server_to_dict(server)
-            
+
         except Exception as e:
             logger.error(f"Failed to create instance {name}: {e}")
             return None
-    
+
     def start_instance(self, instance_id: str) -> bool:
         """
         Start a stopped instance.
-        
+
         Args:
             instance_id: Instance UUID
-            
+
         Returns:
             True if successful
         """
@@ -151,14 +151,14 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to start instance {instance_id}: {e}")
             return False
-    
+
     def stop_instance(self, instance_id: str) -> bool:
         """
         Stop a running instance.
-        
+
         Args:
             instance_id: Instance UUID
-            
+
         Returns:
             True if successful
         """
@@ -169,15 +169,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to stop instance {instance_id}: {e}")
             return False
-    
+
     def reboot_instance(self, instance_id: str, reboot_type: str = "SOFT") -> bool:
         """
         Reboot an instance.
-        
+
         Args:
             instance_id: Instance UUID
             reboot_type: "SOFT" or "HARD"
-            
+
         Returns:
             True if successful
         """
@@ -188,15 +188,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to reboot instance {instance_id}: {e}")
             return False
-    
+
     def delete_instance(self, instance_id: str, force: bool = False) -> bool:
         """
         Delete an instance.
-        
+
         Args:
             instance_id: Instance UUID
             force: Force delete even if running
-            
+
         Returns:
             True if successful
         """
@@ -207,7 +207,7 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to delete instance {instance_id}: {e}")
             return False
-    
+
     def terminate_instance(self, instance_id: str) -> bool:
         """
         Terminate (delete) an instance. ABC-compatible alias for delete_instance.
@@ -223,11 +223,11 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
     # =========================================================================
     # Image Operations
     # =========================================================================
-    
-    def list_images(self) -> List[Dict[str, Any]]:
+
+    def list_images(self) -> list[dict[str, Any]]:
         """
         List available images.
-        
+
         Returns:
             List of image dictionaries
         """
@@ -248,8 +248,8 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to list images: {e}")
             return []
-    
-    def get_image(self, image_id: str) -> Optional[Dict[str, Any]]:
+
+    def get_image(self, image_id: str) -> dict[str, Any] | None:
         """Get image details by ID or name."""
         try:
             image = self._conn.image.find_image(image_id)
@@ -266,15 +266,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to get image {image_id}: {e}")
             return None
-    
+
     # =========================================================================
     # Flavor Operations
     # =========================================================================
-    
-    def list_flavors(self) -> List[Dict[str, Any]]:
+
+    def list_flavors(self) -> list[dict[str, Any]]:
         """
         List available flavors (instance types).
-        
+
         Returns:
             List of flavor dictionaries
         """
@@ -294,15 +294,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to list flavors: {e}")
             return []
-    
+
     # =========================================================================
     # Key Pair Operations
     # =========================================================================
-    
-    def list_keypairs(self) -> List[Dict[str, Any]]:
+
+    def list_keypairs(self) -> list[dict[str, Any]]:
         """
         List SSH key pairs.
-        
+
         Returns:
             List of keypair dictionaries
         """
@@ -319,19 +319,19 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to list keypairs: {e}")
             return []
-    
+
     def create_keypair(
         self,
         name: str,
-        public_key: Optional[str] = None
-    ) -> Optional[Dict[str, Any]]:
+        public_key: str | None = None
+    ) -> dict[str, Any] | None:
         """
         Create or import an SSH key pair.
-        
+
         Args:
             name: Key pair name
             public_key: Public key to import (if None, generates new pair)
-            
+
         Returns:
             Keypair dict (includes private_key if generated)
         """
@@ -348,20 +348,20 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
             # Include private key if it was generated
             if hasattr(keypair, "private_key") and keypair.private_key:
                 result["private_key"] = keypair.private_key
-            
+
             logger.info(f"Created keypair: {name}")
             return result
         except Exception as e:
             logger.error(f"Failed to create keypair {name}: {e}")
             return None
-    
+
     def delete_keypair(self, name: str) -> bool:
         """
         Delete an SSH key pair.
-        
+
         Args:
             name: Key pair name
-            
+
         Returns:
             True if successful
         """
@@ -372,15 +372,15 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to delete keypair {name}: {e}")
             return False
-    
+
     # =========================================================================
     # Availability Zone Operations
     # =========================================================================
-    
-    def list_availability_zones(self) -> List[Dict[str, Any]]:
+
+    def list_availability_zones(self) -> list[dict[str, Any]]:
         """
         List availability zones.
-        
+
         Returns:
             List of availability zone dictionaries
         """
@@ -396,12 +396,12 @@ class InfomaniakComputeClient(InfomaniakOpenStackBase, ComputeClient):
         except Exception as e:
             logger.error(f"Failed to list availability zones: {e}")
             return []
-    
+
     # =========================================================================
     # Helper Methods
     # =========================================================================
-    
-    def _server_to_dict(self, server: Any) -> Dict[str, Any]:
+
+    def _server_to_dict(self, server: Any) -> dict[str, Any]:
         """Convert OpenStack server object to dict."""
         return {
             "id": server.id,

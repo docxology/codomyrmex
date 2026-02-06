@@ -7,17 +7,15 @@ This module provides data compression and decompression utilities supporting:
 - Stream-based compression
 - Automatic format detection via magic bytes
 """
-from io import BytesIO
-from pathlib import Path
-from typing import IO, List, Optional, Union
 import gzip
 import os
 import zipfile
 import zlib
+from io import BytesIO
+from typing import IO
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
 
 logger = get_logger(__name__)
 
@@ -127,7 +125,7 @@ class Compressor:
         decompressed = self.decompress(data)
         output_stream.write(decompressed)
 
-    def detect_format(self, data: bytes) -> Optional[str]:
+    def detect_format(self, data: bytes) -> str | None:
         """Detect compression format from data.
 
         Args:
@@ -147,7 +145,7 @@ class Compressor:
 
     # --- File Utilities ---
 
-    def compress_file(self, input_path: str, output_path: Optional[str] = None, level: int = 6) -> str:
+    def compress_file(self, input_path: str, output_path: str | None = None, level: int = 6) -> str:
         """Compress a file.
 
         Args:
@@ -184,7 +182,7 @@ class Compressor:
             logger.error(f"File compression error: {e}")
             raise CompressionError(f"Failed to compress file: {str(e)}") from e
 
-    def decompress_file(self, input_path: str, output_path: Optional[str] = None) -> str:
+    def decompress_file(self, input_path: str, output_path: str | None = None) -> str:
         """Decompress a file.
 
         Args:
@@ -287,19 +285,19 @@ def auto_decompress(data: bytes) -> bytes:
 def compare_formats(data: bytes, level: int = 6) -> dict[str, dict[str, float]]:
     """
     Compare compression across all supported formats.
-    
+
     Args:
         data: Data to compress
         level: Compression level
-        
+
     Returns:
         Dict with format -> {compressed_size, ratio, time_ms}
     """
     import time
-    
+
     results = {}
     original_size = len(data)
-    
+
     for fmt in Compressor.SUPPORTED_FORMATS:
         compressor = Compressor(fmt)
         start = time.time()
@@ -314,5 +312,5 @@ def compare_formats(data: bytes, level: int = 6) -> dict[str, dict[str, float]]:
             }
         except Exception as e:
             results[fmt] = {"error": str(e)}
-            
+
     return results

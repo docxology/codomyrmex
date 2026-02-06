@@ -17,10 +17,11 @@ Tests cover:
 Total: ~25 tests in one TestInfomaniakNetwork class.
 """
 
-import pytest
 from unittest.mock import MagicMock
 
-from .conftest import make_mock_network, make_mock_floating_ip
+import pytest
+
+from .conftest import make_mock_floating_ip, make_mock_network
 
 
 class TestInfomaniakNetwork:

@@ -10,17 +10,15 @@ logger = get_logger(__name__)
 
 import hashlib
 from pathlib import Path
-from typing import Dict, Optional
 
 import requests
 
-from ..core.models import FPFSpec
 
 
 class FPFFetcher:
     """Fetcher for FPF specification from GitHub."""
 
-    def __init__(self, cache_dir: Optional[Path] = None):
+    def __init__(self, cache_dir: Path | None = None):
         """Initialize the fetcher.
 
         Args:
@@ -83,7 +81,7 @@ class FPFFetcher:
             # If check fails, assume updates are available
             return True
 
-    def get_version_info(self, repo: str = "ailev/FPF") -> Dict[str, any]:
+    def get_version_info(self, repo: str = "ailev/FPF") -> dict[str, any]:
         """Get version information from GitHub.
 
         Args:
@@ -111,7 +109,7 @@ class FPFFetcher:
                 "message": "unknown",
             }
 
-    def cache_spec(self, content: str, version: Optional[str] = None) -> Path:
+    def cache_spec(self, content: str, version: str | None = None) -> Path:
         """Cache the specification content locally.
 
         Args:

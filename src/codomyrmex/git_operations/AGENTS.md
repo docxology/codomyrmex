@@ -1,35 +1,68 @@
-# Codomyrmex Agents — src/codomyrmex/git_operations
+# Agent Guidelines - Git Operations
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Git repository operations: commits, branches, merges, and history.
 
-Provides programmatic Python interface for Git interactions. Abstracts raw subprocess calls into typed, error-handling functions for initializing, managing, and synchronizing repositories. Foundation for automated code modification and version control.
+## Key Classes
 
-## Active Components
+- **GitRepo** — Repository operations
+- **Commit** — Commit representation
+- **Branch** — Branch management
+- **DiffManager** — View diffs
 
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `api/` – Directory containing api components
-- `cli/` – Directory containing cli components
-- `core/` – Directory containing core components
-- `data/` – Directory containing data components
-- `docs/` – Directory containing docs components
-- `requirements.txt` – Project file
-- `tools/` – Directory containing tools components
+## Agent Instructions
 
-## Operating Contracts
+1. **Check status first** — Verify clean state
+2. **Branch often** — Feature branches for work
+3. **Small commits** — Atomic, focused commits
+4. **Meaningful messages** — Descriptive commit messages
+5. **Pull before push** — Avoid merge conflicts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.git_operations import GitRepo, Branch
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Open repository
+repo = GitRepo(".")
+
+# Check status
+status = repo.status()
+if status.is_dirty:
+    print(f"Modified: {status.modified_files}")
+
+# Commit changes
+repo.add(["src/main.py"])
+repo.commit("feat: add new feature")
+
+# Branch operations
+branch = Branch(repo)
+branch.create("feature/new-thing")
+branch.checkout("feature/new-thing")
+
+# View history
+for commit in repo.log(limit=10):
+    print(f"{commit.hash[:7]} - {commit.message}")
+```
+
+## Testing Patterns
+
+```python
+# Verify status
+repo = GitRepo(".")
+status = repo.status()
+assert hasattr(status, "is_dirty")
+
+# Verify log
+commits = repo.log(limit=5)
+assert len(commits) <= 5
+
+# Verify branch listing
+branches = repo.branches()
+assert "main" in branches or "master" in branches
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -10,7 +10,6 @@ Tests cover:
 - Error handling
 """
 
-import time
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -20,13 +19,12 @@ from codomyrmex.metrics import (
     Counter,
     Gauge,
     Histogram,
-    Summary,
-    Metrics,
     MetricAggregator,
-    get_metrics,
+    Metrics,
     MetricsError,
+    Summary,
+    get_metrics,
 )
-
 
 # ==============================================================================
 # Module Import Tests

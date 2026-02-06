@@ -289,7 +289,9 @@ class TestCompositeTransformer:
     def test_composite_applies_all(self):
         """Verify composite transformer applies all transformers."""
         from codomyrmex.migration import (
-            CompositeTransformer, FieldRenameTransformer, FieldTypeTransformer
+            CompositeTransformer,
+            FieldRenameTransformer,
+            FieldTypeTransformer,
         )
 
         transformer = CompositeTransformer([
@@ -310,9 +312,7 @@ class TestMigrationRunner:
 
     def test_runner_run_migration(self):
         """Verify migration execution."""
-        from codomyrmex.migration import (
-            MigrationRunner, Migration, MigrationStatus
-        )
+        from codomyrmex.migration import Migration, MigrationRunner, MigrationStatus
 
         runner = MigrationRunner()
 
@@ -338,9 +338,7 @@ class TestMigrationRunner:
 
     def test_runner_handles_failure(self):
         """Verify failure handling."""
-        from codomyrmex.migration import (
-            MigrationRunner, Migration, MigrationStatus
-        )
+        from codomyrmex.migration import Migration, MigrationRunner, MigrationStatus
 
         runner = MigrationRunner()
 
@@ -358,7 +356,9 @@ class TestMigrationRunner:
     def test_runner_rollback(self):
         """Verify rollback execution."""
         from codomyrmex.migration import (
-            MigrationRunner, Migration, MigrationDirection, MigrationStatus
+            Migration,
+            MigrationRunner,
+            MigrationStatus,
         )
 
         runner = MigrationRunner()
@@ -387,7 +387,7 @@ class TestMigrationRunner:
 
     def test_runner_is_completed(self):
         """Verify completion tracking."""
-        from codomyrmex.migration import MigrationRunner, Migration
+        from codomyrmex.migration import Migration, MigrationRunner
 
         runner = MigrationRunner()
         migration = Migration(id="tracked", name="Test", version="1.0")
@@ -436,7 +436,9 @@ class TestDataMigrator:
     def test_migrator_chaining(self):
         """Verify transformer chaining."""
         from codomyrmex.migration import (
-            DataMigrator, FieldRenameTransformer, FieldTypeTransformer
+            DataMigrator,
+            FieldRenameTransformer,
+            FieldTypeTransformer,
         )
 
         migrator = (

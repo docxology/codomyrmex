@@ -6,15 +6,15 @@ Cache pre-population and warming strategies.
 
 __version__ = "0.1.0"
 
-import time
-import threading
 import concurrent.futures
-from typing import Optional, Dict, Any, List, Callable, TypeVar, Generic, Set
+import threading
+import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from abc import ABC, abstractmethod
-
+from typing import Any, Dict, Generic, List, Optional, Set, TypeVar
+from collections.abc import Callable
 
 T = TypeVar('T')
 K = TypeVar('K')
@@ -47,9 +47,9 @@ class WarmingStats:
     keys_warmed: int = 0
     keys_failed: int = 0
     total_time_ms: float = 0.0
-    last_warming: Optional[datetime] = None
-    errors: List[str] = field(default_factory=list)
-    
+    last_warming: datetime | None = None
+    errors: list[str] = field(default_factory=list)
+
     @property
     def success_rate(self) -> float:
         """Calculate success rate."""
@@ -61,36 +61,36 @@ class WarmingStats:
 
 class KeyProvider(ABC, Generic[K]):
     """Base class for providing keys to warm."""
-    
+
     @abstractmethod
-    def get_keys(self) -> List[K]:
+    def get_keys(self) -> list[K]:
         """Get list of keys to warm."""
         pass
 
 
 class StaticKeyProvider(KeyProvider[K]):
     """Provide a static list of keys."""
-    
-    def __init__(self, keys: List[K]):
+
+    def __init__(self, keys: list[K]):
         self._keys = keys
-    
-    def get_keys(self) -> List[K]:
+
+    def get_keys(self) -> list[K]:
         return self._keys.copy()
 
 
 class CallableKeyProvider(KeyProvider[K]):
     """Provide keys from a callable."""
-    
-    def __init__(self, func: Callable[[], List[K]]):
+
+    def __init__(self, func: Callable[[], list[K]]):
         self._func = func
-    
-    def get_keys(self) -> List[K]:
+
+    def get_keys(self) -> list[K]:
         return self._func()
 
 
 class ValueLoader(ABC, Generic[K, V]):
     """Base class for loading values for cache warming."""
-    
+
     @abstractmethod
     def load(self, key: K) -> V:
         """Load a value for a given key."""
@@ -99,10 +99,10 @@ class ValueLoader(ABC, Generic[K, V]):
 
 class CallableValueLoader(ValueLoader[K, V]):
     """Load values using a callable."""
-    
+
     def __init__(self, func: Callable[[K], V]):
         self._func = func
-    
+
     def load(self, key: K) -> V:
         return self._func(key)
 
@@ -110,21 +110,21 @@ class CallableValueLoader(ValueLoader[K, V]):
 class BatchValueLoader(ValueLoader[K, V]):
     """
     Load values in batches for efficiency.
-    
+
     The batch function should accept a list of keys and return
     a dict mapping keys to values.
     """
-    
-    def __init__(self, batch_func: Callable[[List[K]], Dict[K, V]]):
+
+    def __init__(self, batch_func: Callable[[list[K]], dict[K, V]]):
         self._batch_func = batch_func
-        self._cache: Dict[K, V] = {}
-    
-    def load_batch(self, keys: List[K]) -> Dict[K, V]:
+        self._cache: dict[K, V] = {}
+
+    def load_batch(self, keys: list[K]) -> dict[K, V]:
         """Load a batch of values."""
         result = self._batch_func(keys)
         self._cache.update(result)
         return result
-    
+
     def load(self, key: K) -> V:
         """Load a single value (uses cache if available)."""
         if key in self._cache:
@@ -136,33 +136,33 @@ class BatchValueLoader(ValueLoader[K, V]):
 class CacheWarmer(Generic[K, V]):
     """
     Cache warmer for pre-populating caches.
-    
+
     Usage:
         # Define key provider and value loader
         keys = StaticKeyProvider(["user:1", "user:2", "user:3"])
         loader = CallableValueLoader(lambda k: fetch_user(k))
-        
+
         # Create warmer
         warmer = CacheWarmer(
             cache=my_cache,
             key_provider=keys,
             value_loader=loader,
         )
-        
+
         # Warm the cache
         stats = warmer.warm()
         print(f"Warmed {stats.keys_warmed} keys")
-        
+
         # Or warm asynchronously
         warmer.warm_async()
     """
-    
+
     def __init__(
         self,
-        cache: Dict[K, V],
+        cache: dict[K, V],
         key_provider: KeyProvider[K],
         value_loader: ValueLoader[K, V],
-        config: Optional[WarmingConfig] = None,
+        config: WarmingConfig | None = None,
     ):
         self.cache = cache
         self.key_provider = key_provider
@@ -171,26 +171,26 @@ class CacheWarmer(Generic[K, V]):
         self._stats = WarmingStats()
         self._warming = False
         self._lock = threading.Lock()
-        self._scheduler_thread: Optional[threading.Thread] = None
+        self._scheduler_thread: threading.Thread | None = None
         self._stop_scheduler = threading.Event()
-    
+
     @property
     def stats(self) -> WarmingStats:
         """Get warming statistics."""
         return self._stats
-    
+
     @property
     def is_warming(self) -> bool:
         """Check if warming is in progress."""
         return self._warming
-    
-    def warm(self, keys: Optional[List[K]] = None) -> WarmingStats:
+
+    def warm(self, keys: list[K] | None = None) -> WarmingStats:
         """
         Warm the cache synchronously.
-        
+
         Args:
             keys: Specific keys to warm (or all from provider)
-            
+
         Returns:
             WarmingStats with results
         """
@@ -198,37 +198,37 @@ class CacheWarmer(Generic[K, V]):
             if self._warming:
                 return self._stats
             self._warming = True
-        
+
         start_time = time.time()
         stats = WarmingStats()
-        
+
         try:
             target_keys = keys if keys is not None else self.key_provider.get_keys()
-            
+
             # Check if we're using batch loader
             if isinstance(self.value_loader, BatchValueLoader):
                 stats = self._warm_batch(target_keys)
             else:
                 stats = self._warm_parallel(target_keys)
-            
+
             stats.total_time_ms = (time.time() - start_time) * 1000
             stats.last_warming = datetime.now()
-            
+
         finally:
             with self._lock:
                 self._warming = False
                 self._stats = stats
-        
+
         return stats
-    
-    def _warm_batch(self, keys: List[K]) -> WarmingStats:
+
+    def _warm_batch(self, keys: list[K]) -> WarmingStats:
         """Warm using batch loading."""
         stats = WarmingStats()
         loader = self.value_loader
-        
+
         if not isinstance(loader, BatchValueLoader):
             return stats
-        
+
         # Process in batches
         for i in range(0, len(keys), self.config.batch_size):
             batch = keys[i:i + self.config.batch_size]
@@ -240,13 +240,13 @@ class CacheWarmer(Generic[K, V]):
             except Exception as e:
                 stats.keys_failed += len(batch)
                 stats.errors.append(str(e))
-        
+
         return stats
-    
-    def _warm_parallel(self, keys: List[K]) -> WarmingStats:
+
+    def _warm_parallel(self, keys: list[K]) -> WarmingStats:
         """Warm using parallel loading."""
         stats = WarmingStats()
-        
+
         def load_key(key: K) -> tuple:
             for attempt in range(self.config.max_retries + 1):
                 try:
@@ -257,14 +257,14 @@ class CacheWarmer(Generic[K, V]):
                         return (key, None, str(e))
                     time.sleep(0.1 * (2 ** attempt))  # Exponential backoff
             return (key, None, "Max retries exceeded")
-        
+
         with concurrent.futures.ThreadPoolExecutor(
             max_workers=self.config.max_workers
         ) as executor:
             futures = {executor.submit(load_key, key): key for key in keys}
-            
+
             for future in concurrent.futures.as_completed(
-                futures, 
+                futures,
                 timeout=self.config.warmup_timeout_s
             ):
                 key, value, error = future.result()
@@ -274,23 +274,23 @@ class CacheWarmer(Generic[K, V]):
                 else:
                     self.cache[key] = value
                     stats.keys_warmed += 1
-        
+
         return stats
-    
-    def warm_async(self, keys: Optional[List[K]] = None) -> concurrent.futures.Future:
+
+    def warm_async(self, keys: list[K] | None = None) -> concurrent.futures.Future:
         """
         Warm the cache asynchronously.
-        
+
         Returns:
             Future that resolves to WarmingStats
         """
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
         return executor.submit(self.warm, keys)
-    
+
     def warm_key(self, key: K) -> bool:
         """
         Warm a single key.
-        
+
         Returns:
             True if successful
         """
@@ -300,21 +300,21 @@ class CacheWarmer(Generic[K, V]):
             return True
         except Exception:
             return False
-    
+
     def start_scheduler(self) -> None:
         """Start scheduled warming."""
         if self._scheduler_thread and self._scheduler_thread.is_alive():
             return
-        
+
         self._stop_scheduler.clear()
-        
+
         def scheduler_loop():
             while not self._stop_scheduler.wait(self.config.refresh_interval_s):
                 self.warm()
-        
+
         self._scheduler_thread = threading.Thread(target=scheduler_loop, daemon=True)
         self._scheduler_thread.start()
-    
+
     def stop_scheduler(self) -> None:
         """Stop scheduled warming."""
         self._stop_scheduler.set()
@@ -325,35 +325,35 @@ class CacheWarmer(Generic[K, V]):
 class AccessTracker(Generic[K]):
     """
     Track cache access patterns for adaptive warming.
-    
+
     Usage:
         tracker = AccessTracker[str]()
-        
+
         # Record accesses
         tracker.record_access("user:1")
         tracker.record_access("user:2")
         tracker.record_access("user:1")
-        
+
         # Get frequently accessed keys
         hot_keys = tracker.get_hot_keys(threshold=2)
     """
-    
+
     def __init__(self, max_keys: int = 10000):
         self.max_keys = max_keys
-        self._access_counts: Dict[K, int] = {}
-        self._last_access: Dict[K, float] = {}
+        self._access_counts: dict[K, int] = {}
+        self._last_access: dict[K, float] = {}
         self._lock = threading.Lock()
-    
+
     def record_access(self, key: K) -> None:
         """Record an access to a key."""
         with self._lock:
             self._access_counts[key] = self._access_counts.get(key, 0) + 1
             self._last_access[key] = time.time()
-            
+
             # Trim if over limit
             if len(self._access_counts) > self.max_keys:
                 self._trim()
-    
+
     def _trim(self) -> None:
         """Trim old or infrequent keys."""
         # Remove oldest half
@@ -362,20 +362,20 @@ class AccessTracker(Generic[K]):
             key=lambda x: x[1]
         )
         to_remove = [k for k, _ in sorted_by_time[:len(sorted_by_time) // 2]]
-        
+
         for key in to_remove:
             del self._access_counts[key]
             del self._last_access[key]
-    
+
     def get_access_count(self, key: K) -> int:
         """Get access count for a key."""
         return self._access_counts.get(key, 0)
-    
+
     def get_hot_keys(
-        self, 
+        self,
         threshold: int = 5,
         limit: int = 100,
-    ) -> List[K]:
+    ) -> list[K]:
         """Get frequently accessed keys."""
         with self._lock:
             hot = [
@@ -384,12 +384,12 @@ class AccessTracker(Generic[K]):
             ]
             hot.sort(key=lambda x: x[1], reverse=True)
             return [k for k, _ in hot[:limit]]
-    
+
     def get_recent_keys(
         self,
         seconds: float = 300.0,
         limit: int = 100,
-    ) -> List[K]:
+    ) -> list[K]:
         """Get recently accessed keys."""
         cutoff = time.time() - seconds
         with self._lock:
@@ -399,7 +399,7 @@ class AccessTracker(Generic[K]):
             ]
             recent.sort(key=lambda x: x[1], reverse=True)
             return [k for k, _ in recent[:limit]]
-    
+
     def clear(self) -> None:
         """Clear all tracking data."""
         with self._lock:
@@ -410,10 +410,10 @@ class AccessTracker(Generic[K]):
 class AdaptiveKeyProvider(KeyProvider[K]):
     """
     Key provider based on access patterns.
-    
+
     Uses an AccessTracker to provide frequently accessed keys.
     """
-    
+
     def __init__(
         self,
         tracker: AccessTracker[K],
@@ -423,8 +423,8 @@ class AdaptiveKeyProvider(KeyProvider[K]):
         self.tracker = tracker
         self.threshold = threshold
         self.limit = limit
-    
-    def get_keys(self) -> List[K]:
+
+    def get_keys(self) -> list[K]:
         return self.tracker.get_hot_keys(
             threshold=self.threshold,
             limit=self.limit,

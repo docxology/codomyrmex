@@ -1,7 +1,6 @@
-from typing import Any, Optional
-
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -133,7 +132,7 @@ class ReactiveArchitecture(AgentArchitecture):
 
 class KnowledgeBase:
     """Simple Knowledge Base for deliberative agents."""
-    
+
     def __init__(self):
         self.facts: dict[str, Any] = {}
         self.rules: list[callable] = []
@@ -142,13 +141,13 @@ class KnowledgeBase:
         """Add or update a fact in the knowledge base."""
         self.facts[key] = value
 
-    def get_fact(self, key: str) -> Optional[Any]:
+    def get_fact(self, key: str) -> Any | None:
         """Get a fact by key."""
         return self.facts.get(key)
 
     def remove_fact(self, key: str) -> bool:
         """Remove a fact from the knowledge base.
-        
+
         Returns:
             True if fact was removed, False if not found
         """
@@ -217,7 +216,7 @@ class DeliberativeArchitecture(AgentArchitecture):
              plan.append({"action": "execute_subgoals"})
         else:
              plan.append({"action": "achieve_goal", "goal": goal, "context": self.kb.facts})
-        
+
         self.plans.append(plan)
         self.logger.debug(f"Created plan for goal: {goal}")
         return plan
@@ -235,7 +234,7 @@ class DeliberativeArchitecture(AgentArchitecture):
         # Update KB with new perceptions
         for k, v in environment.items():
             self.kb.add_fact(k, v)
-            
+
         return {
             "raw": environment,
             "interpreted": self._interpret(environment),
@@ -261,7 +260,7 @@ class DeliberativeArchitecture(AgentArchitecture):
         goal = self.goals[0]
         # Plan based on interpreted state
         plan = self.plan(goal, perception.get("interpreted", {}))
-        
+
         if plan:
             next_action = plan[0]
             return {"action": next_action, "plan": plan}

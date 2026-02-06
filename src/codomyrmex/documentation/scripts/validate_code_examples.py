@@ -1,54 +1,12 @@
-from pathlib import Path
-from typing import List, Dict, Tuple, Any
 import ast
 import json
 import os
-import os
 import re
 import sys
-
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Code Example Validation Script
@@ -71,8 +29,8 @@ class CodeExample:
     language: str
     code: str
     syntax_valid: bool = False
-    import_errors: List[str] = None
-    api_mismatches: List[str] = None
+    import_errors: list[str] = None
+    api_mismatches: list[str] = None
 
     def __post_init__(self):
         if self.import_errors is None:
@@ -81,7 +39,7 @@ class CodeExample:
             self.api_mismatches = []
 
 
-def extract_code_blocks(content: str, file_path: Path) -> List[CodeExample]:
+def extract_code_blocks(content: str, file_path: Path) -> list[CodeExample]:
     """Extract all code blocks from markdown content."""
     examples = []
 
@@ -108,7 +66,7 @@ def extract_code_blocks(content: str, file_path: Path) -> List[CodeExample]:
     return examples
 
 
-def validate_python_syntax(code: str) -> Tuple[bool, List[str]]:
+def validate_python_syntax(code: str) -> tuple[bool, list[str]]:
     """Validate Python syntax."""
     errors = []
     try:
@@ -122,7 +80,7 @@ def validate_python_syntax(code: str) -> Tuple[bool, List[str]]:
         return False, errors
 
 
-def check_imports(code: str) -> List[str]:
+def check_imports(code: str) -> list[str]:
     """Check if imports in code can be resolved."""
     errors = []
 
@@ -159,7 +117,7 @@ def validate_code_example(example: CodeExample) -> CodeExample:
     return example
 
 
-def find_all_documentation_files(docs_dir: Path) -> List[Path]:
+def find_all_documentation_files(docs_dir: Path) -> list[Path]:
     """Find all markdown documentation files."""
     markdown_files = []
     for root, dirs, files in os.walk(docs_dir):

@@ -2,10 +2,7 @@
 Queue implementation for task management.
 """
 
-import heapq
-import time
 from datetime import datetime
-from typing import Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -58,7 +55,7 @@ class Queue:
         job.priority = priority
         return self._queue.enqueue(job)
 
-    def dequeue(self) -> Optional[Job]:
+    def dequeue(self) -> Job | None:
         """Remove and return the next job from the queue.
 
         Returns:

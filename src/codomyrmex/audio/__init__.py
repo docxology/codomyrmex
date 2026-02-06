@@ -54,14 +54,14 @@ from .exceptions import (
 # Speech-to-text imports
 try:
     from .speech_to_text import (
-        Transcriber,
-        TranscriptionResult,
-        TranscriptionConfig,
-        Segment,
-        Word,
-        WhisperModelSize,
-        STTProvider,
         WHISPER_AVAILABLE,
+        Segment,
+        STTProvider,
+        Transcriber,
+        TranscriptionConfig,
+        TranscriptionResult,
+        WhisperModelSize,
+        Word,
     )
     STT_AVAILABLE = True
 except ImportError:
@@ -78,15 +78,15 @@ except ImportError:
 # Text-to-speech imports
 try:
     from .text_to_speech import (
-        Synthesizer,
-        SynthesisResult,
-        TTSConfig,
-        AudioFormat,
-        VoiceInfo,
-        VoiceGender,
-        TTSProvider,
-        PYTTSX3_AVAILABLE,
         EDGE_TTS_AVAILABLE,
+        PYTTSX3_AVAILABLE,
+        AudioFormat,
+        SynthesisResult,
+        Synthesizer,
+        TTSConfig,
+        TTSProvider,
+        VoiceGender,
+        VoiceInfo,
     )
     TTS_AVAILABLE = True
 except ImportError:

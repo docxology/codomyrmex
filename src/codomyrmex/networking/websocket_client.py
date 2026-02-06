@@ -6,9 +6,8 @@ message handling, and error recovery.
 
 import asyncio
 import json
-import logging
-from dataclasses import dataclass
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any
+from collections.abc import Callable
 
 try:
     import websockets
@@ -33,7 +32,7 @@ class WebSocketClient:
     def __init__(
         self,
         url: str,
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
         reconnect_interval: float = 1.0,
         max_reconnect_delay: float = 30.0,
     ):
@@ -68,28 +67,28 @@ class WebSocketClient:
                     self.connection = websocket
                     logger.info("WebSocket connected")
                     delay = self.reconnect_interval  # Reset delay on success
-                    
+
                     # Process messages
                     async for message in websocket:
                         await self._handle_message(message)
-                        
+
             except (OSError, websockets.exceptions.WebSocketException) as e:
                 logger.warning(f"WebSocket connection failed: {e}")
             except Exception as e:
                 logger.error(f"Unexpected WebSocket error: {e}")
             finally:
                 self.connection = None
-                
+
             if self._running:
                 logger.info(f"Reconnecting in {delay}s...")
                 await asyncio.sleep(delay)
                 delay = min(delay * 1.5, self.max_reconnect_delay)
 
-    async def send(self, message: Union[str, bytes, Dict]):
+    async def send(self, message: str | bytes | dict):
         """Send a message."""
         if not self.connection or self.connection.closed:
             raise WebSocketError("Not connected")
-            
+
         try:
             if isinstance(message, dict):
                 message = json.dumps(message)
@@ -107,7 +106,7 @@ class WebSocketClient:
         """Add a message handler. Alias for event system consistency."""
         self._handlers.append(handler)
 
-    async def _handle_message(self, message: Union[str, bytes]):
+    async def _handle_message(self, message: str | bytes):
         """Dispatch message to handlers."""
         # Try to parse JSON
         data = message
@@ -116,7 +115,7 @@ class WebSocketClient:
                 data = json.loads(message)
             except json.JSONDecodeError:
                 pass
-                
+
         for handler in self._handlers:
             try:
                 if asyncio.iscoroutinefunction(handler):

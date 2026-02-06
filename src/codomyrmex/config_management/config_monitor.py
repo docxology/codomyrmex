@@ -1,21 +1,14 @@
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Optional
+import hashlib
 import json
 import re
 import time
-
 from dataclasses import dataclass, field
-import hashlib
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """Configuration Monitoring Module for Codomyrmex Configuration Management."""
 
@@ -28,8 +21,8 @@ class ConfigChange:
     config_path: str
     change_type: str  # "created", "modified", "deleted"
     timestamp: datetime
-    previous_hash: Optional[str] = None
-    current_hash: Optional[str] = None
+    previous_hash: str | None = None
+    current_hash: str | None = None
     changes: dict[str, Any] = field(default_factory=dict)
     source: str = "unknown"  # Who made the change
 
@@ -56,7 +49,7 @@ class ConfigSnapshot:
 class ConfigurationMonitor:
     """Configuration monitoring and auditing system."""
 
-    def __init__(self, workspace_dir: Optional[str] = None):
+    def __init__(self, workspace_dir: str | None = None):
         """Initialize configuration monitor.
 
         Args:
@@ -163,7 +156,7 @@ class ConfigurationMonitor:
 
         return changes
 
-    def _get_previous_hash(self, file_path: str) -> Optional[str]:
+    def _get_previous_hash(self, file_path: str) -> str | None:
         """Get previous hash for a file."""
         # This would typically check a database or file storage
         # For now, return None (assume all files are new)
@@ -274,7 +267,7 @@ class ConfigurationMonitor:
         self,
         environment: str,
         config_paths: list[str],
-        compliance_rules: Optional[dict[str, Any]] = None
+        compliance_rules: dict[str, Any] | None = None
     ) -> ConfigAudit:
         """Audit configuration for compliance and best practices.
 
@@ -392,7 +385,7 @@ class ConfigurationMonitor:
             if change.timestamp >= cutoff_time
         ]
 
-    def get_audit_history(self, environment: Optional[str] = None) -> list[ConfigAudit]:
+    def get_audit_history(self, environment: str | None = None) -> list[ConfigAudit]:
         """Get audit history.
 
         Args:
@@ -431,7 +424,7 @@ class ConfigurationMonitor:
 def monitor_config_changes(
     config_paths: list[str],
     interval_seconds: int = 300,  # 5 minutes
-    workspace_dir: Optional[str] = None
+    workspace_dir: str | None = None
 ) -> dict[str, Any]:
     """Monitor configuration changes continuously.
 

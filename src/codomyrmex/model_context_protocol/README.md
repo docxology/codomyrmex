@@ -1,37 +1,85 @@
 # model_context_protocol
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Foundation-layer module defining the Model Context Protocol (MCP), the standardized communication specification between AI agents and platform tools within Codomyrmex. Provides Pydantic-validated schemas for tool calls, tool results, error details, and messages, along with submodules for adapters, validators, and tool discovery. Acts as the syntax layer that all agent-tool interactions flow through.
+Foundation-layer module defining the Model Context Protocol (MCP), the standardized communication specification between AI agents and platform tools within Codomyrmex. Provides JSON-RPC message handling, Pydantic-validated schemas for tool calls, and a full MCP server implementation with stdio transport.
+
+## Quick Start
+
+```python
+from codomyrmex.model_context_protocol import MCPServer, MCPToolRegistry
+
+# Create an MCP server
+server = MCPServer()
+
+# Register a tool using decorator
+@server.tool(name="search", description="Search the database")
+def search(query: str) -> str:
+    return f"Results for: {query}"
+
+# Register a resource
+server.register_resource(
+    uri="file:///data/config.json",
+    name="Configuration",
+    description="App configuration file"
+)
+
+# Run the server (stdio transport)
+server.run()
+```
 
 ## Key Exports
 
+### Server Classes
+
+- **`MCPServer`** -- Full MCP server with tool, resource, and prompt support
+- **`MCPServerConfig`** -- Configuration for server name, version, transport
+
 ### Schema Classes
 
-- **`MCPErrorDetail`** -- Pydantic model for structured error information with `error_type`, `error_message`, and optional `error_details` fields
-- **`MCPMessage`** -- Pydantic model representing a message in the MCP protocol
-- **`MCPToolCall`** -- Pydantic model representing a call to an MCP tool with `tool_name` and `arguments` fields
-- **`MCPToolRegistry`** -- Registry for available MCP tools and their schemas
-- **`MCPToolResult`** -- Pydantic model for tool execution results with `status`, `data`, `error`, and `explanation` fields; includes validators ensuring error is populated on failure and data on success
+- **`MCPErrorDetail`** -- Structured error information
+- **`MCPMessage`** -- Protocol message representation
+- **`MCPToolCall`** -- Tool invocation with `tool_name` and `arguments`
+- **`MCPToolRegistry`** -- Registry for available tools
+- **`MCPToolResult`** -- Tool execution result with status validation
 
 ### Submodules
 
-- **`schemas`** -- Core Pydantic schema definitions for MCP messages, tool calls, and results
-- **`adapters`** -- Adapters for converting between MCP format and other protocols
-- **`validators`** -- Validation logic for MCP messages and tool specifications
-- **`discovery`** -- Tool discovery mechanisms for finding and registering available MCP tools
+- **`schemas`** -- Pydantic schema definitions
+- **`adapters`** -- Protocol adapters for external systems
+- **`validators`** -- Message validation utilities
+- **`discovery`** -- Tool discovery mechanisms
 
-## Directory Contents
+## CLI Scripts
 
-- `schemas/` -- Core Pydantic models (`mcp_schemas.py`) defining the MCP data structures
-- `adapters/` -- Protocol adapter implementations for bridging MCP with external systems
-- `validators/` -- Validation utilities for MCP message and tool specification compliance
-- `discovery/` -- Tool discovery and registration mechanisms
+```bash
+# Run MCP server for Claude Desktop
+python scripts/model_context_protocol/run_mcp_server.py
+
+# List available tools
+python scripts/model_context_protocol/run_mcp_server.py --list-tools
+```
+
+## Claude Desktop Integration
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "codomyrmex": {
+      "command": "python",
+      "args": ["/path/to/codomyrmex/scripts/model_context_protocol/run_mcp_server.py"]
+    }
+  }
+}
+```
 
 ## Navigation
 
 - **Full Documentation**: [docs/modules/model_context_protocol/](../../../docs/modules/model_context_protocol/)
+- **Scripts**: [scripts/model_context_protocol/](../../../scripts/model_context_protocol/)
+- **LLM Integration**: [llm/mcp.py](../llm/mcp.py)
 - **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md

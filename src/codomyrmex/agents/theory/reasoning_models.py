@@ -1,51 +1,8 @@
-from typing import Any, Optional
-
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Reasoning model theories and implementations."""
 
@@ -77,7 +34,7 @@ class ReasoningModel(ABC):
 
     @abstractmethod
     def reason(
-        self, premises: dict[str, Any], context: Optional[dict[str, Any]] = None
+        self, premises: dict[str, Any], context: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Perform reasoning.
@@ -136,7 +93,7 @@ class SymbolicReasoningModel(ReasoningModel):
         self.logger.debug(f"Added fact: {fact} = {value}")
 
     def reason(
-        self, premises: dict[str, Any], context: Optional[dict[str, Any]] = None
+        self, premises: dict[str, Any], context: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Perform symbolic reasoning.
@@ -228,7 +185,7 @@ class NeuralReasoningModel(ReasoningModel):
         self.logger.debug(f"Learned pattern: {pattern_name}")
 
     def reason(
-        self, premises: dict[str, Any], context: Optional[dict[str, Any]] = None
+        self, premises: dict[str, Any], context: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Perform neural reasoning (pattern matching).
@@ -288,7 +245,7 @@ class HybridReasoningModel(ReasoningModel):
         self.neural = NeuralReasoningModel("neural_layer")
 
     def reason(
-        self, premises: dict[str, Any], context: Optional[dict[str, Any]] = None
+        self, premises: dict[str, Any], context: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Perform hybrid reasoning.

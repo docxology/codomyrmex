@@ -1,26 +1,47 @@
-# Personal AI Infrastructure - Build Synthesis Context
+# Personal AI Infrastructure — Build Synthesis Module
 
-**Module**: build_synthesis
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Build system integration for code compilation, bundling, and artifact generation.
+The Build Synthesis module provides PAI integration for project scaffolding.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Project Scaffolding
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Create new projects:
 
-## Key Files
+```python
+from codomyrmex.build_synthesis import Scaffolder
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+scaffolder = Scaffolder()
+scaffolder.create_project(
+    name="my_app",
+    template="fastapi",
+    directory="./projects/"
+)
+```
 
-## Future Considerations
+### Code Generation
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Generate code files:
+
+```python
+from codomyrmex.build_synthesis import FileGenerator
+
+generator = FileGenerator()
+generator.create_file("src/main.py", template="main")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Scaffolder` | New projects |
+| `FileGenerator` | Generate files |
+| `Template` | Templates |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

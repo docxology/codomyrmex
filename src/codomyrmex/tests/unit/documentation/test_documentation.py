@@ -1,11 +1,8 @@
 """Unit tests for documentation module."""
 
-import pytest
 import sys
-import os
-import tempfile
-import shutil
-from pathlib import Path
+
+import pytest
 
 
 @pytest.mark.unit
@@ -80,7 +77,6 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.documentation.documentation_website import install_dependencies
 
         # This actually runs npm install — skip in unit test context
         pytest.skip("Skipping: runs real npm install (use -m slow to include)")
@@ -91,7 +87,6 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.documentation.documentation_website import run_command_stream_output
 
         # This runs a real subprocess — skip in unit test context
         pytest.skip("Skipping: runs real subprocess (use -m slow to include)")
@@ -120,7 +115,9 @@ class TestDocumentation:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.documentation.documentation_website import print_assessment_checklist
+        from codomyrmex.documentation.documentation_website import (
+            print_assessment_checklist,
+        )
 
         print_assessment_checklist()
 
@@ -140,11 +137,11 @@ class TestDocumentation:
             sys.path.insert(0, str(code_dir))
 
         from codomyrmex.documentation.documentation_website import (
+            DEFAULT_ACTION,
             DEFAULT_DOCS_PORT,
             DOCUSAURUS_BASE_PATH,
-            DEFAULT_ACTION,
             DOCUSAURUS_ROOT_DIR,
-            EFFECTIVE_DOCS_URL
+            EFFECTIVE_DOCS_URL,
         )
 
         assert DEFAULT_DOCS_PORT == 3000

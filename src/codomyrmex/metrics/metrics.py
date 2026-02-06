@@ -4,8 +4,8 @@ This module provides classes for collecting and aggregating metrics (Counter, Ga
 and exporting them to various backends (e.g., Prometheus).
 """
 
-from typing import Any, Optional
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -113,14 +113,14 @@ class Metrics:
         self._histograms: dict[str, Histogram] = {}
         self._summaries: dict[str, Summary] = {}
 
-    def _make_key(self, name: str, labels: Optional[dict] = None) -> str:
+    def _make_key(self, name: str, labels: dict | None = None) -> str:
         """Create a key from name and labels."""
         if labels:
             label_str = ",".join(f"{k}={v}" for k, v in sorted(labels.items()))
             return f"{name}{{{label_str}}}"
         return name
 
-    def counter(self, name: str, labels: Optional[dict] = None) -> Counter:
+    def counter(self, name: str, labels: dict | None = None) -> Counter:
         """Create or get a counter metric.
 
         Args:
@@ -135,7 +135,7 @@ class Metrics:
             self._counters[key] = Counter(name=name, labels=labels or {})
         return self._counters[key]
 
-    def gauge(self, name: str, labels: Optional[dict] = None) -> Gauge:
+    def gauge(self, name: str, labels: dict | None = None) -> Gauge:
         """Create or get a gauge metric.
 
         Args:
@@ -150,7 +150,7 @@ class Metrics:
             self._gauges[key] = Gauge(name=name, labels=labels or {})
         return self._gauges[key]
 
-    def histogram(self, name: str, labels: Optional[dict] = None) -> Histogram:
+    def histogram(self, name: str, labels: dict | None = None) -> Histogram:
         """Create or get a histogram metric.
 
         Args:
@@ -165,7 +165,7 @@ class Metrics:
             self._histograms[key] = Histogram(name=name, labels=labels or {})
         return self._histograms[key]
 
-    def summary(self, name: str, labels: Optional[dict] = None) -> Summary:
+    def summary(self, name: str, labels: dict | None = None) -> Summary:
         """Create or get a summary metric.
 
         Args:

@@ -16,13 +16,11 @@ from codomyrmex.api.mocking import (
     MockResponse,
     MockResponseMode,
     MockRoute,
-    RequestLog,
     RequestMatcher,
     ResponseFixture,
     create_fixture,
     create_mock_server,
 )
-
 
 # ---------------------------------------------------------------------------
 # Enums

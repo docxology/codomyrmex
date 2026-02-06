@@ -1,6 +1,7 @@
 """Unit tests for multimodal module."""
-import pytest
 import base64
+
+import pytest
 
 
 @pytest.mark.unit
@@ -363,7 +364,7 @@ class TestAudioProcessor:
 
     def test_processor_validate_valid(self):
         """Verify validation of valid audio."""
-        from codomyrmex.multimodal import AudioProcessor, AudioContent, MediaType
+        from codomyrmex.multimodal import AudioContent, AudioProcessor, MediaType
 
         processor = AudioProcessor()
         content = AudioContent(
@@ -378,7 +379,7 @@ class TestAudioProcessor:
 
     def test_processor_validate_too_long(self):
         """Verify validation rejects long audio."""
-        from codomyrmex.multimodal import AudioProcessor, AudioContent, MediaType
+        from codomyrmex.multimodal import AudioContent, AudioProcessor, MediaType
 
         processor = AudioProcessor(max_duration_seconds=60.0)
         content = AudioContent(
@@ -438,8 +439,9 @@ class TestMultimodalMessageBuilder:
 
     def test_builder_with_base64_image(self):
         """Verify builder with base64 image."""
-        from codomyrmex.multimodal import MultimodalMessageBuilder
         import base64
+
+        from codomyrmex.multimodal import MultimodalMessageBuilder
 
         b64_data = base64.b64encode(b"image bytes").decode('utf-8')
 

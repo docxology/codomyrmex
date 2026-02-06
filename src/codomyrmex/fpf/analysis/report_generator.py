@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Report generator for FPF specifications.
 
 
@@ -9,10 +9,9 @@ with analysis, statistics, and visualizations.
 
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
-from .analyzer import FPFAnalyzer
 from ..core.models import FPFSpec
+from .analyzer import FPFAnalyzer
 from .term_analyzer import TermAnalyzer
 
 
@@ -52,7 +51,7 @@ class ReportGenerator:
             "</head>",
             "<body>",
             "<div class='container'>",
-            f"<h1>FPF Specification Report</h1>",
+            "<h1>FPF Specification Report</h1>",
             f"<p class='meta'>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>",
         ]
 
@@ -154,7 +153,7 @@ class ReportGenerator:
         }
         """
 
-    def _generate_overview_section(self) -> List[str]:
+    def _generate_overview_section(self) -> list[str]:
         """Generate overview section."""
         return [
             "<h2>Overview</h2>",
@@ -165,7 +164,7 @@ class ReportGenerator:
             f"<p><strong>Total Relationships:</strong> {len(self.spec.relationships)}</p>",
         ]
 
-    def _generate_statistics_section(self, analysis: Optional[Dict]) -> List[str]:
+    def _generate_statistics_section(self, analysis: dict | None) -> list[str]:
         """Generate statistics section."""
         lines = ["<h2>Statistics</h2>", "<div class='stats-grid'>"]
 
@@ -194,7 +193,7 @@ class ReportGenerator:
         lines.append("</div>")
         return lines
 
-    def _generate_patterns_section(self) -> List[str]:
+    def _generate_patterns_section(self) -> list[str]:
         """Generate patterns section."""
         lines = [
             "<h2>Patterns</h2>",
@@ -215,7 +214,7 @@ class ReportGenerator:
         lines.append("</table>")
         return lines
 
-    def _generate_concepts_section(self) -> List[str]:
+    def _generate_concepts_section(self) -> list[str]:
         """Generate concepts section."""
         lines = [
             "<h2>Top Concepts</h2>",
@@ -235,7 +234,7 @@ class ReportGenerator:
         lines.append("</table>")
         return lines
 
-    def _generate_analysis_section(self, analysis: Dict) -> List[str]:
+    def _generate_analysis_section(self, analysis: dict) -> list[str]:
         """Generate analysis section."""
         lines = ["<h2>Analysis</h2>"]
 
@@ -256,8 +255,8 @@ class ReportGenerator:
         return lines
 
     def _generate_terms_section(
-        self, term_frequency: Dict[str, int], shared_terms: List[Tuple[str, int, List[str]]]
-    ) -> List[str]:
+        self, term_frequency: dict[str, int], shared_terms: list[tuple[str, int, list[str]]]
+    ) -> list[str]:
         """Generate terms section."""
         lines = [
             "<h2>Shared Terms</h2>",

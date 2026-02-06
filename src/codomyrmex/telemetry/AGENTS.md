@@ -1,30 +1,62 @@
-# Codomyrmex Agents — src/codomyrmex/telemetry
+# Agent Guidelines - Telemetry
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+OpenTelemetry-compatible tracing and observability.
 
-Unified observability framework based on OpenTelemetry standard. Allows the system to record, correlate, and analyze the performance and behavior of distributed workflows.
+## Key Classes
 
-## Active Components
+- **TraceContext** — Manage trace context
+- **start_span(name)** — Start a new span
+- **traced** — Decorator for auto-tracing
+- **OTLPExporter** — Export to OTLP endpoint
+- **BatchSpanProcessor** — Batch span processing
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `context/` – Directory containing context components
-- `exporters/` – Directory containing exporters components
-- `metrics/` – Directory containing metrics components
-- `spans/` – Directory containing spans components
+## Agent Instructions
 
-## Operating Contracts
+1. **Trace entry points** — Trace API endpoints and jobs
+2. **Use descriptive names** — `user.login` not `func1`
+3. **Add attributes** — Include user_id, request_id
+4. **Link spans** — Use `link_span()` for causality
+5. **Batch in production** — Use `BatchSpanProcessor`
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.telemetry import start_span, traced, TraceContext
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Context-managed span
+with start_span("process_request") as span:
+    span.set_attribute("user_id", user.id)
+    result = process(data)
+    span.set_attribute("result_count", len(result))
+
+# Decorator
+@traced("database.query")
+def query_db(sql):
+    return execute(sql)
+
+# Configure exporter
+from codomyrmex.telemetry import OTLPExporter, BatchSpanProcessor
+exporter = OTLPExporter(endpoint="http://jaeger:4318")
+processor = BatchSpanProcessor(exporter)
+```
+
+## Testing Patterns
+
+```python
+# Verify span creation
+with start_span("test") as span:
+    assert span is not None
+    span.set_attribute("key", "value")
+
+# Verify decorator
+@traced("test")
+def test_func():
+    return 42
+assert test_func() == 42
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

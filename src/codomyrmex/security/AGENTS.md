@@ -1,31 +1,64 @@
-# Codomyrmex Agents — src/codomyrmex/security
+# Agent Guidelines - Security
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Security utilities: input validation, vulnerability scanning, and hardening.
 
-Provides comprehensive security capabilities organized into four specialized submodules covering physical, digital, cognitive, and theoretical security aspects. Includes vulnerability scanning, threat modeling, and compliance checking.
+## Key Classes
 
-## Active Components
+- **InputValidator** — Validate and sanitize input
+- **VulnerabilityScanner** — Scan for security issues
+- **SecurityHardener** — Apply security best practices
+- **PermissionChecker** — Check access permissions
 
-- `API_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `cognitive/` – Directory containing cognitive components
-- `digital/` – Directory containing digital components
-- `physical/` – Directory containing physical components
-- `security_theory/` – Directory containing security_theory components
-- `theory/` – Directory containing theory components
+## Agent Instructions
 
-## Operating Contracts
+1. **Validate all input** — Never trust user data
+2. **Escape output** — Context-aware escaping
+3. **Least privilege** — Minimal permissions
+4. **Log security events** — Audit trail
+5. **Scan dependencies** — Check for vulnerabilities
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.security import (
+    InputValidator, VulnerabilityScanner, sanitize_html
+)
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Validate input
+validator = InputValidator()
+if not validator.validate_email(email):
+    raise ValueError("Invalid email")
+
+# Sanitize HTML
+safe_html = sanitize_html(user_content)
+
+# Scan for vulnerabilities
+scanner = VulnerabilityScanner()
+report = scanner.scan_dependencies("requirements.txt")
+for vuln in report.vulnerabilities:
+    print(f"{vuln.package}: {vuln.severity} - {vuln.cve}")
+
+# Check permissions
+checker = PermissionChecker()
+if not checker.can_access(user, resource):
+    raise PermissionDenied()
+```
+
+## Testing Patterns
+
+```python
+# Verify input validation
+validator = InputValidator()
+assert validator.validate_email("test@example.com")
+assert not validator.validate_email("invalid")
+
+# Verify sanitization
+html = sanitize_html("<script>alert('xss')</script>")
+assert "<script>" not in html
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -5,11 +5,13 @@ This module provides a generic ReAct (Reasoning and Acting) agent
 that can use registered tools to solve problems.
 """
 
-from typing import Any, Dict, Iterator, List, Optional
 import json
+from typing import Any
+from collections.abc import Iterator
 
 from codomyrmex.logging_monitoring import get_logger
-from .base import BaseAgent, AgentCapabilities, AgentRequest, AgentResponse
+
+from .base import AgentCapabilities, AgentRequest, AgentResponse, BaseAgent
 from .registry import ToolRegistry
 
 logger = get_logger(__name__)
@@ -17,7 +19,7 @@ logger = get_logger(__name__)
 class ReActAgent(BaseAgent):
     """
     A generic ReAct agent that interleaves reasoning and acting.
-    
+
     It uses a ToolRegistry to discover and execute tools.
     """
 
@@ -26,7 +28,7 @@ class ReActAgent(BaseAgent):
         name: str,
         tool_registry: ToolRegistry,
         llm_client: Any = None, # Placeholder for LLM interface
-        config: Optional[Dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
         max_steps: int = 10
     ):
         capabilities = [
@@ -40,26 +42,26 @@ class ReActAgent(BaseAgent):
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         """Execute the ReAct loop."""
-        
+
         history = []
         history.append({"role": "system", "content": self._get_system_prompt()})
         history.append({"role": "user", "content": request.prompt})
-        
+
         steps = 0
         final_answer = None
-        
+
         # Simulating the loop for now as we don't have a real LLM connected in this env
         # In a real scenario, this would loop calling the LLM, parsing Thought/Action, executing, and feeding back Observation.
-        
+
         self.logger.info(f"Starting ReAct loop for prompt: {request.prompt}")
-        
+
         # Simplified Logic for demonstration/testing without live LLM:
         # If the prompt matches a tool call pattern exactly, execute it.
         # Otherwise return a placeholder.
-        
+
         # NOTE: This is where we would plug in the `codomyrmex.llm` module.
         # For Phase 17, we establish the STRUCTURE.
-        
+
         try:
             # Get available tools for the system prompt
             tools = self.tool_registry.list_tools()
@@ -113,7 +115,7 @@ class ReActAgent(BaseAgent):
 
             # Fallback behavior: Check if prompt asks to run a tool directly
             # This allows unit testing the harness without an LLM.
-            
+
             if request.prompt.startswith("call:"):
                 # Format: call: tool_name args={"k": "v"}
                 parts = request.prompt.split(" ", 2)
@@ -125,7 +127,7 @@ class ReActAgent(BaseAgent):
                             kwargs = json.loads(parts[2])
                         except Exception:
                             pass
-                    
+
                     self.logger.info(f"Executing tool {tool_name} with {kwargs}")
                     result = self.tool_registry.execute(tool_name, **kwargs)
                     final_answer = f"Tool {tool_name} returned: {result}"
@@ -133,12 +135,12 @@ class ReActAgent(BaseAgent):
                     final_answer = "Invalid call format."
             else:
                 final_answer = f"Processed request: {request.prompt}. Available tools: {tool_names}"
-            
+
             return AgentResponse(
                 content=final_answer,
                 metadata={"steps_taken": steps}
             )
-            
+
         except Exception as e:
             self.logger.error(f"ReAct loop failed: {e}")
             return AgentResponse(content="", error=str(e))
@@ -158,7 +160,7 @@ Observation: ...
 Final Answer: ...
 """
 
-    def _parse_action_args(self, action_line: str) -> Dict[str, Any]:
+    def _parse_action_args(self, action_line: str) -> dict[str, Any]:
         """Parse action arguments from an action line.
 
         Supports formats like:

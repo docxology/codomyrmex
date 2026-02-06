@@ -8,11 +8,10 @@ import json
 import logging
 import math
 import time
-
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Optional
-
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +91,7 @@ class SensorManager:
         self.devices[device.device_id] = device
         logger.info(f"Registered device: {device.device_id}")
 
-    def unregister_device(self, device_id: str) -> Optional[DeviceInterface]:
+    def unregister_device(self, device_id: str) -> DeviceInterface | None:
         """Unregister a device."""
         return self.devices.pop(device_id, None)
 
@@ -113,7 +112,7 @@ class SensorManager:
                 except Exception as e:
                     logger.error(f"Callback error: {e}")
 
-    def get_latest_reading(self, sensor_type: SensorType) -> Optional[SensorReading]:
+    def get_latest_reading(self, sensor_type: SensorType) -> SensorReading | None:
         """Get the latest reading for a sensor type."""
         for reading in reversed(self.readings):
             if reading.sensor_type == sensor_type:
@@ -123,8 +122,8 @@ class SensorManager:
     def get_readings_by_type(
         self,
         sensor_type: SensorType,
-        start_time: Optional[float] = None,
-        end_time: Optional[float] = None,
+        start_time: float | None = None,
+        end_time: float | None = None,
     ) -> list[SensorReading]:
         """Get readings for a sensor type within time range."""
         filtered_readings = []
@@ -157,7 +156,7 @@ class SensorManager:
             except ValueError:
                 pass
 
-    def get_device_status(self, device_id: str) -> Optional[DeviceStatus]:
+    def get_device_status(self, device_id: str) -> DeviceStatus | None:
         """Get device connection status."""
         device = self.devices.get(device_id)
         return device.status if device else None
@@ -171,7 +170,7 @@ class SensorManager:
         return False
 
     def export_readings(
-        self, file_path: str, sensor_type: Optional[SensorType] = None
+        self, file_path: str, sensor_type: SensorType | None = None
     ) -> None:
         """Export sensor readings to file."""
         readings_to_export = self.readings

@@ -1,37 +1,65 @@
-# Codomyrmex Agents — src/codomyrmex/fpf
+# Agent Guidelines - FPF
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Module Overview
 
-## Purpose
+Firewall-Proxy-Format pattern for secure AI interactions.
 
-Functional interface for First Principles Framework specification. Transforms static FPF markdown into machine-readable, queryable format for prompt/context engineering.
+## Key Classes
 
-## Active Components
+- **Firewall** — Input/output filtering
+- **Proxy** — Request interception
+- **Formatter** — Response formatting
+- **PolicyEngine** — Policy enforcement
 
-- `API_SPECIFICATION.md` – Project file
-- `FPF-Spec.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `analysis/` – Directory containing analysis components
-- `constraints/` – Directory containing constraints components
-- `core/` – Directory containing core components
-- `io/` – Directory containing io components
-- `models/` – Directory containing models components
-- `optimization/` – Directory containing optimization components
-- `reasoning/` – Directory containing reasoning components
-- `requirements.txt` – Project file
-- `visualization/` – Directory containing visualization components
+## Agent Instructions
 
-## Operating Contracts
+1. **Filter input** — Validate all incoming data
+2. **Filter output** — Sanitize all responses
+3. **Log intercepts** — Track blocked requests
+4. **Update policies** — Keep rules current
+5. **Whitelist approach** — Allow known-good only
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Common Patterns
 
-## Navigation Links
+```python
+from codomyrmex.fpf import Firewall, Proxy, Formatter, PolicyEngine
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+# Configure firewall
+firewall = Firewall()
+firewall.add_rule("block_pii", patterns=["\\d{3}-\\d{2}-\\d{4}"])
+firewall.add_rule("block_injection", patterns=["<script>"])
+
+# Proxy for interception
+proxy = Proxy(firewall)
+safe_input = proxy.filter_input(user_input)
+safe_output = proxy.filter_output(model_response)
+
+# Format responses
+formatter = Formatter()
+response = formatter.format(result, template="markdown")
+
+# Policy engine
+policy = PolicyEngine()
+policy.load("security_policies.yaml")
+if not policy.allows("action", context):
+    raise PolicyViolation()
+```
+
+## Testing Patterns
+
+```python
+# Verify firewall
+firewall = Firewall()
+firewall.add_rule("test", patterns=["blocked"])
+result = firewall.filter("contains blocked word")
+assert "blocked" not in result
+
+# Verify proxy
+proxy = Proxy(firewall)
+safe = proxy.filter_input("<script>alert()</script>")
+assert "<script>" not in safe
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

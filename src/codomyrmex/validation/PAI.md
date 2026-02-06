@@ -1,26 +1,48 @@
-# Personal AI Infrastructure - Validation Context
+# Personal AI Infrastructure — Validation Module
 
-**Module**: validation
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Data validation framework for schema validation, input sanitization, and constraint checking.
+The Validation module provides PAI integration for data and schema validation.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Schema Validation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Validate data against schemas:
 
-## Key Files
+```python
+from codomyrmex.validation import validate_schema
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+schema = {
+    "type": "object",
+    "properties": {"name": {"type": "string"}}
+}
 
-## Future Considerations
+result = validate_schema(data, schema)
+if not result.valid:
+    print(result.errors)
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Type Validation
+
+Validate types:
+
+```python
+from codomyrmex.validation import validate_type
+
+result = validate_type(value, expected_type=int)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `validate_schema` | Schema validation |
+| `validate_type` | Type validation |
+| `Validator` | Custom validators |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

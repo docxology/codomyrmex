@@ -4,19 +4,31 @@ Tests use real implementations only. TestAgent is a test adapter
 that implements BaseAgent interface for testing, not a mock.
 """
 
-import pytest
 import time
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, AgentCapabilities
-from codomyrmex.agents.core import BaseAgent
-from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
-from codomyrmex.agents.core.exceptions import AgentError
+import pytest
+
+try:
+    from codomyrmex.agents.core import (
+        AgentCapabilities,
+        AgentRequest,
+        AgentResponse,
+        BaseAgent,
+    )
+    from codomyrmex.agents.core.exceptions import AgentError
+    from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
+    _HAS_AGENTS = True
+except ImportError:
+    _HAS_AGENTS = False
+
+if not _HAS_AGENTS:
+    pytest.skip("agents deps not available", allow_module_level=True)
 
 
 @pytest.mark.unit
 class TestAgent(BaseAgent):
     """Test agent for advanced orchestration testing.
-    
+
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
 
@@ -36,13 +48,13 @@ class TestAgent(BaseAgent):
 
     def _execute_impl(self, request: AgentRequest) -> AgentResponse:
         self.execution_count += 1
-        
+
         if self.delay > 0:
             time.sleep(self.delay)
-        
+
         if self.fail_after and self.execution_count > self.fail_after:
             return AgentResponse(content="", error=f"Failed after {self.fail_after} attempts")
-        
+
         if self.should_succeed:
             return AgentResponse(
                 content=f"Response from {self.name} (attempt {self.execution_count})",
@@ -67,10 +79,10 @@ class TestSimpleOrchestration:
         """Test single agent execution."""
         agent = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         orchestrator = AgentOrchestrator([agent])
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 1
         assert responses[0].is_success()
         assert "agent1" in responses[0].content
@@ -83,10 +95,10 @@ class TestSimpleOrchestration:
             TestAgent("agent3", [AgentCapabilities.CODE_GENERATION]),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 3
         assert all(r.is_success() for r in responses)
 
@@ -97,10 +109,10 @@ class TestSimpleOrchestration:
             TestAgent("agent2", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         request = AgentRequest(prompt="test")
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
         assert "agent2" in response.content
 
@@ -114,14 +126,14 @@ class TestComplexOrchestration:
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION], delay=0.1)
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING], delay=0.1)
         agent3 = TestAgent("agent3", [AgentCapabilities.CODE_ANALYSIS], delay=0.1)
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
-        
+
         request = AgentRequest(prompt="test")
         start_time = time.time()
         responses = orchestrator.execute_parallel(request)
         execution_time = time.time() - start_time
-        
+
         assert len(responses) == 3
         assert all(r.is_success() for r in responses)
         # Should be roughly parallel (less than sequential time)
@@ -136,10 +148,10 @@ class TestComplexOrchestration:
             TestAgent("agent4", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         request = AgentRequest(prompt="test")
         response = orchestrator.execute_with_fallback(request)
-        
+
         assert response.is_success()
         assert "agent3" in response.content
         # Should stop at first success
@@ -148,12 +160,12 @@ class TestComplexOrchestration:
         """Test sequential execution with data passing between agents."""
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2])
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_sequential(request)
-        
+
         assert len(responses) == 2
         assert all(r.is_success() for r in responses)
         assert agent1.execution_count == 1
@@ -167,10 +179,10 @@ class TestComplexOrchestration:
             TestAgent("agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_sequential(request, stop_on_success=True)
-        
+
         # Should stop after agent2 succeeds
         assert len(responses) == 2
         assert responses[0].is_success() is False
@@ -186,19 +198,19 @@ class TestComplexOrchestration:
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
-        
+
         orchestrator = AgentOrchestrator([
             code_gen_agent,
             code_edit_agent,
             analysis_agent,
             multi_cap_agent
         ])
-        
+
         # Select CODE_GENERATION agents
         selected = orchestrator.select_agent_by_capability(
             AgentCapabilities.CODE_GENERATION.value
         )
-        
+
         assert len(selected) == 2
         assert code_gen_agent in selected
         assert multi_cap_agent in selected
@@ -213,12 +225,12 @@ class TestComplexOrchestration:
             TestAgent("agent3", [AgentCapabilities.CODE_GENERATION]),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         # Execute multiple requests
         for i in range(6):
             request = AgentRequest(prompt=f"test {i}")
             orchestrator.execute_parallel(request)
-        
+
         # All agents should have executed
         assert all(agent.execution_count > 0 for agent in agents)
         # Execution counts should be roughly balanced
@@ -238,14 +250,14 @@ class TestComplexOrchestration:
             [AgentCapabilities.CODE_GENERATION],
             delay=0.01
         )
-        
+
         orchestrator = AgentOrchestrator([slow_agent, fast_agent])
-        
+
         request = AgentRequest(prompt="test", timeout=1)  # 1 second timeout
-        
+
         # Both should execute, but slow one might timeout
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 2
         # Fast agent should succeed
         fast_response = next(r for r in responses if "fast_agent" in r.metadata.get("agent", ""))
@@ -259,14 +271,14 @@ class TestComplexOrchestration:
             TestAgent("agent3", [AgentCapabilities.CODE_GENERATION], should_succeed=True),
         ]
         orchestrator = AgentOrchestrator(agents)
-        
+
         request = AgentRequest(prompt="test")
         responses = orchestrator.execute_parallel(request)
-        
+
         assert len(responses) == 3
         success_count = sum(1 for r in responses if r.is_success())
         failure_count = sum(1 for r in responses if not r.is_success())
-        
+
         assert success_count == 2
         assert failure_count == 1
 
@@ -274,13 +286,13 @@ class TestComplexOrchestration:
         """Test handling of empty agent list."""
         orchestrator = AgentOrchestrator([])
         request = AgentRequest(prompt="test")
-        
+
         with pytest.raises(AgentError, match="No agents available"):
             orchestrator.execute_parallel(request)
-        
+
         with pytest.raises(AgentError, match="No agents available"):
             orchestrator.execute_sequential(request)
-        
+
         with pytest.raises(AgentError, match="No agents available"):
             orchestrator.execute_with_fallback(request)
 
@@ -289,14 +301,14 @@ class TestComplexOrchestration:
         agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
         agent3 = TestAgent("agent3", [AgentCapabilities.CODE_GENERATION])
-        
+
         orchestrator = AgentOrchestrator([agent1, agent2, agent3])
-        
+
         request = AgentRequest(prompt="test")
-        
+
         # Use only agent1 and agent3
         responses = orchestrator.execute_parallel(request, agents=[agent1, agent3])
-        
+
         assert len(responses) == 2
         assert agent1.execution_count == 1
         assert agent2.execution_count == 0  # Not used

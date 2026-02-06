@@ -1,16 +1,15 @@
 """Asynchronous function profiler."""
 
-import time
-import asyncio
 import functools
-from typing import Any, Callable, Dict
 import logging
+import time
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
 class AsyncProfiler:
     """Profiles asynchronous functions to identify bottlenecks."""
-    
+
     @staticmethod
     def profile(func: Callable) -> Callable:
         """Decorator to profile an async function."""

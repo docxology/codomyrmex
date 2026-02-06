@@ -4,7 +4,7 @@ Unit tests for git_manager.py core functions.
 
 import os
 import subprocess
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -120,7 +120,7 @@ class TestCreateBranch:
         """Test creating a new branch."""
         result = create_branch("test-branch", temp_git_repo)
         assert result is True
-        
+
         # Verify branch was created
         current = get_current_branch(temp_git_repo)
         assert current == "test-branch"
@@ -130,11 +130,11 @@ class TestCreateBranch:
         # Create branch first time
         result1 = create_branch("existing-branch", temp_git_repo)
         assert result1 is True
-        
+
         # Switch back to main
         from codomyrmex.git_operations import switch_branch
         switch_branch("main", temp_git_repo)
-        
+
         # Try to create again (should fail)
         result2 = create_branch("existing-branch", temp_git_repo)
         assert result2 is False
@@ -159,12 +159,12 @@ class TestAddFiles:
         # Create multiple files
         file1 = os.path.join(temp_git_repo, "file1.txt")
         file2 = os.path.join(temp_git_repo, "file2.txt")
-        
+
         with open(file1, "w") as f:
             f.write("Content 1")
         with open(file2, "w") as f:
             f.write("Content 2")
-        
+
         result = add_files(["file1.txt", "file2.txt"], temp_git_repo)
         assert result is True
 
@@ -187,7 +187,7 @@ class TestCommitChanges:
         """Test committing changes."""
         # Add file first
         add_files([os.path.basename(sample_file)], temp_git_repo)
-        
+
         # Commit
         result = commit_changes("Test commit", temp_git_repo)
         assert result is not None

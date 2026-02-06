@@ -1,10 +1,11 @@
 """Tests for FPF visualizer."""
 
-import pytest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from codomyrmex.fpf import FPFVisualizer, FPFSpec, Pattern, PatternStatus
+import pytest
+
+from codomyrmex.fpf import FPFSpec, FPFVisualizer, Pattern, PatternStatus
 
 
 @pytest.mark.unit
@@ -33,7 +34,7 @@ def test_visualize_pattern_hierarchy():
             content="",
         ),
     ]
-    
+
     diagram = visualizer.visualize_pattern_hierarchy(patterns)
     assert isinstance(diagram, str)
     assert "graph TD" in diagram or "graph" in diagram
@@ -52,7 +53,7 @@ def test_visualize_dependencies():
             content="",
         ),
     ]
-    
+
     diagram = visualizer.visualize_dependencies(patterns)
     assert isinstance(diagram, str)
     assert "graph" in diagram
@@ -73,7 +74,7 @@ def test_generate_report():
             )
         ]
     )
-    
+
     with TemporaryDirectory() as tmpdir:
         output_path = Path(tmpdir) / "report.md"
         visualizer.generate_report(spec, output_path)
@@ -95,7 +96,7 @@ def test_create_pattern_card():
         sections={"problem": "Test problem", "solution": "Test solution"},
         content="",
     )
-    
+
     card = visualizer.create_pattern_card(pattern)
     assert isinstance(card, str)
     assert "A.1" in card

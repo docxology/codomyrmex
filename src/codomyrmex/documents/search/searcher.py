@@ -2,7 +2,6 @@
 
 import re
 from collections import Counter
-from typing import List
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -19,7 +18,7 @@ def _tokenize(text: str) -> list[str]:
     return re.findall(r'\w+', text.lower())
 
 
-def search_documents(query: str, index: InMemoryIndex) -> List[Document]:
+def search_documents(query: str, index: InMemoryIndex) -> list[Document]:
     """
     Search documents using a query.
 
@@ -44,7 +43,7 @@ def search_documents(query: str, index: InMemoryIndex) -> List[Document]:
     return results
 
 
-def search_index(query: str, index: InMemoryIndex) -> List[dict]:
+def search_index(query: str, index: InMemoryIndex) -> list[dict]:
     """
     Search index and return results with scores.
 

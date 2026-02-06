@@ -1,15 +1,48 @@
-# Personal AI Context - Scheduler
+# Personal AI Infrastructure — Scheduler Module
 
-## Role in PAI Stack
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-The scheduler enables autonomous agent operation by providing:
+## Overview
 
-- **Self-maintenance**: Agents can schedule their own cleanup/optimization tasks
-- **Periodic learning**: Schedule knowledge base updates
-- **Health checks**: Regular self-diagnostics
+The Scheduler module provides PAI integration for task scheduling and cron jobs.
 
-## Autonomy Considerations
+## PAI Capabilities
 
-- Jobs can be created by agents themselves
-- Supports dynamic scheduling based on agent needs
-- Error recovery via automatic rescheduling
+### Task Scheduling
+
+Schedule recurring tasks:
+
+```python
+from codomyrmex.scheduler import Scheduler
+
+scheduler = Scheduler()
+
+@scheduler.every(minutes=30)
+async def refresh_data():
+    await sync_data()
+
+scheduler.start()
+```
+
+### Cron Jobs
+
+Use cron expressions:
+
+```python
+from codomyrmex.scheduler import CronJob
+
+job = CronJob("0 0 * * *", cleanup_function)
+job.start()  # Runs at midnight daily
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `Scheduler` | Schedule tasks |
+| `CronJob` | Cron expressions |
+| `TaskQueue` | Async task queue |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

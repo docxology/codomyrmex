@@ -1,35 +1,62 @@
-# concurrency
+# Concurrency Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active
 
-## Overview
+Distributed locks, semaphores, and synchronization primitives.
 
-The concurrency module provides distributed locks, semaphores, and synchronization primitives for coordinating access to shared resources across threads and processes. It includes file-based local locks, Redis-backed distributed locks, thread-safe and asyncio-compatible semaphores, and a lock manager that orchestrates multi-resource acquisition with deadlock avoidance.
+## Quick Start
 
-## Key Exports
+```python
+from codomyrmex.concurrency import (
+    LocalLock, LockManager, ReadWriteLock, LocalSemaphore
+)
 
-- **`BaseLock`** -- Abstract base class for all lock implementations. Defines the `acquire(timeout, retry_interval)` and `release()` contract, with context manager support (`with` statement).
-- **`LocalLock`** -- File-based lock using `fcntl` for local multi-process synchronization. Stores lock files in `/tmp/codomyrmex/locks/` by default.
-- **`BaseSemaphore`** -- Abstract base class for semaphore implementations. Defines `acquire(timeout)` and `release()` methods with configurable initial value.
-- **`LocalSemaphore`** -- Thread-safe semaphore wrapper around `threading.Semaphore` for local resource throttling.
-- **`RedisLock`** -- Distributed lock backed by Redis using atomic `SETNX` with TTL expiration. Supports owner-based release to prevent accidental unlock by other processes.
-- **`LockManager`** -- Orchestrates multiple registered locks and provides `acquire_all()` with sorted acquisition order to avoid deadlocks. Exposes `LockStats` telemetry.
-- **`ReadWriteLock`** -- Allows concurrent readers with exclusive writer access for read-heavy workloads.
+# Local lock (thread-safe)
+lock = LocalLock("resource-1")
+with lock:
+    # Critical section
+    update_shared_resource()
 
-## Directory Contents
+# Lock manager for multiple resources
+manager = LockManager()
+with manager.acquire("database", timeout=5.0):
+    run_database_operation()
 
-- `__init__.py` - Module entry point; exports all lock and semaphore classes
-- `distributed_lock.py` - `BaseLock` ABC and `LocalLock` file-based implementation
-- `semaphore.py` - `BaseSemaphore` ABC, `LocalSemaphore`, and `AsyncLocalSemaphore` implementations
-- `redis_lock.py` - `RedisLock` distributed lock using Redis SETNX with TTL
-- `lock_manager.py` - `LockManager` for multi-lock orchestration and `ReadWriteLock` primitive
-- `AGENTS.md` - Agent integration specification
-- `API_SPECIFICATION.md` - Programmatic interface documentation
-- `SPEC.md` - Module specification
-- `PAI.md` - PAI integration notes
+# Read-write lock (multiple readers, exclusive writers)
+rw_lock = ReadWriteLock()
+with rw_lock.read():
+    data = read_shared_data()
+with rw_lock.write():
+    write_shared_data(data)
+
+# Semaphore for limiting concurrent access
+sem = LocalSemaphore(max_concurrent=3)
+with sem:
+    # Only 3 concurrent executions allowed
+    process_request()
+```
+
+## Redis Lock (Distributed)
+
+```python
+from codomyrmex.concurrency import RedisLock
+
+lock = RedisLock("resource", redis_url="redis://localhost")
+with lock:
+    # Distributed critical section
+    pass
+```
+
+## Exports
+
+| Class | Description |
+|-------|-------------|
+| `LocalLock` | Thread-safe local lock |
+| `RedisLock` | Redis-backed distributed lock |
+| `LockManager` | Manage multiple named locks |
+| `ReadWriteLock` | Multiple readers, single writer |
+| `LocalSemaphore` | Limit concurrent access |
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/concurrency/](../../../docs/modules/concurrency/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

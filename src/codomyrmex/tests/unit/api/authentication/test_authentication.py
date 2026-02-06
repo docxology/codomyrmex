@@ -1,17 +1,18 @@
 """Comprehensive tests for the codomyrmex.api.authentication module."""
 
-import pytest
 import base64
 import time
 from datetime import datetime, timedelta
 
+import pytest
+
 from codomyrmex.api.authentication import (
-    AuthType,
+    APIKeyAuthenticator,
     AuthCredentials,
     AuthResult,
-    APIKeyAuthenticator,
-    BearerTokenAuthenticator,
+    AuthType,
     BasicAuthenticator,
+    BearerTokenAuthenticator,
     HMACAuthenticator,
     create_authenticator,
 )

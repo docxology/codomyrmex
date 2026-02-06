@@ -1,53 +1,11 @@
 from collections import defaultdict
-from typing import Any, Optional
+from dataclasses import dataclass
+from typing import Any
 
-from dataclasses import dataclass, field
 import numpy as np
 
 from codomyrmex.cerebrum.core.exceptions import InferenceError, NetworkStructureError
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 
@@ -104,7 +62,7 @@ class BayesianNetwork:
         self.cpt: dict[str, dict[tuple, Distribution]] = {}  # Conditional probability tables
         self.logger = get_logger(__name__)
 
-    def add_node(self, node: str, values: list[Any], prior: Optional[list[float]] = None) -> None:
+    def add_node(self, node: str, values: list[Any], prior: list[float] | None = None) -> None:
         """Add a node to the network.
 
         Args:
@@ -229,7 +187,7 @@ class InferenceEngine:
         self.logger = get_logger(__name__)
 
     def infer(
-        self, query: dict[str, Any], evidence: Optional[dict[str, Any]] = None
+        self, query: dict[str, Any], evidence: dict[str, Any] | None = None
     ) -> dict[str, Distribution]:
         """Perform inference to compute posterior distributions.
 
@@ -412,7 +370,7 @@ class InferenceEngine:
         assignment[query_var] = np.random.choice(values, p=probs)
         return assignment
 
-    def compute_marginal(self, variable: str, evidence: Optional[dict[str, Any]] = None) -> Distribution:
+    def compute_marginal(self, variable: str, evidence: dict[str, Any] | None = None) -> Distribution:
         """Compute marginal distribution of a variable.
 
         Args:

@@ -1,19 +1,12 @@
-from datetime import datetime
-from typing import Optional
 import json
 import os
 import sys
+from datetime import datetime
 
 import aiohttp
 import requests
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """GitHub API Operations for Codomyrmex Git Operations Module.
 
@@ -43,7 +36,7 @@ def _get_github_headers(token: str) -> dict[str, str]:
         "Content-Type": "application/json",
     }
 
-def _validate_github_token(token: Optional[str]) -> str:
+def _validate_github_token(token: str | None) -> str:
     """Validate and return GitHub token, raising error if invalid."""
     if not token:
         token = os.environ.get("GITHUB_TOKEN")
@@ -59,7 +52,7 @@ def create_github_repository(
     name: str,
     private: bool = True,
     description: str = "",
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
     auto_init: bool = True,
     gitignore_template: str = "Python",
     license_template: str = "mit",
@@ -142,7 +135,7 @@ def create_github_repository(
         raise GitHubAPIError(error_msg)
 
 def delete_github_repository(
-    owner: str, repo_name: str, github_token: Optional[str] = None
+    owner: str, repo_name: str, github_token: str | None = None
 ) -> bool:
     """
     Delete a GitHub repository.
@@ -195,7 +188,7 @@ def create_pull_request(
     base_branch: str,
     title: str,
     body: str = "",
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """
     Create a pull request.
@@ -279,7 +272,7 @@ def get_pull_requests(
     repo_owner: str,
     repo_name: str,
     state: str = "open",
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> list[dict]:
     """
     Get pull requests for a repository.
@@ -347,7 +340,7 @@ def get_pull_requests(
         raise GitHubAPIError(error_msg)
 
 def get_pull_request(
-    repo_owner: str, repo_name: str, pr_number: int, github_token: Optional[str] = None
+    repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
 ) -> dict:
     """
     Get a specific pull request.
@@ -418,7 +411,7 @@ def get_pull_request(
         raise GitHubAPIError(error_msg)
 
 def get_repository_info(
-    repo_owner: str, repo_name: str, github_token: Optional[str] = None
+    repo_owner: str, repo_name: str, github_token: str | None = None
 ) -> dict:
     """
     Get detailed repository information.
@@ -491,7 +484,7 @@ def create_issue(
     body: str = "",
     labels: list[str] = None,
     assignees: list[str] = None,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """Create a new issue."""
     token = _validate_github_token(github_token)
@@ -531,7 +524,7 @@ def list_issues(
     repo_name: str,
     state: str = "open",
     labels: list[str] = None,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> list[dict]:
     """List issues in a repository."""
     token = _validate_github_token(github_token)
@@ -573,7 +566,7 @@ def close_issue(
     owner: str,
     repo_name: str,
     issue_number: int,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """Close an issue."""
     token = _validate_github_token(github_token)
@@ -608,7 +601,7 @@ def add_comment(
     repo_name: str,
     issue_number: int,
     body: str,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """Add a comment to an issue (or PR)."""
     token = _validate_github_token(github_token)
@@ -647,8 +640,8 @@ async def _async_request(
     method: str,
     url: str,
     headers: dict[str, str],
-    json_data: Optional[dict] = None,
-    params: Optional[dict] = None,
+    json_data: dict | None = None,
+    params: dict | None = None,
     timeout: int = 30,
 ) -> tuple[int, dict | list | str]:
     """
@@ -689,7 +682,7 @@ async def _async_request(
 
 
 async def async_get_repo_info(
-    repo_owner: str, repo_name: str, github_token: Optional[str] = None
+    repo_owner: str, repo_name: str, github_token: str | None = None
 ) -> dict:
     """
     Get detailed repository information asynchronously.
@@ -754,7 +747,7 @@ async def async_list_pull_requests(
     repo_owner: str,
     repo_name: str,
     state: str = "open",
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> list[dict]:
     """
     Get pull requests for a repository asynchronously.
@@ -820,9 +813,9 @@ async def async_create_issue(
     repo_name: str,
     title: str,
     body: str = "",
-    labels: Optional[list[str]] = None,
-    assignees: Optional[list[str]] = None,
-    github_token: Optional[str] = None,
+    labels: list[str] | None = None,
+    assignees: list[str] | None = None,
+    github_token: str | None = None,
 ) -> dict:
     """
     Create a new issue asynchronously.
@@ -882,7 +875,7 @@ async def async_create_pull_request(
     base_branch: str,
     title: str,
     body: str = "",
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """
     Create a pull request asynchronously.
@@ -957,7 +950,7 @@ async def async_create_pull_request(
 
 
 async def async_get_pull_request(
-    repo_owner: str, repo_name: str, pr_number: int, github_token: Optional[str] = None
+    repo_owner: str, repo_name: str, pr_number: int, github_token: str | None = None
 ) -> dict:
     """
     Get a specific pull request asynchronously.
@@ -1025,8 +1018,8 @@ async def async_list_issues(
     owner: str,
     repo_name: str,
     state: str = "open",
-    labels: Optional[list[str]] = None,
-    github_token: Optional[str] = None,
+    labels: list[str] | None = None,
+    github_token: str | None = None,
 ) -> list[dict]:
     """
     List issues in a repository asynchronously.
@@ -1081,7 +1074,7 @@ async def async_close_issue(
     owner: str,
     repo_name: str,
     issue_number: int,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """
     Close an issue asynchronously.
@@ -1129,7 +1122,7 @@ async def async_add_comment(
     repo_name: str,
     issue_number: int,
     body: str,
-    github_token: Optional[str] = None,
+    github_token: str | None = None,
 ) -> dict:
     """
     Add a comment to an issue (or PR) asynchronously.

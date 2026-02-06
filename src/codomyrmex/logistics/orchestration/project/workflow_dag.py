@@ -1,17 +1,10 @@
-from collections import defaultdict, deque
-from typing import Dict, List, Set, Tuple, Optional, Any
 import logging
-
+from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
-
-
-
 
 """
 Workflow DAG (Directed Acyclic Graph) Implementation for Codomyrmex
@@ -48,14 +41,14 @@ class DAGTask:
     name: str
     module: str
     action: str
-    dependencies: List[str] = field(default_factory=list)
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    parameters: dict[str, Any] = field(default_factory=dict)
     status: TaskStatus = TaskStatus.PENDING
     execution_order: int = -1
     result: Any = None
-    error: Optional[str] = None
+    error: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert task to dictionary representation."""
         return {
             "name": self.name,
@@ -81,22 +74,22 @@ class WorkflowDAG:
     - Visualization generation
     """
 
-    def __init__(self, tasks: Optional[List[Dict]] = None):
+    def __init__(self, tasks: list[dict] | None = None):
         """
         Initialize the DAG with optional tasks.
 
         Args:
             tasks: List of task dictionaries to initialize the DAG with
         """
-        self.tasks: Dict[str, DAGTask] = {}
-        self.graph: Dict[str, Set[str]] = defaultdict(set)  # task -> dependencies
-        self.reverse_graph: Dict[str, Set[str]] = defaultdict(set)  # task -> dependents
+        self.tasks: dict[str, DAGTask] = {}
+        self.graph: dict[str, set[str]] = defaultdict(set)  # task -> dependencies
+        self.reverse_graph: dict[str, set[str]] = defaultdict(set)  # task -> dependents
 
         if tasks:
             for task_dict in tasks:
                 self.add_task(task_dict)
 
-    def add_task(self, task_dict: Dict[str, Any]) -> None:
+    def add_task(self, task_dict: dict[str, Any]) -> None:
         """
         Add a task to the DAG.
 
@@ -135,7 +128,7 @@ class WorkflowDAG:
         self.graph[task_name].add(depends_on)
         self.reverse_graph[depends_on].add(task_name)
 
-    def validate_dag(self) -> Tuple[bool, List[str]]:
+    def validate_dag(self) -> tuple[bool, list[str]]:
         """
         Validate the DAG for cycles and other issues.
 
@@ -176,7 +169,7 @@ class WorkflowDAG:
         def dfs(node: str) -> None:
             """
             Depth-First Search to detect cycles.
-            
+
             Args:
                 node: The starting node identifier.
             """
@@ -197,7 +190,7 @@ class WorkflowDAG:
             if node not in visited:
                 dfs(node)
 
-    def _find_cycle(self, start: str, end: str) -> List[str]:
+    def _find_cycle(self, start: str, end: str) -> list[str]:
         """Find the cycle path from start to end."""
         # Simple cycle reconstruction
         path = [start]
@@ -218,7 +211,7 @@ class WorkflowDAG:
         path.append(end)
         return path
 
-    def get_execution_order(self) -> List[List[str]]:
+    def get_execution_order(self) -> list[list[str]]:
         """
         Get the topological execution order of tasks.
 
@@ -261,7 +254,7 @@ class WorkflowDAG:
 
         return result
 
-    def get_task_dependencies(self, task_name: str) -> List[str]:
+    def get_task_dependencies(self, task_name: str) -> list[str]:
         """
         Get all dependencies of a task (recursive).
 
@@ -287,7 +280,7 @@ class WorkflowDAG:
 
         return list(dependencies)
 
-    def get_dependent_tasks(self, task_name: str) -> List[str]:
+    def get_dependent_tasks(self, task_name: str) -> list[str]:
         """
         Get all tasks that depend on the given task (recursive).
 
@@ -337,11 +330,11 @@ class WorkflowDAG:
 
         return "\\n".join(lines)
 
-    def get_task(self, task_name: str) -> Optional[DAGTask]:
+    def get_task(self, task_name: str) -> DAGTask | None:
         """Get a task by name."""
         return self.tasks.get(task_name)
 
-    def get_all_tasks(self) -> Dict[str, DAGTask]:
+    def get_all_tasks(self) -> dict[str, DAGTask]:
         """Get all tasks in the DAG."""
         return self.tasks.copy()
 
@@ -352,7 +345,7 @@ class WorkflowDAG:
             task.result = None
             task.error = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the entire DAG to a dictionary."""
         return {
             "tasks": {name: task.to_dict() for name, task in self.tasks.items()},

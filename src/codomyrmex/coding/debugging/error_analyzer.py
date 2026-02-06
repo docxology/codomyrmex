@@ -13,7 +13,6 @@ Example:
 
 from __future__ import annotations
 
-from typing import Optional, List
 import re
 from dataclasses import dataclass
 
@@ -48,8 +47,8 @@ class ErrorDiagnosis:
     """
     error_type: str
     message: str
-    file_path: Optional[str] = None
-    line_number: Optional[int] = None
+    file_path: str | None = None
+    line_number: int | None = None
     stack_trace: str = ""
     is_syntax_error: bool = False
     is_timeout: bool = False
@@ -85,7 +84,7 @@ class ErrorAnalyzer:
             re.DOTALL
         )
 
-    def analyze(self, stdout: str, stderr: str, exit_code: int) -> Optional[ErrorDiagnosis]:
+    def analyze(self, stdout: str, stderr: str, exit_code: int) -> ErrorDiagnosis | None:
         """Analyze execution output to identify and diagnose the primary error.
 
         Parses the stdout and stderr from a code execution to extract
@@ -115,10 +114,10 @@ class ErrorAnalyzer:
         """
         if exit_code == 0:
             return None
-            
+
         # Combine output for analysis, prioritizing stderr which usually has the traceback
         full_output = f"{stdout}\n{stderr}"
-        
+
         # Check for timeout (this usually comes from the runner but we might see SIGTERM/124)
         if exit_code == 124: # Standard timeout exit code on linux
              return ErrorDiagnosis(
@@ -152,7 +151,7 @@ class ErrorAnalyzer:
                 line_number=int(last_match.group("line")),
                 stack_trace=stderr
             )
-            
+
         # Fallback for generic errors
         lines = stderr.strip().split('\n')
         last_line = lines[-1] if lines else "Unknown Error"

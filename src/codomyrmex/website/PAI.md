@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Website Context
+# Personal AI Infrastructure — Website Module
 
-**Module**: website
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Static website generation for documentation sites with templates, assets, and content management.
+The Website module provides PAI integration for generating web dashboards and static sites.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Site Generation
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Generate static websites:
 
-## Key Files
+```python
+from codomyrmex.website import WebsiteGenerator
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+generator = WebsiteGenerator(output_dir="dist/")
+generator.build([
+    ("index.html", "home.j2", {"title": "Home"})
+])
+```
 
-## Future Considerations
+### Dashboard Building
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+Create data dashboards:
+
+```python
+from codomyrmex.website import DashboardBuilder
+
+dashboard = DashboardBuilder()
+dashboard.add_chart("metrics", chart_config)
+dashboard.render("dashboard.html")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `WebsiteGenerator` | Static sites |
+| `DashboardBuilder` | Data dashboards |
+| `WebsiteServer` | Dev server |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

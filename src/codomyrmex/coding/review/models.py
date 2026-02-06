@@ -17,116 +17,12 @@ Example:
     ... )
 """
 
-from typing import Any, Optional
-
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 logger = get_logger(__name__)
 
@@ -238,8 +134,8 @@ class AnalysisResult:
     message: str
     rule_id: str
     category: str
-    suggestion: Optional[str] = None
-    context: Optional[str] = None
+    suggestion: str | None = None
+    context: str | None = None
     fix_available: bool = False
     confidence: float = 1.0
 
@@ -268,8 +164,8 @@ class AnalysisSummary:
     by_rule: dict[str, int] = field(default_factory=dict)
     files_analyzed: int = 0
     analysis_time: float = 0.0
-    language: Optional[Language] = None
-    pyscn_metrics: Optional[dict[str, Any]] = None
+    language: Language | None = None
+    pyscn_metrics: dict[str, Any] | None = None
 
 
 @dataclass
@@ -294,8 +190,8 @@ class CodeMetrics:
     maintainability_index: float
     technical_debt: float
     code_duplication: float
-    test_coverage: Optional[float] = None
-    documentation_coverage: Optional[float] = None
+    test_coverage: float | None = None
+    documentation_coverage: float | None = None
 
 
 @dataclass
@@ -321,7 +217,7 @@ class ComplexityReductionSuggestion:
     suggested_refactoring: str
     estimated_effort: str  # "low", "medium", "high"
     benefits: list[str]
-    code_example: Optional[str] = None
+    code_example: str | None = None
 
 
 @dataclass
@@ -444,8 +340,8 @@ class QualityDashboard:
     long_term_improvements: list[dict[str, Any]]
 
     # Trends (if historical data available)
-    trend_direction: Optional[str] = None
-    trend_percentage: Optional[float] = None
+    trend_direction: str | None = None
+    trend_percentage: float | None = None
 
 
 @dataclass

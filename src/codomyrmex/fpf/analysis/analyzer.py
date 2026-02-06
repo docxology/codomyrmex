@@ -1,4 +1,4 @@
-from codomyrmex.logging_monitoring import get_logger
+
 """Analyzer for FPF specifications.
 
 logger = get_logger(__name__)
@@ -7,11 +7,10 @@ importance scoring, centrality analysis, and relationship strength calculation.
 """
 
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 import networkx as nx
 
-from ..core.models import FPFSpec, Pattern, Concept, Relationship
+from ..core.models import FPFSpec
 
 
 class FPFAnalyzer:
@@ -27,7 +26,7 @@ class FPFAnalyzer:
         self._dependency_graph = None
         self._concept_graph = None
 
-    def calculate_pattern_importance(self) -> Dict[str, float]:
+    def calculate_pattern_importance(self) -> dict[str, float]:
         """Calculate importance scores for patterns.
 
         Uses multiple metrics: degree centrality, betweenness centrality,
@@ -61,7 +60,7 @@ class FPFAnalyzer:
 
         return importance_scores
 
-    def calculate_concept_centrality(self) -> Dict[str, float]:
+    def calculate_concept_centrality(self) -> dict[str, float]:
         """Calculate centrality scores for concepts.
 
         Returns:
@@ -78,7 +77,7 @@ class FPFAnalyzer:
         centrality = nx.degree_centrality(G)
         return centrality
 
-    def calculate_relationship_strength(self) -> Dict[Tuple[str, str, str], float]:
+    def calculate_relationship_strength(self) -> dict[tuple[str, str, str], float]:
         """Calculate strength scores for relationships.
 
         Returns:
@@ -109,7 +108,7 @@ class FPFAnalyzer:
 
         return strengths
 
-    def analyze_dependency_depth(self) -> Dict[str, int]:
+    def analyze_dependency_depth(self) -> dict[str, int]:
         """Analyze dependency depth for each pattern.
 
         Returns:
@@ -146,7 +145,7 @@ class FPFAnalyzer:
 
         return depths
 
-    def get_critical_patterns(self, top_n: int = 10) -> List[Tuple[str, float]]:
+    def get_critical_patterns(self, top_n: int = 10) -> list[tuple[str, float]]:
         """Get the most critical patterns based on importance.
 
         Args:
@@ -161,7 +160,7 @@ class FPFAnalyzer:
         )
         return sorted_patterns[:top_n]
 
-    def get_isolated_patterns(self) -> List[str]:
+    def get_isolated_patterns(self) -> list[str]:
         """Get patterns that have no dependencies or dependents.
 
         Returns:
@@ -180,7 +179,7 @@ class FPFAnalyzer:
 
         return isolated
 
-    def analyze_part_cohesion(self) -> Dict[str, float]:
+    def analyze_part_cohesion(self) -> dict[str, float]:
         """Analyze cohesion within each part.
 
         Cohesion is measured as the ratio of internal relationships
@@ -189,7 +188,7 @@ class FPFAnalyzer:
         Returns:
             Dictionary mapping part IDs to cohesion scores
         """
-        part_patterns: Dict[str, List[str]] = defaultdict(list)
+        part_patterns: dict[str, list[str]] = defaultdict(list)
         for pattern in self.spec.patterns:
             part = pattern.part or "Other"
             part_patterns[part].append(pattern.id)
@@ -215,7 +214,7 @@ class FPFAnalyzer:
 
         return cohesion_scores
 
-    def get_analysis_summary(self) -> Dict[str, any]:
+    def get_analysis_summary(self) -> dict[str, any]:
         """Get comprehensive analysis summary.
 
         Returns:
@@ -268,7 +267,7 @@ class FPFAnalyzer:
             G.add_node(concept.name)
 
         # Add edges based on shared patterns
-        concept_patterns: Dict[str, set] = defaultdict(set)
+        concept_patterns: dict[str, set] = defaultdict(set)
         for concept in self.spec.concepts:
             concept_patterns[concept.name].add(concept.pattern_id)
             concept_patterns[concept.name].update(concept.references)

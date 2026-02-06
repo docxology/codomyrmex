@@ -4,10 +4,9 @@ This module tests the Validator, ValidationResult, ValidationError, and related 
 Comprehensive tests for validators, schema validation, input sanitization, and edge cases.
 """
 
+
 import pytest
-from unittest.mock import MagicMock, patch
 from pydantic import BaseModel
-from typing import Optional
 
 
 @pytest.mark.unit
@@ -151,7 +150,7 @@ class TestValidationResult:
 
     def test_invalid_result_with_errors(self):
         """Test creating invalid result with errors."""
-        from codomyrmex.validation.validator import ValidationResult, ValidationError
+        from codomyrmex.validation.validator import ValidationError, ValidationResult
 
         errors = [ValidationError("Field required", field="name")]
         result = ValidationResult(is_valid=False, errors=errors)
@@ -181,7 +180,7 @@ class TestValidationResult:
 
     def test_result_with_multiple_errors(self):
         """Test result with multiple errors."""
-        from codomyrmex.validation.validator import ValidationResult, ValidationError
+        from codomyrmex.validation.validator import ValidationError, ValidationResult
 
         errors = [
             ValidationError("Missing name", field="name"),
@@ -194,7 +193,11 @@ class TestValidationResult:
 
     def test_result_mixed_errors_and_warnings(self):
         """Test result with both errors and warnings."""
-        from codomyrmex.validation.validator import ValidationResult, ValidationError, ValidationWarning
+        from codomyrmex.validation.validator import (
+            ValidationError,
+            ValidationResult,
+            ValidationWarning,
+        )
 
         errors = [ValidationError("Missing field", field="name")]
         warnings = [ValidationWarning(field="age", message="Consider review")]
@@ -528,7 +531,7 @@ class TestCustomValidation:
 
     def test_custom_validator_validation_result(self):
         """Test custom validator returning ValidationResult."""
-        from codomyrmex.validation.validator import Validator, ValidationResult
+        from codomyrmex.validation.validator import ValidationResult, Validator
 
         validator = Validator(validator_type="custom")
 
@@ -552,7 +555,11 @@ class TestCustomValidation:
 
     def test_custom_validator_complex_logic(self):
         """Test custom validator with complex validation logic."""
-        from codomyrmex.validation.validator import Validator, ValidationResult, ValidationError
+        from codomyrmex.validation.validator import (
+            ValidationError,
+            ValidationResult,
+            Validator,
+        )
 
         validator = Validator(validator_type="custom")
 
@@ -638,7 +645,7 @@ class TestPydanticValidation:
 
         class UserModel(BaseModel):
             name: str
-            nickname: Optional[str] = None
+            nickname: str | None = None
 
         validator = Validator(validator_type="pydantic")
         data = {"name": "John"}
@@ -769,7 +776,10 @@ class TestContextualValidator:
 
     def test_contextual_validator_add_rule(self):
         """Test adding a rule to contextual validator."""
-        from codomyrmex.validation.contextual import ContextualValidator, ValidationIssue
+        from codomyrmex.validation.contextual import (
+            ContextualValidator,
+            ValidationIssue,
+        )
 
         validator = ContextualValidator()
 
@@ -797,7 +807,10 @@ class TestContextualValidator:
 
     def test_contextual_validator_validate_with_issues(self):
         """Test contextual validation with issues."""
-        from codomyrmex.validation.contextual import ContextualValidator, ValidationIssue
+        from codomyrmex.validation.contextual import (
+            ContextualValidator,
+            ValidationIssue,
+        )
 
         validator = ContextualValidator()
 
@@ -814,7 +827,10 @@ class TestContextualValidator:
 
     def test_contextual_validator_multiple_rules(self):
         """Test contextual validation with multiple rules."""
-        from codomyrmex.validation.contextual import ContextualValidator, ValidationIssue
+        from codomyrmex.validation.contextual import (
+            ContextualValidator,
+            ValidationIssue,
+        )
 
         validator = ContextualValidator()
 
@@ -836,7 +852,10 @@ class TestContextualValidator:
 
     def test_contextual_validator_cross_field_validation(self):
         """Test contextual validation with cross-field rules."""
-        from codomyrmex.validation.contextual import ContextualValidator, ValidationIssue
+        from codomyrmex.validation.contextual import (
+            ContextualValidator,
+            ValidationIssue,
+        )
 
         validator = ContextualValidator()
 
@@ -934,8 +953,9 @@ class TestTypeSafeParser:
 
     def test_parse_dict_invalid_raises(self):
         """Test parse_dict with invalid data raises error."""
-        from codomyrmex.validation.parser import TypeSafeParser
         from pydantic import ValidationError as PydanticValidationError
+
+        from codomyrmex.validation.parser import TypeSafeParser
 
         class UserModel(BaseModel):
             name: str
@@ -1010,8 +1030,8 @@ class TestValidationSummary:
 
     def test_validation_summary_create(self):
         """Test creating a validation summary."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [ValidationIssue(field="test", message="Test error")]
         summary = ValidationSummary(issues)
@@ -1021,8 +1041,8 @@ class TestValidationSummary:
 
     def test_validation_summary_is_valid_no_errors(self):
         """Test summary is valid when no errors."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [ValidationIssue(field="test", message="Warning", severity="warning")]
         summary = ValidationSummary(issues)
@@ -1031,8 +1051,8 @@ class TestValidationSummary:
 
     def test_validation_summary_is_valid_with_errors(self):
         """Test summary is invalid when errors exist."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [ValidationIssue(field="test", message="Error", severity="error")]
         summary = ValidationSummary(issues)
@@ -1041,8 +1061,8 @@ class TestValidationSummary:
 
     def test_validation_summary_error_count(self):
         """Test error count in summary."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [
             ValidationIssue(field="a", message="Error 1", severity="error"),
@@ -1055,8 +1075,8 @@ class TestValidationSummary:
 
     def test_validation_summary_warning_count(self):
         """Test warning count in summary."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [
             ValidationIssue(field="a", message="Error", severity="error"),
@@ -1069,8 +1089,8 @@ class TestValidationSummary:
 
     def test_validation_summary_to_dict(self):
         """Test converting summary to dictionary."""
-        from codomyrmex.validation.summary import ValidationSummary
         from codomyrmex.validation.contextual import ValidationIssue
+        from codomyrmex.validation.summary import ValidationSummary
 
         issues = [ValidationIssue(field="test", message="Error", severity="error")]
         summary = ValidationSummary(issues)

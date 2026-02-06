@@ -12,8 +12,9 @@ Tests cover:
 Total: 23 tests in one TestInfomaniakBlockStorage class.
 """
 
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
 
 from codomyrmex.cloud.infomaniak.block_storage.client import InfomaniakVolumeClient
 

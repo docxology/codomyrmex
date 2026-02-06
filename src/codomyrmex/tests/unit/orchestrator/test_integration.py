@@ -4,13 +4,9 @@ This module tests the integration bridges between thin orchestration
 and other Codomyrmex modules.
 """
 
-import asyncio
-from pathlib import Path
-from typing import Any, Dict
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-
 
 pytestmark = [pytest.mark.orchestrator]
 
@@ -160,12 +156,12 @@ class TestCICDBridge:
 
     def test_create_workflow_from_pipeline(self):
         """Test creating workflow from pipeline config."""
+        from codomyrmex.orchestrator import Workflow
         from codomyrmex.orchestrator.integration import (
             CICDBridge,
             PipelineConfig,
             StageConfig,
         )
-        from codomyrmex.orchestrator import Workflow
 
         bridge = CICDBridge()
 
@@ -184,8 +180,8 @@ class TestCICDBridge:
 
     def test_create_workflow_from_dict(self):
         """Test creating workflow from dict config."""
-        from codomyrmex.orchestrator.integration import CICDBridge
         from codomyrmex.orchestrator import Workflow
+        from codomyrmex.orchestrator.integration import CICDBridge
 
         bridge = CICDBridge()
 
@@ -363,8 +359,8 @@ class TestAgentOrchestrator:
 
     def test_create_agent_workflow(self):
         """Test creating workflow from agent tasks."""
-        from codomyrmex.orchestrator.integration import AgentOrchestrator
         from codomyrmex.orchestrator import Workflow
+        from codomyrmex.orchestrator.integration import AgentOrchestrator
 
         orchestrator = AgentOrchestrator()
 
@@ -386,8 +382,8 @@ class TestConvenienceFunctions:
 
     def test_create_pipeline_workflow(self):
         """Test create_pipeline_workflow function."""
-        from codomyrmex.orchestrator.integration import create_pipeline_workflow
         from codomyrmex.orchestrator import Workflow
+        from codomyrmex.orchestrator.integration import create_pipeline_workflow
 
         stages = [
             {"name": "build", "commands": ["echo build"]},

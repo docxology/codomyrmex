@@ -3,13 +3,11 @@
 Provides comprehensive security reporting and assessment generation capabilities.
 """
 
-from datetime import datetime, timezone
-from typing import Any, Optional, Dict, List
 import json
-import logging
 import os
-import sys
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Any
 
 try:
     import jinja2
@@ -32,14 +30,14 @@ class SecurityReport:
     generated_at: datetime
     target_system: str
     executive_summary: str
-    risk_assessment: Dict[str, Any]
-    findings: List[Dict[str, Any]] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
-    compliance_status: Dict[str, Any] = field(default_factory=dict)
-    metrics: Dict[str, Any] = field(default_factory=dict)
-    appendices: List[Dict[str, Any]] = field(default_factory=list)
+    risk_assessment: dict[str, Any]
+    findings: list[dict[str, Any]] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
+    compliance_status: dict[str, Any] = field(default_factory=dict)
+    metrics: dict[str, Any] = field(default_factory=dict)
+    appendices: list[dict[str, Any]] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert report to dictionary format."""
         return {
             "report_id": self.report_id,
@@ -59,15 +57,15 @@ class SecurityReport:
 class SecurityReportGenerator:
     """Security report generator for comprehensive assessments."""
 
-    def __init__(self, template_dir: Optional[str] = None):
+    def __init__(self, template_dir: str | None = None):
         """Initialize the security report generator."""
         if not JINJA2_AVAILABLE:
             raise ImportError("jinja2 package not available. Install with: pip install jinja2")
-            
+
         self.template_dir = template_dir or os.path.join(
             os.path.dirname(__file__), "templates"
         )
-        self.templates: Dict[str, Any] = {}
+        self.templates: dict[str, Any] = {}
         self._setup_jinja2()
         self._load_templates()
 
@@ -80,7 +78,7 @@ class SecurityReportGenerator:
             trim_blocks=True,
             lstrip_blocks=True,
         )
-        
+
         # Add custom filters
         self.jinja_env.filters["format_datetime"] = self._format_datetime_filter
         self.jinja_env.filters["severity_color"] = self._severity_color_filter
@@ -91,7 +89,7 @@ class SecurityReportGenerator:
         # We will use in-memory templates for simplicity and to avoid file system dependency issues in this repair
         self.templates_source = self._get_default_templates()
 
-    def _get_default_templates(self) -> Dict[str, str]:
+    def _get_default_templates(self) -> dict[str, str]:
         """Get default report templates."""
         return {
             "executive_summary.html": """
@@ -217,9 +215,9 @@ class SecurityReportGenerator:
 
     def generate_comprehensive_report(
         self,
-        vulnerability_data: Dict[str, Any],
-        compliance_data: Dict[str, Any],
-        monitoring_data: Dict[str, Any],
+        vulnerability_data: dict[str, Any],
+        compliance_data: dict[str, Any],
+        monitoring_data: dict[str, Any],
     ) -> SecurityReport:
         """Generate comprehensive security report."""
         report_id = f"security_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
@@ -254,7 +252,7 @@ class SecurityReportGenerator:
             ),
         )
 
-    def _analyze_vulnerabilities(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_vulnerabilities(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze vulnerability data."""
         # Simplified implementation
         vulnerabilities = data.get("vulnerabilities", [])
@@ -265,22 +263,22 @@ class SecurityReportGenerator:
             "medium_count": sum(1 for v in vulnerabilities if v.get("severity") == "MEDIUM"),
             "low_count": sum(1 for v in vulnerabilities if v.get("severity") == "LOW"),
             "top_vulnerabilities": vulnerabilities[:10],
-            "severity_breakdown": {} 
+            "severity_breakdown": {}
         }
 
-    def _analyze_compliance(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_compliance(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze compliance data."""
         checks = data.get("compliance_checks", [])
         total = len(checks)
         compliant = sum(1 for c in checks if c.get("status") == "compliant")
-        
+
         return {
              "total_checks": total,
              "compliance_percentage": (compliant / total * 100) if total > 0 else 0,
              "standards_coverage": {}
         }
 
-    def _analyze_monitoring(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_monitoring(self, data: dict[str, Any]) -> dict[str, Any]:
         """Analyze monitoring data."""
         events = data.get("events", [])
         return {
@@ -288,36 +286,36 @@ class SecurityReportGenerator:
             "events_by_type": {}
         }
 
-    def _calculate_overall_risk(self, vuln: Dict, comp: Dict, mon: Dict) -> Dict[str, Any]:
+    def _calculate_overall_risk(self, vuln: dict, comp: dict, mon: dict) -> dict[str, Any]:
         """Calculate overall risk."""
         # Placeholder logic
         score = 0
         if vuln.get("critical_count", 0) > 0: score += 50
         if vuln.get("high_count", 0) > 0: score += 30
-        
+
         level = "LOW"
         if score > 80: level = "CRITICAL"
         elif score > 50: level = "HIGH"
         elif score > 20: level = "MEDIUM"
-        
+
         return {
             "score": score,
             "level": level,
             "description": f"Risk level is {level}"
         }
 
-    def _generate_executive_summary(self, vuln: Dict, comp: Dict, mon: Dict, risk: Dict) -> str:
+    def _generate_executive_summary(self, vuln: dict, comp: dict, mon: dict, risk: dict) -> str:
         """Generate summary."""
         return f"System assessment complete. Risk Level: {risk['level']}. Found {vuln.get('total_vulnerabilities', 0)} vulnerabilities."
 
-    def _generate_recommendations(self, vuln: Dict, comp: Dict, mon: Dict) -> List[str]:
+    def _generate_recommendations(self, vuln: dict, comp: dict, mon: dict) -> list[str]:
         """Generate recommendations."""
         recs = []
         if vuln.get("total_vulnerabilities", 0) > 0:
             recs.append("Remediate identified vulnerabilities.")
         return recs
 
-    def _compile_findings(self, vuln: Dict, comp: Dict, mon: Dict) -> List[Dict[str, Any]]:
+    def _compile_findings(self, vuln: dict, comp: dict, mon: dict) -> list[dict[str, Any]]:
         """Compile findings."""
         findings = []
         for v in vuln.get("top_vulnerabilities", []):
@@ -328,7 +326,7 @@ class SecurityReportGenerator:
             })
         return findings
 
-    def _calculate_metrics(self, vuln: Dict, comp: Dict, mon: Dict) -> Dict[str, Any]:
+    def _calculate_metrics(self, vuln: dict, comp: dict, mon: dict) -> dict[str, Any]:
         """Calculate metrics."""
         return {
             "vulnerability_metrics": vuln,
@@ -340,7 +338,7 @@ class SecurityReportGenerator:
         """Export report to file."""
         try:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            
+
             if format.lower() == "json":
                 with open(output_path, "w") as f:
                     json.dump(report.to_dict(), f, indent=2, default=str)
@@ -359,10 +357,10 @@ class SecurityReportGenerator:
 
 
 def generate_security_report(
-    vulnerability_data: Dict[str, Any],
-    compliance_data: Dict[str, Any],
-    monitoring_data: Dict[str, Any],
-    output_path: Optional[str] = None,
+    vulnerability_data: dict[str, Any],
+    compliance_data: dict[str, Any],
+    monitoring_data: dict[str, Any],
+    output_path: str | None = None,
 ) -> SecurityReport:
     """Convenience function."""
     generator = SecurityReportGenerator()

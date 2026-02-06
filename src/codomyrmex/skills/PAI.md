@@ -1,26 +1,46 @@
-# Personal AI Infrastructure - Skills Context
+# Personal AI Infrastructure — Skills Module
 
-**Module**: skills
-**Status**: Active
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Skill framework for composable agent capabilities with discovery, execution, and lifecycle management.
+The Skills module provides PAI integration for agent skill management.
 
-## AI Strategy
+## PAI Capabilities
 
-As an AI agent, when working with this module:
+### Skill Discovery
 
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+Find available skills:
 
-## Key Files
+```python
+from codomyrmex.skills import SkillRegistry
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+registry = SkillRegistry()
+skills = registry.discover("./skills/")
 
-## Future Considerations
+for skill in skills:
+    print(f"{skill.name}: {skill.description}")
+```
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+### Skill Execution
+
+Execute skills:
+
+```python
+from codomyrmex.skills import SkillRunner
+
+runner = SkillRunner()
+result = runner.execute("code_analysis", context)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `SkillRegistry` | Discover skills |
+| `SkillRunner` | Execute skills |
+| `SkillBuilder` | Create skills |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

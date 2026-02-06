@@ -46,20 +46,19 @@ def verify_real_methods(*, prompt: str, description: str) -> str:
 
 def verify_readiness(*, prompt: str, description: str) -> str:
     """Check the ecosystem for autonomous readiness."""
-    import os
     from pathlib import Path
-    
+
     project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
     required_dirs = ["src/codomyrmex", "scripts", "src/codomyrmex/tests"]
-    
+
     missing = []
     for d in required_dirs:
         if not (project_root / d).exists():
             missing.append(d)
-            
+
     if missing:
         raise RuntimeError(f"Missing required directories: {', '.join(missing)}")
-        
+
     logger.info("Autonomous readiness verified", extra={"description": description})
     return "Autonomous readiness verified"
 
@@ -2183,7 +2182,7 @@ class PhysicalObjectManager:
 
     def create_object(self, object_id: str, name: str, object_type: ObjectType,
                      x: float, y: float, z: float, **properties) -> PhysicalObject:
-                         pass 
+                         pass
         """Create a new physical object."""
         obj = PhysicalObject(
             id=object_id,
@@ -2338,7 +2337,7 @@ class PhysicsSimulator:
 
     def register_object(self, object_id: str, mass: float, position: Vector3D,
                        velocity: Vector3D = None) -> None:
-                           pass 
+                           pass
         """Register an object for physics simulation."""
         if velocity is None:
             velocity = Vector3D(0, 0, 0)
@@ -2551,7 +2550,7 @@ class SensorManager:
     def get_readings_by_type(self, sensor_type: SensorType,
                            start_time: Optional[float] = None,
                            end_time: Optional[float] = None) -> List[SensorReading]:
-                               pass 
+                               pass
         """Get readings for a sensor type within time range."""
         filtered_readings = []
 

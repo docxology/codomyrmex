@@ -1,60 +1,10 @@
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 import json
-import os
-import subprocess
-import tempfile
-
-from missing_package import something
-from mypackage.core import core_function
-from real_data_factory import FunctionName, ClassName
-import nonexistent_module
-import pytest
 import sqlite3
+import subprocess
+from pathlib import Path
+from typing import Any
+
 import yaml
-import yaml
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """Real data factory for generating test fixtures without mocks.
 
@@ -77,7 +27,7 @@ class RealDataFactory:
 
     @staticmethod
     def create_package_structure(project_path: Path, package_name: str,
-                               modules: Dict[str, str]) -> Path:
+                               modules: dict[str, str]) -> Path:
         """Create a real Python package with multiple modules."""
         package_dir = project_path / package_name
         package_dir.mkdir()
@@ -93,7 +43,7 @@ class RealDataFactory:
 
     @staticmethod
     def create_config_file(project_path: Path, filename: str,
-                          config_data: Dict[str, Any], format_type: str = "json") -> Path:
+                          config_data: dict[str, Any], format_type: str = "json") -> Path:
         """Create a real configuration file."""
         config_file = project_path / filename
 
@@ -135,7 +85,7 @@ class RealDataFactory:
 
     @staticmethod
     def create_sqlite_database(db_path: Path, schema: str,
-                              sample_data: Optional[List[str]] = None) -> Path:
+                              sample_data: list[str] | None = None) -> Path:
         """Create a real SQLite database with schema and data."""
         conn = sqlite3.connect(str(db_path))
 
@@ -156,7 +106,7 @@ class RealDataFactory:
         return db_path
 
     @staticmethod
-    def create_docker_compose_file(project_path: Path, services: Dict[str, Any]) -> Path:
+    def create_docker_compose_file(project_path: Path, services: dict[str, Any]) -> Path:
         """Create a real docker-compose.yml file."""
         compose_data = {"version": "3.8", "services": services}
         return RealDataFactory.create_config_file(project_path, "docker-compose.yml",
@@ -203,7 +153,7 @@ def bad_indentation():
                                                    issue_files[issue_type])
 
     @staticmethod
-    def create_test_project_structure(project_path: Path) -> Dict[str, Path]:
+    def create_test_project_structure(project_path: Path) -> dict[str, Path]:
         """Create a complete test project structure."""
         structure = {}
 
@@ -312,7 +262,7 @@ def name_error():
     return error_codes.get(error_type, "# No error")
 
 
-def create_sample_config() -> Dict[str, Any]:
+def create_sample_config() -> dict[str, Any]:
     """Return sample configuration data."""
     return {
         "app": {
@@ -332,7 +282,7 @@ def create_sample_config() -> Dict[str, Any]:
     }
 
 
-def create_sample_workflow_config() -> Dict[str, Any]:
+def create_sample_workflow_config() -> dict[str, Any]:
     """Return sample workflow configuration."""
     return {
         "name": "test_workflow",

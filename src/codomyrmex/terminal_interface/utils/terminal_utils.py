@@ -1,14 +1,11 @@
-from pathlib import Path
-from typing import Any, Optional
 import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-
-
-
 
 #!/usr/bin/env python3
 
@@ -82,7 +79,7 @@ class TerminalFormatter:
 
         return False
 
-    def color(self, text: str, color: str, style: Optional[str] = None) -> str:
+    def color(self, text: str, color: str, style: str | None = None) -> str:
         """Apply color and style to text."""
         if not self.use_colors:
             return text
@@ -202,7 +199,7 @@ class TerminalFormatter:
         return "\n".join(result)
 
     def box(
-        self, content: str, title: Optional[str] = None, width: Optional[int] = None
+        self, content: str, title: str | None = None, width: int | None = None
     ) -> str:
         """Create a box around content."""
         lines = content.split("\n")
@@ -240,16 +237,16 @@ class CommandRunner:
     Utility class for running commands with beautiful output formatting.
     """
 
-    def __init__(self, formatter: Optional[TerminalFormatter] = None):
+    def __init__(self, formatter: TerminalFormatter | None = None):
         """Initialize command runner."""
         self.formatter = formatter or TerminalFormatter()
 
     def run_command(
         self,
         command: list[str],
-        cwd: Optional[Path] = None,
+        cwd: Path | None = None,
         show_output: bool = True,
-        timeout: Optional[int] = None,
+        timeout: int | None = None,
     ) -> dict[str, Any]:
         """
         Run a command and return formatted results.
@@ -360,7 +357,7 @@ class CommandRunner:
         self,
         module: str,
         args: list[str] = None,
-        cwd: Optional[Path] = None,
+        cwd: Path | None = None,
         show_output: bool = True,
     ) -> dict[str, Any]:
         """Run a Python module with formatting."""

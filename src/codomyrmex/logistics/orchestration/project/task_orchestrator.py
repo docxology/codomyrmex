@@ -4,21 +4,19 @@ This module provides capability for scheduling, executing, and tracking individu
 within the logistics system.
 """
 
-from collections import deque
-from concurrent.futures import ThreadPoolExecutor, Future
-from datetime import datetime, timezone
-from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Deque
-import asyncio
-import logging
 import threading
 import time
 import uuid
-
+from collections import deque
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
-from .resource_manager import get_resource_manager, ResourceManager, ResourceAllocation
+
+from .resource_manager import ResourceAllocation, get_resource_manager
 
 logger = get_logger(__name__)
 
@@ -48,7 +46,7 @@ class TaskResource:
     """Resource requirement for a task."""
     resource_type: str
     amount: float = 1.0
-    resource_id: Optional[str] = None  # Specific resource ID if needed
+    resource_id: str | None = None  # Specific resource ID if needed
 
 
 @dataclass
@@ -57,11 +55,11 @@ class TaskResult:
     task_id: str
     status: TaskStatus
     result: Any = None
-    error: Optional[str] = None
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
-    duration: Optional[float] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    error: str | None = None
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    duration: float | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -70,27 +68,27 @@ class Task:
     name: str
     module: str
     action: str
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: dict[str, Any] = field(default_factory=dict)
     priority: TaskPriority = TaskPriority.NORMAL
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    dependencies: List[str] = field(default_factory=list)  # List of task IDs
-    resources: List[TaskResource] = field(default_factory=list)
-    timeout: Optional[float] = None
+    dependencies: list[str] = field(default_factory=list)  # List of task IDs
+    resources: list[TaskResource] = field(default_factory=list)
+    timeout: float | None = None
     retry_count: int = 0
     max_retries: int = 3
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
+    metadata: dict[str, Any] = field(default_factory=dict)
+
     # Runtime state
     status: TaskStatus = TaskStatus.PENDING
-    result: Optional[TaskResult] = None
-    error: Optional[str] = None
+    result: TaskResult | None = None
+    error: str | None = None
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-    started_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
-    allocations: List[ResourceAllocation] = field(default_factory=list)
-    
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    allocations: list[ResourceAllocation] = field(default_factory=list)
+
     @property
-    def execution_time(self) -> Optional[float]:
+    def execution_time(self) -> float | None:
         """Get execution duration in seconds."""
         if self.started_at and self.completed_at:
             return (self.completed_at - self.started_at).total_seconds()
@@ -102,18 +100,18 @@ class TaskOrchestrator:
 
     def __init__(self, max_workers: int = 4):
         """Initialize the task orchestrator."""
-        self.tasks: Dict[str, Task] = {}
+        self.tasks: dict[str, Task] = {}
         self.max_workers = max_workers
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self.resource_manager = get_resource_manager()
-        
+
         # Queues for different priorities
-        self.queues: Dict[TaskPriority, Deque[str]] = {
+        self.queues: dict[TaskPriority, deque[str]] = {
             p: deque() for p in TaskPriority
         }
-        
-        self.running_tasks: Dict[str, Future] = {}
-        self.task_results: Dict[str, TaskResult] = {}
+
+        self.running_tasks: dict[str, Future] = {}
+        self.task_results: dict[str, TaskResult] = {}
         self._lock = threading.RLock()
         self._stop_event = threading.Event()
         self._worker_thread = None
@@ -122,7 +120,7 @@ class TaskOrchestrator:
         """Start the background processing loop."""
         if self._worker_thread and self._worker_thread.is_alive():
             return
-            
+
         self._stop_event.clear()
         self._worker_thread = threading.Thread(target=self._process_queue, daemon=True)
         self._worker_thread.start()
@@ -140,32 +138,32 @@ class TaskOrchestrator:
         with self._lock:
             if task.id in self.tasks:
                 logger.warning(f"Task {task.id} already exists, handling as update")
-            
+
             self.tasks[task.id] = task
             task.status = TaskStatus.PENDING
-            
+
             # Check dependencies
             if not self._check_dependencies(task):
                 task.status = TaskStatus.BLOCKED
             else:
                 self.queues[task.priority].append(task.id)
                 task.status = TaskStatus.READY
-                
+
             logger.info(f"Submitted task: {task.name} ({task.id})")
-            
+
             # Ensure processor is running
             self.start_processing()
-            
+
             return task.id
 
     def execute_task(self, task: Task) -> TaskResult:
         """Execute a task synchronously (blocking)."""
         self.submit_task(task)
-        
+
         # Wait for completion
         while task.status not in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
             time.sleep(0.1)
-            
+
         return self.task_results.get(task.id) or TaskResult(
             task_id=task.id,
             status=TaskStatus.FAILED,
@@ -178,25 +176,25 @@ class TaskOrchestrator:
             try:
                 # Find highest priority task
                 task_id = self._get_next_task()
-                
+
                 if task_id:
                     self._run_task(task_id)
                 else:
                     # Check blocked tasks
                     self._check_blocked_tasks()
                     time.sleep(0.1)
-                    
+
             except Exception as e:
                 logger.error(f"Error in task processor: {e}")
                 time.sleep(1.0)
 
-    def _get_next_task(self) -> Optional[str]:
+    def _get_next_task(self) -> str | None:
         """Get the next ready task from queues based on priority."""
         with self._lock:
             # Check capacity
             if len(self.running_tasks) >= self.max_workers:
                 return None
-                
+
             for priority in TaskPriority:
                 queue = self.queues[priority]
                 if queue:
@@ -229,10 +227,10 @@ class TaskOrchestrator:
         # Allocate resources if needed
         # (Simplified: assume resources are available for now or implement real allocation)
         # In a real implementation, we would check self.resource_manager.allocate(...)
-        
+
         task.status = TaskStatus.RUNNING
         task.started_at = datetime.now(timezone.utc)
-        
+
         future = self.executor.submit(self._execute_task_logic, task)
         self.running_tasks[task_id] = future
         future.add_done_callback(lambda f: self._on_task_complete(task_id, f))
@@ -240,11 +238,11 @@ class TaskOrchestrator:
     def _execute_task_logic(self, task: Task) -> Any:
         """Execute the actual task logic."""
         logger.info(f"Executing task: {task.name} ({task.action})")
-        
+
         # Simulate execution or dynamically call module
         # Ideally this would use `importlib` to load `task.module` and call `task.action`
         # For now, we'll just simulate success for recognized actions
-        
+
         if task.action == "sleep":
             duration = task.parameters.get("duration", 1)
             time.sleep(duration)
@@ -262,10 +260,10 @@ class TaskOrchestrator:
             task = self.tasks.get(task_id)
             if not task:
                 return
-                
+
             task.completed_at = datetime.now(timezone.utc)
             self.running_tasks.pop(task_id, None)
-            
+
             try:
                 result = future.result()
                 task.status = TaskStatus.COMPLETED
@@ -289,16 +287,16 @@ class TaskOrchestrator:
                     duration=task.execution_time
                 )
                 logger.error(f"Task {task.name} failed: {e}")
-            
+
             self.task_results[task_id] = task_result
             task.result = task_result
             logger.info(f"Task completed: {task.name} ({task.status.value})")
 
-    def list_tasks(self) -> List[Task]:
+    def list_tasks(self) -> list[Task]:
         """List all tasks."""
         return list(self.tasks.values())
 
-    def get_task(self, task_id: str) -> Optional[Task]:
+    def get_task(self, task_id: str) -> Task | None:
         """Get a task by ID."""
         return self.tasks.get(task_id)
 
@@ -308,16 +306,16 @@ class TaskOrchestrator:
             task = self.tasks.get(task_id)
             if not task:
                 return False
-                
+
             if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
                 return False
-                
+
             task.status = TaskStatus.CANCELLED
             task.completed_at = datetime.now(timezone.utc)
-            
+
             # Note: We can't easily kill running threads in ThreadPoolExecutor
             # but we can mark it as cancelled so we don't return its result or trigger dependents
-            
+
             logger.info(f"Cancelled task: {task.name}")
             return True
 

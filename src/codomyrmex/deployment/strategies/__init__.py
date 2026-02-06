@@ -4,13 +4,14 @@ Deployment strategies.
 Provides different deployment strategy implementations.
 """
 
+import threading
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Callable
 from datetime import datetime
 from enum import Enum
-import time
-import threading
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 
 
 class DeploymentState(Enum):
@@ -30,8 +31,8 @@ class DeploymentTarget:
     name: str
     address: str
     healthy: bool = True
-    version: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    version: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -42,10 +43,10 @@ class DeploymentResult:
     targets_failed: int
     duration_ms: float
     state: DeploymentState
-    errors: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    
-    def to_dict(self) -> Dict[str, Any]:
+    errors: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "success": self.success,
             "targets_updated": self.targets_updated,
@@ -58,21 +59,21 @@ class DeploymentResult:
 
 class DeploymentStrategy(ABC):
     """Abstract base class for deployment strategies."""
-    
+
     @abstractmethod
     def deploy(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
         """Deploy a new version to targets."""
         pass
-    
+
     @abstractmethod
     def rollback(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -82,20 +83,20 @@ class DeploymentStrategy(ABC):
 
 class RollingDeployment(DeploymentStrategy):
     """Rolling deployment - update targets one at a time."""
-    
+
     def __init__(
         self,
         batch_size: int = 1,
         delay_seconds: float = 5.0,
-        health_check: Optional[Callable[[DeploymentTarget], bool]] = None,
+        health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
         self.batch_size = batch_size
         self.delay_seconds = delay_seconds
         self.health_check = health_check
-    
+
     def deploy(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -103,20 +104,20 @@ class RollingDeployment(DeploymentStrategy):
         updated = 0
         failed = 0
         errors = []
-        
+
         batches = [
             targets[i:i + self.batch_size]
             for i in range(0, len(targets), self.batch_size)
         ]
-        
+
         for batch in batches:
             for target in batch:
                 try:
                     success = deploy_fn(target, version)
-                    
+
                     if success:
                         target.version = version
-                        
+
                         # Run health check if provided
                         if self.health_check:
                             target.healthy = self.health_check(target)
@@ -124,20 +125,20 @@ class RollingDeployment(DeploymentStrategy):
                                 errors.append(f"Health check failed for {target.id}")
                                 failed += 1
                                 continue
-                        
+
                         updated += 1
                     else:
                         failed += 1
                         errors.append(f"Deploy failed for {target.id}")
-                        
+
                 except Exception as e:
                     failed += 1
                     errors.append(f"Error deploying to {target.id}: {e}")
-            
+
             # Delay between batches
             if batches.index(batch) < len(batches) - 1:
                 time.sleep(self.delay_seconds)
-        
+
         return DeploymentResult(
             success=failed == 0,
             targets_updated=updated,
@@ -146,10 +147,10 @@ class RollingDeployment(DeploymentStrategy):
             state=DeploymentState.COMPLETED if failed == 0 else DeploymentState.FAILED,
             errors=errors,
         )
-    
+
     def rollback(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -158,47 +159,47 @@ class RollingDeployment(DeploymentStrategy):
 
 class BlueGreenDeployment(DeploymentStrategy):
     """Blue-green deployment - switch all traffic at once."""
-    
+
     def __init__(
         self,
-        switch_fn: Optional[Callable[[str], bool]] = None,
-        health_check: Optional[Callable[[DeploymentTarget], bool]] = None,
+        switch_fn: Callable[[str], bool] | None = None,
+        health_check: Callable[[DeploymentTarget], bool] | None = None,
     ):
         self.switch_fn = switch_fn
         self.health_check = health_check
-    
+
     def deploy(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
         start_time = time.time()
-        
+
         # Deploy to all targets (green environment)
         updated = 0
         failed = 0
         errors = []
-        
+
         for target in targets:
             try:
                 if deploy_fn(target, version):
                     target.version = version
-                    
+
                     if self.health_check and not self.health_check(target):
                         errors.append(f"Health check failed: {target.id}")
                         failed += 1
                         continue
-                    
+
                     updated += 1
                 else:
                     failed += 1
                     errors.append(f"Deploy failed: {target.id}")
-                    
+
             except Exception as e:
                 failed += 1
                 errors.append(f"Error: {target.id} - {e}")
-        
+
         # Only switch if all deployments succeeded
         if failed == 0 and updated > 0:
             if self.switch_fn:
@@ -215,7 +216,7 @@ class BlueGreenDeployment(DeploymentStrategy):
                         )
                 except Exception as e:
                     errors.append(f"Switch error: {e}")
-        
+
         return DeploymentResult(
             success=failed == 0,
             targets_updated=updated,
@@ -224,10 +225,10 @@ class BlueGreenDeployment(DeploymentStrategy):
             state=DeploymentState.COMPLETED if failed == 0 else DeploymentState.FAILED,
             errors=errors,
         )
-    
+
     def rollback(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -245,22 +246,22 @@ class BlueGreenDeployment(DeploymentStrategy):
 
 class CanaryDeployment(DeploymentStrategy):
     """Canary deployment - gradual rollout with traffic percentage."""
-    
+
     def __init__(
         self,
-        stages: List[float] = None,  # percentages: [10, 25, 50, 100]
+        stages: list[float] = None,  # percentages: [10, 25, 50, 100]
         stage_duration_seconds: float = 60.0,
-        health_check: Optional[Callable[[DeploymentTarget], bool]] = None,
+        health_check: Callable[[DeploymentTarget], bool] | None = None,
         success_threshold: float = 0.95,
     ):
         self.stages = stages or [10, 25, 50, 100]
         self.stage_duration = stage_duration_seconds
         self.health_check = health_check
         self.success_threshold = success_threshold
-    
+
     def deploy(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -269,38 +270,38 @@ class CanaryDeployment(DeploymentStrategy):
         updated = 0
         failed = 0
         errors = []
-        
+
         for stage_pct in self.stages:
             target_count = int(total * stage_pct / 100)
             targets_to_update = [
                 t for t in targets
                 if t.version != version
             ][:target_count - updated]
-            
+
             stage_updated = 0
             stage_failed = 0
-            
+
             for target in targets_to_update:
                 try:
                     if deploy_fn(target, version):
                         target.version = version
-                        
+
                         if self.health_check and not self.health_check(target):
                             stage_failed += 1
                             errors.append(f"Canary health check failed: {target.id}")
                             continue
-                        
+
                         stage_updated += 1
                     else:
                         stage_failed += 1
-                        
+
                 except Exception as e:
                     stage_failed += 1
                     errors.append(f"Error: {e}")
-            
+
             updated += stage_updated
             failed += stage_failed
-            
+
             # Check success rate
             if stage_updated > 0:
                 success_rate = stage_updated / (stage_updated + stage_failed)
@@ -315,11 +316,11 @@ class CanaryDeployment(DeploymentStrategy):
                         errors=errors,
                         metadata={"stopped_at_stage": stage_pct},
                     )
-            
+
             # Wait before next stage
             if stage_pct < 100:
                 time.sleep(self.stage_duration)
-        
+
         return DeploymentResult(
             success=True,
             targets_updated=updated,
@@ -328,10 +329,10 @@ class CanaryDeployment(DeploymentStrategy):
             state=DeploymentState.COMPLETED,
             errors=errors,
         )
-    
+
     def rollback(
         self,
-        targets: List[DeploymentTarget],
+        targets: list[DeploymentTarget],
         previous_version: str,
         deploy_fn: Callable[[DeploymentTarget, str], bool],
     ) -> DeploymentResult:
@@ -347,11 +348,11 @@ def create_strategy(strategy_type: str, **kwargs) -> DeploymentStrategy:
         "blue_green": BlueGreenDeployment,
         "canary": CanaryDeployment,
     }
-    
+
     strategy_class = strategies.get(strategy_type)
     if not strategy_class:
         raise ValueError(f"Unknown strategy: {strategy_type}")
-    
+
     return strategy_class(**kwargs)
 
 

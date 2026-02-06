@@ -1,21 +1,24 @@
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any
+from collections.abc import Iterator
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, MistralVibeError
+from codomyrmex.agents.core.exceptions import (
+    AgentError,
+    AgentTimeoutError,
+    MistralVibeError,
+)
 from codomyrmex.agents.generic import CLIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 
 class MistralVibeClient(CLIAgentBase):
     """Client for interacting with Mistral Vibe CLI tool."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize Mistral Vibe client.
 
@@ -38,7 +41,7 @@ class MistralVibeClient(CLIAgentBase):
             working_dir=None,
             env_vars={},
         )
-        
+
         vibe_command = self.get_config_value("mistral_vibe_command", config=config)
         timeout = self.get_config_value("mistral_vibe_timeout", config=config)
         working_dir_str = self.get_config_value("mistral_vibe_working_dir", config=config)
@@ -108,7 +111,7 @@ class MistralVibeClient(CLIAgentBase):
         return "\n".join(input_parts)
 
     def execute_vibe_command(
-        self, command: str, args: Optional[list[str]] = None, input_text: Optional[str] = None
+        self, command: str, args: list[str] | None = None, input_text: str | None = None
     ) -> dict[str, Any]:
         """Execute a vibe command."""
         cmd_input = command

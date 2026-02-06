@@ -1,22 +1,25 @@
-from pathlib import Path
-from typing import Any, Iterator, Optional
 import subprocess
+from pathlib import Path
+from typing import Any
+from collections.abc import Iterator
 
-from codomyrmex.agents.core.config import get_config
 from codomyrmex.agents.core import (
     AgentCapabilities,
     AgentRequest,
     AgentResponse,
 )
-from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError, EveryCodeError
+from codomyrmex.agents.core.exceptions import (
+    AgentError,
+    AgentTimeoutError,
+    EveryCodeError,
+)
 from codomyrmex.agents.generic import CLIAgentBase
-from codomyrmex.logging_monitoring import get_logger
 
 
 class EveryCodeClient(CLIAgentBase):
     """Client for interacting with Every Code CLI tool."""
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize Every Code client.
 
@@ -39,7 +42,7 @@ class EveryCodeClient(CLIAgentBase):
             working_dir=None,
             env_vars={},
         )
-        
+
         code_command = self.get_config_value("every_code_command", config=config)
         alt_command = self.get_config_value("every_code_alt_command", config=config)
         timeout = self.get_config_value("every_code_timeout", config=config)
@@ -179,19 +182,19 @@ class EveryCodeClient(CLIAgentBase):
         # Use base class streaming method
         yield from self._stream_command(input_text=code_input)
 
-    def _sanitize_path(self, path_str: str) -> Optional[str]:
+    def _sanitize_path(self, path_str: str) -> str | None:
         """Sanitize and validate file path."""
         try:
             # Prevent directory traversal / shell injection attempts
             if ".." in path_str or ";" in path_str or "|" in path_str:
                 self.logger.warning(f"Suspicious path detected and ignored: {path_str}")
                 return None
-                
+
             path = Path(path_str).resolve()
             # Ensure path exists
             if not path.exists():
                 return None
-                
+
             return str(path)
         except Exception as e:
             self.logger.warning(f"Error sanitizing path {path_str}: {e}")
@@ -237,7 +240,7 @@ class EveryCodeClient(CLIAgentBase):
 
 
     def execute_code_command(
-        self, command: str, args: Optional[list[str]] = None, input_text: Optional[str] = None
+        self, command: str, args: list[str] | None = None, input_text: str | None = None
     ) -> dict[str, Any]:
         """
         Execute a code command (e.g., /plan, /solve, /code, /auto).
