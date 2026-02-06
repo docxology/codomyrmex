@@ -1,0 +1,52 @@
+# Cursor Rules for the orchestrator Module
+
+## 0. Preamble
+These rules are specific to the `orchestrator` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides workflow execution engine for orchestrating complex multi-step operations, task pipelines, and cross-module coordination.
+-   **Key Technologies/Tools**: Python, async programming, workflow engines, DAG execution, task scheduling, dependency resolution.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `orchestrator` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Orchestrator module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for workflow execution.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Orchestrator.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `orchestrator`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `orchestrator` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for workflow definitions and task configurations.
+-   **Idempotency**: Design workflow steps to be idempotent where possible for safe retries.
+-   **Error Recovery**: Implement robust error handling and recovery strategies.
+-   **Observability**: All workflow steps should emit observability data (logs, metrics, traces).
+-   **Resource Management**: Properly manage concurrent task limits and resource allocation.
+
+## 4. Testing in `orchestrator`
+-   New features (e.g., new execution patterns, schedulers) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover workflow execution, error handling, concurrent execution, and rollback scenarios.
+-   Include end-to-end tests for complex workflow patterns.
+-   Run existing tests to ensure no regressions. Refer to `orchestrator/tests/README.md`.
+
+## 5. Documentation for `orchestrator`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document workflow definition patterns, execution models, and integration examples clearly.
+-   Include examples of common orchestration scenarios.
+
+## 6. Specific Considerations for `orchestrator`
+-   **Reliability**: Workflow execution must be reliable with proper failure handling.
+-   **Scalability**: Design for horizontal scaling of workflow execution.
+-   **Deadlock Prevention**: Implement safeguards against circular dependencies and deadlocks.
+-   **Auditability**: Maintain complete execution history for debugging and compliance.
+
+## 7. Final Check for `orchestrator`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that workflows execute reliably and handle failures gracefully.
+-   Test integration with related modules like `project_orchestration`, `events`, and `logging_monitoring`.

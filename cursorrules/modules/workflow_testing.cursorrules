@@ -1,0 +1,48 @@
+# Cursor Rules for the workflow_testing Module
+
+## 0. Preamble
+These rules are specific to the `workflow_testing` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides end-to-end workflow testing infrastructure for validating multi-step operations, agent behaviors, and integration scenarios.
+-   **Key Technologies/Tools**: Python, pytest, workflow assertions, state tracking, scenario definitions.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `workflow_testing` Module
+When working within this module, pay close attention to:
+-   `README.md`: Overview and usage guide.
+-   `API_SPECIFICATION.md`: Programmatic interfaces.
+-   `CHANGELOG.md`: Notable changes log.
+-   `requirements.txt`: Dependencies.
+-   `docs/`: Documentation.
+-   `src/`: Core logic.
+-   `tests/`: Tests for test utilities.
+-   `scenarios/`: Predefined test scenarios.
+
+## 3. Coding Standards & Practices for `workflow_testing`
+-   **Consistency**: Follow existing patterns in the module.
+-   **Scenario-Based**: Define tests as scenarios with clear steps.
+-   **State Assertions**: Validate state at each workflow step.
+-   **Cleanup**: Ensure proper cleanup after each test scenario.
+-   **Determinism**: Scenarios must be deterministic and repeatable.
+-   **Isolation**: Scenarios must not affect each other.
+
+## 4. Testing in `workflow_testing`
+-   Meta-test the workflow testing infrastructure itself.
+-   Ensure scenario definitions are validated.
+-   Test cleanup procedures and error handling.
+-   Refer to `workflow_testing/tests/README.md`.
+
+## 5. Documentation for `workflow_testing`
+-   Document scenario format and assertion types.
+-   Provide example scenarios.
+
+## 6. Specific Considerations for `workflow_testing`
+-   **Timeout Management**: Handle long-running scenarios with timeouts.
+-   **Parallel Execution**: Support parallel scenario execution.
+-   **Reporting**: Generate detailed test reports.
+-   **Debugging**: Provide debugging aids for failed scenarios.
+
+## 7. Final Check for `workflow_testing`
+-   Verify all tests pass.
+-   Test integration with `orchestrator`, `testing`, and `agents`.

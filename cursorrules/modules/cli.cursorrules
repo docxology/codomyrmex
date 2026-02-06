@@ -1,0 +1,52 @@
+# Cursor Rules for the cli Module
+
+## 0. Preamble
+These rules are specific to the `cli` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides command-line interface framework with argument parsing, command routing, help generation, and interactive prompts.
+-   **Key Technologies/Tools**: Python, Click/Typer/argparse, rich console output, interactive prompts, shell completion.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `cli` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the CLI module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for command-line operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to CLI.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `cli`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `cli` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for commands and options.
+-   **Consistent Interface**: Use consistent naming for commands, flags, and options.
+-   **Help Text**: All commands must have clear, helpful descriptions and examples.
+-   **Error Messages**: Provide actionable error messages with suggestions for fixing issues.
+-   **Exit Codes**: Use standard exit codes (0=success, 1=error, 2=misuse).
+
+## 4. Testing in `cli`
+-   New features (e.g., new commands, options) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover argument parsing, command execution, and edge cases.
+-   Use Click's CliRunner or equivalent for testing CLI commands.
+-   Run existing tests to ensure no regressions. Refer to `cli/tests/README.md`.
+
+## 5. Documentation for `cli`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document all commands with usage examples.
+-   Include man page or help text for each command.
+
+## 6. Specific Considerations for `cli`
+-   **Shell Completion**: Support tab completion for commands and options.
+-   **Progressive Disclosure**: Use subcommands to organize complex CLIs.
+-   **Configuration**: Support config files alongside command-line arguments.
+-   **Quiet/Verbose Modes**: Support output verbosity control.
+
+## 7. Final Check for `cli`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that CLI commands work correctly in terminal environments.
+-   Test integration with related modules like `terminal_interface` and `config_management`.

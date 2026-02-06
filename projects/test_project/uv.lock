@@ -738,12 +738,14 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.2.0" },
     { name = "openai", specifier = ">=1.0.0" },
     { name = "opencv-python", marker = "extra == 'video'", specifier = ">=4.8.0" },
+    { name = "openstacksdk", marker = "extra == 'cloud'", specifier = ">=1.0.0" },
     { name = "opentelemetry-api", marker = "extra == 'observability'", specifier = ">=1.20.0" },
     { name = "opentelemetry-exporter-otlp", marker = "extra == 'observability'", specifier = ">=1.20.0" },
     { name = "opentelemetry-sdk", marker = "extra == 'observability'", specifier = ">=1.20.0" },
     { name = "pandas", marker = "extra == 'serialization'", specifier = ">=2.0.0" },
     { name = "paramiko", specifier = ">=3.3.0" },
     { name = "pathlib", marker = "extra == 'code-review'", specifier = ">=1.0.1" },
+    { name = "pillow", marker = "extra == 'dark'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'fpf'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'modeling-3d'", specifier = ">=8.0.0" },
     { name = "pillow", marker = "extra == 'video'", specifier = ">=10.0.0" },
@@ -756,6 +758,7 @@ requires-dist = [
     { name = "pygame", marker = "extra == 'modeling-3d'", specifier = ">=2.0.0" },
     { name = "pygments", specifier = ">=2.15.0" },
     { name = "pylint", specifier = ">=3.0.0" },
+    { name = "pymupdf", marker = "extra == 'dark'", specifier = ">=1.23.0" },
     { name = "pyopengl", marker = "extra == 'modeling-3d'", specifier = ">=3.1.0" },
     { name = "pyopenssl", marker = "extra == 'security-audit'", specifier = ">=23.0.0" },
     { name = "pypdf", marker = "extra == 'documents'", specifier = ">=3.0.0" },
@@ -800,7 +803,7 @@ requires-dist = [
     { name = "watchdog", specifier = ">=3.0.0" },
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "documents", "audio", "video"]
+provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "documents", "audio", "video", "dark"]
 
 [package.metadata.requires-dev]
 dev = [

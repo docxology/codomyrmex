@@ -1,0 +1,52 @@
+# Cursor Rules for the plugin_system Module
+
+## 0. Preamble
+These rules are specific to the `plugin_system` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides plugin architecture for extending Codomyrmex with dynamically loaded modules, hooks, and extension points.
+-   **Key Technologies/Tools**: Python, entry points, plugin discovery, lifecycle management, dependency injection.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `plugin_system` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Plugin System module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for plugin loading.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Plugin System.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `plugin_system`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `plugin_system` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for plugin interfaces.
+-   **Clear Contracts**: Define clear plugin interfaces and contracts.
+-   **Lifecycle Management**: Handle plugin initialization, execution, and cleanup properly.
+-   **Error Isolation**: Plugin errors should not crash the host system.
+-   **Hot Reloading**: Support plugin updates without system restart where possible.
+
+## 4. Testing in `plugin_system`
+-   New features (e.g., new hook points, lifecycle features) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover plugin discovery, loading, execution, and error handling.
+-   Create test plugins for testing the plugin system.
+-   Run existing tests to ensure no regressions. Refer to `plugin_system/tests/README.md`.
+
+## 5. Documentation for `plugin_system`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document plugin development guidelines and templates.
+-   Include examples of creating and registering plugins.
+
+## 6. Specific Considerations for `plugin_system`
+-   **Security**: Plugin loading is security-sensitive; validate and sandbox plugins.
+-   **Dependency Management**: Handle plugin dependencies carefully.
+-   **Versioning**: Support plugin version constraints.
+-   **Performance**: Plugin system overhead should be minimal.
+
+## 7. Final Check for `plugin_system`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that plugins load and execute correctly.
+-   Test integration with related modules like `skills`, `orchestrator`, and `config_management`.

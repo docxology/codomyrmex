@@ -1,0 +1,86 @@
+# Cursor Rules for Python Files
+
+## 0. Preamble
+These rules apply to all Python (`.py`) files across the Codomyrmex project and supplement `general.cursorrules`. Module-specific rules may provide additional guidance for Python code within specific modules.
+
+## 1. File Purpose & Context
+-   **Scope**: All Python source files (`.py`) including modules, scripts, tests, and configuration.
+-   **Key Standards**: PEP 8, PEP 257 (docstrings), PEP 484 (type hints), PEP 585 (generic type hints).
+-   Python 3.10+ features are preferred where available.
+
+## 2. Code Style Standards
+
+### Formatting
+-   **Line Length**: Maximum 88 characters (Black default).
+-   **Indentation**: 4 spaces, no tabs.
+-   **Imports**: Group imports in order: standard library, third-party, local application.
+-   **Blank Lines**: Two blank lines before class/function definitions at module level.
+
+### Naming Conventions
+-   **Modules**: `lowercase_with_underscores.py`
+-   **Classes**: `PascalCase`
+-   **Functions/Methods**: `lowercase_with_underscores`
+-   **Constants**: `UPPERCASE_WITH_UNDERSCORES`
+-   **Private**: Prefix with single underscore `_private_func`
+-   **Dunder**: Reserved for Python special methods `__init__`
+
+## 3. Type Hints
+-   **Required**: All function signatures must include type hints.
+-   **Return Types**: Always specify return type, including `-> None`.
+-   **Complex Types**: Use `typing` module for Union, Optional, List, Dict, etc.
+-   **Example**:
+    ```python
+    def process_data(items: list[str], config: dict[str, Any] | None = None) -> bool:
+    ```
+
+## 4. Documentation
+
+### Docstrings
+-   **Required**: All public modules, classes, functions, and methods.
+-   **Format**: Google-style docstrings preferred.
+-   **Content**: Description, Args, Returns, Raises sections.
+-   **Example**:
+    ```python
+    def calculate_score(value: int, multiplier: float = 1.0) -> float:
+        """Calculate the weighted score for a given value.
+
+        Args:
+            value: The base value to score.
+            multiplier: Weight multiplier for the score.
+
+        Returns:
+            The calculated weighted score.
+
+        Raises:
+            ValueError: If value is negative.
+        """
+    ```
+
+### Comments
+-   Use comments to explain "why", not "what".
+-   Avoid obvious comments that repeat the code.
+-   TODO comments should include issue reference: `# TODO(#123): Implement caching`
+
+## 5. Error Handling
+-   **Specific Exceptions**: Catch specific exceptions, not bare `except:`.
+-   **Custom Exceptions**: Define in `exceptions.py` within each module.
+-   **Logging**: Log exceptions with appropriate level before re-raising.
+-   **Context Managers**: Use `with` statements for resource management.
+
+## 6. Testing
+-   **Test Files**: Name as `test_<module>.py` or `<module>_test.py`.
+-   **Test Functions**: Name as `test_<description>`.
+-   **Fixtures**: Define in `conftest.py` for shared fixtures.
+-   **Coverage**: Aim for >80% test coverage on new code.
+
+## 7. Security Considerations
+-   **No Hardcoded Secrets**: Use environment variables or secure vaults.
+-   **Input Validation**: Validate all external inputs.
+-   **SQL**: Use parameterized queries, never string formatting.
+-   **Subprocess**: Avoid shell=True; use explicit argument lists.
+
+## 8. Final Check for Python Files
+-   Run linter (Ruff/Flake8) and formatter (Black) before committing.
+-   Ensure all type hints are present and valid.
+-   Verify docstrings are complete for public APIs.
+-   Confirm tests pass for modified code.

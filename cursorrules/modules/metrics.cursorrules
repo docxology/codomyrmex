@@ -1,0 +1,52 @@
+# Cursor Rules for the metrics Module
+
+## 0. Preamble
+These rules are specific to the `metrics` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides metrics collection, aggregation, and reporting with support for counters, gauges, histograms, and summaries.
+-   **Key Technologies/Tools**: Python, Prometheus client, StatsD, custom metrics backends, aggregation algorithms.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `metrics` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Metrics module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for metrics data.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Metrics.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `metrics`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `metrics` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for metric types.
+-   **Naming Convention**: Use consistent metric naming (module_component_name_unit).
+-   **Cardinality Control**: Avoid high-cardinality labels that cause metric explosion.
+-   **Units**: Include units in metric names (e.g., _seconds, _bytes).
+-   **Default Labels**: Include standard labels (service, environment) on all metrics.
+
+## 4. Testing in `metrics`
+-   New features (e.g., new metric types, aggregations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover metric recording, aggregation, and export.
+-   Use in-memory metric backends for testing.
+-   Run existing tests to ensure no regressions. Refer to `metrics/tests/README.md`.
+
+## 5. Documentation for `metrics`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document available metrics, their labels, and interpretation.
+-   Include examples of metric queries and dashboards.
+
+## 6. Specific Considerations for `metrics`
+-   **Performance Impact**: Metric collection should have minimal performance impact.
+-   **Retention**: Consider metric retention and storage costs.
+-   **Alerting**: Design metrics to support meaningful alerting.
+-   **Consistency**: Maintain consistent metric semantics across the codebase.
+
+## 7. Final Check for `metrics`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that metrics are collected accurately and efficiently.
+-   Test integration with related modules like `telemetry`, `logging_monitoring`, and `observability_dashboard`.

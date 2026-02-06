@@ -1,0 +1,49 @@
+# Cursor Rules for the prompt_testing Module
+
+## 0. Preamble
+These rules are specific to the `prompt_testing` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides prompt testing and evaluation infrastructure for validating LLM prompts including response quality, consistency, and edge case handling.
+-   **Key Technologies/Tools**: Python, prompt evaluation frameworks, response parsers, scoring systems.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `prompt_testing` Module
+When working within this module, pay close attention to:
+-   `README.md`: Overview and usage guide.
+-   `API_SPECIFICATION.md`: Programmatic interfaces.
+-   `CHANGELOG.md`: Notable changes log.
+-   `requirements.txt`: Dependencies.
+-   `docs/`: Documentation.
+-   `src/`: Core logic.
+-   `tests/`: Tests.
+-   `prompts/`: Prompt test cases.
+-   `evaluators/`: Response evaluation logic.
+
+## 3. Coding Standards & Practices for `prompt_testing`
+-   **Consistency**: Follow existing patterns in the module.
+-   **Reproducibility**: Use fixed seeds and deterministic settings where possible.
+-   **Version Control**: Version prompts alongside tests.
+-   **Metrics**: Define clear evaluation metrics.
+-   **Edge Cases**: Include adversarial and edge case prompts.
+-   **Baseline Comparison**: Compare against baseline responses.
+
+## 4. Testing in `prompt_testing`
+-   Test prompt parsers and evaluators.
+-   Validate scoring consistency.
+-   Mock LLM responses for unit tests.
+-   Refer to `prompt_testing/tests/README.md`.
+
+## 5. Documentation for `prompt_testing`
+-   Document evaluation criteria and metrics.
+-   Provide prompt test case examples.
+
+## 6. Specific Considerations for `prompt_testing`
+-   **Cost Management**: Minimize API calls in testing.
+-   **Model Variability**: Account for LLM response variability.
+-   **Regression Detection**: Detect prompt quality regressions.
+-   **A/B Testing**: Support prompt A/B testing.
+
+## 7. Final Check for `prompt_testing`
+-   Verify all tests pass.
+-   Test integration with `llm`, `agents`, and `testing`.

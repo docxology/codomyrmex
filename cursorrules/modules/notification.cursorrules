@@ -1,0 +1,50 @@
+# Cursor Rules for the notification Module
+
+## 0. Preamble
+These rules are specific to the `notification` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides notification delivery across multiple channels including email, SMS, push notifications, and in-app messaging.
+-   **Key Technologies/Tools**: Python, SMTP, Twilio/SMS providers, push notification services, template engines.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `notification` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Notification module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for notification handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation specific to Notification.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `notification`
+-   **Consistency**: Adhere to existing coding styles and patterns in the module.
+-   **Language Specifics**: Python with PEP 8. Type hints for notification payloads.
+-   **Channel Abstraction**: Abstract notification channels behind a unified interface.
+-   **Template Support**: Use templating for notification content.
+-   **Rate Limiting**: Implement rate limiting per user/channel.
+-   **Delivery Tracking**: Track notification delivery status.
+
+## 4. Testing in `notification`
+-   New features MUST be accompanied by relevant tests.
+-   Mock external services (email, SMS) for testing.
+-   Test template rendering, rate limiting, and error handling.
+-   Refer to `notification/tests/README.md`.
+
+## 5. Documentation for `notification`
+-   Keep documentation up-to-date with channel configurations and templates.
+-   Document provider setup and configuration.
+
+## 6. Specific Considerations for `notification`
+-   **User Preferences**: Respect user notification preferences.
+-   **Compliance**: Ensure CAN-SPAM, GDPR compliance for emails.
+-   **Fallback**: Implement fallback channels for critical notifications.
+-   **Batching**: Batch notifications to avoid overwhelming users.
+
+## 7. Final Check for `notification`
+-   Verify tests pass.
+-   Confirm notifications deliver correctly across channels.
+-   Test integration with `events`, `privacy`, and `config_management`.

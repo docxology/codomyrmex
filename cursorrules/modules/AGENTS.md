@@ -1,49 +1,75 @@
 # Codomyrmex Agents — cursorrules/modules
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Module-specific cursor rules for individual Codomyrmex module behaviors.
+Module-specific cursor rules (60 total) that supplement `general.cursorrules`. Each rule provides coding standards, testing requirements, and best practices for its respective source module.
 
-## Active Components
+## Agent Guidelines
 
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `ai_code_editing.cursorrules` – Project file
-- `api_documentation.cursorrules` – Project file
-- `build_synthesis.cursorrules` – Project file
-- `ci_cd_automation.cursorrules` – Project file
-- `code.cursorrules` – Project file
-- `config_management.cursorrules` – Project file
-- `containerization.cursorrules` – Project file
-- `data_visualization.cursorrules` – Project file
-- `database_management.cursorrules` – Project file
-- `documentation.cursorrules` – Project file
-- `environment_setup.cursorrules` – Project file
-- `git_operations.cursorrules` – Project file
-- `language_models.cursorrules` – Project file
-- `logging_monitoring.cursorrules` – Project file
-- `model_context_protocol.cursorrules` – Project file
-- `modeling_3d.cursorrules` – Project file
-- `module_template.cursorrules` – Project file
-- `ollama_integration.cursorrules` – Project file
-- `pattern_matching.cursorrules` – Project file
-- `performance.cursorrules` – Project file
-- `physical_management.cursorrules` – Project file
-- `project_orchestration.cursorrules` – Project file
-- `security_audit.cursorrules` – Project file
-- `static_analysis.cursorrules` – Project file
-- `system_discovery.cursorrules` – Project file
-- `terminal_interface.cursorrules` – Project file
+### Rule Application
+
+1. **Identify the module** you're working in (e.g., `security`, `agents`, `cloud`)
+2. **Load the corresponding rule** from `modules/{module_name}.cursorrules`
+3. **Apply rules in order**: file-specific → module-specific → cross-module → general
+
+### Quick Module Lookup by Domain
+
+| Domain | Key Modules |
+|--------|-------------|
+| **Security** | `security`, `defense`, `identity`, `wallet`, `privacy`, `encryption`, `auth` |
+| **AI/Agents** | `agents`, `llm`, `agentic_memory`, `cerebrum`, `graph_rag` |
+| **Infrastructure** | `cloud`, `orchestrator`, `cache`, `api`, `deployment`, `networking` |
+| **Development** | `cli`, `testing`, `coding`, `utils`, `tree_sitter`, `static_analysis` |
+| **Operations** | `containerization`, `ci_cd_automation`, `telemetry`, `metrics` |
+
+### Standard Rule Template
+
+All module rules follow this 8-section structure:
+0. **Preamble** - Relationship to general.cursorrules
+
+1. **Purpose & Context** - Core functionality
+2. **Key Files & Structure** - Important files
+3. **Coding Standards** - Language requirements
+4. **Testing** - Test requirements
+5. **Documentation** - Doc maintenance
+6. **Specific Considerations** - Module-specific notes
+7. **Final Check** - Verification steps
+
+### When to Create New Rules
+
+Create a new module rule when:
+
+- A source module has unique coding requirements
+- Module-specific testing patterns are needed
+- Special security considerations apply
+- Cross-cutting concerns don't cover the need
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Module rules supplement (don't replace) general.cursorrules
+- When conflicts occur, module rules take precedence
+- Document any departures from general rules
+- Ensure MCP interfaces remain consistent across modules
+
+## Rule Categories Summary
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| Security & Identity | 7 | security, defense, identity |
+| AI & Agents | 7 | agents, llm, cerebrum |
+| Infrastructure | 9 | cloud, api, deployment |
+| Development Tools | 14 | cli, testing, utils |
+| Metrics & Testing | 5 | metrics, workflow_testing |
+| Documentation & Build | 5 | documentation, build_synthesis |
+| Operations | 7 | containerization, ci_cd_automation |
+| Specialized | 6 | model_context_protocol, modeling_3d |
+| **Total** | **60** | |
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [cursorrules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+- **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
+- **📄 File Rules**: [../file-specific/](../file-specific/) - 6 file-type rules
+- **🔗 Cross-Module**: [../cross-module/](../cross-module/) - 8 cross-module rules
+- **🏠 Project Root**: [../../README.md](../../README.md)

@@ -1,0 +1,92 @@
+# Cursor Rules for JSON Files
+
+## 0. Preamble
+These rules apply to all JSON (`.json`) files across the Codomyrmex project and supplement `general.cursorrules`. They ensure consistent data file formatting and structure.
+
+## 1. File Purpose & Context
+-   **Scope**: All JSON files including package.json, configuration, data files, API schemas, and test fixtures.
+-   **Key Standards**: RFC 8259 (JSON specification), consistent formatting.
+
+## 2. Formatting Standards
+
+### Structure
+-   **Indentation**: 2 spaces, no tabs.
+-   **Trailing Commas**: Not allowed (strict JSON compliance).
+-   **Line Length**: Break long lines for readability.
+-   **Empty Objects/Arrays**: `{}` or `[]` on single line.
+
+### Data Types
+-   **Strings**: Always use double quotes.
+-   **Numbers**: No leading zeros; use scientific notation for very large/small values.
+-   **Booleans**: Use `true`/`false` (lowercase).
+-   **Null**: Use `null` (lowercase).
+
+## 3. File Organization
+
+### Key Ordering
+-   **Consistent Order**: Order keys logically or alphabetically within objects.
+-   **Important Keys First**: Place identifying keys (name, version, id) first.
+-   **Example**:
+    ```json
+    {
+      "name": "my-package",
+      "version": "1.0.0",
+      "description": "Package description",
+      "dependencies": {}
+    }
+    ```
+
+### Nested Structures
+-   **Depth Limit**: Avoid nesting deeper than 4-5 levels.
+-   **Flatten When Possible**: Consider flatter structures for complex data.
+
+## 4. Security Considerations
+-   **No Secrets**: Never store secrets, passwords, or API keys in JSON.
+-   **Template Files**: Provide `.example.json` with placeholder values.
+-   **Gitignore**: Ensure sensitive JSON files are in `.gitignore`.
+-   **Data Validation**: Validate JSON input to prevent injection attacks.
+
+## 5. Schema and Validation
+-   **JSON Schema**: Define schemas for complex JSON structures.
+-   **$schema Property**: Include schema reference when applicable.
+-   **Validation**: Validate JSON files against schema in CI.
+-   **Example**:
+    ```json
+    {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" }
+      }
+    }
+    ```
+
+## 6. Common File Types
+
+### package.json
+-   Follow npm conventions for key ordering.
+-   Keep dependencies sorted alphabetically.
+-   Use exact versions or ranges consistently.
+
+### Configuration Files
+-   Document with a companion README or schema.
+-   Provide sensible defaults.
+-   Support environment variable substitution at runtime.
+
+### API Responses/Fixtures
+-   Use realistic but anonymized test data.
+-   Keep fixtures minimal but representative.
+-   Version fixtures alongside API versions.
+
+## 7. Comments (JSON5 or JSONC)
+-   **Standard JSON**: No comments allowed.
+-   **JSONC/JSON5**: Use for configuration where comments needed.
+-   **VS Code Settings**: Use `*.jsonc` extension for commented JSON.
+-   **Alternative**: Use companion README for documentation.
+
+## 8. Final Check for JSON Files
+-   Validate JSON syntax before committing.
+-   Verify no secrets or sensitive data are included.
+-   Ensure proper indentation (2 spaces).
+-   Confirm schema validation passes if applicable.
+-   Check for trailing commas (not allowed in strict JSON).

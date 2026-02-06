@@ -1,31 +1,64 @@
 # Codomyrmex Agents — cursorrules/cross-module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Cross-module cursor rules for multi-module interactions and shared patterns.
+Cross-module cursor rules for multi-module interactions and shared patterns. Apply these rules when working across module boundaries or with infrastructure shared by multiple modules.
 
-## Active Components
+## Active Rules (8)
 
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `build_synthesis.cursorrules` – Project file
-- `data_visualization.cursorrules` – Project file
-- `logging_monitoring.cursorrules` – Project file
-- `model_context_protocol.cursorrules` – Project file
-- `output_module.cursorrules` – Project file
-- `pattern_matching.cursorrules` – Project file
-- `static_analysis.cursorrules` – Project file
-- `template_module.cursorrules` – Project file
+| Rule | When to Apply |
+|------|---------------|
+| `logging_monitoring` | Adding logging, metrics, or observability |
+| `model_context_protocol` | Defining MCP tools or resources |
+| `static_analysis` | Configuring linters, security scanners |
+| `build_synthesis` | Code generation, build processes |
+| `data_visualization` | Charts, plots, visual output |
+| `output_module` | Managing output directories, artifacts |
+| `pattern_matching` | Code analysis, AST operations |
+| `template_module` | Using or creating templates |
+
+## Agent Guidelines
+
+### When to Apply Cross-Module Rules
+
+1. **Multi-Module Operations**: Working with 2+ modules simultaneously
+2. **Shared Infrastructure**: Logging, metrics, output handling
+3. **Code Generation**: Template-based or synthesized code
+4. **Analysis Tools**: Static analysis, pattern matching
+
+### Rule Application Order
+
+```
+1. Check file-specific rules (python.cursorrules, yaml.cursorrules, etc.)
+2. Check module-specific rules (security.cursorrules, agents.cursorrules, etc.)
+3. Check cross-module rules (this directory) ← Apply these
+4. Fall back to general.cursorrules
+```
+
+### Key Patterns
+
+**Logging**: Always use structured logging with the logging_monitoring patterns:
+
+```python
+logger.info("message", extra={"context": "value"})
+```
+
+**MCP Tools**: Follow model_context_protocol for tool definitions
+
+**Output**: Use output_module patterns for artifact management
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Cross-module rules supplement module-specific rules
+- When conflicts arise, module-specific rules take precedence
+- Document cross-module dependency rationale
+- Ensure MCP interfaces remain available for sibling agents
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [cursorrules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+- **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
+- **📦 Module Rules**: [../modules/](../modules/) - Per-module rules
+- **📄 File Rules**: [../file-specific/](../file-specific/) - File type rules
+- **🏠 Project Root**: [../../README.md](../../README.md)

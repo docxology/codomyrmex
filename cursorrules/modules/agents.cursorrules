@@ -1,0 +1,54 @@
+# Cursor Rules for the agents Module
+
+## 0. Preamble
+These rules are specific to the `agents` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides a multi-agent AI framework supporting Claude, Codex, Gemini, Jules, Mistral, and other AI model integrations with unified interfaces.
+-   **Key Technologies/Tools**: Python, async programming, LLM APIs, agent orchestration patterns, memory systems, tool calling frameworks.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `agents` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Agents module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for agent interactions and tool execution.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Agents.
+-   `base_agent.py`: Core agent abstraction and interface.
+-   `claude/`, `codex/`, `gemini/`, `jules/`, `mistral/`: Provider-specific implementations.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `agents`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `agents` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for agent configurations and responses.
+-   **Async-First**: Use async/await patterns for all LLM interactions to maximize throughput.
+-   **Provider Abstraction**: Maintain clean abstractions between provider-specific and generic agent code.
+-   **Error Isolation**: Agent failures should not cascade; implement proper error boundaries.
+-   **Stateless Design**: Prefer stateless agent designs where possible; use external memory stores.
+
+## 4. Testing in `agents`
+-   New features (e.g., new agent types, tool integrations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover agent initialization, message handling, tool execution, and error scenarios.
+-   Mock LLM providers where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `agents/tests/README.md`.
+
+## 5. Documentation for `agents`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document agent capabilities, configuration options, and provider-specific behaviors clearly.
+-   Include examples of multi-agent workflows and tool integration patterns.
+
+## 6. Specific Considerations for `agents`
+-   **Security Boundaries**: Agents may execute tools with significant capabilities; enforce proper sandboxing.
+-   **Cost Management**: Track token usage and implement rate limiting to control costs.
+-   **Provider Fallbacks**: Implement graceful fallback between providers for reliability.
+-   **Memory Integration**: Properly integrate with `agentic_memory` for persistent agent context.
+-   **MCP Compliance**: Ensure all agent-exposed tools follow MCP specification.
+
+## 7. Final Check for `agents`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that agents interact correctly with their configured LLM providers.
+-   Test integration with related modules like `agentic_memory`, `llm`, and `model_context_protocol`.

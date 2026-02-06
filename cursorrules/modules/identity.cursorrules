@@ -1,0 +1,52 @@
+# Cursor Rules for the identity Module
+
+## 0. Preamble
+These rules are specific to the `identity` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides 3-Tier persona management, bio-verification, and identity verification capabilities for secure autonomous agent operations.
+-   **Key Technologies/Tools**: Python, cryptographic identity, biometric verification, persona management, ZK-proofs, DID standards.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `identity` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Identity module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for identity operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Identity.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `identity`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `identity` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for identity objects and verification results.
+-   **Privacy by Design**: Minimize data collection; use privacy-preserving verification when possible.
+-   **Cryptographic Standards**: Use only well-audited cryptographic primitives.
+-   **Revocation Support**: All identity credentials must support revocation.
+-   **Audit Trail**: Log all identity operations for compliance purposes.
+
+## 4. Testing in `identity`
+-   New features (e.g., new verification methods, persona types) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover identity creation, verification, revocation, and edge cases.
+-   Include security tests for spoofing and replay attacks.
+-   Run existing tests to ensure no regressions. Refer to `identity/tests/README.md`.
+
+## 5. Documentation for `identity`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document identity tiers, verification levels, and integration patterns clearly.
+-   Include examples of persona management and verification workflows.
+
+## 6. Specific Considerations for `identity`
+-   **Security Critical**: Identity is foundational to system security; treat all changes as critical.
+-   **Regulatory Compliance**: Support GDPR right to erasure and data portability.
+-   **Interoperability**: Support standard identity protocols (DID, VC) where applicable.
+-   **Recovery**: Implement secure identity recovery mechanisms.
+
+## 7. Final Check for `identity`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that identity operations are secure and privacy-preserving.
+-   Test integration with related modules like `wallet`, `privacy`, and `defense`.

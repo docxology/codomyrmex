@@ -21,8 +21,8 @@ Core Python implementation demonstrating codomyrmex module integration patterns.
 ### Key Design Patterns
 
 1. **Dataclasses**: All data structures use `@dataclass`
-2. **Optional imports**: Graceful fallback if codomyrmex unavailable
-3. **Logging**: Unified via `get_logger(__name__)`
+2. **Real platform imports**: Uses actual codomyrmex modules (no fallback)
+3. **Logging**: Unified via `codomyrmex.logging_monitoring.get_logger(__name__)`
 4. **Type hints**: Complete annotations on all public APIs
 
 ## Navigation

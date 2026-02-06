@@ -1,0 +1,52 @@
+# Cursor Rules for the coding Module
+
+## 0. Preamble
+These rules are specific to the `coding` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides code manipulation utilities including code generation, refactoring tools, AST operations, and code formatting.
+-   **Key Technologies/Tools**: Python, AST modules, code formatters (Black, isort), refactoring libraries, template engines.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `coding` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Coding module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for code operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Coding.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `coding`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `coding` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for AST operations.
+-   **Preserve Semantics**: Code transformations must preserve program semantics.
+-   **Format Consistency**: Generated code should follow project style guidelines.
+-   **Reversibility**: Where possible, support undoing code transformations.
+-   **Multi-Language**: Design for supporting multiple programming languages.
+
+## 4. Testing in `coding`
+-   New features (e.g., new transformations, generators) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover code generation, transformation correctness, and edge cases.
+-   Include round-trip tests (parse → transform → serialize → parse).
+-   Run existing tests to ensure no regressions. Refer to `coding/tests/README.md`.
+
+## 5. Documentation for `coding`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document transformation types, code generation patterns, and examples.
+-   Include before/after examples for transformations.
+
+## 6. Specific Considerations for `coding`
+-   **Safety**: Generated code must be syntactically valid.
+-   **Comments Preservation**: Preserve comments during transformations where possible.
+-   **Context Sensitivity**: Consider surrounding code context in transformations.
+-   **Tool Integration**: Integrate with IDE and editor features.
+
+## 7. Final Check for `coding`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that code transformations produce valid, formatted output.
+-   Test integration with related modules like `static_analysis`, `ai_code_editing`, and `tree_sitter`.

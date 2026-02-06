@@ -1,0 +1,92 @@
+# Cursor Rules for YAML Configuration Files
+
+## 0. Preamble
+These rules apply to all YAML (`.yaml`, `.yml`) files across the Codomyrmex project and supplement `general.cursorrules`. They ensure consistent configuration file formatting and structure.
+
+## 1. File Purpose & Context
+-   **Scope**: All YAML configuration files including application config, CI/CD pipelines, Kubernetes manifests, and schema definitions.
+-   **Key Standards**: YAML 1.2 specification, consistent formatting.
+
+## 2. Formatting Standards
+
+### Structure
+-   **Indentation**: 2 spaces, no tabs.
+-   **Line Length**: Maximum 120 characters; break long values appropriately.
+-   **File Extension**: Prefer `.yaml` over `.yml` for consistency.
+-   **Document Markers**: Use `---` for document start in multi-document files.
+
+### Naming
+-   **Keys**: Use `snake_case` for keys (e.g., `database_host`, `max_connections`).
+-   **Boolean Values**: Use `true`/`false`, not `yes`/`no` or `on`/`off`.
+-   **Null Values**: Use `null` explicitly, not `~` or empty.
+
+## 3. Comments
+-   **Documentation**: Add comments explaining non-obvious configuration.
+-   **Sections**: Use comment headers to separate logical sections.
+-   **Defaults**: Document default values in comments when overriding.
+-   **Example**:
+    ```yaml
+    # Database Configuration
+    # -----------------------
+    database:
+      host: localhost  # Default: localhost
+      port: 5432       # PostgreSQL default port
+      pool_size: 10    # Max concurrent connections (default: 5)
+    ```
+
+## 4. Security Considerations
+-   **No Secrets**: Never commit secrets, passwords, or API keys.
+-   **Environment Variables**: Reference via `${ENV_VAR}` or template syntax.
+-   **Example Files**: Provide `.example` files with placeholder values.
+-   **Gitignore**: Ensure sensitive configs are in `.gitignore`.
+
+## 5. Schema and Validation
+-   **JSON Schema**: Provide JSON Schema for complex configurations.
+-   **Schema Reference**: Include `$schema` comment at file top when applicable.
+-   **Validation**: Validate YAML files in CI pipeline.
+-   **Example**:
+    ```yaml
+    # yaml-language-server: $schema=./schemas/config.schema.json
+    config:
+      version: "1.0"
+    ```
+
+## 6. Environment-Specific Configs
+-   **Base Config**: Define defaults in `config.yaml`.
+-   **Overrides**: Use `config.<env>.yaml` for environment-specific values.
+-   **Hierarchy**: Document merge order clearly.
+-   **Example Structure**:
+    ```
+    config/
+    ├── config.yaml           # Base configuration
+    ├── config.development.yaml
+    ├── config.staging.yaml
+    └── config.production.yaml
+    ```
+
+## 7. Common Patterns
+
+### Anchors and Aliases
+-   **Use Wisely**: Use anchors (`&`) and aliases (`*`) to reduce duplication.
+-   **Document**: Comment anchor definitions clearly.
+-   **Example**:
+    ```yaml
+    defaults: &defaults
+      timeout: 30
+      retries: 3
+
+    production:
+      <<: *defaults
+      timeout: 60  # Override for production
+    ```
+
+### Multi-line Strings
+-   **Literal Block** (`|`): Preserves newlines exactly.
+-   **Folded Block** (`>`): Folds newlines to spaces.
+-   **Choose Appropriately**: Use literal for code/scripts, folded for prose.
+
+## 8. Final Check for YAML Files
+-   Validate YAML syntax before committing.
+-   Verify no secrets or sensitive data are included.
+-   Ensure proper indentation (2 spaces).
+-   Confirm schema validation passes if applicable.

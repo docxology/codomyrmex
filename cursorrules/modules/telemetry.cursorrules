@@ -1,0 +1,52 @@
+# Cursor Rules for the telemetry Module
+
+## 0. Preamble
+These rules are specific to the `telemetry` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides OpenTelemetry-based observability including distributed tracing, metrics collection, and structured logging integration.
+-   **Key Technologies/Tools**: Python, OpenTelemetry SDK, OTLP exporters, Jaeger, Prometheus, Grafana integration.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `telemetry` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Telemetry module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for telemetry data handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Telemetry.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `telemetry`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `telemetry` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for telemetry configurations and spans.
+-   **Semantic Conventions**: Follow OpenTelemetry semantic conventions for naming.
+-   **Context Propagation**: Properly propagate trace context across service boundaries.
+-   **Cardinality Control**: Avoid high-cardinality metrics that can cause performance issues.
+-   **Sampling**: Implement appropriate sampling strategies for high-volume traces.
+
+## 4. Testing in `telemetry`
+-   New features (e.g., new exporters, instrumentation) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover span creation, context propagation, metrics recording, and exporter behavior.
+-   Mock telemetry backends where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `telemetry/tests/README.md`.
+
+## 5. Documentation for `telemetry`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document instrumentation patterns, configuration options, and backend setup clearly.
+-   Include examples of tracing and metrics usage.
+
+## 6. Specific Considerations for `telemetry`
+-   **Privacy Compliance**: Ensure telemetry data does not contain PII without proper controls.
+-   **Performance Impact**: Telemetry should have minimal impact on application performance.
+-   **Reliability**: Telemetry failures should never impact application functionality.
+-   **Cost Management**: Consider telemetry data volumes and associated storage costs.
+
+## 7. Final Check for `telemetry`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that telemetry collection is reliable and performant.
+-   Test integration with related modules like `logging_monitoring`, `performance`, and `observability_dashboard`.

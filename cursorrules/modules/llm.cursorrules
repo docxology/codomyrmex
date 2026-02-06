@@ -1,0 +1,54 @@
+# Cursor Rules for the llm Module
+
+## 0. Preamble
+These rules are specific to the `llm` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides LLM provider abstraction with unified interfaces for multiple language model providers, including local Ollama support and cloud-based services.
+-   **Key Technologies/Tools**: Python, async programming, provider APIs (OpenAI, Anthropic, Google, etc.), Ollama, streaming responses, token management.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `llm` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the LLM module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for LLM API interactions and data handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to LLM.
+-   `providers/`: Provider-specific implementations.
+-   `ollama/`: Local LLM integration with Ollama.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `llm`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `llm` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for LLM configurations and responses.
+-   **Async-First**: Use async/await for all LLM API calls to enable concurrent requests.
+-   **Streaming Support**: Implement streaming for long-form generation where supported.
+-   **Token Tracking**: Track token usage for cost management and context window limits.
+-   **Response Validation**: Validate LLM responses and handle malformed outputs gracefully.
+
+## 4. Testing in `llm`
+-   New features (e.g., new providers, response formats) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover API interactions, response parsing, error handling, and streaming behavior.
+-   Mock LLM providers where appropriate to ensure deterministic test behavior.
+-   Run existing tests to ensure no regressions. Refer to `llm/tests/README.md`.
+
+## 5. Documentation for `llm`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document provider-specific behaviors, model capabilities, and configuration options clearly.
+-   Include examples of common LLM interaction patterns and advanced usage scenarios.
+
+## 6. Specific Considerations for `llm`
+-   **API Key Security**: Never log or expose API keys; use secure credential management.
+-   **Rate Limiting**: Implement rate limiting and retry logic for API quotas.
+-   **Cost Management**: Track costs per request and implement spending limits.
+-   **Context Windows**: Respect model-specific context window limits.
+-   **Local-First Option**: Prioritize local Ollama option for privacy-sensitive use cases.
+
+## 7. Final Check for `llm`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that LLM integrations work correctly with actual providers.
+-   Test integration with related modules like `agents`, `ollama_integration`, and `model_context_protocol`.

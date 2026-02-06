@@ -1,0 +1,55 @@
+# Cursor Rules for the security Module
+
+## 0. Preamble
+These rules are specific to the `security` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides comprehensive security scanning, vulnerability detection, hardening utilities, and security-focused utilities for the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, security scanners (Bandit, Semgrep), cryptographic libraries, certificate validation, OWASP standards, NIST frameworks.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `security` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Security module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for the security module itself (meta-security).
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Security.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+-   `.gitignore`: Module-specific ignored files.
+
+## 3. Coding Standards & Practices for `security`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `security` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for security configurations and scan results.
+-   **Defense in Depth**: Implement multiple layers of security controls.
+-   **Secure Defaults**: All security features should default to the most secure option.
+-   **Least Privilege**: Implement and enforce principle of least privilege throughout.
+-   **Input Validation**: Validate and sanitize all inputs rigorously.
+
+## 4. Testing in `security`
+-   New features (e.g., new scanners, detection capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover vulnerability detection accuracy, false positive rates, and security control effectiveness.
+-   Include adversarial tests to validate security controls against known attack patterns.
+-   Run existing tests to ensure no regressions. Refer to `security/tests/README.md`.
+
+## 5. Documentation for `security`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document security best practices, scanning procedures, and remediation guidance clearly.
+-   Include examples of security scan outputs and vulnerability reports.
+-   **Never include real credentials, secrets, or sensitive data in documentation.**
+
+## 6. Specific Considerations for `security`
+-   **Critical Module**: This module handles security-sensitive operations. All changes require careful review.
+-   **Credential Handling**: Never log, store, or expose credentials or secrets in plain text.
+-   **Compliance**: Ensure compatibility with OWASP, NIST, and ISO security standards.
+-   **Audit Trail**: All security-relevant operations should be logged for audit purposes.
+-   **Zero-Day Response**: Design for rapid response to newly discovered vulnerabilities.
+
+## 7. Final Check for `security`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass, especially security-focused tests.
+-   Confirm that security operations are robust and produce accurate results.
+-   Test integration with related modules like `encryption`, `defense`, and `static_analysis`.

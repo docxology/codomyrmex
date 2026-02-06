@@ -1,0 +1,53 @@
+# Cursor Rules for the encryption Module
+
+## 0. Preamble
+These rules are specific to the `encryption` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides cryptographic operations including encryption, decryption, key management, digital signatures, and hashing utilities.
+-   **Key Technologies/Tools**: Python, cryptography library, sodium/NaCl, TLS, X.509 certificates, HSM integration.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `encryption` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Encryption module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for cryptographic operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Encryption.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `encryption`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `encryption` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for cryptographic parameters and outputs.
+-   **Use Standard Libraries**: Only use well-audited cryptographic libraries (cryptography, NaCl).
+-   **No Custom Crypto**: Never implement custom cryptographic algorithms.
+-   **Secure Defaults**: Default to the most secure algorithm options (AES-256-GCM, Ed25519, etc.).
+-   **Key Rotation**: Support key rotation and versioning.
+-   **Constant-Time Operations**: Use constant-time comparisons for security-sensitive operations.
+
+## 4. Testing in `encryption`
+-   New features (e.g., new algorithms, key formats) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Use official test vectors from NIST, RFC specifications, etc.
+-   Test encryption/decryption round-trips, signature verification, and error handling.
+-   Run existing tests to ensure no regressions. Refer to `encryption/tests/README.md`.
+
+## 5. Documentation for `encryption`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported algorithms, key formats, and security considerations clearly.
+-   Include examples of common cryptographic operations.
+
+## 6. Specific Considerations for `encryption`
+-   **Critical Security Module**: Cryptographic operations are fundamental to system security.
+-   **Algorithm Deprecation**: Have a clear process for deprecating weak algorithms.
+-   **Performance**: Balance security with performance requirements.
+-   **Compliance**: Support FIPS 140-2/3 modes where required.
+
+## 7. Final Check for `encryption`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass using official test vectors.
+-   Confirm that cryptographic operations use approved algorithms correctly.
+-   Test integration with related modules like `wallet`, `identity`, and `security`.

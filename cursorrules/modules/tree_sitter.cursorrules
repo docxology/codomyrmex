@@ -1,0 +1,48 @@
+# Cursor Rules for the tree_sitter Module
+
+## 0. Preamble
+These rules are specific to the `tree_sitter` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides Tree-sitter integration for incremental parsing, syntax tree analysis, and multi-language code understanding.
+-   **Key Technologies/Tools**: Python, tree-sitter library, grammars for multiple languages, AST queries.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `tree_sitter` Module
+When working within this module, pay close attention to:
+-   `README.md`: Overview and language support.
+-   `API_SPECIFICATION.md`: Programmatic interfaces.
+-   `CHANGELOG.md`: Notable changes log.
+-   `requirements.txt`: Dependencies.
+-   `grammars/`: Language grammars.
+-   `queries/`: Tree-sitter query files.
+-   `src/`: Core logic.
+-   `tests/`: Tests.
+
+## 3. Coding Standards & Practices for `tree_sitter`
+-   **Consistency**: Follow existing patterns in the module.
+-   **Grammar Versioning**: Track grammar versions explicitly.
+-   **Query Optimization**: Optimize tree-sitter queries for performance.
+-   **Incremental Parsing**: Leverage incremental parsing for large files.
+-   **Error Recovery**: Handle parse errors gracefully.
+-   **Multi-Language**: Support consistent interfaces across languages.
+
+## 4. Testing in `tree_sitter`
+-   Test parsing for each supported language.
+-   Include malformed code to test error recovery.
+-   Benchmark parsing performance.
+-   Refer to `tree_sitter/tests/README.md`.
+
+## 5. Documentation for `tree_sitter`
+-   Document supported languages and grammar versions.
+-   Provide query examples for common patterns.
+
+## 6. Specific Considerations for `tree_sitter`
+-   **Grammar Updates**: Keep grammars updated with language changes.
+-   **Memory**: Monitor memory usage for large files.
+-   **Thread Safety**: Consider thread safety for parallel parsing.
+-   **Binary Dependencies**: Handle native library dependencies properly.
+
+## 7. Final Check for `tree_sitter`
+-   Verify tests pass for all supported languages.
+-   Test integration with `coding`, `static_analysis`, and `pattern_matching`.

@@ -1,0 +1,100 @@
+# Cursor Rules for CHANGELOG.md Files
+
+## 0. Preamble
+These rules apply to all `CHANGELOG.md` files across the Codomyrmex project and supplement `general.cursorrules`. They ensure consistent changelog formatting following the Keep a Changelog standard.
+
+## 1. File Purpose & Context
+-   **Scope**: All CHANGELOG.md files in modules and the project root.
+-   **Key Standards**: [Keep a Changelog](https://keepachangelog.com/) v1.1.0, Semantic Versioning.
+-   **Purpose**: Document notable changes for each version in human-readable format.
+
+## 2. File Structure
+
+### Header
+```markdown
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+```
+
+### Version Sections
+-   **Unreleased**: Always have an `[Unreleased]` section at top.
+-   **Version Headers**: Format as `## [X.Y.Z] - YYYY-MM-DD`.
+-   **Chronological Order**: Newest versions at top.
+
+## 3. Change Categories
+
+### Required Categories (when applicable)
+-   **Added**: New features.
+-   **Changed**: Changes to existing functionality.
+-   **Deprecated**: Features to be removed in future.
+-   **Removed**: Features removed in this version.
+-   **Fixed**: Bug fixes.
+-   **Security**: Security vulnerability fixes.
+
+### Category Order
+List categories in the order above for consistency.
+
+## 4. Entry Guidelines
+
+### Content
+-   **User-Focused**: Write for users, not developers.
+-   **Action-Oriented**: Start with verb (Add, Change, Fix, Remove).
+-   **Specific**: Include what changed and why it matters.
+-   **Reference Issues**: Link to related issues/PRs when applicable.
+
+### Examples
+```markdown
+## [Unreleased]
+
+### Added
+- OAuth2 authentication support for API endpoints (#123)
+- New `--verbose` flag for CLI commands
+
+### Changed
+- Improved error messages for configuration validation
+- Upgraded dependencies to address security vulnerabilities
+
+### Fixed
+- Memory leak in connection pool under high load (#456)
+- Incorrect timestamp formatting in log output
+
+### Security
+- Fixed XSS vulnerability in user input handling (CVE-2024-XXXX)
+```
+
+## 5. Version Links
+
+### Footer Format
+Include comparison links at the bottom:
+```markdown
+[Unreleased]: https://github.com/owner/repo/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/owner/repo/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/owner/repo/releases/tag/v1.0.0
+```
+
+## 6. Semantic Versioning
+
+### Version Increment Rules
+-   **MAJOR (X.0.0)**: Breaking API changes.
+-   **MINOR (0.X.0)**: New features, backward compatible.
+-   **PATCH (0.0.X)**: Bug fixes, backward compatible.
+
+### Pre-release Versions
+-   Format: `X.Y.Z-alpha.1`, `X.Y.Z-beta.2`, `X.Y.Z-rc.1`
+
+## 7. Common Mistakes to Avoid
+-   Don't commit empty change categories.
+-   Don't use vague entries like "Various improvements".
+-   Don't include internal/developer-only changes.
+-   Don't forget to update [Unreleased] link on release.
+
+## 8. Final Check for CHANGELOG.md
+-   Verify format follows Keep a Changelog standard.
+-   Ensure all entries are user-focused and actionable.
+-   Confirm version numbers follow SemVer.
+-   Check that version comparison links are correct.
+-   Move [Unreleased] entries to new version section on release.

@@ -1,0 +1,48 @@
+# Cursor Rules for the market Module
+
+## 0. Preamble
+These rules are specific to the `market` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides marketplace functionality including service listings, pricing, transactions, and economic coordination between agents.
+-   **Key Technologies/Tools**: Python, transaction processing, pricing algorithms, escrow patterns, reputation systems.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `market` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview and usage.
+-   `API_SPECIFICATION.md`: Programmatic interfaces.
+-   `SECURITY.md`: Critical - financial transaction security.
+-   `CHANGELOG.md`: Notable changes log.
+-   `requirements.txt`: Dependencies.
+-   `docs/`: Documentation.
+-   `src/`: Core logic.
+-   `tests/`: Unit and integration tests.
+
+## 3. Coding Standards & Practices for `market`
+-   **Consistency**: Follow existing patterns in the module.
+-   **Transaction Safety**: Use ACID-compliant transactions.
+-   **Audit Trail**: Log all financial operations.
+-   **Decimal Precision**: Use Decimal for financial calculations.
+-   **Escrow Patterns**: Implement escrow for untrusted transactions.
+-   **Idempotency**: All transaction operations must be idempotent.
+
+## 4. Testing in `market`
+-   Extensive tests for transaction correctness.
+-   Test concurrent transaction handling.
+-   Validate escrow and refund flows.
+-   Refer to `market/tests/README.md`.
+
+## 5. Documentation for `market`
+-   Document transaction flows with sequence diagrams.
+-   Include pricing model documentation.
+
+## 6. Specific Considerations for `market`
+-   **Critical Security**: Financial transactions require security review.
+-   **Dispute Resolution**: Implement dispute handling.
+-   **Fraud Prevention**: Detect and prevent fraudulent activity.
+-   **Reconciliation**: Support audit and reconciliation.
+
+## 7. Final Check for `market`
+-   Verify tests pass, especially financial scenarios.
+-   Test integration with `wallet`, `identity`, and `encryption`.

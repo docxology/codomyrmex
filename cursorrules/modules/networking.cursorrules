@@ -1,0 +1,52 @@
+# Cursor Rules for the networking Module
+
+## 0. Preamble
+These rules are specific to the `networking` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides networking utilities including HTTP clients, WebSocket support, connection pooling, and network protocol implementations.
+-   **Key Technologies/Tools**: Python, httpx/aiohttp, websockets, asyncio, SSL/TLS, connection management.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `networking` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Networking module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for network operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Networking.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `networking`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `networking` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for network configurations.
+-   **Async-First**: Use async/await for all network I/O operations.
+-   **Connection Pooling**: Reuse connections where possible for efficiency.
+-   **Timeouts**: Always set appropriate timeouts on network operations.
+-   **Retry Logic**: Implement exponential backoff for transient failures.
+
+## 4. Testing in `networking`
+-   New features (e.g., new protocols, clients) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover connection handling, error scenarios, and edge cases.
+-   Use mock servers for unit tests.
+-   Run existing tests to ensure no regressions. Refer to `networking/tests/README.md`.
+
+## 5. Documentation for `networking`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document client configurations, timeout settings, and retry policies.
+-   Include examples of common networking patterns.
+
+## 6. Specific Considerations for `networking`
+-   **Security**: Use TLS for all sensitive communications.
+-   **Certificate Validation**: Properly validate SSL certificates.
+-   **Resource Cleanup**: Ensure connections are properly closed.
+-   **DNS**: Consider DNS caching and resolution strategies.
+
+## 7. Final Check for `networking`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that network operations are reliable and properly handle errors.
+-   Test integration with related modules like `api`, `cloud`, and `security`.

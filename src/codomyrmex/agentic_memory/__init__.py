@@ -468,6 +468,142 @@ class KnowledgeMemory(AgentMemory):
         )
 
 
+class VectorStoreMemory(AgentMemory):
+    """Memory with integrated vector store for hybrid retrieval."""
+    
+    def __init__(
+        self,
+        store: Optional[MemoryStore] = None,
+        vector_store=None,  # VectorStore instance
+        embedding_fn: Optional[Callable[[str], List[float]]] = None,
+        max_memories: int = 10000,
+        hybrid_weight: float = 0.5,  # Balance between vector and keyword
+    ):
+        super().__init__(store, embedding_fn, max_memories)
+        self._vector_store = vector_store
+        self.hybrid_weight = hybrid_weight
+    
+    def remember(
+        self,
+        content: str,
+        memory_type: MemoryType = MemoryType.EPISODIC,
+        importance: MemoryImportance = MemoryImportance.MEDIUM,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Memory:
+        """Store memory with vector indexing."""
+        memory = super().remember(content, memory_type, importance, metadata)
+        
+        # Also index in vector store
+        if self._vector_store and memory.embedding:
+            self._vector_store.add(
+                memory.id,
+                memory.embedding,
+                {"content": content, "type": memory_type.value},
+            )
+        
+        return memory
+    
+    def hybrid_recall(
+        self,
+        query: str,
+        k: int = 5,
+        vector_weight: Optional[float] = None,
+    ) -> List[RetrievalResult]:
+        """Hybrid search using both vector similarity and keyword matching."""
+        weight = vector_weight if vector_weight is not None else self.hybrid_weight
+        
+        # Get keyword results
+        keyword_results = self.recall(query, k=k * 2)
+        keyword_scores = {r.memory.id: r.combined_score for r in keyword_results}
+        
+        # Get vector results
+        vector_scores = {}
+        if self._vector_store and self.embedding_fn:
+            query_embedding = self.embedding_fn(query)
+            vector_results = self._vector_store.search(query_embedding, k=k * 2)
+            for vr in vector_results:
+                vector_scores[vr.id] = vr.score
+        
+        # Combine scores
+        all_ids = set(keyword_scores.keys()) | set(vector_scores.keys())
+        combined = []
+        
+        for mem_id in all_ids:
+            memory = self.store.get(mem_id)
+            if not memory:
+                continue
+            
+            kw_score = keyword_scores.get(mem_id, 0)
+            vec_score = vector_scores.get(mem_id, 0)
+            hybrid_score = (1 - weight) * kw_score + weight * vec_score
+            
+            combined.append(RetrievalResult(
+                memory=memory,
+                relevance_score=hybrid_score,
+                recency_score=memory.recency_score,
+                importance_score=memory.importance.value / 4.0,
+            ))
+        
+        combined.sort(key=lambda r: r.combined_score, reverse=True)
+        return combined[:k]
+    
+    def forget(self, memory_id: str) -> bool:
+        """Remove from both stores."""
+        if self._vector_store:
+            self._vector_store.delete(memory_id)
+        return super().forget(memory_id)
+
+
+class SummaryMemory(AgentMemory):
+    """Memory that auto-summarizes old memories."""
+    
+    def __init__(
+        self,
+        store: Optional[MemoryStore] = None,
+        embedding_fn: Optional[Callable[[str], List[float]]] = None,
+        summarize_fn: Optional[Callable[[List[str]], str]] = None,
+        max_memories: int = 1000,
+        summarize_threshold: int = 100,
+    ):
+        super().__init__(store, embedding_fn, max_memories)
+        self.summarize_fn = summarize_fn
+        self.summarize_threshold = summarize_threshold
+        self._summary_count = 0
+    
+    def _prune_if_needed(self) -> None:
+        """Summarize old memories instead of deleting."""
+        all_memories = self.store.list_all()
+        if len(all_memories) <= self.summarize_threshold:
+            return
+        
+        if not self.summarize_fn:
+            return super()._prune_if_needed()
+        
+        # Get oldest memories
+        sorted_mems = sorted(all_memories, key=lambda m: m.created_at)
+        to_summarize = sorted_mems[:self.summarize_threshold // 2]
+        
+        if len(to_summarize) < 5:
+            return
+        
+        # Summarize them
+        contents = [m.content for m in to_summarize]
+        summary = self.summarize_fn(contents)
+        
+        # Create summary memory
+        self._summary_count += 1
+        self.remember(
+            content=f"[Summary {self._summary_count}] {summary}",
+            memory_type=MemoryType.SEMANTIC,
+            importance=MemoryImportance.HIGH,
+            metadata={"is_summary": True, "source_count": len(to_summarize)},
+        )
+        
+        # Delete summarized memories
+        for mem in to_summarize:
+            self.store.delete(mem.id)
+
+
 __all__ = [
     # Enums
     "MemoryType",
@@ -483,4 +619,7 @@ __all__ = [
     "AgentMemory",
     "ConversationMemory",
     "KnowledgeMemory",
+    # Enhanced
+    "VectorStoreMemory",
+    "SummaryMemory",
 ]

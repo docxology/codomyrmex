@@ -1,0 +1,52 @@
+# Cursor Rules for the api Module
+
+## 0. Preamble
+These rules are specific to the `api` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides REST and GraphQL API infrastructure with routing, middleware, serialization, and request/response handling.
+-   **Key Technologies/Tools**: Python, FastAPI/Flask, Pydantic, OpenAPI, JSON serialization, CORS, rate limiting.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `api` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the API module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for API endpoints.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to API.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `api`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `api` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for request/response models.
+-   **RESTful Design**: Follow REST conventions for resource naming and HTTP methods.
+-   **Versioning**: Implement API versioning (URL path or header-based).
+-   **Validation**: Validate all input using Pydantic models or similar.
+-   **Error Handling**: Return consistent error responses with appropriate HTTP status codes.
+
+## 4. Testing in `api`
+-   New features (e.g., new endpoints, middleware) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover endpoint behavior, authentication, and error handling.
+-   Use test clients (e.g., TestClient for FastAPI) for integration tests.
+-   Run existing tests to ensure no regressions. Refer to `api/tests/README.md`.
+
+## 5. Documentation for `api`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Generate OpenAPI/Swagger documentation automatically.
+-   Include example requests and responses for all endpoints.
+
+## 6. Specific Considerations for `api`
+-   **Authentication**: Implement proper authentication (JWT, OAuth2, API keys).
+-   **Rate Limiting**: Protect endpoints with rate limiting.
+-   **CORS**: Configure CORS appropriately for web clients.
+-   **Pagination**: Implement pagination for list endpoints.
+
+## 7. Final Check for `api`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that API endpoints are secure and performant.
+-   Test integration with related modules like `auth`, `validation`, and `serialization`.

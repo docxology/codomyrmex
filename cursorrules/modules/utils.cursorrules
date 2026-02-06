@@ -1,0 +1,52 @@
+# Cursor Rules for the utils Module
+
+## 0. Preamble
+These rules are specific to the `utils` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides common utility functions and helpers used across the Codomyrmex ecosystem including string manipulation, file operations, and data transformations.
+-   **Key Technologies/Tools**: Python, standard library utilities, reusable helper functions.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `utils` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Utils module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for utility functions.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Utils.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `utils`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `utils` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for all functions.
+-   **Single Responsibility**: Each utility function should do one thing well.
+-   **Pure Functions**: Prefer pure functions without side effects.
+-   **Minimal Dependencies**: Keep external dependencies to a minimum.
+-   **Comprehensive Docstrings**: All utilities must have detailed docstrings with examples.
+
+## 4. Testing in `utils`
+-   New features (e.g., new utilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover normal usage, edge cases, and error conditions.
+-   Utils are foundational; ensure high test coverage (>90%).
+-   Run existing tests to ensure no regressions. Refer to `utils/tests/README.md`.
+
+## 5. Documentation for `utils`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document each utility with purpose, parameters, return values, and examples.
+-   Organize utilities by category in documentation.
+
+## 6. Specific Considerations for `utils`
+-   **Stability**: Utils are widely used; maintain backward compatibility.
+-   **Performance**: Optimize frequently-called utilities.
+-   **Thread Safety**: Document and ensure thread safety where applicable.
+-   **No Circular Imports**: Utils should not depend on other Codomyrmex modules.
+
+## 7. Final Check for `utils`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that utilities are well-documented and have examples.
+-   Ensure no breaking changes to existing utility interfaces.

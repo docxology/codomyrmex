@@ -9,11 +9,11 @@ Coding standards and automation rules for consistent code quality across the rep
 ## Directory Structure
 
 ```
-cursorrules/
-├── general.cursorrules   # Universal coding standards
-├── cross-module/         # Rules for cross-module operations
-├── file-specific/        # Rules for specific file types
-└── modules/              # Module-specific rule overrides
+cursorrules/                 # 75 rules total
+├── general.cursorrules      # Universal coding standards (1)
+├── cross-module/            # Cross-cutting concerns (8)
+├── file-specific/           # File type specific rules (6)
+└── modules/                 # Per-module standards (60)
 ```
 
 ## Active Components

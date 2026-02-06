@@ -1,0 +1,52 @@
+# Cursor Rules for the events Module
+
+## 0. Preamble
+These rules are specific to the `events` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides event-driven architecture primitives including event bus, pub/sub patterns, event sourcing, and async event handling.
+-   **Key Technologies/Tools**: Python, async programming, message queues, event stores, CQRS patterns.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `events` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Events module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for event handling.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Events.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `events`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `events` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for event schemas and handlers.
+-   **Event Schema Versioning**: All events should have versioned schemas for compatibility.
+-   **Idempotent Handlers**: Event handlers should be idempotent for safe replay.
+-   **Ordering Guarantees**: Document ordering guarantees (or lack thereof) clearly.
+-   **Dead Letter Handling**: Implement proper handling for failed event processing.
+
+## 4. Testing in `events`
+-   New features (e.g., new event types, handlers) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover event publishing, subscription, handler execution, and error scenarios.
+-   Test event ordering and replay behavior where applicable.
+-   Run existing tests to ensure no regressions. Refer to `events/tests/README.md`.
+
+## 5. Documentation for `events`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document event types, schemas, subscription patterns, and error handling clearly.
+-   Include examples of common event-driven patterns.
+
+## 6. Specific Considerations for `events`
+-   **Reliability**: Ensure at-least-once or exactly-once delivery as documented.
+-   **Scalability**: Design for horizontal scaling of event handlers.
+-   **Backpressure**: Implement backpressure handling for high-volume events.
+-   **Observability**: Events should integrate with telemetry for tracing.
+
+## 7. Final Check for `events`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that event handling is reliable and performant.
+-   Test integration with related modules like `orchestrator`, `telemetry`, and `logging_monitoring`.

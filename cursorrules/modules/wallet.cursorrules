@@ -1,0 +1,52 @@
+# Cursor Rules for the wallet Module
+
+## 0. Preamble
+These rules are specific to the `wallet` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides self-custody wallet capabilities with Natural Ritual recovery, supporting secure key management and autonomous financial operations.
+-   **Key Technologies/Tools**: Python, cryptographic key management, HD wallets, threshold signatures, secure enclaves, recovery protocols.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `wallet` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Wallet module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for wallet and key operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Wallet.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `wallet`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `wallet` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for wallet operations and transaction types.
+-   **Key Protection**: Private keys must never be logged, exposed in error messages, or stored in plaintext.
+-   **Deterministic Derivation**: Use BIP-32/39/44 standards for key derivation.
+-   **Transaction Validation**: Validate all transactions before signing.
+-   **Secure Memory**: Use secure memory handling for sensitive cryptographic material.
+
+## 4. Testing in `wallet`
+-   New features (e.g., new recovery methods, transaction types) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover key generation, signing, recovery, and error scenarios.
+-   Use deterministic test vectors to verify cryptographic correctness.
+-   Run existing tests to ensure no regressions. Refer to `wallet/tests/README.md`.
+
+## 5. Documentation for `wallet`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document key management best practices, recovery procedures, and supported wallet types clearly.
+-   Include examples of wallet operations and Natural Ritual recovery flows.
+
+## 6. Specific Considerations for `wallet`
+-   **Critical Security Module**: Wallet operations involve real financial value; extreme caution required.
+-   **Backup & Recovery**: Natural Ritual recovery must be thoroughly tested and documented.
+-   **Multi-Signature**: Support multi-signature schemes for high-value operations.
+-   **Hardware Security**: Design for integration with hardware security modules (HSMs) and secure enclaves.
+
+## 7. Final Check for `wallet`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass, especially cryptographic tests.
+-   Confirm that wallet operations are secure and keys are properly protected.
+-   Test integration with related modules like `identity`, `market`, and `encryption`.

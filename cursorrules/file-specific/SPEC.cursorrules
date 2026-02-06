@@ -1,0 +1,122 @@
+# Cursor Rules for SPEC.md Files
+
+## 0. Preamble
+These rules apply to all `SPEC.md` (Functional Specification) files across the Codomyrmex project and supplement `general.cursorrules`. They ensure consistent technical specification formatting and completeness.
+
+## 1. File Purpose & Context
+-   **Scope**: All SPEC.md files in modules and directories.
+-   **Purpose**: Provide detailed technical specifications for understanding implementation and behavior.
+-   **Audience**: Developers, AI agents, and technical reviewers.
+
+## 2. Required Header
+
+```markdown
+# [Component Name] - Functional Specification
+
+**Version**: vX.Y.Z | **Status**: [Active/Draft/Deprecated] | **Last Updated**: Month YYYY
+```
+
+## 3. Required Sections
+
+### Purpose
+Clear, concise statement of what this component does and why it exists.
+
+### Design Principles
+List key design principles (typically 4-6):
+-   **Modularity**: Self-contained, clear boundaries
+-   **Coherence**: Logical organization, consistent patterns
+-   **Parsimony**: Essential elements only, minimal complexity
+-   **Functionality**: Working solutions, forward-looking design
+-   **Testing**: Comprehensive coverage, TDD practices
+-   **Documentation**: Self-documenting code, clear APIs
+
+### Architecture
+Include a Mermaid diagram showing:
+-   Major components and their relationships
+-   Data flow between components
+-   External dependencies
+-   **Example**:
+```markdown
+```mermaid
+graph TD
+    subgraph "Core Components"
+        A[Component A] --> B[Component B]
+        B --> C[Component C]
+    end
+    subgraph "External"
+        D[External Service]
+    end
+    C --> D
+```
+```
+
+### Functional Requirements
+Numbered list of what the component must do:
+1. **Requirement Category**: Specific requirements
+2. **Another Category**: More requirements
+
+### Quality Standards
+Define measurable quality criteria:
+-   Performance benchmarks
+-   Reliability requirements
+-   Security standards
+
+### Interface Contracts
+Document public APIs and interfaces:
+-   Input/output specifications
+-   Error handling contracts
+-   Version compatibility
+
+### Implementation Guidelines
+Guidance for implementing this specification:
+-   Step-by-step implementation approach
+-   Common patterns to follow
+-   Pitfalls to avoid
+
+## 4. Optional Sections
+
+### Dependencies
+List required dependencies and their purposes.
+
+### Configuration
+Document configuration options and defaults.
+
+### Metrics
+Define observability metrics to collect.
+
+### Migration Guide
+Instructions for upgrading from previous versions.
+
+## 5. Mermaid Diagram Guidelines
+
+### Supported Diagram Types
+-   `graph TD/LR`: Flowcharts and architecture
+-   `sequenceDiagram`: API interactions
+-   `classDiagram`: Data structures
+-   `stateDiagram-v2`: State machines
+-   `erDiagram`: Data relationships
+
+### Best Practices
+-   Use subgraphs to group related components
+-   Keep diagrams focused; create multiple smaller diagrams vs. one large one
+-   Include legend if using custom styling
+-   Test diagram rendering before committing
+
+## 6. Navigation Section
+
+Always include navigation at the end:
+```markdown
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Agent Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent Directory**: [../README.md](../README.md)
+- **Repository Root**: [../../README.md](../../README.md)
+```
+
+## 7. Final Check for SPEC.md
+-   Verify all required sections are present.
+-   Ensure Mermaid diagrams render correctly.
+-   Confirm version and status are current.
+-   Check that navigation links are valid.
+-   Validate consistency with implementation and README.

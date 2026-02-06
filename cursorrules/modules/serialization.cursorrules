@@ -1,0 +1,52 @@
+# Cursor Rules for the serialization Module
+
+## 0. Preamble
+These rules are specific to the `serialization` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides data serialization and deserialization utilities for JSON, MessagePack, Protocol Buffers, and other formats.
+-   **Key Technologies/Tools**: Python, json, msgpack, protobuf, pickle (with caution), custom encoders/decoders.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `serialization` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Serialization module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for serialization operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Serialization.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `serialization`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `serialization` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for serializers.
+-   **Format Neutrality**: Design for easy swapping of serialization formats.
+-   **Round-Trip Safety**: Ensure serialize→deserialize produces identical data.
+-   **Version Tolerance**: Handle schema evolution gracefully.
+-   **No Pickle for Untrusted**: Never use pickle for untrusted data.
+
+## 4. Testing in `serialization`
+-   New features (e.g., new formats, custom encoders) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover round-trip serialization, edge cases, and schema evolution.
+-   Include property-based tests for serialization invariants.
+-   Run existing tests to ensure no regressions. Refer to `serialization/tests/README.md`.
+
+## 5. Documentation for `serialization`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document supported formats, custom encoders, and performance characteristics.
+-   Include examples for common serialization use cases.
+
+## 6. Specific Considerations for `serialization`
+-   **Security**: Deserializing untrusted data is a security risk; implement safeguards.
+-   **Performance**: Optimize for high-throughput serialization where needed.
+-   **Binary Formats**: Support efficient binary formats for large data.
+-   **Schema Registry**: Consider schema registry for versioned formats.
+
+## 7. Final Check for `serialization`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that serialization is reliable and handles edge cases.
+-   Test integration with related modules like `api`, `cache`, and `events`.

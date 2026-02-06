@@ -1,0 +1,54 @@
+# Cursor Rules for the cloud Module
+
+## 0. Preamble
+These rules are specific to the `cloud` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides unified interfaces for multi-cloud provider integration including AWS, GCP, Azure, and Infomaniak with storage, compute, and serverless operations.
+-   **Key Technologies/Tools**: Python, boto3 (AWS), google-cloud SDK, azure SDK, OpenStack (Infomaniak), unified storage/compute abstractions.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `cloud` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Cloud module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Critical security considerations for cloud operations and credential management.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Cloud.
+-   `aws/`, `gcp/`, `azure/`, `infomaniak/`: Provider-specific implementations.
+-   `interfaces/`: Unified interface definitions.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `cloud`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `cloud` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for cloud configurations and responses.
+-   **Provider Abstraction**: Maintain clean separation between provider-specific code and unified interfaces.
+-   **Credential Safety**: Never hardcode credentials; use environment variables or secure vaults.
+-   **Retry Logic**: Implement exponential backoff for transient cloud failures.
+-   **Resource Cleanup**: Always implement proper resource cleanup to prevent orphaned cloud resources.
+
+## 4. Testing in `cloud`
+-   New features (e.g., new provider support, new operations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover cloud operations, credential handling, error scenarios, and provider-specific behaviors.
+-   Use mocked cloud services for unit tests; integration tests may use real services in test accounts.
+-   Run existing tests to ensure no regressions. Refer to `cloud/tests/README.md`.
+
+## 5. Documentation for `cloud`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document provider-specific configuration, authentication methods, and operation differences clearly.
+-   Include examples of cross-provider operations and migration patterns.
+
+## 6. Specific Considerations for `cloud`
+-   **Security Critical**: Cloud operations involve sensitive credentials and resources; treat all changes as security-sensitive.
+-   **Cost Awareness**: Implement cost tracking and budgeting alerts for cloud operations.
+-   **Region Awareness**: Support multi-region deployments and data residency requirements.
+-   **Vendor Lock-in**: Design interfaces to minimize provider lock-in where practical.
+-   **Compliance**: Support compliance requirements (GDPR, SOC2, etc.) in cloud operations.
+
+## 7. Final Check for `cloud`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that cloud operations work correctly with actual cloud services.
+-   Test integration with related modules like `config_management`, `cost_management`, and `deployment`.

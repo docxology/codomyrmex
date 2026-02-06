@@ -1,0 +1,52 @@
+# Cursor Rules for the defense Module
+
+## 0. Preamble
+These rules are specific to the `defense` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
+
+## 1. Module Purpose & Context
+-   **Core Functionality**: Provides active defense systems including intrusion detection, threat response, anomaly detection, and real-time security monitoring.
+-   **Key Technologies/Tools**: Python, threat detection algorithms, behavioral analysis, security event correlation, SIEM integration.
+-   Refer to the module's main `README.md` for an overview.
+
+## 2. Key Files & Structure in `defense` Module
+When working within this module, pay close attention to:
+-   `README.md`: High-level overview, setup, and usage of the Defense module.
+-   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
+-   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
+-   `CHANGELOG.md`: All notable changes to this module must be logged here.
+-   `SECURITY.md`: Specific security considerations for active defense operations.
+-   `requirements.txt`: Python dependencies for this module.
+-   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Defense.
+-   `src/` (or primary Python package folders): Core logic of the module.
+-   `tests/`: Unit and integration tests for this module.
+
+## 3. Coding Standards & Practices for `defense`
+-   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `defense` module.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for threat configurations and detection results.
+-   **Real-Time Performance**: Defense operations must be optimized for real-time threat detection.
+-   **False Positive Management**: Implement tunable thresholds to balance detection sensitivity.
+-   **Audit Logging**: All defense actions must be logged for forensic analysis.
+-   **Fail-Safe Defaults**: Default to protective actions in ambiguous threat scenarios.
+
+## 4. Testing in `defense`
+-   New features (e.g., new detection algorithms, response actions) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
+-   Tests should cover threat detection accuracy, response timing, and false positive rates.
+-   Include adversarial tests simulating real attack patterns.
+-   Run existing tests to ensure no regressions. Refer to `defense/tests/README.md`.
+
+## 5. Documentation for `defense`
+-   Keep this module's `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `docs/` directory, and other relevant documentation files meticulously up-to-date.
+-   Document threat detection capabilities, response procedures, and tuning parameters clearly.
+-   Include examples of threat scenarios and appropriate responses.
+
+## 6. Specific Considerations for `defense`
+-   **Critical Security Module**: All changes require security-focused code review.
+-   **Response Proportionality**: Defensive responses should be proportional to threat severity.
+-   **Integration**: Coordinate with `security`, `identity`, and `logging_monitoring` modules.
+-   **Alert Management**: Implement deduplication and escalation for security alerts.
+
+## 7. Final Check for `defense`
+-   Before finalizing changes, ensure all module-specific documentation is updated.
+-   Verify that all tests for this module pass.
+-   Confirm that defense mechanisms operate reliably and proportionately.
+-   Test integration with related modules like `security`, `identity`, and `logging_monitoring`.

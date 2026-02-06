@@ -2,7 +2,7 @@
   "name": "test_project",
   "description": "Comprehensive reference implementation demonstrating all codomyrmex functionalities",
   "type": "reference_implementation",
-  "path": "/Users/mini/Documents/GitHub/codomyrmex/projects/test_project",
+  "path": "projects/test_project",
   "status": "active",
   "version": "1.0.0",
   "template": "ai_analysis",

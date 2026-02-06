@@ -7,6 +7,8 @@
 Test files and validation suites.
 
 ## Directory Contents
+
+- `AGENTS.md` – File
 - `PAI.md` – File
 - `README.md` – File
 - `SPEC.md` – File
@@ -19,5 +21,6 @@ Test files and validation suites.
 - `tests/` – Subdirectory
 
 ## Navigation
+
 - **Parent Directory**: [projects](../README.md)
 - **Project Root**: ../../README.md
