@@ -464,14 +464,28 @@ class OpenRouterProvider(LLMProvider):
     provider_type = ProviderType.OPENROUTER
     BASE_URL = "https://openrouter.ai/api/v1"
 
-    # Free models available on OpenRouter (as of 2026)
+    # Free models available on OpenRouter (verified Feb 2026)
     # See https://openrouter.ai/api/v1/models for current availability
+    # Use provider.list_models() to get full list from API
     FREE_MODELS = [
         "openrouter/free",  # Auto-selects best available free model
+        # Meta Llama
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "meta-llama/llama-3.2-3b-instruct:free",
+        # Google Gemma
+        "google/gemma-3-27b-it:free",
+        "google/gemma-3-12b-it:free",
+        # Mistral
+        "mistralai/mistral-small-3.1-24b-instruct:free",
+        # DeepSeek
+        "deepseek/deepseek-r1-0528:free",
+        # NVIDIA
+        "nvidia/nemotron-nano-9b-v2:free",
         "nvidia/nemotron-3-nano-30b-a3b:free",
-        "nvidia/nemotron-nano-12b-v2-vl:free",
+        # Other providers
+        "arcee-ai/trinity-large-preview:free",
         "liquid/lfm-2.5-1.2b-instruct:free",
-        "arcee-ai/trinity-mini:free",
+        "nousresearch/hermes-3-llama-3.1-405b:free",
     ]
 
     def __init__(self, config: ProviderConfig):

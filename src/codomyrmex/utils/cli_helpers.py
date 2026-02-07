@@ -32,6 +32,25 @@ Usage:
 
 logger = get_logger(__name__)
 
+
+def setup_logging(level: str = "INFO", quiet: bool = False) -> None:
+    """Setup basic logging configuration for CLI scripts.
+
+    Args:
+        level: Logging level (DEBUG, INFO, WARNING, ERROR)
+        quiet: If True, suppress non-error output
+    """
+    import logging
+
+    if quiet:
+        level = "ERROR"
+
+    logging.basicConfig(
+        level=getattr(logging, level.upper(), logging.INFO),
+        format="%(levelname)s: %(message)s",
+    )
+
+
 # Standard output width for formatting
 OUTPUT_WIDTH = 80
 
