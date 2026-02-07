@@ -6,6 +6,19 @@
 
 Unified input validation framework for Codomyrmex with support for JSON Schema, Pydantic models, and custom validators. Provides a `Validator` class that validates data against schemas, a `ValidationManager` for managing multiple validators, contextual validation with issue tracking, type-safe parsing, and a comprehensive exception hierarchy for granular error reporting. Includes submodules for reusable validation rules, input sanitizers, and schema definitions.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -51,6 +64,21 @@ Unified input validation framework for Codomyrmex with support for JSON Schema, 
 - `rules/` -- Reusable validation rule definitions
 - `sanitizers/` -- Input sanitization utilities
 - `schemas/` -- Predefined JSON Schema definitions
+
+## Quick Start
+
+```python
+from codomyrmex.validation import validate, is_valid, get_errors
+
+result = validate()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k validation -v
+```
 
 ## Navigation
 

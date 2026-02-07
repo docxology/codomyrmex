@@ -23,3 +23,12 @@ from codomyrmex.validation import *
 - **Source**: [src/codomyrmex/validation/](../../../src/codomyrmex/validation/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k validation -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

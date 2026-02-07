@@ -31,6 +31,13 @@ from codomyrmex.templating import TemplatingError
 instance = TemplatingError()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -54,6 +61,18 @@ instance = TemplatingError()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k templating -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

@@ -49,3 +49,9 @@ from codomyrmex.validation import validate, is_valid, get_errors
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k validation -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/validation/)

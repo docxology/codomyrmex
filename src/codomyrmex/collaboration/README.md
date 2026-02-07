@@ -6,6 +6,19 @@
 
 The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It supports round-robin, broadcast, capability-routing, and consensus protocols, along with swarm-based task decomposition and parallel execution for orchestrating complex multi-agent workflows.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Data Models
@@ -73,6 +86,22 @@ The collaboration module provides multi-agent collaboration capabilities includi
 - `SECURITY.md` - Security considerations
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.collaboration import CollaborationError, AgentNotFoundError, AgentBusyError
+
+# Initialize CollaborationError
+instance = CollaborationError()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+```
 
 ## Navigation
 

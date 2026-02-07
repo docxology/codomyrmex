@@ -17,6 +17,13 @@ Spatial modeling module for Codomyrmex.
 | `three_d` | Spatial 3D Modeling and Rendering Module for Codomyrmex. |
 | `world_models` | World modeling module for Codomyrmex. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -35,3 +42,9 @@ from codomyrmex.spatial import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/spatial/](../../../src/codomyrmex/spatial/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k spatial -v
+```

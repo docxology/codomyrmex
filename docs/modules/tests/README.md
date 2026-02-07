@@ -12,6 +12,13 @@ Codomyrmex Tests Package
 |-----------|-------------|
 | `examples` | Testing infrastructure for Codomyrmex examples. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python

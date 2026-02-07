@@ -48,3 +48,9 @@ Smart contracts module providing blockchain interaction capabilities for Ethereu
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## API Usage
+
+```python
+from codomyrmex.smart_contracts import Network, TransactionStatus, Address
+```

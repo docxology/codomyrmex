@@ -48,3 +48,9 @@ Search module providing full-text search, fuzzy matching, and semantic search ca
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k search -v
+```

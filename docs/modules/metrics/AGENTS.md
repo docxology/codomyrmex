@@ -23,3 +23,16 @@ instance = MetricsError()
 - **Source**: [src/codomyrmex/metrics/](../../../src/codomyrmex/metrics/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k metrics -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

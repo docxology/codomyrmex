@@ -46,3 +46,9 @@ from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult, FileInfo, ID
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k ide -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/ide/)

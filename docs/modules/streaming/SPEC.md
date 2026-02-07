@@ -47,3 +47,9 @@ from codomyrmex.streaming import EventType, Event, Subscription, Stream, InMemor
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k streaming -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/streaming/)

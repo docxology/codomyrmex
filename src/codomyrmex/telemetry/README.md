@@ -6,6 +6,19 @@
 
 The telemetry module provides an OpenTelemetry-compatible observability framework for distributed tracing, metrics collection, span processing, and alerting. It supports trace context propagation, multiple span processors (simple and batch), OTLP export, sampling strategies, and configurable alerting -- enabling end-to-end visibility across distributed workflows.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Submodules (always available)
@@ -48,6 +61,19 @@ The telemetry module provides an OpenTelemetry-compatible observability framewor
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+import codomyrmex.telemetry
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
+```
 
 ## Navigation
 

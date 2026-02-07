@@ -6,6 +6,19 @@
 
 Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 11 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Framework
@@ -83,6 +96,19 @@ Agentic framework integrations providing AI code editing, task management, and m
 - `pooling/` - Multi-agent load balancing and failover
 - `qwen/` - Qwen-Coder integration
 - `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
+
+## Quick Start
+
+```python
+import codomyrmex.agents
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agents -v
+```
 
 ## Navigation
 

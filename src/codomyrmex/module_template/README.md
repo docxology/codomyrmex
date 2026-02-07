@@ -6,6 +6,19 @@
 
 Scaffolding module for creating new Codomyrmex modules from a standardized template. The `scaffold_new_module()` function generates a complete module directory with all required documentation files (README, AGENTS, SPEC, API_SPECIFICATION, CHANGELOG, MCP_TOOL_SPECIFICATION, SECURITY, USAGE_EXAMPLES), a customized `__init__.py`, and a core Python source file with a boilerplate class and factory function. Module names are validated to enforce snake_case naming conventions.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Functions
@@ -30,6 +43,21 @@ Scaffolding module for creating new Codomyrmex modules from a standardized templ
 - `SECURITY.md` - Template security documentation
 - `SPEC.md` - Template module specification
 - `USAGE_EXAMPLES.md` - Template usage examples
+
+## Quick Start
+
+```python
+from codomyrmex.module_template import scaffold_new_module, list_template_files
+
+result = scaffold_new_module()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k module_template -v
+```
 
 ## Navigation
 

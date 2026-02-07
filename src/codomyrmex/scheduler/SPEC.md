@@ -48,3 +48,7 @@ from codomyrmex.scheduler import (
 ```bash
 pytest tests/unit/test_scheduler.py -v
 ```
+
+## Dependencies
+
+See `src/codomyrmex/scheduler/__init__.py` for import dependencies.

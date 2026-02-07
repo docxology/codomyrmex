@@ -35,6 +35,13 @@ from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob
 instance = Dataset()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -68,6 +75,13 @@ instance = Dataset()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
+```
 
 ## Navigation
 

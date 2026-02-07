@@ -55,6 +55,25 @@ Physical object management, simulation, and sensor integration module for the Co
 - `analytics.py` -- StreamingAnalytics, PredictiveAnalytics, DataStream, and windowing
 - `examples/` -- Usage examples and demo scripts
 
+## Quick Start
+
+```python
+from codomyrmex.physical_management import AnalyticsMetric, StreamingMode
+
+# Create a AnalyticsMetric instance
+analyticsmetric = AnalyticsMetric()
+
+# Use StreamingMode for additional functionality
+streamingmode = StreamingMode()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k physical_management -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/physical_management/](../../../docs/modules/physical_management/)

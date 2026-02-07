@@ -4,6 +4,31 @@
 
 Distributed locks, semaphores, and synchronization primitives.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`BaseLock`** — Abstract base class for all lock implementations.
+- **`LocalLock`** — File-based lock for local multi-process synchronization.
+- **`LockStats`** — Statistics for lock manager telemetry.
+- **`LockManager`** — Orchestrates multiple locks and provides multi-resource acquisition.
+- **`ReadWriteLock`** — In-process Read-Write lock (shared/exclusive).
+- **`RedisLock`** — Distributed lock using Redis SETNX and TTL.
+- **`BaseSemaphore`** — Abstract base class for all semaphore implementations.
+- **`LocalSemaphore`** — Local thread-safe semaphore wrapper.
+
 ## Quick Start
 
 ```python
@@ -56,6 +81,20 @@ with lock:
 | `LockManager` | Manage multiple named locks |
 | `ReadWriteLock` | Multiple readers, single writer |
 | `LocalSemaphore` | Limit concurrent access |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k concurrency -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/concurrency/README.md)
+- [Agent Guide](../../../docs/modules/concurrency/AGENTS.md)
+- [Specification](../../../docs/modules/concurrency/SPEC.md)
 
 ## Navigation
 

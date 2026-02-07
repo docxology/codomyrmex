@@ -46,3 +46,9 @@ from codomyrmex.rate_limiting import RateLimitExceeded, RateLimitResult, RateLim
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/rate_limiting/)

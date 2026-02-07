@@ -15,6 +15,13 @@ Database Management Module for Codomyrmex.
 | `replication` | Replication Submodule |
 | `sharding` | Sharding Submodule |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -33,3 +40,9 @@ from codomyrmex.database_management import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/database_management/](../../../src/codomyrmex/database_management/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
+```

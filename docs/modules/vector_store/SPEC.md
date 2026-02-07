@@ -45,3 +45,9 @@ from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric, V
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/vector_store/)

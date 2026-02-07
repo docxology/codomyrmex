@@ -4,6 +4,33 @@
 
 API rate limiting with fixed window, sliding window, and token bucket algorithms.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`RateLimitExceeded`** — Raised when rate limit is exceeded.
+- **`RateLimitResult`** — Result of a rate limit check.
+- **`RateLimiter`** — Abstract base class for rate limiters.
+- **`FixedWindowLimiter`** — Fixed window rate limiter.
+- **`SlidingWindowLimiter`** — Sliding window rate limiter.
+- **`TokenBucketLimiter`** — Token bucket rate limiter.
+- **`QuotaManager`** — Manage multiple rate limits per key.
+
+### Functions
+- **`create_limiter()`** — Create a rate limiter.
+
 ## Quick Start
 
 ```python
@@ -47,6 +74,20 @@ result = limiter.acquire("user-123")
 headers = result.headers
 # {'X-RateLimit-Limit': '100', 'X-RateLimit-Remaining': '99', 'X-RateLimit-Reset': '1700000000'}
 ```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/rate_limiting/README.md)
+- [Agent Guide](../../../docs/modules/rate_limiting/AGENTS.md)
+- [Specification](../../../docs/modules/rate_limiting/SPEC.md)
 
 ## Navigation
 

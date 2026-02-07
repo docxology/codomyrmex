@@ -50,3 +50,9 @@ Rate limiting module providing request throttling with multiple algorithms: fixe
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
+```

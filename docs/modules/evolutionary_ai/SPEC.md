@@ -45,3 +45,9 @@ from codomyrmex.evolutionary_ai import Genome, Population
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/evolutionary_ai/)

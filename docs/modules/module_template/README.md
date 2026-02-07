@@ -4,13 +4,31 @@
 
 ## Overview
 
-Module Template Package
+Template for creating new Codomyrmex modules with standard structure, testing, and documentation.
+
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+## Key Features
+
+- `scaffold_new_module()` — Create a new Codomyrmex module from the template.
+- `list_template_files()` — List all files available in the module template.
 
 ## Quick Start
 
 ```python
-from codomyrmex.module_template import *  # See source for specific imports
+from codomyrmex.module_template import scaffold_new_module, list_template_files
+
+result = scaffold_new_module()
 ```
+
+## Source Files
+
+- `scaffold.py`
 
 ## Directory Contents
 

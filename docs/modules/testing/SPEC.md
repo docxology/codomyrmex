@@ -50,3 +50,9 @@ from codomyrmex.testing import GeneratorStrategy, IntGenerator, FloatGenerator, 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k testing -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/testing/)

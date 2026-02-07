@@ -6,6 +6,19 @@
 
 Web scraping module providing a unified interface for extracting content from websites. Supports multiple output formats (Markdown, HTML), site crawling, URL mapping, search, and structured data extraction. Abstracts provider-specific details (currently Firecrawl) behind a consistent API with configurable options and a robust exception hierarchy.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Main Classes
@@ -45,6 +58,22 @@ Web scraping module providing a unified interface for extracting content from we
 - `config.py` -- `ScrapeConfig` and configuration management functions
 - `exceptions.py` -- Exception hierarchy for scrape error handling
 - `firecrawl/` -- Firecrawl provider implementation
+
+## Quick Start
+
+```python
+from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeResult
+
+# Initialize ScrapeConfig
+instance = ScrapeConfig()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k scrape -v
+```
 
 ## Navigation
 

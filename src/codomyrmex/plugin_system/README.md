@@ -4,6 +4,31 @@
 
 Extensible plugin architecture for third-party modules.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`InterfaceEnforcer`** — Validates that a plugin class implements a specific interface.
+- **`PluginError`** — Base exception for plugin-related errors.
+- **`LoadError`** — Raised when plugin loading fails.
+- **`DependencyError`** — Raised when plugin dependency resolution fails.
+- **`HookError`** — Raised when plugin hook operations fail.
+- **`PluginValidationError`** — Raised when plugin validation fails.
+- **`PluginStateError`** — Raised when plugin state operations fail.
+- **`PluginConflictError`** — Raised when plugin conflicts are detected.
+
 ## Quick Start
 
 ```python
@@ -58,6 +83,20 @@ class MyPlugin(Plugin):
 | `PluginType` | Enum for plugin categories |
 | `PluginState` | Enum: loaded, active, inactive, error |
 | `PluginError` | Base plugin exception |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/plugin_system/README.md)
+- [Agent Guide](../../../docs/modules/plugin_system/AGENTS.md)
+- [Specification](../../../docs/modules/plugin_system/SPEC.md)
 
 ## Navigation
 

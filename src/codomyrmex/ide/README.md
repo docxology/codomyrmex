@@ -4,6 +4,33 @@
 
 Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`IDEStatus`** — Status of an IDE session.
+- **`IDECommand`** — Represents an IDE command to be executed.
+- **`IDECommandResult`** — Result of an IDE command execution.
+- **`FileInfo`** — Information about a file in the IDE.
+- **`IDEClient`** — Abstract base class for IDE integrations.
+
+### Submodules
+- **`antigravity/`** — Antigravity IDE Integration
+- **`cursor/`** — Cursor IDE Integration.
+- **`vscode/`** — VS Code IDE Integration
+
 ## Quick Start
 
 ```python
@@ -58,6 +85,20 @@ client.disconnect()
 - `antigravity/` — Google DeepMind Antigravity integration
 - `cursor/` — Cursor AI editor integration
 - `vscode/` — Visual Studio Code integration
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k ide -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/ide/README.md)
+- [Agent Guide](../../../docs/modules/ide/AGENTS.md)
+- [Specification](../../../docs/modules/ide/SPEC.md)
 
 ## Navigation
 

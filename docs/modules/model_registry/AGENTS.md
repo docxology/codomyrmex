@@ -29,3 +29,12 @@ instance = ModelStage()
 - **Source**: [src/codomyrmex/model_registry/](../../../src/codomyrmex/model_registry/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_registry -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

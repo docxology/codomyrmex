@@ -6,6 +6,19 @@
 
 Multi-channel notification system with templates and routing. Supports sending notifications across email, Slack, webhook, SMS, console, and file channels through pluggable provider backends. Includes a template engine for rendering parameterized notifications, a rule-based router for directing notifications to channels based on priority or custom conditions, and a central service that ties providers, templates, routing, and broadcast together with delivery history tracking.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -48,6 +61,15 @@ Multi-channel notification system with templates and routing. Supports sending n
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.notification import NotificationChannel, NotificationPriority, NotificationStatus
+
+# Initialize NotificationChannel
+instance = NotificationChannel()
+```
 
 ## Navigation
 

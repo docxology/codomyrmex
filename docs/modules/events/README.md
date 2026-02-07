@@ -6,6 +6,13 @@
 
 Event-Driven Architecture for Codomyrmex
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -20,7 +27,18 @@ from codomyrmex.events import *  # See source for specific imports
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
+
 ## Navigation
 
 - **Source**: [src/codomyrmex/events/](../../../src/codomyrmex/events/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k events -v
+```

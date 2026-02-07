@@ -6,6 +6,13 @@
 
 The `agentic_memory` module provides a long-term memory system for AI agents with retrieval, persistence, and automatic pruning. It supports multiple memory types (episodic, semantic, procedural, working), importance-based ranking, recency-decay scoring, and pluggable storage backends. The module enables agents to maintain stateful, persistent context across interactions through keyword and embedding-based retrieval.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Multi-type memory model**: Supports episodic (experiences), semantic (knowledge), procedural (skills), and working (short-term) memory types via `MemoryType` enum
@@ -18,6 +25,7 @@ The `agentic_memory` module provides a long-term memory system for AI agents wit
 - **Specialized memory subclasses**: `ConversationMemory` for dialog turns and `KnowledgeMemory` for factual knowledge with confidence tracking
 - **Thread-safe operations**: All store operations use threading locks for concurrent access safety
 - **LLM context generation**: `get_context()` method formats relevant memories for direct injection into LLM prompts
+
 
 ## Key Components
 
@@ -87,6 +95,13 @@ knowledge.add_fact(
     source="python.org",
     confidence=0.95,
 )
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
 ```
 
 ## Related Modules

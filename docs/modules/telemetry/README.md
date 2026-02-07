@@ -6,6 +6,13 @@
 
 The Telemetry module provides a unified observability framework based on the OpenTelemetry standard. It enables the system to record, correlate, and analyze the performance and behavior of distributed workflows through tracing, span management, context propagation, metrics collection, and OTLP-compatible export. The module integrates with OpenTelemetry SDKs when available and provides standalone tracing capabilities for environments without the full OTEL stack.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Distributed Tracing**: Full span lifecycle management with parent-child relationships, context propagation via thread-local storage and HTTP headers
@@ -17,6 +24,7 @@ The Telemetry module provides a unified observability framework based on the Ope
 - **Sampling**: Dynamic sampling strategies submodule for high-volume telemetry (early development)
 - **Alerting**: Alert rule configuration and notification routing submodule (early development)
 - **Graceful Degradation**: Optional submodules load conditionally with availability flags, preventing import failures
+
 
 ## Key Components
 

@@ -4,6 +4,29 @@
 
 3D/4D spatial modeling, coordinates, physics, and rendering.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Submodules
+- **`coordinates/`** — Coordinate transformation utilities for spatial modeling.
+- **`four_d/`** — 4D modeling module (Synergetics) for Codomyrmex.
+- **`physics/`** — Physics Simulation submodule.
+- **`rendering/`** — Spatial Rendering submodule.
+- **`three_d/`** — Spatial 3D Modeling and Rendering Module for Codomyrmex.
+- **`world_models/`** — World modeling module for Codomyrmex.
+
 ## Quick Start
 
 ```python
@@ -41,6 +64,20 @@ world.step(dt=0.016)
 | `rendering` | Visualization and rendering |
 | `physics` | Physics simulation and rigid bodies |
 | `world_models` | Spatial world representations |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k spatial -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/spatial/README.md)
+- [Agent Guide](../../../docs/modules/spatial/AGENTS.md)
+- [Specification](../../../docs/modules/spatial/SPEC.md)
 
 ## Navigation
 

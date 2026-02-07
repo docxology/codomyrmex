@@ -29,3 +29,12 @@ instance = Network()
 - **Source**: [src/codomyrmex/smart_contracts/](../../../src/codomyrmex/smart_contracts/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k smart_contracts -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

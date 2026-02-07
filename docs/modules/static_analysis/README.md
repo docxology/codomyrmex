@@ -6,6 +6,13 @@
 
 Static Analysis Module for Codomyrmex.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - `analyze_codebase()` — Alias for analyze_project for backward compatibility.
@@ -35,6 +42,13 @@ result = analyze_codebase()
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 | `tutorials/` | Tutorials |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k static_analysis -v
+```
 
 ## Navigation
 

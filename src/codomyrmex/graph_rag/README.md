@@ -4,6 +4,17 @@
 
 Knowledge graph-enhanced RAG with entity relationships.
 
+## Key Exports
+
+### Classes
+- **`EntityType`** — Types of entities in the knowledge graph.
+- **`RelationType`** — Types of relationships in the knowledge graph.
+- **`Entity`** — An entity in the knowledge graph.
+- **`Relationship`** — A relationship between entities.
+- **`GraphContext`** — Context retrieved from the knowledge graph.
+- **`KnowledgeGraph`** — In-memory knowledge graph for entity and relationship storage.
+- **`GraphRAGPipeline`** — RAG pipeline enhanced with knowledge graph context.
+
 ## Quick Start
 
 ```python
@@ -67,6 +78,20 @@ print(context.to_text())
 | `RelationType` | Enum: is_a, part_of, related_to, authored_by, etc. |
 | `GraphRAGPipeline` | Query graph for LLM context |
 | `GraphContext` | Retrieved entities and relationships |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k graph_rag -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/graph_rag/README.md)
+- [Agent Guide](../../../docs/modules/graph_rag/AGENTS.md)
+- [Specification](../../../docs/modules/graph_rag/SPEC.md)
 
 ## Navigation
 

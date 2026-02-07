@@ -109,6 +109,13 @@ with get_provider(ProviderType.OPENROUTER, api_key=key) as provider:
 | `OPENAI_API_KEY` | OpenAI | OpenAI API key |
 | `ANTHROPIC_API_KEY` | Anthropic | Anthropic API key |
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k llm -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/llm/](../../../docs/modules/llm/)

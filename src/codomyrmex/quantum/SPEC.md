@@ -45,3 +45,9 @@ Quantum computing simulation module providing quantum gates, circuits, and algor
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
+```

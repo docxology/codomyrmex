@@ -15,6 +15,13 @@ Containerization Module for Codomyrmex.
 | `registry` | Registry submodule for containerization. |
 | `security` | Security submodule for containerization. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -33,3 +40,9 @@ from codomyrmex.containerization import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/containerization/](../../../src/codomyrmex/containerization/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
+```

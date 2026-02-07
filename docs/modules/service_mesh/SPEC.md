@@ -45,3 +45,9 @@ from codomyrmex.service_mesh import CircuitState, CircuitBreakerConfig, CircuitB
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k service_mesh -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/service_mesh/)

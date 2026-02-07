@@ -29,3 +29,12 @@ instance = RateLimitExceeded()
 - **Source**: [src/codomyrmex/rate_limiting/](../../../src/codomyrmex/rate_limiting/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

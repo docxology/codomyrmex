@@ -50,3 +50,9 @@ graph TD
 
 - Requires integration with load balancers or service meshes for traffic shifting (simulated in core).
 - Dependent on `networking` and `logging_monitoring` modules.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+```

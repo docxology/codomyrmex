@@ -4,6 +4,31 @@
 
 Metrics collection, alerting, and dashboard visualization.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`MetricType`** — Types of metrics.
+- **`AlertSeverity`** — Alert severity levels.
+- **`PanelType`** — Dashboard panel types.
+- **`MetricValue`** — A single metric value.
+- **`Alert`** — An alert notification.
+- **`Panel`** — A dashboard panel.
+- **`Dashboard`** — A complete dashboard.
+- **`MetricCollector`** — Collects and stores metrics.
+
 ## Quick Start
 
 ```python
@@ -57,6 +82,13 @@ dash.add_panel(Panel(
 | `MetricValue` | Metric with value, labels, timestamp |
 | `PanelType` | Enum: graph, stat, table, heatmap, gauge, log |
 | `AlertSeverity` | Enum: info, warning, error, critical |
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/observability_dashboard/README.md)
+- [Agent Guide](../../../docs/modules/observability_dashboard/AGENTS.md)
+- [Specification](../../../docs/modules/observability_dashboard/SPEC.md)
 
 ## Navigation
 

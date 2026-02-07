@@ -28,6 +28,13 @@ from codomyrmex.accessibility import WCAGLevel, IssueType, AccessibilityIssue
 instance = WCAGLevel()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -61,6 +68,13 @@ instance = WCAGLevel()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k accessibility -v
+```
 
 ## Navigation
 

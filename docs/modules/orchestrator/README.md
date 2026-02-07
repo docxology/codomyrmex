@@ -33,6 +33,13 @@ from codomyrmex.orchestrator import *  # See source for specific imports
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k orchestrator -v
+```
+
 ## Navigation
 
 - **Source**: [src/codomyrmex/orchestrator/](../../../src/codomyrmex/orchestrator/)

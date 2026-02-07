@@ -6,6 +6,19 @@
 
 Comprehensive security module organized into four specialized submodules: digital, physical, cognitive, and theory. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Submodules
@@ -120,6 +133,22 @@ Comprehensive security module organized into four specialized submodules: digita
 - `cognitive/` - Cognitive security: social engineering, phishing, behavior analysis
 - `theory/` - Security theory: threat models, risk, frameworks, patterns
 - `security_theory/` - Additional security theory resources
+
+## Quick Start
+
+```python
+from codomyrmex.security import SBOMFormat, LicenseType, Component
+
+# Initialize SBOMFormat
+instance = SBOMFormat()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k security -v
+```
 
 ## Navigation
 

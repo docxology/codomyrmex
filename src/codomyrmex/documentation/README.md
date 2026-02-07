@@ -49,6 +49,25 @@ Documentation management and website generation module for the Codomyrmex projec
 - `bug_taxonomy.md` - Documentation bug classification reference
 - `coverage_assessment.md` - Documentation coverage analysis
 
+## Quick Start
+
+```python
+from codomyrmex.documentation import ConsistencyIssue, ConsistencyReport
+
+# Create a ConsistencyIssue instance
+consistencyissue = ConsistencyIssue()
+
+# Use ConsistencyReport for additional functionality
+consistencyreport = ConsistencyReport()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/documentation/](../../../docs/modules/documentation/)

@@ -39,3 +39,9 @@ from codomyrmex.serialization import serialize, deserialize
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k serialization -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/serialization/)

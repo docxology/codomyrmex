@@ -17,6 +17,13 @@ Cloud Services Module for Codomyrmex.
 | `gcp` | GCP integration submodule. |
 | `infomaniak` | Infomaniak Public Cloud Integration. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -35,3 +42,9 @@ from codomyrmex.cloud import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/cloud/](../../../src/codomyrmex/cloud/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cloud -v
+```

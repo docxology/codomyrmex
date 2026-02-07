@@ -47,3 +47,9 @@ from codomyrmex.scheduler import JobStatus, TriggerType, Trigger, OnceTrigger, I
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k scheduler -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/scheduler/)

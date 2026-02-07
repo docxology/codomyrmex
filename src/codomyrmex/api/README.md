@@ -106,6 +106,18 @@ Comprehensive API infrastructure module providing everything needed to build, do
 - `pagination/` -- Offset, cursor, and keyset pagination implementations
 - `openapi_generator.py` -- Shared OpenAPI generator components used across submodules
 
+## Quick Start
+
+```python
+from codomyrmex.api import APISchema, OpenAPISpecification
+
+# Create a APISchema instance
+apischema = APISchema()
+
+# Use OpenAPISpecification for additional functionality
+openapispecification = OpenAPISpecification()
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/api/](../../../docs/modules/api/)

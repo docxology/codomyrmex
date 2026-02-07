@@ -71,3 +71,9 @@ graph TD
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
+```

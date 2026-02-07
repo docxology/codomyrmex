@@ -45,3 +45,9 @@ from codomyrmex.feature_store import FeatureType, ValueType, FeatureDefinition, 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k feature_store -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/feature_store/)

@@ -27,6 +27,13 @@ from codomyrmex.quantum import GateType, Gate, Qubit
 instance = GateType()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -62,7 +69,6 @@ instance = GateType()
 | `rx()` | Add RX rotation. |
 | `ry()` | Add RY rotation. |
 | `rz()` | Add RZ rotation. |
-| `measure()` | Add measurement. |
 | `measure_all()` | Measure all qubits. |
 | `run()` | Run circuit and return measurement counts. |
 
@@ -73,6 +79,13 @@ instance = GateType()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
+```
 
 ## Navigation
 

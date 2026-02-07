@@ -19,6 +19,19 @@ Encryption and cryptographic operations module for Codomyrmex. Provides symmetri
 - **Key management** with file-based storage, listing, rotation
 - **SecureDataContainer** for encrypting arbitrary JSON-serializable data
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Classes
@@ -80,6 +93,13 @@ derived = derive_key_hkdf(b"shared-secret", length=32, info=b"app-v1")
 | `hmac_utils.py` | HMAC computation and constant-time verification |
 | `kdf.py` | HKDF key derivation |
 | `__init__.py` | Public API and convenience functions |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k encryption -v
+```
 
 ## Navigation
 

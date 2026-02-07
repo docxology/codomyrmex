@@ -38,6 +38,15 @@ Documentation generation module providing website generation, API documentation,
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
+## Common Patterns
+
+```python
+from codomyrmex.documentation import ConsistencyIssue, ConsistencyReport, DocumentationConsistencyChecker
+
+# Agent uses ConsistencyIssue
+instance = ConsistencyIssue()
+```
+
 ## Navigation Links
 
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation

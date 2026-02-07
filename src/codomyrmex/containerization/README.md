@@ -6,6 +6,19 @@
 
 Container management, orchestration, and deployment module organized into four submodules: Docker lifecycle management, Kubernetes orchestration, container registry operations, and container security/performance optimization. Provides classes for building and managing Docker containers, deploying to Kubernetes clusters, interacting with container registries, and scanning containers for security vulnerabilities. All submodule imports are optional and gracefully degrade if dependencies are unavailable.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Submodules
@@ -59,6 +72,22 @@ Container management, orchestration, and deployment module organized into four s
 - `registry/` - Container registry client and image management
 - `security/` - Security scanner and performance optimizer
 - `exceptions.py` - Exception hierarchy for container operations
+
+## Quick Start
+
+```python
+from codomyrmex.containerization import ContainerError, ImageBuildError, NetworkError
+
+# Initialize ContainerError
+instance = ContainerError()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
+```
 
 ## Navigation
 

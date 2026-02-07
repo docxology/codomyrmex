@@ -21,3 +21,19 @@ from codomyrmex.website import *
 - **Source**: [src/codomyrmex/website/](../../../src/codomyrmex/website/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+- **`DataProvider`** — Aggregates data from various system modules to populate the website.
+- **`WebsiteGenerator`** — Generates the static website.
+- **`WebsiteServer`** — Enhanced HTTP server that supports API endpoints for dynamic functionality.
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k website -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

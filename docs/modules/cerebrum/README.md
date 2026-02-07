@@ -6,12 +6,20 @@
 
 Case-based reasoning and cognitive architecture module. Implements Bayesian inference, active inference, and memory systems for intelligent decision-making.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Case-Based Reasoning**: Learn from past examples
 - **Bayesian Networks**: Probabilistic inference
 - **Active Inference**: Goal-directed reasoning
 - **Memory Systems**: Episodic and semantic memory
+
 
 ## Key Components
 
@@ -38,6 +46,13 @@ result = engine.reason(
 
 - [fpf_integration.md](fpf_integration.md) - FPF integration guide
 - [tutorials/](tutorials/) - Usage tutorials
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cerebrum -v
+```
 
 ## Related Modules
 

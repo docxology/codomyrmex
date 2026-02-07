@@ -21,3 +21,24 @@ from codomyrmex.terminal_interface import *
 - **Source**: [src/codomyrmex/terminal_interface/](../../../src/codomyrmex/terminal_interface/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+
+### Submodules
+
+- `commands` — Commands
+- `completions` — Completions
+- `rendering` — Rendering
+- `shells` — Shells
+- `utils` — Utilities
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

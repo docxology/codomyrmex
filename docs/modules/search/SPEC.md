@@ -47,3 +47,9 @@ from codomyrmex.search import Document, SearchResult, Tokenizer, SimpleTokenizer
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k search -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/search/)

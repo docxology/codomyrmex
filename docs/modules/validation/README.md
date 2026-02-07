@@ -29,6 +29,13 @@ from codomyrmex.validation import validate, is_valid, get_errors
 result = validate()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Functions
@@ -46,6 +53,13 @@ result = validate()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k validation -v
+```
 
 ## Navigation
 

@@ -45,3 +45,9 @@ from codomyrmex.notification import NotificationChannel, NotificationPriority, N
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k notification -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/notification/)

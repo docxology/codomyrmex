@@ -28,6 +28,13 @@ from codomyrmex.chaos_engineering import FaultType, FaultConfig, FaultInjector
 instance = FaultType()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes

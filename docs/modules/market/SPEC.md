@@ -34,3 +34,9 @@ See source module for available exports.
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k market -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/market/)

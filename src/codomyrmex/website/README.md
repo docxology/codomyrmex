@@ -54,6 +54,20 @@ server.start()  # Serves at http://localhost:8080
 | `templates/` | Jinja2 HTML templates |
 | `assets/` | CSS, JS, images |
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k website -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/website/README.md)
+- [Agent Guide](../../../docs/modules/website/AGENTS.md)
+- [Specification](../../../docs/modules/website/SPEC.md)
+
 ## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

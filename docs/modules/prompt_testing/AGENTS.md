@@ -29,3 +29,12 @@ instance = EvaluationType()
 - **Source**: [src/codomyrmex/prompt_testing/](../../../src/codomyrmex/prompt_testing/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Key Components
+
+- **`EvaluationType`** — Types of prompt evaluation.
+- **`TestStatus`** — Status of a test run.
+- **`PromptTestCase`** — A single test case for prompt evaluation.
+- **`TestResult`** — Result of running a single test case.
+- **`TestSuiteResult`** — Result of running a complete test suite.
+

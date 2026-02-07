@@ -45,3 +45,9 @@ from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory, Retr
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/agentic_memory/)

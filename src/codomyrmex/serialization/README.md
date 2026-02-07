@@ -6,6 +6,19 @@
 
 Unified data serialization and deserialization module supporting multiple formats including JSON, YAML, TOML, MessagePack, Avro, and Parquet. Provides both a low-level `Serializer` class with format-specific encoding and a higher-level `SerializationManager` for managing serialization workflows. Includes comprehensive error handling with typed exceptions for schema validation, encoding, circular references, and format compatibility issues.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -43,6 +56,21 @@ Unified data serialization and deserialization module supporting multiple format
 - `serialization_manager.py` - `SerializationManager` for workflow-level serialization
 - `binary_formats.py` - MsgpackSerializer, AvroSerializer, and ParquetSerializer implementations
 - `exceptions.py` - Full exception hierarchy for serialization errors
+
+## Quick Start
+
+```python
+from codomyrmex.serialization import serialize, deserialize
+
+result = serialize()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k serialization -v
+```
 
 ## Navigation
 

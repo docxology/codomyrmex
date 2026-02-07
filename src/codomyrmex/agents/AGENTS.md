@@ -37,6 +37,14 @@ Agentic framework integrations providing AI code editing, task management, and m
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
+## Common Patterns
+
+```python
+import codomyrmex.agents
+
+# Agent interacts with agents
+```
+
 ## Navigation Links
 
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation

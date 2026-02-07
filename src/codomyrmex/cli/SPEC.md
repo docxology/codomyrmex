@@ -70,3 +70,14 @@ graph TD
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
+
+
+## Dependencies
+
+See `src/codomyrmex/cli/__init__.py` for import dependencies.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cli -v
+```

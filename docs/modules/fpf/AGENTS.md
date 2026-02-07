@@ -25,3 +25,15 @@ instance = FPFClient()
 - **Source**: [src/codomyrmex/fpf/](../../../src/codomyrmex/fpf/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Key Components
+
+- **`FPFClient`** — High-level client for working with FPF specifications.
+
+### Submodules
+
+- `constraints` — Constraints
+- `models` — Models
+- `optimization` — Optimization
+- `reasoning` — Reasoning
+

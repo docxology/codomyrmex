@@ -4,12 +4,28 @@
 
 ## Overview
 
-Codomyrmex Examples Module.
+Reference implementations and demonstrations showcasing Codomyrmex module integration patterns.
+
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+## Key Features
+
+- **Integration Demos** — End-to-end examples combining multiple Codomyrmex modules
+- **Best Practices** — Idiomatic usage patterns for common workflows
+- **Test Project** — Complete reference application (`test_project/`) demonstrating real integration
+- **Agent Examples** — Demonstrations of agent coordination and tool calling
 
 ## Quick Start
 
 ```python
-from codomyrmex.examples import *  # See source for specific imports
+from codomyrmex.examples import *
+
+# See source module for available APIs
 ```
 
 ## Directory Contents

@@ -22,6 +22,13 @@ from codomyrmex.compression import compress, decompress, get_compressor
 result = compress()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Functions
@@ -41,6 +48,18 @@ result = compress()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k compression -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

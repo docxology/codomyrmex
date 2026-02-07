@@ -44,6 +44,25 @@ Build automation module providing multi-language build management, artifact synt
 - `build_orchestrator.py` - Pipeline orchestration, environment checking, and artifact synthesis
 - `requirements.txt` - Module-specific dependencies
 
+## Quick Start
+
+```python
+from codomyrmex.build_synthesis import BuildType, BuildStatus
+
+# Create a BuildType instance
+buildtype = BuildType()
+
+# Use BuildStatus for additional functionality
+buildstatus = BuildStatus()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k build_synthesis -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/build_synthesis/](../../../docs/modules/build_synthesis/)

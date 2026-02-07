@@ -6,6 +6,13 @@
 
 Serialization module for Codomyrmex.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - `serialize()` — Serialize an object to bytes.
@@ -32,3 +39,9 @@ result = serialize()
 
 - **Source**: [src/codomyrmex/serialization/](../../../src/codomyrmex/serialization/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k serialization -v
+```

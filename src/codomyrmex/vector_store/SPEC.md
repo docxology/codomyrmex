@@ -54,3 +54,7 @@ pytest tests/unit/test_vector_store.py -v
 - Pinecone client
 - FAISS backend for large-scale
 - Persistent SQLite storage
+
+## Dependencies
+
+See `src/codomyrmex/vector_store/__init__.py` for import dependencies.

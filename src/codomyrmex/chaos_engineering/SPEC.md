@@ -43,3 +43,9 @@ Chaos engineering module providing controlled failure injection for resilience t
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## API Usage
+
+```python
+from codomyrmex.chaos_engineering import FaultType, FaultConfig, FaultInjector
+```

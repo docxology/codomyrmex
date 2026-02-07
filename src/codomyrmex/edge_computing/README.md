@@ -4,6 +4,31 @@
 
 Edge deployment, IoT gateways, and latency-sensitive function execution.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`EdgeNodeStatus`** — Status of an edge node.
+- **`EdgeNode`** — An edge computing node.
+- **`EdgeFunction`** — A function deployable to edge.
+- **`SyncState`** — State synchronization data.
+- **`EdgeSynchronizer`** — Synchronize state between edge and cloud.
+- **`EdgeRuntime`** — Runtime for edge function execution.
+- **`EdgeExecutionError`** — Error during edge function execution.
+- **`EdgeCluster`** — Manage a cluster of edge nodes.
+
 ## Quick Start
 
 ```python
@@ -53,6 +78,20 @@ result = runtime.invoke("sensor-proc", {"temp": 25})
 | `EdgeSynchronizer` | Sync state between edge and cloud |
 | `SyncState` | Versioned state with checksum |
 | `EdgeExecutionError` | Error during edge execution |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/edge_computing/README.md)
+- [Agent Guide](../../../docs/modules/edge_computing/AGENTS.md)
+- [Specification](../../../docs/modules/edge_computing/SPEC.md)
 
 ## Navigation
 

@@ -49,3 +49,9 @@ graph TD
 - Requires `tree-sitter` Python bindings.
 - Grammar compilation requires a C compiler and access to grammar source repositories.
 - Compiled libraries are platform-specific.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
+```

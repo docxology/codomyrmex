@@ -6,6 +6,13 @@
 
 Cache module for Codomyrmex.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - `get_cache()` — Get a cache instance by name.
@@ -39,6 +46,13 @@ result = get_cache()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cache -v
+```
 
 ## Navigation
 

@@ -78,6 +78,18 @@ Command-line interface module serving as the primary entry point for user intera
 - `themes/` -- Terminal color themes and styling configuration
 - `utils.py` -- Shared CLI utilities (logger setup, terminal formatting, feature detection)
 
+## Quick Start
+
+```python
+from codomyrmex.cli import main, get_formatter
+
+# Enhanced main CLI entry point with comprehensive functionality.
+result = main()
+
+# Get TerminalFormatter if available.
+output = get_formatter()
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/cli/](../../../docs/modules/cli/)

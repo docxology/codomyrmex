@@ -70,6 +70,18 @@ Unified module for code execution, sandboxing, review, monitoring, and debugging
 - `testing/` -- Test generation and execution support
 - `exceptions.py` -- Module-level exception definitions
 
+## Quick Start
+
+```python
+from codomyrmex.coding import ExecutionTimeoutError, MemoryLimitError
+
+# Create a ExecutionTimeoutError instance
+executiontimeouterror = ExecutionTimeoutError()
+
+# Use MemoryLimitError for additional functionality
+memorylimiterror = MemoryLimitError()
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/coding/](../../../docs/modules/coding/)

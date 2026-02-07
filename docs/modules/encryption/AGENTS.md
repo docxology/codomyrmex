@@ -23,3 +23,16 @@ from codomyrmex.encryption import *
 - **Source**: [src/codomyrmex/encryption/](../../../src/codomyrmex/encryption/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k encryption -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

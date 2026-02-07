@@ -4,6 +4,35 @@
 
 Microservice communication patterns: circuit breakers, load balancing, and retry policies.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`CircuitState`** — Circuit breaker states.
+- **`CircuitBreakerConfig`** — Circuit breaker configuration.
+- **`CircuitBreaker`** — Circuit breaker pattern implementation.
+- **`CircuitOpenError`** — Raised when circuit is open.
+- **`LoadBalancerStrategy`** — Load balancing strategies.
+- **`ServiceInstance`** — A service instance endpoint.
+- **`LoadBalancer`** — Load balancer for service instances.
+- **`RetryPolicy`** — Retry policy for failed requests.
+
+### Functions
+- **`with_circuit_breaker()`** — Decorator for circuit breaker protection.
+- **`with_retry()`** — Decorator for retry logic.
+
 ## Quick Start
 
 ```python
@@ -61,6 +90,20 @@ def upload_file(path):
 | `RetryPolicy` | Exponential backoff with jitter |
 | `with_circuit_breaker` | Decorator for circuit protection |
 | `with_retry` | Decorator for retry logic |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k service_mesh -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/service_mesh/README.md)
+- [Agent Guide](../../../docs/modules/service_mesh/AGENTS.md)
+- [Specification](../../../docs/modules/service_mesh/SPEC.md)
 
 ## Navigation
 

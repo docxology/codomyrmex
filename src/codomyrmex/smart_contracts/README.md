@@ -4,6 +4,36 @@
 
 Web3 and blockchain smart contract interfaces.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`Network`** — Blockchain networks.
+- **`TransactionStatus`** — Transaction status.
+- **`Address`** — Blockchain address.
+- **`Transaction`** — A blockchain transaction.
+- **`ContractFunction`** — A smart contract function.
+- **`Contract`** — A smart contract.
+- **`ContractCall`** — Build and execute contract calls.
+- **`TransactionBuilder`** — Build transactions with fluent API.
+
+### Functions
+- **`wei_to_ether()`** — wei_to_ether
+- **`ether_to_wei()`** — ether_to_wei
+- **`gwei_to_wei()`** — gwei_to_wei
+
 ## Quick Start
 
 ```python
@@ -57,6 +87,20 @@ print(contract.list_functions())  # ['transfer', ...]
 - Optimism
 - Base
 - Solana
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k smart_contracts -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/smart_contracts/README.md)
+- [Agent Guide](../../../docs/modules/smart_contracts/AGENTS.md)
+- [Specification](../../../docs/modules/smart_contracts/SPEC.md)
 
 ## Navigation
 

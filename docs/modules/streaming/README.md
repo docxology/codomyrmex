@@ -28,6 +28,13 @@ from codomyrmex.streaming import EventType, Event, Subscription
 instance = EventType()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -68,6 +75,13 @@ instance = EventType()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k streaming -v
+```
 
 ## Navigation
 

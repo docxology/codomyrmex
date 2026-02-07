@@ -41,3 +41,9 @@ from codomyrmex.templating import TemplatingError
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k templating -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/templating/)

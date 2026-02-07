@@ -42,3 +42,9 @@ Edge computing module providing edge node management, function deployment, and s
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
+```

@@ -49,6 +49,25 @@ ML feature management, storage, and retrieval for machine learning applications.
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
 
+## Quick Start
+
+```python
+from codomyrmex.feature_store import FeatureType, ValueType
+
+# Create a FeatureType instance
+featuretype = FeatureType()
+
+# Use ValueType for additional functionality
+valuetype = ValueType()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_store -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/feature_store/](../../../docs/modules/feature_store/)

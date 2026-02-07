@@ -4,6 +4,37 @@
 
 Lazy loading, caching, and performance monitoring utilities.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`AsyncProfiler`** — Profiles asynchronous functions to identify bottlenecks.
+- **`PerformanceProfiler`** — Class-based profiler for consistency with tests.
+- **`CacheManager`** — A cache manager that provides persistent caching for expensive operations.
+- **`LazyLoader`** — A lazy loader that defers module imports until they are actually accessed.
+
+### Functions
+- **`run_benchmark()`** — Run a benchmark on a function.
+- **`profile_function()`** — Profile a single function call execution time and memory usage.
+- **`cached_function()`** — Decorator for caching function results.
+- **`clear_cache()`** — Clear the global cache.
+- **`get_cache_stats()`** — Get statistics for the global cache.
+- **`lazy_import()`** — Create a lazy loader for the specified module.
+- **`get_lazy_loader()`** — Get or create a lazy loader for the specified module.
+- **`lazy_function()`** — Create a lazy-loaded function from a module.
+
 ## Quick Start
 
 ```python
@@ -66,6 +97,13 @@ print(f"CPU: {metrics['cpu_percent']}%, Memory: {metrics['memory_percent']}%")
 | `PerformanceMonitor` | System metrics (requires psutil) |
 | `monitor_performance` | Decorator for timing |
 | `performance_context` | Context manager for profiling |
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/performance/README.md)
+- [Agent Guide](../../../docs/modules/performance/AGENTS.md)
+- [Specification](../../../docs/modules/performance/SPEC.md)
 
 ## Navigation
 

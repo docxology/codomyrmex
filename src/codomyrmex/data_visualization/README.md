@@ -6,6 +6,19 @@
 
 Comprehensive data visualization module providing chart generation, plotting engines, Mermaid diagram generation, and Git repository visualization. Supports multiple chart types (line, bar, scatter, histogram, pie, heatmap, box plot, area chart), configurable styles and color palettes, and an advanced plotting engine with dashboard creation. Includes specialized visualizers for Git branch topology and commit timelines.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Functions
@@ -60,6 +73,21 @@ Comprehensive data visualization module providing chart generation, plotting eng
 - `mermaid/` -- Mermaid diagram generator (`mermaid_generator.py`)
 - `themes/` -- Chart theme definitions and style configuration
 - `exceptions.py` -- Visualization-specific exceptions
+
+## Quick Start
+
+```python
+from codomyrmex.data_visualization import get_available_styles, get_available_palettes, get_available_plot_types
+
+result = get_available_styles()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
+```
 
 ## Navigation
 

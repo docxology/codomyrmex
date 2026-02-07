@@ -6,6 +6,19 @@
 
 End-to-end workflow validation and testing framework. Defines multi-step workflows composed of typed steps (HTTP requests, assertions, waits, scripts, conditionals) with dependency tracking and retry support. Includes pluggable step executors, shared context propagation between steps, and aggregate pass/fail reporting with per-step duration metrics.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -39,6 +52,15 @@ End-to-end workflow validation and testing framework. Defines multi-step workflo
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.workflow_testing import WorkflowStepType, StepStatus, WorkflowStep
+
+# Initialize WorkflowStepType
+instance = WorkflowStepType()
+```
 
 ## Navigation
 

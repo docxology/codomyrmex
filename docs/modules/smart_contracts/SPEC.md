@@ -44,3 +44,9 @@ from codomyrmex.smart_contracts import Network, TransactionStatus, Address, Tran
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k smart_contracts -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/smart_contracts/)

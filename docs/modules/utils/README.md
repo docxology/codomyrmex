@@ -22,6 +22,13 @@ from codomyrmex.utils import ensure_directory, safe_json_loads, safe_json_dumps
 result = ensure_directory()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Functions
@@ -42,7 +49,6 @@ result = ensure_directory()
 | `deep_merge()` | Deep merge two dictionaries. |
 | `wrapper()` | wrapper |
 | `decorator()` | decorator |
-| `wrapper()` | wrapper |
 
 ## Directory Contents
 
@@ -51,6 +57,13 @@ result = ensure_directory()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k utils -v
+```
 
 ## Navigation
 

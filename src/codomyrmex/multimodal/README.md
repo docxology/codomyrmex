@@ -6,6 +6,19 @@
 
 Vision and audio processing for multimodal AI applications. Provides typed media containers for images, audio, and video with base64 encoding/decoding, file loading with automatic format detection, and content hashing. Includes image and audio processors for validation and metadata extraction, a `MultimodalMessage` class for composing multi-part messages with mixed media types, and a fluent `MultimodalMessageBuilder` for constructing API-ready payloads.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -41,6 +54,22 @@ Vision and audio processing for multimodal AI applications. Provides typed media
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.multimodal import MediaType, ImageFormat, AudioFormat
+
+# Initialize MediaType
+instance = MediaType()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k multimodal -v
+```
 
 ## Navigation
 

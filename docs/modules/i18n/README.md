@@ -27,6 +27,13 @@ from codomyrmex.i18n import Locale, MessageBundle, Translator
 instance = Locale()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -57,7 +64,6 @@ instance = Locale()
 | `add_bundle()` | add bundle |
 | `set_locale()` | set locale |
 | `get_locale()` | get locale |
-| `t()` | Translate a key. |
 | `load_directory()` | Load all JSON bundles from directory. |
 | `get_rule()` | get rule |
 | `pluralize()` | pluralize |
@@ -71,6 +77,13 @@ instance = Locale()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k i18n -v
+```
 
 ## Navigation
 

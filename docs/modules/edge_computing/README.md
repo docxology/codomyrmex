@@ -28,6 +28,13 @@ from codomyrmex.edge_computing import EdgeNodeStatus, EdgeNode, EdgeFunction
 instance = EdgeNodeStatus()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -72,6 +79,13 @@ instance = EdgeNodeStatus()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
+```
 
 ## Navigation
 

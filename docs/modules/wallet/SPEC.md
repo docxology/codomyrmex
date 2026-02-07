@@ -53,3 +53,9 @@ CodomyrmexError
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: [README](../../../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+```

@@ -4,6 +4,21 @@
 
 Centralized logging with configurable levels, formats, and outputs.
 
+## Key Exports
+
+### Classes
+- **`AuditLogger`** — Specialized logger for recording immutable security and audit events.
+- **`JSONFormatter`** — Formatter that outputs log records as JSON objects.
+- **`LogContext`** — Context manager for correlation ID and contextual logging.
+- **`PerformanceLogger`** — Logger specialized for performance metrics and timing operations.
+- **`LogRotationManager`** — Configures and manages rotating file handlers for loggers.
+
+### Functions
+- **`setup_logging()`** — Configure the logging system for the application.
+- **`get_logger()`** — Get a logger instance with the specified name.
+- **`log_with_context()`** — Log a message with additional context data.
+- **`create_correlation_id()`** — Generate a unique correlation ID for request tracing.
+
 ## Quick Start
 
 ```python
@@ -51,6 +66,20 @@ logger = get_logger(__name__)
 |----------|-------------|
 | `setup_logging()` | Initialize logging system |
 | `get_logger(name)` | Get a named logger instance |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k logging_monitoring -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/logging_monitoring/README.md)
+- [Agent Guide](../../../docs/modules/logging_monitoring/AGENTS.md)
+- [Specification](../../../docs/modules/logging_monitoring/SPEC.md)
 
 ## Navigation
 

@@ -35,6 +35,15 @@ Centralized script orchestration capabilities for discovering, configuring, exec
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
+## Common Patterns
+
+```python
+from codomyrmex.orchestrator import StepError, OrchestratorTimeoutError, StateError
+
+# Agent uses StepError
+instance = StepError()
+```
+
 ## Navigation Links
 
 - **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation

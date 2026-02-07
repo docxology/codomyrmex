@@ -6,6 +6,13 @@
 
 The Evolutionary AI module provides genetic algorithm components for automated optimization within Codomyrmex. It includes genome representation, population management, and a comprehensive suite of selection, crossover, and mutation operators. The module supports both simple evolutionary workflows through convenience functions and advanced use cases through extensible operator classes.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Genome Representation**: Flexible genome class with float-valued gene encoding and fitness tracking
@@ -15,6 +22,7 @@ The Evolutionary AI module provides genetic algorithm components for automated o
 - **Multiple Selection Operators**: Tournament, Roulette, Rank, and Elitism selection strategies
 - **Factory Functions**: `create_mutation`, `create_crossover`, and `create_selection` for easy operator instantiation
 - **Convenience Functions**: Top-level `crossover()`, `mutate()`, and `tournament_selection()` for quick use
+
 
 ## Key Components
 
@@ -95,6 +103,13 @@ evolutionary_ai/
   fitness/      # Fitness evaluation functions
   genome/       # Genome representation (optional)
   population/   # Population management (optional)
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
 ```
 
 ## Related Modules

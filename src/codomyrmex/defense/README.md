@@ -4,6 +4,29 @@
 
 Active countermeasures and threat containment for AI security.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`ActiveDefense`** — Active defense system against cognitive exploits.
+- **`Defense`** — Main class for defense functionality.
+- **`RabbitHole`** — A simulated environment to contain and waste the time of attackers.
+
+### Functions
+- **`create_defense()`** — Create a new Defense instance.
+
 ## Quick Start
 
 ```python
@@ -39,6 +62,20 @@ hole.release() if safe else hole.terminate()
 - **Injection detection** — Detect and block prompt injection attempts
 - **Agent containment** — Isolate suspicious agents in sandboxed environments
 - **Threat response** — Automated countermeasures for detected threats
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k defense -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/defense/README.md)
+- [Agent Guide](../../../docs/modules/defense/AGENTS.md)
+- [Specification](../../../docs/modules/defense/SPEC.md)
 
 ## Navigation
 

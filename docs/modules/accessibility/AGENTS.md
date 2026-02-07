@@ -29,3 +29,12 @@ instance = WCAGLevel()
 - **Source**: [src/codomyrmex/accessibility/](../../../src/codomyrmex/accessibility/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k accessibility -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

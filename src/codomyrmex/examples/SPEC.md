@@ -62,3 +62,9 @@ The examples module fits into the larger Codomyrmex system as:
 - **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k examples -v
+```

@@ -61,6 +61,25 @@ Common utility functions and helpers used across the entire Codomyrmex codebase.
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
 
+## Quick Start
+
+```python
+from codomyrmex.utils import ensure_directory, safe_json_loads
+
+# Ensure a directory exists, creating it if necessary.
+result = ensure_directory()
+
+# Safely parse JSON with a fallback default.
+output = safe_json_loads()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k utils -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/utils/](../../../docs/modules/utils/)

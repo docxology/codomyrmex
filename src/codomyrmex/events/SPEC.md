@@ -47,3 +47,9 @@ Provides an asynchronous event bus for decoupling system components. Implements 
 ### Technical Implementation
 
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k events -v
+```

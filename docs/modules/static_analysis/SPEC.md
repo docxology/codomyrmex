@@ -43,3 +43,9 @@ from codomyrmex.static_analysis import analyze_codebase, analyze_code_quality
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k static_analysis -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/static_analysis/)

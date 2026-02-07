@@ -4,6 +4,19 @@
 
 Test suites with real data analysis (no mock methods).
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Quick Start
 
 ```bash
@@ -55,6 +68,13 @@ def test_feature(my_instance):
     result = my_instance.feature()
     assert result is not None
 ```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/tests/README.md)
+- [Agent Guide](../../../docs/modules/tests/AGENTS.md)
+- [Specification](../../../docs/modules/tests/SPEC.md)
 
 ## Navigation
 

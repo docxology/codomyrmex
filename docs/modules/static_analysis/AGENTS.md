@@ -22,3 +22,23 @@ from codomyrmex.static_analysis import *
 - **Source**: [src/codomyrmex/static_analysis/](../../../src/codomyrmex/static_analysis/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+- **`analyze_codebase()`** — Alias for analyze_project for backward compatibility.
+- **`analyze_code_quality()`** — Analyze code quality for workflow integration.
+
+### Submodules
+
+- `complexity` — Complexity
+- `linting` — Linting
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k static_analysis -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

@@ -41,6 +41,25 @@ Configuration management module providing loading, validation, deployment, monit
 - `secret_manager.py` -- SecretManager and encryption utilities (optional `cryptography` dependency)
 - `watcher.py` -- ConfigWatcher for file-system change detection
 
+## Quick Start
+
+```python
+from codomyrmex.config_management import DeploymentStatus, EnvironmentType
+
+# Create a DeploymentStatus instance
+deploymentstatus = DeploymentStatus()
+
+# Use EnvironmentType for additional functionality
+environmenttype = EnvironmentType()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/config_management/](../../../docs/modules/config_management/)

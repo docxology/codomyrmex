@@ -21,3 +21,26 @@ from codomyrmex.telemetry import *
 - **Source**: [src/codomyrmex/telemetry/](../../../src/codomyrmex/telemetry/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+
+### Submodules
+
+- `alerting` — Alerting
+- `context` — Context
+- `exporters` — Exporters
+- `metrics` — Metrics
+- `sampling` — Sampling
+- `spans` — Spans
+- `tracing` — Tracing
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

@@ -4,6 +4,33 @@
 
 Quantum algorithm primitives, circuit simulation, and gate operations.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`GateType`** — Quantum gate types.
+- **`Gate`** — A quantum gate.
+- **`Qubit`** — A quantum bit state.
+- **`QuantumCircuit`** — A quantum circuit.
+- **`QuantumSimulator`** — Simple statevector quantum simulator.
+
+### Functions
+- **`bell_state()`** — Create Bell state circuit.
+- **`ghz_state()`** — Create GHZ state circuit.
+- **`qft()`** — Quantum Fourier Transform circuit.
+
 ## Quick Start
 
 ```python
@@ -50,6 +77,20 @@ results = simulator.run(qc, shots=1024)
 | RX | `.rx(q, θ)` | X-axis rotation |
 | RY | `.ry(q, θ)` | Y-axis rotation |
 | RZ | `.rz(q, θ)` | Z-axis rotation |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/quantum/README.md)
+- [Agent Guide](../../../docs/modules/quantum/AGENTS.md)
+- [Specification](../../../docs/modules/quantum/SPEC.md)
 
 ## Navigation
 

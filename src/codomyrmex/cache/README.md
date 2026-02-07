@@ -6,6 +6,19 @@
 
 Unified caching module providing multiple backend strategies for code analysis results, LLM responses, build artifacts, and other frequently accessed data. Features an abstract `Cache` interface with in-memory, file-based, and Redis backends; a `CacheManager` for named cache instance lifecycle; namespace isolation; TTL management; eviction policies; invalidation strategies; serializers; distributed caching; cache warmers; replication; and async operations.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -56,6 +69,21 @@ Unified caching module providing multiple backend strategies for code analysis r
 - `warmers/` -- Cache warming utilities
 - `async_ops/` -- Async cache operation wrappers
 - `replication/` -- Cache replication logic
+
+## Quick Start
+
+```python
+from codomyrmex.cache import get_cache
+
+result = get_cache()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cache -v
+```
 
 ## Navigation
 

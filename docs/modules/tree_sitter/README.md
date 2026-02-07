@@ -6,6 +6,13 @@
 
 The Tree-sitter module provides high-fidelity source code parsing across multiple programming languages. It wraps the tree-sitter parsing library to enable advanced static analysis, code transformation, and intelligent auditing within the Codomyrmex ecosystem. The module is organized into four submodules covering parsing, language management, query building, and AST transformations.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Multi-Language Parsing**: Parse source code from any language supported by tree-sitter into concrete syntax trees
@@ -13,6 +20,7 @@ The Tree-sitter module provides high-fidelity source code parsing across multipl
 - **Syntax Tree Querying**: Execute tree-sitter query patterns against parsed syntax trees to capture specific nodes
 - **AST Transformation**: Visitor and transformation patterns for modifying parsed syntax trees (early development)
 - **Auto-Discovery**: Automatically discover and load language grammars from a directory of shared libraries
+
 
 ## Key Components
 
@@ -60,6 +68,13 @@ captures = parser.query(tree, "(function_definition name: (identifier) @func_nam
 
 # Auto-discover all languages in a directory
 LanguageManager.discover_languages("/path/to/grammars/")
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
 ```
 
 ## Related Modules

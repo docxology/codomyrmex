@@ -4,6 +4,35 @@
 
 Template engine support (Jinja2, Mako) for code generation and dynamic content.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`TemplatingError`** — Raised when templating operations fail.
+
+### Functions
+- **`get_default_engine()`** — Get or create default template engine instance.
+- **`render()`** — Render a template string with context data.
+- **`render_file()`** — Load and render a template file.
+
+### Submodules
+- **`context/`** — Context builders submodule.
+- **`engines/`** — Template engine implementations.
+- **`filters/`** — Template filters submodule.
+- **`loaders/`** — Template loaders submodule.
+
 ## Quick Start
 
 ```python
@@ -55,6 +84,20 @@ result = template.render({"data": report_data})
 |--------|--------|----------|
 | jinja2 | `{{ }}` | HTML, configs, general |
 | mako | `${}` | Python-heavy templates |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k templating -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/templating/README.md)
+- [Agent Guide](../../../docs/modules/templating/AGENTS.md)
+- [Specification](../../../docs/modules/templating/SPEC.md)
 
 ## Navigation
 

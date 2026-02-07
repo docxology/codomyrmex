@@ -44,3 +44,9 @@ from codomyrmex.utils import ensure_directory, safe_json_loads, safe_json_dumps,
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k utils -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/utils/)

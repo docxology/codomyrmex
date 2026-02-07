@@ -4,6 +4,20 @@
 
 Code pattern recognition and repository analysis using cased/kit.
 
+## Key Exports
+
+### Classes
+- **`PatternMatch`** — Represents a pattern match.
+- **`AnalysisResult`** — Result of pattern analysis.
+- **`PatternAnalyzer`** — Analyzes code for patterns.
+
+### Functions
+- **`run_codomyrmex_analysis()`** — Run pattern analysis on a directory.
+- **`get_embedding_function()`** — Get the embedding function used for analysis.
+- **`analyze_repository_path()`** — Analyze a repository path.
+- **`run_full_analysis()`** — Run full analysis sequence.
+- **`print_once()`** — Print a message only once.
+
 ## Quick Start
 
 ```python
@@ -46,6 +60,20 @@ embeddings = embed(["def foo():", "class Bar:"])
 - Requires `cased/kit` toolkit for code analysis
 - Uses `logging_monitoring` for logging
 - Uses `environment_setup` for dependency checks
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k pattern_matching -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/pattern_matching/README.md)
+- [Agent Guide](../../../docs/modules/pattern_matching/AGENTS.md)
+- [Specification](../../../docs/modules/pattern_matching/SPEC.md)
 
 ## Navigation
 

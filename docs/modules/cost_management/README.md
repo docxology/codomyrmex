@@ -6,6 +6,13 @@
 
 The `cost_management` module provides spend tracking, budgeting, and cost optimization for cloud and API usage. It supports recording cost entries by category, computing summaries over configurable time periods, setting budgets with threshold-based alerting, and checking spend authorization before incurring costs. The module is designed to track LLM inference, embedding, compute, storage, network, and API call expenses.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Multi-category cost tracking**: Track costs across LLM inference, LLM embedding, compute, storage, network, API calls, and other categories via `CostCategory` enum
@@ -17,6 +24,7 @@ The `cost_management` module provides spend tracking, budgeting, and cost optimi
 - **Pluggable storage backends**: Abstract `CostStore` base class with `InMemoryCostStore` implementation
 - **Thread-safe operations**: All storage and budget operations use threading locks for concurrent safety
 - **Period-aware budget tracking**: Budgets automatically compute the current period start for accurate utilization calculation
+
 
 ## Key Components
 
@@ -86,6 +94,13 @@ if budgets.can_spend(25.0, budget_id="daily_llm"):
     print("Spend authorized")
 else:
     print("Budget exceeded")
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cost_management -v
 ```
 
 ## Related Modules

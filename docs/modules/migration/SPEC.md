@@ -45,3 +45,9 @@ from codomyrmex.migration import MigrationStatus, MigrationDirection, MigrationS
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k migration -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/migration/)

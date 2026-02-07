@@ -1,4 +1,4 @@
-# testing - Functional Specification
+# Tests — Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 

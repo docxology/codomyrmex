@@ -6,6 +6,13 @@
 
 Systematic prompt evaluation and A/B testing framework. Provides a structured approach to testing LLM prompts with configurable test suites, multiple evaluation strategies (exact match, substring containment, custom functions), and A/B testing for comparing prompt variants. The module tracks pass rates, scores, and latency across test runs, enabling data-driven prompt engineering with reproducible results and variant comparison reports.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Test Suite Management**: Organize test cases into named suites with descriptions for structured prompt evaluation
@@ -16,6 +23,7 @@ Systematic prompt evaluation and A/B testing framework. Provides a structured ap
 - **Pass Rate and Scoring**: Configurable pass threshold with aggregate statistics (pass rate, average score, average latency)
 - **Test Result Analytics**: Detailed per-test results with status (PENDING, RUNNING, PASSED, FAILED, ERROR) and error reporting
 - **Variant Comparison Reports**: Generate side-by-side comparison reports across prompt variants with multiple metrics
+
 
 ## Key Components
 

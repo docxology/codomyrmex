@@ -22,6 +22,13 @@ from codomyrmex.encryption import encrypt, decrypt, generate_key
 result = encrypt()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Functions
@@ -43,6 +50,18 @@ result = encrypt()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k encryption -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

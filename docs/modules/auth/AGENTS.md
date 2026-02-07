@@ -23,3 +23,16 @@ from codomyrmex.auth import *
 - **Source**: [src/codomyrmex/auth/](../../../src/codomyrmex/auth/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k auth -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

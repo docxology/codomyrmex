@@ -29,3 +29,12 @@ instance = NotificationChannel()
 - **Source**: [src/codomyrmex/notification/](../../../src/codomyrmex/notification/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k notification -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

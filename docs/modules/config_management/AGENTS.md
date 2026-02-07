@@ -21,3 +21,22 @@ from codomyrmex.config_management import *
 - **Source**: [src/codomyrmex/config_management/](../../../src/codomyrmex/config_management/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+- **`DeploymentStatus`** — Configuration deployment status.
+- **`EnvironmentType`** — Types of deployment environments.
+- **`Environment`** — Deployment environment configuration.
+- **`ConfigDeployment`** — Configuration deployment record.
+- **`ConfigurationDeployer`** — Configuration deployment and environment management system.
+- **`deploy_configuration()`** — Deploy configuration to an environment.
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

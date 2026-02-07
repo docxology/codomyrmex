@@ -88,3 +88,12 @@ Agent-facing technical reference for the skills module. Provides the component i
 - **Source**: [src/codomyrmex/skills/](../../../src/codomyrmex/skills/)
 - **Parent Directory**: [modules](../README.md)
 - **Project Root**: ../../../README.md
+
+## Common Patterns
+
+```python
+from codomyrmex.skills import get_skills_manager
+
+# Get a configured SkillsManager instance.
+result = get_skills_manager()
+```

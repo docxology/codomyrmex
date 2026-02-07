@@ -47,3 +47,9 @@ from codomyrmex.chaos_engineering import FaultType, FaultConfig, FaultInjector, 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k chaos_engineering -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/chaos_engineering/)

@@ -44,3 +44,9 @@ from codomyrmex.inference_optimization import QuantizationType, BatchingStrategy
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k inference_optimization -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/inference_optimization/)

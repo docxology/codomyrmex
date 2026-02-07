@@ -6,6 +6,19 @@
 
 The evolutionary_ai module provides a complete genetic algorithm framework for evolutionary optimization. It includes genome representation with float-valued genes, population management with elitism-preserving evolution, and a rich library of pluggable operators for mutation (bit-flip, swap, Gaussian, scramble), crossover (single-point, two-point, uniform, blend), and selection (tournament, roulette, rank, elitism) -- all accessible via factory functions.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -74,6 +87,22 @@ The evolutionary_ai module provides a complete genetic algorithm framework for e
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.evolutionary_ai import Genome, Population
+
+# Initialize Genome
+instance = Genome()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+```
 
 ## Navigation
 

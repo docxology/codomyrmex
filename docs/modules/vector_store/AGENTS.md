@@ -25,3 +25,12 @@ Embeddings storage with similarity search using cosine, euclidean, or dot produc
 - **Functional Specification**: [SPEC.md](SPEC.md)
 - **Parent Directory**: [docs/modules/](../README.md)
 - **Project Root**: [README](../../../README.md)
+
+## Common Patterns
+
+```python
+from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric
+
+# Initialize SearchResult
+searchresult = SearchResult()
+```

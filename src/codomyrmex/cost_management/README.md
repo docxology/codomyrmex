@@ -6,6 +6,19 @@
 
 Spend tracking, budgeting, and cost optimization for AI/cloud infrastructure. Provides a `CostTracker` to record and aggregate cost entries across categories (LLM inference, compute, storage, network, API calls), a `BudgetManager` for creating budgets with configurable periods and alert thresholds, and pluggable storage backends for persistence.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -40,6 +53,15 @@ Spend tracking, budgeting, and cost optimization for AI/cloud infrastructure. Pr
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.cost_management import CostCategory, BudgetPeriod, CostEntry
+
+# Initialize CostCategory
+instance = CostCategory()
+```
 
 ## Navigation
 

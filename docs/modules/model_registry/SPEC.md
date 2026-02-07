@@ -44,3 +44,9 @@ from codomyrmex.model_registry import ModelStage, ModelFramework, ModelMetrics, 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k model_registry -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/model_registry/)

@@ -21,3 +21,16 @@ from codomyrmex.networking import *
 - **Source**: [src/codomyrmex/networking/](../../../src/codomyrmex/networking/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

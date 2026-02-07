@@ -6,6 +6,13 @@
 
 The `data_lineage` module provides data provenance and lineage tracking through a directed graph model. It enables recording how data flows through transformations, tracing the origin of any dataset, and analyzing the downstream impact of changes. The module supports multiple node types (datasets, transformations, models, artifacts, external sources) connected by typed edges representing derivation, production, usage, and input relationships.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Directed lineage graph**: `LineageGraph` stores nodes and edges representing data flow with thread-safe operations
@@ -18,6 +25,7 @@ The `data_lineage` module provides data provenance and lineage tracking through 
 - **Origin discovery**: `get_origin()` traces back to the original source datasets that have no further upstream dependencies
 - **Impact analysis**: `ImpactAnalyzer` assesses the blast radius of data changes, categorizing affected datasets, models, and transformations with risk levels
 - **Data asset tracking**: `DataAsset` dataclass with schema, row count, size, and SHA-256 checksum computation
+
 
 ## Key Components
 
@@ -82,6 +90,13 @@ print(f"Original sources: {[n.name for n in origins]}")
 analyzer = ImpactAnalyzer(tracker.graph)
 impact = analyzer.analyze_change("sales")
 print(f"Affects {impact['total_affected']} nodes, risk: {impact['risk_level']}")
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_lineage -v
 ```
 
 ## Related Modules

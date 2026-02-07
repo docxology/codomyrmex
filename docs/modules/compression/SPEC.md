@@ -42,3 +42,9 @@ from codomyrmex.compression import compress, decompress, get_compressor, compres
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k compression -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/compression/)

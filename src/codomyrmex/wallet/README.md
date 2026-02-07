@@ -37,6 +37,19 @@ The `wallet` module provides secure self-custody key management and "Natural Rit
 | `WalletKeyError` | Key storage or retrieval failure |
 | `RitualError` | Recovery ritual operation failure |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Quick Start
 
 ```python
@@ -76,6 +89,13 @@ assert recovery.initiate_recovery("user_1", ["Blue", "7"])
 - [identity](../identity/) - Persona management
 - [defense](../defense/) - Active defense
 - [privacy](../privacy/) - Data minimization
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+```
 
 ## Navigation
 

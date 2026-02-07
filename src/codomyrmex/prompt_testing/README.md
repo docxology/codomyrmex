@@ -6,6 +6,19 @@
 
 Systematic prompt evaluation and A/B testing framework. Provides test suites for running prompt test cases against LLM executors, with pluggable evaluators (exact match, substring containment, custom functions) and statistical reporting of pass rates, scores, and latency. Includes full A/B testing support to compare prompt variants and determine winners by configurable metrics.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -40,6 +53,15 @@ Systematic prompt evaluation and A/B testing framework. Provides test suites for
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.prompt_testing import EvaluationType, TestStatus, PromptTestCase
+
+# Initialize EvaluationType
+instance = EvaluationType()
+```
 
 ## Navigation
 

@@ -6,6 +6,44 @@
 
 Document handling module providing document parsing, generation, and manipulation capabilities. Supports multiple formats including Markdown, JSON, YAML, HTML, XML, CSV, PDF, and plain text.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`DocumentsConfig`** — Configuration for document operations.
+- **`DocumentsError`** — Base exception class for all Documents module errors.
+- **`DocumentReadError`** — Raised when document reading fails.
+- **`DocumentWriteError`** — Raised when document writing fails.
+- **`DocumentParseError`** — Raised when document parsing fails.
+- **`DocumentValidationError`** — Raised when document validation fails.
+- **`DocumentConversionError`** — Raised when document format conversion fails.
+- **`UnsupportedFormatError`** — Raised when an unsupported document format is requested.
+
+### Functions
+- **`get_config()`** — Get the global documents configuration.
+- **`set_config()`** — Set the global documents configuration.
+
+### Submodules
+- **`core/`** — Core document operations.
+- **`formats/`** — Format-specific document handlers.
+- **`metadata/`** — Document metadata operations.
+- **`models/`** — Document data models.
+- **`search/`** — Document search and indexing operations.
+- **`transformation/`** — Document transformation operations.
+- **`utils/`** — Document utilities.
+
 ## Quick Start
 
 ```python
@@ -114,6 +152,13 @@ Format-specific read/write handlers:
 - `search/` - Search and indexing
 - `transformation/` - Convert, merge, split, format
 - `utils/` - Encoding detection, file validation
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k documents -v
+```
 
 ## Navigation
 

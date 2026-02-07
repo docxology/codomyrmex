@@ -28,6 +28,13 @@ from codomyrmex.scheduler import JobStatus, TriggerType, Trigger
 instance = JobStatus()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -52,13 +59,7 @@ instance = JobStatus()
 | `cron()` | Create a cron trigger from expression. |
 | `get_next_run()` | Get the next run time. |
 | `get_type()` | Get trigger type. |
-| `get_next_run()` | get next run |
-| `get_type()` | get type |
 | `interval_seconds()` | interval seconds |
-| `get_next_run()` | get next run |
-| `get_type()` | get type |
-| `get_next_run()` | Get next run time (simplified implementation). |
-| `get_type()` | get type |
 | `from_expression()` | Parse cron expression (minute hour day month weekday). |
 | `execute()` | Execute the job. |
 | `schedule()` | Schedule a job. |
@@ -76,6 +77,13 @@ instance = JobStatus()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k scheduler -v
+```
 
 ## Navigation
 

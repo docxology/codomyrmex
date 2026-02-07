@@ -6,6 +6,19 @@
 
 First Principles Framework (FPF) module for fetching, parsing, analyzing, and exporting the FPF specification for use in prompt and context engineering. Transforms the static FPF-Spec.md markdown document into a machine-readable, queryable data model with concepts, patterns, relationships, and a searchable index. Includes a high-level `FPFClient` for common workflows and visualization tools for rendering concept graphs.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Main Classes
@@ -52,6 +65,15 @@ First Principles Framework (FPF) module for fetching, parsing, analyzing, and ex
 - `optimization/` -- Optimization algorithms for pattern selection
 - `reasoning/` -- Reasoning utilities for FPF-based inference
 - `FPF-Spec.md` -- Bundled copy of the FPF specification
+
+## Quick Start
+
+```python
+from codomyrmex.fpf import FPFClient
+
+# Initialize FPFClient
+instance = FPFClient()
+```
 
 ## Navigation
 

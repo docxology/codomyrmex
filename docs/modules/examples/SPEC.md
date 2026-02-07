@@ -10,6 +10,8 @@ Codomyrmex Examples Module.
 
 ## 2. Architecture
 
+See source code for architectural details.
+
 ## 3. Dependencies
 
 See `src/codomyrmex/examples/__init__.py` for import dependencies.
@@ -23,3 +25,9 @@ See source module for available exports.
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k examples -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/examples/)

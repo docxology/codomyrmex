@@ -77,3 +77,9 @@ See [API_SPECIFICATION.md](API_SPECIFICATION.md) and [COMPLETE_API_DOCUMENTATION
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k git_operations -v
+```

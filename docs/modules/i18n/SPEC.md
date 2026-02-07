@@ -40,3 +40,9 @@ from codomyrmex.i18n import Locale, MessageBundle, Translator, PluralRules, Numb
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k i18n -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/i18n/)

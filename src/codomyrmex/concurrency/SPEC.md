@@ -78,3 +78,9 @@ The `concurrency` module provides a suite of synchronization primitives to ensur
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [../../../README.md](../../../README.md)
+
+## API Usage
+
+```python
+from codomyrmex.concurrency import BaseLock, LocalLock, LockStats
+```

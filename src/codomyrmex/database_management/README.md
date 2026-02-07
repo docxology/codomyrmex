@@ -6,6 +6,19 @@
 
 Database administration module providing connection management, schema generation, migration execution, backup/recovery, and performance monitoring. The `DatabaseManager` handles core database operations through `DatabaseConnection` configurations. Supports automated schema generation via `SchemaGenerator`, versioned migrations through `MigrationManager`, backup scheduling with `BackupManager`, and real-time performance monitoring via `DatabaseMonitor`. Includes submodules for connection pooling, replication, sharding, and auditing.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Submodules
@@ -58,6 +71,22 @@ Database administration module providing connection management, schema generatio
 - `replication/` - Database replication configuration and sync
 - `sharding/` - Sharding strategy definitions and shard routing
 - `audit/` - Database security auditing and compliance
+
+## Quick Start
+
+```python
+from codomyrmex.database_management import Backup, BackupResult, BackupManager
+
+# Initialize Backup
+instance = Backup()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
+```
 
 ## Navigation
 

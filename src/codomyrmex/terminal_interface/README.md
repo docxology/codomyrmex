@@ -4,6 +4,28 @@
 
 Interactive terminal shells, command runners, and rich rendering.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Submodules
+- **`commands/`** — Command registry submodule.
+- **`completions/`** — Autocomplete submodule.
+- **`rendering/`** — Output rendering submodule.
+- **`shells/`** — Terminal shell management utilities.
+- **`utils/`** — Terminal utilities submodule.
+
 ## Quick Start
 
 ```python
@@ -50,6 +72,20 @@ print(fmt.table(data, headers=["Name", "Value"]))
 | `InteractiveShell` | REPL-style interactive shell |
 | `CommandRunner` | Execute shell commands with capture |
 | `TerminalFormatter` | Colored output and tables |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/terminal_interface/README.md)
+- [Agent Guide](../../../docs/modules/terminal_interface/AGENTS.md)
+- [Specification](../../../docs/modules/terminal_interface/SPEC.md)
 
 ## Navigation
 

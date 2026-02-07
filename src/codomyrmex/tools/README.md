@@ -40,6 +40,25 @@ Development utilities and helper tools for project analysis, dependency manageme
 - `add_deprecation_notices.py` -- Adds deprecation notices to legacy requirements.txt files
 - `dependency_consolidation_report.md` -- Generated report from dependency consolidation analysis
 
+## Quick Start
+
+```python
+from codomyrmex.tools import DependencyAnalyzer
+
+# Initialize and use DependencyAnalyzer
+dependencyanalyzer = DependencyAnalyzer()
+
+from codomyrmex.tools import get_module_name
+result = get_module_name()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tools -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/tools/](../../../docs/modules/tools/)

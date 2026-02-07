@@ -6,6 +6,13 @@
 
 Metrics module for Codomyrmex.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **MetricsError** — Raised when metrics operations fail.
@@ -27,6 +34,18 @@ instance = MetricsError()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k metrics -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

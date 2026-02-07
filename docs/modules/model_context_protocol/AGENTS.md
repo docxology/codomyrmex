@@ -21,3 +21,16 @@ from codomyrmex.model_context_protocol import *
 - **Source**: [src/codomyrmex/model_context_protocol/](../../../src/codomyrmex/model_context_protocol/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

@@ -99,6 +99,13 @@ h = hash_response("MySecret")  # SHA-256 hex digest
 - **Internal**: `codomyrmex.encryption.key_manager.KeyManager`, `codomyrmex.logging_monitoring`
 - **Standard Library**: `hashlib`, `hmac`, `uuid`, `json`, `datetime`, `pathlib`, `dataclasses`
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+```
+
 ## Related Modules
 
 - [encryption](../encryption/) - Key storage backend

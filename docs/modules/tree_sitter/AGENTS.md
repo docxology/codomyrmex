@@ -21,3 +21,23 @@ from codomyrmex.tree_sitter import *
 - **Source**: [src/codomyrmex/tree_sitter/](../../../src/codomyrmex/tree_sitter/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+
+## Key Components
+
+
+### Submodules
+
+- `languages` — Languages
+- `parsers` — Parsers
+- `queries` — Queries
+- `transformers` — Transformers
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

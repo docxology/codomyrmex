@@ -30,6 +30,19 @@ server.register_resource(
 server.run()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Server Classes
@@ -75,6 +88,13 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
     }
   }
 }
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
 ```
 
 ## Navigation

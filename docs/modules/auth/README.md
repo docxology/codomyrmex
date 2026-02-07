@@ -21,6 +21,13 @@ from codomyrmex.auth import authenticate, authorize, get_authenticator
 result = authenticate()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Functions
@@ -38,6 +45,18 @@ result = authenticate()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k auth -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

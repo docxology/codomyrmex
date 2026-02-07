@@ -4,6 +4,34 @@
 
 Fault injection and resilience testing.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`FaultType`** — Types of injectable faults.
+- **`FaultConfig`** — Configuration for a fault.
+- **`FaultInjector`** — Inject faults into system components.
+- **`InjectedFaultError`** — Raised when a fault is injected.
+- **`SteadyStateHypothesis`** — Define expected steady state.
+- **`ExperimentResult`** — Result of a chaos experiment.
+- **`ChaosExperiment`** — A chaos engineering experiment.
+- **`ChaosMonkey`** — Automated chaos testing.
+
+### Functions
+- **`with_chaos()`** — Decorator to inject chaos into a function.
+
 ## Quick Start
 
 ```python
@@ -67,6 +95,13 @@ result = monkey.run_random()
 | `ExperimentResult` | Experiment outcome with timing |
 | `InjectedFaultError` | Error raised by fault injection |
 | `with_chaos` | Decorator for chaos-protected functions |
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/chaos_engineering/README.md)
+- [Agent Guide](../../../docs/modules/chaos_engineering/AGENTS.md)
+- [Specification](../../../docs/modules/chaos_engineering/SPEC.md)
 
 ## Navigation
 

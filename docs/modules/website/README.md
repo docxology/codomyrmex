@@ -4,13 +4,34 @@
 
 ## Overview
 
-Website generation module for Codomyrmex.
+Website generation, static site building, and web content management utilities.
+
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+## Key Features
+
+- **DataProvider** — Aggregates data from various system modules to populate the website.
+- **WebsiteGenerator** — Generates the static website.
+- **WebsiteServer** — Enhanced HTTP server that supports API endpoints for dynamic functionality.
 
 ## Quick Start
 
 ```python
-from codomyrmex.website import *  # See source for specific imports
+from codomyrmex.website import DataProvider, WebsiteGenerator, WebsiteServer
+
+instance = DataProvider()
 ```
+
+## Source Files
+
+- `data_provider.py`
+- `generator.py`
+- `server.py`
 
 ## Directory Contents
 
@@ -20,6 +41,13 @@ from codomyrmex.website import *  # See source for specific imports
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 | `tutorials/` | Tutorials |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k website -v
+```
 
 ## Navigation
 

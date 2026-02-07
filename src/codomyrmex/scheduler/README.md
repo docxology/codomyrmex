@@ -4,6 +4,36 @@
 
 Task scheduling with cron, interval, and one-time triggers.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`JobStatus`** — Status of a scheduled job.
+- **`TriggerType`** — Types of job triggers.
+- **`Trigger`** — Base class for job triggers.
+- **`OnceTrigger`** — Trigger that fires once at a specific time.
+- **`IntervalTrigger`** — Trigger that fires at regular intervals.
+- **`CronTrigger`** — Cron-style trigger (simplified).
+- **`Job`** — A scheduled job.
+- **`Scheduler`** — Task scheduler with support for various trigger types.
+
+### Functions
+- **`every()`** — Create an interval trigger.
+- **`at()`** — Create a one-time trigger from time string (HH:MM).
+- **`cron()`** — Create a cron trigger from expression.
+
 ## Quick Start
 
 ```python
@@ -69,6 +99,20 @@ cron("0 9 * * 1-5")      # CronTrigger: 9 AM weekdays
 | `every(...)` | Create interval trigger |
 | `at("HH:MM")` | Create one-time trigger |
 | `cron("...")` | Parse cron expression |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k scheduler -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/scheduler/README.md)
+- [Agent Guide](../../../docs/modules/scheduler/AGENTS.md)
+- [Specification](../../../docs/modules/scheduler/SPEC.md)
 
 ## Navigation
 

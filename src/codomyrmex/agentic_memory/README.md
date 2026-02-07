@@ -4,6 +4,18 @@
 
 Long-term agent memory with retrieval, persistence, and automatic pruning.
 
+## Key Exports
+
+### Classes
+- **`MemoryType`** — Types of agent memory.
+- **`MemoryImportance`** — Importance levels for memories.
+- **`Memory`** — A single memory unit.
+- **`RetrievalResult`** — Result of memory retrieval.
+- **`MemoryStore`** — Base class for memory storage backends.
+- **`InMemoryStore`** — In-memory storage for memories.
+- **`JSONFileStore`** — JSON file storage for memories.
+- **`AgentMemory`** — Long-term memory system for AI agents.
+
 ## Quick Start
 
 ```python
@@ -76,6 +88,20 @@ summary_mem = SummaryMemory(summarize_fn=llm_summarize)
 | `KnowledgeMemory` | Fact storage |
 | `VectorStoreMemory` | Vector-enhanced retrieval |
 | `SummaryMemory` | Auto-summarizing memory |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/agentic_memory/README.md)
+- [Agent Guide](../../../docs/modules/agentic_memory/AGENTS.md)
+- [Specification](../../../docs/modules/agentic_memory/SPEC.md)
 
 ## Navigation
 

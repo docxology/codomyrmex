@@ -51,3 +51,9 @@ def run_command(
 
 - **Zero Circular Dependencies**: This module functions as a leaf node in the dependency graph (except for optional logging import). It must not import from Core or Service layers.
 - **Stability**: API must be backward compatible. Breaking changes require major version bump.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k utils -v
+```

@@ -4,6 +4,21 @@
 
 Real-time data streaming with SSE, pub/sub, and stream processing.
 
+## Key Exports
+
+### Classes
+- **`EventType`** — Standard event types.
+- **`Event`** — A stream event.
+- **`Subscription`** — A subscription to a stream.
+- **`Stream`** — Abstract base class for streams.
+- **`InMemoryStream`** — In-memory stream implementation.
+- **`SSEStream`** — Server-Sent Events stream implementation.
+- **`StreamProcessor`** — Process events from a stream with transformations.
+- **`TopicStream`** — Stream with topic-based routing.
+
+### Functions
+- **`create_event()`** — Create a new event.
+
 ## Quick Start
 
 ```python
@@ -63,6 +78,20 @@ await processor.start()
 | `Subscription` | Active subscription with cancel() |
 | `create_event(data)` | Create event with defaults |
 | `broadcast(streams, event)` | Send to multiple streams |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k streaming -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/streaming/README.md)
+- [Agent Guide](../../../docs/modules/streaming/AGENTS.md)
+- [Specification](../../../docs/modules/streaming/SPEC.md)
 
 ## Navigation
 

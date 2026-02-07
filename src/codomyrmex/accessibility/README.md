@@ -4,6 +4,33 @@
 
 WCAG compliance checking and accessibility utilities.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`WCAGLevel`** — WCAG conformance levels.
+- **`IssueType`** — Types of accessibility issues.
+- **`AccessibilityIssue`** — An accessibility issue.
+- **`AccessibilityReport`** — Accessibility audit report.
+- **`WCAGRule`** — A WCAG accessibility rule.
+- **`A11yChecker`** — Accessibility checker.
+
+### Functions
+- **`calculate_contrast_ratio()`** — Calculate WCAG contrast ratio between two colors.
+- **`check_heading_hierarchy()`** — Check heading level hierarchy.
+
 ## Quick Start
 
 ```python
@@ -48,6 +75,20 @@ print(f"Contrast ratio: {ratio:.2f}:1")  # 12.63:1
 - **link-text** (2.4.4): Links must have descriptive text
 - **color-contrast** (1.4.3): Text must have 4.5:1 contrast ratio
 - **focus-visible** (2.4.7): Interactive elements need focus indicator
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k accessibility -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/accessibility/README.md)
+- [Agent Guide](../../../docs/modules/accessibility/AGENTS.md)
+- [Specification](../../../docs/modules/accessibility/SPEC.md)
 
 ## Navigation
 

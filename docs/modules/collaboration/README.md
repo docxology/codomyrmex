@@ -6,6 +6,13 @@
 
 The `collaboration` module enables multi-agent coordination, real-time communication, and workflow orchestration. It provides a swarm-based architecture where multiple agents can work together on missions, with task decomposition, consensus voting, and coordinated execution through dedicated submodules for agents, communication, coordination, and protocols.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Swarm orchestration**: `SwarmManager` coordinates multiple agents working in parallel on shared missions
@@ -13,6 +20,7 @@ The `collaboration` module enables multi-agent coordination, real-time communica
 - **Task decomposition**: `TaskDecomposer` breaks down complex missions into primitive tasks for distributed execution
 - **Consensus voting**: Simple majority voting mechanism among swarm agents for collaborative decision-making
 - **Modular submodule architecture**: Organized into `agents`, `communication`, `coordination`, and `protocols` submodules
+
 
 ## Key Components
 
@@ -53,6 +61,13 @@ print(f"Approved: {approved}")
 subtasks = TaskDecomposer.decompose("Build full-stack user management")
 for task in subtasks:
     print(f"  - {task}")
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
 ```
 
 ## Related Modules

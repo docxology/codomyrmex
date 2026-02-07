@@ -1,4 +1,4 @@
-# code - Functional Specification
+# Coding — Functional Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
@@ -151,3 +151,4 @@ graph TD
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
+```

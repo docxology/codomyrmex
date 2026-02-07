@@ -67,6 +67,13 @@ The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/
 
 The dark-pdf source is included as a git submodule at `pdf/vendor/dark-pdf/` for reference.
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k dark -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/dark/](../../../docs/modules/dark/)

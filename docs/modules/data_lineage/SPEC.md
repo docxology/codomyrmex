@@ -43,3 +43,9 @@ from codomyrmex.data_lineage import NodeType, EdgeType, LineageNode, LineageEdge
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k data_lineage -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/data_lineage/)

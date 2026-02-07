@@ -67,3 +67,9 @@ The `telemetry` module provides a unified observability framework based on the O
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Repository Root**: [../../../README.md](../../../README.md)
+
+## API Usage
+
+```python
+import codomyrmex.telemetry
+```

@@ -29,3 +29,12 @@ instance = NodeType()
 - **Source**: [src/codomyrmex/data_lineage/](../../../src/codomyrmex/data_lineage/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_lineage -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

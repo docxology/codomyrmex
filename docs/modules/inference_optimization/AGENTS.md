@@ -29,3 +29,12 @@ instance = QuantizationType()
 - **Source**: [src/codomyrmex/inference_optimization/](../../../src/codomyrmex/inference_optimization/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k inference_optimization -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

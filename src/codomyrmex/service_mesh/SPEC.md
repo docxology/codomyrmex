@@ -48,3 +48,9 @@ Service mesh module providing resilience patterns: circuit breakers, load balanc
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## API Usage
+
+```python
+from codomyrmex.service_mesh import CircuitState, CircuitBreakerConfig, CircuitBreaker
+```

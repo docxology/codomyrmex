@@ -4,6 +4,36 @@
 
 Feature flag management with evaluation strategies and gradual rollout.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`VariantType`** — Experiment variant types.
+- **`Variant`** — An experiment variant.
+- **`Experiment`** — An A/B test experiment.
+- **`Assignment`** — User's experiment assignment.
+- **`ExperimentEvent`** — An experiment analytics event.
+- **`ExperimentManager`** — Manage A/B test experiments.
+
+### Submodules
+- **`core/`** — Core flag management submodule.
+- **`evaluation/`** — Flag evaluation submodule.
+- **`rollout/`** — Gradual rollout submodule.
+- **`storage/`** — Flag storage submodule.
+- **`strategies/`** — Feature flag evaluation strategies.
+
 ## Quick Start
 
 ```python
@@ -48,6 +78,13 @@ with manager.override("experimental_feature", True):
 | Class | Description |
 |-------|-------------|
 | `FeatureManager` | Main flag manager |
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/feature_flags/README.md)
+- [Agent Guide](../../../docs/modules/feature_flags/AGENTS.md)
+- [Specification](../../../docs/modules/feature_flags/SPEC.md)
 
 ## Navigation
 

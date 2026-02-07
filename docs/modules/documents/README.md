@@ -18,6 +18,13 @@ Documents Module for Codomyrmex.
 | `transformation` | Document transformation operations. |
 | `utils` | Document utilities. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -32,6 +39,13 @@ from codomyrmex.documents import *  # See source for specific imports
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 | `tutorials/` | Tutorials |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k documents -v
+```
 
 ## Navigation
 

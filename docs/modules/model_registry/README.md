@@ -6,6 +6,13 @@
 
 Model versioning, metadata, and lifecycle management for ML models. Provides a central registry for registering model versions with associated metrics, parameters, and artifacts. Supports full lifecycle stage transitions (development, staging, production, archived), multiple ML framework types (sklearn, PyTorch, TensorFlow, ONNX, custom), and pluggable storage backends for model artifacts including file-based and in-memory stores.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Model Versioning**: Register and track multiple versions of each model with semantic version strings
@@ -15,6 +22,7 @@ Model versioning, metadata, and lifecycle management for ML models. Provides a c
 - **Thread-Safe Operations**: All registry mutations protected with threading locks for concurrent access
 - **Artifact Management**: Save, load, and delete serialized model artifacts through the storage backend
 - **Framework Tracking**: Record which ML framework produced each model version
+
 
 ## Key Components
 

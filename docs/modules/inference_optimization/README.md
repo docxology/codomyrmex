@@ -85,6 +85,13 @@ result = future.result()
 batcher.stop()
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k inference_optimization -v
+```
+
 ## Related Modules
 
 - [llm](../llm/) - LLM infrastructure that benefits from inference optimization

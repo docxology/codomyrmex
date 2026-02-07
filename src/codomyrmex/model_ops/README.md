@@ -52,6 +52,25 @@ ML model operations module providing dataset management, fine-tuning job orchest
 - `fine_tuning/` - Fine-tuning job management extensions
 - `evaluators.py` - Legacy evaluator implementations
 
+## Quick Start
+
+```python
+from codomyrmex.model_ops import Dataset, DatasetSanitizer
+
+# Create a Dataset instance
+dataset = Dataset()
+
+# Use DatasetSanitizer for additional functionality
+datasetsanitizer = DatasetSanitizer()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/model_ops/](../../../docs/modules/model_ops/)

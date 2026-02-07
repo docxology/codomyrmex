@@ -83,6 +83,13 @@ print(f"Synced version: {gitops.get_version()}")
 print(f"Is synced: {gitops.is_synced()}")
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+```
+
 ## Related Modules
 
 - [containerization](../containerization/) - Docker/Kubernetes management that provides deployment targets

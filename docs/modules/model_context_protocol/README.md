@@ -15,6 +15,13 @@ Model Context Protocol Module for Codomyrmex.
 | `schemas` | Model Context Protocol schema definitions. |
 | `validators` | MCP Schema Validators Module |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -29,6 +36,18 @@ from codomyrmex.model_context_protocol import *  # See source for specific impor
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 | `tutorials/` | Tutorials |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

@@ -76,6 +76,13 @@ new_data = migrator.migrate(old_data)
 # [{"new_name": "Alice", "age": 30}, {"new_name": "Bob", "age": 25}]
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k migration -v
+```
+
 ## Related Modules
 
 - [environment_setup](../environment_setup/) - Environment validation before running migrations

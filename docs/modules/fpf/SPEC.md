@@ -43,3 +43,9 @@ from codomyrmex.fpf import FPFClient
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k fpf -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/fpf/)

@@ -45,6 +45,16 @@ hash_response, create_wallet, get_wallet_manager
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 - Keys are never logged, exported, or included in backup plaintext.
 
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.
+
 ## Navigation Links
 
 - **Human Documentation**: [README.md](README.md)

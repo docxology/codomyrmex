@@ -49,6 +49,13 @@ embodiment/
   transformation/  # 3D spatial transformations
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
+```
+
 ## Related Modules
 
 - [model_context_protocol](../model_context_protocol/) - Standardized LLM communication interfaces used across modules

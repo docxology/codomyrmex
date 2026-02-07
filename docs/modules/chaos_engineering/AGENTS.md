@@ -29,3 +29,13 @@ instance = FaultType()
 - **Source**: [src/codomyrmex/chaos_engineering/](../../../src/codomyrmex/chaos_engineering/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Key Components
+
+- **`FaultType`** — Types of injectable faults.
+- **`FaultConfig`** — Configuration for a fault.
+- **`FaultInjector`** — Inject faults into system components.
+- **`InjectedFaultError`** — Raised when a fault is injected.
+- **`SteadyStateHypothesis`** — Define expected steady state.
+- **`with_chaos()`** — Decorator to inject chaos into a function.
+

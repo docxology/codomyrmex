@@ -6,6 +6,19 @@
 
 Comprehensive logistics module that consolidates orchestration, task management, and scheduling capabilities for the Codomyrmex platform. Provides workflow and project orchestration engines, job queue management, cron and recurring schedule support with timezone awareness, plus submodules for task routing algorithms, schedule optimization, resource allocation, and progress tracking.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Orchestration
@@ -44,6 +57,19 @@ Comprehensive logistics module that consolidates orchestration, task management,
 - `optimization/` -- Schedule and resource optimization
 - `resources/` -- Resource allocation and pool management
 - `tracking/` -- Progress and status tracking
+
+## Quick Start
+
+```python
+import codomyrmex.logistics
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k logistics -v
+```
 
 ## Navigation
 

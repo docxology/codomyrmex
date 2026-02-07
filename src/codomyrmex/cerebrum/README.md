@@ -82,6 +82,25 @@ Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling
 - `visualization_base.py` -- Base classes for visualization components
 - `visualization_theme.py` -- Theming support for visualization output
 
+## Quick Start
+
+```python
+from codomyrmex.cerebrum import BaseNetworkVisualizer, BaseChartVisualizer
+
+# Create a BaseNetworkVisualizer instance
+basenetworkvisualizer = BaseNetworkVisualizer()
+
+# Use BaseChartVisualizer for additional functionality
+basechartvisualizer = BaseChartVisualizer()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cerebrum -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/cerebrum/](../../../docs/modules/cerebrum/)

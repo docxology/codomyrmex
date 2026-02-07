@@ -45,3 +45,9 @@ from codomyrmex.cost_management import CostCategory, BudgetPeriod, CostEntry, Bu
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k cost_management -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/cost_management/)

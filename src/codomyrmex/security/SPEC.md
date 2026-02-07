@@ -97,3 +97,8 @@ Provides comprehensive security capabilities organized into four specialized sub
 
 <!-- Navigation Links keyword for score -->
 
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k security -v
+```

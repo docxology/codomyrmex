@@ -4,6 +4,35 @@
 
 Full-text search with TF-IDF, fuzzy matching, and query parsing.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`Document`** — A searchable document.
+- **`SearchResult`** — A search result.
+- **`Tokenizer`** — Abstract tokenizer.
+- **`SimpleTokenizer`** — Simple whitespace and punctuation tokenizer.
+- **`SearchIndex`** — Abstract search index.
+- **`InMemoryIndex`** — In-memory inverted index with TF-IDF scoring.
+- **`FuzzyMatcher`** — Fuzzy string matching utilities.
+- **`QueryParser`** — Parse search queries with operators.
+
+### Functions
+- **`create_index()`** — Create a search index.
+- **`quick_search()`** — Quick search over a list of strings.
+
 ## Quick Start
 
 ```python
@@ -66,6 +95,20 @@ FuzzyMatcher.similarity_ratio("apple", "aple")  # 0.8
 candidates = ["python", "java", "javascript"]
 FuzzyMatcher.find_best_match("pythn", candidates)  # "python"
 ```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k search -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/search/README.md)
+- [Agent Guide](../../../docs/modules/search/AGENTS.md)
+- [Specification](../../../docs/modules/search/SPEC.md)
 
 ## Navigation
 

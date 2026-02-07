@@ -6,12 +6,20 @@
 
 AI agent framework providing integrations with multiple AI providers and code editing capabilities. Supports Claude, Codex, Gemini, Jules, and Mistral backends.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Multi-Provider Support**: Claude, Codex, Gemini, Jules, Mistral
 - **AI Code Editing**: Intelligent code generation and refactoring
 - **Task Management**: Droid-based task orchestration
 - **Agent Orchestration**: Coordinate multiple agents
+
 
 ## Key Components
 
@@ -38,6 +46,13 @@ result = orchestrator.execute_task("Generate a REST API handler", provider="clau
 - [index.md](index.md) - Module index
 - [technical_overview.md](technical_overview.md) - Architecture details
 - [tutorials/](tutorials/) - Usage tutorials
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agents -v
+```
 
 ## Related Modules
 

@@ -6,6 +6,13 @@
 
 Multi-channel notification system with templates, routing, and provider-based dispatch. Supports sending notifications through console, file, webhook, email, Slack, and SMS channels. Features a template engine for rendering notifications from parameterized templates, a rule-based router for directing notifications to appropriate channels based on priority or custom conditions, and a central service that ties providers, templates, and routing together with broadcast and history tracking capabilities.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Multi-Channel Dispatch**: Send notifications through console, file, webhook, email, Slack, and SMS channels via pluggable providers
@@ -16,6 +23,7 @@ Multi-channel notification system with templates, routing, and provider-based di
 - **Built-in Templates**: Pre-configured templates for alerts (`ALERT_TEMPLATE`), informational messages (`INFO_TEMPLATE`), and errors (`ERROR_TEMPLATE`)
 - **Priority Levels**: Four priority tiers (LOW, MEDIUM, HIGH, CRITICAL) for notification classification
 - **Provider Architecture**: Abstract `NotificationProvider` base class for implementing custom channel providers
+
 
 ## Key Components
 

@@ -39,3 +39,9 @@ Accessibility module providing WCAG compliance checking, color contrast analysis
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k accessibility -v
+```

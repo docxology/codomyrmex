@@ -50,3 +50,9 @@ from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, Evalu
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/model_ops/)

@@ -29,3 +29,12 @@ instance = MemoryType()
 - **Source**: [src/codomyrmex/agentic_memory/](../../../src/codomyrmex/agentic_memory/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

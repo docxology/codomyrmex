@@ -40,3 +40,7 @@ from codomyrmex.streaming import (
 ```bash
 pytest tests/unit/test_streaming.py -v
 ```
+
+## Dependencies
+
+See `src/codomyrmex/streaming/__init__.py` for import dependencies.

@@ -6,6 +6,13 @@
 
 The Concurrency module provides distributed locks, semaphores, and advanced synchronization primitives for the Codomyrmex platform. It supports both local (file-based and thread-based) and distributed (Redis-backed) locking strategies, along with a unified lock manager for multi-resource acquisition and a read-write lock for shared/exclusive access patterns.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Distributed Locking**: Redis-backed locks using SETNX with TTL for distributed multi-process synchronization
@@ -15,6 +22,7 @@ The Concurrency module provides distributed locks, semaphores, and advanced sync
 - **Read-Write Lock**: In-process shared/exclusive lock for concurrent read access with exclusive write access
 - **Context Manager Support**: All lock implementations support Python `with` statement usage
 - **Lock Telemetry**: Lock manager tracks acquisition/release statistics via `LockStats`
+
 
 ## Key Components
 
@@ -121,6 +129,13 @@ try:
     pass
 finally:
     rwlock.release_write()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k concurrency -v
 ```
 
 ## Related Modules

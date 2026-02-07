@@ -29,3 +29,12 @@ instance = Locale()
 - **Source**: [src/codomyrmex/i18n/](../../../src/codomyrmex/i18n/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k i18n -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

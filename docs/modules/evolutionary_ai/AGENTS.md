@@ -26,3 +26,12 @@ instance = Genome()
 - **Source**: [src/codomyrmex/evolutionary_ai/](../../../src/codomyrmex/evolutionary_ai/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

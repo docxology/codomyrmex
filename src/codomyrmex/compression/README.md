@@ -4,6 +4,28 @@
 
 Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Functions
+- **`compress()`** — Compress data.
+- **`decompress()`** — Decompress data.
+- **`get_compressor()`** — Get a compressor instance.
+- **`compress_file()`** — Compress a file.
+- **`decompress_file()`** — Decompress a file.
+
 ## Quick Start
 
 ```python
@@ -59,6 +81,20 @@ result = parallel.compress_files(["file1.txt", "file2.txt"])
 | zlib | .zz | Data streams |
 | zip | .zip | Archives |
 | zstd | .zst | High performance |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k compression -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/compression/README.md)
+- [Agent Guide](../../../docs/modules/compression/AGENTS.md)
+- [Specification](../../../docs/modules/compression/SPEC.md)
 
 ## Navigation
 

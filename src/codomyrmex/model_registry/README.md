@@ -6,6 +6,19 @@
 
 Model versioning, metadata, and lifecycle management for ML models. Provides a central registry for registering model versions with framework, metrics, parameters, and tags. Supports lifecycle stage transitions (development, staging, production, archived) with automatic demotion of previous production versions, pluggable artifact storage backends, and version-level CRUD operations.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -39,6 +52,15 @@ Model versioning, metadata, and lifecycle management for ML models. Provides a c
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.model_registry import ModelStage, ModelFramework, ModelMetrics
+
+# Initialize ModelStage
+instance = ModelStage()
+```
 
 ## Navigation
 

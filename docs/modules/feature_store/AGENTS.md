@@ -29,3 +29,12 @@ instance = FeatureType()
 - **Source**: [src/codomyrmex/feature_store/](../../../src/codomyrmex/feature_store/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_store -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

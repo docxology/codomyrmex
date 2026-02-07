@@ -42,3 +42,9 @@ graph TD
 
 - Must integration with the `cache` or `persistence` layer for performance.
 - Dependent on the `telemetry` module for tracking flag usage metrics.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_flags -v
+```

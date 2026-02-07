@@ -6,6 +6,19 @@
 
 The deployment module provides deployment strategy implementations and orchestration for service rollouts. It supports rolling, blue-green, and canary deployment patterns with configurable health checks, batch sizing, traffic switching, and staged percentage-based rollouts. Includes a high-level deployment manager for simplified orchestration and a GitOps synchronizer for Git-based configuration management.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Strategy Classes
@@ -48,6 +61,22 @@ The deployment module provides deployment strategy implementations and orchestra
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `SPEC.md` - Module specification
 - `PAI.md` - PAI integration notes
+
+## Quick Start
+
+```python
+from codomyrmex.deployment import DeploymentManager, GitOpsSynchronizer
+
+# Initialize DeploymentManager
+instance = DeploymentManager()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+```
 
 ## Navigation
 

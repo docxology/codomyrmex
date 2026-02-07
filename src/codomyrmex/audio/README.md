@@ -26,8 +26,13 @@ The audio module provides comprehensive audio processing capabilities including 
 ## Installation
 
 ```bash
-# Install audio dependencies
-uv sync --extra audio
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Quick Start

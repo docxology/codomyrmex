@@ -4,6 +4,31 @@
 
 Persona management and bio-cognitive verification for agent identity.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`BioCognitiveVerifier`** — Verifies identity based on behavioral biometrics.
+- **`Identity`** — Main class for identity functionality.
+- **`IdentityManager`** — Manages user personas and identity switching.
+- **`VerificationLevel`** — Level of identity verification.
+- **`Persona`** — Represents a distinct identity persona.
+
+### Functions
+- **`create_identity()`** — Create a new Identity instance.
+
 ## Quick Start
 
 ```python
@@ -45,6 +70,20 @@ if is_authentic:
 | `VerificationLevel` | Enum: unverified, verified, trusted |
 | `IdentityManager` | Register and manage personas |
 | `BioCognitiveVerifier` | Challenge-response authentication |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k identity -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/identity/README.md)
+- [Agent Guide](../../../docs/modules/identity/AGENTS.md)
+- [Specification](../../../docs/modules/identity/SPEC.md)
 
 ## Navigation
 

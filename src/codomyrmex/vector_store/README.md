@@ -4,6 +4,33 @@
 
 Embeddings storage with similarity search using cosine, euclidean, or dot product metrics.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`SearchResult`** — Result from vector similarity search.
+- **`VectorEntry`** — A vector entry in the store.
+- **`DistanceMetric`** — Distance metrics for similarity computation.
+- **`VectorStore`** — Abstract base class for vector storage backends.
+- **`InMemoryVectorStore`** — In-memory vector store implementation.
+- **`NamespacedVectorStore`** — Vector store with namespace support.
+
+### Functions
+- **`create_vector_store()`** — Create a vector store with the specified backend.
+- **`normalize_embedding()`** — Normalize an embedding to unit length.
+
 ## Quick Start
 
 ```python
@@ -69,6 +96,20 @@ print(store.list_namespaces())  # ['users', 'products']
 | cosine | Yes | Semantic similarity |
 | euclidean | No (lower) | Spatial distance |
 | dot_product | Yes | Magnitude-aware similarity |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/vector_store/README.md)
+- [Agent Guide](../../../docs/modules/vector_store/AGENTS.md)
+- [Specification](../../../docs/modules/vector_store/SPEC.md)
 
 ## Navigation
 

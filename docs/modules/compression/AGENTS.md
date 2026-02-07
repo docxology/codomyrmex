@@ -23,3 +23,16 @@ from codomyrmex.compression import *
 - **Source**: [src/codomyrmex/compression/](../../../src/codomyrmex/compression/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k compression -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

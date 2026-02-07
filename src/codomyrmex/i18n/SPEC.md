@@ -42,3 +42,9 @@ Internationalization module providing translation management, pluralization rule
 ## Navigation
 
 - [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k i18n -v
+```

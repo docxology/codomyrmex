@@ -4,6 +4,31 @@
 
 Data provenance and lineage tracking for datasets, transformations, and models.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`NodeType`** — Types of lineage nodes.
+- **`EdgeType`** — Types of lineage edges.
+- **`LineageNode`** — A node in the lineage graph.
+- **`LineageEdge`** — An edge connecting two nodes.
+- **`DataAsset`** — A data asset with lineage information.
+- **`LineageGraph`** — Graph of data lineage relationships.
+- **`LineageTracker`** — Tracks data lineage through transformations.
+- **`ImpactAnalyzer`** — Analyzes impact of data changes.
+
 ## Quick Start
 
 ```python
@@ -50,6 +75,20 @@ print(f"Affected: {impact['total_affected']} nodes")
 | `ImpactAnalyzer` | Analyze change impact |
 | `NodeType` | Enum: dataset, transformation, model, artifact |
 | `EdgeType` | Enum: derived_from, produced_by, used_by, input_to |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_lineage -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/data_lineage/README.md)
+- [Agent Guide](../../../docs/modules/data_lineage/AGENTS.md)
+- [Specification](../../../docs/modules/data_lineage/SPEC.md)
 
 ## Navigation
 

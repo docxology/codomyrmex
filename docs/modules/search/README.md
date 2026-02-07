@@ -28,6 +28,13 @@ from codomyrmex.search import Document, SearchResult, Tokenizer
 instance = Document()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -50,13 +57,8 @@ instance = Document()
 | `create_index()` | Create a search index. |
 | `quick_search()` | Quick search over a list of strings. |
 | `tokenize()` | tokenize |
-| `tokenize()` | tokenize |
 | `index()` | Index a document. |
 | `search()` | Search for documents. |
-| `delete()` | Delete a document. |
-| `count()` | Get document count. |
-| `index()` | Index a document. |
-| `search()` | Search using TF-IDF scoring. |
 | `delete()` | Delete a document. |
 | `count()` | Get document count. |
 | `get()` | Get document by ID. |
@@ -72,6 +74,13 @@ instance = Document()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k search -v
+```
 
 ## Navigation
 

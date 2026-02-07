@@ -35,6 +35,13 @@ from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult
 instance = IDEStatus()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -51,8 +58,6 @@ instance = IDEStatus()
 
 | Function | Description |
 |----------|-------------|
-| `to_dict()` | to dict |
-| `to_dict()` | to dict |
 | `to_dict()` | to dict |
 | `status()` | Get the current connection status. |
 | `command_history()` | Get the history of executed commands. |
@@ -80,6 +85,18 @@ instance = IDEStatus()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k ide -v
+```
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 

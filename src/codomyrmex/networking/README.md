@@ -6,6 +6,19 @@
 
 Networking module providing multi-protocol client implementations for HTTP, WebSocket, SSH/SFTP, and raw TCP/UDP socket communication. The `HTTPClient` handles standard HTTP request/response cycles with configurable timeouts and retry logic. `WebSocketClient` supports persistent bidirectional connections. `SSHClient` provides SSH command execution and SFTP file transfers. Raw socket classes (`TCPClient`, `TCPServer`, `UDPClient`) enable low-level network programming, and `PortScanner` discovers open ports on target hosts. Includes a comprehensive exception hierarchy for granular error handling.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -44,6 +57,21 @@ Networking module providing multi-protocol client implementations for HTTP, WebS
 - `ssh_sftp.py` - `SSHClient` for SSH command execution and SFTP transfers
 - `raw_sockets.py` - `TCPClient`, `TCPServer`, `UDPClient`, and `PortScanner`
 - `exceptions.py` - Full exception hierarchy for networking errors
+
+## Quick Start
+
+```python
+from codomyrmex.networking import get_http_client
+
+result = get_http_client()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+```
 
 ## Navigation
 

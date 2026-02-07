@@ -41,3 +41,9 @@ from codomyrmex.auth import authenticate, authorize, get_authenticator
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k auth -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/auth/)

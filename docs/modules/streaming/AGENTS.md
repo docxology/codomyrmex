@@ -29,3 +29,12 @@ instance = EventType()
 - **Source**: [src/codomyrmex/streaming/](../../../src/codomyrmex/streaming/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k streaming -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

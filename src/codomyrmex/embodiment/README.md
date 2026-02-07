@@ -4,6 +4,27 @@
 
 Robotics integration with ROS2, sensors, actuators, and 3D transforms.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Submodules
+- **`actuators/`** — Actuator control submodule.
+- **`ros/`** — ROS integration submodule.
+- **`sensors/`** — Sensor interfaces submodule.
+- **`transformation/`** — Transformations submodule.
+
 ## Quick Start
 
 ```python
@@ -44,6 +65,20 @@ world_point = transform.apply([0, 0, 0])
 |-------|-------------|
 | `ROS2Bridge` | WebSocket bridge to ROS2 |
 | `Transform3D` | 3D position and rotation transform |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/embodiment/README.md)
+- [Agent Guide](../../../docs/modules/embodiment/AGENTS.md)
+- [Specification](../../../docs/modules/embodiment/SPEC.md)
 
 ## Navigation
 

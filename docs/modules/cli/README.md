@@ -16,6 +16,13 @@ This module provides the command-line interface for the Codomyrmex development p
 | `parsers` | Argument Parsers submodule. |
 | `themes` | CLI Themes submodule. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -34,3 +41,9 @@ from codomyrmex.cli import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/cli/](../../../src/codomyrmex/cli/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cli -v
+```

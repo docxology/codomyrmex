@@ -45,3 +45,9 @@ from codomyrmex.prompt_testing import EvaluationType, TestStatus, PromptTestCase
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k prompt_testing -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/prompt_testing/)

@@ -50,3 +50,9 @@ graph TD
 - Dependent on the presence of a ROS2 runtime (e.g., Humble, Iron).
 - High bandwidth requirement for vision-based embodiments.
 - Real-time performance may be limited by Python's GC and GIL.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
+```

@@ -12,6 +12,13 @@ Scrape Module for Codomyrmex.
 |-----------|-------------|
 | `firecrawl` | Firecrawl integration for the scrape module. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -30,3 +37,9 @@ from codomyrmex.scrape import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/scrape/](../../../src/codomyrmex/scrape/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k scrape -v
+```

@@ -19,6 +19,13 @@ Unified API Module for Codomyrmex.
 | `standardization` | API Standardization Module for Codomyrmex |
 | `webhooks` | Webhooks Submodule |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -32,6 +39,13 @@ from codomyrmex.api import *  # See source for specific imports
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k api -v
+```
 
 ## Navigation
 

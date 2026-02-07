@@ -40,3 +40,9 @@ from codomyrmex.quantum import GateType, Gate, Qubit, QuantumCircuit, QuantumSim
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/quantum/)

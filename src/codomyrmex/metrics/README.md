@@ -4,6 +4,27 @@
 
 Metrics collection with Prometheus and StatsD integration.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`MetricsError`** — Raised when metrics operations fail.
+
+### Functions
+- **`get_metrics()`** — Get a metrics instance.
+
 ## Quick Start
 
 ```python
@@ -52,6 +73,20 @@ exporter.start()  # Serves /metrics endpoint
 | `StatsDClient` | StatsD metric client |
 | `MetricAggregator` | Aggregate metrics across sources |
 | `get_metrics(backend)` | Factory function |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k metrics -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/metrics/README.md)
+- [Agent Guide](../../../docs/modules/metrics/AGENTS.md)
+- [Specification](../../../docs/modules/metrics/SPEC.md)
 
 ## Navigation
 

@@ -29,3 +29,12 @@ instance = CircuitState()
 - **Source**: [src/codomyrmex/service_mesh/](../../../src/codomyrmex/service_mesh/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k service_mesh -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

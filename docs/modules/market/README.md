@@ -4,13 +4,37 @@
 
 ## Overview
 
-Market Module.
+Reverse auction and demand aggregation capabilities for resource allocation and pricing.
+
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+## Key Features
+
+- **DemandAggregator** — Aggregates similar demands into a bulk auction.
+- **Bid** — Bid
+- **AuctionRequest** — AuctionRequest
+- **ReverseAuction** — Manages anonymous reverse auctions.
+- **Market** — Main class for market functionality.
+- `create_market()` — Create a new Market instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.market import *  # See source for specific imports
+from codomyrmex.market import DemandAggregator, Bid, AuctionRequest
+
+instance = DemandAggregator()
 ```
+
+## Source Files
+
+- `aggregator.py`
+- `auction.py`
+- `market.py`
 
 ## Directory Contents
 
@@ -19,6 +43,13 @@ from codomyrmex.market import *  # See source for specific imports
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k market -v
+```
 
 ## Navigation
 

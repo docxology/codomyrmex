@@ -85,6 +85,19 @@ Comprehensive programmatic Python interface for Git version control operations. 
 - `docs/` -- Module-specific documentation
 - `tools/` -- Additional git tooling utilities
 
+## Quick Start
+
+```python
+import codomyrmex.git_operations
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k git_operations -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/git_operations/](../../../docs/modules/git_operations/)

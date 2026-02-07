@@ -6,6 +6,19 @@
 
 Provider and data migration tools for schema changes and data transformations. Supports defining multi-step migrations with up/down (rollback) functions, running them in sequence with status tracking, and transforming data records through composable field-level transformers for renaming, type conversion, and custom logic.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -41,6 +54,22 @@ Provider and data migration tools for schema changes and data transformations. S
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.migration import MigrationStatus, MigrationDirection, MigrationStep
+
+# Initialize MigrationStatus
+instance = MigrationStatus()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k migration -v
+```
 
 ## Navigation
 

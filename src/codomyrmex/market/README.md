@@ -4,6 +4,31 @@
 
 Reverse auction and demand aggregation for AI service procurement.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`DemandAggregator`** — Aggregates similar demands into a bulk auction.
+- **`Bid`** — Bid
+- **`AuctionRequest`** — AuctionRequest
+- **`ReverseAuction`** — Manages anonymous reverse auctions.
+- **`Market`** — Main class for market functionality.
+
+### Functions
+- **`create_market()`** — Create a new Market instance.
+
 ## Quick Start
 
 ```python
@@ -43,6 +68,20 @@ print(f"Total demand: {bulk_order.quantity}")
 | `Bid` | Provider bid with price and capacity |
 | `AuctionRequest` | Buyer's resource request |
 | `DemandAggregator` | Consolidate demand for bulk pricing |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k market -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/market/README.md)
+- [Agent Guide](../../../docs/modules/market/AGENTS.md)
+- [Specification](../../../docs/modules/market/SPEC.md)
 
 ## Navigation
 

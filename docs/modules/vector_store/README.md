@@ -28,6 +28,13 @@ from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric
 instance = SearchResult()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -57,21 +64,9 @@ instance = SearchResult()
 | `search()` | Search for similar vectors. |
 | `count()` | Get total number of vectors. |
 | `clear()` | Clear all vectors. |
-| `add()` | Add a vector to the store. |
 | `add_batch()` | Add multiple vectors at once. |
-| `get()` | Get a vector by ID. |
-| `delete()` | Delete a vector by ID. |
-| `search()` | Search for similar vectors. |
-| `count()` | Get total number of vectors. |
-| `clear()` | Clear all vectors. |
 | `list_ids()` | List all vector IDs. |
 | `use_namespace()` | Set the current namespace. |
-| `add()` | Add to current namespace. |
-| `get()` | Get from current namespace. |
-| `delete()` | Delete from current namespace. |
-| `search()` | Search in current namespace. |
-| `count()` | Count in current namespace. |
-| `clear()` | Clear current namespace. |
 | `list_namespaces()` | List all namespaces. |
 | `delete_namespace()` | Delete an entire namespace. |
 
@@ -82,6 +77,13 @@ instance = SearchResult()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
+```
 
 ## Navigation
 

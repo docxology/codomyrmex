@@ -6,6 +6,13 @@
 
 Unified monitoring dashboards for system observability. Provides a complete metrics collection, alerting, and dashboard management framework. The module includes a thread-safe metric collector supporting counter, gauge, histogram, and summary metric types with configurable retention. An alert manager evaluates metrics against user-defined rules and fires/resolves alerts with severity levels. Dashboards are composed of configurable panels (graph, stat, table, heatmap, gauge, log) that pull data from the metric collector.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Metric Collection**: Record and query metrics with labels, timestamps, and configurable retention windows
@@ -17,6 +24,7 @@ Unified monitoring dashboards for system observability. Provides a complete metr
 - **Time-Range Queries**: Query metrics and panel data over configurable time windows
 - **Automatic Cleanup**: Remove old metrics beyond the retention period to manage memory
 - **Thread-Safe**: All metric recording, alert checking, and dashboard operations are protected with locks
+
 
 ## Key Components
 

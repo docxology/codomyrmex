@@ -58,6 +58,13 @@ feature_flags/
   rollout/       # Gradual rollout management
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_flags -v
+```
+
 ## Related Modules
 
 - [environment_setup](../environment_setup/) - Environment configuration that may interact with feature flags

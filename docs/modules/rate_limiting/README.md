@@ -28,6 +28,13 @@ from codomyrmex.rate_limiting import RateLimitExceeded, RateLimitResult, RateLim
 instance = RateLimitExceeded()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -51,15 +58,6 @@ instance = RateLimitExceeded()
 | `check()` | Check if request is allowed without consuming quota. |
 | `acquire()` | Acquire quota for a request. |
 | `reset()` | Reset quota for a key. |
-| `check()` | Check without consuming. |
-| `acquire()` | Acquire quota. |
-| `reset()` | Reset quota for key. |
-| `check()` | Check without consuming. |
-| `acquire()` | Acquire quota. |
-| `reset()` | Reset quota for key. |
-| `check()` | Check without consuming. |
-| `acquire()` | Acquire tokens. |
-| `reset()` | Reset bucket for key. |
 | `add_limiter()` | Add a named limiter. |
 | `check_all()` | Check all limiters. |
 | `acquire_all()` | Acquire from all limiters (atomic). |
@@ -71,6 +69,13 @@ instance = RateLimitExceeded()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
+```
 
 ## Navigation
 

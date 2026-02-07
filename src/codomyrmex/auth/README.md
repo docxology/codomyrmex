@@ -4,6 +4,26 @@
 
 Authentication with API keys, tokens, OAuth, and access control.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Functions
+- **`authenticate()`** — Authenticate with credentials.
+- **`authorize()`** — Check if token has permission.
+- **`get_authenticator()`** — Get an authenticator instance.
+
 ## Quick Start
 
 ```python
@@ -54,6 +74,20 @@ claims = validator.validate(token.jwt)
 | `PermissionRegistry` | Define and check permissions |
 | `authenticate(creds)` | Authenticate with credentials |
 | `authorize(token, res, perm)` | Check permission |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k auth -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/auth/README.md)
+- [Agent Guide](../../../docs/modules/auth/AGENTS.md)
+- [Specification](../../../docs/modules/auth/SPEC.md)
 
 ## Navigation
 

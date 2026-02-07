@@ -23,6 +23,13 @@ LLM integration modules for Codomyrmex.
 | `streaming` | LLM Streaming Module |
 | `tools` | Tool calling framework for LLMs. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -36,6 +43,13 @@ from codomyrmex.llm import *  # See source for specific imports
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k llm -v
+```
 
 ## Navigation
 

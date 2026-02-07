@@ -40,6 +40,25 @@ Static analysis module for analyzing source code without executing it. Provides 
 - `linting/` -- Linting integrations and rule configurations
 - `requirements.txt` -- Optional dependencies for analysis tools
 
+## Quick Start
+
+```python
+from codomyrmex.static_analysis import analyze_codebase, analyze_code_quality
+
+# Alias for analyze_project for backward compatibility.
+result = analyze_codebase()
+
+# Analyze code quality for workflow integration.
+output = analyze_code_quality()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k static_analysis -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/static_analysis/](../../../docs/modules/static_analysis/)

@@ -4,6 +4,32 @@
 
 Translation, localization, and message bundle management.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`Locale`** — A locale specification.
+- **`MessageBundle`** — A collection of translated messages.
+- **`Translator`** — Multi-locale translator.
+- **`PluralRules`** — Pluralization rules for different locales.
+- **`NumberFormatter`** — Format numbers for different locales.
+
+### Functions
+- **`init()`** — init
+- **`t()`** — t
+
 ## Quick Start
 
 ```python
@@ -63,6 +89,20 @@ NumberFormatter.format(Locale("en"), 1234.56)  # "1,234.56"
 NumberFormatter.format(Locale("de"), 1234.56)  # "1.234,56"
 NumberFormatter.format(Locale("fr"), 1234.56)  # "1 234,56"
 ```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k i18n -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/i18n/README.md)
+- [Agent Guide](../../../docs/modules/i18n/AGENTS.md)
+- [Specification](../../../docs/modules/i18n/SPEC.md)
 
 ## Navigation
 

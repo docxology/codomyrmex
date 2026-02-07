@@ -6,6 +6,13 @@
 
 Vision, audio, and image processing for multimodal AI applications. Provides a unified content model for handling multiple media types (image, audio, video, text) with base64 encoding/decoding, file I/O, and format validation. Includes specialized processors for image and audio content, a fluent message builder for constructing multimodal LLM messages, and media-specific content containers with metadata like dimensions, duration, and sample rate.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - **Unified Media Model**: `MediaContent` base class handles all media types with automatic format detection from file extensions
@@ -16,6 +23,7 @@ Vision, audio, and image processing for multimodal AI applications. Provides a u
 - **Multimodal Messages**: Compose messages containing text, images, and audio in a single `MultimodalMessage` structure
 - **Fluent Builder API**: `MultimodalMessageBuilder` provides a chainable interface for constructing multimodal messages
 - **API-Ready Serialization**: Convert multimodal messages to dictionary format compatible with LLM API calls
+
 
 ## Key Components
 

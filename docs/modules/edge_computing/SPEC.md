@@ -43,3 +43,9 @@ from codomyrmex.edge_computing import EdgeNodeStatus, EdgeNode, EdgeFunction, Sy
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/edge_computing/)

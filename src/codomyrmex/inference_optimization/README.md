@@ -6,6 +6,19 @@
 
 Model inference optimization techniques including request batching, LRU caching, and quantization configuration. Provides a `RequestBatcher` that collects inference requests into batches using configurable size and timeout parameters, an `InferenceCache` with thread-safe LRU eviction, and an `InferenceOptimizer` that wraps a model function with caching, batching, and performance statistics tracking.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Enums
@@ -39,6 +52,22 @@ Model inference optimization techniques including request batching, LRU caching,
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
 - `py.typed` -- PEP 561 type stub marker
+
+## Quick Start
+
+```python
+from codomyrmex.inference_optimization import QuantizationType, BatchingStrategy, OptimizationConfig
+
+# Initialize QuantizationType
+instance = QuantizationType()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k inference_optimization -v
+```
 
 ## Navigation
 

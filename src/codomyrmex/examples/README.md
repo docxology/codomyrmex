@@ -47,6 +47,26 @@ Use these examples to:
 - Test parsing logic against known-good data
 - Learn module integration patterns
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/examples/README.md)
+- [Agent Guide](../../../docs/modules/examples/AGENTS.md)
+- [Specification](../../../docs/modules/examples/SPEC.md)
+
 ## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

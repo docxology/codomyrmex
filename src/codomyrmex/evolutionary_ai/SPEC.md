@@ -49,3 +49,9 @@ graph TD
 
 - Computationally intensive for large populations and complex fitness functions.
 - Highly dependent on high-quality random number generation.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+```

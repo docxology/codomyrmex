@@ -28,6 +28,13 @@ from codomyrmex.service_mesh import CircuitState, CircuitBreakerConfig, CircuitB
 instance = CircuitState()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -61,12 +68,9 @@ instance = CircuitState()
 | `get_instance()` | Get next instance based on strategy. |
 | `mark_healthy()` | Update instance health status. |
 | `get_delay()` | Get delay for retry attempt. |
-| `execute()` | Execute with retry logic. |
 | `call()` | Make a service call with full resilience stack. |
 | `decorator()` | decorator |
-| `decorator()` | decorator |
 | `wrapped()` | wrapped |
-| `wrapper()` | wrapper |
 | `wrapper()` | wrapper |
 
 ## Directory Contents
@@ -76,6 +80,13 @@ instance = CircuitState()
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k service_mesh -v
+```
 
 ## Navigation
 

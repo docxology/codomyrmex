@@ -25,3 +25,16 @@ instance = performance_context()
 - **Source**: [src/codomyrmex/performance/](../../../src/codomyrmex/performance/)
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
+
+## Related Modules
+
+- [Exceptions](../exceptions/AGENTS.md)
+
+## Testing Guidelines
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k performance -v
+```
+
+- Run tests before and after making changes.
+- Ensure all existing tests pass before submitting.

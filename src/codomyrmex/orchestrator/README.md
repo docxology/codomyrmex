@@ -108,6 +108,25 @@ Script orchestration engine for discovering, configuring, and running Python scr
 - `state/` - State persistence
 - `templates/` - Reusable templates
 
+## Quick Start
+
+```python
+from codomyrmex.orchestrator import StepError, OrchestratorTimeoutError
+
+# Create a StepError instance
+steperror = StepError()
+
+# Use OrchestratorTimeoutError for additional functionality
+orchestratortimeouterror = OrchestratorTimeoutError()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k orchestrator -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/orchestrator/](../../../docs/modules/orchestrator/)

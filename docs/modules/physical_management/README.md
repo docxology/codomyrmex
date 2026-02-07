@@ -4,13 +4,38 @@
 
 ## Overview
 
-Physical Object Management Module for Codomyrmex.
+Physical object management, simulation, and tracking with spatial awareness.
+
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+## Key Features
+
+- **AnalyticsMetric** — Types of analytics metrics.
+- **StreamingMode** — Streaming modes for data processing.
+- **DataPoint** — A single data point in a stream.
+- **AnalyticsWindow** — Time window for analytics calculations.
+- **DataStream** — Real-time data stream with analytics capabilities.
+- **StreamingAnalytics** — Central streaming analytics manager.
 
 ## Quick Start
 
 ```python
-from codomyrmex.physical_management import *  # See source for specific imports
+from codomyrmex.physical_management import AnalyticsMetric, StreamingMode, DataPoint
+
+instance = AnalyticsMetric()
 ```
+
+## Source Files
+
+- `analytics.py`
+- `object_manager.py`
+- `sensor_integration.py`
+- `simulation_engine.py`
 
 ## Directory Contents
 
@@ -19,6 +44,13 @@ from codomyrmex.physical_management import *  # See source for specific imports
 | `README.md` | This documentation |
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k physical_management -v
+```
 
 ## Navigation
 

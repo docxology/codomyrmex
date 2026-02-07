@@ -44,3 +44,9 @@ The implementation follows the Unified Streamline principles (v0.1.0), removing 
 ### Technical Implementation
 
 The codebase utilizes Python 3.10+ dataclasses and type hinting. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
+```

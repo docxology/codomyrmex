@@ -34,6 +34,13 @@ from codomyrmex.data_visualization import ChartStyle, ColorPalette, PlotType
 instance = ChartStyle()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes
@@ -60,6 +67,13 @@ instance = ChartStyle()
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 | `tutorials/` | Tutorials |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
+```
 
 ## Navigation
 

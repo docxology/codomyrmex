@@ -149,3 +149,9 @@ CodomyrmexError
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
+```

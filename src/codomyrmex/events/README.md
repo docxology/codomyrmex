@@ -6,6 +6,19 @@
 
 Event-driven architecture module enabling decoupled, asynchronous communication between Codomyrmex components. Provides an `EventBus` for publish/subscribe messaging, an `AsyncEventEmitter` for async event dispatch, typed event schemas with priority levels, and an `EventLogger` for auditing event flow. Supports event filtering by type and priority, handler timeout management, and structured event statistics.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
 ## Key Exports
 
 ### Core Classes
@@ -44,6 +57,22 @@ Event-driven architecture module enabling decoupled, asynchronous communication 
 - `event_listener.py` -- Event listener base classes and utilities
 - `event_logger.py` -- EventLogger for audit trails and statistics
 - `exceptions.py` -- Full exception hierarchy for event system errors
+
+## Quick Start
+
+```python
+from codomyrmex.events import AsyncEventEmitter, Subscription, EventBus
+
+# Initialize AsyncEventEmitter
+instance = AsyncEventEmitter()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k events -v
+```
 
 ## Navigation
 

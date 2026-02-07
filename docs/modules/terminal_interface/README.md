@@ -16,6 +16,13 @@ This module provides interactive terminal interfaces and utilities for
 | `shells` | Terminal shell management utilities. |
 | `utils` | Terminal utilities submodule. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -34,3 +41,9 @@ from codomyrmex.terminal_interface import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/terminal_interface/](../../../src/codomyrmex/terminal_interface/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
+```

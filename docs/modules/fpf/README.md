@@ -32,6 +32,13 @@ from codomyrmex.fpf import FPFClient
 instance = FPFClient()
 ```
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## API Reference
 
 ### Classes

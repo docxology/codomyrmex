@@ -6,6 +6,13 @@
 
 Networking module for Codomyrmex.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Key Features
 
 - `get_http_client()` — Get an HTTP client instance.
@@ -27,7 +34,18 @@ result = get_http_client()
 | `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
+
+## Related Modules
+
+- [Exceptions](../exceptions/README.md)
+
 ## Navigation
 
 - **Source**: [src/codomyrmex/networking/](../../../src/codomyrmex/networking/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+```

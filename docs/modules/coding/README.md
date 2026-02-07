@@ -20,6 +20,13 @@ Coding Module.
 | `sandbox` | Sandbox Submodule |
 | `testing` | Test Tools submodule. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python

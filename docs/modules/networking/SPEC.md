@@ -39,3 +39,9 @@ from codomyrmex.networking import get_http_client
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k networking -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/networking/)

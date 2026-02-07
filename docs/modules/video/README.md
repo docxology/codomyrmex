@@ -141,6 +141,13 @@ has_audio = analyzer.has_audio("video.mp4")
 is_valid = analyzer.is_valid_video("video.mp4")
 ```
 
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k video -v
+```
+
 ## Related Modules
 
 - [audio](../audio/) - Audio processing capabilities (complementary media processing)

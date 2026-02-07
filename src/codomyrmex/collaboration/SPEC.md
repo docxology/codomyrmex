@@ -46,3 +46,9 @@ graph TD
 
 - Large swarms may face coordination overhead and messaging latency.
 - Requires robust serialization for transferring state between agents.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+```

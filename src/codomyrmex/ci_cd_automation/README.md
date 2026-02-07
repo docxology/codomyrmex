@@ -61,6 +61,25 @@ CI/CD pipeline management module providing end-to-end continuous integration and
 - `performance_optimizer.py` - `PipelineOptimizer` for pipeline performance tuning
 - `exceptions.py` - Exception hierarchy for CI/CD operations
 
+## Quick Start
+
+```python
+from codomyrmex.ci_cd_automation import DeploymentStatus, EnvironmentType
+
+# Create a DeploymentStatus instance
+deploymentstatus = DeploymentStatus()
+
+# Use EnvironmentType for additional functionality
+environmenttype = EnvironmentType()
+```
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k ci_cd_automation -v
+```
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/ci_cd_automation/](../../../docs/modules/ci_cd_automation/)

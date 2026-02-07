@@ -44,3 +44,9 @@ from codomyrmex.encryption import encrypt, decrypt, generate_key, get_encryptor,
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k encryption -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/encryption/)

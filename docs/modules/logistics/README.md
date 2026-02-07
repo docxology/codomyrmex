@@ -18,6 +18,13 @@ Logistics Module for Codomyrmex
 | `task` | Queue module for Codomyrmex. |
 | `tracking` | Progress Tracking submodule. |
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
 ## Quick Start
 
 ```python
@@ -36,3 +43,9 @@ from codomyrmex.logistics import *  # See source for specific imports
 
 - **Source**: [src/codomyrmex/logistics/](../../../src/codomyrmex/logistics/)
 - **Parent**: [Modules](../README.md)
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k logistics -v
+```

@@ -4,6 +4,31 @@
 
 Data sanitization and anonymous routing for privacy protection.
 
+
+## Installation
+
+```bash
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`CrumbCleaner`** — Sanitizes data by removing tracking crumbs and metadata.
+- **`Packet`** — Packet
+- **`MixNode`** — A single node in the mixnet overlay.
+- **`MixnetProxy`** — Manages anonymous routing through the mixnet.
+- **`Privacy`** — Main class for privacy functionality.
+
+### Functions
+- **`create_privacy()`** — Create a new Privacy instance.
+
 ## Quick Start
 
 ```python
@@ -40,6 +65,20 @@ response = proxy.route(request, destination="api.example.com")
 - **Log sanitization** — Remove sensitive data before logging
 - **Data export** — Clean PII from datasets
 - **Anonymous requests** — Route API calls through mixnet
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k privacy -v
+```
+
+
+## Documentation
+
+- [Module Documentation](../../../docs/modules/privacy/README.md)
+- [Agent Guide](../../../docs/modules/privacy/AGENTS.md)
+- [Specification](../../../docs/modules/privacy/SPEC.md)
 
 ## Navigation
 

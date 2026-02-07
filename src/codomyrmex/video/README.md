@@ -74,8 +74,13 @@ The video module provides comprehensive video processing capabilities including 
 ## Installation
 
 ```bash
-# Install video dependencies
-uv sync --extra video
+pip install codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Quick Start
@@ -179,6 +184,13 @@ MP4, AVI, MOV, WEBM, MKV
 | ROTATE_90/180/270 | Rotate by degrees |
 | BRIGHTNESS | Adjust brightness |
 | CONTRAST | Adjust contrast |
+
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k video -v
+```
 
 ## Navigation
 

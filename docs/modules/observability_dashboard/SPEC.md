@@ -49,3 +49,9 @@ from codomyrmex.observability_dashboard import MetricType, AlertSeverity, PanelT
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k observability_dashboard -v
 ```
+
+## References
+
+- [README.md](README.md) — Human-readable documentation
+- [AGENTS.md](AGENTS.md) — Agent coordination guide
+- [Source Code](../../../src/codomyrmex/observability_dashboard/)
