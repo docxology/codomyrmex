@@ -15,6 +15,7 @@ UV is a fast, reliable Python package manager that offers significant advantages
 ## 📦 Installation
 
 ### Install UV
+
 ```bash
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -27,6 +28,7 @@ pip install uv
 ```
 
 ### Verify Installation
+
 ```bash
 uv --version
 ```
@@ -34,6 +36,7 @@ uv --version
 ## 🏗️ Project Setup with UV
 
 ### 1. Clone and Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -49,6 +52,7 @@ uv pip install -e .
 ```
 
 ### 2. Development Setup
+
 ```bash
 # Install with development dependencies
 uv pip install -e ".[dev]"
@@ -60,6 +64,7 @@ uv pip install pytest black mypy ruff pre-commit
 ## 🔧 Daily Development Workflow
 
 ### Virtual Environment Management
+
 ```bash
 # Activate virtual environment
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -72,6 +77,7 @@ uv pip list
 ```
 
 ### Package Management
+
 ```bash
 # Install a new package
 uv pip install package-name
@@ -93,6 +99,7 @@ uv pip install --upgrade -r requirements.txt
 ```
 
 ### Dependency Management
+
 ```bash
 # Generate lock file (already done in project)
 uv lock
@@ -107,6 +114,7 @@ uv pip sync uv.lock
 ## 🧪 Testing with UV
 
 ### Run Tests
+
 ```bash
 # Run all tests
 uv run pytest
@@ -122,6 +130,7 @@ uv run pytest -v
 ```
 
 ### Code Quality
+
 ```bash
 # Format code
 uv run black src/ src/codomyrmex/tests/
@@ -139,6 +148,7 @@ uv run bandit -r src/codomyrmex/
 ## 🚀 Performance Benefits
 
 ### Speed Comparison
+
 ```bash
 # Traditional pip workflow
 time pip install -e .  # ~30-60 seconds
@@ -148,6 +158,7 @@ time uv pip install -e .  # ~2-5 seconds
 ```
 
 ### Lock File Benefits
+
 - **Reproducible builds**: Same dependencies across all environments
 - **Faster CI/CD**: Pre-resolved dependencies
 - **Security**: Pinned versions prevent supply chain attacks
@@ -155,6 +166,7 @@ time uv pip install -e .  # ~2-5 seconds
 ## 🔄 Migration from pip
 
 ### If you're already using pip
+
 ```bash
 # Your existing virtual environment will work
 source .venv/bin/activate
@@ -165,6 +177,7 @@ uv pip install package-name  # Instead of pip install package-name
 ```
 
 ### Clean Migration
+
 ```bash
 # Remove old virtual environment
 rm -rf .venv
@@ -178,12 +191,14 @@ uv pip install -e .
 ## 🛠️ Advanced UV Features
 
 ### Workspace Management
+
 ```bash
 # UV supports workspaces (already configured in pyproject.toml)
 uv sync  # Install all workspace dependencies
 ```
 
 ### Python Version Management
+
 ```bash
 # Install specific Python version
 uv python install 3.11
@@ -193,6 +208,7 @@ uv venv --python 3.11 .venv
 ```
 
 ### Script Execution
+
 ```bash
 # Run scripts without activating environment
 uv run python script.py
@@ -203,6 +219,7 @@ uv run black src/
 ## 📊 Monitoring and Debugging
 
 ### Dependency Analysis
+
 ```bash
 # Show dependency tree
 uv pip show --tree package-name
@@ -215,6 +232,7 @@ uv pip list --outdated
 ```
 
 ### Cache Management
+
 ```bash
 # Clear UV cache
 uv cache clean
@@ -226,6 +244,7 @@ uv cache info
 ## 🔧 Configuration
 
 ### UV Configuration File
+
 Create `uv.toml` in project root for custom settings:
 
 ```toml
@@ -248,6 +267,7 @@ dev-dependencies = [
 ```
 
 ### Environment Variables
+
 ```bash
 # Set custom cache directory
 export UV_CACHE_DIR="/path/to/cache"
@@ -264,6 +284,7 @@ export UV_VERBOSE=1
 ### Common Issues
 
 #### 1. Permission Errors
+
 ```bash
 # Fix: Don't use sudo with uv
 # Instead, fix Python installation permissions
@@ -271,6 +292,7 @@ sudo chown -R $USER:$USER /usr/local/lib/python3.*/site-packages
 ```
 
 #### 2. Lock File Conflicts
+
 ```bash
 # Regenerate lock file
 rm uv.lock
@@ -278,6 +300,7 @@ uv lock
 ```
 
 #### 3. Virtual Environment Issues
+
 ```bash
 # Remove and recreate
 rm -rf .venv
@@ -287,6 +310,7 @@ uv pip install -e .
 ```
 
 #### 4. Package Resolution Issues
+
 ```bash
 # Clear cache and retry
 uv cache clean
@@ -294,6 +318,7 @@ uv pip install --no-cache package-name
 ```
 
 ### Debug Mode
+
 ```bash
 # Enable verbose output
 uv --verbose pip install package-name
@@ -305,6 +330,7 @@ uv pip install --dry-run package-name
 ## 📚 Best Practices
 
 ### 1. Always Use Lock Files
+
 ```bash
 # Commit uv.lock to version control
 git add uv.lock
@@ -312,6 +338,7 @@ git commit -m "Update dependencies"
 ```
 
 ### 2. Use Virtual Environments
+
 ```bash
 # Always work in virtual environments
 uv venv .venv
@@ -319,12 +346,14 @@ source .venv/bin/activate
 ```
 
 ### 3. Pin Dependencies
+
 ```bash
 # Use specific versions in requirements.txt
 package-name==1.2.3
 ```
 
 ### 4. Regular Updates
+
 ```bash
 # Update dependencies regularly
 uv pip install --upgrade -r requirements.txt
@@ -332,6 +361,7 @@ uv lock  # Update lock file
 ```
 
 ### 5. CI/CD Integration
+
 ```yaml
 # GitHub Actions example
 - name: Install dependencies
@@ -344,6 +374,7 @@ uv lock  # Update lock file
 ## 🔗 Integration with Codomyrmex
 
 ### Module Development
+
 ```bash
 # When developing new modules
 uv pip install -e .  # Install in development mode
@@ -351,15 +382,17 @@ uv run pytest src/codomyrmex/tests/unit/test_new_module.py
 ```
 
 ### AI Integration
+
 ```bash
 # Install AI dependencies
 uv pip install openai anthropic google-generativeai
 
 # Test AI features
-uv run python -c "from codomyrmex.agents.ai_code_editing import generate_code_snippet"
+uv run python -c "from codomyrmex.agents import generate_code_snippet"
 ```
 
 ### Performance Monitoring
+
 ```bash
 # Install performance tools
 uv pip install psutil

@@ -1,24 +1,23 @@
-# Codomyrmex Agents — docs/modules/module_template
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Module Template Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `AGENTS_ROOT_TEMPLATE.md` – Project file
-- `AGENTS_TEMPLATE.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `index.md` – Project file
-- `technical_overview.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+Module Template Package
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Module Template operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.module_template import *
+
+# Agent uses module template capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/module_template/](../../../src/codomyrmex/module_template/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

@@ -1,37 +1,25 @@
-# Pattern Matching Documentation
+# Pattern Matching Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Pattern matching for text, regex, and AST-based code matching.
-
-## Key Features
-
-- **Text Patterns** — Glob and wildcard
-- **Regex** — Regular expressions
-- **AST Matching** — Python AST patterns
-- **Extraction** — Capture groups
+Pattern Matching Module for Codomyrmex.
 
 ## Quick Start
 
 ```python
-from codomyrmex.pattern_matching import PatternMatcher, ASTMatcher
-
-matcher = PatternMatcher()
-if matcher.matches(text, "def *(*):"):
-    print("Found function")
-
-ast = ASTMatcher()
-functions = ast.find_all(code, "FunctionDef")
+from codomyrmex.pattern_matching import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

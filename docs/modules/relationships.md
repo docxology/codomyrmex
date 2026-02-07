@@ -99,6 +99,7 @@ graph TD
 ```
 
 **Related Documentation**:
+
 - **[System Architecture](../project/architecture.md)**: Overall system design
 - **[Module Overview](./overview.md)**: Module architecture principles
 - **[API Reference](../reference/api.md)**: Module APIs and integration patterns
@@ -108,8 +109,10 @@ graph TD
 ### **🔧 Foundation Modules (Used by All)**
 
 #### **`environment_setup` → All Modules**
+
 - **Provides**: Dependency validation, environment variables, API key management
 - **Integration Points**:
+
   ```python
   # Every module imports this for setup validation
   from codomyrmex.environment_setup.env_checker import ensure_dependencies_installed
@@ -119,8 +122,10 @@ graph TD
   ```
 
 #### **`logging_monitoring` → All Modules**
+
 - **Provides**: Standardized logging interface, structured logging
 - **Integration Points**:
+
   ```python
   # Universal logging interface across all modules
   from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -131,34 +136,40 @@ graph TD
   ```
 
 #### **`model_context_protocol` → AI Modules**
+
 - **Provides**: Standardized communication with AI agents
 - **Integration Points**:
+
   ```python
   # AI modules implement MCP tools
   from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult
 
   # Standardized request/response format
-  tool_call = MCPToolCall(tool_name="ai_code_editing.generate_code", arguments={...})
+  tool_call = MCPToolCall(tool_name="agents.generate_code", arguments={...})
   ```
 
 ### **🤖 AI & Intelligence Modules**
 
-#### **`ai_code_editing` Integration Points**
+#### **`agents` Integration Points**
+
 - **Consumes**: `logging_monitoring`, `environment_setup`, `model_context_protocol`
 - **Provides**: Code generation, refactoring, summarization
 - **Cross-Module Usage**:
+
   ```python
   # Used by pattern_matching for code understanding
-  from codomyrmex.agents.ai_code_editing.ai_code_helpers import generate_code
+  from codomyrmex.agents.ai_code_helpers import generate_code
 
   # Used by documentation for example generation
   result = generate_code("Create a hello world function", "python")
   ```
 
 #### **`pattern_matching` Integration Points**
-- **Consumes**: `logging_monitoring`, `environment_setup`, `ai_code_editing`
+
+- **Consumes**: `logging_monitoring`, `environment_setup`, `agents`
 - **Provides**: Code analysis, pattern recognition, dependency mapping
 - **Cross-Module Usage**:
+
   ```python
   # Used by static_analysis for comprehensive analysis
   from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
@@ -170,9 +181,11 @@ graph TD
 ### **🔍 Analysis & Quality Modules**
 
 #### **`static_analysis` Integration Points**
+
 - **Consumes**: `logging_monitoring`
 - **Provides**: Code quality metrics, security scanning, linting
 - **Cross-Module Usage**:
+
   ```python
   # Used by build_synthesis for quality gates
   from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
@@ -182,12 +195,14 @@ graph TD
   ```
 
 #### **`code` Integration Points**
+
 - **Consumes**: `logging_monitoring`
 - **Provides**: Code execution, sandboxing, review, and monitoring
 - **Submodules**: `execution`, `sandbox`, `review`, `monitoring`
 - **Cross-Module Usage**:
+
   ```python
-  # Used by ai_code_editing for code validation
+  # Used by agents for code validation
   from codomyrmex.coding import execute_code
 
   # Test generated code before applying
@@ -202,9 +217,11 @@ graph TD
 ### **🏗️ Build & Deployment Modules**
 
 #### **`build_synthesis` Integration Points**
+
 - **Consumes**: `static_analysis`, `logging_monitoring`, `git_operations`
 - **Provides**: Automated building, code scaffolding, deployment
 - **Cross-Module Usage**:
+
   ```python
   # Orchestrates multiple modules for complete build pipeline
   from codomyrmex.build_synthesis.build_orchestrator import orchestrate_build_pipeline
@@ -221,9 +238,11 @@ graph TD
   ```
 
 #### **`git_operations` Integration Points**
+
 - **Consumes**: `logging_monitoring`
 - **Provides**: Git workflow automation, repository management
 - **Cross-Module Usage**:
+
   ```python
   # Used by build_synthesis for version control integration
   from git_operations.git_wrapper import create_branch, commit_changes
@@ -236,9 +255,11 @@ graph TD
 ### **📊 Visualization & Reporting Modules**
 
 #### **`data_visualization` Integration Points**
+
 - **Consumes**: `logging_monitoring`
 - **Provides**: Charts, plots, data visualization
 - **Cross-Module Usage**:
+
   ```python
   # Used by pattern_matching for analysis visualization
   from data_visualization.plotter import create_heatmap
@@ -250,9 +271,11 @@ graph TD
   ```
 
 #### **`documentation` Integration Points**
+
 - **Consumes**: All modules (meta-module)
 - **Provides**: Comprehensive documentation website, API references
 - **Cross-Module Usage**:
+
   ```python
   # Generates documentation from all modules
   from documentation.documentation_website import build_static_site
@@ -264,6 +287,7 @@ graph TD
 ## 🔄 Common Integration Patterns
 
 ### **1. Initialization Sequence**
+
 ```python
 # Standard module initialization pattern used across all modules
 from environment_setup.env_checker import ensure_dependencies_installed
@@ -280,6 +304,7 @@ logger = get_logger(__name__)
 ```
 
 ### **2. Error Handling Chain**
+
 ```python
 # Consistent error handling across modules
 try:
@@ -294,6 +319,7 @@ except Exception as e:
 ```
 
 ### **3. Configuration Sharing**
+
 ```python
 # Environment variables shared across modules
 import os
@@ -319,7 +345,7 @@ graph LR
         end
 
         subgraph "AI & Intelligence Layer"
-            AI["ai_code_editing"]
+            AI["agents"]
             PATTERN["pattern_matching"]
         end
 
@@ -369,7 +395,7 @@ graph LR
 
 **Key Modules Dependency Matrix** (showing core module dependencies):
 
-| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | ai_code_editing | data_visualization | static_analysis | pattern_matching | code | build_synthesis | git_operations | documentation |
+| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | agents | data_visualization | static_analysis | pattern_matching | coding | build_synthesis | git_operations | documentation |
 |-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|-----------------|------------------|------------------------|-----------------|---------------|---------------|
 | **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -377,23 +403,21 @@ graph LR
 | **terminal_interface** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **config_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **database_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **language_models** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **llm** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **performance** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **ai_code_editing** | ✅ | ✅ | ✅ | ✅ Self | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
+| **agents** | ✅ | ✅ | ✅ | ✅ Self | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
 | **data_visualization** | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
 | **static_analysis** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ | ❌ | ✅ |
 | **pattern_matching** | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ✅ |
-| **code** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
-| **code_review** | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **security_audit** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **coding** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
+| **security** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **llm/ollama** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **build_synthesis** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self | ✅ | ✅ |
 | **git_operations** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ Self | ✅ |
 | **documentation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self |
-| **api_documentation** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
 | **ci_cd_automation** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
 | **containerization** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **project_orchestration** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **orchestrator** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **system_discovery** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **cli** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **module_template** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -401,11 +425,13 @@ graph LR
 | **physical_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 **Legend:**
+
 - ✅ **Required**: Module cannot function without this dependency
 - 🔄 **Optional**: Module can use this for enhanced functionality
 - ❌ **None**: No direct dependency
 
 **Related Documentation:**
+
 - **[System Architecture](../project/architecture.md)**: Overall system design and principles
 - **[Module Overview](./overview.md)**: Module architecture and organization
 - **[API Reference](../reference/api.md)**: Module APIs and programmatic interfaces
@@ -414,8 +440,9 @@ graph LR
 ## 🚀 Quick Integration Examples
 
 ### **Adding AI Enhancement to Any Module**
+
 ```python
-from ai_code_editing.ai_code_helpers import generate_code_snippet
+from codomyrmex.agents.ai_code_helpers import generate_code_snippet
 from model_context_protocol.mcp_schemas import MCPToolCall
 
 def enhance_code_with_ai(code_snippet, enhancement_request):
@@ -429,8 +456,9 @@ def enhance_code_with_ai(code_snippet, enhancement_request):
 ```
 
 ### **Adding Visualization to Analysis Results**
+
 ```python
-from data_visualization.plotter import create_bar_chart
+from codomyrmex.data_visualization.plotter import create_bar_chart
 from static_analysis.pyrefly_runner import run_pyrefly_analysis
 
 def visualize_analysis_results(target_paths, project_root):
@@ -455,11 +483,12 @@ def visualize_analysis_results(target_paths, project_root):
 ```
 
 ### **Creating a Complete Workflow**
+
 ```python
 from environment_setup.env_checker import ensure_dependencies_installed
 from logging_monitoring import get_logger
-from ai_code_editing.ai_code_helpers import generate_code_snippet
-from code.code_executor import execute_code
+from codomyrmex.agents.ai_code_helpers import generate_code_snippet
+from codomyrmex.coding.code_executor import execute_code
 from data_visualization.plotter import create_line_plot
 
 def complete_development_workflow():
@@ -496,7 +525,6 @@ def complete_development_workflow():
 ```
 
 This comprehensive integration guide shows how Codomyrmex modules work together to create powerful, interconnected development workflows.
-
 
 ## Navigation Links
 

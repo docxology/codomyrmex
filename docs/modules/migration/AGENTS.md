@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/migration
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Migration Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `migration` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Provider and data migration tools.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **MigrationStatus**: Status of a migration.
+- **MigrationDirection**: Direction of migration.
+- **MigrationStep**: A single migration step.
+- **MigrationResult**: Result of a migration.
+- **Migration**: A complete migration definition.
+- `run_up()`: Run migration up.
+- `run_down()`: Run migration down (rollback).
+- `progress()`: Get progress percentage.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.migration import MigrationStatus
+
+# Agent initializes migration
+instance = MigrationStatus()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/migration/](../../../src/codomyrmex/migration/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

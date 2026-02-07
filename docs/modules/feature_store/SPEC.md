@@ -1,19 +1,47 @@
-# feature_store - Functional Specification
+# Feature Store — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.feature_store`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `feature_store` module.
+ML feature management, storage, and retrieval.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/feature_store/SPEC.md](../../../src/codomyrmex/feature_store/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `FeatureType` | Class | Types of features. |
+| `ValueType` | Class | Data types for feature values. |
+| `FeatureDefinition` | Class | Definition of a feature. |
+| `FeatureValue` | Class | A feature value with metadata. |
+| `FeatureVector` | Class | A collection of feature values for an entity. |
+| `FeatureGroup` | Class | A group of related features. |
+| `FeatureStore` | Class | Base class for feature storage backends. |
+| `InMemoryFeatureStore` | Class | In-memory feature store for development and testing. |
+| `FeatureTransform` | Class | Transform features before serving. |
+| `FeatureService` | Class | High-level feature service for ML applications. |
+| `full_name()` | Function | Get fully qualified name. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `age_seconds()` | Function | Get age of this value in seconds. |
+| `get()` | Function | Get a feature value. |
+| `to_list()` | Function | Convert to list in specified order. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/feature_store/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.feature_store import FeatureType, ValueType, FeatureDefinition, FeatureValue, FeatureVector
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_store -v
+```

@@ -1,20 +1,23 @@
-# Codomyrmex Agents — docs/modules/documents
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Documents Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+Documents Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Documents operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.documents import *
+
+# Agent uses documents capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/documents/](../../../src/codomyrmex/documents/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

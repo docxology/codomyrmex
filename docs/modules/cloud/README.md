@@ -4,30 +4,31 @@
 
 ## Overview
 
-Multi-cloud integration with AWS, GCP, Azure, and other cloud providers.
+Cloud Services Module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Multi-Cloud** — Unified API across providers
-- **Storage** — S3, GCS, Azure Blob
-- **Compute** — VM management
-- **Serverless** — Lambda, Cloud Functions
+| Submodule | Description |
+|-----------|-------------|
+| `aws` | AWS integration submodule. |
+| `azure` | Azure integration submodule. |
+| `coda_io` | Coda.io API Client Submodule. |
+| `common` | Cloud common utilities. |
+| `gcp` | GCP integration submodule. |
+| `infomaniak` | Infomaniak Public Cloud Integration. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.cloud import CloudStorage, Provider
-
-storage = CloudStorage(provider=Provider.AWS)
-storage.upload("data.json", bucket="my-bucket")
-content = storage.download("my-bucket", "data.json")
+from codomyrmex.cloud import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

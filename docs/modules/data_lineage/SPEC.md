@@ -1,19 +1,45 @@
-# data_lineage - Functional Specification
+# Data Lineage — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.data_lineage`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `data_lineage` module.
+Data provenance and lineage tracking.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/data_lineage/SPEC.md](../../../src/codomyrmex/data_lineage/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `NodeType` | Class | Types of lineage nodes. |
+| `EdgeType` | Class | Types of lineage edges. |
+| `LineageNode` | Class | A node in the lineage graph. |
+| `LineageEdge` | Class | An edge connecting two nodes. |
+| `DataAsset` | Class | A data asset with lineage information. |
+| `LineageGraph` | Class | Graph of data lineage relationships. |
+| `LineageTracker` | Class | Tracks data lineage through transformations. |
+| `ImpactAnalyzer` | Class | Analyzes impact of data changes. |
+| `key()` | Function | Get unique key. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `key()` | Function | Get unique key. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `compute_checksum()` | Function | Compute checksum of data. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/data_lineage/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.data_lineage import NodeType, EdgeType, LineageNode, LineageEdge, DataAsset
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k data_lineage -v
+```

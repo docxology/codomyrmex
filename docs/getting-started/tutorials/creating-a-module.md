@@ -361,7 +361,7 @@ create_bar_chart(
 ### With AI Code Editing
 ```python
 from codomyrmex.text_analysis import analyze_text
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 # Analyze text and generate improvements
 text = "This text needs improvement."

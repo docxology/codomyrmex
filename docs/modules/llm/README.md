@@ -4,34 +4,37 @@
 
 ## Overview
 
-Large Language Model integration with Ollama, OpenAI, Anthropic, and Fabric.
+LLM integration modules for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Multi-Provider** — OpenAI, Anthropic, Ollama
-- **Local-First** — Privacy with local models
-- **Templates** — Prompt templates
-- **Streaming** — Stream responses
+| Submodule | Description |
+|-----------|-------------|
+| `chains` | Chain implementations for LLM reasoning. |
+| `cost_tracking` | LLM Cost Tracking Module |
+| `embeddings` | LLM Embeddings Module |
+| `fabric` | Codomyrmex Fabric Integration Module |
+| `guardrails` | LLM Guardrails Module |
+| `memory` | Conversation memory management for LLMs. |
+| `ollama` | Codomyrmex Ollama Integration Module |
+| `prompts` | LLM Prompts Module |
+| `providers` | LLM Provider abstractions for unified API access. |
+| `rag` | LLM RAG Module |
+| `streaming` | LLM Streaming Module |
+| `tools` | Tool calling framework for LLMs. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.llm import LLMClient, OllamaManager
-
-# Cloud provider
-client = LLMClient(provider="openai", model="gpt-4")
-response = client.complete("Explain this code")
-
-# Local with Ollama
-ollama = OllamaManager()
-ollama.pull_model("codellama:13b")
+from codomyrmex.llm import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

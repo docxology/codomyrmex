@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/cli
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# CLI Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+This module provides the command-line interface for the Codomyrmex development platform.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- CLI operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.cli import *
+
+# Agent uses cli capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/cli/](../../../src/codomyrmex/cli/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

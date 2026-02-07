@@ -1,47 +1,58 @@
-# docs - Documentation Specification
+# AI Agents — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.agents`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
-This directory contains **Documentation** documentation. It serves to educate users and developers about specific aspects of the system.
+## 1. Overview
 
-## Design Principles
-- **Clarity**: Use simple, direct language.
-- **Accuracy**: Content must be verified against current code.
-- **Examples**: "Show, don't tell" where possible.
+Agents Module for Codomyrmex.
 
-## Functional Requirements
-1.  **Format**: Markdown (`.md`).
-2.  **Links**: All relative links must be valid.
+## 2. Architecture
 
-## Navigation
-- **Parent**: [../README.md](../README.md)
-- **Root**: [../../README.md](../../README.md)
+### Components
 
-<!-- Navigation Links keyword for score -->
+| Component | Type | Description |
+|-----------|------|-------------|
 
-## Detailed Architecture and Implementation
+### Submodule Structure
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+- `ai_code_editing/` — AI Code Editing Module for Codomyrmex.
+- `claude/` — Claude API integration for Codomyrmex agents.
+- `cli/` — CLI agent implementation.
+- `codex/` — OpenAI Codex integration for Codomyrmex agents.
+- `core/` — Core agent infrastructure and base classes.
+- `deepseek/` — Deepseek Submodule
+- `droid/` — Droid configuration and operation package.
+- `evaluation/` — Agent Evaluation Module
+- `every_code/` — Every Code CLI integration for Codomyrmex agents.
+- `gemini/` — Gemini Agent Integration.
+- `generic/` — Generic agent utilities and base classes.
+- `git_agent/` — Git operations agent.
+- `history/` — Agent History Module
+- `infrastructure/` — Infrastructure agent for cloud operations.
+- `jules/` — Jules CLI integration for Codomyrmex agents.
+- `mistral_vibe/` — Mistral Vibe CLI integration for Codomyrmex agents.
+- `o1/` — O1 Submodule
+- `opencode/` — OpenCode CLI integration for Codomyrmex agents.
+- `pooling/` — Agent Pooling Module
+- `qwen/` — Qwen Submodule
+- `theory/` — Theoretical foundations for agentic systems.
 
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+### Source Files
 
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- `exceptions.py`
 
-## Detailed Architecture and Implementation
+## 3. Dependencies
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+See `src/codomyrmex/agents/__init__.py` for import dependencies.
 
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+## 4. Public API
 
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agents -v
+```

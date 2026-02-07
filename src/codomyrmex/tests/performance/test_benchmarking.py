@@ -436,7 +436,11 @@ class TestBenchmarkingIntegration:
         }
 
         from codomyrmex.data_visualization import create_bar_chart
-        chart = create_bar_chart(chart_data, "Function Performance Comparison")
+        chart = create_bar_chart(
+            chart_data["categories"], 
+            chart_data["values"],
+            "Function Performance Comparison"
+        )
 
         assert len(chart) > 0
         assert "Function Performance Comparison" in chart or "bar" in chart.lower()

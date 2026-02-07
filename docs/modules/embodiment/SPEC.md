@@ -1,19 +1,32 @@
-# embodiment - Functional Specification
+# Embodiment — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.embodiment`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `embodiment` module.
+Embodiment module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/embodiment/SPEC.md](../../../src/codomyrmex/embodiment/SPEC.md)
+### Submodule Structure
 
-## Navigation
+- `actuators/` — Actuator control submodule.
+- `ros/` — ROS integration submodule.
+- `sensors/` — Sensor interfaces submodule.
+- `transformation/` — Transformations submodule.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/embodiment/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
+```

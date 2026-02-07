@@ -134,10 +134,10 @@ run_quick_demo() {
     echo -e "\n${CYAN}🏃 Running Codomyrmex Quick Demo...${NC}"
     check_uv
 
-    if [[ -f "scripts/tools/example_usage.py" ]]; then
-        uv run python scripts/tools/example_usage.py
+    if [[ -f "scripts/documentation/examples/basic_usage.py" ]]; then
+        uv run python scripts/documentation/examples/basic_usage.py
     else
-        echo -e "${YELLOW}⚠️  scripts/tools/example_usage.py not found. Running basic demo...${NC}"
+        echo -e "${YELLOW}⚠️  scripts/documentation/examples/basic_usage.py not found. Running basic demo...${NC}"
         uv run python -c "
 import sys
 sys.path.insert(0, 'src')
@@ -568,10 +568,10 @@ run_examples_tutorials() {
     
     case $ex_choice in
         1)
-            if [[ -f "scripts/tools/example_usage.py" ]]; then
-                uv run python scripts/tools/example_usage.py
+            if [[ -f "scripts/documentation/examples/basic_usage.py" ]]; then
+                uv run python scripts/documentation/examples/basic_usage.py
             else
-                echo -e "${YELLOW}⚠️  Example script not found${NC}"
+                echo -e "${YELLOW}⚠️  Example script not found at scripts/documentation/examples/basic_usage.py${NC}"
             fi
             ;;
         2)
@@ -585,21 +585,30 @@ run_examples_tutorials() {
             fi
             ;;
         3)
-            if [[ -f "scripts/tools/select_example.sh" ]]; then
-                bash scripts/tools/select_example.sh
+            echo -e "${GREEN}Select an example to run:${NC}"
+            echo -e "1) Basic Usage"
+            echo -e "2) Advanced Workflow"
+            read -p "Choice (1-2): " ex_sel
+            
+            if [[ "$ex_sel" == "1" ]]; then
+                uv run python scripts/documentation/examples/basic_usage.py
+            elif [[ "$ex_sel" == "2" ]]; then
+                uv run python scripts/documentation/examples/advanced_workflow.py
             else
-                echo -e "${YELLOW}⚠️  Example selector not found${NC}"
+                echo -e "${RED}Invalid selection${NC}"
             fi
             ;;
         4)
-            if [[ -f "scripts/TUTORIALS.md" ]]; then
+            TUTORIAL_DOC="docs/getting-started/tutorials/README.md"
+            if [[ -f "$TUTORIAL_DOC" ]]; then
                 if command -v less &> /dev/null; then
-                    less scripts/TUTORIALS.md
+                    less "$TUTORIAL_DOC"
                 else
-                    cat scripts/TUTORIALS.md
+                    cat "$TUTORIAL_DOC"
                 fi
+                echo -e "\n${CYAN}Check 'docs/getting-started/tutorials/' for more guides!${NC}"
             else
-                echo -e "${YELLOW}⚠️  Tutorials documentation not found${NC}"
+                echo -e "${YELLOW}⚠️  Tutorials documentation not found at $TUTORIAL_DOC${NC}"
             fi
             ;;
         0)

@@ -1,35 +1,34 @@
-# Spatial Documentation
+# Spatial Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Geospatial and spatial data processing utilities.
+Spatial modeling module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Geo** — Geographic operations
-- **Coordinates** — Coordinate systems
-- **Distance** — Distance calculations
-- **Indexing** — Spatial indexing
+| Submodule | Description |
+|-----------|-------------|
+| `coordinates` | Coordinate transformation utilities for spatial modeling. |
+| `four_d` | 4D modeling module (Synergetics) for Codomyrmex. |
+| `physics` | Physics Simulation submodule. |
+| `rendering` | Spatial Rendering submodule. |
+| `three_d` | Spatial 3D Modeling and Rendering Module for Codomyrmex. |
+| `world_models` | World modeling module for Codomyrmex. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.spatial import GeoPoint, distance
-
-point1 = GeoPoint(lat=37.7749, lon=-122.4194)
-point2 = GeoPoint(lat=34.0522, lon=-118.2437)
-
-dist = distance(point1, point2)
-print(f"Distance: {dist:.2f} km")
+from codomyrmex.spatial import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

@@ -1,19 +1,51 @@
-# observability_dashboard - Functional Specification
+# Observability Dashboard — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.observability_dashboard`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `observability_dashboard` module.
+Unified monitoring dashboards for system observability.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/observability_dashboard/SPEC.md](../../../src/codomyrmex/observability_dashboard/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `MetricType` | Class | Types of metrics. |
+| `AlertSeverity` | Class | Alert severity levels. |
+| `PanelType` | Class | Dashboard panel types. |
+| `MetricValue` | Class | A single metric value. |
+| `Alert` | Class | An alert notification. |
+| `Panel` | Class | A dashboard panel. |
+| `Dashboard` | Class | A complete dashboard. |
+| `MetricCollector` | Class | Collects and stores metrics. |
+| `AlertManager` | Class | Manages alerts and notifications. |
+| `DashboardManager` | Class | Manages dashboards. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `is_active()` | Function | Check if alert is still active. |
+| `duration()` | Function | Get alert duration. |
+| `resolve()` | Function | Resolve the alert. |
+| `to_dict()` | Function | Convert to dictionary. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `slo.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/observability_dashboard/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.observability_dashboard import MetricType, AlertSeverity, PanelType, MetricValue, Alert
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k observability_dashboard -v
+```

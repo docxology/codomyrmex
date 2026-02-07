@@ -4,34 +4,44 @@
 
 ## Overview
 
-Cryptographic operations: encryption, hashing, signing, and key management.
+Encryption module for Codomyrmex.
 
 ## Key Features
 
-- **Symmetric** — AES encryption
-- **Asymmetric** — RSA, EC cryptography
-- **Hashing** — SHA-256, bcrypt, argon2
-- **Keys** — Key generation and storage
+- `encrypt()` — Encrypt data.
+- `decrypt()` — Decrypt data.
+- `generate_key()` — Generate an encryption key.
+- `get_encryptor()` — Get an encryptor instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.encryption import encrypt, decrypt, hash_password
+from codomyrmex.encryption import encrypt, decrypt, generate_key
 
-# Encrypt data
-encrypted = encrypt(data, key)
-decrypted = decrypt(encrypted, key)
-
-# Hash passwords
-hashed = hash_password("secret123")
-is_valid = verify_password("secret123", hashed)
+# Use the module
+result = encrypt()
 ```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `encrypt()` | Encrypt data. |
+| `decrypt()` | Decrypt data. |
+| `generate_key()` | Generate an encryption key. |
+| `get_encryptor()` | Get an encryptor instance. |
+| `encrypt_file()` | Encrypt a file. |
+| `decrypt_file()` | Decrypt a file. |
+| `hash_data()` | Compute hash of data. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

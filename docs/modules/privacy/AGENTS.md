@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/privacy
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Privacy Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `privacy` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Privacy Module.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- Privacy operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.privacy import *
+
+# Agent uses privacy capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/privacy/](../../../src/codomyrmex/privacy/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

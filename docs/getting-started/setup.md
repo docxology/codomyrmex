@@ -225,7 +225,7 @@ InteractiveShell().run()
 🐜 codomyrmex> explore                    # Overview of all modules
 🐜 codomyrmex> forage visualization       # Find visualization capabilities
 🐜 codomyrmex> demo data_visualization    # Run live demo
-🐜 codomyrmex> dive ai_code_editing       # Deep dive into AI module
+🐜 codomyrmex> dive agents       # Deep dive into AI module
 🐜 codomyrmex> status                     # System health check
 🐜 codomyrmex> export                     # Generate system inventory
 ```
@@ -245,7 +245,7 @@ result = create_line_plot(x, y, title="Test Plot", output_path="test_plot.png")
 print(f"✅ Visualization test: {result is not None}")
 
 # Test AI code generation (requires API key)
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 try:
     ai_result = generate_code_snippet("Create a hello world function", "python")
@@ -431,7 +431,7 @@ EOF
 # 3. Test API connectivity
 uv run python -c "
 import os
-from codomyrmex.agents.ai_code_editing import validate_api_keys
+from codomyrmex.agents import validate_api_keys
 print('API Keys:', validate_api_keys())
 "
 ```

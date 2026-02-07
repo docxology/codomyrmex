@@ -79,7 +79,7 @@ The `type` field must be one of:
     "build-and-test"
   ],
   "required_modules": [
-    "ai_code_editing",
+    "agents",
     "static_analysis",
     "data_visualization"
   ],
@@ -260,7 +260,7 @@ Modules listed in `required_modules` are essential for the project:
 ```json
 {
   "required_modules": [
-    "ai_code_editing",
+    "agents",
     "static_analysis"
   ]
 }
@@ -322,7 +322,7 @@ This configuration is:
     ".codomyrmex/"
   ],
   "workflows": ["ai-analysis"],
-  "required_modules": ["ai_code_editing", "static_analysis"],
+  "required_modules": ["agents", "static_analysis"],
   "default_config": {
     "ai": {"provider": "openai", "model": "gpt-3.5-turbo"},
     "analysis": {"include_patterns": ["*.py", "*.js"]}

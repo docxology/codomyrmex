@@ -1,19 +1,25 @@
-# Codomyrmex Agents — docs/modules/auth
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Authentication Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Authentication module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- `authenticate()`: Authenticate with credentials.
+- `authorize()`: Check if token has permission.
+- `get_authenticator()`: Get an authenticator instance.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.auth import *
+
+# Agent uses authentication capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/auth/](../../../src/codomyrmex/auth/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

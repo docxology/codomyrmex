@@ -1,36 +1,42 @@
-# Auth Module Documentation
+# Authentication Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Authentication and authorization with JWT, OAuth2, API keys, and role-based access control.
+Authentication module for Codomyrmex.
 
 ## Key Features
 
-- **JWT** — Token generation and validation
-- **OAuth2** — OAuth2 provider integration
-- **API Keys** — Key-based authentication
-- **RBAC** — Role-based access control
+- `authenticate()` — Authenticate with credentials.
+- `authorize()` — Check if token has permission.
+- `get_authenticator()` — Get an authenticator instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.auth import JWTManager, require_auth
+from codomyrmex.auth import authenticate, authorize, get_authenticator
 
-jwt = JWTManager(secret="your-secret")
-token = jwt.create_token(user_id="123")
-
-@require_auth
-async def protected_endpoint():
-    return {"message": "Authenticated!"}
+# Use the module
+result = authenticate()
 ```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `authenticate()` | Authenticate with credentials. |
+| `authorize()` | Check if token has permission. |
+| `get_authenticator()` | Get an authenticator instance. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

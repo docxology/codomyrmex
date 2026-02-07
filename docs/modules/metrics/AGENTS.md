@@ -1,19 +1,25 @@
-# Codomyrmex Agents — docs/modules/metrics
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Metrics Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Metrics module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **MetricsError**: Raised when metrics operations fail.
+- `get_metrics()`: Get a metrics instance.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.metrics import MetricsError
+
+# Agent initializes metrics
+instance = MetricsError()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/metrics/](../../../src/codomyrmex/metrics/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

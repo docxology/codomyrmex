@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/testing
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Testing Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `testing` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Test fixtures, generators, property-based testing, and fuzzing utilities.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **GeneratorStrategy**: Abstract base for value generators.
+- **IntGenerator**: Generate random integers.
+- **FloatGenerator**: Generate random floats.
+- **StringGenerator**: Generate random strings.
+- **ListGenerator**: Generate random lists.
+- `property_test()`: Decorator for property-based tests.
+- `fixture()`: Decorator to create fixtures.
+- `generate()`: generate
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.testing import GeneratorStrategy
+
+# Agent initializes testing
+instance = GeneratorStrategy()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/testing/](../../../src/codomyrmex/testing/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

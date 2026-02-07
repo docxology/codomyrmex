@@ -4,44 +4,23 @@
 
 ## Overview
 
-Secure Cognitive Agent module for anonymous marketplace transactions. Supports reverse auctions and collective bargaining through demand aggregation.
-
-## Key Features
-
-- **Reverse Auctions**: Buyer-initiated competitive bidding
-- **Demand Aggregation**: Collective bargaining for better pricing
-- **Anonymous Bidding**: Persona-based marketplace identity
-
-## Key Classes
-
-| Class | Description |
-|-------|-------------|
-| `ReverseAuction` | Auction management |
-| `DemandAggregator` | Collective bargaining |
-| `BidManager` | Bid lifecycle |
-| `ProviderRegistry` | Provider tracking |
+Market Module.
 
 ## Quick Start
 
 ```python
-from codomyrmex.market import ReverseAuction
-
-market = ReverseAuction()
-auction_id = market.create_request(
-    persona_id="anon_1", 
-    description="GPU Compute", 
-    max_price=0.50
-)
-best_bid = market.get_best_bid(auction_id)
+from codomyrmex.market import *  # See source for specific imports
 ```
 
-## Related Modules
+## Directory Contents
 
-- [identity](../identity/) - Anonymous personas
-- [wallet](../wallet/) - Payment handling
-- [privacy](../privacy/) - Transaction privacy
+| File | Description |
+|------|-------------|
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
+| `SPEC.md` | Technical specification |
 
 ## Navigation
 
 - **Source**: [src/codomyrmex/market/](../../../src/codomyrmex/market/)
-- **Parent**: [docs/modules/](../README.md)
+- **Parent**: [Modules](../README.md)

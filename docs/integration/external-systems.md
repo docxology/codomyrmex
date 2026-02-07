@@ -46,12 +46,12 @@ graph TB
 
 ### **Integration Categories**
 
--   **📊 Data Integration**: Databases, data warehouses, analytics platforms
--   **☁️ Cloud Integration**: AWS, GCP, Azure services and APIs
--   **🔄 CI/CD Integration**: Build pipelines, deployment automation
--   **📈 Monitoring Integration**: Observability and alerting systems
--   **🤖 AI/ML Integration**: External ML services and model APIs
--   **📁 Storage Integration**: File systems, object storage, CDNs
+- **📊 Data Integration**: Databases, data warehouses, analytics platforms
+- **☁️ Cloud Integration**: AWS, GCP, Azure services and APIs
+- **🔄 CI/CD Integration**: Build pipelines, deployment automation
+- **📈 Monitoring Integration**: Observability and alerting systems
+- **🤖 AI/ML Integration**: External ML services and model APIs
+- **📁 Storage Integration**: File systems, object storage, CDNs
 
 ## 📊 Database Integration
 
@@ -309,7 +309,7 @@ class CodomyrmexMongoDB:
 async def ai_enhancement_with_history(code: str, user_id: str,
                                     mongo_db: CodomyrmexMongoDB):
     """AI code enhancement with history tracking."""
-    from codomyrmex.agents.ai_code_editing import enhance_code
+    from codomyrmex.agents import enhance_code
 
     # Enhance code
     result = await enhance_code(code, user_context=user_id)
@@ -597,7 +597,7 @@ class GitHubIntegration:
     async def create_pull_request_analysis(self, pr_number: int) -> Dict:
         """Analyze pull request and create detailed analysis."""
         from codomyrmex.static_analysis import analyze_diff
-        from codomyrmex.agents.ai_code_editing import review_code_changes
+        from codomyrmex.agents import review_code_changes
 
         async with aiohttp.ClientSession() as session:
             # Get PR details
@@ -665,7 +665,7 @@ class GitHubIntegration:
             # AI review (if enabled)
             ai_review = None
             if os.getenv('ENABLE_AI_REVIEW', 'false').lower() == 'true':
-                from codomyrmex.agents.ai_code_editing import review_code_changes
+                from codomyrmex.agents import review_code_changes
                 ai_review = await review_code_changes(content, patch, filename)
 
             return {
@@ -1197,33 +1197,33 @@ async def monitored_analysis_workflow(codebase_path: str):
 
 ### **Integration Resources**
 
--   **[Production Deployment](../deployment/production.md)**: Production integration patterns and security configuration
--   **[Performance Optimization](../reference/performance.md)**: Integration performance tuning
+- **[Production Deployment](../deployment/production.md)**: Production integration patterns and security configuration
+- **[Performance Optimization](../reference/performance.md)**: Integration performance tuning
 
 ### **Development Integration**
 
--   **[Development Setup](../development/environment-setup.md)**: Development environment setup
--   **[Testing Strategy](../development/testing-strategy.md)**: Integration testing patterns
--   **[API Reference](../reference/api.md)**: Complete API documentation for integration
+- **[Development Setup](../development/environment-setup.md)**: Development environment setup
+- **[Testing Strategy](../development/testing-strategy.md)**: Integration testing patterns
+- **[API Reference](../reference/api.md)**: Complete API documentation for integration
 
 ### **Module-Specific Integration**
 
--   **[AI Code Editing API](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md)**: AI service integration
--   **[Static Analysis API](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**: Analysis service integration
--   **[Data Visualization API](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md)**: Visualization integration
+- **[AI Agents API](../../src/codomyrmex/agents/API_SPECIFICATION.md)**: AI service integration
+- **[Static Analysis API](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**: Analysis service integration
+- **[Data Visualization API](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md)**: Visualization integration
 
 ---
 
 **Integration Checklist** ✅:
 
--   [ ] External service credentials configured securely
--   [ ] Error handling and retry logic implemented
--   [ ] Monitoring and alerting configured
--   [ ] Rate limiting and API quotas managed
--   [ ] Data persistence and backup strategies defined
--   [ ] Integration testing automated
--   [ ] Documentation and runbooks created
--   [ ] Security review completed
+- [ ] External service credentials configured securely
+- [ ] Error handling and retry logic implemented
+- [ ] Monitoring and alerting configured
+- [ ] Rate limiting and API quotas managed
+- [ ] Data persistence and backup strategies defined
+- [ ] Integration testing automated
+- [ ] Documentation and runbooks created
+- [ ] Security review completed
 
 **Need Integration Help?** Refer to our [Integration Troubleshooting Guide](../reference/troubleshooting.md#integration-issues) or check module-specific integration documentation.
 

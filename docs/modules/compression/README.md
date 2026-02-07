@@ -4,36 +4,42 @@
 
 ## Overview
 
-Data compression with multiple algorithms: gzip, bzip2, lzma, zstd.
+Compression module for Codomyrmex.
 
 ## Key Features
 
-- **Multi-Algorithm** — gzip, bz2, lzma, zstd
-- **Streaming** — Stream compression
-- **Auto-Detect** — Auto-detect format
-- **Level Control** — Compression levels
+- `compress()` — Compress data.
+- `decompress()` — Decompress data.
+- `get_compressor()` — Get a compressor instance.
+- `compress_file()` — Compress a file.
 
 ## Quick Start
 
 ```python
-from codomyrmex.compression import compress, decompress
+from codomyrmex.compression import compress, decompress, get_compressor
 
-# Compress data
-compressed = compress(data, algorithm="gzip", level=9)
-
-# Decompress (auto-detect)
-original = decompress(compressed)
-
-# Stream compression
-with compress_stream("out.gz", "gzip") as f:
-    f.write(large_data)
+# Use the module
+result = compress()
 ```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `compress()` | Compress data. |
+| `decompress()` | Decompress data. |
+| `get_compressor()` | Get a compressor instance. |
+| `compress_file()` | Compress a file. |
+| `decompress_file()` | Decompress a file. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

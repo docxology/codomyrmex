@@ -1,36 +1,36 @@
-# Orchestrator Documentation
+# Orchestrator Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Workflow orchestration and multi-step execution.
+This module provides functionality for discovering, configuring, and running
 
-## Key Features
+## Submodules
 
-- **Workflows** — Define workflows
-- **Steps** — Sequential/parallel
-- **State** — State management
-- **Retry** — Retry logic
+| Submodule | Description |
+|-----------|-------------|
+| `engines` | Workflow engine implementations. |
+| `monitors` | Execution Monitors submodule. |
+| `pipelines` | Orchestrator Pipelines Module |
+| `schedulers` | Task Schedulers submodule. |
+| `state` | State Submodule |
+| `templates` | Templates Submodule |
+| `triggers` | Triggers Submodule |
+| `workflows` | Workflow Definitions submodule. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.orchestrator import Workflow, Step
-
-workflow = Workflow("deployment")
-workflow.add_step(Step("build", build_func))
-workflow.add_step(Step("test", test_func))
-workflow.add_step(Step("deploy", deploy_func))
-
-result = workflow.run()
+from codomyrmex.orchestrator import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

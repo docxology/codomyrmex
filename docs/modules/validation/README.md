@@ -1,38 +1,50 @@
-# Validation Documentation
+# Validation Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Data and schema validation utilities.
+Validation module for Codomyrmex.
 
 ## Key Features
 
-- **Schema** — JSON Schema validation
-- **Types** — Type validation
-- **Rules** — Custom rules
-- **Errors** — Descriptive errors
+- `validate()` — Validate data against a schema.
+- `is_valid()` — Check if data is valid against a schema.
+- `get_errors()` — Get validation errors for data.
+
+## Submodules
+
+| Submodule | Description |
+|-----------|-------------|
+| `rules` | Rules Submodule |
+| `sanitizers` | Sanitizers Submodule |
+| `schemas` | Validation Schemas Module |
 
 ## Quick Start
 
 ```python
-from codomyrmex.validation import validate_schema
+from codomyrmex.validation import validate, is_valid, get_errors
 
-schema = {
-    "type": "object",
-    "properties": {"name": {"type": "string"}}
-}
-
-result = validate_schema(data, schema)
-if not result.valid:
-    print(result.errors)
+# Use the module
+result = validate()
 ```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `validate()` | Validate data against a schema. |
+| `is_valid()` | Check if data is valid against a schema. |
+| `get_errors()` | Get validation errors for data. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

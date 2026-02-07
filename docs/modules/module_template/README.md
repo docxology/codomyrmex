@@ -1,21 +1,27 @@
-# module_template
+# Module Template Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation files and guides.
+Module Template Package
+
+## Quick Start
+
+```python
+from codomyrmex.module_template import *  # See source for specific imports
+```
 
 ## Directory Contents
-- `AGENTS_ROOT_TEMPLATE.md` – File
-- `AGENTS_TEMPLATE.md` – File
-- `README.md` – File
-- `SPEC.md` – File
-- `index.md` – File
-- `technical_overview.md` – File
-- `tutorials/` – Subdirectory
+
+| File | Description |
+|------|-------------|
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
+| `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
+
 - **Source**: [src/codomyrmex/module_template/](../../../src/codomyrmex/module_template/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: ../../../README.md
+- **Parent**: [Modules](../README.md)

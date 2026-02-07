@@ -1,19 +1,32 @@
-# tree_sitter - Functional Specification
+# Tree-sitter — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.tree_sitter`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `tree_sitter` module.
+Tree-sitter parsing module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/tree_sitter/SPEC.md](../../../src/codomyrmex/tree_sitter/SPEC.md)
+### Submodule Structure
 
-## Navigation
+- `languages/` — Language support submodule.
+- `parsers/` — Tree-sitter parser utilities.
+- `queries/` — Query building submodule.
+- `transformers/` — AST transformers submodule.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/tree_sitter/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tree_sitter -v
+```

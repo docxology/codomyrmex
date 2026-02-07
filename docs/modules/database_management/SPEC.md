@@ -1,19 +1,45 @@
-# database_management - Functional Specification
+# Database Management — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.database_management`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `database_management` module.
+Database Management Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/database_management/SPEC.md](../../../src/codomyrmex/database_management/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `audit/` — Audit Submodule
+- `connections/` — Database Connections Module
+- `replication/` — Replication Submodule
+- `sharding/` — Sharding Submodule
+
+### Source Files
+
+- `backup_manager.py`
+- `db_manager.py`
+- `migration_manager.py`
+- `performance_monitor.py`
+- `schema_generator.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/database_management/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
+```

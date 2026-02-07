@@ -1,35 +1,58 @@
-# Templating Documentation
+# Templating Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Template engines: Jinja2, Mako, and custom templating.
+Templating module for Codomyrmex.
 
 ## Key Features
 
-- **Jinja2** — Full Jinja2 support
-- **Mako** — Mako templates
-- **Filters** — Custom filters
-- **Macros** — Reusable components
+- **TemplatingError** — Raised when templating operations fail.
+- `get_default_engine()` — Get or create default template engine instance.
+- `render()` — Render a template string with context data.
+- `render_file()` — Load and render a template file.
+
+## Submodules
+
+| Submodule | Description |
+|-----------|-------------|
+| `context` | Context builders submodule. |
+| `engines` | Template engine implementations. |
+| `filters` | Template filters submodule. |
+| `loaders` | Template loaders submodule. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.templating import TemplateEngine
+from codomyrmex.templating import TemplatingError
 
-engine = TemplateEngine()
-result = engine.render("Hello, {{ name }}!", name="World")
-
-# From file
-html = engine.render_file("templates/page.j2", data)
+# Initialize
+instance = TemplatingError()
 ```
+
+## API Reference
+
+### Classes
+
+| Class | Description |
+|-------|-------------|
+| `TemplatingError` | Raised when templating operations fail. |
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `get_default_engine()` | Get or create default template engine instance. |
+| `render()` | Render a template string with context data. |
+| `render_file()` | Load and render a template file. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

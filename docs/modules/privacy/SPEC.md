@@ -1,19 +1,36 @@
-# privacy - Functional Specification
+# Privacy — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.privacy`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `privacy` module.
+Privacy Module.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/privacy/SPEC.md](../../../src/codomyrmex/privacy/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `crumbs.py`
+- `mixnet.py`
+- `privacy.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/privacy/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k privacy -v
+```

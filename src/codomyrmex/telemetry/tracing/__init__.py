@@ -201,13 +201,17 @@ class Span:
         }
 
 
-class SpanExporter:
+from abc import ABC, abstractmethod
+
+class SpanExporter(ABC):
     """Base class for span exporters."""
 
+    @abstractmethod
     def export(self, spans: list[Span]) -> None:
         """Export spans."""
         pass
 
+    @abstractmethod
     def shutdown(self) -> None:
         """Shutdown exporter."""
         pass

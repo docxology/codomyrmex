@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/model_registry
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Model Registry Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `model_registry` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Model versioning, metadata, and lifecycle management.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **ModelStage**: Lifecycle stages for models.
+- **ModelFramework**: Supported ML frameworks.
+- **ModelMetrics**: Performance metrics for a model.
+- **ModelVersion**: A specific version of a model.
+- **RegisteredModel**: A registered model with multiple versions.
+- `to_dict()`: Convert to dictionary.
+- `full_name()`: Get full model name with version.
+- `to_dict()`: Convert to dictionary.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.model_registry import ModelStage
+
+# Agent initializes model registry
+instance = ModelStage()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/model_registry/](../../../src/codomyrmex/model_registry/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

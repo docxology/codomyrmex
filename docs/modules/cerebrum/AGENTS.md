@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/cerebrum
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Cerebrum Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `fpf_integration.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+CEREBRUM Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Cerebrum operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.cerebrum import *
+
+# Agent uses cerebrum capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/cerebrum/](../../../src/codomyrmex/cerebrum/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

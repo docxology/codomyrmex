@@ -4,33 +4,40 @@
 
 ## Overview
 
-Multi-backend caching with memory, Redis, and disk storage options.
+Cache module for Codomyrmex.
 
 ## Key Features
 
-- **Memory** — In-memory LRU cache
-- **Redis** — Redis-backed caching
-- **Disk** — Persistent file cache
-- **TTL** — Time-to-live expiration
+- `get_cache()` — Get a cache instance by name.
+
+## Submodules
+
+| Submodule | Description |
+|-----------|-------------|
+| `async_ops` | Async Ops Submodule |
+| `backends` | Cache backend implementations. |
+| `distributed` | Distributed Cache submodule. |
+| `invalidation` | Cache Invalidation Module |
+| `policies` | Cache eviction policies. |
+| `replication` | Replication Submodule |
+| `serializers` | Cache serialization utilities. |
+| `warmers` | Cache Warmers Module |
 
 ## Quick Start
 
 ```python
-from codomyrmex.cache import MemoryCache, cached
+from codomyrmex.cache import get_cache
 
-cache = MemoryCache(max_size=1000)
-cache.set("key", "value", ttl=300)
-
-@cached(ttl=60)
-def expensive_function(x):
-    return compute(x)
+# Use the module
+result = get_cache()
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

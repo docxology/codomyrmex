@@ -1,19 +1,47 @@
-# evolutionary_ai - Functional Specification
+# Evolutionary AI — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.evolutionary_ai`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `evolutionary_ai` module.
+Evolutionary AI module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/evolutionary_ai/SPEC.md](../../../src/codomyrmex/evolutionary_ai/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `Genome` | Class | A genome representing an individual's genetic material. |
+| `Population` | Class | A population of individuals for evolutionary algorithms. |
+| `crossover()` | Function | Perform single-point crossover between two genomes. |
+| `mutate()` | Function | Apply mutation to a genome. |
+| `tournament_selection()` | Function | Select an individual using tournament selection. |
+| `random()` | Function | Create a random genome. |
+| `copy()` | Function | Create a copy of this genome. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `fitness/` — Fitness evaluation submodule.
+- `genome/` — Genome representation submodule.
+- `operators/` — Genetic operators for evolutionary AI.
+- `population/` — Population management submodule.
+- `selection/` — Selection methods submodule.
+
+## 3. Dependencies
+
+See `src/codomyrmex/evolutionary_ai/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.evolutionary_ai import Genome, Population
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+```

@@ -1,19 +1,45 @@
-# performance - Functional Specification
+# Performance — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.performance`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `performance` module.
+Performance optimization utilities for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/performance/SPEC.md](../../../src/codomyrmex/performance/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `performance_context` | Class | No-op context manager if dependencies missing. |
+| `monitor_performance()` | Function | No-op decorator if dependencies missing. |
+| `get_system_metrics()` | Function | get system metrics |
+| `decorator()` | Function | decorator |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `async_profiler.py`
+- `benchmark.py`
+- `cache_manager.py`
+- `lazy_loader.py`
+- `performance_monitor.py`
+- `resource_tracker.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/performance/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.performance import performance_context
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k performance -v
+```

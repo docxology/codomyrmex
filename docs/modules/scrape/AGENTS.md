@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/scrape
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Scrape Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `API_SPECIFICATION.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
+Scrape Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Scrape operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.scrape import *
+
+# Agent uses scrape capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/scrape/](../../../src/codomyrmex/scrape/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

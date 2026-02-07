@@ -4,36 +4,20 @@
 
 ## Overview
 
-Event-driven architecture with pub/sub, event sourcing, and handlers.
-
-## Key Features
-
-- **Pub/Sub** — Publish/subscribe pattern
-- **Event Store** — Event persistence
-- **Handlers** — Async event handlers
-- **Replay** — Event replay support
+Event-Driven Architecture for Codomyrmex
 
 ## Quick Start
 
 ```python
-from codomyrmex.events import EventBus, Event, event_handler
-
-class UserCreated(Event):
-    user_id: str
-
-@event_handler(UserCreated)
-async def on_user_created(event):
-    print(f"User {event.user_id} created")
-
-bus = EventBus()
-await bus.publish(UserCreated(user_id="123"))
+from codomyrmex.events import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

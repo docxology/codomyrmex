@@ -1,21 +1,30 @@
-# Codomyrmex Agents — docs/modules/model_ops
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Model Ops Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `model_ops` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Model Operations module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Dataset**: A dataset for ML model operations.
+- **DatasetSanitizer**: Utilities for cleaning and filtering datasets.
+- **FineTuningJob**: Fine-tuning job management.
+- **Evaluator**: Model output evaluator with customizable metrics.
+- `exact_match_metric()`: Calculate exact match ratio (strips whitespace before comparison).
+- `length_ratio_metric()`: Calculate average length ratio.
+- `validate()`: Validate the dataset.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.model_ops import Dataset
+
+# Agent initializes model ops
+instance = Dataset()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/model_ops/](../../../src/codomyrmex/model_ops/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

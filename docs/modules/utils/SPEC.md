@@ -1,19 +1,46 @@
-# utils - Functional Specification
+# Utilities — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.utils`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `utils` module.
+Utilities Package.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/utils/SPEC.md](../../../src/codomyrmex/utils/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `ensure_directory()` | Function | Ensure a directory exists, creating it if necessary. |
+| `safe_json_loads()` | Function | Safely parse JSON with a fallback default. |
+| `safe_json_dumps()` | Function | Safely serialize to JSON with fallback. |
+| `hash_content()` | Function | Generate hash of content. |
+| `hash_file()` | Function | Generate hash of file contents. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `cli_helpers.py`
+- `integration.py`
+- `metrics.py`
+- `refined.py`
+- `script_base.py`
+- `subprocess.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/utils/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.utils import ensure_directory, safe_json_loads, safe_json_dumps, hash_content, hash_file
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k utils -v
+```

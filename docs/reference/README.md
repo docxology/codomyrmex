@@ -42,7 +42,7 @@ codomyrmex status     # Current status
 
 | Function | Module | Description |
 |----------|--------|-------------|
-| `generate_code_snippet()` | ai_code_editing | AI code generation |
+| `generate_code_snippet()` | agents | AI code generation |
 | `create_bar_chart()` | data_visualization | Create charts |
 | `execute_code()` | coding | Safe code execution |
 | `run_pyrefly_analysis()` | static_analysis | Code analysis |

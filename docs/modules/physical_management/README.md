@@ -1,36 +1,23 @@
-# Physical Management Documentation
+# Physical Management Module Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Hardware and physical device integration utilities.
-
-## Key Features
-
-- **Devices** — Device discovery
-- **Sensors** — Sensor data reading
-- **Control** — Device control
-- **Drivers** — Driver management
+Physical Object Management Module for Codomyrmex.
 
 ## Quick Start
 
 ```python
-from codomyrmex.physical_management import DeviceManager
-
-manager = DeviceManager()
-devices = manager.discover()
-
-for device in devices:
-    status = device.get_status()
-    print(f"{device.name}: {status}")
+from codomyrmex.physical_management import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

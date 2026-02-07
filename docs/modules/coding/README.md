@@ -4,35 +4,34 @@
 
 ## Overview
 
-Code generation, editing, and transformation utilities with AST-based operations.
+Coding Module.
 
-## Key Features
+## Submodules
 
-- **Generation** — Generate code from specs
-- **Editing** — Safe AST-based edits
-- **Transformation** — Refactoring operations
-- **Diff** — Apply code diffs
+| Submodule | Description |
+|-----------|-------------|
+| `analysis` | Code Analysis submodule. |
+| `debugging` | Debugging Module. |
+| `execution` | Code Execution Submodule. |
+| `generation` | Code Generation submodule. |
+| `monitoring` | Monitoring Submodule |
+| `refactoring` | Code refactoring utilities. |
+| `review` | Code Review Submodule. |
+| `sandbox` | Sandbox Submodule |
+| `testing` | Test Tools submodule. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.coding import CodeGenerator, CodeEditor
-
-generator = CodeGenerator()
-code = generator.generate_function(
-    name="hello", params=["name"], return_type="str"
-)
-
-editor = CodeEditor("src/main.py")
-editor.add_import("from datetime import datetime")
-editor.save()
+from codomyrmex.coding import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

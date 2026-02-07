@@ -1,19 +1,25 @@
-# Codomyrmex Agents — docs/modules/encryption
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Encryption Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Encryption module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- `encrypt()`: Encrypt data.
+- `decrypt()`: Decrypt data.
+- `generate_key()`: Generate an encryption key.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.encryption import *
+
+# Agent uses encryption capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/encryption/](../../../src/codomyrmex/encryption/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

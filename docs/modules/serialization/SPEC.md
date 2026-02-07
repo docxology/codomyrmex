@@ -1,19 +1,41 @@
-# serialization - Functional Specification
+# Serialization — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.serialization`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `serialization` module.
+Serialization module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/serialization/SPEC.md](../../../src/codomyrmex/serialization/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `serialize()` | Function | Serialize an object to bytes. |
+| `deserialize()` | Function | Deserialize data to an object. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `binary_formats.py`
+- `exceptions.py`
+- `serialization_manager.py`
+- `serializer.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/serialization/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.serialization import serialize, deserialize
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k serialization -v
+```

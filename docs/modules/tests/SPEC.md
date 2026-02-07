@@ -1,19 +1,38 @@
-# tests - Functional Specification
+# Tests — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.tests`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `tests` module.
+Codomyrmex Tests Package
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/tests/SPEC.md](../../../src/codomyrmex/tests/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `examples/` — Testing infrastructure for Codomyrmex examples.
+
+### Source Files
+
+- `conftest.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/tests/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tests -v
+```

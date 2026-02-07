@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/api
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# API Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Unified API Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- API operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.api import *
+
+# Agent uses api capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/api/](../../../src/codomyrmex/api/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

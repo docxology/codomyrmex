@@ -1,19 +1,52 @@
-# model_ops - Functional Specification
+# Model Ops — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.model_ops`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `model_ops` module.
+Model Operations module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/model_ops/SPEC.md](../../../src/codomyrmex/model_ops/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `Dataset` | Class | A dataset for ML model operations. |
+| `DatasetSanitizer` | Class | Utilities for cleaning and filtering datasets. |
+| `FineTuningJob` | Class | Fine-tuning job management. |
+| `Evaluator` | Class | Model output evaluator with customizable metrics. |
+| `exact_match_metric()` | Function | Calculate exact match ratio (strips whitespace before comparison). |
+| `length_ratio_metric()` | Function | Calculate average length ratio. |
+| `validate()` | Function | Validate the dataset. |
+| `to_jsonl()` | Function | Export dataset to JSONL file. |
+| `from_file()` | Function | Load dataset from JSONL file. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `datasets/` — Dataset management submodule.
+- `evaluation/` — Model evaluation utilities for ML operations.
+- `fine_tuning/` — Fine-tuning submodule.
+- `training/` — Training utilities submodule.
+
+### Source Files
+
+- `evaluators.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/model_ops/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, Evaluator
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
+```

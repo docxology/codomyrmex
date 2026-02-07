@@ -1,19 +1,35 @@
-# telemetry - Functional Specification
+# Telemetry — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.telemetry`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `telemetry` module.
+Telemetry module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/telemetry/SPEC.md](../../../src/codomyrmex/telemetry/SPEC.md)
+### Submodule Structure
 
-## Navigation
+- `alerting/` — Alerting Submodule
+- `context/` — Trace context submodule.
+- `exporters/` — Telemetry exporters for sending trace data to backends.
+- `metrics/` — Telemetry Metrics Module
+- `sampling/` — Sampling Submodule
+- `spans/` — Telemetry span management.
+- `tracing/` — Telemetry Tracing Module
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/telemetry/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
+```

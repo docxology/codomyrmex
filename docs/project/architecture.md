@@ -135,22 +135,21 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 - **`terminal_interface`**: Rich terminal interactions and formatting
 - **`config_management`**: Centralized configuration management
 - **`database_management`**: Data persistence and database operations
-- **`language_models`**: LLM infrastructure and provider abstraction
+- **`llm`**: LLM infrastructure and provider abstraction
 - **`performance`**: Performance monitoring and optimization
 
 ### Core Functional Modules
 
 **Purpose**: Primary capabilities that users directly interact with
 
-- **`ai_code_editing`**: AI-powered code generation and modification
+- **`agents`**: AI-powered code generation and modification
 - **`static_analysis`**: Code quality analysis and security scanning
-- **`code`**: Safe code execution environment
+- **`coding`**: Safe code execution environment
 - **`data_visualization`**: Chart and plot generation
 - **`pattern_matching`**: Code pattern analysis and recognition
 - **`git_operations`**: Git workflow automation
-- **`code_review`**: Automated code review with AI assistance
-- **`security_audit`**: Security vulnerability scanning and compliance
-- **`ollama_integration`**: Local LLM integration via Ollama
+- **`security`**: Security vulnerability scanning and compliance
+- **`llm/ollama`**: Local LLM integration via Ollama
 
 ### Service Modules
 
@@ -158,7 +157,6 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 
 - **`documentation`**: Documentation website generation
 - **`build_synthesis`**: Build automation and code scaffolding
-- **`api_documentation`**: API documentation generation (OpenAPI/Swagger)
 - **`ci_cd_automation`**: CI/CD pipeline management and deployment
 - **`containerization`**: Docker and Kubernetes container management
 
@@ -174,7 +172,7 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 **Purpose**: User-facing applications and interfaces
 
 - **`system_discovery`**: Module and capability discovery
-- **`project_orchestration`**: Workflow orchestration and task management
+- **`orchestrator`**: Workflow orchestration and task management
 - **`cli`**: Command-line interface for all modules
 
 ### Advanced Modules

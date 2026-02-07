@@ -1,36 +1,25 @@
-# Logging & Monitoring Documentation
+# Logging & Monitoring Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Centralized logging, metrics, and monitoring utilities.
-
-## Key Features
-
-- **Logging** — Structured logging
-- **Metrics** — Prometheus metrics
-- **Tracing** — Distributed tracing
-- **Alerts** — Alerting rules
+Codomyrmex Logging Monitoring Module.
 
 ## Quick Start
 
 ```python
-from codomyrmex.logging_monitoring import get_logger, MetricsCollector
-
-logger = get_logger("my_module")
-logger.info("Processing started", extra={"count": 42})
-
-metrics = MetricsCollector()
-metrics.increment("requests_total")
+from codomyrmex.logging_monitoring import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

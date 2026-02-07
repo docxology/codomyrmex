@@ -1,19 +1,35 @@
-# logistics - Functional Specification
+# Logistics — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.logistics`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `logistics` module.
+Logistics Module for Codomyrmex
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/logistics/SPEC.md](../../../src/codomyrmex/logistics/SPEC.md)
+### Submodule Structure
 
-## Navigation
+- `optimization/` — Schedule Optimization submodule.
+- `orchestration/` — Orchestration Submodule for Logistics
+- `resources/` — Resource Allocation submodule.
+- `routing/` — Logistics routing algorithms.
+- `schedule/` — Schedule Submodule for Logistics
+- `task/` — Queue module for Codomyrmex.
+- `tracking/` — Progress Tracking submodule.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/logistics/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k logistics -v
+```

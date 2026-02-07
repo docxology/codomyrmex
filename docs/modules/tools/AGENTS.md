@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/tools
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Tools Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Tools Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Tools operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.tools import *
+
+# Agent uses tools capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/tools/](../../../src/codomyrmex/tools/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

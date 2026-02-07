@@ -1,19 +1,27 @@
-# Codomyrmex Agents — docs/modules/templating
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Templating Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Templating module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **TemplatingError**: Raised when templating operations fail.
+- `get_default_engine()`: Get or create default template engine instance.
+- `render()`: Render a template string with context data.
+- `render_file()`: Load and render a template file.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.templating import TemplatingError
+
+# Agent initializes templating
+instance = TemplatingError()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/templating/](../../../src/codomyrmex/templating/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

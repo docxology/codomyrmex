@@ -51,7 +51,7 @@ graph LR
 #### **API Additions**
 ```python
 # New APIs (additive, backward compatible)
-from codomyrmex.agents.ai_code_editing import enhance_code_batch
+from codomyrmex.agents import enhance_code_batch
 from codomyrmex.data_visualization import create_interactive_dashboard
 from codomyrmex.static_analysis import analyze_security_vulnerabilities
 
@@ -259,7 +259,7 @@ class CodomyrmexMigrator:
             # v0.x.x → v1.0.0 import mappings
             'from codomyrmex.coding.data_visualization import': 'from codomyrmex.data_visualization import',
             'from codomyrmex.analysis.static import': 'from codomyrmex.static_analysis import',
-            'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents.ai_code_editing import',
+            'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents import',
             'from codomyrmex.utils.environment import': 'from codomyrmex.environment_setup import',
         }
 
@@ -386,7 +386,7 @@ class CodomyrmexMigrator:
             migrated['codomyrmex']['static_analysis'] = config['analysis']
 
         if 'ai' in config:
-            migrated['codomyrmex']['ai_code_editing'] = config['ai']
+            migrated['codomyrmex']['agents'] = config['ai']
 
         if 'visualization' in config:
             migrated['codomyrmex']['data_visualization'] = config['visualization']

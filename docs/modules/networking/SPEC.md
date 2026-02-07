@@ -1,19 +1,41 @@
-# networking - Functional Specification
+# Networking — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.networking`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `networking` module.
+Networking module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/networking/SPEC.md](../../../src/codomyrmex/networking/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `get_http_client()` | Function | Get an HTTP client instance. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `exceptions.py`
+- `http_client.py`
+- `raw_sockets.py`
+- `ssh_sftp.py`
+- `websocket_client.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/networking/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.networking import get_http_client
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+```

@@ -4,35 +4,33 @@
 
 ## Overview
 
-RESTful API framework with routing, middleware, OpenAPI support, and request/response handling.
+Unified API Module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Routing** — Decorators for GET, POST, PUT, DELETE endpoints
-- **Middleware** — Authentication, logging, validation
-- **OpenAPI** — Auto-generated API documentation
-- **Async** — Full async/await support
+| Submodule | Description |
+|-----------|-------------|
+| `authentication` | API authentication utilities. |
+| `circuit_breaker` | API Circuit Breaker Module |
+| `documentation` | API Documentation Module for Codomyrmex. |
+| `mocking` | Mocking Submodule |
+| `pagination` | Pagination Submodule |
+| `rate_limiting` | API Rate Limiting utilities. |
+| `standardization` | API Standardization Module for Codomyrmex |
+| `webhooks` | Webhooks Submodule |
 
 ## Quick Start
 
 ```python
-from codomyrmex.api import APIRouter, APIApp
-
-router = APIRouter(prefix="/v1")
-
-@router.get("/users")
-async def list_users():
-    return {"users": [...]}
-
-app = APIApp()
-app.include_router(router)
+from codomyrmex.api import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

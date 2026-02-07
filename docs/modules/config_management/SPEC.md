@@ -1,19 +1,40 @@
-# config_management - Functional Specification
+# Config Management — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.config_management`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `config_management` module.
+Configuration Management Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/config_management/SPEC.md](../../../src/codomyrmex/config_management/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `config_deployer.py`
+- `config_loader.py`
+- `config_migrator.py`
+- `config_monitor.py`
+- `config_validator.py`
+- `secret_manager.py`
+- `watcher.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/config_management/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
+```

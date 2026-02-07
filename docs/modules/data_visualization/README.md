@@ -1,35 +1,65 @@
-# Data Visualization Documentation
+# Data Visualization Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Charts, graphs, and data visualization utilities.
+Data Visualization Module for Codomyrmex.
 
 ## Key Features
 
-- **Charts** — Line, bar, pie charts
-- **Export** — PNG, SVG, HTML
-- **Interactive** — Tooltip, zoom
-- **Dashboards** — Multi-chart layouts
+- **ChartStyle** — Fallback chart style enum.
+- **ColorPalette** — Fallback color palette enum.
+- **PlotType** — Fallback plot type enum.
+- `get_available_styles()` — Get available chart styles.
+- `get_available_palettes()` — Get available color palettes.
+- `get_available_plot_types()` — Get available plot types.
+
+## Submodules
+
+| Submodule | Description |
+|-----------|-------------|
+| `charts` | Charts submodule for data_visualization. |
+| `engines` | Engines submodule for data_visualization. |
+| `git` | Git visualization submodule for data_visualization. |
+| `mermaid` | Mermaid diagram generation utilities. |
+| `themes` | Theme definitions for data visualization. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.data_visualization import Chart
+from codomyrmex.data_visualization import ChartStyle, ColorPalette, PlotType
 
-chart = Chart(type="line")
-chart.add_data(x=[1, 2, 3], y=[10, 20, 15])
-chart.title = "Sales Over Time"
-chart.export("chart.png")
+# Initialize
+instance = ChartStyle()
 ```
+
+## API Reference
+
+### Classes
+
+| Class | Description |
+|-------|-------------|
+| `ChartStyle` | Fallback chart style enum. |
+| `ColorPalette` | Fallback color palette enum. |
+| `PlotType` | Fallback plot type enum. |
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `get_available_styles()` | Get available chart styles. |
+| `get_available_palettes()` | Get available color palettes. |
+| `get_available_plot_types()` | Get available plot types. |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

@@ -1,19 +1,47 @@
-# agentic_memory - Functional Specification
+# Agentic Memory — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.agentic_memory`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `agentic_memory` module.
+Long-term agent memory with retrieval and persistence.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/agentic_memory/SPEC.md](../../../src/codomyrmex/agentic_memory/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `MemoryType` | Class | Types of agent memory. |
+| `MemoryImportance` | Class | Importance levels for memories. |
+| `Memory` | Class | A single memory unit. |
+| `RetrievalResult` | Class | Result of memory retrieval. |
+| `MemoryStore` | Class | Base class for memory storage backends. |
+| `InMemoryStore` | Class | In-memory storage for memories. |
+| `JSONFileStore` | Class | JSON file storage for memories. |
+| `AgentMemory` | Class | Long-term memory system for AI agents. |
+| `ConversationMemory` | Class | Memory optimized for conversation history. |
+| `KnowledgeMemory` | Class | Memory optimized for knowledge/facts. |
+| `age_hours()` | Function | Get memory age in hours. |
+| `recency_score()` | Function | Get recency score (decays over time). |
+| `access()` | Function | Record an access to this memory. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `from_dict()` | Function | Create from dictionary. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/agentic_memory/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory, RetrievalResult, MemoryStore
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
+```

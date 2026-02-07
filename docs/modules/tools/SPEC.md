@@ -1,19 +1,39 @@
-# tools - Functional Specification
+# Tools — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.tools`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `tools` module.
+Tools Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/tools/SPEC.md](../../../src/codomyrmex/tools/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `add_deprecation_notices.py`
+- `analyze_project.py`
+- `dependency_analyzer.py`
+- `dependency_checker.py`
+- `dependency_consolidator.py`
+- `validate_dependencies.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/tools/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k tools -v
+```

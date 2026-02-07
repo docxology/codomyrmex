@@ -1,22 +1,23 @@
-# Codomyrmex Agents — docs/modules/pattern_matching
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Pattern Matching Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `index.md` – Project file
-- `technical_overview.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+Pattern Matching Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Pattern Matching operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.pattern_matching import *
+
+# Agent uses pattern matching capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/pattern_matching/](../../../src/codomyrmex/pattern_matching/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

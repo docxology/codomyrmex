@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/inference_optimization
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Inference Optimization Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `inference_optimization` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Model optimization techniques including quantization and batching.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **QuantizationType**: Types of quantization.
+- **BatchingStrategy**: Strategies for batching requests.
+- **OptimizationConfig**: Configuration for inference optimization.
+- **InferenceStats**: Statistics for inference performance.
+- **InferenceRequest**: A single inference request.
+- `cache_hit_rate()`: Get cache hit rate.
+- `age_ms()`: Get request age in milliseconds.
+- `get()`: Get cached result.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.inference_optimization import QuantizationType
+
+# Agent initializes inference optimization
+instance = QuantizationType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/inference_optimization/](../../../src/codomyrmex/inference_optimization/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

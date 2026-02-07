@@ -1,19 +1,54 @@
-# orchestrator - Functional Specification
+# Orchestrator — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.orchestrator`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `orchestrator` module.
+This module provides functionality for discovering, configuring, and running
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/orchestrator/SPEC.md](../../../src/codomyrmex/orchestrator/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `engines/` — Workflow engine implementations.
+- `monitors/` — Execution Monitors submodule.
+- `pipelines/` — Orchestrator Pipelines Module
+- `schedulers/` — Task Schedulers submodule.
+- `state/` — State Submodule
+- `templates/` — Templates Submodule
+- `triggers/` — Triggers Submodule
+- `workflows/` — Workflow Definitions submodule.
+
+### Source Files
+
+- `config.py`
+- `core.py`
+- `discovery.py`
+- `exceptions.py`
+- `integration.py`
+- `parallel_runner.py`
+- `reporting.py`
+- `runner.py`
+- `thin.py`
+- `workflow.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/orchestrator/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k orchestrator -v
+```

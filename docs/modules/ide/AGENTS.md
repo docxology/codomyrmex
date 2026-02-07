@@ -1,19 +1,31 @@
-# Codomyrmex Agents — docs/modules/ide
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# IDE Integration Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+IDE Integration Module.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **IDEStatus**: Status of an IDE session.
+- **IDECommand**: Represents an IDE command to be executed.
+- **IDECommandResult**: Result of an IDE command execution.
+- **FileInfo**: Information about a file in the IDE.
+- **IDEClient**: Abstract base class for IDE integrations.
+- `to_dict()`: to dict
+- `to_dict()`: to dict
+- `to_dict()`: to dict
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.ide import IDEStatus
+
+# Agent initializes ide integration
+instance = IDEStatus()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/ide/](../../../src/codomyrmex/ide/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

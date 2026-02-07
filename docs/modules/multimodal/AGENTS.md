@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/multimodal
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Multimodal Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `multimodal` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Vision and audio processing for multimodal AI applications.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **MediaType**: Types of media.
+- **ImageFormat**: Supported image formats.
+- **AudioFormat**: Supported audio formats.
+- **MediaContent**: Container for media content.
+- **ImageContent**: Image-specific content.
+- `size_bytes()`: Get content size in bytes.
+- `hash()`: Get content hash.
+- `to_base64()`: Convert to base64 string.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.multimodal import MediaType
+
+# Agent initializes multimodal
+instance = MediaType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/multimodal/](../../../src/codomyrmex/multimodal/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

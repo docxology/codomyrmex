@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/feature_flags
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Feature Flags Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `feature_flags` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Feature Flags module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- Feature Flags operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.feature_flags import *
+
+# Agent uses feature flags capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/feature_flags/](../../../src/codomyrmex/feature_flags/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

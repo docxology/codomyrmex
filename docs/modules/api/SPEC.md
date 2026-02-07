@@ -1,19 +1,45 @@
-# api - Functional Specification
+# API — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.api`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `api` module.
+Unified API Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/api/SPEC.md](../../../src/codomyrmex/api/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `authentication/` — API authentication utilities.
+- `circuit_breaker/` — API Circuit Breaker Module
+- `documentation/` — API Documentation Module for Codomyrmex.
+- `mocking/` — Mocking Submodule
+- `pagination/` — Pagination Submodule
+- `rate_limiting/` — API Rate Limiting utilities.
+- `standardization/` — API Standardization Module for Codomyrmex
+- `webhooks/` — Webhooks Submodule
+
+### Source Files
+
+- `openapi_generator.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/api/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k api -v
+```

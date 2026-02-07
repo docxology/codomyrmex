@@ -1,19 +1,42 @@
-# collaboration - Functional Specification
+# Collaboration — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.collaboration`  
+**Version**: v0.2.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `collaboration` module.
+Collaboration module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/collaboration/SPEC.md](../../../src/codomyrmex/collaboration/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `agents/` — Multi-agent coordination submodule.
+- `communication/` — Inter-agent messaging submodule.
+- `coordination/` — Task coordination submodule.
+- `protocols/` — Multi-agent coordination protocols.
+
+### Source Files
+
+- `exceptions.py`
+- `models.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/collaboration/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+```

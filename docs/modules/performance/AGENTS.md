@@ -1,19 +1,27 @@
-# Codomyrmex Agents — docs/modules/performance
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Performance Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Performance optimization utilities for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **performance_context**: No-op context manager if dependencies missing.
+- `monitor_performance()`: No-op decorator if dependencies missing.
+- `get_system_metrics()`: get system metrics
+- `decorator()`: decorator
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.performance import performance_context
+
+# Agent initializes performance
+instance = performance_context()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/performance/](../../../src/codomyrmex/performance/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

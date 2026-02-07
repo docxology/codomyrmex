@@ -169,11 +169,11 @@ def benchmark_static_analysis():
 
 ### **AI Code Editing Module**
 ```python
-# Benchmark: ai_code_editing performance
-from codomyrmex.agents.ai_code_editing import enhance_code, generate_code
+# Benchmark: agents performance
+from codomyrmex.agents import enhance_code, generate_code
 import asyncio
 
-async def benchmark_ai_code_editing():
+async def benchmark_agents():
     """Performance benchmarks for AI code editing (async)."""
 
     # Simple code enhancement

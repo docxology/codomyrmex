@@ -1,19 +1,52 @@
-# testing - Functional Specification
+# Testing — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.testing`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `testing` module.
+Test fixtures, generators, property-based testing, and fuzzing utilities.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/testing/SPEC.md](../../../src/codomyrmex/testing/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `GeneratorStrategy` | Class | Abstract base for value generators. |
+| `IntGenerator` | Class | Generate random integers. |
+| `FloatGenerator` | Class | Generate random floats. |
+| `StringGenerator` | Class | Generate random strings. |
+| `ListGenerator` | Class | Generate random lists. |
+| `DictGenerator` | Class | Generate random dictionaries. |
+| `OneOfGenerator` | Class | Generate one of specified values. |
+| `PropertyTestResult` | Class | Result of a property-based test. |
+| `FuzzingStrategy` | Class | Fuzzing strategies. |
+| `FuzzResult` | Class | Result of a fuzz test. |
+| `property_test()` | Function | Decorator for property-based tests. |
+| `fixture()` | Function | Decorator to create fixtures. |
+| `generate()` | Function | generate |
+| `generate()` | Function | generate |
+| `generate()` | Function | generate |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `fixtures/` — Testing Fixtures Module
+- `generators/` — Testing Generators Module
+
+## 3. Dependencies
+
+See `src/codomyrmex/testing/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.testing import GeneratorStrategy, IntGenerator, FloatGenerator, StringGenerator, ListGenerator
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k testing -v
+```

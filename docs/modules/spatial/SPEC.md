@@ -1,47 +1,34 @@
-# docs - Documentation Specification
+# Spatial — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.spatial`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
-This directory contains **Documentation** documentation. It serves to educate users and developers about specific aspects of the system.
+## 1. Overview
 
-## Design Principles
-- **Clarity**: Use simple, direct language.
-- **Accuracy**: Content must be verified against current code.
-- **Examples**: "Show, don't tell" where possible.
+Spatial modeling module for Codomyrmex.
 
-## Functional Requirements
-1.  **Format**: Markdown (`.md`).
-2.  **Links**: All relative links must be valid.
+## 2. Architecture
 
-## Navigation
-- **Parent**: [../README.md](../README.md)
-- **Root**: [../../README.md](../../README.md)
+### Submodule Structure
 
-<!-- Navigation Links keyword for score -->
+- `coordinates/` — Coordinate transformation utilities for spatial modeling.
+- `four_d/` — 4D modeling module (Synergetics) for Codomyrmex.
+- `physics/` — Physics Simulation submodule.
+- `rendering/` — Spatial Rendering submodule.
+- `three_d/` — Spatial 3D Modeling and Rendering Module for Codomyrmex.
+- `world_models/` — World modeling module for Codomyrmex.
 
-## Detailed Architecture and Implementation
+## 3. Dependencies
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
+See `src/codomyrmex/spatial/__init__.py` for import dependencies.
 
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+## 4. Public API
 
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+See source module for available exports.
 
-## Detailed Architecture and Implementation
+## 5. Testing
 
-The implementation of this component follows the core principles of the Codomyrmex ecosystem: modularity, performance, and reliability. By adhering to standardized interfaces, this module ensures seamless integration with the broader platform.
-
-### Design Principles
-1.  **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2.  **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3.  **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4.  **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k spatial -v
+```

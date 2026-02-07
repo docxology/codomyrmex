@@ -1,19 +1,47 @@
-# workflow_testing - Functional Specification
+# Workflow Testing — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.workflow_testing`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `workflow_testing` module.
+End-to-end workflow validation and testing.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/workflow_testing/SPEC.md](../../../src/codomyrmex/workflow_testing/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `WorkflowStepType` | Class | Types of workflow steps. |
+| `StepStatus` | Class | Status of a step execution. |
+| `WorkflowStep` | Class | A single step in a workflow test. |
+| `StepResult` | Class | Result of executing a step. |
+| `WorkflowResult` | Class | Result of running a complete workflow. |
+| `StepExecutor` | Class | Base class for step executors. |
+| `AssertionExecutor` | Class | Executor for assertion steps. |
+| `WaitExecutor` | Class | Executor for wait steps. |
+| `ScriptExecutor` | Class | Executor for script steps. |
+| `Workflow` | Class | A workflow test definition. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `passed()` | Function | Check if step passed. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `total_steps()` | Function | Get total steps. |
+| `passed_steps()` | Function | Get passed steps. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/workflow_testing/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.workflow_testing import WorkflowStepType, StepStatus, WorkflowStep, StepResult, WorkflowResult
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k workflow_testing -v
+```

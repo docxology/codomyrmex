@@ -1,19 +1,42 @@
-# feature_flags - Functional Specification
+# Feature Flags — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.feature_flags`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `feature_flags` module.
+Feature Flags module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/feature_flags/SPEC.md](../../../src/codomyrmex/feature_flags/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `core/` — Core flag management submodule.
+- `evaluation/` — Flag evaluation submodule.
+- `rollout/` — Gradual rollout submodule.
+- `storage/` — Flag storage submodule.
+- `strategies/` — Feature flag evaluation strategies.
+
+### Source Files
+
+- `experiments.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/feature_flags/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k feature_flags -v
+```

@@ -1,19 +1,40 @@
-# system_discovery - Functional Specification
+# System Discovery — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.system_discovery`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `system_discovery` module.
+This module provides system discovery and orchestration capabilities
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/system_discovery/SPEC.md](../../../src/codomyrmex/system_discovery/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `capability_scanner.py`
+- `context.py`
+- `discovery_engine.py`
+- `health_checker.py`
+- `health_reporter.py`
+- `profilers.py`
+- `status_reporter.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/system_discovery/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k system_discovery -v
+```

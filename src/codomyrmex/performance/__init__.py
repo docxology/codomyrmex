@@ -10,6 +10,13 @@ from codomyrmex.exceptions import CodomyrmexError
 from .cache_manager import CacheManager, cached_function
 from .lazy_loader import LazyLoader, lazy_import
 
+# Import benchmark utilities
+from .benchmark import (
+    PerformanceProfiler,
+    profile_function,
+    run_benchmark,
+)
+
 # Import PerformanceMonitor with fallback if psutil is not available
 try:
     from .performance_monitor import (
@@ -38,10 +45,6 @@ except ImportError:
 
         def __exit__(self, *args): pass
 
-    def profile_function(*args, **kwargs):
-        """No-op."""
-        return monitor_performance(*args, **kwargs)
-
     def get_system_metrics(*args, **kwargs):
         return {}
 
@@ -50,18 +53,19 @@ __all__ = [
     "lazy_import",
     "CacheManager",
     "cached_function",
+    "PerformanceProfiler",
+    "profile_function",
+    "run_benchmark",
 ]
 
 if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("PerformanceMonitor")
     __all__.append("monitor_performance")
     __all__.append("performance_context")
-    __all__.append("profile_function")
     __all__.append("get_system_metrics")
 else:
     __all__.append("monitor_performance") # Export the no-op version
     __all__.append("performance_context") # Export the no-op version
-    __all__.append("profile_function")
     __all__.append("get_system_metrics")
 
 __version__ = "0.1.0"

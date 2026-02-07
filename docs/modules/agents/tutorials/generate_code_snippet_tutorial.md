@@ -34,7 +34,7 @@ We will use a hypothetical MCP client to call the tool. The actual method of cal
 ```bash
 # Ensure your shell environment has the necessary LLM API key (e.g., OPENAI_API_KEY)
 # Example using a fictional codomyrmex_mcp_client:
-codomyrmex_mcp_client call ai_code_editing generate_code_snippet \
+codomyrmex_mcp_client call agents generate_code_snippet \
   --prompt "Create a Python function that takes an integer n and returns the n-th Fibonacci number. The function should handle non-negative n. Include a docstring." \
   --language "python" \
   # Optional: --llm_provider "openai" --model_name "gpt-3.5-turbo"
@@ -111,7 +111,7 @@ Now you can try:
 - Generating code in different programming languages.
 - Using the `context_code` parameter to generate code that fits into an existing script or class.
 - Exploring more complex prompts, like asking for classes or functions with specific error handling.
-- Reviewing the `ai_code_editing/MCP_TOOL_SPECIFICATION.md` for all available parameters and options for `generate_code_snippet`. 
+- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all available parameters and options for `generate_code_snippet`. 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/notification
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Notification Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `notification` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Multi-channel notification system with templates and routing.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **NotificationChannel**: Available notification channels.
+- **NotificationPriority**: Priority levels for notifications.
+- **NotificationStatus**: Status of a notification.
+- **Notification**: A notification to be sent.
+- **NotificationResult**: Result of sending a notification.
+- `to_dict()`: Convert to dictionary.
+- `is_success()`: is success
+- `channel()`: Get the channel this provider handles.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.notification import NotificationChannel
+
+# Agent initializes notification
+instance = NotificationChannel()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/notification/](../../../src/codomyrmex/notification/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

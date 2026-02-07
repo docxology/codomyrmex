@@ -4,36 +4,30 @@
 
 ## Overview
 
-Command-line interface framework with argument parsing, subcommands, and rich output.
+This module provides the command-line interface for the Codomyrmex development platform.
 
-## Key Features
+## Submodules
 
-- **Subcommands** — Nested command groups
-- **Options** — Flags and arguments
-- **Rich Output** — Colors and formatting
-- **Completion** — Tab completion support
+| Submodule | Description |
+|-----------|-------------|
+| `completions` | Shell Completions submodule. |
+| `formatters` | CLI Output Formatters. |
+| `handlers` | CLI command handlers. |
+| `parsers` | Argument Parsers submodule. |
+| `themes` | CLI Themes submodule. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.cli import CLI, Command, Option
-
-cli = CLI(name="myapp")
-
-@cli.command()
-@Option("--name", "-n")
-def greet(name: str):
-    \"\"\"Greet a user.\"\"\"
-    print(f"Hello, {name}!")
-
-cli.run()
+from codomyrmex.cli import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

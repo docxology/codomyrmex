@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/agentic_memory
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Agentic Memory Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `agentic_memory` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Long-term agent memory with retrieval and persistence.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **MemoryType**: Types of agent memory.
+- **MemoryImportance**: Importance levels for memories.
+- **Memory**: A single memory unit.
+- **RetrievalResult**: Result of memory retrieval.
+- **MemoryStore**: Base class for memory storage backends.
+- `age_hours()`: Get memory age in hours.
+- `recency_score()`: Get recency score (decays over time).
+- `access()`: Record an access to this memory.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.agentic_memory import MemoryType
+
+# Agent initializes agentic memory
+instance = MemoryType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/agentic_memory/](../../../src/codomyrmex/agentic_memory/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

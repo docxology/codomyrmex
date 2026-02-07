@@ -1,19 +1,39 @@
-# plugin_system - Functional Specification
+# Plugin System — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.plugin_system`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `plugin_system` module.
+Plugin System for Codomyrmex
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/plugin_system/SPEC.md](../../../src/codomyrmex/plugin_system/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `enforcer.py`
+- `exceptions.py`
+- `plugin_loader.py`
+- `plugin_manager.py`
+- `plugin_registry.py`
+- `plugin_validator.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/plugin_system/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
+```

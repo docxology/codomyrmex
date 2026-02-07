@@ -1,19 +1,25 @@
-# Codomyrmex Agents — docs/modules/utils
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Utilities Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Utilities Package.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- `ensure_directory()`: Ensure a directory exists, creating it if necessary.
+- `safe_json_loads()`: Safely parse JSON with a fallback default.
+- `safe_json_dumps()`: Safely serialize to JSON with fallback.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.utils import *
+
+# Agent uses utilities capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/utils/](../../../src/codomyrmex/utils/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

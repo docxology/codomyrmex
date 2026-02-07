@@ -1,19 +1,42 @@
-# containerization - Functional Specification
+# Containerization — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.containerization`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `containerization` module.
+Containerization Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/containerization/SPEC.md](../../../src/codomyrmex/containerization/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `docker/` — Docker container management utilities.
+- `kubernetes/` — Kubernetes submodule for containerization.
+- `registry/` — Registry submodule for containerization.
+- `security/` — Security submodule for containerization.
+
+### Source Files
+
+- `exceptions.py`
+- `wasm.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/containerization/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
+```

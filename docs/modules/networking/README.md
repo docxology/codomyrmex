@@ -1,35 +1,30 @@
-# Networking Documentation
+# Networking Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Network utilities: HTTP clients, sockets, DNS, and network monitoring.
+Networking module for Codomyrmex.
 
 ## Key Features
 
-- **HTTP** — Async HTTP client
-- **Sockets** — TCP/UDP handling
-- **DNS** — DNS resolution
-- **Retry** — Connection retries
+- `get_http_client()` — Get an HTTP client instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.networking import HTTPClient, DNSResolver
+from codomyrmex.networking import get_http_client
 
-client = HTTPClient(timeout=30, retries=3)
-response = await client.get("https://api.example.com")
-
-resolver = DNSResolver()
-ips = resolver.resolve("example.com")
+# Use the module
+result = get_http_client()
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

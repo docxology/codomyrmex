@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/cache
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Cache Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Cache module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- `get_cache()`: Get a cache instance by name.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.cache import *
+
+# Agent uses cache capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/cache/](../../../src/codomyrmex/cache/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

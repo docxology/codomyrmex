@@ -45,9 +45,10 @@ def extract_metadata(file_path: str | Path) -> dict[str, Any]:
             metadata.update(_extract_pdf_metadata(file_path))
         elif suffix in [".md", ".markdown"]:
             metadata.update(_extract_markdown_metadata(file_path))
-        elif suffix in [".json", ".yaml", ".yml"]:
-            # Structured formats may have embedded metadata
-            pass
+        elif suffix == ".json":
+            metadata.update(_extract_json_metadata(file_path))
+        elif suffix in [".yaml", ".yml"]:
+            metadata.update(_extract_yaml_metadata(file_path))
 
         return metadata
 
@@ -95,6 +96,40 @@ def _extract_markdown_metadata(file_path: Path) -> dict[str, Any]:
                 if frontmatter:
                     return frontmatter
 
+        return {}
+    except Exception:
+        return {}
+
+
+def _extract_json_metadata(file_path: Path) -> dict[str, Any]:
+    """Extract metadata from JSON files."""
+    try:
+        import json
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            if isinstance(data, dict):
+                # Return standard metadata fields if present at top level
+                return {
+                    k: v for k, v in data.items() 
+                    if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
+                }
+        return {}
+    except Exception:
+        return {}
+
+
+def _extract_yaml_metadata(file_path: Path) -> dict[str, Any]:
+    """Extract metadata from YAML files."""
+    try:
+        import yaml
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+            if isinstance(data, dict):
+                # Return standard metadata fields
+                return {
+                    k: v for k, v in data.items() 
+                    if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
+                }
         return {}
     except Exception:
         return {}

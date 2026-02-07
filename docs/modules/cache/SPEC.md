@@ -1,19 +1,53 @@
-# cache - Functional Specification
+# Cache — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.cache`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `cache` module.
+Cache module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/cache/SPEC.md](../../../src/codomyrmex/cache/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `get_cache()` | Function | Get a cache instance by name. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `async_ops/` — Async Ops Submodule
+- `backends/` — Cache backend implementations.
+- `distributed/` — Distributed Cache submodule.
+- `invalidation/` — Cache Invalidation Module
+- `policies/` — Cache eviction policies.
+- `replication/` — Replication Submodule
+- `serializers/` — Cache serialization utilities.
+- `warmers/` — Cache Warmers Module
+
+### Source Files
+
+- `cache.py`
+- `cache_manager.py`
+- `exceptions.py`
+- `namespaced.py`
+- `stats.py`
+- `ttl_manager.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/cache/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.cache import get_cache
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cache -v
+```

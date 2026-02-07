@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/feature_store
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Feature Store Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `feature_store` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+ML feature management, storage, and retrieval.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **FeatureType**: Types of features.
+- **ValueType**: Data types for feature values.
+- **FeatureDefinition**: Definition of a feature.
+- **FeatureValue**: A feature value with metadata.
+- **FeatureVector**: A collection of feature values for an entity.
+- `full_name()`: Get fully qualified name.
+- `to_dict()`: Convert to dictionary.
+- `age_seconds()`: Get age of this value in seconds.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.feature_store import FeatureType
+
+# Agent initializes feature store
+instance = FeatureType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/feature_store/](../../../src/codomyrmex/feature_store/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

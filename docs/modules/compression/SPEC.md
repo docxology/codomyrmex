@@ -1,19 +1,44 @@
-# compression - Functional Specification
+# Compression — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.compression`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `compression` module.
+Compression module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/compression/SPEC.md](../../../src/codomyrmex/compression/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `compress()` | Function | Compress data. |
+| `decompress()` | Function | Decompress data. |
+| `get_compressor()` | Function | Get a compressor instance. |
+| `compress_file()` | Function | Compress a file. |
+| `decompress_file()` | Function | Decompress a file. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `archive_manager.py`
+- `compressor.py`
+- `parallel.py`
+- `zstd_compressor.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/compression/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.compression import compress, decompress, get_compressor, compress_file, decompress_file
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k compression -v
+```

@@ -17,7 +17,7 @@ AI agent framework providing integrations with multiple AI providers and code ed
 
 | Component | Description |
 |-----------|-------------|
-| `ai_code_editing/` | AI-powered code generation |
+| `agents/` | AI-powered code generation |
 | `claude/` | Anthropic Claude integration |
 | `codex/` | OpenAI Codex integration |
 | `gemini/` | Google Gemini integration |

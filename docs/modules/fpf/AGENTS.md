@@ -1,19 +1,27 @@
-# Codomyrmex Agents — docs/modules/fpf
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# FPF (Filesystem Processing Framework) Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+First Principles Framework (FPF) module.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **FPFClient**: High-level client for working with FPF specifications.
+- `load_from_file()`: Load and parse FPF specification from a local file.
+- `fetch_and_load()`: Fetch latest FPF specification from GitHub and load it.
+- `search()`: Search for patterns.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.fpf import FPFClient
+
+# Agent initializes fpf (filesystem processing framework)
+instance = FPFClient()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/fpf/](../../../src/codomyrmex/fpf/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

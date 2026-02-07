@@ -1,36 +1,55 @@
-# Utils Documentation
+# Utilities Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Common utility functions, helpers, and shared utilities.
+Utilities Package.
 
 ## Key Features
 
-- **File Utils** — Path handling, file ops
-- **String Utils** — Text manipulation
-- **Date Utils** — Date/time helpers
-- **Retries** — Retry decorators
+- `ensure_directory()` — Ensure a directory exists, creating it if necessary.
+- `safe_json_loads()` — Safely parse JSON with a fallback default.
+- `safe_json_dumps()` — Safely serialize to JSON with fallback.
+- `hash_content()` — Generate hash of content.
 
 ## Quick Start
 
 ```python
-from codomyrmex.utils import retry, slugify, ensure_dir
+from codomyrmex.utils import ensure_directory, safe_json_loads, safe_json_dumps
 
-@retry(max_attempts=3)
-def flaky_operation():
-    return call_api()
-
-slug = slugify("Hello World!")  # "hello-world"
-ensure_dir("./output/data/")
+# Use the module
+result = ensure_directory()
 ```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `ensure_directory()` | Ensure a directory exists, creating it if necessary. |
+| `safe_json_loads()` | Safely parse JSON with a fallback default. |
+| `safe_json_dumps()` | Safely serialize to JSON with fallback. |
+| `hash_content()` | Generate hash of content. |
+| `hash_file()` | Generate hash of file contents. |
+| `timing_decorator()` | Decorator to measure function execution time. |
+| `retry()` | Decorator for retrying failed operations with exponential backoff. |
+| `get_timestamp()` | Get current timestamp as formatted string. |
+| `truncate_string()` | Truncate string to maximum length with suffix. |
+| `get_env()` | Get environment variable with options. |
+| `flatten_dict()` | Flatten a nested dictionary. |
+| `deep_merge()` | Deep merge two dictionaries. |
+| `wrapper()` | wrapper |
+| `decorator()` | decorator |
+| `wrapper()` | wrapper |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

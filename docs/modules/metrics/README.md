@@ -4,32 +4,28 @@
 
 ## Overview
 
-Metrics collection, aggregation, and export for monitoring.
+Metrics module for Codomyrmex.
 
 ## Key Features
 
-- **Counters** — Increment counters
-- **Gauges** — Current values
-- **Histograms** — Distribution tracking
-- **Export** — Prometheus, StatsD
+- **MetricsError** — Raised when metrics operations fail.
+- `get_metrics()` — Get a metrics instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.metrics import MetricsCollector
+from codomyrmex.metrics import MetricsError
 
-metrics = MetricsCollector()
-
-metrics.increment("requests_total")
-metrics.gauge("active_connections", 42)
-metrics.histogram("request_duration", 0.125)
+# Initialize
+instance = MetricsError()
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

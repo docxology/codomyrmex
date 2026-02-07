@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/terminal_interface
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Terminal Interface Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+This module provides interactive terminal interfaces and utilities for
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Terminal Interface operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.terminal_interface import *
+
+# Agent uses terminal interface capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/terminal_interface/](../../../src/codomyrmex/terminal_interface/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

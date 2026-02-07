@@ -1,19 +1,46 @@
-# encryption - Functional Specification
+# Encryption — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.encryption`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `encryption` module.
+Encryption module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/encryption/SPEC.md](../../../src/codomyrmex/encryption/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `encrypt()` | Function | Encrypt data. |
+| `decrypt()` | Function | Decrypt data. |
+| `generate_key()` | Function | Generate an encryption key. |
+| `get_encryptor()` | Function | Get an encryptor instance. |
+| `encrypt_file()` | Function | Encrypt a file. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `aes_gcm.py`
+- `container.py`
+- `encryptor.py`
+- `hmac_utils.py`
+- `kdf.py`
+- `key_manager.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/encryption/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.encryption import encrypt, decrypt, generate_key, get_encryptor, encrypt_file
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k encryption -v
+```

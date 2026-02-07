@@ -4,31 +4,26 @@
 
 ## Overview
 
-Documentation generation, parsing, and rendering utilities.
+Documentation Module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Markdown** — Parse and render Markdown
-- **Docstrings** — Extract from Python
-- **API Docs** — Generate API documentation
-- **Templates** — Documentation templates
+| Submodule | Description |
+|-----------|-------------|
+| `scripts` | Documentation generation scripts. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.documentation import DocGenerator
-
-generator = DocGenerator()
-generator.scan("src/")
-generator.generate_api_docs("docs/api/")
-generator.generate_readme_summary("docs/")
+from codomyrmex.documentation import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

@@ -29,7 +29,7 @@ This document provides a guide to Personal AI Infrastructure (PAI) documentation
 | Guide | Location | Description |
 | :--- | :--- | :--- |
 | LLM Integration | [modules/llm/](modules/llm/) | LLM provider setup |
-| Ollama | [modules/ollama_integration.md](modules/ollama_integration.md) | Local LLM setup |
+| Ollama | [modules/ollama.md](modules/ollama.md) | Local LLM setup |
 | Agent Framework | [modules/agents/](modules/agents/) | AI agent usage |
 | Fabric AI | [integration/fabric-ai-integration.md](integration/fabric-ai-integration.md) | Fabric integration |
 

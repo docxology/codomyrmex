@@ -60,7 +60,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 
 **Modules Used**:
 - `static_analysis` - Initial code analysis
-- `ai_code_editing` - AI-powered insights
+- `agents` - AI-powered insights
 - `data_visualization` - Results visualization
 
 **Configuration**:
@@ -152,7 +152,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 - `static_analysis` - Code analysis
 - `pattern_matching` - Pattern detection
 - `data_visualization` - Visualization
-- `ai_code_editing` - AI insights
+- `agents` - AI insights
 
 **Configuration**:
 - Analysis types: Configurable
@@ -178,7 +178,7 @@ Integration examples demonstrate how multiple Codomyrmex modules work together t
 **Purpose**: AI-assisted development workflow from code generation to analysis.
 
 **Modules Used**:
-- `ai_code_editing` - Code generation
+- `agents` - Code generation
 - `static_analysis` - Code analysis
 - `data_visualization` - Results visualization
 

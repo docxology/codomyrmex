@@ -1,19 +1,40 @@
-# documentation - Functional Specification
+# Documentation — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.documentation`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `documentation` module.
+Documentation Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/documentation/SPEC.md](../../../src/codomyrmex/documentation/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `scripts/` — Documentation generation scripts.
+
+### Source Files
+
+- `consistency_checker.py`
+- `documentation_website.py`
+- `quality_assessment.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/documentation/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
+```

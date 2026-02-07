@@ -1,35 +1,32 @@
-# Containerization Documentation
+# Containerization Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Docker container management, image building, and orchestration.
+Containerization Module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Images** — Build Docker images
-- **Containers** — Manage container lifecycle
-- **Compose** — Docker Compose support
-- **Registry** — Push/pull from registries
+| Submodule | Description |
+|-----------|-------------|
+| `docker` | Docker container management utilities. |
+| `kubernetes` | Kubernetes submodule for containerization. |
+| `registry` | Registry submodule for containerization. |
+| `security` | Security submodule for containerization. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.containerization import ContainerManager, ImageBuilder
-
-builder = ImageBuilder()
-image = builder.build("./Dockerfile", tag="myapp:v1")
-
-manager = ContainerManager()
-container = manager.run(image, ports={"8080": 8080})
+from codomyrmex.containerization import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

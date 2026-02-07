@@ -339,7 +339,7 @@ except Exception as e:
 
 # Or use different model with higher limits
 python -c "
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 result = generate_code_snippet(
     'print hello world',
     'python',

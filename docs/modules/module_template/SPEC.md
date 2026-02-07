@@ -1,19 +1,34 @@
-# docs - Documentation Specification
+# Module Template — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.module_template`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
-This directory contains **Documentation** documentation. It serves to educate users and developers about specific aspects of the system.
+## 1. Overview
 
-## Design Principles
-- **Clarity**: Use simple, direct language.
-- **Accuracy**: Content must be verified against current code.
-- **Examples**: "Show, don't tell" where possible.
+Module Template Package
 
-## Functional Requirements
-1.  **Format**: Markdown (`.md`).
-2.  **Links**: All relative links must be valid.
+## 2. Architecture
 
-## Navigation
-- **Parent**: [../README.md](../README.md)
-- **Root**: [../../README.md](../../README.md)
+### Components
+
+| Component | Type | Description |
+|-----------|------|-------------|
+
+### Source Files
+
+- `scaffold.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/module_template/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k module_template -v
+```

@@ -375,7 +375,11 @@ PASSWORD = "admin123"
 
         def visualize_test():
             from codomyrmex.data_visualization import create_bar_chart
-            return create_bar_chart(test_data, "Performance Test Chart")
+            return create_bar_chart(
+                test_data["categories"], 
+                test_data["values"], 
+                "Performance Test Chart"
+            )
 
         result = performance_suite.run_performance_test(
             "data_visualization.create_bar_chart", visualize_test, iterations=5

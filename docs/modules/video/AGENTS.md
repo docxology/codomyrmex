@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/video
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Video Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `video` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Video processing module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- Video operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.video import *
+
+# Agent uses video capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/video/](../../../src/codomyrmex/video/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

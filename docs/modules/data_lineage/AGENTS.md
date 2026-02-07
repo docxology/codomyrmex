@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/data_lineage
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Data Lineage Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `data_lineage` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Data provenance and lineage tracking.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **NodeType**: Types of lineage nodes.
+- **EdgeType**: Types of lineage edges.
+- **LineageNode**: A node in the lineage graph.
+- **LineageEdge**: An edge connecting two nodes.
+- **DataAsset**: A data asset with lineage information.
+- `key()`: Get unique key.
+- `to_dict()`: Convert to dictionary.
+- `key()`: Get unique key.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.data_lineage import NodeType
+
+# Agent initializes data lineage
+instance = NodeType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/data_lineage/](../../../src/codomyrmex/data_lineage/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

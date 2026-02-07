@@ -1,37 +1,33 @@
-# Terminal Interface Documentation
+# Terminal Interface Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Interactive shell, command execution, and terminal rendering utilities.
+This module provides interactive terminal interfaces and utilities for
 
-## Key Features
+## Submodules
 
-- **Shell** — Interactive REPL
-- **Commands** — Execute system commands
-- **Formatting** — Rich terminal output
-- **Completion** — Tab completion
+| Submodule | Description |
+|-----------|-------------|
+| `commands` | Command registry submodule. |
+| `completions` | Autocomplete submodule. |
+| `rendering` | Output rendering submodule. |
+| `shells` | Terminal shell management utilities. |
+| `utils` | Terminal utilities submodule. |
 
 ## Quick Start
 
 ```python
-from codomyrmex.terminal_interface import CommandRunner, TerminalFormatter
-
-runner = CommandRunner()
-result = runner.run("ls -la")
-print(result.stdout)
-
-fmt = TerminalFormatter()
-fmt.print_success("Done!")
-fmt.print_table(data, headers=["Name", "Value"])
+from codomyrmex.terminal_interface import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

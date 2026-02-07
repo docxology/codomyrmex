@@ -2,7 +2,7 @@
 
 **The project changelog has been moved to the root directory for better visibility.**
 
-**👉 Note**: The project changelog is maintained at the module level. Each module has its own `CHANGELOG.md` file (e.g., `src/codomyrmex/agents/ai_code_editing/CHANGELOG.md`).
+**👉 Note**: The project changelog is maintained at the module level. Each module has its own `CHANGELOG.md` file (e.g., `src/codomyrmex/agents/CHANGELOG.md`).
 
 This allows module-specific changelogs to be easily found by contributors and follows modular architecture principles where each module maintains its own version history.
 
@@ -14,7 +14,7 @@ This allows module-specific changelogs to be easily found by contributors and fo
 
 For changes specific to individual modules, see:
 
-- **AI Code Editing**: [Changelog](../../src/codomyrmex/agents/ai_code_editing/CHANGELOG.md)
+- **AI Code Editing**: [Changelog](../../src/codomyrmex/agents/CHANGELOG.md)
 - **Data Visualization**: [Changelog](../../src/codomyrmex/data_visualization/CHANGELOG.md)
 - **Code Execution Sandbox**: [Changelog](../../src/codomyrmex/coding/MIGRATION_COMPLETE.md)
 - **Static Analysis**: [Changelog](../../src/codomyrmex/static_analysis/CHANGELOG.md)

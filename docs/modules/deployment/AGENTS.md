@@ -1,21 +1,28 @@
-# Codomyrmex Agents — docs/modules/deployment
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Deployment Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `deployment` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Deployment module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **DeploymentManager**: High-level deployment manager for orchestrating deployments.
+- **GitOpsSynchronizer**: GitOps synchronization manager.
+- `deploy()`: Deploy a service version using the specified strategy.
+- `get_deployment_history()`: Get history of deployments.
+- `rollback()`: Rollback a service to a previous version.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.deployment import DeploymentManager
+
+# Agent initializes deployment
+instance = DeploymentManager()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/deployment/](../../../src/codomyrmex/deployment/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

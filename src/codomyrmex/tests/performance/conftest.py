@@ -204,41 +204,7 @@ def performance_baseline_data() -> dict[str, Any]:
     }
 
 
-@pytest.fixture
-def mock_performance_logger():
-    """Mock performance logger for testing."""
-    class MockPerformanceLogger:
-        def __init__(self, name="perf_test"):
-            self.name = name
-            self.operations = []
 
-        def start_timer(self, operation, context=None):
-            self.operations.append({
-                "operation": operation,
-                "type": "start",
-                "context": context,
-                "timestamp": time.time()
-            })
-
-        def end_timer(self, operation, context=None):
-            self.operations.append({
-                "operation": operation,
-                "type": "end",
-                "context": context,
-                "timestamp": time.time()
-            })
-
-        def log_metric(self, name, value, unit=None, context=None):
-            self.operations.append({
-                "type": "metric",
-                "name": name,
-                "value": value,
-                "unit": unit,
-                "context": context,
-                "timestamp": time.time()
-            })
-
-    return MockPerformanceLogger()
 
 
 @pytest.fixture

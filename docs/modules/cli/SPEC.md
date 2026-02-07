@@ -1,19 +1,44 @@
-# cli - Functional Specification
+# CLI — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.cli`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `cli` module.
+This module provides the command-line interface for the Codomyrmex development platform.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/cli/SPEC.md](../../../src/codomyrmex/cli/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `completions/` — Shell Completions submodule.
+- `formatters/` — CLI Output Formatters.
+- `handlers/` — CLI command handlers.
+- `parsers/` — Argument Parsers submodule.
+- `themes/` — CLI Themes submodule.
+
+### Source Files
+
+- `__main__.py`
+- `core.py`
+- `utils.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/cli/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cli -v
+```

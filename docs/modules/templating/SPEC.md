@@ -1,19 +1,43 @@
-# templating - Functional Specification
+# Templating — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.templating`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `templating` module.
+Templating module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/templating/SPEC.md](../../../src/codomyrmex/templating/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `TemplatingError` | Class | Raised when templating operations fail. |
+| `get_default_engine()` | Function | Get or create default template engine instance. |
+| `render()` | Function | Render a template string with context data. |
+| `render_file()` | Function | Load and render a template file. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `context/` — Context builders submodule.
+- `engines/` — Template engine implementations.
+- `filters/` — Template filters submodule.
+- `loaders/` — Template loaders submodule.
+
+## 3. Dependencies
+
+See `src/codomyrmex/templating/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.templating import TemplatingError
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k templating -v
+```

@@ -1,36 +1,25 @@
-# Git Operations Documentation
+# Git Operations Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Git repository management and operations.
-
-## Key Features
-
-- **Clone** — Clone repositories
-- **Commits** — Commit operations
-- **Branches** — Branch management
-- **Diff** — Diff generation
+Git Operations Module for Codomyrmex.
 
 ## Quick Start
 
 ```python
-from codomyrmex.git_operations import GitRepo
-
-repo = GitRepo("./my_project")
-status = repo.status()
-repo.add(["src/main.py"])
-repo.commit("Add feature")
-repo.push()
+from codomyrmex.git_operations import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

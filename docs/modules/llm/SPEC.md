@@ -1,19 +1,52 @@
-# llm - Functional Specification
+# LLM — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.llm`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `llm` module.
+LLM integration modules for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/llm/SPEC.md](../../../src/codomyrmex/llm/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `chains/` — Chain implementations for LLM reasoning.
+- `cost_tracking/` — LLM Cost Tracking Module
+- `embeddings/` — LLM Embeddings Module
+- `fabric/` — Codomyrmex Fabric Integration Module
+- `guardrails/` — LLM Guardrails Module
+- `memory/` — Conversation memory management for LLMs.
+- `ollama/` — Codomyrmex Ollama Integration Module
+- `prompts/` — LLM Prompts Module
+- `providers/` — LLM Provider abstractions for unified API access.
+- `rag/` — LLM RAG Module
+- `streaming/` — LLM Streaming Module
+- `tools/` — Tool calling framework for LLMs.
+
+### Source Files
+
+- `config.py`
+- `exceptions.py`
+- `mcp.py`
+- `router.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/llm/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k llm -v
+```

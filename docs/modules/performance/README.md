@@ -1,37 +1,49 @@
-# Performance Documentation
+# Performance Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Performance profiling, benchmarking, and optimization.
+Performance optimization utilities for Codomyrmex.
 
 ## Key Features
 
-- **Profiling** — CPU/memory profiling
-- **Benchmarks** — Benchmark utilities
-- **Timing** — Execution timing
-- **Optimization** — Performance tips
+- **performance_context** — No-op context manager if dependencies missing.
+- `monitor_performance()` — No-op decorator if dependencies missing.
+- `get_system_metrics()` — get system metrics
+- `decorator()` — decorator
 
 ## Quick Start
 
 ```python
-from codomyrmex.performance import profile, benchmark
+from codomyrmex.performance import performance_context
 
-@profile
-def slow_operation():
-    return compute()
-
-@benchmark(iterations=100)
-def operation_to_test():
-    return process()
+# Initialize
+instance = performance_context()
 ```
+
+## API Reference
+
+### Classes
+
+| Class | Description |
+|-------|-------------|
+| `performance_context` | No-op context manager if dependencies missing. |
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `monitor_performance()` | No-op decorator if dependencies missing. |
+| `get_system_metrics()` | get system metrics |
+| `decorator()` | decorator |
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

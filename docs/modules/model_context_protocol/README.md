@@ -1,34 +1,34 @@
-# Model Context Protocol Documentation
+# Model Context Protocol Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-MCP implementation for AI tool and resource sharing.
+Model Context Protocol Module for Codomyrmex.
 
-## Key Features
+## Submodules
 
-- **Servers** — MCP server implementation
-- **Clients** — MCP client connections
-- **Tools** — Tool registration
-- **Resources** — Resource sharing
+| Submodule | Description |
+|-----------|-------------|
+| `adapters` | MCP adapters submodule. |
+| `discovery` | MCP Tool Discovery Module |
+| `schemas` | Model Context Protocol schema definitions. |
+| `validators` | MCP Schema Validators Module |
 
 ## Quick Start
 
 ```python
-from codomyrmex.model_context_protocol import MCPServer
-
-server = MCPServer()
-server.register_tool("search", search_function)
-server.start(port=8080)
+from codomyrmex.model_context_protocol import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

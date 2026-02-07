@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/observability_dashboard
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Observability Dashboard Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `observability_dashboard` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Unified monitoring dashboards for system observability.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **MetricType**: Types of metrics.
+- **AlertSeverity**: Alert severity levels.
+- **PanelType**: Dashboard panel types.
+- **MetricValue**: A single metric value.
+- **Alert**: An alert notification.
+- `to_dict()`: Convert to dictionary.
+- `is_active()`: Check if alert is still active.
+- `duration()`: Get alert duration.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.observability_dashboard import MetricType
+
+# Agent initializes observability dashboard
+instance = MetricType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/observability_dashboard/](../../../src/codomyrmex/observability_dashboard/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

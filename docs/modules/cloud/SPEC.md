@@ -1,19 +1,43 @@
-# cloud - Functional Specification
+# Cloud — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.cloud`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `cloud` module.
+Cloud Services Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/cloud/SPEC.md](../../../src/codomyrmex/cloud/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `aws/` — AWS integration submodule.
+- `azure/` — Azure integration submodule.
+- `coda_io/` — Coda.io API Client Submodule.
+- `common/` — Cloud common utilities.
+- `gcp/` — GCP integration submodule.
+- `infomaniak/` — Infomaniak Public Cloud Integration.
+
+### Source Files
+
+- `edge.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/cloud/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cloud -v
+```

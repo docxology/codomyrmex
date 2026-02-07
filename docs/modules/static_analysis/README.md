@@ -1,36 +1,40 @@
-# Static Analysis Documentation
+# Static Analysis Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Code analysis: linting, type checking, complexity analysis, and security scanning.
+Static Analysis Module for Codomyrmex.
 
 ## Key Features
 
-- **Linting** — Ruff, flake8 integration
-- **Types** — Mypy type checking
-- **Complexity** — Cyclomatic complexity
-- **Security** — Security vulnerability scan
+- `analyze_codebase()` — Alias for analyze_project for backward compatibility.
+- `analyze_code_quality()` — Analyze code quality for workflow integration.
+
+## Submodules
+
+| Submodule | Description |
+|-----------|-------------|
+| `complexity` | Static Analysis Complexity Module |
+| `linting` | Static Analysis Linting Module |
 
 ## Quick Start
 
 ```python
-from codomyrmex.static_analysis import Analyzer, LintRunner
+from codomyrmex.static_analysis import analyze_codebase, analyze_code_quality
 
-analyzer = Analyzer()
-report = analyzer.analyze("src/")
-
-linter = LintRunner(tool="ruff")
-issues = linter.run("src/main.py")
+# Use the module
+result = analyze_codebase()
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
+| `tutorials/` | Tutorials |
 
 ## Navigation
 

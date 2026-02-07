@@ -1,19 +1,33 @@
-# terminal_interface - Functional Specification
+# Terminal Interface — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.terminal_interface`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `terminal_interface` module.
+This module provides interactive terminal interfaces and utilities for
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/terminal_interface/SPEC.md](../../../src/codomyrmex/terminal_interface/SPEC.md)
+### Submodule Structure
 
-## Navigation
+- `commands/` — Command registry submodule.
+- `completions/` — Autocomplete submodule.
+- `rendering/` — Output rendering submodule.
+- `shells/` — Terminal shell management utilities.
+- `utils/` — Terminal utilities submodule.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/terminal_interface/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
+```

@@ -1,19 +1,25 @@
-# examples - Functional Specification
+# Examples — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.examples`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `examples` module.
+Codomyrmex Examples Module.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/examples/SPEC.md](../../../src/codomyrmex/examples/SPEC.md)
+## 3. Dependencies
 
-## Navigation
+See `src/codomyrmex/examples/__init__.py` for import dependencies.
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k examples -v
+```

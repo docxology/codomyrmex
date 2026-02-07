@@ -1,21 +1,31 @@
-# Codomyrmex Agents — docs/modules/prompt_testing
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Prompt Testing Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `prompt_testing` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Systematic prompt evaluation and A/B testing.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **EvaluationType**: Types of prompt evaluation.
+- **TestStatus**: Status of a test run.
+- **PromptTestCase**: A single test case for prompt evaluation.
+- **TestResult**: Result of running a single test case.
+- **TestSuiteResult**: Result of running a complete test suite.
+- `to_dict()`: Convert to dictionary.
+- `passed()`: Check if test passed.
+- `to_dict()`: Convert to dictionary.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.prompt_testing import EvaluationType
+
+# Agent initializes prompt testing
+instance = EvaluationType()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/prompt_testing/](../../../src/codomyrmex/prompt_testing/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

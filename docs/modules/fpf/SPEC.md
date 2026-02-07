@@ -1,19 +1,45 @@
-# fpf - Functional Specification
+# FPF (Filesystem Processing Framework) — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.fpf`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `fpf` module.
+First Principles Framework (FPF) module.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/fpf/SPEC.md](../../../src/codomyrmex/fpf/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `FPFClient` | Class | High-level client for working with FPF specifications. |
+| `load_from_file()` | Function | Load and parse FPF specification from a local file. |
+| `fetch_and_load()` | Function | Fetch latest FPF specification from GitHub and load it. |
+| `search()` | Function | Search for patterns. |
+| `get_pattern()` | Function | Get a pattern by ID. |
+| `export_json()` | Function | Export the specification to JSON. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `constraints/` — Constraint Definitions submodule.
+- `models/` — Domain Models submodule.
+- `optimization/` — Constraint Optimization submodule.
+- `reasoning/` — First Principles Framework reasoning utilities.
+
+## 3. Dependencies
+
+See `src/codomyrmex/fpf/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.fpf import FPFClient
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k fpf -v
+```

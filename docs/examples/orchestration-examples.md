@@ -152,7 +152,7 @@ Create `config/examples/workflow-with-dependencies.json`:
     },
     {
       "name": "ai_insights",
-      "module": "ai_code_editing",
+      "module": "agents",
       "action": "generate_code_insights",
       "parameters": {"analysis_data": "{{analyze_code.output}}"},
       "dependencies": ["analyze_code"]

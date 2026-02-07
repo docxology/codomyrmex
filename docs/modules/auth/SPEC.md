@@ -1,19 +1,43 @@
-# auth - Functional Specification
+# Authentication — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.auth`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `auth` module.
+Authentication module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/auth/SPEC.md](../../../src/codomyrmex/auth/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `authenticate()` | Function | Authenticate with credentials. |
+| `authorize()` | Function | Check if token has permission. |
+| `get_authenticator()` | Function | Get an authenticator instance. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `api_key_manager.py`
+- `authenticator.py`
+- `permissions.py`
+- `token.py`
+- `validator.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/auth/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.auth import authenticate, authorize, get_authenticator
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k auth -v
+```

@@ -13,14 +13,14 @@ graph TD
     end
 
     subgraph "AI & Intelligence Layer"
-        AI[ai_code_editing]
+        AI[agents]
         PATTERN[pattern_matching]
     end
 
     subgraph "Analysis & Quality Layer"
         STATIC[static_analysis]
         EXEC[code]
-        SECURITY[security_audit]
+        SECURITY[security]
     end
 
     subgraph "Visualization Layer"
@@ -35,7 +35,7 @@ graph TD
     end
 
     subgraph "Application Layer"
-        ORCH[project_orchestration]
+        ORCH[orchestrator]
         TERM[terminal_interface]
         DISCO[system_discovery]
     end
@@ -78,28 +78,34 @@ graph TD
 ## Dependency Rules
 
 ### Foundation Layer
+
 - **No dependencies**: These modules form the base of the system
 - Modules: `environment_setup`, `logging_monitoring`, `model_context_protocol`
 
 ### AI & Intelligence Layer
+
 - **Can depend on**: Foundation layer only
-- Modules: `ai_code_editing`, `pattern_matching`
+- Modules: `agents`, `pattern_matching`
 
 ### Analysis & Quality Layer
+
 - **Can depend on**: Foundation layer, and other analysis modules
-- Modules: `static_analysis`, `code`, `security_audit`
+- Modules: `static_analysis`, `coding`, `security`
 
 ### Visualization Layer
+
 - **Can depend on**: Foundation layer
 - Modules: `data_visualization`
 
 ### Build & Deploy Layer
+
 - **Can depend on**: Foundation layer, analysis layer
 - Modules: `build_synthesis`, `git_operations`, `containerization`, `ci_cd_automation`
 
 ### Application Layer
+
 - **Can depend on**: All layers (orchestration modules)
-- Modules: `project_orchestration`, `terminal_interface`, `system_discovery`
+- Modules: `orchestrator`, `terminal_interface`, `system_discovery`
 
 ## Violations
 
@@ -115,7 +121,6 @@ Run `python -m codomyrmex.tools.dependency_analyzer` to check for violations.
 ---
 
 *Last updated: Run `python -m codomyrmex.tools.dependency_analyzer` to regenerate*
-
 
 ## Navigation Links
 

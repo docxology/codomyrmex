@@ -1,19 +1,39 @@
-# ci_cd_automation - Functional Specification
+# CI/CD Automation — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.ci_cd_automation`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `ci_cd_automation` module.
+CI/CD Automation Module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-📄 [src/codomyrmex/ci_cd_automation/SPEC.md](../../../src/codomyrmex/ci_cd_automation/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Source Files
+
+- `deployment_orchestrator.py`
+- `exceptions.py`
+- `performance_optimizer.py`
+- `pipeline_manager.py`
+- `pipeline_monitor.py`
+- `rollback_manager.py`
+
+## 3. Dependencies
+
+See `src/codomyrmex/ci_cd_automation/__init__.py` for import dependencies.
+
+## 4. Public API
+
+See source module for available exports.
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k ci_cd_automation -v
+```

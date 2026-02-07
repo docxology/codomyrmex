@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for all 81 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
+Comprehensive documentation for all 93 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
 
 ## Key Documentation Files
 
@@ -13,7 +13,7 @@ Comprehensive documentation for all 81 Codomyrmex modules. Each module has its o
 | [**overview.md**](overview.md) | Complete module system overview |
 | [**relationships.md**](relationships.md) | Inter-module dependencies and data flow |
 | [**dependency-graph.md**](dependency-graph.md) | Visual dependency graph |
-| [**ollama_integration.md**](ollama_integration.md) | Local LLM integration guide |
+| [**ollama.md**](ollama.md) | Local LLM integration guide |
 
 ## Module Categories
 
@@ -32,7 +32,10 @@ Core infrastructure used by all other modules.
 | [environment_setup/](environment_setup/) | Development environment validation |
 | [events/](events/) | Event-driven architecture primitives |
 | [logging_monitoring/](logging_monitoring/) | Centralized logging and monitoring |
+| [rate_limiting/](rate_limiting/) | API rate limiting (fixed window, sliding window, token bucket) |
+| [scheduler/](scheduler/) | Task scheduling with cron, interval, and one-time triggers |
 | [serialization/](serialization/) | Data serialization formats |
+| [streaming/](streaming/) | Real-time data streaming with SSE/pub-sub |
 | [telemetry/](telemetry/) | OpenTelemetry-based observability |
 | [validation/](validation/) | Data and schema validation |
 
@@ -53,6 +56,7 @@ AI-powered capabilities for code generation and analysis.
 | [model_registry/](model_registry/) | Model versioning and lifecycle management |
 | [multimodal/](multimodal/) | Vision, audio, and image processing |
 | [prompt_testing/](prompt_testing/) | Prompt evaluation and A/B testing |
+| [vector_store/](vector_store/) | Embeddings storage with similarity search |
 
 ### Code & Analysis Modules
 
@@ -60,6 +64,7 @@ Code analysis and pattern recognition.
 
 | Module | Description |
 |--------|-------------|
+| [accessibility/](accessibility/) | WCAG compliance and accessibility utilities |
 | [coding/](coding/) | Safe code execution sandbox |
 | [pattern_matching/](pattern_matching/) | Code pattern recognition |
 | [static_analysis/](static_analysis/) | Code quality analysis |
@@ -82,16 +87,19 @@ Build, deployment, and infrastructure management.
 | Module | Description |
 |--------|-------------|
 | [build_synthesis/](build_synthesis/) | Build automation |
+| [chaos_engineering/](chaos_engineering/) | Fault injection and resilience testing |
 | [ci_cd_automation/](ci_cd_automation/) | CI/CD pipeline management |
 | [cloud/](cloud/) | Cloud provider integration |
 | [containerization/](containerization/) | Docker/Kubernetes management |
 | [cost_management/](cost_management/) | Infrastructure and LLM cost tracking |
 | [deployment/](deployment/) | Deployment strategies and orchestration |
+| [edge_computing/](edge_computing/) | Edge deployment and IoT gateways |
 | [git_operations/](git_operations/) | Git workflow automation |
 | [migration/](migration/) | Cross-provider migration tools |
 | [observability_dashboard/](observability_dashboard/) | Unified monitoring dashboards |
 | [orchestrator/](orchestrator/) | Workflow execution engine |
 | [performance/](performance/) | Performance profiling and benchmarking |
+| [service_mesh/](service_mesh/) | Circuit breakers, load balancing, retry policies |
 | [workflow_testing/](workflow_testing/) | End-to-end workflow validation |
 
 ### Security & Cognitive Modules
@@ -106,6 +114,7 @@ Autonomous security and economic capabilities.
 | [market/](market/) | Reverse auctions, demand aggregation |
 | [privacy/](privacy/) | Crumb scrubbing, mixnet routing |
 | [security/](security/) | Security scanning and hardening |
+| [smart_contracts/](smart_contracts/) | Web3 and blockchain smart contract interfaces |
 | [wallet/](wallet/) | Self-custody, Natural Ritual recovery |
 
 ### Interface & Communication Modules
@@ -139,13 +148,16 @@ Supporting utilities and infrastructure.
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
 | [examples/](examples/) | Code examples and templates |
 | [feature_flags/](feature_flags/) | Feature toggle management |
+| [i18n/](i18n/) | Translation, localization, and message bundles |
 | [logistics/](logistics/) | Logistics and supply chain |
 | [metrics/](metrics/) | Metrics collection and aggregation |
 | [module_template/](module_template/) | Module scaffolding template |
 | [networking/](networking/) | Network utilities |
 | [physical_management/](physical_management/) | Physical asset management |
 | [plugin_system/](plugin_system/) | Plugin architecture |
+| [quantum/](quantum/) | Quantum algorithm primitives and circuit simulation |
 | [scrape/](scrape/) | Web scraping utilities |
+| [search/](search/) | Full-text search with TF-IDF and fuzzy matching |
 | [spatial/](spatial/) | Spatial data processing |
 | [system_discovery/](system_discovery/) | Module discovery and health monitoring |
 | [templating/](templating/) | Template rendering engine |

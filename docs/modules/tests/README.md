@@ -1,36 +1,29 @@
-# Tests Documentation
+# Tests Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Test framework utilities, fixtures, and test patterns.
+Codomyrmex Tests Package
 
-## Key Features
+## Submodules
 
-- **Pytest** — Pytest integration
-- **Fixtures** — Shared test fixtures
-- **Mocks** — Mock utilities
-- **Coverage** — Coverage reporting
+| Submodule | Description |
+|-----------|-------------|
+| `examples` | Testing infrastructure for Codomyrmex examples. |
 
-## Running Tests
+## Quick Start
 
-```bash
-# All tests
-pytest
-
-# With coverage
-pytest --cov=codomyrmex
-
-# Specific module
-pytest tests/unit/test_llm.py
+```python
+from codomyrmex.tests import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

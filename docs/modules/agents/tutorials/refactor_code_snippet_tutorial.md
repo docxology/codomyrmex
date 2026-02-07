@@ -52,7 +52,7 @@ We will use a hypothetical MCP client. You'll need to pass the content of `sampl
 FILE_CONTENT=$(cat sample_to_refactor.py)
 
 # Example using a fictional codomyrmex_mcp_client:
-codomyrmex_mcp_client call ai_code_editing refactor_code_snippet \
+codomyrmex_mcp_client call agents refactor_code_snippet \
   --code_snippet "${FILE_CONTENT}" \
   --refactoring_instruction "Make this Python function more concise and Pythonic using a list comprehension. Keep the docstring." \
   --language "python" \
@@ -118,7 +118,7 @@ Now you can try:
 - Refactoring your own Python code or code in other supported languages.
 - Providing more complex `refactoring_instruction` like "add error handling for X condition" or "optimize this function for readability."
 - Using `refactor_code_snippet` to translate code from one style to another (e.g., functional to object-oriented, though this is a very advanced use case).
-- Reviewing the `ai_code_editing/MCP_TOOL_SPECIFICATION.md` for all parameters of `refactor_code_snippet`. 
+- Reviewing the `agents/MCP_TOOL_SPECIFICATION.md` for all parameters of `refactor_code_snippet`. 
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

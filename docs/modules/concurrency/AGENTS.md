@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/concurrency
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Concurrency Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `concurrency` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Concurrency and synchronization module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- Concurrency operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.concurrency import *
+
+# Agent uses concurrency capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/concurrency/](../../../src/codomyrmex/concurrency/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

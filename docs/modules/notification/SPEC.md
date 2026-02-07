@@ -1,19 +1,47 @@
-# notification - Functional Specification
+# Notification — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.notification`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `notification` module.
+Multi-channel notification system with templates and routing.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/notification/SPEC.md](../../../src/codomyrmex/notification/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `NotificationChannel` | Class | Available notification channels. |
+| `NotificationPriority` | Class | Priority levels for notifications. |
+| `NotificationStatus` | Class | Status of a notification. |
+| `Notification` | Class | A notification to be sent. |
+| `NotificationResult` | Class | Result of sending a notification. |
+| `NotificationProvider` | Class | Base class for notification providers. |
+| `ConsoleProvider` | Class | Print notifications to console. |
+| `FileProvider` | Class | Write notifications to a file. |
+| `WebhookProvider` | Class | Send notifications via webhook (mock for testing). |
+| `NotificationTemplate` | Class |     Template for generating notifications. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `is_success()` | Function | is success |
+| `channel()` | Function | Get the channel this provider handles. |
+| `send()` | Function | Send a notification. |
+| `channel()` | Function | channel |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/notification/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.notification import NotificationChannel, NotificationPriority, NotificationStatus, Notification, NotificationResult
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k notification -v
+```

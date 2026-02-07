@@ -1,22 +1,23 @@
-# Codomyrmex Agents — docs/modules/model_context_protocol
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Model Context Protocol Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `index.md` – Project file
-- `technical_overview.md` – Project file
-- `tutorials/` – Directory containing tutorials components
+Model Context Protocol Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Model Context Protocol operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.model_context_protocol import *
+
+# Agent uses model context protocol capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/model_context_protocol/](../../../src/codomyrmex/model_context_protocol/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

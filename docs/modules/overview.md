@@ -220,7 +220,7 @@ Modules expose public functions and classes:
 
 ```python
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 # Direct function calls
 plot_result = create_line_plot(x_data, y_data, title="Sample Plot")
@@ -254,7 +254,7 @@ def enhance_code_pipeline(source_code):
     analysis = pattern_matching.analyze_code(source_code)
 
     # 2. Generate improvements with AI
-    improvements = ai_code_editing.suggest_improvements(source_code, analysis)
+    improvements = agents.suggest_improvements(source_code, analysis)
 
     # 3. Validate generated code
     validation = code.validate_code(improvements)
@@ -365,7 +365,7 @@ for module_name, module_info in modules.items():
 ```python
 # Import specific functionality
 from codomyrmex.data_visualization import create_bar_chart
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 # Use modules in combination
 def create_code_with_visualization():

@@ -4,38 +4,20 @@
 
 ## Overview
 
-Example implementations and usage demonstrations for Codomyrmex modules.
+Codomyrmex Examples Module.
 
-## Key Features
+## Quick Start
 
-- **Working Examples** — Runnable code samples
-- **Best Practices** — Recommended patterns
-- **Integration** — Cross-module examples
-- **Tutorials** — Step-by-step guides
-
-## Available Examples
-
-| Example | Description |
-|---------|-------------|
-| `basic_llm.py` | Basic LLM usage |
-| `api_server.py` | REST API setup |
-| `data_pipeline.py` | Data processing |
-
-## Running Examples
-
-```bash
-# Run an example
-python -m codomyrmex.examples.basic_llm
-
-# List all examples
-python -m codomyrmex.examples --list
+```python
+from codomyrmex.examples import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

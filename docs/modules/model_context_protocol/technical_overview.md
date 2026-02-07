@@ -60,7 +60,7 @@ from codomyrmex.model_context_protocol.mcp_schemas import MCPToolCall
 **Example**:
 ```json
 {
-  "tool_name": "ai_code_editing.generate_code",
+  "tool_name": "agents.generate_code",
   "arguments": {
     "prompt": "Create a Python function to sum a list of numbers.",
     "language": "python",
@@ -236,7 +236,7 @@ Every `MCP_TOOL_SPECIFICATION.md` file must follow this structure:
 2. **Invocation Name**
    - Unique, machine-readable identifier
    - Format: `module_name.tool_name`
-   - Example: `ai_code_editing.generate_code`
+   - Example: `agents.generate_code`
 
 3. **Input Schema (Parameters)**
    - Markdown table with parameter details
@@ -422,7 +422,7 @@ This is the message an AI agent sends to invoke a specific tool.
 **Format**: JSON Object
 
 **Key Fields**:
-- `tool_name` (string, required): The unique invocation name of the tool to be called (e.g., `"ai_code_editing.generate_code_snippet"`). This name must match the `Invocation Name` defined in the tool's `MCP_TOOL_SPECIFICATION.md`.
+- `tool_name` (string, required): The unique invocation name of the tool to be called (e.g., `"agents.generate_code_snippet"`). This name must match the `Invocation Name` defined in the tool's `MCP_TOOL_SPECIFICATION.md`.
 - `arguments` (object, required): A JSON object containing the parameters for the tool, as specified by the tool's `Input Schema`. The keys in this object are the parameter names, and the values are the arguments provided by the agent.
 
 **Conceptual JSON Schema for a Tool Call Message**:
@@ -433,7 +433,7 @@ See Section 3.1 for the complete JSON Schema definition.
 
 ```json
 {
-  "tool_name": "ai_code_editing.generate_code",
+  "tool_name": "agents.generate_code",
   "arguments": {
     "prompt": "Create a Python function to sum a list of numbers.",
     "language": "python",

@@ -4,33 +4,20 @@
 
 ## Overview
 
-External tool integration and management for running linters, formatters, and other development tools.
-
-## Key Features
-
-- **Discovery** — Find available tools
-- **Execution** — Run tools with args
-- **Version Check** — Verify tool versions
-- **Output Parsing** — Structure tool output
+Tools Module for Codomyrmex.
 
 ## Quick Start
 
 ```python
-from codomyrmex.tools import ToolRegistry, ToolRunner
-
-registry = ToolRegistry()
-available = registry.discover()
-
-runner = ToolRunner()
-result = runner.run("ruff", ["check", "src/"])
-print(result.stdout)
+from codomyrmex.tools import *  # See source for specific imports
 ```
 
 ## Directory Contents
 
 | File | Description |
 |------|-------------|
-| `README.md` | This file |
+| `README.md` | This documentation |
+| `AGENTS.md` | Agent coordination guide |
 | `SPEC.md` | Technical specification |
 
 ## Navigation

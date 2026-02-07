@@ -1,21 +1,23 @@
-# Codomyrmex Agents — docs/modules/audio
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Audio Processing Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `audio` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Audio processing module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- Audio Processing operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.audio import *
+
+# Agent uses audio processing capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/audio/](../../../src/codomyrmex/audio/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

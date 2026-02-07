@@ -139,7 +139,7 @@ result = MCPToolResult(
 
 ### **🤖 AI & Intelligence Modules**
 
-#### **[🤖 ai_code_editing](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md)**
+#### **[🤖 agents](../../src/codomyrmex/agents/API_SPECIFICATION.md)**
 
 **AI-powered code generation, refactoring, and analysis**
 
@@ -154,7 +154,7 @@ result = MCPToolResult(
 **Quick Example:**
 
 ```python
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 # Generate a complete function
 result = generate_code_snippet(
@@ -477,7 +477,7 @@ ensure_dependencies_installed()
 
 # Use core modules
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.agents.ai_code_editing import generate_code_snippet
+from codomyrmex.agents import generate_code_snippet
 
 # Create visualization
 plot_result = create_line_plot(x_data, y_data, title="My Plot")
@@ -541,7 +541,7 @@ codomyrmex discover --detailed --output api-inventory.json
 codomyrmex info --modules --format json | jq '.modules[].mcp_tools'
 
 # Show specific module API
-codomyrmex docs generate --module ai_code_editing --format markdown
+codomyrmex docs generate --module agents --format markdown
 ```
 
 ## 📚 Documentation Links
@@ -550,7 +550,7 @@ codomyrmex docs generate --module ai_code_editing --format markdown
 
 | Module | API Reference | MCP Tools | Status |
 |--------|---------------|-----------|--------|
-| **ai_code_editing** | [API Docs](../../src/codomyrmex/agents/ai_code_editing/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/ai_code_editing/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **agents** | [API Docs](../../src/codomyrmex/agents/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/agents/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **data_visualization** | [API Docs](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) | None | ✅ Stable |
 | **code** | [API Docs](../../src/codomyrmex/coding/README.md) | [MCP Tools](../../src/codomyrmex/coding/README.md#mcp-tools) | 🔄 Evolving |
 | **static_analysis** | [API Docs](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/static_analysis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |

@@ -1,21 +1,28 @@
-# Codomyrmex Agents — docs/modules/evolutionary_ai
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Evolutionary AI Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides for the `evolutionary_ai` module.
 
-## Active Components
-- `README.md` – Module documentation
-- `SPEC.md` – Functional specification
+Evolutionary AI module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **Human Documentation**: [README.md](README.md)
-- **Functional Specification**: [SPEC.md](SPEC.md)
-- **Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **Project Root**: [README](../../../README.md) - Main project documentation
+- **Genome**: A genome representing an individual's genetic material.
+- **Population**: A population of individuals for evolutionary algorithms.
+- `crossover()`: Perform single-point crossover between two genomes.
+- `mutate()`: Apply mutation to a genome.
+- `tournament_selection()`: Select an individual using tournament selection.
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.evolutionary_ai import Genome
+
+# Agent initializes evolutionary ai
+instance = Genome()
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/evolutionary_ai/](../../../src/codomyrmex/evolutionary_ai/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

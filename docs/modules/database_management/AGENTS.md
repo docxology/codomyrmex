@@ -1,19 +1,23 @@
-# Codomyrmex Agents — docs/modules/database_management
-
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+# Database Management Module — Agent Coordination
 
 ## Purpose
-Documentation files and guides.
 
-## Active Components
-- `README.md` – Project file
-- `SPEC.md` – Project file
+Database Management Module for Codomyrmex.
 
-## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+## Key Capabilities
 
-## Navigation Links
-- **📁 Parent Directory**: [modules](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- Database Management operations and management
+
+## Agent Usage Patterns
+
+```python
+from codomyrmex.database_management import *
+
+# Agent uses database management capabilities
+```
+
+## Integration Points
+
+- **Source**: [src/codomyrmex/database_management/](../../../src/codomyrmex/database_management/)
+- **Docs**: [Module Documentation](README.md)
+- **Spec**: [Technical Specification](SPEC.md)

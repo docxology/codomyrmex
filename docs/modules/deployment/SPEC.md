@@ -1,19 +1,47 @@
-# deployment - Functional Specification
+# Deployment — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.deployment`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `deployment` module.
+Deployment module for Codomyrmex.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/deployment/SPEC.md](../../../src/codomyrmex/deployment/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `DeploymentManager` | Class | High-level deployment manager for orchestrating deployments. |
+| `GitOpsSynchronizer` | Class | GitOps synchronization manager. |
+| `deploy()` | Function | Deploy a service version using the specified strategy. |
+| `get_deployment_history()` | Function | Get history of deployments. |
+| `rollback()` | Function | Rollback a service to a previous version. |
+| `sync()` | Function | Synchronize from Git repository. |
+| `get_version()` | Function | Get the current synced version via git rev-parse. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+### Submodule Structure
+
+- `gitops/` — GitOps integration submodule.
+- `health_checks/` — Deployment health check implementations.
+- `manager/` — Deployment manager submodule.
+- `rollback/` — Rollback management submodule.
+- `strategies/` — Deployment strategies.
+
+## 3. Dependencies
+
+See `src/codomyrmex/deployment/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.deployment import DeploymentManager, GitOpsSynchronizer
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
+```

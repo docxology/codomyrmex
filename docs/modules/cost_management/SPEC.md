@@ -1,19 +1,47 @@
-# cost_management - Functional Specification
+# Cost Management — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Module**: `codomyrmex.cost_management`  
+**Version**: v0.1.0  
+**Status**: Active
 
-## Purpose
+## 1. Overview
 
-Functional specification stub for the `cost_management` module.
+Spend tracking, budgeting, and cost optimization.
 
-## Source Specification
+## 2. Architecture
 
-The authoritative functional specification is located in the source module:
-[src/codomyrmex/cost_management/SPEC.md](../../../src/codomyrmex/cost_management/SPEC.md)
+### Components
 
-## Navigation
+| Component | Type | Description |
+|-----------|------|-------------|
+| `CostCategory` | Class | Categories of costs. |
+| `BudgetPeriod` | Class | Budget periods. |
+| `CostEntry` | Class | A single cost entry. |
+| `Budget` | Class | A budget allocation. |
+| `CostSummary` | Class | Summary of costs. |
+| `BudgetAlert` | Class | A budget alert. |
+| `CostStore` | Class | Base class for cost storage. |
+| `InMemoryCostStore` | Class | In-memory cost storage. |
+| `CostTracker` | Class | Main cost tracking service. |
+| `BudgetManager` | Class | Budget management and alerting. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `get_period_start()` | Function | Get the start of the current budget period. |
+| `to_dict()` | Function | Convert to dictionary. |
+| `utilization()` | Function | Get budget utilization percentage. |
+| `message()` | Function | Get alert message. |
 
-- **Human Documentation**: [README.md](README.md)
-- **Technical Documentation**: [AGENTS.md](AGENTS.md)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [README](../../../README.md)
+## 3. Dependencies
+
+See `src/codomyrmex/cost_management/__init__.py` for import dependencies.
+
+## 4. Public API
+
+```python
+from codomyrmex.cost_management import CostCategory, BudgetPeriod, CostEntry, Budget, CostSummary
+```
+
+## 5. Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k cost_management -v
+```

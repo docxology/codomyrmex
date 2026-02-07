@@ -71,7 +71,7 @@ Each workflow step is defined with the following structure:
     },
     {
       "name": "ai_insights",
-      "module": "ai_code_editing",
+      "module": "agents",
       "action": "generate_code_insights",
       "parameters": {
         "analysis_data": "{{code_analysis.output}}",
