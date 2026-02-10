@@ -30,6 +30,14 @@ uv sync
 - **`init()`** — init
 - **`t()`** — t
 
+## Directory Structure
+
+- `models.py` — Data models (Locale)
+- `translator.py` — Translation logic (MessageBundle, Translator)
+- `formatters.py` — Locale-aware formatting (PluralRules, NumberFormatter)
+- `date_formatter.py` — Locale-aware date, time, and relative time formatting (DateFormatter)
+- `__init__.py` — Public API re-exports and convenience functions (init, t)
+
 ## Quick Start
 
 ```python

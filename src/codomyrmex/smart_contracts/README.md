@@ -34,6 +34,16 @@ uv sync
 - **`ether_to_wei()`** — ether_to_wei
 - **`gwei_to_wei()`** — gwei_to_wei
 
+## Directory Structure
+
+- `models.py` — Data models (Network, TransactionStatus, Address, Transaction, ContractFunction)
+- `contract.py` — Smart contract logic (Contract, ContractCall)
+- `builders.py` — Transaction builder with fluent API (TransactionBuilder)
+- `registry.py` — Contract registry (ContractRegistry)
+- `events.py` — Contract events, filtering, and event log (ContractEvent, EventFilter, EventLog)
+- `utils.py` — Unit conversion utilities (wei_to_ether, ether_to_wei, gwei_to_wei)
+- `__init__.py` — Public API re-exports
+
 ## Quick Start
 
 ```python

@@ -31,6 +31,15 @@ uv sync
 - **`ghz_state()`** — Create GHZ state circuit.
 - **`qft()`** — Quantum Fourier Transform circuit.
 
+## Directory Structure
+
+- `models.py` — Data models (GateType, Gate, Qubit)
+- `circuit.py` — Quantum circuit construction (QuantumCircuit)
+- `simulator.py` — Statevector simulation (QuantumSimulator)
+- `algorithms.py` — Pre-built algorithms (bell_state, ghz_state, qft)
+- `visualization.py` — Circuit ASCII rendering and statistics (circuit_to_ascii, circuit_stats)
+- `__init__.py` — Public API re-exports
+
 ## Quick Start
 
 ```python

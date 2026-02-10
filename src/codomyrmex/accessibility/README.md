@@ -31,6 +31,14 @@ uv sync
 - **`calculate_contrast_ratio()`** — Calculate WCAG contrast ratio between two colors.
 - **`check_heading_hierarchy()`** — Check heading level hierarchy.
 
+## Directory Structure
+
+- `models.py` — Data models (WCAGLevel, IssueType, AccessibilityIssue, AccessibilityReport, WCAGRule)
+- `checker.py` — Accessibility checker logic (A11yChecker)
+- `reporters.py` — Report formatters (AccessibilityReporter: summary, dict, JSON, Markdown)
+- `utils.py` — Utility functions (calculate_contrast_ratio, check_heading_hierarchy)
+- `__init__.py` — Public API re-exports
+
 ## Quick Start
 
 ```python
