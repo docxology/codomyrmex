@@ -8,7 +8,7 @@ Fault injection and resilience testing.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

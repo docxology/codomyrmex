@@ -54,7 +54,7 @@ The Git Operations module aims to offer a safe and reliable Python API for autom
     -   Document that automated commits by this module will respect local repository hooks.
     -   If this module itself were to *manage* or *configure* hooks, that would require its own security review.
 -   **Dependency Security**: 
-    -   Keep any third-party Git libraries (e.g., `GitPython`) updated to their latest secure versions by pinning them in `git_operations/requirements.txt` and monitoring for vulnerabilities.
+    -   Keep any third-party Git libraries (e.g., `GitPython`) updated to their latest secure versions by pinning them in `pyproject.toml` and monitoring for vulnerabilities.
     -   Ensure the system's `git` client itself is kept updated.
 -   **Input Validation**: 
     -   Validate repository paths to ensure they point to valid directories and ideally actual Git repositories before operations.

@@ -4,8 +4,8 @@
 
 - **Parent**: [docs](../AGENTS.md)
 - **Self**: [docs/modules Agents](AGENTS.md)
-- **Children** (93 modules):
-  - [accessibility/](accessibility/AGENTS.md), [agentic_memory/](agentic_memory/AGENTS.md), [agents/](agents/AGENTS.md), [api/](api/AGENTS.md), [audio/](audio/AGENTS.md), [auth/](auth/AGENTS.md), [build_synthesis/](build_synthesis/AGENTS.md), [cache/](cache/AGENTS.md), [cerebrum/](cerebrum/AGENTS.md), [chaos_engineering/](chaos_engineering/AGENTS.md), [ci_cd_automation/](ci_cd_automation/AGENTS.md), [cli/](cli/AGENTS.md), [cloud/](cloud/AGENTS.md), [coding/](coding/AGENTS.md), [collaboration/](collaboration/AGENTS.md), [compression/](compression/AGENTS.md), [concurrency/](concurrency/AGENTS.md), [config_management/](config_management/AGENTS.md), [containerization/](containerization/AGENTS.md), [cost_management/](cost_management/AGENTS.md), [dark/](dark/AGENTS.md), [data_lineage/](data_lineage/AGENTS.md), [data_visualization/](data_visualization/AGENTS.md), [database_management/](database_management/AGENTS.md), [defense/](defense/AGENTS.md), [deployment/](deployment/AGENTS.md), [documentation/](documentation/AGENTS.md), [documents/](documents/AGENTS.md), [edge_computing/](edge_computing/AGENTS.md), [embodiment/](embodiment/AGENTS.md), [encryption/](encryption/AGENTS.md), [environment_setup/](environment_setup/AGENTS.md), [events/](events/AGENTS.md), [evolutionary_ai/](evolutionary_ai/AGENTS.md), [examples/](examples/AGENTS.md), [feature_flags/](feature_flags/AGENTS.md), [feature_store/](feature_store/AGENTS.md), [fpf/](fpf/AGENTS.md), [git_operations/](git_operations/AGENTS.md), [graph_rag/](graph_rag/AGENTS.md), [i18n/](i18n/AGENTS.md), [ide/](ide/AGENTS.md), [identity/](identity/AGENTS.md), [inference_optimization/](inference_optimization/AGENTS.md), [llm/](llm/AGENTS.md), [logging_monitoring/](logging_monitoring/AGENTS.md), [logistics/](logistics/AGENTS.md), [market/](market/AGENTS.md), [metrics/](metrics/AGENTS.md), [migration/](migration/AGENTS.md), [model_context_protocol/](model_context_protocol/AGENTS.md), [model_ops/](model_ops/AGENTS.md), [model_registry/](model_registry/AGENTS.md), [module_template/](module_template/AGENTS.md), [multimodal/](multimodal/AGENTS.md), [networking/](networking/AGENTS.md), [notification/](notification/AGENTS.md), [observability_dashboard/](observability_dashboard/AGENTS.md), [orchestrator/](orchestrator/AGENTS.md), [pattern_matching/](pattern_matching/AGENTS.md), [performance/](performance/AGENTS.md), [physical_management/](physical_management/AGENTS.md), [plugin_system/](plugin_system/AGENTS.md), [privacy/](privacy/AGENTS.md), [prompt_testing/](prompt_testing/AGENTS.md), [quantum/](quantum/AGENTS.md), [rate_limiting/](rate_limiting/AGENTS.md), [scheduler/](scheduler/AGENTS.md), [scrape/](scrape/AGENTS.md), [search/](search/AGENTS.md), [security/](security/AGENTS.md), [serialization/](serialization/AGENTS.md), [service_mesh/](service_mesh/AGENTS.md), [skills/](skills/AGENTS.md), [smart_contracts/](smart_contracts/AGENTS.md), [spatial/](spatial/AGENTS.md), [static_analysis/](static_analysis/AGENTS.md), [streaming/](streaming/AGENTS.md), [system_discovery/](system_discovery/AGENTS.md), [telemetry/](telemetry/AGENTS.md), [templating/](templating/AGENTS.md), [terminal_interface/](terminal_interface/AGENTS.md), [testing/](testing/AGENTS.md), [tests/](tests/AGENTS.md), [tools/](tools/AGENTS.md), [tree_sitter/](tree_sitter/AGENTS.md), [utils/](utils/AGENTS.md), [validation/](validation/AGENTS.md), [vector_store/](vector_store/AGENTS.md), [video/](video/AGENTS.md), [wallet/](wallet/AGENTS.md), [website/](website/AGENTS.md), [workflow_testing/](workflow_testing/AGENTS.md)
+- **Children** (94 modules):
+  - [accessibility/](accessibility/AGENTS.md), [agentic_memory/](agentic_memory/AGENTS.md), [agents/](agents/AGENTS.md), [api/](api/AGENTS.md), [audio/](audio/AGENTS.md), [auth/](auth/AGENTS.md), [build_synthesis/](build_synthesis/AGENTS.md), [cache/](cache/AGENTS.md), [cerebrum/](cerebrum/AGENTS.md), [chaos_engineering/](chaos_engineering/AGENTS.md), [ci_cd_automation/](ci_cd_automation/AGENTS.md), [cli/](cli/AGENTS.md), [cloud/](cloud/AGENTS.md), [coding/](coding/AGENTS.md), [collaboration/](collaboration/AGENTS.md), [compression/](compression/AGENTS.md), [concurrency/](concurrency/AGENTS.md), [config_management/](config_management/AGENTS.md), [containerization/](containerization/AGENTS.md), [cost_management/](cost_management/AGENTS.md), [dark/](dark/AGENTS.md), [data_lineage/](data_lineage/AGENTS.md), [data_visualization/](data_visualization/AGENTS.md), [database_management/](database_management/AGENTS.md), [defense/](defense/AGENTS.md), [deployment/](deployment/AGENTS.md), [documentation/](documentation/AGENTS.md), [documents/](documents/AGENTS.md), [edge_computing/](edge_computing/AGENTS.md), [embodiment/](embodiment/AGENTS.md), [encryption/](encryption/AGENTS.md), [environment_setup/](environment_setup/AGENTS.md), [events/](events/AGENTS.md), [exceptions/](exceptions/AGENTS.md), [evolutionary_ai/](evolutionary_ai/AGENTS.md), [examples/](examples/AGENTS.md), [feature_flags/](feature_flags/AGENTS.md), [feature_store/](feature_store/AGENTS.md), [fpf/](fpf/AGENTS.md), [git_operations/](git_operations/AGENTS.md), [graph_rag/](graph_rag/AGENTS.md), [i18n/](i18n/AGENTS.md), [ide/](ide/AGENTS.md), [identity/](identity/AGENTS.md), [inference_optimization/](inference_optimization/AGENTS.md), [llm/](llm/AGENTS.md), [logging_monitoring/](logging_monitoring/AGENTS.md), [logistics/](logistics/AGENTS.md), [market/](market/AGENTS.md), [metrics/](metrics/AGENTS.md), [migration/](migration/AGENTS.md), [model_context_protocol/](model_context_protocol/AGENTS.md), [model_ops/](model_ops/AGENTS.md), [model_registry/](model_registry/AGENTS.md), [module_template/](module_template/AGENTS.md), [multimodal/](multimodal/AGENTS.md), [networking/](networking/AGENTS.md), [notification/](notification/AGENTS.md), [observability_dashboard/](observability_dashboard/AGENTS.md), [orchestrator/](orchestrator/AGENTS.md), [pattern_matching/](pattern_matching/AGENTS.md), [performance/](performance/AGENTS.md), [physical_management/](physical_management/AGENTS.md), [plugin_system/](plugin_system/AGENTS.md), [privacy/](privacy/AGENTS.md), [prompt_testing/](prompt_testing/AGENTS.md), [quantum/](quantum/AGENTS.md), [rate_limiting/](rate_limiting/AGENTS.md), [scheduler/](scheduler/AGENTS.md), [scrape/](scrape/AGENTS.md), [search/](search/AGENTS.md), [security/](security/AGENTS.md), [serialization/](serialization/AGENTS.md), [service_mesh/](service_mesh/AGENTS.md), [skills/](skills/AGENTS.md), [smart_contracts/](smart_contracts/AGENTS.md), [spatial/](spatial/AGENTS.md), [static_analysis/](static_analysis/AGENTS.md), [streaming/](streaming/AGENTS.md), [system_discovery/](system_discovery/AGENTS.md), [telemetry/](telemetry/AGENTS.md), [templating/](templating/AGENTS.md), [terminal_interface/](terminal_interface/AGENTS.md), [testing/](testing/AGENTS.md), [tests/](tests/AGENTS.md), [tools/](tools/AGENTS.md), [tree_sitter/](tree_sitter/AGENTS.md), [utils/](utils/AGENTS.md), [validation/](validation/AGENTS.md), [vector_store/](vector_store/AGENTS.md), [video/](video/AGENTS.md), [wallet/](wallet/AGENTS.md), [website/](website/AGENTS.md), [workflow_testing/](workflow_testing/AGENTS.md)
 - **Key Artifacts**:
   - [Functional Spec](SPEC.md)
   - [Human Readme](README.md)
@@ -16,7 +16,7 @@
 
 ## Purpose
 
-Comprehensive documentation hub for all 93 Codomyrmex modules. Provides API specifications, usage guides, tutorials, and integration patterns for every module in the system.
+Comprehensive documentation hub for all 94 Codomyrmex modules. Provides API specifications, usage guides, tutorials, and integration patterns for every module in the system.
 
 ## Active Components
 
@@ -25,7 +25,7 @@ Comprehensive documentation hub for all 93 Codomyrmex modules. Provides API spec
 - `dependency-graph.md` - Visual dependency graph (Mermaid)
 - `ollama.md` - Local LLM integration guide
 - `PAI.md` - Personal AI Infrastructure context
-- 93 module subdirectories (see Module Categories below)
+- 94 module subdirectories (see Module Categories below)
 
 ## Key Documentation Files
 
@@ -161,6 +161,7 @@ Supporting utilities and infrastructure.
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
 | [examples/](examples/) | Code examples and templates |
+| [exceptions/](exceptions/) | Centralized exception hierarchy and error handling |
 | [feature_flags/](feature_flags/) | Feature toggle management |
 | [logistics/](logistics/) | Logistics and supply chain |
 | [metrics/](metrics/) | Metrics collection and aggregation |
@@ -179,11 +180,11 @@ Supporting utilities and infrastructure.
 
 ## Documentation Coverage
 
-All 93 modules have the complete documentation triad: README.md + AGENTS.md + SPEC.md.
+All 94 modules have the full RASP set: README.md + AGENTS.md + SPEC.md.
 
 ## Agent Quality Standards
 
-1. **Documentation Completeness**: Each module docs folder has README.md, AGENTS.md, SPEC.md (93/93 complete)
+1. **Documentation Completeness**: Each module docs folder has README.md, AGENTS.md, SPEC.md (94/94 complete)
 2. **Accuracy**: Documentation must match current source code implementations
 3. **Examples**: Include working code examples for all key features
 4. **Navigation**: Maintain proper links to source and related modules
@@ -196,7 +197,7 @@ All 93 modules have the complete documentation triad: README.md + AGENTS.md + SP
 - Keep documentation synchronized with source code changes.
 - Update module relationships when dependencies change.
 - Record new modules in overview.md and relationships.md.
-- When adding a new module subdirectory, create the full triad: README.md, AGENTS.md, SPEC.md.
+- When adding a new module subdirectory, create the full RASP set: README.md, AGENTS.md, SPEC.md.
 
 ## Navigation Links
 

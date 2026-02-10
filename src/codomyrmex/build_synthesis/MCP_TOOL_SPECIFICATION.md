@@ -45,7 +45,7 @@ This tool maps to the `trigger_build` Python API function.
 ### 5. Error Handling
 
 - Immediate failures (e.g., invalid `target`) result in a "failure" `status` and `error_message`.
-- For asynchronous builds, `status` might be "pending", and subsequent status checks are needed via `get_build_status`.
+- For asynchronous builds, `status` might be "pending", and the caller should poll or wait before checking results.
 
 ### 6. Idempotency
 
@@ -73,125 +73,157 @@ This tool maps to the `trigger_build` Python API function.
 
 ---
 
-## Tool: `get_build_status`
+## Tool: `clean_build`
 
 ### 1. Tool Purpose and Description
 
-Retrieves the current status and details of a previously initiated build using its `build_id`.
-This tool maps to the `get_build_status` Python API function.
+Cleans build artifacts for a specific target or all targets. Removes generated files from the build directory.
+This tool maps to the `BuildManager.clean_build` Python API method.
 
 ### 2. Invocation Name
 
-`get_build_status`
+`clean_build`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type   | Required | Description                                          | Example Value           |
-| :------------- | :----- | :------- | :--------------------------------------------------- | :---------------------- |
-| `build_id`     | `string`| Yes      | The unique identifier of the build (from `trigger_build`). | `"build_job_170248A9Z"` |
+| Parameter Name | Type     | Required | Description                                                              | Example Value       |
+| :------------- | :------- | :------- | :----------------------------------------------------------------------- | :------------------ |
+| `target_name`  | `string` | No       | Name of the build target to clean. If omitted, cleans all build artifacts. | `"core_library"`  |
+| `config_path`  | `string` | No       | Path to build configuration file. Defaults to `build.yaml` in project root. | `"./build.yaml"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name            | Type          | Description                                                                                             | Example Value                                                       |
-| :-------------------- | :------------ | :------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------ |
-| `build_id`            | `string`      | The build identifier.                                                                                   | `"build_job_170248A9Z"`                                             |
-| `status`              | `string`      | Current build status: "pending", "in_progress", "success", "failure", "cancelled".                | `"in_progress"`                                                     |
-| `progress_percentage` | `integer`     | Optional. Estimated completion percentage (0-100).                                                      | `75`                                                                |
-| `message`             | `string`      | Current status message (e.g., "Compiling module X...", "Build failed: Error Y").                        | `"Linking final artifact..."`                                       |
-| `artifact_paths`      | `array[string]`| List of paths to generated artifacts. Populated if `status` is "success".                               | `["./dist/core_library.whl"]`                                     |
-| `log_file_path`       | `string`      | Optional. Path to a detailed build log file.                                                              | `"./output/logs/build_job_170248A9Z.log"`                         |
-| `error_details`       | `string`      | Detailed error message if `status` is "failure".                                                          | `"Linker error: undefined symbol 'xyz'."`                           |
+| Field Name | Type      | Description                                           | Example Value |
+| :--------- | :-------- | :---------------------------------------------------- | :------------ |
+| `success`  | `boolean` | Whether the clean operation completed successfully.   | `true`        |
+| `message`  | `string`  | Description of what was cleaned or error details.     | `"Cleaned build directory for target: core_library"` |
 
 ### 5. Error Handling
 
-- If `build_id` is not found or invalid, an appropriate error status/message should be returned by the tool itself (e.g. status:"error", message: "Invalid build_id").
+- File system permission errors or missing directories result in `success: false` with an error message.
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes. Multiple calls with the same valid `build_id` should return the current state of that build without causing further side effects on the build itself.
+- **Idempotent**: Yes. Cleaning an already-clean directory is a no-op that succeeds.
 
 ### 7. Usage Examples (for MCP context)
 
 ```json
 {
-  "tool_name": "get_build_status",
+  "tool_name": "clean_build",
   "arguments": {
-    "build_id": "build_job_170248A9Z"
+    "target_name": "core_library"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- Ensure `build_id` does not allow enumeration of arbitrary system information.
-- Returned `log_file_path` or `artifact_paths` should be validated and within expected project boundaries.
+- **Path Traversal**: Validate `target_name` to prevent deletion of files outside the build directory.
+- **Permissions**: Tool needs appropriate write/delete permissions on the build directory.
 
 ---
 
-## Tool: `synthesize_component_from_prompt`
+## Tool: `package_artifacts`
 
 ### 1. Tool Purpose and Description
 
-Generates a new code component (e.g., function, class, small module) based on a natural language prompt, primarily using an LLM.
-This tool maps to the `synthesize_component_from_prompt` Python API function.
+Packages build artifacts for a specific target into a compressed archive (`.tar.gz`).
+This tool maps to the `BuildManager.package_artifacts` Python API method.
 
 ### 2. Invocation Name
 
-`synthesize_component_from_prompt`
+`package_artifacts`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name    | Type     | Required | Description                                                                         | Example Value                                                                |
-| :---------------- | :------- | :------- | :---------------------------------------------------------------------------------- | :--------------------------------------------------------------------------- |
-| `prompt`          | `string` | Yes      | Detailed natural language description of the component to be synthesized.           | `"Create a Python function to calculate factorial recursively with a docstring."` |
-| `language`        | `string` | Yes      | Target programming language (e.g., "python", "javascript").                         | `"python"`                                                                   |
-| `target_directory`| `string` | Yes      | The directory where the generated file(s) should be placed.                         | `"./src/utils/"`                                                             |
-| `context_code`    | `string` | No       | Existing code snippet(s) to provide context to the LLM.                             | `"class MathHelpers:
-    # new function will be part of this class"`          |
-| `style_guide`     | `string` | No       | Instructions or examples related to coding style or conventions.                    | `"Follow PEP8. Max line length 88."`                                       |
-| `llm_config`      | `object` | No       | Configuration for the LLM (e.g., provider, model name). Defaults to module settings.| `{"model_name": "gpt-4-turbo"}`                                              |
+| Parameter Name | Type     | Required | Description                                                              | Example Value                        |
+| :------------- | :------- | :------- | :----------------------------------------------------------------------- | :----------------------------------- |
+| `target_name`  | `string` | Yes      | Name of the build target whose artifacts should be packaged.             | `"core_library"`                     |
+| `output_path`  | `string` | No       | Path for the output archive. Defaults to `{target}_{timestamp}.tar.gz`. | `"./dist/core_library_release.tar.gz"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name        | Type     | Description                                                                                               | Example Value                                                                   |
-| :---------------- | :------- | :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
-| `status`          | `string` | Synthesis status: "success", "failure".                                                                   | `"success"`                                                                     |
-| `generated_files` | `object` | A dictionary where keys are filenames and values are the string content of the generated files.             | `{"factorial.py": "def factorial(n):
-    if n == 0:
-        return 1
-    else:
-        return n * factorial(n-1)"}` |
-| `explanation`     | `string` | LLM-generated explanation of the synthesized code (if any).                                               | `"This function calculates factorial using recursion..."`                     |
-| `error_message`   | `string` | Error description if `status` is "failure".                                                               | `"LLM request failed due to invalid API key."`                                |
+| Field Name     | Type     | Description                                              | Example Value                              |
+| :------------- | :------- | :------------------------------------------------------- | :----------------------------------------- |
+| `status`       | `string` | Packaging status: "success", "failure".                  | `"success"`                                |
+| `archive_path` | `string` | Path to the generated archive file.                      | `"./dist/core_library_20260210_120000.tar.gz"` |
+| `error_message`| `string` | Error description if `status` is "failure".              | `"Build directory not found: build/core_library"` |
 
 ### 5. Error Handling
 
-- Errors such as LLM failures, invalid prompts, or file system write issues will result in a "failure" `status`.
+- Missing build directories or file system errors result in a "failure" `status`.
 
 ### 6. Idempotency
 
-- **Idempotent**: No. Re-running with the same parameters will likely attempt to create and write the same files, potentially overwriting or erroring if they exist.
-- **Explanation**: Strong side effects on the file system.
+- **Idempotent**: No. Re-running overwrites the output archive if it exists or creates a new timestamped one.
 
 ### 7. Usage Examples (for MCP context)
 
 ```json
 {
-  "tool_name": "synthesize_component_from_prompt",
+  "tool_name": "package_artifacts",
   "arguments": {
-    "prompt": "Generate a Python class for a simple User with name and email attributes.",
-    "language": "python",
-    "target_directory": "./models/",
-    "style_guide": "Include type hints."
+    "target_name": "core_library",
+    "output_path": "./dist/core_library_release.tar.gz"
   }
 }
 ```
 
 ### 8. Security Considerations
 
-- **File System Writes**: Validate `target_directory` to prevent writing outside intended project areas.
-- **Prompt Injection**: If `prompt`, `context_code`, or `style_guide` can be influenced by untrusted external sources, this could lead to prompt injection attacks against the LLM.
-- **Resource Usage**: LLM calls can be resource-intensive (API costs, time).
+- **Path Traversal**: Validate `output_path` to prevent writing outside intended directories.
+- **Archive Size**: Large build directories could produce very large archives; consider size limits.
+
+---
+
+## Tool: `get_build_summary`
+
+### 1. Tool Purpose and Description
+
+Returns a summary of all builds that have been executed, including counts, success rates, and average duration.
+This tool maps to the `BuildManager.get_build_summary` Python API method.
+
+### 2. Invocation Name
+
+`get_build_summary`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type     | Required | Description                                                              | Example Value    |
+| :------------- | :------- | :------- | :----------------------------------------------------------------------- | :--------------- |
+| `config_path`  | `string` | No       | Path to build configuration file. Defaults to `build.yaml` in project root. | `"./build.yaml"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name        | Type      | Description                                         | Example Value |
+| :---------------- | :-------- | :-------------------------------------------------- | :------------ |
+| `total_builds`    | `integer` | Total number of builds executed.                    | `10`          |
+| `successful`      | `integer` | Number of successful builds.                        | `8`           |
+| `failed`          | `integer` | Number of failed builds.                            | `2`           |
+| `success_rate`    | `number`  | Ratio of successful builds to total (0.0 to 1.0).  | `0.8`         |
+| `average_duration`| `number`  | Average build duration in seconds.                  | `45.3`        |
+
+### 5. Error Handling
+
+- Returns zero counts if no builds have been executed yet.
+
+### 6. Idempotency
+
+- **Idempotent**: Yes. Read-only operation that does not modify state.
+
+### 7. Usage Examples (for MCP context)
+
+```json
+{
+  "tool_name": "get_build_summary",
+  "arguments": {}
+}
+```
+
+### 8. Security Considerations
+
+- No significant security concerns as this is a read-only operation returning aggregate data.
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 80+ specialized modules.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 90+ specialized modules.
 
 ## Documentation Organization
 

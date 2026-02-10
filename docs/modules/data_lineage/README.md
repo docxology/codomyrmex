@@ -10,7 +10,7 @@ The `data_lineage` module provides data provenance and lineage tracking through 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

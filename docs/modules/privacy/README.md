@@ -10,7 +10,7 @@ Data sanitization via crumb cleaning and anonymous routing via mixnet patterns.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

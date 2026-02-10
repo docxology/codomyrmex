@@ -8,7 +8,7 @@ Interactive terminal shells, command runners, and rich rendering.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

@@ -222,9 +222,9 @@ Source Code → Static Analysis → Testing → Build Validation → Deployment
 
 ### Dependency Management
 
-- **Root `requirements.txt`**: Core dependencies used across modules
-- **Module `requirements.txt`**: Module-specific dependencies
-- **Version pinning**: All dependencies use exact versions for reproducibility
+- **`pyproject.toml`**: All dependencies managed centrally with optional extras per module
+- **`uv.lock`**: Lockfile for reproducible environments
+- **Version pinning**: Managed through uv lockfile for reproducibility
 
 ### Configuration Strategy
 

@@ -24,7 +24,7 @@ AI code editing integration for Cursor, Continue, Copilot, and other editor agen
 - `droid_manager.py` – File
 - `openai_codex.py` – File
 - `prompt_composition.py` – File
-- `requirements.txt` – File
+- `pyproject.toml` – File
 
 ## Navigation
 

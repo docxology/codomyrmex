@@ -10,7 +10,7 @@ Unified monitoring dashboards for system observability. Provides a complete metr
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

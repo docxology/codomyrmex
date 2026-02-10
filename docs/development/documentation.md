@@ -62,7 +62,7 @@ src/codomyrmex/[module]/
 ├── MCP_TOOL_SPECIFICATION.md     # ⚠️ Required if referenced in docs/index.md
 ├── USAGE_EXAMPLES.md             # ⚠️ Required if referenced in docs/index.md
 ├── CHANGELOG.md                  # Optional: Module version history
-├── requirements.txt              # Optional: Module dependencies
+├── pyproject.toml              # Project dependencies
 ├── docs/                         # Extended documentation
 │   ├── index.md                  # ✅ REQUIRED if docs/ exists
 │   ├── technical_overview.md     # Optional: Architecture details

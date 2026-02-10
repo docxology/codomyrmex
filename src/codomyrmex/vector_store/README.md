@@ -4,11 +4,10 @@
 
 Embeddings storage with similarity search using cosine, euclidean, or dot product metrics.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -20,6 +19,7 @@ uv sync
 ## Key Exports
 
 ### Classes
+
 - **`SearchResult`** — Result from vector similarity search.
 - **`VectorEntry`** — A vector entry in the store.
 - **`DistanceMetric`** — Distance metrics for similarity computation.
@@ -28,6 +28,7 @@ uv sync
 - **`NamespacedVectorStore`** — Vector store with namespace support.
 
 ### Functions
+
 - **`create_vector_store()`** — Create a vector store with the specified backend.
 - **`normalize_embedding()`** — Normalize an embedding to unit length.
 
@@ -77,10 +78,16 @@ results = store.search(query_embedding, k=10)
 print(store.list_namespaces())  # ['users', 'products']
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (VectorEntry, SearchResult, DistanceMetric)
+- `store.py` — Store implementations (VectorStore, InMemoryVectorStore)
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `InMemoryVectorStore` | In-memory store with configurable distance |
 | `NamespacedVectorStore` | Multi-namespace vector storage |
 | `VectorEntry` | Vector with id, embedding, metadata |
@@ -92,18 +99,16 @@ print(store.list_namespaces())  # ['users', 'products']
 ## Distance Metrics
 
 | Metric | Higher = Better? | Use Case |
-|--------|------------------|----------|
+| :--- | :--- | :--- |
 | cosine | Yes | Semantic similarity |
 | euclidean | No (lower) | Spatial distance |
 | dot_product | Yes | Magnitude-aware similarity |
-
 
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
 ```
-
 
 ## Documentation
 

@@ -6,11 +6,10 @@
 
 The collaboration module provides multi-agent collaboration capabilities including agent management, communication channels, task coordination, and message-passing protocols. It supports round-robin, broadcast, capability-routing, and consensus protocols, along with swarm-based task decomposition and parallel execution for orchestrating complex multi-agent workflows.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -76,7 +75,7 @@ uv sync
 
 - `__init__.py` - Module entry point; exports all models, protocols, exceptions, and submodules
 - `models.py` - Core data models (`Task`, `TaskResult`, `TaskPriority`, `TaskStatus`, `SwarmStatus`, `AgentStatus`)
-- `exceptions.py` - Full exception hierarchy for collaboration error handling
+- `exceptions.py` - Full exception hierarchy for collaboration error handling (deprecated, now uses global exceptions)
 - `agents/` - Agent implementations (workers, supervisors, registry)
 - `communication/` - Channel-based messaging (broadcast, direct, pub/sub)
 - `coordination/` - Task coordination, consensus algorithms, leader election
@@ -95,7 +94,6 @@ from codomyrmex.collaboration import CollaborationError, AgentNotFoundError, Age
 # Initialize CollaborationError
 instance = CollaborationError()
 ```
-
 
 ## Testing
 

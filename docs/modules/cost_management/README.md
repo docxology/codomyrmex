@@ -10,7 +10,7 @@ The `cost_management` module provides spend tracking, budgeting, and cost optimi
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

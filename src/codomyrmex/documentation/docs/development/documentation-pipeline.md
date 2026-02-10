@@ -11,7 +11,7 @@ This document describes the process for building, maintaining, and deploying the
 The documentation pipeline involves several key stages:
 
 1.  **Content Creation & Updates**: Documentation is written in Markdown within individual modules and in the central `documentation` module.
-2.  **Content Aggregation**: Module-specific documentation is copied into the `documentation/docs/modules/` directory.
+2.  **Content Aggregation**: Module-specific documentation lives in `docs/modules/` at the project root and in each `src/codomyrmex/<module>/` source directory. The legacy `documentation/docs/modules/` output path has been removed.
 3.  **Docusaurus Build**: Docusaurus processes all Markdown files, configurations, and assets to generate a static HTML website.
 4.  **Testing & Preview**: The site is tested locally for correctness, working links, and visual appearance.
 5.  **Deployment**: The static site is deployed to a web server or hosting platform (e.g., GitHub Pages).
@@ -26,11 +26,11 @@ The documentation pipeline involves several key stages:
 
 This is a crucial step to bring all documentation into the Docusaurus build process.
 
--   **Source**: Markdown files from each individual Codomyrmex module (e.g., `ai_code_editing/README.md`, `ai_code_editing/API_SPECIFICATION.md`, `ai_code_editing/docs/technical_overview.md`, `ai_code_editing/docs/tutorials/*`, etc.).
--   **Destination**: These files are copied into a corresponding subdirectory under `documentation/docs/modules/`. For example:
-    -   `ai_code_editing/README.md` &rarr; `documentation/docs/modules/ai_code_editing/README.md`
-    -   `ai_code_editing/docs/technical_overview.md` &rarr; `documentation/docs/modules/ai_code_editing/docs/technical_overview.md`
-    -   `ai_code_editing/docs/tutorials/my_tutorial.md` &rarr; `documentation/docs/modules/ai_code_editing/docs/tutorials/my_tutorial.md`
+-   **Source**: Markdown files from each individual Codomyrmex module under `src/codomyrmex/<module>/` (e.g., `src/codomyrmex/ai_code_editing/README.md`, `src/codomyrmex/ai_code_editing/API_SPECIFICATION.md`).
+-   **Destination**: Documentation-oriented summaries live in `docs/modules/<module>/` at the project root. For example:
+    -   `src/codomyrmex/ai_code_editing/README.md` &rarr; `docs/modules/ai_code_editing/README.md`
+    -   `src/codomyrmex/ai_code_editing/docs/technical_overview.md` &rarr; `docs/modules/ai_code_editing/docs/technical_overview.md`
+    -   `src/codomyrmex/ai_code_editing/docs/tutorials/my_tutorial.md` &rarr; `docs/modules/ai_code_editing/docs/tutorials/my_tutorial.md`
 -   **Current Method**: This process is currently **manual or semi-automated**. Developers need to ensure that updated documentation from modules is copied over before a full documentation build meant for deployment.
 -   **Future Enhancements**: The `documentation/documentation_website.py` script has a placeholder concept for an `aggregate_docs` action. This action could be implemented to automate the copying process based on a manifest or conventions.
 -   **Sidebar Updates**: After aggregation, `documentation/sidebars.js` must be manually checked and updated if new files (especially tutorials) are added or removed, to ensure they appear correctly in the navigation.

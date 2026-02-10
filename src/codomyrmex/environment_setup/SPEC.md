@@ -16,7 +16,7 @@ The `environment_setup` module ensures the Codomyrmex platform runs in a determi
 ### Internal Coherence
 
 - **Fail Fast**: If the environment is invalid (e.g., wrong Python version), it should fail immediately and explicitly.
-- **Helpful Errors**: Error messages must guide the user to the solution (e.g., "Install `kit` via `pip install kit`").
+- **Helpful Errors**: Error messages must guide the user to the solution (e.g., "Install `kit` via `uv pip install kit`").
 
 ### Parsimony
 

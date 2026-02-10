@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAI Awareness - Codomyrmex</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#3b82f6',
+            primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#475569',
+            lineColor: '#64748b',
+            secondaryColor: '#1e293b',
+            tertiaryColor: '#0f172a'
+        }
+    });
+</script>
+
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="index.html" class="logo">
+                <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
+            </a>
+            <div class="nav-links">
+                <div class="nav-group" role="group" aria-label="Operations">
+                    <span class="nav-group-label">Operations</span>
+                    <a href="index.html" class="nav-link" data-shortcut="1">Dashboard</a>
+                    <a href="health.html" class="nav-link" data-shortcut="2">Health</a>
+                    <a href="pipelines.html" class="nav-link" data-shortcut="3">Pipelines</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Development">
+                    <span class="nav-group-label">Development</span>
+                    <a href="modules.html" class="nav-link" data-shortcut="4">Modules</a>
+                    <a href="scripts.html" class="nav-link" data-shortcut="5">Scripts</a>
+                    <a href="config.html" class="nav-link" data-shortcut="6">Config</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Intelligence">
+                    <span class="nav-group-label">Intelligence</span>
+                    <a href="agents.html" class="nav-link" data-shortcut="7">Agents</a>
+                    <a href="chat.html" class="nav-link" data-shortcut="8">Chat</a>
+                    <a href="docs.html" class="nav-link" data-shortcut="9">Docs</a>
+                    <a href="awareness.html" class="nav-link" data-shortcut="0">Awareness</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+<h1>PAI Awareness</h1>
+
+<!-- Metrics Bar -->
+<div class="awareness-metrics" role="region" aria-label="PAI ecosystem metrics">
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-mission-count">7</span>
+        <span class="awareness-metric-label">Missions</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-project-count">18</span>
+        <span class="awareness-metric-label">Projects</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-total-tasks">0</span>
+        <span class="awareness-metric-label">Total Tasks</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-completed-tasks">53</span>
+        <span class="awareness-metric-label">Completed</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-telos-files">22</span>
+        <span class="awareness-metric-label">TELOS Files</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-completion">0%</span>
+        <span class="awareness-metric-label">Completion</span>
+    </div>
+</div>
+
+<!-- Mission Hierarchy -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2 class="card-title">Mission Hierarchy</h2>
+    
+    <div class="mission-list">
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Active Inference Institute</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-high">HIGH</span>
+                
+            </div>
+            
+            <p class="mission-desc">Organizational leadership, governance, research dissemination</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">aii-governance</span>
+                
+                <span class="project-tag">aii-education</span>
+                
+                <span class="project-tag">aii-community</span>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Metainformant</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-high">HIGH</span>
+                
+            </div>
+            
+            <p class="mission-desc">Computational biology toolkit for multi-omic analysis</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">metainformant-v1</span>
+                
+                <span class="project-tag">metainformant-docs</span>
+                
+                <span class="project-tag">metainformant-ci</span>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">PAI Infrastructure</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-high">HIGH</span>
+                
+            </div>
+            
+            <p class="mission-desc">Build and maintain Personal AI system — the force multiplier for all other work</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">pai-tool-docs</span>
+                
+                <span class="project-tag">pai-agent-pipelines</span>
+                
+                <span class="project-tag">pai-evals</span>
+                
+                <span class="project-tag">pai-interview</span>
+                
+                <span class="project-tag">github-sync-audit</span>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Academic Teaching</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-medium">MEDIUM</span>
+                
+            </div>
+            
+            <p class="mission-desc">College of the Redwoods biology instruction (BIOL-8, BIOL-1)</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">cr-spring-2026</span>
+                
+                <span class="project-tag">cr-curriculum-dev</span>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Interview Test Mission</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-medium">MEDIUM</span>
+                
+            </div>
+            
+            <p class="mission-desc">A test mission for interview validation</p>
+            
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Cognitive Security</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-medium">MEDIUM</span>
+                
+            </div>
+            
+            <p class="mission-desc">Cognitive Security &amp; Education Forum — co-founded with RJ Cordes</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">cogsec-framework</span>
+                
+                <span class="project-tag">cogsec-education</span>
+                
+                <span class="project-tag">cogsec-policy</span>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">Personal Research</span>
+                <span class="status-badge status-badge-ACTIVE">ACTIVE</span>
+                <span class="priority-tag priority-medium">MEDIUM</span>
+                
+            </div>
+            
+            <p class="mission-desc">Multi-domain integration: Active Inference, comp bio, synergetics, Blake, AI/ML</p>
+            
+            
+            <div class="linked-projects">
+                
+                <span class="project-tag">active-inference-research</span>
+                
+                <span class="project-tag">research-publishing</span>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- Ecosystem Map (Mermaid) -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2 class="card-title">Ecosystem Map</h2>
+    
+    <div class="mermaid">
+graph TD
+    classDef active fill:#10b981,stroke:#059669,color:#fff
+    classDef paused fill:#f59e0b,stroke:#d97706,color:#fff
+    classDef completed fill:#6b7280,stroke:#4b5563,color:#fff
+    classDef in_progress fill:#3b82f6,stroke:#2563eb,color:#fff
+    classDef blocked fill:#ef4444,stroke:#dc2626,color:#fff
+    classDef unknown fill:#94a3b8,stroke:#64748b,color:#fff
+    M_active_inference_institute["Active Inference Institute"]
+    class M_active_inference_institute ACTIVE
+    M_active_inference_institute --> P_aii_governance
+    M_active_inference_institute --> P_aii_education
+    M_active_inference_institute --> P_aii_community
+    M_metainformant["Metainformant"]
+    class M_metainformant ACTIVE
+    M_metainformant --> P_metainformant_v1
+    M_metainformant --> P_metainformant_docs
+    M_metainformant --> P_metainformant_ci
+    M_pai_infrastructure["PAI Infrastructure"]
+    class M_pai_infrastructure ACTIVE
+    M_pai_infrastructure --> P_pai_tool_docs
+    M_pai_infrastructure --> P_pai_agent_pipelines
+    M_pai_infrastructure --> P_pai_evals
+    M_pai_infrastructure --> P_pai_interview
+    M_pai_infrastructure --> P_github_sync_audit
+    M_academic_teaching["Academic Teaching"]
+    class M_academic_teaching ACTIVE
+    M_academic_teaching --> P_cr_spring_2026
+    M_academic_teaching --> P_cr_curriculum_dev
+    M_test_mission_interview["Interview Test Mission"]
+    class M_test_mission_interview ACTIVE
+    M_cogsec["Cognitive Security"]
+    class M_cogsec ACTIVE
+    M_cogsec --> P_cogsec_framework
+    M_cogsec --> P_cogsec_education
+    M_cogsec --> P_cogsec_policy
+    M_personal_research["Personal Research"]
+    class M_personal_research ACTIVE
+    M_personal_research --> P_active_inference_research
+    M_personal_research --> P_research_publishing
+    P_cr_curriculum_dev["CR Curriculum Development"]
+    class P_cr_curriculum_dev PLANNING
+    P_cr_spring_2026["CR Spring 2026 Semester"]
+    class P_cr_spring_2026 IN_PROGRESS
+    P_aii_community["AII Community Engagement"]
+    class P_aii_community PLANNING
+    P_aii_education["AII Education"]
+    class P_aii_education PLANNING
+    P_aii_governance["AII Governance & Operations"]
+    class P_aii_governance IN_PROGRESS
+    P_cogsec_education["Cognitive Security Education"]
+    class P_cogsec_education IN_PROGRESS
+    P_cogsec_framework["Cognitive Security Framework"]
+    class P_cogsec_framework IN_PROGRESS
+    P_cogsec_policy["Cognitive Security Policy"]
+    class P_cogsec_policy PLANNING
+    P_metainformant_ci["Metainformant CI/CD"]
+    class P_metainformant_ci PLANNING
+    P_metainformant_docs["Metainformant Documentation"]
+    class P_metainformant_docs PLANNING
+    P_metainformant_v1["Metainformant v1.0"]
+    class P_metainformant_v1 IN_PROGRESS
+    P_github_sync_audit["GitHub Sync Audit"]
+    class P_github_sync_audit PLANNING
+    P_pai_agent_pipelines["PAI Agent Pipelines"]
+    class P_pai_agent_pipelines PLANNING
+    P_pai_evals["PAI Evaluation Infrastructure"]
+    class P_pai_evals PLANNING
+    P_pai_interview["PAI Interview - Complete Profile Population"]
+    class P_pai_interview COMPLETED
+    P_pai_tool_docs["PAI Tool Documentation"]
+    class P_pai_tool_docs PLANNING
+    P_active_inference_research["Active Inference Research"]
+    class P_active_inference_research IN_PROGRESS
+    P_research_publishing["Research Publishing Pipeline"]
+    class P_research_publishing PLANNING
+    </div>
+    
+</div>
+
+<div class="awareness-grid">
+    <!-- Projects Detail -->
+    <div class="card">
+        <h2 class="card-title">Projects</h2>
+        
+        <div class="project-list">
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">CR Curriculum Development</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Curriculum modernization — integrate AI tools and scientific literacy</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">4 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">CR Spring 2026 Semester</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Spring 2026 semester — BIOL-8 &amp; BIOL-1 delivery</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">AII Community Engagement</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Community engagement, partnerships, outreach</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">4 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">AII Education</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Active Inference educational curriculum and content</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">4 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">AII Governance &amp; Operations</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Organizational ops — budgets, board duties, strategic planning</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Cognitive Security Education</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Educational curriculum for cognitive security literacy</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">12 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Cognitive Security Framework</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Core cognitive security assessment framework</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Cognitive Security Policy</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Policy advocacy and institutional integration</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">3 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Metainformant CI/CD</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">CI/CD pipeline, testing, package distribution</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">4 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Metainformant Documentation</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">API docs, tutorials, example notebooks</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">4 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Metainformant v1.0</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Ship production-ready v1.0 release</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">6 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">GitHub Sync Audit</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Verify and improve PAI-GitHub bidirectional sync</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">3 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 38%;" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">PAI Agent Pipelines</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Design AI agent pipelines for research automation</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">PAI Evaluation Infrastructure</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Build evaluation/test infrastructure (zero tests currently)</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">PAI Interview - Complete Profile Population</span>
+                    <span class="status-badge status-badge-COMPLETED">COMPLETED</span>
+                </div>
+                
+                <p class="project-goal">Populate all TELOS profile files through structured interview to enable PAI to serve Daniel effectively</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">50 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">9 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 85%;" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">PAI Tool Documentation</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Document 29 undocumented tools in TOOLS.md</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Active Inference Research</span>
+                    <span class="status-badge status-badge-IN_PROGRESS">IN_PROGRESS</span>
+                </div>
+                
+                <p class="project-goal">Active Inference applied to comp bio and multi-domain integration</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">5 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">Research Publishing Pipeline</span>
+                    <span class="status-badge status-badge-PLANNING">PLANNING</span>
+                </div>
+                
+                <p class="project-goal">Publication pipeline — papers, tools, public artifacts</p>
+                
+                
+                <div class="task-breakdown">
+                    <span class="task-stat done">0 done</span>
+                    <span class="task-stat active">0 active</span>
+                    <span class="task-stat remaining">12 remaining</span>
+                    <span class="task-stat blocked">0 blocked</span>
+                </div>
+                
+                
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <!-- TELOS Profile -->
+    <div class="card">
+        <h2 class="card-title">TELOS Life Profile</h2>
+        
+        <div class="telos-list">
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">BELIEFS</span>
+                    <span class="telos-size">1429 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Beliefs
+
+**Core beliefs that guide decision-making.**
+
+---
+
+## Primary Belief: Long-term Optimization
+
+Play the infinite game. Make decisions that compound over time rather than optimizing for immed</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">BOOKS</span>
+                    <span class="telos-size">2162 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Books
+
+**Books that have shaped your thinking.**
+
+---
+
+## Favorite Books
+
+Books that have had the most impact:
+
+1. **Synergetics** by R. Buckminster Fuller &amp; E.J. Applewhite
+   - **Why it matters:**</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">CHALLENGES</span>
+                    <span class="telos-size">1561 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Challenges
+
+**Current obstacles and constraints you&#39;re working against.**
+
+---
+
+## Primary Challenge: Time/Bandwidth
+
+The fundamental bottleneck is insufficient time to execute on all ideas and proj</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">CONTACTS</span>
+                    <span class="telos-size">646 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Contacts
+
+**Key people in your professional and personal network.**
+
+---
+
+## Status: DEFERRED
+
+This file was offered during the PAI Interview (2026-02-03) and the user chose to populate it later as </p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">FRAMES</span>
+                    <span class="telos-size">3636 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Frames
+
+**Useful perspectives for seeing the world.**
+
+Frames are mental lenses that help you interpret situations productively.
+
+---
+
+## Core Frames
+
+### FR0: Active Inference
+**Domain:** Universal</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">GOALS</span>
+                    <span class="telos-size">1542 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Goals
+
+**Specific outcomes you&#39;re working toward.**
+
+---
+
+## Near-term Goals (3-6 months)
+
+### Primary: Build Infrastructure/Systems
+Create the foundational tools and workflows that will multiply fu</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">IDEAS</span>
+                    <span class="telos-size">2797 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Ideas
+
+**Ideas you want to explore, develop, or pursue.**
+
+A capture space for thoughts that might become projects, content, or new directions.
+
+---
+
+## Active Ideas
+
+Ideas you&#39;re actively developin</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">LEARNED</span>
+                    <span class="telos-size">332 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Learned
+
+**Key lessons from life experience.**
+
+---
+
+## Status: SKIPPED
+
+This file was offered during the PAI Interview (2026-02-03) and the user chose to skip it.
+
+This can be populated later throu</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">MISSION</span>
+                    <span class="telos-size">1329 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Mission
+
+**The core driving force behind your work.**
+
+---
+
+## Primary Mission
+
+**Personal mastery and freedom** - building capability, autonomy, and the infrastructure to pursue self-directed intel</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">MODELS</span>
+                    <span class="telos-size">1762 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Mental Models
+
+**Frameworks and lenses for understanding and decision-making.**
+
+---
+
+## Primary Model: Synergy/Emergence
+
+The whole is greater than the sum of parts. Combining elements in the right</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">MOVIES</span>
+                    <span class="telos-size">691 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Movies
+
+**Films that have influenced or moved you.**
+
+---
+
+## Status: NOT APPLICABLE
+
+Daniel does not watch movies or TV shows. This is a deliberate choice rooted in preference for active engagement</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">NARRATIVES</span>
+                    <span class="telos-size">4508 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Narratives
+
+**Your active talking points and key messages.**
+
+These are the stories and perspectives you share with others - your public voice and positions.
+
+---
+
+## Core Narratives
+
+### N0: Act. I</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">PREDICTIONS</span>
+                    <span class="telos-size">884 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Predictions
+
+**Your predictions about the future.**
+
+Making explicit predictions helps you calibrate your understanding of the world.
+
+---
+
+## Status: DEFERRED
+
+This file was offered during the PAI </p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">PROBLEMS</span>
+                    <span class="telos-size">3383 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Problems
+
+**Problems in the world you want to help solve.**
+
+These are bigger than personal challenges - they&#39;re issues affecting others that you care about and want to address through your work.
+
+-</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">PROJECTS</span>
+                    <span class="telos-size">3150 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Life Roles
+
+**Ongoing commitments and areas of responsibility.**
+
+This file tracks **Life Roles** - ongoing commitments with no defined end date that represent continuous areas of activity and ident</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">RESUME</span>
+                    <span class="telos-size">6240 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Resume
+
+**Professional history, education, and academic contributions.**
+
+---
+
+## Education
+
+### Ph.D. in Biology - Stanford University (2014-2019)
+**Advisor:** Prof. Deborah Gordon
+**Focus:** Behav</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">STATUS</span>
+                    <span class="telos-size">1650 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Status
+
+**Current state across all life areas.**
+
+A quick snapshot of where you are right now.
+
+---
+
+## Last Updated: [DATE]
+
+---
+
+## Overall Status
+
+**Current Focus:** [What you&#39;re primarily workin</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">STRATEGIES</span>
+                    <span class="telos-size">1805 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Strategies
+
+**The approaches and methods you&#39;re using to achieve your goals.**
+
+---
+
+## Primary Strategy: AI Leverage
+
+Use AI as a force multiplier to accomplish more with limited bandwidth.
+
+### Im</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">TELOS</span>
+                    <span class="telos-size">4757 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># TELOS - Your Complete Life Framework
+
+*Last Updated: [DATE]*
+
+This document represents your complete TELOS (purpose/end goal) framework - encompassing your mission, beliefs, strategies, challenges, </p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">TRAUMAS</span>
+                    <span class="telos-size">350 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Traumas
+
+**Formative experiences that shaped who you are.**
+
+---
+
+## Status: DEFERRED
+
+This file was offered during the PAI Interview (2026-02-03) and the user chose to populate it later.
+
+This is a</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">WISDOM</span>
+                    <span class="telos-size">2850 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Wisdom
+
+**Collected insights and aphorisms.**
+
+Truths, quotes, and principles that resonate with you.
+
+---
+
+## Personal Aphorisms
+
+Wisdom you&#39;ve discovered or coined:
+
+- **Stigmergy is key** - Coord</p>
+                
+            </div>
+            
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">WRONG</span>
+                    <span class="telos-size">340 bytes</span>
+                </div>
+                
+                <p class="telos-preview"># Wrong
+
+**Things you&#39;ve been wrong about.**
+
+---
+
+## Status: SKIPPED
+
+This file was offered during the PAI Interview (2026-02-03) and the user chose to skip it.
+
+This can be populated later through o</p>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+<!-- AI Summary -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="summary-header">
+        <h2 class="card-title">AI Summary</h2>
+        <button id="generate-summary-btn" class="btn btn-primary" style="padding: 0.25rem 1rem; font-size: 0.85rem;">
+            Generate Summary
+        </button>
+    </div>
+    <div id="ai-summary-content" role="region" aria-live="polite" aria-label="AI-generated summary">
+        <p style="color: var(--text-secondary);">Click "Generate Summary" to get an Ollama-powered analysis of your PAI ecosystem state.</p>
+    </div>
+</div>
+
+<!-- Memory System -->
+<div class="card" style="margin-top: 1.5rem;">
+    <h2 class="card-title">Memory System</h2>
+    
+    <div class="memory-grid">
+        
+        <div class="memory-item">
+            <span class="memory-name">History</span>
+            <span class="memory-stat">0 files</span>
+            <span class="memory-stat">0 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">LEARNING</span>
+            <span class="memory-stat">1282 files</span>
+            <span class="memory-stat">5 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">PAISYSTEMUPDATES</span>
+            <span class="memory-stat">2 files</span>
+            <span class="memory-stat">0 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">RELATIONSHIP</span>
+            <span class="memory-stat">6 files</span>
+            <span class="memory-stat">1 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">RESEARCH</span>
+            <span class="memory-stat">17 files</span>
+            <span class="memory-stat">1 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">SECURITY</span>
+            <span class="memory-stat">6 files</span>
+            <span class="memory-stat">1 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">STATE</span>
+            <span class="memory-stat">96 files</span>
+            <span class="memory-stat">4 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">Signals</span>
+            <span class="memory-stat">0 files</span>
+            <span class="memory-stat">0 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">VOICE</span>
+            <span class="memory-stat">1 files</span>
+            <span class="memory-stat">0 subdirs</span>
+        </div>
+        
+        <div class="memory-item">
+            <span class="memory-name">WORK</span>
+            <span class="memory-stat">717 files</span>
+            <span class="memory-stat">178 subdirs</span>
+        </div>
+        
+    </div>
+    <p class="memory-total">Total files: 2129 | Work sessions: 178</p>
+    
+</div>
+
+<style>
+    .awareness-metrics {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .awareness-metric-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .awareness-metric-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        font-family: 'Fira Code', monospace;
+    }
+
+    .awareness-metric-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .awareness-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Mission styles */
+    .mission-list { display: flex; flex-direction: column; gap: 1rem; }
+    .mission-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .mission-header { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .mission-title { font-weight: 600; }
+    .mission-desc { font-size: 0.85rem; color: var(--text-secondary); margin: 0.5rem 0 0; }
+
+    /* Status badges */
+    .status-badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .status-badge-active { background: #10b981; color: #fff; }
+    .status-badge-paused { background: #f59e0b; color: #fff; }
+    .status-badge-completed { background: #6b7280; color: #fff; }
+    .status-badge-in_progress { background: #3b82f6; color: #fff; }
+    .status-badge-blocked { background: #ef4444; color: #fff; }
+    .status-badge-unknown { background: #94a3b8; color: #fff; }
+
+    /* Priority tags */
+    .priority-tag {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-weight: 600;
+    }
+    .priority-high { background: #fecaca; color: #991b1b; }
+    .priority-medium { background: #fef08a; color: #854d0e; }
+    .priority-low { background: #d1fae5; color: #065f46; }
+
+    .completion-badge {
+        font-size: 0.75rem;
+        font-family: 'Fira Code', monospace;
+        color: var(--accent-color);
+    }
+
+    .linked-projects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    .project-tag {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 3px;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* Project styles */
+    .project-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .project-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .project-header { display: flex; align-items: center; gap: 0.5rem; }
+    .project-title { font-weight: 600; font-size: 0.9rem; }
+    .project-goal { font-size: 0.8rem; color: var(--text-secondary); margin: 0.25rem 0; }
+
+    .task-breakdown { display: flex; gap: 0.5rem; margin-top: 0.25rem; flex-wrap: wrap; }
+    .task-stat {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 3px;
+        font-family: 'Fira Code', monospace;
+    }
+    .task-stat.done { background: #d1fae5; color: #065f46; }
+    .task-stat.active { background: #dbeafe; color: #1e40af; }
+    .task-stat.remaining { background: var(--bg-secondary); color: var(--text-secondary); }
+    .task-stat.blocked { background: #fecaca; color: #991b1b; }
+
+    .progress-bar-container {
+        height: 4px;
+        background: var(--bg-secondary);
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--accent-color);
+        border-radius: 2px;
+        transition: width 0.6s ease;
+    }
+
+    /* TELOS styles */
+    .telos-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .telos-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .telos-header { display: flex; justify-content: space-between; align-items: center; }
+    .telos-name { font-weight: 600; font-size: 0.9rem; }
+    .telos-size { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+    .telos-preview {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    /* AI Summary */
+    .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    #ai-summary-content {
+        min-height: 3rem;
+    }
+    #ai-summary-content pre {
+        white-space: pre-wrap;
+        font-family: inherit;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* Memory styles */
+    .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+    .memory-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .memory-name { font-weight: 600; font-size: 0.9rem; }
+    .memory-stat { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+    .memory-total {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* Mermaid container */
+    .mermaid {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    @media (max-width: 900px) {
+        .awareness-metrics { grid-template-columns: repeat(3, 1fr); }
+        .awareness-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+        .awareness-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<script>
+    // Generate AI Summary
+    const summaryBtn = document.getElementById('generate-summary-btn');
+    if (summaryBtn) {
+        summaryBtn.addEventListener('click', async () => {
+            const contentDiv = document.getElementById('ai-summary-content');
+            summaryBtn.disabled = true;
+            summaryBtn.innerHTML = '<span class="loader"></span> Generating...';
+            contentDiv.innerHTML = '<p style="color: var(--accent-color);">Generating AI summary...</p>';
+
+            try {
+                const response = await fetch('/api/awareness/summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: 'llama3' })
+                });
+                const data = await response.json();
+
+                if (data.success && data.summary) {
+                    const pre = document.createElement('pre');
+                    pre.textContent = data.summary;
+                    contentDiv.textContent = '';
+                    contentDiv.appendChild(pre);
+                } else if (data.error) {
+                    contentDiv.textContent = '';
+                    const errP = document.createElement('p');
+                    errP.style.color = 'var(--error-color)';
+                    errP.textContent = 'Error: ' + data.error;
+                    contentDiv.appendChild(errP);
+                }
+            } catch (err) {
+                contentDiv.textContent = '';
+                const errP = document.createElement('p');
+                errP.style.color = 'var(--error-color)';
+                errP.textContent = 'Network Error: ' + err.message;
+                contentDiv.appendChild(errP);
+            } finally {
+                summaryBtn.disabled = false;
+                summaryBtn.textContent = 'Generate Summary';
+            }
+        });
+    }
+
+    // Auto-refresh metrics every 60s
+    setInterval(async () => {
+        try {
+            const resp = await fetch('/api/awareness');
+            const data = await resp.json();
+            const m = data.metrics;
+            const ids = {
+                'aw-mission-count': m.mission_count,
+                'aw-project-count': m.project_count,
+                'aw-total-tasks': m.total_tasks,
+                'aw-completed-tasks': m.completed_tasks,
+                'aw-telos-files': m.telos_files,
+                'aw-completion': m.overall_completion + '%'
+            };
+            for (const [id, val] of Object.entries(ids)) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            }
+        } catch (e) {
+            // Silently ignore refresh failures
+        }
+    }, 60000);
+</script>
+
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

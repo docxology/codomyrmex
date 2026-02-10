@@ -45,7 +45,7 @@ Uses Google Application Default Credentials:
 ## Dependencies
 
 ```bash
-pip install google-cloud-storage
+uv pip install google-cloud-storage
 ```
 
 ## Navigation

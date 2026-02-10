@@ -2,309 +2,344 @@
 
 ## Introduction
 
-This API specification documents the programmatic interfaces for the Database Management module of Codomyrmex. The module provides comprehensive database management, migration, and administration capabilities for the Codomyrmex ecosystem, supporting multiple database backends with unified interfaces.
+This API specification documents the programmatic interfaces for the Database Management module of Codomyrmex. The module provides comprehensive database management, migration, and administration capabilities for the Codomyrmex ecosystem, supporting SQLite, PostgreSQL, and MySQL databases with unified interfaces.
 
 ## Functions
 
-### Function: `manage_databases(operation: str, connection_config: Dict, **kwargs) -> Dict`
+### Function: `manage_databases(database_url: str | None = None) -> DatabaseManager`
 
-- **Description**: Perform database administration operations including creation, configuration, and maintenance.
+- **Description**: Create and return a `DatabaseManager` instance for database administration. If a `database_url` is provided, automatically connects to the database.
 - **Parameters**:
-    - `operation`: Operation type (create, drop, backup, restore, optimize, health_check).
-    - `connection_config`: Database connection configuration.
-    - `**kwargs`: Operation-specific parameters (database_name, options, etc.).
+    - `database_url` (str | None, optional): Database connection URL. If provided, connects automatically. Supported formats: `sqlite:///path/to/db.sqlite`, `postgresql://user:pass@host:port/database`, `mysql://user:pass@host:port/database`.
+- **Return Value**: `DatabaseManager` instance ready for use.
+- **Errors**: Raises `CodomyrmexError` for unsupported database URLs or connection failures.
+
+### Function: `run_migrations(migration_dir: str, database_url: str, direction: str = "up") -> dict[str, Any]`
+
+- **Description**: Run database migrations. Loads migration files from the specified directory and applies or rolls back migrations.
+- **Parameters**:
+    - `migration_dir` (str): Directory containing migration JSON files.
+    - `database_url` (str): Database connection URL.
+    - `direction` (str, optional): Migration direction (`"up"` to apply pending, `"down"` to rollback latest). Default: `"up"`.
+- **Return Value**:
+    ```python
+    # For direction="up":
+    {
+        "direction": "up",
+        "migrations_processed": int,
+        "successful": int,
+        "failed": int,
+        "success": bool,
+        "results": [
+            {
+                "migration_id": str,
+                "success": bool,
+                "execution_time": float,
+                "error_message": str | None
+            }
+        ]
+    }
+
+    # For direction="down":
+    {
+        "direction": "down",
+        "migrations_processed": int,
+        "success": bool,
+        "result": {
+            "migration_id": str,
+            "success": bool,
+            "execution_time": float,
+            "error_message": str | None
+        }
+    }
+    ```
+- **Errors**: Raises `CodomyrmexError` for invalid migration direction, database connection failures, or migration execution failures.
+
+### Function: `backup_database(database_name: str, database_url: str | None = None, backup_type: str = "full", compression: str = "gzip") -> BackupResult`
+
+- **Description**: Convenience function to create a database backup. Creates a `BackupManager` and performs the backup.
+- **Parameters**:
+    - `database_name` (str): Name identifying the database being backed up.
+    - `database_url` (str | None, optional): Database connection URL.
+    - `backup_type` (str, optional): Backup type (`"full"`, `"incremental"`, `"differential"`). Default: `"full"`.
+    - `compression` (str, optional): Compression method (`"gzip"`, `"none"`). Default: `"gzip"`.
+- **Return Value**: `BackupResult` dataclass with fields: `backup_id`, `success`, `duration`, `file_size_mb`, `error_message`, `warnings`, `checksum`.
+- **Errors**: Raises `CodomyrmexError` for missing database URL, unsupported database types, or backup failures.
+
+### Function: `monitor_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]`
+
+- **Description**: Monitor database performance by analyzing recorded metrics.
+- **Parameters**:
+    - `database_name` (str): Name of the database to monitor.
+    - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
+- **Return Value**: Database performance analysis dictionary from `DatabasePerformanceMonitor.analyze_database_performance()`.
+- **Errors**: Returns empty analysis if no metrics are found.
+
+### Function: `optimize_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]`
+
+- **Description**: Generate a comprehensive performance report with optimization recommendations.
+- **Parameters**:
+    - `database_name` (str): Name of the database to optimize.
+    - `workspace_dir` (str | None, optional): Workspace directory for performance data storage.
+- **Return Value**: Performance report dictionary from `DatabasePerformanceMonitor.get_performance_report()` including query performance, database performance, alerts, and recommendations.
+- **Errors**: Returns report with empty sections if no metrics are found.
+
+### Function: `generate_schema(models: list[Any], output_dir: str) -> dict[str, Any]`
+
+- **Description**: Generate database schema from model definitions (dictionary-based or SQLAlchemy models).
+- **Parameters**:
+    - `models` (list[Any]): List of model definitions. Supports dictionaries with `"name"`, `"columns"`, `"indexes"` keys, or SQLAlchemy model classes with `__table__` and `__tablename__` attributes.
+    - `output_dir` (str): Output directory for generated schema files.
 - **Return Value**:
     ```python
     {
-        "operation": <str>,
-        "success": <bool>,
-        "database_name": <str>,
-        "execution_time": <float>,
-        "affected_objects": <int>,
-        "health_status": <str>,  # For health_check operations
-        "error_message": <str>,
-        "recommendations": [<list_of_maintenance_recommendations>]
+        "tables_generated": int,
+        "schema_file": str,  # Path to generated SQL file
+        "message": str
     }
     ```
-- **Errors**: Raises `DatabaseError` for connection or operation failures.
-
-### Function: `run_migrations(migration_path: str, connection_config: Dict, direction: str = "up", **kwargs) -> Dict`
-
-- **Description**: Execute database migrations with rollback capabilities and dependency management.
-- **Parameters**:
-    - `migration_path`: Path to migration files or directory.
-    - `connection_config`: Database connection configuration.
-    - `direction`: Migration direction (up, down, latest, rollback).
-    - `**kwargs`: Migration options (target_version, dry_run, etc.).
-- **Return Value**:
-    ```python
-    {
-        "direction": <str>,
-        "migrations_executed": <int>,
-        "migrations_pending": <int>,
-        "current_version": <str>,
-        "execution_time": <float>,
-        "rollback_available": <bool>,
-        "dry_run": <bool>,
-        "changes_applied": [<list_of_changes>]
-    }
-    ```
-- **Errors**: Raises `MigrationError` for migration execution failures.
-
-### Function: `backup_database(connection_config: Dict, backup_config: Dict, **kwargs) -> Backup`
-
-- **Description**: Create database backups with compression, encryption, and retention policies.
-- **Parameters**:
-    - `connection_config`: Database connection configuration.
-    - `backup_config`: Backup configuration (type, destination, compression, etc.).
-    - `**kwargs`: Backup options (schedule, retention, encryption, etc.).
-- **Return Value**: Backup object with status tracking and restoration capabilities.
-- **Errors**: Raises `BackupError` for backup creation or storage failures.
-
-### Function: `monitor_database(connection_config: Dict, metrics_config: Optional[Dict] = None, **kwargs) -> DatabaseMetrics`
-
-- **Description**: Monitor database performance, health, and resource utilization.
-- **Parameters**:
-    - `connection_config`: Database connection configuration.
-    - `metrics_config`: Optional metrics collection configuration.
-    - `**kwargs`: Monitoring options (interval, alerts, historical_data, etc.).
-- **Return Value**: DatabaseMetrics object with real-time and historical performance data.
-- **Errors**: Raises `MonitoringError` for monitoring system failures.
-
-### Function: `optimize_database(connection_config: Dict, optimization_type: str = "performance", **kwargs) -> Dict`
-
-- **Description**: Optimize database performance through indexing, query optimization, and configuration tuning.
-- **Parameters**:
-    - `connection_config`: Database connection configuration.
-    - `optimization_type`: Optimization focus (performance, storage, query, maintenance).
-    - `**kwargs`: Optimization options (analyze_only, apply_changes, etc.).
-- **Return Value**:
-    ```python
-    {
-        "optimization_type": <str>,
-        "recommendations_applied": <int>,
-        "performance_improvement": <float>,
-        "storage_saved_mb": <float>,
-        "indexes_created": <int>,
-        "queries_optimized": <int>,
-        "configuration_changes": [<list_of_changes>],
-        "rollback_available": <bool>
-    }
-    ```
-- **Errors**: Raises `OptimizationError` for optimization analysis failures.
-
-### Function: `generate_schema(schema_definition: Dict, target_database: str, **kwargs) -> SchemaDefinition`
-
-- **Description**: Generate database schemas from definitions with validation and migration support.
-- **Parameters**:
-    - `schema_definition`: Schema definition in dictionary format.
-    - `target_database`: Target database type (postgresql, mysql, sqlite, etc.).
-    - `**kwargs`: Schema generation options (validate_only, migration_path, etc.).
-- **Return Value**: SchemaDefinition object with DDL generation and validation.
-- **Errors**: Raises `SchemaError` for invalid schema definitions or generation failures.
+- **Errors**: Raises `CodomyrmexError` for unsupported model formats or schema generation failures.
 
 ## Data Structures
 
-### DatabaseConnection
-Database connection configuration and management:
+### DatabaseConnection (dataclass)
+Database connection information:
 ```python
-{
-    "host": <str>,
-    "port": <int>,
-    "database": <str>,
-    "username": <str>,
-    "password": <str>,  # Encrypted
-    "driver": <str>,    # postgresql, mysql, sqlite, etc.
-    "connection_pool": {
-        "min_connections": <int>,
-        "max_connections": <int>,
-        "connection_timeout": <int>,
-        "idle_timeout": <int>
-    },
-    "ssl_config": {
-        "enabled": <bool>,
-        "cert_path": <str>,
-        "key_path": <str>,
-        "ca_path": <str>
-    },
-    "read_replica": <bool>,
-    "connection_id": <str>
-}
+@dataclass
+class DatabaseConnection:
+    name: str
+    db_type: DatabaseType        # SQLITE, POSTGRESQL, MYSQL, MONGODB, REDIS, CUSTOM
+    database: str
+    host: str = "localhost"
+    port: int = 5432
+    username: str = "postgres"
+    password: str = ""
+    ssl_mode: str = "prefer"
+    connection_pool_size: int = 10
+    connection_timeout: int = 30
+    max_retries: int = 3
+    connection_string: str | None = None
+    created_at: datetime = field(default_factory=datetime.now)
 ```
 
-### Migration
-Database migration definition and tracking:
+Key methods: `get_connection_string()`, `connect()`, `disconnect()`, `execute_query(query, params)`, `get_database_info()`, `health_check()`.
+
+### Migration (dataclass)
+Database migration definition:
 ```python
-{
-    "version": <str>,
-    "name": <str>,
-    "description": <str>,
-    "up_sql": <str>,
-    "down_sql": <str>,
-    "checksum": <str>,
-    "applied_at": <timestamp>,
-    "applied_by": <str>,
-    "execution_time_ms": <int>,
-    "success": <bool>,
-    "rollback_available": <bool>,
-    "dependencies": [<list_of_dependent_migrations>]
-}
+@dataclass
+class Migration:
+    id: str
+    name: str
+    description: str
+    sql: str
+    rollback_sql: str | None = None
+    dependencies: list[str] = field(default_factory=list)
+    created_at: datetime = field(default_factory=datetime.now)
+    applied_at: datetime | None = None
+    status: str = "pending"       # "pending", "applied", "failed", "rolled_back"
+    checksum: str = ""            # Auto-calculated SHA256 of sql
 ```
 
-### Backup
-Database backup configuration and status:
+### MigrationResult (dataclass)
+Result of a migration execution:
 ```python
-{
-    "id": <str>,
-    "database_name": <str>,
-    "backup_type": "full|incremental|differential",
-    "destination": <str>,
-    "compression": <str>,
-    "encryption": <str>,
-    "size_mb": <float>,
-    "created_at": <timestamp>,
-    "status": "in_progress|completed|failed",
-    "retention_days": <int>,
-    "verification_hash": <str>,
-    "restore_tested": <bool>
-}
+@dataclass
+class MigrationResult:
+    migration_id: str
+    success: bool
+    execution_time: float
+    error_message: str | None = None
+    rows_affected: int = 0
+    statements_executed: int = 0
 ```
 
-### DatabaseMetrics
-Database performance and health metrics:
+### Backup (dataclass)
+Database backup information:
 ```python
-{
-    "timestamp": <timestamp>,
-    "database_name": <str>,
-    "connections": {
-        "active": <int>,
-        "idle": <int>,
-        "total": <int>,
-        "waiting": <int>
-    },
-    "performance": {
-        "queries_per_second": <float>,
-        "avg_query_time_ms": <float>,
-        "slow_queries_count": <int>,
-        "cache_hit_ratio": <float>
-    },
-    "storage": {
-        "total_size_mb": <float>,
-        "used_size_mb": <float>,
-        "free_size_mb": <float>,
-        "growth_rate_mb_per_day": <float>
-    },
-    "health_status": "healthy|warning|critical",
-    "alerts": [<list_of_active_alerts>]
-}
+@dataclass
+class Backup:
+    backup_id: str
+    database_name: str
+    database_type: str
+    backup_type: str
+    file_path: str
+    size_mb: float
+    created_at: datetime
+    compression: str = "none"
+    encryption: bool = False
+    checksum: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 ```
 
-### SchemaDefinition
-Database schema definition and management:
+### BackupResult (dataclass)
+Result of a backup operation:
 ```python
-{
-    "database_type": <str>,
-    "tables": [
-        {
-            "name": <str>,
-            "columns": [
-                {
-                    "name": <str>,
-                    "type": <str>,
-                    "nullable": <bool>,
-                    "primary_key": <bool>,
-                    "default": <str>,
-                    "references": <str>
-                }
-            ],
-            "indexes": [<list_of_indexes>],
-            "constraints": [<list_of_constraints>]
-        }
-    ],
-    "views": [<list_of_view_definitions>],
-    "ddl_statements": [<list_of_sql_statements>],
-    "validation_errors": [<list_of_schema_errors>]
-}
+@dataclass
+class BackupResult:
+    backup_id: str
+    success: bool
+    duration: float
+    file_size_mb: float
+    error_message: str | None = None
+    warnings: list[str] = field(default_factory=list)
+    checksum: str | None = None
+```
+
+### DatabaseMetrics (dataclass)
+Database performance metrics:
+```python
+@dataclass
+class DatabaseMetrics:
+    database_name: str
+    timestamp: datetime
+    connections_active: int
+    connections_idle: int
+    queries_per_second: float
+    average_query_time_ms: float
+    cache_hit_ratio: float
+    disk_io_mb: float
+```
+
+### SchemaDefinition (dataclass)
+Complete database schema definition:
+```python
+@dataclass
+class SchemaDefinition:
+    name: str
+    version: str
+    tables: list[SchemaTable] = field(default_factory=list)
+    created_at: datetime = field(default_factory=datetime.now)
+```
+
+Key methods: `to_sql(dialect)`, `to_dict()`.
+
+## Manager Classes
+
+### DatabaseManager
+Database connection and query management:
+```python
+class DatabaseManager:
+    def __init__(self, database_url: str | None = None): ...
+    def add_connection(self, connection: DatabaseConnection): ...
+    def remove_connection(self, name: str): ...
+    def get_connection(self, name: str) -> DatabaseConnection | None: ...
+    def list_connections(self) -> list[str]: ...
+    def connect_all(self): ...
+    def disconnect_all(self): ...
+    def execute_query(self, name: str, query: str, params: tuple | None = None) -> list[dict[str, Any]]: ...
+    def health_check_all(self) -> dict[str, dict[str, Any]]: ...
+    def get_database_stats(self) -> dict[str, Any]: ...
+    def connect(self, database_url: str | None = None) -> DatabaseConnection: ...
+    def disconnect(self, connection_id: str | None = None): ...
+    def execute(self, query: str, params: tuple | None = None) -> QueryResult: ...
+    def execute_many(self, query: str, params_list: list[tuple]) -> QueryResult: ...
+    def transaction(self) -> Generator[None, None, None]: ...  # context manager
+    def get_tables(self) -> list[str]: ...
+    def get_table_info(self, table_name: str) -> list[dict[str, Any]]: ...
+```
+
+### MigrationManager
+Database migration management system:
+```python
+class MigrationManager:
+    def __init__(self, workspace_dir: str | None = None, database_url: str | None = None): ...
+    def set_database_url(self, database_url: str): ...
+    def load_migrations_from_directory(self): ...
+    def create_migration(self, name: str, description: str, sql: str, rollback_sql: str | None = None, dependencies: list[str] | None = None) -> Migration: ...
+    def apply_migration(self, migration_id: str, dry_run: bool = False) -> MigrationResult: ...
+    def rollback_migration(self, migration_id: str) -> MigrationResult: ...
+    def get_migration_status(self, migration_id: str) -> dict[str, Any] | None: ...
+    def list_migrations(self) -> list[dict[str, Any]]: ...
+    def get_pending_migrations(self) -> list[Migration]: ...
+    def apply_pending_migrations(self) -> list[MigrationResult]: ...
+    def close(self): ...
+```
+
+### BackupManager
+Database backup and restore management:
+```python
+class BackupManager:
+    def __init__(self, workspace_dir: str | None = None, database_url: str | None = None): ...
+    def create_backup(self, database_name: str, database_url: str | None = None, backup_type: str = "full", compression: str = "gzip", include_schema: bool = True, include_data: bool = True) -> BackupResult: ...
+    def list_backups(self, database_name: str | None = None) -> list[dict[str, Any]]: ...
+    def delete_backup(self, backup_id: str) -> bool: ...
+```
+
+### SchemaGenerator
+Database schema generation and management:
+```python
+class SchemaGenerator:
+    def __init__(self, workspace_dir: str | None = None, dialect: str = "sqlite"): ...
+    def create_table(self, table: SchemaTable) -> str: ...
+    def create_table_from_dict(self, table_def: dict[str, Any]) -> str: ...
+    def generate_migration(self, name: str, description: str, changes: dict[str, Any]) -> SchemaMigration: ...
+    def compare_schemas(self, current_schema: dict, target_schema: dict) -> dict[str, Any]: ...
+    def get_schema_drift_report(self, current_schema: dict, target_schema: dict) -> dict[str, Any]: ...
+    def generate_schema_sql(self, schema_name: str, version: str = "1.0.0") -> str: ...
+    def export_schema(self, output_path: str, format: str = "sql") -> str: ...
+    def list_migrations(self) -> list[dict[str, Any]]: ...
 ```
 
 ## Error Handling
 
-All functions follow consistent error handling patterns:
-
-- **Connection Errors**: `DatabaseError` for connection, authentication, or network issues
-- **Migration Errors**: `MigrationError` for migration execution or dependency failures
-- **Backup Errors**: `BackupError` for backup creation, storage, or restoration issues
-- **Monitoring Errors**: `MonitoringError` for metrics collection or alerting failures
-- **Optimization Errors**: `OptimizationError` for analysis or application failures
-- **Schema Errors**: `SchemaError` for invalid definitions or generation issues
+All functions use `CodomyrmexError` (from `codomyrmex.exceptions`) as the base error class. Standard Python exceptions (`ValueError`, `OSError`) are also raised where appropriate.
 
 ## Integration Patterns
 
 ### With Project Orchestration
 ```python
 from codomyrmex.database_management import run_migrations
-from codomyrmex.logistics.orchestration.project import execute_workflow
 
-# Run database migrations as part of deployment workflow
-result = execute_workflow("database_deployment", {
-    "database_management": {
-        "operation": "migrate",
-        "migration_path": "migrations/",
-        "connection_config": db_config,
-        "direction": "up"
-    }
-})
+# Run database migrations
+result = run_migrations(
+    migration_dir="migrations/",
+    database_url="sqlite:///app.db",
+    direction="up"
+)
 ```
 
 ### With Performance Monitoring
 ```python
 from codomyrmex.database_management import monitor_database, optimize_database
-from codomyrmex.performance import create_performance_report
 
 # Monitor database performance
-metrics = monitor_database(db_config, metrics_config={
-    "interval_seconds": 60,
-    "alert_thresholds": {"cpu": 80, "memory": 90}
-})
+metrics = monitor_database("my_database", workspace_dir="./perf_data")
 
-# Optimize if performance issues detected
-if metrics.performance_score < 70:
-    optimization = optimize_database(db_config, optimization_type="performance")
-    print(f"Applied {optimization['recommendations_applied']} optimizations")
+# Generate optimization report
+report = optimize_database("my_database", workspace_dir="./perf_data")
 ```
 
-### With Security Audit
+### Database Management
 ```python
 from codomyrmex.database_management import manage_databases
-from codomyrmex.security.digital import audit_code_security
 
-# Run security health check
-health_check = manage_databases("health_check", db_config)
+# Create a database manager with auto-connect
+manager = manage_databases("sqlite:///app.db")
 
-# Perform comprehensive security audit
-audit_result = audit_database_security(db_config, audit_types=[
-    "access_control", "encryption", "backup_security"
-])
+# Execute queries
+result = manager.execute("SELECT * FROM users WHERE active = ?", (True,))
+print(f"Found {result.row_count} active users")
+
+# Clean up
+manager.disconnect()
 ```
 
 ## Security Considerations
 
-- **Connection Security**: All connections use SSL/TLS encryption
-- **Authentication**: Secure credential management and rotation
-- **Access Control**: Database-level permissions and role-based access
-- **Encryption**: Data at rest and in transit encryption
-- **Audit Logging**: All database operations are logged for compliance
-- **Backup Security**: Encrypted backups with access controls
-- **Migration Safety**: Migration rollback capabilities and validation
+- **Connection Security**: PostgreSQL and MySQL connections support SSL/TLS
+- **Authentication**: Credentials are parsed from connection URLs
+- **Safe SQL Execution**: Parameterized queries prevent SQL injection
+- **Backup Security**: Backups support compression and checksum verification
+- **Migration Safety**: Migration rollback capabilities and dependency validation
 
 ## Performance Characteristics
 
-- **Connection Pooling**: Efficient connection reuse and management
-- **Query Optimization**: Automatic query analysis and optimization
-- **Caching**: Schema and metadata caching for performance
-- **Monitoring Overhead**: Minimal impact monitoring with sampling
-- **Backup Efficiency**: Incremental backups and compression
+- **Connection Pooling**: Configurable pool size per connection
+- **Query Execution**: Parameterized queries with timing metrics
+- **Backup Efficiency**: Supports gzip compression for backups
 - **Migration Performance**: Batch migration execution with progress tracking
+- **Monitoring Overhead**: In-memory metrics with configurable retention limits
 
 
 ## Navigation Links

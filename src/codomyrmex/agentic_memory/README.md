@@ -7,6 +7,7 @@ Long-term agent memory with retrieval, persistence, and automatic pruning.
 ## Key Exports
 
 ### Classes
+
 - **`MemoryType`** — Types of agent memory.
 - **`MemoryImportance`** — Importance levels for memories.
 - **`Memory`** — A single memory unit.
@@ -74,10 +75,17 @@ results = vec_mem.hybrid_recall("query", vector_weight=0.7)
 summary_mem = SummaryMemory(summarize_fn=llm_summarize)
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (`Memory`, `MemoryType`, `RetrievalResult`)
+- `stores.py` — Storage backends (`MemoryStore`, `InMemoryStore`, `JSONFileStore`)
+- `memory.py` — Core logic (`AgentMemory`, specialized memory types)
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `AgentMemory` | Core memory system |
 | `Memory` | Single memory unit |
 | `MemoryType` | Enum: episodic, semantic, procedural, working |
@@ -89,13 +97,11 @@ summary_mem = SummaryMemory(summarize_fn=llm_summarize)
 | `VectorStoreMemory` | Vector-enhanced retrieval |
 | `SummaryMemory` | Auto-summarizing memory |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
 ```
-
 
 ## Documentation
 

@@ -32,14 +32,17 @@ class WorkflowManager:
 Creates a new workflow with the specified steps.
 
 **Parameters:**
+
 - `name` (str): Unique name for the workflow
 - `steps` (List[WorkflowStep]): List of workflow steps to execute
 - `save` (bool): Whether to persist the workflow to disk
 
 **Returns:**
+
 - `bool`: True if workflow was created successfully
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import get_workflow_manager, WorkflowStep
 
@@ -68,9 +71,11 @@ success = manager.create_workflow("code_analysis", steps)
 Lists all available workflows with metadata.
 
 **Returns:**
+
 - `Dict[str, Dict[str, Any]]`: Dictionary mapping workflow names to their metadata
 
 **Example:**
+
 ```python
 workflows = manager.list_workflows()
 for name, info in workflows.items():
@@ -85,14 +90,17 @@ for name, info in workflows.items():
 Executes a workflow asynchronously with performance monitoring.
 
 **Parameters:**
+
 - `name` (str): Name of the workflow to execute
 - `parameters` (Optional[Dict[str, Any]]): Global parameters for workflow steps
 - `timeout` (Optional[int]): Maximum execution time in seconds
 
 **Returns:**
+
 - `WorkflowExecution`: Execution result containing status, results, errors, and metrics
 
 **Example:**
+
 ```python
 execution = await manager.execute_workflow(
     "code_analysis",
@@ -112,12 +120,15 @@ else:
 Gets comprehensive performance summary for workflows.
 
 **Parameters:**
+
 - `workflow_name` (Optional[str]): Specific workflow name to analyze
 
 **Returns:**
+
 - `Dict[str, Any]`: Performance summary with execution statistics
 
 **Example:**
+
 ```python
 summary = manager.get_performance_summary()
 print(f"Total executions: {summary['total_workflows_executed']}")
@@ -144,12 +155,15 @@ class TaskOrchestrator:
 Adds a task to the orchestrator.
 
 **Parameters:**
+
 - `task` (Task): Task to add
 
 **Returns:**
+
 - `str`: Task ID
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import get_task_orchestrator, Task, TaskPriority
 
@@ -171,15 +185,18 @@ task_id = orchestrator.add_task(task)
 Creates and adds a new task.
 
 **Parameters:**
+
 - `name` (str): Task name
 - `module` (str): Module name
 - `action` (str): Action name
 - `**kwargs`: Additional task parameters
 
 **Returns:**
+
 - `Task`: Created task instance
 
 **Example:**
+
 ```python
 task = orchestrator.create_task(
     name="test_task",
@@ -196,9 +213,11 @@ task = orchestrator.create_task(
 Gets a task by ID.
 
 **Parameters:**
+
 - `task_id` (str): Task ID
 
 **Returns:**
+
 - `Optional[Task]`: Task instance or None if not found
 
 #### `list_tasks(status: Optional[TaskStatus] = None) -> List[Task]`
@@ -206,12 +225,15 @@ Gets a task by ID.
 Lists tasks, optionally filtered by status.
 
 **Parameters:**
+
 - `status` (Optional[TaskStatus]): Filter by task status
 
 **Returns:**
+
 - `List[Task]`: List of tasks
 
 **Example:**
+
 ```python
 # List all tasks
 all_tasks = orchestrator.list_tasks()
@@ -225,6 +247,7 @@ pending_tasks = orchestrator.list_tasks(TaskStatus.PENDING)
 Starts the task execution engine.
 
 **Example:**
+
 ```python
 orchestrator.start_execution()
 ```
@@ -234,6 +257,7 @@ orchestrator.start_execution()
 Stops the task execution engine.
 
 **Example:**
+
 ```python
 orchestrator.stop_execution()
 ```
@@ -258,15 +282,18 @@ class ProjectManager:
 Creates a new project.
 
 **Parameters:**
+
 - `name` (str): Project name
 - `description` (str): Project description
 - `template_name` (str): Template to use
 - `**kwargs`: Additional project parameters
 
 **Returns:**
+
 - `Project`: Created project instance
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import get_project_manager
 
@@ -285,9 +312,11 @@ project = manager.create_project(
 Gets a project by name.
 
 **Parameters:**
+
 - `name` (str): Project name
 
 **Returns:**
+
 - `Optional[Project]`: Project instance or None if not found
 
 #### `list_projects(status: Optional[ProjectStatus] = None) -> List[str]`
@@ -295,9 +324,11 @@ Gets a project by name.
 Lists projects, optionally filtered by status.
 
 **Parameters:**
+
 - `status` (Optional[ProjectStatus]): Filter by project status
 
 **Returns:**
+
 - `List[str]`: List of project names
 
 #### `update_project(name: str, **kwargs) -> Optional[Project]`
@@ -305,13 +336,16 @@ Lists projects, optionally filtered by status.
 Updates a project.
 
 **Parameters:**
+
 - `name` (str): Project name
 - `**kwargs`: Fields to update
 
 **Returns:**
+
 - `Optional[Project]`: Updated project instance or None if not found
 
 **Example:**
+
 ```python
 updated_project = manager.update_project(
     "my_project",
@@ -326,9 +360,11 @@ updated_project = manager.update_project(
 Deletes a project.
 
 **Parameters:**
+
 - `name` (str): Project name
 
 **Returns:**
+
 - `bool`: True if project was deleted
 
 #### `create_template(template: ProjectTemplate) -> bool`
@@ -336,12 +372,15 @@ Deletes a project.
 Creates a new project template.
 
 **Parameters:**
+
 - `template` (ProjectTemplate): Template to create
 
 **Returns:**
+
 - `bool`: True if template was created
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import ProjectTemplate, ProjectType
 
@@ -350,7 +389,7 @@ template = ProjectTemplate(
     project_type=ProjectType.WEB_APPLICATION,
     description="Custom web application template",
     directory_structure=["src/", "static/", "templates/"],
-    files_to_create=["README.md", "requirements.txt"],
+    files_to_create=["README.md", "pyproject.toml"],
     dependencies=["flask", "jinja2"],
     workflows=["build", "deploy"]
 )
@@ -378,12 +417,15 @@ class ResourceManager:
 Adds a resource to the manager.
 
 **Parameters:**
+
 - `resource` (Resource): Resource to add
 
 **Returns:**
+
 - `bool`: True if resource was added
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import get_resource_manager, Resource, ResourceType
 
@@ -405,9 +447,11 @@ success = manager.add_resource(resource)
 Gets a resource by ID.
 
 **Parameters:**
+
 - `resource_id` (str): Resource ID
 
 **Returns:**
+
 - `Optional[Resource]`: Resource instance or None if not found
 
 #### `list_resources(resource_type: Optional[ResourceType] = None) -> List[Resource]`
@@ -415,9 +459,11 @@ Gets a resource by ID.
 Lists resources, optionally filtered by type.
 
 **Parameters:**
+
 - `resource_type` (Optional[ResourceType]): Filter by resource type
 
 **Returns:**
+
 - `List[Resource]`: List of resources
 
 #### `allocate_resource(resource_id: str, task_id: str, amount: float) -> Optional[ResourceAllocation]`
@@ -425,14 +471,17 @@ Lists resources, optionally filtered by type.
 Allocates a resource for a task.
 
 **Parameters:**
+
 - `resource_id` (str): Resource ID
 - `task_id` (str): Task ID
 - `amount` (float): Amount to allocate
 
 **Returns:**
+
 - `Optional[ResourceAllocation]`: Allocation instance or None if failed
 
 **Example:**
+
 ```python
 allocation = manager.allocate_resource("cpu_1", "task_1", 50.0)
 if allocation:
@@ -444,10 +493,12 @@ if allocation:
 Releases a resource allocation.
 
 **Parameters:**
+
 - `task_id` (str): Task ID
 - `resource_id` (str): Resource ID
 
 **Returns:**
+
 - `bool`: True if resource was released
 
 #### `get_available_capacity(resource_id: str) -> float`
@@ -455,9 +506,11 @@ Releases a resource allocation.
 Gets available capacity for a resource.
 
 **Parameters:**
+
 - `resource_id` (str): Resource ID
 
 **Returns:**
+
 - `float`: Available capacity
 
 #### `get_resource_usage(resource_id: str) -> Optional[ResourceUsage]`
@@ -465,9 +518,11 @@ Gets available capacity for a resource.
 Gets resource usage statistics.
 
 **Parameters:**
+
 - `resource_id` (str): Resource ID
 
 **Returns:**
+
 - `Optional[ResourceUsage]`: Usage statistics or None if not found
 
 #### `get_resource_summary() -> Dict[str, Any]`
@@ -475,6 +530,7 @@ Gets resource usage statistics.
 Gets comprehensive resource summary.
 
 **Returns:**
+
 - `Dict[str, Any]`: Resource summary with statistics
 
 ---
@@ -497,14 +553,17 @@ class OrchestrationEngine:
 Creates a new orchestration session.
 
 **Parameters:**
+
 - `name` (str): Session name
 - `description` (str): Session description
 - `metadata` (Dict[str, Any]): Session metadata
 
 **Returns:**
+
 - `OrchestrationSession`: Created session instance
 
 **Example:**
+
 ```python
 from codomyrmex.logistics.orchestration.project import get_orchestration_engine
 
@@ -522,9 +581,11 @@ session = engine.create_session(
 Gets a session by ID.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 
 **Returns:**
+
 - `Optional[OrchestrationSession]`: Session instance or None if not found
 
 #### `list_sessions(status: Optional[SessionStatus] = None) -> List[OrchestrationSession]`
@@ -532,9 +593,11 @@ Gets a session by ID.
 Lists sessions, optionally filtered by status.
 
 **Parameters:**
+
 - `status` (Optional[SessionStatus]): Filter by session status
 
 **Returns:**
+
 - `List[OrchestrationSession]`: List of sessions
 
 #### `update_session(session_id: str, **kwargs) -> Optional[OrchestrationSession]`
@@ -542,10 +605,12 @@ Lists sessions, optionally filtered by status.
 Updates a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 - `**kwargs`: Fields to update
 
 **Returns:**
+
 - `Optional[OrchestrationSession]`: Updated session instance or None if not found
 
 #### `delete_session(session_id: str) -> bool`
@@ -553,9 +618,11 @@ Updates a session.
 Deletes a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 
 **Returns:**
+
 - `bool`: True if session was deleted
 
 #### `execute_workflow_in_session(session_id: str, workflow_name: str) -> bool`
@@ -563,10 +630,12 @@ Deletes a session.
 Executes a workflow in a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 - `workflow_name` (str): Workflow name
 
 **Returns:**
+
 - `bool`: True if workflow was executed
 
 #### `add_task_to_session(session_id: str, task: Task) -> bool`
@@ -574,10 +643,12 @@ Executes a workflow in a session.
 Adds a task to a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 - `task` (Task): Task to add
 
 **Returns:**
+
 - `bool`: True if task was added
 
 #### `create_project_in_session(session_id: str, name: str, description: str = "") -> Optional[Project]`
@@ -585,11 +656,13 @@ Adds a task to a session.
 Creates a project in a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 - `name` (str): Project name
 - `description` (str): Project description
 
 **Returns:**
+
 - `Optional[Project]`: Created project instance or None if failed
 
 #### `allocate_resources_for_session(session_id: str, resource_id: str, amount: float) -> bool`
@@ -597,11 +670,13 @@ Creates a project in a session.
 Allocates resources for a session.
 
 **Parameters:**
+
 - `session_id` (str): Session ID
 - `resource_id` (str): Resource ID
 - `amount` (float): Amount to allocate
 
 **Returns:**
+
 - `bool`: True if resources were allocated
 
 #### `get_system_status() -> Dict[str, Any]`
@@ -609,6 +684,7 @@ Allocates resources for a session.
 Gets comprehensive system status.
 
 **Returns:**
+
 - `Dict[str, Any]`: System status with statistics
 
 #### `get_health_status() -> Dict[str, Any]`
@@ -616,6 +692,7 @@ Gets comprehensive system status.
 Gets system health status.
 
 **Returns:**
+
 - `Dict[str, Any]`: Health status for all components
 
 ---

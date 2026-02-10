@@ -5,7 +5,7 @@ Comprehensive example scripts demonstrating all Infomaniak Public Cloud service 
 ## Prerequisites
 
 ```bash
-pip install openstacksdk boto3
+uv pip install openstacksdk boto3
 ```
 
 ## Environment Setup

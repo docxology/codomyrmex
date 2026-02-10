@@ -4,11 +4,10 @@
 
 API rate limiting with fixed window, sliding window, and token bucket algorithms.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -20,6 +19,7 @@ uv sync
 ## Key Exports
 
 ### Classes
+
 - **`RateLimitExceeded`** — Raised when rate limit is exceeded.
 - **`RateLimitResult`** — Result of a rate limit check.
 - **`RateLimiter`** — Abstract base class for rate limiters.
@@ -29,6 +29,7 @@ uv sync
 - **`QuotaManager`** — Manage multiple rate limits per key.
 
 ### Functions
+
 - **`create_limiter()`** — Create a rate limiter.
 
 ## Quick Start
@@ -58,7 +59,7 @@ limiter = create_limiter("sliding_window", limit=1000, window_seconds=3600)
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `FixedWindowLimiter` | Fixed time window rate limiting |
 | `SlidingWindowLimiter` | Rolling window rate limiting |
 | `TokenBucketLimiter` | Token bucket with refill rate |
@@ -66,6 +67,13 @@ limiter = create_limiter("sliding_window", limit=1000, window_seconds=3600)
 | `RateLimitResult` | Result with remaining, limit, reset_at, headers |
 | `RateLimitExceeded` | Exception with retry_after |
 | `create_limiter(algorithm)` | Factory for creating limiters |
+
+## Directory Structure
+
+- `models.py` — Data models (RateLimitResult, RateLimitExceeded)
+- `limiters.py` — Limiter implementations (FixedWindowLimiter, TokenBucketLimiter)
+- `strategies.py` - Rate limiting algorithms
+- `__init__.py` — Public API re-exports
 
 ## HTTP Headers
 
@@ -75,13 +83,11 @@ headers = result.headers
 # {'X-RateLimit-Limit': '100', 'X-RateLimit-Remaining': '99', 'X-RateLimit-Reset': '1700000000'}
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k rate_limiting -v
 ```
-
 
 ## Documentation
 

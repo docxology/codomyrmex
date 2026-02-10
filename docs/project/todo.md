@@ -4,10 +4,10 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 
 ## I. General Project-Wide Tasks
 
-- [ ] **Dependency Management**: Enforce version pinning in all `requirements.txt` files.
-    - [ ] Update root `requirements.txt` to use exact versions for all dependencies (e.g., `openai==X.Y.Z` instead of `openai>=X.Y.Z`).
-    - [ ] Review and update all module-specific `requirements.txt` files to use exact versions for their dependencies.
-    - [ ] Ensure module `requirements.txt` files correctly state reliance on the root file or list only truly specific dependencies with pinned versions.
+- [ ] **Dependency Management**: Enforce version pinning in `pyproject.toml`.
+    - [ ] Update `pyproject.toml` to use exact versions for all dependencies (e.g., `openai==X.Y.Z` instead of `openai>=X.Y.Z`).
+    - [ ] Review and update `pyproject.toml` extras to use exact versions for their dependencies.
+    - [ ] Ensure `pyproject.toml` extras correctly state reliance on the root file or list only truly specific dependencies with pinned versions.
 - [ ] **Testing Strategy**: 
     - [x] Define and document a project-wide testing strategy (unit, integration, E2E).
     - [ ] Strive for high test coverage across all modules.
@@ -38,11 +38,11 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [ ] **`API_SPECIFICATION.md`**:
     - [x] Define actual APIs for build and synthesis tasks, replacing `example_function()`. (All sub-tasks defining specific APIs are now addressed in the document)
 - [ ] **`MCP_TOOL_SPECIFICATION.md`**:
-    - [x] Align MCP tools with the newly defined API functions (`trigger_build`, `get_build_status`, `synthesize_component_from_prompt`, `synthesize_component_from_spec`).
+    - [x] Align MCP tools with the newly defined API functions (`trigger_build`, `clean_build`, `package_artifacts`, `get_build_summary`, `synthesize_component_from_spec`).
     - [x] Ensure clear mapping between MCP tool parameters and API function arguments.
 - [ ] **`docs/`**:
     - [x] Complete `technical_overview.md`. (Placeholder content present, needs filling)
-    - [ ] Create meaningful tutorials in `docs/tutorials/` (e.g., for common build targets like Python wheels/Docker, and for code synthesis using `synthesize_code_component`), replacing or augmenting `example_tutorial.md`.
+    - [ ] Create meaningful tutorials in `docs/tutorials/` (e.g., for common build targets like Python wheels/Docker, and for code synthesis using `synthesize_component_from_spec`), replacing or augmenting `example_tutorial.md`.
 - [ ] **Core Logic**: Implement build orchestration and code generation logic.
 - [ ] **Tests**:
     - [ ] Test build scripts, synthesis logic, and reproducibility.
@@ -89,7 +89,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
     - [ ] Detail security measures, threat model, and responsible disclosure. (Template present, needs specific content for data visualization, especially if rendering user-provided data).
     - [ ] Update `tests/README.md` (if applicable, or a general guide for testing docs).
 - [ ] **`USAGE_EXAMPLES.md`**: Provide examples for generating various chart types or dashboards.
-- [ ] **`requirements.txt`**:
+- [ ] **`pyproject.toml`**:
     - [ ] List any specific data visualization libraries (e.g., `matplotlib`, `seaborn`, `plotly`).
 - [ ] **`docs/`**:
     - [ ] Complete `technical_overview.md` (Placeholder content present).
@@ -136,7 +136,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [x] **`API_SPECIFICATION.md` / `MCP_TOOL_SPECIFICATION.md`**: (Likely N/A, but confirm if any tools are exposed).
 - [x] **`SECURITY.md`**: Outline any security considerations for the development environment or setup scripts.
 - [x] **`USAGE_EXAMPLES.md`**: Provide examples of setting up for different scenarios (e.g., basic dev, full features with all modules).
-- [x] **`requirements.txt`**: List any tools required for environment setup itself (e.g., `virtualenv`, `poetry`).
+- [x] **`pyproject.toml`**: List any tools required for environment setup itself (e.g., `virtualenv`, `poetry`).
 - [x] **`docs/`**:
     - [x] Complete `technical_overview.md` if there are complex aspects to the setup.
     - [x] Create tutorials for troubleshooting common setup issues.
@@ -159,7 +159,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
         - [ ] Example API/Tool: `create_pull_request(title: str, body: str, head_branch: str, base_branch: str = "main")`.
 - [ ] **`SECURITY.md`**: Address security aspects of Git usage (e.g., pre-commit hooks for secrets, secure handling of tokens if tools automate Git operations).
 - [ ] **`USAGE_EXAMPLES.md`**: Provide examples for using any custom Git tools or following specific workflows.
-- [ ] **`requirements.txt`**: List any Python libraries used for Git automation (e.g., `GitPython`).
+- [ ] **`pyproject.toml`**: List any Python libraries used for Git automation (e.g., `GitPython`).
 - [ ] **`docs/`**:
     - [ ] Complete `technical_overview.md` for any complex Git automation logic.
     - [ ] Create tutorials for project-specific Git practices.
@@ -181,7 +181,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [ ] **`MCP_TOOL_SPECIFICATION.md`**: (Likely N/A unless tools are exposed for external log management).
 - [ ] **`SECURITY.md`**: Address security of log data (e.g., scrubbing sensitive information, log storage security).
 - [ ] **`USAGE_EXAMPLES.md`**: Provide code snippets showing how other modules should integrate and use the logging utilities.
-- [ ] **`requirements.txt`**: List dependencies for logging (e.g., `structlog`) and any monitoring libraries.
+- [ ] **`pyproject.toml`**: List dependencies for logging (e.g., `structlog`) and any monitoring libraries.
 - [ ] **`docs/`**:
     - [ ] Complete `technical_overview.md` explaining the logging architecture and design choices.
     - [ ] Create tutorials on best practices for logging within the project, and how to interpret monitoring dashboards.
@@ -206,7 +206,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 - [ ] **`MCP_TOOL_SPECIFICATION.md`**: (This module defines the *format* for these, rather than having its own tools, unless there are meta-tools for MCP validation/introspection).
 - [ ] **`SECURITY.md`**: Discuss security implications of the MCP, data validation, and authorization for tool usage.
 - [ ] **`USAGE_EXAMPLES.md`**: Provide examples of MCP messages and tool specifications from other modules.
-- [ ] **`requirements.txt`**: List any libraries for data validation (e.g., `pydantic`) or protocol definition.
+- [ ] **`pyproject.toml`**: List any libraries for data validation (e.g., `pydantic`) or protocol definition.
 - [ ] **`docs/`**:
     - [ ] Complete `technical_overview.md` detailing the design and rationale of MCP.
     - [ ] Create tutorials on how to implement an MCP-compliant tool and how to consume MCP messages.
@@ -231,7 +231,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
     - [ ] Specify MCP tools for pattern matching tasks.
 - [ ] **`SECURITY.md`**: Address potential for ReDoS (Regular Expression Denial of Service) if using complex regexes, and security of parsing untrusted code if using AST-based matching.
 - [ ] **`USAGE_EXAMPLES.md`**: Provide examples of different pattern matching use cases.
-- [ ] **`requirements.txt`**: List any libraries for advanced pattern matching or AST parsing.
+- [ ] **`pyproject.toml`**: List any libraries for advanced pattern matching or AST parsing.
 - [ ] **`docs/`**:
     - [ ] Complete `technical_overview.md` explaining the different matching strategies and their trade-offs.
     - [ ] Create tutorials for common pattern matching tasks.
@@ -248,7 +248,7 @@ This document outlines the tasks required to complete the Codomyrmex project. It
 
 - [ ] **`SECURITY.md`**:
     - [ ] Review and update security considerations for running various analysis tools, including Pyrefly.
-- [ ] **`requirements.txt`**:
+- [ ] **`pyproject.toml`**:
     - [ ] Ensure all dependencies are pinned to exact versions (general project task).
 - [ ] **Pyrefly Integration (`pyrefly_runner.py`)**:
     - [ ] **Refine Pyrefly Output Parser**:

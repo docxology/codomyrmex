@@ -4,11 +4,10 @@
 
 Task scheduling with cron, interval, and one-time triggers.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -20,6 +19,7 @@ uv sync
 ## Key Exports
 
 ### Classes
+
 - **`JobStatus`** — Status of a scheduled job.
 - **`TriggerType`** — Types of job triggers.
 - **`Trigger`** — Base class for job triggers.
@@ -30,6 +30,7 @@ uv sync
 - **`Scheduler`** — Task scheduler with support for various trigger types.
 
 ### Functions
+
 - **`every()`** — Create an interval trigger.
 - **`at()`** — Create a one-time trigger from time string (HH:MM).
 - **`cron()`** — Create a cron trigger from expression.
@@ -86,10 +87,17 @@ cron("*/5 * * * *")      # CronTrigger: every 5 minutes
 cron("0 9 * * 1-5")      # CronTrigger: 9 AM weekdays
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (`Job`, `JobStatus`, `TriggerType`)
+- `triggers.py` — Trigger implementations (`CronTrigger`, `IntervalTrigger`)
+- `scheduler.py` — Core scheduler logic
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `Scheduler` | Main scheduler with start/stop control |
 | `Job` | Scheduled job with status, run history |
 | `JobStatus` | Enum: pending, running, completed, failed, cancelled |
@@ -100,13 +108,11 @@ cron("0 9 * * 1-5")      # CronTrigger: 9 AM weekdays
 | `at("HH:MM")` | Create one-time trigger |
 | `cron("...")` | Parse cron expression |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k scheduler -v
 ```
-
 
 ## Documentation
 

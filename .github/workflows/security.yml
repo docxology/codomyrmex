@@ -8,14 +8,12 @@ on:
     branches: [main]
     paths:
       - 'pyproject.toml'
-      - 'requirements.txt'
       - 'uv.lock'
       - '.github/workflows/security.yml'
   pull_request:
     branches: [main]
     paths:
       - 'pyproject.toml'
-      - 'requirements.txt'
       - 'uv.lock'
       - '.github/workflows/security.yml'
   workflow_dispatch:
@@ -65,7 +63,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🔍 Running pip-audit for vulnerability scanning..."
-          pip install pip-audit
+          uv pip install pip-audit
           
           # Generate vulnerability report
           pip-audit --format=json --output=vulnerability-report.json || true
@@ -84,7 +82,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🛡️  Running Safety vulnerability scanner..."
-          pip install safety
+          uv pip install safety
           
           # Generate safety report
           safety check --json --output safety-report.json || true
@@ -169,7 +167,7 @@ jobs:
         continue-on-error: true
         run: |
           # Install sarif-tools for conversion
-          pip install sarif-tools
+          uv pip install sarif-tools
           
           # Convert JSON to SARIF if available
           if [ -f "bandit-report.json" ]; then
@@ -311,7 +309,7 @@ jobs:
 
       - name: Install license analysis tools
         run: |
-          pip install pip-licenses licensecheck
+          uv pip install pip-licenses licensecheck
 
       - name: Generate license report
         run: |

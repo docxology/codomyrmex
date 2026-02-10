@@ -6,11 +6,10 @@
 
 Provider and data migration tools for schema changes and data transformations. Supports defining multi-step migrations with up/down (rollback) functions, running them in sequence with status tracking, and transforming data records through composable field-level transformers for renaming, type conversion, and custom logic.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -46,7 +45,10 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with runner, migrator, transformers, and data models
+- `models.py` -- Data models (Migration, MigrationStep, MigrationResult)
+- `runner.py` -- Migration runner logic (MigrationRunner, DataMigrator)
+- `transformers.py` -- Data transformers
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification
@@ -63,7 +65,6 @@ from codomyrmex.migration import MigrationStatus, MigrationDirection, MigrationS
 # Initialize MigrationStatus
 instance = MigrationStatus()
 ```
-
 
 ## Testing
 

@@ -17,10 +17,10 @@ python environment_setup/env_checker.py
 ### Expected Outcome
 
 - The script will first attempt to import essential Python dependencies (e.g., `cased`, `dotenv`).
-    - If any are missing, it will print an error message to `stderr` instructing you to install them (usually via `uv sync`) and then exit.
+  - If any are missing, it will print an error message to `stderr` instructing you to install them (usually via `uv sync`) and then exit.
 - If dependencies are present, it will then check for the `.env` file in the project root.
-    - If `.env` is found, it will print a confirmation message and attempt to load it.
-    - If `.env` is missing, it will print a detailed message to `stdout` guiding you on how to create it, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`), and then exit.
+  - If `.env` is found, it will print a confirmation message and attempt to load it.
+  - If `.env` is missing, it will print a detailed message to `stdout` guiding you on how to create it, including a template with common API key placeholders (e.g., `OPENAI_API_KEY`), and then exit.
 - If both checks pass, you should see messages indicating success.
 
 ## Example 2: Importing and Using `env_checker.py` Functions in Another Script
@@ -44,8 +44,8 @@ import sys
 try:
     current_dir = os.path.dirname(os.path.realpath(__file__))
     project_root = os.path.abspath(os.path.join(current_dir, '..', '..')) # Adjust '..', '..' based on actual depth
-    # Verify a known marker for project root, e.g., the presence of 'requirements.txt' or '.git'
-    if not os.path.exists(os.path.join(project_root, 'requirements.txt')):
+    # Verify a known marker for project root, e.g., the presence of 'pyproject.toml' or '.git'
+    if not os.path.exists(os.path.join(project_root, 'pyproject.toml')):
         # Fallback or raise error if heuristic fails
         print("Error: Could not reliably determine project root for env_checker.py. Please ensure your script correctly identifies it.", file=sys.stderr)
         # As a simple fallback, assuming script is run from somewhere within project:
@@ -101,7 +101,7 @@ print("Environment checks passed. Proceeding with script execution.")
 
 ## Example 3: Shell Scripts for General Environment Setup
 
-For examples of shell commands and step-by-step instructions for setting up the broader project environment (including Python virtual environments, `pip install`, Node.js setup for the `documentation` module, etc.), please refer to:
+For examples of shell commands and step-by-step instructions for setting up the broader project environment (including Python virtual environments, `uv sync`, Node.js setup for the `documentation` module, etc.), please refer to:
 
 - **The `environment_setup/README.md` file**: Specifically, the section "I. General Project Development Environment Setup".
 - **The main project `README.md`**: This may also contain or be the primary source for these instructions once reorganized as suggested.
@@ -111,7 +111,7 @@ These READMEs provide the command sequences for initial setup.
 ## Common Pitfalls & Troubleshooting
 
 - **Issue**: `ImportError: No module named environment_setup.env_checker` (or similar) when trying to import functions in your own script.
-  - **Solution**: 
+  - **Solution**:
     - Ensure your script is run from a context where Python can find the `environment_setup` module. This usually means running your script from the project root directory (`codomyrmex/`).
     - If running from a subdirectory, ensure the `codomyrmex/` directory (which contains `environment_setup/`) is in your `PYTHONPATH` environment variable, or modify `sys.path` dynamically in your script (see commented example in the Python script above, but use with caution).
     - Activate your Python virtual environment (`source .venv/bin/activate`) where project dependencies are installed.
@@ -120,10 +120,10 @@ These READMEs provide the command sequences for initial setup.
   - **Solution**: The `check_and_setup_env_vars()` function relies on the `repo_root_path` argument being correctly passed to it. Ensure this path accurately points to the directory where your `.env` file is (or should be) located, which is typically the main `codomyrmex/` project root.
 
 - **Issue**: "Essential dependencies are missing" for packages you believe are installed.
-  - **Solution**: 
+  - **Solution**:
     - Double-check you are in the correct Python virtual environment (`source .venv/bin/activate`).
-    - Run `pip list` to see installed packages in the current environment.
-    - Ensure `requirements.txt` in the project root is up-to-date and re-run `pip install -r requirements.txt`.
+    - Run `uv pip list` to see installed packages in the current environment.
+    - Ensure `pyproject.toml` in the project root is up-to-date and re-run `uv sync`.
 
 ## Example 4: First-Time Full Project Setup Checklist (Conceptual Example)
 
@@ -147,17 +147,17 @@ cd codomyrmex
 echo "Step 2: Repository cloned and current directory changed to codomyrmex/"
 
 # 3. Create and Activate a Python Virtual Environment:
-python -m venv .venv
+uv venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 echo "Step 3: Python virtual environment .venv created and activated."
 
 # 4. Install Root Python Dependencies:
-pip install -r requirements.txt
-echo "Step 4: Root Python dependencies installed from requirements.txt."
+uv sync
+echo "Step 4: Root Python dependencies installed from pyproject.toml."
 
 # 5. Run `env_checker.py` to verify dependencies and .env setup:
 python environment_setup/env_checker.py
-# This script will guide you if `.env` is missing or if essential packages from requirements.txt
+# This script will guide you if `.env` is missing or if essential packages from pyproject.toml
 # were not installed correctly (e.g., due to pip issues).
 # If it prompts to create `.env`, follow its instructions and add your API keys.
 echo "Step 5: env_checker.py executed. Follow its guidance if any issues reported."
@@ -180,7 +180,8 @@ echo "Step 6: Documentation module setup (if chosen) complete or skipped."
 echo "Basic Codomyrmex development environment setup is complete!"
 ```
 
-**Expected Outcome**: 
+**Expected Outcome**:
+
 - The project is cloned.
 - A Python virtual environment is active with necessary packages.
 - `env_checker.py` has confirmed dependencies and guided `.env` creation.
@@ -189,7 +190,7 @@ echo "Basic Codomyrmex development environment setup is complete!"
 
 ## Example 5: Setting Up for a Specific Module with Unique Needs (Conceptual)
 
-While Codomyrmex aims for a unified base setup, a specific module might have an additional, unique setup step not covered by the global `requirements.txt` (e.g., installing a specific system library or a tool not manageable by pip).
+While Codomyrmex aims for a unified base setup, a specific module might have an additional, unique setup step not covered by the global `pyproject.toml` (e.g., installing a specific system library or a tool not manageable by uv).
 
 **Scenario**: Imagine a hypothetical `special_hardware_interface` module needs a system driver and a special Python package installed directly from a Git URL.
 
@@ -211,7 +212,7 @@ While Codomyrmex aims for a unified base setup, a specific module might have an 
     ```
 2.  **Install Special Python Package** (within your active `.venv`):
     ```bash
-    pip install git+https://example.com/vendor/special_xyz_python_lib.git#egg=special_xyz
+    uv pip install git+https://example.com/vendor/special_xyz_python_lib.git#egg=special_xyz
     ```
 3.  **Verify**: 
     Run the module's verification script (if provided):
@@ -221,10 +222,12 @@ While Codomyrmex aims for a unified base setup, a specific module might have an 
 ```
 
 **Key Takeaway**: For module-specific setup steps beyond the common environment:
-1.  Always check that module's `README.md` first.
-2.  Perform these steps *after* the main project setup and *within* the activated project virtual environment (`.venv`).
 
-This `environment_setup` module primarily focuses on the *common* baseline. Individual modules are responsible for documenting their *additional unique* setup requirements. 
+1. Always check that module's `README.md` first.
+2. Perform these steps *after* the main project setup and *within* the activated project virtual environment (`.venv`).
+
+This `environment_setup` module primarily focuses on the *common* baseline. Individual modules are responsible for documenting their *additional unique* setup requirements.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -42,7 +42,7 @@ Build automation module providing multi-language build management, artifact synt
 - `__init__.py` - Module entry point aggregating build manager and orchestrator exports
 - `build_manager.py` - `BuildManager`, build target factories, data structures, and enums
 - `build_orchestrator.py` - Pipeline orchestration, environment checking, and artifact synthesis
-- `requirements.txt` - Module-specific dependencies
+- `pyproject.toml` - Project dependencies
 
 ## Quick Start
 
@@ -55,7 +55,6 @@ buildtype = BuildType()
 # Use BuildStatus for additional functionality
 buildstatus = BuildStatus()
 ```
-
 
 ## Testing
 

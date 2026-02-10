@@ -45,7 +45,7 @@ def read_yaml(
         return data
 
     except ImportError:
-        logger.error("PyYAML not installed. Install with: pip install pyyaml")
+        logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
         raise DocumentReadError(
             "PyYAML library not available",
             file_path=str(file_path)
@@ -94,7 +94,7 @@ def write_yaml(
         logger.debug(f"Wrote YAML to {file_path}")
 
     except ImportError:
-        logger.error("PyYAML not installed. Install with: pip install pyyaml")
+        logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
         raise DocumentWriteError(
             "PyYAML library not available",
             file_path=str(file_path)

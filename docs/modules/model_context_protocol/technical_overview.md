@@ -544,10 +544,10 @@ When implementing an MCP tool:
 
 ## 12. References
 
-- [MCP Tool Specification Meta-Specification](../MCP_TOOL_SPECIFICATION.md) - Authoritative rules for tool specifications
-- [Canonical Tool Template](../../module_template/MCP_TOOL_SPECIFICATION.md) - Starting point for new tools
-- [API Specification](../API_SPECIFICATION.md) - Python API for MCP utilities
-- [Usage Examples](../USAGE_EXAMPLES.md) - Practical implementation examples
+- [MCP Tool Specification Meta-Specification](../../../src/codomyrmex/model_context_protocol/MCP_TOOL_SPECIFICATION.md) - Authoritative rules for tool specifications
+- [Canonical Tool Template](../../../src/codomyrmex/module_template/MCP_TOOL_SPECIFICATION.md) - Starting point for new tools
+- [API Specification](../../../src/codomyrmex/model_context_protocol/API_SPECIFICATION.md) - Python API for MCP utilities
+- [Usage Examples](../../../src/codomyrmex/model_context_protocol/USAGE_EXAMPLES.md) - Practical implementation examples
 - [JSON Schema Specification](https://json-schema.org/) - Standard for schema definitions
 - [Pydantic Documentation](https://docs.pydantic.dev/) - Python data validation library
 

@@ -10,7 +10,7 @@ The evolutionary_ai module provides a complete genetic algorithm framework for e
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

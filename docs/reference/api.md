@@ -213,7 +213,7 @@ create_bar_chart(
 | **`run_pyrefly_analysis()`** | Python-specific static analysis | 🔄 Evolving | `run_pyrefly_analysis(["src/"], ".")` |
 | **`analyze_code_quality()`** | General code quality assessment | 🔄 Evolving | `analyze_code_quality(code, "python")` |
 | **`check_security_issues()`** | Security vulnerability scanning | 🔄 Evolving | `check_security_issues(codebase_path)` |
-| **`analyze_dependencies()`** | Dependency analysis and suggestions | 🔄 Evolving | `analyze_dependencies("requirements.txt")` |
+| **`analyze_dependencies()`** | Dependency analysis and suggestions | 🔄 Evolving | `analyze_dependencies("pyproject.toml")` |
 
 **Quick Example:**
 

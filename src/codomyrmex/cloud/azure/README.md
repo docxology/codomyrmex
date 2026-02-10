@@ -46,7 +46,7 @@ Uses DefaultAzureCredential chain:
 ## Dependencies
 
 ```bash
-pip install azure-storage-blob azure-identity
+uv pip install azure-storage-blob azure-identity
 ```
 
 ## Navigation

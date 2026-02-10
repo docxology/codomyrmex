@@ -293,7 +293,7 @@ else:
 
 - See [Python Wheel Build Tutorial](./python_wheel_build_tutorial.md) for package builds
 - Review [Build Orchestration](../technical_overview.md) for advanced usage
-- Check [Security Documentation](../../SECURITY.md) for security best practices
+- Check [Security Documentation](../../../../src/codomyrmex/build_synthesis/SECURITY.md) for security best practices
 
 
 ## Navigation Links

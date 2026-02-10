@@ -6,11 +6,10 @@
 
 Vision and audio processing for multimodal AI applications. Provides typed media containers for images, audio, and video with base64 encoding/decoding, file loading with automatic format detection, and content hashing. Includes image and audio processors for validation and metadata extraction, a `MultimodalMessage` class for composing multi-part messages with mixed media types, and a fluent `MultimodalMessageBuilder` for constructing API-ready payloads.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -46,7 +45,10 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with media containers, processors, message builder, and data models
+- `models.py` -- Data models (MediaContent, MultimodalMessage, etc.)
+- `processors.py` -- Media processors (ImageProcessor, AudioProcessor)
+- `builder.py` -- Fluent message builder (MultimodalMessageBuilder)
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification
@@ -63,7 +65,6 @@ from codomyrmex.multimodal import MediaType, ImageFormat, AudioFormat
 # Initialize MediaType
 instance = MediaType()
 ```
-
 
 ## Testing
 

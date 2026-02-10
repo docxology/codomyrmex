@@ -26,25 +26,25 @@ def test_get_system_summary(mock_root):
     assert "agent_count" in summary
 
 @pytest.mark.unit
-def test_get_agents_status(mock_root):
+def test_get_modules(mock_root):
     provider = DataProvider(mock_root)
-    agents = provider.get_agents_status()
+    modules = provider.get_modules()
 
-    assert len(agents) == 1
-    assert agents[0]["name"] == "fake_agent"
-    assert agents[0]["description"] == "Test Description"
-    assert agents[0]["status"] == "Active"
+    assert len(modules) == 1
+    assert modules[0]["name"] == "fake_agent"
+    assert modules[0]["description"] == "Test Description"
+    assert modules[0]["status"] == "Active"
 
 @pytest.mark.unit
 def test_get_description_fallback(mock_root):
-    # Create agent without description
+    # Create module without description
     agent_dir = mock_root / "src" / "codomyrmex" / "mystery_agent"
     agent_dir.mkdir()
     (agent_dir / "__init__.py").touch()
 
     provider = DataProvider(mock_root)
-    agents = provider.get_agents_status()
+    modules = provider.get_modules()
 
     # Sort to find the mystery one or check by name
-    mystery = next(a for a in agents if a["name"] == "mystery_agent")
+    mystery = next(a for a in modules if a["name"] == "mystery_agent")
     assert mystery["description"] == "No description available"

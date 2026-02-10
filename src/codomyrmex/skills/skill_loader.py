@@ -61,7 +61,7 @@ class SkillLoader:
             return None
 
         if yaml is None:
-            logger.error("PyYAML not installed. Install with: pip install pyyaml")
+            logger.error("PyYAML not installed. Install with: uv pip install pyyaml")
             return None
 
         try:

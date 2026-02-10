@@ -109,13 +109,21 @@ Comprehensive API infrastructure module providing everything needed to build, do
 ## Quick Start
 
 ```python
-from codomyrmex.api import APISchema, OpenAPISpecification
+from codomyrmex.api import create_api, create_router, create_rate_limiter, CircuitBreaker
 
-# Create a APISchema instance
-apischema = APISchema()
+# Build a REST API with a router
+api = create_api(title="My Service", version="1.0.0")
+router = create_router(prefix="/users")
+api.add_router(router)
 
-# Use OpenAPISpecification for additional functionality
-openapispecification = OpenAPISpecification()
+# Add rate limiting (100 requests per 60-second window)
+limiter = create_rate_limiter(strategy="token_bucket", max_tokens=100, refill_rate=10)
+result = limiter.check("client-ip-123")
+print(f"Allowed: {result.allowed}, Remaining: {result.remaining}")
+
+# Protect external calls with a circuit breaker
+breaker = CircuitBreaker(failure_threshold=5, recovery_timeout=30)
+response = breaker.call(lambda: api.handle_request("/users", method="GET"))
 ```
 
 ## Navigation

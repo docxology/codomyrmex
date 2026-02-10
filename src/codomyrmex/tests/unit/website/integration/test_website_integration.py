@@ -107,6 +107,7 @@ class TestFullWebsiteGeneration:
         # Verify all pages were created
         expected_pages = [
             "index.html",
+            "health.html",
             "modules.html",
             "scripts.html",
             "chat.html",
@@ -251,11 +252,25 @@ class TestWebsiteServerIntegration:
         assert hasattr(WebsiteServer, 'handle_execute')
         assert hasattr(WebsiteServer, 'handle_chat')
         assert hasattr(WebsiteServer, 'handle_refresh')
+        assert hasattr(WebsiteServer, 'handle_status')
+        assert hasattr(WebsiteServer, 'handle_health')
+        assert hasattr(WebsiteServer, 'handle_tests_run')
         assert hasattr(WebsiteServer, 'handle_config_list')
         assert hasattr(WebsiteServer, 'handle_config_get')
         assert hasattr(WebsiteServer, 'handle_config_save')
         assert hasattr(WebsiteServer, 'handle_docs_list')
+        assert hasattr(WebsiteServer, 'handle_docs_get')
+        assert hasattr(WebsiteServer, 'handle_modules_list')
+        assert hasattr(WebsiteServer, 'handle_module_detail')
+        assert hasattr(WebsiteServer, 'handle_agents_list')
+        assert hasattr(WebsiteServer, 'handle_scripts_list')
         assert hasattr(WebsiteServer, 'handle_pipelines_list')
+
+    def test_deprecated_methods_removed(self):
+        """Test that deprecated methods have been removed."""
+        assert not hasattr(DataProvider, 'get_agents_status')
+        assert not hasattr(DataProvider, '_count_agents')
+        assert not hasattr(DataProvider, '_get_script_docstring')
 
 
 @pytest.mark.integration
@@ -287,3 +302,20 @@ class TestSecurityIntegration:
 
         with pytest.raises(ValueError):
             provider.save_config_content("/tmp/evil.txt", "malicious")
+
+    def test_docs_endpoint_traversal_blocked(self, tmp_path):
+        """Test that path traversal is blocked on docs endpoint."""
+        provider = DataProvider(tmp_path)
+
+        with pytest.raises(ValueError):
+            provider.get_doc_content("../../../etc/passwd.md")
+
+        with pytest.raises(ValueError):
+            provider.get_doc_content("/etc/passwd.md")
+
+    def test_docs_endpoint_rejects_non_markdown(self, tmp_path):
+        """Test that docs endpoint rejects non-.md files."""
+        provider = DataProvider(tmp_path)
+
+        with pytest.raises(ValueError):
+            provider.get_doc_content("src/script.py")

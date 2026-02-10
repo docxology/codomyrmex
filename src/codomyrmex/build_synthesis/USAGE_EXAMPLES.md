@@ -43,6 +43,7 @@ else:
 ```
 
 ### Expected Output
+
 ```
 Build successful!
 Artifacts: ['dist/my_package-1.0.0.tar.gz', 'dist/my_package-1.0.0-py3-none-any.whl']
@@ -85,6 +86,7 @@ for result in results:
 ```
 
 ### Expected Output
+
 ```
 core_package: success
   Artifacts: 2 files
@@ -202,6 +204,7 @@ Use the MCP tool interface for remote build triggering:
 ```
 
 ### MCP Response Example
+
 ```json
 {
   "status": "success",
@@ -225,6 +228,7 @@ Use the MCP tool interface for remote build triggering:
 ### Build Environment Issues
 
 **Issue**: "Build environment not properly configured"
+
 ```python
 # Check build environment
 from codomyrmex.build_synthesis import check_build_environment
@@ -241,12 +245,14 @@ if not env_status["ready"]:
 ### Dependency Resolution Problems
 
 **Issue**: "Cannot resolve build dependencies"
-- **Solution**: Check `requirements.txt` or `pyproject.toml` for correct dependency specifications
+
+- **Solution**: Check `pyproject.toml` for correct dependency specifications
 - **Solution**: Ensure package versions are compatible and available on package repositories
 
 ### Quality Gate Failures
 
 **Issue**: Build succeeds but quality gates fail
+
 - **Solution**: Review quality gate logs to identify specific failures
 - **Solution**: Fix code issues (linting errors, test failures, security vulnerabilities)
 - **Solution**: Adjust quality gate thresholds if too strict
@@ -254,18 +260,21 @@ if not env_status["ready"]:
 ### Docker Build Issues
 
 **Issue**: "Docker build fails with permission errors"
+
 - **Solution**: Ensure Docker daemon is running and user has proper permissions
 - **Solution**: Check Dockerfile syntax and base image availability
 
 ### Artifact Storage Problems
 
 **Issue**: "Cannot store build artifacts"
+
 - **Solution**: Verify output directory permissions and available disk space
 - **Solution**: Check artifact naming conflicts and cleanup old artifacts
 
 ### Performance Issues
 
 **Issue**: Builds take too long to complete
+
 - **Solution**: Enable build caching and parallel execution
 - **Solution**: Optimize build scripts and reduce unnecessary operations
 - **Solution**: Use appropriate build environments (development vs production)
@@ -342,6 +351,7 @@ def deploy_successful_build(build_result: BuildResult):
 ## Performance Optimization
 
 ### Parallel Builds
+
 ```python
 # Enable parallel execution for multi-target builds
 build_manager.enable_parallel_builds(max_workers=4)
@@ -349,16 +359,19 @@ results = build_manager.build_all_targets_parallel(BuildEnvironment.PRODUCTION)
 ```
 
 ### Build Caching
+
 ```python
 # Enable build caching to speed up subsequent builds
 build_manager.enable_caching(cache_dir=".build_cache", max_age_days=7)
 ```
 
 ### Incremental Builds
+
 ```python
 # Only rebuild what changed
 build_manager.enable_incremental_builds(changed_files=get_git_changes())
-``` 
+```
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

@@ -10,7 +10,7 @@ Unified data serialization and deserialization module supporting multiple format
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -60,9 +60,19 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.serialization import serialize, deserialize
+from codomyrmex.serialization import serialize, deserialize, SerializationFormat
 
-result = serialize()
+# Serialize a Python object to JSON bytes
+data = {"name": "example", "values": [1, 2, 3]}
+json_bytes = serialize(data, format="json")
+print(f"Serialized: {len(json_bytes)} bytes")
+
+# Deserialize back to a Python object
+restored = deserialize(json_bytes, format="json")
+assert restored == data
+
+# Use YAML format
+yaml_bytes = serialize(data, format=SerializationFormat("yaml"))
 ```
 
 

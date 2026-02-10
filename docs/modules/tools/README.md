@@ -10,7 +10,7 @@ Tool calling framework with registration, validation, execution, and composable 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

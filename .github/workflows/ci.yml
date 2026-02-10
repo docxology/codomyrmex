@@ -43,7 +43,7 @@ jobs:
             ~/.cache/pre-commit
             ~/.cache/uv
             ~/.cache/pip
-          key: ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-${{ hashFiles('uv.lock', 'pyproject.toml', 'requirements.txt') }}
+          key: ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-${{ hashFiles('uv.lock', 'pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-
             ${{ runner.os }}-deps-
@@ -331,7 +331,7 @@ jobs:
       - name: Test package installation
         run: |
           # Test installation from built wheel
-          pip install dist/*.whl
+          uv pip install dist/*.whl
           python -c "import codomyrmex; print('Package installed successfully')"
 
   validate-dependencies:

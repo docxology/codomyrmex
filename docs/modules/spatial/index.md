@@ -19,7 +19,7 @@ This documentation provides in-depth information beyond the main `README.md` for
 ## Related Documentation
 
 - [Module README](../README.md)
-- [Security Considerations](../SECURITY.md)
+- [Security Considerations](../../../src/codomyrmex/spatial/three_d/SECURITY.md)
 - [Examples](../../../scripts/spatial/examples) - Usage examples and demonstrations
 
 

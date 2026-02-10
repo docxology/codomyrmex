@@ -75,7 +75,7 @@ The Codomyrmex project employs a multi-layered testing approach:
 - **Purpose**: To automatically detect potential bugs, code smells, security vulnerabilities, and style issues without executing the code.
 - **Scope**: Applied to all code across the project.
 - **Tools**:
-    - Python: `pylint`, `flake8`, `bandit` (as defined in `static_analysis/requirements.txt` and configured via `static_analysis` module rules).
+    - Python: `pylint`, `flake8`, `bandit` (as defined in `static_analysis/pyproject.toml` and configured via `static_analysis` module rules).
     - JavaScript/Markdown: ESLint, Prettier (for Docusaurus).
 - **Integration**: Enforced via pre-commit hooks and CI/CD pipelines.
 - **Guidelines**: Adhere to the configurations defined in the `static_analysis` module.

@@ -23,7 +23,7 @@ Encryption and cryptographic operations module for Codomyrmex. Provides symmetri
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

@@ -10,7 +10,7 @@ Automatic system capability detection, dependency resolution, and environment pr
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

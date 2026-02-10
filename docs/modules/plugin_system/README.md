@@ -10,7 +10,7 @@ Dynamic plugin loading, discovery, and lifecycle management with sandboxed execu
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

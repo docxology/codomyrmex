@@ -6,11 +6,10 @@
 
 Spend tracking, budgeting, and cost optimization for AI/cloud infrastructure. Provides a `CostTracker` to record and aggregate cost entries across categories (LLM inference, compute, storage, network, API calls), a `BudgetManager` for creating budgets with configurable periods and alert thresholds, and pluggable storage backends for persistence.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -45,7 +44,10 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with all classes, enums, and data models
+- `models.py` -- Data models (CostEntry, Budget, etc.)
+- `stores.py` -- Storage backends (CostStore, InMemoryCostStore)
+- `tracker.py` -- Core logic (CostTracker, BudgetManager)
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification

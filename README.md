@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 82 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 94 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 80+ independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 94 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -68,7 +68,7 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | Guide | Description |
 |-------|-------------|
 | [**Architecture**](docs/project/architecture.md) | System design and principles |
-| [**Module Overview**](docs/modules/overview.md) | Understanding the 82 module system |
+| [**Module Overview**](docs/modules/overview.md) | Understanding the 94 module system |
 | [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
 | [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
 
@@ -140,7 +140,7 @@ uv run scripts/documentation/examples/advanced_workflow.py
 
 **Quick Links:**
 
-- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 80+ modules
+- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 94 modules
 - 📖 **[Full Documentation](docs/)** - Complete documentation
 - 🎯 **[Module Documentation](docs/modules/)** - Per-module guides
 - 💻 **[Scripts](scripts/)** - Utility and automation scripts
@@ -589,7 +589,7 @@ uv sync
 ```bash
 git clone https://github.com/codomyrmex/codomyrmex.git
 cd codomyrmex
-pip install -e .
+uv pip install -e .
 ```
 
 ### Verify Installation
@@ -616,7 +616,7 @@ flowchart TD
     Start([Start]) --> Install{Install Codomyrmex}
 
     Install -->|uv sync| Config["Configure Environment"]
-    Install -->|pip install| Config
+    Install -->|uv pip install| Config
 
     Config --> Setup["Environment Setup"]
     Setup --> Discover["Discover Modules"]
@@ -847,7 +847,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **82 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **94 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -1015,7 +1015,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/static_analysis/     # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 80+ additional modules
+│   └── ...                  # 94 modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -1046,7 +1046,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 82 Modules"]
+        CoreSrc["src/codomyrmex/ 94 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -1493,9 +1493,9 @@ pie title Module Development Status (February 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 82 modules
+- **Lines of Code**: ~50K+ across 94 modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 82 core modules
+- **Module Count**: 94 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

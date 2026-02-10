@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modules - Codomyrmex</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="index.html" class="logo">
+                <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
+            </a>
+            <div class="nav-links">
+                <div class="nav-group" role="group" aria-label="Operations">
+                    <span class="nav-group-label">Operations</span>
+                    <a href="index.html" class="nav-link" data-shortcut="1">Dashboard</a>
+                    <a href="health.html" class="nav-link" data-shortcut="2">Health</a>
+                    <a href="pipelines.html" class="nav-link" data-shortcut="3">Pipelines</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Development">
+                    <span class="nav-group-label">Development</span>
+                    <a href="modules.html" class="nav-link" data-shortcut="4">Modules</a>
+                    <a href="scripts.html" class="nav-link" data-shortcut="5">Scripts</a>
+                    <a href="config.html" class="nav-link" data-shortcut="6">Config</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Intelligence">
+                    <span class="nav-group-label">Intelligence</span>
+                    <a href="agents.html" class="nav-link" data-shortcut="7">Agents</a>
+                    <a href="chat.html" class="nav-link" data-shortcut="8">Chat</a>
+                    <a href="docs.html" class="nav-link" data-shortcut="9">Docs</a>
+                    <a href="awareness.html" class="nav-link" data-shortcut="0">Awareness</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+<h1>System Modules</h1>
+
+<div class="search-container">
+    <label for="moduleSearch" class="sr-only">Search modules</label>
+    <input type="text" class="search-input" id="moduleSearch" placeholder="Search modules...">
+</div>
+
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+    94 Codomyrmex packages providing core functionality.
+</p>
+
+<div class="grid" id="modulesGrid">
+    
+    <div class="card module-card" data-name="accessibility" style="cursor: pointer;" onclick="showModuleDetail('accessibility')">
+        <h2 class="card-title">
+            accessibility
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Accessibility Module
+
+WCAG compliance checking and accessibility utilities.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/accessibility
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="agentic_memory" style="cursor: pointer;" onclick="showModuleDetail('agentic_memory')">
+        <h2 class="card-title">
+            agentic_memory
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Agentic Memory Module
+
+Long-term agent memory with retrieval and persistence.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agentic_memory
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="agents" style="cursor: pointer;" onclick="showModuleDetail('agents')">
+        <h2 class="card-title">
+            agents
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Agents Module for Codomyrmex.
+
+This module provides integration with various agentic frameworks including
+Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI,
+and Every Cod...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                21 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>ai_code_editing</li>
+                
+                <li>claude</li>
+                
+                <li>cli</li>
+                
+                <li>codex</li>
+                
+                <li>core</li>
+                
+                <li>deepseek</li>
+                
+                <li>droid</li>
+                
+                <li>evaluation</li>
+                
+                <li>every_code</li>
+                
+                <li>gemini</li>
+                
+                <li>generic</li>
+                
+                <li>git_agent</li>
+                
+                <li>history</li>
+                
+                <li>infrastructure</li>
+                
+                <li>jules</li>
+                
+                <li>mistral_vibe</li>
+                
+                <li>o1</li>
+                
+                <li>opencode</li>
+                
+                <li>pooling</li>
+                
+                <li>qwen</li>
+                
+                <li>theory</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="api" style="cursor: pointer;" onclick="showModuleDetail('api')">
+        <h2 class="card-title">
+            api
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Unified API Module for Codomyrmex.
+
+This module provides comprehensive API functionality including:
+- API documentation generation and management
+- API standardization (REST, GraphQL, versioning)
+- Op...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                8 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>authentication</li>
+                
+                <li>circuit_breaker</li>
+                
+                <li>documentation</li>
+                
+                <li>mocking</li>
+                
+                <li>pagination</li>
+                
+                <li>rate_limiting</li>
+                
+                <li>standardization</li>
+                
+                <li>webhooks</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/api
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="audio" style="cursor: pointer;" onclick="showModuleDetail('audio')">
+        <h2 class="card-title">
+            audio
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Audio processing module for Codomyrmex.
+
+This module provides audio processing capabilities including:
+- Speech-to-text (STT) transcription using Whisper
+- Text-to-speech (TTS) synthesis using pyttsx3...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                2 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>speech_to_text</li>
+                
+                <li>text_to_speech</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/audio
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="auth" style="cursor: pointer;" onclick="showModuleDetail('auth')">
+        <h2 class="card-title">
+            auth
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Authentication module for Codomyrmex.
+
+This module provides authentication and authorization with API key management,
+OAuth integration, and access control.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/auth
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="build_synthesis" style="cursor: pointer;" onclick="showModuleDetail('build_synthesis')">
+        <h2 class="card-title">
+            build_synthesis
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Build Synthesis Module for Codomyrmex.
+
+The Build Synthesis module provides build automation, dependency management,
+artifact synthesis, and deployment orchestration capabilities within the Codomyrmex...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/build_synthesis
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="cache" style="cursor: pointer;" onclick="showModuleDetail('cache')">
+        <h2 class="card-title">
+            cache
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Cache module for Codomyrmex.
+
+This module provides unified caching strategies for code analysis results,
+LLM responses, build artifacts, and other frequently accessed data.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                8 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>async_ops</li>
+                
+                <li>backends</li>
+                
+                <li>distributed</li>
+                
+                <li>invalidation</li>
+                
+                <li>policies</li>
+                
+                <li>replication</li>
+                
+                <li>serializers</li>
+                
+                <li>warmers</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/cache
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="cerebrum" style="cursor: pointer;" onclick="showModuleDetail('cerebrum')">
+        <h2 class="card-title">
+            cerebrum
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">CEREBRUM Module for Codomyrmex.
+
+Case-Enabled Reasoning Engine with Bayesian Representations for Unified Modeling.
+
+This module provides case-based reasoning combined with Bayesian probabilistic
+infer...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>core</li>
+                
+                <li>fpf</li>
+                
+                <li>inference</li>
+                
+                <li>visualization</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/cerebrum
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="chaos_engineering" style="cursor: pointer;" onclick="showModuleDetail('chaos_engineering')">
+        <h2 class="card-title">
+            chaos_engineering
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Chaos Engineering Module
+
+Fault injection and resilience testing.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/chaos_engineering
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="ci_cd_automation" style="cursor: pointer;" onclick="showModuleDetail('ci_cd_automation')">
+        <h2 class="card-title">
+            ci_cd_automation
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">CI/CD Automation Module for Codomyrmex.
+
+The CI/CD Automation module provides continuous integration and deployment
+capabilities, including pipeline management, automated testing, deployment orchestra...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/ci_cd_automation
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="cli" style="cursor: pointer;" onclick="showModuleDetail('cli')">
+        <h2 class="card-title">
+            cli
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex CLI Module
+
+This module provides the command-line interface for the Codomyrmex development platform.
+It serves as the primary entry point for user interaction with all Codomyrmex capabiliti...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>completions</li>
+                
+                <li>formatters</li>
+                
+                <li>handlers</li>
+                
+                <li>parsers</li>
+                
+                <li>themes</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/cli
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="cloud" style="cursor: pointer;" onclick="showModuleDetail('cloud')">
+        <h2 class="card-title">
+            cloud
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Cloud Services Module for Codomyrmex.
+
+This module provides integrations with various cloud service APIs including:
+- Coda.io: Document and database API for Coda docs
+- AWS: Amazon Web Services (S3)
+-...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                6 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>aws</li>
+                
+                <li>azure</li>
+                
+                <li>coda_io</li>
+                
+                <li>common</li>
+                
+                <li>gcp</li>
+                
+                <li>infomaniak</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/cloud
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="coding" style="cursor: pointer;" onclick="showModuleDetail('coding')">
+        <h2 class="card-title">
+            coding
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Coding Module.
+
+Unified module for code execution, sandboxing, review, monitoring, and
+debugging. Provides a comprehensive toolkit for running, analyzing, and
+fixing code programmatically.
+
+Submodules...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                9 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>analysis</li>
+                
+                <li>debugging</li>
+                
+                <li>execution</li>
+                
+                <li>generation</li>
+                
+                <li>monitoring</li>
+                
+                <li>refactoring</li>
+                
+                <li>review</li>
+                
+                <li>sandbox</li>
+                
+                <li>testing</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/coding
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="collaboration" style="cursor: pointer;" onclick="showModuleDetail('collaboration')">
+        <h2 class="card-title">
+            collaboration
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Collaboration module for Codomyrmex.
+
+Provides multi-agent collaboration capabilities including:
+- Agent management (workers, supervisors, registry)
+- Communication (channels, broadcasting, direct mes...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>agents</li>
+                
+                <li>communication</li>
+                
+                <li>coordination</li>
+                
+                <li>protocols</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/collaboration
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="compression" style="cursor: pointer;" onclick="showModuleDetail('compression')">
+        <h2 class="card-title">
+            compression
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Compression module for Codomyrmex.
+
+This module provides data compression utilities and archive handling:
+- gzip, zlib, and ZIP format support
+- Configurable compression levels
+- Stream-based compress...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/compression
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="concurrency" style="cursor: pointer;" onclick="showModuleDetail('concurrency')">
+        <h2 class="card-title">
+            concurrency
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Concurrency and synchronization module for Codomyrmex.
+
+This module provides distributed locks, semaphores, and other synchronization primitives.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/concurrency
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="config_management" style="cursor: pointer;" onclick="showModuleDetail('config_management')">
+        <h2 class="card-title">
+            config_management
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Configuration Management Module for Codomyrmex.
+
+The Configuration Management module provides configuration management,
+validation, and deployment capabilities for the Codomyrmex ecosystem.
+
+Integrati...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/config_management
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="containerization" style="cursor: pointer;" onclick="showModuleDetail('containerization')">
+        <h2 class="card-title">
+            containerization
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Containerization Module for Codomyrmex.
+
+The Containerization module provides container management,
+orchestration, and deployment capabilities for the Codomyrmex ecosystem.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>docker</li>
+                
+                <li>kubernetes</li>
+                
+                <li>registry</li>
+                
+                <li>security</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/containerization
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="cost_management" style="cursor: pointer;" onclick="showModuleDetail('cost_management')">
+        <h2 class="card-title">
+            cost_management
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Cost Management Module
+
+Spend tracking, budgeting, and cost optimization.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/cost_management
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="dark" style="cursor: pointer;" onclick="showModuleDetail('dark')">
+        <h2 class="card-title">
+            dark
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Dark modes module - network, hardware, software, PDF dark mode utilities.
+
+This module provides dark mode utilities across different domains:
+- pdf: PDF dark mode filters (inversion, brightness, contr...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>hardware</li>
+                
+                <li>network</li>
+                
+                <li>pdf</li>
+                
+                <li>software</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/dark
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="data_lineage" style="cursor: pointer;" onclick="showModuleDetail('data_lineage')">
+        <h2 class="card-title">
+            data_lineage
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Data Lineage Module
+
+Track data lineage through transformations with graph-based analysis.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/data_lineage
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="data_visualization" style="cursor: pointer;" onclick="showModuleDetail('data_visualization')">
+        <h2 class="card-title">
+            data_visualization
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Data Visualization Module for Codomyrmex.
+
+This module provides utilities for generating various types of plots,
+visualizations, and interactive dashboards.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>charts</li>
+                
+                <li>engines</li>
+                
+                <li>git</li>
+                
+                <li>mermaid</li>
+                
+                <li>themes</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/data_visualization
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="database_management" style="cursor: pointer;" onclick="showModuleDetail('database_management')">
+        <h2 class="card-title">
+            database_management
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Database Management Module for Codomyrmex.
+
+The Database Management module provides database management,
+migration, and administration capabilities for the Codomyrmex ecosystem.
+
+Integration:
+- Uses `...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>audit</li>
+                
+                <li>connections</li>
+                
+                <li>replication</li>
+                
+                <li>sharding</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/database_management
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="defense" style="cursor: pointer;" onclick="showModuleDetail('defense')">
+        <h2 class="card-title">
+            defense
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Defense Module.
+
+Provides Active Countermeasures and Rabbit Hole containment.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/defense
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="deployment" style="cursor: pointer;" onclick="showModuleDetail('deployment')">
+        <h2 class="card-title">
+            deployment
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Deployment module for Codomyrmex.
+
+Provides deployment strategies, managers, and utilities:
+- Canary deployments
+- Blue-green deployments
+- Rolling deployments
+- GitOps synchronization</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>gitops</li>
+                
+                <li>health_checks</li>
+                
+                <li>manager</li>
+                
+                <li>rollback</li>
+                
+                <li>strategies</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/deployment
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="documentation" style="cursor: pointer;" onclick="showModuleDetail('documentation')">
+        <h2 class="card-title">
+            documentation
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Documentation Module for Codomyrmex.
+
+This module provides documentation management and website generation
+capabilities for the Codomyrmex project.
+
+Integration:
+- Uses `logging_monitoring` for all lo...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                1 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>scripts</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/documentation
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="documents" style="cursor: pointer;" onclick="showModuleDetail('documents')">
+        <h2 class="card-title">
+            documents
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Documents Module for Codomyrmex.
+
+The Documents module provides robust, abstractable methods for reading and writing
+various document formats. It functions like a &#34;printer&#39;s shop and library or post o...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                7 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>core</li>
+                
+                <li>formats</li>
+                
+                <li>metadata</li>
+                
+                <li>models</li>
+                
+                <li>search</li>
+                
+                <li>transformation</li>
+                
+                <li>utils</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/documents
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="edge_computing" style="cursor: pointer;" onclick="showModuleDetail('edge_computing')">
+        <h2 class="card-title">
+            edge_computing
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Edge Computing Module
+
+Edge deployment, IoT gateways, and latency-sensitive patterns.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/edge_computing
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="embodiment" style="cursor: pointer;" onclick="showModuleDetail('embodiment')">
+        <h2 class="card-title">
+            embodiment
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Embodiment module for Codomyrmex.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>actuators</li>
+                
+                <li>ros</li>
+                
+                <li>sensors</li>
+                
+                <li>transformation</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/embodiment
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="encryption" style="cursor: pointer;" onclick="showModuleDetail('encryption')">
+        <h2 class="card-title">
+            encryption
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Encryption module for Codomyrmex.
+
+This module provides encryption/decryption utilities and key management:
+- AES-256 symmetric encryption (CBC mode, with deprecation warning)
+- AES-GCM authenticated ...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/encryption
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="environment_setup" style="cursor: pointer;" onclick="showModuleDetail('environment_setup')">
+        <h2 class="card-title">
+            environment_setup
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Environment Setup Module for Codomyrmex.
+
+For general project development environment setup instructions (covering
+prerequisites, cloning, virtual environments, Python dependencies, API keys,
+and othe...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/environment_setup
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="events" style="cursor: pointer;" onclick="showModuleDetail('events')">
+        <h2 class="card-title">
+            events
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Event-Driven Architecture for Codomyrmex
+
+This module provides an event system that enables decoupled,
+asynchronous communication between different components of the Codomyrmex platform.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/events
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="evolutionary_ai" style="cursor: pointer;" onclick="showModuleDetail('evolutionary_ai')">
+        <h2 class="card-title">
+            evolutionary_ai
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Evolutionary AI module for Codomyrmex.
+
+Provides genetic algorithm components:
+- Genome representation
+- Population management
+- Selection operators
+- Crossover operators
+- Mutation operators</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>fitness</li>
+                
+                <li>genome</li>
+                
+                <li>operators</li>
+                
+                <li>population</li>
+                
+                <li>selection</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/evolutionary_ai
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="examples" style="cursor: pointer;" onclick="showModuleDetail('examples')">
+        <h2 class="card-title">
+            examples
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex Examples Module.
+
+This module contains example implementations and demonstrations that showcase
+how to use various Codomyrmex capabilities. It serves as a reference for
+developers learning ...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/examples
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="exceptions" style="cursor: pointer;" onclick="showModuleDetail('exceptions')">
+        <h2 class="card-title">
+            exceptions
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex Exception Classes
+
+This package provides all exception classes used throughout the Codomyrmex
+project. It maintains a hierarchical structure rooted at CodomyrmexError.
+
+Exception Categories...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/exceptions
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="feature_flags" style="cursor: pointer;" onclick="showModuleDetail('feature_flags')">
+        <h2 class="card-title">
+            feature_flags
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Feature Flags module for Codomyrmex.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>core</li>
+                
+                <li>evaluation</li>
+                
+                <li>rollout</li>
+                
+                <li>storage</li>
+                
+                <li>strategies</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/feature_flags
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="feature_store" style="cursor: pointer;" onclick="showModuleDetail('feature_store')">
+        <h2 class="card-title">
+            feature_store
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Feature Store
+
+Feature management, storage, and serving for ML applications.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/feature_store
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="fpf" style="cursor: pointer;" onclick="showModuleDetail('fpf')">
+        <h2 class="card-title">
+            fpf
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">First Principles Framework (FPF) module.
+
+This module provides functionality to fetch, parse, analyze, and export
+the First Principles Framework specification for use in prompt/context engineering.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>constraints</li>
+                
+                <li>models</li>
+                
+                <li>optimization</li>
+                
+                <li>reasoning</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/fpf
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="git_operations" style="cursor: pointer;" onclick="showModuleDetail('git_operations')">
+        <h2 class="card-title">
+            git_operations
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Git Operations Module for Codomyrmex.
+
+The Git Operations module provides a standardized interface and tools for performing
+Git actions programmatically within the Codomyrmex ecosystem.
+
+Integration:
+...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/git_operations
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="graph_rag" style="cursor: pointer;" onclick="showModuleDetail('graph_rag')">
+        <h2 class="card-title">
+            graph_rag
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Graph RAG
+
+Knowledge graph-enhanced retrieval-augmented generation.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/graph_rag
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="i18n" style="cursor: pointer;" onclick="showModuleDetail('i18n')">
+        <h2 class="card-title">
+            i18n
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Internationalization (i18n) Module
+
+Translation, localization, and message bundle management.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/i18n
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="ide" style="cursor: pointer;" onclick="showModuleDetail('ide')">
+        <h2 class="card-title">
+            ide
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">IDE Integration Module.
+
+Provides programmatic integration and automation capabilities for various
+Integrated Development Environments including Antigravity, Cursor, and VS Code.
+
+This module enables ...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                3 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>antigravity</li>
+                
+                <li>cursor</li>
+                
+                <li>vscode</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/ide
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="identity" style="cursor: pointer;" onclick="showModuleDetail('identity')">
+        <h2 class="card-title">
+            identity
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Identity Module.
+
+Provides Persona management and Bio-Cognitive Verification.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/identity
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="inference_optimization" style="cursor: pointer;" onclick="showModuleDetail('inference_optimization')">
+        <h2 class="card-title">
+            inference_optimization
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Inference Optimization Module
+
+Model optimization techniques including quantization and batching.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/inference_optimization
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="llm" style="cursor: pointer;" onclick="showModuleDetail('llm')">
+        <h2 class="card-title">
+            llm
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">LLM integration modules for Codomyrmex.
+
+Submodules:
+    - ollama: Local LLM model management via Ollama
+    - fabric: Microsoft Fabric AI integration
+    - providers: Multi-provider LLM client interf...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                12 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>chains</li>
+                
+                <li>cost_tracking</li>
+                
+                <li>embeddings</li>
+                
+                <li>fabric</li>
+                
+                <li>guardrails</li>
+                
+                <li>memory</li>
+                
+                <li>ollama</li>
+                
+                <li>prompts</li>
+                
+                <li>providers</li>
+                
+                <li>rag</li>
+                
+                <li>streaming</li>
+                
+                <li>tools</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/llm
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="logging_monitoring" style="cursor: pointer;" onclick="showModuleDetail('logging_monitoring')">
+        <h2 class="card-title">
+            logging_monitoring
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex Logging Monitoring Module.
+
+This module provides centralized logging facilities for the Codomyrmex project.
+It allows for consistent log formatting, configurable log levels, and outputs
+(co...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/logging_monitoring
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="logistics" style="cursor: pointer;" onclick="showModuleDetail('logistics')">
+        <h2 class="card-title">
+            logistics
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Logistics Module for Codomyrmex
+
+This module provides logistics capabilities including orchestration, task management,
+and scheduling for coordinating workflows, jobs, and time-based execution.
+
+Submo...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                7 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>optimization</li>
+                
+                <li>orchestration</li>
+                
+                <li>resources</li>
+                
+                <li>routing</li>
+                
+                <li>schedule</li>
+                
+                <li>task</li>
+                
+                <li>tracking</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/logistics
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="market" style="cursor: pointer;" onclick="showModuleDetail('market')">
+        <h2 class="card-title">
+            market
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Market Module.
+
+Provides Reverse Auction and Demand Aggregation capabilities.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/market
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="metrics" style="cursor: pointer;" onclick="showModuleDetail('metrics')">
+        <h2 class="card-title">
+            metrics
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Metrics module for Codomyrmex.
+
+This module provides metrics collection, aggregation, and Prometheus integration.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/metrics
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="migration" style="cursor: pointer;" onclick="showModuleDetail('migration')">
+        <h2 class="card-title">
+            migration
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Migration Module
+
+Data migration with versioned steps, rollbacks, and transformers.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/migration
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="model_context_protocol" style="cursor: pointer;" onclick="showModuleDetail('model_context_protocol')">
+        <h2 class="card-title">
+            model_context_protocol
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Model Context Protocol Module for Codomyrmex.
+
+The Model Context Protocol (MCP) is a foundational specification within the Codomyrmex
+ecosystem, designed to standardize communication and interactions ...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>adapters</li>
+                
+                <li>discovery</li>
+                
+                <li>schemas</li>
+                
+                <li>validators</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/model_context_protocol
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="model_ops" style="cursor: pointer;" onclick="showModuleDetail('model_ops')">
+        <h2 class="card-title">
+            model_ops
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Model Operations module for Codomyrmex.
+
+Provides ML model operations including:
+- Dataset management and sanitization
+- Fine-tuning job management
+- Model evaluation and metrics</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>datasets</li>
+                
+                <li>evaluation</li>
+                
+                <li>fine_tuning</li>
+                
+                <li>training</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/model_ops
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="model_registry" style="cursor: pointer;" onclick="showModuleDetail('model_registry')">
+        <h2 class="card-title">
+            model_registry
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Model Registry
+
+Model versioning, lifecycle management, and artifact storage.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/model_registry
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="module_template" style="cursor: pointer;" onclick="showModuleDetail('module_template')">
+        <h2 class="card-title">
+            module_template
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Module Template Package
+
+This module provides a template for creating new Codomyrmex modules.
+When using this template, ensure this file is present in the new module directory.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/module_template
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="multimodal" style="cursor: pointer;" onclick="showModuleDetail('multimodal')">
+        <h2 class="card-title">
+            multimodal
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Multimodal
+
+Multi-modal content handling for images, audio, and text.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/multimodal
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="networking" style="cursor: pointer;" onclick="showModuleDetail('networking')">
+        <h2 class="card-title">
+            networking
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Networking module for Codomyrmex.
+
+This module provides HTTP client utilities, WebSocket support, and API client generation.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/networking
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="notification" style="cursor: pointer;" onclick="showModuleDetail('notification')">
+        <h2 class="card-title">
+            notification
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Notification Module
+
+Multi-channel notification system with templates and routing.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/notification
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="observability_dashboard" style="cursor: pointer;" onclick="showModuleDetail('observability_dashboard')">
+        <h2 class="card-title">
+            observability_dashboard
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Observability Dashboard Module
+
+Unified monitoring dashboards for system observability.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/observability_dashboard
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="orchestrator" style="cursor: pointer;" onclick="showModuleDetail('orchestrator')">
+        <h2 class="card-title">
+            orchestrator
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Script Orchestrator Module
+
+This module provides functionality for discovering, configuring, and running
+Python scripts within the Codomyrmex project.
+
+Features:
+- Script discovery and execution
+- Wor...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                8 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>engines</li>
+                
+                <li>monitors</li>
+                
+                <li>pipelines</li>
+                
+                <li>schedulers</li>
+                
+                <li>state</li>
+                
+                <li>templates</li>
+                
+                <li>triggers</li>
+                
+                <li>workflows</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/orchestrator
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="pattern_matching" style="cursor: pointer;" onclick="showModuleDetail('pattern_matching')">
+        <h2 class="card-title">
+            pattern_matching
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Pattern Matching Module for Codomyrmex.
+
+This module identifies patterns and structures within the Codomyrmex codebase.
+It utilizes the `cased/kit` toolkit for code analysis and pattern recognition.
+
+...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/pattern_matching
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="performance" style="cursor: pointer;" onclick="showModuleDetail('performance')">
+        <h2 class="card-title">
+            performance
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Performance optimization utilities for Codomyrmex.
+
+This module provides lazy loading, caching, and other performance optimizations
+to improve startup time and runtime performance.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/performance
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="physical_management" style="cursor: pointer;" onclick="showModuleDetail('physical_management')">
+        <h2 class="card-title">
+            physical_management
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Physical Object Management Module for Codomyrmex.
+
+This module provides physical object management, simulation,
+and sensor integration capabilities for the Codomyrmex platform, enabling
+physical compu...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/physical_management
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="plugin_system" style="cursor: pointer;" onclick="showModuleDetail('plugin_system')">
+        <h2 class="card-title">
+            plugin_system
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Plugin System for Codomyrmex
+
+This module provides a plugin architecture that allows
+extending Codomyrmex functionality through third-party plugins.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/plugin_system
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="privacy" style="cursor: pointer;" onclick="showModuleDetail('privacy')">
+        <h2 class="card-title">
+            privacy
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Privacy Module.
+
+Provides Crumb Cleaning (sanitization) and Mixnet Routing (anonymity).</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/privacy
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="prompt_testing" style="cursor: pointer;" onclick="showModuleDetail('prompt_testing')">
+        <h2 class="card-title">
+            prompt_testing
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Prompt Testing Module
+
+Systematic prompt evaluation and A/B testing.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/prompt_testing
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="quantum" style="cursor: pointer;" onclick="showModuleDetail('quantum')">
+        <h2 class="card-title">
+            quantum
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Quantum Computing Module
+
+Quantum algorithm primitives, simulation, and circuit patterns.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/quantum
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="rate_limiting" style="cursor: pointer;" onclick="showModuleDetail('rate_limiting')">
+        <h2 class="card-title">
+            rate_limiting
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Rate Limiting Module
+
+Rate limiting with fixed window, sliding window, and token bucket algorithms.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/rate_limiting
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="scheduler" style="cursor: pointer;" onclick="showModuleDetail('scheduler')">
+        <h2 class="card-title">
+            scheduler
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Scheduler Module
+
+Task scheduling and job queuing with support for cron and interval triggers.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/scheduler
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="scrape" style="cursor: pointer;" onclick="showModuleDetail('scrape')">
+        <h2 class="card-title">
+            scrape
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Scrape Module for Codomyrmex.
+
+This module provides web scraping capabilities with support for multiple
+scraping providers. Currently supports Firecrawl integration.
+
+Example:
+    ```python
+    from c...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                1 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>firecrawl</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/scrape
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="search" style="cursor: pointer;" onclick="showModuleDetail('search')">
+        <h2 class="card-title">
+            search
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Search Module
+
+Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/search
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="security" style="cursor: pointer;" onclick="showModuleDetail('security')">
+        <h2 class="card-title">
+            security
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Security Module for Codomyrmex.
+
+The Security module provides comprehensive security capabilities organized into four
+specialized submodules:
+- physical: Physical security practices
+- digital: Digital...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                9 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>audit</li>
+                
+                <li>cognitive</li>
+                
+                <li>compliance</li>
+                
+                <li>digital</li>
+                
+                <li>physical</li>
+                
+                <li>scanning</li>
+                
+                <li>secrets</li>
+                
+                <li>security_theory</li>
+                
+                <li>theory</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/security
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="serialization" style="cursor: pointer;" onclick="showModuleDetail('serialization')">
+        <h2 class="card-title">
+            serialization
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Serialization module for Codomyrmex.
+
+This module provides unified data serialization/deserialization with support
+for JSON, YAML, TOML, MessagePack, and other formats.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/serialization
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="service_mesh" style="cursor: pointer;" onclick="showModuleDetail('service_mesh')">
+        <h2 class="card-title">
+            service_mesh
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Service Mesh Module
+
+Service mesh patterns: circuit breaker, load balancer, retry, and proxy.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/service_mesh
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="skills" style="cursor: pointer;" onclick="showModuleDetail('skills')">
+        <h2 class="card-title">
+            skills
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Skills Module for Codomyrmex
+
+This module provides integration with the vibeship-spawner-skills repository,
+enabling skill management, syncing with upstream, and support for custom skills.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                7 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>composition</li>
+                
+                <li>discovery</li>
+                
+                <li>execution</li>
+                
+                <li>marketplace</li>
+                
+                <li>permissions</li>
+                
+                <li>testing</li>
+                
+                <li>versioning</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/skills
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="smart_contracts" style="cursor: pointer;" onclick="showModuleDetail('smart_contracts')">
+        <h2 class="card-title">
+            smart_contracts
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Smart Contracts Module
+
+Web3 and blockchain smart contract interfaces.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/smart_contracts
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="spatial" style="cursor: pointer;" onclick="showModuleDetail('spatial')">
+        <h2 class="card-title">
+            spatial
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Spatial modeling module for Codomyrmex.
+Provides submodules for 3D modeling, 4D modeling (Synergetics), and world models.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                6 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>coordinates</li>
+                
+                <li>four_d</li>
+                
+                <li>physics</li>
+                
+                <li>rendering</li>
+                
+                <li>three_d</li>
+                
+                <li>world_models</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/spatial
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="static_analysis" style="cursor: pointer;" onclick="showModuleDetail('static_analysis')">
+        <h2 class="card-title">
+            static_analysis
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Static Analysis Module for Codomyrmex.
+
+The Static Analysis module provides tools and integrations for analyzing source code
+without executing it. Its core purpose is to enhance code quality through a...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                2 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>complexity</li>
+                
+                <li>linting</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/static_analysis
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="streaming" style="cursor: pointer;" onclick="showModuleDetail('streaming')">
+        <h2 class="card-title">
+            streaming
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Streaming Module
+
+Event streaming with in-memory, SSE, and topic-based backends.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/streaming
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="system_discovery" style="cursor: pointer;" onclick="showModuleDetail('system_discovery')">
+        <h2 class="card-title">
+            system_discovery
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex System Discovery Module
+
+This module provides system discovery and orchestration capabilities
+for the Codomyrmex ecosystem. It scans all modules, discovers capabilities,
+reports on system s...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/system_discovery
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="telemetry" style="cursor: pointer;" onclick="showModuleDetail('telemetry')">
+        <h2 class="card-title">
+            telemetry
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Telemetry module for Codomyrmex.
+
+This module provides OpenTelemetry-compatible tracing and observability tools.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                7 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>alerting</li>
+                
+                <li>context</li>
+                
+                <li>exporters</li>
+                
+                <li>metrics</li>
+                
+                <li>sampling</li>
+                
+                <li>spans</li>
+                
+                <li>tracing</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/telemetry
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="templating" style="cursor: pointer;" onclick="showModuleDetail('templating')">
+        <h2 class="card-title">
+            templating
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Templating module for Codomyrmex.
+
+This module provides template engine support (Jinja2, Mako) for code generation,
+documentation templates, and dynamic content.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>context</li>
+                
+                <li>engines</li>
+                
+                <li>filters</li>
+                
+                <li>loaders</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/templating
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="terminal_interface" style="cursor: pointer;" onclick="showModuleDetail('terminal_interface')">
+        <h2 class="card-title">
+            terminal_interface
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex Terminal Interface Module
+
+This module provides interactive terminal interfaces and utilities for
+exploring and interacting with the Codomyrmex ecosystem in engaging,
+accessible ways.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                5 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>commands</li>
+                
+                <li>completions</li>
+                
+                <li>rendering</li>
+                
+                <li>shells</li>
+                
+                <li>utils</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/terminal_interface
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="testing" style="cursor: pointer;" onclick="showModuleDetail('testing')">
+        <h2 class="card-title">
+            testing
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Testing Utilities
+
+Property-based testing, fuzzing, fixtures, and test data generation.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                2 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>fixtures</li>
+                
+                <li>generators</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/testing
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="tests" style="cursor: pointer;" onclick="showModuleDetail('tests')">
+        <h2 class="card-title">
+            tests
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Codomyrmex Tests Package
+
+This package contains all test suites for the Codomyrmex platform, including:
+- Unit tests: Individual component testing
+- Integration tests: Cross-module workflow testing
+- ...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                1 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>examples</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/tests
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="tools" style="cursor: pointer;" onclick="showModuleDetail('tools')">
+        <h2 class="card-title">
+            tools
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Tools Module for Codomyrmex.
+
+The Tools module provides development utilities and helper tools for project analysis,
+dependency management, and maintenance tasks. These are command-line utilities
+desi...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/tools
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="tree_sitter" style="cursor: pointer;" onclick="showModuleDetail('tree_sitter')">
+        <h2 class="card-title">
+            tree_sitter
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Tree-sitter parsing module for Codomyrmex.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                4 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>languages</li>
+                
+                <li>parsers</li>
+                
+                <li>queries</li>
+                
+                <li>transformers</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/tree_sitter
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="utils" style="cursor: pointer;" onclick="showModuleDetail('utils')">
+        <h2 class="card-title">
+            utils
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Utilities Package.
+
+Common utility functions and helpers used across the codomyrmex codebase.
+
+This package provides:
+- Subprocess execution utilities (run_command, run_command_async, etc.)
+- JSON han...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/utils
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="validation" style="cursor: pointer;" onclick="showModuleDetail('validation')">
+        <h2 class="card-title">
+            validation
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Validation module for Codomyrmex.
+
+This module provides unified input validation framework with support for
+JSON Schema, Pydantic models, and custom validators.</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                3 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>rules</li>
+                
+                <li>sanitizers</li>
+                
+                <li>schemas</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/validation
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="vector_store" style="cursor: pointer;" onclick="showModuleDetail('vector_store')">
+        <h2 class="card-title">
+            vector_store
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Vector Store Module
+
+Vector similarity search with in-memory and namespaced backends.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/vector_store
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="video" style="cursor: pointer;" onclick="showModuleDetail('video')">
+        <h2 class="card-title">
+            video
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Video processing module for Codomyrmex.
+
+This module provides video processing capabilities including:
+- Video processing (resize, crop, rotate, convert, filter, trim, merge)
+- Frame extraction and th...</p>
+
+        
+        <details class="submodules-details" onclick="event.stopPropagation();">
+            <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
+                3 submodules
+            </summary>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                
+                <li>analysis</li>
+                
+                <li>extraction</li>
+                
+                <li>processing</li>
+                
+            </ul>
+        </details>
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/video
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="wallet" style="cursor: pointer;" onclick="showModuleDetail('wallet')">
+        <h2 class="card-title">
+            wallet
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Wallet Module.
+
+Provides Secure Self-Custody and Natural Ritual Recovery for cognitive agents.
+
+Core Components:
+    WalletManager: Wallet creation, signing, rotation, and lifecycle management.
+    Na...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/wallet
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="website" style="cursor: pointer;" onclick="showModuleDetail('website')">
+        <h2 class="card-title">
+            website
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Website generation module for Codomyrmex.
+
+This module provides a dynamic web dashboard and control interface for the
+Codomyrmex ecosystem. It serves as a central hub for human interaction with
+the sy...</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/website
+        </p>
+    </div>
+    
+    <div class="card module-card" data-name="workflow_testing" style="cursor: pointer;" onclick="showModuleDetail('workflow_testing')">
+        <h2 class="card-title">
+            workflow_testing
+            <span class="status-badge active">Active</span>
+        </h2>
+        <p class="module-description">Workflow Testing Module
+
+Test workflows with step-based assertions, waits, and scripts.</p>
+
+        
+
+        <p class="console"
+            style="margin-top: 0.5rem; padding: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/workflow_testing
+        </p>
+    </div>
+    
+</div>
+<p id="no-results" class="hidden" role="status" style="color: var(--text-secondary); text-align: center; padding: 2rem;">No modules match your search.</p>
+
+<!-- Module Detail Panel -->
+<div id="module-detail-overlay" class="module-detail-overlay hidden" onclick="closeModuleDetail(event)">
+    <div class="module-detail-panel" onclick="event.stopPropagation();">
+        <button class="module-detail-close" onclick="closeModuleDetail()" aria-label="Close detail panel">&times;</button>
+        <h2 id="module-detail-name" style="margin-bottom: 0.5rem;"></h2>
+        <p id="module-detail-description" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
+        <div id="module-detail-badges" class="module-detail-badges"></div>
+        <div id="module-detail-stats" style="margin-top: 1rem;"></div>
+        <div id="module-detail-submodules" style="margin-top: 1rem;"></div>
+    </div>
+</div>
+
+<style>
+    .module-detail-overlay {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6); z-index: 1000;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .module-detail-overlay.hidden { display: none; }
+    .module-detail-panel {
+        background: var(--bg-secondary); border: 1px solid var(--border-color);
+        border-radius: 12px; padding: 2rem; max-width: 550px; width: 90%;
+        position: relative; max-height: 80vh; overflow-y: auto;
+    }
+    .module-detail-close {
+        position: absolute; top: 0.75rem; right: 1rem;
+        background: none; border: none; color: var(--text-secondary);
+        font-size: 1.5rem; cursor: pointer; line-height: 1;
+    }
+    .module-detail-close:hover { color: var(--text-primary); }
+    .module-detail-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .module-badge {
+        display: inline-flex; align-items: center; gap: 0.3rem;
+        padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem;
+        border: 1px solid var(--border-color);
+    }
+    .module-badge.pass { background: rgba(16,185,129,0.15); color: #10b981; border-color: #10b981; }
+    .module-badge.fail { background: rgba(239,68,68,0.15); color: #ef4444; border-color: #ef4444; }
+</style>
+
+<script>
+    document.getElementById('moduleSearch').addEventListener('input', function (e) {
+        const filter = e.target.value.toLowerCase();
+        let visibleCount = 0;
+        document.querySelectorAll('.module-card').forEach(card => {
+            const name = card.dataset.name.toLowerCase();
+            const desc = card.querySelector('.module-description').textContent.toLowerCase();
+            const visible = name.includes(filter) || desc.includes(filter);
+            card.style.display = visible ? '' : 'none';
+            if (visible) visibleCount++;
+        });
+        const noResults = document.getElementById('no-results');
+        if (noResults) {
+            noResults.classList.toggle('hidden', visibleCount > 0);
+        }
+    });
+
+    async function showModuleDetail(name) {
+        const overlay = document.getElementById('module-detail-overlay');
+        const nameEl = document.getElementById('module-detail-name');
+        const descEl = document.getElementById('module-detail-description');
+        const badgesEl = document.getElementById('module-detail-badges');
+        const statsEl = document.getElementById('module-detail-stats');
+        const submodulesEl = document.getElementById('module-detail-submodules');
+
+        nameEl.textContent = name;
+        descEl.textContent = 'Loading...';
+        badgesEl.innerHTML = '';
+        statsEl.innerHTML = '';
+        submodulesEl.innerHTML = '';
+        overlay.classList.remove('hidden');
+
+        try {
+            const resp = await fetch('/api/modules/' + encodeURIComponent(name));
+            const data = await resp.json();
+
+            if (data.error) {
+                descEl.textContent = data.error;
+                return;
+            }
+
+            descEl.textContent = data.description || 'No description available';
+
+            const badges = [
+                { label: 'Tests', ok: data.has_tests },
+                { label: 'API Spec', ok: data.has_api_spec },
+                { label: 'MCP Spec', ok: data.has_mcp_spec },
+                { label: 'README', ok: data.has_readme },
+            ];
+            badgesEl.innerHTML = badges.map(b =>
+                '<span class="module-badge ' + (b.ok ? 'pass' : 'fail') + '">'
+                + (b.ok ? '&#10003;' : '&#10007;') + ' ' + b.label + '</span>'
+            ).join('');
+
+            statsEl.innerHTML =
+                '<p style="font-size: 0.85rem; color: var(--text-secondary);">'
+                + '<strong>Python files:</strong> ' + data.python_file_count
+                + ' &nbsp;|&nbsp; <strong>Path:</strong> <code>' + data.path + '</code></p>';
+
+            if (data.submodules && data.submodules.length > 0) {
+                submodulesEl.innerHTML =
+                    '<p style="font-size: 0.85rem; font-weight: 600;">Submodules (' + data.submodules.length + '):</p>'
+                    + '<ul style="padding-left: 1rem; font-size: 0.8rem; color: var(--text-secondary);">'
+                    + data.submodules.map(s => '<li>' + s.name + '</li>').join('')
+                    + '</ul>';
+            }
+        } catch (err) {
+            descEl.textContent = 'Error loading module detail: ' + err.message;
+        }
+    }
+
+    function closeModuleDetail(event) {
+        document.getElementById('module-detail-overlay').classList.add('hidden');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModuleDetail();
+    });
+</script>
+
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

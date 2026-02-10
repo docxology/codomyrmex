@@ -7,6 +7,7 @@ Knowledge graph-enhanced RAG with entity relationships.
 ## Key Exports
 
 ### Classes
+
 - **`EntityType`** — Types of entities in the knowledge graph.
 - **`RelationType`** — Types of relationships in the knowledge graph.
 - **`Entity`** — An entity in the knowledge graph.
@@ -64,13 +65,16 @@ print(context.to_text())
 #   - Python (concept)
 #   - Machine Learning (concept)
 # Relationships:
-#   - python --[related_to]--> ml
-```
+## Directory Structure
+- `models.py` — Data models (Entity, Relationship, GraphContext, etc.)
+- `graph.py` — Knowledge graph implementation (KnowledgeGraph)
+- `pipeline.py` — RAG pipeline logic (GraphRAGPipeline)
+- `__init__.py` — Public API re-exports
 
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `KnowledgeGraph` | Entity and relationship storage |
 | `Entity` | Node with id, name, type, properties |
 | `Relationship` | Edge with source, target, type, weight |
@@ -85,7 +89,6 @@ print(context.to_text())
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k graph_rag -v
 ```
-
 
 ## Documentation
 

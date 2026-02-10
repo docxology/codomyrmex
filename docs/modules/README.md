@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for all 93 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
+Comprehensive documentation for all 94 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
 
 ## Key Documentation Files
 
@@ -147,6 +147,7 @@ Supporting utilities and infrastructure.
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
 | [examples/](examples/) | Code examples and templates |
+| [exceptions/](exceptions/) | Centralized exception hierarchy and error handling |
 | [feature_flags/](feature_flags/) | Feature toggle management |
 | [i18n/](i18n/) | Translation, localization, and message bundles |
 | [logistics/](logistics/) | Logistics and supply chain |

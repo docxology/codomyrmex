@@ -32,7 +32,7 @@ instance = SearchResult()
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## API Reference

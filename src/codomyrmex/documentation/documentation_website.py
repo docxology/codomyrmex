@@ -380,7 +380,9 @@ def aggregate_docs(source_root: str = None, dest_root: str = None):
     """Aggregate module documentation into the Docusaurus docs/modules folder.
 
     This copies canonical documentation files from each src/codomyrmex/<module>/ directory into
-    documentation/docs/modules/<module>/ so the Docusaurus site can present a unified view.
+    the destination docs/modules/<module>/ folder so the documentation site can present a unified
+    view. The project-root docs/modules/ directory is the canonical location for documentation
+    output; the legacy documentation/docs/modules/ path has been removed.
 
     By default, it scans the project `src/codomyrmex/` directory and copies recognized
     documentation files and the `docs/` subfolder contents.
@@ -454,7 +456,7 @@ def aggregate_docs(source_root: str = None, dest_root: str = None):
                 )
 
     logger.info(
-        "Documentation aggregation complete. Please review 'documentation/docs/modules' for results."
+        "Documentation aggregation complete. Please review 'docs/modules/' (project root) for results."
     )
 
 

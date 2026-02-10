@@ -51,7 +51,7 @@ Use these examples to:
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

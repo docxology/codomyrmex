@@ -10,7 +10,7 @@ Multi-channel notification system with templates, routing, and provider-based di
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

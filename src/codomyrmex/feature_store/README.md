@@ -40,7 +40,10 @@ ML feature management, storage, and retrieval for machine learning applications.
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with store, service, transform, and data models
+- `models.py` -- Data models (FeatureDefinition, FeatureValue, etc.)
+- `store.py` -- Storage backends (FeatureStore, InMemoryFeatureStore)
+- `service.py` -- Core feature service and transforms
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification
@@ -60,7 +63,6 @@ featuretype = FeatureType()
 # Use ValueType for additional functionality
 valuetype = ValueType()
 ```
-
 
 ## Testing
 

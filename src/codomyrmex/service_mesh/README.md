@@ -4,11 +4,10 @@
 
 Microservice communication patterns: circuit breakers, load balancing, and retry policies.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -20,6 +19,7 @@ uv sync
 ## Key Exports
 
 ### Classes
+
 - **`CircuitState`** — Circuit breaker states.
 - **`CircuitBreakerConfig`** — Circuit breaker configuration.
 - **`CircuitBreaker`** — Circuit breaker pattern implementation.
@@ -30,6 +30,7 @@ uv sync
 - **`RetryPolicy`** — Retry policy for failed requests.
 
 ### Functions
+
 - **`with_circuit_breaker()`** — Decorator for circuit breaker protection.
 - **`with_retry()`** — Decorator for retry logic.
 
@@ -76,10 +77,19 @@ def upload_file(path):
     pass
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (CircuitState, ServiceInstance, etc.)
+- `cicuit_breaker.py` — Circuit breaker logic (CircuitBreaker)
+- `load_balancer.py` — Load balancer logic (LoadBalancer)
+- `retry.py` — Retry policies (RetryPolicy)
+- `public_decorators.py` — Public decorators (with_circuit_breaker, with_retry)
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `CircuitBreaker` | Circuit breaker with closed/open/half-open states |
 | `CircuitBreakerConfig` | Failure threshold, timeout, recovery settings |
 | `CircuitState` | Enum: closed, open, half_open |
@@ -91,13 +101,11 @@ def upload_file(path):
 | `with_circuit_breaker` | Decorator for circuit protection |
 | `with_retry` | Decorator for retry logic |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k service_mesh -v
 ```
-
 
 ## Documentation
 

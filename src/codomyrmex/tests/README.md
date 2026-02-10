@@ -8,7 +8,7 @@ Test suites with real data analysis (no mock methods).
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

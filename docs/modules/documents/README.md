@@ -22,7 +22,7 @@ Documents Module for Codomyrmex.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Quick Start

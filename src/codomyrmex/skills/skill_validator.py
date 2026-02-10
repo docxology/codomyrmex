@@ -105,7 +105,7 @@ class SkillValidator:
             return False, [f"File does not exist: {file_path}"]
 
         if not HAS_YAML:
-            return False, ["PyYAML not installed. Install with: pip install pyyaml"]
+            return False, ["PyYAML not installed. Install with: uv pip install pyyaml"]
 
         try:
             with open(file_path, encoding="utf-8") as f:

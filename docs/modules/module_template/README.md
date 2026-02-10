@@ -10,7 +10,7 @@ Template for creating new Codomyrmex modules with standard structure, testing, a
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

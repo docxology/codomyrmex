@@ -1,3 +1,10 @@
+"""Static site generator for the Codomyrmex website.
+
+Provides WebsiteGenerator, which renders Jinja2 HTML templates with
+data from DataProvider and copies static assets to produce a complete
+static website.
+"""
+
 import shutil
 from pathlib import Path
 
@@ -53,11 +60,13 @@ class WebsiteGenerator:
             "scripts": self.data_provider.get_available_scripts(),
             "config_files": self.data_provider.get_config_files(),
             "doc_tree": self.data_provider.get_doc_tree(),
-            "pipelines": self.data_provider.get_pipeline_status()
+            "pipelines": self.data_provider.get_pipeline_status(),
+            "health": self.data_provider.get_health_status(),
+            "awareness": self.data_provider.get_pai_awareness_data(),
         }
 
         # 3. Render Pages
-        pages = ["index.html", "modules.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html"]
+        pages = ["index.html", "health.html", "modules.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html", "awareness.html"]
         for page in pages:
             self._render_page(page, context)
 
@@ -67,8 +76,11 @@ class WebsiteGenerator:
         print("Website generation complete.")
 
     def _render_page(self, template_name: str, context: dict):
+        """Render a Jinja2 template with the given context and write to output.
 
-
+        Loads *template_name* from the templates directory, renders it with
+        *context*, and writes the resulting HTML to the output directory.
+        """
         template = self.env.get_template(template_name)
         output = template.render(**context)
         output_path = self.output_dir / template_name
@@ -76,7 +88,7 @@ class WebsiteGenerator:
         print(f"Rendered {template_name}")
 
     def _copy_assets(self):
-        """Brief description of _copy_assets."""
+        """Copy static assets (CSS, JS) to the output directory."""
         if self.assets_dir.exists():
             shutil.copytree(self.assets_dir, self.output_dir / "assets")
             print("Copied assets")

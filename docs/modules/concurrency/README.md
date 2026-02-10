@@ -10,7 +10,7 @@ The Concurrency module provides distributed locks, semaphores, and advanced sync
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

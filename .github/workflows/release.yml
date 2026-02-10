@@ -229,7 +229,7 @@ jobs:
           echo "## Installation" >> release-notes.md
           echo "" >> release-notes.md
           echo "\`\`\`bash" >> release-notes.md
-          echo "pip install codomyrmex==$VERSION" >> release-notes.md
+          echo "uv pip install codomyrmex==$VERSION" >> release-notes.md
           echo "\`\`\`" >> release-notes.md
           echo "" >> release-notes.md
           echo "## Assets" >> release-notes.md
@@ -353,7 +353,7 @@ jobs:
           # Wait a bit for package to be available
           sleep 30
           
-          pip install ${{ steps.pypi_source.outputs.index_url }} codomyrmex==$VERSION
+          uv pip install ${{ steps.pypi_source.outputs.index_url }} codomyrmex==$VERSION
           
           # Basic functionality test
           python -c "
@@ -390,7 +390,7 @@ jobs:
           fi
           
           # Update installation instructions
-          find . -name "*.md" -exec grep -l "pip install codomyrmex" {} \; | while read -r file; do
+          find . -name "*.md" -exec grep -l "uv pip install codomyrmex" {} \; | while read -r file; do
             sed -i "s/codomyrmex==[0-9]\+\.[0-9]\+\.[0-9]\+/codomyrmex==$VERSION/g" "$file" || true
           done
 

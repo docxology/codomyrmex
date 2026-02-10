@@ -6,7 +6,7 @@ This tutorial will guide you through generating a histogram to visualize the dis
 
 Before you begin, ensure you have the following:
 
-- The Data Visualization module installed and its dependencies (`matplotlib`, `seaborn`, `numpy`) available in your Python environment. (See main [README.md](../../README.md) and `data_visualization/requirements.txt`).
+- The Data Visualization module installed and its dependencies (`matplotlib`, `seaborn`, `numpy`) available in your Python environment. (See main [README.md](../../README.md) and `the project `pyproject.toml``).
 - Your Codomyrmex project environment set up, with logging initialized (see `logging_monitoring` and `environment_setup` modules).
 - Basic familiarity with Python syntax and data structures (lists or NumPy arrays).
 

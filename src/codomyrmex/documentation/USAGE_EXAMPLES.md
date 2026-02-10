@@ -93,7 +93,7 @@ python documentation/documentation_website.py
 ## Common Pitfalls & Troubleshooting
 
 - **Issue**: `ModuleNotFoundError: No module named 'codomyrmex.logging_monitoring'` when running `documentation_website.py`.
-  - **Solution**: Ensure you have installed the main Codomyrmex project dependencies from the root `requirements.txt` (`pip install -r requirements.txt`) in your Python environment, as `documentation_website.py` attempts to use the project's logging module.
+  - **Solution**: Ensure you have installed the main Codomyrmex project dependencies from the root `requirements.txt` (`uv sync`) in your Python environment, as `documentation_website.py` attempts to use the project's logging module.
 
 - **Issue**: `npm` or `yarn` commands fail (e.g., `npm ERR! ...`).
   - **Solution**: 

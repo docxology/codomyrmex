@@ -322,9 +322,9 @@ jobs:
           echo "## Dependencies Check" >> health-report.md
           echo "" >> health-report.md
           
-          if [ -f "requirements.txt" ]; then
-            req_count=$(wc -l < requirements.txt)
-            echo "✅ requirements.txt ($req_count dependencies)" >> health-report.md
+          if [ -f "pyproject.toml" ]; then
+            dep_count=$(grep -c '^\s*"' pyproject.toml 2>/dev/null || echo "N/A")
+            echo "✅ pyproject.toml (project dependencies)" >> health-report.md
           fi
           
           if [ -f "pyproject.toml" ]; then

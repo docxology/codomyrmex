@@ -18,7 +18,7 @@ Three-dimensional geometry and mesh processing for 3D visualization and modeling
 - `engine_3d.py` – File
 - `examples/` – Subdirectory
 - `rendering_pipeline.py` – File
-- `requirements.txt` – File
+- `pyproject.toml` – File
 
 ## Navigation
 

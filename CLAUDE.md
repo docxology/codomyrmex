@@ -45,7 +45,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 80+ specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 94 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -77,6 +77,7 @@ Codomyrmex is a modular development platform with 80+ specialized modules organi
 ### Module Structure
 
 Each module is self-contained with standard structure:
+
 - `__init__.py` - Module exports
 - `README.md` - Module documentation
 - `API_SPECIFICATION.md` - Programmatic interfaces
@@ -92,6 +93,7 @@ Each module is self-contained with standard structure:
 ## Test Markers
 
 Tests use pytest markers defined in `pytest.ini`:
+
 - `@pytest.mark.unit` - Unit tests
 - `@pytest.mark.integration` - Integration tests
 - `@pytest.mark.slow` - Long-running tests
@@ -110,6 +112,7 @@ Run specific categories: `uv run pytest -m unit`
 ## Dependency Management
 
 All dependencies are managed in `pyproject.toml`:
+
 - Core dependencies: `[project.dependencies]`
 - Module-specific optional: `[project.optional-dependencies.<module>]`
 - Development tools: `[dependency-groups.dev]`

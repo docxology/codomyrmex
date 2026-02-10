@@ -23,13 +23,6 @@ Start with [creating-a-module.md](creating-a-module.md) to understand:
 - Testing requirements
 - Integration patterns
 
-### 2. Coming Soon
-
-- AI Code Generation Tutorial
-- Data Visualization Tutorial
-- Workflow Orchestration Tutorial
-- Secure Cognitive Agent Tutorial
-
 ## Prerequisites
 
 Before starting tutorials:

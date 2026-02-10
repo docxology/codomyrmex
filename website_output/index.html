@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Codomyrmex</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="index.html" class="logo">
+                <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
+            </a>
+            <div class="nav-links">
+                <div class="nav-group" role="group" aria-label="Operations">
+                    <span class="nav-group-label">Operations</span>
+                    <a href="index.html" class="nav-link" data-shortcut="1">Dashboard</a>
+                    <a href="health.html" class="nav-link" data-shortcut="2">Health</a>
+                    <a href="pipelines.html" class="nav-link" data-shortcut="3">Pipelines</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Development">
+                    <span class="nav-group-label">Development</span>
+                    <a href="modules.html" class="nav-link" data-shortcut="4">Modules</a>
+                    <a href="scripts.html" class="nav-link" data-shortcut="5">Scripts</a>
+                    <a href="config.html" class="nav-link" data-shortcut="6">Config</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Intelligence">
+                    <span class="nav-group-label">Intelligence</span>
+                    <a href="agents.html" class="nav-link" data-shortcut="7">Agents</a>
+                    <a href="chat.html" class="nav-link" data-shortcut="8">Chat</a>
+                    <a href="docs.html" class="nav-link" data-shortcut="9">Docs</a>
+                    <a href="awareness.html" class="nav-link" data-shortcut="0">Awareness</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+<h1>Command Center</h1>
+
+<!-- Top Row: Key Metrics -->
+<section aria-label="System Metrics">
+<div class="dashboard-metrics">
+    <div class="dash-metric">
+        <span class="dash-metric-value status-ok">Operational</span>
+        <span class="dash-metric-label">System Status</span>
+    </div>
+    <div class="dash-metric">
+        <span class="dash-metric-value">94</span>
+        <span class="dash-metric-label">Modules</span>
+    </div>
+    <div class="dash-metric">
+        <span class="dash-metric-value">21</span>
+        <span class="dash-metric-label">Agent Integrations</span>
+    </div>
+    <div class="dash-metric">
+        <span class="dash-metric-value">380</span>
+        <span class="dash-metric-label">Scripts</span>
+    </div>
+    <div class="dash-metric">
+        <span class="dash-metric-value">0.1.0</span>
+        <span class="dash-metric-label">Version</span>
+    </div>
+    <div class="dash-metric">
+        <span class="dash-metric-value">Development</span>
+        <span class="dash-metric-label">Environment</span>
+    </div>
+</div>
+</section>
+
+<!-- Main Grid -->
+<div class="dashboard-grid">
+    <!-- Git Status -->
+    <div class="card">
+        <h2 class="card-title">Git Status
+            <span class="status-badge running">
+                593 changed
+            </span>
+        </h2>
+        <p><strong>Branch:</strong> <code>main</code></p>
+        <p><strong>Commits:</strong> 115</p>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            f0d1919b up (3 days ago)
+        </p>
+    </div>
+
+    <!-- Coverage Overview -->
+    <div class="card">
+        <h2 class="card-title">Coverage</h2>
+        <div class="coverage-bars" style="margin-top: 0.5rem;">
+            <div class="coverage-row">
+                <span class="coverage-label">API Specs</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="98.9" aria-valuemin="0" aria-valuemax="100" aria-label="API Specs coverage"><div class="coverage-fill" style="width: 98.9%; background: var(--success-color);"></div></div>
+                <span class="coverage-pct">98.9%</span>
+            </div>
+            <div class="coverage-row">
+                <span class="coverage-label">Tests</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="98.9" aria-valuemin="0" aria-valuemax="100" aria-label="Tests coverage"><div class="coverage-fill" style="width: 98.9%; background: var(--accent-color);"></div></div>
+                <span class="coverage-pct">98.9%</span>
+            </div>
+            <div class="coverage-row">
+                <span class="coverage-label">MCP</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="61.7" aria-valuemin="0" aria-valuemax="100" aria-label="MCP Specs coverage"><div class="coverage-fill" style="width: 61.7%; background: #8b5cf6;"></div></div>
+                <span class="coverage-pct">61.7%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Layers -->
+    <div class="card">
+        <h2 class="card-title">Architecture</h2>
+        <div class="arch-layers-compact">
+            
+            <div class="arch-row">
+                <span class="arch-dot" style="background: #10b981;"></span>
+                <span class="arch-name">Foundation</span>
+                <span class="arch-count">4</span>
+                <div class="arch-bar">
+                    <div class="arch-bar-fill" style="width: 4.0%; background: #10b981;"></div>
+                </div>
+            </div>
+            
+            <div class="arch-row">
+                <span class="arch-dot" style="background: #3b82f6;"></span>
+                <span class="arch-name">Core</span>
+                <span class="arch-count">6</span>
+                <div class="arch-bar">
+                    <div class="arch-bar-fill" style="width: 6.0%; background: #3b82f6;"></div>
+                </div>
+            </div>
+            
+            <div class="arch-row">
+                <span class="arch-dot" style="background: #8b5cf6;"></span>
+                <span class="arch-name">Service</span>
+                <span class="arch-count">5</span>
+                <div class="arch-bar">
+                    <div class="arch-bar-fill" style="width: 5.0%; background: #8b5cf6;"></div>
+                </div>
+            </div>
+            
+            <div class="arch-row">
+                <span class="arch-dot" style="background: #f59e0b;"></span>
+                <span class="arch-name">Application</span>
+                <span class="arch-count">3</span>
+                <div class="arch-bar">
+                    <div class="arch-bar-fill" style="width: 3.0%; background: #f59e0b;"></div>
+                </div>
+            </div>
+            
+            <div class="arch-row">
+                <span class="arch-dot" style="background: #94a3b8;"></span>
+                <span class="arch-name">Extended</span>
+                <span class="arch-count">76</span>
+                <div class="arch-bar">
+                    <div class="arch-bar-fill" style="width: 81.0%; background: #94a3b8;"></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="card">
+        <h2 class="card-title">Quick Actions</h2>
+        <div class="quick-actions">
+            <a href="health.html" class="quick-btn">System Health</a>
+            <a href="modules.html" class="quick-btn">Browse Modules</a>
+            <a href="agents.html" class="quick-btn">AI Agents</a>
+            <a href="scripts.html" class="quick-btn">Run Scripts</a>
+            <a href="docs.html" class="quick-btn">Documentation</a>
+            <a href="config.html" class="quick-btn">Edit Config</a>
+            <button id="refresh-data-btn" class="quick-btn" style="border: none; cursor: pointer; font-family: inherit; font-size: inherit;">Refresh Data</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-metrics {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .dash-metric {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .dash-metric-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .dash-metric-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .coverage-bars { display: flex; flex-direction: column; gap: 0.6rem; }
+    .coverage-row { display: flex; align-items: center; gap: 0.6rem; }
+    .coverage-label { width: 70px; font-size: 0.8rem; color: var(--text-secondary); }
+    .coverage-bar { flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+    .coverage-fill { height: 100%; border-radius: 3px; }
+    .coverage-pct { width: 45px; text-align: right; font-size: 0.8rem; font-weight: 600; font-family: 'Fira Code', monospace; }
+
+    .arch-layers-compact { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
+    .arch-row { display: flex; align-items: center; gap: 0.5rem; }
+    .arch-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .arch-name { font-size: 0.85rem; width: 85px; }
+    .arch-count { font-size: 0.8rem; color: var(--text-secondary); width: 25px; text-align: right; font-family: 'Fira Code', monospace; }
+    .arch-bar { flex: 1; height: 5px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+    .arch-bar-fill { height: 100%; border-radius: 3px; }
+
+    .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .quick-btn {
+        display: block;
+        text-align: center;
+        padding: 0.6rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: var(--transition);
+    }
+    .quick-btn:hover { background: var(--accent-color); color: white; }
+
+    @media (max-width: 900px) {
+        .dashboard-metrics { grid-template-columns: repeat(3, 1fr); }
+        .dashboard-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+        .dashboard-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

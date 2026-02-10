@@ -80,8 +80,8 @@ The Codomyrmex project uses **pyproject.toml as the single source of truth** for
     *   **All optional dependencies**: `uv sync --all-extras`
     *   **Development dependencies**: Automatically included with `uv sync --dev`
 
-4.  **Module-Specific `requirements.txt` Files**:
-    *   **DEPRECATED**: Module-specific `requirements.txt` files are deprecated and will be removed in a future version.
+4.  **Module-Specific Dependencies**:
+    *   **DEPRECATED**: Module-specific dependencies are now managed as optional extras in `pyproject.toml`.
     *   These files are kept temporarily for backward compatibility but should **not be modified**.
     *   All new dependencies must be added to `pyproject.toml` instead.
 

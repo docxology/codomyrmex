@@ -48,7 +48,7 @@ The module's architecture is straightforward, consisting of a collection of Pyth
   - `seaborn`: Higher-level interface for statistical graphics, built on Matplotlib.
   - `numpy`: For numerical operations, often a dependency or utility for preparing data for Matplotlib/Seaborn.
   - `logging_monitoring` (Codomyrmex internal): For all logging activities within the module. This is a project-wide utility.
-  - `environment_setup` (Codomyrmex internal, conceptual for direct use by this module): Primarily for ensuring dependencies are met at a project level. This module's own `requirements.txt` lists its specific dependencies like Matplotlib, Seaborn, and NumPy with pinned versions.
+  - `environment_setup` (Codomyrmex internal, conceptual for direct use by this module): Primarily for ensuring dependencies are met at a project level. This module's dependencies are declared in `pyproject.toml` extras like Matplotlib, Seaborn, and NumPy with pinned versions.
 
 ```mermaid
 graph TD

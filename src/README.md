@@ -11,7 +11,6 @@ Source code directory containing all Python packages and modules for the Codomyr
 | Directory | Description |
 |-----------|-------------|
 | [**codomyrmex/**](codomyrmex/) | Main Python package with 94 modules |
-| [**codomyrmex.llm/**](codomyrmex.llm/) | Standalone LLM integration package |
 
 ### Key Files
 
@@ -31,7 +30,6 @@ src/
 │   ├── coding/           # Code execution
 │   ├── documentation/    # Doc generation
 │   └── ...               # 65+ more modules
-└── codomyrmex.llm/       # Standalone LLM package
 ```
 
 ## Usage

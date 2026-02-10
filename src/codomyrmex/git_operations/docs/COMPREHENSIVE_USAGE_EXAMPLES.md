@@ -52,7 +52,7 @@ def setup_new_project(project_path, project_name):
         "src/main.py", 
         "tests/__init__.py",
         "tests/test_main.py",
-        "requirements.txt",
+        "pyproject.toml",
         ".gitignore"
     ]
     

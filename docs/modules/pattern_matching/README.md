@@ -10,7 +10,7 @@ Advanced pattern matching with regex, glob, AST, and structural pattern support.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

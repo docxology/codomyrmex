@@ -43,7 +43,6 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
 # 2. Install dependencies (uv pip is preferred over pip)
 uv pip install -e .
-# Or if uv is not installed: pip install -e .
 
 # 3. Verify installation
 codomyrmex check

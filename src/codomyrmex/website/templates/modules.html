@@ -6,6 +6,7 @@
 <h1>System Modules</h1>
 
 <div class="search-container">
+    <label for="moduleSearch" class="sr-only">Search modules</label>
     <input type="text" class="search-input" id="moduleSearch" placeholder="Search modules...">
 </div>
 
@@ -15,16 +16,16 @@
 
 <div class="grid" id="modulesGrid">
     {% for module in modules %}
-    <div class="card module-card" data-name="{{ module.name }}">
-        <div class="card-title">
+    <div class="card module-card" data-name="{{ module.name }}" style="cursor: pointer;" onclick="showModuleDetail('{{ module.name }}')">
+        <h2 class="card-title">
             {{ module.name }}
             <span class="status-badge active">{{ module.status }}</span>
-        </div>
+        </h2>
         <p class="module-description">{{ module.description[:200] }}{% if module.description|length > 200 %}...{% endif
             %}</p>
 
         {% if module.submodules %}
-        <details class="submodules-details">
+        <details class="submodules-details" onclick="event.stopPropagation();">
             <summary style="cursor: pointer; color: var(--accent-color); font-size: 0.9rem; margin-top: 0.5rem;">
                 {{ module.submodules|length }} submodules
             </summary>
@@ -43,15 +44,125 @@
     </div>
     {% endfor %}
 </div>
+<p id="no-results" class="hidden" role="status" style="color: var(--text-secondary); text-align: center; padding: 2rem;">No modules match your search.</p>
+
+<!-- Module Detail Panel -->
+<div id="module-detail-overlay" class="module-detail-overlay hidden" onclick="closeModuleDetail(event)">
+    <div class="module-detail-panel" onclick="event.stopPropagation();">
+        <button class="module-detail-close" onclick="closeModuleDetail()" aria-label="Close detail panel">&times;</button>
+        <h2 id="module-detail-name" style="margin-bottom: 0.5rem;"></h2>
+        <p id="module-detail-description" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
+        <div id="module-detail-badges" class="module-detail-badges"></div>
+        <div id="module-detail-stats" style="margin-top: 1rem;"></div>
+        <div id="module-detail-submodules" style="margin-top: 1rem;"></div>
+    </div>
+</div>
+
+<style>
+    .module-detail-overlay {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6); z-index: 1000;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .module-detail-overlay.hidden { display: none; }
+    .module-detail-panel {
+        background: var(--bg-secondary); border: 1px solid var(--border-color);
+        border-radius: 12px; padding: 2rem; max-width: 550px; width: 90%;
+        position: relative; max-height: 80vh; overflow-y: auto;
+    }
+    .module-detail-close {
+        position: absolute; top: 0.75rem; right: 1rem;
+        background: none; border: none; color: var(--text-secondary);
+        font-size: 1.5rem; cursor: pointer; line-height: 1;
+    }
+    .module-detail-close:hover { color: var(--text-primary); }
+    .module-detail-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .module-badge {
+        display: inline-flex; align-items: center; gap: 0.3rem;
+        padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem;
+        border: 1px solid var(--border-color);
+    }
+    .module-badge.pass { background: rgba(16,185,129,0.15); color: #10b981; border-color: #10b981; }
+    .module-badge.fail { background: rgba(239,68,68,0.15); color: #ef4444; border-color: #ef4444; }
+</style>
 
 <script>
     document.getElementById('moduleSearch').addEventListener('input', function (e) {
         const filter = e.target.value.toLowerCase();
+        let visibleCount = 0;
         document.querySelectorAll('.module-card').forEach(card => {
             const name = card.dataset.name.toLowerCase();
             const desc = card.querySelector('.module-description').textContent.toLowerCase();
-            card.style.display = (name.includes(filter) || desc.includes(filter)) ? '' : 'none';
+            const visible = name.includes(filter) || desc.includes(filter);
+            card.style.display = visible ? '' : 'none';
+            if (visible) visibleCount++;
         });
+        const noResults = document.getElementById('no-results');
+        if (noResults) {
+            noResults.classList.toggle('hidden', visibleCount > 0);
+        }
+    });
+
+    async function showModuleDetail(name) {
+        const overlay = document.getElementById('module-detail-overlay');
+        const nameEl = document.getElementById('module-detail-name');
+        const descEl = document.getElementById('module-detail-description');
+        const badgesEl = document.getElementById('module-detail-badges');
+        const statsEl = document.getElementById('module-detail-stats');
+        const submodulesEl = document.getElementById('module-detail-submodules');
+
+        nameEl.textContent = name;
+        descEl.textContent = 'Loading...';
+        badgesEl.innerHTML = '';
+        statsEl.innerHTML = '';
+        submodulesEl.innerHTML = '';
+        overlay.classList.remove('hidden');
+
+        try {
+            const resp = await fetch('/api/modules/' + encodeURIComponent(name));
+            const data = await resp.json();
+
+            if (data.error) {
+                descEl.textContent = data.error;
+                return;
+            }
+
+            descEl.textContent = data.description || 'No description available';
+
+            const badges = [
+                { label: 'Tests', ok: data.has_tests },
+                { label: 'API Spec', ok: data.has_api_spec },
+                { label: 'MCP Spec', ok: data.has_mcp_spec },
+                { label: 'README', ok: data.has_readme },
+            ];
+            badgesEl.innerHTML = badges.map(b =>
+                '<span class="module-badge ' + (b.ok ? 'pass' : 'fail') + '">'
+                + (b.ok ? '&#10003;' : '&#10007;') + ' ' + b.label + '</span>'
+            ).join('');
+
+            statsEl.innerHTML =
+                '<p style="font-size: 0.85rem; color: var(--text-secondary);">'
+                + '<strong>Python files:</strong> ' + data.python_file_count
+                + ' &nbsp;|&nbsp; <strong>Path:</strong> <code>' + data.path + '</code></p>';
+
+            if (data.submodules && data.submodules.length > 0) {
+                submodulesEl.innerHTML =
+                    '<p style="font-size: 0.85rem; font-weight: 600;">Submodules (' + data.submodules.length + '):</p>'
+                    + '<ul style="padding-left: 1rem; font-size: 0.8rem; color: var(--text-secondary);">'
+                    + data.submodules.map(s => '<li>' + s.name + '</li>').join('')
+                    + '</ul>';
+            }
+        } catch (err) {
+            descEl.textContent = 'Error loading module detail: ' + err.message;
+        }
+    }
+
+    function closeModuleDetail(event) {
+        document.getElementById('module-detail-overlay').classList.add('hidden');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModuleDetail();
     });
 </script>
 {% endblock %}

@@ -10,7 +10,7 @@ Container management, orchestration, and deployment module organized into four s
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -76,10 +76,16 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.containerization import ContainerError, ImageBuildError, NetworkError
+from codomyrmex.containerization import DockerManager, ContainerConfig, scan_container_security
 
-# Initialize ContainerError
-instance = ContainerError()
+# Build and manage Docker containers
+manager = DockerManager()
+config = ContainerConfig(image="python:3.12-slim", ports={"8080": "80"}, env={"APP_ENV": "prod"})
+container = manager.run_container(config)
+
+# Scan a container image for vulnerabilities
+scan_result = scan_container_security("myapp:latest")
+print(f"Vulnerabilities found: {len(scan_result.findings)}")
 ```
 
 

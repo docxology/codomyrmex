@@ -24,7 +24,7 @@ AI code editing integration providing automated refactoring, code suggestions, a
 - `droid_manager.py` – Project file
 - `openai_codex.py` – Project file
 - `prompt_composition.py` – Project file
-- `requirements.txt` – Project file
+- `pyproject.toml` – Project file
 
 ## Operating Contracts
 

@@ -10,7 +10,7 @@ Physical object management, simulation, and tracking with spatial awareness.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

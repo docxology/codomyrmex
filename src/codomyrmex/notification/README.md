@@ -6,11 +6,10 @@
 
 Multi-channel notification system with templates and routing. Supports sending notifications across email, Slack, webhook, SMS, console, and file channels through pluggable provider backends. Includes a template engine for rendering parameterized notifications, a rule-based router for directing notifications to channels based on priority or custom conditions, and a central service that ties providers, templates, routing, and broadcast together with delivery history tracking.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -53,22 +52,41 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with providers, templates, router, service, and data models
+- `models.py` -- Data models (Notification, NotificationResult, etc.)
+- `providers.py` -- Channel providers (ConsoleProvider, FileProvider, etc.)
+- `templates.py` -- Template engine (NotificationTemplate)
+- `service.py` -- Core service and router (NotificationService, NotificationRouter)
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification
 - `MCP_TOOL_SPECIFICATION.md` -- Model Context Protocol tool definitions
 - `PAI.md` -- PAI integration notes
 - `SPEC.md` -- Module specification
-- `py.typed` -- PEP 561 type stub marker
+- `py.typed` -- PEP 561 type stub marker as needed
 
 ## Quick Start
 
 ```python
-from codomyrmex.notification import NotificationChannel, NotificationPriority, NotificationStatus
+from codomyrmex.notification import (
+    NotificationService, ConsoleProvider, Notification,
+    NotificationPriority, ALERT_TEMPLATE,
+)
 
-# Initialize NotificationChannel
-instance = NotificationChannel()
+# Set up the notification service with a console provider
+service = NotificationService()
+service.register_provider(ConsoleProvider())
+
+# Send a notification directly
+result = service.send(Notification(
+    id="n-001", subject="Build Complete", body="Deployment v2.1 succeeded",
+    priority=NotificationPriority.HIGH,
+))
+print(f"Delivered: {result.is_success}")
+
+# Send from a template
+service.register_template("alert", ALERT_TEMPLATE)
+service.send_from_template("alert", severity="WARN", title="CPU High", source="prod-1", message="CPU at 92%")
 ```
 
 ## Navigation

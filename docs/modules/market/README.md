@@ -10,7 +10,7 @@ Reverse auction and demand aggregation capabilities for resource allocation and 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Comprehensive documentation hub for all 93 Codomyrmex modules. This directory contains per-module documentation triads (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
+Comprehensive documentation hub for all 94 Codomyrmex modules. This directory contains per-module RASP documentation sets (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
 
 ## AI Agent Guidance
 
 ### Context for Agents
 
-- **93 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
+- **94 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
 - **System-level views** — overview, relationships, dependency graph
 - **Module categories** — Foundation, AI & Intelligence, Code & Analysis, Data & Visualization, DevOps & Infrastructure, Security & Cognitive, Interface & Communication, Framework & Utilities
 
@@ -33,7 +33,7 @@ Comprehensive documentation hub for all 93 Codomyrmex modules. This directory co
 
 ### Subdirectories
 
-Each module subdirectory follows the documentation triad pattern:
+Each module subdirectory follows the RASP documentation pattern:
 
 - **README.md** — Human-readable overview, quick start, and features
 - **AGENTS.md** — Agent signposting, guidelines, and coordination
@@ -42,7 +42,7 @@ Each module subdirectory follows the documentation triad pattern:
 ## Cross-References
 
 - [README.md](README.md) — Module index and category tables
-- [AGENTS.md](AGENTS.md) — Agent quality standards (93/93 complete)
+- [AGENTS.md](AGENTS.md) — Agent quality standards (94/94 complete)
 - [SPEC.md](SPEC.md) — Module system specification
 - [overview.md](overview.md) — Architecture and design principles
 - [relationships.md](relationships.md) — Dependency matrix and data flows

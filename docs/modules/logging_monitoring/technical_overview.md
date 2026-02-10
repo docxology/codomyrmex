@@ -44,7 +44,7 @@ A simple factory function that calls `logging.getLogger(name)`. This returns a l
   - Error handling for file operations (e.g., if a log file cannot be opened).
 
 - **External Dependencies**:
-  - `python-dotenv`: Used by `setup_logging()` to load configurations from `.env` files. This dependency is expected to be managed at the project level (root `requirements.txt`).
+  - `python-dotenv`: Used by `setup_logging()` to load configurations from `.env` files. This dependency is expected to be managed at the project level (root `pyproject.toml`).
   - Standard Python modules: `logging`, `os`, `sys`.
 
 ```mermaid

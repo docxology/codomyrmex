@@ -10,7 +10,7 @@ Website generation, static site building, and web content management utilities.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

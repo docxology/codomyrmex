@@ -604,7 +604,7 @@ All existing code continues to work without modification. New features are addit
 - [ ] **Import Updates**: Update all import statements
 - [ ] **Function Calls**: Update function signatures
 - [ ] **Configuration**: Migrate config files
-- [ ] **Dependencies**: Update requirements.txt/pyproject.toml
+- [ ] **Dependencies**: Update `pyproject.toml`
 - [ ] **Testing**: Run comprehensive test suite
 - [ ] **Validation**: Validate all workflows
 - [ ] **Performance**: Run benchmark comparison

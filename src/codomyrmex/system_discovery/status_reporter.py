@@ -536,7 +536,7 @@ class StatusReporter:
 
         if report["dependencies"]["success_rate"] < 80:
             recommendations.append(
-                "Install missing dependencies: pip install -r requirements.txt"
+                "Install missing dependencies: uv sync"
             )
 
         if not report["git_status"]["is_git_repo"]:

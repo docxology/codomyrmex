@@ -10,7 +10,7 @@ Systematic prompt evaluation and A/B testing framework. Provides a structured ap
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

@@ -4,11 +4,10 @@
 
 Full-text search with TF-IDF, fuzzy matching, and query parsing.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -20,6 +19,7 @@ uv sync
 ## Key Exports
 
 ### Classes
+
 - **`Document`** — A searchable document.
 - **`SearchResult`** — A search result.
 - **`Tokenizer`** — Abstract tokenizer.
@@ -30,6 +30,7 @@ uv sync
 - **`QueryParser`** — Parse search queries with operators.
 
 ### Functions
+
 - **`create_index()`** — Create a search index.
 - **`quick_search()`** — Quick search over a list of strings.
 
@@ -55,10 +56,19 @@ docs = ["apple pie recipe", "orange juice", "apple cider"]
 results = quick_search(docs, "apple", k=2)
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (Document, SearchResult)
+- `index.py` — Search index implementations (SearchIndex, InMemoryIndex)
+- `tokenizer.py` — Tokenizers (Tokenizer, SimpleTokenizer)
+- `parser.py` — Query parsing logic (QueryParser)
+- `matching.py` — Fuzzy matching utilities (FuzzyMatcher)
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class/Function | Description |
-|----------------|-------------|
+| :--- | :--- |
 | `InMemoryIndex` | In-memory inverted index with TF-IDF |
 | `Document` | Searchable document with id, content, metadata |
 | `SearchResult` | Result with document, score, highlights |
@@ -96,13 +106,11 @@ candidates = ["python", "java", "javascript"]
 FuzzyMatcher.find_best_match("pythn", candidates)  # "python"
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k search -v
 ```
-
 
 ## Documentation
 

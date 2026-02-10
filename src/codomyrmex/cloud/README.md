@@ -134,22 +134,22 @@ graph TB
 
 ```bash
 # Core (Coda.io only)
-pip install requests
+uv pip install requests
 
 # AWS support
-pip install boto3
+uv pip install boto3
 
 # GCP support
-pip install google-cloud-storage
+uv pip install google-cloud-storage
 
 # Azure support
-pip install azure-storage-blob azure-identity
+uv pip install azure-storage-blob azure-identity
 
 # Infomaniak support (OpenStack services)
-pip install openstacksdk
+uv pip install openstacksdk
 
 # Infomaniak S3-compatible storage
-pip install boto3
+uv pip install boto3
 ```
 
 ### Usage Examples

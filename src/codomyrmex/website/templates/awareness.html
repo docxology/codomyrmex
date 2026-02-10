@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}PAI Awareness - Codomyrmex{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#3b82f6',
+            primaryTextColor: '#e2e8f0',
+            primaryBorderColor: '#475569',
+            lineColor: '#64748b',
+            secondaryColor: '#1e293b',
+            tertiaryColor: '#0f172a'
+        }
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>PAI Awareness</h1>
+
+<!-- Metrics Bar -->
+<div class="awareness-metrics" role="region" aria-label="PAI ecosystem metrics">
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-mission-count">{{ awareness.metrics.mission_count }}</span>
+        <span class="awareness-metric-label">Missions</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-project-count">{{ awareness.metrics.project_count }}</span>
+        <span class="awareness-metric-label">Projects</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-total-tasks">{{ awareness.metrics.total_tasks }}</span>
+        <span class="awareness-metric-label">Total Tasks</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-completed-tasks">{{ awareness.metrics.completed_tasks }}</span>
+        <span class="awareness-metric-label">Completed</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-telos-files">{{ awareness.metrics.telos_files }}</span>
+        <span class="awareness-metric-label">TELOS Files</span>
+    </div>
+    <div class="awareness-metric-card">
+        <span class="awareness-metric-value" id="aw-completion">{{ awareness.metrics.overall_completion }}%</span>
+        <span class="awareness-metric-label">Completion</span>
+    </div>
+</div>
+
+<!-- Mission Hierarchy -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2 class="card-title">Mission Hierarchy</h2>
+    {% if awareness.missions %}
+    <div class="mission-list">
+        {% for mission in awareness.missions %}
+        <div class="mission-item">
+            <div class="mission-header">
+                <span class="mission-title">{{ mission.title }}</span>
+                <span class="status-badge status-badge-{{ mission.status }}">{{ mission.status }}</span>
+                <span class="priority-tag priority-{{ mission.priority|lower }}">{{ mission.priority }}</span>
+                {% if mission.completion_percentage > 0 %}
+                <span class="completion-badge">{{ mission.completion_percentage }}%</span>
+                {% endif %}
+            </div>
+            {% if mission.description %}
+            <p class="mission-desc">{{ mission.description }}</p>
+            {% endif %}
+            {% if mission.linked_projects %}
+            <div class="linked-projects">
+                {% for proj in mission.linked_projects %}
+                <span class="project-tag">{{ proj }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: var(--text-secondary);">No missions found. PAI mission data is loaded from ~/.claude/MEMORY/STATE/missions/.</p>
+    {% endif %}
+</div>
+
+<!-- Ecosystem Map (Mermaid) -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2 class="card-title">Ecosystem Map</h2>
+    {% if awareness.missions or awareness.projects %}
+    <div class="mermaid">
+{{ awareness.mermaid_graph | safe }}
+    </div>
+    {% else %}
+    <p style="color: var(--text-secondary);">No missions or projects to visualize.</p>
+    {% endif %}
+</div>
+
+<div class="awareness-grid">
+    <!-- Projects Detail -->
+    <div class="card">
+        <h2 class="card-title">Projects</h2>
+        {% if awareness.projects %}
+        <div class="project-list">
+            {% for project in awareness.projects %}
+            <div class="project-item">
+                <div class="project-header">
+                    <span class="project-title">{{ project.title }}</span>
+                    <span class="status-badge status-badge-{{ project.status }}">{{ project.status }}</span>
+                </div>
+                {% if project.goal %}
+                <p class="project-goal">{{ project.goal }}</p>
+                {% endif %}
+                {% if project.task_counts %}
+                <div class="task-breakdown">
+                    <span class="task-stat done">{{ project.task_counts.get('completed', 0) }} done</span>
+                    <span class="task-stat active">{{ project.task_counts.get('in_progress', 0) }} active</span>
+                    <span class="task-stat remaining">{{ project.task_counts.get('remaining', 0) }} remaining</span>
+                    <span class="task-stat blocked">{{ project.task_counts.get('blocked', 0) }} blocked</span>
+                </div>
+                {% endif %}
+                {% if project.completion_percentage > 0 %}
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: {{ project.completion_percentage }}%;" role="progressbar" aria-valuenow="{{ project.completion_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color: var(--text-secondary);">No projects found.</p>
+        {% endif %}
+    </div>
+
+    <!-- TELOS Profile -->
+    <div class="card">
+        <h2 class="card-title">TELOS Life Profile</h2>
+        {% if awareness.telos %}
+        <div class="telos-list">
+            {% for item in awareness.telos %}
+            <div class="telos-item">
+                <div class="telos-header">
+                    <span class="telos-name">{{ item.name }}</span>
+                    <span class="telos-size">{{ item.size_bytes }} bytes</span>
+                </div>
+                {% if item.preview %}
+                <p class="telos-preview">{{ item.preview }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color: var(--text-secondary);">No TELOS files found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- AI Summary -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div class="summary-header">
+        <h2 class="card-title">AI Summary</h2>
+        <button id="generate-summary-btn" class="btn btn-primary" style="padding: 0.25rem 1rem; font-size: 0.85rem;">
+            Generate Summary
+        </button>
+    </div>
+    <div id="ai-summary-content" role="region" aria-live="polite" aria-label="AI-generated summary">
+        <p style="color: var(--text-secondary);">Click "Generate Summary" to get an Ollama-powered analysis of your PAI ecosystem state.</p>
+    </div>
+</div>
+
+<!-- Memory System -->
+<div class="card" style="margin-top: 1.5rem;">
+    <h2 class="card-title">Memory System</h2>
+    {% if awareness.memory.directories %}
+    <div class="memory-grid">
+        {% for dir in awareness.memory.directories %}
+        <div class="memory-item">
+            <span class="memory-name">{{ dir.name }}</span>
+            <span class="memory-stat">{{ dir.file_count }} files</span>
+            <span class="memory-stat">{{ dir.subdir_count }} subdirs</span>
+        </div>
+        {% endfor %}
+    </div>
+    <p class="memory-total">Total files: {{ awareness.memory.total_files }} | Work sessions: {{ awareness.memory.work_sessions_count }}</p>
+    {% else %}
+    <p style="color: var(--text-secondary);">No memory data found. PAI memory is stored in ~/.claude/MEMORY/.</p>
+    {% endif %}
+</div>
+
+<style>
+    .awareness-metrics {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .awareness-metric-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .awareness-metric-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        font-family: 'Fira Code', monospace;
+    }
+
+    .awareness-metric-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .awareness-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Mission styles */
+    .mission-list { display: flex; flex-direction: column; gap: 1rem; }
+    .mission-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .mission-header { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .mission-title { font-weight: 600; }
+    .mission-desc { font-size: 0.85rem; color: var(--text-secondary); margin: 0.5rem 0 0; }
+
+    /* Status badges */
+    .status-badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .status-badge-active { background: #10b981; color: #fff; }
+    .status-badge-paused { background: #f59e0b; color: #fff; }
+    .status-badge-completed { background: #6b7280; color: #fff; }
+    .status-badge-in_progress { background: #3b82f6; color: #fff; }
+    .status-badge-blocked { background: #ef4444; color: #fff; }
+    .status-badge-unknown { background: #94a3b8; color: #fff; }
+
+    /* Priority tags */
+    .priority-tag {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-weight: 600;
+    }
+    .priority-high { background: #fecaca; color: #991b1b; }
+    .priority-medium { background: #fef08a; color: #854d0e; }
+    .priority-low { background: #d1fae5; color: #065f46; }
+
+    .completion-badge {
+        font-size: 0.75rem;
+        font-family: 'Fira Code', monospace;
+        color: var(--accent-color);
+    }
+
+    .linked-projects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    .project-tag {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 3px;
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* Project styles */
+    .project-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .project-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .project-header { display: flex; align-items: center; gap: 0.5rem; }
+    .project-title { font-weight: 600; font-size: 0.9rem; }
+    .project-goal { font-size: 0.8rem; color: var(--text-secondary); margin: 0.25rem 0; }
+
+    .task-breakdown { display: flex; gap: 0.5rem; margin-top: 0.25rem; flex-wrap: wrap; }
+    .task-stat {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 3px;
+        font-family: 'Fira Code', monospace;
+    }
+    .task-stat.done { background: #d1fae5; color: #065f46; }
+    .task-stat.active { background: #dbeafe; color: #1e40af; }
+    .task-stat.remaining { background: var(--bg-secondary); color: var(--text-secondary); }
+    .task-stat.blocked { background: #fecaca; color: #991b1b; }
+
+    .progress-bar-container {
+        height: 4px;
+        background: var(--bg-secondary);
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--accent-color);
+        border-radius: 2px;
+        transition: width 0.6s ease;
+    }
+
+    /* TELOS styles */
+    .telos-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .telos-item {
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .telos-header { display: flex; justify-content: space-between; align-items: center; }
+    .telos-name { font-weight: 600; font-size: 0.9rem; }
+    .telos-size { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+    .telos-preview {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    /* AI Summary */
+    .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    #ai-summary-content {
+        min-height: 3rem;
+    }
+    #ai-summary-content pre {
+        white-space: pre-wrap;
+        font-family: inherit;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* Memory styles */
+    .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+    .memory-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.75rem;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+    }
+    .memory-name { font-weight: 600; font-size: 0.9rem; }
+    .memory-stat { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+    .memory-total {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-family: 'Fira Code', monospace;
+    }
+
+    /* Mermaid container */
+    .mermaid {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    @media (max-width: 900px) {
+        .awareness-metrics { grid-template-columns: repeat(3, 1fr); }
+        .awareness-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+        .awareness-metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<script>
+    // Generate AI Summary
+    const summaryBtn = document.getElementById('generate-summary-btn');
+    if (summaryBtn) {
+        summaryBtn.addEventListener('click', async () => {
+            const contentDiv = document.getElementById('ai-summary-content');
+            summaryBtn.disabled = true;
+            summaryBtn.innerHTML = '<span class="loader"></span> Generating...';
+            contentDiv.innerHTML = '<p style="color: var(--accent-color);">Generating AI summary...</p>';
+
+            try {
+                const response = await fetch('/api/awareness/summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: 'llama3' })
+                });
+                const data = await response.json();
+
+                if (data.success && data.summary) {
+                    const pre = document.createElement('pre');
+                    pre.textContent = data.summary;
+                    contentDiv.textContent = '';
+                    contentDiv.appendChild(pre);
+                } else if (data.error) {
+                    contentDiv.textContent = '';
+                    const errP = document.createElement('p');
+                    errP.style.color = 'var(--error-color)';
+                    errP.textContent = 'Error: ' + data.error;
+                    contentDiv.appendChild(errP);
+                }
+            } catch (err) {
+                contentDiv.textContent = '';
+                const errP = document.createElement('p');
+                errP.style.color = 'var(--error-color)';
+                errP.textContent = 'Network Error: ' + err.message;
+                contentDiv.appendChild(errP);
+            } finally {
+                summaryBtn.disabled = false;
+                summaryBtn.textContent = 'Generate Summary';
+            }
+        });
+    }
+
+    // Auto-refresh metrics every 60s
+    setInterval(async () => {
+        try {
+            const resp = await fetch('/api/awareness');
+            const data = await resp.json();
+            const m = data.metrics;
+            const ids = {
+                'aw-mission-count': m.mission_count,
+                'aw-project-count': m.project_count,
+                'aw-total-tasks': m.total_tasks,
+                'aw-completed-tasks': m.completed_tasks,
+                'aw-telos-files': m.telos_files,
+                'aw-completion': m.overall_completion + '%'
+            };
+            for (const [id, val] of Object.entries(ids)) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            }
+        } catch (e) {
+            // Silently ignore refresh failures
+        }
+    }, 60000);
+</script>
+{% endblock %}

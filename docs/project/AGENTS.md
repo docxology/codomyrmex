@@ -36,7 +36,7 @@ Project-level documentation for architecture, contributing, roadmap, and project
 ### Key Architectural Components
 
 - **Layered Architecture**: Foundation → Core → Service → Application
-- **Module System**: 80+ independent, composable modules
+- **Module System**: 90+ independent, composable modules
 - **Secure Cognitive Layer**: Identity, Wallet, Defense, Market, Privacy
 
 ## Operating Contracts

@@ -8,7 +8,7 @@ Edge deployment, IoT gateways, and latency-sensitive function execution.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

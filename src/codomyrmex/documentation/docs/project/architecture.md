@@ -86,7 +86,7 @@ Each module is a self-contained unit focusing on a specific domain. It typically
 -   Its own `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `SECURITY.md`, `CHANGELOG.md`, and `USAGE_EXAMPLES.md`.
 -   A `docs/` directory for `technical_overview.md` and tutorials.
 -   A `tests/` directory for unit and integration tests.
--   A `requirements.txt` for module-specific dependencies.
+-   A `pyproject.toml` for module-specific dependencies.
 
 ### Model Context Protocol (MCP)
 

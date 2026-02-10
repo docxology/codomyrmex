@@ -10,7 +10,7 @@ Case-based reasoning and cognitive architecture module. Implements Bayesian infe
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

@@ -10,7 +10,7 @@ Vision, audio, and image processing for multimodal AI applications. Provides a u
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

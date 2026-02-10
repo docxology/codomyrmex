@@ -39,7 +39,7 @@ text_analysis/
 ├── MCP_TOOL_SPECIFICATION.md
 ├── CHANGELOG.md
 ├── SECURITY.md
-├── requirements.txt
+├── pyproject.toml
 ├── template_module.py
 ├── docs/
 │   ├── index.md
@@ -885,8 +885,8 @@ __all__ = [
 ]
 ```
 
-### **Update requirements.txt**
-Edit `requirements.txt`:
+### **Update `pyproject.toml`**
+Edit `pyproject.toml`:
 
 ```txt
 # Optional dependencies for enhanced sentiment analysis

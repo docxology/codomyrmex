@@ -10,7 +10,7 @@ Networking module providing multi-protocol client implementations for HTTP, WebS
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -61,9 +61,20 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.networking import get_http_client
+from codomyrmex.networking import HTTPClient, WebSocketClient
 
-result = get_http_client()
+# Make HTTP requests with retry and timeout support
+client = HTTPClient(timeout=10, max_retries=3)
+response = client.get("https://api.example.com/users")
+print(f"Status: {response.status_code}, Data: {response.json()}")
+
+# POST with JSON data
+response = client.post("https://api.example.com/users", data={"name": "Alice"})
+
+# WebSocket for bidirectional communication
+ws = WebSocketClient(url="wss://stream.example.com/events")
+ws.connect()
+ws.send({"subscribe": "ticker"})
 ```
 
 

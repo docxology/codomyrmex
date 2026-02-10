@@ -10,7 +10,7 @@ Active countermeasures and containment strategies including rabbit hole detectio
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

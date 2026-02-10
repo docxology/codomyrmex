@@ -8,7 +8,7 @@ Quantum algorithm primitives, circuit simulation, and gate operations.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

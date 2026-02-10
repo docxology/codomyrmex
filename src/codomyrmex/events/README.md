@@ -10,7 +10,7 @@ Event-driven architecture module enabling decoupled, asynchronous communication 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -61,10 +61,18 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.events import AsyncEventEmitter, Subscription, EventBus
+from codomyrmex.events import EventBus, Event, EventType, EventPriority, subscribe_to_events
 
-# Initialize AsyncEventEmitter
-instance = AsyncEventEmitter()
+# Create an event bus and subscribe a handler
+bus = EventBus()
+bus.subscribe("logger", event_patterns={"system"}, handler=lambda e: print(f"Got: {e.payload}"))
+
+# Publish an event
+event = Event(event_type=EventType.SYSTEM, payload={"action": "deploy", "version": "2.1"})
+bus.publish(event)
+
+# Use convenience functions with the global event bus
+subscribe_to_events("monitor", patterns={"error"}, handler=lambda e: alert(e.payload))
 ```
 
 

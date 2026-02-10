@@ -2,116 +2,136 @@
 
 ## Introduction
 
-<!-- 
-This document outlines the specification for any programmatic APIs (e.g., Python functions intended for direct import and use by other modules) provided by the `documentation` module. 
+This document outlines the specification for the programmatic APIs provided by the `documentation` module. The module manages Docusaurus-based documentation websites, aggregates module documentation, validates version consistency, and assesses documentation quality.
 
-Note: The primary interface for interacting with this module's functionalities (like building the Docusaurus site) is through:
+The primary interface for interacting with this module's functionalities is through:
 1. The `documentation_website.py` command-line script.
-2. MCP (Model Context Protocol) tools like `trigger_documentation_build` and `check_documentation_environment`, which are detailed in `MCP_TOOL_SPECIFICATION.md`.
-
-This API Specification is relevant if functions within `documentation_website.py` or other Python files in this module are designed to be imported and used as a library by other Codomyrmex components. If no such direct programmatic API is exposed, this document may indicate N/A or be minimal.
--->
+2. MCP (Model Context Protocol) tools like `trigger_documentation_build` and `check_documentation_environment`, detailed in `MCP_TOOL_SPECIFICATION.md`.
+3. Direct Python function imports from `codomyrmex.documentation`.
 
 ## Endpoints / Functions / Interfaces
 
-### Function: `check_doc_environment(package_manager: str = 'npm', docs_module_root: str = 'documentation') -> Dict`
+### Function: `check_doc_environment() -> bool`
 
-- **Description**: Verify Docusaurus documentation environment and dependencies.
+- **Description**: Check for Node.js and npm/yarn availability in the system PATH. Logs findings and returns whether the basic documentation environment is ready.
+- **Parameters**: None.
+- **Return Value**: `True` if Node.js and at least one package manager (npm or yarn) are available, `False` otherwise.
+- **Errors**: Does not raise exceptions; logs errors for missing dependencies.
+
+### Function: `run_command_stream_output(command_parts: list[str], cwd: str) -> bool`
+
+- **Description**: Helper to run a shell command and stream its stdout/stderr output to the logger in real time.
 - **Parameters**:
-    - `package_manager`: Package manager to use ('npm', 'yarn', 'pnpm').
-    - `docs_module_root`: Path to documentation module directory.
-- **Return Value**: Environment check results with status and recommendations.
-- **Errors**: Raises `EnvironmentError` for missing dependencies or configuration issues.
+    - `command_parts` (list[str]): List of command arguments.
+    - `cwd` (str): Working directory for the command.
+- **Return Value**: `True` if the command executed successfully (exit code 0), `False` otherwise.
+- **Errors**: Returns `False` on `FileNotFoundError` or other exceptions; does not raise.
 
-### Function: `install_dependencies(package_manager: str = 'npm', docs_module_root: str = 'documentation') -> bool`
+### Function: `install_dependencies(package_manager: str = "npm") -> bool`
 
-- **Description**: Install documentation dependencies and verify installation.
+- **Description**: Install Docusaurus dependencies using the specified package manager.
 - **Parameters**:
-    - `package_manager`: Package manager to use ('npm', 'yarn', 'pnpm').
-    - `docs_module_root`: Path to documentation module directory.
-- **Return Value**: True if installation successful, False otherwise.
-- **Errors**: Raises `InstallationError` for dependency installation failures.
+    - `package_manager` (str, optional): Package manager to use (`"npm"` or `"yarn"`). Falls back to npm if yarn is specified but not found. Default: `"npm"`.
+- **Return Value**: `True` if installation succeeded, `False` otherwise.
+- **Errors**: Returns `False` if neither npm nor yarn is found.
 
-### Function: `start_dev_server(port: int = 3000, host: str = 'localhost', docs_module_root: str = 'documentation') -> subprocess.Popen`
+### Function: `start_dev_server(package_manager: str = "npm") -> bool`
 
-- **Description**: Start Docusaurus development server for live documentation preview.
+- **Description**: Start the Docusaurus development server with hot-reloading. This is a blocking call that runs until interrupted (Ctrl+C).
 - **Parameters**:
-    - `port`: Port number for development server.
-    - `host`: Host address for development server.
-    - `docs_module_root`: Path to documentation module directory.
-- **Return Value**: Process object for the running development server.
-- **Errors**: Raises `ServerError` for server startup failures.
+    - `package_manager` (str, optional): Package manager to use (`"npm"` or `"yarn"`). Default: `"npm"`.
+- **Return Value**: `True` when the server process finishes or is interrupted, `False` on error.
+- **Errors**: Returns `False` if neither npm nor yarn is found or if the server fails to start.
 
-### Function: `build_static_site(output_dir: str = 'build', docs_module_root: str = 'documentation') -> Dict`
+### Function: `build_static_site(package_manager: str = "npm") -> bool`
 
-- **Description**: Build static documentation website for deployment.
+- **Description**: Build the static Docusaurus site for deployment. Output is placed in the `build/` directory within the documentation module root.
 - **Parameters**:
-    - `output_dir`: Directory to output built static files.
-    - `docs_module_root`: Path to documentation module directory.
-- **Return Value**: Build results with status, file count, and performance metrics.
-- **Errors**: Raises `BuildError` for build process failures.
+    - `package_manager` (str, optional): Package manager to use (`"npm"` or `"yarn"`). Default: `"npm"`.
+- **Return Value**: `True` if the build completed successfully, `False` otherwise.
+- **Errors**: Returns `False` on build failures.
 
-### Function: `aggregate_docs(source_dirs: List[str], output_dir: str, **kwargs) -> Dict`
+### Function: `serve_static_site(package_manager: str = "npm") -> bool`
 
-- **Description**: Aggregate documentation from multiple sources into unified structure.
+- **Description**: Serve the previously built static Docusaurus site. This is a blocking call. Requires the `build/` directory to exist and contain built files.
 - **Parameters**:
-    - `source_dirs`: List of directories containing documentation to aggregate.
-    - `output_dir`: Directory to output aggregated documentation.
-    - `**kwargs`: Aggregation options (format, merge_strategy, etc.).
-- **Return Value**: Aggregation results with file counts and merge statistics.
-- **Errors**: Raises `AggregationError` for documentation processing failures.
+    - `package_manager` (str, optional): Package manager to use (`"npm"` or `"yarn"`). Default: `"npm"`.
+- **Return Value**: `True` when the server process finishes or is interrupted, `False` on error.
+- **Errors**: Returns `False` if the build directory does not exist or is empty.
 
-### Function: `validate_doc_versions(docs_path: str, version_pattern: str = None, **kwargs) -> Dict`
+### Function: `print_assessment_checklist() -> None`
 
-- **Description**: Validate version consistency across documentation files.
+- **Description**: Print a checklist to stdout for manually assessing the documentation website. Covers navigation, content rendering, links, code blocks, and console errors.
+- **Parameters**: None.
+- **Return Value**: None. Prints to stdout as a side effect.
+
+### Function: `aggregate_docs(source_root: str = None, dest_root: str = None) -> None`
+
+- **Description**: Aggregate module documentation into the Docusaurus `docs/modules/` folder. Copies canonical documentation files (`README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `USAGE_EXAMPLES.md`, `CHANGELOG.md`, `SECURITY.md`) and the `docs/` subfolder from each `src/codomyrmex/<module>/` directory.
 - **Parameters**:
-    - `docs_path`: Path to documentation directory to validate.
-    - `version_pattern`: Regex pattern for version validation.
-    - `**kwargs`: Validation options (strict_mode, ignore_patterns, etc.).
-- **Return Value**: Validation results with version mismatches and recommendations.
-- **Errors**: Raises `ValidationError` for version consistency issues.
+    - `source_root` (str, optional): Root directory containing module source directories. Default: `{project_root}/src/codomyrmex`.
+    - `dest_root` (str, optional): Destination directory for aggregated docs. Default: `{documentation_module}/docs/modules`.
+- **Return Value**: None. Logs progress and results.
+- **Errors**: Logs errors for individual file copy failures but continues processing.
 
-### Function: `assess_site(site_path: str, assessment_type: str = 'comprehensive', **kwargs) -> Dict`
+### Function: `validate_doc_versions() -> tuple[bool, list[str], list[str]]`
 
-- **Description**: Assess documentation website quality and completeness.
+- **Description**: Validate version consistency between source and aggregated documentation files. Compares CHANGELOG.md content and checks file modification timestamps.
+- **Parameters**: None.
+- **Return Value**: Tuple of `(is_valid, errors, warnings)` where:
+    - `is_valid` (bool): `True` if no validation errors were found.
+    - `errors` (list[str]): List of error messages for content mismatches.
+    - `warnings` (list[str]): List of warning messages for stale aggregated docs.
+- **Errors**: Does not raise; returns errors in the result tuple.
+
+### Function: `assess_site() -> None`
+
+- **Description**: Open the documentation website URL in the default web browser and print the assessment checklist to stdout. Requires a running documentation server.
+- **Parameters**: None.
+- **Return Value**: None. Opens browser and prints checklist as side effects.
+- **Errors**: Logs warning if browser cannot be opened automatically.
+
+### Function: `generate_quality_report(file_path: Path) -> dict[str, float]`
+
+- **Description**: Generate a quality assessment report for a single documentation file. Analyzes completeness, consistency, technical accuracy, readability, and structure.
 - **Parameters**:
-    - `site_path`: Path to built documentation site.
-    - `assessment_type`: Type of assessment (comprehensive, quick, seo, accessibility).
-    - `**kwargs`: Assessment options (thresholds, categories, etc.).
-- **Return Value**: Assessment results with scores, issues, and improvement recommendations.
-- **Errors**: Raises `AssessmentError` for assessment execution failures.
+    - `file_path` (Path): Path to the documentation file to analyze.
+- **Return Value**: Dictionary of quality metric scores.
 
-- **Description**: Programmatically executes a Docusaurus command (e.g., 'build', 'start', 'install'). This is a conceptual example; check `documentation_website.py` for actual function definitions if intended for library use.
-- **Method**: N/A (Python function)
-- **Path**: N/A
-- **Parameters/Arguments**:
-    - `action` (str): The Docusaurus action to perform (e.g., 'build', 'start', 'install', 'serve', 'checkenv').
-    - `package_manager` (str, optional): 'npm' or 'yarn'. Default: 'npm'.
-    - `project_root` (str, optional): Path to the Codomyrmex project root. Default: current directory.
-    - `docs_module_root` (str, optional): Path to the documentation module relative to project_root. Default: 'documentation'.
-- **Request Body**: N/A
-- **Returns/Response**:
-    - **Success**: (e.g., `True`, or a result object/dictionary with status and output)
-        ```python
-        # Example conceptual return
-        {
-          "success": True,
-          "message": "Action [action] completed successfully.",
-          "output": "...	ext of stdout/stderr..."
-        }
-        ```
-    - **Error**: (e.g., `False`, raises an exception, or a result object with error details)
-        ```python
-        # Example conceptual return
-        {
-          "success": False,
-          "message": "Error during action [action]: ...",
-          "error_details": "..."
-        }
-        ```
-- **Events Emitted**: N/A
+## Classes
 
-<!-- Endpoint/Function 2: ... -->
+### `DocumentationQualityAnalyzer`
+
+Analyzes documentation quality metrics.
+
+```python
+class DocumentationQualityAnalyzer:
+    def __init__(self): ...
+    def analyze_file(self, file_path: Path) -> dict[str, float]: ...
+```
+
+**`analyze_file(file_path: Path) -> dict[str, float]`**: Analyze a single documentation file and return quality scores:
+```python
+{
+    "completeness": float,
+    "consistency": float,
+    "technical_accuracy": float,
+    "readability": float,
+    "structure": float,
+    "overall_score": float
+}
+```
+
+### `DocumentationConsistencyChecker`
+
+Checks documentation for consistency issues including naming conventions, formatting standards, and content alignment.
+
+```python
+class DocumentationConsistencyChecker:
+    def __init__(self, config: dict[str, Any] | None = None): ...
+```
+
+Uses `ConsistencyIssue` and `ConsistencyReport` dataclasses for results.
 
 ## Data Structures
 
@@ -119,44 +139,42 @@ This API Specification is relevant if functions within `documentation_website.py
 Configuration for documentation build process:
 ```python
 {
-    "source_dir": <str>,
-    "output_dir": <str>,
-    "package_manager": <str>,
+    "source_dir": str,
+    "output_dir": str,
+    "package_manager": str,
     "build_options": {
-        "minify": <bool>,
-        "optimize_images": <bool>,
-        "generate_sitemap": <bool>
+        "minify": bool,
+        "optimize_images": bool,
+        "generate_sitemap": bool
     },
     "metadata": {
-        "version": <str>,
-        "last_updated": <timestamp>,
-        "author": <str>
+        "version": str,
+        "last_updated": timestamp,
+        "author": str
     }
 }
 ```
 
-### DocumentationAssessmentResult
-Results from documentation quality assessment:
+### ConsistencyIssue (dataclass)
 ```python
-{
-    "overall_score": <float>,
-    "categories": {
-        "completeness": <float>,
-        "accuracy": <float>,
-        "consistency": <float>,
-        "accessibility": <float>
-    },
-    "issues": [
-        {
-            "type": <str>,
-            "severity": <str>,
-            "description": <str>,
-            "location": <str>,
-            "recommendation": <str>
-        }
-    ],
-    "recommendations": [<list_of_improvements>]
-}
+@dataclass
+class ConsistencyIssue:
+    file_path: str
+    line_number: int
+    issue_type: str
+    description: str
+    severity: str = "warning"
+    suggestion: str | None = None
+```
+
+### ConsistencyReport (dataclass)
+```python
+@dataclass
+class ConsistencyReport:
+    total_files: int
+    files_checked: int
+    issues: list[ConsistencyIssue] = field(default_factory=list)
+    passed: bool = True
 ```
 
 ## Security Considerations
@@ -172,42 +190,37 @@ All documentation functions operate locally and do not expose network interfaces
 
 - **Local Processing**: All operations performed locally with no external API calls
 - **Resource Efficient**: Minimal memory and CPU usage for documentation operations
-- **Scalable**: Can handle large documentation repositories
-- **Fast Execution**: Build and assessment operations complete in seconds to minutes
-- **Streaming Output**: Real-time output streaming for long-running operations
+- **Streaming Output**: Real-time output streaming for long-running operations via `run_command_stream_output`
 
 ## Integration Patterns
 
 ### With Build Synthesis
 ```python
 from codomyrmex.documentation import build_static_site
-from codomyrmex.build_synthesis import create_build_target
-
-# Create documentation build target
-docs_target = create_build_target(
-    name="documentation",
-    build_type="documentation",
-    config={"output_dir": "docs/build"}
-)
 
 # Build documentation as part of CI/CD
-build_result = build_static_site(output_dir="docs/build")
+build_result = build_static_site(package_manager="npm")
 ```
 
-### With Project Orchestration
+### Documentation Aggregation
 ```python
 from codomyrmex.documentation import aggregate_docs, validate_doc_versions
-from codomyrmex.logistics.orchestration.project import execute_workflow
 
-# Aggregate documentation from multiple modules
-aggregation_result = aggregate_docs(
-    source_dirs=["src/codomyrmex/*/docs", "docs/modules"],
-    output_dir="docs/aggregated"
-)
+# Aggregate documentation from all modules
+aggregate_docs()
 
 # Validate version consistency
-validation_result = validate_doc_versions("docs/aggregated")
-``` 
+is_valid, errors, warnings = validate_doc_versions()
+```
+
+### Quality Assessment
+```python
+from codomyrmex.documentation import DocumentationQualityAnalyzer
+
+analyzer = DocumentationQualityAnalyzer()
+report = analyzer.analyze_file(Path("docs/README.md"))
+print(f"Overall score: {report['overall_score']}")
+```
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

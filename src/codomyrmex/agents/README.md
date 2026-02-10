@@ -10,7 +10,7 @@ Agentic framework integrations providing AI code editing, task management, and m
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

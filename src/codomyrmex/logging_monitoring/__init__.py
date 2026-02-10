@@ -6,7 +6,7 @@ It allows for consistent log formatting, configurable log levels, and outputs
 (console, file) across all other modules.
 
 To use:
-1. Ensure `python-dotenv` is installed (usually in the root `requirements.txt`).
+1. Ensure `python-dotenv` is installed (usually in the root `pyproject.toml`).
 2. Create a `.env` file in the project root to specify logging configurations:
    - `CODOMYRMEX_LOG_LEVEL` (e.g., DEBUG, INFO, WARNING, ERROR, CRITICAL)
    - `CODOMYRMEX_LOG_FILE` (e.g., /path/to/codomyrmex.log)

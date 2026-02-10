@@ -8,7 +8,7 @@ Metrics collection, alerting, and dashboard visualization.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

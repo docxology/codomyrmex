@@ -94,7 +94,7 @@ uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
 
 - [containerization](../containerization/) - Docker/Kubernetes management that provides deployment targets
 - [ci_cd_automation](../ci_cd_automation/) - CI/CD pipeline management that triggers deployments
-- [health_checks](../health_checks/) - Health verification integrated into deployment workflows
+- [health_checks](../../../src/codomyrmex/deployment/health_checks/) - Health verification integrated into deployment workflows
 - [git_operations](../git_operations/) - Git workflow automation used by GitOps synchronization
 
 ## Navigation

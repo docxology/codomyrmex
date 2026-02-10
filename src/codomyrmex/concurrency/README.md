@@ -8,7 +8,7 @@ Distributed locks, semaphores, and synchronization primitives.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

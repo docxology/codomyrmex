@@ -12,13 +12,13 @@
 <div class="grid">
     {% for agent in agents %}
     <div class="card">
-        <div class="card-title">
+        <h2 class="card-title">
             {{ agent.name }}
             <span
                 class="status-badge {% if agent.type == 'CLI Integration' %}active{% elif agent.type == 'API Integration' %}running{% else %}pending{% endif %}">
                 {{ agent.type }}
             </span>
-        </div>
+        </h2>
         <p style="margin-bottom: 0.75rem;">{{ agent.description[:250] }}{% if agent.description|length > 250 %}...{%
             endif %}</p>
         <p class="console"
@@ -30,9 +30,9 @@
 </div>
 
 {% if not agents %}
-<div class="empty-state">
-    <div class="empty-state-icon">🤖</div>
-    <p>No agent integrations found in src/codomyrmex/agents/</p>
+<div class="empty-state" aria-label="No agents found">
+    <div class="empty-state-icon" aria-hidden="true">🤖</div>
+    <p>No agent integrations found in <code>src/codomyrmex/agents/</code></p>
 </div>
 {% endif %}
 {% endblock %}

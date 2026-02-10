@@ -7,6 +7,7 @@ Real-time data streaming with SSE, pub/sub, and stream processing.
 ## Key Exports
 
 ### Classes
+
 - **`EventType`** — Standard event types.
 - **`Event`** — A stream event.
 - **`Subscription`** — A subscription to a stream.
@@ -17,6 +18,7 @@ Real-time data streaming with SSE, pub/sub, and stream processing.
 - **`TopicStream`** — Stream with topic-based routing.
 
 ### Functions
+
 - **`create_event()`** — Create a new event.
 
 ## Quick Start
@@ -65,10 +67,17 @@ processor = (
 await processor.start()
 ```
 
+## Directory Structure
+
+- `models.py` — Data models (Event, EventType, Subscription)
+- `stream.py` — Stream implementations (Stream, InMemoryStream, SSEStream, TopicStream)
+- `processor.py` — Stream processing logic (StreamProcessor)
+- `__init__.py` — Public API re-exports
+
 ## Exports
 
 | Class | Description |
-|-------|-------------|
+| :--- | :--- |
 | `InMemoryStream` | In-memory pub/sub with event buffer |
 | `SSEStream` | Server-Sent Events stream |
 | `TopicStream` | Topic-based message routing |
@@ -79,13 +88,11 @@ await processor.start()
 | `create_event(data)` | Create event with defaults |
 | `broadcast(streams, event)` | Send to multiple streams |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k streaming -v
 ```
-
 
 ## Documentation
 

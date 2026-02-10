@@ -298,7 +298,7 @@ uv run pytest --profile src/codomyrmex/tests/unit/
 uv run pytest -n auto src/codomyrmex/tests/unit/
 
 # Use pytest-xdist for distributed execution
-pip install pytest-xdist
+uv pip install pytest-xdist
 uv run pytest -n 4 src/codomyrmex/tests/unit/
 ```
 

@@ -10,7 +10,7 @@ Static Analysis Module for Codomyrmex.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

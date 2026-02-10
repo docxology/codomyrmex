@@ -6,7 +6,7 @@ This tutorial will guide you through generating a heatmap using the Data Visuali
 
 Before you begin, ensure you have the following:
 
-- The Data Visualization module installed and its dependencies (`matplotlib`, `seaborn`, `numpy`) available in your Python environment. (See main [README.md](../../README.md) and `data_visualization/requirements.txt`).
+- The Data Visualization module installed and its dependencies (`matplotlib`, `seaborn`, `numpy`) available in your Python environment. (See main [README.md](../../README.md) and `the project `pyproject.toml``).
 - Your Codomyrmex project environment set up, with logging initialized (`logging_monitoring`) and capable of making MCP tool calls.
 - An output directory (e.g., `./mcp_plots/`) created and writable by the application running the MCP server.
 - Familiarity with JSON format for MCP requests.
@@ -112,7 +112,7 @@ If an error occurred (e.g., invalid `output_path`, incorrect data format), the r
 - **Data Validation**: While the tool will attempt to generate a plot, providing correctly structured data as per the `MCP_TOOL_SPECIFICATION.md` is essential for meaningful output.
 - **Resource Usage**: Generating heatmaps from very large datasets can be resource-intensive. Be mindful of this if allowing arbitrary data sizes via MCP calls.
 
-For a complete list of parameters and details for the `create_heatmap` MCP tool and others, always refer to the [Data Visualization MCP Tool Specification](../../MCP_TOOL_SPECIFICATION.md).
+For a complete list of parameters and details for the `create_heatmap` MCP tool and others, always refer to the [Data Visualization MCP Tool Specification](../../../../src/codomyrmex/data_visualization/MCP_TOOL_SPECIFICATION.md).
 
 ## 5. Next Steps
 

@@ -10,7 +10,7 @@ Reference implementations and demonstrations showcasing Codomyrmex module integr
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

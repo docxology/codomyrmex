@@ -10,7 +10,7 @@ The Tree-sitter module provides high-fidelity source code parsing across multipl
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

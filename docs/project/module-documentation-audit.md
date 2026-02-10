@@ -14,7 +14,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### api - Required Files
 - **SECURITY.md (Security considerations)**
@@ -24,7 +24,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### auth - Required Files
 - **SECURITY.md (Security considerations)**
@@ -34,7 +34,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### cache - Required Files
 - **SECURITY.md (Security considerations)**
@@ -44,23 +44,23 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### cerebrum - Optional Files
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### ci_cd_automation - Optional Files
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### coding - Optional Files
 - API_SPECIFICATION.md (API documentation)
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### compression - Required Files
 - **SECURITY.md (Security considerations)**
@@ -70,25 +70,25 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### config_management - Optional Files
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### containerization - Optional Files
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### database_management - Optional Files
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### documents - Required Files
 - **SECURITY.md (Security considerations)**
@@ -105,7 +105,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### events - Required Files
 - **SECURITY.md (Security considerations)**
@@ -115,7 +115,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### fpf - Required Files
 - **SECURITY.md (Security considerations)**
@@ -132,7 +132,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### metrics - Required Files
 - **SECURITY.md (Security considerations)**
@@ -142,10 +142,10 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### module_template - Optional Files
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### networking - Required Files
 - **SECURITY.md (Security considerations)**
@@ -155,7 +155,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### performance - Optional Files
 - USAGE_EXAMPLES.md (Usage examples)
@@ -174,10 +174,10 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### project_orchestration - Optional Files
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### scrape - Optional Files
 - API_SPECIFICATION.md (API documentation)
@@ -192,7 +192,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### serialization - Required Files
 - **SECURITY.md (Security considerations)**
@@ -202,7 +202,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### spatial - Required Files
 - **SECURITY.md (Security considerations)**
@@ -212,12 +212,12 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### system_discovery - Optional Files
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### task_queue - Required Files
 - **SECURITY.md (Security considerations)**
@@ -227,7 +227,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### templating - Required Files
 - **SECURITY.md (Security considerations)**
@@ -237,12 +237,12 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### terminal_interface - Optional Files
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### tests - Required Files
 - **SECURITY.md (Security considerations)**
@@ -252,7 +252,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### tools - Required Files
 - **SECURITY.md (Security considerations)**
@@ -262,7 +262,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ### validation - Required Files
 - **SECURITY.md (Security considerations)**
@@ -272,7 +272,7 @@
 - MCP_TOOL_SPECIFICATION.md (MCP tool specifications)
 - USAGE_EXAMPLES.md (Usage examples)
 - CHANGELOG.md (Version history)
-- requirements.txt (Dependencies)
+- pyproject.toml extras (Dependencies)
 
 ## Broken References
 ### Broken Link

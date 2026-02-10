@@ -30,7 +30,7 @@ The `build_synthesis` module is the construction engine of Codomyrmex. It takes 
 
 ### Testing
 
-- **End-to-End**: Validates that artifacts are actually created and runnable (e.g., `pip install` the built wheel in a test env).
+- **End-to-End**: Validates that artifacts are actually created and runnable (e.g., `uv pip install` the built wheel in a test env).
 
 ## Architecture
 

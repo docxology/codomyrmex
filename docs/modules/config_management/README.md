@@ -10,7 +10,7 @@ Hierarchical configuration management with environment-aware overrides, validati
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

@@ -192,7 +192,7 @@ else:
 
 - See [Docker Build Tutorial](./docker_build_tutorial.md) for container builds
 - Review [Build Orchestration](../technical_overview.md) for advanced usage
-- Check [API Specification](../../API_SPECIFICATION.md) for complete API reference
+- Check [API Specification](../../../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md) for complete API reference
 
 
 ## Navigation Links

@@ -26,7 +26,7 @@ src/
 │   ├── orchestrator/     # Workflow orchestration
 │   ├── static_analysis/  # Code quality analysis
 │   ├── tests/            # Unit and integration tests
-│   └── ... (80+ more)
+│   └── ... (90+ more)
 └── codomyrmex.llm/       # LLM subpackage
 ```
 

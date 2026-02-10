@@ -133,7 +133,7 @@ class DatabaseConnector:
         elif self._db_type == "postgresql":
             if not POSTGRESQL_AVAILABLE:
                 raise CodomyrmexError(
-                    "PostgreSQL driver not available. Install with: pip install psycopg2-binary"
+                    "PostgreSQL driver not available. Install with: uv pip install psycopg2-binary"
                 )
             self._connection = psycopg2.connect(
                 host=params["host"],
@@ -147,7 +147,7 @@ class DatabaseConnector:
         elif self._db_type == "mysql":
             if not MYSQL_AVAILABLE:
                 raise CodomyrmexError(
-                    "MySQL driver not available. Install with: pip install pymysql"
+                    "MySQL driver not available. Install with: uv pip install pymysql"
                 )
             self._connection = pymysql.connect(
                 host=params["host"],

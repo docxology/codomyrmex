@@ -20,7 +20,7 @@ This module provides the command-line interface for the Codomyrmex development p
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Quick Start

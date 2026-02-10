@@ -173,7 +173,7 @@ The integration demonstrates how CEREBRUM can be applied to structured knowledge
 
 - [CEREBRUM README](../README.md)
 - [FPF Module](../../fpf/README.md)
-- [Usage Examples](../USAGE_EXAMPLES.md)
+- [Usage Examples](../../../src/codomyrmex/cerebrum/USAGE_EXAMPLES.md)
 
 
 

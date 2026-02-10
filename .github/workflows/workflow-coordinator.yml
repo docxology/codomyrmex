@@ -74,14 +74,12 @@ jobs:
               - '.github/workflows/**'
               - '.github/**'
             dependencies:
-              - 'requirements.txt'
               - 'pyproject.toml'
               - 'uv.lock'
               - 'poetry.lock'
               - 'Pipfile.lock'
             security:
               - 'pyproject.toml'
-              - 'requirements.txt'
               - '.bandit'
               - '.github/workflows/security.yml'
             all-files:

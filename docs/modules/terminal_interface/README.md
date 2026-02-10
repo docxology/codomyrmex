@@ -20,7 +20,7 @@ This module provides interactive terminal interfaces and utilities for
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Quick Start

@@ -8,7 +8,7 @@ Extensible plugin architecture for third-party modules.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

@@ -73,13 +73,21 @@ Unified module for code execution, sandboxing, review, monitoring, and debugging
 ## Quick Start
 
 ```python
-from codomyrmex.coding import ExecutionTimeoutError, MemoryLimitError
+from codomyrmex.coding import execute_code, CodeReviewer, Debugger, generate_report
 
-# Create a ExecutionTimeoutError instance
-executiontimeouterror = ExecutionTimeoutError()
+# Execute Python code in a sandboxed environment
+result = execute_code("python", "print('Hello from sandbox!')")
+print(f"Output: {result}")
 
-# Use MemoryLimitError for additional functionality
-memorylimiterror = MemoryLimitError()
+# Review code quality for a project directory
+reviewer = CodeReviewer("./src")
+issues = reviewer.analyze_file("module.py")
+report = generate_report(issues)
+
+# Debug a failed execution
+debugger = Debugger()
+diagnosis = debugger.debug(code="x = 1/0", stdout="", stderr="ZeroDivisionError", exit_code=1)
+print(f"Root cause: {diagnosis}")
 ```
 
 ## Navigation

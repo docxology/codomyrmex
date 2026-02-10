@@ -10,7 +10,7 @@ The Evolutionary AI module provides genetic algorithm components for automated o
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

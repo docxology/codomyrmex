@@ -10,7 +10,7 @@ AI agent framework providing integrations with multiple AI providers and code ed
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

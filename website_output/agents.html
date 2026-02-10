@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents - Codomyrmex</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <nav aria-label="Main navigation">
+            <a href="index.html" class="logo">
+                <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
+            </a>
+            <div class="nav-links">
+                <div class="nav-group" role="group" aria-label="Operations">
+                    <span class="nav-group-label">Operations</span>
+                    <a href="index.html" class="nav-link" data-shortcut="1">Dashboard</a>
+                    <a href="health.html" class="nav-link" data-shortcut="2">Health</a>
+                    <a href="pipelines.html" class="nav-link" data-shortcut="3">Pipelines</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Development">
+                    <span class="nav-group-label">Development</span>
+                    <a href="modules.html" class="nav-link" data-shortcut="4">Modules</a>
+                    <a href="scripts.html" class="nav-link" data-shortcut="5">Scripts</a>
+                    <a href="config.html" class="nav-link" data-shortcut="6">Config</a>
+                </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Intelligence">
+                    <span class="nav-group-label">Intelligence</span>
+                    <a href="agents.html" class="nav-link" data-shortcut="7">Agents</a>
+                    <a href="chat.html" class="nav-link" data-shortcut="8">Chat</a>
+                    <a href="docs.html" class="nav-link" data-shortcut="9">Docs</a>
+                    <a href="awareness.html" class="nav-link" data-shortcut="0">Awareness</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+<h1>AI Agent Integrations</h1>
+
+<p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+    21 agent frameworks and integrations available in the Codomyrmex agents module.
+</p>
+
+<div class="grid">
+    
+    <div class="card">
+        <h2 class="card-title">
+            ai_code_editing
+            <span
+                class="status-badge pending">
+                Framework
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">AI Code Editing Module for Codomyrmex.
+
+This module provides comprehensive utilities for AI-powered code generation, editing, and analysis.
+
+Integration:
+- Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app...</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/ai_code_editing
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            claude
+            <span
+                class="status-badge running">
+                API Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Claude API integration for Codomyrmex agents.
+
+This module provides comprehensive Claude integration including:
+- ClaudeClient: Full-featured API client with retry logic, tool use, and sessions
+- ClaudeIntegrationAdapter: Bridges Claude with other Co...</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/claude
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            cli
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">CLI agent implementation.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/cli
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            codex
+            <span
+                class="status-badge running">
+                API Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">OpenAI Codex integration for Codomyrmex agents.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/codex
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            core
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Core agent infrastructure and base classes.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/core
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            deepseek
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Deepseek Submodule
+
+DeepSeek Coder integration for code generation and analysis</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/deepseek
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            droid
+            <span
+                class="status-badge active">
+                CLI Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Droid configuration and operation package.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/droid
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            evaluation
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Agent Evaluation Module
+
+Agent benchmarking, quality metrics, and performance comparison.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/evaluation
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            every_code
+            <span
+                class="status-badge pending">
+                Framework
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Every Code CLI integration for Codomyrmex agents.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/every_code
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            gemini
+            <span
+                class="status-badge active">
+                CLI Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Gemini Agent Integration.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/gemini
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            generic
+            <span
+                class="status-badge pending">
+                Framework
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Generic agent utilities and base classes.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/generic
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            git_agent
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Git operations agent.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/git_agent
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            history
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Agent History Module
+
+Conversation and context persistence for agent sessions.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/history
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            infrastructure
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Infrastructure agent for cloud operations.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/infrastructure
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            jules
+            <span
+                class="status-badge active">
+                CLI Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Jules CLI integration for Codomyrmex agents.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/jules
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            mistral_vibe
+            <span
+                class="status-badge active">
+                CLI Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Mistral Vibe CLI integration for Codomyrmex agents.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/mistral_vibe
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            o1
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">O1 Submodule
+
+OpenAI o1/o3 reasoning model integration for advanced multi-step reasoning tasks</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/o1
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            opencode
+            <span
+                class="status-badge active">
+                CLI Integration
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">OpenCode CLI integration for Codomyrmex agents.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/opencode
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            pooling
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Agent Pooling Module
+
+Multi-agent load balancing, failover, and intelligent routing.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/pooling
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            qwen
+            <span
+                class="status-badge pending">
+                Agent
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Qwen Submodule
+
+Qwen-Coder integration for multilingual code assistance</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/qwen
+        </p>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">
+            theory
+            <span
+                class="status-badge pending">
+                Framework
+            </span>
+        </h2>
+        <p style="margin-bottom: 0.75rem;">Theoretical foundations for agentic systems.</p>
+        <p class="console"
+            style="margin-top: 0; padding: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); background: transparent; border: none;">
+            src/codomyrmex/agents/theory
+        </p>
+    </div>
+    
+</div>
+
+
+
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

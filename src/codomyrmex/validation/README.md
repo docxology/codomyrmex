@@ -10,7 +10,7 @@ Unified input validation framework for Codomyrmex with support for JSON Schema, 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -70,7 +70,27 @@ uv sync
 ```python
 from codomyrmex.validation import validate, is_valid, get_errors
 
-result = validate()
+# Define a JSON Schema
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "age": {"type": "integer", "minimum": 0},
+    },
+    "required": ["name", "age"],
+}
+
+# Validate data against the schema
+result = validate({"name": "Alice", "age": 30}, schema)
+print(f"Valid: {result.is_valid}")
+
+# Quick boolean check
+assert is_valid({"name": "Bob", "age": 25}, schema)
+
+# Get detailed errors for invalid data
+errors = get_errors({"name": "", "age": -1}, schema)
+for err in errors:
+    print(f"Error: {err}")
 ```
 
 

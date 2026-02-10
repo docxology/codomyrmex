@@ -14,14 +14,14 @@ This allows module-specific changelogs to be easily found by contributors and fo
 
 For changes specific to individual modules, see:
 
-- **AI Code Editing**: [Changelog](../../src/codomyrmex/agents/CHANGELOG.md)
+- **AI Code Editing**: [Changelog](../../src/codomyrmex/agents/ai_code_editing/CHANGELOG.md)
 - **Data Visualization**: [Changelog](../../src/codomyrmex/data_visualization/CHANGELOG.md)
 - **Code Execution Sandbox**: [Changelog](../../src/codomyrmex/coding/MIGRATION_COMPLETE.md)
 - **Static Analysis**: [Changelog](../../src/codomyrmex/static_analysis/CHANGELOG.md)
 - **Build Synthesis**: [Changelog](../../src/codomyrmex/build_synthesis/CHANGELOG.md)
 - **Documentation**: [Changelog](../../src/codomyrmex/documentation/CHANGELOG.md)
 - **Pattern Matching**: [Changelog](../../src/codomyrmex/pattern_matching/CHANGELOG.md)
-- **Git Operations**: [Changelog](../../src/codomyrmex/git_operations/CHANGELOG.md)
+- **Git Operations**: [README](../../src/codomyrmex/git_operations/README.md)
 - **Logging & Monitoring**: [Changelog](../../src/codomyrmex/logging_monitoring/CHANGELOG.md)
 - **Environment Setup**: [Changelog](../../src/codomyrmex/environment_setup/CHANGELOG.md)
 - **Model Context Protocol**: [Changelog](../../src/codomyrmex/model_context_protocol/CHANGELOG.md)

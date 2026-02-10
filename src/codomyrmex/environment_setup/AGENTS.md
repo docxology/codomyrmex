@@ -30,13 +30,13 @@ from codomyrmex.environment_setup import (
 report = validate_environment()
 if not report.valid:
     print(f"Missing: {report.missing_items}")
-    install_dependencies("requirements.txt")
+    install_dependencies("pyproject.toml")
 
 # Check specific dependencies
 deps = check_dependencies(["numpy", "pandas", "openai"])
 for dep in deps:
     if not dep.installed:
-        print(f"Install {dep.name}: pip install {dep.name}")
+        print(f"Install {dep.name}: uv pip install {dep.name}")
 
 # Verify API keys
 from codomyrmex.environment_setup import check_api_keys

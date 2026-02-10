@@ -82,7 +82,7 @@ def read_pdf(file_path: str | Path) -> PDFDocument:
                     )
             except ImportError:
                 raise DocumentReadError(
-                    "PDF libraries not available. Install with: pip install pypdf or pip install PyPDF2",
+                    "PDF libraries not available. Install with: uv pip install pypdf or uv pip install PyPDF2",
                     file_path=str(file_path)
                 )
 
@@ -170,7 +170,7 @@ def write_pdf(
 
             except ImportError:
                 raise DocumentWriteError(
-                    "PDF generation libraries not available. Install with: pip install reportlab or pip install fpdf",
+                    "PDF generation libraries not available. Install with: uv pip install reportlab or uv pip install fpdf",
                     file_path=str(file_path)
                 )
 

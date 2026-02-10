@@ -1,5 +1,7 @@
 # Codomyrmex Module System Overview
 
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+
 Codomyrmex is built on a **modular architecture** where each module provides specific functionality while maintaining clear interfaces and minimal coupling. This design allows for flexible composition, independent development, and easy extensibility.
 
 ## 🏗️ Module Architecture Principles
@@ -8,7 +10,7 @@ Codomyrmex is built on a **modular architecture** where each module provides spe
 
 Each module is a complete unit with:
 
-- Its own dependencies (`requirements.txt`)
+- Its own dependencies (managed via `pyproject.toml` extras)
 - Comprehensive tests (`tests/`)
 - API documentation (`API_SPECIFICATION.md`)
 - Usage examples (`USAGE_EXAMPLES.md`)
@@ -207,6 +209,7 @@ graph TD
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
+| **`exceptions`** | Exception hierarchy | Centralized exception classes, error handling, error codes |
 | **`utils`** | Common utilities | Helper functions, CLI helpers, shared utilities |
 | **`tools`** | Utility tools | Tool registry, tool execution, helper tools |
 | **`templating`** | Template engine | Jinja2-style templating, code generation, scaffolding |
@@ -282,7 +285,7 @@ def enhance_code_pipeline(source_code):
    ├── MCP_TOOL_SPECIFICATION.md   # AI integration specs
    ├── CHANGELOG.md               # Version history
    ├── SECURITY.md                # Security considerations
-   ├── requirements.txt           # Module dependencies
+   ├── pyproject.toml              # Project dependencies
    ├── my_module_code.py          # Implementation
    ├── docs/                      # Extended documentation
    │   ├── technical_overview.md  # Architecture details
@@ -309,7 +312,7 @@ def enhance_code_pipeline(source_code):
 1. **Dependency Management**:
    - Minimize dependencies on other modules
    - Use foundation modules (logging, environment) as needed
-   - Pin exact versions in `requirements.txt`
+   - Pin exact versions in `pyproject.toml`
 
 2. **Error Handling**:
 

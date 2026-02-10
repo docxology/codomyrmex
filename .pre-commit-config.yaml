@@ -1,5 +1,5 @@
 # Pre-commit hooks configuration for Codomyrmex
-# Install: pip install pre-commit
+# Install: uv pip install pre-commit
 # Setup: pre-commit install
 # Run: pre-commit run --all-files
 
@@ -94,7 +94,7 @@ repos:
         name: Validate Dependencies
         entry: python3 scripts/validation/validate_dependencies.py
         language: system
-        files: ^(pyproject\.toml|src/.*/requirements\.txt)$
+        files: ^pyproject\.toml$
         pass_filenames: false
         always_run: false
 

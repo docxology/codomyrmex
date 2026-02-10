@@ -12,7 +12,7 @@
             {% for config in config_files %}
             <li>
                 <a href="#" class="config-file-link" data-filename="{{ config.name }}">
-                    <span class="file-icon">{% if config.type == 'toml' %}⚙️{% elif config.type == 'yaml' or config.type
+                    <span class="file-icon" aria-hidden="true">{% if config.type == 'toml' %}⚙️{% elif config.type == 'yaml' or config.type
                         == 'yml' %}📋{% elif config.type == 'json' %}📄{% else %}📝{% endif %}</span>
                     {{ config.name }}
                 </a>
@@ -36,9 +36,11 @@
             <div class="empty-state-icon">📝</div>
             <p>Select a configuration file from the sidebar to view and edit its contents.</p>
         </div>
+        <label for="config-editor" class="sr-only">Configuration file editor</label>
         <textarea id="config-editor"
             style="flex: 1; font-family: 'Fira Code', monospace; padding: 1rem; line-height: 1.5; resize: none; border-color: var(--border-color); background-color: var(--bg-tertiary); color: var(--text-primary); display: none;"
             spellcheck="false"></textarea>
+        <div id="save-status" class="save-status" role="status" aria-live="polite"></div>
     </div>
 </div>
 

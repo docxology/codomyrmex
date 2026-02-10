@@ -46,7 +46,7 @@ Documentation files and guides for modules.
 
 ## Architecture
 
-The module system follows a strict hierarchical structure. Each module is a self-contained unit under `src/codomyrmex/`, containing its own implementation, tests, and documentation triad (`README.md`, `AGENTS.md`, `SPEC.md`). Cross-module dependencies are managed via explicit imports and the First Principles Framework (FPF).
+The module system follows a strict hierarchical structure. Each module is a self-contained unit under `src/codomyrmex/`, containing its own implementation, tests, and RASP documentation set (`README.md`, `AGENTS.md`, `SPEC.md`). Cross-module dependencies are managed via explicit imports and the First Principles Framework (FPF).
 
 ## Functional Requirements
 

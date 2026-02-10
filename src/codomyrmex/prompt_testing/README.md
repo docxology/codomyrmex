@@ -10,7 +10,7 @@ Systematic prompt evaluation and A/B testing framework. Provides test suites for
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

@@ -5,6 +5,7 @@ This guide covers all aspects of setting up Codomyrmex, from initial installatio
 ## 🎯 Quick Start Setup
 
 ### **Option 1: UV-Optimized Setup (Recommended)**
+
 ```bash
 # Clone and setup everything automatically with uv
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -13,6 +14,7 @@ cd codomyrmex
 ```
 
 ### **Option 2: Manual UV Setup**
+
 ```bash
 # 1. Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -31,6 +33,7 @@ codomyrmex check
 ```
 
 ### **Option 3: Alternative Setup (if uv not available)**
+
 ```bash
 # 1. Clone and setup virtual environment
 git clone https://github.com/codomyrmex/codomyrmex.git
@@ -38,9 +41,8 @@ cd codomyrmex
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 2. Install dependencies (uv is strongly recommended)
+# 2. Install dependencies
 uv pip install -e .
-# Or if uv is not installed: pip install -e .
 
 # 3. Verify installation
 codomyrmex check
@@ -70,31 +72,43 @@ pytest src/codomyrmex/tests/unit/ -x
 ## 📋 Prerequisites
 
 ### **Required**
+
 - **Python 3.10+** (latest versions recommended for best package compatibility)
+
   ```bash
   python3 --version  # Should be 3.10 or higher
   ```
+
 - **uv** (package manager used across Codomyrmex)
+
   ```bash
   uv --version || curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
+
 - **git** (version control)
+
   ```bash
   git --version
   ```
 
 ### **Optional (for specific modules)**
+
 - **Node.js 18+** (for documentation generation)
+
   ```bash
   node --version  # Should be 18.0 or higher
   npm --version
   ```
+
 - **Docker** (for code execution sandbox)
+
   ```bash
   docker --version
   docker run hello-world  # Test Docker installation
   ```
+
 - **Graphviz** (for dependency visualization)
+
   ```bash
   # macOS
   brew install graphviz
@@ -179,6 +193,7 @@ EOF
 Some modules may require additional setup:
 
 #### **Documentation Module**
+
 ```bash
 # Install Node.js dependencies for documentation generation
 cd src/codomyrmex/documentation
@@ -187,6 +202,7 @@ cd ../../..
 ```
 
 #### **Docker for Code Execution**
+
 ```bash
 # Test Docker setup
 docker run --rm python:3.11-slim python -c "print('Docker works!')"
@@ -195,6 +211,7 @@ docker run --rm python:3.11-slim python -c "print('Docker works!')"
 ## 🧪 Testing & Verification
 
 ### **Step 1: Basic System Check**
+
 ```bash
 # Verify Codomyrmex is working correctly
 codomyrmex check
@@ -208,6 +225,7 @@ codomyrmex check
 ```
 
 ### **Step 2: Interactive Exploration**
+
 ```bash
 # Launch the interactive shell for hands-on exploration
 ./start_here.sh
@@ -221,6 +239,7 @@ InteractiveShell().run()
 ```
 
 **Try these commands in the interactive shell:**
+
 ```bash
 🐜 codomyrmex> explore                    # Overview of all modules
 🐜 codomyrmex> forage visualization       # Find visualization capabilities
@@ -261,6 +280,7 @@ print(f"✅ Sandbox test: {sandbox_result['success']}")
 ```
 
 ### **Step 4: Run Comprehensive Tests**
+
 ```bash
 # Run all tests with coverage reporting
 pytest src/codomyrmex/tests/ --cov=src/codomyrmex --cov-report=html
@@ -276,6 +296,7 @@ open src/codomyrmex/tests/htmlcov/index.html  # View coverage report
 ```
 
 ### **Step 5: Code Quality Check**
+
 ```bash
 # Run linting on the main codebase
 python -m ruff check src/codomyrmex/
@@ -318,6 +339,7 @@ uv pip list | grep -E "(matplotlib|numpy|pytest|docker)"
 ### **🚨 Common Issues & Solutions**
 
 #### **❌ "Module not found" Errors**
+
 ```bash
 # Problem: ImportError when trying to use Codomyrmex
 # Solution: Ensure virtual environment is activated and installation is correct
@@ -339,6 +361,7 @@ uv run python -c "import codomyrmex; print('Success!')"
 ```
 
 #### **❌ Python Version Too Old**
+
 ```bash
 # Problem: Python 3.9 or older detected
 # Solution: Upgrade to Python 3.10+
@@ -356,6 +379,7 @@ sudo apt-get install python3.11 python3.11-venv
 ```
 
 #### **❌ Virtual Environment Problems**
+
 ```bash
 # Problem: Virtual environment not working properly
 # Solution: Recreate the environment
@@ -375,6 +399,7 @@ codomyrmex check
 ```
 
 #### **❌ Permission Errors**
+
 ```bash
 # Problem: Permission denied when installing packages
 # Solution: Don't use sudo in virtual environments
@@ -391,6 +416,7 @@ uv sync
 ```
 
 #### **❌ "No module named 'codomyrmex'" After Installation**
+
 ```bash
 # Problem: Module not found despite installation
 # Solution: Check installation and Python path
@@ -413,6 +439,7 @@ uv run python -c "import codomyrmex; print('Fixed!')"
 ### **🔧 Module-Specific Issues**
 
 #### **🤖 AI Features Not Working**
+
 ```bash
 # Problem: AI code generation fails
 # Solution: Check API keys and connectivity
@@ -437,6 +464,7 @@ print('API Keys:', validate_api_keys())
 ```
 
 #### **🐳 Docker/Code Execution Issues**
+
 ```bash
 # Problem: Code execution sandbox fails
 # Solution: Check Docker installation and permissions
@@ -458,6 +486,7 @@ print('Sandbox test:', result['success'])
 ```
 
 #### **📊 Visualization Issues**
+
 ```bash
 # Problem: Can't create plots or display images
 # Solution: Check matplotlib backend and dependencies
@@ -480,6 +509,7 @@ print('Plot test:', result is not None)
 ```
 
 #### **📚 Documentation Build Issues**
+
 ```bash
 # Problem: Documentation website build fails
 # Solution: Check Node.js and dependencies
@@ -500,6 +530,7 @@ npm install
 ```
 
 ### **🔍 Advanced Debugging**
+
 ```bash
 # Check system dependencies
 uv run python -c "
@@ -537,12 +568,15 @@ For integrating with CI/CD systems, see [External Systems Integration](../integr
 ## 📞 Getting Help
 
 ### **Community Support**
+
 - **📖 Documentation Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues) - Report documentation problems
 - **💬 General Questions**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions) - Ask questions and share ideas
 - **🐛 Bug Reports**: Use the issue tracker for bugs and feature requests
 
 ### **When Reporting Issues**
+
 Include:
+
 1. **System Information**: `python --version`, `uname -a`
 2. **Codomyrmex Information**: `codomyrmex check`, `pip list | grep codomyrmex`
 3. **Error Details**: Complete error messages, steps to reproduce
@@ -553,6 +587,7 @@ Include:
 **Setup complete!** You're ready to start using Codomyrmex's powerful modular toolkit for code analysis, generation, and workflow automation.
 
 **Next Steps:**
+
 1. **🎮 Try Interactive Examples**: [Examples Documentation](../examples/README.md)
 2. **📚 Explore Documentation**: [docs/README.md](../README.md)
 3. **🏗️ Understand Architecture**: [docs/project/architecture.md](../project/architecture.md)

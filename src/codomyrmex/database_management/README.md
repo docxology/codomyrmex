@@ -10,7 +10,7 @@ Database administration module providing connection management, schema generatio
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -75,10 +75,17 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.database_management import Backup, BackupResult, BackupManager
+from codomyrmex.database_management import DatabaseManager, DatabaseConnection, MigrationManager
 
-# Initialize Backup
-instance = Backup()
+# Create a connection and execute queries
+conn = DatabaseConnection(name="app_db", db_type="sqlite", database="app.db")
+conn.connect()
+results = conn.execute_query("SELECT * FROM users WHERE active = ?", (True,))
+
+# Manage multiple connections
+manager = DatabaseManager()
+manager.add_connection(conn)
+manager.execute_query("app_db", "CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY, message TEXT)")
 ```
 
 

@@ -10,7 +10,7 @@ The telemetry module provides an OpenTelemetry-compatible observability framewor
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

@@ -10,7 +10,7 @@ Model versioning, metadata, and lifecycle management for ML models. Provides a c
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

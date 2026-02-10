@@ -7,11 +7,13 @@ This guide helps you resolve common issues when using or developing Codomyrmex.
 ### **Python Version Problems**
 
 #### Issue: "Python version too old" error
+
 ```bash
 ERROR: Python 3.9 is required, but you have Python 3.8
 ```
 
 **Solution:**
+
 ```bash
 # Check current Python version
 python3 --version
@@ -28,6 +30,7 @@ python3.11 -m venv .venv
 ```
 
 #### Issue: Multiple Python versions causing confusion
+
 ```bash
 # Check all Python versions
 which -a python3
@@ -40,12 +43,13 @@ ls -la /usr/bin/python*
 ### **Virtual Environment Issues**
 
 #### Issue: Virtual environment not activating
+
 ```bash
 # Remove corrupted virtual environment
 rm -rf .venv
 
 # Create new environment
-python3 -m venv .venv
+uv venv .venv
 
 # Activate (Linux/macOS)
 source .venv/bin/activate
@@ -58,6 +62,7 @@ which python  # Should show .venv/bin/python
 ```
 
 #### Issue: "Permission denied" when creating virtual environment
+
 ```bash
 # Don't use sudo with virtual environments
 # Instead, fix Python installation permissions or use user directory
@@ -72,6 +77,7 @@ sudo chown -R $USER:$USER /usr/local/lib/python3.*/site-packages
 ### **Dependency Installation Problems**
 
 #### Issue: Package installation fails with "ERROR: Could not build wheels"
+
 ```bash
 # Update uv and build tools
 uv self update
@@ -85,6 +91,7 @@ uv pip install --no-cache package_name
 ```
 
 #### Issue: Conflicting package versions
+
 ```bash
 # Clear pip cache
 pip cache purge
@@ -101,6 +108,7 @@ uv sync
 ### **Import Errors**
 
 #### Issue: "ModuleNotFoundError: No module named 'codomyrmex'"
+
 ```bash
 # Ensure you're in project root
 pwd  # Should end with /codomyrmex
@@ -113,6 +121,7 @@ python -c "import codomyrmex; print(codomyrmex.__file__)"
 ```
 
 #### Issue: "ModuleNotFoundError" for specific Codomyrmex modules
+
 ```bash
 # Check module is properly installed
 python -c "
@@ -131,6 +140,7 @@ uv sync
 ### **Configuration Issues** {#environment-variable-issues}
 
 #### Issue: API keys not being recognized
+
 ```bash
 # Check .env file exists and is in project root
 ls -la .env
@@ -151,6 +161,7 @@ EOF
 ```
 
 #### Issue: Docker not working for code execution
+
 ```bash
 # Check Docker is running
 docker --version
@@ -167,6 +178,7 @@ docker run --rm python:3.11-slim python -c "print('Docker works!')"
 ### **Performance Issues** {#performance-issues}
 
 #### Issue: Slow module discovery or analysis
+
 ```bash
 # Run with debug logging to identify bottlenecks
 export CODOMYRMEX_LOG_LEVEL="DEBUG"
@@ -181,6 +193,7 @@ find . -name "*.py" -size +1M  # Find large Python files
 ```
 
 #### Issue: High memory usage
+
 ```bash
 # Monitor memory usage
 python -c "
@@ -203,6 +216,7 @@ print(f'Memory after: {process.memory_info().rss / 1024 / 1024:.1f} MB')
 ### **Test Failures**
 
 #### Issue: Tests failing with import errors
+
 ```bash
 # Run tests from project root
 cd /path/to/codomyrmex
@@ -217,6 +231,7 @@ uv sync
 ```
 
 #### Issue: Tests pass locally but fail in CI
+
 ```bash
 # Check Python version consistency
 python --version
@@ -230,6 +245,7 @@ pytest src/codomyrmex/tests/ -v --tb=short --cov=src/codomyrmex
 ```
 
 #### Issue: Coverage reports not generating
+
 ```bash
 # Install coverage dependencies
 uv sync
@@ -245,6 +261,7 @@ xdg-open src/codomyrmex/tests/htmlcov/index.html  # Linux
 ### **Linting and Code Quality Issues**
 
 #### Issue: Pre-commit hooks failing
+
 ```bash
 # Update pre-commit hooks
 pre-commit autoupdate
@@ -260,6 +277,7 @@ git commit --no-verify -m "temporary commit"
 ```
 
 #### Issue: Code formatting inconsistencies
+
 ```bash
 # Run Black formatter
 black src/ src/codomyrmex/tests/
@@ -275,6 +293,7 @@ black --check --diff src/ src/codomyrmex/tests/
 ### **Matplotlib Issues**
 
 #### Issue: Plots not displaying or saving
+
 ```bash
 # Check matplotlib backend
 python -c "import matplotlib; print(matplotlib.get_backend())"
@@ -290,6 +309,7 @@ import matplotlib.pyplot as plt
 ```
 
 #### Issue: Font or rendering problems
+
 ```bash
 # Clear matplotlib cache
 rm -rf ~/.matplotlib/
@@ -310,6 +330,7 @@ print(f'Found {len(fonts)} fonts')
 ### **OpenAI API Issues**
 
 #### Issue: "Authentication failed" errors
+
 ```bash
 # Check API key format
 python -c "
@@ -333,6 +354,7 @@ except Exception as e:
 ```
 
 #### Issue: Rate limiting or quota exceeded
+
 ```bash
 # Check rate limits in your OpenAI dashboard
 # Implement exponential backoff in your code
@@ -351,6 +373,7 @@ result = generate_code_snippet(
 ### **Anthropic Claude Issues**
 
 #### Issue: Claude API authentication problems
+
 ```bash
 # Check Anthropic API key
 python -c "
@@ -366,6 +389,7 @@ print(f'Starts with sk-ant-: {key.startswith(\"sk-ant-\")}')
 ### **Git and Version Control**
 
 #### Issue: Large files causing Git problems
+
 ```bash
 # Check for large files
 find . -size +100M -not -path "./.git/*"
@@ -377,6 +401,7 @@ git add .gitattributes
 ```
 
 #### Issue: Merge conflicts in generated files
+
 ```bash
 # Add to .gitignore
 echo "codomyrmex_inventory.json" >> .gitignore
@@ -391,6 +416,7 @@ git commit -m "Remove generated files from tracking"
 ### **IDE and Editor Issues**
 
 #### Issue: VS Code not recognizing Python environment
+
 ```json
 // Add to .vscode/settings.json
 {
@@ -401,6 +427,7 @@ git commit -m "Remove generated files from tracking"
 ```
 
 #### Issue: Type checking errors with mypy
+
 ```bash
 # Install type stubs
 uv pip install types-requests types-PyYAML
@@ -414,6 +441,7 @@ python_version = "3.10"
 ## 🔍 Debugging Techniques
 
 ### **Debug Mode**
+
 ```bash
 # Enable debug logging
 export CODOMYRMEX_LOG_LEVEL="DEBUG"
@@ -429,6 +457,7 @@ def problematic_function():
 ```
 
 ### **System Information**
+
 ```bash
 # Get comprehensive system information
 python -c "
@@ -445,6 +474,7 @@ for key in sorted(os.environ.keys()):
 ```
 
 ### **Module Diagnostics**
+
 ```bash
 # Run comprehensive system check
 python -c "
@@ -474,6 +504,7 @@ except Exception as e:
 ### **External System Integration Problems**
 
 #### Issue: API authentication failures with external systems
+
 ```bash
 # Check API credentials
 python -c "
@@ -496,6 +527,7 @@ except Exception as e:
 ```
 
 #### Issue: Database connection problems
+
 ```bash
 # Test database connection
 python -c "
@@ -512,6 +544,7 @@ except Exception as e:
 ```
 
 #### Issue: Webhook delivery failures
+
 ```bash
 # Check webhook configuration
 python -c "
@@ -542,6 +575,7 @@ else:
 ### **Deployment Problems**
 
 #### Issue: Application fails to start in production
+
 ```bash
 # Check environment variables
 python -c "
@@ -562,6 +596,7 @@ print(f'Environment Status: {status}')
 ```
 
 #### Issue: High resource usage in production
+
 ```bash
 # Monitor resource usage
 python -c "
@@ -575,6 +610,7 @@ print(f'Open Files: {len(process.open_files())}')
 ```
 
 #### Issue: Production database migrations failing
+
 ```bash
 # Check database connection
 python -c "
@@ -594,6 +630,7 @@ if db_url:
 ### **Security Configuration Problems**
 
 #### Issue: API keys exposed in logs
+
 ```bash
 # Check logging configuration
 python -c "
@@ -615,6 +652,7 @@ for key in sensitive_keys[:5]:
 ```
 
 #### Issue: SSL/TLS certificate validation failures
+
 ```bash
 # Test SSL connectivity
 python -c "
@@ -632,6 +670,7 @@ except Exception as e:
 ```
 
 #### Issue: Unauthorized access attempts
+
 ```bash
 # Check authentication configuration
 python -c "
@@ -646,14 +685,17 @@ if auth_method == 'none':
 ## 📞 Getting Additional Help
 
 ### **Community Support**
+
 - **GitHub Issues**: [Report bugs and problems](https://github.com/codomyrmex/codomyrmex/issues)
 - **GitHub Discussions**: [Get help from community](https://github.com/codomyrmex/codomyrmex/discussions)
 - **Documentation**: [Full documentation](../README.md)
 
 ### **When Reporting Issues**
+
 Include the following information:
 
 1. **System Information**:
+
    ```bash
    python --version
    uname -a  # Linux/macOS
@@ -661,6 +703,7 @@ Include the following information:
    ```
 
 2. **Codomyrmex Information**:
+
    ```bash
    codomyrmex check
    pip list | grep -i codomyrmex
@@ -679,6 +722,7 @@ Include the following information:
    - Node.js version if using documentation
 
 ### **Emergency Debugging**
+
 If nothing works, try a clean reinstall:
 
 ```bash

@@ -22,7 +22,7 @@ This guide provides comprehensive information for developers working with the Co
 ### Prerequisites
 
 - Python 3.8+
-- pip or conda for package management
+- uv for package management
 - Git for version control
 - IDE with Python support (VS Code, PyCharm, etc.)
 
@@ -34,10 +34,10 @@ git clone https://github.com/your-org/codomyrmex.git
 cd codomyrmex
 
 # Install in development mode
-pip install -e .
+uv sync
 
 # Install development dependencies
-pip install -r requirements-dev.txt
+uv sync --dev
 ```
 
 ### Quick Start
@@ -144,12 +144,12 @@ src/codomyrmex/logistics/orchestration/project/
 
 ```bash
 # Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+uv venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+uv sync
+uv sync --dev
 
 # Run tests
 pytest
@@ -170,7 +170,7 @@ Create `.vscode/settings.json`:
 
 ```json
 {
-    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.defaultInterpreterPath": "./.venv/bin/python",
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
     "python.formatting.provider": "black",
@@ -765,6 +765,7 @@ type(scope): description
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -774,6 +775,7 @@ Types:
 - `chore`: Build process or auxiliary tool changes
 
 Examples:
+
 ```
 feat(workflow): add workflow retry mechanism
 fix(task): resolve task dependency circular reference

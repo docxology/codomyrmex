@@ -34,8 +34,8 @@ def calculate_correct_path(from_file: Path, base_path: Path) -> str:
 logger = get_logger(__name__)
 
 Calculate correct relative path from documentation SPEC to module SPEC."""
-    # From: src/codomyrmex/documentation/docs/modules/{module}/SPEC.md
-    # To: src/codomyrmex/{module}/SPEC.md
+    # From: docs/modules/{module}/SPEC.md (project root) or src/codomyrmex/{module}/SPEC.md
+    # To: src/codomyrmex/{module}/SPEC.md (canonical source location)
     
     # Get the module name from the path
     module_name = from_file.parent.name
@@ -83,7 +83,7 @@ def fix_spec_links(file_path: Path, base_path: Path) -> bool:
 def main():
     """Fix SPEC links in documentation directory."""
     base_path = Path("/Users/mini/Documents/GitHub/codomyrmex")
-    doc_dir = base_path / "src/codomyrmex/documentation/docs/modules"
+    doc_dir = base_path / "docs/modules"
     fixed_count = 0
     
     for spec_file in doc_dir.rglob("SPEC.md"):

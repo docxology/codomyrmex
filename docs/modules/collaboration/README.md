@@ -10,7 +10,7 @@ The `collaboration` module enables multi-agent coordination, real-time communica
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

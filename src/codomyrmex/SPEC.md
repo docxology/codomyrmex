@@ -484,7 +484,7 @@ Each module must provide:
 
 - **Human Documentation**: [README.md](README.md) - User-facing documentation
 - **Technical Documentation**: [AGENTS.md](AGENTS.md) - Technical specifications
-- **Exception Reference**: [exceptions.py](exceptions.py) - Exception hierarchy
+- **Exception Reference**: [exceptions/](exceptions/) - Exception hierarchy
 - **CLI Reference**: `cli.py` - Command-line interface
 
 ### Parent Navigation

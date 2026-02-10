@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block title %}Health - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>System Health</h1>
+
+<!-- Connection status indicator (Fix #2) -->
+<div id="connection-status" class="connection-status connection-ok" aria-live="polite">
+    <span class="connection-dot"></span>
+    <span id="connection-text">Connected</span>
+</div>
+
+<div class="health-grid">
+    <!-- System Vitals -->
+    <div class="card health-card">
+        <h2 class="card-title">System Vitals</h2>
+        <div class="metric-grid">
+            <div class="metric">
+                <span class="metric-value" id="uptime">{{ health.uptime }}</span>
+                <span class="metric-label">Uptime</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value" id="python-version">{{ health.python.version }}</span>
+                <span class="metric-label">Python</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value" id="module-count">{{ health.modules.total }}</span>
+                <span class="metric-label">Modules</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value status-{{ health.status_class }}" id="system-status">{{ health.status_text
+                    }}</span>
+                <span class="metric-label">Status</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Git Status -->
+    <div class="card health-card">
+        <h2 class="card-title">Git Repository</h2>
+        <div class="metric-grid">
+            <div class="metric">
+                <span class="metric-value mono" id="git-branch">{{ health.git.branch }}</span>
+                <span class="metric-label">Branch</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value" id="git-commits">{{ health.git.commit_count }}</span>
+                <span class="metric-label">Commits</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value {% if health.git.dirty_files == 0 %}status-ok{% else %}status-warn{% endif %}"
+                    id="git-status">
+                    {{ health.git.status }}
+                </span>
+                <span class="metric-label">Working Tree</span>
+            </div>
+        </div>
+        <p class="mono" id="git-last-commit"
+            style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
+            {{ health.git.last_commit }}
+        </p>
+    </div>
+
+    <!-- Documentation Coverage -->
+    <div class="card health-card">
+        <h2 class="card-title">Documentation Coverage</h2>
+        <div class="coverage-bars">
+            <div class="coverage-row">
+                <span class="coverage-label">API Specs</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.api_spec_pct }}"
+                    aria-valuemin="0" aria-valuemax="100" aria-label="API Specs coverage" id="api-spec-bar">
+                    <div class="coverage-fill"
+                        style="width: {{ health.modules.api_spec_pct }}%; background: var(--success-color);"></div>
+                </div>
+                <span class="coverage-pct" id="api-spec-pct">{{ health.modules.api_spec_pct }}%</span>
+            </div>
+            <div class="coverage-row">
+                <span class="coverage-label">Test Dirs</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.test_coverage_pct }}"
+                    aria-valuemin="0" aria-valuemax="100" aria-label="Test Dirs coverage" id="test-coverage-bar">
+                    <div class="coverage-fill"
+                        style="width: {{ health.modules.test_coverage_pct }}%; background: var(--accent-color);"></div>
+                </div>
+                <span class="coverage-pct" id="test-coverage-pct">{{ health.modules.test_coverage_pct }}%</span>
+            </div>
+            <div class="coverage-row">
+                <span class="coverage-label">MCP Specs</span>
+                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.mcp_spec_pct }}"
+                    aria-valuemin="0" aria-valuemax="100" aria-label="MCP Specs coverage" id="mcp-spec-bar">
+                    <div class="coverage-fill" style="width: {{ health.modules.mcp_spec_pct }}%; background: #8b5cf6;">
+                    </div>
+                </div>
+                <span class="coverage-pct" id="mcp-spec-pct">{{ health.modules.mcp_spec_pct }}%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Layers -->
+    <div class="card health-card">
+        <h2 class="card-title">Architecture Layers</h2>
+        <div class="arch-layers" id="arch-layers">
+            {% for layer in health.architecture_layers %}
+            <div class="arch-layer">
+                <div class="arch-layer-header">
+                    <span class="arch-layer-dot" style="background: {{ layer.color }};"></span>
+                    <span class="arch-layer-name">{{ layer.name }}</span>
+                    <span class="arch-layer-count">{{ layer.modules|length }}</span>
+                </div>
+                <div class="arch-layer-modules">
+                    {% for mod in layer.modules[:8] %}
+                    <span class="arch-module-tag">{{ mod }}</span>
+                    {% endfor %}
+                    {% if layer.modules|length > 8 %}
+                    <span class="arch-module-tag more">+{{ layer.modules|length - 8 }} more</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Test Runner (Fix #12: controls moved out of h2) -->
+    <div class="card health-card" style="grid-column: 1 / -1;">
+        <div class="test-runner-header">
+            <h2 class="card-title">Test Runner</h2>
+            <div class="test-runner-controls">
+                <label for="test-module" class="sr-only">Select test module</label>
+                <select id="test-module">
+                    <option value="">All Tests</option>
+                    {% for module in modules %}
+                    <option value="{{ module.name }}">{{ module.name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="run-tests-btn" class="btn btn-primary" style="padding: 0.25rem 1rem; font-size: 0.85rem;">
+                    Run Tests
+                </button>
+            </div>
+        </div>
+        <div id="test-results" class="test-results" role="status" aria-live="polite">
+            <p style="color: var(--text-secondary);">Click "Run Tests" to execute the test suite.</p>
+        </div>
+        <div id="test-output" class="console hidden" style="max-height: 300px;"></div>
+    </div>
+</div>
+
+<style>
+    .health-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .health-card .card-title {
+        margin-bottom: 1rem;
+    }
+
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .metric {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .metric-value {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .metric-value.mono {
+        font-family: 'Fira Code', monospace;
+        font-size: 1.1rem;
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-ok {
+        color: var(--success-color);
+    }
+
+    .status-warn {
+        color: #f59e0b;
+    }
+
+    .status-err {
+        color: var(--error-color);
+    }
+
+    .coverage-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .coverage-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .coverage-label {
+        width: 80px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .coverage-bar {
+        flex: 1;
+        height: 8px;
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .coverage-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.6s ease;
+    }
+
+    .coverage-pct {
+        width: 50px;
+        text-align: right;
+        font-size: 0.85rem;
+        font-weight: 600;
+        font-family: 'Fira Code', monospace;
+    }
+
+    .arch-layers {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .arch-layer-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .arch-layer-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .arch-layer-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .arch-layer-count {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-left: auto;
+    }
+
+    .arch-layer-modules {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+        padding-left: 1.25rem;
+    }
+
+    .arch-module-tag {
+        font-size: 0.75rem;
+        padding: 0.1rem 0.4rem;
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+        color: var(--text-secondary);
+        font-family: 'Fira Code', monospace;
+    }
+
+    .arch-module-tag.more {
+        color: var(--accent-color);
+    }
+
+    .test-results {
+        margin-top: 0.5rem;
+    }
+
+    .test-summary {
+        display: flex;
+        gap: 2rem;
+        padding: 1rem;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+    }
+
+    .test-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .test-stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Fira Code', monospace;
+    }
+
+    .test-stat-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+    }
+
+    .test-runner-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .test-runner-controls {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .health-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Connection status indicator */
+    .connection-status {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .connection-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-secondary);
+    }
+
+    .connection-ok .connection-dot {
+        background: var(--success-color);
+        box-shadow: 0 0 8px var(--success-color);
+    }
+
+    .connection-warn .connection-dot {
+        background: #f59e0b;
+    }
+
+    .connection-err .connection-dot {
+        background: var(--error-color);
+    }
+</style>
+
+<script>
+    document.getElementById('run-tests-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('run-tests-btn');
+        const moduleSelect = document.getElementById('test-module');
+        const resultsDiv = document.getElementById('test-results');
+        const outputDiv = document.getElementById('test-output');
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loader"></span> Running...';
+        resultsDiv.innerHTML = '<p style="color: var(--accent-color);">Running tests...</p>';
+        outputDiv.classList.add('hidden');
+
+        try {
+            const body = moduleSelect.value ? { module: moduleSelect.value } : {};
+            const response = await fetch('/api/tests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await response.json();
+
+            if (data.error) {
+                resultsDiv.innerHTML = `<p class="status-err">${data.error}</p>`;
+            } else {
+                const statusClass = data.success ? 'status-ok' : 'status-err';
+                resultsDiv.innerHTML = `
+                    <div class="test-summary">
+                        <div class="test-stat">
+                            <span class="test-stat-value status-ok">${data.passed}</span>
+                            <span class="test-stat-label">Passed</span>
+                        </div>
+                        <div class="test-stat">
+                            <span class="test-stat-value status-err">${data.failed}</span>
+                            <span class="test-stat-label">Failed</span>
+                        </div>
+                        <div class="test-stat">
+                            <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${data.errors}</span>
+                            <span class="test-stat-label">Errors</span>
+                        </div>
+                        <div class="test-stat">
+                            <span class="test-stat-value" style="color: var(--text-secondary);">${data.skipped}</span>
+                            <span class="test-stat-label">Skipped</span>
+                        </div>
+                        <div class="test-stat">
+                            <span class="test-stat-value">${data.total}</span>
+                            <span class="test-stat-label">Total</span>
+                        </div>
+                        <div class="test-stat">
+                            <span class="test-stat-value ${statusClass}">${data.success ? 'PASS' : 'FAIL'}</span>
+                            <span class="test-stat-label">Result</span>
+                        </div>
+                    </div>
+                `;
+
+                if (data.output) {
+                    outputDiv.textContent = data.output;
+                    outputDiv.classList.remove('hidden');
+                }
+            }
+        } catch (err) {
+            resultsDiv.innerHTML = `<p class="status-err">Network error: ${err.message}</p>`;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Run Tests';
+        }
+    });
+
+    // Auto-refresh uptime
+    const uptimeEl = document.getElementById('uptime');
+    if (uptimeEl) {
+        setInterval(async () => {
+            try {
+                const resp = await fetch('/api/health');
+                const data = await resp.json();
+                uptimeEl.textContent = data.uptime;
+
+                // Update connection status
+                const connStatus = document.getElementById('connection-status');
+                const connText = document.getElementById('connection-text');
+                if (connStatus) {
+                    connStatus.className = 'connection-status connection-ok';
+                    connText.textContent = 'Connected';
+                }
+            } catch (e) {
+                // Update connection status
+                const connStatus = document.getElementById('connection-status');
+                const connText = document.getElementById('connection-text');
+                if (connStatus) {
+                    connStatus.className = 'connection-status connection-err';
+                    connText.textContent = 'Disconnected';
+                }
+            }
+        }, 5000); // 5s refresh
+    }
+</script>
+{% endblock %}

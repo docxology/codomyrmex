@@ -10,7 +10,7 @@ The Telemetry module provides a unified observability framework based on the Ope
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

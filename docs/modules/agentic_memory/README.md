@@ -10,7 +10,7 @@ The `agentic_memory` module provides a long-term memory system for AI agents wit
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## Key Features

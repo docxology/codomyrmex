@@ -10,7 +10,7 @@ Document handling module providing document parsing, generation, and manipulatio
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

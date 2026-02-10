@@ -35,7 +35,7 @@ instance = TemplatingError()
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## API Reference

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial plotting functions in `plotter.py` using Matplotlib:
   - `create_line_plot()` for single and multiple line plots.
   - `create_scatter_plot()` for scatter plots.
@@ -19,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `create_heatmap()` function for heatmap visualizations.
 - Improved modularity: all plotting functions in separate files, dispatched via `plotter.py`.
 - Expanded documentation and usage examples for all visualizations.
-- `matplotlib` added to `requirements.txt`.
+- `matplotlib` added to `pyproject.toml`.
 - Comprehensive `README.md`, `API_SPECIFICATION.md`, and `USAGE_EXAMPLES.md`.
 - **NEW: Git Visualization Capabilities**:
   - `mermaid_generator.py` module for Mermaid diagram generation
@@ -38,30 +39,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Comprehensive test coverage with unit and integration tests
 
 ### Changed
-- 
+
+-
 
 ### Deprecated
-- 
+
+-
 
 ### Removed
-- 
+
+-
 
 ### Fixed
-- 
+
+-
 
 ### Security
-- 
+
+-
 
 ## [Version X.Y.Z] - YYYY-MM-DD
 
 ### Added
+
 - Feature A.
 
 ### Changed
+
 - Enhancement B.
 
 ### Fixed
-- Bug C. 
+
+- Bug C.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

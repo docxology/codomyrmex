@@ -6,11 +6,10 @@
 
 Test fixtures, generators, and utilities for the Codomyrmex test suite. Provides a structured framework for creating reusable test data, managing fixture lifecycles with scoping and dependency resolution, and generating random typed data for property-based and integration testing.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -21,7 +20,7 @@ uv sync
 
 ## Key Exports
 
-### Fixtures (`fixtures/`)
+### Fixtures (`fixture_utils.py` & `fixtures/`)
 
 - **`FixtureManager`** — Core fixture lifecycle manager with `register()`, `get()`, `cleanup()`, and context manager `use()`. Supports scoped fixtures (function, class, module, session) and dependency resolution.
 - **`DataFixture`** — Pre-defined data fixture with `filter()`, `find()`, and `all()` methods for querying test records.
@@ -29,7 +28,7 @@ uv sync
 - **`FixtureBuilder`** — Fluent builder for creating fixture data: `FixtureBuilder("user").with_field("name", "Alice").build()`.
 - **`FixtureScope`** — Enum: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`.
 
-### Generators (`generators/`)
+### Generators (`strategies.py` & `generators/`)
 
 - **`RecordGenerator`** — Generates structured records from field-level generators: `gen.add_field("name", NameGenerator()).generate()`.
 - **`DatasetGenerator`** — Generates complete datasets with `generate(rows=N)` and `generate_csv()`.
@@ -39,8 +38,8 @@ uv sync
 ## Usage
 
 ```python
-from codomyrmex.testing.fixtures import FixtureManager, FixtureScope
-from codomyrmex.testing.generators import RecordGenerator, NameGenerator, EmailGenerator
+from codomyrmex.testing.fixture_utils import FixtureManager, FixtureScope
+from codomyrmex.testing.strategies import RecordGenerator, NameGenerator, EmailGenerator
 
 # Fixture management
 fixtures = FixtureManager()
@@ -62,8 +61,10 @@ records = gen.generate_many(100)
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `SPEC.md` - Functional specification
 - `PAI.md` - PAI integration details
-- `fixtures/` - Fixture management (FixtureManager, DataFixture, JSONFixtureLoader, FixtureBuilder)
-- `generators/` - Data generators (RecordGenerator, DatasetGenerator, type-specific generators)
+- `fixtures/` - Fixture management (pre-existing subpackage)
+- `generators/` - Data generators (pre-existing subpackage)
+- `fixture_utils.py` - Core fixture utilities (FixtureManager, decorator)
+- `strategies.py` - Generation strategies (GeneratorStrategy, IntGenerator, etc.)
 
 ## Navigation
 

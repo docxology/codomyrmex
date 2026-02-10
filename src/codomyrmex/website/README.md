@@ -7,15 +7,18 @@ Dynamic web dashboard and control interface for Codomyrmex.
 ## Quick Start
 
 ```python
+import socketserver
 from codomyrmex.website import WebsiteGenerator, DataProvider, WebsiteServer
 
 # Generate static website
 generator = WebsiteGenerator(output_dir="./build")
 generator.generate()
 
-# Start development server
-server = WebsiteServer(port=8080)
-server.start()  # Serves at http://localhost:8080
+# Start development server (WebsiteServer is a request handler, not a standalone server)
+WebsiteServer.data_provider = DataProvider()
+with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
+    print("Serving at http://localhost:8787")
+    httpd.serve_forever()
 ```
 
 ## Features

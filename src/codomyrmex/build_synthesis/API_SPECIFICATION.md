@@ -2,101 +2,243 @@
 
 ## Introduction
 
-The Build Synthesis module provides functionalities for automating build processes and synthesizing code components within the Codomyrmex project. While the primary programmatic interaction with this module is intended through its Model Context Protocol (MCP) tools, this document outlines the direct Python API functions available for more granular control or internal use by the MCP tool implementations or other modules.
+The Build Synthesis module provides functionalities for automating build processes, dependency management, artifact synthesis, and deployment orchestration within the Codomyrmex project. This document outlines the direct Python API functions and data structures available for build management.
 
 For details on the MCP tools, please refer to the [MCP Tool Specification](./MCP_TOOL_SPECIFICATION.md).
 
 ## Core Python API Functions
 
-This section details the Python API functions that underpin the Build Synthesis module's capabilities. These functions are typically called by the MCP tools or can be used internally.
+### Build Management
 
-### Build Orchestration
-
-1.  **`trigger_build(target: str, config: dict = None, output_path_suggestion: str = None, clean_build: bool = False, build_options: dict = None) -> dict`**
-    *   **Description**: Initiates a build process for a specified target (e.g., a component, module, or specific build configuration name).
+1.  **`trigger_build(target_name: str = None, environment: str = "development", config_path: str = None) -> bool`**
+    *   **Description**: Trigger a build process for the specified target or all targets. Initializes a `BuildManager`, converts the environment string to a `BuildEnvironment` enum, and executes the build.
     *   **Arguments**:
-        *   `target` (str): Mandatory. Identifier for the build target (e.g., "module:ai_code_editing", "docker:my_service", "project_docs").
-        *   `config` (dict, optional): A dictionary containing build configuration parameters, such as build profile (e.g., "debug", "release"), version information, or specific flags. Structure may vary based on target type.
-        *   `output_path_suggestion` (str, optional): A suggested base directory where build artifacts should be placed. The actual path might be determined by the build system.
-        *   `clean_build` (bool, optional): If `True`, forces a clean build, removing any prior artifacts. Default: `False`.
-        *   `build_options` (dict, optional): Additional, potentially target-specific, build options or overrides.
+        *   `target_name` (str, optional): Name of the build target to execute. If `None`, builds all targets.
+        *   `environment` (str, optional): Build environment name (`"development"`, `"production"`, `"staging"`, `"testing"`). Default: `"development"`.
+        *   `config_path` (str, optional): Path to build configuration file (YAML or JSON). Default: `None` (uses `build.yaml` in project root).
+    *   **Returns** (bool): `True` if the build succeeded, `False` otherwise.
+
+2.  **`check_build_environment() -> dict`**
+    *   **Description**: Check if the build environment is properly configured by probing for common build tools (`make`, `cmake`, `ninja`, `gcc`, `python3`).
     *   **Returns** (dict):
-        ```json
+        ```python
         {
-          "status": "success" | "failure" | "pending",
-          "build_id": "unique_build_identifier_string", // Generated if build is asynchronous or long-running
-          "message": "Build initiated successfully." | "Error message if immediate failure.",
-          "artifact_paths": ["path/to/artifact1", "path/to/artifact2"], // Populated on synchronous success
-          "log_output_summary": "Brief summary of build logs or initial log lines..." // Populated on synchronous success
+            "python_available": bool,
+            "make_available": bool,
+            "cmake_available": bool,
+            "ninja_available": bool,
+            "gcc_available": bool,
+            "available_tools": list[str],
+            "all_required_available": bool
         }
         ```
 
-2.  **`get_build_status(build_id: str) -> dict`**
-    *   **Description**: Retrieves the current status and details of a previously initiated build.
+3.  **`run_build_command(command: list[str], cwd: str = None) -> tuple[bool, str, str]`**
+    *   **Description**: Run a build command and return the result. Executes the command with a 5-minute timeout.
     *   **Arguments**:
-        *   `build_id` (str): Mandatory. The unique identifier of the build, returned by `trigger_build`.
+        *   `command` (list[str]): List of command arguments.
+        *   `cwd` (str, optional): Working directory for the command. Default: `None`.
+    *   **Returns** (tuple[bool, str, str]): Tuple of `(success, stdout, stderr)`.
+
+4.  **`synthesize_build_artifact(source_path: str, output_path: str, artifact_type: str = "executable") -> bool`**
+    *   **Description**: Synthesize a build artifact from source code. Supports `"executable"` (Python wrapper scripts) and `"package"` (directory copy) artifact types.
+    *   **Arguments**:
+        *   `source_path` (str): Path to source file or directory.
+        *   `output_path` (str): Path where artifact should be created.
+        *   `artifact_type` (str, optional): Type of artifact to create (`"executable"`, `"library"`, `"package"`). Default: `"executable"`.
+    *   **Returns** (bool): `True` if synthesis was successful, `False` otherwise.
+
+5.  **`validate_build_output(output_path: str) -> dict[str, Any]`**
+    *   **Description**: Validate that build output meets expectations. Checks file existence, executability, size, and basic content validity.
+    *   **Arguments**:
+        *   `output_path` (str): Path to the build output.
     *   **Returns** (dict):
-        ```json
+        ```python
         {
-          "build_id": "unique_build_identifier_string",
-          "status": "pending" | "in_progress" | "success" | "failure" | "cancelled",
-          "progress_percentage": 0-100, // Optional, if available
-          "message": "Current status message (e.g., 'Compiling module X...', 'Build failed: Error Y').",
-          "artifact_paths": ["path/to/artifact1"], // Populated on success
-          "log_file_path": "path/to/full_build_log.txt", // Optional, path to detailed logs
-          "error_details": "Detailed error if status is failure..."
+            "exists": bool,
+            "is_file": bool,
+            "is_executable": bool,
+            "size_bytes": int,
+            "errors": list[str]
         }
         ```
 
-### Code Synthesis
-
-1.  **`synthesize_component_from_prompt(prompt: str, language: str, target_directory: str, context_code: str = None, style_guide: str = None, llm_config: dict = None) -> dict`**
-    *   **Description**: Generates a new code component (e.g., function, class, small module) based on a natural language prompt, using an LLM.
+6.  **`orchestrate_build_pipeline(build_config: dict[str, Any]) -> dict[str, Any]`**
+    *   **Description**: Orchestrate a complete build pipeline with stages: environment check, dependency installation, build execution, artifact synthesis, and output validation.
     *   **Arguments**:
-        *   `prompt` (str): Mandatory. Detailed natural language description of the component to be synthesized.
-        *   `language` (str): Mandatory. Target programming language (e.g., "python", "javascript").
-        *   `target_directory` (str): Mandatory. The directory where the generated file(s) should be placed.
-        *   `context_code` (str, optional): Existing code snippet(s) to provide context to the LLM.
-        *   `style_guide` (str, optional): Instructions or examples related to coding style or conventions.
-        *   `llm_config` (dict, optional): Configuration for the LLM (e.g., provider, model name, temperature). Defaults to module settings.
+        *   `build_config` (dict): Dictionary containing build configuration with optional keys: `"dependencies"` (list[str]), `"build_commands"` (list[list[str]]), `"working_directory"` (str), `"artifacts"` (list of dicts with `"source"`, `"output"`, `"type"`).
     *   **Returns** (dict):
-        ```json
+        ```python
         {
-          "status": "success" | "failure",
-          "generated_files": {
-            "filename1.ext": "content of file1...",
-            "filename2.ext": "content of file2..."
-          },
-          "explanation": "LLM-generated explanation of the synthesized code (if any)...",
-          "error_message": "Error details if any..."
+            "stages": [{"name": str, "success": bool, ...}],
+            "overall_success": bool,
+            "artifacts": [{"source": str, "output": str, "success": bool}],
+            "errors": list[str]
         }
         ```
 
-2.  **`synthesize_component_from_spec(specification_file: str, language: str, target_directory: str, template_name: str = None, llm_assisted: bool = False, llm_config: dict = None) -> dict`**
-    *   **Description**: Generates a new code component based on a structured specification file (e.g., a JSON or YAML file defining component structure, interfaces, dependencies) or a pre-defined template.
+### Build Target Convenience Functions
+
+7.  **`create_python_build_target(name: str, source_path: str, output_path: str = None, dependencies: list[str] = None) -> BuildTarget`**
+    *   **Description**: Create a Python build target with predefined steps (install dependencies, run tests, build package, create distribution).
     *   **Arguments**:
-        *   `specification_file` (str): Mandatory. Path to the structured specification file for the component.
-        *   `language` (str): Mandatory. Target programming language (if not implicitly defined by spec/template).
-        *   `target_directory` (str): Mandatory. The directory where generated file(s) should be placed.
-        *   `template_name` (str, optional): Name of a pre-defined component template to use as a base. The specification can augment or override template parts.
-        *   `llm_assisted` (bool, optional): If `True`, an LLM may be used to fill in parts of the template or interpret parts of the specification. Default: `False`.
-        *   `llm_config` (dict, optional): Configuration for the LLM if `llm_assisted` is `True`.
-    *   **Returns** (dict):
-        ```json
-        {
-          "status": "success" | "failure",
-          "generated_files": {
-            "filename1.ext": "content of file1...",
-            "filename2.ext": "content of file2..."
-          },
-          "log_output": "Generation process summary...",
-          "error_message": "Error details if any..."
-        }
-        ```
+        *   `name` (str): Target name.
+        *   `source_path` (str): Path to source directory.
+        *   `output_path` (str, optional): Output directory. Default: `"dist/{name}"`.
+        *   `dependencies` (list[str], optional): List of dependency names.
+    *   **Returns**: `BuildTarget` dataclass instance.
+
+8.  **`create_docker_build_target(name: str, source_path: str, dockerfile_path: str = "Dockerfile", image_tag: str = None) -> BuildTarget`**
+    *   **Description**: Create a Docker build target with steps to build and test a Docker image.
+    *   **Arguments**:
+        *   `name` (str): Target name.
+        *   `source_path` (str): Path to source directory.
+        *   `dockerfile_path` (str, optional): Path to Dockerfile. Default: `"Dockerfile"`.
+        *   `image_tag` (str, optional): Docker image tag. Default: `"{name}:latest"`.
+    *   **Returns**: `BuildTarget` dataclass instance.
+
+9.  **`create_static_build_target(name: str, source_path: str, output_path: str = None, build_command: str = "npm run build") -> BuildTarget`**
+    *   **Description**: Create a static site build target with steps for npm install, build, and optional optimization.
+    *   **Arguments**:
+        *   `name` (str): Target name.
+        *   `source_path` (str): Path to source directory.
+        *   `output_path` (str, optional): Output directory. Default: `"dist/{name}"`.
+        *   `build_command` (str, optional): Build command. Default: `"npm run build"`.
+    *   **Returns**: `BuildTarget` dataclass instance.
+
+10. **`get_available_build_types() -> list[BuildType]`**
+    *   **Description**: Get the list of available build types.
+    *   **Returns**: List of `BuildType` enum members.
+
+11. **`get_available_environments() -> list[BuildEnvironment]`**
+    *   **Description**: Get the list of available build environments.
+    *   **Returns**: List of `BuildEnvironment` enum members.
 
 ## Data Models
 
-Data models for request and response payloads are defined by the Python function signatures and their return value dictionaries above. These also inform the structures used in the corresponding MCP tools (see `MCP_TOOL_SPECIFICATION.md`).
+### Enums
+
+#### `BuildType(Enum)`
+Types of builds supported:
+- `PYTHON = "python"`
+- `NODEJS = "nodejs"`
+- `DOCKER = "docker"`
+- `STATIC = "static"`
+- `DOCUMENTATION = "documentation"`
+- `TESTING = "testing"`
+- `PACKAGING = "packaging"`
+- `DEPLOYMENT = "deployment"`
+
+#### `BuildStatus(Enum)`
+Build status states:
+- `PENDING = "pending"`
+- `RUNNING = "running"`
+- `SUCCESS = "success"`
+- `FAILED = "failed"`
+- `CANCELLED = "cancelled"`
+- `SKIPPED = "skipped"`
+
+#### `BuildEnvironment(Enum)`
+Build environments:
+- `DEVELOPMENT = "development"`
+- `STAGING = "staging"`
+- `PRODUCTION = "production"`
+- `TESTING = "testing"`
+
+#### `DependencyType(Enum)`
+Types of dependencies:
+- `RUNTIME = "runtime"`
+- `DEVELOPMENT = "development"`
+- `BUILD = "build"`
+- `OPTIONAL = "optional"`
+
+### Dataclasses
+
+#### `BuildStep`
+Individual build step definition:
+```python
+@dataclass
+class BuildStep:
+    name: str
+    command: str
+    working_dir: str | None = None
+    environment: dict[str, str] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    timeout: int = 300  # seconds
+    retry_count: int = 0
+    required: bool = True
+    parallel: bool = False
+    condition: str | None = None  # Command to check if step should run
+```
+
+#### `BuildTarget`
+Build target definition:
+```python
+@dataclass
+class BuildTarget:
+    name: str
+    build_type: BuildType
+    source_path: str
+    output_path: str
+    dependencies: list[str] = field(default_factory=list)
+    environment: BuildEnvironment = BuildEnvironment.DEVELOPMENT
+    config: dict[str, Any] = field(default_factory=dict)
+    steps: list[BuildStep] = field(default_factory=list)
+```
+
+#### `BuildResult`
+Result of a build operation:
+```python
+@dataclass
+class BuildResult:
+    target_name: str
+    status: BuildStatus
+    start_time: datetime
+    end_time: datetime | None = None
+    duration: float | None = None
+    output: str = ""
+    error: str = ""
+    artifacts: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+```
+
+#### `Dependency`
+Dependency definition:
+```python
+@dataclass
+class Dependency:
+    name: str
+    version: str
+    dep_type: DependencyType
+    source: str = "pypi"  # pypi, npm, git, local, etc.
+    install_command: str | None = None
+    check_command: str | None = None
+```
+
+### BuildManager Class
+
+**`BuildManager(project_root: str = None, config_path: str = None)`**
+
+Main build management class providing comprehensive build orchestration.
+
+**Constructor Arguments**:
+- `project_root` (str, optional): Root directory of the project. Default: current working directory.
+- `config_path` (str, optional): Path to build configuration file (YAML or JSON). Default: `{project_root}/build.yaml`.
+
+**Key Methods**:
+
+| Method | Signature | Returns | Description |
+|--------|-----------|---------|-------------|
+| `add_build_target` | `(target: BuildTarget) -> bool` | `bool` | Add a build target to the manager |
+| `add_dependency` | `(dependency: Dependency) -> bool` | `bool` | Add a dependency to the manager |
+| `check_dependencies` | `() -> dict[str, bool]` | `dict[str, bool]` | Check if all dependencies are available |
+| `install_dependencies` | `(force: bool = False) -> dict[str, bool]` | `dict[str, bool]` | Install missing dependencies |
+| `build_target` | `(target_name: str, environment: BuildEnvironment = None) -> BuildResult` | `BuildResult` | Build a specific target |
+| `build_all_targets` | `(environment: BuildEnvironment = None) -> list[BuildResult]` | `list[BuildResult]` | Build all targets |
+| `clean_build` | `(target_name: str = None) -> bool` | `bool` | Clean build artifacts |
+| `package_artifacts` | `(target_name: str, output_path: str = None) -> str` | `str` | Package build artifacts as tar.gz |
+| `get_build_summary` | `() -> dict[str, Any]` | `dict` | Get summary of all builds |
+| `export_config` | `(output_path: str) -> bool` | `bool` | Export current configuration to file |
 
 ## Authentication & Authorization
 
@@ -104,11 +246,11 @@ Direct API access, if exposed externally from the Codomyrmex system, would requi
 
 ## Rate Limiting
 
-As these API functions can trigger resource-intensive operations (builds, LLM calls), any external exposure should be protected by rate limiting. Internal usage should be mindful of resource consumption.
+As these API functions can trigger resource-intensive operations (builds, subprocess calls), any external exposure should be protected by rate limiting. Internal usage should be mindful of resource consumption.
 
 ## Versioning
 
-API versioning for these Python functions will follow standard Python library practices. Significant changes will be noted in the module's `CHANGELOG.md`. If the API is exposed more broadly, a formal versioning scheme might be adopted. 
+API versioning for these Python functions will follow standard Python library practices. Significant changes will be noted in the module's `CHANGELOG.md`.
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

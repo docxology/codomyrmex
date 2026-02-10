@@ -26,7 +26,7 @@ The audio module provides comprehensive audio processing capabilities including 
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

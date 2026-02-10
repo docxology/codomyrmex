@@ -48,7 +48,7 @@ The Data Visualization module generates plots (e.g., line charts, heatmaps) from
     -   **Permissions**: The process running the plotting functions should have minimal necessary file system write permissions, restricted only to the designated output directories.
 -   **Dependency Management**:
     -   Keep Matplotlib, Seaborn, NumPy, and Python itself updated to their latest secure versions. Monitor their vulnerability disclosures.
-    -   Use pinned versions in `requirements.txt` files.
+    -   Use pinned versions in `pyproject.toml`.
 -   **Resource Limiting (Application Level)**:
     -   If the application calling this module anticipates very large or complex plot requests, it may need to implement its own timeout or resource monitoring around calls to the plotting functions, or run them in a separate, resource-constrained process/thread.
 -   **Logging**: Use the `logging_monitoring` module for logging. Ensure logs do not inadvertently record excessively large data payloads if an error occurs during processing of such data. Sensitive information from data should not be logged directly.

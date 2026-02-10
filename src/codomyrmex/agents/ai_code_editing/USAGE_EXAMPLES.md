@@ -9,6 +9,7 @@ This document provides examples of how to use the AI Code Editing module within 
    - `ANTHROPIC_API_KEY` for using Anthropic models
 
 2. Install the required dependencies:
+
    ```bash
    uv sync --extra ai_code_editing
    ```
@@ -112,7 +113,7 @@ else:
     print(f"Error: {result['error_message']}")
 ```
 
-### Add Type Hints 
+### Add Type Hints
 
 ```python
 from ai_code_editing import refactor_code_snippet
@@ -225,6 +226,7 @@ complete_coding_task(
 **Issue**: Getting "API key not found" or "Authentication failed" errors.
 
 **Solution**:
+
 ```bash
 # 1. Check environment variables are set
 echo $OPENAI_API_KEY
@@ -242,6 +244,7 @@ cat .env | grep API_KEY
 **Issue**: Getting "LLM service unavailable" or "Rate limit exceeded" errors.
 
 **Solution**:
+
 ```python
 # Check LLM service status
 from ai_code_editing import check_llm_availability
@@ -275,6 +278,7 @@ def generate_with_retry(prompt, max_retries=3):
 **Issue**: Generated code doesn't meet requirements or contains errors.
 
 **Solution**:
+
 ```python
 # 1. Improve prompt specificity
 detailed_prompt = """
@@ -308,6 +312,7 @@ if result["status"] == "success":
 **Issue**: Code generation doesn't properly integrate with existing codebase.
 
 **Solution**:
+
 ```python
 # Provide comprehensive context
 context = """
@@ -339,6 +344,7 @@ result = generate_code_snippet(
 **Issue**: Code generation takes too long or times out.
 
 **Solution**:
+
 ```python
 # Use simpler prompts for complex tasks
 # Break down complex requirements into smaller, focused prompts
@@ -359,6 +365,7 @@ step3 = generate_code_snippet("Create REST API endpoints for user management")
 **Issue**: Code generation doesn't follow language-specific conventions.
 
 **Solution**:
+
 ```python
 # Be explicit about language requirements
 python_requirements = """
@@ -401,7 +408,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: uv sync
 
       - name: Run AI Code Review
         run: |
@@ -522,7 +529,8 @@ def safe_code_generation(prompt, language, max_retries=3):
 1. **Use Appropriate Models**: GPT-4 for complex tasks, GPT-3.5-turbo for simple tasks
 2. **Batch Operations**: Generate multiple related functions together
 3. **Cache Results**: Store successful generations for similar prompts
-4. **Incremental Generation**: Build complex code in stages 
+4. **Incremental Generation**: Build complex code in stages
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

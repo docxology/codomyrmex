@@ -6,11 +6,10 @@
 
 End-to-end workflow validation and testing framework. Defines multi-step workflows composed of typed steps (HTTP requests, assertions, waits, scripts, conditionals) with dependency tracking and retry support. Includes pluggable step executors, shared context propagation between steps, and aggregate pass/fail reporting with per-step duration metrics.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -46,7 +45,10 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` - Module definition with all workflow testing classes and executors
+- `models.py` - Data models (WorkflowStep, StepResult, etc.)
+- `executors.py` - Step executors (StepExecutor, AssertionExecutor, etc.)
+- `runner.py` - Workflow runner logic (WorkflowRunner)
+- `__init__.py` - Public API re-exports
 - `AGENTS.md` - Agent integration specification
 - `API_SPECIFICATION.md` - Detailed API documentation
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions

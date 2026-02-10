@@ -6,11 +6,10 @@
 
 Model versioning, metadata, and lifecycle management for ML models. Provides a central registry for registering model versions with framework, metrics, parameters, and tags. Supports lifecycle stage transitions (development, staging, production, archived) with automatic demotion of previous production versions, pluggable artifact storage backends, and version-level CRUD operations.
 
-
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:
@@ -44,7 +43,10 @@ uv sync
 
 ## Directory Contents
 
-- `__init__.py` -- Module implementation with registry, stores, and data models
+- `models.py` -- Data models (ModelVersion, RegisteredModel, etc.)
+- `stores.py` -- Storage backends (ModelStore, FileModelStore)
+- `registry.py` -- Core registry logic (ModelRegistry)
+- `__init__.py` -- Public API re-exports
 - `README.md` -- This file
 - `AGENTS.md` -- Agent integration documentation
 - `API_SPECIFICATION.md` -- Programmatic API specification

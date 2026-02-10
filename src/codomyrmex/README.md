@@ -4,7 +4,7 @@
 
 ## Overview
 
-Main package directory containing 80+ specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 94 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Directory Contents
 

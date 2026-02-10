@@ -8,7 +8,7 @@ Translation, localization, and message bundle management.
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 Or for development:

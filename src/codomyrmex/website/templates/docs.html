@@ -2,17 +2,30 @@
 
 {% block title %}Documentation - Codomyrmex{% endblock %}
 
+{% block extra_head %}
+<!-- Markdown rendering libraries -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<!-- Syntax highlighting -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/json.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1>Documentation Browser</h1>
 
 <div style="display: flex; gap: 2rem;">
     <div style="width: 300px; border-right: 1px solid var(--border-color);">
-        <ul class="doc-tree">
+        <ul class="doc-tree" role="tree">
             {% macro render_tree(node) %}
-            <li>
+            <li role="treeitem">
                 {% if node.children %}
-                <span class="folder">{{ node.name }}</span>
-                <ul>
+                <span class="folder" tabindex="0" aria-expanded="true">{{ node.name }}</span>
+                <ul role="group">
                     {% for child in node.children %}
                     {{ render_tree(child) }}
                     {% endfor %}

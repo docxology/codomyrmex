@@ -21,31 +21,37 @@ It functions as a cohesive "colony" of specialized modules where each component 
 ## Design Principles
 
 ### Modularity
-- Each module is a self-contained unit under `src/codomyrmex/` with its own implementation, tests, and documentation triad (`README.md`, `AGENTS.md`, `SPEC.md`).
+
+- Each module is a self-contained unit under `src/codomyrmex/` with its own implementation, tests, and RASP pattern (`README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md`).
 - Modules expose only public APIs; internal implementation details remain encapsulated.
 - Adding, removing, or upgrading a module must not require changes to unrelated modules.
 
 ### Internal Coherence
-- Consistent directory structure and naming conventions across all 80+ modules.
+
+- Consistent directory structure and naming conventions across all 94 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
 ### Parsimony
+
 - Include only essential elements; avoid speculative abstractions.
 - Minimize the public API surface area of each module to reduce coupling.
 - Lazy module loading ensures startup cost scales with usage, not with total module count.
 
 ### Functionality
+
 - Prioritize working solutions over theoretical completeness.
 - Forward-looking design that accommodates future modules without requiring rewrites.
 - Each module must deliver demonstrable value through its defined interfaces.
 
 ### Testing
+
 - Comprehensive test coverage enforced through `pytest` with structured markers (`unit`, `integration`, `slow`, `network`, `external`).
 - Test-driven development practices encouraged; tests live alongside source in `src/codomyrmex/tests/unit/<module>/`.
 - Real data analysis preferred over mocked approximations where feasible.
 
 ### Documentation
+
 - Self-documenting code with clear docstrings and type annotations.
 - Complete API specifications (`API_SPECIFICATION.md`) and MCP tool definitions (`MCP_TOOL_SPECIFICATION.md`) for applicable modules with AI-callable tools.
 - Living documentation that stays synchronized with implementation through scaffolding tools.
@@ -105,7 +111,7 @@ graph TB
 ## Quality Standards
 
 - **Coupling**: Aim for loose coupling between modules and high cohesion within each module.
-- **Modularity Gate**: New modules must pass structure validation (documentation triad, `__init__.py`, test stubs) before being committed.
+- **Modularity Gate**: New modules must pass structure validation (RASP pattern, `__init__.py`, test stubs) before being committed.
 - **Documentation Coverage**: 100% of module directories must contain a non-skeletal `README.md` with accurate content.
 - **Interface Stability**: Public API changes require a semantic version bump and updated specification documents.
 - **Test Coverage**: All modules must maintain unit test coverage; integration tests are required for cross-module interactions.
@@ -121,17 +127,17 @@ graph TB
 ## Modularity & Interfaces
 
 - **Inputs**:
-    - User commands (CLI, Shell).
-    - AI Agent requests (MCP, Function Calls).
-    - Event triggers (File changes, Webhooks).
+  - User commands (CLI, Shell).
+  - AI Agent requests (MCP, Function Calls).
+  - Event triggers (File changes, Webhooks).
 - **Outputs**:
-    - Synthesized code and artifacts.
-    - Structured logs and telemetry.
-    - Visualizations and reports.
-    - Executable processes.
+  - Synthesized code and artifacts.
+  - Structured logs and telemetry.
+  - Visualizations and reports.
+  - Executable processes.
 - **Boundaries**:
-    - Modules interact primarily through public APIs defined in `src/codomyrmex/`.
-    - Cross-module dependencies are strictly hierarchical (Foundation -> Core -> Service -> Application).
+  - Modules interact primarily through public APIs defined in `src/codomyrmex/`.
+  - Cross-module dependencies are strictly hierarchical (Foundation -> Core -> Service -> Application).
 
 ## Implementation Guidelines
 

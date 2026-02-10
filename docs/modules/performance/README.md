@@ -26,7 +26,7 @@ instance = performance_context()
 ## Installation
 
 ```bash
-pip install codomyrmex
+uv pip install codomyrmex
 ```
 
 ## API Reference

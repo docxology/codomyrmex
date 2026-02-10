@@ -1,0 +1,34 @@
+layers:
+  - name: Foundation
+    color: "#10b981"
+    modules:
+      - logging_monitoring
+      - environment_setup
+      - model_context_protocol
+      - terminal_interface
+
+  - name: Core
+    color: "#3b82f6"
+    modules:
+      - agents
+      - static_analysis
+      - coding
+      - llm
+      - pattern_matching
+      - git_operations
+
+  - name: Service
+    color: "#8b5cf6"
+    modules:
+      - build_synthesis
+      - documentation
+      - ci_cd_automation
+      - containerization
+      - orchestrator
+
+  - name: Application
+    color: "#f59e0b"
+    modules:
+      - cli
+      - system_discovery
+      - website

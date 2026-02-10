@@ -8,23 +8,27 @@
 <div class="grid">
     {% for pipeline in pipelines %}
     <div class="card">
-        <div class="card-title">
+        <h2 class="card-title">
             {{ pipeline.name }}
             <span
-                class="status-badge {{ 'active' if pipeline.status == 'success' else 'error' if pipeline.status == 'failure' else '' }}">
+                class="status-badge {{ 'active' if pipeline.status == 'success' else 'error' if pipeline.status == 'failure' else 'running' if pipeline.status == 'running' else 'defined' }}">
                 {{ pipeline.status|title }}
             </span>
-        </div>
+        </h2>
 
         <p><strong>ID:</strong> <span class="mono">{{ pipeline.id }}</span></p>
-        <p><strong>Started:</strong> {{ pipeline.started_at }}</p>
-        <p><strong>Duration:</strong> {{ pipeline.duration }}</p>
+        {% if pipeline.file %}
+        <p><strong>File:</strong> <span class="mono">{{ pipeline.file }}</span></p>
+        {% endif %}
+        {% if pipeline.triggers %}
+        <p><strong>Triggers:</strong> {{ pipeline.triggers|join(', ') }}</p>
+        {% endif %}
 
         <div style="margin-top: 1.5rem;">
             <h4>Stages</h4>
             <div class="pipeline-visual">
                 {% for stage in pipeline.stages %}
-                <div class="stage-node {{ stage.status }}">
+                <div class="stage-node {{ stage.status }}" aria-label="{{ stage.name }}: {{ stage.status }}">
                     <div class="stage-name">{{ stage.name }}</div>
                     <div class="stage-status">{{ stage.status|title }}</div>
                 </div>
@@ -38,65 +42,11 @@
     {% endfor %}
 </div>
 
-<style>
-    .mono {
-        font-family: 'Fira Code', monospace;
-        opacity: 0.8;
-        font-size: 0.9rem;
-    }
+{% if not pipelines %}
+<div class="empty-state">
+    <div class="empty-state-icon" aria-hidden="true">🔄</div>
+    <p>No CI/CD pipelines found. Add workflow files to <code>.github/workflows/</code> to see them here.</p>
+</div>
+{% endif %}
 
-    .pipeline-visual {
-        display: flex;
-        align-items: center;
-        margin-top: 1rem;
-        overflow-x: auto;
-        padding-bottom: 1rem;
-    }
-
-    .stage-node {
-        background-color: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0.75rem;
-        min-width: 100px;
-        text-align: center;
-    }
-
-    .stage-node.success {
-        border-color: var(--success-color);
-        color: var(--success-color);
-    }
-
-    .stage-node.running {
-        border-color: var(--accent-color);
-        color: var(--accent-color);
-    }
-
-    .stage-node.pending {
-        border-color: var(--text-secondary);
-        opacity: 0.6;
-    }
-
-    .stage-node.failed {
-        border-color: var(--error-color);
-        color: var(--error-color);
-    }
-
-    .stage-name {
-        font-weight: 600;
-        font-size: 0.9rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .stage-status {
-        font-size: 0.75rem;
-        opacity: 0.8;
-    }
-
-    .stage-connector {
-        flex: 0 0 2rem;
-        height: 2px;
-        background-color: var(--border-color);
-    }
-</style>
 {% endblock %}

@@ -283,8 +283,7 @@ class BuildManager:
                     if dep.source == "pypi":
                         result = subprocess.run(
                             [
-                                sys.executable,
-                                "-m",
+                                "uv",
                                 "pip",
                                 "install",
                                 f"{dep.name}=={dep.version}",
@@ -646,14 +645,14 @@ def create_python_build_target(
     steps = [
         BuildStep(
             name="install_dependencies",
-            command="pip install -r requirements.txt",
+            command="uv pip install -r pyproject.toml",
             required=True,
         ),
         BuildStep(name="run_tests", command="python -m pytest tests/", required=False),
-        BuildStep(name="build_package", command="python -m build", required=True),
+        BuildStep(name="build_package", command="uv build", required=True),
         BuildStep(
             name="create_distribution",
-            command=f"python -m pip wheel . -w {output_path}",
+            command=f"uv build --wheel --out-dir {output_path}",
             required=True,
         ),
     ]
