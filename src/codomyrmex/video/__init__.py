@@ -43,6 +43,13 @@ Quick Start:
 
 __version__ = "0.1.0"
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import exceptions
 # Import configuration
 from .config import (
@@ -103,8 +110,36 @@ except ImportError:
     ANALYSIS_AVAILABLE = False
 
 
+def cli_commands():
+    """Return CLI commands for the video module."""
+    return {
+        "formats": {
+            "help": "List supported video formats and capabilities",
+            "handler": lambda **kwargs: print(
+                f"Video Module v{__version__}\n"
+                f"  Video codecs: {', '.join(vc.value if hasattr(vc, 'value') else str(vc) for vc in VideoCodec)}\n"
+                f"  Audio codecs: {', '.join(ac.value if hasattr(ac, 'value') else str(ac) for ac in AudioCodec)}\n"
+                f"  Filters: {', '.join(ft.value if hasattr(ft, 'value') else str(ft) for ft in FilterType)}\n"
+                f"  Processing: {PROCESSING_AVAILABLE} | Extraction: {EXTRACTION_AVAILABLE} | Analysis: {ANALYSIS_AVAILABLE}"
+            ),
+        },
+        "process": {
+            "help": "Process a video file",
+            "handler": lambda **kwargs: print(
+                "Video Processing\n"
+                "  Processor: VideoProcessor (resize, crop, rotate, convert, filter, trim, merge)\n"
+                "  Extraction: FrameExtractor (frames, thumbnails, audio extraction)\n"
+                "  Analysis: VideoAnalyzer (metadata, comparison)\n"
+                "  Configure via VideoConfig or configure()"
+            ),
+        },
+    }
+
+
 # Build __all__ dynamically
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Version
     "__version__",
     # Exceptions

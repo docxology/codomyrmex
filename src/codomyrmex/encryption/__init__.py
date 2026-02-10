@@ -29,6 +29,45 @@ from .hmac_utils import compute_hmac, verify_hmac
 from .kdf import derive_key_hkdf
 from .key_manager import KeyManager
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the encryption module."""
+    return {
+        "algorithms": {
+            "help": "List available encryption algorithms",
+            "handler": lambda **kwargs: print(
+                "Encryption Algorithms:\n"
+                "  - AES-256-CBC: Symmetric (legacy, deprecated)\n"
+                "  - AES-256-GCM: Authenticated symmetric (recommended)\n"
+                "  - RSA: Asymmetric encryption\n"
+                "  - PBKDF2: Key derivation\n"
+                "  - HKDF: Key derivation\n"
+                "  - HMAC: Message authentication\n"
+                "  - SHA-256/SHA-512: Secure hashing"
+            ),
+        },
+        "status": {
+            "help": "Show encryption module status",
+            "handler": lambda **kwargs: print(
+                "Encryption Status:\n"
+                f"  Encryptor: {Encryptor.__name__} (available)\n"
+                f"  AES-GCM: {AESGCMEncryptor.__name__} (available)\n"
+                f"  Key Manager: {KeyManager.__name__} (available)\n"
+                f"  Secure Container: {SecureDataContainer.__name__} (available)\n"
+                "  HMAC utils: available\n"
+                "  KDF utils: available"
+            ),
+        },
+    }
+
+
 __all__ = [
     # Classes
     "Encryptor",
@@ -52,6 +91,8 @@ __all__ = [
     "verify_hmac",
     # KDF
     "derive_key_hkdf",
+    # CLI
+    "cli_commands",
 ]
 
 

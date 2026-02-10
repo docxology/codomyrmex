@@ -11,6 +11,8 @@ Edge node management, function deployment, and synchronization.
 - **EdgeRuntime** — Function execution runtime
 - **EdgeCluster** — Cluster management
 - **EdgeSynchronizer** — State synchronization
+- **EdgeMetrics** — Invocation metrics tracking
+- **InvocationRecord** — Single invocation record
 
 ## Agent Instructions
 
@@ -24,40 +26,52 @@ Edge node management, function deployment, and synchronization.
 
 ```python
 from codomyrmex.edge_computing import (
-    EdgeNode, EdgeCluster, EdgeFunction, EdgeSynchronizer
+    EdgeNode, EdgeCluster, EdgeFunction, EdgeRuntime,
+    EdgeSynchronizer, EdgeMetrics, InvocationRecord, SyncState
 )
 
-# Define edge function
-@EdgeFunction(resources={"memory": "256MB"})
-def process_sensor_data(data):
-    return analyze(data)
-
-# Create cluster
+# Create cluster and register nodes
 cluster = EdgeCluster()
-cluster.add_node(EdgeNode("edge-1", location="factory-a"))
-cluster.add_node(EdgeNode("edge-2", location="factory-b"))
+node = EdgeNode(id="edge-1", name="factory-sensor", location="factory-a")
+cluster.register_node(node)
 
-# Deploy function
-cluster.deploy(process_sensor_data, to_nodes=["edge-1"])
+# Deploy function to all nodes
+func = EdgeFunction(id="fn-1", name="process-data", handler=my_handler)
+count = cluster.deploy_to_all(func)
+
+# Invoke function via runtime
+runtime = cluster.get_runtime("edge-1")
+result = runtime.invoke("fn-1", sensor_data)
 
 # Synchronize state
 sync = EdgeSynchronizer()
-sync.sync_bidirectional(cloud_state, edge_state)
+state = sync.update_local({"readings": [1, 2, 3]})
+remote = SyncState.from_data({"readings": [4, 5]}, version=5)
+sync.apply_remote(remote)
+
+# Track metrics
+metrics = EdgeMetrics()
+metrics.record(InvocationRecord(
+    function_id="fn-1", node_id="edge-1",
+    duration_ms=15.2, success=True
+))
+print(metrics.summary())
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify edge function
-@EdgeFunction()
-def test_func(x):
-    return x * 2
-assert test_func(5) == 10
-
 # Verify cluster management
 cluster = EdgeCluster()
-cluster.add_node(EdgeNode("n1"))
-assert len(cluster.nodes) == 1
+node = EdgeNode(id="n1", name="test-node")
+cluster.register_node(node)
+assert len(cluster.list_nodes()) == 1
+
+# Verify runtime
+runtime = EdgeRuntime(node)
+func = EdgeFunction(id="fn-1", name="echo", handler=lambda x: x)
+runtime.deploy(func)
+assert runtime.invoke("fn-1", 42) == 42
 ```
 
 ## Navigation

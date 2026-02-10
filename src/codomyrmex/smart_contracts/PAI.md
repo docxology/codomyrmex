@@ -10,56 +10,72 @@ The Smart Contracts module provides PAI integration for blockchain interactions,
 
 ### Contract Interactions
 
-AI agents can interact with smart contracts:
+AI agents can interact with smart contracts using the fluent API:
 
 ```python
 from codomyrmex.smart_contracts import (
-    Contract, TransactionBuilder, Network
+    Address, Contract, ContractCall, TransactionBuilder, Network
 )
 
-# Connect to contract
-contract = Contract(
-    address="0x1234...",
-    abi=contract_abi,
-    network=Network.ETHEREUM_MAINNET
+# Create contract with ABI
+addr = Address(value="0x" + "a" * 40, network=Network.ETHEREUM)
+contract = Contract(address=addr, abi=contract_abi, name="MyToken")
+
+# Look up function from ABI
+func = contract.get_function("transfer")
+
+# Build a contract call (fluent API)
+call = (
+    ContractCall(contract, "transfer")
+    .with_args("0xrecipient", 1000)
+    .with_gas_limit(60000)
 )
+tx = call.to_transaction(from_address=addr, nonce=5)
 
-# Read contract state
-balance = contract.call("balanceOf", wallet_address)
-
-# Build transaction
-tx = TransactionBuilder()
-tx.to(contract.address)
-tx.data(contract.encode("transfer", recipient, amount))
-tx.gas_limit(100000)
+# Build raw transaction (fluent API)
+tx = (
+    TransactionBuilder(addr)
+    .to(addr)
+    .value(1000)
+    .gas_limit(21000)
+    .build()
+)
 ```
 
-### Multi-Chain Support
+### Contract Registry & Events
 
-Work across multiple blockchains:
+Manage contracts and track events:
 
 ```python
-from codomyrmex.smart_contracts import Network, MultiChainManager
-
-# Manage multiple networks
-manager = MultiChainManager()
-manager.add_network(Network.ETHEREUM_MAINNET)
-manager.add_network(Network.POLYGON)
-
-# Execute across chains
-results = manager.execute_multi(
-    contracts={"eth": eth_contract, "poly": poly_contract},
-    method="getPrice"
+from codomyrmex.smart_contracts import (
+    ContractRegistry, ContractEvent, EventFilter, EventLog
 )
+
+# Registry
+registry = ContractRegistry()
+registry.register("token", contract)
+registry.get("token")      # -> Contract
+registry.remove("token")   # -> True
+
+# Events
+log = EventLog()
+log.add(ContractEvent(name="Transfer", block_number=100, args={"to": "0x1"}))
+log.add(ContractEvent(name="Approval", block_number=101))
+
+# Query with filter
+transfers = log.query(EventFilter().event("Transfer").from_block(50))
+latest = log.latest(5)     # 5 most recent by block number
 ```
 
 ## PAI Integration Points
 
 | Component | PAI Use Case |
 |-----------|-------------|
-| `Contract` | Interact with contracts |
-| `TransactionBuilder` | Build transactions |
-| `MultiChainManager` | Multi-chain operations |
+| `Contract` | ABI parsing and function lookup |
+| `ContractCall` | Fluent contract call builder |
+| `TransactionBuilder` | Fluent transaction builder |
+| `ContractRegistry` | Named contract management |
+| `EventLog` | Event tracking and querying |
 
 ## Navigation
 

@@ -32,6 +32,39 @@ from .visualization.graph_generator import GraphGenerator
 from .visualization.visualizer import FPFVisualizer
 from .visualization.visualizer_png import FPFVisualizerPNG
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the FPF module."""
+    return {
+        "fetch": {
+            "help": "Fetch, parse, and format a FPF specification URL",
+            "args": ["--url"],
+            "handler": lambda url=None: (
+                print(FPFFetcher().fetch_latest())
+                if not url
+                else print(FPFFetcher().fetch_from_url(url))
+            ),
+        },
+        "exporters": {
+            "help": "List available export formats",
+            "handler": lambda: print(
+                "Available FPF export formats:\n"
+                "- json\n"
+                "- markdown\n"
+                "- context (prompt-ready)\n"
+                "- graph (visualization)"
+            ),
+        },
+    }
+
+
 __all__ = [
     # Main classes
     "FPFParser",
@@ -59,6 +92,8 @@ __all__ = [
     "PatternStatus",
     "ConceptType",
     "RelationshipType",
+    # CLI integration
+    "cli_commands",
 ]
 
 

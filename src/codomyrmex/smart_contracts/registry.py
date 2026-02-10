@@ -15,5 +15,12 @@ class ContractRegistry:
     def get(self, name: str) -> Contract | None:
         return self._contracts.get(name)
 
+    def remove(self, name: str) -> bool:
+        """Remove a contract by name. Returns True if it existed."""
+        if name in self._contracts:
+            del self._contracts[name]
+            return True
+        return False
+
     def list(self) -> list[str]:
         return list(self._contracts.keys())

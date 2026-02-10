@@ -36,6 +36,13 @@ Available submodules:
 """
 
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 try:
     from codomyrmex.agents.ai_code_editing.code_editor import CodeEditor
 except ImportError:
@@ -188,7 +195,42 @@ try:
 except ImportError:
     GitAgent = None
 
+def cli_commands():
+    """Return CLI commands for the agents module."""
+    def _list_agents():
+        providers = []
+        provider_map = {
+            "claude": ClaudeClient,
+            "codex": CodexClient,
+            "gemini": GeminiClient,
+            "jules": JulesClient,
+            "mistral_vibe": MistralVibeClient,
+            "opencode": OpenCodeClient,
+            "every_code": EveryCodeClient,
+            "o1": O1Client,
+            "deepseek": DeepSeekClient,
+            "qwen": QwenClient,
+        }
+        for name, client in provider_map.items():
+            status = "available" if client is not None else "not installed"
+            providers.append(f"  {name}: {status}")
+        print("Registered agent providers:")
+        print("\n".join(providers))
+
+    def _show_config():
+        config = get_config()
+        print("Agent configuration:")
+        for key, value in vars(config).items():
+            print(f"  {key}: {value}")
+
+    return {
+        "list": _list_agents,
+        "config": _show_config,
+    }
+
+
 __all__ = [
+    "cli_commands",
     "AgentInterface",
     "AgentIntegrationAdapter",
     "BaseAgent",

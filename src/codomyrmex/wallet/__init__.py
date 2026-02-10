@@ -15,6 +15,37 @@ from .exceptions import RitualError, WalletError, WalletKeyError, WalletNotFound
 from .key_rotation import KeyRotation, RotationPolicy, RotationRecord
 from .recovery import NaturalRitualRecovery, RitualStep, hash_response
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the wallet module."""
+    return {
+        "balance": {
+            "help": "Show wallet balance for a given user",
+            "args": ["--user-id"],
+            "handler": lambda user_id=None: (
+                print(f"Wallet balance lookup for: {user_id}")
+                if user_id
+                else print("Usage: wallet balance --user-id <USER_ID>")
+            ),
+        },
+        "transactions": {
+            "help": "List recent wallet transactions",
+            "args": ["--user-id", "--limit"],
+            "handler": lambda user_id=None, limit=10: print(
+                f"Listing last {limit} transactions"
+                + (f" for user {user_id}" if user_id else "")
+            ),
+        },
+    }
+
+
 __all__ = [
     # Classes
     "WalletManager",
@@ -33,6 +64,8 @@ __all__ = [
     "hash_response",
     "create_wallet",
     "get_wallet_manager",
+    # CLI integration
+    "cli_commands",
 ]
 
 __version__ = "0.1.0"

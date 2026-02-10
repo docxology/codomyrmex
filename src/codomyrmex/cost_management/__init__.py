@@ -10,6 +10,30 @@ from .models import Budget, BudgetAlert, BudgetPeriod, CostCategory, CostEntry, 
 from .stores import CostStore, InMemoryCostStore
 from .tracker import BudgetManager, CostTracker
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the cost_management module."""
+    return {
+        "report": lambda: print(
+            "Cost Report\n"
+            "  Categories: " + ", ".join(cc.value for cc in CostCategory) + "\n"
+            "  Use CostTracker to record expenses and generate CostSummary reports."
+        ),
+        "budgets": lambda: print(
+            "Budget Management\n"
+            "  Budget periods: " + ", ".join(bp.value for bp in BudgetPeriod) + "\n"
+            "  Use BudgetManager to create budgets and monitor BudgetAlerts."
+        ),
+    }
+
+
 __all__ = [
     # Enums
     "CostCategory",
@@ -25,4 +49,6 @@ __all__ = [
     # Core
     "CostTracker",
     "BudgetManager",
+    # CLI
+    "cli_commands",
 ]

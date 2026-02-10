@@ -23,14 +23,16 @@ Edge computing module providing edge node management, function deployment, and s
 | `EdgeRuntime` | Function execution runtime |
 | `EdgeCluster` | Cluster of edge nodes |
 | `EdgeSynchronizer` | State sync manager |
+| `EdgeMetrics` | Invocation metrics tracking |
+| `InvocationRecord` | Single invocation record |
 
 ## Key Functions
 
 | Function | Description |
 |----------|-------------|
-| `@EdgeFunction()` | Decorator for edge functions |
-| `discover_nodes()` | Auto-discover edge nodes |
-| `sync_state()` | Synchronize state |
+| `EdgeRuntime.deploy(func)` | Deploy function to runtime |
+| `EdgeCluster.register_node(node)` | Register node in cluster |
+| `EdgeSynchronizer.update_local(data)` | Update local state |
 
 ## Design Principles
 

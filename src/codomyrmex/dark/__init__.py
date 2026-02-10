@@ -40,6 +40,39 @@ except ImportError:
     pdf = None  # type: ignore
     PDF_AVAILABLE = False
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the dark module."""
+    return {
+        "status": {
+            "help": "Show dark mode status across all domains",
+            "handler": lambda: print(
+                "Dark Mode Status:\n"
+                f"  PDF support:      {'available' if PDF_AVAILABLE else 'not installed'}\n"
+                f"  Network module:   loaded\n"
+                f"  Hardware module:  loaded\n"
+                f"  Software module:  loaded"
+            ),
+        },
+        "config": {
+            "help": "Show dark mode configuration",
+            "handler": lambda: print(
+                "Dark Mode Config:\n"
+                f"  Version:          {__version__}\n"
+                f"  PDF available:    {PDF_AVAILABLE}\n"
+                "  Submodules:       pdf, network, hardware, software"
+            ),
+        },
+    }
+
+
 __all__ = [
     "__version__",
     "pdf",
@@ -47,4 +80,6 @@ __all__ = [
     "hardware",
     "software",
     "PDF_AVAILABLE",
+    # CLI integration
+    "cli_commands",
 ]

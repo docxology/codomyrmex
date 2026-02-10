@@ -112,6 +112,31 @@ Primary checker that aggregates rules and runs audits.
     - `headings` (list[int]): Sequence of heading levels (1-6).
 - **Returns**: `list[str]` - List of issue descriptions. Empty list means valid hierarchy.
 
+### `AccessibilityReporter`
+
+Formats an `AccessibilityReport` for various output targets.
+
+#### `AccessibilityReporter.__init__(report)`
+
+- **Parameters**:
+    - `report` (AccessibilityReport): The report to format.
+
+#### `AccessibilityReporter.to_summary() -> str`
+
+- **Description**: One-line summary string: `"Score: 85.0% | 17 passed, 2 errors, 1 warning"`.
+
+#### `AccessibilityReporter.to_dict() -> dict[str, Any]`
+
+- **Description**: Full report as a serializable dictionary with `url`, `score`, `passed`, `errors`, `warnings`, and `issues` list.
+
+#### `AccessibilityReporter.to_json(indent=2) -> str`
+
+- **Description**: JSON string of the report (calls `to_dict()` internally).
+
+#### `AccessibilityReporter.to_markdown() -> str`
+
+- **Description**: Markdown formatted report with heading, score summary, and an issues table with columns: Code, Level, Type, Message, Suggestion.
+
 ## Error Handling
 
 Functions return empty/zero values on invalid input rather than raising exceptions. `calculate_contrast_ratio` returns `0.0` for malformed hex strings. `check_heading_hierarchy` handles empty lists gracefully.

@@ -26,6 +26,36 @@ To use:
 
 # This file makes the 'logging_monitoring' directory a Python package.
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .logger_config import get_logger, setup_logging
 
-__all__ = ["setup_logging", "get_logger"]
+def cli_commands():
+    """Return CLI commands for the logging_monitoring module."""
+    def _show_config():
+        import os
+        print("Logging configuration:")
+        print(f"  CODOMYRMEX_LOG_LEVEL: {os.environ.get('CODOMYRMEX_LOG_LEVEL', 'INFO (default)')}")
+        print(f"  CODOMYRMEX_LOG_FILE: {os.environ.get('CODOMYRMEX_LOG_FILE', 'None (console only)')}")
+        print(f"  CODOMYRMEX_LOG_FORMAT: {os.environ.get('CODOMYRMEX_LOG_FORMAT', 'default')}")
+
+    def _list_levels():
+        import logging
+        levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        print("Available log levels:")
+        for level in levels:
+            value = getattr(logging, level)
+            print(f"  {level} ({value})")
+
+    return {
+        "config": _show_config,
+        "levels": _list_levels,
+    }
+
+
+__all__ = ["cli_commands", "setup_logging", "get_logger"]

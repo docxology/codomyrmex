@@ -27,11 +27,50 @@ except ImportError:
     CommandRunner = None
     TerminalFormatter = None
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the terminal_interface module."""
+    import os
+    import shutil
+
+    return {
+        "themes": {
+            "help": "List available terminal themes",
+            "handler": lambda **kwargs: print(
+                "Available themes:\n"
+                "  - default: Standard terminal output\n"
+                "  - rich: Rich text formatting with colors\n"
+                "  - minimal: Minimal output, no decorations\n"
+                "  - json: JSON-structured output"
+            ),
+        },
+        "info": {
+            "help": "Show terminal environment info",
+            "handler": lambda **kwargs: print(
+                f"Terminal: {os.environ.get('TERM', 'unknown')}\n"
+                f"Shell: {os.environ.get('SHELL', 'unknown')}\n"
+                f"Columns: {shutil.get_terminal_size().columns}\n"
+                f"Lines: {shutil.get_terminal_size().lines}\n"
+                f"Interactive shell available: {InteractiveShell is not None}\n"
+                f"Command runner available: {CommandRunner is not None}"
+            ),
+        },
+    }
+
+
 __all__ = [
     "shells",
     "commands",
     "rendering",
     "completions",
+    "cli_commands",
 ]
 
 if InteractiveShell:

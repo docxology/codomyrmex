@@ -23,21 +23,22 @@ Internationalization module providing translation management, pluralization rule
 | `MessageBundle` | Translation bundle |
 | `PluralRules` | Pluralization engine |
 | `NumberFormatter` | Locale-aware number formatting |
+| `DateFormatter` | Locale-aware date/time formatting |
 
 ## Key Functions
 
 | Function | Description |
 |----------|-------------|
-| `init(locale, bundles_path)` | Initialize translator |
-| `t(key, **context)` | Translate message |
-| `set_locale(locale)` | Change active locale |
+| `init(default_locale="en")` | Initialize global translator |
+| `t(key, **kwargs)` | Translate message |
+| `Translator.set_locale(locale)` | Change active locale |
 
 ## Design Principles
 
-1. **Fallback Chain**: Language → Country → Default
-2. **ICU Format**: Industry-standard message format
+1. **Fallback Chain**: Regional → Language → Default
+2. **Simple Interpolation**: `{placeholder}` token replacement
 3. **Lazy Loading**: Load bundles on demand
-4. **Thread Safety**: Safe for concurrent access
+4. **Classmethod Formatters**: NumberFormatter and DateFormatter use classmethods
 
 ## Navigation
 

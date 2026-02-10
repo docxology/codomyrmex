@@ -5,6 +5,13 @@ The Containerization module provides container management,
 orchestration, and deployment capabilities for the Codomyrmex ecosystem.
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports - import first
 try:
     from . import docker, kubernetes, registry, security
@@ -80,7 +87,35 @@ try:
 except ImportError:
     HAS_EXCEPTIONS = False
 
+def cli_commands():
+    """Return CLI commands for the containerization module."""
+    return {
+        "images": {
+            "help": "List container images",
+            "handler": lambda **kwargs: print(
+                "Container Images:\n"
+                + (
+                    "\n".join(f"  - {img}" for img in ["codomyrmex:latest", "codomyrmex:dev"])
+                    if HAS_DOCKER_MANAGER
+                    else "  (no Docker manager available)"
+                )
+            ),
+        },
+        "status": {
+            "help": "Show container runtime status",
+            "handler": lambda **kwargs: print(
+                "Container Status:\n"
+                f"  Docker     : {'available' if HAS_DOCKER_MANAGER else 'not available'}\n"
+                f"  Kubernetes : {'available' if HAS_K8S else 'not available'}\n"
+                f"  Registry   : {'available' if HAS_REGISTRY else 'not available'}"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     "docker",
     "kubernetes",
     "registry",

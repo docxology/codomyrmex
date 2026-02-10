@@ -27,6 +27,7 @@ from .exceptions import (
     EventTimeoutError,
     EventValidationError,
 )
+from .mixins import EventMixin
 
 __all__ = [
     # Core classes
@@ -37,6 +38,7 @@ __all__ = [
     'EventBus',
     'AsyncEventEmitter',
     'EventLogger',
+    'EventMixin',
     # Functions
     'get_event_bus',
     'publish_event',

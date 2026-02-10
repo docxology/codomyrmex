@@ -7,6 +7,13 @@ enabling skill management, syncing with upstream, and support for custom skills.
 from pathlib import Path
 from typing import Optional
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # New submodule exports
 from . import (
     composition,
@@ -22,6 +29,34 @@ from .skill_registry import SkillRegistry
 from .skill_sync import SkillSync
 from .skills_manager import SkillsManager
 
+def cli_commands():
+    """Return CLI commands for the skills module."""
+    def _list_skills():
+        """List available skills."""
+        try:
+            registry = SkillRegistry()
+            skills = registry.list_skills()
+            for skill in skills:
+                print(f"  {skill}")
+        except Exception:
+            print("Skills: use SkillRegistry to discover available skills")
+
+    def _info_skill():
+        """Show skill info."""
+        try:
+            registry = SkillRegistry()
+            print(f"Skills registry: {registry}")
+            print(f"Upstream: {DEFAULT_UPSTREAM_REPO}")
+            print(f"Branch: {DEFAULT_UPSTREAM_BRANCH}")
+        except Exception:
+            print(f"Skills upstream: {DEFAULT_UPSTREAM_REPO} ({DEFAULT_UPSTREAM_BRANCH})")
+
+    return {
+        "list": _list_skills,
+        "info": _info_skill,
+    }
+
+
 __all__ = [
     'permissions',
     'versioning',
@@ -35,6 +70,7 @@ __all__ = [
     "execution",
     "composition",
     "testing",
+    "cli_commands",
 ]
 
 # Default configuration

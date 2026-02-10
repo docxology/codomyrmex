@@ -86,6 +86,34 @@ cluster.list_nodes(status=EdgeNodeStatus.ONLINE)  # Filter by status
 count = cluster.deploy_to_all(func)  # -> int (number of nodes deployed to)
 ```
 
+### 2.6 Invocation Metrics
+
+**`InvocationRecord`**: Record of a single function invocation.
+- `function_id: str`, `node_id: str`, `duration_ms: float`, `success: bool`.
+- `timestamp: datetime` (defaults to `now()`), `error: str` (defaults to `""`).
+
+**`EdgeMetrics`**: Track and query invocation metrics.
+
+```python
+from codomyrmex.edge_computing import EdgeMetrics, InvocationRecord
+
+metrics = EdgeMetrics()
+
+# Record invocations
+metrics.record(InvocationRecord(
+    function_id="fn-1", node_id="edge-01",
+    duration_ms=42.5, success=True
+))
+
+# Query metrics
+metrics.total_invocations()                    # -> int
+metrics.total_invocations(function_id="fn-1")  # -> int (filtered)
+metrics.success_rate()                         # -> float (0-100)
+metrics.avg_latency_ms()                       # -> float
+metrics.error_count()                          # -> int
+metrics.summary()                              # -> dict with all above
+```
+
 ## 3. Error Handling
 
 | Exception | Raised When |

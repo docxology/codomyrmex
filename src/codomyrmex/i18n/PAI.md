@@ -8,56 +8,56 @@ The i18n (Internationalization) module provides PAI integration for multilingual
 
 ## PAI Capabilities
 
-### AI-Generated Translations
+### Translation with File-Based Bundles
 
-Combine i18n with LLM translation:
+Load translations from JSON files and translate with interpolation:
 
 ```python
-from codomyrmex.i18n import Translator, MessageBundle
-from codomyrmex.llm import LLMClient
+from codomyrmex.i18n import Translator, Locale, MessageBundle
 
 # Initialize translator
-translator = Translator()
-translator.load_bundles("./locales")
+translator = Translator(Locale("en"))
 
-# Translate with AI for missing keys
-llm = LLMClient()
+# Load all JSON bundles from a directory
+count = translator.load_directory("./locales")  # -> int (bundles loaded)
 
-def get_translation(key, locale):
-    # Try cached translation first
-    if translator.has_key(key, locale):
-        return translator.t(key, locale=locale)
-    
-    # AI-assisted translation
-    english = translator.t(key, locale="en")
-    translated = llm.complete(
-        f"Translate to {locale}: {english}"
-    )
-    return translated
+# Or add bundles manually
+bundle = MessageBundle.from_json_file(Locale("es"), "./locales/es.json")
+translator.add_bundle(bundle)
+
+# Translate with interpolation
+message = translator.t("welcome", name="Daniel")
+# Falls back: exact locale -> language-only -> default -> raw key
 ```
 
 ### Locale-Aware Formatting
 
-Format data for PAI agents across locales:
+Format numbers and dates using classmethod APIs:
 
 ```python
-from codomyrmex.i18n import NumberFormatter, DateFormatter
+from codomyrmex.i18n import NumberFormatter, DateFormatter, Locale
+from datetime import date
 
-# Format for user's locale
-formatter = NumberFormatter(locale="de-DE")
-print(formatter.format(1234.56))  # "1.234,56"
+# Number formatting (classmethod)
+NumberFormatter.format(Locale("de"), 1234.56)  # "1.234,56"
+NumberFormatter.format(Locale("en"), 1000.0, decimals=0)  # "1,000"
 
-date_fmt = DateFormatter(locale="ja-JP")
-print(date_fmt.format(date))  # "2026年2月6日"
+# Date formatting (classmethod)
+DateFormatter.format_date(Locale("ja"), date(2026, 2, 6))  # "2026/02/06"
+DateFormatter.format_date(Locale("de"), date(2026, 2, 6))  # "06.02.2026"
+
+# Relative time
+DateFormatter.relative_time(past_datetime)  # "5 minutes ago"
 ```
 
 ## PAI Integration Points
 
 | Component | PAI Use Case |
 |-----------|-------------|
-| `Translator` | Multilingual content |
-| `NumberFormatter` | Locale-aware numbers |
-| `DateFormatter` | Locale-aware dates |
+| `Translator` | Multilingual content with fallback |
+| `NumberFormatter` | Locale-aware number formatting |
+| `DateFormatter` | Locale-aware date/time formatting |
+| `PluralRules` | Correct pluralization per locale |
 
 ## Navigation
 

@@ -12,6 +12,13 @@ import random
 from typing import Any, Dict, List, Optional, Tuple
 from collections.abc import Callable
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports
 from . import fitness, operators, selection
 
@@ -249,7 +256,34 @@ def tournament_selection(
     return winner.copy()
 
 
+def cli_commands():
+    """Return CLI commands for the evolutionary_ai module."""
+    return {
+        "algorithms": {
+            "help": "List evolutionary algorithms",
+            "handler": lambda **kwargs: print(
+                "Evolutionary AI Algorithms\n"
+                f"  Mutation types: {', '.join(mt.value if hasattr(mt, 'value') else str(mt) for mt in MutationType)}\n"
+                f"  Crossover types: {', '.join(ct.value if hasattr(ct, 'value') else str(ct) for ct in CrossoverType)}\n"
+                f"  Selection types: {', '.join(st.value if hasattr(st, 'value') else str(st) for st in SelectionType)}\n"
+                "  Core: Genome, Population, crossover, mutate, tournament_selection"
+            ),
+        },
+        "evolve": {
+            "help": "Run an evolutionary algorithm",
+            "handler": lambda **kwargs: print(
+                "Evolutionary Run\n"
+                "  Use Population(size, genome_length) to create a population.\n"
+                "  Call population.evaluate(fitness_fn) then population.evolve().\n"
+                "  Factory functions: create_mutation, create_crossover, create_selection"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Submodules
     "operators",
     "selection",

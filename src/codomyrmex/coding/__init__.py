@@ -26,6 +26,13 @@ Example:
     >>> fixed = debugger.debug(code, stdout, stderr, exit_code)
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Execution submodule
 # Debugging submodule
 from .debugging import (
@@ -85,7 +92,30 @@ from .sandbox import (
     sandbox_process_isolation,
 )
 
+def cli_commands():
+    """Return CLI commands for the coding module."""
+    def _list_languages():
+        print("Supported languages:")
+        for lang in sorted(SUPPORTED_LANGUAGES):
+            print(f"  {lang}")
+
+    def _execute(lang="python", code="print('hello')"):
+        result = execute_code(lang, code)
+        print(f"Language: {lang}")
+        print(f"Exit code: {result.get('exit_code', 'N/A')}")
+        if result.get("stdout"):
+            print(f"stdout: {result['stdout']}")
+        if result.get("stderr"):
+            print(f"stderr: {result['stderr']}")
+
+    return {
+        "languages": _list_languages,
+        "execute": _execute,
+    }
+
+
 __all__ = [
+    "cli_commands",
     # Execution
     "execute_code",
     "SUPPORTED_LANGUAGES",

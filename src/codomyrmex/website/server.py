@@ -175,8 +175,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             try:
                 content = self.data_provider.get_config_content(filename)
                 self.send_json_response({"content": content})
+            except FileNotFoundError as e:
+                self.send_json_response({"error": str(e)}, status=404)
+            except ValueError as e:
+                self.send_json_response({"error": str(e)}, status=403)
             except Exception as e:
-                self.send_error(404, str(e))
+                self.send_json_response({"error": str(e)}, status=500)
+        else:
+            self.send_json_response({"error": "Data provider missing"}, status=500)
 
     def handle_config_save(self):
         """Handle config save request."""

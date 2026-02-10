@@ -30,6 +30,42 @@ from .schemas.mcp_schemas import (
 # MCP Server
 from .server import MCPServer, MCPServerConfig
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the model_context_protocol module."""
+    return {
+        "tools": {
+            "help": "List registered MCP tools",
+            "handler": lambda **kwargs: print(
+                "MCP Tool Registry:\n"
+                f"  Registry class: {MCPToolRegistry.__name__}\n"
+                f"  Message class: {MCPMessage.__name__}\n"
+                f"  Tool call class: {MCPToolCall.__name__}\n"
+                f"  Tool result class: {MCPToolResult.__name__}\n"
+                f"  Error detail class: {MCPErrorDetail.__name__}\n"
+                "  Submodules: adapters, discovery, schemas, validators"
+            ),
+        },
+        "status": {
+            "help": "Show MCP server status and configuration",
+            "handler": lambda **kwargs: print(
+                f"MCP Server: {MCPServer.__name__}\n"
+                f"MCP Config: {MCPServerConfig.__name__}\n"
+                "Adapters module loaded: True\n"
+                "Discovery module loaded: True\n"
+                "Validators module loaded: True"
+            ),
+        },
+    }
+
+
 __all__ = [
     "MCPErrorDetail",
     "MCPMessage",
@@ -42,6 +78,7 @@ __all__ = [
     "adapters",
     "validators",
     "discovery",
+    "cli_commands",
 ]
 
 

@@ -29,6 +29,13 @@ Available functions:
 - create_bayesian_network: Create a Bayesian network
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .core import (
     ActiveInferenceError,
     AdaptationTransformer,
@@ -82,7 +89,32 @@ except ImportError:
     FPFOrchestrator = None
     FPFCombinatoricsAnalyzer = None
 
+def cli_commands():
+    """Return CLI commands for the cerebrum module."""
+    return {
+        "status": {
+            "help": "Show cerebrum engine status",
+            "handler": lambda **kwargs: print(
+                f"CEREBRUM Engine v{__version__}\n"
+                f"  FPF integration: {'available' if _HAS_FPF else 'not available'}\n"
+                f"  Components: CerebrumEngine, BayesianNetwork, ActiveInferenceAgent\n"
+                f"  Status: ready"
+            ),
+        },
+        "infer": {
+            "help": "Run inference using the CEREBRUM engine",
+            "handler": lambda **kwargs: print(
+                "CEREBRUM Inference\n"
+                "  Available engines: BayesianNetwork, InferenceEngine, ActiveInferenceAgent\n"
+                "  Use CerebrumEngine.create() to start a session"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Core engine
     "CerebrumEngine",
     "ModelManager",

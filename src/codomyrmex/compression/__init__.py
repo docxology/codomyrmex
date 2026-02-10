@@ -26,6 +26,43 @@ from .compressor import (
 from .parallel import ParallelCompressor
 from .zstd_compressor import ZstdCompressor
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the compression module."""
+    return {
+        "algorithms": {
+            "help": "List available compression algorithms",
+            "handler": lambda **kwargs: print(
+                "Compression Algorithms:\n"
+                "  - gzip: GNU zip (default, level 1-9)\n"
+                "  - zlib: zlib deflate compression\n"
+                "  - zip: ZIP archive format\n"
+                "  - zstd: Zstandard compression (fast)\n"
+                "  - parallel: Multi-threaded compression"
+            ),
+        },
+        "stats": {
+            "help": "Show compression module statistics",
+            "handler": lambda **kwargs: print(
+                "Compression Stats:\n"
+                f"  Compressor: {Compressor.__name__} (available)\n"
+                f"  Archive Manager: {ArchiveManager.__name__} (available)\n"
+                f"  Zstd Compressor: {ZstdCompressor.__name__} (available)\n"
+                f"  Parallel Compressor: {ParallelCompressor.__name__} (available)\n"
+                "  Auto-decompress: available\n"
+                "  Supported formats: gzip, zlib, zip, zstd"
+            ),
+        },
+    }
+
+
 __all__ = [
     # Classes
     "Compressor",
@@ -42,6 +79,8 @@ __all__ = [
     "auto_decompress",
     "compress_file",
     "decompress_file",
+    # CLI
+    "cli_commands",
 ]
 
 

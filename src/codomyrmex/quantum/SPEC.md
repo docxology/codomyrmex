@@ -18,8 +18,9 @@ Quantum computing simulation module providing quantum gates, circuits, and algor
 
 | Class | Description |
 |-------|-------------|
-| `QuantumCircuit` | Quantum circuit builder |
-| `QuantumGate` | Quantum gate operations |
+| `QuantumCircuit` | Quantum circuit builder (fluent API) |
+| `Gate` | Gate dataclass (gate_type, target, control, parameter) |
+| `GateType` | Enum of supported gate types |
 | `QuantumSimulator` | Statevector simulator |
 | `Qubit` | Qubit state representation |
 
@@ -27,14 +28,16 @@ Quantum computing simulation module providing quantum gates, circuits, and algor
 
 | Function | Description |
 |----------|-------------|
-| `create_bell_state()` | Create 2-qubit Bell pair |
-| `create_ghz_state(n)` | Create n-qubit GHZ state |
-| `create_qft_circuit(n)` | Create QFT circuit |
+| `bell_state()` | Create 2-qubit Bell pair circuit |
+| `ghz_state(n)` | Create n-qubit GHZ state circuit |
+| `qft(n)` | Create n-qubit QFT circuit |
+| `circuit_to_ascii(circuit)` | Render circuit as ASCII art |
+| `circuit_stats(circuit)` | Return circuit statistics dict |
 
 ## Supported Gates
 
 - Single-qubit: H, X, Y, Z, S, T, Rx, Ry, Rz
-- Multi-qubit: CNOT, CZ, SWAP, Toffoli
+- Multi-qubit: CNOT, CZ, SWAP
 
 ## Design Principles
 

@@ -23,6 +23,13 @@ Usage:
     docs = client.list_docs()
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import from coda_io submodule
 from .coda_io import (
     ACLSettings,
@@ -119,6 +126,38 @@ except ImportError:
 # New submodule exports
 from . import common
 
+def cli_commands():
+    """Return CLI commands for the cloud module."""
+    def _list_providers():
+        """List cloud providers."""
+        print("Cloud Providers:")
+        print("  coda_io     - Coda.io REST API v1 (always available)")
+        print(f"  aws         - Amazon Web Services S3 ({'available' if S3Client else 'unavailable - install boto3'})")
+        print(f"  gcp         - Google Cloud Storage ({'available' if GCSClient else 'unavailable - install google-cloud-storage'})")
+        print(f"  azure       - Azure Blob Storage ({'available' if AzureBlobClient else 'unavailable - install azure-storage-blob'})")
+        print(f"  infomaniak  - Infomaniak Public Cloud ({'available' if InfomaniakComputeClient else 'unavailable - install openstacksdk'})")
+
+    def _cloud_status():
+        """Show cloud status."""
+        print("Cloud Module Status:")
+        available = ["coda_io"]
+        if S3Client:
+            available.append("aws")
+        if GCSClient:
+            available.append("gcp")
+        if AzureBlobClient:
+            available.append("azure")
+        if InfomaniakComputeClient:
+            available.append("infomaniak")
+        print(f"  Available providers: {', '.join(available)}")
+        print(f"  Total providers: {len(available)}/5")
+
+    return {
+        "providers": _list_providers,
+        "status": _cloud_status,
+    }
+
+
 __all__ = [
     # Client
     "CodaClient",
@@ -179,5 +218,6 @@ __all__ = [
     "create_s3_client",
     # Submodules
     "common",
+    "cli_commands",
 ]
 

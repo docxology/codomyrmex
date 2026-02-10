@@ -57,6 +57,11 @@ class QuantumCircuit:
         self.gates.append(Gate(GateType.RZ, qubit, parameter=theta))
         return self
 
+    def swap(self, qubit1: int, qubit2: int) -> "QuantumCircuit":
+        """Add SWAP gate."""
+        self.gates.append(Gate(GateType.SWAP, qubit2, qubit1))
+        return self
+
     def measure(self, qubit: int, classical_bit: int) -> "QuantumCircuit":
         """Add measurement."""
         self.measurements[qubit] = classical_bit

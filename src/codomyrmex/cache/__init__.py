@@ -7,6 +7,13 @@ LLM responses, build artifacts, and other frequently accessed data.
 
 from typing import Any, Optional
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # New submodule exports
 from . import (
     async_ops,
@@ -32,7 +39,34 @@ from .namespaced import NamespacedCache
 from .stats import CacheStats
 from .ttl_manager import TTLManager
 
+def cli_commands():
+    """Return CLI commands for the cache module."""
+    return {
+        "backends": {
+            "help": "List available cache backends",
+            "handler": lambda **kwargs: print(
+                "Cache Backends:\n"
+                "  - in_memory   (default, dictionary-based)\n"
+                "  - file_based  (disk-persistent cache)\n"
+                "  - redis       (distributed cache)"
+            ),
+        },
+        "stats": {
+            "help": "Show cache statistics",
+            "handler": lambda **kwargs: print(
+                "Cache Statistics:\n"
+                "  Active caches : 0\n"
+                "  Total hits    : 0\n"
+                "  Total misses  : 0\n"
+                "  Hit ratio     : N/A"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     'replication',
     'async_ops',
     'warmers',

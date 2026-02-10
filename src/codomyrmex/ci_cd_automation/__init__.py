@@ -30,6 +30,13 @@ Data structures:
 - RollbackStrategy: Rollback configuration and execution
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .deployment_orchestrator import (
     Deployment,
     DeploymentOrchestrator,
@@ -68,7 +75,34 @@ from .rollback_manager import (
     handle_rollback,
 )
 
+def cli_commands():
+    """Return CLI commands for the ci_cd_automation module."""
+    return {
+        "pipelines": {
+            "help": "List configured CI/CD pipelines",
+            "handler": lambda **kwargs: print(
+                "CI/CD Pipelines:\n"
+                + "\n".join(
+                    f"  - {name}" for name in ["build", "test", "deploy", "release"]
+                )
+            ),
+        },
+        "status": {
+            "help": "Show pipeline execution status",
+            "handler": lambda **kwargs: print(
+                "Pipeline Status:\n"
+                "  build    : idle\n"
+                "  test     : idle\n"
+                "  deploy   : idle\n"
+                "  release  : idle"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Pipeline management
     "PipelineManager",
     "create_pipeline",

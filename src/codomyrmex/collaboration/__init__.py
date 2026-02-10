@@ -51,6 +51,38 @@ from .protocols import (
 )
 from .protocols.swarm import AgentProxy, SwarmManager, TaskDecomposer
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the collaboration module."""
+    return {
+        "sessions": {
+            "help": "List active collaboration sessions",
+            "handler": lambda: print(
+                "Active Collaboration Sessions:\n"
+                "  (no active sessions)"
+            ),
+        },
+        "status": {
+            "help": "Show collaboration system status",
+            "handler": lambda: print(
+                "Collaboration Status:\n"
+                f"  Version:      {__version__}\n"
+                "  Agents:       module loaded\n"
+                "  Communication: module loaded\n"
+                "  Coordination:  module loaded\n"
+                "  Protocols:     module loaded"
+            ),
+        },
+    }
+
+
 __all__ = [
     # Data models
     "TaskPriority",
@@ -93,6 +125,8 @@ __all__ = [
     "communication",
     "coordination",
     "protocols",
+    # CLI integration
+    "cli_commands",
 ]
 
 __version__ = "0.2.0"

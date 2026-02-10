@@ -34,6 +34,35 @@ from .exceptions import (
 )
 from .scraper import Scraper
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the scrape module."""
+    return {
+        "fetch": {
+            "help": "Fetch a URL and return scraped content",
+            "args": ["--url"],
+            "handler": lambda url=None: (
+                print(Scraper().scrape(url).content)
+                if url
+                else print("Usage: scrape fetch --url <URL>")
+            ),
+        },
+        "formats": {
+            "help": "List available output formats",
+            "handler": lambda: print(
+                "\n".join(f"- {fmt.value}" for fmt in ScrapeFormat)
+            ),
+        },
+    }
+
+
 __all__ = [
     # Main classes
     "Scraper",
@@ -57,6 +86,8 @@ __all__ = [
     "get_config",
     "set_config",
     "reset_config",
+    # CLI integration
+    "cli_commands",
 ]
 
 __version__ = "0.1.0"

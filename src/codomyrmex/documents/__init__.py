@@ -21,6 +21,13 @@ Integration:
 
 __version__ = "0.1.0"
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import core document operations
 try:
     from .core.document_parser import DocumentParser, parse_document
@@ -162,8 +169,45 @@ except ImportError:
     set_config = None
     CONFIG_AVAILABLE = False
 
+def cli_commands():
+    """Return CLI commands for the documents module."""
+    def _list_formats():
+        """List document formats."""
+        print("Documents Module - Supported Formats:")
+        formats = [
+            ("markdown", FORMATS_AVAILABLE),
+            ("json", FORMATS_AVAILABLE),
+            ("yaml", FORMATS_AVAILABLE),
+            ("text", FORMATS_AVAILABLE),
+            ("pdf", PDF_AVAILABLE),
+            ("html", HTML_AVAILABLE),
+            ("xml", XML_AVAILABLE),
+            ("csv", CSV_AVAILABLE),
+        ]
+        for name, available in formats:
+            status = "available" if available else "unavailable"
+            print(f"  {name:12s} - {status}")
+
+    def _convert_document():
+        """Convert document (shows conversion capabilities)."""
+        print("Documents Module - Conversion:")
+        if TRANSFORMATION_AVAILABLE:
+            print("  convert_document: available")
+            print("  merge_documents:  available")
+            print("  split_document:   available")
+            print("  format_document:  available")
+        else:
+            print("  Transformation capabilities unavailable")
+            print("  Install document transformation dependencies")
+
+    return {
+        "formats": _list_formats,
+        "convert": _convert_document,
+    }
+
+
 # Build __all__ dynamically
-__all__ = []
+__all__ = ["cli_commands"]
 
 if CORE_AVAILABLE:
     __all__.extend([

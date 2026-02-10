@@ -7,6 +7,13 @@ to improve startup time and runtime performance.
 
 from codomyrmex.exceptions import CodomyrmexError
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .cache_manager import CacheManager, cached_function
 from .lazy_loader import LazyLoader, lazy_import
 
@@ -48,6 +55,34 @@ except ImportError:
     def get_system_metrics(*args, **kwargs):
         return {}
 
+def cli_commands():
+    """Return CLI commands for the performance module."""
+    def _run_profiler():
+        """Run the performance profiler."""
+        print(f"Performance module v{__version__}")
+        print("Profiler: PerformanceProfiler")
+        print("  Use profile_function() to profile individual functions")
+        print("  Use run_benchmark() for benchmark suites")
+        if PERFORMANCE_MONITOR_AVAILABLE:
+            print("  PerformanceMonitor: available (psutil detected)")
+        else:
+            print("  PerformanceMonitor: unavailable (psutil not installed)")
+
+    def _performance_report():
+        """Show performance report."""
+        print(f"Performance module v{__version__}")
+        print("Components:")
+        print(f"  LazyLoader: available")
+        print(f"  CacheManager: available")
+        print(f"  PerformanceProfiler: available")
+        print(f"  PerformanceMonitor: {'available' if PERFORMANCE_MONITOR_AVAILABLE else 'unavailable'}")
+
+    return {
+        "profile": _run_profiler,
+        "report": _performance_report,
+    }
+
+
 __all__ = [
     "LazyLoader",
     "lazy_import",
@@ -56,6 +91,7 @@ __all__ = [
     "PerformanceProfiler",
     "profile_function",
     "run_benchmark",
+    "cli_commands",
 ]
 
 if PERFORMANCE_MONITOR_AVAILABLE:

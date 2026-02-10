@@ -623,3 +623,49 @@ class TestCircuitStats:
         stats = circuit_stats(QuantumCircuit(1))
         expected_keys = {"num_qubits", "num_gates", "gate_counts", "depth", "has_measurements"}
         assert set(stats.keys()) == expected_keys
+
+
+# ---------------------------------------------------------------------------
+# NEW: SWAP gate tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+class TestSwapGate:
+    """Tests for QuantumCircuit.swap() and simulator SWAP support."""
+
+    def test_swap_adds_gate(self):
+        """swap() adds a SWAP gate to the circuit."""
+        c = QuantumCircuit(2)
+        c.swap(0, 1)
+        assert len(c.gates) == 1
+        assert c.gates[0].gate_type == GateType.SWAP
+
+    def test_swap_returns_self(self):
+        """swap() returns self for fluent chaining."""
+        c = QuantumCircuit(2)
+        assert c.swap(0, 1) is c
+
+    def test_swap_chaining(self):
+        """swap() can chain with other gate methods."""
+        c = QuantumCircuit(2)
+        result = c.h(0).swap(0, 1).measure_all()
+        assert result is c
+        assert len(c.gates) == 2
+        assert c.gates[1].gate_type == GateType.SWAP
+
+    def test_swap_simulation(self):
+        """SWAP after X(0) should move |1> from qubit 0 to qubit 1."""
+        c = QuantumCircuit(2).x(0).swap(0, 1).measure_all()
+        sim = QuantumSimulator()
+        counts = sim.run(c, shots=500)
+        # After X on q0: state is |10>. After SWAP: state is |01>.
+        # Bitstring is reversed: qubit 0 is rightmost, so |01> -> "10"
+        assert "10" in counts, f"Expected '10' in counts, got {counts}"
+        assert counts["10"] == 500
+
+    def test_swap_ascii(self):
+        """SWAP gate renders 'x' in ASCII output."""
+        c = QuantumCircuit(2).swap(0, 1)
+        output = circuit_to_ascii(c)
+        assert "x" in output

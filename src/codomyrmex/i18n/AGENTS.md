@@ -6,11 +6,12 @@ Internationalization: translations, pluralization, and number formatting.
 
 ## Key Classes
 
-- **Translator** — Message translation
-- **Locale** — Locale information
-- **MessageBundle** — Translation bundles
-- **PluralRules** — Pluralization
-- **NumberFormatter** — Locale-aware numbers
+- **Translator** — Message translation with interpolation
+- **Locale** — Locale representation (language + region)
+- **MessageBundle** — Translation message bundles
+- **PluralRules** — Pluralization engine
+- **NumberFormatter** — Locale-aware number formatting (classmethod)
+- **DateFormatter** — Locale-aware date/time formatting (classmethod)
 
 ## Agent Instructions
 
@@ -18,44 +19,55 @@ Internationalization: translations, pluralization, and number formatting.
 2. **Use keys** — Descriptive translation keys
 3. **Handle plurals** — Use PluralRules for counts
 4. **Format numbers** — Use locale-aware formatting
-5. **Fallback chain** — en-US → en → default
+5. **Fallback chain** — en_US → en → default
 
 ## Common Patterns
 
 ```python
-from codomyrmex.i18n import Translator, init, t, NumberFormatter
+from codomyrmex.i18n import (
+    Translator, Locale, MessageBundle, init, t,
+    NumberFormatter, DateFormatter, PluralRules
+)
+from datetime import date
 
-# Initialize translator
-init(locale="fr-FR", bundles_path="./locales")
+# Initialize global translator
+init(default_locale="fr")
 
-# Translate messages
-message = t("welcome_message", name="Jean")
-print(message)  # "Bienvenue, Jean!"
+# Add bundles manually or load from directory
+tr = Translator(Locale("en"))
+en = MessageBundle.from_dict(Locale("en"), {"welcome": "Hello, {name}!"})
+tr.add_bundle(en)
+tr.t("welcome", name="Jean")  # "Hello, Jean!"
+
+# Load bundles from a directory of JSON files
+tr.load_directory("./locales")
+
+# Format numbers (classmethod API)
+NumberFormatter.format(Locale("de"), 1234567.89)  # "1.234.567,89"
+NumberFormatter.format(Locale("en"), 1000.5, decimals=0)  # "1,001"
+
+# Format dates (classmethod API)
+DateFormatter.format_date(Locale("de"), date(2025, 3, 15))  # "15.03.2025"
+DateFormatter.format_date(Locale("en"), date(2025, 3, 15))  # "03/15/2025"
 
 # Pluralization
-items = t("items_count", count=3)
-print(items)  # "3 éléments"
-
-# Format numbers
-fmt = NumberFormatter(locale="de-DE")
-print(fmt.format_number(1234567.89))  # "1.234.567,89"
-print(fmt.format_currency(99.99, "EUR"))  # "99,99 €"
+PluralRules.pluralize(Locale("en"), 1, {"one": "1 item", "other": "{n} items"})
 ```
 
 ## Testing Patterns
 
 ```python
 # Verify translation
-init(locale="en-US")
-assert t("hello") == "Hello"
-
-# Verify pluralization
-assert "1 item" in t("items", count=1)
-assert "5 items" in t("items", count=5)
+tr = Translator(Locale("en"))
+bundle = MessageBundle.from_dict(Locale("en"), {"hello": "Hello"})
+tr.add_bundle(bundle)
+assert tr.t("hello") == "Hello"
 
 # Verify number formatting
-fmt = NumberFormatter(locale="en-US")
-assert fmt.format_number(1000) == "1,000"
+assert NumberFormatter.format(Locale("en"), 1000.0, decimals=0) == "1,000"
+
+# Verify date formatting
+assert DateFormatter.format_date(Locale("en"), date(2025, 1, 1)) == "01/01/2025"
 ```
 
 ## Navigation

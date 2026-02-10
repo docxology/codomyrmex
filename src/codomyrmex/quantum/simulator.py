@@ -68,6 +68,18 @@ class QuantumSimulator:
                 new_state[j] = self._state[i]
         self._state = new_state
 
+    def _apply_swap(self, qubit1: int, qubit2: int):
+        """Apply SWAP gate by swapping amplitudes."""
+        new_state = list(self._state)
+        for i in range(len(self._state)):
+            bit1 = (i >> qubit1) & 1
+            bit2 = (i >> qubit2) & 1
+            if bit1 != bit2:
+                j = i ^ (1 << qubit1) ^ (1 << qubit2)
+                new_state[i] = self._state[j]
+                new_state[j] = self._state[i]
+        self._state = new_state
+
     def run(self, circuit: QuantumCircuit, shots: int = 1024) -> dict[str, int]:
         """Run circuit and return measurement counts."""
         counts: dict[str, int] = {}
@@ -80,6 +92,8 @@ class QuantumSimulator:
                 if gate.control is not None:
                     if gate.gate_type == GateType.CNOT:
                         self._apply_cnot(gate.control, gate.target)
+                    elif gate.gate_type == GateType.SWAP:
+                        self._apply_swap(gate.control, gate.target)
                 else:
                     self._apply_single_gate(
                         gate.gate_type,

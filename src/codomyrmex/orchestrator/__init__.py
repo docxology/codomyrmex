@@ -12,6 +12,13 @@ Features:
 - Progress streaming and callbacks
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # New submodule exports
 from . import (
     engines,
@@ -81,7 +88,29 @@ from .workflow import (
     parallel,
 )
 
+def cli_commands():
+    """Return CLI commands for the orchestrator module."""
+    return {
+        "workflows": {
+            "help": "List available workflows",
+            "handler": lambda **kwargs: print(
+                "Available workflows:\n"
+                + "\n".join(f"  - {name}" for name in ["default", "ci", "deploy", "test"])
+            ),
+        },
+        "run": {
+            "help": "Run a workflow by name",
+            "args": {"--name": {"help": "Workflow name to run", "required": True}},
+            "handler": lambda name="default", **kwargs: print(
+                f"Running workflow: {name}"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     'templates',
     'state',
     'triggers',

@@ -10,22 +10,32 @@ The Edge Computing module provides PAI integration for edge node management, ena
 
 ### Edge Deployment
 
-Deploy AI functions to edge nodes:
+Deploy functions to edge nodes via cluster:
 
 ```python
 from codomyrmex.edge_computing import (
-    EdgeCluster, EdgeFunction, EdgeNode
+    EdgeCluster, EdgeFunction, EdgeNode, EdgeMetrics, InvocationRecord
 )
 
-# Create edge function
-@EdgeFunction(resources={"memory": "256MB"})
-def process_sensor_data(data):
-    return analyze(data)
-
-# Deploy to edge cluster
+# Create cluster and register nodes
 cluster = EdgeCluster()
-cluster.add_node(EdgeNode("edge-1", location="factory-a"))
-cluster.deploy(process_sensor_data, to_nodes=["edge-1"])
+node = EdgeNode(id="edge-1", name="factory-sensor", location="factory-a")
+cluster.register_node(node)
+
+# Deploy function to all nodes
+func = EdgeFunction(id="fn-1", name="process-data", handler=my_handler)
+count = cluster.deploy_to_all(func)  # -> int (nodes deployed to)
+
+# Invoke via runtime
+runtime = cluster.get_runtime("edge-1")
+result = runtime.invoke("fn-1", sensor_data)
+
+# Track metrics
+metrics = EdgeMetrics()
+metrics.record(InvocationRecord(
+    function_id="fn-1", node_id="edge-1",
+    duration_ms=15.2, success=True
+))
 ```
 
 ### State Synchronization
@@ -33,16 +43,20 @@ cluster.deploy(process_sensor_data, to_nodes=["edge-1"])
 Keep edge and cloud in sync:
 
 ```python
-from codomyrmex.edge_computing import EdgeSynchronizer
+from codomyrmex.edge_computing import EdgeSynchronizer, SyncState
 
-# Sync manager
 sync = EdgeSynchronizer()
 
-# Bidirectional sync
-sync.sync_bidirectional(cloud_state, edge_state)
+# Update local state
+state = sync.update_local({"readings": [1, 2, 3]})
 
-# Handle conflicts
-sync.on_conflict(lambda c, e: c)  # Cloud wins
+# Apply remote state (accepts if version is newer)
+remote = SyncState.from_data({"readings": [4, 5]}, version=5)
+applied = sync.apply_remote(remote)  # -> bool
+
+# Get pending changes
+changes = sync.get_pending_changes()
+sync.confirm_sync(up_to_version=3)
 ```
 
 ## PAI Integration Points
@@ -50,8 +64,9 @@ sync.on_conflict(lambda c, e: c)  # Cloud wins
 | Component | PAI Use Case |
 |-----------|-------------|
 | `EdgeCluster` | Manage distributed edge nodes |
-| `EdgeFunction` | Deploy AI at the edge |
+| `EdgeRuntime` | Deploy and invoke functions |
 | `EdgeSynchronizer` | State consistency |
+| `EdgeMetrics` | Invocation tracking |
 
 ## Navigation
 

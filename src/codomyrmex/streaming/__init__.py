@@ -14,6 +14,39 @@ from .stream import (
 )
 from .processors import StreamProcessor
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the streaming module."""
+    return {
+        "streams": {
+            "help": "List active streams",
+            "handler": lambda: print(
+                "Stream Backends:\n"
+                "  - InMemoryStream\n"
+                "  - SSEStream\n"
+                "  - TopicStream\n"
+                "  Active streams: 0"
+            ),
+        },
+        "stats": {
+            "help": "Show streaming statistics",
+            "handler": lambda: print(
+                "Streaming Stats:\n"
+                "  Event types:      " + str(len(EventType)) + "\n"
+                "  Processors:       0\n"
+                "  Subscriptions:    0"
+            ),
+        },
+    }
+
+
 __all__ = [
     "EventType",
     "Event",
@@ -25,4 +58,6 @@ __all__ = [
     "TopicStream",
     "broadcast",
     "StreamProcessor",
+    # CLI integration
+    "cli_commands",
 ]

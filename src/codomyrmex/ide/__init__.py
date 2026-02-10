@@ -18,6 +18,13 @@ Example:
 
 import time
 from abc import ABC, abstractmethod
+
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -261,6 +268,28 @@ from codomyrmex.exceptions import (
 # Import submodule clients
 from codomyrmex.ide.cursor import CursorClient
 
+def cli_commands():
+    """Return CLI commands for the IDE module."""
+    def _list_extensions():
+        """List IDE extensions."""
+        print("IDE Integration Extensions:")
+        print("  cursor    - Cursor AI-first code editor")
+        print("  vscode    - Visual Studio Code")
+        print("  antigravity - Google DeepMind Antigravity IDE")
+
+    def _ide_status():
+        """Show IDE integration status."""
+        print("IDE Module Status:")
+        print(f"  IDEClient: available (abstract base)")
+        print(f"  CursorClient: {'available' if CursorClient else 'unavailable'}")
+        print(f"  Statuses: {', '.join(s.value for s in IDEStatus)}")
+
+    return {
+        "extensions": _list_extensions,
+        "status": _ide_status,
+    }
+
+
 __all__ = [
     "IDEClient",
     "IDEStatus",
@@ -274,4 +303,5 @@ __all__ = [
     "ArtifactError",
     # Submodule clients
     "CursorClient",
+    "cli_commands",
 ]

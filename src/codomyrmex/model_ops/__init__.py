@@ -11,6 +11,13 @@ import uuid
 from typing import Any, Dict, List, Optional
 from collections.abc import Callable
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports
 from . import evaluation, training
 
@@ -270,7 +277,37 @@ def length_ratio_metric(predictions: list[str], references: list[str]) -> float:
     return sum(ratios) / len(ratios)
 
 
+def cli_commands():
+    """Return CLI commands for the model_ops module."""
+    return {
+        "pipelines": {
+            "help": "List ML pipelines",
+            "handler": lambda **kwargs: print(
+                "Model Operations Pipelines\n"
+                "  Available pipelines:\n"
+                "    - Dataset preparation (Dataset, DatasetSanitizer)\n"
+                "    - Fine-tuning (FineTuningJob)\n"
+                "    - Evaluation (ModelEvaluator, Evaluator)\n"
+                f"  Task types: {', '.join(tt.value if hasattr(tt, 'value') else str(tt) for tt in TaskType)}"
+            ),
+        },
+        "status": {
+            "help": "Show pipeline status",
+            "handler": lambda **kwargs: print(
+                f"Model Ops v{__version__}\n"
+                f"  Datasets submodule: {'available' if datasets is not None else 'not available'}\n"
+                f"  Fine-tuning submodule: {'available' if fine_tuning is not None else 'not available'}\n"
+                "  Evaluation submodule: available\n"
+                "  Training submodule: available\n"
+                "  Status: ready"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Submodules
     "evaluation",
     "training",

@@ -32,9 +32,105 @@ import json
 from typing import Any, Dict, List, Optional
 
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
+from codomyrmex.model_context_protocol.discovery import (
+    DiscoveredTool,
+    SpecificationScanner,
+    ToolCatalog,
+    discover_tools,
+)
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
+
+
+# ============================================================================
+# MCP Tool Discovery Bridge
+# ============================================================================
+
+def discover_and_register_tools(server: MCPServer) -> int:
+    """
+    Discover tools from MCP_TOOL_SPECIFICATION.md files across all modules
+    and register them with the MCP server.
+
+    Returns the number of tools discovered and registered.
+    """
+    project_root = Path(__file__).resolve().parent.parent.parent
+    modules_dir = project_root / "src" / "codomyrmex"
+
+    # Find all MCP_TOOL_SPECIFICATION.md files
+    spec_files = list(modules_dir.rglob("MCP_TOOL_SPECIFICATION.md"))
+    logger.info(f"Found {len(spec_files)} MCP specification files")
+
+    # Use the discovery system to scan specifications
+    catalog = discover_tools(spec_files=spec_files)
+    discovered = catalog.list_all()
+    registered_count = 0
+
+    for tool in discovered:
+        # Skip tools with empty names or duplicates of built-in tools
+        if not tool.name or not tool.name.strip():
+            continue
+
+        # Sanitize tool name: lowercase, replace spaces/special chars
+        safe_name = tool.name.lower().replace(" ", "_").replace("-", "_")
+        safe_name = "".join(c for c in safe_name if c.isalnum() or c == "_")
+
+        if not safe_name:
+            continue
+
+        # Prefix with module source to avoid collisions
+        source_module = _extract_module_name(tool.source_path, str(modules_dir))
+        if source_module:
+            prefixed_name = f"{source_module}__{safe_name}"
+        else:
+            prefixed_name = safe_name
+
+        # Check for duplicate tool names
+        existing = server._tool_registry.list_tools()
+        if prefixed_name in existing:
+            continue
+
+        # Build schema for registration
+        schema = {
+            "name": prefixed_name,
+            "description": tool.description or f"Discovered tool: {tool.name}",
+            "inputSchema": tool.input_schema if tool.input_schema else {
+                "type": "object",
+                "properties": {},
+                "required": [],
+            },
+        }
+
+        # Create a handler that returns tool metadata (spec-discovered tools
+        # are documentation-only; actual execution routes through module code)
+        def make_handler(t: DiscoveredTool):
+            def handler(**kwargs):
+                return (
+                    f"Tool '{t.name}' from {t.source_path}. "
+                    f"This tool is defined in the MCP specification. "
+                    f"Pass arguments to the underlying module for execution."
+                )
+            return handler
+
+        server.register_tool(prefixed_name, schema, make_handler(tool))
+        registered_count += 1
+        logger.debug(f"Registered discovered tool: {prefixed_name}")
+
+    logger.info(f"Registered {registered_count} discovered tools from specifications")
+    return registered_count
+
+
+def _extract_module_name(source_path: str, base_dir: str) -> str:
+    """Extract the module name from a specification file path."""
+    try:
+        rel = Path(source_path).relative_to(base_dir)
+        parts = rel.parts
+        # The first directory component is the module name
+        if parts:
+            return parts[0]
+    except (ValueError, IndexError):
+        pass
+    return ""
 
 
 # ============================================================================
@@ -255,12 +351,19 @@ def create_server(name: str = "codomyrmex-mcp") -> MCPServer:
     config = MCPServerConfig(name=name, version="1.0.0")
     server = MCPServer(config)
     
-    # Register all tool categories
+    # Register all built-in tool categories
     create_file_tools(server)
     create_code_tools(server)
     create_shell_tools(server)
     create_memory_tools(server)
     create_codomyrmex_tools(server)
+
+    # Discover and register tools from MCP_TOOL_SPECIFICATION.md files
+    try:
+        discovered_count = discover_and_register_tools(server)
+        logger.info(f"Discovery bridge registered {discovered_count} additional tools")
+    except Exception as e:
+        logger.warning(f"Tool discovery failed (non-fatal): {e}")
     
     # Register resources
     project_root = Path(__file__).parent.parent.parent

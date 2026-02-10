@@ -23,6 +23,13 @@ The module is organized into submodules:
 - pagination: Cursor, offset, and keyset pagination
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import from documentation submodule
 # Import from authentication submodule
 from .authentication import (
@@ -192,6 +199,32 @@ from .webhooks import (
     create_webhook_registry,
 )
 
+def cli_commands():
+    """Return CLI commands for the API module."""
+    def _list_routes():
+        """List API routes."""
+        print("API Module - Route Types:")
+        print("  REST API routes (via RESTAPI / APIRouter)")
+        print("  GraphQL endpoints (via GraphQLAPI / GraphQLSchema)")
+        print("  Webhook endpoints (via WebhookRegistry)")
+        print("  Mock routes (via MockAPIServer)")
+
+    def _api_status():
+        """Show API status."""
+        print("API Module Status:")
+        print("  Authentication: APIKey, Bearer, Basic, HMAC")
+        print("  Rate Limiting: FixedWindow, SlidingWindow, TokenBucket")
+        print("  Resilience: CircuitBreaker, RetryPolicy, Bulkhead")
+        print("  Pagination: Offset, Cursor, Keyset")
+        print("  Webhooks: available")
+        print("  Mocking: available")
+
+    return {
+        "routes": _list_routes,
+        "status": _api_status,
+    }
+
+
 __all__ = [
     # Documentation submodule exports
     "APIDocumentationGenerator",
@@ -309,4 +342,5 @@ __all__ = [
     "CursorPaginator",
     "KeysetPaginator",
     "create_paginator",
+    "cli_commands",
 ]

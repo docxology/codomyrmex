@@ -25,6 +25,39 @@ from .service import (
     FeatureService,
 )
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the feature_store module."""
+    def _list_features():
+        print(
+            "Feature Store\n"
+            "  Feature types: " + ", ".join(ft.value for ft in FeatureType) + "\n"
+            "  Value types: " + ", ".join(vt.value for vt in ValueType) + "\n"
+            "  Built-in features: USER_ID_FEATURE, TIMESTAMP_FEATURE\n"
+            "  Use FeatureStore / InMemoryFeatureStore to manage feature storage."
+        )
+
+    def _feature_stats():
+        print(
+            "Feature Store Stats\n"
+            "  Use FeatureService to serve features with transforms.\n"
+            "  Use FeatureGroup to organize related features.\n"
+            "  Use FeatureVector for point-in-time feature retrieval."
+        )
+
+    return {
+        "features": _list_features,
+        "stats": _feature_stats,
+    }
+
+
 __all__ = [
     # Models
     "FeatureType",
@@ -41,4 +74,6 @@ __all__ = [
     # Service
     "FeatureTransform",
     "FeatureService",
+    # CLI
+    "cli_commands",
 ]

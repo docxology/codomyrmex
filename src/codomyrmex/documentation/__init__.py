@@ -21,6 +21,13 @@ Available functions:
 - assess_site
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .consistency_checker import DocumentationConsistencyChecker
 from .documentation_website import (
     aggregate_docs,
@@ -36,7 +43,35 @@ from .documentation_website import (
 )
 from .quality_assessment import DocumentationQualityAnalyzer, generate_quality_report
 
+def cli_commands():
+    """Return CLI commands for the documentation module."""
+    def _generate(path=None):
+        import os
+        target = path or os.getcwd()
+        print(f"Generating documentation for: {target}")
+        try:
+            result = aggregate_docs(target)
+            if result:
+                print(f"  Result: {result}")
+            else:
+                print("  Documentation aggregated successfully.")
+        except Exception as e:
+            print(f"Documentation error: {e}")
+
+    def _list_formats():
+        formats = ["html", "markdown", "json", "rst"]
+        print("Supported output formats:")
+        for fmt in formats:
+            print(f"  {fmt}")
+
+    return {
+        "generate": _generate,
+        "formats": _list_formats,
+    }
+
+
 __all__ = [
+    "cli_commands",
     "check_doc_environment",
     "run_command_stream_output",
     "install_dependencies",

@@ -10,46 +10,55 @@ The Quantum module provides PAI integration for quantum computing simulation, en
 
 ### Quantum Circuit Building
 
-Build quantum circuits programmatically:
+Build quantum circuits with a fluent API:
 
 ```python
 from codomyrmex.quantum import QuantumCircuit, QuantumSimulator
 
 # Create Bell state circuit
 circuit = QuantumCircuit(2)
-circuit.h(0)        # Hadamard on qubit 0
-circuit.cnot(0, 1)  # CNOT controlled by 0
+circuit.h(0).cnot(0, 1).measure_all()
 
-# Simulate
+# Simulate — returns dict[str, int] of bitstring -> count
 sim = QuantumSimulator()
-result = sim.run(circuit, shots=1000)
-
-print(f"Measurement outcomes: {result.counts}")
-# {'00': 500, '11': 500}  # Bell state!
+counts = sim.run(circuit, shots=1000)
+print(counts)  # {"00": ~500, "11": ~500}
 ```
 
 ### Quantum Algorithm Exploration
 
-AI-assisted quantum algorithm development:
+Use built-in algorithm functions and visualization:
 
 ```python
-from codomyrmex.quantum import create_qft_circuit
+from codomyrmex.quantum import (
+    qft, bell_state, ghz_state,
+    circuit_to_ascii, circuit_stats
+)
 
 # Quantum Fourier Transform
-qft = create_qft_circuit(n_qubits=4)
+qft_circuit = qft(4)
 
-# Analyze circuit
-print(f"Depth: {qft.depth}")
-print(f"Gates: {qft.gate_count}")
+# Analyze circuit with circuit_stats()
+stats = circuit_stats(qft_circuit)
+print(f"Depth: {stats['depth']}")
+print(f"Gates: {stats['num_gates']}")
+print(f"Gate breakdown: {stats['gate_counts']}")
+
+# Visualize as ASCII
+print(circuit_to_ascii(bell_state()))
+# q0: -H--*--M-
+# q1: ----X--M-
 ```
 
 ## PAI Integration Points
 
 | Component | PAI Use Case |
 |-----------|-------------|
-| `QuantumCircuit` | Build quantum programs |
+| `QuantumCircuit` | Build quantum programs (fluent API) |
 | `QuantumSimulator` | Test quantum algorithms |
-| `QuantumGate` | Custom gate operations |
+| `Gate` / `GateType` | Gate representation |
+| `circuit_to_ascii` | Visualize circuits |
+| `circuit_stats` | Analyze circuit complexity |
 
 ## Navigation
 

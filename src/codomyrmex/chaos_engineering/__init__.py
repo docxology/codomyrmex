@@ -16,6 +16,13 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from collections.abc import Callable
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 
 class FaultType(Enum):
     """Types of injectable faults."""
@@ -231,6 +238,32 @@ def with_chaos(
     return decorator
 
 
+def cli_commands():
+    """Return CLI commands for the chaos_engineering module."""
+
+    def _experiments():
+        """List registered chaos experiments."""
+        print("Chaos Engineering Experiments")
+        print(f"  Fault Types: {[ft.value for ft in FaultType]}")
+        monkey = ChaosMonkey()
+        print(f"  Registered Experiments: {len(monkey._experiments)}")
+        print(f"  Past Results: {len(monkey.results)}")
+
+    def _run(name: str = ""):
+        """Run a chaos experiment by --name."""
+        if not name:
+            print("Usage: chaos_engineering run --name <experiment_name>")
+            return
+        print(f"Running chaos experiment: {name}")
+        print("  (No experiments registered in default context)")
+        print(f"  Available fault types: {[ft.value for ft in FaultType]}")
+
+    return {
+        "experiments": _experiments,
+        "run": _run,
+    }
+
+
 __all__ = [
     "FaultInjector",
     "FaultType",
@@ -241,4 +274,5 @@ __all__ = [
     "ExperimentResult",
     "InjectedFaultError",
     "with_chaos",
+    "cli_commands",
 ]

@@ -5,6 +5,13 @@ This module provides utilities for generating various types of plots,
 visualizations, and interactive dashboards.
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports - import first to make available
 from . import charts, mermaid, themes
 
@@ -202,10 +209,32 @@ def get_available_plot_types():
         return [t.value for t in PlotType]
     return []
 
+def cli_commands():
+    """Return CLI commands for the data_visualization module."""
+    return {
+        "chart_types": lambda: print(
+            "Available Chart Types\n"
+            "  Plot types: " + ", ".join(get_available_plot_types()) + "\n"
+            "  Styles: " + ", ".join(get_available_styles()) + "\n"
+            "  Palettes: " + ", ".join(get_available_palettes()) + "\n"
+            "  Advanced plotter: " + ("available" if HAS_ADVANCED_PLOTTER else "not installed") + "\n"
+            "  Git visualizer: " + ("available" if HAS_GIT_VIZ else "not installed") + "\n"
+            "  Mermaid generator: " + ("available" if HAS_MERMAID_GEN else "not installed")
+        ),
+        "render": lambda: print(
+            "Render Visualization\n"
+            "  Use create_line_plot, create_bar_chart, create_scatter_plot, etc.\n"
+            "  For advanced rendering use AdvancedPlotter (if available).\n"
+            "  For git diagrams use GitVisualizer or MermaidDiagramGenerator."
+        ),
+    }
+
+
 __all__ = [
     "themes",
     "mermaid",
     "charts",
+    "cli_commands",
     "get_available_styles",
     "get_available_palettes",
     "get_available_plot_types",

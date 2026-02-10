@@ -20,9 +20,13 @@ Smart contracts module providing blockchain interaction capabilities for Ethereu
 |-------|-------------|
 | `Contract` | Smart contract interface |
 | `Transaction` | Transaction representation |
-| `TransactionBuilder` | Build transactions |
-| `Network` | Network configuration |
-| `ContractCall` | Contract method calls |
+| `TransactionBuilder` | Fluent transaction builder |
+| `Network` | Network enum (ETHEREUM, POLYGON, ARBITRUM, OPTIMISM, BASE, SOLANA) |
+| `ContractCall` | Fluent contract method call builder |
+| `ContractRegistry` | In-memory named contract registry |
+| `ContractEvent` | Smart contract event record |
+| `EventFilter` | Fluent event filter builder |
+| `EventLog` | Event collection and query |
 
 ## Key Functions
 
@@ -30,13 +34,12 @@ Smart contracts module providing blockchain interaction capabilities for Ethereu
 |----------|-------------|
 | `wei_to_ether(wei)` | Convert wei to ether |
 | `ether_to_wei(ether)` | Convert ether to wei |
-| `is_valid_address(addr)` | Validate address format |
+| `gwei_to_wei(gwei)` | Convert gwei to wei |
 
 ## Supported Networks
 
-- Ethereum Mainnet, Goerli, Sepolia
-- Polygon, Arbitrum, Optimism
-- Custom RPC endpoints
+- Ethereum, Polygon, Arbitrum, Optimism, Base
+- Solana
 
 ## Design Principles
 

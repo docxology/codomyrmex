@@ -28,6 +28,13 @@ Data structures:
 - ConfigAudit: Configuration audit and compliance results
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .config_deployer import (
     ConfigDeployment,
     ConfigurationDeployer,
@@ -62,6 +69,32 @@ except ImportError:
     manage_secrets = None
     SECRET_MANAGEMENT_AVAILABLE = False
 
+def cli_commands():
+    """Return CLI commands for the config_management module."""
+    def _show(**kwargs):
+        """Show current configuration."""
+        mgr = ConfigurationManager()
+        config = mgr.get_current()
+        print("=== Current Configuration ===")
+        for key, value in (config or {}).items():
+            print(f"  {key}: {value}")
+
+    def _validate(**kwargs):
+        """Validate configuration against schemas."""
+        mgr = ConfigurationManager()
+        result = mgr.validate()
+        status = "VALID" if result else "INVALID"
+        print(f"Configuration status: {status}")
+        if hasattr(result, "errors") and result.errors:
+            for err in result.errors:
+                print(f"  ERROR: {err}")
+
+    return {
+        "show": {"handler": _show, "help": "Show current configuration"},
+        "validate": {"handler": _validate, "help": "Validate configuration against schemas"},
+    }
+
+
 # Build __all__ dynamically based on available components
 __all__ = [
     # Configuration management
@@ -79,6 +112,7 @@ __all__ = [
     "monitor_config_changes",
     "ConfigAudit",
     "ConfigWatcher",
+    "cli_commands",
 ]
 
 # Add secret management if available

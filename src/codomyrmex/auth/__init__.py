@@ -15,6 +15,41 @@ from .permissions import PermissionRegistry
 from .token import Token, TokenManager
 from .validator import TokenValidator
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the auth module."""
+    return {
+        "providers": {
+            "help": "List available authentication providers",
+            "handler": lambda **kwargs: print(
+                "Auth Providers:\n"
+                f"  - Authenticator: {Authenticator.__name__}\n"
+                f"  - API Key Manager: {APIKeyManager.__name__}\n"
+                f"  - Token Manager: {TokenManager.__name__}\n"
+                f"  - Token Validator: {TokenValidator.__name__}\n"
+                f"  - Permission Registry: {PermissionRegistry.__name__}"
+            ),
+        },
+        "status": {
+            "help": "Show current authentication status",
+            "handler": lambda **kwargs: print(
+                "Auth Status:\n"
+                "  Authenticator: available\n"
+                "  API Key Manager: available\n"
+                "  Token Manager: available\n"
+                "  Permission Registry: available"
+            ),
+        },
+    }
+
+
 __all__ = [
     "Authenticator",
     "Token",
@@ -25,6 +60,7 @@ __all__ = [
     "authenticate",
     "authorize",
     "get_authenticator",
+    "cli_commands",
 ]
 
 __version__ = "0.1.0"

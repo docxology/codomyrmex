@@ -740,3 +740,31 @@ class TestEventLog:
     def test_latest_empty_log(self):
         log = EventLog()
         assert log.latest() == []
+
+
+# ---------------------------------------------------------------------------
+# ContractRegistry.remove() tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+class TestContractRegistryRemove:
+    """Tests for ContractRegistry.remove() method."""
+
+    def test_remove_existing_returns_true(self, contract_with_abi):
+        registry = ContractRegistry()
+        registry.register("token", contract_with_abi)
+        assert registry.remove("token") is True
+        assert registry.get("token") is None
+
+    def test_remove_missing_returns_false(self):
+        registry = ContractRegistry()
+        assert registry.remove("nonexistent") is False
+
+    def test_remove_then_register_again(self, contract_with_abi, empty_contract):
+        registry = ContractRegistry()
+        registry.register("token", contract_with_abi)
+        registry.remove("token")
+        registry.register("token", empty_contract)
+        result = registry.get("token")
+        assert result is empty_contract

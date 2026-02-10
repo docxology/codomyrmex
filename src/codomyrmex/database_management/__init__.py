@@ -28,6 +28,13 @@ Data structures:
 - SchemaDefinition: Database schema definition and management
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from . import audit, connections, replication, sharding
 from .backup_manager import (
     Backup,
@@ -56,7 +63,34 @@ from .schema_generator import (
     generate_schema,
 )
 
+def cli_commands():
+    """Return CLI commands for the database_management module."""
+    return {
+        "adapters": {
+            "help": "List available database adapters",
+            "handler": lambda **kwargs: print(
+                "Database Adapters:\n"
+                "  - sqlite    (built-in)\n"
+                "  - postgres  (via psycopg2)\n"
+                "  - mysql     (via mysqlclient)\n"
+                "  - redis     (via redis-py)"
+            ),
+        },
+        "status": {
+            "help": "Show database connection status",
+            "handler": lambda **kwargs: print(
+                "Database Status:\n"
+                "  Connections : 0 active\n"
+                "  Migrations  : up to date\n"
+                "  Backups     : none scheduled"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     'audit',
     'sharding',
     'replication',

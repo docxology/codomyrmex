@@ -9,6 +9,13 @@ Integration:
 - Relies on `environment_setup` for environment and dependency checks.
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from codomyrmex.exceptions import CodomyrmexError
 
 # GitHub API Operations
@@ -96,7 +103,44 @@ try:
 except ImportError:
     VISUALIZATION_INTEGRATION_AVAILABLE = False
 
+def cli_commands():
+    """Return CLI commands for the git_operations module."""
+    def _show_status():
+        import os
+        try:
+            status = get_status(os.getcwd())
+            print("Git status:")
+            if isinstance(status, dict):
+                for key, value in status.items():
+                    print(f"  {key}: {value}")
+            else:
+                print(f"  {status}")
+        except Exception as e:
+            print(f"Error getting git status: {e}")
+
+    def _show_info():
+        import os
+        cwd = os.getcwd()
+        try:
+            is_repo = is_git_repository(cwd)
+            print(f"Path: {cwd}")
+            print(f"Is git repository: {is_repo}")
+            if is_repo:
+                branch = get_current_branch(cwd)
+                print(f"Current branch: {branch}")
+                remotes = list_remotes(cwd)
+                print(f"Remotes: {remotes}")
+        except Exception as e:
+            print(f"Error getting repo info: {e}")
+
+    return {
+        "status": _show_status,
+        "info": _show_info,
+    }
+
+
 __all__ = [
+    "cli_commands",
     # Core operations
     "check_git_availability",
     "is_git_repository",

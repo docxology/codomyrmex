@@ -5,6 +5,13 @@ This module provides template engine support (Jinja2, Mako) for code generation,
 documentation templates, and dynamic content.
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports - import first to make available
 from . import context, engines, filters
 
@@ -90,6 +97,36 @@ def render_file(path: str, context: dict = None, engine: str = "jinja2") -> str:
     return template.render(context)
 
 
+def cli_commands():
+    """Return CLI commands for the templating module."""
+    def _list_engines():
+        """List template engines."""
+        print("Templating Module - Engines:")
+        print("  jinja2 - Jinja2 template engine (default)")
+        print("  mako   - Mako template engine")
+        print(f"  TemplateEngine: {'available' if TemplateEngine else 'unavailable'}")
+        print(f"  TemplateManager: {'available' if TemplateManager else 'unavailable'}")
+
+    def _render_template():
+        """Render a template (shows render capabilities)."""
+        print(f"Templating module v{__version__}")
+        print("Render functions:")
+        print("  render(template, context, engine)     - render a template string")
+        print("  render_file(path, context, engine)     - render a template file")
+        print("  get_default_engine(engine_type)        - get engine instance")
+        if TemplateEngine:
+            try:
+                result = render("Hello {{ name }}!", {"name": "Codomyrmex"})
+                print(f"  Test render: {result}")
+            except Exception as e:
+                print(f"  Test render failed: {e}")
+
+    return {
+        "engines": _list_engines,
+        "render": _render_template,
+    }
+
+
 __all__ = [
     "engines",
     "filters",
@@ -97,6 +134,7 @@ __all__ = [
     "render",
     "render_file",
     "get_default_engine",
+    "cli_commands",
 ]
 
 if TemplateEngine:

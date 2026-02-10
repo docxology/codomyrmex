@@ -3,6 +3,13 @@
 This module provides OpenTelemetry-compatible tracing and observability tools.
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Submodule exports - import first
 from . import exporters, metrics, spans
 
@@ -44,6 +51,36 @@ except ImportError:
 
 from . import alerting, sampling, tracing
 
+def cli_commands():
+    """Return CLI commands for the telemetry module."""
+    def _status(**kwargs):
+        """Show telemetry status."""
+        print("=== Telemetry Status ===")
+        print(f"  Trace context: {'available' if HAS_TRACE_CONTEXT else 'not available'}")
+        print(f"  Span processor: {'available' if HAS_SPAN_PROCESSOR else 'not available'}")
+        print(f"  OTLP exporter: {'available' if HAS_OTLP_EXPORTER else 'not available'}")
+        print(f"  Alerting module: loaded")
+        print(f"  Sampling module: loaded")
+
+    def _export(**kwargs):
+        """Export telemetry data."""
+        print("=== Telemetry Export ===")
+        if HAS_OTLP_EXPORTER:
+            print("  OTLP exporter is available for data export")
+            print("  Use OTLPExporter class to configure export targets")
+        else:
+            print("  OTLP exporter not available (install opentelemetry dependencies)")
+        print("  Span processors: " + (
+            "BatchSpanProcessor, SimpleSpanProcessor" if HAS_SPAN_PROCESSOR
+            else "not available"
+        ))
+
+    return {
+        "status": {"handler": _status, "help": "Show telemetry status"},
+        "export": {"handler": _export, "help": "Export telemetry data"},
+    }
+
+
 __all__ = [
     'alerting',
     'sampling',
@@ -51,6 +88,7 @@ __all__ = [
     "exporters",
     "spans",
     "metrics",
+    "cli_commands",
 ]
 
 if HAS_TRACE_CONTEXT:

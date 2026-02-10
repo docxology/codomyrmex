@@ -26,6 +26,13 @@ Data structures:
 - Language: Supported programming languages
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .pyrefly_runner import (
     PyreflyIssue,
     PyreflyResult,
@@ -90,7 +97,32 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
         }
 
 
+def cli_commands():
+    """Return CLI commands for the static_analysis module."""
+    def _analyze(path=None):
+        import os
+        target = path or os.getcwd()
+        result = analyze_code_quality(target)
+        print(f"Analysis of: {result['path']}")
+        print(f"Success: {result['success']}")
+        print(f"Issues: {result['issues_count']}")
+        if result.get("error"):
+            print(f"Error: {result['error']}")
+
+    def _list_tools():
+        tools_list = get_available_tools()
+        print("Available analysis tools:")
+        for tool in tools_list:
+            print(f"  {tool}")
+
+    return {
+        "analyze": _analyze,
+        "tools": _list_tools,
+    }
+
+
 __all__ = [
+    "cli_commands",
     "PyreflyRunner",
     "PyreflyResult",
     "PyreflyIssue",

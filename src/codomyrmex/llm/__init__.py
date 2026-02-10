@@ -15,6 +15,13 @@ Submodules:
     - prompts: Prompt versioning and template management
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # modular Ollama implementation
 # Submodule exports
 from . import (
@@ -50,7 +57,32 @@ from .mcp import (
 )
 from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 
+def cli_commands():
+    """Return CLI commands for the llm module."""
+    def _show_config():
+        config = get_config()
+        print("LLM configuration:")
+        for key, value in vars(config).items():
+            print(f"  {key}: {value}")
+
+    def _list_providers():
+        submodules = [
+            "providers", "chains", "memory", "tools",
+            "guardrails", "streaming", "embeddings",
+            "rag", "cost_tracking", "prompts",
+        ]
+        print("LLM provider submodules:")
+        for name in submodules:
+            print(f"  {name}")
+
+    return {
+        "config": _show_config,
+        "providers": _list_providers,
+    }
+
+
 __all__ = [
+    'cli_commands',
     'OllamaManager',
     'ModelRunner',
     'OutputManager',

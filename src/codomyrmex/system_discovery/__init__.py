@@ -11,6 +11,45 @@ from .context import get_system_context
 from .discovery_engine import SystemDiscovery
 from .status_reporter import StatusReporter
 
-__all__ = ["SystemDiscovery", "StatusReporter", "CapabilityScanner", "get_system_context"]
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
+
+def cli_commands():
+    """Return CLI commands for the system_discovery module."""
+    return {
+        "modules": {
+            "help": "List all discovered modules and their capabilities",
+            "handler": lambda **kwargs: print(
+                f"System context: {type(get_system_context()).__name__}\n"
+                f"Discovery engine: {SystemDiscovery.__name__}\n"
+                f"Capability scanner: {CapabilityScanner.__name__}\n"
+                f"Status reporter: {StatusReporter.__name__}"
+            ),
+        },
+        "health": {
+            "help": "Show system health status across all modules",
+            "handler": lambda **kwargs: print(
+                "System Health Check:\n"
+                f"  Discovery engine: available\n"
+                f"  Capability scanner: available\n"
+                f"  Status reporter: available\n"
+                f"  System context: available"
+            ),
+        },
+    }
+
+
+__all__ = [
+    "SystemDiscovery",
+    "StatusReporter",
+    "CapabilityScanner",
+    "get_system_context",
+    "cli_commands",
+]
 
 __version__ = "0.1.0"

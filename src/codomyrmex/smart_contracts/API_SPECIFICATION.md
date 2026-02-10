@@ -160,9 +160,62 @@ Register a contract by name.
 
 Look up a contract by name.
 
+#### `ContractRegistry.remove(name) -> bool`
+
+Remove a contract by name. Returns `True` if it existed, `False` otherwise.
+
 #### `ContractRegistry.list() -> list[str]`
 
 Return all registered contract names.
+
+### `ContractEvent`
+
+A smart contract event.
+
+| Field | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | `str` | required | Event name (e.g., `"Transfer"`) |
+| `args` | `dict[str, Any]` | `{}` | Event arguments |
+| `contract_address` | `Address | None` | `None` | Emitting contract |
+| `block_number` | `int` | `0` | Block number |
+| `transaction_hash` | `str` | `""` | Transaction hash |
+| `log_index` | `int` | `0` | Log index |
+| `timestamp` | `datetime` | `now()` | Event timestamp |
+
+### `EventFilter`
+
+Fluent builder for filtering contract events.
+
+#### Builder Methods (all return `self`)
+
+- `event(name) -> EventFilter` - Filter by event name.
+- `from_block(block) -> EventFilter` - Set minimum block number.
+- `to_block(block) -> EventFilter` - Set maximum block number.
+- `address(addr) -> EventFilter` - Filter by contract address.
+
+#### `EventFilter.matches(event) -> bool`
+
+Check if a `ContractEvent` matches all filter criteria.
+
+### `EventLog`
+
+Collect and query contract events.
+
+#### `EventLog.add(event) -> None`
+
+Add a `ContractEvent` to the log.
+
+#### `EventLog.query(filter=None) -> list[ContractEvent]`
+
+Query events with optional `EventFilter`. Returns all events if no filter provided.
+
+#### `EventLog.count(event_name=None) -> int`
+
+Count events, optionally filtered by event name.
+
+#### `EventLog.latest(n=1) -> list[ContractEvent]`
+
+Get the `n` most recent events sorted by block number (descending).
 
 ## Utility Functions
 

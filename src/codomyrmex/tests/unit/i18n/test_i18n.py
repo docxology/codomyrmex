@@ -511,3 +511,97 @@ class TestTranslateFunction:
         # The global _default_translator is the same object
         assert i18n_mod._default_translator is tr
         assert t("welcome") == "Welcome!"
+
+
+# ---------------------------------------------------------------------------
+# MessageBundle.from_json_file() tests
+# ---------------------------------------------------------------------------
+
+@pytest.mark.unit
+class TestMessageBundleFromJsonFile:
+    """Tests for MessageBundle.from_json_file()."""
+
+    def test_loads_valid_json_file(self, tmp_path):
+        """Loads messages from a valid JSON file."""
+        import json
+        f = tmp_path / "en.json"
+        f.write_text(json.dumps({"hello": "Hello", "bye": "Goodbye"}))
+        bundle = MessageBundle.from_json_file(Locale("en"), str(f))
+        assert bundle.get("hello") == "Hello"
+        assert bundle.get("bye") == "Goodbye"
+        assert bundle.locale.language == "en"
+
+    def test_preserves_all_keys(self, tmp_path):
+        """All keys from the JSON file are available."""
+        import json
+        data = {"k1": "v1", "k2": "v2", "k3": "v3"}
+        f = tmp_path / "fr.json"
+        f.write_text(json.dumps(data))
+        bundle = MessageBundle.from_json_file(Locale("fr"), str(f))
+        assert sorted(bundle.keys()) == ["k1", "k2", "k3"]
+
+    def test_raises_on_missing_file(self):
+        """Raises FileNotFoundError for nonexistent file."""
+        with pytest.raises(FileNotFoundError):
+            MessageBundle.from_json_file(Locale("en"), "/nonexistent/path.json")
+
+    def test_raises_on_invalid_json(self, tmp_path):
+        """Raises JSONDecodeError for malformed JSON."""
+        import json
+        f = tmp_path / "bad.json"
+        f.write_text("not valid json{{{")
+        with pytest.raises(json.JSONDecodeError):
+            MessageBundle.from_json_file(Locale("en"), str(f))
+
+
+# ---------------------------------------------------------------------------
+# Translator.load_directory() tests
+# ---------------------------------------------------------------------------
+
+@pytest.mark.unit
+class TestTranslatorLoadDirectory:
+    """Tests for Translator.load_directory()."""
+
+    def test_loads_all_json_files(self, tmp_path):
+        """Loads all .json files from directory."""
+        import json
+        (tmp_path / "en.json").write_text(json.dumps({"hi": "Hello"}))
+        (tmp_path / "es.json").write_text(json.dumps({"hi": "Hola"}))
+        tr = Translator(Locale("en"))
+        count = tr.load_directory(str(tmp_path))
+        assert count == 2
+        assert tr.t("hi") == "Hello"
+        tr.set_locale(Locale("es"))
+        assert tr.t("hi") == "Hola"
+
+    def test_returns_count_of_loaded_bundles(self, tmp_path):
+        """Returns the number of bundles loaded."""
+        import json
+        (tmp_path / "en.json").write_text(json.dumps({"a": "b"}))
+        (tmp_path / "fr.json").write_text(json.dumps({"a": "c"}))
+        (tmp_path / "de.json").write_text(json.dumps({"a": "d"}))
+        tr = Translator(Locale("en"))
+        assert tr.load_directory(str(tmp_path)) == 3
+
+    def test_ignores_non_json_files(self, tmp_path):
+        """Ignores .txt and other non-.json files."""
+        import json
+        (tmp_path / "en.json").write_text(json.dumps({"a": "b"}))
+        (tmp_path / "readme.txt").write_text("not a bundle")
+        (tmp_path / "data.csv").write_text("a,b,c")
+        tr = Translator(Locale("en"))
+        assert tr.load_directory(str(tmp_path)) == 1
+
+    def test_empty_directory_returns_zero(self, tmp_path):
+        """Returns 0 for an empty directory."""
+        tr = Translator(Locale("en"))
+        assert tr.load_directory(str(tmp_path)) == 0
+
+    def test_file_stems_become_locale_codes(self, tmp_path):
+        """File name (stem) is parsed as locale code."""
+        import json
+        (tmp_path / "en_US.json").write_text(json.dumps({"msg": "US English"}))
+        tr = Translator(Locale("en"))
+        tr.load_directory(str(tmp_path))
+        result = tr.t("msg", locale=Locale.from_string("en-US"))
+        assert result == "US English"

@@ -1,9 +1,30 @@
-"""Embodiment module for Codomyrmex."""
+"""Embodiment module for Codomyrmex.
 
-# Submodule exports
-from . import actuators, ros, sensors, transformation
-from .ros.ros_bridge import ROS2Bridge
-from .transformation.transformation import Transform3D
+.. deprecated::
+    This module is archived. It has zero intersection with the coding platform
+    mission. Imports will still work but the module receives no further development.
+"""
+
+import warnings as _warnings
+
+_warnings.warn(
+    "codomyrmex.embodiment is archived and will be removed in a future version.",
+    DeprecationWarning,
+    stacklevel=2,
+)
+
+# Submodule exports (kept for backward compatibility)
+try:
+    from . import actuators, ros, sensors, transformation
+    from .ros.ros_bridge import ROS2Bridge
+    from .transformation.transformation import Transform3D
+except ImportError:
+    ROS2Bridge = None
+    Transform3D = None
+    actuators = None
+    ros = None
+    sensors = None
+    transformation = None
 
 __all__ = [
     "ROS2Bridge",
@@ -15,4 +36,3 @@ __all__ = [
 ]
 
 __version__ = "0.1.0"
-

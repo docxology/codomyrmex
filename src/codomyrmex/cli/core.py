@@ -59,6 +59,96 @@ if str(src_dir) not in sys.path:
 
 logger = get_logger(__name__)
 
+
+def _discover_module_commands() -> dict:
+    """
+    Auto-discover CLI commands from modules that export cli_commands().
+
+    Each module can define a cli_commands() function in its __init__.py
+    that returns a dict of command definitions:
+
+        def cli_commands():
+            return {
+                "command_name": {
+                    "help": "Description of the command",
+                    "handler": handler_function,
+                    "arguments": [
+                        {"name": "arg_name", "help": "arg description"},
+                        {"name": "--flag", "action": "store_true", "help": "flag desc"},
+                    ],
+                }
+            }
+
+    Returns:
+        Dict mapping command names to their definitions.
+    """
+    import importlib
+
+    discovered = {}
+
+    try:
+        from codomyrmex import list_modules
+        module_names = list_modules()
+    except Exception:
+        module_names = []
+
+    for module_name in module_names:
+        try:
+            mod = importlib.import_module(f"codomyrmex.{module_name}")
+            if hasattr(mod, "cli_commands") and callable(mod.cli_commands):
+                commands = mod.cli_commands()
+                if isinstance(commands, dict):
+                    for cmd_name, cmd_def in commands.items():
+                        # Prefix with module name to avoid collisions
+                        full_name = f"{module_name}:{cmd_name}" if ":" not in cmd_name else cmd_name
+                        discovered[full_name] = {**cmd_def, "_module": module_name}
+        except (ImportError, Exception):
+            # Skip modules that can't be imported or don't have cli_commands
+            continue
+
+    return discovered
+
+
+def _register_discovered_commands(subparsers, discovered_commands: dict) -> None:
+    """Register auto-discovered module commands into the CLI."""
+    if not discovered_commands:
+        return
+
+    # Group by module
+    by_module = {}
+    for cmd_name, cmd_def in discovered_commands.items():
+        module = cmd_def.get("_module", "unknown")
+        if module not in by_module:
+            by_module[module] = {}
+        by_module[module][cmd_name] = cmd_def
+
+    # Create a 'mod' subcommand group for discovered module commands
+    mod_parser = subparsers.add_parser(
+        "mod", help="Auto-discovered module commands"
+    )
+    mod_subparsers = mod_parser.add_subparsers(
+        dest="mod_command", help="Module-specific commands"
+    )
+
+    for cmd_name, cmd_def in discovered_commands.items():
+        cmd_parser = mod_subparsers.add_parser(
+            cmd_name.replace(":", "-"),
+            help=cmd_def.get("help", f"Command from {cmd_def.get('_module', 'unknown')}"),
+        )
+
+        for arg in cmd_def.get("arguments", []):
+            arg_name = arg.pop("name", None)
+            if arg_name:
+                if arg_name.startswith("-"):
+                    cmd_parser.add_argument(arg_name, **arg)
+                else:
+                    cmd_parser.add_argument(arg_name, **arg)
+                # Restore the name for reuse
+                arg["name"] = arg_name
+
+    return by_module
+
+
 def main():
     """Enhanced main CLI entry point with comprehensive functionality."""
     parser = argparse.ArgumentParser(
@@ -333,6 +423,10 @@ Examples:
     exec_workflow_parser.add_argument("definition", help="Workflow definition file (YAML/JSON)")
     exec_workflow_parser.add_argument("--params", "-p", help="JSON parameters")
 
+    # Auto-discover module commands
+    discovered_commands = _discover_module_commands()
+    discovered_by_module = _register_discovered_commands(subparsers, discovered_commands) or {}
+
     # Parse arguments
     args = parser.parse_args()
 
@@ -467,6 +561,31 @@ Examples:
         else:
             skills_parser.print_help()
             success = False
+
+    # Auto-discovered module commands
+    elif args.command == "mod":
+        mod_cmd = getattr(args, "mod_command", None)
+        if mod_cmd:
+            # Find the matching command definition
+            normalized = mod_cmd.replace("-", ":")
+            cmd_def = discovered_commands.get(normalized) or discovered_commands.get(mod_cmd)
+            if cmd_def and "handler" in cmd_def:
+                try:
+                    handler = cmd_def["handler"]
+                    # Pass all parsed args to the handler
+                    success = handler(args)
+                    if success is None:
+                        success = True
+                except Exception as e:
+                    logger.error(f"Module command '{mod_cmd}' failed: {e}")
+                    success = False
+            else:
+                print(f"No handler found for module command: {mod_cmd}")
+                success = False
+        else:
+            print(f"Available module commands: {len(discovered_commands)}")
+            for name, defn in sorted(discovered_commands.items()):
+                print(f"  {name.replace(':', '-')}: {defn.get('help', '')}")
 
     # Quick orchestration commands
     elif args.command == "run":

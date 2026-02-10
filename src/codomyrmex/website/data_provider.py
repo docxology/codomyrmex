@@ -1080,7 +1080,12 @@ class DataProvider:
         completed_tasks = 0
         for project in projects:
             tc = project.get("task_counts", {})
-            total_tasks += tc.get("total", 0)
+            # task_counts has: completed, in_progress, remaining, blocked, optional
+            # Sum all to get total (there is no 'total' key in progress.json)
+            total_tasks += sum(
+                tc.get(k, 0)
+                for k in ("completed", "in_progress", "remaining", "blocked", "optional")
+            )
             completed_tasks += tc.get("completed", 0)
 
         overall_completion = (

@@ -134,6 +134,41 @@ Locale-aware number formatting. Supports `en`, `de`, and `fr` decimal/thousands 
     - `decimals` (int): Decimal places. Use `0` for integers.
 - **Returns**: `str` - Formatted number string.
 
+### `DateFormatter`
+
+Locale-aware date and time formatting. Supports `en`, `de`, `fr`, `es`, `ja` patterns. Falls back to English for unknown locales.
+
+#### `DateFormatter.format_date(locale, d) -> str` (classmethod)
+
+- **Description**: Format a `date` object for the given locale.
+- **Parameters**:
+    - `locale` (Locale): Target locale.
+    - `d` (date): The date to format.
+- **Returns**: `str` - Formatted date string (e.g., `"03/15/2025"` for English, `"15.03.2025"` for German).
+
+#### `DateFormatter.format_time(locale, dt) -> str` (classmethod)
+
+- **Description**: Format the time portion of a `datetime` for the given locale.
+- **Parameters**:
+    - `locale` (Locale): Target locale.
+    - `dt` (datetime): The datetime to format.
+- **Returns**: `str` - Formatted time string (e.g., `"02:30 PM"` for English, `"14:30"` for German).
+
+#### `DateFormatter.format_datetime(locale, dt) -> str` (classmethod)
+
+- **Description**: Format a full `datetime` for the given locale.
+- **Parameters**:
+    - `locale` (Locale): Target locale.
+    - `dt` (datetime): The datetime to format.
+- **Returns**: `str` - Formatted datetime string.
+
+#### `DateFormatter.relative_time(dt, now=None) -> str` (classmethod)
+
+- **Description**: Human-readable relative time: `"just now"`, `"5 minutes ago"`, `"2 hours ago"`, `"yesterday"`, `"3 days ago"`.
+- **Parameters**:
+    - `dt` (datetime): The past datetime.
+    - `now` (datetime | None): Reference time. Defaults to `datetime.now()`.
+
 ## Convenience Functions
 
 ### `init(default_locale="en") -> Translator`

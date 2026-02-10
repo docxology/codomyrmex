@@ -7,6 +7,13 @@ JSON Schema, Pydantic models, and custom validators.
 
 from typing import Any, Optional
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from . import rules, sanitizers, schemas
 from .contextual import ContextualValidator, ValidationIssue
 from .exceptions import (
@@ -24,6 +31,37 @@ from .parser import TypeSafeParser
 from .summary import ValidationSummary
 from .validation_manager import ValidationManager
 from .validator import ValidationResult, ValidationWarning, Validator
+
+def cli_commands():
+    """Return CLI commands for the validation module."""
+    def _validators(**kwargs):
+        """List available validators."""
+        print("=== Available Validators ===")
+        print("  json_schema  - JSON Schema validation (RFC draft)")
+        print("  pydantic     - Pydantic model validation")
+        print("  custom       - Custom validator functions")
+        print("  contextual   - Context-aware validation (ContextualValidator)")
+        print("  type_safe    - TypeSafeParser for strict type coercion")
+
+    def _check(**kwargs):
+        """Validate a target with --path arg."""
+        path = kwargs.get("path")
+        if not path:
+            print("Usage: validate check --path <file_or_data>")
+            return
+        import json
+        try:
+            with open(path) as f:
+                data = json.load(f)
+            print(f"Loaded {path}: valid JSON with {len(data)} top-level keys")
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Validation failed for {path}: {e}")
+
+    return {
+        "validators": {"handler": _validators, "help": "List available validators"},
+        "check": {"handler": _check, "help": "Validate with --path argument"},
+    }
+
 
 __all__ = [
     'rules',
@@ -52,6 +90,7 @@ __all__ = [
     "FormatValidationError",
     "LengthValidationError",
     "CustomValidationError",
+    "cli_commands",
 ]
 
 __version__ = "0.1.0"

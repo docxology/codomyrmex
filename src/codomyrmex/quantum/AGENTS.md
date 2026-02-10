@@ -6,11 +6,14 @@ Quantum computing simulation with gates, circuits, and algorithms.
 
 ## Key Classes
 
-- **QuantumCircuit** — Build quantum circuits
-- **QuantumGate** — Quantum gate operations
+- **QuantumCircuit** — Build quantum circuits (fluent API)
+- **Gate** — Gate dataclass (gate_type, target, control, parameter)
+- **GateType** — Enum of supported gate types
 - **QuantumSimulator** — Statevector simulation
-- **create_bell_state()** — Create Bell pair
-- **create_ghz_state(n)** — Create GHZ state
+- **bell_state()** — Create Bell pair circuit
+- **ghz_state(n)** — Create GHZ state circuit
+- **circuit_to_ascii()** — Render circuit as ASCII art
+- **circuit_stats()** — Get circuit statistics dict
 
 ## Agent Instructions
 
@@ -24,35 +27,43 @@ Quantum computing simulation with gates, circuits, and algorithms.
 
 ```python
 from codomyrmex.quantum import (
-    QuantumCircuit, QuantumSimulator, create_bell_state, create_ghz_state
+    QuantumCircuit, QuantumSimulator, bell_state, ghz_state,
+    circuit_to_ascii, circuit_stats
 )
 
-# Build simple circuit
+# Build simple circuit (fluent API)
 circuit = QuantumCircuit(2)
-circuit.h(0)       # Hadamard on qubit 0
-circuit.cx(0, 1)   # CNOT: control=0, target=1
+circuit.h(0).cnot(0, 1).measure_all()
 
-# Simulate
+# Simulate — returns dict[str, int] of bitstring counts
 sim = QuantumSimulator()
-result = sim.run(circuit)
-print(f"Statevector: {result.statevector}")
-print(f"Probabilities: {result.probabilities}")
+counts = sim.run(circuit, shots=1000)
+print(counts)  # {"00": ~500, "11": ~500}
 
 # Create entangled states
-bell = create_bell_state()
-ghz = create_ghz_state(3)  # 3-qubit GHZ
+bell = bell_state()
+ghz = ghz_state(3)  # 3-qubit GHZ
+
+# Visualize
+print(circuit_to_ascii(bell))
+# q0: -H--*--M-
+# q1: ----X--M-
+
+# Statistics
+stats = circuit_stats(bell)
+print(stats)  # {"num_qubits": 2, "num_gates": 2, ...}
 ```
 
 ## Testing Patterns
 
 ```python
 # Verify Bell state
-bell = create_bell_state()
 sim = QuantumSimulator()
-result = sim.run(bell)
-# Should have 50% |00⟩ and 50% |11⟩
-assert abs(result.probabilities[0] - 0.5) < 0.01
-assert abs(result.probabilities[3] - 0.5) < 0.01
+counts = sim.run(bell_state(), shots=1000)
+# Should produce only "00" and "11" outcomes
+assert set(counts.keys()) <= {"00", "11"}
+assert counts.get("00", 0) > 0
+assert counts.get("11", 0) > 0
 ```
 
 ## Navigation

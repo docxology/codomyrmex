@@ -40,6 +40,13 @@ Quick Start:
 
 __version__ = "0.1.0"
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import exceptions
 from .exceptions import (
     AudioError,
@@ -102,8 +109,36 @@ except ImportError:
     TTS_AVAILABLE = False
 
 
+def cli_commands():
+    """Return CLI commands for the audio module."""
+    return {
+        "formats": {
+            "help": "List supported audio formats and capabilities",
+            "handler": lambda **kwargs: print(
+                f"Audio Module v{__version__}\n"
+                f"  STT available: {STT_AVAILABLE}"
+                + (f" (Whisper: {WHISPER_AVAILABLE})" if STT_AVAILABLE else "") + "\n"
+                f"  TTS available: {TTS_AVAILABLE}"
+                + (f" (pyttsx3: {PYTTSX3_AVAILABLE}, Edge TTS: {EDGE_TTS_AVAILABLE})" if TTS_AVAILABLE else "") + "\n"
+                "  Supported operations: transcribe, synthesize"
+            ),
+        },
+        "process": {
+            "help": "Process an audio file",
+            "handler": lambda **kwargs: print(
+                "Audio Processing\n"
+                "  STT: Use Transcriber(model_size) then transcriber.transcribe(path)\n"
+                "  TTS: Use Synthesizer(provider) then synth.synthesize(text)\n"
+                "  Export: result.save(path) or result.save_srt(path)"
+            ),
+        },
+    }
+
+
 # Build __all__ dynamically
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Version
     "__version__",
     # Exceptions (always available)

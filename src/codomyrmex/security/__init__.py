@@ -16,6 +16,14 @@ Integration:
 
 from . import audit, compliance, scanning, secrets
 
+# Import AI safety
+try:
+    from .ai_safety import AISafetyMonitor
+    AI_SAFETY_AVAILABLE = True
+except ImportError:
+    AISafetyMonitor = None
+    AI_SAFETY_AVAILABLE = False
+
 __version__ = "0.1.0"
 
 # Import from digital security
@@ -242,4 +250,7 @@ if THEORY_AVAILABLE:
         "get_best_practices",
         "check_compliance_with_practices",
     ])
+
+if AI_SAFETY_AVAILABLE:
+    __all__.append("AISafetyMonitor")
 

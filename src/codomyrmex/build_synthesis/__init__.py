@@ -32,6 +32,13 @@ Data structures:
 - DependencyType: Types of dependencies
 """
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 from .build_manager import (
     BuildEnvironment,
     BuildManager,
@@ -57,7 +64,40 @@ from .build_orchestrator import (
     validate_build_output,
 )
 
+def cli_commands():
+    """Return CLI commands for the build_synthesis module."""
+    def _list_builders():
+        build_types = get_available_build_types()
+        print("Available build types:")
+        for bt in build_types:
+            print(f"  {bt}")
+        environments = get_available_environments()
+        print("Available build environments:")
+        for env in environments:
+            print(f"  {env}")
+
+    def _build(path=None):
+        import os
+        target = path or os.getcwd()
+        print(f"Running build for: {target}")
+        try:
+            result = trigger_build(target)
+            if isinstance(result, dict):
+                for key, value in result.items():
+                    print(f"  {key}: {value}")
+            else:
+                print(f"  Result: {result}")
+        except Exception as e:
+            print(f"Build error: {e}")
+
+    return {
+        "builders": _list_builders,
+        "build": _build,
+    }
+
+
 __all__ = [
+    "cli_commands",
     # Original functions
     "check_build_environment",
     "run_build_command",

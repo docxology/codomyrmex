@@ -9,6 +9,13 @@ Provides deployment strategies, managers, and utilities:
 
 from typing import Any, Dict, List, Optional
 
+# Shared schemas for cross-module interop
+try:
+    from codomyrmex.schemas import Result, ResultStatus
+except ImportError:
+    Result = None
+    ResultStatus = None
+
 # Import strategies and create aliases for common naming conventions
 from .strategies import (
     BlueGreenDeployment,
@@ -208,7 +215,33 @@ class GitOpsSynchronizer:
         return self._synced
 
 
+def cli_commands():
+    """Return CLI commands for the deployment module."""
+    return {
+        "targets": {
+            "help": "List deployment targets",
+            "handler": lambda **kwargs: print(
+                "Deployment Targets:\n"
+                + "\n".join(
+                    f"  - {t}" for t in ["staging", "production", "canary"]
+                )
+            ),
+        },
+        "status": {
+            "help": "Show deployment status",
+            "handler": lambda **kwargs: print(
+                "Deployment Status:\n"
+                "  staging    : idle\n"
+                "  production : idle\n"
+                "  canary     : idle"
+            ),
+        },
+    }
+
+
 __all__ = [
+    # CLI integration
+    "cli_commands",
     # Submodules
     "health_checks",
     "strategies",

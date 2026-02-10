@@ -83,6 +83,7 @@ Builder for quantum circuits with a fluent API.
 - `y(qubit) -> QuantumCircuit` - Add Pauli-Y gate.
 - `z(qubit) -> QuantumCircuit` - Add Pauli-Z gate.
 - `cnot(control, target) -> QuantumCircuit` - Add CNOT gate.
+- `swap(qubit1, qubit2) -> QuantumCircuit` - Add SWAP gate (two-qubit).
 - `cz(control, target) -> QuantumCircuit` - Add Controlled-Z gate.
 - `rx(qubit, theta) -> QuantumCircuit` - Add RX rotation (theta in radians).
 - `ry(qubit, theta) -> QuantumCircuit` - Add RY rotation.
@@ -108,6 +109,27 @@ No parameters. State is initialized per-run.
     - `circuit` (QuantumCircuit): Circuit to simulate.
     - `shots` (int): Number of simulation runs. Default: `1024`.
 - **Returns**: `dict[str, int]` - Mapping of bitstring to count (e.g., `{"00": 512, "11": 512}`).
+
+## Visualization Functions
+
+### `circuit_to_ascii(circuit) -> str`
+
+- **Description**: Render a quantum circuit as ASCII art. Gate symbols: H, X, Y, Z, Rx, Ry, Rz, CNOT target=X control=\*, CZ target=Z control=\*, SWAP=x, Measure=M.
+- **Parameters**:
+    - `circuit` (QuantumCircuit): The circuit to render.
+- **Returns**: `str` - Multi-line ASCII art with one line per qubit wire.
+
+### `circuit_stats(circuit) -> dict`
+
+- **Description**: Return circuit statistics.
+- **Parameters**:
+    - `circuit` (QuantumCircuit): The circuit to analyze.
+- **Returns**: `dict` with keys:
+    - `num_qubits` (int): Number of qubits.
+    - `num_gates` (int): Total gate count.
+    - `gate_counts` (dict[str, int]): Count per gate type name.
+    - `depth` (int): Maximum gates on any single qubit wire.
+    - `has_measurements` (bool): Whether the circuit has measurements.
 
 ## Convenience Functions
 
