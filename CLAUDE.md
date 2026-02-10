@@ -90,6 +90,22 @@ Each module is self-contained with standard structure:
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
 
+## PAI Integration
+
+Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
+
+- **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
+- **MCP Bridge**: `scripts/model_context_protocol/run_mcp_server.py` exposes codomyrmex tools to PAI agents via Model Context Protocol
+- **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
+- **Bridge Doc**: [`/PAI.md`](PAI.md) is the authoritative document mapping the PAI Algorithm phases to codomyrmex modules
+- **Agent Mapping**: PAI subagent types (Engineer, Architect, QATester) consume codomyrmex agent providers and tools — see [`src/codomyrmex/agents/PAI.md`](src/codomyrmex/agents/PAI.md)
+
+Key PAI system references (in `~/.claude/skills/PAI/`):
+- `SKILL.md` — Algorithm CORE (v0.2.25)
+- `SYSTEM/PAIAGENTSYSTEM.md` — Agent types and delegation
+- `SYSTEM/SKILLSYSTEM.md` — Skill architecture
+- `SYSTEM/THEHOOKSYSTEM.md` — Hook event patterns
+
 ## Test Markers
 
 Tests use pytest markers defined in `pytest.ini`:

@@ -6,6 +6,8 @@
 
 Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 11 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
+When used with [PAI](../../../PAI.md) (`~/.claude/skills/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
+
 
 ## Installation
 
@@ -71,7 +73,7 @@ uv sync
 - `AGENT_COMPARISON.md` - Provider comparison reference
 - `API_SPECIFICATION.md` - Programmatic interface documentation
 - `MCP_TOOL_SPECIFICATION.md` - Model Context Protocol tool definitions
-- `PAI.md` - PAI integration details
+- `PAI.md` - PAI integration details (three-tier agent mapping, Algorithm capability selection, composition patterns)
 - `SPEC.md` - Functional specification
 - `__init__.py` - Module exports (40+ items)
 - `exceptions.py` - Agent exception hierarchy

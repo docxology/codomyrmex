@@ -39,6 +39,18 @@ Each module subdirectory follows the RASP documentation pattern:
 - **AGENTS.md** — Agent signposting, guidelines, and coordination
 - **SPEC.md** — Functional specification and design principles
 
+## PAI System Documentation
+
+This file describes the AI context for the `docs/modules/` directory. It is distinct from the **PAI system bridge** documentation:
+
+| Document | Purpose |
+|----------|---------|
+| [`/PAI.md`](../../PAI.md) | **Authoritative bridge** — maps the actual PAI system (`~/.claude/skills/PAI/`) to codomyrmex modules |
+| `src/codomyrmex/<module>/PAI.md` | Per-module AI capabilities (RASP pattern) |
+| This file (`docs/modules/PAI.md`) | AI agent context for the documentation directory |
+
+If you're looking for how PAI (the system) integrates with codomyrmex, start at [`/PAI.md`](../../PAI.md).
+
 ## Cross-References
 
 - [README.md](README.md) — Module index and category tables

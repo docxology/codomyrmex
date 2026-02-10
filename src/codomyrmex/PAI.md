@@ -106,6 +106,53 @@ graph TB
     Orchestrator --> Auth
 ```
 
+## PAI Algorithm Phase Mapping
+
+When used with the [PAI system](../../PAI.md) (`~/.claude/skills/PAI/`), these modules map to specific Algorithm phases:
+
+```mermaid
+graph TB
+    subgraph Algorithm ["PAI Algorithm v0.2.25"]
+        OBSERVE["1. OBSERVE"]
+        THINK["2. THINK"]
+        PLAN["3. PLAN"]
+        BUILD["4. BUILD"]
+        EXECUTE["5. EXECUTE"]
+        VERIFY["6. VERIFY"]
+        LEARN["7. LEARN"]
+    end
+
+    subgraph Modules ["Codomyrmex Modules"]
+        PM["pattern_matching, search, documents"]
+        CB["cerebrum, agents/theory, graph_rag"]
+        OR["orchestrator, logistics"]
+        CE["agents/ai_code_editing, coding, build_synthesis"]
+        AG["agents (all providers), git_operations"]
+        SA["static_analysis, security, testing"]
+        AM["agentic_memory, logging_monitoring"]
+    end
+
+    OBSERVE --> PM
+    THINK --> CB
+    PLAN --> OR
+    BUILD --> CE
+    EXECUTE --> AG
+    VERIFY --> SA
+    LEARN --> AM
+```
+
+| Phase | Modules Used | What They Provide |
+|-------|-------------|------------------|
+| **OBSERVE** | `pattern_matching`, `search`, `documents`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
+| **THINK** | `cerebrum`, `agents/theory/`, `graph_rag` | Case-based reasoning, deliberative architecture, knowledge graphs |
+| **PLAN** | `orchestrator`, `logistics` | DAG-based workflow construction, scheduling |
+| **BUILD** | `agents/ai_code_editing/`, `coding`, `build_synthesis` | Code generation, sandbox execution, multi-language builds |
+| **EXECUTE** | `agents/` (all providers), `coding`, `git_operations` | Agent dispatch, sandboxed execution, version control |
+| **VERIFY** | `static_analysis`, `security`, `testing` | Code quality, vulnerability scanning, test execution |
+| **LEARN** | `agentic_memory`, `logging_monitoring` | Long-term memory capture, structured logging |
+
+The authoritative bridge document is [`/PAI.md`](../../PAI.md) at the project root.
+
 ## Key PAI Patterns
 
 ### 1. AI-Assisted Code Review

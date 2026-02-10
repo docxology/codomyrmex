@@ -1,282 +1,194 @@
-# Codomyrmex Personal AI Infrastructure (PAI)
+# Codomyrmex &harr; PAI System Bridge
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+## What Is PAI?
 
-This document describes how Codomyrmex serves as a **Personal AI Infrastructure** platform - enabling individuals, teams, and organizations to build, deploy, and operate AI-augmented development workflows. Codomyrmex provides the foundational layer for integrating AI capabilities into software development lifecycles.
+PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is **not** a concept — it is running software:
 
-## What is Personal AI Infrastructure?
+| Component | Count | Location |
+|-----------|-------|----------|
+| Algorithm | v0.2.25 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
+| Skills | 28+ | `~/.claude/skills/PAI/Skills/` |
+| Hooks | 18 | `~/.claude/hooks/` |
+| Tools | 60+ | `~/.claude/skills/PAI/Tools/` |
+| Agents | Named + subagent types | `~/.claude/skills/PAI/SYSTEM/PAIAGENTSYSTEM.md` |
+| Memory | WORK / STATE / LEARNING | `~/.claude/skills/PAI/MEMORY/` |
 
-Personal AI Infrastructure (PAI) refers to the individualized or team-owned systems that:
+PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt, creates ISC (Ideal State Criteria), selects capabilities, executes work, and verifies results.
 
-1. **Integrate AI Models** - Connect to local (Ollama) and cloud-based (OpenAI, Anthropic, Google) language models
-2. **Coordinate AI Agents** - Orchestrate multiple specialized AI agents working on complex tasks
-3. **Manage Knowledge** - Maintain context, memory, and learned patterns across sessions
-4. **Enable Autonomous Workflows** - Support AI-driven task completion with human oversight
-5. **Ensure Privacy & Control** - Keep sensitive data and workflows under your control
+## How Codomyrmex Serves PAI
 
-## Codomyrmex PAI Capabilities
+Codomyrmex is a **94-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
-### AI Model Integration
+```
+PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
+     Algorithm + Skills + Hooks              94 modules of dev-platform tools
+```
 
-Codomyrmex provides unified interfaces for working with AI models:
+PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
 
-| Capability | Module | Description |
-| :--- | :--- | :--- |
-| **Local LLM Support** | [llm/](src/codomyrmex/llm/) | Run models locally via Ollama for privacy and cost control |
-| **Cloud LLM Access** | [llm/](src/codomyrmex/llm/) | Connect to OpenAI, Anthropic, Google, and other providers |
-| **Model Context Protocol** | [model_context_protocol/](src/codomyrmex/model_context_protocol/) | Standardized interfaces for LLM tool use |
-| **Inference Engine** | [cerebrum/](src/codomyrmex/cerebrum/) | Advanced reasoning with Bayesian inference |
+## MCP Bridge Architecture
 
-### Agent Coordination
-
-The platform supports sophisticated multi-agent workflows:
-
-| Capability | Module | Description |
-| :--- | :--- | :--- |
-| **Agent Framework** | [agents/](src/codomyrmex/agents/) | Base classes and orchestration for AI agents |
-| **Provider Integrations** | [agents/claude/](src/codomyrmex/agents/claude/), [agents/codex/](src/codomyrmex/agents/codex/) | Claude, Codex, Jules, Gemini, and more |
-| **AI Code Editing** | [agents/ai_code_editing/](src/codomyrmex/agents/ai_code_editing/) | Automated code generation and refactoring |
-| **Task Management** | [agents/droid/](src/codomyrmex/agents/droid/) | Agent task orchestration and delegation |
-
-### Knowledge Management
-
-Maintain and leverage knowledge across your development workflows:
-
-| Capability | Module | Description |
-| :--- | :--- | :--- |
-| **Document Processing** | [documents/](src/codomyrmex/documents/) | Extract, transform, and search documents |
-| **Pattern Recognition** | [pattern_matching/](src/codomyrmex/pattern_matching/) | Identify patterns in code and data |
-| **Case-Based Reasoning** | [cerebrum/](src/codomyrmex/cerebrum/) | Learn from past cases and apply to new situations |
-
-### Autonomous Workflows
-
-Enable AI to work semi-autonomously with appropriate oversight:
-
-| Capability | Module | Description |
-| :--- | :--- | :--- |
-| **Workflow Orchestration** | [orchestrator/](src/codomyrmex/orchestrator/) | DAG-based workflow execution |
-| **Event System** | [events/](src/codomyrmex/events/) | Pub/sub for agent communication |
-| **Plugin Architecture** | [plugin_system/](src/codomyrmex/plugin_system/) | Extend capabilities dynamically |
-| **Safe Execution** | [coding/](src/codomyrmex/coding/) | Sandboxed code execution with observability |
-
-### Security & Privacy
-
-Keep your AI infrastructure secure and private:
-
-| Capability | Module | Description |
-| :--- | :--- | :--- |
-| **Security Scanning** | [security/](src/codomyrmex/security/) | Vulnerability detection and compliance |
-| **Encryption** | [encryption/](src/codomyrmex/encryption/) | Data protection at rest and in transit |
-| **Authentication** | [auth/](src/codomyrmex/auth/) | Identity and access management |
-| **Local Processing** | [llm/ollama/](src/codomyrmex/llm/) | Keep sensitive data on-premises |
-
-## PAI Architecture
+The MCP server is the operational bridge between PAI and codomyrmex:
 
 ```mermaid
-graph TB
-    subgraph userInterface ["User Interface Layer"]
-        CLI["CLI Interface"]
-        API["REST API"]
-        IDE["IDE Integration"]
+graph LR
+    subgraph PAI ["PAI System (~/.claude/)"]
+        Algo["Algorithm v0.2.25"]
+        Skills["28+ Skills"]
+        Agents["Named Agents"]
     end
 
-    subgraph paiCore ["PAI Core Layer"]
-        AgentOrch["Agent Orchestrator"]
-        ModelMgr["Model Manager"]
-        Knowledge["Knowledge Base"]
-        Workflow["Workflow Engine"]
+    subgraph Bridge ["MCP Bridge"]
+        Server["run_mcp_server.py"]
     end
 
-    subgraph aiProviders ["AI Provider Layer"]
-        Local["Local Models (Ollama)"]
-        Cloud["Cloud APIs (OpenAI, Anthropic)"]
-        Custom["Custom Models"]
+    subgraph Codomyrmex ["Codomyrmex (this repo)"]
+        FileOps["File Operations"]
+        CodeAnalysis["Code Analysis"]
+        Shell["Shell Execution"]
+        Memory["Memory/Knowledge"]
+        Modules["94 Module Tools"]
     end
 
-    subgraph dataLayer ["Data & Security Layer"]
-        Encryption["Encryption"]
-        Auth["Authentication"]
-        Audit["Audit Logging"]
-        Storage["Secure Storage"]
-    end
-
-    CLI --> AgentOrch
-    API --> AgentOrch
-    IDE --> AgentOrch
-
-    AgentOrch --> ModelMgr
-    AgentOrch --> Knowledge
-    AgentOrch --> Workflow
-
-    ModelMgr --> Local
-    ModelMgr --> Cloud
-    ModelMgr --> Custom
-
-    Knowledge --> Storage
-    Workflow --> Audit
-    AgentOrch --> Encryption
-    AgentOrch --> Auth
+    Algo --> Agents
+    Agents -->|"MCP calls"| Server
+    Server --> FileOps
+    Server --> CodeAnalysis
+    Server --> Shell
+    Server --> Memory
+    Server --> Modules
 ```
 
-## Getting Started with PAI
+**Server**: `scripts/model_context_protocol/run_mcp_server.py`
+**Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
+**Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
 
-### 1. Set Up Local AI Models (Recommended)
+## Algorithm Phase &rarr; Module Mapping
 
-```bash
-# Install Ollama
-curl https://ollama.ai/install.sh | sh
+Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 
-# Pull a model
-ollama pull llama2
+| Algorithm Phase | Purpose | Codomyrmex Modules |
+|----------------|---------|-------------------|
+| **OBSERVE** (1/7) | Understand the request | `pattern_matching`, `search`, `documents`, `system_discovery` |
+| **THINK** (2/7) | Select capabilities, expand ISC | `cerebrum`, `agents/theory/`, `graph_rag` |
+| **PLAN** (3/7) | Finalize approach | `orchestrator` (workflow DAGs), `logistics` |
+| **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `build_synthesis` |
+| **EXECUTE** (5/7) | Run the work | `agents` (all providers), `coding` (sandbox), `git_operations` |
+| **VERIFY** (6/7) | Validate against ISC | `static_analysis`, `security`, `testing` |
+| **LEARN** (7/7) | Capture improvements | `agentic_memory`, `logging_monitoring` |
 
-# Verify in Codomyrmex
-uv run python -c "from codomyrmex.llm import check_ollama_status; print(check_ollama_status())"
+## Per-User Separation
+
+```
+~/.claude/                          # PRIVATE (per-user, never committed)
+├── skills/PAI/                     # Algorithm, skills, tools, hooks
+│   ├── SKILL.md                    # CORE (the Algorithm)
+│   ├── Skills/                     # 28+ skills
+│   ├── Tools/                      # 60+ tools
+│   ├── SYSTEM/                     # System docs
+│   ├── USER/                       # Personal data
+│   └── MEMORY/                     # WORK, STATE, LEARNING
+├── hooks/                          # 18 hooks
+├── settings.json                   # Identity, preferences
+└── claude_desktop_config.json      # MCP server registrations
+
+codomyrmex/                         # SHARED (this repo, committed)
+├── src/codomyrmex/                 # 94 Python modules
+├── scripts/model_context_protocol/ # MCP server runner
+├── PAI.md                          # THIS FILE (bridge doc)
+└── docs/                           # Documentation
 ```
 
-### 2. Configure AI Providers
+**Rule**: Personal AI configuration lives in `~/.claude/`. Shared development tooling lives in this repo. The MCP protocol connects them.
 
-```yaml
-# config/llm/providers.yaml
-providers:
-  ollama:
-    enabled: true
-    base_url: "http://localhost:11434"
-    default_model: "llama2"
+## Configuration
 
-  openai:
-    enabled: false  # Enable if you have an API key
-    api_key: "${OPENAI_API_KEY}"
+### PAI Settings (`~/.claude/skills/PAI/settings.json`)
+
+```json
+{
+  "principal": { "name": "YourName", "timezone": "America/Los_Angeles" },
+  "daidentity": { "name": "PAI", "displayName": "PAI" }
+}
 ```
 
-### 3. Use AI Agents
+### MCP Registration (`claude_desktop_config.json`)
 
-```python
-from codomyrmex.agents import AgentOrchestrator
-from codomyrmex.agents.ai_code_editing import AICodeEditor
-
-# Initialize orchestrator
-orchestrator = AgentOrchestrator()
-
-# Use AI code editing
-editor = AICodeEditor()
-result = editor.refactor(
-    code="def old_function(): pass",
-    instruction="Add type hints and docstring"
-)
+```json
+{
+  "mcpServers": {
+    "codomyrmex": {
+      "command": "python",
+      "args": ["path/to/codomyrmex/scripts/model_context_protocol/run_mcp_server.py", "--transport", "stdio"]
+    }
+  }
+}
 ```
-
-### 4. Set Up Workflows
-
-```python
-from codomyrmex.orchestrator import WorkflowEngine
-
-# Define a workflow
-workflow = WorkflowEngine()
-workflow.add_task("analyze", static_analysis.analyze)
-workflow.add_task("generate_docs", documentation.generate, depends_on=["analyze"])
-workflow.add_task("review", ai_code_editing.review, depends_on=["analyze"])
-
-# Execute
-result = workflow.run(project_path="./my_project")
-```
-
-## PAI Configuration
 
 ### Environment Variables
 
 ```bash
-# AI Provider Keys (optional - only if using cloud providers)
+# Codomyrmex modules (optional — for cloud provider access)
 export OPENAI_API_KEY="sk-..."
 export ANTHROPIC_API_KEY="sk-..."
-
-# Local Configuration
-export CODOMYRMEX_LOG_LEVEL="INFO"
-export CODOMYRMEX_CACHE_DIR="~/.codomyrmex/cache"
+export OLLAMA_HOST="http://localhost:11434"
 ```
 
-### Configuration Files
+## Codomyrmex Module Capabilities
 
-| File | Purpose |
-| :--- | :--- |
-| `config/llm/providers.yaml` | AI model provider configuration |
-| `config/llm/models.yaml` | Model-specific settings |
-| `config/security/api_keys.yaml` | Secure API key storage |
-| `config/workflows/default.yaml` | Default workflow configurations |
+Condensed view of what PAI agents can access:
 
-## PAI Best Practices
+| Domain | Modules | PAI Use |
+|--------|---------|---------|
+| **AI Agents** | `agents/` (11 providers), `agents/ai_code_editing/` | BUILD/EXECUTE — code generation, review, refactoring |
+| **LLM** | `llm/`, `model_context_protocol/` | Model management, tool interfaces |
+| **Reasoning** | `cerebrum/`, `graph_rag/`, `pattern_matching/` | THINK — case-based reasoning, pattern recognition |
+| **Knowledge** | `documents/`, `agentic_memory/`, `search/` | OBSERVE/LEARN — document processing, memory |
+| **Code Ops** | `coding/`, `static_analysis/`, `git_operations/` | BUILD/VERIFY — sandbox execution, analysis, VCS |
+| **Workflow** | `orchestrator/`, `events/`, `logistics/` | PLAN/EXECUTE — DAG workflows, pub/sub, scheduling |
+| **Security** | `security/`, `encryption/`, `auth/` | VERIFY — vulnerability scanning, data protection |
+| **DevOps** | `build_synthesis/`, `ci_cd_automation/`, `containerization/` | EXECUTE — multi-language builds, pipelines, containers |
+| **Interface** | `cli/`, `terminal_interface/`, `ide/` | User interaction, rich output |
 
-### 1. Start Local, Scale to Cloud
+## RASP Documentation Pattern
 
-Begin with local models (Ollama) for:
-- Development and testing
-- Sensitive data processing
-- Cost optimization
+Every codomyrmex module has a `PAI.md` file describing its AI capabilities. These per-module files describe **what that module offers to AI agents**. This root document describes **how the actual PAI system consumes those capabilities**.
 
-Scale to cloud providers when you need:
-- Higher performance models
-- Specialized capabilities
-- Production workloads
+| Document | Purpose |
+|----------|---------|
+| `/PAI.md` (this file) | Authoritative PAI system bridge |
+| `src/codomyrmex/PAI.md` | Source-level PAI module map |
+| `src/codomyrmex/<module>/PAI.md` | Per-module AI capabilities |
+| `docs/modules/PAI.md` | Documentation hub PAI context |
 
-### 2. Implement Proper Oversight
+## Getting Started
 
-- Review AI-generated code before deployment
-- Use the security module to scan AI outputs
-- Maintain audit logs of AI actions
-- Set appropriate permission boundaries
-
-### 3. Manage Context Effectively
-
-- Use the documents module for RAG (Retrieval Augmented Generation)
-- Maintain project-specific knowledge bases
-- Leverage pattern matching for code intelligence
-
-### 4. Secure Your Infrastructure
-
-- Encrypt sensitive configuration
-- Use authentication for API access
-- Run security scans on AI-generated code
-- Keep audit trails of AI interactions
-
-## Module PAI Documentation
-
-Each major module has its own PAI documentation:
-
-| Module | PAI Document | Focus |
-| :--- | :--- | :--- |
-| Source Code | [src/codomyrmex/PAI.md](src/codomyrmex/PAI.md) | Core PAI implementations |
-| Agents | [src/codomyrmex/agents/PAI.md](src/codomyrmex/agents/PAI.md) | Agent coordination |
-| LLM | [src/codomyrmex/llm/PAI.md](src/codomyrmex/llm/PAI.md) | Model management |
-| Cerebrum | [src/codomyrmex/cerebrum/PAI.md](src/codomyrmex/cerebrum/PAI.md) | Reasoning engine |
-| Documentation | [docs/PAI.md](docs/PAI.md) | PAI guides |
+1. **Have PAI installed**: Check `~/.claude/skills/PAI/SKILL.md` exists
+2. **Clone codomyrmex**: `git clone` this repo, run `uv sync`
+3. **Connect via MCP**: Follow [Connecting PAI to Codomyrmex](docs/getting-started/tutorials/connecting-pai.md)
+4. **Verify**: Start a Claude Code session, invoke the Algorithm, confirm codomyrmex tools are available
 
 ## Signposting
 
 ### Navigation
 
-- **Self**: [PAI.md](PAI.md) - This document
-- **Parent**: [README.md](README.md) - Project root
+- **Self**: [PAI.md](PAI.md) — This document (authoritative bridge)
+- **Parent**: [README.md](README.md) — Project root
 - **Siblings**:
-  - [AGENTS.md](AGENTS.md) - Agent coordination
-  - [SPEC.md](SPEC.md) - Functional specification
-  - [SECURITY.md](SECURITY.md) - Security policies
-- **Children**:
-  - [src/codomyrmex/PAI.md](src/codomyrmex/PAI.md) - Source PAI
-  - [docs/PAI.md](docs/PAI.md) - Documentation PAI
+  - [AGENTS.md](AGENTS.md) — Agent coordination
+  - [SPEC.md](SPEC.md) — Functional specification
+  - [CLAUDE.md](CLAUDE.md) — Claude Code guidance
 
-### Related Resources
+### Key References
 
-- [Model Context Protocol](src/codomyrmex/model_context_protocol/README.md)
-- [Agent Framework](src/codomyrmex/agents/README.md)
-- [LLM Integration](src/codomyrmex/llm/README.md)
-- [Cerebrum Reasoning](src/codomyrmex/cerebrum/README.md)
-- [Workflow Orchestration](src/codomyrmex/orchestrator/README.md)
+- [MCP Bridge Docs](src/codomyrmex/model_context_protocol/PAI.md) — Full MCP integration details
+- [Agent System Integration](src/codomyrmex/agents/PAI.md) — PAI agent &harr; codomyrmex mapping
+- [Source Module Map](src/codomyrmex/PAI.md) — All modules with PAI capabilities
+- [Connecting Tutorial](docs/getting-started/tutorials/connecting-pai.md) — Step-by-step setup
 
 ## Version History
 
-- **v0.1.0** (February 2026) - Initial PAI documentation
-
----
-
-**Codomyrmex PAI** - Your foundation for AI-augmented development.
+- **v0.2.0** (February 2026) — Full rewrite: actual PAI system bridge documentation
+- **v0.1.0** (February 2026) — Initial generic PAI concept documentation

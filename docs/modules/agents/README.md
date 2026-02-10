@@ -21,6 +21,10 @@ uv pip install codomyrmex
 - **Agent Orchestration**: Coordinate multiple agents
 
 
+### PAI Integration
+
+When used with the [PAI system](../../../PAI.md) (`~/.claude/skills/PAI/`), the agents module serves as the primary execution layer. PAI's Algorithm selects capabilities in its THINK phase, then dispatches to codomyrmex agents during BUILD/EXECUTE. The three-tier mapping (Task Subagents → `AgentOrchestrator`, Named Agents → MCP tools, Custom Agents → `BaseAgent`) is documented in [`src/codomyrmex/agents/PAI.md`](../../../src/codomyrmex/agents/PAI.md).
+
 ## Key Components
 
 | Component | Description |
@@ -31,6 +35,7 @@ uv pip install codomyrmex
 | `gemini/` | Google Gemini integration |
 | `jules/` | Jules agent integration |
 | `droid/` | Task management framework |
+| `PAI.md` | PAI system bridge — agent tier mapping, capability selection, composition patterns |
 
 ## Quick Start
 

@@ -16,6 +16,10 @@ As an AI agent, when working with this module:
 - `__init__.py`: Public API export.
 - `SPEC.md`: Technical specification.
 
+## PAI System Bridge
+
+For full documentation on how the MCP server bridges PAI (`~/.claude/skills/PAI/`) and codomyrmex, see [`src/codomyrmex/model_context_protocol/PAI.md`](../../src/codomyrmex/model_context_protocol/PAI.md). The authoritative PAI bridge document is [`/PAI.md`](../../PAI.md).
+
 ## Future Considerations
 - Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+- Telemetry: Ensure operations emit performance metrics.

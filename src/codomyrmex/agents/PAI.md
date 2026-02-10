@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Agents Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -91,12 +91,104 @@ manager.create("code_review_session")
 manager.create("documentation_session")
 ```
 
+## PAI Agent System Integration
+
+When codomyrmex is used with the [PAI system](../../../PAI.md) (`~/.claude/skills/PAI/`), the agents module maps directly to PAI's three-tier agent architecture.
+
+### Three-Tier Agent Mapping
+
+PAI defines three tiers of agents. Each tier maps to codomyrmex components:
+
+| PAI Tier | PAI Agents | Codomyrmex Mapping |
+|----------|-----------|-------------------|
+| **Task Subagents** | `Engineer`, `Architect`, `QATester`, `Designer`, `Pentester`, `Algorithm` | `AgentOrchestrator` dispatches to provider clients based on capability needs |
+| **Named Agents** | Serena, Marcus, Remy, Johannes (personality + voice + specialty) | Consume codomyrmex tools via MCP; use `CodeEditor`, `AgentPool`, provider clients |
+| **Custom Agents** | `ComposeAgent` (dynamic composition) | `BaseAgent` / `AgentIntegrationAdapter` base classes for custom implementations |
+
+### Task Subagent → Codomyrmex Provider
+
+Each PAI subagent type maps to specific codomyrmex capabilities:
+
+| PAI Subagent | Primary Codomyrmex Modules | What It Uses |
+|-------------|---------------------------|-------------|
+| **Engineer** | `agents/ai_code_editing/`, `coding/`, `static_analysis/` | `CodeEditor.refactor()`, `CodeEditor.generate()`, sandbox execution |
+| **Architect** | `agents/theory/`, `cerebrum/`, `pattern_matching/` | `DeliberativeArchitecture`, case-based reasoning, pattern analysis |
+| **QATester** | `static_analysis/`, `security/`, `coding/` | `SecurityScanner.scan()`, test runners, browser automation |
+| **Designer** | `agents/ai_code_editing/`, `ide/` | Component generation, UI code editing |
+| **Pentester** | `security/`, `static_analysis/`, `encryption/` | Vulnerability scanning, security analysis |
+| **Explore** | `documents/`, `search/`, `pattern_matching/` | File discovery, content search, pattern recognition |
+| **Research** (GeminiResearcher, ClaudeResearcher, GrokResearcher) | `documents/`, `graph_rag/`, `search/` | Document processing, graph RAG, knowledge retrieval |
+
+### Named Agents and MCP
+
+PAI's named agents (e.g., Serena for research, Marcus for engineering) operate in Claude Code sessions and access codomyrmex through the MCP bridge:
+
+```
+Named Agent (PAI)  →  MCP Client  →  Codomyrmex MCP Server  →  Module Tools
+    │                                                              │
+    │  "Analyze this codebase"                                     │
+    └──────────────────────────────────────────────────────────────→│
+       calls: analyze_code, search_files, list_modules             │
+    ←──────────────────────────────────────────────────────────────←┘
+       returns: analysis results, file matches, module status
+```
+
+See [model_context_protocol/PAI.md](../model_context_protocol/PAI.md) for MCP bridge details.
+
+## Algorithm Capability Selection
+
+The PAI Algorithm's THINK phase selects which capabilities (agents, skills, tools) to use. This selection directly determines which codomyrmex modules get invoked.
+
+### Two-Pass Selection
+
+| Pass | Source | Authority |
+|------|--------|-----------|
+| **Pass 1: Hook Hints** | `FormatReminder` hook analyzes raw prompt | Draft suggestions |
+| **Pass 2: THINK Validation** | Algorithm validates against ISC criteria | **Authoritative** |
+
+Pass 2 can override Pass 1 based on what OBSERVE discovered. For example:
+- Hook suggests `Engineer` → ISC reveals architecture decision needed → **add** `Architect`
+- Hook suggests nothing → ISC requires browser verification → **add** `QATester`
+
+### Composition Patterns
+
+PAI composes capabilities using named patterns. These map to codomyrmex orchestration:
+
+| PAI Pattern | Shape | Codomyrmex Implementation |
+|-------------|-------|--------------------------|
+| **Pipeline** | A → B → C | `WorkflowEngine` with DAG dependencies |
+| **TDD Loop** | A ↔ B | `AgentOrchestrator` review-fix cycle |
+| **Fan-out** | → [A, B, C] | `AgentPool` parallel dispatch |
+| **Fan-in** | [A, B, C] → D | `AgentPool` + result aggregation |
+| **Gate** | A → check → B or retry | `WorkflowEngine` conditional branching |
+| **Escalation** | haiku → sonnet → opus | Provider client model upgrade |
+| **Specialist** | Single A | Direct provider client call |
+
+### Algorithm Phase → Agent Activity
+
+| Phase | Agent Activity | Codomyrmex Module |
+|-------|---------------|-------------------|
+| **OBSERVE** | Explore agent reads codebase, searches patterns | `system_discovery`, `pattern_matching`, `search` |
+| **THINK** | Capability selection, ISC expansion | `cerebrum` (reasoning), `agents/theory/` |
+| **PLAN** | Workflow definition | `orchestrator` (DAG construction) |
+| **BUILD** | Engineer/Designer creates artifacts | `agents/ai_code_editing/`, `coding` |
+| **EXECUTE** | Selected agents run work in parallel | `agents/` (all providers), `AgentPool` |
+| **VERIFY** | QATester validates against ISC | `static_analysis`, `security`, test runners |
+| **LEARN** | Memory capture | `agentic_memory`, `logging_monitoring` |
+
 ## PAI Architecture
 
 ```mermaid
 graph TB
-    subgraph agentLayer ["Agent Layer"]
+    subgraph paiSystem ["PAI System (~/.claude/)"]
+        Algorithm["Algorithm v0.2.25"]
+        Subagents["Task Subagents"]
+        Named["Named Agents"]
+    end
+
+    subgraph agentLayer ["Codomyrmex Agent Layer"]
         Orchestrator["AgentOrchestrator"]
+        Pool["AgentPool"]
         Session["SessionManager"]
     end
 
@@ -113,10 +205,18 @@ graph TB
         Droid["Task Management"]
     end
 
+    Algorithm --> Subagents
+    Algorithm --> Named
+    Subagents -->|"MCP"| Orchestrator
+    Named -->|"MCP"| Pool
+
     Orchestrator --> Claude
     Orchestrator --> Codex
     Orchestrator --> Gemini
     Orchestrator --> Local
+
+    Pool --> Claude
+    Pool --> Codex
 
     Session --> Orchestrator
 
@@ -208,12 +308,14 @@ if scan_result.has_vulnerabilities:
 ### Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) - Source PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) - Main PAI documentation
+- **Parent**: [../PAI.md](../PAI.md) — Source PAI documentation
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
 
 ### Related Documentation
 
-- [README.md](README.md) - Module overview
-- [AGENTS.md](AGENTS.md) - Agent coordination
-- [AI Code Editing](ai_code_editing/README.md) - Code editing details
-- [../llm/PAI.md](../llm/PAI.md) - LLM PAI features
+- [README.md](README.md) — Module overview
+- [AGENTS.md](AGENTS.md) — Agent coordination
+- [AI Code Editing](ai_code_editing/README.md) — Code editing details
+- [MCP Bridge](../model_context_protocol/PAI.md) — MCP integration with PAI
+- [../llm/PAI.md](../llm/PAI.md) — LLM PAI features
+- [Connecting Tutorial](../../../docs/getting-started/tutorials/connecting-pai.md) — Step-by-step PAI setup

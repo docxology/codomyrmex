@@ -11,6 +11,7 @@ Step-by-step tutorials for learning Codomyrmex. From creating your first module 
 | Tutorial | Description | Time |
 |----------|-------------|------|
 | [**Creating a Module**](creating-a-module.md) | Build your own Codomyrmex module from scratch | 45 min |
+| [**Connecting PAI to Codomyrmex**](connecting-pai.md) | Connect the PAI system to codomyrmex via MCP | 30 min |
 
 ## Learning Path
 
@@ -22,6 +23,14 @@ Start with [creating-a-module.md](creating-a-module.md) to understand:
 - RASP documentation (README, AGENTS, SPEC, PAI)
 - Testing requirements
 - Integration patterns
+
+### 2. PAI Integration
+
+Follow [connecting-pai.md](connecting-pai.md) to connect PAI to codomyrmex:
+
+- MCP bridge setup and verification
+- Algorithm phase → module mapping
+- Per-user customization
 
 ## Prerequisites
 
