@@ -174,6 +174,7 @@ Each module directory contains:
 - `README.md` - Human-readable overview
 - `AGENTS.md` - Agent coordination
 - `SPEC.md` - Functional specification
+- `PAI.md` - Personal AI considerations
 - (Optional) Additional guides and tutorials
 
 ## Related Documentation

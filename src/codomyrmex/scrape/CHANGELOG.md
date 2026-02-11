@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-12-XX
 
 ### Added
+
 - Initial release of scrape module
 - Core scraping abstractions (`ScrapeResult`, `ScrapeOptions`, `ScrapeFormat`)
 - Main `Scraper` class implementing unified scraping interface
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit and integration test structure
 
 ### Features
+
 - Single URL scraping with multiple formats
 - Website crawling with depth and limit controls
 - Site structure mapping with search filtering
@@ -37,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type hints throughout
 
 ### Documentation
+
 - User-facing README with examples
 - Technical AGENTS.md documentation
 - Functional SPEC.md specification
@@ -44,11 +47,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Firecrawl submodule documentation
 
 ### Testing
+
 - Test structure for unit and integration tests
 - Test files for core abstractions, scraper, and Firecrawl integration
 
-[0.1.0]: https://github.com/codomyrmex/codomyrmex/releases/tag/scrape-v0.1.0
-
+[0.1.0]: https://github.com/docxology/codomyrmex/releases/tag/scrape-v0.1.0
 
 ## Navigation Links
 

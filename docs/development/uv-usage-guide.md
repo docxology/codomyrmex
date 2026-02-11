@@ -39,7 +39,7 @@ uv --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 
 # Use the automated UV setup script (recommended)

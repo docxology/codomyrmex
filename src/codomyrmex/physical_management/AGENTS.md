@@ -47,14 +47,14 @@ actuator.wait_for_completion()
 ## Testing Patterns
 
 ```python
-# Verify device discovery (mock)
-devices = DeviceManager(mock=True)
-devices.add_mock_device("test_device")
+# Verify device discovery (simulation mode)
+devices = DeviceManager(simulation=True)
+devices.add_simulated_device("test_device")
 assert len(devices.list()) == 1
 
-# Verify sensor reading
-sensors = SensorHub(mock=True)
-value = sensors.read("mock_sensor")
+# Verify sensor reading (simulation mode)
+sensors = SensorHub(simulation=True)
+value = sensors.read("simulated_sensor")
 assert value is not None
 ```
 

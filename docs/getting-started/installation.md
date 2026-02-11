@@ -20,7 +20,7 @@ This file now serves as a redirect to the complete setup guide that includes:
 ### **Option 1: UV-Optimized Setup (Fastest & Most Reliable)**
 ```bash
 # Clone and setup everything automatically with uv
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 ./start_here.sh
 ```
@@ -31,7 +31,7 @@ cd codomyrmex
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 2. Clone the repository
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 
 # 3. Create virtual environment and install
@@ -93,7 +93,7 @@ Before installing Codomyrmex, ensure you have:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 2. Clone repository
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 
 # 3. Create virtual environment and install
@@ -330,7 +330,7 @@ sudo apt-get update
 sudo apt-get install python3.11 python3.11-venv
 
 # Windows: Download from python.org
-# Install Python 3.11+ and add to PATH
+# Install Python 3.10+ and add to PATH
 ```
 
 #### **❌ Virtual Environment Problems**
@@ -542,9 +542,9 @@ If these solutions don't resolve your issue:
    find docs/ -name "*.md" | head -10
    ```
 
-3. **Search existing issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+3. **Search existing issues**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
-4. **Ask the community**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
+4. **Ask the community**: [GitHub Discussions](https://github.com/docxology/codomyrmex/discussions)
 
 5. **Create a bug report**: Include your system info and exact error messages
 

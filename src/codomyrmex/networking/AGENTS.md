@@ -50,9 +50,8 @@ ips = resolver.resolve("example.com")
 ## Testing Patterns
 
 ```python
-# Verify HTTP client
+# Verify HTTP client with real endpoint
 client = HTTPClient()
-# Use mock server or responses library
 response = await client.get("http://httpbin.org/get")
 assert response.status_code == 200
 

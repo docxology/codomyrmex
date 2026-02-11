@@ -42,18 +42,21 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 ### 🔐 High-Security Modules
 
 #### **coding** (code execution sandbox)
+
 - Executes untrusted code in isolated environments
 - **Risk**: Code injection, container escape, resource exhaustion
 - **Mitigation**: Docker isolation, resource limits, network restrictions
 - [Module Security Details](src/codomyrmex/coding/SECURITY.md)
 
 #### **ai_code_editing**  
+
 - Processes external AI API responses
 - **Risk**: Prompt injection, malicious code generation
 - **Mitigation**: Input sanitization, output validation, API key protection
 - [Module Security Details](src/codomyrmex/agents/ai_code_editing/SECURITY.md)
 
 #### **git_operations**
+
 - Interacts with version control systems
 - **Risk**: Command injection, unauthorized repository access
 - **Mitigation**: Input validation, safe command construction
@@ -62,22 +65,26 @@ We take the security of Codomyrmex seriously. If you discover a security vulnera
 ### 🛡️ Security Best Practices
 
 #### **API Key Management**
+
 - Store API keys in environment variables or `.env` files
 - Never commit API keys to version control
 - Use least-privilege access for service accounts
 - Regularly rotate API keys
 
 #### **Input Validation**
+
 - All user inputs are validated and sanitized
 - File paths are validated to prevent directory traversal
 - Code execution is sandboxed and resource-limited
 
 #### **Network Security**
+
 - External API calls use HTTPS
 - Code execution sandbox has restricted network access
 - No unnecessary network services exposed
 
 #### **Dependency Security**
+
 - Regular dependency updates and vulnerability scanning
 - Pin specific versions to avoid supply chain attacks
 - Use `pip-audit` and `safety` for vulnerability detection
@@ -169,8 +176,8 @@ Codomyrmex follows these security standards and practices:
 For security-related questions or concerns:
 
 - **Security Email**: `danielarifriedman@gmail.com` (private disclosure)
-- **Security Advisories**: [GitHub Security Advisories](https://github.com/codomyrmex/codomyrmex/security/advisories)
-- **General Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues) (for non-security issues only)
+- **Security Advisories**: [GitHub Security Advisories](https://github.com/docxology/codomyrmex/security/advisories)
+- **General Issues**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues) (for non-security issues only)
 
 ## Related Documentation
 

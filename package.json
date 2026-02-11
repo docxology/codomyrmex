@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codomyrmex/codomyrmex.git"
+    "url": "git+https://github.com/docxology/codomyrmex.git"
   },
   "keywords": [
     "code-analysis",
@@ -22,9 +22,9 @@
   "author": "Codomyrmex Team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codomyrmex/codomyrmex/issues"
+    "url": "https://github.com/docxology/codomyrmex/issues"
   },
-  "homepage": "https://github.com/codomyrmex/codomyrmex#readme",
+  "homepage": "https://github.com/docxology/codomyrmex#readme",
   "engines": {
     "node": ">=18.0.0"
   }

@@ -404,8 +404,8 @@ python -m memory_profiler my_script.py
 ### **Development Support**
 - **Documentation**: This guide and [Architecture Overview](../project/architecture.md)
 - **Code Examples**: Look at existing modules for patterns
-- **Community**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
-- **Issues**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+- **Community**: [GitHub Discussions](https://github.com/docxology/codomyrmex/discussions)
+- **Issues**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
 ### **Debugging Tips**
 ```python

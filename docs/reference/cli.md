@@ -137,7 +137,7 @@ codomyrmex module demo <module_name>
 
 **Version**: 0.1.0  
 **Last Updated**: Aligned with current CLI implementation  
-**Support**: See [Troubleshooting Guide](troubleshooting.md) or [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+**Support**: See [Troubleshooting Guide](troubleshooting.md) or [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
 ## Navigation Links
 

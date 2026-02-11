@@ -51,10 +51,12 @@ async for chunk in client.stream("Long response needed"):
 ## Testing Patterns
 
 ```python
-# Verify client (mock)
-client = LLMClient(mock=True)
-response = client.complete("Test")
-assert response is not None
+# Verify client with real provider
+import os
+client = LLMClient(provider="openai", model="gpt-4")
+if os.getenv("OPENAI_API_KEY"):
+    response = client.complete("Test")
+    assert response is not None
 
 # Verify template
 template = PromptTemplate("Hello {name}")

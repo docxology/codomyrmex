@@ -81,41 +81,18 @@ indent_size = 2
 [*.toml]
 indent_size = 4
 
-# RST files
-[*.rst]
-max_line_length = off
-
 # reStructuredText files
 [*.rst]
+max_line_length = off
 trim_trailing_whitespace = false
 
 # Documentation specific files
 [docs/**/*.md]
 max_line_length = off
 
-# Source code specific settings
-[src/**/*.py]
-# Additional Python-specific settings can go here
-
-# Test files
-[testing/**/*.py]
-# Test file specific settings
-
 # Configuration templates
 [config/**/*.env]
 indent_size = 2
-
-# Examples
-[examples/**/*]
-# Example file settings
-
-# Scripts directory
-[scripts/**/*]
-# Script file settings
-
-# Tools directory
-[tools/**/*]
-# Tool file settings
 
 # Package configuration files
 [pyproject.toml]
@@ -130,11 +107,3 @@ indent_size = 4
 # GitHub workflow files
 [.github/**/*.{yml,yaml}]
 indent_size = 2
-
-# Documentation source files
-[docs/**/*.py]
-# Documentation Python files
-
-# Template files
-[**/template/**/*]
-# Template file settings

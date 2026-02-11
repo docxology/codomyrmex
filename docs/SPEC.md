@@ -63,7 +63,7 @@ graph TD
 
     subgraph "Content Organization"
         Examples[examples/]
-        Reference[reference/]
+        ReferenceDir[reference/]
         Modules[modules/]
         Integration[integration/]
     end
@@ -79,7 +79,7 @@ graph TD
     Contributors --> Learning
     Developers --> Learning
     Admins --> Reference
-    Reference --> Reference
+    ReferenceDir --> Reference
     Modules --> Learning
     
     subgraph "Secure Cognitive Agent"

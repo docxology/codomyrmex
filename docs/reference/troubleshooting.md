@@ -686,8 +686,8 @@ if auth_method == 'none':
 
 ### **Community Support**
 
-- **GitHub Issues**: [Report bugs and problems](https://github.com/codomyrmex/codomyrmex/issues)
-- **GitHub Discussions**: [Get help from community](https://github.com/codomyrmex/codomyrmex/discussions)
+- **GitHub Issues**: [Report bugs and problems](https://github.com/docxology/codomyrmex/issues)
+- **GitHub Discussions**: [Get help from community](https://github.com/docxology/codomyrmex/discussions)
 - **Documentation**: [Full documentation](../README.md)
 
 ### **When Reporting Issues**
@@ -745,7 +745,7 @@ pytest src/codomyrmex/tests/unit/ -x
 
 ---
 
-This troubleshooting guide covers the most common issues. If you encounter something not covered here, please [open an issue](https://github.com/codomyrmex/codomyrmex/issues) so we can help you and improve this guide for others.
+This troubleshooting guide covers the most common issues. If you encounter something not covered here, please [open an issue](https://github.com/docxology/codomyrmex/issues) so we can help you and improve this guide for others.
 
 ## Navigation Links
 

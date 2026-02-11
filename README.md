@@ -3,7 +3,7 @@
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/codomyrmex/codomyrmex)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -38,7 +38,7 @@ Get started with Codomyrmex in minutes:
 
 ```bash
 # Clone the repository
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 
 # Install with uv (recommended)
@@ -579,7 +579,7 @@ graph TD
 **Option 1: Using uv (Recommended)**
 
 ```bash
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 uv sync
 ```
@@ -587,7 +587,7 @@ uv sync
 **Option 2: Using pip**
 
 ```bash
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 uv pip install -e .
 ```
@@ -1502,11 +1502,11 @@ pie title Module Development Status (February 2026)
 
 ## Links
 
-- **Repository**: [github.com/codomyrmex/codomyrmex](https://github.com/codomyrmex/codomyrmex)
-- **Issues**: [github.com/codomyrmex/codomyrmex/issues](https://github.com/codomyrmex/codomyrmex/issues)
+- **Repository**: [github.com/docxology/codomyrmex](https://github.com/docxology/codomyrmex)
+- **Issues**: [github.com/docxology/codomyrmex/issues](https://github.com/docxology/codomyrmex/issues)
 - **Documentation**: codomyrmex.readthedocs.io (coming soon)
 - **PyPI**: pypi.org/project/codomyrmex/ (coming soon)
-- **Docker Hub**: hub.docker.com/r/codomyrmex/codomyrmex (coming soon)
+- **Docker Hub**: hub.docker.com/r/docxology/codomyrmex (coming soon)
 
 ---
 

@@ -1,5 +1,5 @@
 # Pre-commit hooks configuration for Codomyrmex
-# Install: uv pip install pre-commit
+# Install: uv sync (pre-commit is included in dev dependencies)
 # Setup: pre-commit install
 # Run: pre-commit run --all-files
 
@@ -45,8 +45,7 @@ repos:
         args: [--recursive, --configfile=pyproject.toml, src/codomyrmex/]
 
   # Python syntax checking
-  - repo: https://github.com/pycqa/py_compile
-    rev: v0.9.0
+  - repo: local
     hooks:
       - id: py-compile
         name: py-compile

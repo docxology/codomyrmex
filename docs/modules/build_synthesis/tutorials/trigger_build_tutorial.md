@@ -75,7 +75,7 @@ By the end of this tutorial, you will be able to:
     dependencies = []
 
     [project.urls]
-    Homepage = "https://github.com/codomyrmex/codomyrmex"
+    Homepage = "https://github.com/docxology/codomyrmex"
     ```
     *(Optionally, add a simple `README.md` in `sample_utility_module/` if referenced in `pyproject.toml`)*
 

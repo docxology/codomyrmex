@@ -2,7 +2,13 @@
 
 # Operating System files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
 # IDEs and editors
 .vscode/
@@ -11,22 +17,84 @@ Thumbs.db
 *.sublime-workspace
 *.komodoproject
 
+# Editor swap files
+*.swp
+*.swo
+*~
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
-.env
 .venv/
-env/
 venv/
+env/
 ENV/
+.ENV/
+
+# Python tools
+.python-version
+Pipfile.lock
+poetry.lock
+.pdm.toml
+.pdm-python
+.pdm-build/
+__pypackages__/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+.ruff_cache/
+.black
+.isort.cfg
+.flake8
+.hypothesis/
+.pytest_cache/
+.tox/
+
+# IPython / Jupyter
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
 
 # Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+jspm_packages/
+typings/
+*.tsbuildinfo
+.rpt2_cache_cjs/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.lock-wscript
+build/Release
+bower_components
 
 # Compiled files
 *.o
@@ -43,8 +111,9 @@ yarn-error.log*
 
 # Logs
 *.log
+logs/
 
-# Build directories (general)
+# Build directories
 build/
 dist/
 bin/
@@ -53,14 +122,20 @@ output/
 
 # Coverage reports
 coverage/
+coverage.json
 .coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+*.lcov
+htmlcov/
+cover/
+.nyc_output
+lib-cov
 
-# Specific tool caches/outputs (add more as needed)
-.pytest_cache/
-.mypy_cache/
-.tox/
-
-# Secrets - ensure these are not committed if used locally
+# Secrets — never commit these
+.encryption_key
 # secrets.yml
 # *.credential
 # *.key
@@ -68,11 +143,18 @@ coverage/
 # *.p12
 # *.pfx
 
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # Documentation build outputs
-/code/documentation/.docusaurus
 /code/documentation/.docusaurus
 /docs/build/
 /docs/.docusaurus/
+/site
 
 # Temporary and backup files
 *.tmp
@@ -80,131 +162,23 @@ coverage/
 *.bak
 *.backup
 *.orig
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Editor swap files
-*.swp
-*.swo
-*~
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# pdm
-.pdm.toml
-.pdm-python
-.pdm-build/
-
-# PEP 582
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Virtual environments (additional patterns)
-.venv/
-venv/
-ENV/
-env/
-.ENV/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
-
-# VS Code
-# .vscode/
-
-# Ruff
-.ruff_cache/
-
-# Black
-.black
-
-# isort
-.isort.cfg
-
-# Flake8
-.flake8
-
-# Coverage reports
-htmlcov/
-.tox/
-.coverage.*
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+tmp/
+temp/
 
 # Translations
 *.mo
 *.pot
 
-# Django stuff:
-*.log
+# Django
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy
 .scrapy
 
 # Sphinx documentation
@@ -214,73 +188,16 @@ docs/_build/
 .pybuilder/
 target/
 
-# Jupyter Notebook
-# .ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-# For a library or package, you might want to ignore these files since the code is
-# intended to run in multiple environments; otherwise, check them in:
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# pdm
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pbrady/fast
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# parcel-bundler cache (https://parceljs.org/)
+# Frontend build
 .cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
 .cache/
-public
-
-# Storybook build outputs
+.parcel-cache
+.next
+.nuxt
 .out
 .storybook-out
-
-# Temporary folders
-tmp/
-temp/
-
-# Logs (additional patterns)
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+.grunt
+public
 
 # Runtime data
 pids/
@@ -288,88 +205,9 @@ pids/
 *.seed
 *.pid.lock
 
-# Directory for instrumented libs generated by jscoverage/JSCover
-lib-cov
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
-# Dependency directories
-jspm_packages/
-
-# TypeScript v1 declaration files
-typings/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and *not* Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
-
-# Storybook build outputs
-.out
-.storybook-out
-
-# Temporary folders
-tmp/
-temp/
+# Auto-generated files
+*.auto
+*.autogen
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
@@ -381,35 +219,6 @@ temp/
 .yarn/install-state.gz
 .pnp.*
 
-# IntelliJ based IDEs
-.idea/
-
-# Finder (MacOS)
-.DS_Store
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# VS Code
-.vscode/
-
-# Temporary Files
-*.tmp
-*.temp
-
-# Auto-generated files
-*.auto
-*.autogen
-
-# Lock files (project specific)
-# lock files are usually project specific, uncomment if needed
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-
 # Project specific
-# Add any project-specific patterns here
 /rollback_plans
 /@output

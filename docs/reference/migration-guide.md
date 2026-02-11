@@ -110,7 +110,7 @@ codomyrmex:
    - Configuration format updated
 
 2. **Minimum Requirements**
-   - Python 3.11+ required (was 3.10+)
+   - Python 3.10+ required (was 3.10+)
    - Updated dependency versions
    - New optional dependencies for advanced features
 
@@ -598,7 +598,7 @@ All existing code continues to work without modification. New features are addit
 ### **0.x.x → 1.0.0 Migration**
 
 #### **Comprehensive Migration Checklist**
-- [ ] **Environment**: Update to Python 3.11+
+- [ ] **Environment**: Update to Python 3.10+
 - [ ] **Backup**: Create full project backup
 - [ ] **Analysis**: Run migration analysis tool
 - [ ] **Import Updates**: Update all import statements
@@ -677,8 +677,8 @@ uv pip install codomyrmex==$(previous_version)
 ## 🛠️ Migration Support
 
 ### **Getting Help**
-- **Migration Issues**: [GitHub Issues - Migration Label](https://github.com/codomyrmex/codomyrmex/issues?q=label:migration)
-- **Community Support**: [Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
+- **Migration Issues**: [GitHub Issues - Migration Label](https://github.com/docxology/codomyrmex/issues?q=label:migration)
+- **Community Support**: [Discussions](https://github.com/docxology/codomyrmex/discussions)
 - **Professional Support**: Contact team for enterprise migration assistance
 
 ### **Migration Tools**

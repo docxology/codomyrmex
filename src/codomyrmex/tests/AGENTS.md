@@ -15,7 +15,7 @@ Test framework with fixtures, utilities, and test patterns.
 
 1. **Follow AAA** — Arrange, Act, Assert
 2. **Use fixtures** — Share setup with fixtures
-3. **Mock external** — Mock APIs and databases
+3. **Test with real data** — Use real data factories, not mocks
 4. **Test edge cases** — Not just happy path
 5. **Name descriptively** — `test_user_login_fails_with_wrong_password`
 
@@ -23,7 +23,7 @@ Test framework with fixtures, utilities, and test patterns.
 
 ```python
 import pytest
-from codomyrmex.tests.fixtures import mock_db, mock_api
+from codomyrmex.tests.fixtures.real_data_factory import create_test_data
 
 # Basic test
 def test_function_returns_expected():

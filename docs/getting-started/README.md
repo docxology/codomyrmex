@@ -46,7 +46,7 @@ Work through [tutorials/](tutorials/) for hands-on learning.
 
 ## Prerequisites
 
-- **Python 3.11+**
+- **Python 3.10+**
 - **uv** (recommended) or pip
 - **Git**
 - **Docker** (optional, for code execution sandbox)
@@ -55,7 +55,7 @@ Work through [tutorials/](tutorials/) for hands-on learning.
 
 ```bash
 # Clone repository
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 
 # Install with uv

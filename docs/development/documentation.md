@@ -159,7 +159,7 @@ print(f"Result: {result}")
 [Module Template](../../src/codomyrmex/module_template/README.md)
 
 # External links
-[GitHub Repository](https://github.com/codomyrmex/codomyrmex)
+[GitHub Repository](https://github.com/docxology/codomyrmex)
 
 # Anchor links within document
 [See Installation Section](#installation)
@@ -410,7 +410,7 @@ Good documentation should achieve:
 
 **Last Updated**: Auto-generated from documentation review  
 **Maintainers**: Documentation team and community contributors  
-**Feedback**: [Open an issue](https://github.com/codomyrmex/codomyrmex/issues) for documentation improvements
+**Feedback**: [Open an issue](https://github.com/docxology/codomyrmex/issues) for documentation improvements
 
 ## Navigation Links
 

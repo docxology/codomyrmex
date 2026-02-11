@@ -32,7 +32,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 - Unit testing with pytest
 - Integration testing patterns
 - Test coverage requirements (>80%)
-- Mocking and fixtures
+- Test fixtures and data generators
 
 ### Documentation Standards
 
@@ -44,7 +44,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 
 ```bash
 # Clone and setup
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 uv sync
 

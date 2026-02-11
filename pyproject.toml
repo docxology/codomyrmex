@@ -232,9 +232,9 @@ dark = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/codomyrmex/codomyrmex"
-Repository = "https://github.com/codomyrmex/codomyrmex"
-Issues = "https://github.com/codomyrmex/codomyrmex/issues"
+Homepage = "https://github.com/docxology/codomyrmex"
+Repository = "https://github.com/docxology/codomyrmex"
+Issues = "https://github.com/docxology/codomyrmex/issues"
 Documentation = "https://codomyrmex.readthedocs.io/"
 
 [tool.hatch.build.targets.wheel]

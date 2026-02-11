@@ -8,7 +8,7 @@ Get up and running with Codomyrmex in **5 minutes or less**! This guide will sho
 
 ```bash
 # Clone and setup everything automatically with uv
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 ./start_here.sh
 ```
@@ -20,7 +20,7 @@ cd codomyrmex
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 2. Clone and setup virtual environment
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 uv venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -36,7 +36,7 @@ codomyrmex check
 
 ```bash
 # 1. Clone and setup virtual environment
-git clone https://github.com/codomyrmex/codomyrmex.git
+git clone https://github.com/docxology/codomyrmex.git
 cd codomyrmex
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -460,8 +460,8 @@ uv run python -c "import matplotlib; print(matplotlib.get_backend())"
 
 - 📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
 - 🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
-- 💬 **Community Support**: [GitHub Discussions](https://github.com/codomyrmex/codomyrmex/discussions)
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/codomyrmex/codomyrmex/issues)
+- 💬 **Community Support**: [GitHub Discussions](https://github.com/docxology/codomyrmex/discussions)
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
 
 ### **Next Steps**
 

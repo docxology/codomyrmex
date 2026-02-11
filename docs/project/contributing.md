@@ -16,7 +16,7 @@ We welcome contributions in various forms, including but not limited to:
 
 ## Getting Started
 
-1.  **Fork the repository**: `git clone https://github.com/codomyrmex/codomyrmex.git`
+1.  **Fork the repository**: `git clone https://github.com/docxology/codomyrmex.git`
 2.  **Set up your development environment**: Follow general setup instructions in the main `README.md` or specific instructions in a module's `README.md` if you are working within a particular module.
 3.  **Create a new branch** for your work: `git checkout -b type/descriptive-branch-name` (e.g., `feature/new-visualization-tool`, `bugfix/readme-typo`, `docs/improve-contributing-guide`).
 
