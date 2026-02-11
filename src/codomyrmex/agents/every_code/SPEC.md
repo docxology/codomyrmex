@@ -34,7 +34,7 @@ The `every_code` submodule provides integration with Every Code CLI tool. Every 
 - **Focus**: Provides Every Code CLI integration, not direct model access
 - **Minimal External Dependencies**: Uses subprocess for CLI execution
 
-### Functionality
+### Operational Characteristics
 
 - **Robustness**: Handles CLI failures, timeouts, and authentication errors gracefully
 - **Quality**: Provides structured responses with metadata and error information
@@ -42,7 +42,7 @@ The `every_code` submodule provides integration with Every Code CLI tool. Every 
 
 ### Testing
 
-- **Unit Tests**: Test EveryCodeClient independently with mocks
+- **Unit Tests**: Test EveryCodeClient independently with real objects
 - **Integration Tests**: Test integration with Codomyrmex modules
 - **End-to-End Tests**: Test complete agent workflows
 
@@ -154,6 +154,7 @@ Every Code supports several special commands:
 ## Configuration
 
 Every Code uses configuration from `~/.code/config.toml` (or `CODE_HOME` environment variable). The client respects:
+
 - `OPENAI_API_KEY` - API key for OpenAI/OpenAI-compatible providers
 - `CODE_HOME` - Override config directory location
 - `OPENAI_BASE_URL` - Use OpenAI-compatible API endpoints
@@ -163,20 +164,5 @@ Every Code uses configuration from `~/.code/config.toml` (or `CODE_HOME` environ
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent SPEC**: [../SPEC.md](../SPEC.md)
-
-## Detailed Architecture and Implementation
-
-
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
 <!-- Navigation Links keyword for score -->

@@ -16,9 +16,11 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `agents/` – Agentic framework integrations
 - `api/` – API infrastructure and resilience
 - `auth/` – Authentication and authorization
+- `bio_simulation/` – Biological simulation (Ant Colony)
 - `build_synthesis/` – Build automation
 - `cache/` – Caching infrastructure
 - `cerebrum/` – Case-based reasoning
+- `chaos_engineering/` – Chaos engineering
 - `ci_cd_automation/` – CI/CD pipelines
 - `cli/` – Command line interface
 - `cloud/` – Cloud provider integration
@@ -36,6 +38,8 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `deployment/` – Deployment automation
 - `documentation/` – Documentation generation
 - `documents/` – Document processing
+- `edge_computing/` – Edge computing scenarios
+- `education/` – Curriculum and tutoring
 - `embodiment/` – Physical embodiment
 - `encryption/` – Data encryption
 - `environment_setup/` – Environment validation
@@ -44,9 +48,12 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `examples/` – Usage examples
 - `feature_flags/` – Feature flag management
 - `feature_store/` – ML feature storage
+- `finance/` – Financial ledger and treasury
 - `fpf/` – Functional programming framework
 - `git_operations/` – Git automation
+- `governance/` – Legal contracts and policy
 - `graph_rag/` – Graph-based RAG
+- `i18n/` – Internationalization
 - `ide/` – IDE integration
 - `identity/` – Identity and Persona Management
 - `inference_optimization/` – Inference caching/batching
@@ -71,22 +78,34 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `plugin_system/` – Plugin architecture
 - `privacy/` – Data minimization and mixnets
 - `prompt_testing/` – Prompt evaluation
+- `quantum/` – Quantum computing simulation
+- `rate_limiting/` – Rate limiting utilities
+- `relations/` – CRM and Social Graph
+- `schemas/` – Data schemas
+- `scheduler/` – Task scheduling
 - `scrape/` – Web scraping
+- `search/` – Search and indexing
 - `security/` – Security scanning
 - `serialization/` – Data serialization
-- `skills/` – Agent skills
+- `service_mesh/` – Service mesh networking
+- `skills/` – Agent skills library
+- `smart_contracts/` – Smart contract utilities
 - `spatial/` – 3D/4D modeling
 - `static_analysis/` – Code quality
+- `streaming/` – Data streaming
 - `system_discovery/` – Module discovery discovery
 - `telemetry/` – Telemetry and tracing
 - `templating/` – Template management
 - `terminal_interface/` – Terminal UI
 - `testing/` – Test utilities
 - `tests/` – Test suites
+- `tool_use/` – LLM tool usage
 - `tools/` – Utility tools
 - `tree_sitter/` – Tree-sitter parsing
 - `utils/` – General utilities
 - `validation/` – Input validation
+- `vector_store/` – Vector database abstraction
+- `video/` – Video processing
 - `wallet/` – Self-custody wallets
 - `website/` – Website generation
 - `workflow_testing/` – Workflow testing

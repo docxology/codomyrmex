@@ -106,17 +106,6 @@ uv sync
 - `qwen/` - Qwen-Coder integration
 - `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
 
-### New Submodules
-
-- `agent_setup/` - Agent discovery, YAML config, interactive setup wizard
-- `deepseek/` - DeepSeek Coder API client
-- `o1/` - OpenAI o1/o3 reasoning model client
-- `qwen/` - Qwen-Coder API client
-- `pooling/` - Multi-agent load balancing and failover
-- `evaluation/` - Agent benchmarking and quality metrics
-- `history/` - Conversation and context persistence
-- `infrastructure/` - Infrastructure management agent
-
 ## Quick Start
 
 ```python

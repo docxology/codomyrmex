@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Codomyrmex Exception Classes
 
 This package provides all exception classes used throughout the Codomyrmex
