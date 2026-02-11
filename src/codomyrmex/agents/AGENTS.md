@@ -1,51 +1,71 @@
 # Codomyrmex Agents — src/codomyrmex/agents
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Agentic framework integrations providing AI code editing, task management, and multi-provider support (Claude, Codex, Gemini, Jules, Mistral). Core layer for intelligent automation workflows.
+Multi-provider agent framework with 11 provider integrations (5 API, 5 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
 
 ## Active Components
 
-- `AGENT_COMPARISON.md` – Project file
-- `API_SPECIFICATION.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `ai_code_editing/` – Directory containing ai_code_editing components
-- `claude/` – Directory containing claude components
-- `cli/` – Directory containing cli components
-- `codex/` – Directory containing codex components
-- `core/` – Directory containing core components
-- `droid/` – Directory containing droid components
-- `every_code/` – Directory containing every_code components
-- `exceptions.py` – Project file
-- `gemini/` – Directory containing gemini components
-- `generic/` – Directory containing generic components
-- `git_agent/` – Directory containing git_agent components
-- `jules/` – Directory containing jules components
-- `mistral_vibe/` – Directory containing mistral_vibe components
-- `opencode/` – Directory containing opencode components
-- `theory/` – Directory containing theory components
+### Provider Clients
+
+| Agent | Type | Base Class | Binary / Env Var | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| `claude/` | API | `APIAgentBase` | `ANTHROPIC_API_KEY` | Functional |
+| `codex/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
+| `o1/` | API | `APIAgentBase` | `OPENAI_API_KEY` | Functional |
+| `deepseek/` | API | `APIAgentBase` | `DEEPSEEK_API_KEY` | Functional |
+| `qwen/` | API | `APIAgentBase` | `DASHSCOPE_API_KEY` | Functional |
+| `jules/` | CLI | `CLIAgentBase` | `jules` | Functional |
+| `opencode/` | CLI | `CLIAgentBase` | `opencode` | Functional |
+| `gemini/` | CLI | `CLIAgentBase` | `gemini` | Functional |
+| `mistral_vibe/` | CLI | `CLIAgentBase` | `vibe` | Functional |
+| `every_code/` | CLI | `CLIAgentBase` | `code` | Functional |
+| Ollama (local) | Local | via `llm/ollama/` | `OLLAMA_BASE_URL` | Functional |
+
+### Core & Infrastructure
+
+| Component | Path | Description |
+| :--- | :--- | :--- |
+| Core framework | `core/` | `BaseAgent`, `AgentInterface`, `AgentConfig`, parsers, sessions, `ReActAgent` |
+| Generic bases | `generic/` | `APIAgentBase`, `CLIAgentBase`, `AgentOrchestrator`, `MessageBus`, `TaskPlanner` |
+| Pooling | `pooling/` | `AgentPool`, `CircuitBreaker`, `AgentHealth` — load balancing and failover |
+| Evaluation | `evaluation/` | `AgentBenchmark`, scorers (`ExactMatch`, `Contains`, `Length`, `Composite`) |
+| History | `history/` | `ConversationManager`, `InMemoryHistoryStore`, `FileHistoryStore`, `SQLiteHistoryStore` |
+| Agent Setup | `agent_setup/` | `AgentRegistry`, YAML config persistence, interactive setup wizard |
+| Exceptions | `exceptions.py` | Full exception hierarchy: `AgentError` → provider-specific errors |
+
+### Supplementary
+
+| Component | Path | Description |
+| :--- | :--- | :--- |
+| AI code editing | `ai_code_editing/` | `CodeEditor` for refactoring, review, generation |
+| Git agent | `git_agent/` | `GitAgent` for Git operations |
+| Droid | `droid/` | Task management and automation |
+| Infrastructure | `infrastructure/` | Infrastructure management agent |
+| Theory | `theory/` | `ReactiveArchitecture`, `DeliberativeArchitecture`, `HybridArchitecture` |
+| CLI | `cli/` | CLI subcommands and handlers |
+
+## Quick Verification
+
+```bash
+# Check which agents are operative on this machine
+uv run python -m codomyrmex.agents.agent_setup --status-only
+
+# Run the full agent test suite (129 tests, zero-mock)
+uv run python -m pytest tests/unit/agents/ -v --no-cov
+```
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
-
-## Common Patterns
-
-```python
-import codomyrmex.agents
-
-# Agent interacts with agents
-```
+- All agents implement `AgentInterface`: `execute()`, `stream()`, `setup()`, `test_connection()`
+- All responses use `AgentResponse` with content, error, metadata, tokens, execution time
+- Configuration through `AgentConfig` dataclass with environment variable fallbacks
+- API keys masked in `to_dict()` output
+- Zero-mock testing policy — all tests use real objects and functional verification
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- **📁 Parent Directory**: [codomyrmex](../README.md)
+- **🏠 Project Root**: [README.md](../../../README.md)

@@ -34,25 +34,9 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
                         time_module.sleep(delay)
             raise last_exception
         return wrapper
+    return decorator
 
 
-class CLIAgentBase(BaseAgent):
-    """Base class for CLI-based agents with common subprocess execution patterns."""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""Base class for CLI-based agents with common subprocess patterns."""
 
 class CLIAgentBase(BaseAgent):
     """Base class for CLI-based agents with common subprocess execution patterns."""

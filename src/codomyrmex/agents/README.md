@@ -1,13 +1,12 @@
 # agents
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 11 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
 When used with [PAI](../../../PAI.md) (`~/.claude/skills/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
-
 
 ## Installation
 
@@ -24,6 +23,7 @@ uv sync
 ## Key Exports
 
 ### Core Framework
+
 - **`AgentInterface`** — Abstract base class for all agents
 - **`BaseAgent`** — Base implementation with common agent behavior
 - **`AgentIntegrationAdapter`** — Adapter pattern for integrating external agent frameworks
@@ -34,9 +34,11 @@ uv sync
 - **`AgentConfig`** / `get_config` / `set_config` / `reset_config` — Configuration management
 
 ### Code Editing
+
 - **`CodeEditor`** — Agent specialized in code editing, generation, and analysis (extends BaseAgent)
 
 ### Provider Clients
+
 - **`ClaudeClient`** — Claude API integration
 - **`CodexClient`** — OpenAI Codex integration
 - **`GeminiClient`** — Gemini CLI integration
@@ -50,22 +52,27 @@ uv sync
 - **`QwenClient`** — Qwen-Coder integration (lazy-loaded)
 
 ### Session & Parsing
+
 - **`AgentSession`** / **`SessionManager`** / **`Message`** — Session lifecycle management
 - **`parse_json_response`** / **`parse_code_blocks`** / **`parse_first_code_block`** — Response parsing utilities
 - **`parse_structured_output`** / **`CodeBlock`** / **`ParseResult`** / **`clean_response`**
 
 ### Architecture & Theory
+
 - **`ReactiveArchitecture`** / **`DeliberativeArchitecture`** / **`HybridArchitecture`** — Agent architectures
 - **`KnowledgeBase`** — Knowledge management for agents
 - **`AgentOrchestrator`** — Multi-agent orchestration
 
 ### Additional Submodules (lazy-loaded)
+
 - **`AgentPool`** — Multi-agent load balancing and failover (`pooling/`)
 - **`AgentEvaluator`** — Agent benchmarking and quality metrics (`evaluation/`)
 - **`ConversationHistory`** — Conversation and context persistence (`history/`)
 - **`InfrastructureAgent`** — Infrastructure management agent (`infrastructure/`)
+- **`AgentRegistry`** — Declarative agent catalog with live health probes (`agent_setup/`)
 
 ### Exceptions
+
 - `AgentError`, `AgentTimeoutError`, `AgentConfigurationError`, `ExecutionError`, `ToolError`, `ContextError`, `SessionError`
 
 ## Directory Contents
@@ -99,17 +106,37 @@ uv sync
 - `qwen/` - Qwen-Coder integration
 - `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)
 
+### New Submodules
+
+- `agent_setup/` - Agent discovery, YAML config, interactive setup wizard
+- `deepseek/` - DeepSeek Coder API client
+- `o1/` - OpenAI o1/o3 reasoning model client
+- `qwen/` - Qwen-Coder API client
+- `pooling/` - Multi-agent load balancing and failover
+- `evaluation/` - Agent benchmarking and quality metrics
+- `history/` - Conversation and context persistence
+- `infrastructure/` - Infrastructure management agent
+
 ## Quick Start
 
 ```python
 import codomyrmex.agents
-```
 
+# Check which agents are available
+from codomyrmex.agents.agent_setup import AgentRegistry
+registry = AgentRegistry()
+for r in registry.probe_all():
+    print(f"{r.name}: {r.status}")
+```
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k agents -v
+# Full agent test suite (129 tests, zero-mock)
+uv run python -m pytest tests/unit/agents/ -v --no-cov
+
+# Setup wizard (status-only)
+uv run python -m codomyrmex.agents.agent_setup --status-only
 ```
 
 ## Navigation

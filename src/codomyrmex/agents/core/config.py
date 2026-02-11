@@ -60,6 +60,31 @@ class AgentConfig:
     every_code_api_key: str | None = None
     every_code_config_path: str | None = None  # Path to ~/.code/config.toml
 
+    # DeepSeek configuration
+    deepseek_api_key: str | None = None
+    deepseek_model: str = "deepseek-coder"
+    deepseek_timeout: int = 60
+    deepseek_max_tokens: int = 4096
+    deepseek_temperature: float = 0.0
+
+    # O1 / O3 configuration
+    o1_api_key: str | None = None
+    o1_model: str = "o1"
+    o1_timeout: int = 120
+    o1_max_tokens: int = 4096
+    o1_temperature: float = 1.0
+
+    # Qwen configuration
+    qwen_api_key: str | None = None
+    qwen_model: str = "qwen-coder-plus"
+    qwen_timeout: int = 60
+    qwen_max_tokens: int = 4096
+    qwen_temperature: float = 0.0
+
+    # Ollama / local model configuration
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_default_model: str = "llama3.2"
+
     # General agent configuration
     default_timeout: int = 30
     enable_logging: bool = True
@@ -135,6 +160,31 @@ class AgentConfig:
             "CODE_HOME", os.path.expanduser("~/.code")
         ) if self.every_code_config_path is None else self.every_code_config_path
 
+        # DeepSeek configuration
+        self.deepseek_api_key = _env_or("deepseek_api_key", "DEEPSEEK_API_KEY")
+        self.deepseek_model = _env_or("deepseek_model", "DEEPSEEK_MODEL")
+        self.deepseek_timeout = _env_or("deepseek_timeout", "DEEPSEEK_TIMEOUT", int)
+        self.deepseek_max_tokens = _env_or("deepseek_max_tokens", "DEEPSEEK_MAX_TOKENS", int)
+        self.deepseek_temperature = _env_or("deepseek_temperature", "DEEPSEEK_TEMPERATURE", float)
+
+        # O1 / O3 configuration
+        self.o1_api_key = _env_or("o1_api_key", "OPENAI_API_KEY")
+        self.o1_model = _env_or("o1_model", "O1_MODEL")
+        self.o1_timeout = _env_or("o1_timeout", "O1_TIMEOUT", int)
+        self.o1_max_tokens = _env_or("o1_max_tokens", "O1_MAX_TOKENS", int)
+        self.o1_temperature = _env_or("o1_temperature", "O1_TEMPERATURE", float)
+
+        # Qwen configuration
+        self.qwen_api_key = _env_or("qwen_api_key", "DASHSCOPE_API_KEY")
+        self.qwen_model = _env_or("qwen_model", "QWEN_MODEL")
+        self.qwen_timeout = _env_or("qwen_timeout", "QWEN_TIMEOUT", int)
+        self.qwen_max_tokens = _env_or("qwen_max_tokens", "QWEN_MAX_TOKENS", int)
+        self.qwen_temperature = _env_or("qwen_temperature", "QWEN_TEMPERATURE", float)
+
+        # Ollama / local
+        self.ollama_base_url = _env_or("ollama_base_url", "OLLAMA_BASE_URL")
+        self.ollama_default_model = _env_or("ollama_default_model", "OLLAMA_DEFAULT_MODEL")
+
         # General configuration
         self.default_timeout = int(
             os.getenv("AGENT_DEFAULT_TIMEOUT", str(self.default_timeout))
@@ -189,6 +239,23 @@ class AgentConfig:
             "every_code_working_dir": self.every_code_working_dir,
             "every_code_api_key": "***" if self.every_code_api_key else None,
             "every_code_config_path": self.every_code_config_path,
+            "deepseek_api_key": "***" if self.deepseek_api_key else None,
+            "deepseek_model": self.deepseek_model,
+            "deepseek_timeout": self.deepseek_timeout,
+            "deepseek_max_tokens": self.deepseek_max_tokens,
+            "deepseek_temperature": self.deepseek_temperature,
+            "o1_api_key": "***" if self.o1_api_key else None,
+            "o1_model": self.o1_model,
+            "o1_timeout": self.o1_timeout,
+            "o1_max_tokens": self.o1_max_tokens,
+            "o1_temperature": self.o1_temperature,
+            "qwen_api_key": "***" if self.qwen_api_key else None,
+            "qwen_model": self.qwen_model,
+            "qwen_timeout": self.qwen_timeout,
+            "qwen_max_tokens": self.qwen_max_tokens,
+            "qwen_temperature": self.qwen_temperature,
+            "ollama_base_url": self.ollama_base_url,
+            "ollama_default_model": self.ollama_default_model,
             "default_timeout": self.default_timeout,
             "enable_logging": self.enable_logging,
             "log_level": self.log_level,
@@ -234,6 +301,15 @@ class AgentConfig:
 
         if self.every_code_timeout <= 0:
             errors.append("every_code_timeout must be positive")
+
+        if self.deepseek_timeout <= 0:
+            errors.append("deepseek_timeout must be positive")
+
+        if self.o1_timeout <= 0:
+            errors.append("o1_timeout must be positive")
+
+        if self.qwen_timeout <= 0:
+            errors.append("qwen_timeout must be positive")
 
         return errors
 

@@ -1,35 +1,29 @@
 """Agents Module for Codomyrmex.
 
-This module provides integration with various agentic frameworks including
-Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI,
-and Every Code CLI. It includes theoretical foundations, generic utilities, and
-framework-specific implementations.
+This module provides integration with 11 agentic frameworks:
+
+- **API-based**: Claude, Codex, O1, DeepSeek, Qwen (extend ``APIAgentBase``)
+- **CLI-based**: Jules, OpenCode, Gemini, Mistral Vibe, Every Code (extend ``CLIAgentBase``)
+- **Local**: Ollama (via ``llm/ollama/``)
 
 Integration:
-- Uses `logging_monitoring` for all logging
-- Integrates with `ai_code_editing` for code generation workflows
-- Integrates with `llm` for LLM infrastructure
-- Integrates with `code` for safe code execution
+- Uses ``logging_monitoring`` for all logging
+- Integrates with ``ai_code_editing`` for code generation workflows
+- Integrates with ``llm`` for LLM infrastructure
+- Integrates with ``code`` for safe code execution
 
 Available classes:
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
-- AgentConfig: Configuration management
+- AgentConfig: Configuration management for all 11 agents
 
 Available submodules:
-- generic: Base agent classes and utilities
+- agent_setup: Agent discovery, YAML config, interactive setup wizard
+- generic: Base agent classes (APIAgentBase, CLIAgentBase, AgentOrchestrator)
 - theory: Theoretical foundations for agentic systems
-- jules: Jules CLI integration
-- claude: Claude API integration
-- codex: OpenAI Codex integration
-- opencode: OpenCode CLI integration
-- gemini: Gemini CLI integration
-- mistral_vibe: Mistral Vibe CLI integration
-- every_code: Every Code CLI integration (multi-agent orchestration)
-- o1: OpenAI o1/o3 reasoning model integration
-- deepseek: DeepSeek Coder integration
-- qwen: Qwen-Coder integration
+- claude, codex, o1, deepseek, qwen: API-based agent clients
+- jules, opencode, gemini, mistral_vibe, every_code: CLI-based agent clients
 - pooling: Multi-agent load balancing and failover
 - evaluation: Agent benchmarking and quality metrics
 - history: Conversation and context persistence
@@ -166,6 +160,11 @@ except ImportError:
     InfrastructureAgent = None
 
 try:
+    from .agent_setup import AgentRegistry
+except ImportError:
+    AgentRegistry = None
+
+try:
     from .exceptions import (
         AgentConfigurationError,
         AgentError,
@@ -287,6 +286,8 @@ __all__ = [
     "ConversationHistory",
     # Infrastructure agent (lazy-loaded)
     "InfrastructureAgent",
+    # Agent setup
+    "AgentRegistry",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

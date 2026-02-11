@@ -2,9 +2,10 @@
 
 This document outlines the specification for tools within the Agents module that are intended to be integrated with the Model Context Protocol (MCP).
 
-## General Considerations
+## 1. Overview
 
-- **Tool Integration**: This module provides AI agent framework integrations and core agent infrastructure.
+The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 11 providers (5 API, 5 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
+
 - **Configuration**: Agents may require API keys, model configurations, and capability settings.
 
 ---
@@ -23,7 +24,7 @@ Executes a request through a specified AI agent, supporting various capabilities
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `agent_name` | `string` | Yes | Name of the agent to use (e.g., "claude", "codex", "gemini") | `"claude"` |
+| `agent_name` | `string` | Yes | Name of the agent to use (e.g., "claude", "codex", "o1", "deepseek", "qwen", "gemini", "ollama") | `"claude"` |
 | `prompt` | `string` | Yes | The prompt or instruction for the agent | `"Generate a Python function to calculate fibonacci numbers"` |
 | `context` | `object` | No | Additional context for the request (e.g., language, file contents) | `{"language": "python", "existing_code": "..."}` |
 | `capabilities` | `array[string]` | No | Required capabilities (e.g., "code_generation", "streaming") | `["code_generation"]` |
@@ -97,9 +98,9 @@ Lists all available AI agents and their capabilities, helping users discover wha
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
 | `agents` | `array[object]` | List of available agents | See below |
-| `total_count` | `integer` | Total number of agents | `5` |
+| `total_count` | `integer` | Total number of agents | `11` |
 
-**Agent object structure:**
+**Agent object structure** (powered by `AgentRegistry.probe_all()`):
 
 | Field Name | Type | Description |
 |:-----------|:-----|:------------|
@@ -111,6 +112,41 @@ Lists all available AI agents and their capabilities, helping users discover wha
 ### 5. Error Handling
 
 - Returns empty list if no agents are configured
+
+### 6. Idempotency
+
+- **Idempotent**: Yes
+
+---
+
+## Tool: `probe_agent_status`
+
+### 1. Tool Purpose and Description
+
+Probes a specific agent's health using `AgentRegistry.probe_agent()`. Returns real connectivity status (API key present, CLI binary found, Ollama server reachable).
+
+### 2. Invocation Name
+
+`probe_agent_status`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+| :--- | :--- | :--- | :--- | :--- |
+| `agent_name` | `string` | Yes | Agent to probe | `"claude"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+| :--- | :--- | :--- | :--- |
+| `name` | `string` | Agent identifier | `"claude"` |
+| `status` | `string` | `"operative"`, `"key_missing"`, `"unreachable"`, `"unavailable"` | `"operative"` |
+| `detail` | `string` | Human-readable explanation | `"Key present (ANTHROPIC_API_KEY=sk-a...)"` |
+| `latency_ms` | `number` | Probe response time | `0.12` |
+
+### 5. Error Handling
+
+- Unknown agent returns `"unavailable"` status
 
 ### 6. Idempotency
 

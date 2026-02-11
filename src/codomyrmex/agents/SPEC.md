@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The `agents` module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI, and Every Code CLI. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
+The `agents` module provides integration with various agentic frameworks including Jules CLI, Claude API, OpenAI Codex, OpenCode CLI, Gemini CLI, Mistral Vibe CLI, Every Code CLI, DeepSeek Coder API, OpenAI O1/O3 API, Qwen-Coder API, and local Ollama models. It includes theoretical foundations, generic utilities, and framework-specific implementations that integrate seamlessly with Codomyrmex modules.
 
 ## Design Principles
 
@@ -12,9 +12,10 @@ The `agents` module provides integration with various agentic frameworks includi
 
 - **Framework Separation**: Each agentic framework is implemented as a separate submodule
   - **CLI-based**: Jules, Gemini, OpenCode, Mistral Vibe, Every Code (extend `CLIAgentBase`)
-  - **API-based**: Claude, Codex (extend `APIAgentBase`)
+  - **API-based**: Claude, Codex, O1, DeepSeek, Qwen (extend `APIAgentBase`)
+  - **Local**: Ollama (via `llm/ollama/` integration)
 - **Clear Interfaces**: All agents implement the `AgentInterface` abstract base class
-- **Base Classes**: 
+- **Base Classes**:
   - `BaseAgent`: Common functionality for all agents
   - `CLIAgentBase`: Specialized base for CLI-based agents with subprocess handling
   - `APIAgentBase`: Specialized base for API-based agents with standardized error handling and token extraction
@@ -42,9 +43,10 @@ The `agents` module provides integration with various agentic frameworks includi
 
 ### Testing
 
-- **Unit Tests**: Test each agent framework independently with mocks
+- **Unit Tests**: 129 zero-mock tests in `tests/unit/agents/`
 - **Integration Tests**: Test integration with Codomyrmex modules
 - **End-to-End Tests**: Test complete agent workflows
+- **Policy**: All tests use real objects, no mocking (zero-mock policy)
 
 ## Architecture
 
@@ -75,6 +77,13 @@ graph TD
     subgraph "API-based Agents"
         ClaudeClient[ClaudeClient<br/>Anthropic API]
         CodexClient[CodexClient<br/>OpenAI API]
+        O1Client[O1Client<br/>OpenAI o1/o3]
+        DeepSeekClient[DeepSeekClient<br/>DeepSeek API]
+        QwenClient[QwenClient<br/>Alibaba API]
+    end
+
+    subgraph "Local Agents"
+        OllamaManager[OllamaManager<br/>Local LLMs]
     end
 
     subgraph "Integration Adapters"
@@ -101,6 +110,9 @@ graph TD
     CLIAgentBase --> EveryCodeClient
     APIAgentBase --> ClaudeClient
     APIAgentBase --> CodexClient
+    APIAgentBase --> O1Client
+    APIAgentBase --> DeepSeekClient
+    APIAgentBase --> QwenClient
 
     AgentOrchestrator --> BaseAgent
     MessageBus --> BaseAgent
@@ -125,12 +137,15 @@ graph TD
 
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
    - CLI-based: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
-   - API-based: Claude, Codex
+   - API-based: Claude, Codex, O1, DeepSeek, Qwen
+   - Local: Ollama
 2. **Unified Interface**: Provide consistent interface across all agent frameworks
-3. **Code Generation**: Generate code using various agent frameworks
-4. **Code Editing**: Edit and refactor code using agents
-5. **Streaming Support**: Support streaming responses where available
-6. **Multi-Agent Orchestration**: Coordinate multiple agents for complex tasks (via Every Code and AgentOrchestrator)
+3. **Agent Discovery**: `AgentRegistry` with live health probes for all 11 agents
+4. **Code Generation**: Generate code using various agent frameworks
+5. **Code Editing**: Edit and refactor code using agents
+6. **Streaming Support**: Support streaming responses where available
+7. **Multi-Agent Orchestration**: Coordinate multiple agents for complex tasks (via Every Code and AgentOrchestrator)
+8. **Config Persistence**: YAML config file at `~/.codomyrmex/agents.yaml`
 
 ### Quality Standards
 
@@ -158,7 +173,11 @@ graph TD
 - `AgentOrchestrator`: Multi-agent coordination
 - Framework-specific clients:
   - CLI-based: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
-  - API-based: `ClaudeClient`, `CodexClient`
+  - API-based: `ClaudeClient`, `CodexClient`, `O1Client`, `DeepSeekClient`, `QwenClient`
+- `AgentRegistry`: Agent discovery and health probing (`agent_setup/`)
+- `AgentPool`: Multi-agent load balancing (`pooling/`)
+- `AgentBenchmark`: Evaluation and scoring (`evaluation/`)
+- `ConversationManager`: Conversation persistence (`history/`)
 
 ### Dependencies
 
@@ -174,7 +193,9 @@ graph TD
 - Use `AgentInterface` for type hints and abstract operations
 - Use framework-specific clients for direct operations:
   - CLI-based agents: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
-  - API-based agents: `ClaudeClient`, `CodexClient`
+  - API-based agents: `ClaudeClient`, `CodexClient`, `O1Client`, `DeepSeekClient`, `QwenClient`
+  - Local: Ollama via `llm/ollama/OllamaManager`
+- Use `AgentRegistry.probe_all()` to discover operative agents
 - Use integration adapters for Codomyrmex module integration
 - Use `AgentOrchestrator` or `EveryCodeClient` for multi-agent workflows
 

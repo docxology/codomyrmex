@@ -16,6 +16,9 @@ Support for multiple AI providers with consistent interfaces:
 | :--- | :--- | :--- | :--- |
 | Claude | `ClaudeClient` | API | Code review, generation, explanation |
 | Codex | `CodexClient` | API | Code completion, transformation |
+| O1 | `O1Client` | API | Complex reasoning, chain-of-thought |
+| DeepSeek | `DeepSeekClient` | API | Cost-effective code generation |
+| Qwen | `QwenClient` | API | Multilingual code tasks |
 | Gemini | `GeminiClient` | CLI | Multi-modal code analysis |
 | Ollama | via `llm/` | Local | Private local AI processing |
 
@@ -147,6 +150,7 @@ The PAI Algorithm's THINK phase selects which capabilities (agents, skills, tool
 | **Pass 2: THINK Validation** | Algorithm validates against ISC criteria | **Authoritative** |
 
 Pass 2 can override Pass 1 based on what OBSERVE discovered. For example:
+
 - Hook suggests `Engineer` → ISC reveals architecture decision needed → **add** `Architect`
 - Hook suggests nothing → ISC requires browser verification → **add** `QATester`
 
@@ -195,6 +199,9 @@ graph TB
     subgraph providers ["Provider Layer"]
         Claude["ClaudeClient"]
         Codex["CodexClient"]
+        O1["O1Client"]
+        DeepSeek["DeepSeekClient"]
+        Qwen["QwenClient"]
         Gemini["GeminiClient"]
         Local["Ollama (via llm/)"]
     end
@@ -203,6 +210,7 @@ graph TB
         CodeEdit["AI Code Editing"]
         GitAgent["Git Operations"]
         Droid["Task Management"]
+        Setup["AgentRegistry"]
     end
 
     Algorithm --> Subagents
@@ -212,6 +220,9 @@ graph TB
 
     Orchestrator --> Claude
     Orchestrator --> Codex
+    Orchestrator --> O1
+    Orchestrator --> DeepSeek
+    Orchestrator --> Qwen
     Orchestrator --> Gemini
     Orchestrator --> Local
 
@@ -233,7 +244,9 @@ graph TB
 ```bash
 # API Keys (optional - only for cloud providers)
 export ANTHROPIC_API_KEY="sk-..."
-export OPENAI_API_KEY="sk-..."
+export OPENAI_API_KEY="sk-..."   # for Codex and O1
+export DEEPSEEK_API_KEY="sk-..."
+export DASHSCOPE_API_KEY="sk-..." # for Qwen
 
 # Default provider (local-first)
 export CODOMYRMEX_DEFAULT_AGENT="ollama"
