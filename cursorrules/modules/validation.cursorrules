@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for input validation.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Validation.
 -   `src/` (or primary Python package folders): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.

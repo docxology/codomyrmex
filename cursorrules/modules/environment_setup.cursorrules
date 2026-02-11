@@ -18,7 +18,7 @@ When working within this module, pay close attention to:
 -   `docs/tutorials/troubleshooting_common_setup_issues.md`: Guide for resolving common setup problems.
 -   `API_SPECIFICATION.md`: (Currently a template) For any formal API definitions of `env_checker.py` functions.
 -   `CHANGELOG.md`: Log changes to this module's scripts or documentation.
--   `requirements.txt`: (Currently minimal/empty) For any dependencies *unique* to `env_checker.py` that are not in the root project `requirements.txt`.
+-   `pyproject.toml`: All dependencies managed centrally via uv.
 
 ## 3. Coding Standards & Practices
 
@@ -37,7 +37,7 @@ When working within this module, pay close attention to:
 ## 4. Testing
 -   **`env_checker.py`**:
     -   Manually test `env_checker.py` under various conditions: missing dependencies, missing `.env` file, existing `.env` file, incorrect project root (if that part of the script is modified).
-    -   Unit tests (in `tests/`) should cover the logic of `ensure_dependencies_installed` and `check_and_setup_env_vars`, mocking file system operations and imports where necessary.
+    -   Unit tests (in `tests/`) should cover the logic of `ensure_dependencies_installed` and `check_and_setup_env_vars`, using real file system operations with temp directories (Zero-Mock policy).
 -   **Documentation**: 
     -   Manually walk through setup instructions in `README.md` and troubleshooting steps on different OS (if feasible) to verify accuracy.
     -   Check for clarity and completeness of explanations.

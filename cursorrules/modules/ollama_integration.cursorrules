@@ -14,7 +14,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for Ollama integration and model interactions.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Ollama Integration.
 -   `src/codomyrmex/llm/ollama/`: Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -34,7 +34,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `llm/ollama`
 -   New features (e.g., new model support, output processing) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover Ollama API interactions, model execution, configuration management, and error scenarios.
--   Mock Ollama API where appropriate to ensure deterministic test behavior.
+-   Use real Ollama API with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `src/codomyrmex/tests/unit/test_ollama_integration.py`.
 
 ## 5. Documentation for `llm/ollama`

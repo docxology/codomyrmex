@@ -18,11 +18,22 @@ Rules follow a specificity hierarchy (most specific wins):
 | 4 (Lowest) | General | `general.cursorrules` | 1 rule |
 | | **Total** | | **75 rules** |
 
+## Mandatory Policies (Cannot Be Overridden)
+
+These policies are defined in `general.cursorrules §2` and enforced at all levels:
+
+| Policy | Summary |
+|--------|---------|
+| **Zero-Mock** | Never use mocks — real implementations, data factories, environment-gated tests |
+| **UV-Only** | `pyproject.toml` + `uv sync` for all dependencies — no `pip install` or `requirements.txt` |
+| **RASP** | Every directory needs `README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md` |
+| **Python ≥ 3.10** | All code compatible with Python 3.10+ |
+
 ## Directory Structure
 
 ```
 cursorrules/
-├── general.cursorrules       # Universal coding standards (baseline)
+├── general.cursorrules       # Universal coding standards + mandatory policies
 ├── cross-module/             # Rules for cross-cutting concerns (8 rules)
 │   ├── logging_monitoring.cursorrules
 │   ├── model_context_protocol.cursorrules
@@ -48,8 +59,8 @@ All `.cursorrules` files follow this structure:
 1. **Purpose & Context**: Core functionality, key technologies
 2. **Key Files & Structure**: Important files to monitor
 3. **Coding Standards**: Language and style requirements
-4. **Testing**: Test requirements and strategies
-5. **Documentation**: Documentation maintenance
+4. **Testing**: Test requirements and strategies (Zero-Mock enforced)
+5. **Documentation**: Documentation maintenance (RASP enforced)
 6. **Specific Considerations**: Module-specific notes
 7. **Final Check**: Verification steps before finalizing
 
@@ -61,7 +72,7 @@ All `.cursorrules` files follow this structure:
 | Security guidelines | `modules/security.cursorrules` |
 | Logging patterns | `cross-module/logging_monitoring.cursorrules` |
 | MCP tool specs | `cross-module/model_context_protocol.cursorrules` |
-| General principles | `general.cursorrules` |
+| General principles + policies | `general.cursorrules` |
 
 ## Companion Files
 

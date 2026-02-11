@@ -14,7 +14,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: Programmatic interfaces.
 -   `SECURITY.md`: Critical - financial transaction security.
 -   `CHANGELOG.md`: Notable changes log.
--   `requirements.txt`: Dependencies.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: Documentation.
 -   `src/`: Core logic.
 -   `tests/`: Unit and integration tests.

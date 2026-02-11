@@ -67,6 +67,7 @@ When editing a file, check if a file-specific rule applies:
 
 - [**AGENTS.md**](AGENTS.md) - Agent guidelines for file-specific work
 - [**SPEC.md**](SPEC.md) - Functional specification
+- [**PAI.md**](PAI.md) - AI infrastructure context
 
 ## Navigation
 

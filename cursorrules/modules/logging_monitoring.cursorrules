@@ -19,7 +19,7 @@ When working within this module, pay close attention to:
 -   `USAGE_EXAMPLES.md`: Practical examples of different logging configurations.
 -   `CHANGELOG.md`: All notable changes must be logged here.
 -   `SECURITY.md`: Focus on preventing sensitive data leakage through logs and secure file path handling.
--   `requirements.txt`: Module-specific dependencies (though `python-dotenv` is likely a root dependency).
+-   `pyproject.toml`: All dependencies managed centrally via uv.
 -   `docs/`: In-depth documentation (currently minimal, but placeholder for future).
 -   `tests/`: Unit tests for `logger_config.py`.
 
@@ -31,7 +31,7 @@ When working within this module, pay close attention to:
     -   Handle potential `IOError` during log file setup gracefully.
 -   **Dependencies**:
     -   Minimize dependencies. `python-dotenv` is essential.
-    -   Changes to dependencies must be justified and added to this module's `requirements.txt` and potentially the root `requirements.txt` if globally applicable.
+    -   Changes to dependencies must be justified and added to `pyproject.toml` (managed centrally via uv).
 -   **Error Handling**:
     -   The module itself should be robust to configuration errors (e.g., invalid log levels, unwritable log files), providing clear warnings to `stderr` without crashing.
     -   The `JsonFormatter` should gracefully handle non-serializable `extra` data if this becomes an issue, though for now, it relies on input.
@@ -40,7 +40,7 @@ When working within this module, pay close attention to:
 ## 4. Testing
 -   New features or bug fixes MUST be accompanied by corresponding tests in `tests/unit/test_logger_config.py`.
 -   Tests should cover various environment variable combinations, log output types (TEXT, JSON), and error conditions (e.g., invalid log file path).
--   Mocking `os.getenv` and file system operations will be necessary.
+-   Use real environment variables and file system operations with temp directories (Zero-Mock policy).
 -   Run existing tests to ensure no regressions are introduced. Refer to `tests/README.md`.
 
 ## 5. Documentation

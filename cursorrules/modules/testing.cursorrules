@@ -4,8 +4,8 @@
 These rules are specific to the `testing` module and supplement `general.cursorrules`. Always adhere to `general.cursorrules` unless explicitly overridden here for a specific reason pertinent to this module.
 
 ## 1. Module Purpose & Context
--   **Core Functionality**: Provides testing utilities, fixtures, mock factories, and test infrastructure for the Codomyrmex ecosystem.
--   **Key Technologies/Tools**: Python, pytest, unittest, mock/MagicMock, fixtures, coverage tools.
+-   **Core Functionality**: Provides testing utilities, fixtures, data factories, and test infrastructure for the Codomyrmex ecosystem.
+-   **Key Technologies/Tools**: Python, pytest, unittest, fixtures, real data factories, coverage tools.
 -   Refer to the module's main `README.md` for an overview.
 
 ## 2. Key Files & Structure in `testing` Module
@@ -14,8 +14,8 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
--   `SECURITY.md`: Specific security considerations for test data and mocks.
--   `requirements.txt`: Python dependencies for this module.
+-   `SECURITY.md`: Specific security considerations for test data and fixtures.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Testing.
 -   `src/` (or primary Python package folders): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -23,14 +23,14 @@ When working within this module, pay close attention to:
 
 ## 3. Coding Standards & Practices for `testing`
 -   **Consistency**: Adhere to existing coding styles, naming conventions, and architectural patterns found within the `testing` module.
--   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for fixtures and mocks.
+-   **Language Specifics**: Primarily Python. Follow PEP 8. Use type hinting extensively for fixtures and data factories.
 -   **Isolation**: Tests must be isolated and not depend on execution order.
 -   **Determinism**: Tests must be deterministic; use fixed seeds for random operations.
--   **Fast Tests**: Keep unit tests fast; use mocks for slow dependencies.
--   **Real Methods**: Prefer real implementations over mocks where practical.
+-   **Fast Tests**: Keep unit tests fast; use environment-gated tests for slow dependencies.
+-   **Real Methods**: Always use real implementations (Zero-Mock policy).
 
 ## 4. Testing in `testing`
--   New features (e.g., new fixtures, mock factories) or bug fixes MUST be accompanied by relevant tests.
+-   New features (e.g., new fixtures, data factories) or bug fixes MUST be accompanied by relevant tests.
 -   Meta-testing: Test that test utilities work correctly.
 -   Ensure fixtures are properly cleaned up.
 -   Run existing tests to ensure no regressions. Refer to `testing/tests/README.md`.

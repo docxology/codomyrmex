@@ -6,6 +6,8 @@
 
 File-specific cursor rules that take **highest priority** in the rule hierarchy. Apply these rules based on the file type you are editing.
 
+> **Mandatory Policies** (from `general.cursorrules §2`): Zero-Mock, UV-Only, RASP, Python ≥ 3.10 — these apply unconditionally at all levels.
+
 ## Active Rules (6)
 
 | Rule | File Pattern | Auto-Apply |
@@ -34,7 +36,8 @@ File-specific cursor rules that take **highest priority** in the rule hierarchy.
 1. Run `ruff` or `flake8` for linting
 2. Ensure type hints on all functions
 3. Add Google-style docstrings
-4. Write tests in `tests/` directory
+4. Write tests in `tests/` directory (Zero-Mock — real implementations only)
+5. Run tests via `uv run pytest`
 
 ### When Editing YAML/JSON Files
 
@@ -73,4 +76,5 @@ File-specific cursor rules that take **highest priority** in the rule hierarchy.
 - **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
 - **📦 Module Rules**: [../modules/](../modules/) - 60 module rules
 - **🔗 Cross-Module**: [../cross-module/](../cross-module/) - 8 cross-module rules
+- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
 - **🏠 Project Root**: [../../README.md](../../README.md)

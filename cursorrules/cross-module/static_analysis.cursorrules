@@ -16,7 +16,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: If analysis results are exposed via an API.
 -   `MCP_TOOL_SPECIFICATION.md`: If MCP tools are provided to trigger analyses or query results.
 -   `docs/`: Detailed guides on specific linters/scanners, how to fix common issues, and understanding quality metrics.
--   `requirements.txt`: Dependencies for the analysis tools themselves if installed centrally by this module.
+-   `pyproject.toml`: Dependencies managed centrally via uv.
 
 ## 3. Coding Standards & Practices for `static_analysis`
 -   **Tool Configuration**: Configurations for linters and scanners should be consistent with project coding standards and aim to improve code quality and security.

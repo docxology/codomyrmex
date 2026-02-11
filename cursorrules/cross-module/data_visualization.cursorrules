@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: MCP tools for requesting visualizations.
 -   `CHANGELOG.md`: New chart types, library updates.
 -   `SECURITY.md`: Security of data handling and rendering (e.g., XSS in interactive charts).
--   `requirements.txt`: Dependencies like plotting libraries.
+-   `pyproject.toml`: Dependencies managed centrally via uv.
 -   `docs/`: Examples, tutorials for creating different visualizations.
 -   `src/` (or equivalent): Core plotting functions and data processing logic.
 -   `tests/`: Tests for chart generation and data integrity.

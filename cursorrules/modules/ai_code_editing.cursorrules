@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for this module.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to AI Code Editing.
 -   `src/` (or primary Python package folders, e.g., `ai_code_editing/` itself if it contains Python sources directly): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -30,7 +30,7 @@ When working within this module, pay close attention to:
 
 ## 4. Testing in `ai_code_editing`
 -   New features (e.g., new AI-powered editing commands, prompt strategies) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
--   Tests might involve mocking LLM responses to ensure deterministic behavior of the module's logic.
+-   Tests should use real LLM providers with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `ai_code_editing/tests/README.md`.
 
 ## 5. Documentation for `ai_code_editing`

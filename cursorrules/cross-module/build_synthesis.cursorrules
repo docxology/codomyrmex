@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: MCP tools for build/synthesis automation.
 -   `CHANGELOG.md`: Changes to build processes or synthesis tools.
 -   `SECURITY.md`: Security of build scripts and generated code.
--   `requirements.txt`: Dependencies for the build synthesis tools themselves.
+-   `pyproject.toml`: Dependencies managed centrally via uv.
 -   `docs/`: Detailed documentation on build targets, synthesis strategies.
 -   `src/` (or equivalent): Core logic for orchestrating builds and code generation.
 -   `tests/`: Tests for build scripts and synthesis logic.

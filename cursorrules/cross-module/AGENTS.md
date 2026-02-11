@@ -6,6 +6,8 @@
 
 Cross-module cursor rules for multi-module interactions and shared patterns. Apply these rules when working across module boundaries or with infrastructure shared by multiple modules.
 
+> **Mandatory Policies** (from `general.cursorrules §2`): Zero-Mock, UV-Only, RASP, Python ≥ 3.10 — these apply unconditionally at all levels.
+
 ## Active Rules (8)
 
 | Rule | When to Apply |
@@ -49,6 +51,12 @@ logger.info("message", extra={"context": "value"})
 
 **Output**: Use output_module patterns for artifact management
 
+### Mandatory Policies (Always Apply)
+
+- **Zero-Mock**: Cross-module tests must use real implementations
+- **UV-Only**: Dependencies via `uv add` → `pyproject.toml` — no `requirements.txt`
+- **RASP**: All directories need README.md, AGENTS.md, SPEC.md, PAI.md
+
 ## Operating Contracts
 
 - Cross-module rules supplement module-specific rules
@@ -61,4 +69,5 @@ logger.info("message", extra={"context": "value"})
 - **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
 - **📦 Module Rules**: [../modules/](../modules/) - Per-module rules
 - **📄 File Rules**: [../file-specific/](../file-specific/) - File type rules
+- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
 - **🏠 Project Root**: [../../README.md](../../README.md)

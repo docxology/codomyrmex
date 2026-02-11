@@ -48,7 +48,7 @@ When working within this module, pay close attention to:
 ## 4. Testing
 -   **Unit Tests (`tests/unit/`)**: 
     -   Focus on the logic within wrapper functions (argument parsing, subprocess calls, output parsing).
-    -   Mock `subprocess.run()` calls to simulate various Git responses (success, errors, different repository states).
+    -   Use real Git repositories in temp directories for testing various responses (Zero-Mock policy).
     -   Test error handling and return value types.
 -   **Integration Tests (`tests/integration/`)**: 
     -   These tests should interact with actual (temporary, locally created) Git repositories.

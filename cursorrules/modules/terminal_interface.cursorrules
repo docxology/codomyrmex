@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for terminal operations and user input handling.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Terminal Interface.
 -   `src/` (or primary Python package folders, e.g., `terminal_interface/` itself if it contains Python sources directly): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -33,7 +33,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `terminal_interface`
 -   New features (e.g., new terminal utilities, shell capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover terminal interactions, command routing, shell functionality, and user input handling.
--   Mock terminal environments where appropriate to ensure deterministic test behavior.
+-   Use real terminal environments with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `terminal_interface/tests/README.md`.
 
 ## 5. Documentation for `terminal_interface`

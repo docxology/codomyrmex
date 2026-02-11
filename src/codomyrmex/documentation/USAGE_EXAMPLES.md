@@ -93,16 +93,17 @@ python documentation/documentation_website.py
 ## Common Pitfalls & Troubleshooting
 
 - **Issue**: `ModuleNotFoundError: No module named 'codomyrmex.logging_monitoring'` when running `documentation_website.py`.
-  - **Solution**: Ensure you have installed the main Codomyrmex project dependencies from the root `requirements.txt` (`uv sync`) in your Python environment, as `documentation_website.py` attempts to use the project's logging module.
+  - **Solution**: Ensure you have installed the main Codomyrmex project dependencies via `uv sync` in your Python environment, as `documentation_website.py` attempts to use the project's logging module.
 
 - **Issue**: `npm` or `yarn` commands fail (e.g., `npm ERR! ...`).
-  - **Solution**: 
+  - **Solution**:
     - Ensure Node.js and the respective package manager (npm or yarn) are correctly installed and in your system's PATH. Refer to `environment_setup/README.md`.
     - Check the specific error message. It might indicate missing peer dependencies for Docusaurus or network issues during package download.
     - Try deleting `documentation/node_modules/` and `documentation/package-lock.json` (or `yarn.lock`) and re-running the install command (e.g., `python documentation/documentation_website.py install`).
 
 - **Issue**: Port `3000` is already in use when trying to start or serve.
-  - **Solution**: Docusaurus (or the `serve` package) might try to use another port if 3000 is busy. Check the terminal output for the actual URL. You can often configure the port Docusaurus uses via command-line flags or its configuration, though the `documentation_website.py` script does not currently pass these through. You might need to run the `npm run start -- --port <new_port>` command manually in the `documentation/` directory if this is a persistent issue. 
+  - **Solution**: Docusaurus (or the `serve` package) might try to use another port if 3000 is busy. Check the terminal output for the actual URL. You can often configure the port Docusaurus uses via command-line flags or its configuration, though the `documentation_website.py` script does not currently pass these through. You might need to run the `npm run start -- --port <new_port>` command manually in the `documentation/` directory if this is a persistent issue.
+
 ## Navigation Links
 
 - **Parent**: [Project Overview](../README.md)

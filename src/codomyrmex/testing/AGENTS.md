@@ -7,7 +7,7 @@ Test utilities, fixtures, and testing patterns for Codomyrmex.
 ## Key Classes
 
 - **TestRunner** — Execute tests with configuration
-- **MockFactory** — Create test doubles (note: prefer real implementations)
+- **RealDataFactory** — Generate real test data (Zero-Mock policy: no test doubles)
 - **FixtureManager** — Manage test fixtures
 - **AssertionHelpers** — Enhanced assertions
 

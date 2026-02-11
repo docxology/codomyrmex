@@ -7,7 +7,7 @@ These rules are specific to the `template/module_template` directory itself (the
 
 ## 1. Module Purpose & Context
 -   **Core Functionality**: Provides the standard skeleton for creating new Codomyrmex modules. It enforces consistency in file structure and documentation.
--   **Key Technologies/Tools**: Markdown, standard file formats (e.g., .gitignore, requirements.txt templates).
+-   **Key Technologies/Tools**: Markdown, standard file formats (e.g., .gitignore, pyproject.toml templates).
 -   Refer to this module's `README.md` for a comprehensive overview.
 
 ## 2. Key Files & Structure
@@ -17,7 +17,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: Specifications for tools exposed via the Model Context Protocol.
 -   `CHANGELOG.md`: All notable changes must be logged here.
 -   `SECURITY.md`: Specific security considerations for this module.
--   `requirements.txt` (or `package.json`, etc.): Module-specific dependencies.
+-   `pyproject.toml`: All Python dependencies managed centrally via uv.
 -   `docs/`: In-depth documentation, technical overviews, and tutorials.
 -   `src/` or primary source code files (e.g., ``README.md`, `API_SPECIFICATION.md` (as templates themselves).``): Core logic of the module.
 -   `tests/`: Unit and integration tests.
@@ -26,7 +26,7 @@ When working within this module, pay close attention to:
 -   **Consistency**: Adhere strictly to the existing coding style, naming conventions, and architectural patterns found within the `template/module_template` module.
 -   **Language Specifics**: The templates themselves are language-agnostic or provide specific language examples (e.g., Python `__init__.py`). Focus on placeholders and clear instructions within the templates.
 -   **Dependencies**:
-    -   Any new dependencies must be justified and added to this module's specific requirements file (e.g., `requirements.txt`).
+    -   Any new dependencies must be justified and added to `pyproject.toml` (managed centrally via uv).
     -   Prefer to use dependencies already available in the project if suitable.
 -   **Error Handling**: Implement robust error handling specific to the operations of this module. Log errors using the `logging_monitoring` module.
 

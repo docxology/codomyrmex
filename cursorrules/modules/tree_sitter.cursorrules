@@ -13,7 +13,7 @@ When working within this module, pay close attention to:
 -   `README.md`: Overview and language support.
 -   `API_SPECIFICATION.md`: Programmatic interfaces.
 -   `CHANGELOG.md`: Notable changes log.
--   `requirements.txt`: Dependencies.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `grammars/`: Language grammars.
 -   `queries/`: Tree-sitter query files.
 -   `src/`: Core logic.

@@ -15,47 +15,77 @@ These are the general guiding principles for AI-assisted development across the 
 9.  **Documentation**: Keep all forms of documentation (READMEs, API specs, inline comments, changelogs) accurate and up-to-date with code changes.
 10. **User-Focus**: For APIs, tools, and documentation, consider the end-user (developer, AI agent, or end-user of the Codomyrmex platform).
 
-## 2. File Handling & Structure
+## 2. Mandatory Policies
+
+### Zero-Mock Policy
+**Never use mocks, MagicMock, monkey-patching, or test doubles.** All tests must use real implementations:
+- Use **real data factories** (`real_data_factory.py`) for test data generation
+- Use **environment-gated tests** (`@pytest.mark.skipif(not os.getenv("API_KEY"))`) for external services
+- Use **simulation modes** (e.g., `simulation=True`) where hardware or external systems are unavailable
+- Use **temp directories** and real file system operations instead of mocking `os` or `pathlib`
+- Use **real subprocess calls** with isolated test repos instead of mocking `subprocess.run()`
+
+### UV Package Management
+**All Python dependencies are managed via `uv` and `pyproject.toml`:**
+- Run `uv sync` to install dependencies — never `pip install`
+- Module-specific `requirements.txt` files have been removed; all dependencies are in `pyproject.toml`
+- Use `uv run pytest` to execute tests
+- Use `uv add <package>` to add new dependencies (automatically updates `pyproject.toml`)
+
+### RASP Documentation Standard
+**Every directory must contain these 4 files:**
+- `README.md` — Human-readable documentation with overview, structure, and navigation
+- `AGENTS.md` — AI agent guidelines with purpose, components, and contracts
+- `SPEC.md` — Functional specification with architecture diagrams and interface contracts
+- `PAI.md` — Personal AI Infrastructure context with statistics and key files
+
+### Python Version
+The project requires **Python ≥ 3.10**. All code must be compatible with Python 3.10+.
+
+## 3. File Handling & Structure
 1.  **Respect Existing Structure**: When modifying files, conform to their existing organization.
 2.  **New Files**: Place new files in logically appropriate directories. Follow established naming conventions.
-3.  **Standard Files**: Be aware of the purpose of standard files like `README.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `CHANGELOG.md`, `SECURITY.md`, `requirements.txt` (or language equivalent), and `.gitignore`. Ensure they are maintained.
+3.  **Standard Files**: Be aware of the purpose of standard files like `README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md`, `API_SPECIFICATION.md`, `MCP_TOOL_SPECIFICATION.md`, `CHANGELOG.md`, `SECURITY.md`, `pyproject.toml`, and `.gitignore`. Ensure they are maintained.
 4.  **.cursorrules**: These files themselves are part of the project. They can be updated if requirements change, ideally with a clear rationale. All cursorrules are organized in the `cursorrules/` directory. See `cursorrules/README.md` for organization details.
 
-## 3. Coding Practices
+## 4. Coding Practices
 1.  **Comments**: Comment complex logic, design rationales, and public APIs. Avoid over-commenting simple code. Use TODOs/FIXMEs judiciously with context.
 2.  **Error Handling**: Implement comprehensive error handling. Use specific exceptions. Provide informative error messages. Log errors appropriately using the `logging_monitoring` module.
 3.  **Dependencies**:
     *   Minimize new external dependencies. Justify their inclusion based on significant benefit.
-    *   Update `pyproject.toml` (and `package.json` for JS modules) with version pinning for stability. Note: module-specific `requirements.txt` files are deprecated.
+    *   Add dependencies via `uv add <package>` which updates `pyproject.toml` automatically.
+    *   Use version pinning for stability. All dependencies live in the root `pyproject.toml`.
 4.  **Configuration**: Configuration should be clear, manageable, and externalized from code where appropriate (e.g., environment variables, config files). Avoid hardcoding sensitive information.
 5.  **Language Best Practices**: Apply best practices for the specific programming language being used in a module.
 
-## 4. Tool Usage (MCP & APIs)
+## 5. Tool Usage (MCP & APIs)
 1.  **Adherence to Specs**: When interacting with or defining tools via `MCP_TOOL_SPECIFICATION.md` or APIs via `API_SPECIFICATION.md`, strictly adhere to the defined schemas, parameters, and expected behaviors.
 2.  **Clarity and Precision**: Inputs to tools should be clear and precise. Tool definitions must be unambiguous.
 
-## 5. Testing
-1.  **Comprehensive Testing**: Strive for thorough test coverage (unit, integration, and E2E where applicable).
-2.  **Test Maintenance**: Keep tests up-to-date with code changes.
-3.  **Test Execution**: Ensure all relevant tests pass before finalizing changes. Refer to module-specific `tests/README.md`.
+## 6. Testing
+1.  **Zero-Mock**: All tests must use real implementations — never mocks or test doubles (see §2).
+2.  **Comprehensive Testing**: Strive for thorough test coverage (unit, integration, and E2E where applicable).
+3.  **Environment-Gated Tests**: Use `pytest.mark.skipif` for tests requiring external services or API keys.
+4.  **Test Maintenance**: Keep tests up-to-date with code changes.
+5.  **Test Execution**: Run tests via `uv run pytest`. Ensure all relevant tests pass before finalizing changes.
 
-## 6. Communication & Interaction (AI with User/Project)
+## 7. Communication & Interaction (AI with User/Project)
 1.  **Clarity of Intent**: Clearly state your objectives and the changes you propose.
 2.  **Iterative Approach**: Prefer smaller, well-defined, incremental changes.
 3.  **Information Gathering**: If unsure, ask clarifying questions or use provided tools to gather more context before acting.
 4.  **Rationale for Changes**: Explain the reasoning behind significant or complex changes.
 5.  **Feedback Incorporation**: Address user feedback thoughtfully.
 
-## 7. Project-Wide Documents
+## 8. Project-Wide Documents
 When interacting with project-wide documents like the root `README.md`, `LICENSE`, `CONTRIBUTING.md`, or `CODE_OF_CONDUCT.md`, understand their broad scope and impact. Changes should be carefully considered. Specific rules for the root `README.md` can be found in `file-specific/README.md.cursorrules`.
 
 ### Documentation Standards
 All documentation should follow the guidelines in `docs/development/documentation.md` and contribute to the overall documentation architecture outlined in `docs/README.md`. For contribution guidelines, see `docs/project/contributing.md`.
 
-## 8. Review and Finalization
+## 9. Review and Finalization
 1.  **Self-Review**: Before concluding, review your changes against these general rules and any applicable module-specific rules.
 2.  **Impact Assessment**: Briefly consider the potential impact of your changes on other parts of the project.
 3.  **Changelog**: Update relevant `CHANGELOG.md` files for any significant modifications.
+4.  **Triple-Check**: Verify all file paths, function signatures, and cross-references are correct.
 
 These general rules are designed to foster a high-quality, maintainable, and robust Codomyrmex codebase.
-

@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Critical security considerations for cloud operations and credential management.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Cloud.
 -   `aws/`, `gcp/`, `azure/`, `infomaniak/`: Provider-specific implementations.
 -   `interfaces/`: Unified interface definitions.
@@ -32,7 +32,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `cloud`
 -   New features (e.g., new provider support, new operations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover cloud operations, credential handling, error scenarios, and provider-specific behaviors.
--   Use mocked cloud services for unit tests; integration tests may use real services in test accounts.
+-   Use real cloud services with environment-gated tests in test accounts (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `cloud/tests/README.md`.
 
 ## 5. Documentation for `cloud`

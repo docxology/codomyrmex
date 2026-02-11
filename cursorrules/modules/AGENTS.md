@@ -6,6 +6,8 @@
 
 Module-specific cursor rules (60 total) that supplement `general.cursorrules`. Each rule provides coding standards, testing requirements, and best practices for its respective source module.
 
+> **Mandatory Policies** (from `general.cursorrules §2`): Zero-Mock, UV-Only, RASP, Python ≥ 3.10 — these apply unconditionally at all levels and are encoded in every module rule.
+
 ## Agent Guidelines
 
 ### Rule Application
@@ -42,9 +44,16 @@ All module rules follow this 8-section structure:
 Create a new module rule when:
 
 - A source module has unique coding requirements
-- Module-specific testing patterns are needed
+- Module-specific testing patterns are needed (always Zero-Mock)
 - Special security considerations apply
 - Cross-cutting concerns don't cover the need
+
+### Key Policies in Every Module Rule
+
+- **Testing** sections mandate real implementations — no mocks, data factories instead
+- **Key Files** sections reference `pyproject.toml` for dependencies — no `requirements.txt`
+- **Documentation** sections enforce RASP (README, AGENTS, SPEC, PAI) at module level
+- **Coding Standards** target Python ≥ 3.10 with type hints
 
 ## Operating Contracts
 
@@ -72,4 +81,5 @@ Create a new module rule when:
 - **📁 Parent Directory**: [../README.md](../README.md) - cursorrules root
 - **📄 File Rules**: [../file-specific/](../file-specific/) - 6 file-type rules
 - **🔗 Cross-Module**: [../cross-module/](../cross-module/) - 8 cross-module rules
+- **📋 PAI Context**: [PAI.md](PAI.md) - AI infrastructure context
 - **🏠 Project Root**: [../../README.md](../../README.md)

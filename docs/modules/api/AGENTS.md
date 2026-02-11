@@ -22,7 +22,6 @@ from codomyrmex.api import *
 - **Docs**: [Module Documentation](README.md)
 - **Spec**: [Technical Specification](SPEC.md)
 
-
 ## Key Components
 
 - **`APISchema`** — API schema definition for documentation generation.
@@ -40,7 +39,7 @@ from codomyrmex.api import *
 - `authentication` — Authentication
 - `circuit_breaker` — Circuit Breaker
 - `documentation` — Documentation
-- `mocking` — Mocking
+- `mocking` — API Simulation (development endpoints, not test mocking)
 - `pagination` — Pagination
 - `rate_limiting` — Rate Limiting
 - `standardization` — Standardization

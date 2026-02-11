@@ -9,31 +9,37 @@ Cross-module coding rules and coordination standards defining how Codomyrmex mod
 ## Design Principles
 
 ### Modularity
+
 - Self-contained components
 - Clear boundaries
 - Minimal dependencies
 
 ### Internal Coherence
+
 - Logical organization
 - Consistent patterns
 - Unified design
 
 ### Parsimony
+
 - Essential elements only
 - No unnecessary complexity
 - Minimal surface area
 
 ### Functionality
+
 - Focus on working solutions
 - Forward-looking design
 - Current needs focus
 
 ### Testing
+
 - Comprehensive coverage
 - TDD practices
 - Real data analysis
 
 ### Documentation
+
 - Self-documenting code
 - Clear APIs
 - Complete specifications
@@ -44,7 +50,6 @@ Cross-module coding rules and coordination standards defining how Codomyrmex mod
 graph TD
     subgraph "Rule Categories"
         Build[build_synthesis]
-        Exec[code]
         Viz[data_visualization]
         Log[logging_monitoring]
         MCP[model_context_protocol]
@@ -62,23 +67,26 @@ graph TD
     end
 
     Build --> Interface
-    Exec --> DataFlow
     Viz --> Interface
     Log --> Logging
     MCP --> Interface
     Pattern --> DataFlow
     Static --> ErrorHandling
+    Template --> DataFlow
+    Output --> Interface
 ```
 
 ## Functional Requirements
 
 ### Rule Categories
+
 1. **Module-Specific Rules**: Coordination standards for specific modules
 2. **Interface Standards**: Inter-module communication patterns
 3. **Data Flow Rules**: Data sharing and transformation standards
 4. **Error Handling**: Cross-module error propagation patterns
 
 ### Rule Standards
+
 - Clear coordination guidelines
 - Consistent interface patterns
 - Standardized error handling
@@ -87,12 +95,14 @@ graph TD
 ## Quality Standards
 
 ### Rule Quality
+
 - Clear and actionable rules
 - Consistent with module boundaries
 - Practical coordination patterns
 - Current best practices
 
 ### Coordination Standards
+
 - Interface consistency
 - Data flow clarity
 - Error handling coherence
@@ -101,12 +111,14 @@ graph TD
 ## Interface Contracts
 
 ### Inter-Module Interface
+
 - Standardized communication patterns
 - Consistent data structures
 - Unified error handling
 - Shared logging integration
 
 ### Rule Interface
+
 - Module-specific rule files
 - Clear rule scope
 - Consistent rule syntax
@@ -115,6 +127,7 @@ graph TD
 ## Implementation Guidelines
 
 ### Creating Cross-Module Rules
+
 1. Identify coordination pattern
 2. Define interface standards
 3. Specify data flow rules
@@ -122,6 +135,7 @@ graph TD
 5. Test coordination
 
 ### Maintaining Rules
+
 - Update when modules change
 - Review coordination patterns
 - Test inter-module interactions
@@ -131,6 +145,7 @@ graph TD
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **AI Context**: [PAI.md](PAI.md)
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

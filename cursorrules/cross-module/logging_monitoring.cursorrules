@@ -17,7 +17,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: If any APIs are provided for metrics or log querying.
 -   `MCP_TOOL_SPECIFICATION.md`: If any MCP tools are related to log/monitoring control.
 -   `docs/`: Best practices for logging, guides on interpreting logs, monitoring dashboard setups.
--   `requirements.txt`: Dependencies like specific logging libraries.
+-   `pyproject.toml`: Dependencies managed centrally via uv.
 
 ## 3. Coding Standards & Practices for `logging_monitoring`
 -   **Structured Logging**: Promote and implement structured logging (e.g., JSON format) to facilitate easier parsing and analysis.

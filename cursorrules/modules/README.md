@@ -124,6 +124,7 @@ general.cursorrules (lowest priority)
 
 - [**AGENTS.md**](AGENTS.md) - Agent guidelines
 - [**SPEC.md**](SPEC.md) - Functional specification
+- [**PAI.md**](PAI.md) - AI infrastructure context
 
 ## Navigation
 

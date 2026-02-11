@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for pattern analysis and data handling.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Pattern Matching.
 -   `src/` (or primary Python package folders, e.g., `pattern_matching/` itself if it contains Python sources directly): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -32,7 +32,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `pattern_matching`
 -   New features (e.g., new pattern algorithms, analysis capabilities) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover various pattern matching scenarios, algorithm accuracy, and result validation.
--   Mock cased/kit components where appropriate to ensure deterministic test behavior.
+-   Use real cased/kit components with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `pattern_matching/tests/README.md`.
 
 ## 5. Documentation for `pattern_matching`

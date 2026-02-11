@@ -32,6 +32,7 @@ graph TB
 ```
 
 ### **Deployment Strategies**
+
 - **🔵 Blue-Green**: Zero-downtime deployments with instant rollback
 - **🎯 Canary**: Gradual rollout with traffic splitting
 - **📊 Rolling**: Sequential instance updates with health checks
@@ -42,15 +43,19 @@ graph TB
 ### **Container Configuration**
 
 #### **Production Dockerfile**
+
 ```dockerfile
 # Multi-stage build for production
-FROM python:3.11-slim as builder
+FROM python:3.13-slim as builder
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Build dependencies
-COPY requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev
 
-FROM python:3.11-slim as production
+FROM python:3.13-slim as production
 
 # Security: Create non-root user
 RUN groupadd --gid 1000 codomyrmex && \
@@ -62,10 +67,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY --from=builder /wheels /wheels
-COPY requirements.txt .
-RUN pip install --no-cache /wheels/* && rm -rf /wheels
+# Install Python dependencies from builder
+COPY --from=builder /root/.local /root/.local
 
 # Copy application
 COPY --chown=codomyrmex:codomyrmex . /app
@@ -84,6 +87,7 @@ CMD ["python", "-m", "codomyrmex", "serve", "--host", "0.0.0.0", "--port", "8000
 ```
 
 #### **Docker Compose for Production**
+
 ```yaml
 version: '3.8'
 
@@ -153,6 +157,7 @@ networks:
 ### **Kubernetes Deployment**
 
 #### **Production Namespace**
+
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -243,6 +248,7 @@ spec:
 ## 🔒 Security Configuration
 
 ### **Environment Variables & Secrets**
+
 ```bash
 # Production Environment Variables
 export CODOMYRMEX_ENV=production
@@ -264,6 +270,7 @@ export MAX_FILE_SIZE_MB=50
 ```
 
 ### **TLS/SSL Configuration**
+
 ```nginx
 # nginx.conf for HTTPS
 server {
@@ -300,6 +307,7 @@ server {
 ```
 
 ### **Database Security**
+
 ```sql
 -- Create production database with proper permissions
 CREATE DATABASE codomyrmex_prod;
@@ -319,6 +327,7 @@ CREATE POLICY user_data_policy ON sensitive_data FOR ALL TO codomyrmex_app USING
 ## 📊 Monitoring & Observability
 
 ### **Health Checks & Metrics**
+
 ```python
 # Health check endpoint
 from flask import Flask, jsonify
@@ -376,6 +385,7 @@ def health_check():
 ```
 
 ### **Prometheus Metrics**
+
 ```python
 # metrics.py - Production metrics collection
 from prometheus_client import Counter, Histogram, Gauge, generate_latest
@@ -405,6 +415,7 @@ def metrics():
 ```
 
 ### **Logging Configuration**
+
 ```python
 # production_logging.py
 import logging
@@ -458,6 +469,7 @@ logging.config.dictConfig(LOGGING_CONFIG)
 ## ⚡ Performance Optimization
 
 ### **Caching Strategy**
+
 ```python
 # caching.py - Production caching
 import redis
@@ -498,6 +510,7 @@ def analyze_large_codebase(codebase_path):
 ```
 
 ### **Async Processing**
+
 ```python
 # async_workers.py - Background task processing
 from celery import Celery
@@ -542,6 +555,7 @@ def batch_analysis_task(file_paths):
 ## 🚀 CI/CD Pipeline
 
 ### **GitHub Actions Production Pipeline**
+
 ```yaml
 # .github/workflows/production.yml
 name: Production Deployment
@@ -569,7 +583,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.13'
 
     - name: Install dependencies
       run: |
@@ -581,7 +595,7 @@ jobs:
 
     - name: Security scan
       run: |
-        uv pip install bandit safety
+        uv add --dev bandit safety
         uv run bandit -r src/codomyrmex/
         uv run safety check --json
 
@@ -666,6 +680,7 @@ jobs:
 ## 🔄 Backup & Disaster Recovery
 
 ### **Database Backup Strategy**
+
 ```bash
 #!/bin/bash
 # backup.sh - Automated database backup
@@ -692,6 +707,7 @@ echo "Backup completed successfully: ${BACKUP_FILE}"
 ```
 
 ### **Application State Backup**
+
 ```python
 # state_backup.py - Backup application state
 import json
@@ -731,16 +747,19 @@ def backup_application_state():
 ## 🔗 Related Documentation
 
 ### **Deployment Resources**
+
 - **[Troubleshooting Production](../reference/troubleshooting.md#production-issues)**: Production issue resolution
 - **[Performance Guide](../reference/performance.md)**: Performance optimization strategies
 - **[Security Considerations](../reference/troubleshooting.md#security-issues)**: Security best practices
 
 ### **Operational Guides**
+
 - **[Troubleshooting Guide](../reference/troubleshooting.md)**: Comprehensive issue resolution
 - **[Performance Optimization](../reference/performance.md)**: Performance tuning strategies
 - **[Architecture Overview](../project/architecture.md)**: System design for deployment considerations
 
 ### **Development Integration**
+
 - **[Testing Strategy](../development/testing-strategy.md)**: Testing approach and best practices
 - **[Development Setup](../development/environment-setup.md)**: Development environment configuration
 - **[Contributing Guide](../project/contributing.md)**: How to contribute effectively
@@ -748,6 +767,7 @@ def backup_application_state():
 ---
 
 **Production Readiness Checklist** ✅:
+
 - [ ] Security configuration validated
 - [ ] Monitoring and alerting configured
 - [ ] Backup and recovery tested

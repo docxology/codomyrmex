@@ -15,7 +15,7 @@ When working within this module, pay close attention to:
 -   `MCP_TOOL_SPECIFICATION.md`: For tools exposed via Model Context Protocol from this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for agent interactions and tool execution.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Agents.
 -   `base_agent.py`: Core agent abstraction and interface.
 -   `claude/`, `codex/`, `gemini/`, `jules/`, `mistral/`: Provider-specific implementations.
@@ -32,7 +32,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `agents`
 -   New features (e.g., new agent types, tool integrations) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover agent initialization, message handling, tool execution, and error scenarios.
--   Mock LLM providers where appropriate to ensure deterministic test behavior.
+-   Use real LLM providers with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `agents/tests/README.md`.
 
 ## 5. Documentation for `agents`

@@ -36,7 +36,7 @@ safe_html = sanitize_html(user_content)
 
 # Scan for vulnerabilities
 scanner = VulnerabilityScanner()
-report = scanner.scan_dependencies("requirements.txt")
+report = scanner.scan_dependencies("pyproject.toml")
 for vuln in report.vulnerabilities:
     print(f"{vuln.package}: {vuln.severity} - {vuln.cve}")
 

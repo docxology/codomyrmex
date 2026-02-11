@@ -26,7 +26,7 @@ Documentation generation module providing website generation, API documentation,
 - `package-lock.json` – Project file
 - `package.json` – Project file
 - `quality_assessment.py` – Project file
-- `requirements.txt` – Project file
+- `pyproject.toml` – Dependencies (root-level, managed via `uv`)
 - `scripts/` – Directory containing scripts components
 - `sidebars.js` – Project file
 - `src/` – Directory containing src components

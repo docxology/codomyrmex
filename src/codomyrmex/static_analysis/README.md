@@ -9,6 +9,7 @@ Static analysis module for analyzing source code without executing it. Provides 
 ## Key Exports
 
 ### Pyrefly Integration
+
 - **`PyreflyRunner`** -- Runs the Pyrefly type checker on Python source files and directories
 - **`PyreflyResult`** -- Structured result from a Pyrefly analysis run containing issues and summary
 - **`PyreflyIssue`** -- Individual issue found by Pyrefly with file, line, message, and severity
@@ -16,6 +17,7 @@ Static analysis module for analyzing source code without executing it. Provides 
 - **`check_pyrefly_available()`** -- Checks whether the Pyrefly binary is installed and accessible
 
 ### Static Analyzer
+
 - **`StaticAnalyzer`** -- Main analyzer class that orchestrates multiple analysis tools and aggregates results
 - **`analyze_file()`** -- Analyzes a single file and returns an `AnalysisResult`
 - **`analyze_project()`** -- Analyzes an entire project directory and returns an `AnalysisSummary`
@@ -24,6 +26,7 @@ Static analysis module for analyzing source code without executing it. Provides 
 - **`get_available_tools()`** -- Returns list of installed analysis tools and their capabilities
 
 ### Data Types
+
 - **`AnalysisResult`** -- Individual analysis finding with file path, line number, message, severity, and fix suggestion
 - **`AnalysisSummary`** -- Aggregated summary of all analysis results with counts by severity and type
 - **`CodeMetrics`** -- Computed code quality metrics (lines of code, complexity, maintainability index)
@@ -38,7 +41,7 @@ Static analysis module for analyzing source code without executing it. Provides 
 - `exceptions.py` -- Static analysis exception classes
 - `complexity/` -- Code complexity analysis tools (cyclomatic, cognitive complexity)
 - `linting/` -- Linting integrations and rule configurations
-- `requirements.txt` -- Optional dependencies for analysis tools
+- `pyproject.toml` -- Dependencies managed via root `pyproject.toml` and `uv`
 
 ## Quick Start
 
@@ -51,7 +54,6 @@ result = analyze_codebase()
 # Analyze code quality for workflow integration.
 output = analyze_code_quality()
 ```
-
 
 ## Testing
 

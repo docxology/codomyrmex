@@ -6,7 +6,7 @@
 
 ## Purpose
 
-API mock server for development and testing workflows
+API simulation server for development and integration workflows. This provides real HTTP endpoints that simulate external APIs — it is **not** a testing mock/double (see Zero-Mock policy in `general.cursorrules §2`).
 
 ## Agent Instructions
 
@@ -15,6 +15,7 @@ When working with this submodule:
 ### Key Patterns
 
 1. **Import Convention**:
+
    ```python
    from codomyrmex.api.mocking import <specific_import>
    ```

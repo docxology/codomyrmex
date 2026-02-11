@@ -9,31 +9,37 @@ File-type specific coding conventions and standards defining formatting, structu
 ## Design Principles
 
 ### Modularity
+
 - Self-contained components
 - Clear boundaries
 - Minimal dependencies
 
 ### Internal Coherence
+
 - Logical organization
 - Consistent patterns
 - Unified design
 
 ### Parsimony
+
 - Essential elements only
 - No unnecessary complexity
 - Minimal surface area
 
 ### Functionality
+
 - Focus on working solutions
 - Forward-looking design
 - Current needs focus
 
 ### Testing
+
 - Comprehensive coverage
 - TDD practices
 - Real data analysis
 
 ### Documentation
+
 - Self-documenting code
 - Clear APIs
 - Complete specifications
@@ -65,12 +71,14 @@ graph TD
 ## Functional Requirements
 
 ### File Type Coverage
+
 1. **README.md**: Documentation structure and formatting standards
 2. **Python Files**: Code style and structure requirements
 3. **Configuration Files**: Config file format standards
 4. **Other Types**: Additional file-type specific rules
 
 ### Rule Standards
+
 - Clear file-type specific guidelines
 - Consistent formatting requirements
 - Structure validation rules
@@ -79,12 +87,14 @@ graph TD
 ## Quality Standards
 
 ### Rule Quality
+
 - Clear and actionable file-type rules
 - Consistent with general coding standards
 - Practical formatting guidelines
 - Current best practices
 
 ### Validation Standards
+
 - File structure validation
 - Format compliance checking
 - Content quality verification
@@ -93,12 +103,14 @@ graph TD
 ## Interface Contracts
 
 ### Rule Interface
+
 - File-type specific rule files
 - Clear rule scope per file type
 - Consistent rule syntax
 - Defined validation functions
 
 ### Validation Interface
+
 - `validate_readme_structure(content) -> ValidationResult`
 - `check_readme_links(content) -> LinkValidation`
 - `standardize_readme_sections(content) -> StandardizedContent`
@@ -106,6 +118,7 @@ graph TD
 ## Implementation Guidelines
 
 ### Creating File-Type Rules
+
 1. Identify file type pattern
 2. Define formatting standards
 3. Specify structure requirements
@@ -113,6 +126,7 @@ graph TD
 5. Test rule enforcement
 
 ### Maintaining Rules
+
 - Update when file types change
 - Review formatting standards
 - Test validation functions
@@ -122,6 +136,7 @@ graph TD
 
 - **Human Documentation**: [README.md](README.md)
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **AI Context**: [PAI.md](PAI.md)
 - **Parent Directory**: [cursorrules](../README.md)
 - **Repository Root**: [../../README.md](../../README.md)
 - **Repository SPEC**: [../../SPEC.md](../../SPEC.md)

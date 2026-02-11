@@ -14,7 +14,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for configuration and secret management.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Config Management.
 -   `src/` (or primary Python package folders, e.g., `config_management/` itself if it contains Python sources directly): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
@@ -34,7 +34,7 @@ When working within this module, pay close attention to:
 ## 4. Testing in `config_management`
 -   New features (e.g., new configuration formats, validation rules) or bug fixes MUST be accompanied by relevant tests in `tests/unit/` and/or `tests/integration/`.
 -   Tests should cover various configuration scenarios, validation edge cases, and secret handling.
--   Mock external configuration sources where appropriate to ensure deterministic test behavior.
+-   Use real external configuration sources with environment-gated tests for deterministic behavior (Zero-Mock policy).
 -   Run existing tests to ensure no regressions. Refer to `config_management/tests/README.md`.
 
 ## 5. Documentation for `config_management`

@@ -14,7 +14,7 @@ When working within this module, pay close attention to:
 -   `API_SPECIFICATION.md`: Details for programmatic interfaces (functions, classes) provided by this module.
 -   `CHANGELOG.md`: All notable changes to this module must be logged here.
 -   `SECURITY.md`: Specific security considerations for database operations and data protection.
--   `requirements.txt`: Python dependencies for this module.
+-   `pyproject.toml`: Python dependencies (managed centrally via uv).
 -   `docs/`: In-depth documentation, technical overviews, and tutorials specific to Database Management.
 -   `src/` (or primary Python package folders, e.g., `database_management/` itself if it contains Python sources directly): Core logic of the module.
 -   `tests/`: Unit and integration tests for this module.
