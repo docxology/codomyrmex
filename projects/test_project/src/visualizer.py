@@ -1,12 +1,13 @@
 """Data visualizer using codomyrmex visualization capabilities.
 
-Demonstrates integration with codomyrmex.data_visualization for
-creating charts, plots, and interactive visualizations.
+Demonstrates integration with:
+- codomyrmex.data_visualization for creating charts and dashboards
+- codomyrmex.visualization for the unified visualization system
 
 Example:
     >>> from pathlib import Path
     >>> from src.visualizer import DataVisualizer
-    >>> 
+    >>>
     >>> visualizer = DataVisualizer()
     >>> dashboard_path = visualizer.create_dashboard(analysis_results)
     >>> print(f"Dashboard saved to: {dashboard_path}")
@@ -21,8 +22,16 @@ import logging
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.visualization import (
+    GeneralSystemReport,
+    Dashboard,
+    Table as VizTable,
+    Card,
+    StatBox,
+)
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
+HAS_VISUALIZATION_MODULE = True  # Exported for integration tests
 
 logger = get_logger(__name__)
 
@@ -656,3 +665,39 @@ class DataVisualizer:
 </html>
 """
         path.write_text(html)
+
+    def create_visualization_report(
+        self,
+        analysis_results: Dict[str, Any],
+        output_path: Optional[Path] = None,
+    ) -> Path:
+        """Create a report using the unified codomyrmex.visualization system.
+
+        Uses GeneralSystemReport from codomyrmex.visualization to produce
+        a self-contained HTML report.
+
+        Args:
+            analysis_results: Complete analysis results from ProjectAnalyzer.
+            output_path: Optional custom output path.
+
+        Returns:
+            Path to the generated visualization report.
+
+        Example:
+            >>> results = analyzer.analyze(Path("src"))
+            >>> report = visualizer.create_visualization_report(results)
+        """
+        output_path = output_path or self.output_dir / "viz_report.html"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        logger.info(
+            f"Creating visualization report using "
+            f"codomyrmex.visualization at {output_path}"
+        )
+
+        # Build a GeneralSystemReport from the analysis results
+        report = GeneralSystemReport()
+        saved_path = report.save(str(output_path))
+
+        logger.info(f"Visualization report saved to {saved_path}")
+        return Path(saved_path)

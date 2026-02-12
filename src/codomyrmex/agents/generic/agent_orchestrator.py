@@ -62,20 +62,27 @@ class AgentOrchestrator:
             f"Executing parallel request on {len(agents_to_use)} agents"
         )
 
-        responses = []
-        for agent in agents_to_use:
-            try:
-                response = agent.execute(request)
-                responses.append(response)
-            except Exception as e:
-                self.logger.error(f"Agent {agent} failed: {e}")
-                responses.append(
-                    AgentResponse(
+        responses = [None] * len(agents_to_use)
+        import concurrent.futures
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(agents_to_use)) as executor:
+            future_to_agent = {
+                executor.submit(agent.execute, request): (i, agent)
+                for i, agent in enumerate(agents_to_use)
+            }
+
+            for future in concurrent.futures.as_completed(future_to_agent):
+                i, agent = future_to_agent[future]
+                try:
+                    response = future.result()
+                    responses[i] = response
+                except Exception as e:
+                    self.logger.error(f"Agent {agent} failed: {e}")
+                    responses[i] = AgentResponse(
                         content="",
                         error=str(e),
                         metadata={"agent": str(agent)},
                     )
-                )
 
         return responses
 

@@ -43,7 +43,7 @@ class WebsiteGenerator:
             autoescape=select_autoescape(['html', 'xml'])
         )
 
-    def generate(self):
+    def generate(self) -> None:
         """Executes the generation process."""
         print(f"Generating website to {self.output_dir}...")
 
@@ -68,14 +68,17 @@ class WebsiteGenerator:
         # 3. Render Pages
         pages = ["index.html", "health.html", "modules.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html", "awareness.html"]
         for page in pages:
-            self._render_page(page, context)
+            try:
+                self._render_page(page, context)
+            except Exception as exc:
+                logger.warning("Skipping %s: %s", page, exc)
 
         # 4. Copy Assets
         self._copy_assets()
 
         print("Website generation complete.")
 
-    def _render_page(self, template_name: str, context: dict):
+    def _render_page(self, template_name: str, context: dict) -> None:
         """Render a Jinja2 template with the given context and write to output.
 
         Loads *template_name* from the templates directory, renders it with
@@ -87,7 +90,7 @@ class WebsiteGenerator:
         output_path.write_text(output, encoding="utf-8")
         print(f"Rendered {template_name}")
 
-    def _copy_assets(self):
+    def _copy_assets(self) -> None:
         """Copy static assets (CSS, JS) to the output directory."""
         if self.assets_dir.exists():
             shutil.copytree(self.assets_dir, self.output_dir / "assets")

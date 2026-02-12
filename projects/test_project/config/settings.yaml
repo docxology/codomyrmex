@@ -87,3 +87,11 @@ pipeline:
   max_retries: 3
   emit_events: true
   save_intermediate_results: true
+
+# Performance configuration (uses performance module)
+performance:
+  enable_profiling: true
+  enable_caching: true
+  cache_ttl_seconds: 3600
+  benchmark_iterations: 5
+  log_profile_data: true

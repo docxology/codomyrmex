@@ -9,11 +9,14 @@ enabled_modules:
     - terminal_interface
     - environment_setup
     - metrics
+    - performance
+    - exceptions
 
   # Core Layer - Primary development capabilities
   core:
     - static_analysis
     - data_visualization
+    - visualization
     - pattern_matching
     - validation
 
@@ -21,6 +24,7 @@ enabled_modules:
   service:
     - documentation
     - orchestrator
+    - llm
 
   # Utility Layer - Supporting utilities
   utility:

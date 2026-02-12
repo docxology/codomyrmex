@@ -1,25 +1,35 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/website/integration
+# Agent Guide — Website Integration Tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Test files and validation suites.
+End-to-end validation ensuring the full website generation pipeline produces correct output and security controls are enforced.
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `test_website_integration.py` – Project file
+- `test_website_integration.py` — Comprehensive integration test suite covering:
+  - `TestFullWebsiteGeneration` — DataProvider data collection, 10-page generation, content verification
+  - `TestConfigOperations` — Config read/write round-trip
+  - `TestDocumentationTree` — Nested doc structure scanning
+  - `TestAssetsCopying` — CSS/JS asset pipeline
+  - `TestWebsiteServerIntegration` — Server class attributes and handler method existence
+  - `TestSecurityIntegration` — Path traversal, absolute path, and file type restrictions
 
-## Operating Contracts
+## Testing Patterns
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+```python
+# Full project fixture with modules, scripts, configs, and docs
+@pytest.fixture
+def project_structure(self, tmp_path):
+    (tmp_path / "src" / "codomyrmex").mkdir(parents=True)
+    module1 = tmp_path / "src" / "codomyrmex" / "coding"
+    module1.mkdir()
+    (module1 / "__init__.py").write_text('"""Code editing module."""')
+    ...
+```
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../../../README.md - Main project documentation
+- **📁 Parent Directory**: [website](../README.md)
+- **🏠 Project Root**: [codomyrmex](../../../../../README.md)

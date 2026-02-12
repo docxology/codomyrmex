@@ -18,7 +18,11 @@ Test files and validation suites.
 - `generic/` – Subdirectory
 - `helpers.py` – File
 - `mistral_vibe/` – Subdirectory
-- `test_agents.py` – File
+- `test_agents_core_config.py` – Agent configuration tests
+- `test_agents_core_session.py` – Session management tests
+- `test_agents_core_tools.py` – Tool registry tests
+- `test_agents_core_orchestration.py` – Multi-agent orchestration tests
+- `conftest.py` – Shared fixtures (FakeLLMClient, ConcreteAgent)
 - `test_cli_configurations.py` – File
 - `test_cli_orchestration.py` – File
 - `test_configuration.py` – File

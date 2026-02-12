@@ -116,17 +116,29 @@ from codomyrmex.agents.agent_setup import AgentRegistry
 registry = AgentRegistry()
 for r in registry.probe_all():
     print(f"{r.name}: {r.status}")
+
+# Run the orchestration demo
+# uv run python src/codomyrmex/examples/agent_orchestration_demo.py
 ```
 
 ## Testing
 
-```bash
-# Full agent test suite (129 tests, zero-mock)
-uv run python -m pytest tests/unit/agents/ -v --no-cov
+Running the full Zero-Mock test suite:
 
-# Setup wizard (status-only)
-uv run python -m codomyrmex.agents.agent_setup --status-only
+```bash
+# Run all agent tests (350+ tests, zero-mock)
+uv run python -m pytest src/codomyrmex/tests/unit/agents/ -v
+
+# Run specific component tests
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_config.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_session.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_tools.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orchestration.py
 ```
+
+### Zero-Mock Policy
+
+Tests use `FakeLLMClient` and real `BaseAgent` implementations (`ConcreteAgent`, `FailingAgent`) instead of `unittest.mock.MagicMock`. This ensures robust integration testing of the agent framework's core logic.
 
 ## Navigation
 

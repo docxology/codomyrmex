@@ -40,13 +40,13 @@ class AgentRequest:
     """Request structure for agent operations."""
 
     prompt: str
-    context: dict[str, Any] = None
-    capabilities: list[AgentCapabilities] = None
+    context: dict[str, Any] | None = None
+    capabilities: list[AgentCapabilities] | None = None
     timeout: int | None = None
-    metadata: dict[str, Any] = None
+    metadata: dict[str, Any] | None = None
     id: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize default values."""
         if self.context is None:
             self.context = {}
@@ -61,14 +61,14 @@ class AgentResponse:
     """Response structure from agent operations."""
 
     content: str
-    metadata: dict[str, Any] = None
+    metadata: dict[str, Any] | None = None
     error: str | None = None
     execution_time: float | None = None
     tokens_used: int | None = None
     cost: float | None = None
     request_id: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize default values."""
         if self.metadata is None:
             self.metadata = {}
@@ -331,21 +331,21 @@ class AgentIntegrationAdapter(ABC):
 
     @abstractmethod
     def adapt_for_ai_code_editing(
-        self, prompt: str, language: str = "python", **kwargs
+        self, prompt: str, language: str = "python", **kwargs: Any
     ) -> str:
         """Adapt agent for AI code editing module."""
         pass
 
     @abstractmethod
     def adapt_for_llm(
-        self, messages: list[dict], model: str = None, **kwargs
-    ) -> dict:
+        self, messages: list[dict[str, Any]], model: str | None = None, **kwargs: Any
+    ) -> dict[str, Any]:
         """Adapt agent for LLM module."""
         pass
 
     @abstractmethod
     def adapt_for_code_execution(
-        self, code: str, language: str = "python", **kwargs
+        self, code: str, language: str = "python", **kwargs: Any
     ) -> dict[str, Any]:
         """Adapt agent for code execution sandbox."""
         pass

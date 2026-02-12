@@ -1,27 +1,34 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/website/unit
+# Agent Guide — Website Unit Tests
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Test files and validation suites.
+Unit-level validation for `DataProvider`, `WebsiteGenerator`, and `WebsiteServer`. Tests run in isolation using temporary project trees and ephemeral HTTP servers.
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `test_data_provider.py` – Project file
-- `test_generator.py` – Project file
-- `test_server.py` – Project file
+- `test_data_provider.py` — Tests for module scanning, config I/O, PAI data, health status, and security (path traversal, symlink escape)
+- `test_generator.py` — Tests for Jinja2 template rendering, asset copying, output directory management, and error handling
+- `test_server.py` — Tests for all 18 API endpoints via live HTTP requests, CORS preflight, origin validation, and Ollama proxy (mocked external)
 
-## Operating Contracts
+## Testing Patterns
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+```python
+# Live HTTP server fixture — each test gets its own server on a random port
+@pytest.fixture
+def live_server(tmp_path):
+    root = _build_project(tmp_path)
+    srv = _LiveServer(root)
+    yield srv
+    srv.shutdown()
+
+# Real DataProvider — no mocking
+provider = DataProvider(tmp_path)
+assert isinstance(provider.get_modules(), list)
+```
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [website](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../../../../README.md - Main project documentation
+- **📁 Parent Directory**: [website](../README.md)
+- **🏠 Project Root**: [codomyrmex](../../../../../README.md)

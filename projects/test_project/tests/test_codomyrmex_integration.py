@@ -168,6 +168,85 @@ class TestExceptionsIntegration:
         assert issubclass(ConfigurationError, CodomyrmexError)
         assert issubclass(ValidationError, CodomyrmexError)
 
+    def test_import_orchestration_exceptions(self):
+        """Verify orchestration-specific exceptions."""
+        from codomyrmex.exceptions import (
+            CodomyrmexError,
+            OrchestrationError,
+            WorkflowError,
+        )
+
+        assert issubclass(OrchestrationError, CodomyrmexError)
+        assert issubclass(WorkflowError, CodomyrmexError)
+
+
+class TestVisualizationIntegration:
+    """Tests for codomyrmex.visualization (unified system) integration."""
+
+    def test_import_dashboard(self):
+        """Verify Dashboard class imports."""
+        from codomyrmex.visualization import Dashboard
+
+        assert Dashboard is not None
+
+    def test_import_report_classes(self):
+        """Verify report classes import."""
+        from codomyrmex.visualization import (
+            GeneralSystemReport,
+            generate_report,
+        )
+
+        assert GeneralSystemReport is not None
+        assert callable(generate_report)
+
+    def test_import_components(self):
+        """Verify component classes import."""
+        from codomyrmex.visualization import Card, Table, StatBox
+
+        assert Card is not None
+        assert Table is not None
+        assert StatBox is not None
+
+    def test_construct_general_report(self):
+        """Verify GeneralSystemReport can be constructed."""
+        from codomyrmex.visualization import GeneralSystemReport
+
+        report = GeneralSystemReport()
+        assert report is not None
+
+
+class TestPerformanceIntegration:
+    """Tests for codomyrmex.performance integration."""
+
+    def test_import_profiler(self):
+        """Verify PerformanceProfiler imports."""
+        from codomyrmex.performance import PerformanceProfiler
+
+        profiler = PerformanceProfiler()
+        assert profiler is not None
+
+    def test_import_profile_function(self):
+        """Verify profile_function imports and works."""
+        from codomyrmex.performance import profile_function
+
+        result = profile_function(lambda: sum(range(100)))
+        assert "execution_time" in result
+        assert result["execution_time"] >= 0
+
+    def test_import_run_benchmark(self):
+        """Verify run_benchmark imports and works."""
+        from codomyrmex.performance import run_benchmark
+
+        result = run_benchmark(lambda: sum(range(100)), iterations=2)
+        assert "average_time" in result
+        assert result["iterations"] == 2
+
+    def test_import_cache_manager(self):
+        """Verify CacheManager imports."""
+        from codomyrmex.performance import CacheManager
+
+        assert CacheManager is not None
+
 
 class TestTestProjectModulesUseCodomyrmex:
     """Verify test_project source modules use real codomyrmex."""
@@ -187,3 +266,22 @@ class TestTestProjectModulesUseCodomyrmex:
         # Logger should be from codomyrmex, not stdlib
         assert "codomyrmex" in str(type(analyzer.logger).__module__) or \
                hasattr(analyzer, 'HAS_CODOMYRMEX_LOGGING')
+
+    def test_pipeline_has_performance_profiling(self):
+        """Verify pipeline.py integrates codomyrmex.performance."""
+        from src.pipeline import HAS_PERFORMANCE_PROFILING
+
+        assert HAS_PERFORMANCE_PROFILING is True
+
+    def test_pipeline_has_structured_exceptions(self):
+        """Verify pipeline.py integrates codomyrmex.exceptions."""
+        from src.pipeline import HAS_STRUCTURED_EXCEPTIONS
+
+        assert HAS_STRUCTURED_EXCEPTIONS is True
+
+    def test_visualizer_has_visualization_module(self):
+        """Verify visualizer.py integrates codomyrmex.visualization."""
+        from src.visualizer import HAS_VISUALIZATION_MODULE
+
+        assert HAS_VISUALIZATION_MODULE is True
+

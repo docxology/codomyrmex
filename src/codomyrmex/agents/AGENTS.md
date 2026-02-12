@@ -53,8 +53,17 @@ Multi-provider agent framework with 11 provider integrations (5 API, 5 CLI, 1 lo
 # Check which agents are operative on this machine
 uv run python -m codomyrmex.agents.agent_setup --status-only
 
-# Run the full agent test suite (129 tests, zero-mock)
-uv run python -m pytest tests/unit/agents/ -v --no-cov
+# Run the full agent test suite (350+ tests, zero-mock)
+uv run python -m pytest src/codomyrmex/tests/unit/agents/ -v
+
+# Run specific component tests
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_config.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_session.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_tools.py
+uv run python -m pytest src/codomyrmex/tests/unit/agents/test_agents_core_orchestration.py
+
+# Run the orchestration demo
+uv run python src/codomyrmex/examples/agent_orchestration_demo.py
 ```
 
 ## Operating Contracts

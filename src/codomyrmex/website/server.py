@@ -43,6 +43,17 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def do_OPTIONS(self) -> None:
+        """Handle CORS preflight requests."""
+        self.send_response(204)
+        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
+        self.send_header('Access-Control-Max-Age', '86400')
+        self.send_header('Vary', 'Origin')
+        self.end_headers()
+
     def _validate_origin(self) -> bool:
         """Check Origin or Referer header matches allowed origins."""
         origin = self.headers.get("Origin", "")
@@ -54,7 +65,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         # Allow requests with no origin (e.g. same-origin, curl)
         return True
 
-    def do_POST(self):
+    def do_POST(self) -> None:
         """Handle POST requests."""
         if not self._validate_origin():
             self.send_json_response({"error": "Origin not allowed"}, status=403)
@@ -77,7 +88,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(404, "Endpoint not found")
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         """Handle GET requests."""
         parsed_path = urlparse(self.path)
 
@@ -108,7 +119,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
-    def handle_status(self):
+    def handle_status(self) -> None:
         """Handle /api/status — quick system status."""
         if self.data_provider:
             summary = self.data_provider.get_system_summary()
@@ -116,7 +127,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_health(self):
+    def handle_health(self) -> None:
         """Handle /api/health — comprehensive health data."""
         if self.data_provider:
             health = self.data_provider.get_health_status()
@@ -124,7 +135,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_tests_run(self):
+    def handle_tests_run(self) -> None:
         """Handle POST /api/tests — run tests for a module."""
         # Rate limiting: only one test run at a time
         with self._test_lock:
@@ -160,7 +171,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             with self._test_lock:
                 WebsiteServer._test_running = False
 
-    def handle_config_list(self):
+    def handle_config_list(self) -> None:
         """Handle config list request."""
         if self.data_provider:
             configs = self.data_provider.get_config_files()
@@ -168,7 +179,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_config_get(self, path):
+    def handle_config_get(self, path: str) -> None:
         """Handle config get request."""
         filename = path.replace("/api/config/", "")
         if self.data_provider:
@@ -184,7 +195,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_json_response({"error": "Data provider missing"}, status=500)
 
-    def handle_config_save(self):
+    def handle_config_save(self) -> None:
         """Handle config save request."""
         content_length = int(self.headers.get('Content-Length', 0))
         if content_length == 0:
@@ -216,7 +227,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_docs_list(self):
+    def handle_docs_list(self) -> None:
         """Handle docs list request."""
         if self.data_provider:
             data = self.data_provider.get_doc_tree()
@@ -224,7 +235,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500)
 
-    def handle_pipelines_list(self):
+    def handle_pipelines_list(self) -> None:
         """Handle pipelines list request."""
         if self.data_provider:
             status = self.data_provider.get_pipeline_status()
@@ -232,7 +243,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500)
 
-    def handle_docs_get(self, path):
+    def handle_docs_get(self, path: str) -> None:
         """Handle GET /api/docs/{path} — return doc file content."""
         doc_path = path.replace("/api/docs/", "", 1)
         if not self.data_provider:
@@ -248,7 +259,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json_response({"error": str(e)}, status=500)
 
-    def handle_modules_list(self):
+    def handle_modules_list(self) -> None:
         """Handle GET /api/modules — return all modules."""
         if self.data_provider:
             modules = self.data_provider.get_modules()
@@ -256,7 +267,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_module_detail(self, path):
+    def handle_module_detail(self, path: str) -> None:
         """Handle GET /api/modules/{name} — return single module detail."""
         name = path.replace("/api/modules/", "", 1)
         if not self.data_provider:
@@ -268,7 +279,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_json_response(detail)
 
-    def handle_agents_list(self):
+    def handle_agents_list(self) -> None:
         """Handle GET /api/agents — return actual AI agents."""
         if self.data_provider:
             agents = self.data_provider.get_actual_agents()
@@ -276,7 +287,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_scripts_list(self):
+    def handle_scripts_list(self) -> None:
         """Handle GET /api/scripts — return available scripts."""
         if self.data_provider:
             scripts = self.data_provider.get_available_scripts()
@@ -284,7 +295,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
-    def handle_execute(self):
+    def handle_execute(self) -> None:
         """Execute a script from the scripts directory."""
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -350,7 +361,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json_response({"success": False, "error": str(e)}, status=500)
 
-    def handle_chat(self):
+    def handle_chat(self) -> None:
         """Proxy chat requests to Ollama."""
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -414,7 +425,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json_response({"error": str(e)}, status=500)
 
-    def handle_refresh(self):
+    def handle_refresh(self) -> None:
         """Refresh system data."""
         if self.data_provider:
             data = {
@@ -427,7 +438,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider not initialized")
 
-    def handle_awareness(self):
+    def handle_awareness(self) -> None:
         """Handle GET /api/awareness — PAI ecosystem data."""
         if self.data_provider:
             data = self.data_provider.get_pai_awareness_data()
@@ -435,7 +446,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_json_response({"error": "Data provider missing"}, status=500)
 
-    def handle_awareness_summary(self):
+    def handle_awareness_summary(self) -> None:
         """Handle POST /api/awareness/summary — generate Ollama AI summary."""
         try:
             content_length = int(self.headers.get('Content-Length', 0))
@@ -515,11 +526,13 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json_response({"error": str(e)}, status=500)
 
-    def send_json_response(self, data, status=200):
+    def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
         self.send_header('Vary', 'Origin')
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))

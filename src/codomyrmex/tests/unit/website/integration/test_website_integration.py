@@ -114,7 +114,8 @@ class TestFullWebsiteGeneration:
             "agents.html",
             "config.html",
             "docs.html",
-            "pipelines.html"
+            "pipelines.html",
+            "awareness.html"
         ]
 
         for page in expected_pages:
@@ -249,6 +250,7 @@ class TestWebsiteServerIntegration:
         """Test that all handler methods exist."""
         assert hasattr(WebsiteServer, 'do_GET')
         assert hasattr(WebsiteServer, 'do_POST')
+        assert hasattr(WebsiteServer, 'do_OPTIONS')
         assert hasattr(WebsiteServer, 'handle_execute')
         assert hasattr(WebsiteServer, 'handle_chat')
         assert hasattr(WebsiteServer, 'handle_refresh')
@@ -265,6 +267,9 @@ class TestWebsiteServerIntegration:
         assert hasattr(WebsiteServer, 'handle_agents_list')
         assert hasattr(WebsiteServer, 'handle_scripts_list')
         assert hasattr(WebsiteServer, 'handle_pipelines_list')
+        assert hasattr(WebsiteServer, 'handle_awareness')
+        assert hasattr(WebsiteServer, 'handle_awareness_summary')
+        assert hasattr(WebsiteServer, 'send_json_response')
 
     def test_deprecated_methods_removed(self):
         """Test that deprecated methods have been removed."""

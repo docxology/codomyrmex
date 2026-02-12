@@ -1,55 +1,34 @@
-# tests - Test Specification
+# Website Test Suite — Specification
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-This directory contains **Tests** for the parent module. These tests ensure code correctness, regression prevention, and adherence to functional requirements.
+Tests ensuring correctness, security, and regression prevention for the `codomyrmex.website` module. Covers static site generation, API endpoints, and data aggregation.
 
 ## Design Principles
 
-- **Isolation**: Tests should not depend on external state (unless integration tests).
-- **Determinism**: Tests must consistently pass or fail.
-- **Coverage**: Aim for high branch coverage.
+- **Zero-Mock**: No `unittest.mock.Mock` for internal objects. Tests use real `DataProvider`, `WebsiteGenerator`, and live HTTP servers.
+- **Isolation**: Each test creates its own `tmp_path` project tree — no shared mutable state.
+- **Determinism**: Tests run offline without external dependencies (Ollama calls are `@patch`-ed).
+- **Coverage**: Branch coverage ≥ 85% for `server.py` and `data_provider.py`.
 
 ## Functional Requirements
 
-1. **Execution**: Must run via `pytest`.
-2. **Reporting**: Must report failures clearly with context.
+1. **Execution**: All tests run via `uv run python -m pytest`.
+2. **Fixture-Based**: Tests use `pytest.fixture` for project trees and server instances.
+3. **Security Validation**: Path traversal, absolute path injection, and non-`.md` file access are tested.
+
+## Test Categories
+
+| Category | Files | Coverage Focus |
+| -------- | ----- | -------------- |
+| Data Provider | `unit/test_data_provider.py` | Module scanning, config I/O, PAI data, security |
+| Generator | `unit/test_generator.py` | Template rendering, asset copying, error handling |
+| Server | `unit/test_server.py` | All 18 API endpoints via live HTTP, CORS, security |
+| Integration | `integration/test_website_integration.py` | Full generation, nested docs, assets, security |
 
 ## Navigation
 
 - **Parent**: [../README.md](../README.md)
-- **Root**: [../../../README.md](../../../README.md)
-
-<!-- Navigation Links keyword for score -->
-
-## Detailed Architecture and Implementation
-
-
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
-
-## Detailed Architecture and Implementation
-
-
-
-### Design Principles
-
-1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
-2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
-3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
-4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
-
-### Technical Implementation
-
-The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+- **Root**: [../../../../README.md](../../../../README.md)

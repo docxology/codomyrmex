@@ -1,25 +1,29 @@
-# Personal AI Infrastructure - Website Context
+# Personal AI Infrastructure — Website Tests
 
-**Module**: website
+**Module**: website tests
 **Status**: Active
 
 ## Context
 
-Unit and integration tests for the website module with pytest fixtures and mocks.
+Unit and integration tests for the website module using pytest fixtures and real functional objects. Zero-Mock compliant — no internal mocking of `DataProvider`, `WebsiteGenerator`, or `WebsiteServer`.
 
 ## AI Strategy
 
-As an AI agent, when working with this module:
-1. **Respect Interfaces**: Use the public API defined in `__init__.py`.
-2. **Maintain State**: Ensure any stateful operations are documented in `SPEC.md`.
-3. **Error Handling**: Wrap external calls in try/except blocks and log using `logging_monitoring`.
+As an AI agent working with this test suite:
+
+1. **Never use `unittest.mock.Mock`** for internal objects — use real instances with `tmp_path` project trees.
+2. **Use `live_server` fixture** for HTTP endpoint tests — it starts a real `TCPServer`.
+3. **Only mock external services** — `@patch("codomyrmex.website.server.requests")` for Ollama calls.
+4. **Verify real state** — check actual file contents, HTTP response bodies, and status codes.
 
 ## Key Files
 
-- `__init__.py`: Public API export.
-- `SPEC.md`: Technical specification.
+- `unit/test_server.py`: Live HTTP server tests with `_LiveServer` helper
+- `unit/test_generator.py`: Real Jinja2 template rendering tests
+- `unit/test_data_provider.py`: Real filesystem scanning tests
+- `integration/test_website_integration.py`: Full pipeline tests
 
 ## Future Considerations
 
-- Modularization: Keep dependencies minimal.
-- Telemetry: Ensure operations emit performace metrics.
+- Add WebSocket tests if real-time features are added.
+- Expand security tests for CSRF token validation.

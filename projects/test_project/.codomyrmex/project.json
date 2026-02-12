@@ -52,13 +52,17 @@
     "config_management",
     "static_analysis",
     "data_visualization",
+    "visualization",
     "documentation",
     "orchestrator",
     "serialization",
     "validation",
     "events",
     "pattern_matching",
-    "terminal_interface"
+    "terminal_interface",
+    "performance",
+    "exceptions",
+    "llm"
   ],
   "author": "Codomyrmex Team",
   "tags": [
@@ -68,12 +72,12 @@
     "ai-analysis"
   ],
   "created_at": "2025-10-21T18:41:18.209323+00:00",
-  "updated_at": "2026-01-23T22:52:00.000000+00:00",
+  "updated_at": "2026-02-12T14:18:00.000000+00:00",
   "milestones": {
     "v1.0.0": "Initial comprehensive implementation"
   },
   "metrics": {
-    "modules_integrated": 11,
+    "modules_integrated": 15,
     "documentation_coverage": 100
   }
 }

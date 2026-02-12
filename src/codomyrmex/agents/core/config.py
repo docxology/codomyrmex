@@ -91,7 +91,7 @@ class AgentConfig:
     log_level: str = "INFO"
     output_dir: Path | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize configuration from environment variables.
 
         Env vars are only used as fallbacks when no explicit value was passed.
@@ -100,7 +100,7 @@ class AgentConfig:
         """
         _defaults = AgentConfig.__dataclass_fields__
 
-        def _env_or(field_name: str, env_var: str, cast=str):
+        def _env_or(field_name: str, env_var: str, cast: type = str) -> Any:
             """Return env var value only if field is still at its default."""
             current = getattr(self, field_name)
             default = _defaults[field_name].default
@@ -264,7 +264,7 @@ class AgentConfig:
 
     def validate(self) -> list[str]:
         """Validate configuration and return list of errors."""
-        errors = []
+        errors: list[str] = []
 
         # Validate Claude configuration if needed
         if not self.claude_api_key:
@@ -326,13 +326,13 @@ def get_config() -> AgentConfig:
     return _config_instance
 
 
-def set_config(config: AgentConfig):
+def set_config(config: AgentConfig) -> None:
     """Set global agent configuration instance."""
     global _config_instance
     _config_instance = config
 
 
-def reset_config():
+def reset_config() -> None:
     """Reset global configuration to default."""
     global _config_instance
     _config_instance = None
