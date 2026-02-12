@@ -8,7 +8,7 @@ Module scanning, capability discovery, and system status reporting.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

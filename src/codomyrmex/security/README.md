@@ -10,7 +10,7 @@ Comprehensive security module organized into four specialized submodules: digita
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

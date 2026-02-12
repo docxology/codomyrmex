@@ -16,7 +16,7 @@ Codomyrmex is a **modular development platform** that brings together 94 special
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 94 independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 95 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -238,6 +238,7 @@ graph TB
     subgraph extensions ["Module Layer - Extensions"]
         ModTemplate["Module Template"]
         Tools["Utility Tools"]
+        Meme["Meme (Info Dynamics)"]
         SysDiscovery["System Discovery"]
         Cerebrum["Cerebrum (Reasoning)"]
         FPF["FPF (Functional)"]
@@ -296,6 +297,8 @@ graph TB
     PluginSys --> ModTemplate
     SysDiscovery --> ModTemplate
     SysDiscovery --> Tools
+    Meme --> Tools
+    Meme --> Events
 
     %% Foundation connections (all modules depend on foundation)
     AICode -.-> Logging
@@ -401,6 +404,7 @@ graph TD
         SysDiscovery["system_discovery"]
         ModuleTemplate["module_template"]
         Spatial["spatial"]
+        Meme["meme"]
         Events["events"]
         PluginSys["plugin_system"]
         Tools["tools"]
@@ -501,6 +505,8 @@ graph TD
     DataViz --> Spatial
     Events --> PluginSys
     PluginSys --> ModuleTemplate
+    Meme --> Events
+    Meme --> Tools
 ```
 
 ### Workflow Execution Architecture

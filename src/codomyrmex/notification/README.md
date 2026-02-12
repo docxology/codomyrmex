@@ -9,7 +9,7 @@ Multi-channel notification system with templates and routing. Supports sending n
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

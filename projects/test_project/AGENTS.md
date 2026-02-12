@@ -1,27 +1,72 @@
 # Codomyrmex Agents — projects/test_project
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-Test files and validation suites.
+
+Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (zero-mock) integration of Codomyrmex modules. Serves as both a validation suite and a template for new projects.
 
 ## Active Components
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `config/` – Directory containing config components
-- `data/` – Directory containing data components
-- `pyproject.toml` – Project file
-- `reports/` – Directory containing reports components
-- `run_demo.py` – Project file
-- `src/` – Directory containing src components
-- `tests/` – Directory containing tests components
+
+| Component | Type | Description |
+|:---|:---|:---|
+| `src/main.py` | Entry point | Logging, config, events integration |
+| `src/analyzer.py` | Analysis | Static analysis and pattern matching |
+| `src/visualizer.py` | Visualization | Dashboard generation via `data_visualization` and `visualization` |
+| `src/reporter.py` | Reporting | Multi-format output (HTML, JSON, Markdown) via `serialization` |
+| `src/pipeline.py` | Orchestration | DAG-based workflow with `performance` profiling and structured `exceptions` |
+| `config/` | Configuration | YAML settings, modules, workflows |
+| `tests/` | Test suite | Unit tests + zero-mock integration tests |
+| `run_demo.py` | Demo | Single-entrypoint full demonstration |
+
+## Integrated Codomyrmex Modules
+
+### Foundation Layer
+
+- `logging_monitoring` — Structured JSON logging
+- `config_management` — Unified YAML configuration
+- `performance` — Pipeline execution profiling
+- `environment_setup` — Python version validation
+
+### Core Layer
+
+- `static_analysis` — Code quality and metrics
+- `pattern_matching` — Code pattern recognition
+- `data_visualization` — Charts and dashboards
+- `visualization` — Unified visualization system
+- `validation` — Schema-driven input validation
+
+### Service Layer
+
+- `orchestrator` — DAG-based pipeline execution
+- `documentation` — Report generation
+
+### Utility Layer
+
+- `serialization` — JSON/YAML data encoding
+- `events` — Pub/Sub event bus
+- `exceptions` — Structured error hierarchy
+- `llm` — LLM provider integration (tested)
 
 ## Operating Contracts
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+
+1. **Zero-Mock Policy**: All integrations use real module logic. No mocking, no stubs.
+2. **Quadruple Play**: Maintain README, AGENTS, SPEC, PAI at every key directory level.
+3. **Preserve Template Nature**: Changes must maintain the demonstration/reference character.
+4. **Layer Discipline**: Respect the codomyrmex layer architecture for imports.
+5. **Test Coverage**: Every new integration gets both a unit test and an integration test.
+
+## Agent Workflows
+
+| Task | Entry Point | Details |
+|:---|:---|:---|
+| Run analysis | `uv run python run_demo.py` | Full demo: analyze → visualize → report → pipeline |
+| Run tests | `uv run pytest tests/ -v` | 60+ tests, all zero-mock |
+| Run pipeline only | `uv run python -m src.main --pipeline src/` | DAG-based pipeline execution |
 
 ## Navigation Links
-- **📁 Parent Directory**: [projects](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+
+- **📁 Parent Directory**: [projects](../README.md) — Parent directory documentation
+- **🏠 Project Root**: [../../README.md](../../README.md) — Main project documentation
+- **📖 Specification**: [SPEC.md](SPEC.md) — Functional specification
+- **🤖 AI Context**: [PAI.md](PAI.md) — Personal AI Infrastructure

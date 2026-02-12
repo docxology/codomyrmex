@@ -10,7 +10,7 @@ Networking module providing multi-protocol client implementations for HTTP, WebS
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

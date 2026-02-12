@@ -10,7 +10,7 @@ Model inference optimization techniques including request batching, LRU caching,
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

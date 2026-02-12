@@ -27,3 +27,12 @@ class Plot(ABC):
         """
         # Default fallback: string representation of the render result
         return str(self.render())
+        
+    def __str__(self) -> str:
+        """
+        Returns the HTML representation of the plot when converted to string.
+        """
+        try:
+            return self.to_html()
+        except Exception as e:
+            return f"<div>Error rendering plot: {str(e)}</div>"

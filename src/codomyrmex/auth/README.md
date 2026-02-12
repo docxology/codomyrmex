@@ -8,7 +8,7 @@ Authentication with API keys, tokens, OAuth, and access control.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

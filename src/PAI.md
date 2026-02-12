@@ -22,7 +22,7 @@ This is the main source directory containing the `codomyrmex` Python package wit
 | Foundation | `logging_monitoring`, `environment_setup`, `model_context_protocol`, `terminal_interface`, `config_management`, `metrics` | Core infrastructure |
 | Core | `coding`, `static_analysis`, `llm`, `git_operations`, `security`, `data_visualization` | Primary functionality |
 | Service | `build_synthesis`, `documentation`, `api`, `ci_cd_automation`, `containerization`, `database_management` | Higher-level services |
-| Specialized | `agents`, `cerebrum`, `fpf`, `spatial`, `evolutionary_ai`, `quantum` | Advanced features |
+| Specialized | `agents`, `cerebrum`, `meme`, `fpf`, `spatial`, `evolutionary_ai`, `quantum` | Advanced features |
 
 ### Key Patterns
 

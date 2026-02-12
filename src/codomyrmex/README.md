@@ -61,12 +61,13 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `logging_monitoring/` – Centralized logging
 - `logistics/` – Workflow logistics
 - `market/` – Anonymous marketplaces
+- `meme/` – Unified Memetic Warfare & Information Dynamics
 - `metrics/` – Metrics collection
 - `migration/` – Data migration
 - `model_context_protocol/` – MCP interfaces
 - `model_ops/` – ML model operations
 - `model_registry/` – Model versioning
-- `module_template/` – Module scaffolding scaffolding
+- `module_template/` – Module scaffolding
 - `multimodal/` – Multimodal processing
 - `networking/` – Network utilities
 - `notification/` – Notification channels
@@ -93,7 +94,7 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `spatial/` – 3D/4D modeling
 - `static_analysis/` – Code quality
 - `streaming/` – Data streaming
-- `system_discovery/` – Module discovery discovery
+- `system_discovery/` – Module discovery
 - `telemetry/` – Telemetry and tracing
 - `templating/` – Template management
 - `terminal_interface/` – Terminal UI
@@ -106,6 +107,7 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `validation/` – Input validation
 - `vector_store/` – Vector database abstraction
 - `video/` – Video processing
+- `visualization/` – Central Visualization Module and Dashboarding
 - `wallet/` – Self-custody wallets
 - `website/` – Website generation
 - `workflow_testing/` – Workflow testing

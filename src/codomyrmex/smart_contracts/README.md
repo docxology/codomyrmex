@@ -8,7 +8,7 @@ Web3 and blockchain smart contract interfaces.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

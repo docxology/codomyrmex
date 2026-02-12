@@ -9,7 +9,7 @@ Complete financial management system for autonomous agents and user businesses. 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 ## Key Exports

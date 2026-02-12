@@ -8,7 +8,7 @@ Template engine support (Jinja2, Mako) for code generation and dynamic content.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

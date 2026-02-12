@@ -9,7 +9,7 @@ Vision and audio processing for multimodal AI applications. Provides typed media
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

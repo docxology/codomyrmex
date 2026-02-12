@@ -8,7 +8,7 @@ Data sanitization and anonymous routing for privacy protection.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

@@ -8,7 +8,7 @@ Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

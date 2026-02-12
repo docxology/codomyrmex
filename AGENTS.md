@@ -254,6 +254,8 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `TreeSitterParser`, `ASTNavigator`
 - `website/` - Website generation and management
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
+- `meme/` - Memetics & Information Dynamics
+  - Key Classes: `MemeSpecific`, `NarrativeEngine`
 
 **Secure Cognitive Layer**:
 
@@ -331,6 +333,7 @@ See [docs/modules/overview.md](docs/modules/overview.md) for module documentatio
 | **coding** | [src/codomyrmex/coding/AGENTS.md](src/codomyrmex/coding/AGENTS.md) | Core |
 | **llm** | [src/codomyrmex/llm/AGENTS.md](src/codomyrmex/llm/AGENTS.md) | Core |
 | **cerebrum** | [src/codomyrmex/cerebrum/AGENTS.md](src/codomyrmex/cerebrum/AGENTS.md) | Specialized |
+| **meme** | [src/codomyrmex/meme/AGENTS.md](src/codomyrmex/meme/AGENTS.md) | Specialized |
 | **orchestrator** | [src/codomyrmex/orchestrator/AGENTS.md](src/codomyrmex/orchestrator/AGENTS.md) | Service |
 
 ### For Contributors

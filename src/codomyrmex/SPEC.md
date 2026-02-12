@@ -116,6 +116,7 @@ graph TB
         Templating[templating<br/>Template engine]
         Skills[skills<br/>Skills management]
         IDE[ide<br/>IDE integration]
+        Meme[meme<br/>Memetics & Info War]
     end
 
     Logging --> Coding
@@ -139,6 +140,7 @@ graph TB
 **Purpose**: Provides core infrastructure services that all other modules depend on.
 
 **Modules**:
+
 - `logging_monitoring`: Centralized structured logging with JSON output
 - `environment_setup`: Environment validation and dependency checking
 - `model_context_protocol`: MCP tool specifications and protocol handling
@@ -147,6 +149,7 @@ graph TB
 - `metrics`: Metrics collection and aggregation infrastructure
 
 **Characteristics**:
+
 - No dependencies on other Codomyrmex modules
 - Used by all other layers
 - Provides essential services (logging, config, environment)
@@ -157,6 +160,7 @@ graph TB
 **Purpose**: Provides primary functionality for code analysis, execution, and visualization.
 
 **Modules**:
+
 - `static_analysis`: Code quality analysis and linting
 - `coding`: Secure code execution and sandboxing
 - `data_visualization`: Charts, plots, and visualizations
@@ -174,6 +178,7 @@ graph TB
 - `documents`: Document processing and management
 
 **Characteristics**:
+
 - Depends only on Foundation Layer
 - Provides core development capabilities
 - Self-contained functionality
@@ -184,6 +189,7 @@ graph TB
 **Purpose**: Provides higher-level services that build upon core functionality.
 
 **Modules**:
+
 - `build_synthesis`: Build automation and code synthesis
 - `documentation`: Documentation generation tools
 - `api`: API infrastructure and OpenAPI generation
@@ -196,6 +202,7 @@ graph TB
 - `cloud`: Cloud service integrations
 
 **Characteristics**:
+
 - Depends on Foundation and Core Layers
 - Orchestrates multiple core modules
 - Provides end-to-end workflows
@@ -206,6 +213,7 @@ graph TB
 **Purpose**: Provides advanced features and specialized capabilities.
 
 **Modules**:
+
 - `spatial`: 3D/4D spatial modeling and visualization
 - `cerebrum`: Case-based reasoning and Bayesian inference
 - `fpf`: First Principles Framework integration
@@ -238,6 +246,7 @@ graph TB
 - `inference_optimization`: Specialized module
 - `migration`: Specialized module
 - `model_ops`: Specialized module
+- `meme`: Specialized module
 - `model_registry`: Specialized module
 - `multimodal`: Specialized module
 - `notification`: Specialized module
@@ -255,6 +264,7 @@ graph TB
 - `wallet`: Specialized module
 
 **Characteristics**:
+
 - May depend on any layer
 - Specialized functionality
 - Advanced features
@@ -265,6 +275,7 @@ graph TB
 ### Public API Contract
 
 All modules must provide:
+
 1. **Clear Public API**: Well-defined entry points with type hints
 2. **Documentation**: Complete API documentation in `AGENTS.md`
 3. **Error Handling**: Use unified exception hierarchy
@@ -274,6 +285,7 @@ All modules must provide:
 ### Module Structure Contract
 
 Each module must contain:
+
 1. `__init__.py` - Module exports and public API
 2. `README.md` - User-facing documentation
 3. `AGENTS.md` - Technical specifications
@@ -284,6 +296,7 @@ Each module must contain:
 ### Dependency Contract
 
 Modules must follow dependency rules:
+
 1. **Foundation Layer**: No Codomyrmex dependencies
 2. **Core Layer**: Foundation Layer only
 3. **Service Layer**: Foundation and Core Layers
@@ -292,6 +305,7 @@ Modules must follow dependency rules:
 ### Integration Contract
 
 Modules must integrate with:
+
 1. **Logging**: Use `logging_monitoring.get_logger()`
 2. **Exceptions**: Use `codomyrmex.exceptions` hierarchy
 3. **Configuration**: Use `config_management` for config
@@ -355,6 +369,7 @@ Specialized Layer (may depend on any layer)
 ### Module Structure Requirements
 
 Each module must provide:
+
 1. **Core Functionality**: Working implementation of module purpose
 2. **Public API**: Clear, well-documented public interface
 3. **Configuration Management**: Support for configuration via `config_management`

@@ -8,7 +8,7 @@ Code parsing with tree-sitter for syntax analysis and transformations.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

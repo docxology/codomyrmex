@@ -7,7 +7,7 @@ Task scheduling with cron, interval, and one-time triggers.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

@@ -9,7 +9,7 @@ Social relationship management and external communication engine. Integrates CRM
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 ## Key Exports

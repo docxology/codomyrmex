@@ -27,6 +27,7 @@ src/
 │   ├── agents/           # AI agent integrations
 │   ├── llm/              # LLM infrastructure
 │   ├── orchestrator/     # Workflow orchestration
+│   ├── meme/             # Memetics & Info War
 │   ├── coding/           # Code execution
 │   ├── documentation/    # Doc generation
 │   └── ...               # 65+ more modules

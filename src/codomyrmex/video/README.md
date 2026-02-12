@@ -74,7 +74,7 @@ The video module provides comprehensive video processing capabilities including 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

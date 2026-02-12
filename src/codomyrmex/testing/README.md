@@ -9,7 +9,7 @@ Test fixtures, generators, and utilities for the Codomyrmex test suite. Provides
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

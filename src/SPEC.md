@@ -164,6 +164,7 @@ The `codomyrmex/` package contains:
 
 - `spatial` - 3D/4D modeling
 - `cerebrum` - Reasoning engine
+- `meme` - Memetics & Information Dynamics
 - `fpf` - First Principles Framework
 - `agents` - AI agent integrations
 - `events` - Event system

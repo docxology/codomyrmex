@@ -7,7 +7,7 @@ API rate limiting with fixed window, sliding window, and token bucket algorithms
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

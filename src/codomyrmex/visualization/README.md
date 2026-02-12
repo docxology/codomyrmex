@@ -1,6 +1,6 @@
 # Visualization Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.3.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -29,8 +29,27 @@ The module is organized into submodules for better maintainability:
   - `heatmap.py`: Heatmaps.
   - `mermaid.py`: Mermaid diagram support.
   - `base.py`: Abstract base class for plots.
+  - `violin.py`: Violin plots.
+  - `radar.py`: Radar charts.
+  - `candlestick.py`: Candlestick charts.
+  - `funnel.py`: Funnel charts.
+  - `sankey.py`: Sankey diagrams.
+  - `wordcloud.py`: Word clouds.
+  - `confusion_matrix.py`: Confusion matrices.
+  - `treemap.py`: Tree maps.
+  - `network.py`: Network graphs.
 - `components/`: UI components.
   - `basic.py`: Card, Table, etc.
+  - `media.py`: Image, Video.
+  - `text.py`: TextBlock, CodeBlock.
+  - `badge.py`: Status Badges.
+  - `alert.py`: Alert Boxes.
+  - `progress.py`: Progress Bars.
+  - `timeline.py`: Timeline.
+  - `statbox.py`: StatBox.
+  - `chat_bubble.py`: Chat bubbles.
+  - `json_view.py`: JSON viewer.
+  - `heatmap_table.py`: Heatmap table.
 - `reports/`: Domain-specific report generators.
   - `general.py`: Executive Dashboard implementation.
   - `base.py`: Abstract base class for reports.

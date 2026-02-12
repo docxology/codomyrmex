@@ -8,7 +8,7 @@ Reverse auction and demand aggregation for AI service procurement.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

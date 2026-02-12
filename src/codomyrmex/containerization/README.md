@@ -10,7 +10,7 @@ Container management, orchestration, and deployment module organized into four s
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

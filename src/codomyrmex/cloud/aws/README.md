@@ -45,7 +45,7 @@ Uses boto3 credential chain:
 ## Dependencies
 
 ```bash
-uv pip install boto3
+uv uv add boto3
 ```
 
 ## Directory Structure

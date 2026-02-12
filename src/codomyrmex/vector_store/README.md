@@ -7,7 +7,7 @@ Embeddings storage with similarity search using cosine, euclidean, or dot produc
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

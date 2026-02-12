@@ -8,7 +8,7 @@ Feature flag management with evaluation strategies and gradual rollout.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

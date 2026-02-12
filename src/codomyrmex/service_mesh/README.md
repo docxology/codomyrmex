@@ -7,7 +7,7 @@ Microservice communication patterns: circuit breakers, load balancing, and retry
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

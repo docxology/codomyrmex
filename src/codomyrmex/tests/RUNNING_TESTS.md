@@ -4,7 +4,15 @@
 
 ## Overview
 
-This document provides comprehensive guidance for running the Codomyrmex test suite. The test suite contains **1,203 tests** organized into multiple categories to ensure comprehensive coverage while managing resource usage.
+This document provides comprehensive guidance for running the Codomyrmex test suite. The test suite contains **1,203 tests** organized into multiple categories.
+
+### Zero-Mock Policy
+
+**CRITICAL**: This project adheres to a strict **Zero-Mock Policy**.
+
+- All tests must verify real functional behavior.
+- Use of `unittest.mock`, `pytest-mock`, or similar libraries is **forbidden** for core logic.
+- External services may be substituted with strictly typed, functional fakes only when absolutely necessary (e.g. avoiding real credit card charges), but prefer real local instances (e.g. local DBs) whenever possible.
 
 ## Test Organization
 
@@ -264,7 +272,8 @@ python -c "import sys; print('
 uv run python -c "import codomyrmex; print('Package imported successfully')"
 
 # Check for syntax errors
-find src/ -name "*.py" -exec python -m py_compile {} \;
+# Check for syntax errors
+find src/ -name "*.py" -exec uv run python -m py_compile {} \;
 ```
 
 #### Network/External Dependencies
@@ -298,7 +307,7 @@ uv run pytest --profile src/codomyrmex/tests/unit/
 uv run pytest -n auto src/codomyrmex/tests/unit/
 
 # Use pytest-xdist for distributed execution
-uv pip install pytest-xdist
+# Note: Ensure pytest-xdist is in your project dependencies (uv sync)
 uv run pytest -n 4 src/codomyrmex/tests/unit/
 ```
 
@@ -376,13 +385,13 @@ Use the test summary script for detailed analysis:
 
 ```bash
 # Generate test summary
-python scripts/src/codomyrmex/tests/test_summary.py
+uv run python scripts/src/codomyrmex/tests/test_summary.py
 
 # Analyze test durations
-python scripts/src/codomyrmex/tests/test_summary.py --durations
+uv run python scripts/src/codomyrmex/tests/test_summary.py --durations
 
 # Identify flaky tests
-python scripts/src/codomyrmex/tests/test_summary.py --flaky
+uv run python scripts/src/codomyrmex/tests/test_summary.py --flaky
 ```
 
 ## Best Practices
@@ -394,7 +403,7 @@ python scripts/src/codomyrmex/tests/test_summary.py --flaky
 3. **Check coverage** to ensure adequate test coverage
 4. **Review failures** carefully - they may indicate real issues
 
-### Test Development
+### Development Strategy
 
 1. **Write tests first** (TDD approach)
 2. **Keep tests fast** and isolated
@@ -402,7 +411,7 @@ python scripts/src/codomyrmex/tests/test_summary.py --flaky
 4. **Test error conditions** and edge cases
 5. **Maintain test documentation**
 
-### CI/CD Integration
+### CI/CD Best Practices
 
 1. **Use batch execution** in CI pipelines
 2. **Set appropriate timeouts** to prevent hanging

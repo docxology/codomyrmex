@@ -25,10 +25,10 @@ Comprehensive integration with Infomaniak's OpenStack-based public cloud platfor
 
 ```bash
 # OpenStack SDK (for most services)
-uv pip install openstacksdk
+uv uv add openstacksdk
 
 # boto3 (for S3-compatible storage)
-uv pip install boto3
+uv uv add boto3
 ```
 
 ### Authentication

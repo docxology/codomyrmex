@@ -8,7 +8,7 @@ Robotics integration with ROS2, sensors, actuators, and 3D transforms.
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

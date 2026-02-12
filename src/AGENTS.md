@@ -21,6 +21,7 @@ src/
 │   ├── market/           # Secure Cognitive - Anonymous markets
 │   ├── privacy/          # Secure Cognitive - Mixnets
 │   ├── llm/              # LLM integration
+│   ├── meme/             # Memetics & Information Dynamics
 │   ├── logging_monitoring/  # Centralized logging
 │   ├── model_context_protocol/  # MCP implementation
 │   ├── orchestrator/     # Workflow orchestration

@@ -9,7 +9,7 @@ High-fidelity biological simulation engine. Provides digital twins of ant coloni
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 ## Key Exports

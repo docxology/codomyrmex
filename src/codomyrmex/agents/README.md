@@ -11,7 +11,7 @@ When used with [PAI](../../../PAI.md) (`~/.claude/skills/PAI/`), this module map
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

@@ -10,7 +10,7 @@ Comprehensive data visualization module providing chart generation, plotting eng
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

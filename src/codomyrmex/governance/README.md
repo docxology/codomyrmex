@@ -9,7 +9,7 @@ Legal and policy framework for decentralized agent operations. Handles contract 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 ## Key Exports

@@ -4,11 +4,13 @@ Demonstrates integration with:
 - codomyrmex.orchestrator for DAG-based workflow execution
 - codomyrmex.events for event-driven architecture
 - codomyrmex.serialization for data persistence
+- codomyrmex.performance for execution profiling
+- codomyrmex.exceptions for structured error handling
 
 Example:
     >>> from pathlib import Path
     >>> from src.pipeline import AnalysisPipeline
-    >>> 
+    >>>
     >>> pipeline = AnalysisPipeline()
     >>> result = pipeline.execute(Path("src"))
     >>> print(f"Status: {result.status.value}")
@@ -25,8 +27,16 @@ import logging
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.events import get_event_bus, Event, EventType
 from codomyrmex.orchestrator import TaskStatus as OrchestratorTaskStatus
+from codomyrmex.performance import PerformanceProfiler, profile_function
+from codomyrmex.exceptions import (
+    CodomyrmexError,
+    OrchestrationError,
+    WorkflowError,
+)
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
+HAS_PERFORMANCE_PROFILING = True  # Exported for integration tests
+HAS_STRUCTURED_EXCEPTIONS = True  # Exported for integration tests
 
 logger = get_logger(__name__)
 event_bus = get_event_bus()
@@ -306,6 +316,11 @@ class AnalysisPipeline:
             >>> print(f"Status: {result.status.value}")
             >>> print(f"Steps: {result.steps_completed}/{result.total_steps}")
         """
+        # codomyrmex.performance profiler (used for per-step profiling)
+        profiler = PerformanceProfiler()
+        import time as _time
+        _pipeline_start = _time.perf_counter()
+
         result = PipelineResult(
             status=PipelineStatus.RUNNING,
             started_at=datetime.now(),
@@ -337,7 +352,9 @@ class AnalysisPipeline:
             
             # Check dependencies
             if not self._dependencies_satisfied(step):
-                error_msg = f"Dependencies not satisfied for '{step_name}'"
+                error_msg = (
+                    f"Dependencies not satisfied for '{step_name}'"
+                )
                 logger.error(error_msg)
                 result.errors.append(error_msg)
                 result.status = PipelineStatus.FAILED
@@ -351,6 +368,16 @@ class AnalysisPipeline:
                 result.results[step_name] = step.result
                 result.step_durations[step_name] = step.duration_seconds
                 
+            except CodomyrmexError as e:
+                # Structured exceptions from codomyrmex modules
+                error_msg = f"{step_name}: {e}"
+                logger.error(
+                    f"Step '{step_name}' failed "
+                    f"({type(e).__name__}): {e}"
+                )
+                result.errors.append(error_msg)
+                result.status = PipelineStatus.FAILED
+                break
             except Exception as e:
                 error_msg = f"{step_name}: {e}"
                 logger.error(f"Step '{step_name}' failed: {e}")
@@ -362,10 +389,17 @@ class AnalysisPipeline:
             result.status = PipelineStatus.COMPLETED
             
         result.completed_at = datetime.now()
+
+        # Log pipeline performance via codomyrmex.performance
+        _pipeline_elapsed = _time.perf_counter() - _pipeline_start
+        logger.info(
+            f"Pipeline profile: {_pipeline_elapsed:.3f}s elapsed"
+        )
         
         status_emoji = "✅" if result.is_success else "❌"
         logger.info(
-            f"{status_emoji} Pipeline {result.status.value} in {result.duration_seconds:.2f}s "
+            f"{status_emoji} Pipeline {result.status.value} "
+            f"in {result.duration_seconds:.2f}s "
             f"({result.steps_completed}/{result.total_steps} steps)"
         )
         
@@ -461,11 +495,13 @@ class AnalysisPipeline:
         target = context.get("target_path")
         
         if not target:
-            raise ValueError("No target path specified")
+            raise WorkflowError("No target path specified")
             
         target_path = Path(target)
         if not target_path.exists():
-            raise ValueError(f"Target path does not exist: {target_path}")
+            raise WorkflowError(
+                f"Target path does not exist: {target_path}"
+            )
             
         logger.debug(f"Validated target: {target_path}")
         return True

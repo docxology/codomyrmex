@@ -9,7 +9,7 @@ Spend tracking, budgeting, and cost optimization for AI/cloud infrastructure. Pr
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

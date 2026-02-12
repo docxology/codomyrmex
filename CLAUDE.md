@@ -45,7 +45,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 94 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 95 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -101,6 +101,7 @@ Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielm
 - **Agent Mapping**: PAI subagent types (Engineer, Architect, QATester) consume codomyrmex agent providers and tools — see [`src/codomyrmex/agents/PAI.md`](src/codomyrmex/agents/PAI.md)
 
 Key PAI system references (in `~/.claude/skills/PAI/`):
+
 - `SKILL.md` — Algorithm CORE (v0.2.25)
 - `SYSTEM/PAIAGENTSYSTEM.md` — Agent types and delegation
 - `SYSTEM/SKILLSYSTEM.md` — Skill architecture

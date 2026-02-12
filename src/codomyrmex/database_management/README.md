@@ -10,7 +10,7 @@ Database administration module providing connection management, schema generatio
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv uv add codomyrmex
 ```
 
 Or for development:

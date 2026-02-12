@@ -16,4 +16,4 @@ While primarily a utility module, Visualization provides tools for "Analyst" typ
 
 ## Future Expansions
 
-- **AnomalyDetectionAgent**: Uses visualization data to flag outliers.
+- **AnomalyDetectionAgent**: Uses `ViolinPlot` and `Agert` components to flag outliers and notify users of system irregularities.

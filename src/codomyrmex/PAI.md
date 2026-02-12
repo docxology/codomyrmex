@@ -35,6 +35,14 @@ The Codomyrmex modules provide PAI capabilities across several domains:
   - `market`: Reverse auctions and demand aggregation.
   - `privacy`: Metadata scrubbing and mixnet proxying.
 
+### Memetics & Influence
+
+| Module | PAI Capability | Description |
+| :--- | :--- | :--- |
+| [meme/](meme/) | Information Dynamics | Propagate ideas, analyze narratives, frame reality |
+| [meme/neurolinguistic/](meme/neurolinguistic/) | Persuasion | Cognitive framing and linguistic pattern engineering |
+| [meme/contagion/](meme/contagion/) | Viral Forecasting | Predict spread and detect cascades |
+
 ### Knowledge & Reasoning
 
 | Module | PAI Capability | Description |
@@ -82,6 +90,7 @@ graph TB
         LLM["llm/"]
         Cerebrum["cerebrum/"]
         Documents["documents/"]
+        Meme["meme/"]
     end
 
     subgraph paiExecution ["PAI Execution Layer"]
@@ -102,6 +111,8 @@ graph TB
     LLM --> Coding
     Cerebrum --> Static
     Documents --> Orchestrator
+    Meme --> Orchestrator
+    Meme --> LLM
     Coding --> Security
     Orchestrator --> Auth
 ```
@@ -134,9 +145,11 @@ graph TB
 
     OBSERVE --> PM
     THINK --> CB
+    THINK --> ME["meme/ (analysis)"]
     PLAN --> OR
     BUILD --> CE
     EXECUTE --> AG
+    EXECUTE --> MI["meme/ (influence)"]
     VERIFY --> SA
     LEARN --> AM
 ```
