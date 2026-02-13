@@ -34,7 +34,7 @@ from .reporting import generate_report, generate_script_documentation, save_log
 from .runner import run_script
 
 
-def main():
+def main(argv=None):
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="Run and log all scripts in the scripts directory",
@@ -106,7 +106,7 @@ Examples:
         help="Generate Markdown documentation to this file path",
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # Determine scripts_dir
     # If not provided, assume we are running from a script in scripts/ or

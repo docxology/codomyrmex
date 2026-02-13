@@ -9,21 +9,19 @@ and Python specific requirements (py.typed, docstrings).
 
 import os
 import ast
+import argparse
+import sys
 from pathlib import Path
-from typing import Dict, List, Set, Optional
-
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
-REPORT_FILE = ROOT_DIR / "docs_audit_report.md"
+from typing import List
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 PLACEHOLDER_TEXTS = ["Placeholder", "TODO: Add documentation", "# New Module"]
 
 class ModuleAudit:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, src_root: Path):
         self.path = path
         self.name = path.name
-        self.relative_path = path.relative_to(SRC_DIR)
+        self.relative_path = path.relative_to(src_root)
         self.missing_docs: List[str] = []
         self.placeholder_docs: List[str] = []
         self.has_py_typed = False
@@ -64,7 +62,7 @@ class ModuleAudit:
 def is_package(path: Path) -> bool:
     return path.is_dir() and (path / "__init__.py").exists()
 
-def generate_report(audits: List[ModuleAudit]):
+def generate_report(audits: List[ModuleAudit], report_file: Path):
     total_modules = len(audits)
     perfect_modules = 0
     modules_missing_rasp = 0
@@ -121,35 +119,45 @@ def generate_report(audits: List[ModuleAudit]):
         if missing_str != "✅" or placeholder_str != "✅" or typed_str == "❌" or init_doc_str == "❌":
             report_lines.append(f"| `{audit.relative_path}` | {missing_str} | {placeholder_str} | {typed_str} | {init_doc_str} |")
 
-    REPORT_FILE.write_text("\n".join(report_lines))
-    print(f"Report generated at: {REPORT_FILE}")
+    try:
+        report_file.write_text("\n".join(report_lines))
+        print(f"Report generated at: {report_file}")
+    except Exception as e:
+        print(f"Error writing report to {report_file}: {e}", file=sys.stderr)
 
 def main():
-    if not SRC_DIR.exists():
-        print(f"Error: Source directory {SRC_DIR} does not exist.")
+    parser = argparse.ArgumentParser(description="Audit documentation completeness.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    parser.add_argument("--report", type=Path, default=None, help="Output path for the report file")
+    
+    args = parser.parse_args()
+    
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    report_file = args.report or (root_dir / "docs_audit_report.md")
+
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
         return
 
     audits = []
-    # Walk only top-level subdirectories of codomyrmex for now, or recursive?
-    # Requirement: "all submodules". Let's do recursive for packages.
     
-    for root, dirs, files in os.walk(SRC_DIR):
+    for root, dirs, files in os.walk(src_dir):
         root_path = Path(root)
         if is_package(root_path):
-            # Skip the root codomyrmex package itself if desired, or include it?
-            # User wants audit of "submodules", but usually that implies children of codomyrmex.
-            # Let's include codomyrmex itself if needed, but primarily children.
-            # If root == SRC_DIR, it's the main package.
-            
             # Skip hidden directories
-            if any(part.startswith('.') for part in root_path.relative_to(SRC_DIR).parts):
+            if any(part.startswith('.') for part in root_path.relative_to(src_dir).parts):
                 continue
                 
-            audit = ModuleAudit(root_path)
+            audit = ModuleAudit(root_path, src_dir)
             audit.audit()
             audits.append(audit)
 
-    generate_report(audits)
+    if not audits:
+        print("No modules found to audit.")
+        return
+
+    generate_report(audits, report_file)
 
 if __name__ == "__main__":
     main()

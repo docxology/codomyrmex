@@ -6,14 +6,13 @@ Prepends docstrings to __init__.py files that are missing them.
 Targeted at a specific list of modules identified in the audit.
 """
 
+import sys
+import argparse
 from pathlib import Path
 import ast
 
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
-
-# List of relative paths to packages that are missing docstrings
-TARGETS = [
+# Default list of relative paths to packages that are missing docstrings
+DEFAULT_TARGETS = [
     "documentation/scripts",
     "tests/unit/tools",
     "tests/unit/api",
@@ -48,11 +47,10 @@ def has_docstring(file_path: Path) -> bool:
     except Exception:
         return False
 
-def fix_docstring(rel_path: str):
-    path = SRC_DIR / rel_path / "__init__.py"
+def fix_docstring(rel_path: str, src_dir: Path):
+    path = src_dir / rel_path / "__init__.py"
     if not path.exists():
-        print(f"Skipping {rel_path}: __init__.py not found")
-        # specific handling for tests/unit/tools if it's actually tests/unit/tools/__init__.py
+        print(f"Skipping {rel_path}: __init__.py not found at {path}")
         return
 
     if has_docstring(path):
@@ -62,13 +60,38 @@ def fix_docstring(rel_path: str):
     docstring = DOCSTRINGS.get(rel_path, f'"""Module for {Path(rel_path).name}."""\n')
     
     print(f"Fixing {rel_path}")
-    content = path.read_text()
-    path.write_text(docstring + "\n" + content)
+    try:
+        content = path.read_text()
+        path.write_text(docstring + "\n" + content)
+    except Exception as e:
+        print(f"Error fixing {rel_path}: {e}", file=sys.stderr)
 
 def main():
-    print(f"Fixing {len(TARGETS)} modules...")
-    for target in TARGETS:
-        fix_docstring(target)
+    parser = argparse.ArgumentParser(description="Fix missing docstrings in __init__.py files.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    parser.add_argument("--target", action="append", help="Specific target module (relative to src/codomyrmex). Can be used multiple times.")
+    parser.add_argument("--all", action="store_true", help="Run on all default targets")
+    
+    args = parser.parse_args()
+    
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
+        return
+
+    targets = args.target if args.target else []
+    if args.all or not targets:
+         # If --all is specified, OR if no targets are specified (default behavior), use default targets?
+         # Wait, if I want to just run --help and do nothing, I shouldn't run defaults by default unless explicit?
+         # Current script runs defaults immediately. Let's keep that behavior but allow overriding.
+         if not targets:
+             targets = DEFAULT_TARGETS
+    
+    print(f"Fixing {len(targets)} modules...")
+    for target in targets:
+        fix_docstring(target, src_dir)
     print("Done.")
 
 if __name__ == "__main__":
