@@ -1,47 +1,41 @@
 # Personal AI Infrastructure — Spatial Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Spatial module provides PAI integration for geospatial operations.
+Spatial modeling module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Geospatial Operations
-
-Work with coordinates:
-
 ```python
-from codomyrmex.spatial import GeoPoint, distance
-
-point1 = GeoPoint(lat=37.7749, lon=-122.4194)
-point2 = GeoPoint(lat=34.0522, lon=-118.2437)
-
-dist = distance(point1, point2)
-print(f"Distance: {dist:.2f} km")
+from codomyrmex.spatial import three_d, four_d, world_models
 ```
 
-### Spatial Indexing
+## Key Exports
 
-Index spatial data:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `three_d` | Function/Constant | Three d |
+| `four_d` | Function/Constant | Four d |
+| `world_models` | Function/Constant | World models |
+| `coordinates` | Function/Constant | Coordinates |
+| `rendering` | Function/Constant | Rendering |
+| `physics` | Function/Constant | Physics |
 
-```python
-from codomyrmex.spatial import SpatialIndex
+## PAI Algorithm Phase Mapping
 
-index = SpatialIndex()
-index.add(point, data)
-nearby = index.query_radius(center, radius=10)
-```
+| Phase | Spatial Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `GeoPoint` | Coordinates |
-| `distance` | Calculate distance |
-| `SpatialIndex` | Spatial queries |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

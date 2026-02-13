@@ -1,46 +1,31 @@
 # Personal AI Infrastructure — Documents Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Documents module provides PAI integration for document parsing and processing.
+Documents Module for Codomyrmex. This is a **Core Layer** module.
 
 ## PAI Capabilities
 
-### Document Parsing
+## Key Exports
 
-Parse documents:
+| Export | Type | Purpose |
+|--------|------|---------|
 
-```python
-from codomyrmex.documents import DocumentParser
+## PAI Algorithm Phase Mapping
 
-parser = DocumentParser()
-doc = parser.parse("report.pdf")
+| Phase | Documents Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-print(f"Pages: {doc.page_count}")
-print(doc.text[:500])
-```
+## Architecture Role
 
-### Text Chunking
-
-Chunk for RAG:
-
-```python
-from codomyrmex.documents import TextChunker
-
-chunker = TextChunker(chunk_size=500)
-chunks = chunker.chunk(doc.text)
-```
-
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `DocumentParser` | Parse documents |
-| `TextChunker` | Chunk for RAG |
-| `Metadata` | Extract metadata |
+**Core Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

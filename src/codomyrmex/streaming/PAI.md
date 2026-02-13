@@ -1,44 +1,47 @@
 # Personal AI Infrastructure — Streaming Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Streaming module provides PAI integration for streaming data processing.
+Streaming Module This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Stream Processing
-
-Process streaming data:
-
 ```python
-from codomyrmex.streaming import Stream
-
-async for chunk in Stream.from_llm(response):
-    print(chunk, end="", flush=True)
+from codomyrmex.streaming import EventType, Event, Subscription, create_event, broadcast
 ```
 
-### Event Streaming
+## Key Exports
 
-Stream events:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `EventType` | Class | Eventtype |
+| `Event` | Class | Event |
+| `Subscription` | Class | Subscription |
+| `create_event` | Function/Constant | Create event |
+| `Stream` | Class | Stream |
+| `InMemoryStream` | Class | Inmemorystream |
+| `SSEStream` | Class | Ssestream |
+| `TopicStream` | Class | Topicstream |
+| `broadcast` | Function/Constant | Broadcast |
+| `StreamProcessor` | Class | Streamprocessor |
 
-```python
-from codomyrmex.streaming import EventStream
+## PAI Algorithm Phase Mapping
 
-stream = EventStream()
-async for event in stream.subscribe("logs"):
-    print(f"Event: {event}")
-```
+| Phase | Streaming Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+| **LEARN** | Learning and knowledge capture |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Stream` | Process streams |
-| `EventStream` | Event streaming |
-| `StreamBuffer` | Buffer management |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

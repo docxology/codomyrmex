@@ -1,45 +1,52 @@
-# Personal AI Infrastructure — Evolutionary AI Module
+# Personal AI Infrastructure — Evolutionary Ai Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Evolutionary AI module provides PAI integration for genetic algorithms and evolutionary optimization.
+Evolutionary AI module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Genetic Algorithms
-
-Evolve solutions:
-
 ```python
-from codomyrmex.evolutionary_ai import GeneticAlgorithm
-
-ga = GeneticAlgorithm(
-    fitness_fn=evaluate, population_size=100
-)
-best = ga.evolve(generations=50)
+from codomyrmex.evolutionary_ai import Genome, Population, Individual, operators, selection, fitness
 ```
 
-### Parameter Optimization
+## Key Exports
 
-Optimize hyperparameters:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `operators` | Function/Constant | Operators |
+| `selection` | Function/Constant | Selection |
+| `fitness` | Function/Constant | Fitness |
+| `Genome` | Class | Genome |
+| `Population` | Class | Population |
+| `Individual` | Class | Individual |
+| `crossover` | Function/Constant | Crossover |
+| `mutate` | Function/Constant | Mutate |
+| `tournament_selection` | Function/Constant | Tournament selection |
+| `MutationType` | Class | Mutationtype |
+| `CrossoverType` | Class | Crossovertype |
+| `SelectionType` | Class | Selectiontype |
+| `MutationOperator` | Class | Mutationoperator |
+| `BitFlipMutation` | Class | Bitflipmutation |
 
-```python
-from codomyrmex.evolutionary_ai import Optimizer
+*Plus 16 additional exports.*
 
-optimizer = Optimizer(search_space=params)
-best_params = optimizer.search(objective_fn)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `GeneticAlgorithm` | Evolve solutions |
-| `Optimizer` | Hyperparameters |
-| `Population` | Manage candidates |
+| Phase | Evolutionary Ai Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,45 +1,55 @@
 # Personal AI Infrastructure — Orchestrator Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Orchestrator module provides PAI integration for workflow orchestration.
+Script Orchestrator Module This is a **Service Layer** module.
 
 ## PAI Capabilities
 
-### Workflow Definition
-
-Define workflows:
-
 ```python
-from codomyrmex.orchestrator import Workflow, Step
-
-workflow = Workflow("deployment")
-workflow.add_step(Step("build", build_func))
-workflow.add_step(Step("test", test_func))
-workflow.add_step(Step("deploy", deploy_func))
+from codomyrmex.orchestrator import Workflow, Task, TaskStatus, templates, state, triggers
 ```
 
-### Workflow Execution
+## Key Exports
 
-Run workflows:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `templates` | Function/Constant | Templates |
+| `state` | Function/Constant | State |
+| `triggers` | Function/Constant | Triggers |
+| `pipelines` | Function/Constant | Pipelines |
+| `run_orchestrator` | Function/Constant | Run orchestrator |
+| `load_config` | Function/Constant | Load config |
+| `get_script_config` | Function/Constant | Get script config |
+| `discover_scripts` | Function/Constant | Discover scripts |
+| `Workflow` | Class | Workflow |
+| `Task` | Class | Task |
+| `TaskStatus` | Class | Taskstatus |
+| `TaskResult` | Class | Taskresult |
+| `RetryPolicy` | Class | Retrypolicy |
+| `WorkflowError` | Class | Workflowerror |
 
-```python
-from codomyrmex.orchestrator import Workflow
+*Plus 43 additional exports.*
 
-result = workflow.run()
-print(f"Status: {result.status}")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Workflow` | Define workflows |
-| `Step` | Define steps |
-| `run` | Execute workflows |
+| Phase | Orchestrator Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **PLAN** | Workflow planning and scheduling |
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+
+## Architecture Role
+
+**Service Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

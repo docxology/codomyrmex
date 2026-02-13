@@ -1,44 +1,41 @@
 # Personal AI Infrastructure — Telemetry Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Telemetry module provides PAI integration for usage tracking and telemetry.
+Telemetry module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Event Tracking
-
-Track events:
-
 ```python
-from codomyrmex.telemetry import TelemetryClient
-
-client = TelemetryClient()
-client.track("llm_request", {"model": "gpt-4", "tokens": 150})
+from codomyrmex.telemetry import alerting, sampling, tracing
 ```
 
-### Usage Analytics
+## Key Exports
 
-Collect analytics:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `alerting` | Function/Constant | Alerting |
+| `sampling` | Function/Constant | Sampling |
+| `tracing` | Function/Constant | Tracing |
+| `exporters` | Function/Constant | Exporters |
+| `spans` | Function/Constant | Spans |
+| `metrics` | Function/Constant | Metrics |
 
-```python
-from codomyrmex.telemetry import UsageAnalytics
+## PAI Algorithm Phase Mapping
 
-analytics = UsageAnalytics()
-report = analytics.generate_report(period="month")
-print(f"Total requests: {report.total_requests}")
-```
+| Phase | Telemetry Contribution |
+|-------|------------------------------|
+| **LEARN** | Learning and knowledge capture |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `TelemetryClient` | Track events |
-| `UsageAnalytics` | Reports |
-| `Privacy` | Data anonymization |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

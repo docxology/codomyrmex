@@ -3,33 +3,37 @@
 {% block title %}Dashboard - Codomyrmex{% endblock %}
 
 {% block content %}
-<h1>Command Center</h1>
+<h1>Command Center
+    <span id="dash-connection" class="connection-status connection-ok" style="float: right; font-size: 0.8rem; font-weight: 400;">
+        <span class="status-dot"></span> <span id="dash-connection-text">Connected</span>
+    </span>
+</h1>
 
 <!-- Top Row: Key Metrics -->
 <section aria-label="System Metrics">
 <div class="dashboard-metrics">
     <div class="dash-metric">
-        <span class="dash-metric-value status-ok">Operational</span>
+        <span id="dm-status" class="dash-metric-value status-ok">{{ health.status_text|default('Operational') }}</span>
         <span class="dash-metric-label">System Status</span>
     </div>
     <div class="dash-metric">
-        <span class="dash-metric-value">{{ system.module_count }}</span>
+        <span id="dm-modules" class="dash-metric-value">{{ system.module_count }}</span>
         <span class="dash-metric-label">Modules</span>
     </div>
     <div class="dash-metric">
-        <span class="dash-metric-value">{{ system.agent_count }}</span>
+        <span id="dm-agents" class="dash-metric-value">{{ system.agent_count }}</span>
         <span class="dash-metric-label">Agent Integrations</span>
     </div>
     <div class="dash-metric">
-        <span class="dash-metric-value">{{ scripts|length }}</span>
+        <span id="dm-scripts" class="dash-metric-value">{{ scripts|length }}</span>
         <span class="dash-metric-label">Scripts</span>
     </div>
     <div class="dash-metric">
-        <span class="dash-metric-value">{{ system.version }}</span>
-        <span class="dash-metric-label">Version</span>
+        <span id="dm-uptime" class="dash-metric-value">{{ health.uptime|default('--') }}</span>
+        <span class="dash-metric-label">Uptime</span>
     </div>
     <div class="dash-metric">
-        <span class="dash-metric-value">{{ system.environment }}</span>
+        <span id="dm-environment" class="dash-metric-value">{{ system.environment }}</span>
         <span class="dash-metric-label">Environment</span>
     </div>
 </div>
@@ -40,13 +44,13 @@
     <!-- Git Status -->
     <div class="card">
         <h2 class="card-title">Git Status
-            <span class="status-badge {% if health.git.dirty_files == 0 %}active{% else %}running{% endif %}">
+            <span id="dm-git-badge" class="status-badge {% if health.git.dirty_files == 0 %}active{% else %}running{% endif %}">
                 {{ health.git.status }}
             </span>
         </h2>
-        <p><strong>Branch:</strong> <code>{{ health.git.branch }}</code></p>
-        <p><strong>Commits:</strong> {{ health.git.commit_count }}</p>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+        <p><strong>Branch:</strong> <code id="dm-git-branch">{{ health.git.branch }}</code></p>
+        <p><strong>Commits:</strong> <span id="dm-git-commits">{{ health.git.commit_count }}</span></p>
+        <p id="dm-git-last" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
             {{ health.git.last_commit }}
         </p>
     </div>
@@ -57,19 +61,60 @@
         <div class="coverage-bars" style="margin-top: 0.5rem;">
             <div class="coverage-row">
                 <span class="coverage-label">API Specs</span>
-                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.api_spec_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="API Specs coverage"><div class="coverage-fill" style="width: {{ health.modules.api_spec_pct }}%; background: var(--success-color);"></div></div>
-                <span class="coverage-pct">{{ health.modules.api_spec_pct }}%</span>
+                <div id="dm-api-bar" class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.api_spec_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="API Specs coverage"><div class="coverage-fill" style="width: {{ health.modules.api_spec_pct }}%; background: var(--success-color);"></div></div>
+                <span id="dm-api-pct" class="coverage-pct">{{ health.modules.api_spec_pct }}%</span>
             </div>
             <div class="coverage-row">
                 <span class="coverage-label">Tests</span>
-                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.test_coverage_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Tests coverage"><div class="coverage-fill" style="width: {{ health.modules.test_coverage_pct }}%; background: var(--accent-color);"></div></div>
-                <span class="coverage-pct">{{ health.modules.test_coverage_pct }}%</span>
+                <div id="dm-test-bar" class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.test_coverage_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="Tests coverage"><div class="coverage-fill" style="width: {{ health.modules.test_coverage_pct }}%; background: var(--accent-color);"></div></div>
+                <span id="dm-test-pct" class="coverage-pct">{{ health.modules.test_coverage_pct }}%</span>
             </div>
             <div class="coverage-row">
                 <span class="coverage-label">MCP</span>
-                <div class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.mcp_spec_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="MCP Specs coverage"><div class="coverage-fill" style="width: {{ health.modules.mcp_spec_pct }}%; background: #8b5cf6;"></div></div>
-                <span class="coverage-pct">{{ health.modules.mcp_spec_pct }}%</span>
+                <div id="dm-mcp-bar" class="coverage-bar" role="progressbar" aria-valuenow="{{ health.modules.mcp_spec_pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="MCP Specs coverage"><div class="coverage-fill" style="width: {{ health.modules.mcp_spec_pct }}%; background: #8b5cf6;"></div></div>
+                <span id="dm-mcp-pct" class="coverage-pct">{{ health.modules.mcp_spec_pct }}%</span>
             </div>
+        </div>
+    </div>
+
+    <!-- MCP Server Status -->
+    <div class="card" id="mcp-card">
+        <h2 class="card-title">MCP Server
+            <span id="mcp-badge" class="status-badge">Checking...</span>
+        </h2>
+        <div id="mcp-content">
+            <p style="color: var(--text-secondary);">Probing localhost:8080...</p>
+        </div>
+    </div>
+
+    <!-- PAI Awareness Summary -->
+    <div class="card">
+        <h2 class="card-title">PAI Awareness
+            <a href="awareness.html" style="font-size: 0.75rem; font-weight: 400; color: var(--accent-color); text-decoration: none;">View All</a>
+        </h2>
+        <div id="pai-summary">
+            {% if awareness and awareness.metrics %}
+            <div class="pai-stats">
+                <div class="pai-stat">
+                    <span class="pai-stat-value">{{ awareness.metrics.mission_count|default(0) }}</span>
+                    <span class="pai-stat-label">Missions</span>
+                </div>
+                <div class="pai-stat">
+                    <span class="pai-stat-value">{{ awareness.metrics.project_count|default(0) }}</span>
+                    <span class="pai-stat-label">Projects</span>
+                </div>
+                <div class="pai-stat">
+                    <span class="pai-stat-value">{{ awareness.metrics.completed_tasks|default(0) }}/{{ awareness.metrics.total_tasks|default(0) }}</span>
+                    <span class="pai-stat-label">Tasks Done</span>
+                </div>
+                <div class="pai-stat">
+                    <span class="pai-stat-value" style="color: var(--accent-color);">{{ awareness.metrics.overall_completion|default(0) }}%</span>
+                    <span class="pai-stat-label">Completion</span>
+                </div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">PAI data unavailable</p>
+            {% endif %}
         </div>
     </div>
 
@@ -104,6 +149,8 @@
         </div>
     </div>
 </div>
+
+<p id="dash-last-updated" style="text-align: right; font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;"></p>
 
 <style>
     .dashboard-metrics {
@@ -145,7 +192,7 @@
     .coverage-row { display: flex; align-items: center; gap: 0.6rem; }
     .coverage-label { width: 70px; font-size: 0.8rem; color: var(--text-secondary); }
     .coverage-bar { flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
-    .coverage-fill { height: 100%; border-radius: 3px; }
+    .coverage-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
     .coverage-pct { width: 45px; text-align: right; font-size: 0.8rem; font-weight: 600; font-family: 'Fira Code', monospace; }
 
     .arch-layers-compact { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
@@ -170,6 +217,23 @@
     }
     .quick-btn:hover { background: var(--accent-color); color: white; }
 
+    .connection-status { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.6rem; border-radius: 12px; }
+    .connection-ok { color: var(--success-color); }
+    .connection-err { color: var(--error-color, #ef4444); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+    .pai-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+    .pai-stat { text-align: center; padding: 0.4rem; background: var(--bg-tertiary); border-radius: 6px; }
+    .pai-stat-value { display: block; font-size: 1.1rem; font-weight: 700; font-family: 'Fira Code', monospace; }
+    .pai-stat-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; }
+
+    .mcp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
+    .mcp-stat { text-align: center; padding: 0.4rem; background: var(--bg-tertiary); border-radius: 6px; }
+    .mcp-stat-value { display: block; font-size: 1.1rem; font-weight: 700; font-family: 'Fira Code', monospace; }
+    .mcp-stat-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; }
+    .mcp-link { display: block; margin-top: 0.5rem; text-align: center; font-size: 0.8rem; color: var(--accent-color); text-decoration: none; }
+    .mcp-link:hover { text-decoration: underline; }
+
     @media (max-width: 900px) {
         .dashboard-metrics { grid-template-columns: repeat(3, 1fr); }
         .dashboard-grid { grid-template-columns: 1fr; }
@@ -178,4 +242,110 @@
         .dashboard-metrics { grid-template-columns: repeat(2, 1fr); }
     }
 </style>
+
+<script>
+(function() {
+    let failCount = 0;
+
+    function updateBar(barId, pctId, value) {
+        const bar = document.getElementById(barId);
+        const pct = document.getElementById(pctId);
+        if (bar) {
+            const fill = bar.querySelector('.coverage-fill');
+            if (fill) fill.style.width = value + '%';
+            bar.setAttribute('aria-valuenow', value);
+        }
+        if (pct) pct.textContent = value + '%';
+    }
+
+    function setConnection(ok) {
+        const el = document.getElementById('dash-connection');
+        const txt = document.getElementById('dash-connection-text');
+        if (el) el.className = 'connection-status ' + (ok ? 'connection-ok' : 'connection-err');
+        if (txt) txt.textContent = ok ? 'Connected' : 'Connection lost';
+    }
+
+    async function refreshDashboard() {
+        try {
+            const resp = await fetch('/api/health');
+            const data = await resp.json();
+            failCount = 0;
+            setConnection(true);
+
+            // Update metrics
+            const statusEl = document.getElementById('dm-status');
+            if (statusEl) { statusEl.textContent = data.status_text; statusEl.className = 'dash-metric-value status-' + data.status_class; }
+
+            const modulesEl = document.getElementById('dm-modules');
+            if (modulesEl && data.modules) modulesEl.textContent = data.modules.total;
+
+            const uptimeEl = document.getElementById('dm-uptime');
+            if (uptimeEl) uptimeEl.textContent = data.uptime;
+
+            // Git
+            const branchEl = document.getElementById('dm-git-branch');
+            if (branchEl && data.git) branchEl.textContent = data.git.branch;
+            const commitsEl = document.getElementById('dm-git-commits');
+            if (commitsEl && data.git) commitsEl.textContent = data.git.commit_count;
+            const gitBadge = document.getElementById('dm-git-badge');
+            if (gitBadge && data.git) {
+                gitBadge.textContent = data.git.status;
+                gitBadge.className = 'status-badge ' + (data.git.dirty_files === 0 ? 'active' : 'running');
+            }
+            const gitLast = document.getElementById('dm-git-last');
+            if (gitLast && data.git) gitLast.textContent = data.git.last_commit;
+
+            // Coverage
+            if (data.modules) {
+                updateBar('dm-api-bar', 'dm-api-pct', data.modules.api_spec_pct);
+                updateBar('dm-test-bar', 'dm-test-pct', data.modules.test_coverage_pct);
+                updateBar('dm-mcp-bar', 'dm-mcp-pct', data.modules.mcp_spec_pct);
+            }
+
+            // Timestamp
+            const ts = document.getElementById('dash-last-updated');
+            if (ts) ts.textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+
+        } catch (e) {
+            failCount++;
+            if (failCount >= 2) setConnection(false);
+        }
+    }
+
+    async function probeMCP() {
+        const badge = document.getElementById('mcp-badge');
+        const content = document.getElementById('mcp-content');
+        try {
+            const resp = await fetch('http://localhost:8080/health', { signal: AbortSignal.timeout(3000) });
+            const data = await resp.json();
+            if (data.status === 'ok') {
+                badge.textContent = 'Online';
+                badge.className = 'status-badge active';
+                content.innerHTML =
+                    '<div class="mcp-stats">' +
+                    '<div class="mcp-stat"><span class="mcp-stat-value">' + data.tool_count + '</span><span class="mcp-stat-label">Tools</span></div>' +
+                    '<div class="mcp-stat"><span class="mcp-stat-value">' + data.resource_count + '</span><span class="mcp-stat-label">Resources</span></div>' +
+                    '<div class="mcp-stat"><span class="mcp-stat-value">' + data.prompt_count + '</span><span class="mcp-stat-label">Prompts</span></div>' +
+                    '</div>' +
+                    '<a href="http://localhost:8080/" target="_blank" class="mcp-link">Open MCP Dashboard &rarr;</a>';
+            } else {
+                badge.textContent = 'Error';
+                badge.className = 'status-badge running';
+                content.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.85rem;">Server returned non-ok status</p>';
+            }
+        } catch (e) {
+            badge.textContent = 'Offline';
+            badge.className = 'status-badge';
+            content.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.85rem;">MCP server not running on port 8080</p>' +
+                '<p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;"><code>uv run python scripts/model_context_protocol/run_mcp_server.py --transport http --port 8080</code></p>';
+        }
+    }
+
+    // Initial load + auto-refresh
+    refreshDashboard();
+    probeMCP();
+    setInterval(refreshDashboard, 15000);
+    setInterval(probeMCP, 30000);
+})();
+</script>
 {% endblock %}

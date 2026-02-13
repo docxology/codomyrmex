@@ -1,46 +1,39 @@
 # Personal AI Infrastructure — Identity Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Identity module provides PAI integration for agent identity and context management.
+Identity Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Agent Identity
-
-Manage agent identities:
-
 ```python
-from codomyrmex.identity import AgentIdentity
-
-identity = AgentIdentity(
-    name="code_reviewer",
-    capabilities=["code_analysis", "suggestion"]
-)
+from codomyrmex.identity import Persona, VerificationLevel, IdentityManager
 ```
 
-### Context Management
+## Key Exports
 
-Manage agent context:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Persona` | Class | Persona |
+| `VerificationLevel` | Class | Verificationlevel |
+| `IdentityManager` | Class | Identitymanager |
+| `BioCognitiveVerifier` | Class | Biocognitiveverifier |
 
-```python
-from codomyrmex.identity import ContextManager
+## PAI Algorithm Phase Mapping
 
-context = ContextManager()
-context.set_workspace("/path/to/project")
-context.set_user("developer_123")
-```
+| Phase | Identity Contribution |
+|-------|------------------------------|
+| **VERIFY** | Validation and quality checks |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `AgentIdentity` | Define agent roles |
-| `ContextManager` | Manage context |
-| `SessionManager` | Track sessions |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

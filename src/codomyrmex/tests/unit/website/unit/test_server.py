@@ -231,6 +231,15 @@ class TestGETEndpoints:
         assert "projects" in data
         assert "mermaid_graph" in data
 
+    def test_llm_config_endpoint(self, live_server):
+        """Test /api/llm/config returns LLM configuration."""
+        status, data = live_server.get("/api/llm/config")
+        assert status == 200
+        assert isinstance(data, dict)
+        assert "default_model" in data
+        assert "preferred_models" in data
+        assert "ollama_host" in data
+
 
 # ── POST Endpoint Tests ─────────────────────────────────────────────
 
@@ -415,6 +424,32 @@ class TestChatEndpoint:
         assert "Hello from Ollama!" in data["response"]
 
     @patch("codomyrmex.website.server.requests")
+    @patch("codomyrmex.website.data_provider.ConfigManager")
+    def test_chat_uses_default_model(self, MockConfigManager, mock_requests, live_server):
+        """Test that chat endpoint uses default model when none provided."""
+        # Mock ConfigManager to return a specific default model
+        mock_config = Mock()
+        mock_config.default_model = "llama3.1:latest"
+        MockConfigManager.return_value.config = mock_config
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "message": {"content": "Response from default"}
+        }
+        mock_requests.post.return_value = mock_response
+
+        status, data = live_server.post("/api/chat", {"message": "Hello"})
+        assert status == 200
+        assert data["success"] is True
+
+        # Verify the call to Ollama used the default model
+        args, kwargs = mock_requests.post.call_args
+        payload = kwargs['json']
+        # Default fallback in DataProvider is llama3.1:latest
+        assert payload['model'] == "llama3.1:latest"
+
+    @patch("codomyrmex.website.server.requests")
     def test_chat_connection_error_returns_503(self, mock_requests, live_server):
         """Test that Ollama connection failure returns 503."""
         import requests as real_requests
@@ -449,6 +484,31 @@ class TestAwarenessSummary:
         assert status == 200
         assert data["success"] is True
         assert "summary" in data
+
+    @patch("codomyrmex.website.server.requests")
+    @patch("codomyrmex.website.data_provider.ConfigManager")
+    def test_awareness_summary_uses_default_model(self, MockConfigManager, mock_requests, live_server):
+        """Test that awareness summary uses default model when none provided."""
+        # Mock ConfigManager to return a specific default model
+        mock_config = Mock()
+        mock_config.default_model = "llama3.1:latest"
+        MockConfigManager.return_value.config = mock_config
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "message": {"content": "Summary from default"}
+        }
+        mock_requests.post.return_value = mock_response
+
+        status, data = live_server.post("/api/awareness/summary", {})
+        assert status == 200
+        assert data["success"] is True
+
+        # Verify the call to Ollama used the default model
+        args, kwargs = mock_requests.post.call_args
+        payload = kwargs['json']
+        assert payload['model'] == "llama3.1:latest"
 
     @patch("codomyrmex.website.server.requests")
     def test_connection_error_returns_503(self, mock_requests, live_server):

@@ -1,55 +1,44 @@
 # Personal AI Infrastructure — Accessibility Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Accessibility module provides PAI integration for WCAG compliance checking and accessibility auditing, enabling AI agents to create inclusive applications.
+Accessibility Module This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Accessibility Checking
-
-Run accessibility audits as part of AI workflows:
-
 ```python
-from codomyrmex.accessibility import A11yChecker, WCAGLevel
-
-# Initialize checker
-checker = A11yChecker(level=WCAGLevel.AA)
-
-# Audit HTML content
-report = checker.audit(html_content)
-
-for issue in report.issues:
-    print(f"{issue.severity}: {issue.message}")
-    print(f"  Fix: {issue.remediation}")
+from codomyrmex.accessibility import A11yChecker, AccessibilityIssue, AccessibilityReport, calculate_contrast_ratio, check_heading_hierarchy
 ```
 
-### Color Contrast Analysis
+## Key Exports
 
-Verify color combinations meet WCAG standards:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `A11yChecker` | Class | A11ychecker |
+| `AccessibilityIssue` | Class | Accessibilityissue |
+| `AccessibilityReport` | Class | Accessibilityreport |
+| `AccessibilityReporter` | Class | Accessibilityreporter |
+| `WCAGLevel` | Class | Wcaglevel |
+| `WCAGRule` | Class | Wcagrule |
+| `IssueType` | Class | Issuetype |
+| `calculate_contrast_ratio` | Function/Constant | Calculate contrast ratio |
+| `check_heading_hierarchy` | Function/Constant | Check heading hierarchy |
 
-```python
-from codomyrmex.accessibility import calculate_contrast_ratio
+## PAI Algorithm Phase Mapping
 
-# Check contrast
-ratio = calculate_contrast_ratio("#333333", "#FFFFFF")
-print(f"Contrast ratio: {ratio:.2f}:1")
+| Phase | Accessibility Contribution |
+|-------|------------------------------|
+| **VERIFY** | Validation and quality checks |
 
-# AA requires 4.5:1 for normal text
-if ratio >= 4.5:
-    print("✓ Passes WCAG AA")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `A11yChecker` | Automated accessibility testing |
-| `WCAGRule` | Custom rule definitions |
-| `AccessibilityReport` | Generate reports for review |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

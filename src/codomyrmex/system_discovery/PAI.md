@@ -1,47 +1,40 @@
 # Personal AI Infrastructure — System Discovery Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The System Discovery module provides PAI integration for system introspection.
+Codomyrmex System Discovery Module This is an **Application Layer** module.
 
 ## PAI Capabilities
 
-### Service Discovery
-
-Find running services:
-
 ```python
-from codomyrmex.system_discovery import SystemScanner
-
-scanner = SystemScanner()
-services = scanner.discover_services()
-
-for svc in services:
-    print(f"{svc.name}: {svc.port}")
+from codomyrmex.system_discovery import SystemDiscovery, StatusReporter, CapabilityScanner, get_system_context
 ```
 
-### Health Checks
+## Key Exports
 
-Check service health:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `SystemDiscovery` | Class | Systemdiscovery |
+| `StatusReporter` | Class | Statusreporter |
+| `CapabilityScanner` | Class | Capabilityscanner |
+| `get_system_context` | Function/Constant | Get system context |
 
-```python
-from codomyrmex.system_discovery import SystemScanner
+## PAI Algorithm Phase Mapping
 
-scanner = SystemScanner()
-health = scanner.health_check("api_server")
-print(f"Status: {health.status}")
-```
+| Phase | System Discovery Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `SystemScanner` | Discover services |
-| `health_check` | Check health |
-| `Inventory` | System inventory |
+**Application Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

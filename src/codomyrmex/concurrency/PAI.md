@@ -1,45 +1,42 @@
 # Personal AI Infrastructure — Concurrency Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Concurrency module provides PAI integration for async operations and parallel execution.
+Concurrency and synchronization module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Parallel Execution
-
-Run tasks in parallel:
-
 ```python
-from codomyrmex.concurrency import gather, Semaphore
-
-results = await gather([
-    process_file(f) for f in files
-])
+from codomyrmex.concurrency import BaseLock, LocalLock, BaseSemaphore
 ```
 
-### Rate Limiting
+## Key Exports
 
-Control concurrency:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `BaseLock` | Class | Baselock |
+| `LocalLock` | Class | Locallock |
+| `BaseSemaphore` | Class | Basesemaphore |
+| `LocalSemaphore` | Class | Localsemaphore |
+| `RedisLock` | Class | Redislock |
+| `LockManager` | Class | Lockmanager |
+| `ReadWriteLock` | Class | Readwritelock |
 
-```python
-from codomyrmex.concurrency import Semaphore
+## PAI Algorithm Phase Mapping
 
-sem = Semaphore(10)  # Max 10 concurrent
-async with sem:
-    await make_api_call()
-```
+| Phase | Concurrency Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `gather` | Parallel execution |
-| `Semaphore` | Limit concurrency |
-| `Lock` | Resource locking |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **94-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **106-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              94 modules of dev-platform tools
+     Algorithm + Skills + Hooks              106 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -62,6 +62,9 @@ graph LR
 ```
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
+**Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
+**Tools**: 33 registered tools across file ops, code analysis, git, security, data processing
+**Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
 
@@ -95,7 +98,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 94 Python modules
+├── src/codomyrmex/                 # 106 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation

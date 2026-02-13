@@ -1,47 +1,51 @@
 # Personal AI Infrastructure — Documentation Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Documentation module provides PAI integration for auto-generating docs from code.
+Documentation Module for Codomyrmex. This is a **Service Layer** module.
 
 ## PAI Capabilities
 
-### Documentation Generation
-
-Generate docs from source:
-
 ```python
-from codomyrmex.documentation import DocGenerator
-
-generator = DocGenerator()
-generator.scan("src/")
-generator.generate_api_docs("docs/api/")
+from codomyrmex.documentation import DocumentationQualityAnalyzer, DocumentationConsistencyChecker, check_doc_environment, run_command_stream_output, install_dependencies
 ```
 
-### Docstring Extraction
+## Key Exports
 
-Extract and validate docstrings:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `check_doc_environment` | Function/Constant | Check doc environment |
+| `run_command_stream_output` | Function/Constant | Run command stream output |
+| `install_dependencies` | Function/Constant | Install dependencies |
+| `start_dev_server` | Function/Constant | Start dev server |
+| `build_static_site` | Function/Constant | Build static site |
+| `serve_static_site` | Function/Constant | Serve static site |
+| `print_assessment_checklist` | Function/Constant | Print assessment checklist |
+| `aggregate_docs` | Function/Constant | Aggregate docs |
+| `validate_doc_versions` | Function/Constant | Validate doc versions |
+| `assess_site` | Function/Constant | Assess site |
+| `DocumentationQualityAnalyzer` | Class | Documentationqualityanalyzer |
+| `generate_quality_report` | Function/Constant | Generate quality report |
+| `DocumentationConsistencyChecker` | Class | Documentationconsistencychecker |
 
-```python
-from codomyrmex.documentation import DocstringParser
+## PAI Algorithm Phase Mapping
 
-parser = DocstringParser()
-docs = parser.extract("src/main.py")
+| Phase | Documentation Contribution |
+|-------|------------------------------|
+| **THINK** | Analysis and reasoning |
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
 
-for func in docs.functions:
-    print(f"{func.name}: {func.docstring}")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `DocGenerator` | Auto-generate docs |
-| `DocstringParser` | Extract docstrings |
-| `MarkdownRenderer` | Render markdown |
+**Service Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

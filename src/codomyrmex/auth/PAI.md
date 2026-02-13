@@ -1,47 +1,45 @@
 # Personal AI Infrastructure — Auth Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Auth module provides PAI integration for authentication and authorization.
+Authentication module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Token Management
-
-Manage authentication tokens:
-
 ```python
-from codomyrmex.auth import JWTManager
-
-jwt = JWTManager(secret="your-secret")
-token = jwt.create_token(user_id="123", roles=["admin"])
-
-claims = jwt.verify_token(token)
+from codomyrmex.auth import Authenticator, Token, TokenManager, authenticate, authorize, get_authenticator
 ```
 
-### API Key Authentication
+## Key Exports
 
-Manage API keys:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Authenticator` | Class | Authenticator |
+| `Token` | Class | Token |
+| `TokenManager` | Class | Tokenmanager |
+| `APIKeyManager` | Class | Apikeymanager |
+| `PermissionRegistry` | Class | Permissionregistry |
+| `TokenValidator` | Class | Tokenvalidator |
+| `authenticate` | Function/Constant | Authenticate |
+| `authorize` | Function/Constant | Authorize |
+| `get_authenticator` | Function/Constant | Get authenticator |
 
-```python
-from codomyrmex.auth import APIKeyManager
+## PAI Algorithm Phase Mapping
 
-keys = APIKeyManager()
-key = keys.create(name="development", scopes=["read"])
+| Phase | Auth Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
 
-is_valid = keys.validate(api_key)
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `JWTManager` | Token management |
-| `APIKeyManager` | API key auth |
-| `RBACManager` | Role-based access |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

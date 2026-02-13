@@ -413,7 +413,7 @@
                 const response = await fetch('/api/awareness/summary', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: 'llama3' })
+                    body: JSON.stringify({ model: null }) // Let server use default
                 });
                 const data = await response.json();
 

@@ -1,44 +1,47 @@
-# Personal AI Infrastructure - Feature Store
+# Personal AI Infrastructure — Feature Store Module
 
-**Module**: `codomyrmex.feature_store`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-ML feature management, versioning, and serving
+Feature Store This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.feature_store import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.feature_store import FeatureType, ValueType, FeatureDefinition
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `FeatureType` | Class | Featuretype |
+| `ValueType` | Class | Valuetype |
+| `FeatureDefinition` | Class | Featuredefinition |
+| `FeatureValue` | Class | Featurevalue |
+| `FeatureVector` | Class | Featurevector |
+| `FeatureGroup` | Class | Featuregroup |
+| `USER_ID_FEATURE` | Class | User id feature |
+| `TIMESTAMP_FEATURE` | Class | Timestamp feature |
+| `FeatureStore` | Class | Featurestore |
+| `InMemoryFeatureStore` | Class | Inmemoryfeaturestore |
+| `FeatureTransform` | Class | Featuretransform |
+| `FeatureService` | Class | Featureservice |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Feature Store Contribution |
+|-------|------------------------------|
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

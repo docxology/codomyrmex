@@ -1,43 +1,48 @@
 # Personal AI Infrastructure — Compression Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Compression module provides PAI integration for data compression.
+Compression module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Data Compression
-
-Compress data:
-
 ```python
-from codomyrmex.compression import compress, decompress
-
-compressed = compress(data, algorithm="gzip", level=9)
-original = decompress(compressed)
+from codomyrmex.compression import Compressor, ArchiveManager, CompressionError, compress, decompress, get_compressor
 ```
 
-### Stream Compression
+## Key Exports
 
-Stream large data:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Compressor` | Class | Compressor |
+| `ArchiveManager` | Class | Archivemanager |
+| `CompressionError` | Class | Compressionerror |
+| `ZstdCompressor` | Class | Zstdcompressor |
+| `ParallelCompressor` | Class | Parallelcompressor |
+| `compress` | Function/Constant | Compress |
+| `decompress` | Function/Constant | Decompress |
+| `get_compressor` | Function/Constant | Get compressor |
+| `compress_data` | Function/Constant | Compress data |
+| `decompress_data` | Function/Constant | Decompress data |
+| `auto_decompress` | Function/Constant | Auto decompress |
+| `compress_file` | Function/Constant | Compress file |
+| `decompress_file` | Function/Constant | Decompress file |
 
-```python
-from codomyrmex.compression import CompressStream
+## PAI Algorithm Phase Mapping
 
-with CompressStream("output.gz", algorithm="gzip") as f:
-    f.write(large_data)
-```
+| Phase | Compression Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `compress` | Compress data |
-| `decompress` | Decompress data |
-| `CompressStream` | Streaming |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

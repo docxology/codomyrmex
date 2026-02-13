@@ -1,48 +1,54 @@
 # Personal AI Infrastructure — Validation Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Validation module provides PAI integration for data and schema validation.
+Validation module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Schema Validation
-
-Validate data against schemas:
-
 ```python
-from codomyrmex.validation import validate_schema
-
-schema = {
-    "type": "object",
-    "properties": {"name": {"type": "string"}}
-}
-
-result = validate_schema(data, schema)
-if not result.valid:
-    print(result.errors)
+from codomyrmex.validation import Validator, ValidationManager, ValidationResult, rules, sanitizers, schemas
 ```
 
-### Type Validation
+## Key Exports
 
-Validate types:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `rules` | Function/Constant | Rules |
+| `sanitizers` | Function/Constant | Sanitizers |
+| `schemas` | Function/Constant | Schemas |
+| `Validator` | Class | Validator |
+| `ValidationManager` | Class | Validationmanager |
+| `ValidationResult` | Class | Validationresult |
+| `ValidationWarning` | Class | Validationwarning |
+| `ContextualValidator` | Class | Contextualvalidator |
+| `ValidationIssue` | Class | Validationissue |
+| `TypeSafeParser` | Class | Typesafeparser |
+| `ValidationSummary` | Class | Validationsummary |
+| `validate` | Function/Constant | Validate |
+| `is_valid` | Function/Constant | Is valid |
+| `get_errors` | Function/Constant | Get errors |
+| `ValidationError` | Class | Validationerror |
 
-```python
-from codomyrmex.validation import validate_type
+*Plus 9 additional exports.*
 
-result = validate_type(value, expected_type=int)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `validate_schema` | Schema validation |
-| `validate_type` | Type validation |
-| `Validator` | Custom validators |
+| Phase | Validation Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

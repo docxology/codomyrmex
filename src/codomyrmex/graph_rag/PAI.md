@@ -1,44 +1,42 @@
-# Personal AI Infrastructure - Graph Rag
+# Personal AI Infrastructure — Graph Rag Module
 
-**Module**: `codomyrmex.graph_rag`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Knowledge graph integration with RAG for structured knowledge retrieval and reasoning
+Graph RAG This is a **Core Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.graph_rag import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.graph_rag import EntityType, RelationType, Entity
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `EntityType` | Class | Entitytype |
+| `RelationType` | Class | Relationtype |
+| `Entity` | Class | Entity |
+| `Relationship` | Class | Relationship |
+| `GraphContext` | Class | Graphcontext |
+| `KnowledgeGraph` | Class | Knowledgegraph |
+| `GraphRAGPipeline` | Class | Graphragpipeline |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Graph Rag Contribution |
+|-------|------------------------------|
+| **THINK** | Analysis and reasoning |
+
+## Architecture Role
+
+**Core Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

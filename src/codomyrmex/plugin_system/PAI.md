@@ -1,52 +1,53 @@
 # Personal AI Infrastructure — Plugin System Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Plugin System module provides PAI integration for extensibility.
+Plugin System for Codomyrmex This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Plugin Management
-
-Load and manage plugins:
-
 ```python
-from codomyrmex.plugin_system import PluginManager
-
-manager = PluginManager()
-manager.discover("./plugins/")
-manager.load_all()
-
-for plugin in manager.list():
-    print(f"{plugin.name}: {plugin.version}")
+from codomyrmex.plugin_system import PluginManager, PluginValidator, PluginLoader
 ```
 
-### Custom Plugins
+## Key Exports
 
-Create custom plugins:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `PluginManager` | Class | Pluginmanager |
+| `PluginValidator` | Class | Pluginvalidator |
+| `PluginLoader` | Class | Pluginloader |
+| `PluginRegistry` | Class | Pluginregistry |
+| `PluginInfo` | Class | Plugininfo |
+| `Plugin` | Class | Plugin |
+| `PluginType` | Class | Plugintype |
+| `PluginState` | Class | Pluginstate |
+| `PluginError` | Class | Pluginerror |
+| `LoadError` | Class | Loaderror |
+| `DependencyError` | Class | Dependencyerror |
+| `HookError` | Class | Hookerror |
+| `PluginValidationError` | Class | Pluginvalidationerror |
+| `PluginStateError` | Class | Pluginstateerror |
+| `PluginConflictError` | Class | Pluginconflicterror |
 
-```python
-from codomyrmex.plugin_system import Plugin
+*Plus 1 additional exports.*
 
-class MyPlugin(Plugin):
-    name = "my_plugin"
-    version = "1.0.0"
-    
-    def initialize(self):
-        # Plugin init
-        pass
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `PluginManager` | Manage plugins |
-| `Plugin` | Base class |
-| `PluginRegistry` | Plugin discovery |
+| Phase | Plugin System Contribution |
+|-------|------------------------------|
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

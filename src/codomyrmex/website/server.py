@@ -116,6 +116,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_pipelines_list()
         elif parsed_path.path == "/api/awareness":
             self.handle_awareness()
+        elif parsed_path.path == "/api/llm/config":
+            self.handle_llm_config()
         else:
             super().do_GET()
 
@@ -381,7 +383,13 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
         # Get the message from frontend
         user_message = data.get('message', '')
-        model = data.get('model', 'llama3')  # Default to llama3
+        # Use provided model or fall back to system default
+        system_model = "llama3.1:latest" # Fallback
+        if self.data_provider:
+            llm_config = self.data_provider.get_llm_config()
+            system_model = llm_config.get("default_model", "llama3.1:latest")
+
+        model = data.get('model') or system_model
 
         # Format for Ollama API
         ollama_payload = {
@@ -392,10 +400,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             "stream": False  # Non-streaming for simplicity
         }
 
-        # If the frontend already sends proper format, use it
+            # If the frontend already sends proper format, use it
         if 'messages' in data:
             ollama_payload = {
-                "model": data.get('model', 'llama3'),
+                "model": data.get('model') or system_model,
                 "messages": data['messages'],
                 "stream": False
             }
@@ -446,6 +454,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_json_response({"error": "Data provider missing"}, status=500)
 
+    def handle_llm_config(self) -> None:
+        """Handle GET /api/llm/config — return LLM configuration."""
+        if self.data_provider:
+            config = self.data_provider.get_llm_config()
+            self.send_json_response(config)
+        else:
+            self.send_json_response({"error": "Data provider missing"}, status=500)
+
     def handle_awareness_summary(self) -> None:
         """Handle POST /api/awareness/summary — generate Ollama AI summary."""
         try:
@@ -462,7 +478,13 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
-        model = data.get('model', 'llama3')
+        if self.data_provider:
+            llm_config = self.data_provider.get_llm_config()
+            system_model = llm_config.get("default_model", "llama3.1:latest")
+        else:
+            system_model = "llama3.1:latest"
+
+        model = data.get('model') or system_model
 
         if not self.data_provider:
             self.send_json_response({"error": "Data provider missing"}, status=500)

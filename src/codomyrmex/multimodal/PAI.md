@@ -1,44 +1,47 @@
-# Personal AI Infrastructure - Multimodal
+# Personal AI Infrastructure — Multimodal Module
 
-**Module**: `codomyrmex.multimodal`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Vision, audio, and image processing for multi-modal AI workflows
+Multimodal This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.multimodal import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.multimodal import MediaType, ImageFormat, AudioFormat
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `MediaType` | Class | Mediatype |
+| `ImageFormat` | Class | Imageformat |
+| `AudioFormat` | Class | Audioformat |
+| `MediaContent` | Class | Mediacontent |
+| `ImageContent` | Class | Imagecontent |
+| `AudioContent` | Class | Audiocontent |
+| `MultimodalMessage` | Class | Multimodalmessage |
+| `MultimodalProcessor` | Class | Multimodalprocessor |
+| `ImageProcessor` | Class | Imageprocessor |
+| `AudioProcessor` | Class | Audioprocessor |
+| `MultimodalMessageBuilder` | Class | Multimodalmessagebuilder |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Multimodal Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

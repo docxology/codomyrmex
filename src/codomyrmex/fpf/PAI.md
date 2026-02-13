@@ -1,44 +1,55 @@
-# Personal AI Infrastructure — FPF Module
+# Personal AI Infrastructure — Fpf Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The FPF module provides PAI integration for Firewall-Proxy-Format security patterns.
+First Principles Framework (FPF) module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Input Filtering
-
-Filter AI inputs:
-
 ```python
-from codomyrmex.fpf import Firewall
-
-firewall = Firewall()
-firewall.add_rule("block_pii", patterns=[r"\d{3}-\d{2}-\d{4}"])
-safe = firewall.filter(user_input)
+from codomyrmex.fpf import FPFParser, FPFExtractor, FPFIndexer
 ```
 
-### Output Formatting
+## Key Exports
 
-Format AI outputs:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `FPFParser` | Class | Fpfparser |
+| `FPFExtractor` | Class | Fpfextractor |
+| `FPFIndexer` | Class | Fpfindexer |
+| `FPFFetcher` | Class | Fpffetcher |
+| `FPFExporter` | Class | Fpfexporter |
+| `FPFVisualizer` | Class | Fpfvisualizer |
+| `FPFVisualizerPNG` | Class | Fpfvisualizerpng |
+| `ContextBuilder` | Class | Contextbuilder |
+| `TermAnalyzer` | Class | Termanalyzer |
+| `GraphGenerator` | Class | Graphgenerator |
+| `SectionManager` | Class | Sectionmanager |
+| `SectionExporter` | Class | Sectionexporter |
+| `SectionImporter` | Class | Sectionimporter |
+| `FPFAnalyzer` | Class | Fpfanalyzer |
+| `ReportGenerator` | Class | Reportgenerator |
 
-```python
-from codomyrmex.fpf import Formatter
+*Plus 9 additional exports.*
 
-formatter = Formatter()
-formatted = formatter.apply(ai_response, format="json")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Firewall` | Filter inputs |
-| `Proxy` | Intercept requests |
-| `Formatter` | Format outputs |
+| Phase | Fpf Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **THINK** | Analysis and reasoning |
+| **BUILD** | Artifact creation and code generation |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

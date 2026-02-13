@@ -1,47 +1,55 @@
 # Personal AI Infrastructure — Database Management Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Database Management module provides PAI integration for database operations.
+Database Management Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Database Connection
-
-Connect to databases:
-
 ```python
-from codomyrmex.database_management import DatabaseConnection
-
-db = DatabaseConnection(
-    host="localhost", database="mydb", pool_size=10
-)
-
-with db.connection() as conn:
-    result = conn.execute("SELECT * FROM users")
+from codomyrmex.database_management import DatabaseManager, DatabaseConnection, MigrationManager, audit, sharding, replication
 ```
 
-### Migrations
+## Key Exports
 
-Run database migrations:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `audit` | Function/Constant | Audit |
+| `sharding` | Function/Constant | Sharding |
+| `replication` | Function/Constant | Replication |
+| `connections` | Function/Constant | Connections |
+| `DatabaseManager` | Class | Databasemanager |
+| `manage_databases` | Function/Constant | Manage databases |
+| `DatabaseConnection` | Class | Databaseconnection |
+| `MigrationManager` | Class | Migrationmanager |
+| `run_migrations` | Function/Constant | Run migrations |
+| `Migration` | Class | Migration |
+| `BackupManager` | Class | Backupmanager |
+| `backup_database` | Function/Constant | Backup database |
+| `Backup` | Class | Backup |
+| `DatabaseMonitor` | Class | Databasemonitor |
 
-```python
-from codomyrmex.database_management import Migrator
+*Plus 6 additional exports.*
 
-migrator = Migrator(db)
-migrator.migrate_to("v2.0.0")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `DatabaseConnection` | Connect to DB |
-| `Migrator` | Run migrations |
-| `QueryBuilder` | Build queries |
+| Phase | Database Management Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,45 +1,42 @@
 # Personal AI Infrastructure — Performance Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Performance module provides PAI integration for profiling and optimization.
+Performance optimization utilities for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Profiling
-
-Profile code:
-
 ```python
-from codomyrmex.performance import profile
-
-@profile
-def slow_operation():
-    return compute()
+from codomyrmex.performance import LazyLoader, CacheManager, PerformanceProfiler, lazy_import, cached_function, profile_function
 ```
 
-### Benchmarking
+## Key Exports
 
-Benchmark functions:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `LazyLoader` | Class | Lazyloader |
+| `lazy_import` | Function/Constant | Lazy import |
+| `CacheManager` | Class | Cachemanager |
+| `cached_function` | Function/Constant | Cached function |
+| `PerformanceProfiler` | Class | Performanceprofiler |
+| `profile_function` | Function/Constant | Profile function |
+| `run_benchmark` | Function/Constant | Run benchmark |
 
-```python
-from codomyrmex.performance import benchmark
+## PAI Algorithm Phase Mapping
 
-@benchmark(iterations=100)
-def operation_to_test():
-    return process()
-```
+| Phase | Performance Contribution |
+|-------|------------------------------|
+| **EXECUTE** | Execution and deployment |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `profile` | Profile code |
-| `benchmark` | Benchmark |
-| `MemoryTracker` | Memory usage |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

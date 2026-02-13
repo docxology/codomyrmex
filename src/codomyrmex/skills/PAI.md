@@ -1,46 +1,48 @@
 # Personal AI Infrastructure — Skills Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Skills module provides PAI integration for agent skill management.
+Skills Module for Codomyrmex This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Skill Discovery
-
-Find available skills:
-
 ```python
-from codomyrmex.skills import SkillRegistry
-
-registry = SkillRegistry()
-skills = registry.discover("./skills/")
-
-for skill in skills:
-    print(f"{skill.name}: {skill.description}")
+from codomyrmex.skills import SkillsManager, SkillLoader, SkillSync, permissions, versioning, marketplace
 ```
 
-### Skill Execution
+## Key Exports
 
-Execute skills:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `permissions` | Function/Constant | Permissions |
+| `versioning` | Function/Constant | Versioning |
+| `marketplace` | Function/Constant | Marketplace |
+| `SkillsManager` | Class | Skillsmanager |
+| `SkillLoader` | Class | Skillloader |
+| `SkillSync` | Class | Skillsync |
+| `SkillRegistry` | Class | Skillregistry |
+| `discovery` | Function/Constant | Discovery |
+| `execution` | Function/Constant | Execution |
+| `composition` | Function/Constant | Composition |
+| `testing` | Function/Constant | Testing |
 
-```python
-from codomyrmex.skills import SkillRunner
+## PAI Algorithm Phase Mapping
 
-runner = SkillRunner()
-result = runner.execute("code_analysis", context)
-```
+| Phase | Skills Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `SkillRegistry` | Discover skills |
-| `SkillRunner` | Execute skills |
-| `SkillBuilder` | Create skills |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,48 +1,48 @@
 # Personal AI Infrastructure — Config Management Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Config Management module provides PAI integration for configuration loading and validation.
+Configuration Management Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Configuration Loading
-
-Load configuration:
-
 ```python
-from codomyrmex.config_management import ConfigLoader
-
-config = ConfigLoader.load(
-    path="config.yaml",
-    env_prefix="APP_"
-)
-
-db_host = config.get("database.host")
+from codomyrmex.config_management import ConfigurationManager, Configuration, ConfigSchema, load_configuration, validate_configuration, deploy_configuration
 ```
 
-### Schema Validation
+## Key Exports
 
-Validate configuration:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ConfigurationManager` | Class | Configurationmanager |
+| `load_configuration` | Function/Constant | Load configuration |
+| `validate_configuration` | Function/Constant | Validate configuration |
+| `Configuration` | Class | Configuration |
+| `ConfigSchema` | Class | Configschema |
+| `ConfigurationDeployer` | Class | Configurationdeployer |
+| `deploy_configuration` | Function/Constant | Deploy configuration |
+| `ConfigDeployment` | Class | Configdeployment |
+| `ConfigurationMonitor` | Class | Configurationmonitor |
+| `monitor_config_changes` | Function/Constant | Monitor config changes |
+| `ConfigAudit` | Class | Configaudit |
+| `ConfigWatcher` | Class | Configwatcher |
 
-```python
-from codomyrmex.config_management import ConfigValidator
+## PAI Algorithm Phase Mapping
 
-validator = ConfigValidator(schema)
-if not validator.validate(config):
-    print(validator.errors)
-```
+| Phase | Config Management Contribution |
+|-------|------------------------------|
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ConfigLoader` | Load config |
-| `ConfigValidator` | Validate schema |
-| `Secrets` | Secret management |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

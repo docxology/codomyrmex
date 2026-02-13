@@ -1,22 +1,61 @@
 # Agent Guidelines - Website
 
+**Type**: Application Module
+**Status**: Active
+**Version**: v0.2.0
+
 ## Module Overview
 
-Web dashboard, API server, and static site generator for the Codomyrmex ecosystem.
+The Website module serves as the primary user interface for the Codomyrmex ecosystem. While not an autonomous agent itself, it acts as a critical interface layer (Human-in-the-Loop) for interacting with agents, monitoring system health, and managing configurations.
+
+## Capabilities
+
+1. **Observability**: Real-time dashboard for system metrics (CPU, Memory, Uptime) and Git status.
+2. **Agent Interaction**: Direct chat interface for interacting with LLM agents via Ollama.
+3. **Documentation Browser**: Rendered view of project documentation and specifications.
+4. **Configuration Management**: Web-based editor for system configuration files.
+5. **Task Execution**: Trigger scripts and workflows directly from the UI.
+6. **PAI Awareness**: Visualization of the Personal AI Infrastructure (Missions, Projects, Tasks).
 
 ## Key Classes
 
-- **WebsiteGenerator** — Renders Jinja2 templates into a static site
-- **DataProvider** — Aggregates module, agent, script, config, and PAI data
-- **WebsiteServer** — HTTP request handler with 18 REST API endpoints
+- **WebsiteGenerator**: Renders Jinja2 templates into a static site.
+- **DataProvider**: Aggregates module, agent, script, config, and PAI data.
+- **WebsiteServer**: HTTP request handler with 19 REST API endpoints.
 
-## Agent Instructions
+## Integration Points
 
-1. **Template-based** — All pages use Jinja2 templates in `templates/`
-2. **Mobile-first** — Responsive design via CSS grid and media queries
-3. **Fast loading** — Minimize external dependencies; Inter + Fira Code fonts only
-4. **Accessible** — Skip links, ARIA labels, keyboard shortcuts (Alt+1–9)
-5. **Secure** — Path traversal protection, origin validation, symlink blocking
+- **Data Provider**: Aggregates data from `src/codomyrmex/` and `.claude/` directories.
+- **Ollama**: Proxies chat requests to local LLM inference server via `http://localhost:11434`.
+- **Scripts**: Discovers and executes scripts from `scripts/`.
+- **CI/CD**: Monitors `.github/workflows` status.
+
+## Usage
+
+### Starting the Dashboard
+
+```bash
+uv run python -m codomyrmex.website.server
+```
+
+Access at: `http://localhost:8787`
+
+### API Interaction
+
+The module exposes a REST API for external integrations. Key endpoints include:
+
+- `GET /api/status`: System health check.
+- `GET /api/llm/config`: Retrieve current LLM configuration.
+- `POST /api/chat`: Send message to active agent/LLM.
+- `POST /api/execute`: Run a registered script.
+
+## Development
+
+The frontend is built with vanilla HTML/JS/CSS for maximum performance and zero build-step requirements.
+
+- **Templates**: `src/codomyrmex/website/templates/`
+- **Assets**: `src/codomyrmex/website/assets/`
+- **Logic**: `src/codomyrmex/website/server.py` and `data_provider.py`
 
 ## Common Patterns
 
@@ -34,21 +73,3 @@ WebsiteServer.data_provider = DataProvider(Path("."))
 with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
     httpd.serve_forever()
 ```
-
-## Testing Patterns
-
-```python
-# Verify generation (real templates, real DataProvider)
-generator = WebsiteGenerator(output_dir=str(tmp_path / "out"), root_dir=str(tmp_path))
-generator.generate()
-assert (tmp_path / "out" / "index.html").exists()
-
-# Verify data provider
-provider = DataProvider(tmp_path)
-modules = provider.get_modules()
-assert isinstance(modules, list)
-```
-
-## Navigation
-
-- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

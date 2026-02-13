@@ -19,6 +19,7 @@ from typing import Any
 import yaml
 
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.llm.ollama.config_manager import ConfigManager
 
 logger = get_logger(__name__)
 
@@ -641,6 +642,29 @@ class DataProvider:
                 "mcp_spec_pct": round(modules_with_mcp_spec / max(len(modules), 1) * 100, 1),
             },
             "architecture_layers": self._get_architecture_layers(),
+            "llm_config": self.get_llm_config(),
+        }
+
+    def get_llm_config(self) -> dict[str, Any]:
+        """
+        Get the current LLM configuration.
+        """
+        try:
+            config_manager = ConfigManager()
+            if config_manager.config:
+                return {
+                    "default_model": config_manager.config.default_model,
+                    "preferred_models": config_manager.config.preferred_models,
+                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}"
+                }
+        except Exception as e:
+            logger.warning(f"Failed to load LLM config: {e}")
+
+        # Fallback defaults
+        return {
+            "default_model": "llama3.1:latest",
+            "preferred_models": ["llama3.1:latest", "codellama:latest"],
+            "ollama_host": "localhost:11434"
         }
 
     def _get_git_info(self) -> dict[str, str]:

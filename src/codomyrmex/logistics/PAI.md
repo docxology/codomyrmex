@@ -1,44 +1,53 @@
 # Personal AI Infrastructure — Logistics Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Logistics module provides PAI integration for supply chain and inventory management.
+Logistics Module for Codomyrmex This is a **Service Layer** module.
 
 ## PAI Capabilities
 
-### Inventory Management
-
-Track inventory:
-
 ```python
-from codomyrmex.logistics import InventoryManager
-
-inventory = InventoryManager()
-inventory.add_item("SKU-001", quantity=100)
-level = inventory.get_level("SKU-001")
+from codomyrmex.logistics import WorkflowManager, TaskOrchestrator, ProjectManager, routing, optimization, resources
 ```
 
-### Route Optimization
+## Key Exports
 
-Optimize delivery routes:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `WorkflowManager` | Class | Workflowmanager |
+| `TaskOrchestrator` | Class | Taskorchestrator |
+| `ProjectManager` | Class | Projectmanager |
+| `ResourceManager` | Class | Resourcemanager |
+| `OrchestrationEngine` | Class | Orchestrationengine |
+| `OrchestrationSession` | Class | Orchestrationsession |
+| `Queue` | Class | Queue |
+| `Job` | Class | Job |
+| `JobScheduler` | Class | Jobscheduler |
+| `ScheduleManager` | Class | Schedulemanager |
+| `CronScheduler` | Class | Cronscheduler |
+| `CronExpression` | Class | Cronexpression |
+| `RecurringScheduler` | Class | Recurringscheduler |
+| `RecurringSchedule` | Class | Recurringschedule |
+| `TimezoneManager` | Class | Timezonemanager |
 
-```python
-from codomyrmex.logistics import RouteOptimizer
+*Plus 5 additional exports.*
 
-optimizer = RouteOptimizer()
-route = optimizer.optimize(deliveries, start_location)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `InventoryManager` | Track stock |
-| `RouteOptimizer` | Optimize routes |
-| `ShipmentTracker` | Track shipments |
+| Phase | Logistics Contribution |
+|-------|------------------------------|
+| **PLAN** | Workflow planning and scheduling |
+
+## Architecture Role
+
+**Service Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

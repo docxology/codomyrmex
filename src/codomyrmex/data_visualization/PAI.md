@@ -1,47 +1,45 @@
 # Personal AI Infrastructure — Data Visualization Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Data Visualization module provides PAI integration for charts and graphs.
+Data Visualization Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Chart Generation
-
-Create visualizations:
-
 ```python
-from codomyrmex.data_visualization import Chart
-
-chart = Chart(type="line")
-chart.add_data(x=[1, 2, 3], y=[10, 20, 15])
-chart.title = "Metrics Over Time"
-chart.export("metrics.png")
+from codomyrmex.data_visualization import themes, mermaid, charts
 ```
 
-### Dashboard Building
+## Key Exports
 
-Build data dashboards:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `themes` | Function/Constant | Themes |
+| `mermaid` | Function/Constant | Mermaid |
+| `charts` | Function/Constant | Charts |
+| `get_available_styles` | Function/Constant | Get available styles |
+| `get_available_palettes` | Function/Constant | Get available palettes |
+| `get_available_plot_types` | Function/Constant | Get available plot types |
+| `create_heatmap` | Function/Constant | Create heatmap |
+| `create_box_plot` | Function/Constant | Create box plot |
+| `create_area_chart` | Function/Constant | Create area chart |
 
-```python
-from codomyrmex.data_visualization import Dashboard
+## PAI Algorithm Phase Mapping
 
-dashboard = Dashboard()
-dashboard.add_chart("users", users_chart)
-dashboard.add_chart("revenue", revenue_chart)
-dashboard.render("dashboard.html")
-```
+| Phase | Data Visualization Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **BUILD** | Artifact creation and code generation |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Chart` | Create charts |
-| `Dashboard` | Multi-chart layouts |
-| `Exporter` | Export to formats |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,44 +1,49 @@
-# Personal AI Infrastructure - Prompt Testing
+# Personal AI Infrastructure — Prompt Testing Module
 
-**Module**: `codomyrmex.prompt_testing`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Prompt evaluation, A/B testing, and quality assurance at scale
+Prompt Testing Module This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.prompt_testing import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.prompt_testing import EvaluationType, TestStatus, PromptTestCase
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `EvaluationType` | Class | Evaluationtype |
+| `TestStatus` | Class | Teststatus |
+| `PromptTestCase` | Class | Prompttestcase |
+| `TestResult` | Class | Testresult |
+| `TestSuiteResult` | Class | Testsuiteresult |
+| `Evaluator` | Class | Evaluator |
+| `ExactMatchEvaluator` | Class | Exactmatchevaluator |
+| `ContainsEvaluator` | Class | Containsevaluator |
+| `CustomEvaluator` | Class | Customevaluator |
+| `PromptTestSuite` | Class | Prompttestsuite |
+| `PromptTester` | Class | Prompttester |
+| `ABTest` | Class | Abtest |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Prompt Testing Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **THINK** | Analysis and reasoning |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

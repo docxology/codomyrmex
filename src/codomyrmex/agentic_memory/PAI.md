@@ -1,44 +1,47 @@
-# Personal AI Infrastructure - Agentic Memory
+# Personal AI Infrastructure — Agentic Memory Module
 
-**Module**: `codomyrmex.agentic_memory`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Long-term agent memory systems for stateful, persistent agent interactions
+Agentic Memory Module This is a **Core Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.agentic_memory import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `MemoryType` | Class | Memorytype |
+| `MemoryImportance` | Class | Memoryimportance |
+| `Memory` | Class | Memory |
+| `RetrievalResult` | Class | Retrievalresult |
+| `MemoryStore` | Class | Memorystore |
+| `InMemoryStore` | Class | Inmemorystore |
+| `JSONFileStore` | Class | Jsonfilestore |
+| `AgentMemory` | Class | Agentmemory |
+| `ConversationMemory` | Class | Conversationmemory |
+| `KnowledgeMemory` | Class | Knowledgememory |
+| `VectorStoreMemory` | Class | Vectorstorememory |
+| `SummaryMemory` | Class | Summarymemory |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Agentic Memory Contribution |
+|-------|------------------------------|
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Core Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

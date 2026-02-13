@@ -1,46 +1,39 @@
 # Personal AI Infrastructure — Market Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Market module provides PAI integration for market data and trading.
+Market Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Market Data
-
-Fetch market data:
-
 ```python
-from codomyrmex.market import MarketData
-
-data = MarketData()
-price = data.get_price("BTC/USD")
-history = data.get_history("ETH/USD", period="1d")
+from codomyrmex.market import ReverseAuction, Bid, AuctionRequest
 ```
 
-### Trading Operations
+## Key Exports
 
-Execute trades:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ReverseAuction` | Class | Reverseauction |
+| `Bid` | Class | Bid |
+| `AuctionRequest` | Class | Auctionrequest |
+| `DemandAggregator` | Class | Demandaggregator |
 
-```python
-from codomyrmex.market import TradingClient
+## PAI Algorithm Phase Mapping
 
-client = TradingClient()
-order = client.place_order(
-    symbol="BTC/USD", side="buy", amount=0.1
-)
-```
+| Phase | Market Contribution |
+|-------|------------------------------|
+| **PLAN** | Workflow planning and scheduling |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `MarketData` | Fetch prices |
-| `TradingClient` | Execute trades |
-| `Portfolio` | Track positions |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

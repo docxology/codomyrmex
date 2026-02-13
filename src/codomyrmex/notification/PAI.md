@@ -1,44 +1,53 @@
-# Personal AI Infrastructure - Notification
+# Personal AI Infrastructure — Notification Module
 
-**Module**: `codomyrmex.notification`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Multi-channel notification dispatch including email, Slack, and SMS
+Notification Module This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.notification import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.notification import NotificationChannel, NotificationPriority, NotificationStatus
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `NotificationChannel` | Class | Notificationchannel |
+| `NotificationPriority` | Class | Notificationpriority |
+| `NotificationStatus` | Class | Notificationstatus |
+| `Notification` | Class | Notification |
+| `NotificationResult` | Class | Notificationresult |
+| `NotificationProvider` | Class | Notificationprovider |
+| `ConsoleProvider` | Class | Consoleprovider |
+| `FileProvider` | Class | Fileprovider |
+| `WebhookProvider` | Class | Webhookprovider |
+| `NotificationTemplate` | Class | Notificationtemplate |
+| `NotificationRouter` | Class | Notificationrouter |
+| `NotificationService` | Class | Notificationservice |
+| `ALERT_TEMPLATE` | Class | Alert template |
+| `INFO_TEMPLATE` | Class | Info template |
+| `ERROR_TEMPLATE` | Class | Error template |
 
-## Future Considerations
+*Plus 1 additional exports.*
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Notification Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

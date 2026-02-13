@@ -1,45 +1,41 @@
 # Personal AI Infrastructure — Embodiment Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Embodiment module provides PAI integration for physical agent embodiment.
+Embodiment module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Robot Control
-
-Control physical robots:
-
 ```python
-from codomyrmex.embodiment import RobotController
-
-robot = RobotController()
-robot.move_to(x=10, y=20)
-robot.pick_object("cube_1")
+from codomyrmex.embodiment import ROS2Bridge, Transform3D, ros, sensors, actuators
 ```
 
-### Sensor Integration
+## Key Exports
 
-Read sensor data:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ROS2Bridge` | Class | Ros2bridge |
+| `Transform3D` | Class | Transform3d |
+| `ros` | Function/Constant | Ros |
+| `sensors` | Function/Constant | Sensors |
+| `actuators` | Function/Constant | Actuators |
+| `transformation` | Function/Constant | Transformation |
 
-```python
-from codomyrmex.embodiment import SensorArray
+## PAI Algorithm Phase Mapping
 
-sensors = SensorArray()
-distance = sensors.read("proximity")
-temperature = sensors.read("thermal")
-```
+| Phase | Embodiment Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `RobotController` | Control robots |
-| `SensorArray` | Read sensors |
-| `Actuator` | Control actuators |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

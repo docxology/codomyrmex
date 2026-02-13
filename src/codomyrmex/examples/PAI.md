@@ -1,49 +1,26 @@
 # Personal AI Infrastructure — Examples Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Examples module provides PAI integration demonstrations.
+Codomyrmex Examples Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Running Examples
+## PAI Algorithm Phase Mapping
 
-Execute example code:
+| Phase | Examples Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-```bash
-# List all examples
-python -m codomyrmex.examples --list
+## Architecture Role
 
-# Run a specific example
-python -m codomyrmex.examples.basic_llm
-```
-
-### Creating Examples
-
-Add new examples:
-
-```python
-# examples/my_example.py
-\"\"\"Example: Using the LLM module.\"\"\"
-
-
-from codomyrmex.llm import LLMClient
-
-client = LLMClient()
-response = client.complete("Hello!")
-print(response)
-```
-
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `examples` | Runnable demos |
-| `--list` | List examples |
-| `docs` | Example docs |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,44 +1,48 @@
-# Personal AI Infrastructure - Workflow Testing
+# Personal AI Infrastructure — Workflow Testing Module
 
-**Module**: `codomyrmex.workflow_testing`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-End-to-end workflow validation and integration testing
+Workflow Testing Module This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.workflow_testing import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.workflow_testing import WorkflowStepType, StepStatus, WorkflowStep
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `WorkflowStepType` | Class | Workflowsteptype |
+| `StepStatus` | Class | Stepstatus |
+| `WorkflowStep` | Class | Workflowstep |
+| `StepResult` | Class | Stepresult |
+| `WorkflowResult` | Class | Workflowresult |
+| `Workflow` | Class | Workflow |
+| `StepExecutor` | Class | Stepexecutor |
+| `AssertionExecutor` | Class | Assertionexecutor |
+| `WaitExecutor` | Class | Waitexecutor |
+| `ScriptExecutor` | Class | Scriptexecutor |
+| `WorkflowRunner` | Class | Workflowrunner |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Workflow Testing Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **PLAN** | Workflow planning and scheduling |
+| **EXECUTE** | Execution and deployment |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,48 +1,54 @@
 # Personal AI Infrastructure — Scheduler Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Scheduler module provides PAI integration for task scheduling and cron jobs.
+Scheduler Module This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Task Scheduling
-
-Schedule recurring tasks:
-
 ```python
-from codomyrmex.scheduler import Scheduler
-
-scheduler = Scheduler()
-
-@scheduler.every(minutes=30)
-async def refresh_data():
-    await sync_data()
-
-scheduler.start()
+from codomyrmex.scheduler import Scheduler, Job, JobStatus, every, at, cron
 ```
 
-### Cron Jobs
+## Key Exports
 
-Use cron expressions:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Scheduler` | Class | Scheduler |
+| `Job` | Class | Job |
+| `JobStatus` | Class | Jobstatus |
+| `Trigger` | Class | Trigger |
+| `TriggerType` | Class | Triggertype |
+| `OnceTrigger` | Class | Oncetrigger |
+| `IntervalTrigger` | Class | Intervaltrigger |
+| `CronTrigger` | Class | Crontrigger |
+| `every` | Function/Constant | Every |
+| `at` | Function/Constant | At |
+| `cron` | Function/Constant | Cron |
+| `DependencyScheduler` | Class | Dependencyscheduler |
+| `PersistentScheduler` | Class | Persistentscheduler |
+| `JobPipeline` | Class | Jobpipeline |
+| `ScheduledRecurrence` | Class | Scheduledrecurrence |
 
-```python
-from codomyrmex.scheduler import CronJob
+*Plus 1 additional exports.*
 
-job = CronJob("0 0 * * *", cleanup_function)
-job.start()  # Runs at midnight daily
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Scheduler` | Schedule tasks |
-| `CronJob` | Cron expressions |
-| `TaskQueue` | Async task queue |
+| Phase | Scheduler Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **PLAN** | Workflow planning and scheduling |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

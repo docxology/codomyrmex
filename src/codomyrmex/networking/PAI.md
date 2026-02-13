@@ -1,46 +1,54 @@
 # Personal AI Infrastructure — Networking Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Networking module provides PAI integration for HTTP clients and network operations.
+Networking module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### HTTP Client
-
-Make API requests:
-
 ```python
-from codomyrmex.networking import HTTPClient
-
-client = HTTPClient(timeout=30, retries=3)
-response = await client.get("https://api.example.com/data")
-
-data = response.json()
+from codomyrmex.networking import HTTPClient, WebSocketClient, SSHClient, get_http_client
 ```
 
-### Connection Management
+## Key Exports
 
-Manage connections:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `HTTPClient` | Class | Httpclient |
+| `WebSocketClient` | Class | Websocketclient |
+| `SSHClient` | Class | Sshclient |
+| `TCPClient` | Class | Tcpclient |
+| `TCPServer` | Class | Tcpserver |
+| `UDPClient` | Class | Udpclient |
+| `PortScanner` | Class | Portscanner |
+| `Response` | Class | Response |
+| `get_http_client` | Function/Constant | Get http client |
+| `NetworkError` | Class | Networkerror |
+| `ConnectionError` | Class | Connectionerror |
+| `NetworkTimeoutError` | Class | Networktimeouterror |
+| `SSLError` | Class | Sslerror |
+| `HTTPError` | Class | Httperror |
+| `DNSResolutionError` | Class | Dnsresolutionerror |
 
-```python
-from codomyrmex.networking import ConnectionPool
+*Plus 5 additional exports.*
 
-pool = ConnectionPool(max_connections=10)
-async with pool.connection() as conn:
-    result = await conn.fetch(url)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `HTTPClient` | API calls |
-| `ConnectionPool` | Connection management |
-| `DNSResolver` | DNS resolution |
+| Phase | Networking Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

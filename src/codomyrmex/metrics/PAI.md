@@ -1,47 +1,45 @@
 # Personal AI Infrastructure — Metrics Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Metrics module provides PAI integration for tracking AI agent performance, usage, and system health.
+Metrics module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Agent Metrics
-
-Track AI agent performance:
-
 ```python
-from codomyrmex.metrics import MetricsCollector
-
-metrics = MetricsCollector()
-metrics.increment("llm_requests_total")
-metrics.histogram("llm_latency_seconds", 0.125)
-metrics.gauge("active_agents", 5)
+from codomyrmex.metrics import Metrics, Counter, Gauge, get_metrics
 ```
 
-### Usage Tracking
+## Key Exports
 
-Monitor resource consumption:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Metrics` | Class | Metrics |
+| `Counter` | Class | Counter |
+| `Gauge` | Class | Gauge |
+| `Histogram` | Class | Histogram |
+| `Summary` | Class | Summary |
+| `PrometheusExporter` | Class | Prometheusexporter |
+| `StatsDClient` | Class | Statsdclient |
+| `MetricAggregator` | Class | Metricaggregator |
+| `get_metrics` | Function/Constant | Get metrics |
 
-```python
-from codomyrmex.metrics import UsageTracker
+## PAI Algorithm Phase Mapping
 
-tracker = UsageTracker()
-tracker.record_tokens(prompt=100, completion=50)
+| Phase | Metrics Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **LEARN** | Learning and knowledge capture |
 
-print(f"Total tokens: {tracker.total_tokens}")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `MetricsCollector` | General metrics |
-| `UsageTracker` | Token/cost tracking |
-| `PerformanceMonitor` | Latency monitoring |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

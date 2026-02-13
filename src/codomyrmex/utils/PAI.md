@@ -1,47 +1,56 @@
 # Personal AI Infrastructure — Utils Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Utils module provides PAI integration for common utility functions.
+Utilities Package. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Common Utilities
-
-Useful helper functions:
-
 ```python
-from codomyrmex.utils import retry, slugify, ensure_dir
-
-@retry(max_attempts=3, backoff=2.0)
-def flaky_api_call():
-    return call_api()
-
-slug = slugify("Hello World!")  # "hello-world"
-ensure_dir("./output/data/")
+from codomyrmex.utils import ScriptBase, ScriptConfig, ScriptResult, ensure_directory, safe_json_loads, safe_json_dumps
 ```
 
-### File Utilities
+## Key Exports
 
-File operations:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ensure_directory` | Function/Constant | Ensure directory |
+| `safe_json_loads` | Function/Constant | Safe json loads |
+| `safe_json_dumps` | Function/Constant | Safe json dumps |
+| `hash_content` | Function/Constant | Hash content |
+| `hash_file` | Function/Constant | Hash file |
+| `timing_decorator` | Function/Constant | Timing decorator |
+| `retry` | Function/Constant | Retry |
+| `get_timestamp` | Function/Constant | Get timestamp |
+| `truncate_string` | Function/Constant | Truncate string |
+| `get_env` | Function/Constant | Get env |
+| `flatten_dict` | Function/Constant | Flatten dict |
+| `deep_merge` | Function/Constant | Deep merge |
+| `ScriptBase` | Class | Scriptbase |
+| `ScriptConfig` | Class | Scriptconfig |
+| `ScriptResult` | Class | Scriptresult |
 
-```python
-from codomyrmex.utils import read_json, write_json
+*Plus 28 additional exports.*
 
-data = read_json("config.json")
-write_json("output.json", result)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `retry` | Retry operations |
-| `slugify` | Text processing |
-| `file utilities` | File operations |
+| Phase | Utils Contribution |
+|-------|————————————————————|
+| **OBSERVE** | Data gathering and state inspection |
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

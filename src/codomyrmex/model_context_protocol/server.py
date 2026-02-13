@@ -2,6 +2,7 @@
 MCP Server Implementation
 
 Complete MCP server with tool, resource, and prompt support.
+Supports both stdio and HTTP (Streamable HTTP + REST) transports.
 """
 
 import asyncio
@@ -53,8 +54,17 @@ class MCPServer:
         self,
         name: str | None = None,
         description: str | None = None,
+        title: str | None = None,
+        output_schema: dict[str, Any] | None = None,
     ):
-        """Decorator to register a tool."""
+        """Decorator to register a tool.
+
+        Args:
+            name: Programmatic tool name (used in tool calls).
+            description: Tool description for the model.
+            title: Human-friendly display name (MCP 2025-06-18).
+            output_schema: JSON Schema for structured output (MCP 2025-06-18).
+        """
         def decorator(func: Callable) -> Callable:
             tool_name = name or func.__name__
             tool_desc = description or func.__doc__ or ""
@@ -82,7 +92,7 @@ class MCPServer:
                 if param.default == inspect.Parameter.empty:
                     required.append(pname)
 
-            schema = {
+            schema: dict[str, Any] = {
                 "name": tool_name,
                 "description": tool_desc,
                 "inputSchema": {
@@ -91,6 +101,14 @@ class MCPServer:
                     "required": required,
                 }
             }
+
+            # MCP 2025-06-18: human-friendly display name
+            if title:
+                schema["title"] = title
+
+            # MCP 2025-06-18: structured output schema
+            if output_schema:
+                schema["outputSchema"] = output_schema
 
             self._tool_registry.register(tool_name, schema, func)
             return func
@@ -102,8 +120,22 @@ class MCPServer:
         name: str,
         schema: dict[str, Any],
         handler: Callable,
+        title: str | None = None,
+        output_schema: dict[str, Any] | None = None,
     ) -> None:
-        """Register a tool manually."""
+        """Register a tool manually.
+
+        Args:
+            name: Programmatic tool name.
+            schema: Tool schema dict with name, description, inputSchema.
+            handler: Callable that implements the tool.
+            title: Human-friendly display name (MCP 2025-06-18).
+            output_schema: JSON Schema for structured output (MCP 2025-06-18).
+        """
+        if title:
+            schema["title"] = title
+        if output_schema:
+            schema["outputSchema"] = output_schema
         self._tool_registry.register(name, schema, handler)
 
     # =========================================================================
@@ -234,7 +266,7 @@ class MCPServer:
             capabilities["prompts"] = {}
 
         return {
-            "protocolVersion": "2024-11-05",
+            "protocolVersion": "2025-06-18",
             "capabilities": capabilities,
             "serverInfo": {
                 "name": self.config.name,
@@ -252,7 +284,12 @@ class MCPServer:
         return {"tools": tools}
 
     async def _call_tool(self, params: dict[str, Any]) -> dict[str, Any]:
-        """Execute a tool."""
+        """Execute a tool.
+
+        MCP 2025-06-18: When a tool defines an outputSchema, the response
+        includes a 'structuredContent' field with the typed return value
+        alongside the standard 'content' array.
+        """
         tool_call = MCPToolCall(
             tool_name=params.get("name"),
             arguments=params.get("arguments", {}),
@@ -262,7 +299,15 @@ class MCPServer:
 
         if result.status == "success":
             content = [{"type": "text", "text": json.dumps(result.data)}]
-            return {"content": content}
+            response: dict[str, Any] = {"content": content}
+
+            # MCP 2025-06-18: Include structuredContent when outputSchema exists
+            tool_name = params.get("name")
+            tool_entry = self._tool_registry.get(tool_name) if tool_name else None
+            if tool_entry and "outputSchema" in tool_entry.get("schema", {}):
+                response["structuredContent"] = result.data
+
+            return response
         else:
             content = [{"type": "text", "text": result.error.error_message if result.error else "Unknown error"}]
             return {"content": content, "isError": True}
@@ -363,6 +408,112 @@ class MCPServer:
                 break
             except Exception as e:
                 print(f"Error: {e}", file=sys.stderr)
+
+    async def run_http(self, host: str = "0.0.0.0", port: int = 8080) -> None:
+        """Run server over HTTP transport with Streamable HTTP + REST endpoints.
+
+        Args:
+            host: Bind address.
+            port: Port number.
+        """
+        from fastapi import FastAPI, Request
+        from fastapi.middleware.cors import CORSMiddleware
+        from fastapi.responses import HTMLResponse, JSONResponse
+        import uvicorn
+
+        from .web_ui import get_web_ui_html
+
+        app = FastAPI(
+            title=self.config.name,
+            version=self.config.version,
+            docs_url=None,
+            redoc_url=None,
+        )
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+        server = self  # capture for closures
+
+        # --- Web UI ---
+        @app.get("/", response_class=HTMLResponse)
+        async def web_ui():
+            return get_web_ui_html()
+
+        # --- Health check ---
+        @app.get("/health")
+        async def health():
+            return {
+                "status": "ok",
+                "server_name": server.config.name,
+                "server_version": server.config.version,
+                "protocol_version": "2025-06-18",
+                "transport": "http",
+                "tool_count": len(server._tool_registry.list_tools()),
+                "resource_count": len(server._resources),
+                "prompt_count": len(server._prompts),
+            }
+
+        # --- MCP JSON-RPC endpoint (Streamable HTTP) ---
+        @app.post("/mcp")
+        async def mcp_endpoint(request: Request):
+            body = await request.json()
+            response = await server.handle_request(body)
+            if response is None:
+                return JSONResponse(content={"status": "accepted"}, status_code=202)
+            return JSONResponse(content=response)
+
+        # --- Convenience REST endpoints ---
+        @app.get("/tools")
+        async def list_tools():
+            result = await server._list_tools({})
+            return JSONResponse(content=result)
+
+        @app.get("/tools/{tool_name}")
+        async def get_tool(tool_name: str):
+            tool = server._tool_registry.get(tool_name)
+            if not tool:
+                return JSONResponse(
+                    content={"error": f"Tool not found: {tool_name}"},
+                    status_code=404,
+                )
+            return JSONResponse(content=tool["schema"])
+
+        @app.post("/tools/{tool_name}/call")
+        async def call_tool(tool_name: str, request: Request):
+            try:
+                body = await request.json()
+            except Exception:
+                body = {}
+            result = await server._call_tool({
+                "name": tool_name,
+                "arguments": body,
+            })
+            return JSONResponse(content=result)
+
+        @app.get("/resources")
+        async def list_resources():
+            result = await server._list_resources({})
+            return JSONResponse(content=result)
+
+        @app.get("/prompts")
+        async def list_prompts():
+            result = await server._list_prompts({})
+            return JSONResponse(content=result)
+
+        config = uvicorn.Config(
+            app,
+            host=host,
+            port=port,
+            log_level=self.config.log_level.lower(),
+        )
+        uv_server = uvicorn.Server(config)
+        await uv_server.serve()
 
     def run(self) -> None:
         """Run the server."""

@@ -1,49 +1,49 @@
 # Personal AI Infrastructure — Tools Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Tools module provides PAI integration for managing external development tools.
+Tools Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Tool Execution
-
-Run external tools:
-
 ```python
-from codomyrmex.tools import ToolRunner
-
-runner = ToolRunner()
-result = runner.run("ruff", ["check", "src/"])
-
-print(f"Exit code: {result.returncode}")
-print(result.stdout)
+from codomyrmex.tools import DependencyAnalyzer, analyze_project_structure, analyze_project_dependencies, analyze_code_quality
 ```
 
-### Tool Discovery
+## Key Exports
 
-Find available tools:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `analyze_project_structure` | Function/Constant | Analyze project structure |
+| `analyze_project_dependencies` | Function/Constant | Analyze project dependencies |
+| `analyze_code_quality` | Function/Constant | Analyze code quality |
+| `check_dependencies` | Function/Constant | Check dependencies |
+| `consolidate_dependencies` | Function/Constant | Consolidate dependencies |
+| `add_deprecation_notice` | Function/Constant | Add deprecation notice |
+| `DependencyAnalyzer` | Class | Dependencyanalyzer |
+| `analyze_project_main` | Function/Constant | Analyze project main |
+| `dependency_analyzer_main` | Function/Constant | Dependency analyzer main |
+| `dependency_checker_main` | Function/Constant | Dependency checker main |
+| `dependency_consolidator_main` | Function/Constant | Dependency consolidator main |
+| `validate_dependencies_main` | Function/Constant | Validate dependencies main |
+| `add_deprecation_notices_main` | Function/Constant | Add deprecation notices main |
 
-```python
-from codomyrmex.tools import ToolRegistry
+## PAI Algorithm Phase Mapping
 
-registry = ToolRegistry()
-tools = registry.discover()
+| Phase | Tools Contribution |
+|-------|------------------------------|
+| **THINK** | Analysis and reasoning |
+| **VERIFY** | Validation and quality checks |
 
-for tool in tools:
-    print(f"{tool.name}: {tool.version}")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ToolRunner` | Execute tools |
-| `ToolRegistry` | Discover tools |
-| `OutputParser` | Parse tool output |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

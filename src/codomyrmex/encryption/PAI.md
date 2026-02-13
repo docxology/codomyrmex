@@ -1,46 +1,55 @@
 # Personal AI Infrastructure — Encryption Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Encryption module provides PAI integration for secure data handling, key management, and cryptographic operations.
+Encryption module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Secure Data Handling
-
-Encrypt sensitive AI data:
-
 ```python
-from codomyrmex.encryption import encrypt, decrypt
-
-# Encrypt API keys and secrets
-encrypted = encrypt(api_key, password)
-
-# Decrypt when needed
-decrypted = decrypt(encrypted, password)
+from codomyrmex.encryption import Encryptor, KeyManager, AESGCMEncryptor, encrypt, decrypt, generate_key
 ```
 
-### Password Hashing
+## Key Exports
 
-Secure password storage:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Encryptor` | Class | Encryptor |
+| `KeyManager` | Class | Keymanager |
+| `AESGCMEncryptor` | Class | Aesgcmencryptor |
+| `SecureDataContainer` | Class | Securedatacontainer |
+| `EncryptionError` | Class | Encryptionerror |
+| `encrypt` | Function/Constant | Encrypt |
+| `decrypt` | Function/Constant | Decrypt |
+| `generate_key` | Function/Constant | Generate key |
+| `get_encryptor` | Function/Constant | Get encryptor |
+| `encrypt_data` | Function/Constant | Encrypt data |
+| `decrypt_data` | Function/Constant | Decrypt data |
+| `generate_aes_key` | Function/Constant | Generate aes key |
+| `encrypt_file` | Function/Constant | Encrypt file |
+| `decrypt_file` | Function/Constant | Decrypt file |
+| `hash_data` | Function/Constant | Hash data |
 
-```python
-from codomyrmex.encryption import hash_password, verify_password
+*Plus 4 additional exports.*
 
-hashed = hash_password("user_secret")
-is_valid = verify_password("user_secret", hashed)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `encrypt/decrypt` | Secure data storage |
-| `hash_password` | Credential management |
-| `KeyManager` | Key rotation and storage |
+| Phase | Encryption Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **BUILD** | Artifact creation and code generation |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

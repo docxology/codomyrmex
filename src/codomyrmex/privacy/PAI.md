@@ -1,46 +1,37 @@
 # Personal AI Infrastructure — Privacy Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Privacy module provides PAI integration for data anonymization and privacy protection.
+Privacy Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Data Anonymization
-
-Anonymize sensitive data:
-
 ```python
-from codomyrmex.privacy import Anonymizer
-
-anon = Anonymizer()
-safe_text = anon.anonymize(text, types=["email", "phone", "ssn"])
+from codomyrmex.privacy import CrumbCleaner, MixnetProxy
 ```
 
-### PII Detection
+## Key Exports
 
-Find personal information:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `CrumbCleaner` | Class | Crumbcleaner |
+| `MixnetProxy` | Class | Mixnetproxy |
 
-```python
-from codomyrmex.privacy import PIIDetector
+## PAI Algorithm Phase Mapping
 
-detector = PIIDetector()
-pii_found = detector.scan(document)
+| Phase | Privacy Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-for item in pii_found:
-    print(f"{item.type}: {item.location}")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Anonymizer` | Remove PII |
-| `PIIDetector` | Find PII |
-| `DataMasker` | Mask sensitive data |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

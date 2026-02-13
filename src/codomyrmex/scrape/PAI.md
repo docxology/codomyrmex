@@ -1,46 +1,54 @@
 # Personal AI Infrastructure — Scrape Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Scrape module provides PAI integration for web scraping and data extraction.
+Scrape Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Web Scraping
-
-Scrape web pages:
-
 ```python
-from codomyrmex.scrape import Scraper
-
-scraper = Scraper(rate_limit=1.0)
-page = await scraper.get("https://example.com")
-
-title = page.select("h1").text
-links = page.select_all("a.link").attrs("href")
+from codomyrmex.scrape import Scraper, BaseScraper, ScrapeConfig, get_config, set_config, reset_config
 ```
 
-### Data Extraction
+## Key Exports
 
-Extract structured data:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Scraper` | Class | Scraper |
+| `BaseScraper` | Class | Basescraper |
+| `ScrapeConfig` | Class | Scrapeconfig |
+| `ScrapeResult` | Class | Scraperesult |
+| `ScrapeOptions` | Class | Scrapeoptions |
+| `ScrapeFormat` | Class | Scrapeformat |
+| `CrawlResult` | Class | Crawlresult |
+| `MapResult` | Class | Mapresult |
+| `SearchResult` | Class | Searchresult |
+| `ExtractResult` | Class | Extractresult |
+| `ScrapeError` | Class | Scrapeerror |
+| `ScrapeConnectionError` | Class | Scrapeconnectionerror |
+| `ScrapeTimeoutError` | Class | Scrapetimeouterror |
+| `ScrapeValidationError` | Class | Scrapevalidationerror |
+| `FirecrawlError` | Class | Firecrawlerror |
 
-```python
-from codomyrmex.scrape import DataExtractor
+*Plus 4 additional exports.*
 
-extractor = DataExtractor()
-data = extractor.extract_tables(page)
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Scraper` | Web requests |
-| `DataExtractor` | Extract data |
-| `Selector` | CSS/XPath selection |
+| Phase | Scrape Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

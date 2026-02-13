@@ -71,6 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (chatForm) {
         const messagesContainer = document.getElementById('chat-messages');
         const chatInput = document.getElementById('chat-input');
+        let currentModel = null;
+
+        // Fetch LLM config
+        fetch('/api/llm/config')
+            .then(res => res.json())
+            .then(data => {
+                if (data.default_model) {
+                    currentModel = data.default_model;
+                    console.log('Using model:', currentModel);
+                }
+            })
+            .catch(err => console.error('Failed to load LLM config:', err));
 
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -90,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        model: 'llama3',
+                        model: currentModel, // Use configured model (or null to let server decide)
                         messages: [{ role: 'user', content: message }],
                         stream: false
                     })

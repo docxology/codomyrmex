@@ -1,44 +1,45 @@
-# Personal AI Infrastructure - Observability Dashboard
+# Personal AI Infrastructure — Observability Dashboard Module
 
-**Module**: `codomyrmex.observability_dashboard`  
-**Version**: v0.1.0  
-**Status**: Active
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Overview
 
-Unified dashboards for telemetry visualization and monitoring
+Observability Dashboard Module This is an **Extended Layer** module.
 
-## AI Strategy
-
-As an AI agent working with this module:
-
-### Core Principles
-
-1. **Graceful Degradation**: Handle missing dependencies gracefully
-2. **Configuration Awareness**: Check environment and config before operations
-3. **Consistent Patterns**: Follow established module patterns
-
-### Usage Pattern
+## PAI Capabilities
 
 ```python
-from codomyrmex.observability_dashboard import <component>
-
-# Pattern for safe usage
-try:
-    result = component.operation()
-except Exception as e:
-    logger.warning(f"Operation failed: {e}")
-    # Fallback behavior
+from codomyrmex.observability_dashboard import MetricType, AlertSeverity, PanelType
 ```
 
-## Key Files
+## Key Exports
 
-| File | Purpose |
-|------|---------|
-| `__init__.py` | Module initialization |
-| `core.py` | Core implementation |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `MetricType` | Class | Metrictype |
+| `AlertSeverity` | Class | Alertseverity |
+| `PanelType` | Class | Paneltype |
+| `MetricValue` | Class | Metricvalue |
+| `Alert` | Class | Alert |
+| `Panel` | Class | Panel |
+| `Dashboard` | Class | Dashboard |
+| `MetricCollector` | Class | Metriccollector |
+| `AlertManager` | Class | Alertmanager |
+| `DashboardManager` | Class | Dashboardmanager |
 
-## Future Considerations
+## PAI Algorithm Phase Mapping
 
-1. **Enhancement Area 1**: Description
-2. **Enhancement Area 2**: Description
+| Phase | Observability Dashboard Contribution |
+|-------|------------------------------|
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
+
+## Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

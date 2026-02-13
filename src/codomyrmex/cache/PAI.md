@@ -1,50 +1,53 @@
 # Personal AI Infrastructure — Cache Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Cache module provides PAI integration for caching LLM responses and computed results.
+Cache module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Response Caching
-
-Cache LLM responses:
-
 ```python
-from codomyrmex.cache import LLMCache
-
-cache = LLMCache()
-
-# Check cache first
-cached = cache.get(prompt_hash)
-if cached:
-    return cached
-
-# Store new response
-cache.set(prompt_hash, response, ttl=3600)
+from codomyrmex.cache import Cache, CacheManager, CacheStats, replication, async_ops, warmers
 ```
 
-### Multi-Backend
+## Key Exports
 
-Use different cache backends:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `replication` | Function/Constant | Replication |
+| `async_ops` | Function/Constant | Async ops |
+| `warmers` | Function/Constant | Warmers |
+| `Cache` | Class | Cache |
+| `CacheManager` | Class | Cachemanager |
+| `CacheStats` | Class | Cachestats |
+| `NamespacedCache` | Class | Namespacedcache |
+| `TTLManager` | Class | Ttlmanager |
+| `get_cache` | Function/Constant | Get cache |
+| `CacheError` | Class | Cacheerror |
+| `CacheExpiredError` | Class | Cacheexpirederror |
+| `CacheFullError` | Class | Cachefullerror |
+| `CacheConnectionError` | Class | Cacheconnectionerror |
+| `CacheKeyError` | Class | Cachekeyerror |
 
-```python
-from codomyrmex.cache import MemoryCache, RedisCache
+*Plus 6 additional exports.*
 
-memory = MemoryCache(max_size=1000)
-redis = RedisCache(url="redis://localhost")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `LLMCache` | Cache LLM responses |
-| `MemoryCache` | In-memory caching |
-| `RedisCache` | Distributed caching |
+| Phase | Cache Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

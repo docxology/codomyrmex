@@ -1,49 +1,57 @@
-# Personal AI Infrastructure — API Module
+# Personal AI Infrastructure — Api Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The API module provides PAI integration for building REST APIs.
+Unified API Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### API Development
-
-Build REST APIs:
-
 ```python
-from codomyrmex.api import APIRouter, APIApp
-
-router = APIRouter(prefix="/v1")
-
-@router.get("/users")
-async def list_users():
-    return {"users": [...]}
-
-app = APIApp()
-app.include_router(router)
+from codomyrmex.api import APIDocumentationGenerator, APIDocumentation, DocumentationAPIEndpoint, generate_api_docs, extract_api_specs, generate_openapi_spec_from_docs
 ```
 
-### Middleware Support
+## Key Exports
 
-Add middleware:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `APIDocumentationGenerator` | Class | Apidocumentationgenerator |
+| `generate_api_docs` | Function/Constant | Generate api docs |
+| `extract_api_specs` | Function/Constant | Extract api specs |
+| `APIDocumentation` | Class | Apidocumentation |
+| `DocumentationAPIEndpoint` | Class | Documentationapiendpoint |
+| `DocumentationOpenAPIGenerator` | Class | Documentationopenapigenerator |
+| `generate_openapi_spec_from_docs` | Function/Constant | Generate openapi spec from docs |
+| `validate_openapi_spec` | Function/Constant | Validate openapi spec |
+| `APISchema` | Class | Apischema |
+| `RESTAPI` | Class | Restapi |
+| `StandardizationAPIEndpoint` | Class | Standardizationapiendpoint |
+| `APIResponse` | Class | Apiresponse |
+| `APIRouter` | Class | Apirouter |
+| `HTTPMethod` | Class | Httpmethod |
+| `HTTPStatus` | Class | Httpstatus |
 
-```python
-from codomyrmex.api import APIApp, AuthMiddleware
+*Plus 93 additional exports.*
 
-app = APIApp()
-app.add_middleware(AuthMiddleware())
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `APIRouter` | Define routes |
-| `APIApp` | Application setup |
-| `Middleware` | Request processing |
+| Phase | Api Contribution |
+|-------|————————————————————|
+| **OBSERVE** | Data gathering and state inspection |
+| **THINK** | Analysis and reasoning |
+| **BUILD** | Artifact creation and code generation |
+| **VERIFY** | Validation and quality checks |
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

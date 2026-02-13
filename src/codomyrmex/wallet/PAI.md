@@ -1,45 +1,51 @@
 # Personal AI Infrastructure — Wallet Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Wallet module provides PAI integration for cryptocurrency wallet management.
+Wallet Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Wallet Operations
-
-Manage crypto wallets:
-
 ```python
-from codomyrmex.wallet import WalletManager
-
-wallet = WalletManager()
-address = wallet.create_address()
-balance = wallet.get_balance(address)
+from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, BackupManager, hash_response, create_wallet, get_wallet_manager
 ```
 
-### Transaction Support
+## Key Exports
 
-Send transactions:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `WalletManager` | Class | Walletmanager |
+| `NaturalRitualRecovery` | Class | Naturalritualrecovery |
+| `BackupManager` | Class | Backupmanager |
+| `KeyRotation` | Class | Keyrotation |
+| `RitualStep` | Class | Ritualstep |
+| `RotationRecord` | Class | Rotationrecord |
+| `RotationPolicy` | Class | Rotationpolicy |
+| `WalletError` | Class | Walleterror |
+| `WalletNotFoundError` | Class | Walletnotfounderror |
+| `WalletKeyError` | Class | Walletkeyerror |
+| `RitualError` | Class | Ritualerror |
+| `hash_response` | Function/Constant | Hash response |
+| `create_wallet` | Function/Constant | Create wallet |
+| `get_wallet_manager` | Function/Constant | Get wallet manager |
 
-```python
-from codomyrmex.wallet import WalletManager
+## PAI Algorithm Phase Mapping
 
-wallet = WalletManager()
-tx = wallet.send(to="0x...", amount=0.1)
-print(f"TX: {tx.hash}")
-```
+| Phase | Wallet Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **BUILD** | Artifact creation and code generation |
+| **LEARN** | Learning and knowledge capture |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `WalletManager` | Manage wallets |
-| `send` | Send transactions |
-| `get_balance` | Check balances |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -69,7 +69,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 ## API Endpoints
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
+| --- | --- | --- |
 | `/api/status` | GET | System summary metrics |
 | `/api/health` | GET | Comprehensive health data |
 | `/api/modules` | GET | List all modules |
@@ -88,6 +88,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 | `/api/tests` | POST | Run pytest suite |
 | `/api/refresh` | POST | Refresh system data |
 | `/api/awareness/summary` | POST | Generate AI summary |
+| `/api/llm/config` | GET | Retrieve LLM configuration |
 
 ## Dependencies
 

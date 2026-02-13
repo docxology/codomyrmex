@@ -1,52 +1,39 @@
 # Personal AI Infrastructure — Feature Flags Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Feature Flags module provides PAI integration for progressive rollouts and A/B testing.
+Feature Flags module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Feature Toggle
-
-Control features dynamically:
-
 ```python
-from codomyrmex.feature_flags import FeatureFlags
-
-flags = FeatureFlags()
-
-if flags.is_enabled("new_llm_model"):
-    response = new_model.complete(prompt)
-else:
-    response = old_model.complete(prompt)
+from codomyrmex.feature_flags import strategies, storage, evaluation
 ```
 
-### A/B Testing
+## Key Exports
 
-Run experiments:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `strategies` | Function/Constant | Strategies |
+| `storage` | Function/Constant | Storage |
+| `evaluation` | Function/Constant | Evaluation |
+| `rollout` | Function/Constant | Rollout |
 
-```python
-from codomyrmex.feature_flags import ABTest
+## PAI Algorithm Phase Mapping
 
-test = ABTest("prompt_style")
-variant = test.get_variant(user_id)
+| Phase | Feature Flags Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-if variant == "concise":
-    prompt = short_prompt
-else:
-    prompt = detailed_prompt
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `FeatureFlags` | Toggle features |
-| `ABTest` | Run experiments |
-| `Rollout` | Progressive rollouts |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

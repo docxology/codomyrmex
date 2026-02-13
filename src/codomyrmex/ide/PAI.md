@@ -1,52 +1,47 @@
-# Personal AI Infrastructure — IDE Module
+# Personal AI Infrastructure — Ide Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The IDE module provides PAI integration for programmatic IDE control, enabling AI agents to interact with development environments.
+IDE Integration Module. This is an **Application Layer** module.
 
 ## PAI Capabilities
 
-### IDE Integration
-
-Control IDEs programmatically:
-
 ```python
-from codomyrmex.ide import CursorClient, IDECommand
-
-client = CursorClient()
-client.connect()
-
-# Execute IDE commands
-result = client.execute(IDECommand.OPEN_FILE, path="src/main.py")
-
-# Get open files
-files = client.list_open_files()
+from codomyrmex.ide import IDEClient, IDEStatus, IDECommand
 ```
 
-### Multi-IDE Support
+## Key Exports
 
-Work across different IDEs:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `IDEClient` | Class | Ideclient |
+| `IDEStatus` | Class | Idestatus |
+| `IDECommand` | Class | Idecommand |
+| `IDECommandResult` | Class | Idecommandresult |
+| `FileInfo` | Class | Fileinfo |
+| `IDEError` | Class | Ideerror |
+| `ConnectionError` | Class | Connectionerror |
+| `CommandExecutionError` | Class | Commandexecutionerror |
+| `SessionError` | Class | Sessionerror |
+| `ArtifactError` | Class | Artifacterror |
+| `CursorClient` | Class | Cursorclient |
 
-```python
-from codomyrmex.ide import IDEManager
+## PAI Algorithm Phase Mapping
 
-manager = IDEManager()
-ides = manager.discover()  # Find running IDEs
+| Phase | Ide Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **EXECUTE** | Execution and deployment |
 
-for ide in ides:
-    print(f"{ide.name}: {ide.workspace}")
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `CursorClient` | Cursor AI integration |
-| `IDECommand` | Execute IDE actions |
-| `IDEManager` | Multi-IDE management |
+**Application Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

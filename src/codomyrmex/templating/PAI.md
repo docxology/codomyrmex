@@ -1,46 +1,42 @@
 # Personal AI Infrastructure — Templating Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Templating module provides PAI integration for template rendering.
+Templating module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Template Rendering
-
-Render templates:
-
 ```python
-from codomyrmex.templating import TemplateEngine
-
-engine = TemplateEngine()
-result = engine.render("Hello, {{ name }}!", name="World")
-
-# From file
-html = engine.render_file("templates/email.j2", context)
+from codomyrmex.templating import engines, filters, context
 ```
 
-### Custom Filters
+## Key Exports
 
-Add custom template filters:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `engines` | Function/Constant | Engines |
+| `filters` | Function/Constant | Filters |
+| `context` | Function/Constant | Context |
+| `render` | Function/Constant | Render |
+| `render_file` | Function/Constant | Render file |
+| `get_default_engine` | Function/Constant | Get default engine |
 
-```python
-from codomyrmex.templating import TemplateEngine
+## PAI Algorithm Phase Mapping
 
-engine = TemplateEngine()
-engine.add_filter("capitalize_all", str.upper)
-```
+| Phase | Templating Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **BUILD** | Artifact creation and code generation |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `TemplateEngine` | Render templates |
-| `JinjaLoader` | Template loading |
-| `Filters` | Custom filters |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

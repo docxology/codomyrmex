@@ -1,47 +1,37 @@
 # Personal AI Infrastructure — Defense Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Defense module provides PAI integration for security defenses and threat mitigation.
+Defense Module. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Threat Detection
-
-Detect threats:
-
 ```python
-from codomyrmex.defense import ThreatDetector
-
-detector = ThreatDetector()
-threats = detector.scan(input_data)
-
-for threat in threats:
-    print(f"Threat: {threat.type} - {threat.severity}")
+from codomyrmex.defense import ActiveDefense, RabbitHole
 ```
 
-### Defense Policies
+## Key Exports
 
-Apply defense policies:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ActiveDefense` | Class | Activedefense |
+| `RabbitHole` | Class | Rabbithole |
 
-```python
-from codomyrmex.defense import DefensePolicy
+## PAI Algorithm Phase Mapping
 
-policy = DefensePolicy()
-policy.add_rule("block_injections", pattern=r"DROP TABLE")
-safe = policy.apply(user_input)
-```
+| Phase | Defense Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ThreatDetector` | Scan for threats |
-| `DefensePolicy` | Apply defenses |
-| `Firewall` | Block attacks |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

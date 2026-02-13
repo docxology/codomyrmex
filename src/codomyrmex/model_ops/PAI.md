@@ -1,46 +1,54 @@
 # Personal AI Infrastructure — Model Ops Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Model Ops module provides PAI integration for ML model lifecycle management.
+Model Operations module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Model Registry
-
-Track model versions:
-
 ```python
-from codomyrmex.model_ops import ModelRegistry
-
-registry = ModelRegistry()
-registry.register("my_model", model, version="1.0.0")
-
-model = registry.load("my_model", version="latest")
+from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, evaluation, training, create_evaluator
 ```
 
-### Experiment Tracking
+## Key Exports
 
-Track ML experiments:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `evaluation` | Function/Constant | Evaluation |
+| `training` | Function/Constant | Training |
+| `Dataset` | Class | Dataset |
+| `DatasetSanitizer` | Class | Datasetsanitizer |
+| `FineTuningJob` | Class | Finetuningjob |
+| `Evaluator` | Class | Evaluator |
+| `TaskType` | Class | Tasktype |
+| `EvaluationResult` | Class | Evaluationresult |
+| `Metric` | Class | Metric |
+| `AccuracyMetric` | Class | Accuracymetric |
+| `PrecisionMetric` | Class | Precisionmetric |
+| `RecallMetric` | Class | Recallmetric |
+| `F1Metric` | Class | F1metric |
+| `ConfusionMatrix` | Class | Confusionmatrix |
 
-```python
-from codomyrmex.model_ops import ExperimentTracker
+*Plus 9 additional exports.*
 
-tracker = ExperimentTracker("experiment_1")
-tracker.log_params({"lr": 0.01})
-tracker.log_metrics({"accuracy": 0.95})
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ModelRegistry` | Version models |
-| `ExperimentTracker` | Track experiments |
-| `ModelDeployer` | Deploy models |
+| Phase | Model Ops Contribution |
+|-------|------------------------------|
+| **THINK** | Analysis and reasoning |
+| **BUILD** | Artifact creation and code generation |
+| **LEARN** | Learning and knowledge capture |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

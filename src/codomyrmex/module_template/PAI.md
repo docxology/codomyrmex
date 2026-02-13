@@ -1,45 +1,26 @@
-# Personal AI Infrastructure — Module Template
+# Personal AI Infrastructure — Module Template Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Module Template provides PAI integration patterns for creating new Codomyrmex modules.
+Module Template Package This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Standard Module Structure
+## PAI Algorithm Phase Mapping
 
-Every module follows this structure:
+| Phase | Module Template Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-```
-my_module/
-├── README.md      # Human documentation
-├── AGENTS.md      # AI agent guidelines
-├── SPEC.md        # Functional specification
-├── PAI.md         # PAI integration (this file)
-├── __init__.py    # Module exports
-├── core.py        # Core implementation
-└── tests/         # Module tests
-```
+## Architecture Role
 
-### PAI Pattern Template
-
-Standard PAI.md template:
-
-```markdown
-# Personal AI Infrastructure — [Module] Module
-
-## Overview
-Brief module description for AI context.
-
-## PAI Capabilities
-Working code examples.
-
-## PAI Integration Points
-Table of key components.
-```
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

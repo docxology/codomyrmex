@@ -1,43 +1,54 @@
 # Personal AI Infrastructure — Deployment Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Deployment module provides PAI integration for application deployment.
+Deployment module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Deployment Automation
-
-Deploy applications:
-
 ```python
-from codomyrmex.deployment import Deployer
-
-deployer = Deployer(target="production")
-deployer.deploy(version="v1.2.0")
+from codomyrmex.deployment import DeploymentState, DeploymentTarget, DeploymentResult, health_checks, strategies, rollback
 ```
 
-### Rollback Support
+## Key Exports
 
-Rollback deployments:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `health_checks` | Function/Constant | Health checks |
+| `strategies` | Function/Constant | Strategies |
+| `rollback` | Function/Constant | Rollback |
+| `DeploymentState` | Class | Deploymentstate |
+| `DeploymentTarget` | Class | Deploymenttarget |
+| `DeploymentResult` | Class | Deploymentresult |
+| `DeploymentStrategy` | Class | Deploymentstrategy |
+| `RollingDeployment` | Class | Rollingdeployment |
+| `BlueGreenDeployment` | Class | Bluegreendeployment |
+| `CanaryDeployment` | Class | Canarydeployment |
+| `create_strategy` | Function/Constant | Create strategy |
+| `CanaryStrategy` | Class | Canarystrategy |
+| `BlueGreenStrategy` | Class | Bluegreenstrategy |
+| `RollingStrategy` | Class | Rollingstrategy |
 
-```python
-from codomyrmex.deployment import Deployer
+*Plus 2 additional exports.*
 
-deployer = Deployer(target="production")
-deployer.rollback(to_version="v1.1.0")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Deployer` | Deploy apps |
-| `rollback` | Rollback versions |
-| `HealthCheck` | Verify deployment |
+| Phase | Deployment Contribution |
+|-------|------------------------------|
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+| **VERIFY** | Validation and quality checks |
+
+## Architecture Role
+
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

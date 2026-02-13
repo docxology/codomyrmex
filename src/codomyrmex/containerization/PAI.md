@@ -1,47 +1,39 @@
 # Personal AI Infrastructure — Containerization Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Containerization module provides PAI integration for Docker container management.
+Containerization Module for Codomyrmex. This is a **Service Layer** module.
 
 ## PAI Capabilities
 
-### Container Management
-
-Manage Docker containers:
-
 ```python
-from codomyrmex.containerization import ContainerManager
-
-manager = ContainerManager()
-container = manager.run("python:3.11", command="python app.py")
-
-logs = container.logs()
-container.stop()
+from codomyrmex.containerization import docker, kubernetes, registry
 ```
 
-### Image Building
+## Key Exports
 
-Build Docker images:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `docker` | Function/Constant | Docker |
+| `kubernetes` | Function/Constant | Kubernetes |
+| `registry` | Function/Constant | Registry |
+| `security` | Function/Constant | Security |
 
-```python
-from codomyrmex.containerization import ImageBuilder
+## PAI Algorithm Phase Mapping
 
-builder = ImageBuilder()
-image = builder.build("./Dockerfile", tag="myapp:v1")
-builder.push(image, registry="docker.io")
-```
+| Phase | Containerization Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ContainerManager` | Run containers |
-| `ImageBuilder` | Build images |
-| `ComposeManager` | Docker Compose |
+**Service Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

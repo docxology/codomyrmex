@@ -1,45 +1,45 @@
 # Personal AI Infrastructure — Vector Store Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Vector Store module provides PAI integration for embedding storage and similarity search.
+Vector Store Module This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Embedding Storage
-
-Store and retrieve embeddings:
-
 ```python
-from codomyrmex.vector_store import VectorStore
-
-store = VectorStore()
-store.add(id="doc_1", embedding=embedding_vector, metadata={"title": "Doc 1"})
-
-results = store.search(query_embedding, limit=5)
+from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric, normalize_embedding, create_vector_store
 ```
 
-### Namespace Management
+## Key Exports
 
-Organize embeddings:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `SearchResult` | Class | Searchresult |
+| `VectorEntry` | Class | Vectorentry |
+| `DistanceMetric` | Class | Distancemetric |
+| `normalize_embedding` | Function/Constant | Normalize embedding |
+| `VectorStore` | Class | Vectorstore |
+| `InMemoryVectorStore` | Class | Inmemoryvectorstore |
+| `NamespacedVectorStore` | Class | Namespacedvectorstore |
+| `create_vector_store` | Function/Constant | Create vector store |
 
-```python
-from codomyrmex.vector_store import VectorStore
+## PAI Algorithm Phase Mapping
 
-store = VectorStore(namespace="code_snippets")
-store.add(id="func_1", embedding=code_embedding)
-```
+| Phase | Vector Store Contribution |
+|-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
+| **BUILD** | Artifact creation and code generation |
+| **LEARN** | Learning and knowledge capture |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `VectorStore` | Store embeddings |
-| `search` | Similarity search |
-| `Namespace` | Organize data |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

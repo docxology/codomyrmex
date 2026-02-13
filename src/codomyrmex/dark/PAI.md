@@ -1,47 +1,41 @@
 # Personal AI Infrastructure — Dark Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Dark module provides PAI integration for dark mode and theming support.
+Dark modes module - network, hardware, software, PDF dark mode utilities. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Theme Management
-
-Manage themes:
-
 ```python
-from codomyrmex.dark import ThemeManager
-
-themes = ThemeManager()
-themes.set_theme("dark")
-
-current = themes.current_theme()
-print(f"Current: {current}")
+from codomyrmex.dark import PDF_AVAILABLE, pdf, network, hardware
 ```
 
-### Color Schemes
+## Key Exports
 
-Access color schemes:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `__version__` | Function/Constant |   version   |
+| `pdf` | Function/Constant | Pdf |
+| `network` | Function/Constant | Network |
+| `hardware` | Function/Constant | Hardware |
+| `software` | Function/Constant | Software |
+| `PDF_AVAILABLE` | Class | Pdf available |
 
-```python
-from codomyrmex.dark import ColorScheme
+## PAI Algorithm Phase Mapping
 
-scheme = ColorScheme("monokai")
-bg = scheme.get("background")
-fg = scheme.get("foreground")
-```
+| Phase | Dark Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `ThemeManager` | Manage themes |
-| `ColorScheme` | Color palettes |
-| `DarkMode` | Toggle dark mode |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

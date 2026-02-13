@@ -1,46 +1,41 @@
 # Personal AI Infrastructure — Tree Sitter Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Tree Sitter module provides PAI integration for AST parsing and code analysis.
+Tree-sitter parsing module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Code Parsing
-
-Parse code into ASTs:
-
 ```python
-from codomyrmex.tree_sitter import Parser
-
-parser = Parser(language="python")
-tree = parser.parse(source_code)
-
-for node in tree.root_node.children:
-    print(f"{node.type}: {node.text}")
+from codomyrmex.tree_sitter import TreeSitterParser, LanguageManager, parsers, languages, queries
 ```
 
-### Query Support
+## Key Exports
 
-Query code patterns:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `TreeSitterParser` | Class | Treesitterparser |
+| `LanguageManager` | Class | Languagemanager |
+| `parsers` | Function/Constant | Parsers |
+| `languages` | Function/Constant | Languages |
+| `queries` | Function/Constant | Queries |
+| `transformers` | Function/Constant | Transformers |
 
-```python
-from codomyrmex.tree_sitter import Query
+## PAI Algorithm Phase Mapping
 
-query = Query("(function_definition name: (identifier) @name)")
-matches = query.execute(tree)
-```
+| Phase | Tree Sitter Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-## PAI Integration Points
+## Architecture Role
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `Parser` | Parse code |
-| `Query` | Pattern matching |
-| `Node` | AST navigation |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

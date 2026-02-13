@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/skills/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the protocol that connects them.
+The Model Context Protocol (MCP) module is **the operational bridge** between the PAI system (`~/.claude/skills/PAI/`) and codomyrmex. PAI is TypeScript/Bun; codomyrmex is Python. MCP is the JSON-RPC protocol that connects them, exposing 33 tools across file operations, code analysis, git, shell execution, memory, and module introspection.
 
 ## Architecture
 
@@ -19,45 +19,122 @@ graph TB
     subgraph MCP ["MCP Layer"]
         Client["MCP Client (in PAI session)"]
         Server["Codomyrmex MCP Server"]
+        WebUI["Web UI (port 8080)"]
     end
 
     subgraph Codomyrmex ["Codomyrmex Modules"]
         FileTools["File Operations"]
         CodeTools["Code Analysis (static_analysis, coding)"]
         ShellTools["Shell Execution"]
-        MemoryTools["Memory & Knowledge (agentic_memory, documents)"]
+        GitTools["Git Operations"]
+        DataTools["Data Utilities"]
+        MemoryTools["Memory & Knowledge"]
         ModuleTools["Module Info (system_discovery)"]
     end
 
     Algorithm --> Agents
     Agents --> Client
     Client -->|"JSON-RPC over stdio/HTTP"| Server
+    Server --> WebUI
     Server --> FileTools
     Server --> CodeTools
     Server --> ShellTools
+    Server --> GitTools
+    Server --> DataTools
     Server --> MemoryTools
     Server --> ModuleTools
 ```
 
-**Flow**: PAI Algorithm phase → capability selection → agent spawned → agent calls MCP tool → codomyrmex server routes to module → result returned to agent.
+**Flow**: PAI Algorithm phase → capability selection → agent spawned → agent calls MCP tool → codomyrmex server routes to `tools.py` implementation → result returned to agent.
 
-## Available Tools
+## Transports
 
-The codomyrmex MCP server exposes these tool categories:
+| Transport | Protocol | Use Case | Command |
+|-----------|----------|----------|---------|
+| **stdio** | JSON-RPC over stdin/stdout | Claude Desktop, Claude Code (production) | `--transport stdio` |
+| **HTTP** | FastAPI + Uvicorn, REST + Streamable HTTP | Browser access, remote clients, Web UI | `--transport http --port 8080` |
 
-| Category | Tools | PAI Algorithm Phase |
-|----------|-------|-------------------|
-| **File Operations** | `read_file`, `write_file`, `list_directory`, `search_files` | All phases |
-| **Code Analysis** | `analyze_code`, `lint_check`, `security_scan` | VERIFY |
-| **Shell Execution** | `run_command`, `run_script` | EXECUTE |
-| **Memory/Knowledge** | `store_memory`, `retrieve_memory`, `search_documents` | OBSERVE, LEARN |
-| **Module Info** | `list_modules`, `module_status`, `module_health` | OBSERVE |
+The HTTP transport includes a self-contained **Web UI** at the root URL (`/`) with interactive tool testing, server info, resource browsing, and prompt browsing.
 
-List all available tools:
+## HTTP Endpoints (8 REST + 1 JSON-RPC)
 
-```bash
-python scripts/model_context_protocol/run_mcp_server.py --list-tools
-```
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/` | GET | Web UI — interactive tool tester and server dashboard |
+| `/health` | GET | Health check — returns status, tool/resource/prompt counts, protocol version |
+| `/mcp` | POST | JSON-RPC endpoint (Streamable HTTP) for MCP protocol messages |
+| `/tools` | GET | List all registered tools with schemas |
+| `/tools/{name}` | GET | Get a single tool's schema and parameters |
+| `/tools/{name}/call` | POST | Execute a tool — body is raw arguments (server wraps as `arguments`) |
+| `/resources` | GET | List registered resources |
+| `/prompts` | GET | List registered prompt templates |
+
+## Available Tools (33 Total)
+
+### Built-in Tools (15) — Fully Implemented
+
+All built-in tools delegate to `tools.py` implementations with real functionality:
+
+| Category | Tool | Description | PAI Phase |
+|----------|------|-------------|-----------|
+| **File Ops** | `read_file` | Read file contents with metadata (size, lines, mtime) | All |
+| **File Ops** | `write_file` | Write content, creating parent dirs if needed | BUILD |
+| **File Ops** | `list_directory` | List directory with filtering, pagination, metadata | OBSERVE |
+| **Code** | `search_code` | Regex search across code files with type filtering | OBSERVE |
+| **Code** | `analyze_python_file` | Python AST analysis: classes, functions, imports, metrics | VERIFY |
+| **Shell** | `run_command` | Execute shell commands with timeout and env support | EXECUTE |
+| **Git** | `git_status` | Branch, changed files, recent commits | OBSERVE |
+| **Git** | `git_diff` | File diffs, optionally staged only | OBSERVE |
+| **Data** | `json_query` | Read/query JSON files with dot-notation paths | OBSERVE |
+| **Data** | `checksum_file` | Calculate MD5, SHA1, or SHA256 checksums | VERIFY |
+| **Memory** | `store_memory` | Store key-value pair in session memory | LEARN |
+| **Memory** | `recall_memory` | Retrieve value from session memory | OBSERVE |
+| **Memory** | `list_memories` | List all stored memory keys | OBSERVE |
+| **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
+| **Module** | `get_module_info` | Get module README, file listing | OBSERVE |
+
+### Discovered Tools (~18) — From MCP Specifications
+
+Additional tools are auto-discovered from `MCP_TOOL_SPECIFICATION.md` files across all 106 modules. These are prefixed with `{module}__` to avoid collisions (e.g., `git_operations__git_status`). Tools with matching entries in `_SPEC_TOOL_IMPLEMENTATIONS` are wired to real `tools.py` functions; others return structured metadata as spec-only placeholders.
+
+### Registered Resources
+
+| Resource | Type | Description |
+|----------|------|-------------|
+| `file://.../README.md` | `text/markdown` | Main project documentation |
+
+### Registered Prompts
+
+| Prompt | Arguments | Description |
+|--------|-----------|-------------|
+| `code_review` | `focus`, `code` | Review code for security, performance, or style |
+| `explain_code` | `detail_level`, `code` | Explain code at brief, detailed, or expert level |
+
+## Web UI
+
+The Web UI (`web_ui.py`) is a self-contained HTML/CSS/JS application served at `GET /` when the HTTP transport is active. It provides:
+
+| Tab | Features |
+|-----|----------|
+| **Tools** | Searchable tool list, click to select, parameter form auto-generated from inputSchema, Execute button with JSON result display |
+| **Resources** | Browse registered resources with URI, name, MIME type |
+| **Prompts** | Browse prompt templates with arguments |
+| **Server Info** | Stats grid (tool count, resource count, prompt count, protocol version, server name, transport) |
+
+The UI uses a dark theme with the codomyrmex accent color (`#6c8cff`), and the tool tester supports real-time tool execution against the running server.
+
+## Key Classes and Files
+
+| Class/File | Location | Purpose |
+|------------|----------|---------|
+| `MCPServer` | `server.py` | Full MCP server — tool/resource/prompt registration, JSON-RPC dispatch, stdio and HTTP transports |
+| `MCPServerConfig` | `server.py` | Server configuration dataclass (name, version, transport, log_level) |
+| `MCPToolRegistry` | `schemas/mcp_schemas.py` | Tool registration and execution engine |
+| `MCPToolCall` | `schemas/mcp_schemas.py` | Tool call data model |
+| `get_web_ui_html()` | `web_ui.py` | Self-contained HTML Web UI (524 lines) |
+| `tools.py` | `tools.py` | All tool implementations (file, code, shell, git, data) |
+| `discovery.py` | `discovery.py` | Auto-discover tools from `MCP_TOOL_SPECIFICATION.md` files |
+| `run_mcp_server.py` | `scripts/model_context_protocol/` | Server runner — creates server, registers all tools, starts transport |
 
 ## Setup for PAI Users
 
@@ -65,10 +142,13 @@ python scripts/model_context_protocol/run_mcp_server.py --list-tools
 
 ```bash
 # stdio mode (for Claude Desktop / Claude Code)
-python scripts/model_context_protocol/run_mcp_server.py --transport stdio
+uv run python scripts/model_context_protocol/run_mcp_server.py --transport stdio
 
-# HTTP mode (for remote access)
-python scripts/model_context_protocol/run_mcp_server.py --transport http --port 8080
+# HTTP mode (with Web UI at http://localhost:8080/)
+uv run python scripts/model_context_protocol/run_mcp_server.py --transport http --port 8080
+
+# List all 33 available tools
+uv run python scripts/model_context_protocol/run_mcp_server.py --list-tools
 ```
 
 ### Step 2: Register in Claude Desktop Config
@@ -91,10 +171,39 @@ Add to `~/.claude/claude_desktop_config.json`:
 
 ### Step 3: Verify
 
-In a Claude Code session:
-1. The PAI Algorithm will run on your prompt
-2. During EXECUTE, agents can call codomyrmex tools via MCP
-3. Check server logs for tool invocations
+```bash
+# Quick verification via HTTP
+curl http://localhost:8080/health
+# → {"status":"ok","tool_count":33,"resource_count":1,"prompt_count":2,...}
+
+# Test a tool
+curl -X POST http://localhost:8080/tools/git_status/call \
+  -H "Content-Type: application/json" \
+  -d '{"path":"."}'
+
+# Open Web UI in browser
+open http://localhost:8080/
+```
+
+## PAI Algorithm Phase Mapping
+
+| Phase | MCP Module Contribution |
+|-------|------------------------|
+| **OBSERVE** | `git_status`, `git_diff`, `read_file`, `list_directory`, `search_code`, `list_modules`, `recall_memory` — gather system state |
+| **THINK** | Tool schemas inform capability selection; `analyze_python_file` for code understanding |
+| **PLAN** | `/health` endpoint shows tool inventory for planning; discovery bridge reveals available module tools |
+| **BUILD** | `write_file` — create artifacts; `run_command` — run build scripts |
+| **EXECUTE** | `run_command` — shell execution; all tools available for agent-driven work |
+| **VERIFY** | `checksum_file` — integrity checks; `analyze_python_file` — code quality; `git_diff` — change validation |
+| **LEARN** | `store_memory` — capture learnings; discovery system learns from new `MCP_TOOL_SPECIFICATION.md` files |
+
+## MCP Protocol Version
+
+The server implements **MCP 2025-06-18** with:
+- `protocolVersion: "2025-06-18"` in `initialize` response
+- `title` field on tools (human-friendly display name)
+- `outputSchema` support for structured tool output
+- `structuredContent` in tool call responses when `outputSchema` is defined
 
 ## Extending: Custom Tools
 
@@ -105,34 +214,33 @@ from codomyrmex.model_context_protocol import MCPServer
 
 server = MCPServer()
 
-# Register a custom tool from any codomyrmex module
-server.register_tool(
-    name="my_custom_analysis",
-    handler=my_analysis_function,
+# Decorator style
+@server.tool(
+    name="my_analysis",
+    title="My Analysis",  # MCP 2025-06-18
     description="Run custom analysis on code",
-    parameters={
-        "code": {"type": "string", "description": "Code to analyze"},
-        "options": {"type": "object", "description": "Analysis options"}
-    }
+)
+def my_analysis(code: str, options: str = "") -> str:
+    return "analysis result"
+
+# Manual registration
+server.register_tool(
+    name="my_tool",
+    schema={"name": "my_tool", "description": "...", "inputSchema": {...}},
+    handler=my_function,
+    title="My Tool",
 )
 ```
 
-Any codomyrmex module can expose tools through MCP by following this pattern. The MCP server discovers and registers tools from modules that implement the `MCP_TOOL_SPECIFICATION.md` interface.
-
-## PAI Integration Points
-
-| Component | PAI Use Case | Details |
-|-----------|-------------|---------|
-| `MCPServer` | Host codomyrmex tools for PAI agents | Primary bridge server |
-| `MCPClient` | Consume external MCP servers from codomyrmex | For codomyrmex modules that need external tools |
-| `MCPServerConfig` | Configure server behavior | Transport, port, tool registration |
-| `MCP_TOOL_SPECIFICATION.md` | Per-module tool definitions | Each module declares its MCP-exposed tools |
+Any codomyrmex module can expose tools through MCP by adding an `MCP_TOOL_SPECIFICATION.md` file. The discovery bridge in `run_mcp_server.py` auto-discovers and registers these at startup.
 
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)
 - **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
 - **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
-- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Web UI**: [web_ui.py](web_ui.py) — Self-contained HTML interface
 - **Tutorial**: [Connecting PAI to Codomyrmex](../../../docs/getting-started/tutorials/connecting-pai.md)
-- **Server Script**: [scripts/model_context_protocol/run_mcp_server.py](../../../scripts/model_context_protocol/run_mcp_server.py)
+- **Server Script**: [run_mcp_server.py](../../../scripts/model_context_protocol/run_mcp_server.py)
+- **Website Integration**: [../website/PAI.md](../website/PAI.md) — Dashboard probes MCP server for live status

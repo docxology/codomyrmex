@@ -1,45 +1,54 @@
-# Personal AI Infrastructure — CI/CD Automation Module
+# Personal AI Infrastructure — Ci Cd Automation Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The CI/CD Automation module provides PAI integration for continuous integration and deployment.
+CI/CD Automation Module for Codomyrmex. This is a **Service Layer** module.
 
 ## PAI Capabilities
 
-### Pipeline Definition
-
-Define CI/CD pipelines:
-
 ```python
-from codomyrmex.ci_cd_automation import PipelineBuilder
-
-pipeline = PipelineBuilder("main")
-pipeline.add_stage("lint", ["ruff check ."])
-pipeline.add_stage("test", ["pytest"])
-pipeline.add_stage("build", ["python -m build"])
+from codomyrmex.ci_cd_automation import PipelineManager, Pipeline, PipelineJob, create_pipeline, run_pipeline, manage_deployments
 ```
 
-### Workflow Execution
+## Key Exports
 
-Run workflows:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `PipelineManager` | Class | Pipelinemanager |
+| `create_pipeline` | Function/Constant | Create pipeline |
+| `run_pipeline` | Function/Constant | Run pipeline |
+| `Pipeline` | Class | Pipeline |
+| `PipelineJob` | Class | Pipelinejob |
+| `PipelineStage` | Class | Pipelinestage |
+| `DeploymentOrchestrator` | Class | Deploymentorchestrator |
+| `manage_deployments` | Function/Constant | Manage deployments |
+| `Deployment` | Class | Deployment |
+| `Environment` | Class | Environment |
+| `PipelineMonitor` | Class | Pipelinemonitor |
+| `monitor_pipeline_health` | Function/Constant | Monitor pipeline health |
+| `generate_pipeline_reports` | Function/Constant | Generate pipeline reports |
+| `PipelineReport` | Class | Pipelinereport |
 
-```python
-from codomyrmex.ci_cd_automation import WorkflowRunner
+*Plus 11 additional exports.*
 
-runner = WorkflowRunner()
-result = runner.execute("deploy.yaml")
-```
 
-## PAI Integration Points
+## PAI Algorithm Phase Mapping
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `PipelineBuilder` | Build pipelines |
-| `WorkflowRunner` | Run workflows |
-| `ArtifactManager` | Manage artifacts |
+| Phase | Ci Cd Automation Contribution |
+|-------|------------------------------|
+| **PLAN** | Workflow planning and scheduling |
+| **BUILD** | Artifact creation and code generation |
+| **EXECUTE** | Execution and deployment |
+
+## Architecture Role
+
+**Service Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

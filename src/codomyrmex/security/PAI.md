@@ -1,45 +1,39 @@
 # Personal AI Infrastructure — Security Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Security module provides PAI integration for secure AI operations.
+Security Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
-### Input Sanitization
-
-Sanitize AI inputs:
-
 ```python
-from codomyrmex.security import InputSanitizer
-
-sanitizer = InputSanitizer()
-safe_input = sanitizer.sanitize(user_input)
+from codomyrmex.security import audit, compliance, secrets
 ```
 
-### Output Filtering
+## Key Exports
 
-Filter AI outputs:
+| Export | Type | Purpose |
+|--------|------|---------|
+| `audit` | Function/Constant | Audit |
+| `compliance` | Function/Constant | Compliance |
+| `secrets` | Function/Constant | Secrets |
+| `scanning` | Function/Constant | Scanning |
 
-```python
-from codomyrmex.security import OutputFilter
+## PAI Algorithm Phase Mapping
 
-filter = OutputFilter()
-filter.add_rule("no_secrets", r"sk-[a-zA-Z0-9]+")
+| Phase | Security Contribution |
+|-------|------------------------------|
+| **VERIFY** | Validation and quality checks |
 
-safe_output = filter.apply(ai_response)
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `InputSanitizer` | Clean inputs |
-| `OutputFilter` | Filter outputs |
-| `PolicyEnforcer` | Enforce policies |
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,44 +1,74 @@
 # Personal AI Infrastructure — Logging & Monitoring Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Logging & Monitoring module provides PAI integration for observability.
+The Logging & Monitoring module is the **observability foundation** for the entire codomyrmex ecosystem. Every other module depends on it for structured logging. It provides centralized log configuration, configurable output formats, and environment-driven settings.
 
 ## PAI Capabilities
 
 ### Structured Logging
 
-Log with context:
+Every codomyrmex module uses this module for consistent logging:
 
 ```python
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.logging_monitoring import setup_logging, get_logger
 
-logger = get_logger("my_module")
-logger.info("Processing", extra={"file": "main.py", "line": 42})
+# Initialize once at startup (reads .env configuration)
+setup_logging()
+
+# Get a logger in any module
+logger = get_logger(__name__)
+logger.info("Processing file", extra={"file": "main.py", "line": 42})
+logger.warning("Slow query", extra={"duration_ms": 1250})
 ```
 
-### Metrics Collection
+### Environment-Driven Configuration
 
-Collect metrics:
+All logging behavior is controlled via environment variables (or `.env` file):
 
-```python
-from codomyrmex.logging_monitoring import MetricsCollector
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `CODOMYRMEX_LOG_LEVEL` | Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL) | `INFO` |
+| `CODOMYRMEX_LOG_FILE` | File path for log output | None (console only) |
+| `CODOMYRMEX_LOG_FORMAT` | Format string or `DETAILED` for expanded format | Default Python format |
 
-metrics = MetricsCollector()
-metrics.increment("requests_total")
-metrics.histogram("latency", 0.125)
+### CLI Commands
+
+```bash
+codomyrmex logging_monitoring config   # Show current logging configuration
+codomyrmex logging_monitoring levels   # List available log levels with numeric values
 ```
 
-## PAI Integration Points
+## Key Exports
 
-| Component | PAI Use Case |
-|-----------|-------------|
-| `get_logger` | Structured logs |
-| `MetricsCollector` | Collect metrics |
-| `Tracer` | Distributed tracing |
+| Export | Type | Purpose |
+|--------|------|---------|
+| `setup_logging()` | Function | Initialize logging from environment variables — call once at startup |
+| `get_logger(name)` | Function | Get a named logger instance for any module |
+| `cli_commands()` | Function | CLI command registration for the `codomyrmex` CLI |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Logging Module Contribution |
+|-------|---------------------------|
+| **OBSERVE** | `get_logger` provides observability into all module operations |
+| **EXECUTE** | All tool executions emit structured logs for tracing |
+| **VERIFY** | Log output enables post-execution verification and debugging |
+| **LEARN** | Log files capture execution history for pattern analysis |
+
+## MCP Integration
+
+The MCP server (`run_mcp_server.py`) uses `get_logger(__name__)` for all server-side logging. When running in HTTP mode, server logs appear in the terminal alongside uvicorn access logs.
+
+## Architecture Role
+
+**Foundation Layer** — This module is imported by every other codomyrmex module. It has no upward dependencies and must remain stable and lightweight.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
