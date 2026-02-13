@@ -1,6 +1,7 @@
-import unittest
+"""Zero-Mock tests for DocumentWriter — uses real file I/O via tmp_path."""
+
+import json
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
@@ -10,50 +11,57 @@ from codomyrmex.documents.models.document import Document, DocumentFormat
 
 
 @pytest.mark.unit
-class TestDocumentWriter(unittest.TestCase):
-    def setUp(self):
+class TestDocumentWriter:
+    def setup_method(self):
         self.writer = DocumentWriter()
-        self.doc = Document("content", DocumentFormat.TEXT)
 
-    @patch('pathlib.Path.parent')
-    def test_write_file_creation_error(self, mock_parent):
-        """Test error when creating directory fails."""
-        # Use a real path for this test to trigger logic, but mock mkdir
-        path = Path("some/dir/file.txt")
-        # We need mock_parent to be what path.parent returns, which is a bit tricky with PropertyMock
-        # Easier to mock the mkdir call on the Path object that is created inside write
+    def test_write_text(self, tmp_path):
+        """Test writing a text document to a real file."""
+        f = tmp_path / "test.txt"
+        doc = Document("content", DocumentFormat.TEXT)
 
-        with patch('pathlib.Path.mkdir', side_effect=OSError("Permission denied")):
-            with self.assertRaises(DocumentWriteError):
-                self.writer.write(self.doc, path)
+        self.writer.write(doc, str(f))
 
+        assert f.exists()
+        assert f.read_text(encoding="utf-8") == "content"
 
-    @patch('codomyrmex.documents.formats.text_handler.write_text')
-    @patch('codomyrmex.documents.metadata.manager.update_metadata')
-    def test_write_text(self, mock_update_meta, mock_write_text):
-        """Test writing a text document."""
-        self.writer.write(self.doc, "test.txt")
-        mock_write_text.assert_called_once()
-
-    @patch('codomyrmex.documents.formats.json_handler.write_json')
-    def test_write_json(self, mock_write_json):
-        """Test writing a JSON document."""
+    def test_write_json(self, tmp_path):
+        """Test writing a JSON document to a real file."""
+        f = tmp_path / "test.json"
         doc = Document({"a": 1}, DocumentFormat.JSON)
-        self.writer.write(doc, "test.json")
-        mock_write_json.assert_called_once()
 
-    def test_write_unsupported_format(self):
+        self.writer.write(doc, str(f))
+
+        assert f.exists()
+        written = json.loads(f.read_text(encoding="utf-8"))
+        assert written == {"a": 1}
+
+    def test_write_creates_parent_dirs(self, tmp_path):
+        """Test that write creates parent directories."""
+        f = tmp_path / "subdir" / "nested" / "test.txt"
+        doc = Document("deep content", DocumentFormat.TEXT)
+
+        self.writer.write(doc, str(f))
+
+        assert f.exists()
+        assert f.read_text(encoding="utf-8") == "deep content"
+
+    def test_write_unsupported_format(self, tmp_path):
         """Test error for unsupported format."""
+        f = tmp_path / "test.xml"
         doc = Document("content", DocumentFormat.XML)
-        # XML is ostensibly not implemented in writer yet, raising UnsupportedFormatError wrapped in DocumentWriteError
-        with self.assertRaises(DocumentWriteError):
-            self.writer.write(doc, "test.xml")
+        with pytest.raises(DocumentWriteError):
+            self.writer.write(doc, str(f))
+
 
 @pytest.mark.unit
-class TestWriteDocumentConvenience(unittest.TestCase):
-    @patch('codomyrmex.documents.core.document_writer.DocumentWriter.write')
-    def test_write_document_wrapper(self, mock_write):
-        """Test the convenient wrapper."""
+class TestWriteDocumentConvenience:
+    def test_write_document_wrapper(self, tmp_path):
+        """Test the convenience wrapper writes a real file."""
+        f = tmp_path / "wrap.txt"
         doc = Document("content", DocumentFormat.TEXT)
-        write_document(doc, "test.txt")
-        mock_write.assert_called_once()
+
+        write_document(doc, str(f))
+
+        assert f.exists()
+        assert f.read_text(encoding="utf-8") == "content"

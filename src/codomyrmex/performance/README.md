@@ -8,7 +8,7 @@ Lazy loading, caching, and performance monitoring utilities.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

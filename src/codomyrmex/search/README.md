@@ -7,7 +7,7 @@ Full-text search with TF-IDF, fuzzy matching, and query parsing.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

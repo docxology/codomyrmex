@@ -8,7 +8,7 @@ Metrics collection, alerting, and dashboard visualization.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

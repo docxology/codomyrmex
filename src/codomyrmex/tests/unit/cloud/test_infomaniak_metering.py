@@ -15,7 +15,7 @@ Total: ~19 tests in a single TestInfomaniakMetering class.
 """
 
 from datetime import datetime, timezone
-from unittest.mock import MagicMock
+from _stubs import Stub
 
 
 from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
@@ -44,10 +44,10 @@ class TestInfomaniakMetering:
 
     def test_get_compute_usage_single_server(self, mock_openstack_connection):
         """get_compute_usage sums vcpus/ram/disk from a single server's flavor."""
-        mock_server = MagicMock()
+        mock_server = Stub()
         mock_server.flavor = {"id": "flavor-1"}
 
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.vcpus = 4
         mock_flavor.ram = 8192
         mock_flavor.disk = 80
@@ -66,17 +66,17 @@ class TestInfomaniakMetering:
 
     def test_get_compute_usage_multiple_servers(self, mock_openstack_connection):
         """get_compute_usage aggregates resources across multiple servers."""
-        server_a = MagicMock()
+        server_a = Stub()
         server_a.flavor = {"id": "flavor-a"}
-        server_b = MagicMock()
+        server_b = Stub()
         server_b.flavor = {"id": "flavor-b"}
 
-        flavor_a = MagicMock()
+        flavor_a = Stub()
         flavor_a.vcpus = 2
         flavor_a.ram = 4096
         flavor_a.disk = 40
 
-        flavor_b = MagicMock()
+        flavor_b = Stub()
         flavor_b.vcpus = 8
         flavor_b.ram = 16384
         flavor_b.disk = 160
@@ -94,13 +94,13 @@ class TestInfomaniakMetering:
 
     def test_get_compute_usage_server_without_flavor(self, mock_openstack_connection):
         """Servers with flavor=None are counted but contribute zero resources."""
-        server_with_flavor = MagicMock()
+        server_with_flavor = Stub()
         server_with_flavor.flavor = {"id": "flavor-1"}
 
-        server_no_flavor = MagicMock()
+        server_no_flavor = Stub()
         server_no_flavor.flavor = None
 
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.vcpus = 2
         mock_flavor.ram = 2048
         mock_flavor.disk = 20
@@ -150,11 +150,11 @@ class TestInfomaniakMetering:
 
     def test_get_storage_usage(self, mock_openstack_connection):
         """get_storage_usage sums sizes and counts attached/unattached volumes."""
-        vol_attached = MagicMock()
+        vol_attached = Stub()
         vol_attached.size = 100
         vol_attached.attachments = [{"id": "att-1"}]
 
-        vol_unattached = MagicMock()
+        vol_unattached = Stub()
         vol_unattached.size = 50
         vol_unattached.attachments = []
 
@@ -200,21 +200,21 @@ class TestInfomaniakMetering:
 
     def test_get_network_usage(self, mock_openstack_connection):
         """get_network_usage counts networks, routers, SGs, FIPs, and FIPs in use."""
-        fip_in_use = MagicMock()
+        fip_in_use = Stub()
         fip_in_use.port_id = "port-123"
 
-        fip_unused = MagicMock()
+        fip_unused = Stub()
         fip_unused.port_id = None
 
         mock_openstack_connection.network.networks.return_value = [
-            MagicMock(),
-            MagicMock(),
+            Stub(),
+            Stub(),
         ]
-        mock_openstack_connection.network.routers.return_value = [MagicMock()]
+        mock_openstack_connection.network.routers.return_value = [Stub()]
         mock_openstack_connection.network.security_groups.return_value = [
-            MagicMock(),
-            MagicMock(),
-            MagicMock(),
+            Stub(),
+            Stub(),
+            Stub(),
         ]
         mock_openstack_connection.network.ips.return_value = [fip_in_use, fip_unused]
 
@@ -229,9 +229,9 @@ class TestInfomaniakMetering:
 
     def test_get_network_usage_all_fips_unused(self, mock_openstack_connection):
         """When all floating IPs have port_id=None, floating_ips_in_use is 0."""
-        fip_a = MagicMock()
+        fip_a = Stub()
         fip_a.port_id = None
-        fip_b = MagicMock()
+        fip_b = Stub()
         fip_b.port_id = None
 
         mock_openstack_connection.network.networks.return_value = []
@@ -262,11 +262,11 @@ class TestInfomaniakMetering:
 
     def test_get_object_storage_usage(self, mock_openstack_connection):
         """get_object_storage_usage sums container counts and bytes."""
-        container_a = MagicMock()
+        container_a = Stub()
         container_a.count = 100
         container_a.bytes = 1024 * 1024 * 500  # 500 MB
 
-        container_b = MagicMock()
+        container_b = Stub()
         container_b.count = 50
         container_b.bytes = 1024 * 1024 * 250  # 250 MB
 
@@ -337,7 +337,7 @@ class TestInfomaniakMetering:
         )
 
         # Volumes succeed
-        mock_vol = MagicMock()
+        mock_vol = Stub()
         mock_vol.id = "vol-100"
         mock_vol.name = "data-vol"
         mock_vol.status = "in-use"
@@ -345,7 +345,7 @@ class TestInfomaniakMetering:
         mock_openstack_connection.block_storage.volumes.return_value = [mock_vol]
 
         # Floating IPs succeed
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-200"
         mock_fip.floating_ip_address = "195.15.220.50"
         mock_fip.status = "ACTIVE"
@@ -375,7 +375,7 @@ class TestInfomaniakMetering:
 
     def test_get_compute_quotas(self, mock_openstack_connection):
         """get_compute_quotas returns instance, core, ram, keypair, server_group limits."""
-        mock_quotas = MagicMock()
+        mock_quotas = Stub()
         mock_quotas.instances = 20
         mock_quotas.cores = 80
         mock_quotas.ram = 204800
@@ -399,7 +399,7 @@ class TestInfomaniakMetering:
 
     def test_get_network_quotas(self, mock_openstack_connection):
         """get_network_quotas returns network/subnet/router/FIP/SG limits."""
-        mock_quotas = MagicMock()
+        mock_quotas = Stub()
         mock_quotas.networks = 50
         mock_quotas.subnets = 100
         mock_quotas.routers = 10
@@ -425,7 +425,7 @@ class TestInfomaniakMetering:
 
     def test_get_storage_quotas(self, mock_openstack_connection):
         """get_storage_quotas returns volume/gigabyte/snapshot/backup limits."""
-        mock_quotas = MagicMock()
+        mock_quotas = Stub()
         mock_quotas.volumes = 50
         mock_quotas.gigabytes = 5000
         mock_quotas.snapshots = 100
@@ -457,3 +457,66 @@ class TestInfomaniakMetering:
         quotas = client.get_compute_quotas()
 
         assert quotas == {}
+
+
+# =========================================================================
+
+class TestInfomaniakMeteringClientExpanded:
+    """Tests for InfomaniakMeteringClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.metering import InfomaniakMeteringClient
+        mock_conn = Stub()
+        mock_conn.current_project_id = "proj-1"
+        return InfomaniakMeteringClient(connection=mock_conn), mock_conn
+
+    def test_get_object_storage_usage(self):
+        client, mc = self._make_client()
+        c = Stub(count=100, bytes=2048000)
+        mc.object_store.containers.return_value = [c]
+        result = client.get_object_storage_usage()
+        assert result["container_count"] == 1
+        assert result["object_count"] == 100
+        assert result["total_bytes"] == 2048000
+
+    def test_list_resources_with_usage(self):
+        client, mc = self._make_client()
+        srv = Stub(id="s1", name="web", status="ACTIVE", created_at=None)
+        vol = Stub(id="v1", name="data", status="in-use", size=50)
+        fip = Stub(id="f1", floating_ip_address="1.2.3.4", status="ACTIVE", port_id="p1")
+        mc.compute.servers.return_value = [srv]
+        mc.block_storage.volumes.return_value = [vol]
+        mc.network.ips.return_value = [fip]
+        result = client.list_resources_with_usage()
+        assert len(result) == 3
+        types = [r["type"] for r in result]
+        assert "compute.instance" in types
+        assert "storage.volume" in types
+        assert "network.floating_ip" in types
+
+    def test_get_network_quotas(self):
+        client, mc = self._make_client()
+        q = Stub(networks=10, subnets=20, routers=5,
+                      floatingips=3, security_groups=10, security_group_rules=50)
+        mc.network.get_quota.return_value = q
+        result = client.get_network_quotas()
+        assert result["networks"] == 10
+        assert result["floating_ips"] == 3
+
+    def test_get_storage_quotas(self):
+        client, mc = self._make_client()
+        q = Stub(volumes=20, gigabytes=1000, snapshots=10, backups=5)
+        mc.block_storage.get_quota_set.return_value = q
+        result = client.get_storage_quotas()
+        assert result["volumes"] == 20
+        assert result["gigabytes"] == 1000
+
+    def test_get_compute_usage_error(self):
+        client, mc = self._make_client()
+        mc.compute.servers.side_effect = Exception("fail")
+        assert client.get_compute_usage() == {}
+
+
+# =========================================================================
+# FACTORY METHOD TESTS FOR REMAINING CLIENTS
+# =========================================================================

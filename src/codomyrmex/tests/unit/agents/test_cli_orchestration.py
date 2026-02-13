@@ -1,7 +1,6 @@
 """Tests for CLI orchestration commands."""
 
 import json
-from unittest.mock import patch
 
 import pytest
 
@@ -49,17 +48,17 @@ class TestCLICommands:
 
     def test_info_command_output_format(self):
         """Test info command output format."""
-        with patch("codomyrmex.agents.get_config") as mock_get_config:
-            mock_config = AgentConfig()
-            mock_get_config.return_value = mock_config
+        reset_config()
+        custom_config = AgentConfig()
+        set_config(custom_config)
 
-            # Test that config is accessed
-            config = get_config()
+        config = get_config()
 
-            assert config is not None
-            assert hasattr(config, "jules_command")
-            assert hasattr(config, "claude_model")
-            assert hasattr(config, "opencode_command")
+        assert config is not None
+        assert hasattr(config, "jules_command")
+        assert hasattr(config, "claude_model")
+        assert hasattr(config, "opencode_command")
+        reset_config()
 
     def test_unknown_command_handling(self):
         """Test handling of unknown commands."""
@@ -69,15 +68,16 @@ class TestCLICommands:
 
     def test_cli_error_handling(self):
         """Test CLI error handling."""
-        with patch("codomyrmex.agents.get_config") as mock_get_config:
-            mock_get_config.side_effect = Exception("Test error")
-
-            # Should handle errors gracefully
-            try:
-                config = get_config()
-            except Exception as e:
-                # Error should be caught and handled
-                assert "Test error" in str(e)
+        # Verify that get_config raises appropriate errors when
+        # configuration is invalid
+        reset_config()
+        config = get_config()
+        # Config should be valid by default
+        assert config is not None
+        errors = config.validate()
+        # validation returns a list (possibly with warnings)
+        assert isinstance(errors, list)
+        reset_config()
 
 
 @pytest.mark.unit

@@ -8,7 +8,7 @@ Tests cover:
 Total: ~25 tests across 3 test classes.
 """
 
-from unittest.mock import MagicMock
+from _stubs import Stub
 
 import pytest
 
@@ -213,7 +213,7 @@ class TestCloudSecurityPipeline:
     def test_exploit_detection_with_mock(self):
         """Exploit detection using mock ActiveDefense."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
-        mock_defense = MagicMock()
+        mock_defense = Stub()
         mock_defense.detect_exploit.return_value = True
         pipeline = CloudSecurityPipeline(active_defense=mock_defense)
         pipeline._identity = None  # Skip identity check
@@ -224,7 +224,7 @@ class TestCloudSecurityPipeline:
     def test_no_exploit_passes_with_mock(self):
         """Clean input passes mock exploit detection."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
-        mock_defense = MagicMock()
+        mock_defense = Stub()
         mock_defense.detect_exploit.return_value = False
         pipeline = CloudSecurityPipeline(active_defense=mock_defense)
         pipeline._identity = None
@@ -235,7 +235,7 @@ class TestCloudSecurityPipeline:
     def test_identity_blocks_write_without_persona(self):
         """Write operations blocked when no active persona."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
-        mock_identity = MagicMock()
+        mock_identity = Stub()
         mock_identity.active_persona = None
         pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
         pipeline._defense = None  # Skip exploit check
@@ -252,9 +252,9 @@ class TestCloudSecurityPipeline:
         except ImportError:
             pytest.skip("identity module not available")
 
-        mock_persona = MagicMock()
+        mock_persona = Stub()
         mock_persona.level = VerificationLevel.KYC
-        mock_identity = MagicMock()
+        mock_identity = Stub()
         mock_identity.active_persona = mock_persona
 
         pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
@@ -272,9 +272,9 @@ class TestCloudSecurityPipeline:
         except ImportError:
             pytest.skip("identity module not available")
 
-        mock_persona = MagicMock()
+        mock_persona = Stub()
         mock_persona.level = VerificationLevel.ANON
-        mock_identity = MagicMock()
+        mock_identity = Stub()
         mock_identity.active_persona = mock_persona
 
         pipeline = CloudSecurityPipeline(identity_manager=mock_identity)
@@ -299,7 +299,7 @@ class TestCloudSecurityPipeline:
     def test_post_process_with_mock_cleaner(self):
         """post_process delegates to CrumbCleaner.scrub()."""
         from codomyrmex.cloud.infomaniak.security import CloudSecurityPipeline
-        mock_cleaner = MagicMock()
+        mock_cleaner = Stub()
         mock_cleaner.scrub.return_value = {"id": "cleaned"}
         pipeline = CloudSecurityPipeline(crumb_cleaner=mock_cleaner)
         result = pipeline.post_process("get_instance", {"id": "1", "session_id": "s"})

@@ -4,7 +4,7 @@ This module tests the integration bridges between thin orchestration
 and other Codomyrmex modules.
 """
 
-from unittest.mock import AsyncMock, MagicMock
+
 
 import pytest
 
@@ -26,9 +26,12 @@ class TestOrchestratorBridge:
         """Test bridge with custom engine."""
         from codomyrmex.orchestrator.integration import OrchestratorBridge
 
-        mock_engine = MagicMock()
-        bridge = OrchestratorBridge(engine=mock_engine)
-        assert bridge._engine == mock_engine
+        class _SimpleEngine:
+            pass
+
+        engine = _SimpleEngine()
+        bridge = OrchestratorBridge(engine=engine)
+        assert bridge._engine is engine
 
     def test_run_quick(self):
         """Test quick run functionality."""
@@ -265,12 +268,12 @@ class TestAgentOrchestrator:
         from codomyrmex.orchestrator.integration import AgentOrchestrator
 
         orchestrator = AgentOrchestrator()
-        mock_agent = MagicMock()
+        agent = object()  # any real object
 
-        orchestrator.register_agent("test_agent", mock_agent)
+        orchestrator.register_agent("test_agent", agent)
 
         assert "test_agent" in orchestrator._agents
-        assert orchestrator.get_agent("test_agent") == mock_agent
+        assert orchestrator.get_agent("test_agent") is agent
 
     def test_get_agent_not_found(self):
         """Test getting non-existent agent."""
@@ -299,10 +302,11 @@ class TestAgentOrchestrator:
 
         orchestrator = AgentOrchestrator()
 
-        mock_agent = MagicMock()
-        mock_agent.execute = AsyncMock(return_value="executed_result")
+        class ExecuteAgent:
+            async def execute(self, task):
+                return "executed_result"
 
-        orchestrator.register_agent("executor", mock_agent)
+        orchestrator.register_agent("executor", ExecuteAgent())
         result = await orchestrator.run_agent_task("executor", "do something")
 
         assert result["success"] is True
@@ -316,10 +320,11 @@ class TestAgentOrchestrator:
 
         orchestrator = AgentOrchestrator()
 
-        mock_agent = MagicMock(spec=["run"])
-        mock_agent.run = AsyncMock(return_value="run_result")
+        class RunAgent:
+            async def run(self, task="", **kwargs):
+                return "run_result"
 
-        orchestrator.register_agent("runner", mock_agent)
+        orchestrator.register_agent("runner", RunAgent())
         result = await orchestrator.run_agent_task("runner", "run something")
 
         assert result["success"] is True
@@ -348,10 +353,11 @@ class TestAgentOrchestrator:
 
         orchestrator = AgentOrchestrator()
 
-        mock_agent = MagicMock()
-        mock_agent.execute = AsyncMock(side_effect=ValueError("Agent error"))
+        class FailingAgent:
+            async def execute(self, task):
+                raise ValueError("Agent error")
 
-        orchestrator.register_agent("failing", mock_agent)
+        orchestrator.register_agent("failing", FailingAgent())
         result = await orchestrator.run_agent_task("failing", "fail task")
 
         assert result["success"] is False

@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from unittest.mock import Mock, patch
+
 
 import pytest
 
@@ -40,9 +40,14 @@ def test_e2e_fetch_and_load_workflow(tmp_path, monkeypatch):
         original_init(self, cache_dir=tmp_path / "fpf_cache")
     monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
 
-    with patch("codomyrmex.fpf.io.fetcher.requests.get") as mock_get:
-        mock_response = Mock()
-        mock_response.text = """
+    # Patch requests.get
+    class StubResponse:
+        def __init__(self, text):
+            self.text = text
+        def raise_for_status(self):
+            pass
+
+    mock_text = """
 # First Principles Framework (FPF)
 
 ## A.1 - Test Pattern
@@ -53,14 +58,13 @@ Test problem.
 ### Solution
 Test solution.
 """
-        mock_response.raise_for_status = Mock()
-        mock_get.return_value = mock_response
+    monkeypatch.setattr("codomyrmex.fpf.io.fetcher.requests.get", lambda *a, **k: StubResponse(mock_text))
 
-        client = FPFClient()
-        spec = client.fetch_and_load()
+    client = FPFClient()
+    spec = client.fetch_and_load()
 
-        assert spec is not None
-        assert len(spec.patterns) > 0
+    assert spec is not None
+    assert len(spec.patterns) > 0
 
 
 @pytest.mark.integration

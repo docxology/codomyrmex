@@ -8,7 +8,7 @@ Translation, localization, and message bundle management.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

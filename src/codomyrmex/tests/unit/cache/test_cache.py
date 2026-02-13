@@ -5,7 +5,7 @@ CacheStats, CacheManager, TTLManager, TTL handling, eviction, and cache operatio
 """
 
 import time
-from unittest.mock import MagicMock
+
 
 import pytest
 
@@ -773,19 +773,33 @@ class TestTTLManager:
         time.sleep(0.1)
 
     def test_cleanup_called(self):
-        """Test cleanup is called on registered caches."""
+        """Test cleanup runs without error on registered caches.
+
+        InMemoryCache uses lazy TTL expiration (entries removed on access),
+        so we verify cleanup doesn't crash and that TTL expiration works
+        through normal cache access patterns.
+        """
         from codomyrmex.cache.ttl_manager import TTLManager
 
         manager = TTLManager(cleanup_interval=60)
 
-        # Create mock cache with cleanup_expired method
-        mock_cache = MagicMock()
-        mock_cache.cleanup_expired = MagicMock()
+        # Use a real cache with a short-lived entry
+        real_cache = InMemoryCache()
+        real_cache.set("short_lived", "value", ttl=1)
 
-        manager.register_cache(mock_cache)
+        manager.register_cache(real_cache)
+
+        # Cleanup should run without error (InMemoryCache uses lazy expiration)
         manager.cleanup()
 
-        mock_cache.cleanup_expired.assert_called_once()
+        # Entry still exists before TTL expires
+        assert real_cache.exists("short_lived") is True
+
+        # Wait for TTL to expire
+        time.sleep(1.1)
+
+        # After TTL expiry, lazy cleanup on access removes the key
+        assert real_cache.exists("short_lived") is False
 
 
 @pytest.mark.unit

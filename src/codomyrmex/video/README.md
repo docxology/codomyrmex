@@ -74,7 +74,7 @@ The video module provides comprehensive video processing capabilities including 
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

@@ -9,17 +9,18 @@ Tests cover all methods:
 - Outputs: get_stack_outputs (with outputs, empty, stack not found)
 - Error handling: every method gracefully handles exceptions
 
-Uses mock_openstack_connection fixture and make_mock_stack factory from conftest.py.
+Uses mock_openstack_connection fixture and make_stub_stack factory from conftest.py.
 
 Total: ~26 tests in TestInfomaniakOrchestration class.
 """
 
-from unittest.mock import MagicMock, mock_open, patch
+import os
+from _stubs import Stub
 
 
 from codomyrmex.cloud.infomaniak.orchestration.client import InfomaniakHeatClient
 
-from ..cloud.conftest import make_mock_stack
+from _stubs import make_stub_stack
 
 
 class TestInfomaniakOrchestration:
@@ -31,7 +32,7 @@ class TestInfomaniakOrchestration:
 
     def test_list_stacks_success(self, mock_openstack_connection):
         """list_stacks returns formatted dicts for each stack."""
-        stack = make_mock_stack(stack_id="stk-1", name="web-app", status="CREATE_COMPLETE")
+        stack = make_stub_stack(stack_id="stk-1", name="web-app", status="CREATE_COMPLETE")
         mock_openstack_connection.orchestration.stacks.return_value = [stack]
 
         client = InfomaniakHeatClient(mock_openstack_connection)
@@ -55,7 +56,7 @@ class TestInfomaniakOrchestration:
 
     def test_get_stack_success(self, mock_openstack_connection):
         """get_stack returns full stack detail dict when found."""
-        stack = make_mock_stack(stack_id="stk-abc", name="db-stack")
+        stack = make_stub_stack(stack_id="stk-abc", name="db-stack")
         mock_openstack_connection.orchestration.find_stack.return_value = stack
 
         client = InfomaniakHeatClient(mock_openstack_connection)
@@ -90,7 +91,7 @@ class TestInfomaniakOrchestration:
 
     def test_create_stack_success(self, mock_openstack_connection):
         """create_stack returns dict with id and name on success."""
-        mock_stack_result = MagicMock()
+        mock_stack_result = Stub()
         mock_stack_result.id = "stk-new"
         mock_openstack_connection.orchestration.create_stack.return_value = mock_stack_result
 
@@ -129,39 +130,34 @@ class TestInfomaniakOrchestration:
 
         assert result is None
 
-    def test_create_stack_from_file_success(self, mock_openstack_connection):
+    def test_create_stack_from_file_success(self, mock_openstack_connection, tmp_path):
         """create_stack_from_file reads file and delegates to create_stack."""
-        mock_stack_result = MagicMock()
+        mock_stack_result = Stub()
         mock_stack_result.id = "stk-from-file"
         mock_openstack_connection.orchestration.create_stack.return_value = mock_stack_result
 
         template_content = "heat_template_version: 2021-04-16\nresources:\n  server:\n    type: OS::Nova::Server"
+        template_file = tmp_path / "template.yaml"
+        template_file.write_text(template_content)
 
-        m = mock_open(read_data=template_content)
-        with patch("builtins.open", m):
-            client = InfomaniakHeatClient(mock_openstack_connection)
-            result = client.create_stack_from_file(
-                name="file-stack",
-                template_path="/tmp/claude/template.yaml",
-                parameters={"key_name": "ssh-key"},
-            )
+        client = InfomaniakHeatClient(mock_openstack_connection)
+        result = client.create_stack_from_file(
+            name="file-stack",
+            template_path=str(template_file),
+            parameters={"key_name": "ssh-key"},
+        )
 
         assert result is not None
         assert result["id"] == "stk-from-file"
-        m.assert_called_once_with("/tmp/claude/template.yaml", "r")
         mock_openstack_connection.orchestration.create_stack.assert_called_once()
 
     def test_create_stack_from_file_read_error(self, mock_openstack_connection):
         """create_stack_from_file returns None when file cannot be read."""
-        m = mock_open()
-        m.side_effect = FileNotFoundError("No such file")
-
-        with patch("builtins.open", m):
-            client = InfomaniakHeatClient(mock_openstack_connection)
-            result = client.create_stack_from_file(
-                name="missing-file-stack",
-                template_path="/nonexistent/template.yaml",
-            )
+        client = InfomaniakHeatClient(mock_openstack_connection)
+        result = client.create_stack_from_file(
+            name="missing-file-stack",
+            template_path="/nonexistent_path_xyz123/template.yaml",
+        )
 
         assert result is None
 
@@ -259,7 +255,7 @@ class TestInfomaniakOrchestration:
 
     def test_list_stack_resources_success(self, mock_openstack_connection):
         """list_stack_resources returns formatted resource dicts."""
-        mock_resource = MagicMock()
+        mock_resource = Stub()
         mock_resource.name = "my_server"
         mock_resource.resource_type = "OS::Nova::Server"
         mock_resource.status = "CREATE_COMPLETE"
@@ -289,7 +285,7 @@ class TestInfomaniakOrchestration:
 
     def test_get_stack_resource_success(self, mock_openstack_connection):
         """get_stack_resource returns formatted dict for a single resource."""
-        mock_resource = MagicMock()
+        mock_resource = Stub()
         mock_resource.name = "my_network"
         mock_resource.resource_type = "OS::Neutron::Net"
         mock_resource.status = "CREATE_COMPLETE"
@@ -326,7 +322,7 @@ class TestInfomaniakOrchestration:
 
     def test_list_stack_events_success(self, mock_openstack_connection):
         """list_stack_events returns formatted event dicts."""
-        mock_event = MagicMock()
+        mock_event = Stub()
         mock_event.id = "evt-001"
         mock_event.resource_name = "my_server"
         mock_event.resource_status = "CREATE_COMPLETE"
@@ -437,7 +433,7 @@ class TestInfomaniakOrchestration:
 
     def test_get_stack_outputs_with_outputs(self, mock_openstack_connection):
         """get_stack_outputs returns key-value dict from stack outputs."""
-        stack = make_mock_stack(stack_id="stk-out")
+        stack = make_stub_stack(stack_id="stk-out")
         stack.outputs = [
             {"output_key": "public_ip", "output_value": "195.15.220.10"},
             {"output_key": "private_ip", "output_value": "10.0.0.5"},
@@ -455,7 +451,7 @@ class TestInfomaniakOrchestration:
 
     def test_get_stack_outputs_empty(self, mock_openstack_connection):
         """get_stack_outputs returns empty dict when stack has no outputs."""
-        stack = make_mock_stack(stack_id="stk-no-out")
+        stack = make_stub_stack(stack_id="stk-no-out")
         stack.outputs = []
         mock_openstack_connection.orchestration.find_stack.return_value = stack
 
@@ -481,3 +477,74 @@ class TestInfomaniakOrchestration:
         result = client.get_stack_outputs("stk-err")
 
         assert result == {}
+
+
+# =========================================================================
+
+class TestInfomaniakHeatClientExpanded:
+    """Tests for InfomaniakHeatClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.orchestration import InfomaniakHeatClient
+        mock_conn = Stub()
+        return InfomaniakHeatClient(connection=mock_conn), mock_conn
+
+    def test_update_stack(self):
+        client, mc = self._make_client()
+        assert client.update_stack("stk1", template="heat: {}") is True
+        mc.orchestration.update_stack.assert_called_once()
+
+    def test_suspend_stack(self):
+        client, mc = self._make_client()
+        assert client.suspend_stack("stk1") is True
+        mc.orchestration.suspend_stack.assert_called_once_with("stk1")
+
+    def test_resume_stack(self):
+        client, mc = self._make_client()
+        assert client.resume_stack("stk1") is True
+        mc.orchestration.resume_stack.assert_called_once_with("stk1")
+
+    def test_get_stack_resource(self):
+        client, mc = self._make_client()
+        res = Stub(name="srv", resource_type="OS::Nova::Server",
+                        status="CREATE_COMPLETE", physical_resource_id="inst1",
+                        attributes={"ip": "1.2.3.4"})
+        mc.orchestration.get_resource.return_value = res
+        result = client.get_stack_resource("stk1", "srv")
+        assert result["resource_type"] == "OS::Nova::Server"
+
+    def test_list_stack_events(self):
+        client, mc = self._make_client()
+        ev = Stub(id="ev1", resource_name="srv",
+                       resource_status="CREATE_COMPLETE",
+                       resource_status_reason="OK", event_time=None)
+        mc.orchestration.events.return_value = [ev]
+        result = client.list_stack_events("stk1")
+        assert len(result) == 1
+        assert result[0]["resource_name"] == "srv"
+
+    def test_get_stack_template(self):
+        client, mc = self._make_client()
+        tpl = "heat_template_version: 2021-04-16"
+        mc.orchestration.get_stack_template.return_value = tpl
+        assert client.get_stack_template("stk1") == tpl
+
+    def test_get_stack_outputs(self):
+        client, mc = self._make_client()
+        stk = Stub()
+        stk.outputs = [
+            {"output_key": "server_ip", "output_value": "10.0.0.5"}
+        ]
+        mc.orchestration.find_stack.return_value = stk
+        result = client.get_stack_outputs("stk1")
+        assert result["server_ip"] == "10.0.0.5"
+
+    def test_list_stacks_error(self):
+        client, mc = self._make_client()
+        mc.orchestration.stacks.side_effect = Exception("fail")
+        assert client.list_stacks() == []
+
+
+# =========================================================================
+# ADDITIONAL METERING CLIENT TESTS
+# =========================================================================

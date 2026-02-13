@@ -8,7 +8,7 @@ Test suites with real data analysis (no mock methods).
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

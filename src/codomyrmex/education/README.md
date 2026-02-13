@@ -9,7 +9,7 @@ Comprehensive learning management system for training users and upskilling agent
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 ## Key Exports

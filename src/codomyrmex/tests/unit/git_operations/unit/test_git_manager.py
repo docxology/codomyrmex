@@ -4,7 +4,7 @@ Unit tests for git_manager.py core functions.
 
 import os
 import subprocess
-from unittest.mock import patch
+
 
 import pytest
 
@@ -29,17 +29,17 @@ class TestCheckGitAvailability:
         assert isinstance(result, bool)
         # Should be True if Git is installed (which it should be in test environment)
 
-    @patch("codomyrmex.git_operations.core.git.subprocess.run")
-    def test_git_not_available(self, mock_run):
+    def test_git_not_available(self, monkeypatch):
         """Test when Git is not available."""
-        mock_run.side_effect = FileNotFoundError()
+        import codomyrmex.git_operations.core.git as _git_mod
+        monkeypatch.setattr(_git_mod.subprocess, "run", lambda *a, **k: (_ for _ in ()).throw(FileNotFoundError()))
         result = check_git_availability()
         assert result is False
 
-    @patch("codomyrmex.git_operations.core.git.subprocess.run")
-    def test_git_command_fails(self, mock_run):
+    def test_git_command_fails(self, monkeypatch):
         """Test when Git command fails."""
-        mock_run.side_effect = subprocess.CalledProcessError(1, "git")
+        import codomyrmex.git_operations.core.git as _git_mod
+        monkeypatch.setattr(_git_mod.subprocess, "run", lambda *a, **k: (_ for _ in ()).throw(subprocess.CalledProcessError(1, "git")))
         result = check_git_availability()
         assert result is False
 

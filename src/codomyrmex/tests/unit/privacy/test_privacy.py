@@ -1,6 +1,7 @@
-"""Tests for the privacy module (crumbs + mixnet)."""
+"""Zero-Mock tests for the privacy module (crumbs + mixnet).
 
-from unittest.mock import patch
+Uses real time.sleep with minimal delays for mixnet relay tests.
+"""
 
 import pytest
 
@@ -105,23 +106,20 @@ class TestPacket:
 
 @pytest.mark.unit
 class TestMixNode:
-    """Tests for the MixNode class."""
+    """Tests for the MixNode class — uses real time.sleep."""
 
     def test_mix_node_creation(self):
         node = MixNode("node_0")
         assert node.node_id == "node_0"
 
-    @patch("codomyrmex.privacy.mixnet.time.sleep")
-    def test_mix_node_relay_decrements_hops(self, mock_sleep):
+    def test_mix_node_relay_decrements_hops(self):
         node = MixNode("node_0")
         pkt = Packet(payload=b"data", route_id="r1", hops_remaining=3)
         result = node.relay(pkt)
         assert result.hops_remaining == 2
         assert result.payload == b"data"
-        mock_sleep.assert_called_once()
 
-    @patch("codomyrmex.privacy.mixnet.time.sleep")
-    def test_mix_node_relay_zero_hops(self, mock_sleep):
+    def test_mix_node_relay_zero_hops(self):
         node = MixNode("node_0")
         pkt = Packet(payload=b"data", route_id="r1", hops_remaining=0)
         result = node.relay(pkt)
@@ -131,39 +129,33 @@ class TestMixNode:
 
 @pytest.mark.unit
 class TestMixnetProxy:
-    """Tests for the MixnetProxy class."""
+    """Tests for the MixnetProxy class — uses real time.sleep."""
 
     def test_mixnet_init(self):
         proxy = MixnetProxy()
         assert len(proxy._nodes) == 10
 
-    @patch("codomyrmex.privacy.mixnet.time.sleep")
-    def test_route_payload(self, mock_sleep):
+    def test_route_payload(self):
         proxy = MixnetProxy()
         payload = b"secret message"
         result = proxy.route_payload(payload, hops=3)
         assert result == payload
 
-    @patch("codomyrmex.privacy.mixnet.time.sleep")
-    def test_route_payload_single_hop(self, mock_sleep):
+    def test_route_payload_single_hop(self):
         proxy = MixnetProxy()
         payload = b"data"
         result = proxy.route_payload(payload, hops=1)
         assert result == payload
 
 
-# Additional tests migrated from root /tests/unit/privacy/
 @pytest.mark.unit
 def test_crumb_cleaning_nested():
-    """Test nested dictionary scrubbing from root tests."""
+    """Test nested dictionary scrubbing."""
     cleaner = CrumbCleaner()
     data = {
         "valid": "data",
         "timestamp": 12345,
-        "meta": {
-            "device_id": "xyz",
-            "nested": "keep"
-        }
+        "meta": {"device_id": "xyz", "nested": "keep"},
     }
 
     clean = cleaner.scrub(data)
@@ -174,13 +166,9 @@ def test_crumb_cleaning_nested():
 
 
 @pytest.mark.unit
-@patch("codomyrmex.privacy.mixnet.time.sleep")
-def test_mixnet_proxy_multiple_hops(mock_sleep):
-    """Test mixnet proxy with configurable hops."""
+def test_mixnet_proxy_multiple_hops():
+    """Test mixnet proxy with configurable hops — uses real sleep."""
     proxy = MixnetProxy()
     payload = b"test"
-
-    # Should return same payload simulation
     assert proxy.route_payload(payload, hops=1) == payload
     assert proxy.route_payload(payload, hops=5) == payload
-

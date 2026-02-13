@@ -8,7 +8,7 @@ WCAG compliance checking and accessibility utilities.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

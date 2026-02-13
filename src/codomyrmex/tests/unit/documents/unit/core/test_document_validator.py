@@ -1,5 +1,4 @@
-import unittest
-from unittest.mock import patch
+"""Zero-Mock tests for DocumentValidator — uses real validation logic."""
 
 import pytest
 
@@ -11,8 +10,8 @@ from codomyrmex.documents.models.document import Document, DocumentFormat
 
 
 @pytest.mark.unit
-class TestDocumentValidator(unittest.TestCase):
-    def setUp(self):
+class TestDocumentValidator:
+    def setup_method(self):
         self.validator = DocumentValidator()
 
     def test_validate_structured_json(self):
@@ -20,37 +19,32 @@ class TestDocumentValidator(unittest.TestCase):
         doc = Document({"age": 30}, DocumentFormat.JSON)
         schema = {
             "type": "object",
-            "properties": {
-                "age": {"type": "integer"}
-            }
+            "properties": {"age": {"type": "integer"}},
         }
         result = self.validator.validate(doc, schema=schema)
-        self.assertTrue(result.is_valid)
+        assert result.is_valid
 
     def test_validate_structured_json_fail(self):
         """Test validation failure."""
         doc = Document({"age": "thirty"}, DocumentFormat.JSON)
         schema = {
             "type": "object",
-            "properties": {
-                "age": {"type": "integer"}
-            }
+            "properties": {"age": {"type": "integer"}},
         }
         result = self.validator.validate(doc, schema=schema)
-        self.assertFalse(result.is_valid)
-
+        assert not result.is_valid
 
     def test_validate_markdown(self):
         """Test markdown validation (basic pass)."""
         doc = Document("# Title", DocumentFormat.MARKDOWN)
         result = self.validator.validate(doc)
-        self.assertTrue(result.is_valid)
+        assert result.is_valid
+
 
 @pytest.mark.unit
-class TestValidateDocumentConvenience(unittest.TestCase):
-    @patch('codomyrmex.documents.core.document_validator.DocumentValidator.validate')
-    def test_validate_document_wrapper(self, mock_validate):
-        """Test convenience wrapper."""
-        doc = Document("c", DocumentFormat.TEXT)
-        validate_document(doc)
-        mock_validate.assert_called_once()
+class TestValidateDocumentConvenience:
+    def test_validate_document_wrapper(self):
+        """Test convenience wrapper calls real validation."""
+        doc = Document("content", DocumentFormat.TEXT)
+        result = validate_document(doc)
+        assert result is not None

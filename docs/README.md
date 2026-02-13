@@ -14,7 +14,7 @@ Comprehensive documentation for the Codomyrmex platform. This directory contains
 | [**development/**](development/) | Development environment, testing, contribution |
 | [**reference/**](reference/) | API docs, CLI reference, troubleshooting |
 | [**deployment/**](deployment/) | Production deployment guides |
-| [**modules/**](modules/) | Per-module documentation (94 modules) |
+| [**modules/**](modules/) | Per-module documentation (105 modules) |
 | [**integration/**](integration/) | External service integration |
 | [**examples/**](examples/) | Code examples and demos |
 | [**project/**](project/) | Architecture, roadmap, contributing |

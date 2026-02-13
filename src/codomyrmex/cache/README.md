@@ -10,7 +10,7 @@ Unified caching module providing multiple backend strategies for code analysis r
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

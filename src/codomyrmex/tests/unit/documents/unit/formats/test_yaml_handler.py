@@ -1,33 +1,38 @@
-import sys
-import unittest
-from unittest.mock import MagicMock, mock_open, patch
+"""Zero-Mock tests for YAML handler — uses real file I/O via tmp_path."""
 
 import pytest
+import yaml
 
 from codomyrmex.documents.formats.yaml_handler import read_yaml, write_yaml
 
 
 @pytest.mark.unit
-class TestYamlHandler(unittest.TestCase):
-    def test_read_yaml_mocked(self):
-        """Test reading YAML with mocked yaml module."""
-        mock_yaml = MagicMock()
-        mock_yaml.safe_load.return_value = {"key": "value"}
+class TestYamlHandler:
+    def test_read_yaml(self, tmp_path):
+        """Test reading YAML from a real file."""
+        f = tmp_path / "test.yaml"
+        f.write_text("key: value\n", encoding="utf-8")
 
-        with patch.dict(sys.modules, {'yaml': mock_yaml}):
-            with patch("builtins.open", new_callable=mock_open, read_data="key: value"):
-                data = read_yaml("test.yaml")
-                self.assertEqual(data, {"key": "value"})
+        data = read_yaml(str(f))
+        assert data == {"key": "value"}
 
-    def test_write_yaml_mocked(self):
-        """Test writing YAML with mocked yaml module."""
-        mock_yaml = MagicMock()
+    def test_write_yaml(self, tmp_path):
+        """Test writing YAML to a real file."""
+        f = tmp_path / "test.yaml"
         data = {"key": "value"}
 
-        with patch.dict(sys.modules, {'yaml': mock_yaml}):
-            with patch("builtins.open", new_callable=mock_open):
-                canary = MagicMock() # To verify parent creation
-                with patch('pathlib.Path.parent', new_callable=lambda: canary):
-                    write_yaml(data, "test.yaml")
+        write_yaml(data, str(f))
 
-        mock_yaml.dump.assert_called()
+        assert f.exists()
+        written = yaml.safe_load(f.read_text(encoding="utf-8"))
+        assert written == data
+
+    def test_roundtrip(self, tmp_path):
+        """Test YAML write then read roundtrip."""
+        f = tmp_path / "roundtrip.yaml"
+        original = {"nested": {"list": [1, 2, 3]}, "flag": True}
+
+        write_yaml(original, str(f))
+        result = read_yaml(str(f))
+
+        assert result == original

@@ -10,7 +10,7 @@ Comprehensive logistics module that consolidates orchestration, task management,
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

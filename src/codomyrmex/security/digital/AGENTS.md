@@ -18,7 +18,6 @@ Digital security components including network security, data protection, and sec
 - `certificate_validator.py` – Project file
 - `compliance_checker.py` – Project file
 - `encryption_manager.py` – Project file
-- `requirements.txt` – Project file
 - `secrets_detector.py` – Project file
 - `security_analyzer.py` – Project file
 - `security_monitor.py` – Project file

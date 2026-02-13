@@ -8,7 +8,7 @@ Edge deployment, IoT gateways, and latency-sensitive function execution.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

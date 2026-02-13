@@ -1,5 +1,4 @@
-import unittest
-from unittest.mock import mock_open, patch
+"""Zero-Mock tests for Markdown handler — uses real file I/O via tmp_path."""
 
 import pytest
 
@@ -7,26 +6,31 @@ from codomyrmex.documents.formats.markdown_handler import read_markdown, write_m
 
 
 @pytest.mark.unit
-class TestMarkdownHandler(unittest.TestCase):
-    def test_read_markdown(self):
-        """Test reading markdown."""
-        with patch("builtins.open", new_callable=mock_open, read_data="# Header\nContent"):
-            content = read_markdown("test.md")
-            self.assertEqual(content, "# Header\nContent")
+class TestMarkdownHandler:
+    def test_read_markdown(self, tmp_path):
+        """Test reading markdown from a real file."""
+        f = tmp_path / "test.md"
+        f.write_text("# Header\nContent", encoding="utf-8")
 
-    def test_write_markdown(self):
-        """Test writing markdown."""
+        content = read_markdown(str(f))
+        assert content == "# Header\nContent"
+
+    def test_write_markdown(self, tmp_path):
+        """Test writing markdown to a real file."""
+        f = tmp_path / "test.md"
         content = "# Header\nContent"
-        with patch("builtins.open", new_callable=mock_open) as mock_file:
-            # We must also mock parent.mkdir because write_markdown calls it
-            # mocking Path.parent is tricky, but often not needed if mkdir doesnt crash
-            # But the code does file_path.parent.mkdir(...)
-            # If we pass a string "test.md", Path("test.md").parent is "."
-            # Path(".").mkdir works or is skipped? No, mkdir(parents=True, exist_ok=True)
-            # We should mock mkdir to be safe
-            with patch('pathlib.Path.mkdir'):
-                write_markdown(content, "test.md")
 
-            mock_file.assert_called_with(unittest.mock.ANY, 'w', encoding='utf-8')
-            handle = mock_file()
-            handle.write.assert_called_with(content)
+        write_markdown(content, str(f))
+
+        assert f.exists()
+        assert f.read_text(encoding="utf-8") == content
+
+    def test_roundtrip(self, tmp_path):
+        """Test markdown write then read roundtrip."""
+        f = tmp_path / "roundtrip.md"
+        original = "# Title\n\n## Section\n\n- Item 1\n- Item 2"
+
+        write_markdown(original, str(f))
+        result = read_markdown(str(f))
+
+        assert result == original

@@ -12,14 +12,14 @@ Tests cover:
 Total: 23 tests in one TestInfomaniakBlockStorage class.
 """
 
-from unittest.mock import MagicMock
+from _stubs import Stub
 
 import pytest
 
 from codomyrmex.cloud.infomaniak.block_storage.client import InfomaniakVolumeClient
 
 # Import the shared factory from conftest (available as module-level function)
-from codomyrmex.tests.unit.cloud.conftest import make_mock_volume
+from _stubs import make_stub_volume
 
 
 class TestInfomaniakBlockStorage:
@@ -28,7 +28,7 @@ class TestInfomaniakBlockStorage:
     @pytest.fixture
     def mock_openstack_connection(self):
         """Create a fully-mocked OpenStack connection."""
-        conn = MagicMock()
+        conn = Stub()
         conn.current_user_id = "user-test-123"
         conn.current_project_id = "proj-test-456"
         return conn
@@ -39,7 +39,7 @@ class TestInfomaniakBlockStorage:
 
     def test_list_volumes_returns_volume_dicts(self, mock_openstack_connection):
         """list_volumes converts OpenStack volume objects to dicts."""
-        vol = make_mock_volume(volume_id="vol-aaa", name="data-disk", size=200)
+        vol = make_stub_volume(volume_id="vol-aaa", name="data-disk", size=200)
         mock_openstack_connection.block_storage.volumes.return_value = [vol]
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -59,7 +59,7 @@ class TestInfomaniakBlockStorage:
 
     def test_get_volume_returns_dict(self, mock_openstack_connection):
         """get_volume returns a dict for a valid volume ID."""
-        vol = make_mock_volume(volume_id="vol-bbb", name="boot-vol", status="in-use")
+        vol = make_stub_volume(volume_id="vol-bbb", name="boot-vol", status="in-use")
         mock_openstack_connection.block_storage.get_volume.return_value = vol
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -81,7 +81,7 @@ class TestInfomaniakBlockStorage:
 
     def test_create_volume_success(self, mock_openstack_connection):
         """create_volume returns a dict on success with all parameters forwarded."""
-        vol = make_mock_volume(volume_id="vol-new", name="fresh-vol", status="creating", size=50)
+        vol = make_stub_volume(volume_id="vol-new", name="fresh-vol", status="creating", size=50)
         mock_openstack_connection.block_storage.create_volume.return_value = vol
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -142,7 +142,7 @@ class TestInfomaniakBlockStorage:
 
     def test_detach_volume_success(self, mock_openstack_connection):
         """detach_volume finds the matching attachment and deletes it."""
-        mock_attach = MagicMock()
+        mock_attach = Stub()
         mock_attach.id = "att-99"
         mock_attach.volume_id = "vol-det"
         mock_openstack_connection.compute.volume_attachments.return_value = [mock_attach]
@@ -157,7 +157,7 @@ class TestInfomaniakBlockStorage:
 
     def test_detach_volume_not_attached_returns_false(self, mock_openstack_connection):
         """detach_volume returns False with a warning when volume is not attached."""
-        other_attach = MagicMock()
+        other_attach = Stub()
         other_attach.id = "att-other"
         other_attach.volume_id = "vol-OTHER"
         mock_openstack_connection.compute.volume_attachments.return_value = [other_attach]
@@ -174,7 +174,7 @@ class TestInfomaniakBlockStorage:
 
     def test_list_backups_returns_backup_dicts(self, mock_openstack_connection):
         """list_backups converts backup objects to dicts."""
-        mock_backup = MagicMock()
+        mock_backup = Stub()
         mock_backup.id = "bkp-001"
         mock_backup.name = "nightly"
         mock_backup.status = "available"
@@ -195,7 +195,7 @@ class TestInfomaniakBlockStorage:
 
     def test_create_backup_success(self, mock_openstack_connection):
         """create_backup returns a dict with backup metadata."""
-        mock_backup = MagicMock()
+        mock_backup = Stub()
         mock_backup.id = "bkp-new"
         mock_backup.name = "manual-bkp"
         mock_backup.status = "creating"
@@ -225,7 +225,7 @@ class TestInfomaniakBlockStorage:
 
     def test_restore_backup_success(self, mock_openstack_connection):
         """restore_backup returns a dict with the restored volume_id."""
-        mock_result = MagicMock()
+        mock_result = Stub()
         mock_result.volume_id = "vol-restored"
         mock_openstack_connection.block_storage.restore_backup.return_value = mock_result
 
@@ -254,7 +254,7 @@ class TestInfomaniakBlockStorage:
 
     def test_list_snapshots_returns_snapshot_dicts(self, mock_openstack_connection):
         """list_snapshots converts snapshot objects to dicts."""
-        mock_snap = MagicMock()
+        mock_snap = Stub()
         mock_snap.id = "snap-001"
         mock_snap.name = "pre-deploy"
         mock_snap.status = "available"
@@ -274,7 +274,7 @@ class TestInfomaniakBlockStorage:
 
     def test_create_snapshot_success(self, mock_openstack_connection):
         """create_snapshot returns a dict with snapshot metadata."""
-        mock_snap = MagicMock()
+        mock_snap = Stub()
         mock_snap.id = "snap-new"
         mock_snap.name = "quick-snap"
         mock_snap.status = "creating"
@@ -315,7 +315,7 @@ class TestInfomaniakBlockStorage:
 
     def test_volume_to_dict_with_created_at(self, mock_openstack_connection):
         """_volume_to_dict converts created_at to string when present."""
-        vol = make_mock_volume(volume_id="vol-ts")
+        vol = make_stub_volume(volume_id="vol-ts")
         vol.created_at = "2026-02-01T12:30:00Z"
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -325,7 +325,7 @@ class TestInfomaniakBlockStorage:
 
     def test_volume_to_dict_with_none_created_at(self, mock_openstack_connection):
         """_volume_to_dict returns None for created_at when not set."""
-        vol = make_mock_volume(volume_id="vol-no-ts")
+        vol = make_stub_volume(volume_id="vol-no-ts")
         vol.created_at = None
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -335,7 +335,7 @@ class TestInfomaniakBlockStorage:
 
     def test_volume_to_dict_with_attachments(self, mock_openstack_connection):
         """_volume_to_dict preserves non-empty attachments list."""
-        vol = make_mock_volume(volume_id="vol-attached")
+        vol = make_stub_volume(volume_id="vol-attached")
         vol.attachments = [
             {"server_id": "srv-1", "device": "/dev/vdb"},
             {"server_id": "srv-2", "device": "/dev/vdc"},
@@ -349,7 +349,7 @@ class TestInfomaniakBlockStorage:
 
     def test_volume_to_dict_with_none_attachments(self, mock_openstack_connection):
         """_volume_to_dict returns empty list when attachments is None."""
-        vol = make_mock_volume(volume_id="vol-none-att")
+        vol = make_stub_volume(volume_id="vol-none-att")
         vol.attachments = None
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
@@ -458,3 +458,74 @@ class TestInfomaniakBlockStorage:
 
         client = InfomaniakVolumeClient(mock_openstack_connection)
         assert client.delete_snapshot("snap-busy") is False
+
+
+# =========================================================================
+
+class TestInfomaniakVolumeClientExpanded:
+    """Tests for InfomaniakVolumeClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.block_storage import InfomaniakVolumeClient
+        mock_conn = Stub()
+        return InfomaniakVolumeClient(connection=mock_conn), mock_conn
+
+    def test_get_volume(self):
+        """get_volume returns dict via _volume_to_dict."""
+        client, mc = self._make_client()
+        vol = Stub(id="v1", name="data", status="available", size=50,
+                        volume_type="SSD", availability_zone="dc3-a",
+                        is_bootable=False, is_encrypted=False,
+                        attachments=[], created_at=None)
+        mc.block_storage.get_volume.return_value = vol
+        result = client.get_volume("v1")
+        assert result["id"] == "v1"
+        assert result["size"] == 50
+
+    def test_create_backup(self):
+        """create_backup returns dict with backup details."""
+        client, mc = self._make_client()
+        bk = Stub(id="bk1", name="mybk", status="creating", volume_id="v1")
+        mc.block_storage.create_backup.return_value = bk
+        result = client.create_backup("v1", "mybk")
+        assert result["id"] == "bk1"
+        assert result["volume_id"] == "v1"
+
+    def test_restore_backup(self):
+        """restore_backup returns dict with volume_id."""
+        client, mc = self._make_client()
+        res = Stub(volume_id="v-new")
+        mc.block_storage.restore_backup.return_value = res
+        result = client.restore_backup("bk1")
+        assert result["volume_id"] == "v-new"
+
+    def test_delete_backup(self):
+        """delete_backup returns True on success."""
+        client, mc = self._make_client()
+        assert client.delete_backup("bk1") is True
+        mc.block_storage.delete_backup.assert_called_once_with("bk1", force=False)
+
+    def test_create_snapshot(self):
+        """create_snapshot returns dict with snapshot details."""
+        client, mc = self._make_client()
+        snap = Stub(id="sn1", name="mysnap", status="creating", volume_id="v1")
+        mc.block_storage.create_snapshot.return_value = snap
+        result = client.create_snapshot("v1", "mysnap")
+        assert result["id"] == "sn1"
+
+    def test_delete_snapshot(self):
+        """delete_snapshot returns True on success."""
+        client, mc = self._make_client()
+        assert client.delete_snapshot("sn1") is True
+        mc.block_storage.delete_snapshot.assert_called_once_with("sn1", force=False)
+
+    def test_list_volumes_error(self):
+        """list_volumes returns [] on error."""
+        client, mc = self._make_client()
+        mc.block_storage.volumes.side_effect = Exception("fail")
+        assert client.list_volumes() == []
+
+
+# =========================================================================
+# ADDITIONAL NETWORK CLIENT TESTS
+# =========================================================================

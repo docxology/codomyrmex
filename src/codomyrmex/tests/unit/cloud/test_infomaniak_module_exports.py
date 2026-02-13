@@ -11,7 +11,7 @@ Tests cover:
 Total: ~11 tests in a single TestInfomaniakModuleExports class.
 """
 
-from unittest.mock import MagicMock
+from _stubs import Stub
 
 
 
@@ -141,7 +141,7 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakOpenStackBase, "__enter__")
         assert hasattr(InfomaniakOpenStackBase, "__exit__")
 
-        mock_conn = MagicMock()
+        mock_conn = Stub()
         base = InfomaniakOpenStackBase(mock_conn)
 
         with base as ctx:
@@ -160,7 +160,7 @@ class TestInfomaniakModuleExports:
         assert hasattr(InfomaniakS3Base, "__enter__")
         assert hasattr(InfomaniakS3Base, "__exit__")
 
-        mock_client = MagicMock()
+        mock_client = Stub()
         s3_base = InfomaniakS3Base(mock_client)
 
         with s3_base as ctx:
@@ -300,3 +300,57 @@ class TestInfomaniakModuleExports:
         assert result.operation == "mystery_op"
         assert result.resource_id == "res-999"
         assert "Something completely unexpected happened" in str(result)
+
+
+# =========================================================================
+
+class TestExpandedModuleExports:
+    """Comprehensive tests for __all__ exports and import paths."""
+
+    def test_classify_http_error_exported(self):
+        """classify_http_error is in __all__ and importable."""
+        from codomyrmex.cloud.infomaniak import classify_http_error
+        assert callable(classify_http_error)
+
+    def test_rest_base_exported(self):
+        """InfomaniakRESTBase is in __all__ and importable."""
+        from codomyrmex.cloud.infomaniak import InfomaniakRESTBase
+        assert InfomaniakRESTBase is not None
+
+    def test_all_exports_importable(self):
+        """Every item in __all__ can be imported and is not None."""
+        import codomyrmex.cloud.infomaniak as pkg
+
+        for name in pkg.__all__:
+            obj = getattr(pkg, name)
+            # Client classes may be None if optional deps missing,
+            # but base classes and exceptions should always exist
+            if name.startswith("Infomaniak") and name.endswith("Client"):
+                # Client may be None on systems without openstacksdk/boto3
+                continue
+            assert obj is not None, f"{name} is None but should be available"
+
+    def test_all_contains_classify_http_error(self):
+        """Verify __all__ includes classify_http_error."""
+        import codomyrmex.cloud.infomaniak as pkg
+        assert "classify_http_error" in pkg.__all__
+
+    def test_all_contains_rest_base(self):
+        """Verify __all__ includes InfomaniakRESTBase."""
+        import codomyrmex.cloud.infomaniak as pkg
+        assert "InfomaniakRESTBase" in pkg.__all__
+
+    def test_newsletter_importable_from_package(self):
+        """InfomaniakNewsletterClient importable from package root."""
+        from codomyrmex.cloud.infomaniak import InfomaniakNewsletterClient
+        assert InfomaniakNewsletterClient is not None
+
+    def test_newsletter_importable_from_submodule(self):
+        """InfomaniakNewsletterClient importable from newsletter submodule."""
+        from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
+        assert InfomaniakNewsletterClient is not None
+
+
+# =========================================================================
+# ADDITIONAL COMPUTE CLIENT TESTS
+# =========================================================================

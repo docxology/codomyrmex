@@ -10,7 +10,7 @@ This document outlines the steps to set up the development environment for the C
 
 ## Core Prerequisites
 
-- Python 3.9 or higher
+- Python 3.10 or higher
 - `uv` (Python package manager)
 - `git`
 
@@ -44,7 +44,7 @@ This document outlines the steps to set up the development environment for the C
     - Then, install the Python bindings:
 
         ```bash
-        uv uv uv pip install graphviz
+        uv pip install graphviz
         ```
 
 5. **API Keys (Optional for LLM features):**

@@ -15,7 +15,6 @@ This module provides extensive test coverage for:
 
 import asyncio
 import time
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -866,17 +865,34 @@ class TestIntegrationBridges:
         assert "test" in wf.tasks
 
 
+class _SimpleAgent:
+    """Real agent implementation for testing (no mocks)."""
+
+    def __init__(self, has_execute: bool = True, has_run: bool = False):
+        self._calls: list[tuple[str, ...]] = []
+        self._has_execute = has_execute
+        self._has_run = has_run
+
+    async def execute(self, task: str):
+        self._calls.append(("execute", task))
+        return {"output": "test"}
+
+    async def run(self, task: str = "", **kwargs):
+        self._calls.append(("run", task))
+        return {"output": "test"}
+
+
 class TestAgentOrchestrator:
     """Tests for AgentOrchestrator class."""
 
     def test_agent_registration(self):
         """Test agent registration."""
         orchestrator = AgentOrchestrator()
-        mock_agent = MagicMock()
+        agent = _SimpleAgent()
 
-        orchestrator.register_agent("test_agent", mock_agent)
+        orchestrator.register_agent("test_agent", agent)
 
-        assert orchestrator.get_agent("test_agent") == mock_agent
+        assert orchestrator.get_agent("test_agent") is agent
 
     def test_get_unregistered_agent(self):
         """Test getting unregistered agent returns None."""
@@ -898,32 +914,36 @@ class TestAgentOrchestrator:
     async def test_run_agent_task_with_execute(self):
         """Test running task with agent that has execute method."""
         orchestrator = AgentOrchestrator()
+        agent = _SimpleAgent()
 
-        mock_agent = MagicMock()
-        mock_agent.execute = AsyncMock(return_value={"output": "test"})
-
-        orchestrator.register_agent("test_agent", mock_agent)
+        orchestrator.register_agent("test_agent", agent)
 
         result = await orchestrator.run_agent_task("test_agent", "do_something")
 
         assert result["success"] is True
         assert result["agent"] == "test_agent"
-        mock_agent.execute.assert_called_once_with("do_something")
+        assert ("execute", "do_something") in agent._calls
 
     @pytest.mark.asyncio
     async def test_run_agent_task_with_run(self):
-        """Test running task with agent that has run method."""
+        """Test running task with agent that has run method (no execute)."""
         orchestrator = AgentOrchestrator()
 
-        mock_agent = MagicMock(spec=["run"])
-        mock_agent.run = AsyncMock(return_value={"output": "test"})
+        class RunOnlyAgent:
+            """Agent with only run method."""
+            def __init__(self):
+                self._called = False
+            async def run(self, task: str = "", **kwargs):
+                self._called = True
+                return {"output": "test"}
 
-        orchestrator.register_agent("test_agent", mock_agent)
+        agent = RunOnlyAgent()
+        orchestrator.register_agent("test_agent", agent)
 
         result = await orchestrator.run_agent_task("test_agent", "do_something")
 
         assert result["success"] is True
-        mock_agent.run.assert_called_once()
+        assert agent._called is True
 
     def test_create_agent_workflow(self):
         """Test creating workflow from agent tasks."""

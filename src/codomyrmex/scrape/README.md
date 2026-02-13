@@ -10,7 +10,7 @@ Web scraping module providing a unified interface for extracting content from we
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

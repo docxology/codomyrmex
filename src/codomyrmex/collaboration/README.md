@@ -9,7 +9,7 @@ The collaboration module provides multi-agent collaboration capabilities includi
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

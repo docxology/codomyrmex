@@ -46,7 +46,7 @@ Uses DefaultAzureCredential chain:
 ## Dependencies
 
 ```bash
-uv uv add azure-storage-blob azure-identity
+uv add azure-storage-blob azure-identity
 ```
 
 ## Navigation

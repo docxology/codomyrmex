@@ -133,7 +133,7 @@ This scenario walks through the typical commands a developer would run for a fir
 
 ```bash
 # 1. Ensure Prerequisites are Met (Manual Check):
-#    - Python 3.9+ installed?
+#    - Python 3.10+ installed?
 #    - pip available?
 #    - git installed?
 #    - Node.js 18.0+ and npm/yarn (if working on documentation module)?

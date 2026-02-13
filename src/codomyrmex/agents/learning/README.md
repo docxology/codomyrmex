@@ -9,7 +9,7 @@ Implements the learning loop for autonomous agents. Enables skill acquisition, p
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 ## Key Exports

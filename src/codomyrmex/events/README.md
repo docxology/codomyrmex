@@ -10,7 +10,7 @@ Event-driven architecture module enabling decoupled, asynchronous communication 
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

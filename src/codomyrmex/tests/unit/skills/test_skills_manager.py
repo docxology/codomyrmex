@@ -1,13 +1,20 @@
-"""Tests for SkillsManager."""
+"""Tests for SkillsManager — Zero-Mock implementation.
 
+Uses real git operations and temporary directories. Tests that depend
+on network connectivity or git are skipped when unavailable.
+"""
+
+import shutil
+import subprocess
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 import yaml
 
 from codomyrmex.skills.skills_manager import SkillsManager
+
+_GIT_AVAILABLE = shutil.which("git") is not None
 
 
 @pytest.fixture
@@ -17,61 +24,94 @@ def temp_dir():
         yield Path(tmpdir)
 
 
-@patch("codomyrmex.skills.skills_manager.SkillSync.clone_upstream")
-def test_initialize_clone(mock_clone, temp_dir):
-    """Test initialization with clone."""
-    mock_clone.return_value = True
+def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
+    """Create a git repo at *path* containing skill YAML files.
 
+    Args:
+        path: Root of the repo.
+        skills: Mapping of ``category/skill_name`` → skill data dict.
+    """
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=str(path), capture_output=True, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+    for rel, data in skills.items():
+        skill_dir = path / rel
+        skill_dir.mkdir(parents=True, exist_ok=True)
+        with open(skill_dir / "skill.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(data, f)
+    subprocess.run(["git", "add", "."], cwd=str(path), capture_output=True, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+
+
+# ---- Tests ----
+
+
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_initialize_clone(temp_dir):
+    """Test initialization clones a real repo."""
+    origin = temp_dir / "origin"
+    _init_repo_with_skills(origin, {
+        "cat1/skill1": {"description": "s1"}
+    })
+
+    skills_dir = temp_dir / "skills"
     manager = SkillsManager(
-        temp_dir / "skills",
-        "https://github.com/test/repo",
+        skills_dir,
+        str(origin),
         "main",
         auto_sync=False,
     )
 
     result = manager.initialize()
     assert result is True
-    mock_clone.assert_called_once()
+    assert (skills_dir / "upstream").exists()
 
 
-@patch("codomyrmex.skills.skills_manager.SkillSync.pull_upstream")
-@patch("codomyrmex.skills.skills_manager.SkillSync.check_upstream_status")
-def test_initialize_auto_sync(mock_status, mock_pull, temp_dir):
-    """Test initialization with auto-sync."""
-    mock_status.return_value = {"exists": True}
-    mock_pull.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_initialize_auto_sync(temp_dir):
+    """Test initialization with auto-sync pulls updates."""
+    origin = temp_dir / "origin"
+    _init_repo_with_skills(origin, {
+        "cat1/skill1": {"description": "s1"}
+    })
 
     skills_dir = temp_dir / "skills"
-    upstream_dir = skills_dir / "upstream"
-    upstream_dir.mkdir(parents=True)
+    manager = SkillsManager(skills_dir, str(origin), "main", auto_sync=True)
 
-    manager = SkillsManager(
-        skills_dir,
-        "https://github.com/test/repo",
-        "main",
-        auto_sync=True,
-    )
-
+    # First init clones
     result = manager.initialize()
     assert result is True
-    mock_pull.assert_called_once()
+
+    # Second init should pull (auto_sync=True)
+    manager2 = SkillsManager(skills_dir, str(origin), "main", auto_sync=True)
+    result2 = manager2.initialize()
+    assert result2 is True
 
 
-@patch("codomyrmex.skills.skills_manager.SkillSync.pull_upstream")
-def test_sync_upstream(mock_pull, temp_dir):
-    """Test syncing upstream."""
-    mock_pull.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_sync_upstream(temp_dir):
+    """Test syncing upstream pulls from remote."""
+    origin = temp_dir / "origin"
+    _init_repo_with_skills(origin, {
+        "cat1/skill1": {"description": "s1"}
+    })
 
     skills_dir = temp_dir / "skills"
-    upstream_dir = skills_dir / "upstream"
-    upstream_dir.mkdir(parents=True)
-
-    manager = SkillsManager(skills_dir, "https://github.com/test/repo", "main")
-    manager.registry.build_index = MagicMock()  # Mock build_index
+    manager = SkillsManager(skills_dir, str(origin), "main")
+    manager.initialize()
 
     result = manager.sync_upstream()
     assert result is True
-    mock_pull.assert_called_once()
 
 
 @pytest.mark.unit
@@ -188,4 +228,3 @@ def test_get_categories(temp_dir):
     categories = manager.get_categories()
     assert "category1" in categories
     assert "category2" in categories
-

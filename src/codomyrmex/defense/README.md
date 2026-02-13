@@ -8,7 +8,7 @@ Active countermeasures and threat containment for AI security.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

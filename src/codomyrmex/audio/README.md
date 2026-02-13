@@ -26,7 +26,7 @@ The audio module provides comprehensive audio processing capabilities including 
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

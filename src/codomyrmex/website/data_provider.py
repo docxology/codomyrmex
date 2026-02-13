@@ -655,6 +655,7 @@ class DataProvider:
                 return {
                     "default_model": config_manager.config.default_model,
                     "preferred_models": config_manager.config.preferred_models,
+                    "available_models": config_manager.get_available_models(),
                     "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}"
                 }
         except Exception as e:
@@ -664,6 +665,7 @@ class DataProvider:
         return {
             "default_model": "llama3.1:latest",
             "preferred_models": ["llama3.1:latest", "codellama:latest"],
+            "available_models": ["llama3.1:latest"],
             "ollama_host": "localhost:11434"
         }
 

@@ -8,7 +8,7 @@ Fault injection and resilience testing.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

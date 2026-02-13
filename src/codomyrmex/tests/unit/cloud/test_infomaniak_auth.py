@@ -15,7 +15,8 @@ Total: ~16 tests in 1 test class.
 """
 
 import sys
-from unittest.mock import MagicMock, patch
+import os
+from _stubs import Stub
 
 import pytest
 
@@ -64,48 +65,50 @@ class TestInfomaniakAuthModule:
     # InfomaniakCredentials.from_env
     # -----------------------------------------------------------------
 
-    def test_credentials_from_env_valid(self, infomaniak_openstack_env):
+    def test_credentials_from_env_valid(self, infomaniak_openstack_env, monkeypatch):
         """Credentials are correctly populated from valid environment variables."""
         from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
 
-        with patch.dict("os.environ", infomaniak_openstack_env, clear=True):
-            creds = InfomaniakCredentials.from_env()
+        creds = InfomaniakCredentials.from_env()
 
-            assert creds.application_credential_id == "test-cred-id"
-            assert creds.application_credential_secret == "test-cred-secret"
-            assert creds.auth_url == "https://api.pub1.infomaniak.cloud/identity/v3/"
-            assert creds.region == "dc3-a"
+        assert creds.application_credential_id == "test-cred-id"
+        assert creds.application_credential_secret == "test-cred-secret"
+        assert creds.auth_url == "https://api.pub1.infomaniak.cloud/identity/v3/"
+        assert creds.region == "dc3-a"
 
-    def test_credentials_from_env_missing_raises(self):
+    def test_credentials_from_env_missing_raises(self, monkeypatch):
         """Missing required env vars raise InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakAuthError,
             InfomaniakCredentials,
         )
 
-        with patch.dict("os.environ", {}, clear=True):
-            with pytest.raises(
-                InfomaniakAuthError, match="Missing required environment variables"
-            ):
-                InfomaniakCredentials.from_env()
+        # Clear all INFOMANIAK env vars
+        for key in list(os.environ):
+            if key.startswith("INFOMANIAK"):
+                monkeypatch.delenv(key, raising=False)
 
-    def test_credentials_from_env_defaults(self):
+        with pytest.raises(
+            InfomaniakAuthError, match="Missing required environment variables"
+        ):
+            InfomaniakCredentials.from_env()
+
+    def test_credentials_from_env_defaults(self, monkeypatch):
         """Defaults are applied when optional env vars are absent."""
         from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
 
-        with patch.dict(
-            "os.environ",
-            {
-                "INFOMANIAK_APP_CREDENTIAL_ID": "id-only",
-                "INFOMANIAK_APP_CREDENTIAL_SECRET": "secret-only",
-            },
-            clear=True,
-        ):
-            creds = InfomaniakCredentials.from_env()
+        # Clear existing env vars and set only required ones
+        for key in list(os.environ):
+            if key.startswith("INFOMANIAK"):
+                monkeypatch.delenv(key, raising=False)
+        monkeypatch.setenv("INFOMANIAK_APP_CREDENTIAL_ID", "id-only")
+        monkeypatch.setenv("INFOMANIAK_APP_CREDENTIAL_SECRET", "secret-only")
 
-            assert creds.auth_url == "https://api.pub1.infomaniak.cloud/identity/v3/"
-            assert creds.region == "dc3-a"
-            assert creds.project_id is None
+        creds = InfomaniakCredentials.from_env()
+
+        assert creds.auth_url == "https://api.pub1.infomaniak.cloud/identity/v3/"
+        assert creds.region == "dc3-a"
+        assert creds.project_id is None
 
     # -----------------------------------------------------------------
     # to_openstack_auth()
@@ -133,29 +136,31 @@ class TestInfomaniakAuthModule:
     # InfomaniakS3Credentials.from_env
     # -----------------------------------------------------------------
 
-    def test_s3_credentials_from_env_valid(self, infomaniak_s3_env):
+    def test_s3_credentials_from_env_valid(self, infomaniak_s3_env, monkeypatch):
         """S3 credentials are correctly populated from valid environment variables."""
         from codomyrmex.cloud.infomaniak.auth import InfomaniakS3Credentials
 
-        with patch.dict("os.environ", infomaniak_s3_env, clear=True):
-            creds = InfomaniakS3Credentials.from_env()
+        creds = InfomaniakS3Credentials.from_env()
 
-            assert creds.access_key == "test-s3-access"
-            assert creds.secret_key == "test-s3-secret"
-            assert creds.endpoint_url == "https://s3.pub1.infomaniak.cloud/"
+        assert creds.access_key == "test-s3-access"
+        assert creds.secret_key == "test-s3-secret"
+        assert creds.endpoint_url == "https://s3.pub1.infomaniak.cloud/"
 
-    def test_s3_credentials_from_env_missing_raises(self):
+    def test_s3_credentials_from_env_missing_raises(self, monkeypatch):
         """Missing required S3 env vars raise InfomaniakAuthError."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakAuthError,
             InfomaniakS3Credentials,
         )
 
-        with patch.dict("os.environ", {}, clear=True):
-            with pytest.raises(
-                InfomaniakAuthError, match="Missing required environment variables"
-            ):
-                InfomaniakS3Credentials.from_env()
+        for key in list(os.environ):
+            if key.startswith("INFOMANIAK"):
+                monkeypatch.delenv(key, raising=False)
+
+        with pytest.raises(
+            InfomaniakAuthError, match="Missing required environment variables"
+        ):
+            InfomaniakS3Credentials.from_env()
 
     def test_s3_credentials_defaults(self):
         """S3 credentials use correct defaults for endpoint and region."""
@@ -173,15 +178,15 @@ class TestInfomaniakAuthModule:
     # create_openstack_connection
     # -----------------------------------------------------------------
 
-    def test_create_openstack_connection_success(self):
+    def test_create_openstack_connection_success(self, monkeypatch):
         """create_openstack_connection calls openstack.connect with correct params."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakCredentials,
             create_openstack_connection,
         )
 
-        mock_openstack = MagicMock()
-        mock_conn = MagicMock()
+        mock_openstack = Stub()
+        mock_conn = Stub()
         mock_openstack.connect.return_value = mock_conn
 
         creds = InfomaniakCredentials(
@@ -191,8 +196,8 @@ class TestInfomaniakAuthModule:
             region="dc3-a",
         )
 
-        with patch.dict(sys.modules, {"openstack": mock_openstack}):
-            result = create_openstack_connection(creds)
+        monkeypatch.setitem(sys.modules, "openstack", mock_openstack)
+        result = create_openstack_connection(creds)
 
         assert result is mock_conn
         mock_openstack.connect.assert_called_once_with(
@@ -203,7 +208,7 @@ class TestInfomaniakAuthModule:
             region_name="dc3-a",
         )
 
-    def test_create_openstack_connection_auth_failure(self):
+    def test_create_openstack_connection_auth_failure(self, monkeypatch):
         """create_openstack_connection raises InfomaniakAuthError on SDK failure."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakAuthError,
@@ -211,7 +216,7 @@ class TestInfomaniakAuthModule:
             create_openstack_connection,
         )
 
-        mock_openstack = MagicMock()
+        mock_openstack = Stub()
         mock_openstack.connect.side_effect = Exception("Unauthorized 401")
 
         creds = InfomaniakCredentials(
@@ -219,23 +224,23 @@ class TestInfomaniakAuthModule:
             application_credential_secret="bad-secret",
         )
 
-        with patch.dict(sys.modules, {"openstack": mock_openstack}):
-            with pytest.raises(InfomaniakAuthError, match="Authentication failed"):
-                create_openstack_connection(creds)
+        monkeypatch.setitem(sys.modules, "openstack", mock_openstack)
+        with pytest.raises(InfomaniakAuthError, match="Authentication failed"):
+            create_openstack_connection(creds)
 
     # -----------------------------------------------------------------
     # create_s3_client
     # -----------------------------------------------------------------
 
-    def test_create_s3_client_success(self):
+    def test_create_s3_client_success(self, monkeypatch):
         """create_s3_client calls boto3.client with correct params."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakS3Credentials,
             create_s3_client,
         )
 
-        mock_boto3 = MagicMock()
-        mock_client = MagicMock()
+        mock_boto3 = Stub()
+        mock_client = Stub()
         mock_boto3.client.return_value = mock_client
 
         creds = InfomaniakS3Credentials(
@@ -245,8 +250,8 @@ class TestInfomaniakAuthModule:
             region="us-east-1",
         )
 
-        with patch.dict(sys.modules, {"boto3": mock_boto3}):
-            result = create_s3_client(creds)
+        monkeypatch.setitem(sys.modules, "boto3", mock_boto3)
+        result = create_s3_client(creds)
 
         assert result is mock_client
         mock_boto3.client.assert_called_once_with(
@@ -257,7 +262,7 @@ class TestInfomaniakAuthModule:
             region_name="us-east-1",
         )
 
-    def test_create_s3_client_import_error_without_boto3(self):
+    def test_create_s3_client_import_error_without_boto3(self, monkeypatch):
         """create_s3_client raises ImportError when boto3 is not installed."""
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakS3Credentials,
@@ -270,6 +275,234 @@ class TestInfomaniakAuthModule:
         )
 
         # Remove boto3 from sys.modules and make import fail
-        with patch.dict(sys.modules, {"boto3": None}):
+        monkeypatch.setitem(sys.modules, "boto3", None)
+        with pytest.raises(ImportError, match="boto3 is required"):
+            create_s3_client(creds)
+
+
+# =========================================================================
+
+class TestAuthFunctions:
+    """Tests for create_openstack_connection and create_s3_client."""
+
+    def test_create_openstack_connection_import_error(self):
+        """create_openstack_connection raises ImportError when openstacksdk missing."""
+        import sys
+
+        from codomyrmex.cloud.infomaniak.auth import create_openstack_connection
+
+        # Temporarily hide openstack module
+        saved = sys.modules.get("openstack")
+        sys.modules["openstack"] = None
+        try:
+            with pytest.raises(ImportError, match="openstacksdk is required"):
+                create_openstack_connection(
+                    Stub()  # credentials arg doesn't matter — import fails first
+                )
+        finally:
+            if saved is not None:
+                sys.modules["openstack"] = saved
+            else:
+                sys.modules.pop("openstack", None)
+
+    def test_create_openstack_connection_auth_failure(self):
+        """create_openstack_connection raises InfomaniakAuthError on connection failure."""
+        import sys
+
+        from codomyrmex.cloud.infomaniak.auth import (
+            InfomaniakAuthError,
+            InfomaniakCredentials,
+            create_openstack_connection,
+        )
+
+        mock_openstack = Stub()
+        mock_openstack.connect.side_effect = Exception("auth failed")
+        sys.modules["openstack"] = mock_openstack
+        try:
+            creds = InfomaniakCredentials(
+                application_credential_id="id",
+                application_credential_secret="secret",
+            )
+            with pytest.raises(InfomaniakAuthError, match="Authentication failed"):
+                create_openstack_connection(creds)
+        finally:
+            sys.modules.pop("openstack", None)
+
+    def test_create_openstack_connection_success(self):
+        """create_openstack_connection returns Connection on success."""
+        import sys
+
+        from codomyrmex.cloud.infomaniak.auth import (
+            InfomaniakCredentials,
+            create_openstack_connection,
+        )
+
+        mock_conn = Stub()
+        mock_openstack = Stub()
+        mock_openstack.connect.return_value = mock_conn
+        sys.modules["openstack"] = mock_openstack
+        try:
+            creds = InfomaniakCredentials(
+                application_credential_id="id",
+                application_credential_secret="secret",
+            )
+            result = create_openstack_connection(creds)
+            assert result is mock_conn
+            mock_openstack.connect.assert_called_once()
+        finally:
+            sys.modules.pop("openstack", None)
+
+    def test_create_s3_client_import_error(self):
+        """create_s3_client raises ImportError when boto3 missing."""
+        import sys
+
+        from codomyrmex.cloud.infomaniak.auth import create_s3_client
+
+        saved = sys.modules.get("boto3")
+        sys.modules["boto3"] = None
+        try:
             with pytest.raises(ImportError, match="boto3 is required"):
-                create_s3_client(creds)
+                create_s3_client(Stub())
+        finally:
+            if saved is not None:
+                sys.modules["boto3"] = saved
+            else:
+                sys.modules.pop("boto3", None)
+
+    def test_create_s3_client_success(self):
+        """create_s3_client returns boto3 client on success."""
+        import sys
+
+        from codomyrmex.cloud.infomaniak.auth import (
+            InfomaniakS3Credentials,
+            create_s3_client,
+        )
+
+        mock_s3 = Stub()
+        mock_boto3 = Stub()
+        mock_boto3.client.return_value = mock_s3
+        sys.modules["boto3"] = mock_boto3
+        try:
+            creds = InfomaniakS3Credentials(
+                access_key="ak", secret_key="sk",
+            )
+            result = create_s3_client(creds)
+            assert result is mock_s3
+            mock_boto3.client.assert_called_once_with(
+                "s3",
+                endpoint_url=creds.endpoint_url,
+                aws_access_key_id="ak",
+                aws_secret_access_key="sk",
+                region_name=creds.region,
+            )
+        finally:
+            sys.modules.pop("boto3", None)
+
+    def test_credentials_to_openstack_auth(self):
+        """InfomaniakCredentials.to_openstack_auth returns correct dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id-123",
+            application_credential_secret="secret-456",
+            auth_url="https://custom.url/identity/v3/",
+        )
+        auth = creds.to_openstack_auth()
+
+        assert auth["auth_url"] == "https://custom.url/identity/v3/"
+        assert auth["application_credential_id"] == "id-123"
+        assert auth["application_credential_secret"] == "secret-456"
+        assert len(auth) == 3
+
+    def test_credentials_metadata_field(self):
+        """InfomaniakCredentials supports metadata dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id",
+            application_credential_secret="secret",
+            metadata={"env": "prod"},
+        )
+        assert creds.metadata == {"env": "prod"}
+
+    def test_credentials_default_metadata_empty(self):
+        """InfomaniakCredentials metadata defaults to empty dict."""
+        from codomyrmex.cloud.infomaniak.auth import InfomaniakCredentials
+
+        creds = InfomaniakCredentials(
+            application_credential_id="id",
+            application_credential_secret="secret",
+        )
+        assert creds.metadata == {}
+
+    def test_auth_constants(self):
+        """Auth module defines correct default constants."""
+        from codomyrmex.cloud.infomaniak.auth import (
+            DEFAULT_AUTH_URL,
+            DEFAULT_S3_ENDPOINT,
+            DEFAULT_S3_REGION,
+        )
+        assert DEFAULT_AUTH_URL == "https://api.pub1.infomaniak.cloud/identity/v3/"
+        assert DEFAULT_S3_ENDPOINT == "https://s3.pub1.infomaniak.cloud/"
+        assert DEFAULT_S3_REGION == "us-east-1"
+
+
+# =========================================================================
+# Test Module Exports (expanded)
+# =========================================================================
+
+
+# =========================================================================
+
+class TestClientFactoryMethodsExpanded:
+    """Factory method tests for clients not previously tested."""
+
+    def test_volume_from_credentials(self, monkeypatch):
+        from codomyrmex.cloud.infomaniak.block_storage import InfomaniakVolumeClient
+        monkeypatch.setattr(
+            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
+            lambda *a, **kw: Stub()
+        )
+        client = InfomaniakVolumeClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakVolumeClient)
+
+    def test_network_from_credentials(self, monkeypatch):
+        from codomyrmex.cloud.infomaniak.network import InfomaniakNetworkClient
+        monkeypatch.setattr(
+            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
+            lambda *a, **kw: Stub()
+        )
+        client = InfomaniakNetworkClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakNetworkClient)
+
+    def test_dns_from_credentials(self, monkeypatch):
+        from codomyrmex.cloud.infomaniak.dns import InfomaniakDNSClient
+        monkeypatch.setattr(
+            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
+            lambda *a, **kw: Stub()
+        )
+        client = InfomaniakDNSClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakDNSClient)
+
+    def test_heat_from_credentials(self, monkeypatch):
+        from codomyrmex.cloud.infomaniak.orchestration import InfomaniakHeatClient
+        monkeypatch.setattr(
+            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
+            lambda *a, **kw: Stub()
+        )
+        client = InfomaniakHeatClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakHeatClient)
+
+    def test_metering_from_credentials(self, monkeypatch):
+        from codomyrmex.cloud.infomaniak.metering import InfomaniakMeteringClient
+        monkeypatch.setattr(
+            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
+            lambda *a, **kw: Stub()
+        )
+        client = InfomaniakMeteringClient.from_credentials("id", "secret")
+        assert isinstance(client, InfomaniakMeteringClient)
+
+
+# =========================================================================
+# NEWSLETTER VALIDATION TESTS
+# =========================================================================

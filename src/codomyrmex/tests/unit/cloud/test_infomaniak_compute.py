@@ -15,13 +15,14 @@ Tests cover:
 Total: ~24 tests across 7 test classes.
 """
 
-from unittest.mock import MagicMock, patch
+import os
+from _stubs import Stub
 
 
 from codomyrmex.cloud.common import ComputeClient
 from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
-from codomyrmex.tests.unit.cloud.conftest import make_mock_image, make_mock_server
+from _stubs import make_stub_image, make_stub_server
 
 # =========================================================================
 # Base Class & Construction
@@ -60,15 +61,15 @@ class TestComputeClientBase:
 
         mock_openstack_connection.close.assert_called_once()
 
-    def test_from_env_delegates_to_create_openstack_connection(self):
+    def test_from_env_delegates_to_create_openstack_connection(self, monkeypatch):
         """from_env() delegates to create_openstack_connection and returns a client."""
-        mock_conn = MagicMock()
+        mock_conn = Stub()
 
-        with patch(
+        monkeypatch.setattr(
             "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
-            return_value=mock_conn,
-        ):
-            client = InfomaniakComputeClient.from_env()
+            lambda *a, **kw: mock_conn,
+        )
+        client = InfomaniakComputeClient.from_env()
 
         assert isinstance(client, InfomaniakComputeClient)
         assert client._conn is mock_conn
@@ -84,7 +85,7 @@ class TestComputeInstanceOps:
 
     def test_list_instances(self, mock_openstack_connection):
         """list_instances returns a list of dicts from OpenStack servers."""
-        server = make_mock_server()
+        server = make_stub_server()
         mock_openstack_connection.compute.servers.return_value = [server]
 
         client = InfomaniakComputeClient(mock_openstack_connection)
@@ -100,7 +101,7 @@ class TestComputeInstanceOps:
 
     def test_get_instance(self, mock_openstack_connection):
         """get_instance returns a dict for a specific server ID."""
-        server = make_mock_server(server_id="srv-abc", name="specific-server")
+        server = make_stub_server(server_id="srv-abc", name="specific-server")
         mock_openstack_connection.compute.get_server.return_value = server
 
         client = InfomaniakComputeClient(mock_openstack_connection)
@@ -114,18 +115,18 @@ class TestComputeInstanceOps:
     def test_create_instance_happy_path(self, mock_openstack_connection):
         """create_instance resolves flavor/image/network and returns created server."""
         # Set up resolved objects
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.id = "flavor-a1"
-        mock_image = MagicMock()
+        mock_image = Stub()
         mock_image.id = "img-ubuntu"
-        mock_network = MagicMock()
+        mock_network = Stub()
         mock_network.id = "net-main"
 
         mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
         mock_openstack_connection.image.find_image.return_value = mock_image
         mock_openstack_connection.network.find_network.return_value = mock_network
 
-        created = make_mock_server(server_id="srv-new", name="new-instance")
+        created = make_stub_server(server_id="srv-new", name="new-instance")
         mock_openstack_connection.compute.create_server.return_value = created
         mock_openstack_connection.compute.wait_for_server.return_value = created
 
@@ -162,7 +163,7 @@ class TestComputeInstanceOps:
 
     def test_create_instance_image_not_found(self, mock_openstack_connection):
         """create_instance returns None when the image is not found."""
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.id = "flavor-1"
         mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
         mock_openstack_connection.image.find_image.return_value = None
@@ -180,9 +181,9 @@ class TestComputeInstanceOps:
 
     def test_create_instance_network_not_found(self, mock_openstack_connection):
         """create_instance returns None when the network is not found."""
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.id = "flavor-1"
-        mock_image = MagicMock()
+        mock_image = Stub()
         mock_image.id = "image-1"
         mock_openstack_connection.compute.find_flavor.return_value = mock_flavor
         mock_openstack_connection.image.find_image.return_value = mock_image
@@ -260,7 +261,7 @@ class TestComputeImageOps:
 
     def test_list_images(self, mock_openstack_connection):
         """list_images returns a list of image dicts from Glance."""
-        img = make_mock_image(image_id="img-ubuntu", name="Ubuntu 22.04")
+        img = make_stub_image(image_id="img-ubuntu", name="Ubuntu 22.04")
         mock_openstack_connection.image.images.return_value = [img]
 
         client = InfomaniakComputeClient(mock_openstack_connection)
@@ -274,7 +275,7 @@ class TestComputeImageOps:
 
     def test_get_image(self, mock_openstack_connection):
         """get_image returns a dict for a found image."""
-        img = make_mock_image(image_id="img-found", name="Debian 12")
+        img = make_stub_image(image_id="img-found", name="Debian 12")
         mock_openstack_connection.image.find_image.return_value = img
 
         client = InfomaniakComputeClient(mock_openstack_connection)
@@ -305,7 +306,7 @@ class TestComputeFlavorOps:
 
     def test_list_flavors(self, mock_openstack_connection):
         """list_flavors returns flavor dicts with vcpus, ram, disk."""
-        mock_flavor = MagicMock()
+        mock_flavor = Stub()
         mock_flavor.id = "a1-ram2-disk20-perf1"
         mock_flavor.name = "a1-ram2-disk20-perf1"
         mock_flavor.vcpus = 1
@@ -336,7 +337,7 @@ class TestComputeKeypairOps:
 
     def test_list_keypairs(self, mock_openstack_connection):
         """list_keypairs returns keypair dicts with name and fingerprint."""
-        mock_kp = MagicMock()
+        mock_kp = Stub()
         mock_kp.name = "deploy-key"
         mock_kp.fingerprint = "aa:bb:cc:dd:ee:ff"
         mock_kp.type = "ssh"
@@ -353,7 +354,7 @@ class TestComputeKeypairOps:
 
     def test_create_keypair_with_public_key(self, mock_openstack_connection):
         """create_keypair imports an existing public key and returns the result."""
-        mock_kp = MagicMock()
+        mock_kp = Stub()
         mock_kp.name = "imported-key"
         mock_kp.fingerprint = "11:22:33:44"
         mock_kp.public_key = "ssh-rsa AAAA..."
@@ -376,7 +377,7 @@ class TestComputeKeypairOps:
 
     def test_create_keypair_generates_private_key(self, mock_openstack_connection):
         """create_keypair without public_key generates a new pair with private_key."""
-        mock_kp = MagicMock()
+        mock_kp = Stub()
         mock_kp.name = "generated-key"
         mock_kp.fingerprint = "55:66:77:88"
         mock_kp.public_key = "ssh-rsa BBBB..."
@@ -417,7 +418,7 @@ class TestComputeAZOps:
 
     def test_list_availability_zones(self, mock_openstack_connection):
         """list_availability_zones returns zone dicts with name and state."""
-        mock_zone = MagicMock()
+        mock_zone = Stub()
         mock_zone.name = "dc3-a"
         mock_zone.state = {"available": True}
 
@@ -487,3 +488,84 @@ class TestComputeErrorPaths:
         result = client.list_flavors()
 
         assert result == []
+
+
+# =========================================================================
+
+class TestInfomaniakComputeClientExpanded:
+    """Tests for InfomaniakComputeClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
+        mock_conn = Stub()
+        return InfomaniakComputeClient(connection=mock_conn), mock_conn
+
+    def test_get_image(self):
+        """get_image returns dict with image details."""
+        client, mc = self._make_client()
+        img = Stub(id="img-1", status="active",
+                        min_disk=10, min_ram=512, size=2048)
+        img.name = "Ubuntu"
+        mc.image.find_image.return_value = img
+        result = client.get_image("img-1")
+        mc.image.find_image.assert_called_once_with("img-1")
+        assert result["id"] == "img-1"
+        assert result["name"] == "Ubuntu"
+
+    def test_get_image_not_found(self):
+        """get_image returns None when not found."""
+        client, mc = self._make_client()
+        mc.image.find_image.return_value = None
+        assert client.get_image("nope") is None
+
+    def test_create_keypair(self):
+        """create_keypair returns dict with keypair details."""
+        client, mc = self._make_client()
+        kp = Stub(fingerprint="aa:bb", public_key="ssh-rsa AAA")
+        kp.name = "mykey"
+        kp.private_key = None
+        mc.compute.create_keypair.return_value = kp
+        result = client.create_keypair("mykey", "ssh-rsa AAA")
+        mc.compute.create_keypair.assert_called_once_with(name="mykey", public_key="ssh-rsa AAA")
+        assert result["name"] == "mykey"
+        assert result["fingerprint"] == "aa:bb"
+
+    def test_delete_keypair(self):
+        """delete_keypair calls SDK and returns True."""
+        client, mc = self._make_client()
+        assert client.delete_keypair("mykey") is True
+        mc.compute.delete_keypair.assert_called_once_with("mykey")
+
+    def test_list_availability_zones(self):
+        """list_availability_zones returns list of dicts."""
+        client, mc = self._make_client()
+        az = Stub()
+        az.name = "dc3-a"
+        az.state = {"available": True}
+        mc.compute.availability_zones.return_value = [az]
+        result = client.list_availability_zones()
+        assert len(result) == 1
+        assert result[0]["name"] == "dc3-a"
+
+    def test_terminate_instance(self):
+        """terminate_instance delegates to delete_instance with force=True."""
+        client, mc = self._make_client()
+        assert client.terminate_instance("inst-1") is True
+        mc.compute.delete_server.assert_called_once_with("inst-1", force=True)
+
+    def test_server_to_dict_flavor_none(self):
+        """_server_to_dict handles None flavor safely."""
+        client, _ = self._make_client()
+        srv = Stub(id="s1", name="test", status="ACTIVE",
+                        addresses={}, key_name=None, created_at=None,
+                        updated_at=None, security_groups=[])
+        srv.flavor = None
+        srv.image = None
+        result = client._server_to_dict(srv)
+        assert result["flavor"] is None
+        assert result["image"] is None
+
+
+# =========================================================================
+# ADDITIONAL VOLUME CLIENT TESTS
+# =========================================================================

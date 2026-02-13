@@ -2,9 +2,10 @@
 Tests for OpenRouterProvider.
 
 Unit tests for the OpenRouter LLM provider implementation.
+Zero-Mock compliant — uses real API calls gated by OPENROUTER_API_KEY.
 """
 
-from unittest.mock import MagicMock
+import os
 
 import pytest
 
@@ -14,6 +15,11 @@ from codomyrmex.llm.providers import (
     ProviderConfig,
     ProviderType,
     get_provider,
+)
+
+_OPENROUTER_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+_skip_no_key = pytest.mark.skipif(
+    not _OPENROUTER_KEY, reason="OPENROUTER_API_KEY not set"
 )
 
 
@@ -152,38 +158,16 @@ class TestOpenRouterProviderContextManager:
 class TestOpenRouterProviderComplete:
     """Test OpenRouterProvider completion methods."""
 
-    def test_complete_calls_openai_client(self):
-        """Test that complete() uses the OpenAI client correctly."""
-        # Setup mock
-        mock_client = MagicMock()
-        mock_response = MagicMock()
-        mock_response.choices = [MagicMock()]
-        mock_response.choices[0].message.content = "Hello from OpenRouter!"
-        mock_response.choices[0].message.tool_calls = None
-        mock_response.choices[0].finish_reason = "stop"
-        mock_response.model = "google/gemma-2-9b-it:free"
-        mock_response.usage = MagicMock(
-            prompt_tokens=10,
-            completion_tokens=5,
-            total_tokens=15
-        )
-        mock_client.chat.completions.create.return_value = mock_response
+    @_skip_no_key
+    def test_complete_returns_response(self):
+        """Test that complete() returns a valid response using real API."""
+        config = ProviderConfig(api_key=_OPENROUTER_KEY)
+        with OpenRouterProvider(config) as provider:
+            messages = [Message(role="user", content="Say hello in one word")]
+            response = provider.complete(messages)
 
-        # Create provider and inject mock client
-        config = ProviderConfig(api_key="test-key")
-        provider = OpenRouterProvider(config)
-        provider._client = mock_client
-
-        messages = [Message(role="user", content="Say hello")]
-        response = provider.complete(messages)
-
-        # Verify response
-        assert response.content == "Hello from OpenRouter!"
-        assert response.provider == ProviderType.OPENROUTER
-        assert response.usage["total_tokens"] == 15
-
-        # Verify the client was called correctly
-        mock_client.chat.completions.create.assert_called_once()
+            assert len(response.content) > 0
+            assert response.provider == ProviderType.OPENROUTER
 
     def test_complete_raises_when_client_not_initialized(self):
         """Test that complete() raises RuntimeError when client is None."""

@@ -10,7 +10,7 @@ The deployment module provides deployment strategy implementations and orchestra
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

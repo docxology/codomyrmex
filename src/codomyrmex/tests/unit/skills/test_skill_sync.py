@@ -1,12 +1,20 @@
-"""Tests for SkillSync."""
+"""Tests for SkillSync — Zero-Mock implementation.
 
+Uses real git operations (git init, etc.) and temporary directories.
+Tests that require network access to clone remote repos are skipped
+when git is not available or network is unreachable.
+"""
+
+import shutil
+import subprocess
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
 from codomyrmex.skills.skill_sync import SkillSync
+
+_GIT_AVAILABLE = shutil.which("git") is not None
 
 
 @pytest.fixture
@@ -14,6 +22,40 @@ def temp_dir():
     """Create temporary directory for testing."""
     with tempfile.TemporaryDirectory() as tmpdir:
         yield Path(tmpdir)
+
+
+def _init_bare_repo(path: Path) -> None:
+    """Create a minimal bare git repo at *path* for testing."""
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        ["git", "init", "--bare"],
+        cwd=str(path),
+        capture_output=True,
+        check=True,
+    )
+
+
+def _init_repo_with_commit(path: Path) -> None:
+    """Create a git repo with a single commit at *path*."""
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=str(path), capture_output=True, check=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+    (path / "README.md").write_text("# test\n")
+    subprocess.run(["git", "add", "."], cwd=str(path), capture_output=True, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"],
+        cwd=str(path), capture_output=True, check=True,
+    )
+
+
+# ---- Tests ----
 
 
 @pytest.mark.unit
@@ -30,86 +72,76 @@ def test_check_upstream_status_not_exists(temp_dir):
     assert status["is_git_repo"] is False
 
 
-@patch("codomyrmex.skills.skill_sync.clone_repository")
-def test_clone_upstream(mock_clone, temp_dir):
-    """Test cloning upstream repository."""
-    mock_clone.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_clone_upstream(temp_dir):
+    """Test cloning upstream repository from a local bare repo."""
+    bare = temp_dir / "bare_origin.git"
+    _init_repo_with_commit(bare)
 
-    sync = SkillSync(
-        temp_dir / "upstream",
-        "https://github.com/test/repo",
-        "main",
-    )
+    upstream_dir = temp_dir / "skills" / "upstream"
+    sync = SkillSync(upstream_dir, str(bare), "main")
 
     result = sync.clone_upstream()
     assert result is True
-    mock_clone.assert_called_once()
+    assert upstream_dir.exists()
 
 
-@patch("codomyrmex.skills.skill_sync.clone_repository")
-def test_clone_upstream_force(mock_clone, temp_dir):
-    """Test force cloning upstream repository."""
-    mock_clone.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_clone_upstream_force(temp_dir):
+    """Test force-cloning upstream repository."""
+    bare = temp_dir / "bare_origin.git"
+    _init_repo_with_commit(bare)
 
-    upstream_dir = temp_dir / "upstream"
-    upstream_dir.mkdir()
+    upstream_dir = temp_dir / "skills" / "upstream"
+    upstream_dir.mkdir(parents=True, exist_ok=True)
+    (upstream_dir / "stale_file.txt").write_text("stale")
 
-    sync = SkillSync(upstream_dir, "https://github.com/test/repo", "main")
+    sync = SkillSync(upstream_dir, str(bare), "main")
 
     result = sync.clone_upstream(force=True)
     assert result is True
-    mock_clone.assert_called_once()
+    assert upstream_dir.exists()
 
 
-@patch("codomyrmex.skills.skill_sync.pull_changes")
-@patch("codomyrmex.skills.skill_sync.is_git_repository")
-def test_pull_upstream(mock_is_git, mock_pull, temp_dir):
-    """Test pulling upstream changes."""
-    mock_is_git.return_value = True
-    mock_pull.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_pull_upstream(temp_dir):
+    """Test pulling upstream changes from a real cloned repo."""
+    bare = temp_dir / "bare_origin.git"
+    _init_repo_with_commit(bare)
 
-    upstream_dir = temp_dir / "upstream"
-    upstream_dir.mkdir()
-
-    sync = SkillSync(upstream_dir, "https://github.com/test/repo", "main")
+    upstream_dir = temp_dir / "skills" / "upstream"
+    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync.clone_upstream()
 
     result = sync.pull_upstream()
     assert result is True
-    mock_pull.assert_called_once()
 
 
-@patch("codomyrmex.skills.skill_sync.clone_repository")
-@patch("codomyrmex.skills.skill_sync.is_git_repository")
-def test_pull_upstream_not_git(mock_is_git, mock_clone, temp_dir):
-    """Test pulling when directory is not a git repo."""
-    mock_is_git.return_value = False
-    mock_clone.return_value = True
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_pull_upstream_not_git(temp_dir):
+    """Test pulling when directory exists but is not a git repo."""
+    bare = temp_dir / "bare_origin.git"
+    _init_repo_with_commit(bare)
 
-    upstream_dir = temp_dir / "upstream"
-    upstream_dir.mkdir()
-
-    sync = SkillSync(upstream_dir, "https://github.com/test/repo", "main")
+    upstream_dir = temp_dir / "skills" / "upstream"
+    upstream_dir.mkdir(parents=True)
+    # Directory exists but is NOT a git repo → should re-clone
+    sync = SkillSync(upstream_dir, str(bare), "main")
 
     result = sync.pull_upstream()
     assert result is True
-    mock_clone.assert_called_once()
 
 
-@patch("subprocess.run")
-def test_get_upstream_version(mock_subprocess, temp_dir):
-    """Test getting upstream version."""
-    mock_result = MagicMock()
-    mock_result.returncode = 0
-    mock_result.stdout = "abc123def\n"
-    mock_subprocess.return_value = mock_result
+@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
+def test_get_upstream_version(temp_dir):
+    """Test getting upstream version (commit hash)."""
+    bare = temp_dir / "bare_origin.git"
+    _init_repo_with_commit(bare)
 
-    upstream_dir = temp_dir / "upstream"
-    upstream_dir.mkdir()
+    upstream_dir = temp_dir / "skills" / "upstream"
+    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync.clone_upstream()
 
-    sync = SkillSync(upstream_dir, "https://github.com/test/repo", "main")
-
-    # Mock is_git_repository
-    with patch("codomyrmex.skills.skill_sync.is_git_repository", return_value=True):
-        version = sync.get_upstream_version()
-        assert version == "abc123def"
-
+    version = sync.get_upstream_version()
+    assert isinstance(version, str)
+    assert len(version) >= 7  # short SHA or full

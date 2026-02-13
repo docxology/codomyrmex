@@ -10,7 +10,7 @@ Unified input validation framework for Codomyrmex with support for JSON Schema, 
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

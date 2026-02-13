@@ -77,12 +77,46 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/api/llm/config')
             .then(res => res.json())
             .then(data => {
+                const select = document.getElementById('model-select');
+                if (select && data.available_models) {
+                    select.innerHTML = ''; // Clear loading
+                    data.available_models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model;
+                        option.textContent = model;
+                        select.appendChild(option);
+                    });
+                }
+
                 if (data.default_model) {
                     currentModel = data.default_model;
+                    if (select) {
+                        select.value = currentModel;
+                        // If default isn't in list (unlikely if list comes from source), select.value will be empty/first
+                        if (!select.value && select.options.length > 0) {
+                            select.value = select.options[0].value;
+                            currentModel = select.value;
+                        }
+                    }
                     console.log('Using model:', currentModel);
                 }
             })
-            .catch(err => console.error('Failed to load LLM config:', err));
+            .catch(err => {
+                console.error('Failed to load LLM config:', err);
+                const select = document.getElementById('model-select');
+                if (select) {
+                    select.innerHTML = '<option disabled>Error loading models</option>';
+                }
+            });
+
+        // Update currentModel when dropdown changes
+        const modelSelect = document.getElementById('model-select');
+        if (modelSelect) {
+            modelSelect.addEventListener('change', (e) => {
+                currentModel = e.target.value;
+                console.log('Model changed to:', currentModel);
+            });
+        }
 
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();

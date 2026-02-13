@@ -10,7 +10,7 @@ Database administration module providing connection management, schema generatio
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

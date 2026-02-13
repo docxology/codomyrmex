@@ -8,7 +8,7 @@ Module scanning, capability discovery, and system status reporting.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

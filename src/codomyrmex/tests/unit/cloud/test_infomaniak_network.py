@@ -17,11 +17,11 @@ Tests cover:
 Total: ~25 tests in one TestInfomaniakNetwork class.
 """
 
-from unittest.mock import MagicMock
+from _stubs import Stub
 
 import pytest
 
-from .conftest import make_mock_floating_ip, make_mock_network
+from _stubs import make_stub_floating_ip, make_stub_network
 
 
 class TestInfomaniakNetwork:
@@ -39,7 +39,7 @@ class TestInfomaniakNetwork:
 
     def test_list_networks_success(self, client, mock_openstack_connection):
         """list_networks returns formatted dicts for each network."""
-        net = make_mock_network(network_id="net-1", name="prod-net", status="ACTIVE")
+        net = make_stub_network(network_id="net-1", name="prod-net", status="ACTIVE")
         mock_openstack_connection.network.networks.return_value = [net]
 
         result = client.list_networks()
@@ -62,7 +62,7 @@ class TestInfomaniakNetwork:
 
     def test_create_network_success(self, client, mock_openstack_connection):
         """create_network returns id and name on success."""
-        mock_net = MagicMock()
+        mock_net = Stub()
         mock_net.id = "net-new"
         mock_net.name = "my-net"
         mock_openstack_connection.network.create_network.return_value = mock_net
@@ -107,7 +107,7 @@ class TestInfomaniakNetwork:
 
     def test_create_subnet_success(self, client, mock_openstack_connection):
         """create_subnet returns id, name, cidr on success."""
-        mock_sub = MagicMock()
+        mock_sub = Stub()
         mock_sub.id = "sub-new"
         mock_sub.name = "app-subnet"
         mock_sub.cidr = "10.0.1.0/24"
@@ -128,7 +128,7 @@ class TestInfomaniakNetwork:
 
     def test_list_subnets_success(self, client, mock_openstack_connection):
         """list_subnets returns formatted subnet dicts."""
-        mock_sub = MagicMock()
+        mock_sub = Stub()
         mock_sub.id = "sub-1"
         mock_sub.name = "default-subnet"
         mock_sub.network_id = "net-1"
@@ -147,7 +147,7 @@ class TestInfomaniakNetwork:
 
     def test_get_subnet_success(self, client, mock_openstack_connection):
         """get_subnet returns formatted dict for found subnet."""
-        mock_sub = MagicMock()
+        mock_sub = Stub()
         mock_sub.id = "sub-abc"
         mock_sub.name = "my-subnet"
         mock_sub.network_id = "net-1"
@@ -183,7 +183,7 @@ class TestInfomaniakNetwork:
 
     def test_list_routers_success(self, client, mock_openstack_connection):
         """list_routers returns formatted router dicts."""
-        mock_rtr = MagicMock()
+        mock_rtr = Stub()
         mock_rtr.id = "rtr-1"
         mock_rtr.name = "main-router"
         mock_rtr.status = "ACTIVE"
@@ -198,11 +198,11 @@ class TestInfomaniakNetwork:
 
     def test_create_router_with_external_network(self, client, mock_openstack_connection):
         """create_router sets external_gateway_info when external_network found."""
-        ext_net = MagicMock()
+        ext_net = Stub()
         ext_net.id = "ext-net-id"
         mock_openstack_connection.network.find_network.return_value = ext_net
 
-        mock_rtr = MagicMock()
+        mock_rtr = Stub()
         mock_rtr.id = "rtr-new"
         mock_rtr.name = "gw-router"
         mock_openstack_connection.network.create_router.return_value = mock_rtr
@@ -237,7 +237,7 @@ class TestInfomaniakNetwork:
 
     def test_list_security_groups_success(self, client, mock_openstack_connection):
         """list_security_groups returns formatted SG dicts with rules_count."""
-        mock_sg = MagicMock()
+        mock_sg = Stub()
         mock_sg.id = "sg-1"
         mock_sg.name = "web-sg"
         mock_sg.description = "Web traffic"
@@ -252,7 +252,7 @@ class TestInfomaniakNetwork:
 
     def test_create_security_group_success(self, client, mock_openstack_connection):
         """create_security_group returns id and name on success."""
-        mock_sg = MagicMock()
+        mock_sg = Stub()
         mock_sg.id = "sg-new"
         mock_sg.name = "db-sg"
         mock_openstack_connection.network.create_security_group.return_value = mock_sg
@@ -265,7 +265,7 @@ class TestInfomaniakNetwork:
 
     def test_add_security_group_rule_success(self, client, mock_openstack_connection):
         """add_security_group_rule returns id, direction, protocol on success."""
-        mock_rule = MagicMock()
+        mock_rule = Stub()
         mock_rule.id = "rule-new"
         mock_openstack_connection.network.create_security_group_rule.return_value = mock_rule
 
@@ -296,7 +296,7 @@ class TestInfomaniakNetwork:
 
     def test_list_floating_ips_success(self, client, mock_openstack_connection):
         """list_floating_ips returns formatted FIP dicts."""
-        fip = make_mock_floating_ip(fip_id="fip-1", address="195.15.220.10")
+        fip = make_stub_floating_ip(fip_id="fip-1", address="195.15.220.10")
         mock_openstack_connection.network.ips.return_value = [fip]
 
         result = client.list_floating_ips()
@@ -308,11 +308,11 @@ class TestInfomaniakNetwork:
 
     def test_allocate_floating_ip_success(self, client, mock_openstack_connection):
         """allocate_floating_ip returns id and address when external network found."""
-        ext_net = MagicMock()
+        ext_net = Stub()
         ext_net.id = "ext-net-id"
         mock_openstack_connection.network.find_network.return_value = ext_net
 
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-new"
         mock_fip.floating_ip_address = "195.15.220.99"
         mock_openstack_connection.network.create_ip.return_value = mock_fip
@@ -374,7 +374,7 @@ class TestInfomaniakNetwork:
 
     def test_list_loadbalancers_success(self, client, mock_openstack_connection):
         """list_loadbalancers returns formatted LB dicts."""
-        mock_lb = MagicMock()
+        mock_lb = Stub()
         mock_lb.id = "lb-1"
         mock_lb.name = "web-lb"
         mock_lb.vip_address = "10.0.0.100"
@@ -391,7 +391,7 @@ class TestInfomaniakNetwork:
 
     def test_create_loadbalancer_success(self, client, mock_openstack_connection):
         """create_loadbalancer returns id, name, and vip_address."""
-        mock_lb = MagicMock()
+        mock_lb = Stub()
         mock_lb.id = "lb-new"
         mock_lb.name = "api-lb"
         mock_lb.vip_address = "10.0.0.200"
@@ -426,7 +426,7 @@ class TestInfomaniakNetwork:
 
     def test_create_listener_success(self, client, mock_openstack_connection):
         """create_listener returns id, name, and protocol."""
-        mock_listener = MagicMock()
+        mock_listener = Stub()
         mock_listener.id = "lis-new"
         mock_listener.name = "https-listener"
         mock_openstack_connection.load_balancer.create_listener.return_value = mock_listener
@@ -455,7 +455,7 @@ class TestInfomaniakNetwork:
 
     def test_create_pool_success(self, client, mock_openstack_connection):
         """create_pool returns id, name, and protocol."""
-        mock_pool = MagicMock()
+        mock_pool = Stub()
         mock_pool.id = "pool-new"
         mock_pool.name = "web-pool"
         mock_openstack_connection.load_balancer.create_pool.return_value = mock_pool
@@ -484,7 +484,7 @@ class TestInfomaniakNetwork:
 
     def test_add_pool_member_success(self, client, mock_openstack_connection):
         """add_pool_member returns id, address, and port."""
-        mock_member = MagicMock()
+        mock_member = Stub()
         mock_member.id = "mem-new"
         mock_openstack_connection.load_balancer.create_member.return_value = mock_member
 
@@ -515,7 +515,7 @@ class TestInfomaniakNetwork:
 
     def test_create_health_monitor_success(self, client, mock_openstack_connection):
         """create_health_monitor returns id, type, and pool_id."""
-        mock_hm = MagicMock()
+        mock_hm = Stub()
         mock_hm.id = "hm-new"
         mock_openstack_connection.load_balancer.create_health_monitor.return_value = mock_hm
 
@@ -538,3 +538,285 @@ class TestInfomaniakNetwork:
 
         assert result is True
         mock_openstack_connection.load_balancer.delete_health_monitor.assert_called_once_with("hm-del")
+
+
+# =========================================================================
+
+class TestInfomaniakNetworkClientExpanded:
+    """Tests for InfomaniakNetworkClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.network import InfomaniakNetworkClient
+        mock_conn = Stub()
+        return InfomaniakNetworkClient(connection=mock_conn), mock_conn
+
+    def test_create_subnet(self):
+        client, mc = self._make_client()
+        sn = Stub(id="sn1", name="sub1", cidr="10.0.0.0/24")
+        mc.network.create_subnet.return_value = sn
+        result = client.create_subnet("n1", "sub1", "10.0.0.0/24")
+        assert result["id"] == "sn1"
+
+    def test_create_router(self):
+        client, mc = self._make_client()
+        rt = Stub(id="rt1", name="router1")
+        mc.network.create_router.return_value = rt
+        result = client.create_router("router1")
+        assert result["id"] == "rt1"
+
+    def test_add_router_interface(self):
+        client, mc = self._make_client()
+        assert client.add_router_interface("rt1", "sn1") is True
+        mc.network.add_interface_to_router.assert_called_once_with("rt1", subnet_id="sn1")
+
+    def test_delete_router(self):
+        client, mc = self._make_client()
+        assert client.delete_router("rt1") is True
+        mc.network.delete_router.assert_called_once_with("rt1")
+
+    def test_create_security_group(self):
+        client, mc = self._make_client()
+        sg = Stub(id="sg1", name="web")
+        mc.network.create_security_group.return_value = sg
+        result = client.create_security_group("web")
+        assert result["id"] == "sg1"
+
+    def test_delete_security_group(self):
+        client, mc = self._make_client()
+        assert client.delete_security_group("sg1") is True
+
+    def test_allocate_floating_ip(self):
+        client, mc = self._make_client()
+        ext = Stub(id="ext1")
+        mc.network.find_network.return_value = ext
+        fip = Stub(id="fip1", floating_ip_address="1.2.3.4")
+        mc.network.create_ip.return_value = fip
+        result = client.allocate_floating_ip("external")
+        assert result["floating_ip_address"] == "1.2.3.4"
+
+    def test_associate_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.associate_floating_ip("fip1", "port1") is True
+        mc.network.update_ip.assert_called_once_with("fip1", port_id="port1")
+
+    def test_create_loadbalancer(self):
+        client, mc = self._make_client()
+        lb = Stub(id="lb1", name="web-lb", vip_address="10.0.0.5")
+        mc.load_balancer.create_load_balancer.return_value = lb
+        result = client.create_loadbalancer("web-lb", "sn1")
+        assert result["id"] == "lb1"
+
+    def test_delete_loadbalancer(self):
+        client, mc = self._make_client()
+        assert client.delete_loadbalancer("lb1") is True
+
+    def test_list_subnets(self):
+        client, mc = self._make_client()
+        sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
+                       ip_version=4, gateway_ip="10.0.0.1", is_dhcp_enabled=True)
+        mc.network.subnets.return_value = [sn]
+        result = client.list_subnets()
+        assert len(result) == 1
+        assert result[0]["id"] == "sn1"
+
+    def test_get_subnet(self):
+        client, mc = self._make_client()
+        sn = Stub(id="sn1", name="s", network_id="n1", cidr="10.0.0.0/24",
+                       ip_version=4, gateway_ip="10.0.0.1")
+        mc.network.get_subnet.return_value = sn
+        result = client.get_subnet("sn1")
+        assert result["id"] == "sn1"
+
+    def test_delete_subnet(self):
+        client, mc = self._make_client()
+        assert client.delete_subnet("sn1") is True
+
+    def test_release_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.release_floating_ip("fip1") is True
+        mc.network.delete_ip.assert_called_once_with("fip1")
+
+    def test_disassociate_floating_ip(self):
+        client, mc = self._make_client()
+        assert client.disassociate_floating_ip("fip1") is True
+        mc.network.update_ip.assert_called_once_with("fip1", port_id=None)
+
+    def test_list_listeners(self):
+        client, mc = self._make_client()
+        li = Stub(id="li1", name="http", protocol="HTTP", protocol_port=80)
+        mc.load_balancer.listeners.return_value = [li]
+        result = client.list_listeners()
+        assert len(result) == 1
+
+    def test_create_listener(self):
+        client, mc = self._make_client()
+        li = Stub(id="li1", name="http")
+        mc.load_balancer.create_listener.return_value = li
+        result = client.create_listener("lb1", "http", "HTTP", 80)
+        assert result["id"] == "li1"
+
+    def test_delete_listener(self):
+        client, mc = self._make_client()
+        assert client.delete_listener("li1") is True
+
+    def test_list_pools(self):
+        client, mc = self._make_client()
+        p = Stub(id="p1", name="pool1", protocol="HTTP", lb_algorithm="ROUND_ROBIN")
+        mc.load_balancer.pools.return_value = [p]
+        result = client.list_pools()
+        assert len(result) == 1
+
+    def test_create_pool(self):
+        client, mc = self._make_client()
+        p = Stub(id="p1", name="pool1")
+        mc.load_balancer.create_pool.return_value = p
+        result = client.create_pool("pool1", "HTTP", "ROUND_ROBIN")
+        assert result["id"] == "p1"
+
+    def test_delete_pool(self):
+        client, mc = self._make_client()
+        assert client.delete_pool("p1") is True
+
+    def test_list_pool_members(self):
+        client, mc = self._make_client()
+        m = Stub(id="m1", name="srv1", address="10.0.0.2",
+                      protocol_port=80, weight=1)
+        mc.load_balancer.members.return_value = [m]
+        result = client.list_pool_members("p1")
+        assert len(result) == 1
+
+    def test_add_pool_member(self):
+        client, mc = self._make_client()
+        m = Stub(id="m1")
+        mc.load_balancer.create_member.return_value = m
+        result = client.add_pool_member("p1", "10.0.0.2", 80)
+        assert result["id"] == "m1"
+
+    def test_remove_pool_member(self):
+        client, mc = self._make_client()
+        assert client.remove_pool_member("p1", "m1") is True
+        mc.load_balancer.delete_member.assert_called_once_with("m1", "p1")
+
+    def test_list_health_monitors(self):
+        client, mc = self._make_client()
+        hm = Stub(id="hm1", name="check", type="HTTP",
+                       delay=5, timeout=3, max_retries=3)
+        mc.load_balancer.health_monitors.return_value = [hm]
+        result = client.list_health_monitors()
+        assert len(result) == 1
+
+    def test_create_health_monitor(self):
+        """Uses renamed monitor_type parameter."""
+        client, mc = self._make_client()
+        hm = Stub(id="hm1")
+        mc.load_balancer.create_health_monitor.return_value = hm
+        result = client.create_health_monitor("p1", monitor_type="HTTP", delay=5, timeout=3)
+        assert result["id"] == "hm1"
+        assert result["type"] == "HTTP"
+
+    def test_delete_health_monitor(self):
+        client, mc = self._make_client()
+        assert client.delete_health_monitor("hm1") is True
+
+    def test_remove_router_interface(self):
+        client, mc = self._make_client()
+        assert client.remove_router_interface("rt1", "sn1") is True
+        mc.network.remove_interface_from_router.assert_called_once_with("rt1", subnet_id="sn1")
+
+    def test_remove_router_interface_error(self):
+        client, mc = self._make_client()
+        mc.network.remove_interface_from_router.side_effect = Exception("fail")
+        assert client.remove_router_interface("rt1", "sn1") is False
+
+    def test_list_networks_error(self):
+        """list_networks returns [] on error."""
+        client, mc = self._make_client()
+        mc.network.networks.side_effect = Exception("fail")
+        assert client.list_networks() == []
+
+    # --- Error-path tests for get/create/delete methods ---
+
+    def test_create_network_error(self):
+        client, mc = self._make_client()
+        mc.network.create_network.side_effect = Exception("fail")
+        assert client.create_network("test") is None
+
+    def test_delete_network_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_network.side_effect = Exception("fail")
+        assert client.delete_network("n1") is False
+
+    def test_create_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.create_subnet.side_effect = Exception("fail")
+        assert client.create_subnet("n1", "s1", "10.0.0.0/24") is None
+
+    def test_get_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.get_subnet.side_effect = Exception("fail")
+        assert client.get_subnet("sn1") is None
+
+    def test_delete_subnet_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_subnet.side_effect = Exception("fail")
+        assert client.delete_subnet("sn1") is False
+
+    def test_create_router_error(self):
+        client, mc = self._make_client()
+        mc.network.create_router.side_effect = Exception("fail")
+        assert client.create_router("r1") is None
+
+    def test_add_router_interface_error(self):
+        client, mc = self._make_client()
+        mc.network.add_interface_to_router.side_effect = Exception("fail")
+        assert client.add_router_interface("rt1", "sn1") is False
+
+    def test_delete_router_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_router.side_effect = Exception("fail")
+        assert client.delete_router("rt1") is False
+
+    def test_create_security_group_error(self):
+        client, mc = self._make_client()
+        mc.network.create_security_group.side_effect = Exception("fail")
+        assert client.create_security_group("sg") is None
+
+    def test_delete_security_group_error(self):
+        client, mc = self._make_client()
+        mc.network.delete_security_group.side_effect = Exception("fail")
+        assert client.delete_security_group("sg1") is False
+
+    def test_allocate_floating_ip_error(self):
+        client, mc = self._make_client()
+        mc.network.find_network.side_effect = Exception("fail")
+        assert client.allocate_floating_ip("ext-net") is None
+
+    def test_create_loadbalancer_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.create_load_balancer.side_effect = Exception("fail")
+        assert client.create_loadbalancer("lb", "sn1") is None
+
+    def test_delete_loadbalancer_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.delete_load_balancer.side_effect = Exception("fail")
+        assert client.delete_loadbalancer("lb1") is False
+
+    def test_create_listener_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.create_listener.side_effect = Exception("fail")
+        assert client.create_listener("lb1", "http", "HTTP", 80) is None
+
+    def test_delete_listener_error(self):
+        client, mc = self._make_client()
+        mc.load_balancer.delete_listener.side_effect = Exception("fail")
+        assert client.delete_listener("li1") is False
+
+    def test_add_security_group_rule_error(self):
+        client, mc = self._make_client()
+        mc.network.create_security_group_rule.side_effect = Exception("fail")
+        assert client.add_security_group_rule("sg1") is None
+
+
+# =========================================================================
+# ADDITIONAL OBJECT STORAGE (SWIFT) CLIENT TESTS
+# =========================================================================

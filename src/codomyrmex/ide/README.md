@@ -8,7 +8,7 @@ Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

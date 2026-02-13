@@ -8,13 +8,11 @@ Tests cover:
 
 Total: ~30 tests across 4 test classes.
 
-Note: These tests may be skipped if `codomyrmex.agents` has unresolved
-import dependencies (e.g., google.genai). This is a pre-existing issue
-affecting ALL agent tests in this environment.
+Zero-Mock compliant — uses lightweight stub client classes instead of
+unittest.mock.MagicMock.
 """
 
 import json
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -39,34 +37,109 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-# =========================================================================
+# ---------------------------------------------------------------------------
+# Lightweight stub client classes (replace MagicMock)
+# ---------------------------------------------------------------------------
+
+class StubClient:
+    """Minimal stub client that records calls and returns configured values."""
+    pass
+
+
+class StubComputeClient:
+    """Stub compute client with common compute methods."""
+
+    def __init__(self, *, list_instances_rv=None, create_instance_rv=None,
+                 list_images_rv=None, validate_connection_rv=True):
+        self._list_instances_rv = list_instances_rv or []
+        self._create_instance_rv = create_instance_rv or {"id": "new"}
+        self._list_images_rv = list_images_rv or []
+        self._validate_connection_rv = validate_connection_rv
+        self._calls = {}
+
+    def list_instances(self, **kwargs):
+        self._calls.setdefault("list_instances", []).append(kwargs)
+        return self._list_instances_rv
+
+    def create_instance(self, **kwargs):
+        self._calls.setdefault("create_instance", []).append(kwargs)
+        return self._create_instance_rv
+
+    def list_images(self, **kwargs):
+        self._calls.setdefault("list_images", []).append(kwargs)
+        return self._list_images_rv
+
+    def validate_connection(self):
+        return self._validate_connection_rv
+
+
+class StubNetworkClient:
+    """Stub network client."""
+
+    def list_networks(self):
+        return []
+
+    def validate_connection(self):
+        return True
+
+
+class StubConnectionFailClient:
+    """Stub client whose validate_connection returns False."""
+
+    def validate_connection(self):
+        return False
+
+
+class StubSecurityPipeline:
+    """Stub security pipeline for testing security-blocked execution."""
+
+    def __init__(self, allowed=True, reason=""):
+        self._allowed = allowed
+        self._reason = reason
+
+    def pre_check(self, *args, **kwargs):
+        return _SecurityCheckResult(allowed=self._allowed, reason=self._reason)
+
+
+class _SecurityCheckResult:
+    """Minimal security check result."""
+
+    def __init__(self, allowed=True, reason=""):
+        self.allowed = allowed
+        self.reason = reason
+
+
+class StubPublicPrivateClient:
+    """Client with both public and private methods for tool factory tests."""
+
+    def public_method(self):
+        return "public"
+
+    def _private_method(self):
+        return "private"
+
+
+# ---------------------------------------------------------------------------
 # Test InfrastructureAgent Initialization
-# =========================================================================
+# ---------------------------------------------------------------------------
 
 class TestInfrastructureAgentInit:
     """Tests for InfrastructureAgent constructor and from_env."""
 
     def test_init_with_compute_client(self):
         """Compute client sets CLOUD_INFRASTRUCTURE capability."""
-
-        agent = InfrastructureAgent(clients={"compute": MagicMock()})
+        agent = InfrastructureAgent(clients={"compute": StubComputeClient()})
         caps = agent.get_capabilities()
         assert AgentCapabilities.CLOUD_INFRASTRUCTURE in caps
         assert AgentCapabilities.CLOUD_STORAGE not in caps
 
     def test_init_with_s3_adds_storage(self):
         """S3 client adds CLOUD_STORAGE capability."""
-        from codomyrmex.agents.core.base import AgentCapabilities
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        agent = InfrastructureAgent(clients={"s3": MagicMock()})
+        agent = InfrastructureAgent(clients={"s3": StubClient()})
         assert AgentCapabilities.CLOUD_STORAGE in agent.get_capabilities()
 
     def test_init_empty_clients(self):
         """Empty clients dict results in only CLOUD_INFRASTRUCTURE."""
-        from codomyrmex.agents.core.base import AgentCapabilities
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
         agent = InfrastructureAgent(clients={})
         caps = agent.get_capabilities()
         assert AgentCapabilities.CLOUD_INFRASTRUCTURE in caps
@@ -74,10 +147,8 @@ class TestInfrastructureAgentInit:
 
     def test_available_services(self):
         """available_services returns configured service names."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
         agent = InfrastructureAgent(
-            clients={"compute": MagicMock(), "network": MagicMock()}
+            clients={"compute": StubComputeClient(), "network": StubNetworkClient()}
         )
         services = agent.available_services()
         assert "compute" in services
@@ -85,21 +156,18 @@ class TestInfrastructureAgentInit:
 
     def test_name_is_infrastructure_agent(self):
         """Agent name is InfrastructureAgent."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
         agent = InfrastructureAgent()
         assert agent.name == "InfrastructureAgent"
 
 
-# =========================================================================
+# ---------------------------------------------------------------------------
 # Test InfrastructureAgent Execution
-# =========================================================================
+# ---------------------------------------------------------------------------
 
 class TestInfrastructureAgentExecute:
     """Tests for InfrastructureAgent._execute_impl."""
 
     def _make_agent(self, clients=None):
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         agent = InfrastructureAgent(clients=clients or {})
         # Disable security pipeline for focused execution tests
         agent._pipeline = None
@@ -107,12 +175,8 @@ class TestInfrastructureAgentExecute:
 
     def test_valid_json_dispatch(self):
         """Valid JSON dispatches to correct client method."""
-        from codomyrmex.agents.core.base import AgentRequest
-
-        mock_compute = MagicMock()
-        mock_compute.list_instances.return_value = [{"id": "i-1"}]
-
-        agent = self._make_agent(clients={"compute": mock_compute})
+        compute = StubComputeClient(list_instances_rv=[{"id": "i-1"}])
+        agent = self._make_agent(clients={"compute": compute})
         request = AgentRequest(prompt=json.dumps({
             "service": "compute",
             "action": "list_instances",
@@ -120,12 +184,10 @@ class TestInfrastructureAgentExecute:
         response = agent.execute(request)
         assert response.is_success()
         assert "i-1" in response.content
-        mock_compute.list_instances.assert_called_once()
+        assert len(compute._calls.get("list_instances", [])) == 1
 
     def test_missing_service_key(self):
         """Missing 'service' key returns error."""
-        from codomyrmex.agents.core.base import AgentRequest
-
         agent = self._make_agent()
         request = AgentRequest(prompt=json.dumps({"action": "list"}))
         response = agent.execute(request)
@@ -134,8 +196,6 @@ class TestInfrastructureAgentExecute:
 
     def test_missing_action_key(self):
         """Missing 'action' key returns error."""
-        from codomyrmex.agents.core.base import AgentRequest
-
         agent = self._make_agent()
         request = AgentRequest(prompt=json.dumps({"service": "compute"}))
         response = agent.execute(request)
@@ -144,9 +204,7 @@ class TestInfrastructureAgentExecute:
 
     def test_unknown_service(self):
         """Unknown service returns error with available list."""
-        from codomyrmex.agents.core.base import AgentRequest
-
-        agent = self._make_agent(clients={"compute": MagicMock()})
+        agent = self._make_agent(clients={"compute": StubComputeClient()})
         request = AgentRequest(prompt=json.dumps({
             "service": "unknown",
             "action": "list",
@@ -158,10 +216,9 @@ class TestInfrastructureAgentExecute:
 
     def test_unknown_action(self):
         """Unknown action returns error."""
-        from codomyrmex.agents.core.base import AgentRequest
-
-        mock_compute = MagicMock(spec=["list_instances"])
-        agent = self._make_agent(clients={"compute": mock_compute})
+        # Create a compute client that only has list_instances
+        compute = StubComputeClient()
+        agent = self._make_agent(clients={"compute": compute})
         request = AgentRequest(prompt=json.dumps({
             "service": "compute",
             "action": "nonexistent_method",
@@ -172,8 +229,6 @@ class TestInfrastructureAgentExecute:
 
     def test_invalid_json(self):
         """Invalid JSON returns error."""
-        from codomyrmex.agents.core.base import AgentRequest
-
         agent = self._make_agent()
         request = AgentRequest(prompt="{invalid json}")
         response = agent.execute(request)
@@ -182,8 +237,6 @@ class TestInfrastructureAgentExecute:
 
     def test_non_json_prompt(self):
         """Non-JSON prompt returns error."""
-        from codomyrmex.agents.core.base import AgentRequest
-
         agent = self._make_agent()
         request = AgentRequest(prompt="just a string")
         response = agent.execute(request)
@@ -191,12 +244,8 @@ class TestInfrastructureAgentExecute:
 
     def test_parameter_forwarding(self):
         """Extra JSON keys are forwarded as kwargs to client method."""
-        from codomyrmex.agents.core.base import AgentRequest
-
-        mock_compute = MagicMock()
-        mock_compute.create_instance.return_value = {"id": "new"}
-
-        agent = self._make_agent(clients={"compute": mock_compute})
+        compute = StubComputeClient(create_instance_rv={"id": "new"})
+        agent = self._make_agent(clients={"compute": compute})
         request = AgentRequest(prompt=json.dumps({
             "service": "compute",
             "action": "create_instance",
@@ -205,24 +254,14 @@ class TestInfrastructureAgentExecute:
         }))
         response = agent.execute(request)
         assert response.is_success()
-        mock_compute.create_instance.assert_called_once_with(
-            name="srv-1", flavor="small"
-        )
+        assert compute._calls["create_instance"][0] == {"name": "srv-1", "flavor": "small"}
 
     def test_security_pipeline_blocks(self):
         """Security pipeline can block execution."""
-        from codomyrmex.agents.core.base import AgentRequest
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_pipeline = MagicMock()
-        check_result = MagicMock()
-        check_result.allowed = False
-        check_result.reason = "exploit detected"
-        mock_pipeline.pre_check.return_value = check_result
-
+        pipeline = StubSecurityPipeline(allowed=False, reason="exploit detected")
         agent = InfrastructureAgent(
-            clients={"compute": MagicMock()},
-            security_pipeline=mock_pipeline,
+            clients={"compute": StubComputeClient()},
+            security_pipeline=pipeline,
         )
         request = AgentRequest(prompt=json.dumps({
             "service": "compute",
@@ -236,12 +275,8 @@ class TestInfrastructureAgentExecute:
 
     def test_response_metadata_contains_service_and_action(self):
         """Successful response metadata includes service and action."""
-        from codomyrmex.agents.core.base import AgentRequest
-
-        mock_compute = MagicMock()
-        mock_compute.list_images.return_value = []
-
-        agent = self._make_agent(clients={"compute": mock_compute})
+        compute = StubComputeClient(list_images_rv=[])
+        agent = self._make_agent(clients={"compute": compute})
         request = AgentRequest(prompt=json.dumps({
             "service": "compute",
             "action": "list_images",
@@ -251,34 +286,26 @@ class TestInfrastructureAgentExecute:
         assert response.metadata.get("action") == "list_images"
 
 
-# =========================================================================
+# ---------------------------------------------------------------------------
 # Test InfrastructureAgent Tool Registry
-# =========================================================================
+# ---------------------------------------------------------------------------
 
 class TestInfrastructureAgentToolRegistry:
     """Tests for InfrastructureAgent.populate_tool_registry."""
 
     def test_populate_creates_tools(self):
         """populate_tool_registry creates tool entries for client methods."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_compute = MagicMock()
-        # Add a public method
-        mock_compute.list_instances = MagicMock(return_value=[])
-
-        agent = InfrastructureAgent(clients={"compute": mock_compute})
+        compute = StubComputeClient()
+        agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
         registry = agent.populate_tool_registry()
-        # Should have at least one tool containing "compute"
         compute_tools = [n for n in registry if "compute" in n]
         assert len(compute_tools) > 0
 
     def test_populate_with_external_registry(self):
         """External registry dict is populated in place."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_compute = MagicMock()
-        agent = InfrastructureAgent(clients={"compute": mock_compute})
+        compute = StubComputeClient()
+        agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
         external = {}
         result = agent.populate_tool_registry(registry=external)
@@ -287,12 +314,8 @@ class TestInfrastructureAgentToolRegistry:
 
     def test_tool_has_name_and_handler(self):
         """Each generated tool has a name and callable handler."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_compute = MagicMock()
-        mock_compute.list_instances = MagicMock()
-
-        agent = InfrastructureAgent(clients={"compute": mock_compute})
+        compute = StubComputeClient()
+        agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
         registry = agent.populate_tool_registry()
 
@@ -302,29 +325,20 @@ class TestInfrastructureAgentToolRegistry:
 
     def test_tool_handler_delegates_to_client(self):
         """Tool handler calls the underlying client method."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_compute = MagicMock()
-        mock_compute.list_instances = MagicMock(return_value=["a"])
-
-        agent = InfrastructureAgent(clients={"compute": mock_compute})
+        compute = StubComputeClient(list_instances_rv=["a"])
+        agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
         registry = agent.populate_tool_registry()
 
-        # Find the list_instances tool
         tool_name = "infomaniak_compute_list_instances"
         if tool_name in registry:
             result = registry[tool_name].handler()
-            mock_compute.list_instances.assert_called()
+            assert len(compute._calls.get("list_instances", [])) > 0
 
     def test_stream_yields_execute_result(self):
         """stream() yields the execute result content."""
-        from codomyrmex.agents.core.base import AgentRequest
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_compute = MagicMock()
-        mock_compute.list_instances.return_value = []
-        agent = InfrastructureAgent(clients={"compute": mock_compute})
+        compute = StubComputeClient()
+        agent = InfrastructureAgent(clients={"compute": compute})
         agent._pipeline = None
 
         request = AgentRequest(prompt=json.dumps({
@@ -336,69 +350,50 @@ class TestInfrastructureAgentToolRegistry:
 
     def test_test_connection_succeeds(self):
         """test_connection returns True when all clients pass."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_client = MagicMock()
-        mock_client.validate_connection.return_value = True
-        agent = InfrastructureAgent(clients={"compute": mock_client})
+        client = StubComputeClient(validate_connection_rv=True)
+        agent = InfrastructureAgent(clients={"compute": client})
         assert agent.test_connection() is True
 
     def test_test_connection_fails(self):
         """test_connection returns False when a client fails."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
-
-        mock_client = MagicMock()
-        mock_client.validate_connection.return_value = False
-        agent = InfrastructureAgent(clients={"compute": mock_client})
+        client = StubConnectionFailClient()
+        agent = InfrastructureAgent(clients={"compute": client})
         assert agent.test_connection() is False
 
     def test_test_connection_empty_clients(self):
         """test_connection returns False with no clients."""
-        from codomyrmex.agents.infrastructure.agent import InfrastructureAgent
         agent = InfrastructureAgent(clients={})
         assert agent.test_connection() is False
 
 
-# =========================================================================
+# ---------------------------------------------------------------------------
 # Test CloudToolFactory
-# =========================================================================
+# ---------------------------------------------------------------------------
 
 class TestCloudToolFactory:
     """Tests for CloudToolFactory."""
 
     def test_register_client_generates_tool_names(self):
         """register_client creates correctly named tools."""
-        from codomyrmex.agents.infrastructure.tool_factory import CloudToolFactory
-
-        mock_client = MagicMock()
-        mock_client.list_instances = MagicMock()
-        mock_client.create_instance = MagicMock()
-
+        compute = StubComputeClient()
         registry = {}
-        names = CloudToolFactory.register_client(mock_client, "compute", registry)
+        names = CloudToolFactory.register_client(compute, "compute", registry)
         assert "infomaniak_compute_list_instances" in names
         assert "infomaniak_compute_create_instance" in names
 
     def test_register_client_skips_private_methods(self):
         """Private methods (starting with _) are not registered."""
-        from codomyrmex.agents.infrastructure.tool_factory import CloudToolFactory
-
-        mock_client = MagicMock()
-        mock_client._private_method = MagicMock()
-        mock_client.public_method = MagicMock()
-
+        client = StubPublicPrivateClient()
         registry = {}
-        names = CloudToolFactory.register_client(mock_client, "svc", registry)
+        names = CloudToolFactory.register_client(client, "svc", registry)
         private_tools = [n for n in names if "private" in n]
         assert len(private_tools) == 0
 
     def test_register_all_clients(self):
         """register_all_clients returns dict of service -> tool names."""
-        from codomyrmex.agents.infrastructure.tool_factory import CloudToolFactory
-
         clients = {
-            "compute": MagicMock(),
-            "network": MagicMock(),
+            "compute": StubComputeClient(),
+            "network": StubNetworkClient(),
         }
         registry = {}
         result = CloudToolFactory.register_all_clients(registry, clients)
@@ -408,20 +403,11 @@ class TestCloudToolFactory:
 
     def test_security_wrapping(self):
         """Security-wrapped tool raises on blocked check."""
-        from codomyrmex.agents.infrastructure.tool_factory import CloudToolFactory
-
-        mock_pipeline = MagicMock()
-        check_result = MagicMock()
-        check_result.allowed = False
-        check_result.reason = "blocked"
-        mock_pipeline.pre_check.return_value = check_result
-
-        mock_client = MagicMock()
-        mock_client.create_instance = MagicMock()
-
+        pipeline = StubSecurityPipeline(allowed=False, reason="blocked")
+        compute = StubComputeClient()
         registry = {}
         CloudToolFactory.register_client(
-            mock_client, "compute", registry, security_pipeline=mock_pipeline
+            compute, "compute", registry, security_pipeline=pipeline
         )
         tool = registry.get("infomaniak_compute_create_instance")
         if tool:
@@ -430,8 +416,6 @@ class TestCloudToolFactory:
 
     def test_tool_schema_extraction(self):
         """Tool parameters schema is extracted from method signature."""
-        from codomyrmex.agents.infrastructure.tool_factory import _method_to_args_schema
-
         def sample_method(name: str, size: int = 50, enabled: bool = True):
             pass
 
@@ -444,8 +428,6 @@ class TestCloudToolFactory:
 
     def test_tool_schema_no_self(self):
         """Schema extraction skips 'self' parameter."""
-        from codomyrmex.agents.infrastructure.tool_factory import _method_to_args_schema
-
         class Foo:
             def bar(self, x: str):
                 pass
@@ -455,8 +437,6 @@ class TestCloudToolFactory:
 
     def test_is_public_method(self):
         """_is_public_method correctly identifies public callables."""
-        from codomyrmex.agents.infrastructure.tool_factory import _is_public_method
-
         assert _is_public_method("list_instances", lambda: None) is True
         assert _is_public_method("_private", lambda: None) is False
         assert _is_public_method("NotCallable", "string") is False

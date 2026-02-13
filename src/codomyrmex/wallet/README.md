@@ -41,7 +41,7 @@ The `wallet` module provides secure self-custody key management and "Natural Rit
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

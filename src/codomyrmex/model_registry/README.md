@@ -9,7 +9,7 @@ Model versioning, metadata, and lifecycle management for ML models. Provides a c
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

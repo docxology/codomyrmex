@@ -8,7 +8,7 @@ Metrics collection with Prometheus and StatsD integration.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

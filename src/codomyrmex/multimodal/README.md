@@ -9,7 +9,7 @@ Vision and audio processing for multimodal AI applications. Provides typed media
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:
@@ -60,10 +60,18 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.multimodal import MediaType, ImageFormat, AudioFormat
+from codomyrmex.multimodal import MultimodalMessageBuilder
 
-# Initialize MediaType
-instance = MediaType()
+# Build a multimodal message
+message = (
+    MultimodalMessageBuilder()
+    .text("Describe this image:")
+    .image_file("photo.png")
+    .build()
+)
+
+# Convert to API-ready format
+payload = message.to_dict()
 ```
 
 ## Testing

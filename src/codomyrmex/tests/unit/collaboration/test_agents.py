@@ -4,7 +4,6 @@ Tests for collaboration agents submodule.
 
 import pytest
 import asyncio
-from unittest.mock import AsyncMock, MagicMock
 
 from codomyrmex.collaboration.agents import (
     AbstractAgent,

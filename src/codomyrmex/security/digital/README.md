@@ -18,7 +18,6 @@ Digital security implementations including encryption, access control, and secur
 - `certificate_validator.py` – File
 - `compliance_checker.py` – File
 - `encryption_manager.py` – File
-- `requirements.txt` – File
 - `secrets_detector.py` – File
 - `security_analyzer.py` – File
 - `security_monitor.py` – File

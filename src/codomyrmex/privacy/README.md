@@ -8,7 +8,7 @@ Data sanitization and anonymous routing for privacy protection.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

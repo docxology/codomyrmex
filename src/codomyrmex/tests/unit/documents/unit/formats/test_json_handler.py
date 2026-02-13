@@ -1,5 +1,6 @@
-import unittest
-from unittest.mock import ANY, mock_open, patch
+"""Zero-Mock tests for JSON handler — uses real file I/O via tmp_path."""
+
+import json
 
 import pytest
 
@@ -7,23 +8,32 @@ from codomyrmex.documents.formats.json_handler import read_json, write_json
 
 
 @pytest.mark.unit
-class TestJsonHandler(unittest.TestCase):
-    def test_read_json(self):
-        """Test reading JSON."""
-        # read_json uses json.load(f)
-        with patch("builtins.open", new_callable=mock_open, read_data='{"key": "value"}'):
-            data = read_json("test.json")
-            self.assertEqual(data, {"key": "value"})
+class TestJsonHandler:
+    def test_read_json(self, tmp_path):
+        """Test reading JSON from a real file."""
+        f = tmp_path / "test.json"
+        f.write_text('{"key": "value"}', encoding="utf-8")
 
-    def test_write_json(self):
-        """Test writing JSON."""
+        data = read_json(str(f))
+        assert data == {"key": "value"}
+
+    def test_write_json(self, tmp_path):
+        """Test writing JSON to a real file."""
+        f = tmp_path / "test.json"
         data = {"key": "value"}
-        with patch("builtins.open", new_callable=mock_open) as mock_file:
-            with patch('pathlib.Path.mkdir'):
-                write_json(data, "test.json")
 
-            mock_file.assert_called_with(ANY, 'w', encoding='utf-8')
-            # Verify json.dump called write on the handle
-            # json.dump usually does multiple writes or one write
-            # We can check that at least something was written
-            mock_file().write.assert_called()
+        write_json(data, str(f))
+
+        assert f.exists()
+        written = json.loads(f.read_text(encoding="utf-8"))
+        assert written == data
+
+    def test_roundtrip(self, tmp_path):
+        """Test JSON write then read roundtrip."""
+        f = tmp_path / "roundtrip.json"
+        original = {"nested": {"list": [1, 2, 3]}, "flag": True}
+
+        write_json(original, str(f))
+        result = read_json(str(f))
+
+        assert result == original

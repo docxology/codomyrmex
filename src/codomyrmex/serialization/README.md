@@ -10,7 +10,7 @@ Unified data serialization and deserialization module supporting multiple format
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

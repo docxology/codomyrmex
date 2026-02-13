@@ -1,6 +1,6 @@
-import unittest
-from pathlib import Path
-from unittest.mock import patch
+"""Zero-Mock tests for DocumentReader — uses real file I/O via tmp_path."""
+
+import json
 
 import pytest
 
@@ -10,80 +10,60 @@ from codomyrmex.documents.models.document import DocumentFormat
 
 
 @pytest.mark.unit
-class TestDocumentReader(unittest.TestCase):
-    def setUp(self):
+class TestDocumentReader:
+    def setup_method(self):
         self.reader = DocumentReader()
 
-    @patch('pathlib.Path.exists')
-    def test_read_file_not_found(self, mock_exists):
+    def test_read_file_not_found(self):
         """Test error when file does not exist."""
-        mock_exists.return_value = False
-        with self.assertRaises(DocumentReadError):
-            self.reader.read("nonexistent.txt")
+        with pytest.raises(DocumentReadError):
+            self.reader.read("/tmp/nonexistent_file_xyz_12345.txt")
 
-    @patch('pathlib.Path.exists')
-    @patch('codomyrmex.documents.core.document_reader.DocumentReader._detect_format')
-    @patch('codomyrmex.documents.core.document_reader.detect_encoding')
-    @patch('codomyrmex.documents.formats.text_handler.read_text')
-    @patch('codomyrmex.documents.metadata.extractor.extract_metadata')
-    def test_read_text_auto_detect(self, mock_extract, mock_read_text, mock_encoding, mock_detect_format, mock_exists):
-        """Test reading a text file with auto detection."""
-        mock_exists.return_value = True
-        mock_detect_format.return_value = DocumentFormat.TEXT
-        mock_encoding.return_value = "utf-8"
-        mock_read_text.return_value = "file content"
-        mock_extract.return_value = {}
+    def test_read_text_file(self, tmp_path):
+        """Test reading a real text file."""
+        f = tmp_path / "test.txt"
+        f.write_text("file content", encoding="utf-8")
 
-        doc = self.reader.read("test.txt")
+        doc = self.reader.read(str(f))
 
-        self.assertEqual(doc.content, "file content")
-        self.assertEqual(doc.format, DocumentFormat.TEXT)
-        self.assertEqual(doc.encoding, "utf-8")
+        assert doc.content == "file content"
+        assert doc.format == DocumentFormat.TEXT
 
-        mock_read_text.assert_called_once()
+    def test_read_json_file(self, tmp_path):
+        """Test reading a real JSON file with explicit format."""
+        f = tmp_path / "test.json"
+        f.write_text('{"a": 1}', encoding="utf-8")
 
-    @patch('pathlib.Path.exists')
-    @patch('codomyrmex.documents.formats.json_handler.read_json')
-    @patch('codomyrmex.documents.metadata.extractor.extract_metadata')
-    def test_read_json_explicit_format(self, mock_extract, mock_read_json, mock_exists):
-        """Test reading a JSON file with explicit format."""
-        mock_exists.return_value = True
-        mock_read_json.return_value = {"a": 1}
-        mock_extract.return_value = {}
+        doc = self.reader.read(str(f), format=DocumentFormat.JSON)
 
-        doc = self.reader.read("test.json", format=DocumentFormat.JSON)
+        assert doc.content == {"a": 1}
+        assert doc.format == DocumentFormat.JSON
 
-        self.assertEqual(doc.content, {"a": 1})
-        self.assertEqual(doc.format, DocumentFormat.JSON)
-        mock_read_json.assert_called_once()
+    def test_read_markdown_file(self, tmp_path):
+        """Test reading a real markdown file."""
+        f = tmp_path / "test.md"
+        f.write_text("# Title\n\nParagraph", encoding="utf-8")
 
+        doc = self.reader.read(str(f))
 
-    @patch('pathlib.Path.exists')
-    def test_read_unsupported_format(self, mock_exists):
-        """Test error for unsupported format."""
-        mock_exists.return_value = True
-        # It handles MARKDOWN, JSON, YAML, PDF, TEXT.
-        # So XML should raise UnsupportedFormatError wrapped in DocumentReadError
-        with self.assertRaises(DocumentReadError):
-            self.reader.read("test.xml", format=DocumentFormat.XML)
+        assert "# Title" in doc.content
 
-    def test_detect_format(self):
-        """Test format detection logic."""
-        # This relies on mime_type_detector, but we can verify mapping logic
-        # We might need to mock detect_format_from_path
-        with patch('codomyrmex.documents.core.document_reader.detect_format_from_path') as mock_detect:
-            mock_detect.return_value = "json"
-            fmt = self.reader._detect_format(Path("test.json"))
-            self.assertEqual(fmt, DocumentFormat.JSON)
+    def test_detect_format_json(self, tmp_path):
+        """Test format detection for JSON extension."""
+        f = tmp_path / "data.json"
+        f.write_text('{"x": 1}', encoding="utf-8")
 
-            mock_detect.return_value = "markdown"
-            fmt = self.reader._detect_format(Path("test.md"))
-            self.assertEqual(fmt, DocumentFormat.MARKDOWN)
+        doc = self.reader.read(str(f))
+        assert doc.format == DocumentFormat.JSON
+
 
 @pytest.mark.unit
-class TestReadDocumentConvenience(unittest.TestCase):
-    @patch('codomyrmex.documents.core.document_reader.DocumentReader.read')
-    def test_read_document_wrapper(self, mock_read):
-        """Test the convenience wrapper function."""
-        read_document("test.txt")
-        mock_read.assert_called_once()
+class TestReadDocumentConvenience:
+    def test_read_document_wrapper(self, tmp_path):
+        """Test the convenience wrapper returns a real document."""
+        f = tmp_path / "test.txt"
+        f.write_text("hello", encoding="utf-8")
+
+        doc = read_document(str(f))
+        assert doc is not None
+        assert doc.content == "hello"

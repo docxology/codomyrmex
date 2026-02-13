@@ -9,7 +9,7 @@ Provider and data migration tools for schema changes and data transformations. S
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

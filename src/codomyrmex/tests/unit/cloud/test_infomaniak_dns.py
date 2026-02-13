@@ -12,9 +12,9 @@ Tests cover:
 Total: 24 tests in a single TestInfomaniakDNS class.
 """
 
-from unittest.mock import MagicMock
+from _stubs import Stub
 
-from codomyrmex.tests.unit.cloud.conftest import make_mock_zone
+from _stubs import make_stub_zone
 
 
 class TestInfomaniakDNS:
@@ -28,7 +28,7 @@ class TestInfomaniakDNS:
         """list_zones returns formatted dicts for each zone."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        zone = make_mock_zone(zone_id="z-1", name="example.com.", email="admin@example.com")
+        zone = make_stub_zone(zone_id="z-1", name="example.com.", email="admin@example.com")
         mock_openstack_connection.dns.zones.return_value = [zone]
 
         client = InfomaniakDNSClient(mock_openstack_connection)
@@ -57,7 +57,7 @@ class TestInfomaniakDNS:
         """get_zone returns formatted dict when zone is found."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        zone = make_mock_zone(zone_id="z-abc", name="found.com.", email="ops@found.com")
+        zone = make_stub_zone(zone_id="z-abc", name="found.com.", email="ops@found.com")
         mock_openstack_connection.dns.find_zone.return_value = zone
 
         client = InfomaniakDNSClient(mock_openstack_connection)
@@ -84,7 +84,7 @@ class TestInfomaniakDNS:
         """create_zone appends trailing dot to name without one."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_zone = MagicMock()
+        mock_zone = Stub()
         mock_zone.id = "z-new"
         mock_zone.name = "newdomain.org."
         mock_openstack_connection.dns.create_zone.return_value = mock_zone
@@ -106,7 +106,7 @@ class TestInfomaniakDNS:
         """create_zone does not double-append dot when name already ends with one."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_zone = MagicMock()
+        mock_zone = Stub()
         mock_zone.id = "z-dotted"
         mock_zone.name = "dotted.io."
         mock_openstack_connection.dns.create_zone.return_value = mock_zone
@@ -162,7 +162,7 @@ class TestInfomaniakDNS:
         """list_records returns formatted dicts for each record set."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_record = MagicMock()
+        mock_record = Stub()
         mock_record.id = "rec-1"
         mock_record.name = "www.example.com."
         mock_record.type = "A"
@@ -184,7 +184,7 @@ class TestInfomaniakDNS:
         """get_record returns formatted dict when record is found."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_record = MagicMock()
+        mock_record = Stub()
         mock_record.id = "rec-abc"
         mock_record.name = "api.example.com."
         mock_record.type = "CNAME"
@@ -205,7 +205,7 @@ class TestInfomaniakDNS:
         """create_record appends trailing dot to name without one."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_record = MagicMock()
+        mock_record = Stub()
         mock_record.id = "rec-new"
         mock_record.name = "mail.example.com."
         mock_openstack_connection.dns.create_recordset.return_value = mock_record
@@ -235,7 +235,7 @@ class TestInfomaniakDNS:
         """create_record does not double-append dot when name already ends with one."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_record = MagicMock()
+        mock_record = Stub()
         mock_record.id = "rec-dotted"
         mock_record.name = "sub.example.com."
         mock_openstack_connection.dns.create_recordset.return_value = mock_record
@@ -305,7 +305,7 @@ class TestInfomaniakDNS:
         """list_ptr_records returns formatted dicts for each PTR."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_ptr = MagicMock()
+        mock_ptr = Stub()
         mock_ptr.id = "ptr-1"
         mock_ptr.ptrdname = "host.example.com."
         mock_ptr.address = "195.15.220.10"
@@ -325,11 +325,11 @@ class TestInfomaniakDNS:
         """set_reverse_dns finds FIP, appends dot to hostname, creates PTR."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-1"
         mock_openstack_connection.network.find_ip.return_value = mock_fip
 
-        mock_ptr = MagicMock()
+        mock_ptr = Stub()
         mock_ptr.id = "ptr-new"
         mock_openstack_connection.dns.create_ptr_record.return_value = mock_ptr
 
@@ -352,11 +352,11 @@ class TestInfomaniakDNS:
         """set_reverse_dns does not double-append dot when hostname already ends with one."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-2"
         mock_openstack_connection.network.find_ip.return_value = mock_fip
 
-        mock_ptr = MagicMock()
+        mock_ptr = Stub()
         mock_ptr.id = "ptr-dotted"
         mock_openstack_connection.dns.create_ptr_record.return_value = mock_ptr
 
@@ -386,11 +386,11 @@ class TestInfomaniakDNS:
         """get_reverse_dns returns formatted PTR dict when found."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-get"
         mock_openstack_connection.network.find_ip.return_value = mock_fip
 
-        mock_ptr = MagicMock()
+        mock_ptr = Stub()
         mock_ptr.id = "ptr-found"
         mock_ptr.ptrdname = "web.example.com."
         mock_ptr.ttl = 3600
@@ -420,7 +420,7 @@ class TestInfomaniakDNS:
         """delete_reverse_dns returns True on success."""
         from codomyrmex.cloud.infomaniak.dns.client import InfomaniakDNSClient
 
-        mock_fip = MagicMock()
+        mock_fip = Stub()
         mock_fip.id = "fip-del"
         mock_openstack_connection.network.find_ip.return_value = mock_fip
 
@@ -441,3 +441,87 @@ class TestInfomaniakDNS:
 
         assert result is False
         mock_openstack_connection.dns.delete_ptr_record.assert_not_called()
+
+
+# =========================================================================
+
+class TestInfomaniakDNSClientExpanded:
+    """Tests for InfomaniakDNSClient untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.dns import InfomaniakDNSClient
+        mock_conn = Stub()
+        return InfomaniakDNSClient(connection=mock_conn), mock_conn
+
+    def test_get_zone(self):
+        client, mc = self._make_client()
+        z = Stub(id="z1", email="a@b.com",
+                      status="ACTIVE", ttl=3600)
+        z.name = "example.com."
+        mc.dns.find_zone.return_value = z
+        result = client.get_zone("z1")
+        assert result["id"] == "z1"
+        assert result["name"] == "example.com."
+
+    def test_update_zone(self):
+        client, mc = self._make_client()
+        assert client.update_zone("z1", email="new@b.com") is True
+        mc.dns.update_zone.assert_called_once_with("z1", email="new@b.com")
+
+    def test_get_record(self):
+        client, mc = self._make_client()
+        r = Stub(id="r1", name="www.example.com.", type="A",
+                      records=["1.2.3.4"], ttl=300)
+        mc.dns.get_recordset.return_value = r
+        result = client.get_record("z1", "r1")
+        assert result["id"] == "r1"
+        assert result["type"] == "A"
+
+    def test_update_record(self):
+        client, mc = self._make_client()
+        assert client.update_record("z1", "r1", records=["5.6.7.8"]) is True
+
+    def test_list_ptr_records(self):
+        client, mc = self._make_client()
+        ptr = Stub(id="ptr1", ptrdname="host.example.com.",
+                        address="1.2.3.4", status="ACTIVE")
+        mc.dns.ptr_records.return_value = [ptr]
+        result = client.list_ptr_records()
+        assert len(result) == 1
+        assert result[0]["ptrdname"] == "host.example.com."
+
+    def test_set_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = Stub(id="fip1")
+        mc.network.find_ip.return_value = fip
+        ptr = Stub(id="ptr1")
+        mc.dns.create_ptr_record.return_value = ptr
+        result = client.set_reverse_dns("1.2.3.4", "host.example.com")
+        assert result["address"] == "1.2.3.4"
+        assert result["ptrdname"] == "host.example.com."
+
+    def test_get_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = Stub(id="fip1")
+        mc.network.find_ip.return_value = fip
+        ptr = Stub(id="ptr1", ptrdname="host.example.com.", ttl=3600)
+        mc.dns.get_ptr_record.return_value = ptr
+        result = client.get_reverse_dns("1.2.3.4")
+        assert result["ptrdname"] == "host.example.com."
+
+    def test_delete_reverse_dns(self):
+        client, mc = self._make_client()
+        fip = Stub(id="fip1")
+        mc.network.find_ip.return_value = fip
+        assert client.delete_reverse_dns("1.2.3.4") is True
+        mc.dns.delete_ptr_record.assert_called_once_with("fip1")
+
+    def test_list_zones_error(self):
+        client, mc = self._make_client()
+        mc.dns.zones.side_effect = Exception("fail")
+        assert client.list_zones() == []
+
+
+# =========================================================================
+# ADDITIONAL HEAT (ORCHESTRATION) CLIENT TESTS
+# =========================================================================

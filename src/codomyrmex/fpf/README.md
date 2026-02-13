@@ -10,7 +10,7 @@ First Principles Framework (FPF) module for fetching, parsing, analyzing, and ex
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

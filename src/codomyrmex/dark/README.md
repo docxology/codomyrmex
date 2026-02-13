@@ -7,17 +7,17 @@ Dark mode utilities for different domains: PDF, network, hardware, and software.
 | Submodule | Status | Description |
 |-----------|--------|-------------|
 | `pdf` | Implemented | PDF dark mode filters (inversion, brightness, contrast, sepia) |
-| `network` | Placeholder | Network dark mode utilities |
-| `hardware` | Placeholder | Hardware dark mode utilities |
-| `software` | Placeholder | Software dark mode utilities |
+| `network` | Planned | Network dark mode utilities — Planned for future implementation |
+| `hardware` | Planned | Hardware dark mode utilities — Planned for future implementation |
+| `software` | Planned | Software dark mode utilities — Planned for future implementation |
 
 ## Key Exports
 
 ### Submodules
 - **`pdf`** — PDF dark mode filters (inversion, brightness, contrast, sepia); `None` if dependencies missing
-- **`network`** — Network dark mode utilities (placeholder)
-- **`hardware`** — Hardware dark mode utilities (placeholder)
-- **`software`** — Software dark mode utilities (placeholder)
+- **`network`** — Network dark mode utilities — Planned for future implementation
+- **`hardware`** — Hardware dark mode utilities — Planned for future implementation
+- **`software`** — Software dark mode utilities — Planned for future implementation
 
 ### Availability Flags
 - **`PDF_AVAILABLE`** — Boolean flag indicating whether PDF processing dependencies (PyMuPDF, Pillow) are available

@@ -1,6 +1,7 @@
-"""Tests for APIAgentBase class."""
+"""Tests for APIAgentBase class.
 
-from unittest.mock import Mock
+Zero-Mock compliant — uses simple stub classes instead of unittest.mock.
+"""
 
 import pytest
 
@@ -19,6 +20,31 @@ if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
 
+# ---------------------------------------------------------------------------
+# Lightweight stubs replacing unittest.mock.Mock
+# ---------------------------------------------------------------------------
+
+class StubClient:
+    """A simple stub API client (replaces Mock)."""
+    pass
+
+
+def _stub_client_init(api_key):
+    """Factory that creates a StubClient, replaces lambda k: Mock()."""
+    return StubClient()
+
+
+class _SimpleNamespace:
+    """Minimal attribute container (replaces Mock with attribute assignment)."""
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+
+# ---------------------------------------------------------------------------
+# Concrete test subclass of APIAgentBase
+# ---------------------------------------------------------------------------
+
 @pytest.mark.unit
 class TestAPIAgentBase(APIAgentBase):
     """Test implementation of APIAgentBase."""
@@ -34,9 +60,9 @@ class TestAPIAgentBase(APIAgentBase):
         """Initialize test agent."""
         # Use sentinel to allow passing None
         if client_class == "SENTINEL":
-            client_class = Mock
+            client_class = StubClient
         if client_init_func is None:
-            client_init_func = lambda api_key: Mock()
+            client_init_func = _stub_client_init
         if error_class is None:
             error_class = AgentError
 
@@ -166,9 +192,7 @@ class TestAPIAgentBaseErrorHandling:
     def test_handle_api_error_with_api_error_class(self):
         """Test handling API errors with specific error class."""
         agent = TestAPIAgentBase(config={"test_api_key": "key"})
-        api_error = Mock()
-        api_error.status_code = 429
-        api_error.__str__ = Mock(return_value="Rate limit exceeded")
+        api_error = _SimpleNamespace(status_code=429)
 
         with pytest.raises(AgentError) as exc_info:
             agent._handle_api_error(api_error, 1.0, type(api_error))
@@ -191,10 +215,9 @@ class TestAPIAgentBaseTokenExtraction:
     def test_extract_tokens_anthropic(self):
         """Test extracting tokens from Anthropic response."""
         agent = TestAPIAgentBase(config={"test_api_key": "key"})
-        response = Mock()
-        response.usage = Mock()
-        response.usage.input_tokens = 10
-        response.usage.output_tokens = 20
+        response = _SimpleNamespace(
+            usage=_SimpleNamespace(input_tokens=10, output_tokens=20)
+        )
 
         input_tokens, output_tokens = agent._extract_tokens_from_response(response, "anthropic")
         assert input_tokens == 10
@@ -203,10 +226,9 @@ class TestAPIAgentBaseTokenExtraction:
     def test_extract_tokens_openai(self):
         """Test extracting tokens from OpenAI response."""
         agent = TestAPIAgentBase(config={"test_api_key": "key"})
-        response = Mock()
-        response.usage = Mock()
-        response.usage.prompt_tokens = 15
-        response.usage.completion_tokens = 25
+        response = _SimpleNamespace(
+            usage=_SimpleNamespace(prompt_tokens=15, completion_tokens=25)
+        )
 
         input_tokens, output_tokens = agent._extract_tokens_from_response(response, "openai")
         assert input_tokens == 15
@@ -215,7 +237,7 @@ class TestAPIAgentBaseTokenExtraction:
     def test_extract_tokens_unknown_provider(self):
         """Test extracting tokens from unknown provider returns zeros."""
         agent = TestAPIAgentBase(config={"test_api_key": "key"})
-        response = Mock()
+        response = _SimpleNamespace()
 
         input_tokens, output_tokens = agent._extract_tokens_from_response(response, "unknown")
         assert input_tokens == 0
@@ -249,7 +271,6 @@ class TestAPIAgentBaseExecution:
 
     def test_execute_impl_not_implemented(self):
         """Test that _execute_impl raises NotImplementedError if not overridden."""
-        # Create agent without implementing _execute_impl
         class IncompleteAgent(APIAgentBase):
             def __init__(self):
                 super().__init__(
@@ -260,8 +281,8 @@ class TestAPIAgentBaseExecution:
                     timeout_config_key="test_timeout",
                     max_tokens_config_key="test_max_tokens",
                     temperature_config_key="test_temperature",
-                    client_class=Mock,
-                    client_init_func=lambda k: Mock(),
+                    client_class=StubClient,
+                    client_init_func=_stub_client_init,
                     error_class=AgentError,
                     config={"test_api_key": "key"},
                 )
@@ -284,8 +305,8 @@ class TestAPIAgentBaseExecution:
                     timeout_config_key="test_timeout",
                     max_tokens_config_key="test_max_tokens",
                     temperature_config_key="test_temperature",
-                    client_class=Mock,
-                    client_init_func=lambda k: Mock(),
+                    client_class=StubClient,
+                    client_init_func=_stub_client_init,
                     error_class=AgentError,
                     config={"test_api_key": "key"},
                 )
@@ -297,4 +318,3 @@ class TestAPIAgentBaseExecution:
 
         with pytest.raises(NotImplementedError):
             list(agent._stream_impl(request))
-

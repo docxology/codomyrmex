@@ -10,7 +10,7 @@ Scaffolding module for creating new Codomyrmex modules from a standardized templ
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

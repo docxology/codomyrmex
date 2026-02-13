@@ -1,11 +1,30 @@
 """Unit tests for WebSocketClient."""
 
 import asyncio
-from unittest.mock import MagicMock
 
 import pytest
 
 from codomyrmex.networking.websocket_client import WebSocketClient
+
+
+class CallTracker:
+    """Real callable that tracks calls — replaces MagicMock."""
+
+    def __init__(self):
+        self.calls: list = []
+
+    def __call__(self, *args, **kwargs):
+        self.calls.append((args, kwargs))
+
+    @property
+    def call_count(self):
+        return len(self.calls)
+
+    def assert_called_once_with(self, *expected_args, **expected_kwargs):
+        assert self.call_count == 1, f"Expected 1 call, got {self.call_count}"
+        args, kwargs = self.calls[0]
+        assert args == expected_args
+        assert kwargs == expected_kwargs
 
 
 @pytest.mark.asyncio
@@ -13,13 +32,9 @@ async def test_websocket_client_on_handler():
     """Test the standardized .on() handler attachment."""
     client = WebSocketClient("ws://localhost:8080")
 
-    # Mock handler
-    handler = MagicMock()
-
-    # Use the new .on() method
+    handler = CallTracker()
     client.on(handler)
 
-    # Manually trigger message handling for testing
     await client._handle_message('{"test": "data"}')
 
     handler.assert_called_once_with({"test": "data"})

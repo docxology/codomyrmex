@@ -8,7 +8,7 @@ Interactive terminal shells, command runners, and rich rendering.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

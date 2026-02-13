@@ -7,7 +7,7 @@ Data provenance and lineage tracking for datasets, transformations, and models.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

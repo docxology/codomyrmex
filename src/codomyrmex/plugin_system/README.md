@@ -8,7 +8,7 @@ Extensible plugin architecture for third-party modules.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

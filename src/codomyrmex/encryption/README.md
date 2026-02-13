@@ -23,7 +23,7 @@ Encryption and cryptographic operations module for Codomyrmex. Provides symmetri
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

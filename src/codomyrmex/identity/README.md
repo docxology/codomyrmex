@@ -8,7 +8,7 @@ Persona management and bio-cognitive verification for agent identity.
 ## Installation
 
 ```bash
-uv uv add codomyrmex
+uv add codomyrmex
 ```
 
 Or for development:

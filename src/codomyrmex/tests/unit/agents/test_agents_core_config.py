@@ -1,6 +1,7 @@
 
+import os
+
 import pytest
-from unittest.mock import patch
 from codomyrmex.agents.core import (
     AgentConfig,
     base,
@@ -53,11 +54,11 @@ class TestAgentConfiguration:
         assert config.enable_logging is True
         assert config.claude_model == "claude-3-opus-20240229"
 
-    def test_agent_config_from_environment(self):
+    def test_agent_config_from_environment(self, monkeypatch):
         """Test AgentConfig reads from environment variables."""
-        with patch.dict("os.environ", {"CLAUDE_MODEL": "claude-3-sonnet"}):
-            config = AgentConfig()
-            assert config.claude_model == "claude-3-sonnet"
+        monkeypatch.setenv("CLAUDE_MODEL", "claude-3-sonnet")
+        config = AgentConfig()
+        assert config.claude_model == "claude-3-sonnet"
 
     def test_agent_config_to_dict(self):
         """Test AgentConfig serialization to dict."""

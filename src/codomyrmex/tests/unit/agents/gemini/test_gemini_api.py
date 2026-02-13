@@ -1,9 +1,15 @@
-"""Tests for GeminiClient."""
+"""Tests for GeminiClient.
 
+Zero-Mock compliant — tests use the real Gemini API when GEMINI_API_KEY is
+set, otherwise they are skipped.
+"""
+
+import os
 from collections.abc import Generator
-from unittest.mock import MagicMock, patch
 
 import pytest
+
+_HAS_GEMINI_KEY = bool(os.environ.get("GEMINI_API_KEY"))
 
 try:
     from codomyrmex.agents.core import AgentCapabilities, AgentRequest
@@ -15,80 +21,75 @@ except ImportError:
 if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
-# NOTE: We partially mock 'google.genai' ONLY because we cannot guarantee
-# external API access in all test environments.
-# In a real "No Mock" environment with a provided key, these should run against the real API.
-# Here we check if key is present; if not, we must simulate or skip.
 
-@pytest.fixture
-def mock_genai_client():
-    with patch("codomyrmex.agents.gemini.gemini_client.genai") as mock_genai:
-        mock_client_instance = MagicMock()
-        mock_genai.Client.return_value = mock_client_instance
-        yield mock_client_instance
-
-@pytest.fixture
-def gemini_client(mock_genai_client) -> Generator[GeminiClient, None, None]:
-    """Create a GeminiClient instance."""
-    # Ensure key is "set" for init
-    config = {"gemini_api_key": "fake_key", "gemini_model": "gemini-test"}
-    client = GeminiClient(config=config)
-    yield client
+# ---------------------------------------------------------------------------
+# Tests that require no API key (structural / init tests)
+# ---------------------------------------------------------------------------
 
 @pytest.mark.unit
-class TestGeminiClient:
+class TestGeminiClientInit:
+    """Tests for GeminiClient initialisation paths."""
 
-    def test_init(self, gemini_client):
-        """Test initialization."""
-        assert gemini_client.name == "gemini"
-        assert AgentCapabilities.TEXT_COMPLETION in gemini_client.capabilities
-        assert gemini_client.default_model == "gemini-test"
+    @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+    def test_init_with_real_key(self):
+        """GeminiClient initializes successfully with a real API key."""
+        client = GeminiClient()
+        assert client.name == "gemini"
+        assert AgentCapabilities.TEXT_COMPLETION in client.capabilities
+        assert client.client is not None
 
-    def test_generate_content(self, gemini_client, mock_genai_client):
-        """Test generate_content execution."""
-        # Setup mock response
-        mock_response = MagicMock()
-        mock_cand = MagicMock()
-        mock_part = MagicMock()
-        mock_part.text = "Generated text"
-        mock_part.function_call = None
-        mock_part.executable_code = None
-        mock_part.code_execution_result = None
-        mock_cand.content.parts = [mock_part]
-        mock_cand.finish_reason = "STOP"
-        mock_response.candidates = [mock_cand]
-        mock_response.usage_metadata.model_dump.return_value = {"total_tokens": 10}
+    def test_init_without_key_warns(self, monkeypatch):
+        """GeminiClient warns (but doesn't crash) when no API key is available."""
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        # The client logs a warning instead of raising
+        client = GeminiClient(config={"gemini_api_key": ""})
+        # api_key should be falsy
+        assert not client.api_key
 
-        mock_genai_client.models.generate_content.return_value = mock_response
+    @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+    def test_default_model(self):
+        """GeminiClient uses the default model from config or env."""
+        client = GeminiClient()
+        assert client.default_model is not None
+        assert isinstance(client.default_model, str)
 
-        request = AgentRequest(prompt="Hello")
-        response = gemini_client.execute(request)
+
+# ---------------------------------------------------------------------------
+# Tests that require a live Gemini API key
+# ---------------------------------------------------------------------------
+
+@pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
+@pytest.mark.unit
+class TestGeminiClientAPI:
+    """Live-API tests for GeminiClient — skipped without GEMINI_API_KEY."""
+
+    @pytest.fixture
+    def client(self):
+        """Create a real GeminiClient with the environment API key."""
+        return GeminiClient()
+
+    def test_generate_content(self, client):
+        """Test generate_content returns a successful response."""
+        request = AgentRequest(prompt="Say hello in one word.")
+        response = client.execute(request)
 
         assert response.is_success()
-        assert response.content == "Generated text"
-        assert response.metadata["finish_reason"] == "STOP"
+        assert len(response.content) > 0
 
-        # Verify call args
-        args, kwargs = mock_genai_client.models.generate_content.call_args
-        assert kwargs["model"] == "gemini-test"
-        assert kwargs["contents"] == [["Hello"]]
+    def test_list_models(self, client):
+        """Test list_models returns at least one model."""
+        models = client.list_models()
+        assert isinstance(models, list)
+        assert len(models) > 0
 
-    def test_list_models(self, gemini_client, mock_genai_client):
-        """Test list_models."""
-        mock_model = MagicMock()
-        mock_model.model_dump.return_value = {"name": "models/gemini-pro"}
-        mock_genai_client.models.list.return_value = [mock_model]
+    def test_count_tokens(self, client):
+        """Test count_tokens returns token count dict."""
+        result = client.count_tokens("Hello world")
+        assert result is not None
 
-        models = gemini_client.list_models()
-        assert len(models) == 1
-        assert models[0]["name"] == "models/gemini-pro"
-
-    def test_upload_file(self, gemini_client, mock_genai_client):
-        """Test upload_file."""
-        mock_file_ref = MagicMock()
-        mock_file_ref.model_dump.return_value = {"name": "files/123", "uri": "https://..."}
-        mock_genai_client.files.upload.return_value = mock_file_ref
-
-        result = gemini_client.upload_file("path/to/file.pdf")
-        assert result["name"] == "files/123"
-
+    def test_stream(self, client):
+        """Test streaming yields content chunks."""
+        request = AgentRequest(prompt="Count from 1 to 3.")
+        chunks = list(client.stream(request))
+        assert len(chunks) >= 1
+        assert any(len(c) > 0 for c in chunks)

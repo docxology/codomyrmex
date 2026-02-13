@@ -11,7 +11,7 @@ Tests cover:
 import importlib.util
 import os
 import sys
-from unittest.mock import MagicMock
+
 
 import pytest
 
@@ -506,20 +506,28 @@ class TestReActAgent:
         assert len(chunks) >= 1
         assert any("Processed request" in chunk for chunk in chunks)
 
-    def test_react_agent_with_mock_llm_client(self, agent_modules):
-        """Test ReAct agent with mocked LLM client."""
+    def test_react_agent_with_stub_llm_client(self, agent_modules):
+        """Test ReAct agent with a stub LLM client."""
         ReActAgent = agent_modules['ReActAgent']
         ToolRegistry = agent_modules['ToolRegistry']
         AgentRequest = agent_modules['AgentRequest']
 
         registry = ToolRegistry()
 
-        # Create a mock LLM client
-        mock_client = MagicMock()
-        mock_client.chat.return_value = "Final Answer: The answer is 42"
+        # Create a simple stub LLM client (no mocks)
+        class StubLLMClient:
+            """Stub that returns a deterministic answer."""
+            class chat_ns:
+                @staticmethod
+                def __call__(*args, **kwargs):
+                    return "Final Answer: The answer is 42"
+            def __init__(self):
+                self.chat = self.chat_ns()
+
+        stub_client = StubLLMClient()
 
         agent = ReActAgent(
-            name="test", tool_registry=registry, llm_client=mock_client, max_steps=3
+            name="test", tool_registry=registry, llm_client=stub_client, max_steps=3
         )
 
         response = agent.execute(AgentRequest(prompt="What is the meaning of life?"))

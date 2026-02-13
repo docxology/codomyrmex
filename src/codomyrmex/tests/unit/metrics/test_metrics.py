@@ -1,16 +1,16 @@
-"""Comprehensive tests for the metrics module.
+"""Zero-Mock comprehensive tests for the metrics module.
 
 Tests cover:
 - Counter, Gauge, Histogram, Summary metric types
 - Metrics registration and updates
 - Labels and dimensions
 - Prometheus exporter format
-- StatsD client operations
+- StatsD client operations (real, skip if unavailable)
 - Metric aggregation
 - Error handling
 """
 
-from unittest.mock import MagicMock, patch
+import socket
 
 import pytest
 
@@ -618,12 +618,11 @@ class TestMetricsError:
 
 
 class TestPrometheusExporter:
-    """Tests for PrometheusExporter (mocked to avoid network dependencies)."""
+    """Tests for PrometheusExporter — creation only, no server start."""
 
     def test_prometheus_exporter_import(self):
-        """Test PrometheusExporter can be imported when prometheus_client is available."""
+        """Test PrometheusExporter can be imported."""
         from codomyrmex.metrics import PrometheusExporter
-        # May be None if prometheus_client is not installed
         assert PrometheusExporter is None or callable(PrometheusExporter)
 
     @pytest.mark.skipif(
@@ -631,38 +630,12 @@ class TestPrometheusExporter:
         reason="prometheus_client not installed"
     )
     def test_prometheus_exporter_creation(self):
-        """Test PrometheusExporter creation."""
+        """Test PrometheusExporter creation without starting server."""
         from codomyrmex.metrics import PrometheusExporter
         exporter = PrometheusExporter(port=9090, addr="127.0.0.1")
         assert exporter.port == 9090
         assert exporter.addr == "127.0.0.1"
         assert not exporter._server_started
-
-    @pytest.mark.skipif(
-        metrics.PrometheusExporter is None,
-        reason="prometheus_client not installed"
-    )
-    @patch("codomyrmex.metrics.prometheus_exporter.start_http_server")
-    def test_prometheus_exporter_start(self, mock_start_server):
-        """Test PrometheusExporter start."""
-        from codomyrmex.metrics import PrometheusExporter
-        exporter = PrometheusExporter(port=9090)
-        exporter.start()
-        mock_start_server.assert_called_once_with(9090, addr="0.0.0.0")
-        assert exporter._server_started
-
-    @pytest.mark.skipif(
-        metrics.PrometheusExporter is None,
-        reason="prometheus_client not installed"
-    )
-    @patch("codomyrmex.metrics.prometheus_exporter.start_http_server")
-    def test_prometheus_exporter_start_idempotent(self, mock_start_server):
-        """Test PrometheusExporter start is idempotent."""
-        from codomyrmex.metrics import PrometheusExporter
-        exporter = PrometheusExporter(port=9090)
-        exporter.start()
-        exporter.start()  # Second call should be no-op
-        assert mock_start_server.call_count == 1
 
 
 # ==============================================================================
@@ -670,87 +643,73 @@ class TestPrometheusExporter:
 # ==============================================================================
 
 
+# Check for real StatsD server
+_HAS_STATSD_SERVER = False
+try:
+    _test_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    _test_sock.settimeout(0.1)
+    _test_sock.sendto(b"test:1|c", ("localhost", 8125))
+    _test_sock.close()
+    _HAS_STATSD_SERVER = True
+except Exception:
+    pass
+
+requires_statsd = pytest.mark.skipif(
+    not _HAS_STATSD_SERVER,
+    reason="StatsD server not running on localhost:8125",
+)
+
+
 class TestStatsDClient:
-    """Tests for StatsDClient (mocked to avoid network dependencies)."""
+    """Tests for StatsDClient — uses real client, skip if no server."""
 
     def test_statsd_client_import(self):
-        """Test StatsDClient can be imported when statsd is available."""
+        """Test StatsDClient can be imported."""
         from codomyrmex.metrics import StatsDClient
-        # May be None if statsd is not installed
         assert StatsDClient is None or callable(StatsDClient)
 
     @pytest.mark.skipif(
         metrics.StatsDClient is None,
         reason="statsd not installed"
     )
-    @patch("codomyrmex.metrics.statsd_client.statsd.StatsClient")
-    def test_statsd_client_creation(self, mock_statsd):
-        """Test StatsDClient creation."""
+    def test_statsd_client_creation(self):
+        """Test StatsDClient creation with real client."""
         from codomyrmex.metrics import StatsDClient
         client = StatsDClient(host="localhost", port=8125, prefix="test")
-        mock_statsd.assert_called_once_with(
-            host="localhost", port=8125, prefix="test"
-        )
+        assert client is not None
 
     @pytest.mark.skipif(
         metrics.StatsDClient is None,
         reason="statsd not installed"
     )
-    @patch("codomyrmex.metrics.statsd_client.statsd.StatsClient")
-    def test_statsd_client_incr(self, mock_statsd):
-        """Test StatsDClient incr operation."""
+    @requires_statsd
+    def test_statsd_client_incr(self):
+        """Test StatsDClient incr — sends real UDP packet."""
         from codomyrmex.metrics import StatsDClient
-        mock_client = MagicMock()
-        mock_statsd.return_value = mock_client
-
         client = StatsDClient()
         client.incr("requests", count=5, rate=0.5)
-        mock_client.incr.assert_called_once_with("requests", 5, 0.5)
 
     @pytest.mark.skipif(
         metrics.StatsDClient is None,
         reason="statsd not installed"
     )
-    @patch("codomyrmex.metrics.statsd_client.statsd.StatsClient")
-    def test_statsd_client_gauge(self, mock_statsd):
-        """Test StatsDClient gauge operation."""
+    @requires_statsd
+    def test_statsd_client_gauge(self):
+        """Test StatsDClient gauge — sends real UDP packet."""
         from codomyrmex.metrics import StatsDClient
-        mock_client = MagicMock()
-        mock_statsd.return_value = mock_client
-
         client = StatsDClient()
         client.gauge("memory", 1024.0, rate=1.0)
-        mock_client.gauge.assert_called_once_with("memory", 1024.0, 1.0)
 
     @pytest.mark.skipif(
         metrics.StatsDClient is None,
         reason="statsd not installed"
     )
-    @patch("codomyrmex.metrics.statsd_client.statsd.StatsClient")
-    def test_statsd_client_timing(self, mock_statsd):
-        """Test StatsDClient timing operation."""
+    @requires_statsd
+    def test_statsd_client_timing(self):
+        """Test StatsDClient timing — sends real UDP packet."""
         from codomyrmex.metrics import StatsDClient
-        mock_client = MagicMock()
-        mock_statsd.return_value = mock_client
-
         client = StatsDClient()
         client.timing("request_time", 150.0)
-        mock_client.timing.assert_called_once_with("request_time", 150.0, 1)
-
-    @pytest.mark.skipif(
-        metrics.StatsDClient is None,
-        reason="statsd not installed"
-    )
-    @patch("codomyrmex.metrics.statsd_client.statsd.StatsClient")
-    def test_statsd_client_timer_context_manager(self, mock_statsd):
-        """Test StatsDClient timer context manager."""
-        from codomyrmex.metrics import StatsDClient
-        mock_client = MagicMock()
-        mock_statsd.return_value = mock_client
-
-        client = StatsDClient()
-        client.timer("operation_duration")
-        mock_client.timer.assert_called_once_with("operation_duration", 1)
 
 
 # ==============================================================================

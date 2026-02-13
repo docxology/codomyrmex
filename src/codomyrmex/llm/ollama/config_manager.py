@@ -436,3 +436,28 @@ class ConfigManager:
             'errors': errors,
             'warnings': warnings
         }
+
+    def get_available_models(self) -> list[str]:
+        """
+        Get list of available models from Ollama server.
+
+        Returns:
+            List of model names available in Ollama
+        """
+        if not self.config:
+            return []
+
+        try:
+            import requests
+            url = f"http://{self.config.server_host}:{self.config.server_port}/api/tags"
+            response = requests.get(url, timeout=2)
+            if response.status_code == 200:
+                data = response.json()
+                return [model['name'] for model in data.get('models', [])]
+        except Exception as e:
+            self.logger.warning(f"Failed to fetch models from Ollama: {e}")
+
+        # Fallback to configured models if API fails
+        if self.config and self.config.preferred_models:
+            return self.config.preferred_models
+        return ["llama3.1:latest"]

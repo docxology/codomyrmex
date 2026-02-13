@@ -12,7 +12,12 @@ bucket policies, and error paths.
 Total: ~28 tests across 2 test classes.
 """
 
-from unittest.mock import MagicMock, mock_open, patch
+import io
+import os
+
+import pytest
+
+from _stubs import Stub
 
 
 from codomyrmex.cloud.infomaniak.object_storage.client import (
@@ -31,9 +36,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_list_containers(self, mock_openstack_connection):
         """list_containers returns container names from object_store."""
-        c1 = MagicMock()
+        c1 = Stub()
         c1.name = "alpha"
-        c2 = MagicMock()
+        c2 = Stub()
         c2.name = "beta"
         mock_openstack_connection.object_store.containers.return_value = [c1, c2]
 
@@ -67,7 +72,7 @@ class TestInfomaniakObjectStorageClient:
 
     def test_get_container_metadata(self, mock_openstack_connection):
         """get_container_metadata returns dict from container.metadata."""
-        mock_container = MagicMock()
+        mock_container = Stub()
         mock_container.metadata = {"X-Container-Read": ".r:*"}
         mock_openstack_connection.object_store.get_container_metadata.return_value = (
             mock_container
@@ -91,9 +96,9 @@ class TestInfomaniakObjectStorageClient:
 
     def test_list_objects(self, mock_openstack_connection):
         """list_objects returns object names from a container."""
-        obj1 = MagicMock()
+        obj1 = Stub()
         obj1.name = "file1.txt"
-        obj2 = MagicMock()
+        obj2 = Stub()
         obj2.name = "dir/file2.txt"
         mock_openstack_connection.object_store.objects.return_value = [obj1, obj2]
 
@@ -120,18 +125,18 @@ class TestInfomaniakObjectStorageClient:
             content_type="text/plain",
         )
 
-    def test_upload_file(self, mock_openstack_connection):
+    def test_upload_file(self, mock_openstack_connection, monkeypatch, tmp_path):
         """upload_file reads file from disk and delegates to upload_object."""
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
 
-        m = mock_open(read_data=b"file contents")
-        with patch("builtins.open", m):
-            result = client.upload_file(
-                "bucket", "doc.pdf", "/tmp/claude/doc.pdf", content_type="application/pdf"
-            )
+        f = tmp_path / "doc.pdf"
+        f.write_bytes(b"file contents")
+
+        result = client.upload_file(
+            "bucket", "doc.pdf", str(f), content_type="application/pdf"
+        )
 
         assert result is True
-        m.assert_called_once_with("/tmp/claude/doc.pdf", "rb")
         mock_openstack_connection.object_store.upload_object.assert_called_once_with(
             container="bucket",
             name="doc.pdf",
@@ -143,8 +148,7 @@ class TestInfomaniakObjectStorageClient:
         """upload_file returns False when the file cannot be read."""
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
 
-        with patch("builtins.open", side_effect=FileNotFoundError("no such file")):
-            result = client.upload_file("bucket", "key", "/nonexistent")
+        result = client.upload_file("bucket", "key", "/nonexistent_path_abc123")
 
         assert result is False
 
@@ -157,19 +161,17 @@ class TestInfomaniakObjectStorageClient:
 
         assert data == b"hello swift"
 
-    def test_download_file(self, mock_openstack_connection):
+    def test_download_file(self, mock_openstack_connection, tmp_path):
         """download_file writes downloaded bytes to disk."""
         mock_openstack_connection.object_store.download_object.return_value = b"bytes on disk"
 
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
 
-        m = mock_open()
-        with patch("builtins.open", m):
-            result = client.download_file("bucket", "key.bin", "/tmp/claude/out.bin")
+        out = tmp_path / "out.bin"
+        result = client.download_file("bucket", "key.bin", str(out))
 
         assert result is True
-        m.assert_called_once_with("/tmp/claude/out.bin", "wb")
-        m().write.assert_called_once_with(b"bytes on disk")
+        assert out.read_bytes() == b"bytes on disk"
 
     def test_download_file_no_data_returns_false(self, mock_openstack_connection):
         """download_file returns False when download_object returns None."""
@@ -193,7 +195,7 @@ class TestInfomaniakObjectStorageClient:
 
     def test_get_object_metadata(self, mock_openstack_connection):
         """get_object_metadata returns structured metadata dict."""
-        mock_obj = MagicMock()
+        mock_obj = Stub()
         mock_obj.name = "file.txt"
         mock_obj.content_length = 1024
         mock_obj.content_type = "text/plain"
@@ -323,7 +325,7 @@ class TestInfomaniakS3Client:
 
     def test_download_data(self, mock_s3_client):
         """download_data reads Body from S3 get_object response."""
-        mock_body = MagicMock()
+        mock_body = Stub()
         mock_body.read.return_value = b"raw bytes"
         mock_s3_client.get_object.return_value = {"Body": mock_body}
 
@@ -406,7 +408,7 @@ class TestInfomaniakS3Client:
 
     def test_list_objects_paginated(self, mock_s3_client):
         """list_objects_paginated uses paginator to collect all keys."""
-        mock_paginator = MagicMock()
+        mock_paginator = Stub()
         mock_paginator.paginate.return_value = [
             {"Contents": [{"Key": "page1-k1"}, {"Key": "page1-k2"}]},
             {"Contents": [{"Key": "page2-k1"}]},
@@ -481,3 +483,178 @@ class TestInfomaniakS3Client:
         mock_s3_client.put_bucket_policy.assert_called_once_with(
             Bucket="bucket", Policy=policy_json
         )
+
+
+# =========================================================================
+
+class TestInfomaniakSwiftClientExpanded:
+    """Tests for InfomaniakObjectStorageClient (Swift) untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.object_storage import (
+            InfomaniakObjectStorageClient,
+        )
+        mock_conn = Stub()
+        return InfomaniakObjectStorageClient(connection=mock_conn), mock_conn
+
+    def test_delete_container(self):
+        client, mc = self._make_client()
+        assert client.delete_container("mybucket") is True
+        mc.object_store.delete_container.assert_called_once_with("mybucket")
+
+    def test_get_container_metadata(self):
+        client, mc = self._make_client()
+        meta = Stub()
+        meta.metadata = {"x-count": "5"}
+        mc.object_store.get_container_metadata.return_value = meta
+        result = client.get_container_metadata("mybucket")
+        assert isinstance(result, dict)
+
+    def test_list_objects(self):
+        client, mc = self._make_client()
+        obj = Stub()
+        obj.name = "file.txt"
+        mc.object_store.objects.return_value = [obj]
+        result = client.list_objects("mybucket")
+        assert result == ["file.txt"]
+
+    def test_list_objects_with_prefix(self):
+        client, mc = self._make_client()
+        mc.object_store.objects.return_value = []
+        client.list_objects("mybucket", prefix="logs/")
+        mc.object_store.objects.assert_called_once_with("mybucket", prefix="logs/")
+
+    def test_get_object_metadata(self):
+        client, mc = self._make_client()
+        obj = Stub(content_length=1024,
+                        content_type="text/plain", etag="abc",
+                        last_modified_at=None)
+        obj.name = "file.txt"
+        mc.object_store.get_object_metadata.return_value = obj
+        result = client.get_object_metadata("mybucket", "file.txt")
+        assert result["name"] == "file.txt"
+        assert result["content_length"] == 1024
+
+    def test_set_container_read_acl(self):
+        client, mc = self._make_client()
+        assert client.set_container_read_acl("mybucket", ".r:*") is True
+        mc.object_store.set_container_metadata.assert_called_once()
+
+    def test_set_container_write_acl(self):
+        client, mc = self._make_client()
+        assert client.set_container_write_acl("mybucket", "user:admin") is True
+
+    def test_list_containers_error(self):
+        client, mc = self._make_client()
+        mc.object_store.containers.side_effect = Exception("fail")
+        assert client.list_containers() == []
+
+
+# =========================================================================
+# ADDITIONAL S3 CLIENT TESTS
+# =========================================================================
+
+
+# =========================================================================
+
+class TestInfomaniakS3ClientExpanded:
+    """Tests for InfomaniakS3Client untested methods."""
+
+    def _make_client(self):
+        from codomyrmex.cloud.infomaniak.object_storage import InfomaniakS3Client
+        mock_s3 = Stub()
+        return InfomaniakS3Client(client=mock_s3), mock_s3
+
+    def test_create_bucket(self):
+        client, s3 = self._make_client()
+        assert client.create_bucket("mybucket") is True
+        s3.create_bucket.assert_called_once_with(Bucket="mybucket")
+
+    def test_delete_bucket(self):
+        client, s3 = self._make_client()
+        assert client.delete_bucket("mybucket") is True
+        s3.delete_bucket.assert_called_once_with(Bucket="mybucket")
+
+    def test_upload_file(self):
+        client, s3 = self._make_client()
+        assert client.upload_file("bkt", "key.txt", "/tmp/f.txt") is True
+        s3.upload_file.assert_called_once_with("/tmp/f.txt", "bkt", "key.txt", ExtraArgs=None)
+
+    def test_download_file(self):
+        client, s3 = self._make_client()
+        assert client.download_file("bkt", "key.txt", "/tmp/out.txt") is True
+        s3.download_file.assert_called_once_with("bkt", "key.txt", "/tmp/out.txt")
+
+    def test_delete_file_delegates(self):
+        client, s3 = self._make_client()
+        assert client.delete_file("bkt", "key.txt") is True
+        s3.delete_object.assert_called_once_with(Bucket="bkt", Key="key.txt")
+
+    def test_get_metadata(self):
+        client, s3 = self._make_client()
+        s3.head_object.return_value = {
+            "ContentLength": 100, "ContentType": "text/plain",
+            "ETag": '"abc"', "LastModified": "2026-01-01",
+            "Metadata": {}
+        }
+        result = client.get_metadata("bkt", "key.txt")
+        assert result["content_length"] == 100
+        assert result["content_type"] == "text/plain"
+
+    def test_copy_object(self):
+        client, s3 = self._make_client()
+        assert client.copy_object("src", "sk", "dst", "dk") is True
+        s3.copy_object.assert_called_once_with(
+            Bucket="dst", Key="dk",
+            CopySource={"Bucket": "src", "Key": "sk"}
+        )
+
+    def test_list_objects_paginated(self):
+        client, s3 = self._make_client()
+        paginator = Stub()
+        paginator.paginate.return_value = [
+            {"Contents": [{"Key": "a.txt"}, {"Key": "b.txt"}]}
+        ]
+        s3.get_paginator.return_value = paginator
+        result = client.list_objects_paginated("bkt")
+        assert result == ["a.txt", "b.txt"]
+
+    def test_delete_objects_batch(self):
+        client, s3 = self._make_client()
+        s3.delete_objects.return_value = {
+            "Deleted": [{"Key": "a.txt"}, {"Key": "b.txt"}],
+            "Errors": []
+        }
+        result = client.delete_objects_batch("bkt", ["a.txt", "b.txt"])
+        assert result["deleted"] == 2
+        assert result["errors"] == []
+
+    def test_enable_versioning(self):
+        client, s3 = self._make_client()
+        assert client.enable_versioning("bkt") is True
+        s3.put_bucket_versioning.assert_called_once()
+
+    def test_get_versioning(self):
+        client, s3 = self._make_client()
+        s3.get_bucket_versioning.return_value = {"Status": "Enabled"}
+        assert client.get_versioning("bkt") == "Enabled"
+
+    def test_get_bucket_policy(self):
+        client, s3 = self._make_client()
+        s3.get_bucket_policy.return_value = {"Policy": '{"Version":"2012"}'}
+        assert client.get_bucket_policy("bkt") == '{"Version":"2012"}'
+
+    def test_put_bucket_policy(self):
+        client, s3 = self._make_client()
+        assert client.put_bucket_policy("bkt", '{"Version":"2012"}') is True
+        s3.put_bucket_policy.assert_called_once()
+
+    def test_list_buckets_error(self):
+        client, s3 = self._make_client()
+        s3.list_buckets.side_effect = Exception("fail")
+        assert client.list_buckets() == []
+
+
+# =========================================================================
+# ADDITIONAL IDENTITY CLIENT TESTS
+# =========================================================================

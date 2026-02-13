@@ -13,9 +13,36 @@
     </div>
 
     <form id="chat-form" class="chat-input-area">
+        <div class="chat-controls">
+            <select id="model-select" class="model-select" aria-label="Select Model">
+                <option value="" disabled selected>Loading models...</option>
+            </select>
+        </div>
         <label for="chat-input" class="sr-only">Message</label>
         <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." autocomplete="off">
         <button type="submit" class="btn btn-primary">Send</button>
     </form>
 </div>
+
+<style>
+    .chat-controls {
+        margin-right: 0.5rem;
+    }
+
+    .model-select {
+        padding: 0.5rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        color: var(--text-primary);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .model-select:focus {
+        border-color: var(--accent-color);
+    }
+</style>
 {% endblock %}
