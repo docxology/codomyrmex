@@ -187,6 +187,57 @@
     {% endif %}
 </div>
 
+<!-- PAI Skills & Workflows -->
+<div class="card" style="margin-top: 1.5rem;">
+    <h2>PAI Skills &amp; Workflows</h2>
+    <div id="skills-content" style="margin-top: 1rem;">
+        <p style="color: var(--text-secondary);">Loading skills data...</p>
+    </div>
+</div>
+
+<script>
+    (async function loadSkills() {
+        try {
+            const resp = await fetch('/api/awareness');
+            const data = await resp.json();
+            const container = document.getElementById('skills-content');
+            const skills = data.skills || [];
+            const hooks = data.hooks || [];
+
+            let html = '';
+
+            if (skills.length > 0) {
+                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Skills (' + skills.length + ')</h3>';
+                html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">';
+                skills.forEach(function(s) {
+                    const name = typeof s === 'string' ? s : (s.name || s);
+                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(59,130,246,0.15); color: var(--accent-color); border: 1px solid rgba(59,130,246,0.3);">' + name + '</span>';
+                });
+                html += '</div>';
+            }
+
+            if (hooks.length > 0) {
+                html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Hooks (' + hooks.length + ')</h3>';
+                html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
+                hooks.forEach(function(h) {
+                    const name = typeof h === 'string' ? h : (h.name || h);
+                    html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">' + name + '</span>';
+                });
+                html += '</div>';
+            }
+
+            if (!html) {
+                html = '<p style="color: var(--text-secondary);">No PAI skills or hooks detected.</p>';
+            }
+
+            container.innerHTML = html;
+        } catch (err) {
+            document.getElementById('skills-content').innerHTML =
+                '<p style="color: var(--text-secondary);">Could not load skills data.</p>';
+        }
+    })();
+</script>
+
 <style>
     .awareness-metrics {
         display: grid;

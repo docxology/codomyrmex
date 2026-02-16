@@ -34,8 +34,7 @@ docs/
 │   └── tutorials/                # Step-by-step tutorials
 ├── project/                      # Project-level documentation
 │   ├── architecture.md           # System architecture
-│   ├── contributing.md           # Contributing guidelines
-│   └── documentation-reorganization-summary.md
+│   └── contributing.md           # Contributing guidelines
 ├── modules/                      # Module system documentation
 │   ├── overview.md               # Module system overview
 │   └── relationships.md          # Inter-module dependencies
@@ -75,6 +74,7 @@ src/codomyrmex/[module]/
 #### **Required Files**
 
 All modules **MUST** have:
+
 - **README.md**: Module overview, features, quick start, and usage examples
 - **AGENTS.md**: Agent configuration, operating contracts, and navigation links
 - **SECURITY.md**: Security considerations and vulnerability reporting process
@@ -82,6 +82,7 @@ All modules **MUST** have:
 #### **Conditionally Required Files**
 
 These files are required **if referenced** in documentation:
+
 - **API_SPECIFICATION.md**: Required if `docs/index.md` references it
 - **MCP_TOOL_SPECIFICATION.md**: Required if `docs/index.md` references it
 - **USAGE_EXAMPLES.md**: Required if `docs/index.md` references it
@@ -90,6 +91,7 @@ These files are required **if referenced** in documentation:
 #### **Link Standards**
 
 All internal links must follow these conventions:
+
 - **Contributing Guidelines**: Always link to `../../docs/project/contributing.md` (from module root) or `../../../docs/project/contributing.md` (from `docs/` directory)
 - **Module Documentation**: Use relative paths from current file location
 - **Cross-Module References**: Use paths relative to repository root
@@ -97,10 +99,12 @@ All internal links must follow these conventions:
 #### **Validation**
 
 Module documentation is automatically validated using:
+
 - `scripts/documentation/module_docs_auditor.py` - Comprehensive audit tool
 - `scripts/documentation/validate_module_docs.py` - CI/CD validation tool
 
 Run validation before committing:
+
 ```bash
 python3 scripts/documentation/validate_module_docs.py
 ```
@@ -149,6 +153,7 @@ print(f"Result: {result}")
 > **💡 Tip**: Helpful suggestions for better experience.
 
 > **🔍 Note**: Additional context or clarification.
+
 ```
 
 ### **Link Conventions**
@@ -284,16 +289,20 @@ done
 The documentation system includes automated tools for maintenance:
 
 #### **Pre-Commit Validation**
+
 ```bash
 # Add to .git/hooks/pre-commit
 python3 scripts/documentation/validate_module_docs.py
 ```
 
 #### **CI/CD Integration**
+
 See `.github/workflows/documentation-validation.yml` for automated validation in CI/CD pipelines.
 
 #### **Regular Audits**
+
 Run comprehensive audits periodically:
+
 ```bash
 # Full repository audit
 python3 scripts/documentation/comprehensive_audit.py
@@ -341,16 +350,19 @@ npm run check-links
 ### **Regular Maintenance Schedule**
 
 #### **Weekly**
+
 - Check for new issues asking documentation questions
 - Review and merge documentation pull requests
 - Update example code if APIs change
 
 #### **Monthly**
+
 - Run comprehensive link checking
 - Review analytics for most-viewed documentation
 - Update getting-started guides for new features
 
 #### **Quarterly**
+
 - Complete documentation structure review
 - User experience testing with new contributors
 - Performance review of documentation website
@@ -369,21 +381,25 @@ Track these metrics for documentation health:
 ### **Common Issues and Solutions**
 
 #### **Outdated Examples**
+
 - **Problem**: Code examples break with API changes
 - **Solution**: Automated testing of documentation examples
 - **Prevention**: Include documentation in code review process
 
 #### **Broken Links**
+
 - **Problem**: Links break when files are moved or reorganized
 - **Solution**: Regular link checking and relative link preferences
 - **Prevention**: Use consistent link patterns and automation
 
 #### **Structure Confusion**
+
 - **Problem**: Users can't find information they need
 - **Solution**: User testing and feedback collection
 - **Prevention**: User-centric organization and clear navigation
 
 #### **Duplicate Content**
+
 - **Problem**: Information exists in multiple places, creating maintenance burden
 - **Solution**: Single source of truth principle
 - **Prevention**: Clear content ownership and regular audits

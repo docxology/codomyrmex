@@ -16,7 +16,6 @@ import re
 import textwrap
 from pathlib import Path
 
-SRC_DIR = Path(__file__).resolve().parent.parent / "src" / "codomyrmex"
 MAX_STUB_LINES = 55
 
 # Layer classification for modules
@@ -223,6 +222,7 @@ def main():
     parser.add_argument("--apply", action="store_true", help="Apply changes (default: dry run)")
     parser.add_argument("--max-lines", type=int, default=MAX_STUB_LINES,
                         help=f"Maximum lines to consider as stub (default: {MAX_STUB_LINES})")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
     args = parser.parse_args()
 
     # Find all module directories with PAI.md files
@@ -230,7 +230,14 @@ def main():
     skipped = 0
     errors = 0
 
-    for pai_path in sorted(SRC_DIR.glob("*/PAI.md")):
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
+        return
+
+    for pai_path in sorted(src_dir.glob("*/PAI.md")):
         module_dir = pai_path.parent
         module_name = module_dir.name
 

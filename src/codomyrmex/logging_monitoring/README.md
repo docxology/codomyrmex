@@ -1,4 +1,4 @@
-# Logging Monitoring Module
+# Logging & Monitoring Module
 
 **Version**: v0.1.0 | **Status**: Active
 

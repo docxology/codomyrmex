@@ -54,6 +54,9 @@ from .reports.marketing import MarketingReport
 from .reports.logistics import LogisticsReport
 
 # Backward compatibility function (renamed/wrapped)
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+@mcp_tool(category="visualization")
 def generate_report(output_dir: str = "report_output", report_type: str = "general") -> str:
     from pathlib import Path
     out_path = Path(output_dir) / f"{report_type}_report.html"

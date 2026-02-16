@@ -14,10 +14,10 @@ from .exceptions import (
     PluginStateError,
     PluginValidationError,
 )
-from .plugin_loader import PluginLoader
-from .plugin_manager import PluginManager
-from .plugin_registry import Plugin, PluginInfo, PluginRegistry, PluginState, PluginType
-from .plugin_validator import PluginValidator
+from .core.plugin_loader import PluginLoader
+from .core.plugin_manager import PluginManager
+from .core.plugin_registry import Plugin, PluginInfo, PluginRegistry, PluginState, PluginType
+from .validation.plugin_validator import PluginValidator
 
 # Shared schemas for cross-module interop
 try:

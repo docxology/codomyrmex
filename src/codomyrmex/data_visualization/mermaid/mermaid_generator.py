@@ -16,8 +16,9 @@ try:
     from codomyrmex.logging_monitoring import get_logger
     logger = get_logger(__name__)
 except ImportError:
-    import logging
     logger = logging.getLogger(__name__)
+
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 class MermaidDiagramGenerator:
@@ -395,6 +396,7 @@ class MermaidDiagramGenerator:
 
 
 # Convenience functions for easy import
+@mcp_tool()
 def create_git_branch_diagram(
     branches: list[dict[str, Any]] = None,
     commits: list[dict[str, Any]] = None,
@@ -406,6 +408,7 @@ def create_git_branch_diagram(
     return generator.create_git_branch_diagram(branches, commits, title, output_path)
 
 
+@mcp_tool()
 def create_git_workflow_diagram(
     workflow_steps: list[dict[str, Any]] = None,
     title: str = "Git Workflow",
@@ -416,6 +419,7 @@ def create_git_workflow_diagram(
     return generator.create_git_workflow_diagram(workflow_steps, title, output_path)
 
 
+@mcp_tool()
 def create_repository_structure_diagram(
     repo_structure: dict[str, Any] = None,
     title: str = "Repository Structure",
@@ -428,6 +432,7 @@ def create_repository_structure_diagram(
     )
 
 
+@mcp_tool()
 def create_commit_timeline_diagram(
     commits: list[dict[str, Any]] = None,
     title: str = "Commit Timeline",

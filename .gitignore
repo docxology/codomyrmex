@@ -221,4 +221,10 @@ pids/
 
 # Project specific
 /rollback_plans
+/rollback_history
 /@output
+/git_analysis
+/pipeline_metrics
+/pipeline_reports
+/optimization_data
+~/

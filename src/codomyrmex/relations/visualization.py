@@ -1,15 +1,16 @@
-from .crm import CRM
+from .crm import ContactManager
 from codomyrmex.visualization import MermaidDiagram
 
-def render_social_graph(crm: CRM) -> MermaidDiagram:
+
+def render_social_graph(cm: ContactManager) -> MermaidDiagram:
     """
     Generates a mermaid diagram of social connections.
     """
     diagram = "graph TD\n"
-    
+
     # Simple flat graph for now as we don't have explicit edges in the basic CRM
-    for contact in crm._contacts:
+    for contact in cm._contacts.values():
         safe_name = contact.name.replace(" ", "_")
         diagram += f"    {safe_name}[{contact.name}]\n"
-        
+
     return MermaidDiagram("Social Graph", diagram)

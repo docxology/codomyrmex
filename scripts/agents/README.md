@@ -48,8 +48,33 @@ uv run python scripts/agents/claude_code_demo.py
 | `agent_comparison.py` | Multiple | Side-by-side comparison |
 | `theory_example.py` | Theory | Code analysis |
 
+## PAI (Personal AI Infrastructure)
+
+| Script | Description |
+| ------ | ----------- |
+| `pai_example.py` | Full PAI bridge demo — all 11 subsystems (Algorithm, Skills, Tools, Hooks, Agents, Memory, Security, TELOS, Settings, MCP) |
+| `pai_dashboard.py` | **Key entry point** — launches dashboard and opens browser to PAI Awareness page |
+
+```bash
+# Full PAI report
+uv run python scripts/agents/pai_example.py
+
+# Single subsystem
+uv run python scripts/agents/pai_example.py --subsystem algorithm
+
+# JSON output
+uv run python scripts/agents/pai_example.py --json
+
+# Launch PAI Control Center in browser
+uv run python scripts/agents/pai_dashboard.py
+
+# Launch on custom port without auto-open
+uv run python scripts/agents/pai_dashboard.py --port 9000 --no-open
+```
+
 ## Navigation
 
 - **Parent**: [scripts](../README.md)
 - **Agents Module**: [../../src/codomyrmex/agents/README.md](../../src/codomyrmex/agents/README.md)
+- **PAI Module**: [../../src/codomyrmex/agents/pai/README.md](../../src/codomyrmex/agents/pai/README.md)
 - **Claude Module**: [../../src/codomyrmex/agents/claude/README.md](../../src/codomyrmex/agents/claude/README.md)

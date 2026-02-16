@@ -158,6 +158,42 @@ class DataProvider:
         return "Agent"
 
 
+    def get_mcp_tools(self) -> dict[str, Any]:
+        """Return MCP tools, resources, and prompts from the PAI bridge."""
+        try:
+            from codomyrmex.agents.pai.mcp_bridge import get_skill_manifest
+            manifest = get_skill_manifest()
+
+            # Classify tools as safe vs destructive using trust gateway patterns
+            destructive_patterns = {
+                "write", "delete", "remove", "execute", "run", "drop",
+                "create", "update", "modify", "set", "reset", "clear",
+                "purge", "destroy", "kill", "terminate", "send", "push",
+                "mutate", "shutdown", "stop",
+            }
+
+            tools = []
+            for tool in manifest.get("tools", []):
+                name = tool.get("name", "")
+                parts = name.lower().split(".")
+                last_part = parts[-1] if parts else ""
+                is_destructive = any(last_part.startswith(p) for p in destructive_patterns)
+                tools.append({
+                    "name": name,
+                    "description": tool.get("description", ""),
+                    "category": tool.get("category", "general"),
+                    "is_destructive": is_destructive,
+                })
+
+            return {
+                "tools": tools,
+                "resources": manifest.get("resources", []),
+                "prompts": manifest.get("prompts", []),
+            }
+        except Exception as exc:
+            logger.warning("Failed to load MCP tools: %s", exc)
+            return {"tools": [], "resources": [], "prompts": [], "error": str(exc)}
+
     def get_available_scripts(self) -> list[dict[str, Any]]:
         """
         Scans the `scripts` directory for executable scripts.
@@ -441,6 +477,9 @@ class DataProvider:
             "has_api_spec": (src_path / "API_SPECIFICATION.md").exists(),
             "has_mcp_spec": (src_path / "MCP_TOOL_SPECIFICATION.md").exists(),
             "has_readme": (src_path / "README.md").exists(),
+            "has_pai_md": (src_path / "PAI.md").exists(),
+            "has_agents_md": (src_path / "AGENTS.md").exists(),
+            "has_spec_md": (src_path / "SPEC.md").exists(),
             "python_file_count": len(python_files),
         }
 
@@ -1118,11 +1157,35 @@ class DataProvider:
             round(completed_tasks / total_tasks * 100, 1) if total_tasks > 0 else 0
         )
 
+        # Discover PAI skills and hooks
+        skills: list[str] = []
+        hooks: list[str] = []
+        try:
+            skills_dir = self._PAI_ROOT / "skills"
+            if skills_dir.exists():
+                skills = sorted(
+                    d.name for d in skills_dir.iterdir()
+                    if d.is_dir() and not d.name.startswith(".")
+                )
+        except Exception:
+            pass
+        try:
+            hooks_dir = self._PAI_ROOT / "hooks"
+            if hooks_dir.exists():
+                hooks = sorted(
+                    f.stem for f in hooks_dir.iterdir()
+                    if f.is_file() and not f.name.startswith(".")
+                )
+        except Exception:
+            pass
+
         return {
             "missions": missions,
             "projects": projects,
             "telos": telos,
             "memory": memory,
+            "skills": skills,
+            "hooks": hooks,
             "metrics": {
                 "mission_count": len(missions),
                 "project_count": len(projects),
@@ -1130,6 +1193,8 @@ class DataProvider:
                 "completed_tasks": completed_tasks,
                 "telos_files": len(telos),
                 "overall_completion": overall_completion,
+                "skill_count": len(skills),
+                "hook_count": len(hooks),
             },
             "mermaid_graph": self._safe_mermaid_graph(missions, projects),
         }

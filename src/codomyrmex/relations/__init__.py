@@ -1,12 +1,16 @@
 """Relations Module for Codomyrmex.
 
-Provides CRM, social media management, and network analysis.
+Provides CRM contact management, social network analysis,
+and graph metrics.
 """
 
-# Lazy imports
-try:
-    from .crm import Contact
-except ImportError:
-    Contact = None
+from .crm import Contact, ContactManager, Interaction
+from .network_analysis import SocialGraph, GraphMetrics
 
-__all__ = ["Contact"]
+__all__ = [
+    "Contact",
+    "ContactManager",
+    "GraphMetrics",
+    "Interaction",
+    "SocialGraph",
+]

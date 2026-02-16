@@ -6,26 +6,31 @@ Edge deployment, IoT gateways, and latency-sensitive patterns.
 
 __version__ = "0.1.0"
 
-from .models import (
+from .core import (
+    EdgeCluster,
     EdgeExecutionError,
     EdgeFunction,
     EdgeNode,
     EdgeNodeStatus,
+    EdgeRuntime,
     SyncState,
 )
-from .sync import EdgeSynchronizer
-from .runtime import EdgeRuntime
-from .cluster import EdgeCluster
-from .metrics import EdgeMetrics, InvocationRecord
 from .deployment import (
     DeploymentManager,
     DeploymentPlan,
     DeploymentState,
     DeploymentStrategy,
 )
-from .scheduler import EdgeScheduler, ScheduledJob, ScheduleType
-from .cache import CacheEntry, EdgeCache
-from .health import HealthCheck, HealthMonitor
+from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
+from .infrastructure import (
+    CacheEntry,
+    EdgeCache,
+    EdgeMetrics,
+    EdgeSynchronizer,
+    HealthCheck,
+    HealthMonitor,
+    InvocationRecord,
+)
 
 # Shared schemas for cross-module interop
 try:

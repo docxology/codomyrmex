@@ -8,11 +8,9 @@ Remediates documentation gaps:
 """
 
 import os
+import argparse
 from pathlib import Path
 from typing import List
-
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 
@@ -88,8 +86,8 @@ def get_docstring_summary(path: Path) -> str:
 def is_package(path: Path) -> bool:
     return path.is_dir() and (path / "__init__.py").exists()
 
-def remediate_module(path: Path):
-    print(f"Checking {path.relative_to(SRC_DIR)}")
+def remediate_module(path: Path, src_dir: Path):
+    print(f"Checking {path.relative_to(src_dir)}")
     
     # 1. Ensure py.typed
     py_typed = path / "py.typed"
@@ -109,20 +107,27 @@ def remediate_module(path: Path):
             doc_path.write_text(content)
 
 def main():
-    if not SRC_DIR.exists():
-        print(f"Error: Source directory {SRC_DIR} does not exist.")
+    parser = argparse.ArgumentParser(description="Remediate documentation gaps.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    args = parser.parse_args()
+
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
         return
 
     count = 0
-    for root, dirs, files in os.walk(SRC_DIR):
+    for root, dirs, files in os.walk(src_dir):
         root_path = Path(root)
         
         # Skip hidden directories
-        if any(part.startswith('.') for part in root_path.relative_to(SRC_DIR).parts):
+        if any(part.startswith('.') for part in root_path.relative_to(src_dir).parts):
             continue
 
         if is_package(root_path):
-            remediate_module(root_path)
+            remediate_module(root_path, src_dir)
             count += 1
             
     print(f"\nRemediation complete. Processed {count} modules.")

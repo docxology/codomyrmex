@@ -1,12 +1,41 @@
 """Finance Module for Codomyrmex.
 
-Provides double-entry bookkeeping, tax compliance, payroll, and forecasting.
+Provides double-entry bookkeeping, tax compliance, payroll processing,
+and financial forecasting.
+
+Submodules:
+    ledger -- Double-entry bookkeeping engine
+    forecasting -- Time-series forecasting (moving average, exponential smoothing, linear trend)
+    taxes -- Progressive tax calculation with bracket support
+    payroll -- Payroll processing with tax withholding and pay-stub generation
 """
 
-# Lazy imports for submodules
-try:
-    from .ledger import Ledger
-except ImportError:
-    Ledger = None
+from .ledger import (
+    AccountType,
+    Account,
+    TransactionEntry,
+    Transaction,
+    Ledger,
+    LedgerError,
+)
+from .forecasting import Forecaster
+from .taxes import TaxCalculator, TaxResult
+from .payroll import PayrollProcessor, PayStub
 
-__all__ = ["Ledger"]
+__all__ = [
+    # Ledger
+    "AccountType",
+    "Account",
+    "TransactionEntry",
+    "Transaction",
+    "Ledger",
+    "LedgerError",
+    # Forecasting
+    "Forecaster",
+    # Taxes
+    "TaxCalculator",
+    "TaxResult",
+    # Payroll
+    "PayrollProcessor",
+    "PayStub",
+]

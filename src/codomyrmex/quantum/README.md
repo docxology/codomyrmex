@@ -1,4 +1,4 @@
-# Quantum Computing Module
+# Quantum Module
 
 **Version**: v0.1.0 | **Status**: Active
 

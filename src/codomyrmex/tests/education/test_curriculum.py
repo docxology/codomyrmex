@@ -1,19 +1,29 @@
-from codomyrmex.education.curriculum import Curriculum, Lesson, Difficulty
+from codomyrmex.education.curriculum import Curriculum, Lesson, DifficultyLevel
+
 
 def test_curriculum_basics():
-    curr = Curriculum("Python", Difficulty.BEGINNER)
-    assert curr.total_duration() == 0
-    assert len(curr.lessons) == 0
+    curr = Curriculum("Python", "beginner")
+    assert len(curr._modules) == 0
 
-    l1 = Lesson("Intro", "Hello World", Difficulty.BEGINNER, 30)
-    curr.add_lesson(l1)
-    
-    assert curr.total_duration() == 30
-    assert len(curr.lessons) == 1
-    assert curr.get_lesson(l1.id) == l1
+    lesson = curr.add_module("Intro", "Hello World", duration_minutes=30)
+
+    assert len(curr._modules) == 1
+    assert curr._modules["Intro"] == lesson
+
 
 def test_lesson_prerequisites():
-    l1 = Lesson("A", "...", Difficulty.BEGINNER, 10)
-    l2 = Lesson("B", "...", Difficulty.BEGINNER, 10, prerequisites=[l1.id])
-    
-    assert l1.id in l2.prerequisites
+    l1 = Lesson(
+        title="A",
+        objectives=["Learn A"],
+        content="...",
+        duration_minutes=10,
+    )
+    l2 = Lesson(
+        title="B",
+        objectives=["Learn B"],
+        content="...",
+        duration_minutes=10,
+        prerequisites=["A"],
+    )
+
+    assert "A" in l2.prerequisites

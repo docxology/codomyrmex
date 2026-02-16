@@ -4,7 +4,7 @@
 
 ## Overview
 
-Main package directory containing 94 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 107 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Directory Contents
 
@@ -12,9 +12,11 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `README.md` – This file
 - `SPEC.md` – Module specification
 - `__init__.py` – Package initialization
+- `accessibility/` – Accessibility testing and compliance
 - `agentic_memory/` – Memory systems for AI agents
 - `agents/` – Agentic framework integrations
 - `api/` – API infrastructure and resilience
+- `audio/` – Audio processing and transcription
 - `auth/` – Authentication and authorization
 - `bio_simulation/` – Biological simulation (Ant Colony)
 - `build_synthesis/` – Build automation
@@ -31,10 +33,12 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `config_management/` – Configuration management
 - `containerization/` – Container management
 - `cost_management/` – Cost tracking and budgets
+- `dark/` – Dark patterns and adversarial analysis
 - `data_lineage/` – Data lineage tracking
 - `data_visualization/` – Charts and plots
 - `database_management/` – Database operations
 - `defense/` – Active fiduciary defense
+- `dependency_injection/` – Dependency injection framework
 - `deployment/` – Deployment automation
 - `documentation/` – Documentation generation
 - `documents/` – Document processing
@@ -46,6 +50,7 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `events/` – Event system
 - `evolutionary_ai/` – Evolutionary algorithms
 - `examples/` – Usage examples
+- `exceptions/` – Exception hierarchy
 - `feature_flags/` – Feature flag management
 - `feature_store/` – ML feature storage
 - `finance/` – Financial ledger and treasury
@@ -65,6 +70,7 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `metrics/` – Metrics collection
 - `migration/` – Data migration
 - `model_context_protocol/` – MCP interfaces
+- `model_evaluation/` – Model quality evaluation
 - `model_ops/` – ML model operations
 - `model_registry/` – Model versioning
 - `module_template/` – Module scaffolding
@@ -78,12 +84,13 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `physical_management/` – Physical systems
 - `plugin_system/` – Plugin architecture
 - `privacy/` – Data minimization and mixnets
+- `prompt_engineering/` – Prompt design and optimization
 - `prompt_testing/` – Prompt evaluation
 - `quantum/` – Quantum computing simulation
 - `rate_limiting/` – Rate limiting utilities
 - `relations/` – CRM and Social Graph
-- `schemas/` – Data schemas
 - `scheduler/` – Task scheduling
+- `schemas/` – Data schemas
 - `scrape/` – Web scraping
 - `search/` – Search and indexing
 - `security/` – Security scanning
@@ -101,8 +108,7 @@ Main package directory containing 94 specialized modules for the Codomyrmex plat
 - `testing/` – Test utilities
 - `tests/` – Test suites
 - `tool_use/` – LLM tool usage
-- `tools/` – Utility tools
-- `tree_sitter/` – Tree-sitter parsing
+- `maintenance/` – Dependency analysis and project maintenance
 - `utils/` – General utilities
 - `validation/` – Input validation
 - `vector_store/` – Vector database abstraction

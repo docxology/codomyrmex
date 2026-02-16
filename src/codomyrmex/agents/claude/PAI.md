@@ -58,7 +58,20 @@ client.register_tool(
 4. **Caching**: Prompt caching for repeated system prompts
 5. **Telemetry**: Enhanced performance metrics and cost analytics
 
-## Related
+## Signposting
 
+### Navigation
+
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Agents PAI documentation
+- **Root Bridge**: [../../../../PAI.md](../../../../PAI.md) — Authoritative PAI system bridge
+
+### Related Documentation
+
+- [README.md](README.md) — Module overview
+- [AGENTS.md](AGENTS.md) — Agent coordination
+- [API_SPECIFICATION.md](API_SPECIFICATION.md) — Complete API reference
+- [MCP_TOOL_SPECIFICATION.md](MCP_TOOL_SPECIFICATION.md) — MCP tool definitions
 - **ClaudeTaskMaster**: `../ai_code_editing/claude_task_master.py`
 - **Core Session Management**: `../core/session.py`
+- **PAI Bridge Module**: [../pai/README.md](../pai/README.md)

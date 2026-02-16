@@ -109,7 +109,7 @@ graph TB
         System[system_discovery<br/>System discovery]
         Physical[physical_management<br/>Physical simulation]
         Template[module_template<br/>Module templates]
-        Tools[tools<br/>Utility tools]
+        Maint[maintenance<br/>Maintenance utils]
         Utils[utils<br/>Common utilities]
         Validation[validation<br/>Data validation]
         Website[website<br/>Website generation]
@@ -117,6 +117,10 @@ graph TB
         Skills[skills<br/>Skills management]
         IDE[ide<br/>IDE integration]
         Meme[meme<br/>Memetics & Info War]
+        Viz[visualization<br/>Central Viz]
+        Audio[audio<br/>Audio Processing]
+        Video[video<br/>Video Processing]
+        Dark[dark<br/>Dark Mode]
     end
 
     Logging --> Coding
@@ -223,7 +227,7 @@ graph TB
 - `system_discovery`: System introspection and capability mapping
 - `physical_management`: Physical system simulation
 - `module_template`: Module creation templates
-- `tools`: Utility tools and helpers
+- `maintenance`: Project maintenance and dependency analysis utilities
 - `utils`: Common utilities
 - `validation`: Data validation and schema checking
 - `website`: Website generation and hosting
@@ -255,13 +259,17 @@ graph TB
 - `telemetry`: Specialized module
 - `testing`: Specialized module
 - `tests`: Specialized module
-- `tree_sitter`: Specialized module
+
 - `workflow_testing`: Specialized module
 - `defense`: Specialized module
 - `identity`: Specialized module
 - `market`: Specialized module
 - `privacy`: Specialized module
 - `wallet`: Specialized module
+- `audio`: specialized module
+- `video`: specialized module
+- `dark`: specialized module
+- `visualization`: Central Visualization module
 
 **Characteristics**:
 

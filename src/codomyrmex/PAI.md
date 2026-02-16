@@ -74,6 +74,7 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | Module | PAI Capability | Description |
 | :--- | :--- | :--- |
 | [security/](security/) | Security Analysis | Vulnerability scanning for AI outputs |
+| [agents/pai/](agents/pai/) | Trust Gateway | Trust-gated execution (UNTRUSTED/VERIFIED/TRUSTED) |
 | [encryption/](encryption/) | Data Protection | Secure data handling |
 | [auth/](auth/) | Access Control | Authentication and authorization |
 
@@ -123,7 +124,7 @@ When used with the [PAI system](../../PAI.md) (`~/.claude/skills/PAI/`), these m
 
 ```mermaid
 graph TB
-    subgraph Algorithm ["PAI Algorithm v0.2.25"]
+    subgraph Algorithm ["PAI Algorithm v1.5.0"]
         OBSERVE["1. OBSERVE"]
         THINK["2. THINK"]
         PLAN["3. PLAN"]

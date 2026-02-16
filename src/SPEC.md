@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 94 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 104 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
@@ -121,7 +121,7 @@ The `src/` directory contains:
 
 The `codomyrmex/` package contains:
 
-- 94 module subdirectories organized by layer
+- 104 module subdirectories organized by layer
 - Package-level files (**init**.py, cli.py, exceptions.py)
 - Comprehensive documentation for each module
 
@@ -172,7 +172,7 @@ The `codomyrmex/` package contains:
 - `system_discovery` - System introspection
 - `physical_management` - Physical simulation
 - `module_template` - Module templates
-- `tools`, `utils`, `validation`, `website`, `templating`, `skills`, `ide`
+- `maintenance`, `utils`, `validation`, `website`, `templating`, `skills`, `ide`
 
 ## Functional Requirements
 

@@ -7,13 +7,9 @@ Finalizes root documentation by:
 2. Updating SPEC.md with the complete module list.
 """
 
+import argparse
 from pathlib import Path
 import re
-
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
-AGENTS_PATH = SRC_DIR / "AGENTS.md"
-SPEC_PATH = SRC_DIR / "SPEC.md"
 
 DESCRIPTIONS = {
     "agentic_memory": "Memory systems for AI agents",
@@ -91,8 +87,13 @@ DESCRIPTIONS = {
     "workflow_testing": "Workflow testing",
 }
 
-def update_agents_md():
-    content = AGENTS_PATH.read_text()
+def update_agents_md(src_dir: Path):
+    agents_path = src_dir / "AGENTS.md"
+    if not agents_path.exists():
+        print(f"Skipping AGENTS.md update: {agents_path} not found")
+        return
+
+    content = agents_path.read_text()
     
     for module, desc in DESCRIPTIONS.items():
         # Replace generic "Module component" with specific description
@@ -100,18 +101,16 @@ def update_agents_md():
         replacement = f"- `{module}/` – {desc}"
         content = content.replace(target, replacement)
         
-    AGENTS_PATH.write_text(content)
+    agents_path.write_text(content)
     print("Updated AGENTS.md descriptions.")
 
-def update_spec_md():
-    # SPEC.md has a "Specialized Layer - Advanced Features" section in mermaid and text
-    # It's hard to automatically parse/update the text descriptions without potential damage.
-    # But we can look for the huge list of modules and see if we can perform targeted updates.
-    # The SPEC already contains a good list.
-    # Let's check for missing *new* modules in the list manually first?
-    # Or just print what is missing.
-    
-    content = SPEC_PATH.read_text()
+def update_spec_md(src_dir: Path):
+    spec_path = src_dir / "SPEC.md"
+    if not spec_path.exists():
+        print(f"Skipping SPEC.md update: {spec_path} not found")
+        return
+
+    content = spec_path.read_text()
     missing = []
     for module in DESCRIPTIONS.keys():
         if f"`{module}`" not in content and f"{module}<br/>" not in content:
@@ -124,8 +123,19 @@ def update_spec_md():
         print("SPEC.md appears to cover all modules (based on name check).")
 
 def main():
-    update_agents_md()
-    update_spec_md()
+    parser = argparse.ArgumentParser(description="Finalize root documentation.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    args = parser.parse_args()
+
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
+        return
+
+    update_agents_md(src_dir)
+    update_spec_md(src_dir)
 
 if __name__ == "__main__":
     main()

@@ -17,17 +17,15 @@ from typing import Optional
 
 from codomyrmex.exceptions import EncryptionError
 
-from .aes_gcm import AESGCMEncryptor
-from .container import SecureDataContainer
-from .encryptor import (
+from .algorithms import AESGCMEncryptor
+from .containers import SecureDataContainer
+from .core import (
     Encryptor,
     decrypt_data,
     encrypt_data,
     generate_aes_key,
 )
-from .hmac_utils import compute_hmac, verify_hmac
-from .kdf import derive_key_hkdf
-from .key_manager import KeyManager
+from .keys import KeyManager, compute_hmac, derive_key_hkdf, verify_hmac
 
 # Shared schemas for cross-module interop
 try:

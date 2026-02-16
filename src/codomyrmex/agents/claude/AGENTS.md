@@ -11,7 +11,7 @@ Anthropic Claude-based agent implementation for AI-assisted coding with advanced
 | File | Description |
 |------|-------------|
 | `__init__.py` | Public API exports (`ClaudeClient`, `ClaudeIntegrationAdapter`) |
-| `claude_client.py` | Full-featured API client (741 lines) |
+| `claude_client.py` | Full-featured API client (1595 lines) |
 | `claude_integration.py` | Codomyrmex module adapters (468 lines) |
 | `API_SPECIFICATION.md` | Complete API reference |
 | `MCP_TOOL_SPECIFICATION.md` | Model Context Protocol tools |

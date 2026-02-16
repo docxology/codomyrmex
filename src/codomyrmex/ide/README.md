@@ -1,4 +1,4 @@
-# IDE Module
+# IDE Integration Module
 
 **Version**: v0.1.0 | **Status**: Active
 

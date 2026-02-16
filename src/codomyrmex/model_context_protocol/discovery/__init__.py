@@ -339,6 +339,134 @@ def discover_tools(
     return catalog
 
 
+def discover_all_public_tools(
+    *,
+    include_classes: bool = False,
+    excluded_modules: Optional[Set[str]] = None,
+) -> List[DiscoveredTool]:
+    """Discover ALL public functions from every codomyrmex module.
+
+    Scans all top-level packages under ``codomyrmex.*``, imports each one,
+    and introspects public functions to build MCP-ready tool descriptors
+    with auto-generated JSON schemas from type annotations.
+
+    Args:
+        include_classes: If True, also register class constructors.
+        excluded_modules: Module names to skip (e.g. ``{"tests", "examples"}``).
+
+    Returns:
+        List of :class:`DiscoveredTool` objects with handlers attached.
+    """
+    import inspect
+    import os
+
+    from codomyrmex.model_context_protocol.decorators import _generate_schema_from_signature
+
+    if excluded_modules is None:
+        excluded_modules = {"tests", "examples", "module_template"}
+
+    # Find the codomyrmex source root
+    codomyrmex_pkg = importlib.import_module("codomyrmex")
+    src_root = Path(codomyrmex_pkg.__file__).parent
+
+    # Enumerate all top-level sub-packages
+    module_dirs = []
+    for entry in sorted(os.listdir(src_root)):
+        entry_path = src_root / entry
+        if (
+            entry_path.is_dir()
+            and not entry.startswith(("_", "."))
+            and (entry_path / "__init__.py").exists()
+            and entry not in excluded_modules
+        ):
+            module_dirs.append(entry)
+
+    tools: List[DiscoveredTool] = []
+    seen_names: Set[str] = set()
+
+    for module_name in module_dirs:
+        fqn = f"codomyrmex.{module_name}"
+        try:
+            mod = importlib.import_module(fqn)
+        except Exception as exc:
+            logger.debug(f"Skipping {fqn}: {exc}")
+            continue
+
+        for attr_name in sorted(dir(mod)):
+            if attr_name.startswith("_"):
+                continue
+
+            obj = getattr(mod, attr_name, None)
+            if obj is None:
+                continue
+
+            # Skip objects not defined in this module
+            obj_module = getattr(obj, "__module__", "") or ""
+            if not obj_module.startswith(fqn):
+                continue
+
+            # Skip already-decorated @mcp_tool functions (discovered elsewhere)
+            if hasattr(obj, "_mcp_tool"):
+                continue
+
+            is_function = inspect.isfunction(obj)
+            is_class = inspect.isclass(obj) and include_classes
+
+            if not (is_function or is_class):
+                continue
+
+            tool_name = f"codomyrmex.{module_name}.{attr_name}"
+            if tool_name in seen_names:
+                continue
+            seen_names.add(tool_name)
+
+            # Build description from docstring
+            doc = inspect.getdoc(obj) or f"Call {module_name}.{attr_name}"
+            # Truncate long docstrings for the MCP description
+            first_line = doc.split("\n")[0].strip()
+            if len(first_line) > 200:
+                first_line = first_line[:197] + "..."
+
+            # Auto-generate schema
+            try:
+                if is_function:
+                    schema = _generate_schema_from_signature(obj)
+                else:
+                    # For classes, generate schema from __init__
+                    schema = _generate_schema_from_signature(obj.__init__)
+            except Exception:
+                schema = {"type": "object", "properties": {}}
+
+            # Create a handler closure that calls the real function
+            def _make_handler(fn, mod_name, fn_name):
+                """Create a handler closure bound to the specific function."""
+                def handler(**kwargs):
+                    try:
+                        result = fn(**kwargs)
+                        return {"result": result}
+                    except Exception as e:
+                        return {"error": f"{type(e).__name__}: {e}"}
+                handler.__name__ = f"_auto_{mod_name}_{fn_name}"
+                handler.__doc__ = f"Auto-generated handler for {mod_name}.{fn_name}"
+                return handler
+
+            tools.append(DiscoveredTool(
+                name=tool_name,
+                description=first_line,
+                source="auto_discovery",
+                source_path=fqn,
+                input_schema=schema,
+                handler=_make_handler(obj, module_name, attr_name),
+                tags=[module_name, "auto_discovered"],
+            ))
+
+    logger.info(
+        f"Auto-discovered {len(tools)} public tools from "
+        f"{len(module_dirs)} modules"
+    )
+    return tools
+
+
 __all__ = [
     "DiscoveredTool",
     "ModuleScanner",
@@ -346,4 +474,6 @@ __all__ = [
     "ExternalServerDiscovery",
     "ToolCatalog",
     "discover_tools",
+    "discover_all_public_tools",
 ]
+

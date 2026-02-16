@@ -1,4 +1,4 @@
-# FPF (Filesystem Processing Framework) Module Documentation
+# FPF (Functional Programming Framework) Module Documentation
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 

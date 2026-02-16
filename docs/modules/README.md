@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive documentation for all 94 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
+Comprehensive documentation for all 105 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
 
 ## Key Documentation Files
 
@@ -52,8 +52,10 @@ AI-powered capabilities for code generation and analysis.
 | [inference_optimization/](inference_optimization/) | Model quantization, batching, and caching |
 | [llm/](llm/) | LLM provider abstraction and Ollama support |
 | [model_context_protocol/](model_context_protocol/) | MCP implementation and standardized LLM interfaces |
+| [model_evaluation/](model_evaluation/) | LLM output scoring, composable scorers, and evaluation |
 | [model_ops/](model_ops/) | ML model operations and evaluation |
 | [model_registry/](model_registry/) | Model versioning and lifecycle management |
+| [prompt_engineering/](prompt_engineering/) | Prompt template management, versioning, and optimization |
 | [multimodal/](multimodal/) | Vision, audio, and image processing |
 | [prompt_testing/](prompt_testing/) | Prompt evaluation and A/B testing |
 | [vector_store/](vector_store/) | Embeddings storage with similarity search |
@@ -68,6 +70,7 @@ Code analysis and pattern recognition.
 | [coding/](coding/) | Safe code execution sandbox |
 | [pattern_matching/](pattern_matching/) | Code pattern recognition |
 | [static_analysis/](static_analysis/) | Code quality analysis |
+| [schemas/](schemas/) | Shared schema registry and standardized types |
 | [tree_sitter/](tree_sitter/) | AST parsing and analysis |
 
 ### Data & Visualization Modules
@@ -92,6 +95,7 @@ Build, deployment, and infrastructure management.
 | [cloud/](cloud/) | Cloud provider integration |
 | [containerization/](containerization/) | Docker/Kubernetes management |
 | [cost_management/](cost_management/) | Infrastructure and LLM cost tracking |
+| [dependency_injection/](dependency_injection/) | IoC container, service registration, lifecycle scoping |
 | [deployment/](deployment/) | Deployment strategies and orchestration |
 | [edge_computing/](edge_computing/) | Edge deployment and IoT gateways |
 | [git_operations/](git_operations/) | Git workflow automation |
@@ -116,6 +120,7 @@ Autonomous security and economic capabilities.
 | [security/](security/) | Security scanning and hardening |
 | [smart_contracts/](smart_contracts/) | Web3 and blockchain smart contract interfaces |
 | [wallet/](wallet/) | Self-custody, Natural Ritual recovery |
+| [governance/](governance/) | Contracts management, policy enforcement, dispute resolution |
 
 ### Interface & Communication Modules
 
@@ -143,14 +148,18 @@ Supporting utilities and infrastructure.
 | Module | Description |
 |--------|-------------|
 | [auth/](auth/) | Authentication and authorization |
+| [bio_simulation/](bio_simulation/) | Ant colony simulation, pheromone foraging, genetic algorithms |
 | [documentation/](documentation/) | Documentation generation |
+| [education/](education/) | Curriculum generation, interactive tutoring, assessments |
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
 | [examples/](examples/) | Code examples and templates |
 | [exceptions/](exceptions/) | Centralized exception hierarchy and error handling |
 | [feature_flags/](feature_flags/) | Feature toggle management |
+| [finance/](finance/) | Double-entry bookkeeping, tax compliance, payroll, forecasting |
 | [i18n/](i18n/) | Translation, localization, and message bundles |
 | [logistics/](logistics/) | Logistics and supply chain |
+| [meme/](meme/) | Memetic warfare, information dynamics, meme propagation |
 | [metrics/](metrics/) | Metrics collection and aggregation |
 | [module_template/](module_template/) | Module scaffolding template |
 | [networking/](networking/) | Network utilities |
@@ -164,6 +173,7 @@ Supporting utilities and infrastructure.
 | [templating/](templating/) | Template rendering engine |
 | [testing/](testing/) | Test fixtures and data generators |
 | [tests/](tests/) | Project test suite |
+| [tool_use/](tool_use/) | Tool registry, composition, and validation for workflows |
 | [tools/](tools/) | Development tools |
 | [utils/](utils/) | General utilities |
 

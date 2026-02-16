@@ -80,22 +80,53 @@ uv run pre-commit install
 ## Testing
 
 - Write tests for all new features
-- Maintain minimum 70% code coverage
+- Maintain minimum 80% code coverage (target: ≥80%)
 - Place unit tests in `src/codomyrmex/tests/unit/`
 - Place integration tests in `src/codomyrmex/tests/integration/`
 
 ## Documentation
 
 - Update relevant documentation when making changes
-- Follow the AGENTS.md pattern for AI agent instructions
-- Keep README files up to date
+- Every module follows the **RASP pattern** — four standard docs that must stay in sync with code:
+  - `README.md` — Module overview, key exports, quick start
+  - `AGENTS.md` — AI agent coordination and operating contracts
+  - `SPEC.md` — Functional specification and design rationale
+  - `PAI.md` — PAI system integration and algorithm phase mapping
+- Additionally, modules with programmatic APIs maintain `API_SPECIFICATION.md` and AI-callable tools maintain `MCP_TOOL_SPECIFICATION.md`
+- See [Documentation Guide](docs/development/documentation.md) for detailed writing guidance
+
+## Commit Messages
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: add new feature description
+fix: resolve specific bug
+docs: update module documentation
+refactor: restructure without behavior change
+test: add or update tests
+chore: maintenance tasks
+```
 
 ## Pull Requests
 
 1. Ensure all tests pass
-2. Update documentation as needed
+2. Update documentation as needed (RASP files for affected modules)
 3. Add a clear PR description
 4. Request review from maintainers
+
+## Related Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [README.md](README.md) | Project overview and quick start |
+| [SPEC.md](SPEC.md) | Functional specification and design principles |
+| [AGENTS.md](AGENTS.md) | AI agent coordination and navigation |
+| [SECURITY.md](SECURITY.md) | Security policies and vulnerability reporting |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |
+| [CHANGELOG.md](CHANGELOG.md) | Version history and release notes |
+| [Testing Strategy](docs/development/testing-strategy.md) | Testing approach and best practices |
+| [Environment Setup](docs/development/environment-setup.md) | Development environment configuration |
 
 ## Questions?
 

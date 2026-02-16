@@ -134,6 +134,9 @@
                 { label: 'API Spec', ok: data.has_api_spec },
                 { label: 'MCP Spec', ok: data.has_mcp_spec },
                 { label: 'README', ok: data.has_readme },
+                { label: 'PAI.md', ok: data.has_pai_md },
+                { label: 'AGENTS.md', ok: data.has_agents_md },
+                { label: 'SPEC.md', ok: data.has_spec_md },
             ];
             badgesEl.innerHTML = badges.map(b =>
                 '<span class="module-badge ' + (b.ok ? 'pass' : 'fail') + '">'

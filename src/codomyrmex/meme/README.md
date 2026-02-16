@@ -1,4 +1,4 @@
-# Codomyrmex Meme Module
+# Meme Module
 
 **Unified Memetic Warfare & Information Dynamics**
 

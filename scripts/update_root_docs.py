@@ -7,25 +7,27 @@ with the actual subdirectories present.
 """
 
 import os
+import argparse
 from pathlib import Path
 from typing import List
-
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
 
 # Modules to always ignore
 IGNORE = ["__pycache__", ".DS_Store"]
 
-def get_submodules() -> List[str]:
+def get_submodules(src_dir: Path) -> List[str]:
     modules = []
-    for item in SRC_DIR.iterdir():
+    for item in src_dir.iterdir():
         if item.is_dir() and item.name not in IGNORE and not item.name.startswith("."):
             if (item / "__init__.py").exists():
                 modules.append(item.name)
     return sorted(modules)
 
-def update_init_py(modules: List[str]):
-    init_path = SRC_DIR / "__init__.py"
+def update_init_py(modules: List[str], src_dir: Path):
+    init_path = src_dir / "__init__.py"
+    if not init_path.exists():
+        print(f"Skipping __init__.py update: {init_path} not found")
+        return
+
     content = init_path.read_text()
     
     # Generate new _submodules list
@@ -80,8 +82,12 @@ def update_init_py(modules: List[str]):
     except Exception as e:
         print(f"Error updating __init__.py: {e}")
 
-def update_readme_md(modules: List[str]):
-    readme_path = SRC_DIR / "README.md"
+def update_readme_md(modules: List[str], src_dir: Path):
+    readme_path = src_dir / "README.md"
+    if not readme_path.exists():
+        print(f"Skipping README.md update: {readme_path} not found")
+        return
+
     content = readme_path.read_text()
     
     header = "## Directory Contents\n\n"
@@ -114,8 +120,12 @@ def update_readme_md(modules: List[str]):
     readme_path.write_text(final_content)
     print("Updated README.md")
 
-def update_agents_md(modules: List[str]):
-    agents_path = SRC_DIR / "AGENTS.md"
+def update_agents_md(modules: List[str], src_dir: Path):
+    agents_path = src_dir / "AGENTS.md"
+    if not agents_path.exists():
+         print(f"Skipping AGENTS.md update: {agents_path} not found")
+         return
+
     content = agents_path.read_text()
     
     header = "## Active Components\n\n"
@@ -143,12 +153,23 @@ def update_agents_md(modules: List[str]):
     print("Updated AGENTS.md")
 
 def main():
-    modules = get_submodules()
+    parser = argparse.ArgumentParser(description="Update root documentation files.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    args = parser.parse_args()
+
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
+        return
+
+    modules = get_submodules(src_dir)
     print(f"Found {len(modules)} submodules.")
     
-    update_init_py(modules)
-    update_readme_md(modules)
-    update_agents_md(modules)
+    update_init_py(modules, src_dir)
+    update_readme_md(modules, src_dir)
+    update_agents_md(modules, src_dir)
 
 if __name__ == "__main__":
     main()

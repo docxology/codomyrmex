@@ -185,7 +185,7 @@ PAI composes capabilities using named patterns. These map to codomyrmex orchestr
 ```mermaid
 graph TB
     subgraph paiSystem ["PAI System (~/.claude/)"]
-        Algorithm["Algorithm v0.2.25"]
+        Algorithm["Algorithm v1.5.0"]
         Subagents["Task Subagents"]
         Named["Named Agents"]
     end

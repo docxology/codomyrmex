@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 #!/usr/bin/env python3
 
@@ -414,6 +415,7 @@ class CommandRunner:
 
         print(self.formatter.table(headers, rows))
 
+@mcp_tool()
 def create_ascii_art(text: str, style: str = "simple") -> str:
     """
     Create simple ASCII art for text.

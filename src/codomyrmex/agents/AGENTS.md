@@ -46,6 +46,7 @@ Multi-provider agent framework with 11 provider integrations (5 API, 5 CLI, 1 lo
 | Infrastructure | `infrastructure/` | Infrastructure management agent |
 | Theory | `theory/` | `ReactiveArchitecture`, `DeliberativeArchitecture`, `HybridArchitecture` |
 | CLI | `cli/` | CLI subcommands and handlers |
+| PAI Bridge | `pai/` | PAI system discovery and validation |
 
 ## Quick Verification
 

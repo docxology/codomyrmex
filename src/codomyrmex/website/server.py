@@ -118,6 +118,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_awareness()
         elif parsed_path.path == "/api/llm/config":
             self.handle_llm_config()
+        elif parsed_path.path == "/api/tools":
+            self.handle_tools_list()
         else:
             super().do_GET()
 
@@ -280,6 +282,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_json_response({"error": f"Module '{name}' not found"}, status=404)
         else:
             self.send_json_response(detail)
+
+    def handle_tools_list(self) -> None:
+        """Handle GET /api/tools — return all MCP tools, resources, and prompts."""
+        if not self.data_provider:
+            self.send_error(500, "Data provider missing")
+            return
+        tools_data = self.data_provider.get_mcp_tools()
+        self.send_json_response(tools_data)
 
     def handle_agents_list(self) -> None:
         """Handle GET /api/agents — return actual AI agents."""

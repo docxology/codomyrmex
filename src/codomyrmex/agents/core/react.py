@@ -116,7 +116,7 @@ class ReActAgent(BaseAgent):
             # Fallback behavior: Check if prompt asks to run a tool directly
             # This allows unit testing the harness without an LLM.
 
-            if request.prompt.startswith("call:"):
+            if final_answer is None and request.prompt.startswith("call:"):
                 # Format: call: tool_name args={"k": "v"}
                 parts = request.prompt.split(" ", 2)
                 if len(parts) >= 2:
@@ -133,7 +133,7 @@ class ReActAgent(BaseAgent):
                     final_answer = f"Tool {tool_name} returned: {result}"
                 else:
                     final_answer = "Invalid call format."
-            else:
+            elif final_answer is None:
                 final_answer = f"Processed request: {request.prompt}. Available tools: {tool_names}"
 
             return AgentResponse(

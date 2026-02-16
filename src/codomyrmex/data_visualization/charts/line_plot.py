@@ -15,9 +15,11 @@ from .plot_utils import (
     get_codomyrmex_logger,
     save_plot,
 )
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_codomyrmex_logger(__name__)
 
+@mcp_tool()
 def create_line_plot(
     x_data: list,
     y_data: list,

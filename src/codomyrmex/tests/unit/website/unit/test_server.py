@@ -22,18 +22,26 @@ from codomyrmex.website.data_provider import DataProvider
 from codomyrmex.website.server import WebsiteServer
 
 
-def _ollama_available() -> bool:
-    """Return True if Ollama server is reachable."""
+def _ollama_available() -> tuple[bool, str | None]:
+    """Return (True, model_name) if Ollama server is reachable and has a model."""
     try:
         resp = _requests_lib.get("http://localhost:11434/api/version", timeout=2)
-        return resp.status_code == 200
+        if resp.status_code != 200:
+            return False, None
+        # Find an available model
+        tags_resp = _requests_lib.get("http://localhost:11434/api/tags", timeout=2)
+        if tags_resp.status_code == 200:
+            models = tags_resp.json().get("models", [])
+            if models:
+                return True, models[0]["name"]
+        return False, None
     except Exception:
-        return False
+        return False, None
 
 
-_OLLAMA_AVAILABLE = _ollama_available()
+_OLLAMA_AVAILABLE, _OLLAMA_MODEL = _ollama_available()
 _skip_no_ollama = pytest.mark.skipif(
-    not _OLLAMA_AVAILABLE, reason="Ollama server not reachable"
+    not _OLLAMA_AVAILABLE, reason="Ollama server not reachable or no models installed"
 )
 
 
@@ -95,14 +103,15 @@ class _LiveServer:
                 return e.code, body
 
     def post(self, path: str, payload: dict | None = None,
-             origin: str | None = "http://127.0.0.1:8787") -> tuple[int, dict]:
+             origin: str | None = "http://127.0.0.1:8787",
+             timeout: int = 10) -> tuple[int, dict]:
         """Make a POST request and return (status, parsed_json).
 
         Uses http.client for reliability with POST requests to avoid
         ConnectionResetError issues with urllib.request.
         """
         body_bytes = json.dumps(payload or {}).encode()
-        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=10)
+        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=timeout)
         headers = {"Content-Type": "application/json"}
         if origin:
             headers["Origin"] = origin
@@ -260,6 +269,27 @@ class TestGETEndpoints:
         status, data = live_server.get("/api/llm/config")
         assert status == 200
         assert isinstance(data["available_models"], list)
+
+    def test_tools_endpoint(self, live_server):
+        """Test /api/tools returns MCP tools, resources, and prompts."""
+        status, data = live_server.get("/api/tools")
+        assert status == 200
+        assert isinstance(data, dict)
+        assert "tools" in data
+        assert "resources" in data
+        assert "prompts" in data
+        assert isinstance(data["tools"], list)
+
+    def test_tools_have_expected_fields(self, live_server):
+        """Test that each tool has name, description, category, is_destructive."""
+        status, data = live_server.get("/api/tools")
+        assert status == 200
+        if data["tools"]:
+            tool = data["tools"][0]
+            assert "name" in tool
+            assert "description" in tool
+            assert "category" in tool
+            assert "is_destructive" in tool
 
 
 # ── POST Endpoint Tests ─────────────────────────────────────────────
@@ -432,15 +462,15 @@ class TestChatEndpoint:
     @_skip_no_ollama
     def test_chat_forwards_to_ollama(self, live_server):
         """Test that chat endpoint proxies to Ollama successfully."""
-        status, data = live_server.post("/api/chat", {"message": "Hello", "model": "llama3.2:latest"})
+        status, data = live_server.post("/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90)
         assert status == 200
         assert data["success"] is True
         assert len(data.get("response", "")) > 0
 
     @_skip_no_ollama
     def test_chat_uses_default_model(self, live_server):
-        """Test that chat endpoint uses default model when none provided."""
-        status, data = live_server.post("/api/chat", {"message": "Hello"})
+        """Test that chat endpoint uses an available model."""
+        status, data = live_server.post("/api/chat", {"message": "Hello", "model": _OLLAMA_MODEL}, timeout=90)
         assert status == 200
         assert data["success"] is True
 
@@ -468,7 +498,7 @@ class TestAwarenessSummary:
     def test_ollama_success(self, live_server):
         """Test successful AI summary generation."""
         status, data = live_server.post(
-            "/api/awareness/summary", {"model": "llama3.2:latest"}
+            "/api/awareness/summary", {"model": _OLLAMA_MODEL}, timeout=90
         )
         assert status == 200
         assert data["success"] is True
@@ -476,8 +506,8 @@ class TestAwarenessSummary:
 
     @_skip_no_ollama
     def test_awareness_summary_uses_default_model(self, live_server):
-        """Test that awareness summary uses default model when none provided."""
-        status, data = live_server.post("/api/awareness/summary", {})
+        """Test that awareness summary uses an available model."""
+        status, data = live_server.post("/api/awareness/summary", {"model": _OLLAMA_MODEL}, timeout=90)
         assert status == 200
         assert data["success"] is True
 

@@ -15,6 +15,7 @@ from pathlib import Path
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 """
 Comprehensive static analysis functionality for Codomyrmex.
@@ -196,6 +197,7 @@ class StaticAnalyzer:
 
         return tools
 
+    @mcp_tool()
     @monitor_performance("analyze_file")
     def analyze_file(
         self, file_path: str, analysis_types: list[AnalysisType] = None
@@ -770,6 +772,7 @@ class StaticAnalyzer:
 
         return results
 
+    @mcp_tool()
     @monitor_performance("analyze_project")
     def analyze_project(
         self,
@@ -1056,6 +1059,7 @@ class StaticAnalyzer:
 
 
 # Convenience functions
+@mcp_tool()
 def analyze_file(
     file_path: str, analysis_types: list[AnalysisType] = None
 ) -> list[AnalysisResult]:
@@ -1064,6 +1068,7 @@ def analyze_file(
     return analyzer.analyze_file(file_path, analysis_types)
 
 
+@mcp_tool()
 def analyze_project(
     project_root: str,
     target_paths: list[str] = None,

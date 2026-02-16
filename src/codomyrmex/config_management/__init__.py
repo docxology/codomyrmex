@@ -35,28 +35,28 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .config_deployer import (
-    ConfigDeployment,
-    ConfigurationDeployer,
-    deploy_configuration,
-)
-from .config_loader import (
+from .core import (
     ConfigSchema,
     Configuration,
     ConfigurationManager,
     load_configuration,
     validate_configuration,
 )
-from .config_monitor import (
+from .deployment import (
+    ConfigDeployment,
+    ConfigurationDeployer,
+    deploy_configuration,
+)
+from .monitoring import (
     ConfigAudit,
     ConfigurationMonitor,
+    ConfigWatcher,
     monitor_config_changes,
 )
-from .watcher import ConfigWatcher
 
 # Import secret management conditionally (requires cryptography)
 try:
-    from .secret_manager import (
+    from .secrets import (
         SecretManager,
         encrypt_configuration,
         manage_secrets,

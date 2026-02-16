@@ -254,3 +254,69 @@ if THEORY_AVAILABLE:
 if AI_SAFETY_AVAILABLE:
     __all__.append("AISafetyMonitor")
 
+
+# =============================================================================
+# MCP Tools
+# =============================================================================
+
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+from typing import Dict, Any, List
+
+@mcp_tool(category="security")
+def scan_project_security(path: str = ".") -> Dict[str, Any]:
+    """
+    Run a full security scan on the project (vulnerabilities + secrets).
+    
+    Args:
+        path: Root path to scan (default: current directory)
+        
+    Returns:
+        Structured security report.
+    """
+    results = {}
+    
+    if DIGITAL_AVAILABLE:
+        # 1. Vulnerabilities
+        try:
+            vuln_report = scan_vulnerabilities(path)
+            results["vulnerabilities"] = {
+                "count": len(vuln_report.findings) if hasattr(vuln_report, "findings") else 0,
+                "report": str(vuln_report)
+            }
+        except Exception as e:
+            results["vulnerabilities"] = {"error": str(e)}
+            
+        # 2. Secrets
+        try:
+            secrets = scan_directory_for_secrets(path)
+            results["secrets"] = {
+                "count": len(secrets),
+                "findings": [s.to_dict() for s in secrets] if secrets else []
+            }
+        except Exception as e:
+            results["secrets"] = {"error": str(e)}
+            
+    else:
+        return {"error": "Digital security module not available."}
+        
+    return results
+
+@mcp_tool(category="security")
+def security_audit_code(path: str) -> Dict[str, Any]:
+    """
+    Audit code quality and security for a specific file or directory.
+    
+    Args:
+        path: Path to file or directory
+        
+    Returns:
+        Audit results.
+    """
+    if not DIGITAL_AVAILABLE:
+        return {"error": "Digital security module not available."}
+        
+    try:
+        return audit_code_security(path)
+    except Exception as e:
+        return {"error": str(e)}
+

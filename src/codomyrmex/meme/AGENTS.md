@@ -1,74 +1,108 @@
-# Agents Guide: Meme Module
+# Meme Module — Agent Coordination
 
-**Capabilities & Directives for Autonomous Agents**
+## Purpose
 
-This document outlines the capabilities of the `codomyrmex.meme` module and provides directives for agents (AI or simulated) interacting with it.
+codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
 
-## Core Directives
+A comprehensive framework for modeling, analyzing, and engineering the
+propagation, mutation, and evolution of information units (memes) through
+cultural, cognitive, and network substrates.
 
-1. **Treat Information as Biological**: Approach all text, code, and data as living substrates capable of mutation and evolution.
-2. **Zero-Mock Policy**: Use real functional methods for all analysis. Do not simulate outputs unless explicitly testing the `hyperreality` module.
-3. **Cross-Domain Synthesis**: Combine insights from multiple submodules (e.g., use `neurolinguistic` framing to optimize `memetic` fitness).
+Submodules
+----------
+memetics        Core memetic engine — Meme, Memeplex, fitness, mutation.
+semiotic        Computational semiotics — signs, encoding, drift.
+contagion       Information cascade & epidemic propagation models.
+narrative       Computational narratology — arcs, myths, insurgency.
+cultural_dynamics  Cultural oscillation, zeitgeist, power dynamics.
+hyperreality    Baudrillardian simulacra & consensus engineering.
+swarm           Swarm intelligence — ACO, PSO, stigmergy, emergence.
+neurolinguistic Cognitive framing, bias exploitation, metacognition.
+ideoscape       Ideational ecosystem ecology — Lotka-Volterra for ideas.
+rhizome         Rhizomatic network analysis — plateaus, lines of flight.
+epistemic       Epistemic territory mapping & knowledge warfare.
+cybernetic      Cybernetic control theory & feedback engineering.
 
-## Agent Capabilities by Submodule
+## Key Capabilities
 
-### Memetics (`memetics`)
+- **`Meme`** — Available export
+- **`Memeplex`** — Available export
+- **`MemeticCode`** — Available export
+- **`FitnessMap`** — Available export
+- **`MemeticEngine`** — Available export
+- **`Sign`** — Available export
+- **`SignType`** — Available export
+- **`DriftReport`** — Available export
 
-* **Dissect & Synthesize**: Break down complex texts into atomic memes and recombine them.
-* **Evolutionary Optimization**: Run genetic algorithms to evolve more effective messaging.
-* **Fitness Evaluation**: Assess the viral potential (fecundity) and staying power (longevity) of ideas.
+## Agent Usage Patterns
 
-### Semiotics (`semiotic`)
+```python
+from codomyrmex.meme import MemeticEngine, Meme
 
-* **Decode Hidden Meaning**: Analyze signifiers to find latent meaning or steganographic payloads.
-* **Track Drift**: Monitor how the meaning of terms changes over time or across contexts.
+# Initialize engine
+engine = MemeticEngine()
 
-### Propagation (`contagion`)
+# Dissect text into memes
+text = "The quick brown fox jumps over the lazy dog."
+memes = engine.dissect(text)
 
-* **Predict Spread**: Use SIR/SEIR models to forecast information diffusion.
-* **Detect Cascades**: Identify early signs of viral outbreaks or information cascades.
+# Analyze fitness
+for meme in memes:
+    print(f"Meme: {meme.content}, Fitness: {meme.fitness}")
+```
 
-### Narrative (`narrative`)
+## Key Components
 
-* **Construct Myths**: Synthesize compelling narratives using established archetypes and structures.
-* **Analyze Arcs**: Determine where a current event sits within a broader narrative trajectory.
+| Export | Type |
+|--------|------|
+| `Meme` | Public API |
+| `Memeplex` | Public API |
+| `MemeticCode` | Public API |
+| `FitnessMap` | Public API |
+| `MemeticEngine` | Public API |
+| `Sign` | Public API |
+| `SignType` | Public API |
+| `DriftReport` | Public API |
+| `SemioticAnalyzer` | Public API |
+| `ContagionModel` | Public API |
+| `CascadeDetector` | Public API |
+| `PropagationTrace` | Public API |
+| `Cascade` | Public API |
+| `CascadeType` | Public API |
+| `ResonanceMap` | Public API |
 
-### Cultural Dynamics (`cultural_dynamics`)
+## Source Files
 
-* **Map Power**: Identify key power brokers and resource flows.
-* **Predict Backlash**: Model cultural oscillation (pendulum swings) to anticipate reactions.
+| File | Description |
+|------|-------------|
+| `verify_all.py` | Verification script for the new meme module. |
 
-### Swarm (`swarm`)
+## Submodules
 
-* **Coordinate**: Use flocking rules to coordinate with other agents without central control.
-* **Consensus**: Reach agreement on shared facts or goals using distributed consensus algorithms.
+- `contagion/` — Contagion
+- `cultural_dynamics/` — Cultural Dynamics
+- `cybernetic/` — Cybernetic
+- `epistemic/` — Epistemic
+- `hyperreality/` — Hyperreality
+- `ideoscape/` — Ideoscape
+- `memetics/` — Memetics
+- `narrative/` — Narrative
+- `neurolinguistic/` — Neurolinguistic
+- `rhizome/` — Rhizome
+- `semiotic/` — Semiotic
+- `swarm/` — Swarm
 
-### Neurolinguistic (`neurolinguistic`)
+## Integration Points
 
-* **Persuasion**: optimized language patterns (Milton Model) for influence.
-* **Frame Control**: Detect and reframe hostile narratives.
+- **Docs**: [Module Documentation](../../../docs/modules/meme/README.md)
+- **Spec**: [SPEC.md](SPEC.md)
+- **PAI**: [PAI.md](PAI.md)
 
-### Ideoscape (`ideoscape`)
+## Testing Guidelines
 
-* **Visualize**: Generate topographic maps of the information landscape.
-* **Navigate**: Identify "high ground" (dominant ideas) and "valleys" (marginalized concepts).
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k meme -v
+```
 
-### Rhizome (`rhizome`)
-
-* **Connect**: Establish non-hierarchical connections between disparate data points.
-* **Resilience**: Analyze network topology to ensure robustness against node removal.
-
-### Epistemic (`epistemic`)
-
-* **Verify Truth**: rigorously check claims against evidence models.
-* **Defend Reality**: Detect and counter fabricated evidence or gaslighting attempts.
-
-### Hyperreality (`hyperreality`)
-
-* **Assess Authenticity**: Determine the simulation level of an object or event (Real vs. Hyperreal).
-* **Engineer Simulacra**: Create high-fidelity simulations for testing or camouflage.
-
-### Cybernetic (`cybernetic`)
-
-* **Regulate**: Maintain system stability via negative feedback loops.
-* **Amplify**: Use positive feedback to accelerate desired trends.
+- Always use real, functional tests — no mocks (Zero-Mock policy)
+- Verify all changes pass existing tests before submitting

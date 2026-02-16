@@ -1,14 +1,15 @@
 """Embodiment module for Codomyrmex.
 
 .. deprecated::
-    This module is archived. It has zero intersection with the coding platform
-    mission. Imports will still work but the module receives no further development.
+    The embodiment module is deprecated and will be removed in a future version.
+    It has zero intersection with the coding platform mission. Imports will still
+    work but the module receives no further development.
 """
 
-import warnings as _warnings
+import warnings
 
-_warnings.warn(
-    "codomyrmex.embodiment is archived and will be removed in a future version.",
+warnings.warn(
+    "The embodiment module is deprecated and will be removed in a future version.",
     DeprecationWarning,
     stacklevel=2,
 )

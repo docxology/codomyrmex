@@ -3,6 +3,12 @@ Performance optimization utilities for Codomyrmex.
 
 This module provides lazy loading, caching, and other performance optimizations
 to improve startup time and runtime performance.
+
+Subpackages:
+    profiling    - Benchmarking and async function profiling
+    caching      - In-memory and disk-based caching
+    optimization - Lazy loading utilities
+    monitoring   - Performance monitoring and resource tracking
 """
 
 from codomyrmex.exceptions import CodomyrmexError
@@ -14,11 +20,11 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .cache_manager import CacheManager, cached_function
-from .lazy_loader import LazyLoader, lazy_import
+from .caching.cache_manager import CacheManager, cached_function
+from .optimization.lazy_loader import LazyLoader, lazy_import
 
 # Import benchmark utilities
-from .benchmark import (
+from .profiling.benchmark import (
     PerformanceProfiler,
     profile_function,
     run_benchmark,
@@ -26,7 +32,7 @@ from .benchmark import (
 
 # Import PerformanceMonitor with fallback if psutil is not available
 try:
-    from .performance_monitor import (
+    from .monitoring.performance_monitor import (
         PerformanceMonitor,
         monitor_performance,
         performance_context,

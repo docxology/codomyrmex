@@ -1,4 +1,4 @@
-# ci_cd_automation
+# CI/CD Automation Module
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 

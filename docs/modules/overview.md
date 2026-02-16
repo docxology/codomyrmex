@@ -111,6 +111,13 @@ graph TD
 | **`llm`** | LLM infrastructure | Language model integration, provider abstraction, Ollama support |
 | **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
 | **`metrics`** | Metrics collection | System metrics, custom metrics, aggregation, reporting |
+| **`concurrency`** | Distributed synchronization | Locks, semaphores, thread-safe primitives |
+| **`dependency_injection`** | IoC container | Service registration, constructor injection, lifecycle scoping |
+| **`rate_limiting`** | API rate limiting | Fixed window, sliding window, token bucket algorithms |
+| **`scheduler`** | Task scheduling | Cron triggers, interval scheduling, one-time jobs |
+| **`schemas`** | Shared type registry | Standardized types, cross-module interoperability |
+| **`streaming`** | Real-time data streaming | Server-sent events, pub-sub patterns |
+| **`telemetry`** | Observability | OpenTelemetry traces, spans, context propagation |
 
 ### **⚙️ Core Functional Modules**
 
@@ -132,6 +139,9 @@ graph TD
 | **`networking`** | Network utilities | HTTP clients, WebSocket support, network diagnostics |
 | **`serialization`** | Data serialization | JSON, YAML, binary formats, schema validation |
 | **`validation`** | Data validation | Schema validation, input sanitization, constraint checking |
+| **`accessibility`** | WCAG compliance | Accessibility auditing, color contrast, screen reader support |
+| **`search`** | Full-text search | TF-IDF indexing, fuzzy matching, relevance ranking |
+| **`tree_sitter`** | AST parsing | Language-agnostic parsing, syntax trees, code navigation |
 
 ### **🔧 Service Modules**
 
@@ -147,6 +157,16 @@ graph TD
 | **`logistics`** | Orchestration and scheduling | Task orchestration, workflow scheduling, resource allocation |
 | **`cloud`** | Cloud integrations | Cloud provider APIs, resource management, deployment |
 | **`auth`** | Authentication | OAuth, API keys, token management, access control |
+| **`chaos_engineering`** | Resilience testing | Fault injection, failure simulation, chaos experiments |
+| **`cost_management`** | Infrastructure cost tracking | LLM cost tracking, budget alerts, optimization |
+| **`deployment`** | Deployment strategies | Blue/green, canary, rolling deployments |
+| **`edge_computing`** | Edge deployment | IoT gateways, edge inference, offline-first patterns |
+| **`migration`** | Cross-provider migration | Data migration, schema evolution, provider switching |
+| **`model_ops`** | ML operations | Model lifecycle, experiment tracking, serving |
+| **`observability_dashboard`** | Unified monitoring | Dashboard generation, metric aggregation, alerting |
+| **`orchestrator`** | Workflow execution | DAG execution, step composition, retry policies |
+| **`service_mesh`** | Service coordination | Circuit breakers, load balancing, retry policies |
+| **`workflow_testing`** | Workflow validation | End-to-end testing, scenario replay, regression checks |
 
 ### **🎮 Application Modules**
 
@@ -158,6 +178,9 @@ graph TD
 | **`terminal_interface`** | Interactive exploration | Command shell, foraging interface, guided discovery |
 | **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell |
 | **`website`** | Website generation | Static site generation, templating, local server |
+| **`notification`** | Multi-channel dispatch | Email, Slack, webhook, SMS notification delivery |
+| **`audio`** | Audio processing | Transcription, synthesis, audio analysis |
+| **`video`** | Video processing | Video analysis, frame extraction, transcription |
 
 ### **🛡️ Secure Cognitive Modules**
 
@@ -170,6 +193,9 @@ graph TD
 | **`defense`** | Active Defense | Exploit detection, context poisoning, rabbit hole containment |
 | **`market`** | Anonymous Markets | Reverse auctions, demand aggregation, anonymous bidding |
 | **`privacy`** | Privacy & Anonymity | Crumb scrubbing, mixnet simulation, dynamic blacklists |
+| **`dark`** | Dark mode & PDF ops | Dark mode utilities, PDF processing, steganography |
+| **`smart_contracts`** | Web3 integration | Blockchain smart contracts, token operations |
+| **`governance`** | Policy enforcement | Contracts management, dispute resolution, compliance |
 
 ### **🔗 Integration Modules**
 
@@ -182,6 +208,9 @@ graph TD
 | **`ide`** | IDE integrations | Antigravity, Cursor, VS Code automation and control |
 | **`events`** | Event system | Event bus, pub/sub, event handlers |
 | **`plugin_system`** | Plugin architecture | Plugin loading, registration, lifecycle management |
+| **`collaboration`** | Multi-agent collaboration | Swarm coordination, shared context, team workflows |
+| **`feature_flags`** | Feature toggles | Feature gates, rollout strategies, A/B routing |
+| **`i18n`** | Internationalization | Translation management, locale bundles, pluralization |
 
 ### **🧠 Intelligence Modules**
 
@@ -193,6 +222,16 @@ graph TD
 | **`cerebrum`** | Case-based reasoning | Bayesian inference, active inference, reasoning engine |
 | **`fpf`** | Functional Programming Framework | Combinator engine, transformation pipelines, composition |
 | **`skills`** | Skills framework | Skill definitions, execution, chaining |
+| **`agentic_memory`** | Long-term agent memory | Retrieval, persistence, contextual recall |
+| **`graph_rag`** | Knowledge graph RAG | Graph-enhanced retrieval, knowledge extraction |
+| **`inference_optimization`** | Model inference | Quantization, batching, caching, optimization |
+| **`model_evaluation`** | Model output scoring | Composable scorers, evaluation pipelines |
+| **`model_registry`** | Model versioning | Model lifecycle, version tracking, metadata |
+| **`multimodal`** | Vision & audio AI | Image analysis, audio processing, cross-modal fusion |
+| **`prompt_engineering`** | Prompt management | Template versioning, optimization, evaluation |
+| **`prompt_testing`** | Prompt evaluation | A/B testing, regression testing, quality scoring |
+| **`vector_store`** | Embeddings storage | Similarity search, HNSW indexing, retrieval |
+| **`tool_use`** | Tool registry & composition | Tool validation, chain abstraction, workflow tools |
 
 ### **🚀 Advanced Modules**
 
@@ -202,6 +241,12 @@ graph TD
 |--------|---------|-------------|
 | **`spatial`** | 3D/4D modeling and visualization | 3D model creation, manipulation, rendering, world models |
 | **`physical_management`** | Physical system simulation | System monitoring, resource management, performance tracking |
+| **`bio_simulation`** | Ant colony simulation | Pheromone foraging, genetic algorithms, colony dynamics |
+| **`embodiment`** | Physical/robotic integration | Hardware interfaces, sensor fusion, motor control |
+| **`evolutionary_ai`** | Genetic algorithms | Evolutionary optimization, population dynamics, fitness |
+| **`quantum`** | Quantum computing | Algorithm primitives, circuit simulation, qubit operations |
+| **`data_lineage`** | Data provenance | Lineage tracking, transformation history, audit trails |
+| **`feature_store`** | ML feature management | Feature pipelines, versioning, serving |
 
 ### **🛠️ Utility Modules**
 
@@ -214,6 +259,13 @@ graph TD
 | **`tools`** | Utility tools | Tool registry, tool execution, helper tools |
 | **`templating`** | Template engine | Jinja2-style templating, code generation, scaffolding |
 | **`tests`** | Test infrastructure | Unit tests, integration tests, test utilities |
+| **`testing`** | Test fixtures | Data generators, mock factories, test helpers |
+| **`examples`** | Code examples | Usage examples, tutorials, demo applications |
+| **`visualization`** | Unified visualization | Cross-module dashboards, report generation |
+| **`meme`** | Information dynamics | Memetic warfare, meme propagation, evolution modeling |
+| **`education`** | Learning & tutoring | Curriculum generation, interactive tutoring, assessments |
+| **`finance`** | Financial operations | Double-entry bookkeeping, tax compliance, forecasting |
+| **`relations`** | CRM & social graphs | Contact management, social network analysis, graph metrics |
 
 ## 🔄 Module Communication Patterns
 

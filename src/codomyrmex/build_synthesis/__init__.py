@@ -8,6 +8,10 @@ Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
 
+Subpackages:
+- core/       - Build management classes, data structures, and convenience functions
+- pipeline/   - Build orchestration and pipeline execution capabilities
+
 Available functions:
 - check_build_environment: Check build environment setup
 - run_build_command: Execute build commands
@@ -39,7 +43,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .build_manager import (
+from .core import (
     BuildEnvironment,
     BuildManager,
     BuildResult,
@@ -56,7 +60,7 @@ from .build_manager import (
     get_available_environments,
     trigger_build,
 )
-from .build_orchestrator import (
+from .pipeline import (
     check_build_environment,
     orchestrate_build_pipeline,
     run_build_command,

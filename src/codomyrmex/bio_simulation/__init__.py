@@ -1,12 +1,17 @@
 """Bio-Simulation Module for Codomyrmex.
 
-Provides ant colony simulation and genomics integration.
+Provides ant colony simulation with pheromone-based foraging and
+genomics / genetic algorithm integration.
 """
 
-# Lazy imports
-try:
-    from .ant_colony import Colony
-except ImportError:
-    Colony = None
+from .ant_colony import Ant, AntState, Colony, Environment
+from .genomics import Genome, Population
 
-__all__ = ["Colony"]
+__all__ = [
+    "Ant",
+    "AntState",
+    "Colony",
+    "Environment",
+    "Genome",
+    "Population",
+]

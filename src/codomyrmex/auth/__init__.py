@@ -9,11 +9,10 @@ from typing import Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from .api_key_manager import APIKeyManager
-from .authenticator import Authenticator
-from .permissions import PermissionRegistry
-from .token import Token, TokenManager
-from .validator import TokenValidator
+from .core import Authenticator
+from .providers import APIKeyManager
+from .rbac import PermissionRegistry
+from .tokens import Token, TokenManager, TokenValidator
 
 # Shared schemas for cross-module interop
 try:

@@ -16,38 +16,18 @@ import sys
 import pytest
 
 
-def _load_module_directly(module_name: str, file_path: str):
-    """Load a module directly without going through parent __init__.py."""
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Cannot load {module_name} from {file_path}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
 def _get_agent_imports():
-    """Deferred import to avoid collection-time errors.
+    """Import agent core modules via the installed package.
 
-    Uses direct file loading to bypass problematic __init__.py imports.
+    Uses standard importlib.import_module so that relative imports
+    within the agents.core package work correctly.
     """
-    # Get the path to the agents/core directory
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    core_dir = os.path.join(base_dir, "agents", "core")
-
     try:
-        # Load modules directly
-        base_path = os.path.join(core_dir, "base.py")
-        registry_path = os.path.join(core_dir, "registry.py")
-        react_path = os.path.join(core_dir, "react.py")
+        import importlib
 
-        if not os.path.exists(base_path):
-            return {'available': False, 'error': f"base.py not found at {base_path}"}
-
-        base_module = _load_module_directly("_test_agents_core_base", base_path)
-        registry_module = _load_module_directly("_test_agents_core_registry", registry_path)
-        react_module = _load_module_directly("_test_agents_core_react", react_path)
+        base_module = importlib.import_module("codomyrmex.agents.core.base")
+        registry_module = importlib.import_module("codomyrmex.agents.core.registry")
+        react_module = importlib.import_module("codomyrmex.agents.core.react")
 
         return {
             'AgentCapabilities': base_module.AgentCapabilities,
@@ -352,7 +332,7 @@ class TestToolRegistry:
             """Add two numbers."""
             return x + y
 
-        registry.register(my_tool, name="add")
+        registry.register_function(my_tool, name="add")
 
         tools = registry.list_tools()
         tool_names = [t.name for t in tools]
@@ -367,7 +347,7 @@ class TestToolRegistry:
             """Multiply two numbers."""
             return a * b
 
-        registry.register(multiply, name="multiply")
+        registry.register_function(multiply, name="multiply")
         result = registry.execute("multiply", a=3, b=4)
 
         assert result == 12
@@ -381,7 +361,7 @@ class TestToolRegistry:
             """Greet a person."""
             return f"Hello, {name}!"
 
-        registry.register(greet, name="greet")
+        registry.register_function(greet, name="greet")
 
         schemas = registry.get_schemas()
         assert isinstance(schemas, list)
@@ -422,7 +402,7 @@ class TestReActAgent:
         def echo(text: str) -> str:
             return f"Echo: {text}"
 
-        registry.register(echo, name="echo")
+        registry.register_function(echo, name="echo")
 
         agent = ReActAgent(name="test", tool_registry=registry)
         response = agent.execute(AgentRequest(prompt='call: echo {"text": "hello"}'))
@@ -455,7 +435,7 @@ class TestReActAgent:
             """A test tool."""
             pass
 
-        registry.register(my_tool, name="my_tool")
+        registry.register_function(my_tool, name="my_tool")
 
         agent = ReActAgent(name="test", tool_registry=registry)
         prompt = agent._get_system_prompt()
@@ -517,12 +497,8 @@ class TestReActAgent:
         # Create a simple stub LLM client (no mocks)
         class StubLLMClient:
             """Stub that returns a deterministic answer."""
-            class chat_ns:
-                @staticmethod
-                def __call__(*args, **kwargs):
-                    return "Final Answer: The answer is 42"
-            def __init__(self):
-                self.chat = self.chat_ns()
+            def chat(self, history):
+                return "Final Answer: The answer is 42"
 
         stub_client = StubLLMClient()
 
@@ -557,8 +533,8 @@ class TestAgentIntegration:
             """Multiply two numbers."""
             return a * b
 
-        registry.register(add, name="add")
-        registry.register(multiply, name="multiply")
+        registry.register_function(add, name="add")
+        registry.register_function(multiply, name="multiply")
 
         agent = ReActAgent(name="calculator", tool_registry=registry)
 
@@ -582,7 +558,7 @@ class TestAgentIntegration:
             """A tool that always fails."""
             raise ValueError("Tool failed!")
 
-        registry.register(failing_tool, name="failing")
+        registry.register_function(failing_tool, name="failing")
 
         agent = ReActAgent(name="test", tool_registry=registry)
 

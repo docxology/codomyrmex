@@ -1,4 +1,4 @@
-# agents
+# Agents Module
 
 **Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 
@@ -102,6 +102,7 @@ uv sync
 - `mistral_vibe/` - Mistral Vibe CLI client
 - `o1/` - OpenAI o1/o3 reasoning model client
 - `opencode/` - OpenCode CLI client
+- `pai/` - PAI system bridge (discovery, validation, status)
 - `pooling/` - Multi-agent load balancing and failover
 - `qwen/` - Qwen-Coder integration
 - `theory/` - Theoretical foundations (reactive, deliberative, hybrid architectures)

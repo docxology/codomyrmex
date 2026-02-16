@@ -4,6 +4,7 @@ import time
 
 from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 #!/usr/bin/env python3
 
@@ -87,6 +88,7 @@ def is_git_repository(path: str = None) -> bool:
     except Exception:
         return False
 
+@mcp_tool()
 @monitor_performance("git_initialize_repository")
 def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
     """Initialize a new Git repository at the specified path."""
@@ -146,6 +148,7 @@ def initialize_git_repository(path: str, initial_commit: bool = True) -> bool:
         logger.error(f"Unexpected error initializing repository: {e}")
         return False
 
+@mcp_tool()
 @monitor_performance("git_clone_repository")
 def clone_repository(url: str, destination: str, branch: str = None) -> bool:
     """Clone a Git repository to the specified destination."""
@@ -171,6 +174,7 @@ def clone_repository(url: str, destination: str, branch: str = None) -> bool:
         logger.error(f"Unexpected error cloning repository: {e}")
         return False
 
+@mcp_tool()
 def create_branch(branch_name: str, repository_path: str = None) -> bool:
     """Create and switch to a new Git branch."""
     if repository_path is None:
@@ -200,6 +204,7 @@ def create_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error creating branch: {e}")
         return False
 
+@mcp_tool()
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
     """Switch to an existing Git branch."""
     if repository_path is None:
@@ -228,6 +233,7 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error switching branch: {e}")
         return False
 
+@mcp_tool()
 def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""
     if repository_path is None:
@@ -278,6 +284,7 @@ def add_files(file_paths: list[str], repository_path: str = None) -> bool:
         logger.error(f"Unexpected error adding files: {e}")
         return False
 
+@mcp_tool()
 def commit_changes(
     message: str,
     repository_path: str = None,
@@ -389,6 +396,7 @@ def commit_changes(
         logger.error(f"Unexpected error committing changes: {e}")
         return None
 
+@mcp_tool()
 def push_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
 ) -> bool:
@@ -425,6 +433,7 @@ def push_changes(
         logger.error(f"Unexpected error pushing changes: {e}")
         return False
 
+@mcp_tool()
 def pull_changes(
     remote: str = "origin", branch: str = None, repository_path: str = None
 ) -> bool:
@@ -461,6 +470,7 @@ def pull_changes(
         logger.error(f"Unexpected error pulling changes: {e}")
         return False
 
+@mcp_tool()
 def get_status(repository_path: str = None) -> dict[str, any]:
     """Get the current Git repository status."""
     if repository_path is None:
@@ -535,6 +545,7 @@ def get_status(repository_path: str = None) -> dict[str, any]:
         logger.error(f"Unexpected error getting status: {e}")
         return {"error": str(e)}
 
+@mcp_tool()
 def get_commit_history(
     limit: int = 10, repository_path: str = None
 ) -> list[dict[str, str]]:
@@ -585,6 +596,7 @@ def get_commit_history(
         logger.error(f"Unexpected error getting commit history: {e}")
         return []
 
+@mcp_tool()
 def merge_branch(
     source_branch: str,
     target_branch: str = None,
@@ -633,6 +645,7 @@ def merge_branch(
         logger.error(f"Unexpected error merging branch: {e}")
         return False
 
+@mcp_tool()
 def rebase_branch(
     target_branch: str, repository_path: str = None, interactive: bool = False
 ) -> bool:
@@ -667,6 +680,7 @@ def rebase_branch(
         logger.error(f"Unexpected error rebasing branch: {e}")
         return False
 
+@mcp_tool()
 def create_tag(tag_name: str, message: str = None, repository_path: str = None) -> bool:
     """Create a Git tag."""
     if repository_path is None:
@@ -697,6 +711,7 @@ def create_tag(tag_name: str, message: str = None, repository_path: str = None) 
         logger.error(f"Unexpected error creating tag: {e}")
         return False
 
+@mcp_tool()
 def list_tags(repository_path: str = None) -> list[str]:
     """List all Git tags."""
     if repository_path is None:
@@ -724,6 +739,7 @@ def list_tags(repository_path: str = None) -> list[str]:
         logger.error(f"Unexpected error listing tags: {e}")
         return []
 
+@mcp_tool()
 def stash_changes(message: str = None, repository_path: str = None) -> bool:
     """Stash current changes."""
     if repository_path is None:
@@ -752,6 +768,7 @@ def stash_changes(message: str = None, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error stashing changes: {e}")
         return False
 
+@mcp_tool()
 def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
     """Apply stashed changes."""
     if repository_path is None:
@@ -780,6 +797,7 @@ def apply_stash(stash_ref: str = None, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error applying stash: {e}")
         return False
 
+@mcp_tool()
 def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
     """List all stashes."""
     if repository_path is None:

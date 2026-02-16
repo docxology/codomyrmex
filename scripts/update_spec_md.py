@@ -6,24 +6,33 @@ Updates SPEC.md to include any modules missing from the module lists.
 Adds them to the 'Specialized Layer' section by default.
 """
 
+import argparse
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
-SPEC_PATH = SRC_DIR / "SPEC.md"
-
 # List of all modules (same logic as before)
-def get_all_modules():
+def get_all_modules(src_dir: Path):
     modules = []
-    for item in SRC_DIR.iterdir():
+    for item in src_dir.iterdir():
         if item.is_dir() and not item.name.startswith(".") and item.name != "__pycache__":
             if (item / "__init__.py").exists():
                 modules.append(item.name)
     return set(modules)
 
 def main():
-    content = SPEC_PATH.read_text()
-    all_modules = get_all_modules()
+    parser = argparse.ArgumentParser(description="Update SPEC.md with missing modules.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    args = parser.parse_args()
+
+    root_dir = args.root
+    src_dir = root_dir / "src" / "codomyrmex"
+    spec_path = src_dir / "SPEC.md"
+    
+    if not spec_path.exists():
+        print(f"Error: SPEC.md not found at {spec_path}")
+        return
+
+    content = spec_path.read_text()
+    all_modules = get_all_modules(src_dir)
     
     # We look for the "Specialized Layer" definition in the mermaid chart or the text list
     # Let's target the text list: "#### Specialized Layer" ... "**Modules**:"
@@ -74,7 +83,7 @@ def main():
         new_list_block = current_list_block.rstrip() + new_entries + "\n\n"
         
         final_content = content[:modules_idx] + new_list_block + content[end_idx:]
-        SPEC_PATH.write_text(final_content)
+        spec_path.write_text(final_content)
         print("Updated SPEC.md")
     else:
         print("No missing modules found in SPEC.md")

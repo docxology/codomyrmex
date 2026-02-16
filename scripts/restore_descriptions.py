@@ -5,11 +5,8 @@ scripts/restore_descriptions.py
 Restores the descriptive text for modules in README.md that was overwritten.
 """
 
+import argparse
 from pathlib import Path
-
-ROOT_DIR = Path(__file__).parent.parent
-SRC_DIR = ROOT_DIR / "src" / "codomyrmex"
-README_PATH = SRC_DIR / "README.md"
 
 DESCRIPTIONS = {
     "agentic_memory": "Memory systems for AI agents",
@@ -88,7 +85,18 @@ DESCRIPTIONS = {
 }
 
 def main():
-    content = README_PATH.read_text()
+    parser = argparse.ArgumentParser(description="Restore module descriptions in README.md.")
+    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    args = parser.parse_args()
+
+    root_dir = args.root
+    readme_path = root_dir / "src" / "codomyrmex" / "README.md"
+    
+    if not readme_path.exists():
+        print(f"Error: README.md not found at {readme_path}")
+        return
+
+    content = readme_path.read_text()
     
     for module, desc in DESCRIPTIONS.items():
         # Replace generic "Module" with specific description
@@ -97,7 +105,7 @@ def main():
         replacement = f"- `{module}/` – {desc}"
         content = content.replace(target, replacement)
         
-    README_PATH.write_text(content)
+    readme_path.write_text(content)
     print("Restored descriptions in README.md")
 
 if __name__ == "__main__":

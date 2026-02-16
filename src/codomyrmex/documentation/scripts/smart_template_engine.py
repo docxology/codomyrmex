@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Smart Template Engine for Codomyrmex Documentation.
+
+Analyzes Python modules to extract API information, generate code examples,
+infer relationships, and populate documentation templates with real content.
+"""
+
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Callable
 import argparse
@@ -6,81 +14,21 @@ import inspect
 import json
 import logging
 import sys
-
 from dataclasses import dataclass, asdict
 import importlib
 
-from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
+# Try to import Codomyrmex logger, fall back to standard logging
+try:
+    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+    setup_logging()
+    logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-
 @dataclass
 class APIFunction:
-    """
-
-
-
-    #!/usr/bin/env python3
-    """
-
-Smart Template Engine for Codomyrmex Documentation.
-
-Analyzes Python modules to extract API information, generate code examples,
-infer relationships, and populate documentation templates with real content.
-"""
-
-
-try:
-    setup_logging()
-
-
-logger = get_logger(__name__)
-
-Represents an API function."""
+    """Represents an API function."""
     name: str
     signature: str
     docstring: str

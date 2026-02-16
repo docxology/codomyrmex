@@ -6,10 +6,10 @@ for the Codomyrmex ecosystem. It scans all modules, discovers capabilities,
 reports on system status, and provides interactive exploration tools.
 """
 
-from .capability_scanner import CapabilityScanner
-from .context import get_system_context
-from .discovery_engine import SystemDiscovery
-from .status_reporter import StatusReporter
+from .core.capability_scanner import CapabilityScanner
+from .core.context import get_system_context
+from .core.discovery_engine import SystemDiscovery
+from .reporting.status_reporter import StatusReporter
 
 # Shared schemas for cross-module interop
 try:

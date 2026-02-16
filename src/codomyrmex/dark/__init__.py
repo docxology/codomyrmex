@@ -1,10 +1,11 @@
-"""Dark modes module - network, hardware, software, PDF dark mode utilities.
+"""Dark modes module - PDF dark mode utilities.
 
-This module provides dark mode utilities across different domains:
+This module provides dark mode utilities for PDF documents:
 - pdf: PDF dark mode filters (inversion, brightness, contrast, sepia)
-- network: Network dark mode utilities (not yet implemented)
-- hardware: Hardware dark mode utilities (not yet implemented)
-- software: Software dark mode utilities (not yet implemented)
+
+The hardware, network, and software submodules have been removed as they
+contained no implementation. Only the pdf submodule (with real functionality)
+is retained.
 
 Installation:
     Install dark mode dependencies with:
@@ -29,9 +30,6 @@ Quick Start:
 
 __version__ = "0.1.0"
 
-# Lazy imports to avoid pulling in heavy dependencies at module level
-from . import hardware, network, software
-
 # PDF submodule uses optional dependencies
 try:
     from . import pdf
@@ -52,13 +50,10 @@ def cli_commands():
     """Return CLI commands for the dark module."""
     return {
         "status": {
-            "help": "Show dark mode status across all domains",
+            "help": "Show dark mode status",
             "handler": lambda: print(
                 "Dark Mode Status:\n"
-                f"  PDF support:      {'available' if PDF_AVAILABLE else 'not installed'}\n"
-                f"  Network module:   loaded\n"
-                f"  Hardware module:  loaded\n"
-                f"  Software module:  loaded"
+                f"  PDF support:      {'available' if PDF_AVAILABLE else 'not installed'}"
             ),
         },
         "config": {
@@ -67,7 +62,7 @@ def cli_commands():
                 "Dark Mode Config:\n"
                 f"  Version:          {__version__}\n"
                 f"  PDF available:    {PDF_AVAILABLE}\n"
-                "  Submodules:       pdf, network, hardware, software"
+                "  Submodules:       pdf"
             ),
         },
     }
@@ -76,9 +71,6 @@ def cli_commands():
 __all__ = [
     "__version__",
     "pdf",
-    "network",
-    "hardware",
-    "software",
     "PDF_AVAILABLE",
     # CLI integration
     "cli_commands",

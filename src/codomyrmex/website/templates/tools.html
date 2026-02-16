@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}MCP Tools - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>MCP Tools &amp; Resources</h1>
+
+<div class="search-container">
+    <label for="toolSearch" class="sr-only">Search tools</label>
+    <input type="text" class="search-input" id="toolSearch" placeholder="Filter tools...">
+</div>
+
+<div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <div class="card" style="text-align: center;">
+        <p style="font-size: 2rem; font-weight: 700; color: var(--accent-color);" id="total-tools">--</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Total Tools</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <p style="font-size: 2rem; font-weight: 700; color: #10b981;" id="safe-count">--</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Safe Tools</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <p style="font-size: 2rem; font-weight: 700; color: #f59e0b;" id="destructive-count">--</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Destructive Tools</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <p style="font-size: 2rem; font-weight: 700; color: var(--accent-color);" id="resource-count">--</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Resources</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <p style="font-size: 2rem; font-weight: 700; color: var(--accent-color);" id="prompt-count">--</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem;">Prompts</p>
+    </div>
+</div>
+
+<h2 style="margin-top: 2rem;">Tools</h2>
+<div class="grid" id="toolsGrid" style="grid-template-columns: 1fr;"></div>
+<p id="no-results" class="hidden" role="status" style="color: var(--text-secondary); text-align: center; padding: 2rem;">No tools match your filter.</p>
+
+<h2 style="margin-top: 2rem;">Resources</h2>
+<div class="grid" id="resourcesGrid" style="grid-template-columns: 1fr;"></div>
+
+<h2 style="margin-top: 2rem;">Prompts</h2>
+<div class="grid" id="promptsGrid" style="grid-template-columns: 1fr;"></div>
+
+<style>
+    .trust-badge {
+        display: inline-flex; align-items: center; gap: 0.3rem;
+        padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem;
+        font-weight: 600; text-transform: uppercase;
+    }
+    .trust-badge.safe { background: rgba(16,185,129,0.15); color: #10b981; }
+    .trust-badge.destructive { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .tool-name { font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--accent-color); }
+    .tool-desc { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.3rem; }
+    .tool-category { color: var(--text-secondary); font-size: 0.75rem; opacity: 0.7; }
+</style>
+
+<script>
+    async function loadTools() {
+        try {
+            const resp = await fetch('/api/tools');
+            const data = await resp.json();
+
+            document.getElementById('total-tools').textContent = data.tools ? data.tools.length : 0;
+            document.getElementById('resource-count').textContent = data.resources ? data.resources.length : 0;
+            document.getElementById('prompt-count').textContent = data.prompts ? data.prompts.length : 0;
+
+            let safeCount = 0, destructiveCount = 0;
+            const toolsGrid = document.getElementById('toolsGrid');
+            toolsGrid.innerHTML = '';
+
+            if (data.tools) {
+                data.tools.forEach(tool => {
+                    const isDestructive = tool.is_destructive;
+                    if (isDestructive) destructiveCount++;
+                    else safeCount++;
+
+                    const card = document.createElement('div');
+                    card.className = 'card tool-card';
+                    card.dataset.name = tool.name;
+                    card.innerHTML =
+                        '<div style="display: flex; justify-content: space-between; align-items: center;">'
+                        + '<span class="tool-name">' + tool.name + '</span>'
+                        + '<span class="trust-badge ' + (isDestructive ? 'destructive' : 'safe') + '">'
+                        + (isDestructive ? 'Destructive' : 'Safe') + '</span>'
+                        + '</div>'
+                        + '<p class="tool-desc">' + (tool.description || '') + '</p>'
+                        + '<p class="tool-category">Category: ' + (tool.category || 'general') + '</p>';
+                    toolsGrid.appendChild(card);
+                });
+            }
+
+            document.getElementById('safe-count').textContent = safeCount;
+            document.getElementById('destructive-count').textContent = destructiveCount;
+
+            const resourcesGrid = document.getElementById('resourcesGrid');
+            resourcesGrid.innerHTML = '';
+            if (data.resources) {
+                data.resources.forEach(r => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML =
+                        '<span class="tool-name">' + r.uri + '</span>'
+                        + '<p class="tool-desc">' + (r.description || r.name || '') + '</p>';
+                    resourcesGrid.appendChild(card);
+                });
+            }
+
+            const promptsGrid = document.getElementById('promptsGrid');
+            promptsGrid.innerHTML = '';
+            if (data.prompts) {
+                data.prompts.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML =
+                        '<span class="tool-name">' + p.name + '</span>'
+                        + '<p class="tool-desc">' + (p.description || '') + '</p>';
+                    promptsGrid.appendChild(card);
+                });
+            }
+
+        } catch (err) {
+            document.getElementById('toolsGrid').innerHTML =
+                '<div class="card"><p style="color: #ef4444;">Error loading tools: ' + err.message + '</p></div>';
+        }
+    }
+
+    document.getElementById('toolSearch').addEventListener('input', function(e) {
+        const filter = e.target.value.toLowerCase();
+        let visibleCount = 0;
+        document.querySelectorAll('.tool-card').forEach(card => {
+            const name = card.dataset.name.toLowerCase();
+            const desc = card.querySelector('.tool-desc').textContent.toLowerCase();
+            const visible = name.includes(filter) || desc.includes(filter);
+            card.style.display = visible ? '' : 'none';
+            if (visible) visibleCount++;
+        });
+        document.getElementById('no-results').classList.toggle('hidden', visibleCount > 0);
+    });
+
+    loadTools();
+</script>
+{% endblock %}

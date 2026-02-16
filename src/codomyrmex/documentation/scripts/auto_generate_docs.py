@@ -2,11 +2,11 @@ import argparse
 import sys
 from pathlib import Path
 
-from smart_template_engine import SmartTemplateEngine
-
-
 # Import smart template engine
-sys.path.insert(0, str(Path(__file__).parent))
+# sys.path.insert(0, str(Path(__file__).parent)) # Removed sys.path hack
+
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.documentation.scripts.smart_template_engine import SmartTemplateEngine
 
 
 class AutoDocumentationGenerator:
@@ -148,6 +148,7 @@ For complete documentation, see:
 
         return agents_template
 
+    @mcp_tool()
     def generate_documentation(self, module_name: str | None = None) -> int:
         """Generate documentation for modules."""
         modules = self.find_modules(module_name)
@@ -203,6 +204,19 @@ For complete documentation, see:
         return 0 if generated_count > 0 else 1
 
 
+
+@mcp_tool()
+def generate_documentation(repo_root: str = None, module_name: str = None) -> int:
+    """Generate documentation for modules.
+    
+    Args:
+        repo_root: Root directory of the repository (optional).
+        module_name: Specific module to document (optional).
+    """
+    repo_path = Path(repo_root) if repo_root else Path.cwd()
+    generator = AutoDocumentationGenerator(repo_path)
+    return generator.generate_documentation(module_name)
+    
 def main():
     """Main entry point."""
 

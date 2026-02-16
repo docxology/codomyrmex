@@ -15,16 +15,16 @@ from typing import Optional
 
 from codomyrmex.exceptions import CodomyrmexError
 
-from .archive_manager import ArchiveManager
-from .compressor import (
+from .archives.archive_manager import ArchiveManager
+from .core.compressor import (
     CompressionError,
     Compressor,
     auto_decompress,
     compress_data,
     decompress_data,
 )
-from .parallel import ParallelCompressor
-from .zstd_compressor import ZstdCompressor
+from .engines.parallel import ParallelCompressor
+from .engines.zstd_compressor import ZstdCompressor
 
 # Shared schemas for cross-module interop
 try:
@@ -117,5 +117,3 @@ def decompress_file(input_path: str, output_path: str | None = None, format: str
     """Decompress a file."""
     compressor = Compressor(format=format)
     return compressor.decompress_file(input_path, output_path)
-
-

@@ -1,4 +1,4 @@
-# static_analysis
+# Static Analysis Module
 
 **Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 

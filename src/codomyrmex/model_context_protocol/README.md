@@ -1,4 +1,4 @@
-# model_context_protocol
+# Model Context Protocol Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
@@ -29,7 +29,6 @@ server.register_resource(
 # Run the server (stdio transport)
 server.run()
 ```
-
 
 ## Installation
 
@@ -90,7 +89,6 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 }
 ```
 
-
 ## Testing
 
 ```bash
@@ -103,3 +101,18 @@ uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
 - **Scripts**: [scripts/model_context_protocol/](../../../scripts/model_context_protocol/)
 - **LLM Integration**: [llm/mcp.py](../llm/mcp.py)
 - **Parent Directory**: [codomyrmex](../README.md)
+
+## Dynamic Discovery (New)
+
+The module supports decentralized tool registration via decorators, allowing any Python function in the codebase to be exposed as an MCP tool without centralized registration.
+
+```python
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+@mcp_tool(category="data_analysis")
+def analyze_data(filepath: str) -> dict:
+    """Analyze a data file."""
+    # ... implementation
+```
+
+The PAI Bridge (`src/codomyrmex/agents/pai/mcp_bridge.py`) automatically discovers these tools in key modules (`visualization`, `llm`, `security`, `agentic_memory`).

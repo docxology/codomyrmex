@@ -8,17 +8,15 @@ asynchronous communication between different components of the Codomyrmex platfo
 # Re-export base EventError from main exceptions module
 from codomyrmex.exceptions import EventError
 
-from .emitter import AsyncEventEmitter
-from .event_bus import (
+from .core.event_bus import (
     EventBus,
     get_event_bus,
     publish_event,
     subscribe_to_events,
     unsubscribe_from_events,
 )
-from .event_logger import EventLogger, get_event_logger, get_event_stats
-from .event_schema import Event, EventPriority, EventSchema, EventType
-from .exceptions import (
+from .core.event_schema import Event, EventPriority, EventSchema, EventType
+from .core.exceptions import (
     EventDeliveryError,
     EventHandlerError,
     EventPublishError,
@@ -27,7 +25,9 @@ from .exceptions import (
     EventTimeoutError,
     EventValidationError,
 )
-from .mixins import EventMixin
+from .core.mixins import EventMixin
+from .emitters.emitter import AsyncEventEmitter
+from .handlers.event_logger import EventLogger, get_event_logger, get_event_stats
 
 __all__ = [
     # Core classes
@@ -56,4 +56,3 @@ __all__ = [
     'EventQueueError',
     'EventDeliveryError',
 ]
-

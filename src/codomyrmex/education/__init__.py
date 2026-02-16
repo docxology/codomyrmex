@@ -1,12 +1,19 @@
 """Education Module for Codomyrmex.
 
-Provides curriculum generation, tutoring, and certification.
+Provides curriculum generation, interactive tutoring, and
+certification / assessment capabilities.
 """
 
-# Lazy imports
-try:
-    from .curriculum import Curriculum
-except ImportError:
-    Curriculum = None
+from .curriculum import Curriculum, Lesson, DifficultyLevel
+from .tutoring import Tutor, TutoringSession
+from .certification import Assessment, Certificate
 
-__all__ = ["Curriculum"]
+__all__ = [
+    "Assessment",
+    "Certificate",
+    "Curriculum",
+    "DifficultyLevel",
+    "Lesson",
+    "Tutor",
+    "TutoringSession",
+]

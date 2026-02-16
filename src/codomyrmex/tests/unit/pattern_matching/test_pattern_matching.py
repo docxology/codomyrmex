@@ -1,4 +1,15 @@
-"""Unit tests for pattern_matching module."""
+"""Unit tests for pattern_matching module.
+
+Tests cover:
+- Module import and structure
+- PatternAnalyzer: single file analysis, directory analysis
+- PatternMatch dataclass fields
+- AnalysisResult dataclass fields
+- Multiple patterns, no-match scenarios, empty patterns
+- Stub/compatibility functions
+- Edge cases: empty files, binary-like content, nested directories
+- run_codomyrmex_analysis convenience function
+"""
 
 import sys
 
@@ -21,15 +32,17 @@ class TestPatternMatching:
             pytest.fail(f"Failed to import run_codomyrmex_analysis: {e}")
 
     def test_pattern_matching_module_structure(self, code_dir):
-        """Test that pattern_matching has expected structure."""
+        """Test that pattern_matching package has expected exports."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.pattern_matching import run_codomyrmex_analysis
+        import codomyrmex.pattern_matching as pm_pkg
 
-        assert hasattr(run_codomyrmex_analysis, '__file__')
-        assert hasattr(run_codomyrmex_analysis, 'run_full_analysis')
-        assert hasattr(run_codomyrmex_analysis, 'analyze_repository_path')
+        # Check the package exports the key names
+        assert hasattr(pm_pkg, 'run_codomyrmex_analysis')
+        assert hasattr(pm_pkg, 'run_full_analysis')
+        assert hasattr(pm_pkg, 'analyze_repository_path')
+        assert hasattr(pm_pkg, 'PatternAnalyzer')
 
     def test_get_embedding_function(self, code_dir):
         """Test get_embedding_function returns a callable."""
@@ -227,3 +240,294 @@ class TestPatternMatching:
         result = run_codomyrmex_analysis(str(tmp_path), {"hack": "HACK"})
         assert isinstance(result, AnalysisResult)
         assert len(result.matches) == 1
+
+    # ==================================================================
+    # New tests: PatternMatch dataclass
+    # ==================================================================
+
+    def test_pattern_match_fields(self, code_dir):
+        """PatternMatch stores pattern_name, file_path, line_number, matched_text, confidence."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternMatch
+
+        pm = PatternMatch(
+            pattern_name="todo",
+            file_path="/some/file.py",
+            line_number=42,
+            matched_text="# TODO: fix",
+        )
+        assert pm.pattern_name == "todo"
+        assert pm.file_path == "/some/file.py"
+        assert pm.line_number == 42
+        assert pm.matched_text == "# TODO: fix"
+        assert pm.confidence == 1.0  # default
+
+    def test_pattern_match_custom_confidence(self, code_dir):
+        """PatternMatch can have a custom confidence value."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternMatch
+
+        pm = PatternMatch(
+            pattern_name="test",
+            file_path="/f.py",
+            line_number=1,
+            matched_text="text",
+            confidence=0.75,
+        )
+        assert pm.confidence == 0.75
+
+    # ==================================================================
+    # New tests: AnalysisResult dataclass
+    # ==================================================================
+
+    def test_analysis_result_defaults(self, code_dir):
+        """AnalysisResult has empty matches and errors by default."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import AnalysisResult
+
+        ar = AnalysisResult(total_files=5, files_analyzed=5)
+        assert ar.total_files == 5
+        assert ar.files_analyzed == 5
+        assert ar.matches == []
+        assert ar.errors == []
+
+    # ==================================================================
+    # New tests: PatternAnalyzer edge cases
+    # ==================================================================
+
+    def test_pattern_analyzer_empty_patterns(self, tmp_path, code_dir):
+        """Analyzer with empty patterns dict finds no matches."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        test_file = tmp_path / "test.py"
+        test_file.write_text("# TODO: important\n")
+
+        analyzer = PatternAnalyzer({})
+        matches = analyzer.analyze_file(str(test_file))
+        assert matches == []
+
+    def test_pattern_analyzer_no_match_in_file(self, tmp_path, code_dir):
+        """Analyzer finds no matches when patterns are absent from file."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        test_file = tmp_path / "clean.py"
+        test_file.write_text("def clean():\n    return True\n")
+
+        analyzer = PatternAnalyzer({"todo": "TODO", "fixme": "FIXME"})
+        matches = analyzer.analyze_file(str(test_file))
+        assert matches == []
+
+    def test_pattern_analyzer_multiple_patterns_same_line(self, tmp_path, code_dir):
+        """Multiple patterns matching the same line produce multiple matches."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        test_file = tmp_path / "multi.py"
+        test_file.write_text("# TODO FIXME: urgent\n")
+
+        analyzer = PatternAnalyzer({"todo": "TODO", "fixme": "FIXME"})
+        matches = analyzer.analyze_file(str(test_file))
+        assert len(matches) == 2
+        names = {m.pattern_name for m in matches}
+        assert names == {"todo", "fixme"}
+
+    def test_pattern_analyzer_multiple_matches_different_lines(self, tmp_path, code_dir):
+        """Pattern found on multiple lines produces multiple matches."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        test_file = tmp_path / "many_todos.py"
+        test_file.write_text("# TODO: first\nprint('ok')\n# TODO: second\n")
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        matches = analyzer.analyze_file(str(test_file))
+        assert len(matches) == 2
+        assert matches[0].line_number == 1
+        assert matches[1].line_number == 3
+
+    def test_pattern_analyzer_nonexistent_file(self, code_dir):
+        """Analyzer handles nonexistent file gracefully (returns empty)."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        matches = analyzer.analyze_file("/nonexistent/path/file.py")
+        assert matches == []
+
+    def test_pattern_analyzer_empty_file(self, tmp_path, code_dir):
+        """Analyzer handles empty file (no matches, no errors)."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        test_file = tmp_path / "empty.py"
+        test_file.write_text("")
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        matches = analyzer.analyze_file(str(test_file))
+        assert matches == []
+
+    def test_pattern_analyzer_matched_text_truncation(self, tmp_path, code_dir):
+        """Matched text is truncated to 100 characters."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        long_line = "# TODO: " + "x" * 200 + "\n"
+        test_file = tmp_path / "long.py"
+        test_file.write_text(long_line)
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        matches = analyzer.analyze_file(str(test_file))
+        assert len(matches) == 1
+        assert len(matches[0].matched_text) <= 100
+
+    def test_pattern_analyzer_directory_default_extensions(self, tmp_path, code_dir):
+        """analyze_directory defaults to .py, .js, .ts extensions."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        (tmp_path / "code.py").write_text("# TODO: python\n")
+        (tmp_path / "code.js").write_text("// TODO: javascript\n")
+        (tmp_path / "code.txt").write_text("TODO: text file\n")
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        result = analyzer.analyze_directory(str(tmp_path))
+
+        # Should find matches in .py and .js, but not .txt
+        matched_files = {m.file_path for m in result.matches}
+        assert any(f.endswith(".py") for f in matched_files)
+        assert any(f.endswith(".js") for f in matched_files)
+        assert not any(f.endswith(".txt") for f in matched_files)
+
+    def test_pattern_analyzer_directory_empty(self, tmp_path, code_dir):
+        """analyze_directory on directory with no matching files."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        analyzer = PatternAnalyzer({"todo": "TODO"})
+        result = analyzer.analyze_directory(str(tmp_path), extensions=[".py"])
+        assert result.total_files == 0
+        assert result.files_analyzed == 0
+        assert result.matches == []
+
+    def test_pattern_analyzer_directory_nested(self, tmp_path, code_dir):
+        """analyze_directory searches nested subdirectories."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+
+        subdir = tmp_path / "sub"
+        subdir.mkdir()
+        (subdir / "nested.py").write_text("# HACK: nested\n")
+
+        analyzer = PatternAnalyzer({"hack": "HACK"})
+        result = analyzer.analyze_directory(str(tmp_path), extensions=[".py"])
+        assert len(result.matches) == 1
+        assert result.matches[0].pattern_name == "hack"
+
+    # ==================================================================
+    # New tests: stub functions
+    # ==================================================================
+
+    def test_perform_code_summarization(self, code_dir):
+        """_perform_code_summarization returns a string."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_code_summarization,
+        )
+
+        result = _perform_code_summarization("/some/path")
+        assert isinstance(result, str)
+        assert len(result) > 0
+
+    def test_perform_docstring_indexing(self, code_dir):
+        """_perform_docstring_indexing runs without error."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            _perform_docstring_indexing,
+        )
+
+        # Should not raise
+        _perform_docstring_indexing("/some/path")
+
+    def test_embedding_function_returns_consistent_length(self, code_dir):
+        """Embedding function returns a list of consistent length for different inputs."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            get_embedding_function,
+        )
+
+        embed_fn = get_embedding_function()
+        result1 = embed_fn("short")
+        result2 = embed_fn("a much longer piece of text to embed")
+        assert len(result1) == len(result2)
+
+    def test_run_codomyrmex_analysis_no_patterns(self, tmp_path, code_dir):
+        """run_codomyrmex_analysis with no patterns returns empty matches."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            run_codomyrmex_analysis,
+        )
+
+        (tmp_path / "test.py").write_text("# Nothing to match\n")
+        result = run_codomyrmex_analysis(str(tmp_path))
+        assert result.matches == []
+
+    def test_analyze_repository_path_returns_path(self, code_dir):
+        """analyze_repository_path includes the input path in its result."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            analyze_repository_path,
+        )
+
+        result = analyze_repository_path("/custom/repo")
+        assert result["path"] == "/custom/repo"
+
+    def test_run_full_analysis_returns_path(self, code_dir):
+        """run_full_analysis includes the input path in its result."""
+        if str(code_dir) not in sys.path:
+            sys.path.insert(0, str(code_dir))
+
+        from codomyrmex.pattern_matching.run_codomyrmex_analysis import (
+            run_full_analysis,
+        )
+
+        result = run_full_analysis("/custom/path")
+        assert result["path"] == "/custom/path"
+        assert result["full_analysis"] is True

@@ -1,4 +1,4 @@
-# physical_management
+# Physical Management Module
 
 **Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
 

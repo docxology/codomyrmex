@@ -22,13 +22,17 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Modularity
 
-- Each module is a self-contained unit under `src/codomyrmex/` with its own implementation, tests, and RASP pattern (`README.md`, `AGENTS.md`, `SPEC.md`, `PAI.md`).
+- Each module is a self-contained unit under `src/codomyrmex/` with its own implementation, tests, and **RASP documentation pattern** — four standard files that make every module self-describing:
+  - **R**EADME.md — Module overview, exports, and quick start
+  - **A**GENTS.md — AI agent coordination and operating contracts
+  - **S**PEC.md — Functional specification and design rationale
+  - **P**AI.md — PAI system integration and algorithm phase mapping
 - Modules expose only public APIs; internal implementation details remain encapsulated.
 - Adding, removing, or upgrading a module must not require changes to unrelated modules.
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 94 modules.
+- Consistent directory structure and naming conventions across all 104 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -111,7 +115,7 @@ graph TB
 ## Quality Standards
 
 - **Coupling**: Aim for loose coupling between modules and high cohesion within each module.
-- **Modularity Gate**: New modules must pass structure validation (RASP pattern, `__init__.py`, test stubs) before being committed.
+- **Modularity Gate**: New modules must pass structure validation (RASP documentation — README, AGENTS, SPEC, PAI — plus `__init__.py` and test stubs) before being committed.
 - **Documentation Coverage**: 100% of module directories must contain a non-skeletal `README.md` with accurate content.
 - **Interface Stability**: Public API changes require a semantic version bump and updated specification documents.
 - **Test Coverage**: All modules must maintain unit test coverage; integration tests are required for cross-module interactions.

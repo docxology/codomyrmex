@@ -8,22 +8,22 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is
 
 | Component | Count | Location |
 |-----------|-------|----------|
-| Algorithm | v0.2.25 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
-| Skills | 28+ | `~/.claude/skills/PAI/Skills/` |
-| Hooks | 18 | `~/.claude/hooks/` |
-| Tools | 60+ | `~/.claude/skills/PAI/Tools/` |
-| Agents | Named + subagent types | `~/.claude/skills/PAI/SYSTEM/PAIAGENTSYSTEM.md` |
+| Algorithm | v1.5.0 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
+| Skills | 38 | `~/.claude/skills/` |
+| Hooks | 20 | `~/.claude/hooks/` |
+| Tools | 59 | `~/.claude/skills/PAI/Tools/` |
+| Agents | 13 + subagent types | `~/.claude/skills/PAI/PAIAGENTSYSTEM.md` |
 | Memory | WORK / STATE / LEARNING | `~/.claude/skills/PAI/MEMORY/` |
 
 PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt, creates ISC (Ideal State Criteria), selects capabilities, executes work, and verifies results.
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **106-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **104-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              106 modules of dev-platform tools
+     Algorithm + Skills + Hooks              104 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -35,8 +35,8 @@ The MCP server is the operational bridge between PAI and codomyrmex:
 ```mermaid
 graph LR
     subgraph PAI ["PAI System (~/.claude/)"]
-        Algo["Algorithm v0.2.25"]
-        Skills["28+ Skills"]
+        Algo["Algorithm v1.5.0"]
+        Skills["38 Skills"]
         Agents["Named Agents"]
     end
 
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["94 Module Tools"]
+        Modules["104 Module Tools"]
     end
 
     Algo --> Agents
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 33 registered tools across file ops, code analysis, git, security, data processing
+**Tools**: 18 static tools + 554 auto-discovered (607 total) across file ops, code analysis, git, security, all 104 modules
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -88,17 +88,16 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 ~/.claude/                          # PRIVATE (per-user, never committed)
 ├── skills/PAI/                     # Algorithm, skills, tools, hooks
 │   ├── SKILL.md                    # CORE (the Algorithm)
-│   ├── Skills/                     # 28+ skills
-│   ├── Tools/                      # 60+ tools
-│   ├── SYSTEM/                     # System docs
+│   ├── Skills/                     # 38 skills
+│   ├── Tools/                      # 59 tools
 │   ├── USER/                       # Personal data
 │   └── MEMORY/                     # WORK, STATE, LEARNING
-├── hooks/                          # 18 hooks
+├── hooks/                          # 20 hooks
 ├── settings.json                   # Identity, preferences
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 106 Python modules
+├── src/codomyrmex/                 # 104 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation
@@ -156,6 +155,15 @@ Condensed view of what PAI agents can access:
 | **Interface** | `cli/`, `terminal_interface/`, `ide/` | User interaction, rich output |
 
 ## RASP Documentation Pattern
+
+**RASP** stands for the four standard documentation files every codomyrmex module carries:
+
+| Letter | File | Purpose |
+|--------|------|---------|
+| **R** | `README.md` | Module overview, key exports, quick start |
+| **A** | `AGENTS.md` | AI agent coordination, operating contracts |
+| **S** | `SPEC.md` | Functional specification, design rationale |
+| **P** | `PAI.md` | PAI system integration, algorithm phase mapping |
 
 Every codomyrmex module has a `PAI.md` file describing its AI capabilities. These per-module files describe **what that module offers to AI agents**. This root document describes **how the actual PAI system consumes those capabilities**.
 

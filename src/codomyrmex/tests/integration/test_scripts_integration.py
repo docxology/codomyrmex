@@ -83,3 +83,64 @@ def test_verify_phase1_execution():
     assert result.returncode == 0
     assert "Phase 1 Verification Complete" in result.stdout
 
+
+def test_finalize_root_docs_help():
+    """Test that scripts/finalize_root_docs.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "finalize_root_docs.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Finalize root documentation" in result.stdout
+
+def test_remediate_documentation_help():
+    """Test that scripts/remediate_documentation.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "remediate_documentation.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Remediate documentation gaps" in result.stdout
+
+def test_restore_descriptions_help():
+    """Test that scripts/restore_descriptions.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "restore_descriptions.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Restore module descriptions" in result.stdout
+
+def test_update_pai_docs_help():
+    """Test that scripts/update_pai_docs.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "update_pai_docs.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Batch update stub PAI.md files" in result.stdout
+
+def test_update_root_docs_help():
+    """Test that scripts/update_root_docs.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "update_root_docs.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Update root documentation files" in result.stdout
+
+def test_update_spec_md_help():
+    """Test that scripts/update_spec_md.py runs and shows help."""
+    result = subprocess.run(
+        [sys.executable, str(SCRIPTS_DIR / "update_spec_md.py"), "--help"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+    assert "Update SPEC.md with missing modules" in result.stdout
+

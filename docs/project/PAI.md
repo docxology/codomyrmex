@@ -2,34 +2,22 @@
 
 ## Purpose
 
-Project-level documentation including audit results, health reports, and project status tracking.
+Project-level documentation including architecture specifications and contribution guidelines for the Codomyrmex platform.
 
 ## AI Agent Guidance
 
-This directory contains project health information and audit results. AI agents should:
+This directory contains project governance information. AI agents should:
 
-1. **Reference history** — Check audit results for known issues
-2. **Track progress** — Use status files for project health
-3. **Understand context** — Read background for project decisions
+1. **Follow architecture** — Reference `architecture.md` for system design
+2. **Follow conventions** — Reference `contributing.md` for code standards
+3. **Maintain RASP** — Ensure README, AGENTS, SPEC, PAI in every directory
 
 ## Directory Structure
 
 | File | Description |
 |------|-------------|
-| `audit_results.md` | Security and quality audits |
-| `project_status.md` | Current project health |
-| `decision_log.md` | Architectural decisions |
-
-## PAI Integration
-
-```python
-from codomyrmex.system_discovery import get_project_status
-
-# Query project health
-status = get_project_status()
-print(f"Health: {status.health_score}%")
-print(f"Open Issues: {status.open_issues}")
-```
+| `architecture.md` | System architecture and design principles |
+| `contributing.md` | Contribution guidelines and code standards |
 
 ## Cross-References
 

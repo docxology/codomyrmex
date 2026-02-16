@@ -1,30 +1,26 @@
 """
 Pattern Matching Module for Codomyrmex.
 
-This module identifies patterns and structures within the Codomyrmex codebase.
-It utilizes the `cased/kit` toolkit for code analysis and pattern recognition.
+This module identifies patterns and structures within codebases.
+It provides AST-based pattern matching, design pattern detection,
+code similarity analysis, and general text/regex pattern scanning.
 
-Integration:
-- Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
-- Relies on `environment_setup` for environment and dependency checks.
+Submodules:
+    analysis -- Core pattern analysis (PatternAnalyzer, PatternMatch)
+    ast_matcher -- AST-based structural pattern matching
+    code_patterns -- Design pattern detection (singleton, factory, observer, etc.)
+    similarity -- Code similarity and duplicate detection
 
-Available functions:
-- get_embedding_function
-- analyze_repository_path
-- run_full_analysis
-- print_once
-- _perform_repository_index
-- _perform_dependency_analysis
-- _perform_text_search
-- _perform_code_summarization
-- _perform_docstring_indexing
-- _perform_symbol_extraction
-- _perform_symbol_usage_analysis
-- _perform_text_search_context_extraction
-- _perform_chunking_examples
+Legacy functions (backward-compatible):
+    get_embedding_function, analyze_repository_path, run_full_analysis,
+    print_once, and _perform_* helpers.
 """
 
 from .run_codomyrmex_analysis import (
+    PatternAnalyzer,
+    PatternMatch,
+    AnalysisResult,
+    run_codomyrmex_analysis,
     _perform_chunking_examples,
     _perform_code_summarization,
     _perform_dependency_analysis,
@@ -39,6 +35,10 @@ from .run_codomyrmex_analysis import (
     print_once,
     run_full_analysis,
 )
+
+from .ast_matcher import ASTMatcher, ASTMatchResult
+from .code_patterns import PatternDetector, PatternDefinition, PATTERNS
+from .similarity import CodeSimilarity, DuplicateResult
 
 # Shared schemas for cross-module interop
 try:
@@ -76,6 +76,22 @@ def cli_commands():
 
 
 __all__ = [
+    # Core analysis
+    "PatternAnalyzer",
+    "PatternMatch",
+    "AnalysisResult",
+    "run_codomyrmex_analysis",
+    # AST matching
+    "ASTMatcher",
+    "ASTMatchResult",
+    # Design pattern detection
+    "PatternDetector",
+    "PatternDefinition",
+    "PATTERNS",
+    # Similarity
+    "CodeSimilarity",
+    "DuplicateResult",
+    # Legacy functions
     "get_embedding_function",
     "analyze_repository_path",
     "run_full_analysis",

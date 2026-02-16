@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Comprehensive documentation hub for all 94 Codomyrmex modules. This directory contains per-module RASP documentation sets (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
+Comprehensive documentation hub for all 104 Codomyrmex modules. This directory contains per-module RASP documentation sets (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
 
 ## AI Agent Guidance
 
 ### Context for Agents
 
-- **94 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
+- **104 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
 - **System-level views** — overview, relationships, dependency graph
 - **Module categories** — Foundation, AI & Intelligence, Code & Analysis, Data & Visualization, DevOps & Infrastructure, Security & Cognitive, Interface & Communication, Framework & Utilities
 

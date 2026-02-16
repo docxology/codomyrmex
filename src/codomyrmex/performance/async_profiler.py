@@ -1,25 +1,10 @@
-"""Asynchronous function profiler."""
+"""
+Backward-compatibility shim.
 
-import functools
-import logging
-import time
-from collections.abc import Callable
+This module has been moved to codomyrmex.performance.profiling.async_profiler.
+All imports are re-exported here for backward compatibility.
+"""
 
-logger = logging.getLogger(__name__)
-
-class AsyncProfiler:
-    """Profiles asynchronous functions to identify bottlenecks."""
-
-    @staticmethod
-    def profile(func: Callable) -> Callable:
-        """Decorator to profile an async function."""
-        @functools.wraps(func)
-        async def wrapper(*args, **kwargs):
-            start_time = time.perf_counter()
-            try:
-                return await func(*args, **kwargs)
-            finally:
-                end_time = time.perf_counter()
-                duration = end_time - start_time
-                logger.info(f"Async Profile: {func.__name__} took {duration:.4f}s")
-        return wrapper
+from codomyrmex.performance.profiling.async_profiler import (  # noqa: F401
+    AsyncProfiler,
+)

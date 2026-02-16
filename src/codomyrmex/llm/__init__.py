@@ -116,5 +116,44 @@ __all__ = [
     'rag',
     'cost_tracking',
     'prompts',
+    'ask',
 ]
+
+
+# =============================================================================
+# MCP Tools
+# =============================================================================
+
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+@mcp_tool(category="llm")
+def ask(question: str, model: str = "openrouter/free") -> str:
+    """
+    Ask a question to an LLM provider (default: OpenRouter Free Tier).
+    
+    Args:
+        question: The prompt/question to ask
+        model: Model to use (default: openrouter/free)
+        
+    Returns:
+        The text response from the LLM.
+    """
+    from .providers import get_provider, ProviderType, ProviderConfig, Message
+    import os
+    
+    # Use OpenRouter by default as it has free models
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        return "Error: OPENROUTER_API_KEY not set in environment."
+        
+    try:
+        config = ProviderConfig(api_key=api_key)
+        with get_provider(ProviderType.OPENROUTER, config) as provider:
+            response = provider.complete(
+                messages=[Message(role="user", content=question)],
+                model=model
+            )
+            return response.content
+    except Exception as e:
+        return f"Error querying LLM: {str(e)}"
 

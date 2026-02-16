@@ -10,21 +10,21 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .distributed_lock import (
+from .locks.distributed_lock import (
     BaseLock,
     LocalLock,
 )
-from .lock_manager import (
+from .locks.lock_manager import (
     LockManager,
     ReadWriteLock,
 )
 try:
-    from .redis_lock import (
+    from .locks.redis_lock import (
         RedisLock,
     )
 except ImportError:
     RedisLock = None
-from .semaphore import (
+from .semaphores.semaphore import (
     BaseSemaphore,
     LocalSemaphore,
 )

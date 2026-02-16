@@ -22,6 +22,12 @@ To use:
    logger = get_logger(__name__)
    logger.info("This is an informational message.")
    ```
+
+Subpackages:
+    core/       - Logger configuration, setup, context management
+    formatters/ - Structured log formatters (JSON)
+    audit/      - Security and compliance audit logging
+    handlers/   - Log handlers (rotation, performance)
 """
 
 # This file makes the 'logging_monitoring' directory a Python package.
@@ -33,7 +39,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .logger_config import get_logger, setup_logging
+from .core.logger_config import get_logger, setup_logging
 
 def cli_commands():
     """Return CLI commands for the logging_monitoring module."""
