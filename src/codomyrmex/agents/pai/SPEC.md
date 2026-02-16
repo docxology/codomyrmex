@@ -1,6 +1,6 @@
 # pai — Functional Specification
 
-**Version**: v0.3.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 

@@ -1,0 +1,5131 @@
+2026-02-16 10:48:48,277 - codomyrmex.documentation.documentation_website - INFO - Codomyrmex centralized logging initialized successfully via documentation_website.py.
+2026-02-16 10:48:52,438 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,439 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,447 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,468 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,469 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,470 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,486 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,486 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,487 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,694 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,695 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,913 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,941 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,941 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,942 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,942 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:52,970 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,970 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,971 - codomyrmex.agents.pai.mcp_bridge - INFO - Codomyrmex MCP server created: 607 tools, 2 resources, 5 prompts
+2026-02-16 10:48:52,988 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:52,988 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:52,988 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:53,008 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:53,009 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:53,009 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:53,029 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:53,030 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:53,031 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:53,048 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:53,049 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:53,052 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:53,064 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:53,104 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:53,105 - codomyrmex.model_context_protocol.schemas.mcp_schemas - INFO - MCPToolRegistry initialized
+2026-02-16 10:48:53,188 - codomyrmex.model_context_protocol.discovery - INFO - Auto-discovered 554 public tools from 102 modules
+2026-02-16 10:48:53,232 - codomyrmex.agents.pai.mcp_bridge - INFO - Total dynamic tools discovered: 589 (554 auto-discovered)
+2026-02-16 10:48:53,390 - codomyrmex.agents.pai.trust_gateway - INFO - Verify complete: 105 modules, 607 tools (479 safe, 4 destructive), MCP healthy
+{
+  "status": "verified",
+  "modules": {
+    "count": 105,
+    "names": [
+      "accessibility",
+      "agentic_memory",
+      "agents",
+      "api",
+      "audio",
+      "auth",
+      "bio_simulation",
+      "build_synthesis",
+      "cache",
+      "cerebrum",
+      "chaos_engineering",
+      "ci_cd_automation",
+      "cli",
+      "cloud",
+      "coding",
+      "collaboration",
+      "compression",
+      "concurrency",
+      "config_management",
+      "containerization",
+      "cost_management",
+      "dark",
+      "data_lineage",
+      "data_visualization",
+      "database_management",
+      "defense",
+      "dependency_injection",
+      "deployment",
+      "documentation",
+      "documents",
+      "edge_computing",
+      "education",
+      "embodiment",
+      "encryption",
+      "environment_setup",
+      "events",
+      "evolutionary_ai",
+      "examples",
+      "exceptions",
+      "feature_flags",
+      "feature_store",
+      "finance",
+      "fpf",
+      "git_operations",
+      "governance",
+      "graph_rag",
+      "i18n",
+      "ide",
+      "identity",
+      "inference_optimization",
+      "llm",
+      "logging_monitoring",
+      "logistics",
+      "maintenance",
+      "market",
+      "meme",
+      "metrics",
+      "migration",
+      "model_context_protocol",
+      "model_evaluation",
+      "model_ops",
+      "model_registry",
+      "module_template",
+      "multimodal",
+      "networking",
+      "notification",
+      "observability_dashboard",
+      "orchestrator",
+      "pattern_matching",
+      "performance",
+      "physical_management",
+      "plugin_system",
+      "privacy",
+      "prompt_engineering",
+      "prompt_testing",
+      "quantum",
+      "rate_limiting",
+      "relations",
+      "scheduler",
+      "schemas",
+      "scrape",
+      "search",
+      "security",
+      "serialization",
+      "service_mesh",
+      "skills",
+      "smart_contracts",
+      "spatial",
+      "static_analysis",
+      "streaming",
+      "system_discovery",
+      "telemetry",
+      "templating",
+      "terminal_interface",
+      "testing",
+      "tests",
+      "tool_use",
+      "utils",
+      "validation",
+      "vector_store",
+      "video",
+      "visualization",
+      "wallet",
+      "website",
+      "workflow_testing"
+    ]
+  },
+  "tools": {
+    "count": 607,
+    "expected": 607,
+    "match": true,
+    "safe_count": 479,
+    "destructive_count": 128,
+    "items": [
+      {
+        "name": "codomyrmex.accessibility.calculate_contrast_ratio",
+        "description": "Calculate WCAG contrast ratio between two colors.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.accessibility.check_heading_hierarchy",
+        "description": "Check heading level hierarchy.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.accessibility.cli_commands",
+        "description": "Return CLI commands for the accessibility module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.add_memory",
+        "description": "Add a new item to long-term agentic memory.\n\nArgs:\n    content: The text content to remember\n    importance: 1-10 importance score (default: 1)\n    metadata: Optional dictionary of metadata\n    \nReturns:\n    Status message.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agentic_memory.cli_commands",
+        "description": "Return CLI commands for the agentic_memory module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.clean_response",
+        "description": "Clean agent response by removing common artifacts.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.cli_commands",
+        "description": "Return CLI commands for the agents module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.get_config",
+        "description": "Get global agent configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.parse_code_blocks",
+        "description": "Extract fenced code blocks from text.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.parse_first_code_block",
+        "description": "Extract the first code block, optionally filtered by language.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.parse_json_response",
+        "description": "Extract and parse JSON from mixed text output.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.parse_structured_output",
+        "description": "Extract structured data using regex patterns.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.agents.reset_config",
+        "description": "Reset global configuration to default.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.agents.set_config",
+        "description": "Set global agent configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.analyze_file",
+        "description": "Analyze a single file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.analyze_project",
+        "description": "Analyze an entire project.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.analyze_python",
+        "description": "Analyze a Python file for structure and metrics",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.circuit_breaker_decorator",
+        "description": "Decorator to apply circuit breaker to a function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.cli_commands",
+        "description": "Return CLI commands for the API module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.create_api",
+        "description": "Create a new REST API instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_authenticator",
+        "description": "Factory function for authenticators.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_field",
+        "description": "Create a new GraphQL field.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_fixture",
+        "description": "Create and return a new ``ResponseFixture`` instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_mock_server",
+        "description": "Create and return a new ``MockAPIServer`` instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_object_type",
+        "description": "Create a new GraphQL object type.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_openapi_from_graphql_api",
+        "description": "Create OpenAPI spec from a GraphQL API.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_openapi_from_rest_api",
+        "description": "Create OpenAPI spec from a REST API.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_paginator",
+        "description": "Create a paginator instance for the given strategy.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_rate_limiter",
+        "description": "Factory function to create rate limiters.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_router",
+        "description": "Create a new API router.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_schema",
+        "description": "Create a new GraphQL schema.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_version_manager",
+        "description": "Create a new API version manager.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_versioned_endpoint",
+        "description": "Create a new versioned endpoint.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_webhook_dispatcher",
+        "description": "Create a webhook dispatcher with optional defaults.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.create_webhook_registry",
+        "description": "Create a new, empty webhook registry.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.api.deprecated_version",
+        "description": "Decorator to mark a version as deprecated.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.extract_api_specs",
+        "description": "Convenience function to extract API specifications from source code.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.generate_api_docs",
+        "description": "Convenience function to generate API documentation.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.generate_openapi_spec_from_api",
+        "description": "Create a new OpenAPI generator for standardization.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.generate_openapi_spec_from_docs",
+        "description": "Convenience function to generate OpenAPI specification from endpoints.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.mutation",
+        "description": "Decorator to mark functions as GraphQL mutations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.resolver",
+        "description": "Decorator to mark functions as GraphQL resolvers.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.retry",
+        "description": "Decorator to apply retry logic to a function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.validate_openapi_spec",
+        "description": "Convenience function to validate OpenAPI specification.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.api.version",
+        "description": "Decorator to specify API version for an endpoint.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.apply_stash",
+        "description": "Apply stashed changes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ask",
+        "description": "Ask a question to an LLM provider (default: OpenRouter Free Tier).\n\nArgs:\n    question: The prompt/question to ask\n    model: Model to use (default: openrouter/free)\n    \nReturns:\n    The text response from the LLM.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.audio.cli_commands",
+        "description": "Return CLI commands for the audio module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.auth.authenticate",
+        "description": "Authenticate with credentials.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.auth.authorize",
+        "description": "Check if token has permission.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.auth.cli_commands",
+        "description": "Return CLI commands for the auth module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.auth.get_authenticator",
+        "description": "Get an authenticator instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.check_build_environment",
+        "description": "Check if the build environment is properly configured.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.cli_commands",
+        "description": "Return CLI commands for the build_synthesis module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.create_docker_build_target",
+        "description": "Create a Docker build target.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.create_python_build_target",
+        "description": "Create a Python build target.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.create_static_build_target",
+        "description": "Create a static site build target.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.get_available_build_types",
+        "description": "Get list of available build types.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.get_available_environments",
+        "description": "Get list of available build environments.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.orchestrate_build_pipeline",
+        "description": "Orchestrate a complete build pipeline.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.run_build_command",
+        "description": "Run a build command and return the result.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.synthesize_build_artifact",
+        "description": "Synthesize a build artifact from source code.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.trigger_build",
+        "description": "Trigger a build process for the specified target or all targets.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.build_synthesis.validate_build_output",
+        "description": "Validate that build output meets expectations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cache.cli_commands",
+        "description": "Return CLI commands for the cache module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cache.get_cache",
+        "description": "Get a cache instance by name.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.call_module_function",
+        "description": "Call any public function from any Codomyrmex module by path. Use list_module_functions first to discover available functions.",
+        "has_handler": true,
+        "category": "destructive",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cerebrum.cli_commands",
+        "description": "Return CLI commands for the cerebrum module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cerebrum.compute_cosine_similarity",
+        "description": "Compute cosine similarity between two feature vectors.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cerebrum.compute_euclidean_distance",
+        "description": "Compute Euclidean distance between two feature vectors.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cerebrum.compute_hash",
+        "description": "Compute a hash for the given data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cerebrum.normalize_features",
+        "description": "Normalize feature values to [0, 1] range.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cerebrum.softmax",
+        "description": "Compute softmax probabilities.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.chaos_engineering.cli_commands",
+        "description": "Return CLI commands for the chaos_engineering module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.chaos_engineering.with_chaos",
+        "description": "Decorator to inject chaos into a function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.checksum_file",
+        "description": "Calculate file checksum (md5, sha1, sha256)",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.cli_commands",
+        "description": "Return CLI commands for the ci_cd_automation module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.create_pipeline",
+        "description": "Convenience function to create a pipeline from configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.generate_pipeline_reports",
+        "description": "Generate multiple types of pipeline reports.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.handle_rollback",
+        "description": "Handle rollback for a failed deployment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.manage_deployments",
+        "description": "Convenience function to create deployment orchestrator.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.monitor_pipeline_health",
+        "description": "Monitor pipeline health and return status.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.optimize_pipeline_performance",
+        "description": "Optimize pipeline performance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ci_cd_automation.run_pipeline",
+        "description": "Convenience function to run a pipeline.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.check_environment",
+        "description": "Check if the environment is properly set up.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.demo_ai_code_editing",
+        "description": "Demo AI code editing capabilities.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.demo_code_execution",
+        "description": "Demo code execution sandbox.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.demo_data_visualization",
+        "description": "Demo data visualization capabilities.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.demo_git_operations",
+        "description": "Demo git operations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_ai_generate",
+        "description": "Handle AI code generation command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_ai_refactor",
+        "description": "Handle AI code refactoring command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_code_analysis",
+        "description": "Handle code analysis command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_analyze",
+        "description": "Handle FPF analyze command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_context",
+        "description": "Handle FPF context command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_export",
+        "description": "Handle FPF export command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_export_section",
+        "description": "Handle FPF export-section command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_fetch",
+        "description": "Handle FPF fetch command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_parse",
+        "description": "Handle FPF parse command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_report",
+        "description": "Handle FPF report command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_search",
+        "description": "Handle FPF search command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_fpf_visualize",
+        "description": "Handle FPF visualize command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_git_analysis",
+        "description": "Handle git repository analysis command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_module_demo",
+        "description": "Handle module demo command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_module_test",
+        "description": "Handle module testing command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_orchestration_health",
+        "description": "Handle orchestration health check command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_orchestration_status",
+        "description": "Handle orchestration status command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_project_build",
+        "description": "Handle project build command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_project_create",
+        "description": "Handle project creation command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.handle_project_list",
+        "description": "Handle project listing command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.handle_skills_get",
+        "description": "Handle skills get command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.handle_skills_list",
+        "description": "Handle skills list command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.handle_skills_search",
+        "description": "Handle skills search command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.handle_skills_sync",
+        "description": "Handle skills sync command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.handle_workflow_create",
+        "description": "Handle workflow creation command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.list_workflows",
+        "description": "List available workflows and orchestration templates.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.main",
+        "description": "Enhanced main CLI entry point with comprehensive functionality.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.run_interactive_shell",
+        "description": "Launch the interactive Codomyrmex shell.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.run_workflow",
+        "description": "Run a specific workflow.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cli.show_info",
+        "description": "Show information about Codomyrmex.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.show_modules",
+        "description": "Show detailed information about available modules.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cli.show_system_status",
+        "description": "Show comprehensive system status.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.clone_repository",
+        "description": "Clone a Git repository to the specified destination.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cloud.cli_commands",
+        "description": "Return CLI commands for the cloud module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cloud.create_openstack_connection",
+        "description": "Create an OpenStack SDK connection to Infomaniak.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.cloud.create_s3_client",
+        "description": "Create a boto3 S3 client for Infomaniak Object Storage.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.coding.analyze_file",
+        "description": "Analyze a single file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.analyze_project",
+        "description": "Analyze an entire project.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.check_docker_available",
+        "description": "Check if Docker is available on the system.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.check_quality_gates",
+        "description": "Check if project meets quality standards.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.cleanup_temp_files",
+        "description": "Safely clean up temporary directory and files.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.cli_commands",
+        "description": "Return CLI commands for the coding module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.execute_with_limits",
+        "description": "Execute code with resource limits and monitoring.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.coding.generate_report",
+        "description": "Generate analysis report.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.prepare_code_file",
+        "description": "Prepare a temporary file containing the code to execute.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.prepare_stdin_file",
+        "description": "Prepare a file with stdin content if provided.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.resource_limits_context",
+        "description": "Context manager to set and restore resource limits.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.run_code_in_docker",
+        "description": "Execute code in a Docker container with security constraints.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.coding.sandbox_process_isolation",
+        "description": "Execute code in a completely isolated process environment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.validate_language",
+        "description": "Validate that the requested programming language is supported.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.coding.validate_session_id",
+        "description": "Validate and sanitize a session ID string.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.collaboration.cli_commands",
+        "description": "Return CLI commands for the collaboration module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.commit_changes",
+        "description": "Commit staged changes with the given message.\n\nArgs:\n    message: Commit message\n    repository_path: Path to repository (defaults to current directory)\n    author_name: Override Git config for author name\n    author_email: Override Git config for author email\n    stage_all: If True, stages all tracked, modified files before committing (default: True)\n    file_paths: Optional list of specific files to stage and commit (if provided, stage_all is ignored)\n\nReturns:\n    SHA of the new commit on success, None on failure",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.auto_decompress",
+        "description": "Automatically detect format and decompress.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.cli_commands",
+        "description": "Return CLI commands for the compression module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.compress",
+        "description": "Compress data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.compress_data",
+        "description": "Compress data using specified format.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.compress_file",
+        "description": "Compress a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.decompress",
+        "description": "Decompress data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.decompress_data",
+        "description": "Decompress data using specified format.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.decompress_file",
+        "description": "Decompress a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.compression.get_compressor",
+        "description": "Get a compressor instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.concurrency.cli_commands",
+        "description": "Return CLI commands for the concurrency module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.cli_commands",
+        "description": "Return CLI commands for the config_management module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.deploy_configuration",
+        "description": "Deploy configuration to an environment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.encrypt_configuration",
+        "description": "Encrypt sensitive configuration values.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.load_configuration",
+        "description": "Convenience function to load configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.manage_secrets",
+        "description": "Manage secrets based on operation.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.monitor_config_changes",
+        "description": "Monitor configuration changes continuously.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.config_management.validate_configuration",
+        "description": "Convenience function to validate configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.build_containers",
+        "description": "Convenience function to build containers.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.cli_commands",
+        "description": "Return CLI commands for the containerization module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.manage_container_registry",
+        "description": "Manage container registry operations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.manage_containers",
+        "description": "Convenience function to create Docker manager.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.optimize_containers",
+        "description": "Optimize multiple containers.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.orchestrate_kubernetes",
+        "description": "Orchestrate Kubernetes deployment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.containerization.scan_container_security",
+        "description": "Convenience function to scan container security.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.cost_management.cli_commands",
+        "description": "Return CLI commands for the cost_management module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_ascii_art",
+        "description": "Create simple ASCII art for text.\n\nArgs:\n    text: Text to convert\n    style: Art style ('simple', 'block', etc.)\n\nReturns:\n    ASCII art string",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_bar_chart",
+        "description": "Generates a bar chart (vertical or horizontal).\nUses logging_monitoring for logging.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_branch",
+        "description": "Create and switch to a new Git branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_commit_timeline_diagram",
+        "description": "Create a commit timeline diagram using Mermaid syntax.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_git_branch_diagram",
+        "description": "Create a Git branch diagram using Mermaid syntax.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_git_workflow_diagram",
+        "description": "Create a Git workflow diagram using Mermaid syntax.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_line_plot",
+        "description": "Generates a line plot.\nUses logging_monitoring for logging.\nIf y_data is a list of lists, and x_data is a single list, multiple lines are plotted.\nIf line_labels are provided, they will be used for the legend.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_pie_chart",
+        "description": "Generates a pie chart.\nUses logging_monitoring for logging.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_repository_structure_diagram",
+        "description": "Create a repository structure diagram using Mermaid syntax.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.create_tag",
+        "description": "Create a Git tag.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dark.cli_commands",
+        "description": "Return CLI commands for the dark module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_lineage.cli_commands",
+        "description": "Return CLI commands for the data_lineage module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_visualization.cli_commands",
+        "description": "Return CLI commands for the data_visualization module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_bar_chart",
+        "description": "Create an advanced bar chart.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_dashboard",
+        "description": "Create an advanced dashboard.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_heatmap",
+        "description": "Create an advanced heatmap.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_histogram",
+        "description": "Create an advanced histogram.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_line_plot",
+        "description": "Create an advanced line plot.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_advanced_scatter_plot",
+        "description": "Create an advanced scatter plot.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_area_chart",
+        "description": "Generates an area chart using fill_between.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_bar_chart",
+        "description": "Create an advanced bar chart.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_box_plot",
+        "description": "Generates a box plot.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_dashboard",
+        "description": "Create an advanced dashboard.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_git_tree_mermaid",
+        "description": "Create a Mermaid Git tree diagram.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_git_tree_png",
+        "description": "Create a PNG Git tree visualization.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_heatmap",
+        "description": "Generates a heatmap from a 2D data array.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_heatmap_advanced",
+        "description": "Create an advanced heatmap.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_histogram",
+        "description": "Create an advanced histogram.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_line_plot",
+        "description": "Create an advanced line plot.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.create_scatter_plot",
+        "description": "Create an advanced scatter plot.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.data_visualization.get_available_palettes",
+        "description": "Get available color palettes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_visualization.get_available_plot_types",
+        "description": "Get available plot types.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_visualization.get_available_styles",
+        "description": "Get available chart styles.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.data_visualization.visualize_git_repository",
+        "description": "Create comprehensive Git repository visualizations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.backup_database",
+        "description": "Convenience function to backup a database.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.cli_commands",
+        "description": "Return CLI commands for the database_management module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.generate_schema",
+        "description": "Generate database schema from models.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.manage_databases",
+        "description": "Create and return a DatabaseManager instance for database administration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.monitor_database",
+        "description": "Monitor database performance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.optimize_database",
+        "description": "Optimize database performance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.database_management.run_migrations",
+        "description": "Run database migrations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.get_inject_metadata",
+        "description": "Retrieve the InjectMetadata from a function, if present.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.get_injectable_metadata",
+        "description": "Retrieve the InjectableMetadata from a class, if present.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.get_injectable_params",
+        "description": "Retrieve the pre-computed injectable parameter hints from a function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.inject",
+        "description": "Decorator that marks a constructor (or any method) for auto-injection.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.injectable",
+        "description": "Decorator that marks a class as injectable with a given scope.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.dependency_injection.is_injectable",
+        "description": "Check whether a class has been marked with @injectable.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.deployment.cli_commands",
+        "description": "Return CLI commands for the deployment module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.deployment.create_strategy",
+        "description": "Factory function for deployment strategies.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documentation.aggregate_docs",
+        "description": "Aggregate module documentation into the Docusaurus docs/modules folder.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.assess_site",
+        "description": "Guides user through assessing the site by opening browser and printing checklist.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.build_static_site",
+        "description": "Builds the static Docusaurus site.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.check_doc_environment",
+        "description": "Checks for Node.js and npm/yarn.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.cli_commands",
+        "description": "Return CLI commands for the documentation module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.generate_quality_report",
+        "description": "Generate a comprehensive quality report for the project.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.install_dependencies",
+        "description": "Installs Docusaurus dependencies.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.print_assessment_checklist",
+        "description": "Prints a checklist for manually assessing the documentation website.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.run_command_stream_output",
+        "description": "Helper to run a shell command and stream its output to the logger.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documentation.serve_static_site",
+        "description": "Serves the built static Docusaurus site.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.start_dev_server",
+        "description": "Starts the Docusaurus development server (hot-reloading).",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documentation.validate_doc_versions",
+        "description": "Validate version consistency between source and aggregated documentation.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.build_query",
+        "description": "Build a search query.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.cli_commands",
+        "description": "Return CLI commands for the documents module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.convert_document",
+        "description": "Convert a document to a different format.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.create_index",
+        "description": "Create a new empty search index.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.extract_metadata",
+        "description": "Extract metadata from a document file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.format_document",
+        "description": "Format a document according to a style.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.get_config",
+        "description": "Get the global documents configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.get_document_version",
+        "description": "Get version information from a document.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.index_document",
+        "description": "Index a document for search.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.merge_documents",
+        "description": "Merge multiple documents into a single document.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.parse_document",
+        "description": "Parse content string into a Document object.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_csv",
+        "description": "Read CSV content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_document",
+        "description": "Read a document from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_html",
+        "description": "Read HTML content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_json",
+        "description": "Read JSON content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_markdown",
+        "description": "Read markdown content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_pdf",
+        "description": "Read PDF content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_text",
+        "description": "Read plain text content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_xml",
+        "description": "Read XML content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.read_yaml",
+        "description": "Read YAML content from a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.search_documents",
+        "description": "Search documents using a query.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.search_index",
+        "description": "Search index and return results with scores.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.set_config",
+        "description": "Set the global documents configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.split_document",
+        "description": "Split a document into multiple documents based on criteria.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.update_metadata",
+        "description": "Update metadata for a document file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.validate_document",
+        "description": "Validate a document.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.documents.write_csv",
+        "description": "Write CSV data to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_document",
+        "description": "Write a document to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_html",
+        "description": "Write HTML content to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_json",
+        "description": "Write JSON data to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_markdown",
+        "description": "Write markdown content to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_pdf",
+        "description": "Write text content to a PDF file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_text",
+        "description": "Write text content to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_xml",
+        "description": "Write XML content to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.documents.write_yaml",
+        "description": "Write YAML data to a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.edge_computing.cli_commands",
+        "description": "Return CLI commands for the edge_computing module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.cli_commands",
+        "description": "Return CLI commands for the encryption module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.compute_hmac",
+        "description": "Compute an HMAC digest.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.decrypt",
+        "description": "Decrypt data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.decrypt_data",
+        "description": "Decrypt data using specified algorithm.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.decrypt_file",
+        "description": "Decrypt a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.derive_key_hkdf",
+        "description": "Derive a cryptographic key using HKDF.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.encrypt",
+        "description": "Encrypt data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.encrypt_data",
+        "description": "Encrypt data using specified algorithm.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.encrypt_file",
+        "description": "Encrypt a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.generate_aes_key",
+        "description": "Generate a random AES-256 key.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.generate_key",
+        "description": "Generate an encryption key.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.get_encryptor",
+        "description": "Get an encryptor instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.hash_data",
+        "description": "Compute hash of data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.encryption.verify_hmac",
+        "description": "Verify an HMAC using constant-time comparison.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.environment_setup.check_and_setup_env_vars",
+        "description": "Load environment variables from a .env file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.environment_setup.cli_commands",
+        "description": "Return CLI commands for the environment_setup module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.environment_setup.ensure_dependencies_installed",
+        "description": "Check if primary dependencies are installed and accessible.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.environment_setup.is_uv_available",
+        "description": "Check if the 'uv' package manager is available in the system PATH.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.environment_setup.is_uv_environment",
+        "description": "Check if the current Python interpreter is running within a uv-managed environment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.environment_setup.validate_python_version",
+        "description": "Validate that the Python version meets minimum requirements.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.get_event_bus",
+        "description": "Call events.get_event_bus",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.get_event_logger",
+        "description": "Call events.get_event_logger",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.get_event_stats",
+        "description": "Call events.get_event_stats",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.publish_event",
+        "description": "Call events.publish_event",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.subscribe_to_events",
+        "description": "Call events.subscribe_to_events",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.events.unsubscribe_from_events",
+        "description": "Call events.unsubscribe_from_events",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.cli_commands",
+        "description": "Return CLI commands for the evolutionary_ai module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.create_crossover",
+        "description": "Factory function for crossover operators.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.create_mutation",
+        "description": "Factory function for mutation operators.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.create_selection",
+        "description": "Factory function for selection operators.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.crossover",
+        "description": "Perform single-point crossover between two genomes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.mutate",
+        "description": "Apply mutation to a genome.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.evolutionary_ai.tournament_selection",
+        "description": "Select an individual using tournament selection.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.exceptions.create_error_context",
+        "description": "Create a context dictionary for exception handling.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.exceptions.format_exception_chain",
+        "description": "Format an exception chain for display.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.execute_code",
+        "description": "Execute a code snippet in a sandboxed Docker environment.\n\nRuns the provided source code in an isolated Docker container with\nresource limits and timeout controls. Supports multiple programming\nlanguages and optional session persistence.\n\nArgs:\n    language: Programming language of the code. Must be one of the\n        supported languages (python, javascript, java, cpp, c, go,\n        rust, bash).\n    code: Source code to execute as a string.\n    stdin: Optional standard input to provide to the program.\n    timeout: Maximum execution time in seconds. Defaults to 30,\n        with a maximum of 300 seconds.\n    session_id: Optional session identifier for persistent environments.\n        Allows maintaining state between executions.\n\nReturns:\n    A dictionary containing execution results with keys:\n    - stdout (str): Standard output from the program\n    - stderr (str): Standard error output\n    - exit_code (int): Process exit code (0 for success)\n    - execution_time (float): Actual execution time in seconds\n    - status (str): Execution status (\"success\", \"timeout\", \"error\", \"setup_error\")\n    - error_message (str): Detailed error message if status is not \"success\"\n\nRaises:\n    No exceptions are raised; errors are returned in the result dictionary.\n\nExample:\n    >>> result = execute_code(\"python\", \"print(sum(range(10)))\")\n    >>> print(result[\"stdout\"])  # \"45\"\n    >>> print(result[\"exit_code\"])  # 0\n    >>>\n    >>> result = execute_code(\"python\", \"x = input(); print(f'Got: {x}')\", stdin=\"hello\")\n    >>> print(result[\"stdout\"])  # \"Got: hello\"",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.feature_flags.cli_commands",
+        "description": "Return CLI commands for the feature_flags module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.feature_store.cli_commands",
+        "description": "Return CLI commands for the feature_store module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.fpf.cli_commands",
+        "description": "Return CLI commands for the FPF module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.generate_documentation",
+        "description": "Generate documentation for modules.\n\nArgs:\n    repo_root: Root directory of the repository (optional).\n    module_name: Specific module to document (optional).",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.generate_report",
+        "description": "",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.get_commit_history",
+        "description": "Get recent commit history.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.get_current_branch",
+        "description": "Get the name of the current Git branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.get_module_readme",
+        "description": "Read the README.md or SPEC.md documentation for any Codomyrmex module",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.get_status",
+        "description": "Get the current Git repository status.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_diff",
+        "description": "Get git diff for changes",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.add_files",
+        "description": "Add files to the Git staging area.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.add_remote",
+        "description": "Add a remote repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.amend_commit",
+        "description": "Amend the last commit.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.analyze_repository_structure",
+        "description": "Analyze and visualize repository structure.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.check_git_availability",
+        "description": "Check if Git is available on the system.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.cherry_pick",
+        "description": "Cherry-pick a commit from another branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.cli_commands",
+        "description": "Return CLI commands for the git_operations module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.create_git_analysis_report",
+        "description": "Create a comprehensive Git analysis report with visualizations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.create_git_workflow_diagram",
+        "description": "Create a Git workflow diagram.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.create_github_repository",
+        "description": "Create a new GitHub repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.create_pull_request",
+        "description": "Create a pull request.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.delete_github_repository",
+        "description": "Delete a GitHub repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.fetch_changes",
+        "description": "Fetch changes from a remote repository without merging.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_config",
+        "description": "Get a Git configuration value.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_diff",
+        "description": "Get the diff of current changes against a target.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_pull_request",
+        "description": "Get a specific pull request.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_pull_requests",
+        "description": "Get pull requests for a repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_repository_info",
+        "description": "Get detailed repository information.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.get_repository_metadata",
+        "description": "Get comprehensive repository metadata for visualization.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.is_git_repository",
+        "description": "Check if the given path is a Git repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.list_remotes",
+        "description": "List all remote repositories.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.remove_remote",
+        "description": "Remove a remote repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.reset_changes",
+        "description": "Reset repository to a specific state.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.set_config",
+        "description": "Set a Git configuration value.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.git_operations.visualize_commit_activity",
+        "description": "Create a commit activity visualization.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_operations.visualize_git_branches",
+        "description": "Create a Git branch visualization.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.git_status",
+        "description": "Get git repository status",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.graph_rag.cli_commands",
+        "description": "Return CLI commands for the graph_rag module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.i18n.cli_commands",
+        "description": "Return CLI commands for the i18n module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.i18n.init",
+        "description": "Call i18n.init",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.i18n.t",
+        "description": "Call i18n.t",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.ide.cli_commands",
+        "description": "Return CLI commands for the IDE module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.identity.cli_commands",
+        "description": "Return CLI commands for the identity module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.inference_optimization.cli_commands",
+        "description": "Return CLI commands for the inference_optimization module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.initialize_git_repository",
+        "description": "Initialize a new Git repository at the specified path.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.json_query",
+        "description": "Read and optionally query a JSON file via dot-notation",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.list_directory",
+        "description": "List directory contents with filtering",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.list_module_functions",
+        "description": "List all public callable functions and classes in any Codomyrmex module. Use this to discover what's available before calling call_module_function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.list_modules",
+        "description": "List all available Codomyrmex modules",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.list_stashes",
+        "description": "List all stashes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.list_tags",
+        "description": "List all Git tags.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.llm.cli_commands",
+        "description": "Return CLI commands for the llm module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.llm.convert_tool_to_mcp",
+        "description": "Convert a codomyrmex.llm.tools.Tool to MCP format.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.llm.create_mcp_bridge_from_registry",
+        "description": "Create an MCPBridge from an LLM ToolRegistry.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.llm.get_config",
+        "description": "Get global LLM configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.llm.reset_config",
+        "description": "Reset global configuration to default.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.llm.set_config",
+        "description": "Set global LLM configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.logging_monitoring.cli_commands",
+        "description": "Return CLI commands for the logging_monitoring module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.logging_monitoring.get_logger",
+        "description": "Get a logger instance with the specified name.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.logging_monitoring.setup_logging",
+        "description": "Configure the logging system for the application.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.logistics.cli_commands",
+        "description": "Return CLI commands for the logistics module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.add_deprecation_notice",
+        "description": "Add deprecation notice to requirements.txt file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.add_deprecation_notices_main",
+        "description": "Main function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.analyze_code_quality",
+        "description": "Analyze code quality metrics.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.analyze_project_dependencies",
+        "description": "Analyze project dependencies.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.analyze_project_main",
+        "description": "Main function to run the analysis.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.analyze_project_structure",
+        "description": "Analyze the overall project structure.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.check_dependencies",
+        "description": "Check if main dependencies can be imported.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.consolidate_dependencies",
+        "description": "Analyze all requirements.txt files and return consolidated dependency information.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.dependency_analyzer_main",
+        "description": "Main entry point.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.dependency_checker_main",
+        "description": "Main function to run dependency checks.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.dependency_consolidator_main",
+        "description": "Main consolidation workflow.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.generate_analysis_report",
+        "description": "Generate an analysis report.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.maintenance.validate_dependencies_main",
+        "description": "Main validation function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.market.cli_commands",
+        "description": "Return CLI commands for the market module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.merge_branch",
+        "description": "Merge a source branch into the target branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.metrics.cli_commands",
+        "description": "Return CLI commands for the metrics module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.metrics.get_metrics",
+        "description": "Get a metrics instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.migration.cli_commands",
+        "description": "Return CLI commands for the migration module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_context_protocol.cli_commands",
+        "description": "Return CLI commands for the model_context_protocol module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_evaluation.analyze_quality",
+        "description": "Convenience function to analyze output quality with default settings.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_evaluation.create_default_scorer",
+        "description": "Create a default composite scorer with sensible defaults.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.model_ops.cli_commands",
+        "description": "Return CLI commands for the model_ops module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_ops.create_evaluator",
+        "description": "Factory function to create evaluators.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.model_ops.exact_match_metric",
+        "description": "Calculate exact match ratio (strips whitespace before comparison).",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_ops.length_ratio_metric",
+        "description": "Calculate average length ratio.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.model_registry.cli_commands",
+        "description": "Return CLI commands for the model_registry module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.module_info",
+        "description": "Get info about a specific module (docstring, exports, path)",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.multimodal.cli_commands",
+        "description": "Return CLI commands for the multimodal module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.networking.cli_commands",
+        "description": "Return CLI commands for the networking module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.networking.get_http_client",
+        "description": "Get an HTTP client instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.notification.cli_commands",
+        "description": "Return CLI commands for the notification module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.observability_dashboard.cli_commands",
+        "description": "Return CLI commands for the observability_dashboard module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.batch",
+        "description": "Run multiple targets in parallel.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.chain",
+        "description": "Create a linear workflow where each task depends on the previous.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.chain_scripts",
+        "description": "Chain scripts sequentially with result passing.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.cli_commands",
+        "description": "Return CLI commands for the orchestrator module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.condition",
+        "description": "Create a condition function for conditional task execution.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.create_pipeline_workflow",
+        "description": "Create a workflow from pipeline stages.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.discover_scripts",
+        "description": "Discover all Python scripts in the scripts directory.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.fan_out_fan_in",
+        "description": "Create a fan-out/fan-in workflow pattern.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.get_script_config",
+        "description": "Get configuration for a specific script.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.load_config",
+        "description": "Load script configuration, searching upwards for config.yaml.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.parallel",
+        "description": "Create a workflow where all tasks run in parallel.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.pipe",
+        "description": "Pipe commands together sequentially.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.python_func",
+        "description": "Run a Python function with monitoring.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.retry",
+        "description": "Wrap an action with retry logic.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run",
+        "description": "Run a single script or command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_agent_task",
+        "description": "Run a task using an agent.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_async",
+        "description": "Async version of run.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_ci_stage",
+        "description": "Run a CI/CD stage.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_function",
+        "description": "Run a python function in a monitored separate process.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_orchestrator",
+        "description": "Main entry point.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_parallel",
+        "description": "Convenience function to run scripts in parallel.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_parallel_async",
+        "description": "Async convenience function to run scripts in parallel.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.run_script",
+        "description": "Run a single script and capture output.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.orchestrator.shell",
+        "description": "Execute a shell command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.step",
+        "description": "Decorator to create a workflow step.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.timeout",
+        "description": "Decorator to add timeout to an action.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.orchestrator.workflow",
+        "description": "Create a new workflow builder.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pai_awareness",
+        "description": "Get full PAI awareness data (missions, projects, tasks, memory)",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pai_status",
+        "description": "Get PAI installation status and component inventory",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.analyze_repository_path",
+        "description": "Analyze a repository path.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.cli_commands",
+        "description": "Return CLI commands for the pattern_matching module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.get_embedding_function",
+        "description": "Get the embedding function used for analysis.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.print_once",
+        "description": "Print a message only once.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.run_codomyrmex_analysis",
+        "description": "Run pattern analysis on a directory.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.pattern_matching.run_full_analysis",
+        "description": "Run full analysis sequence.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.performance.cached_function",
+        "description": "Decorator for caching function results.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.cli_commands",
+        "description": "Return CLI commands for the performance module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.get_system_metrics",
+        "description": "Call performance.get_system_metrics",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.lazy_import",
+        "description": "Create a lazy loader for the specified module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.monitor_performance",
+        "description": "No-op decorator if dependencies missing.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.profile_function",
+        "description": "Profile a single function call execution time and memory usage.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.performance.run_benchmark",
+        "description": "Run a benchmark on a function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.plugin_system.cli_commands",
+        "description": "Return CLI commands for the plugin_system module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.privacy.cli_commands",
+        "description": "Return CLI commands for the privacy module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.cli_commands",
+        "description": "Return CLI command definitions for the prompt_engineering module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.get_default_criteria",
+        "description": "Get the default set of evaluation criteria.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.get_default_registry",
+        "description": "Get the module-level default template registry.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.list_strategies",
+        "description": "List available optimization strategies.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.list_templates",
+        "description": "List all templates in the default registry.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.quick_evaluate",
+        "description": "Run a quick evaluation of a prompt-response pair using default criteria.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.score_completeness",
+        "description": "Score whether the response addresses the apparent intent of the prompt.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.score_relevance",
+        "description": "Score relevance by measuring keyword overlap between prompt and response.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.score_response_length",
+        "description": "Score based on response length relative to a reasonable range.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_engineering.score_structure",
+        "description": "Score response structure quality.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.prompt_testing.cli_commands",
+        "description": "Return CLI commands for the prompt_testing module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.pull_changes",
+        "description": "Pull changes from a remote repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.push_changes",
+        "description": "Push committed changes to a remote repository.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.bell_state",
+        "description": "Create Bell state circuit.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.circuit_stats",
+        "description": "Return circuit statistics.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.circuit_to_ascii",
+        "description": "Render circuit as ASCII art.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.cli_commands",
+        "description": "Return CLI commands for the quantum module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.ghz_state",
+        "description": "Create GHZ state circuit.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.quantum.qft",
+        "description": "Quantum Fourier Transform circuit.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.rate_limiting.cli_commands",
+        "description": "Return CLI commands for the rate_limiting module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.rate_limiting.create_limiter",
+        "description": "Create a rate limiter.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.read_file",
+        "description": "Read file contents with metadata",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.rebase_branch",
+        "description": "Rebase current branch onto target branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.run_command",
+        "description": "Execute a shell command safely",
+        "has_handler": true,
+        "category": "destructive",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.run_tests",
+        "description": "Run pytest for a specific module or the whole project",
+        "has_handler": true,
+        "category": "destructive",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.scan_project_security",
+        "description": "Run a full security scan on the project (vulnerabilities + secrets).\n\nArgs:\n    path: Root path to scan (default: current directory)\n    \nReturns:\n    Structured security report.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scheduler.at",
+        "description": "Create a one-time trigger from time string (HH:MM).",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scheduler.cli_commands",
+        "description": "Return CLI commands for the scheduler module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scheduler.cron",
+        "description": "Create a cron trigger from expression.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scheduler.every",
+        "description": "Create an interval trigger.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scrape.cli_commands",
+        "description": "Return CLI commands for the scrape module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scrape.get_config",
+        "description": "Get the global configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.scrape.reset_config",
+        "description": "Reset the global configuration to None.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.scrape.set_config",
+        "description": "Set the global configuration instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.search.cli_commands",
+        "description": "Return CLI commands for the search module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.search.create_index",
+        "description": "Create a search index.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.search.quick_search",
+        "description": "Quick search over a list of strings.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.search_codebase",
+        "description": "Search for patterns in code files (regex supported)",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.search_memory",
+        "description": "Search agentic long-term memory.\n\nArgs:\n    query: Search query string\n    limit: Max number of results (default: 5)\n    \nReturns:\n    List of matching memory items with scores.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_communication",
+        "description": "Analyze communication.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_directory_security",
+        "description": "Convenience function to analyze a directory.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_email",
+        "description": "Analyze email for phishing.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_file_security",
+        "description": "Convenience function to analyze a file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_threats",
+        "description": "Analyze threats in a threat model.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.analyze_user_behavior",
+        "description": "Analyze user behavior.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.apply_framework",
+        "description": "Apply a security framework to a context.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.apply_pattern",
+        "description": "Apply a security pattern to a context.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.apply_principle",
+        "description": "Apply a security principle to a context.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.assess_cognitive_threats",
+        "description": "Assess cognitive threats.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.assess_physical_security",
+        "description": "Assess physical security.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.assess_risk",
+        "description": "Perform a risk assessment.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.assess_training_effectiveness",
+        "description": "Assess training effectiveness.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.audit_access_logs",
+        "description": "Convenience function to audit access logs for security events.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.audit_code_security",
+        "description": "Convenience function for code security auditing.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.calculate_risk_score",
+        "description": "Calculate risk score from likelihood and impact.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.check_access_permission",
+        "description": "Check access permission.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.check_compliance",
+        "description": "Convenience function for compliance checking.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.check_compliance_with_practices",
+        "description": "Check compliance with security best practices.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.check_perimeter_security",
+        "description": "Check perimeter security.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.create_threat_model",
+        "description": "Create a threat model for a system.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.security.create_training_module",
+        "description": "Create a training module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.security.detect_anomalous_behavior",
+        "description": "Detect anomalous behavior.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.detect_phishing_attempt",
+        "description": "Detect if email is a phishing attempt.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.detect_social_engineering",
+        "description": "Detect social engineering.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.evaluate_human_factors",
+        "description": "Evaluate human factors.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.generate_security_report",
+        "description": "Convenience function.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.get_asset_status",
+        "description": "Get asset status.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.security.get_best_practices",
+        "description": "Get security best practices, optionally filtered by category.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.get_framework",
+        "description": "Get a security framework by name.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.get_security_patterns",
+        "description": "Get all security architecture patterns.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.get_security_principles",
+        "description": "Get all security principles.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.grant_access",
+        "description": "Grant access permission.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.log_physical_event",
+        "description": "Log a physical event.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.manage_access_points",
+        "description": "Manage access points.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.monitor_physical_access",
+        "description": "Monitor physical access.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.monitor_security_events",
+        "description": "Convenience function to create and start security monitoring.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.register_asset",
+        "description": "Register a new asset.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.security.revoke_access",
+        "description": "Revoke access permission.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.scan_physical_vulnerabilities",
+        "description": "Scan for physical vulnerabilities.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.scan_vulnerabilities",
+        "description": "Convenience function to scan vulnerabilities.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.security.track_asset",
+        "description": "Track an asset.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.security_audit_code",
+        "description": "Audit code quality and security for a specific file or directory.\n\nArgs:\n    path: Path to file or directory\n    \nReturns:\n    Audit results.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.serialization.cli_commands",
+        "description": "Return CLI commands for the serialization module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.serialization.deserialize",
+        "description": "Deserialize data to an object.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.serialization.serialize",
+        "description": "Serialize an object to bytes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.service_mesh.cli_commands",
+        "description": "Return CLI commands for the service_mesh module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.service_mesh.with_circuit_breaker",
+        "description": "Decorator for circuit breaker protection.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.service_mesh.with_retry",
+        "description": "Decorator for retry logic.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.skills.cli_commands",
+        "description": "Return CLI commands for the skills module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.skills.get_skills_manager",
+        "description": "Get a configured SkillsManager instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.smart_contracts.cli_commands",
+        "description": "Return CLI commands for the smart_contracts module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.smart_contracts.ether_to_wei",
+        "description": "Call smart_contracts.ether_to_wei",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.smart_contracts.gwei_to_wei",
+        "description": "Call smart_contracts.gwei_to_wei",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.smart_contracts.wei_to_ether",
+        "description": "Call smart_contracts.wei_to_ether",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.spatial.cli_commands",
+        "description": "Return CLI commands for the spatial module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.stash_changes",
+        "description": "Stash current changes.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.analyze_code_quality",
+        "description": "Analyze code quality for workflow integration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.analyze_codebase",
+        "description": "Alias for analyze_project for backward compatibility.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.check_pyrefly_available",
+        "description": "Check if Pyrefly is available.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.cli_commands",
+        "description": "Return CLI commands for the static_analysis module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.get_available_tools",
+        "description": "Get list of available analysis tools.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.static_analysis.run_pyrefly",
+        "description": "Run Pyrefly analysis on a path.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.streaming.broadcast",
+        "description": "Broadcast an event to multiple streams.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.streaming.cli_commands",
+        "description": "Return CLI commands for the streaming module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.streaming.create_event",
+        "description": "Create a new event.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.switch_branch",
+        "description": "Switch to an existing Git branch.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.telemetry.cli_commands",
+        "description": "Return CLI commands for the telemetry module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.telemetry.get_current_span",
+        "description": "Get the currently active span.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.telemetry.link_span",
+        "description": "Link two spans together (e.g. for async producer/consumer).",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.telemetry.start_span",
+        "description": "Start a new span.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.telemetry.traced",
+        "description": "Decorator to automatically wrap a function in a span.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.templating.cli_commands",
+        "description": "Return CLI commands for the templating module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.templating.get_default_engine",
+        "description": "Get or create default template engine instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.templating.render",
+        "description": "Render a template string with context data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.templating.render_file",
+        "description": "Load and render a template file.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.terminal_interface.cli_commands",
+        "description": "Return CLI commands for the terminal_interface module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.testing.cli_commands",
+        "description": "Return CLI commands for the testing module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.testing.fixture",
+        "description": "Decorator to create fixtures.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.testing.property_test",
+        "description": "Decorator for property-based tests.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.tool_use.tool",
+        "description": "Decorator that marks a function as a tool and optionally registers it.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.tool_use.validate_input",
+        "description": "Validate tool input data against a JSON-schema-like specification.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.tool_use.validate_output",
+        "description": "Validate tool output data against a JSON-schema-like specification.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.async_retry",
+        "description": "Async retry with exponential backoff.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.async_timed_operation",
+        "description": "Async context manager for timing operations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.check_command_available",
+        "description": "Check if a command is available on the system.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.deep_merge",
+        "description": "Deep merge two dictionaries.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.ensure_directory",
+        "description": "Ensure a directory exists, creating it if necessary.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.flatten_dict",
+        "description": "Flatten a nested dictionary.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.gather_with_concurrency",
+        "description": "Run coroutines with limited concurrency.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.get_command_version",
+        "description": "Get the version string of a command.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.get_env",
+        "description": "Get environment variable with options.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.get_timestamp",
+        "description": "Get current timestamp as formatted string.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.hash_content",
+        "description": "Generate hash of content.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.hash_file",
+        "description": "Generate hash of file contents.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.log_performance",
+        "description": "Decorator to log function performance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.make_async",
+        "description": "Convert sync function to async.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.quote_command",
+        "description": "Safely quote a command for shell execution.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.retry",
+        "description": "Decorator for retrying failed operations with exponential backoff.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.run_async",
+        "description": "Run an async function from sync context.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.run_command",
+        "description": "Execute a command synchronously.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.run_command_async",
+        "description": "Execute a command asynchronously.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.run_script",
+        "description": "Convenience function to run a simple script.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.run_with_retry",
+        "description": "Execute a command with retry logic for flaky commands.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.safe_json_dumps",
+        "description": "Safely serialize to JSON with fallback.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.safe_json_loads",
+        "description": "Safely parse JSON with a fallback default.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.setup_module_logging",
+        "description": "Set up logging for a module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.split_command",
+        "description": "Split a command string into list of arguments.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.stream_command",
+        "description": "Execute a command and yield output lines in real-time.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.timed_operation",
+        "description": "Context manager for timing operations.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.timing_decorator",
+        "description": "Decorator to measure function execution time.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.utils.truncate_string",
+        "description": "Truncate string to maximum length with suffix.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.utils.with_retry",
+        "description": "Decorator for retry logic with exponential backoff.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.validation.cli_commands",
+        "description": "Return CLI commands for the validation module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.validation.get_errors",
+        "description": "Get validation errors for data.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.validation.is_valid",
+        "description": "Check if data is valid against a schema.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.validation.validate",
+        "description": "Validate data against a schema.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.vector_store.cli_commands",
+        "description": "Return CLI commands for the vector_store module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.vector_store.create_vector_store",
+        "description": "Create a vector store with the specified backend.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.vector_store.normalize_embedding",
+        "description": "Normalize an embedding to unit length.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.video.cli_commands",
+        "description": "Return CLI commands for the video module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.video.configure",
+        "description": "Configure video processing settings.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.video.get_config",
+        "description": "Get the global video configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.video.reset_config",
+        "description": "Reset configuration to defaults.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.video.set_config",
+        "description": "Set the global video configuration.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.wallet.cli_commands",
+        "description": "Return CLI commands for the wallet module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.wallet.create_wallet",
+        "description": "Convenience function to create a wallet for a user.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "untrusted"
+      },
+      {
+        "name": "codomyrmex.wallet.get_wallet_manager",
+        "description": "Get a WalletManager instance.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.wallet.hash_response",
+        "description": "Hash a ritual response for storage or comparison.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.workflow_testing.cli_commands",
+        "description": "Return CLI commands for the workflow_testing module.",
+        "has_handler": true,
+        "category": "safe",
+        "trust_level": "verified"
+      },
+      {
+        "name": "codomyrmex.write_file",
+        "description": "Write content to a file",
+        "has_handler": true,
+        "category": "destructive",
+        "trust_level": "untrusted"
+      }
+    ]
+  },
+  "resources": {
+    "count": 2,
+    "expected": 2,
+    "items": [
+      {
+        "uri": "codomyrmex://modules",
+        "name": "Module Inventory",
+        "description": "Complete list of all Codomyrmex modules with descriptions"
+      },
+      {
+        "uri": "codomyrmex://status",
+        "name": "System Status",
+        "description": "Current Codomyrmex system status including PAI integration"
+      }
+    ]
+  },
+  "prompts": {
+    "count": 5,
+    "expected": 5,
+    "items": [
+      {
+        "name": "codomyrmex.analyze_module",
+        "description": "Analyze a Codomyrmex module \u2014 structure, exports, tests, documentation"
+      },
+      {
+        "name": "codomyrmex.debug_issue",
+        "description": "Debug an issue using Codomyrmex tools"
+      },
+      {
+        "name": "codomyrmex.create_test",
+        "description": "Generate tests for a Codomyrmex module"
+      },
+      {
+        "name": "codomyrmexVerify",
+        "description": "Verify all Codomyrmex capabilities available to Claude Code via MCP"
+      },
+      {
+        "name": "codomyrmexTrust",
+        "description": "Trust Codomyrmex tools for full execution in Claude Code"
+      }
+    ]
+  },
+  "mcp_server": {
+    "healthy": true,
+    "tools": 607,
+    "resources": 2,
+    "prompts": 5
+  },
+  "pai_bridge": {
+    "installed": true,
+    "components": {
+      "algorithm": {
+        "exists": true,
+        "count": 1,
+        "path": "/Users/mini/.claude/skills/PAI/SKILL.md"
+      },
+      "skills": {
+        "exists": true,
+        "count": 45,
+        "path": "/Users/mini/.claude/skills"
+      },
+      "tools": {
+        "exists": true,
+        "count": 62,
+        "path": "/Users/mini/.claude/skills/PAI/Tools"
+      },
+      "agents": {
+        "exists": true,
+        "count": 15,
+        "path": "/Users/mini/.claude/agents"
+      },
+      "memory": {
+        "exists": true,
+        "count": 13,
+        "path": "/Users/mini/.claude/MEMORY"
+      },
+      "hooks": {
+        "exists": true,
+        "count": 33,
+        "path": "/Users/mini/.claude/hooks"
+      },
+      "security": {
+        "exists": true,
+        "count": 6,
+        "path": "/Users/mini/.claude/skills/PAI/PAISECURITYSYSTEM"
+      },
+      "components": {
+        "exists": true,
+        "count": 7,
+        "path": "/Users/mini/.claude/skills/PAI/Components"
+      }
+    }
+  },
+  "skill_manifest": {
+    "valid": true,
+    "version": "0.4.0"
+  },
+  "trust": {
+    "promoted_to_verified": [],
+    "current_state": {
+      "total_tools": 607,
+      "by_level": {
+        "untrusted": [
+          "codomyrmex.agents.reset_config",
+          "codomyrmex.agents.set_config",
+          "codomyrmex.api.create_api",
+          "codomyrmex.api.create_authenticator",
+          "codomyrmex.api.create_field",
+          "codomyrmex.api.create_fixture",
+          "codomyrmex.api.create_mock_server",
+          "codomyrmex.api.create_object_type",
+          "codomyrmex.api.create_openapi_from_graphql_api",
+          "codomyrmex.api.create_openapi_from_rest_api",
+          "codomyrmex.api.create_paginator",
+          "codomyrmex.api.create_rate_limiter",
+          "codomyrmex.api.create_router",
+          "codomyrmex.api.create_schema",
+          "codomyrmex.api.create_version_manager",
+          "codomyrmex.api.create_versioned_endpoint",
+          "codomyrmex.api.create_webhook_dispatcher",
+          "codomyrmex.api.create_webhook_registry",
+          "codomyrmex.build_synthesis.create_docker_build_target",
+          "codomyrmex.build_synthesis.create_python_build_target",
+          "codomyrmex.build_synthesis.create_static_build_target",
+          "codomyrmex.build_synthesis.run_build_command",
+          "codomyrmex.call_module_function",
+          "codomyrmex.ci_cd_automation.create_pipeline",
+          "codomyrmex.ci_cd_automation.run_pipeline",
+          "codomyrmex.cli.handle_project_create",
+          "codomyrmex.cli.handle_skills_get",
+          "codomyrmex.cli.handle_skills_list",
+          "codomyrmex.cli.handle_skills_search",
+          "codomyrmex.cli.handle_skills_sync",
+          "codomyrmex.cli.handle_workflow_create",
+          "codomyrmex.cli.run_interactive_shell",
+          "codomyrmex.cli.run_workflow",
+          "codomyrmex.cloud.create_openstack_connection",
+          "codomyrmex.cloud.create_s3_client",
+          "codomyrmex.coding.execute_with_limits",
+          "codomyrmex.coding.run_code_in_docker",
+          "codomyrmex.data_visualization.create_advanced_bar_chart",
+          "codomyrmex.data_visualization.create_advanced_dashboard",
+          "codomyrmex.data_visualization.create_advanced_heatmap",
+          "codomyrmex.data_visualization.create_advanced_histogram",
+          "codomyrmex.data_visualization.create_advanced_line_plot",
+          "codomyrmex.data_visualization.create_advanced_scatter_plot",
+          "codomyrmex.data_visualization.create_area_chart",
+          "codomyrmex.data_visualization.create_bar_chart",
+          "codomyrmex.data_visualization.create_box_plot",
+          "codomyrmex.data_visualization.create_dashboard",
+          "codomyrmex.data_visualization.create_git_tree_mermaid",
+          "codomyrmex.data_visualization.create_git_tree_png",
+          "codomyrmex.data_visualization.create_heatmap",
+          "codomyrmex.data_visualization.create_heatmap_advanced",
+          "codomyrmex.data_visualization.create_histogram",
+          "codomyrmex.data_visualization.create_line_plot",
+          "codomyrmex.data_visualization.create_scatter_plot",
+          "codomyrmex.database_management.run_migrations",
+          "codomyrmex.deployment.create_strategy",
+          "codomyrmex.documentation.run_command_stream_output",
+          "codomyrmex.documents.create_index",
+          "codomyrmex.documents.set_config",
+          "codomyrmex.documents.update_metadata",
+          "codomyrmex.documents.write_csv",
+          "codomyrmex.documents.write_document",
+          "codomyrmex.documents.write_html",
+          "codomyrmex.documents.write_json",
+          "codomyrmex.documents.write_markdown",
+          "codomyrmex.documents.write_pdf",
+          "codomyrmex.documents.write_text",
+          "codomyrmex.documents.write_xml",
+          "codomyrmex.documents.write_yaml",
+          "codomyrmex.environment_setup.check_and_setup_env_vars",
+          "codomyrmex.evolutionary_ai.create_crossover",
+          "codomyrmex.evolutionary_ai.create_mutation",
+          "codomyrmex.evolutionary_ai.create_selection",
+          "codomyrmex.evolutionary_ai.mutate",
+          "codomyrmex.exceptions.create_error_context",
+          "codomyrmex.git_operations.create_git_analysis_report",
+          "codomyrmex.git_operations.create_git_workflow_diagram",
+          "codomyrmex.git_operations.create_github_repository",
+          "codomyrmex.git_operations.create_pull_request",
+          "codomyrmex.git_operations.delete_github_repository",
+          "codomyrmex.git_operations.remove_remote",
+          "codomyrmex.git_operations.reset_changes",
+          "codomyrmex.git_operations.set_config",
+          "codomyrmex.llm.create_mcp_bridge_from_registry",
+          "codomyrmex.llm.reset_config",
+          "codomyrmex.llm.set_config",
+          "codomyrmex.logging_monitoring.setup_logging",
+          "codomyrmex.model_evaluation.create_default_scorer",
+          "codomyrmex.model_ops.create_evaluator",
+          "codomyrmex.orchestrator.create_pipeline_workflow",
+          "codomyrmex.orchestrator.run",
+          "codomyrmex.orchestrator.run_agent_task",
+          "codomyrmex.orchestrator.run_async",
+          "codomyrmex.orchestrator.run_ci_stage",
+          "codomyrmex.orchestrator.run_function",
+          "codomyrmex.orchestrator.run_orchestrator",
+          "codomyrmex.orchestrator.run_parallel",
+          "codomyrmex.orchestrator.run_parallel_async",
+          "codomyrmex.orchestrator.run_script",
+          "codomyrmex.pattern_matching.run_codomyrmex_analysis",
+          "codomyrmex.pattern_matching.run_full_analysis",
+          "codomyrmex.performance.run_benchmark",
+          "codomyrmex.rate_limiting.create_limiter",
+          "codomyrmex.run_command",
+          "codomyrmex.run_tests",
+          "codomyrmex.scrape.reset_config",
+          "codomyrmex.scrape.set_config",
+          "codomyrmex.search.create_index",
+          "codomyrmex.security.create_threat_model",
+          "codomyrmex.security.create_training_module",
+          "codomyrmex.security.get_asset_status",
+          "codomyrmex.security.register_asset",
+          "codomyrmex.security.track_asset",
+          "codomyrmex.skills.get_skills_manager",
+          "codomyrmex.static_analysis.run_pyrefly",
+          "codomyrmex.streaming.create_event",
+          "codomyrmex.utils.run_async",
+          "codomyrmex.utils.run_command",
+          "codomyrmex.utils.run_command_async",
+          "codomyrmex.utils.run_script",
+          "codomyrmex.utils.run_with_retry",
+          "codomyrmex.utils.setup_module_logging",
+          "codomyrmex.utils.truncate_string",
+          "codomyrmex.vector_store.create_vector_store",
+          "codomyrmex.video.reset_config",
+          "codomyrmex.video.set_config",
+          "codomyrmex.wallet.create_wallet",
+          "codomyrmex.write_file"
+        ],
+        "verified": [
+          "codomyrmex.accessibility.calculate_contrast_ratio",
+          "codomyrmex.accessibility.check_heading_hierarchy",
+          "codomyrmex.accessibility.cli_commands",
+          "codomyrmex.add_memory",
+          "codomyrmex.agentic_memory.cli_commands",
+          "codomyrmex.agents.clean_response",
+          "codomyrmex.agents.cli_commands",
+          "codomyrmex.agents.get_config",
+          "codomyrmex.agents.parse_code_blocks",
+          "codomyrmex.agents.parse_first_code_block",
+          "codomyrmex.agents.parse_json_response",
+          "codomyrmex.agents.parse_structured_output",
+          "codomyrmex.analyze_file",
+          "codomyrmex.analyze_project",
+          "codomyrmex.analyze_python",
+          "codomyrmex.api.circuit_breaker_decorator",
+          "codomyrmex.api.cli_commands",
+          "codomyrmex.api.deprecated_version",
+          "codomyrmex.api.extract_api_specs",
+          "codomyrmex.api.generate_api_docs",
+          "codomyrmex.api.generate_openapi_spec_from_api",
+          "codomyrmex.api.generate_openapi_spec_from_docs",
+          "codomyrmex.api.mutation",
+          "codomyrmex.api.resolver",
+          "codomyrmex.api.retry",
+          "codomyrmex.api.validate_openapi_spec",
+          "codomyrmex.api.version",
+          "codomyrmex.apply_stash",
+          "codomyrmex.ask",
+          "codomyrmex.audio.cli_commands",
+          "codomyrmex.auth.authenticate",
+          "codomyrmex.auth.authorize",
+          "codomyrmex.auth.cli_commands",
+          "codomyrmex.auth.get_authenticator",
+          "codomyrmex.build_synthesis.check_build_environment",
+          "codomyrmex.build_synthesis.cli_commands",
+          "codomyrmex.build_synthesis.get_available_build_types",
+          "codomyrmex.build_synthesis.get_available_environments",
+          "codomyrmex.build_synthesis.orchestrate_build_pipeline",
+          "codomyrmex.build_synthesis.synthesize_build_artifact",
+          "codomyrmex.build_synthesis.trigger_build",
+          "codomyrmex.build_synthesis.validate_build_output",
+          "codomyrmex.cache.cli_commands",
+          "codomyrmex.cache.get_cache",
+          "codomyrmex.cerebrum.cli_commands",
+          "codomyrmex.cerebrum.compute_cosine_similarity",
+          "codomyrmex.cerebrum.compute_euclidean_distance",
+          "codomyrmex.cerebrum.compute_hash",
+          "codomyrmex.cerebrum.normalize_features",
+          "codomyrmex.cerebrum.softmax",
+          "codomyrmex.chaos_engineering.cli_commands",
+          "codomyrmex.chaos_engineering.with_chaos",
+          "codomyrmex.checksum_file",
+          "codomyrmex.ci_cd_automation.cli_commands",
+          "codomyrmex.ci_cd_automation.generate_pipeline_reports",
+          "codomyrmex.ci_cd_automation.handle_rollback",
+          "codomyrmex.ci_cd_automation.manage_deployments",
+          "codomyrmex.ci_cd_automation.monitor_pipeline_health",
+          "codomyrmex.ci_cd_automation.optimize_pipeline_performance",
+          "codomyrmex.cli.check_environment",
+          "codomyrmex.cli.demo_ai_code_editing",
+          "codomyrmex.cli.demo_code_execution",
+          "codomyrmex.cli.demo_data_visualization",
+          "codomyrmex.cli.demo_git_operations",
+          "codomyrmex.cli.handle_ai_generate",
+          "codomyrmex.cli.handle_ai_refactor",
+          "codomyrmex.cli.handle_code_analysis",
+          "codomyrmex.cli.handle_fpf_analyze",
+          "codomyrmex.cli.handle_fpf_context",
+          "codomyrmex.cli.handle_fpf_export",
+          "codomyrmex.cli.handle_fpf_export_section",
+          "codomyrmex.cli.handle_fpf_fetch",
+          "codomyrmex.cli.handle_fpf_parse",
+          "codomyrmex.cli.handle_fpf_report",
+          "codomyrmex.cli.handle_fpf_search",
+          "codomyrmex.cli.handle_fpf_visualize",
+          "codomyrmex.cli.handle_git_analysis",
+          "codomyrmex.cli.handle_module_demo",
+          "codomyrmex.cli.handle_module_test",
+          "codomyrmex.cli.handle_orchestration_health",
+          "codomyrmex.cli.handle_orchestration_status",
+          "codomyrmex.cli.handle_project_build",
+          "codomyrmex.cli.handle_project_list",
+          "codomyrmex.cli.list_workflows",
+          "codomyrmex.cli.main",
+          "codomyrmex.cli.show_info",
+          "codomyrmex.cli.show_modules",
+          "codomyrmex.cli.show_system_status",
+          "codomyrmex.clone_repository",
+          "codomyrmex.cloud.cli_commands",
+          "codomyrmex.coding.analyze_file",
+          "codomyrmex.coding.analyze_project",
+          "codomyrmex.coding.check_docker_available",
+          "codomyrmex.coding.check_quality_gates",
+          "codomyrmex.coding.cleanup_temp_files",
+          "codomyrmex.coding.cli_commands",
+          "codomyrmex.coding.generate_report",
+          "codomyrmex.coding.prepare_code_file",
+          "codomyrmex.coding.prepare_stdin_file",
+          "codomyrmex.coding.resource_limits_context",
+          "codomyrmex.coding.sandbox_process_isolation",
+          "codomyrmex.coding.validate_language",
+          "codomyrmex.coding.validate_session_id",
+          "codomyrmex.collaboration.cli_commands",
+          "codomyrmex.commit_changes",
+          "codomyrmex.compression.auto_decompress",
+          "codomyrmex.compression.cli_commands",
+          "codomyrmex.compression.compress",
+          "codomyrmex.compression.compress_data",
+          "codomyrmex.compression.compress_file",
+          "codomyrmex.compression.decompress",
+          "codomyrmex.compression.decompress_data",
+          "codomyrmex.compression.decompress_file",
+          "codomyrmex.compression.get_compressor",
+          "codomyrmex.concurrency.cli_commands",
+          "codomyrmex.config_management.cli_commands",
+          "codomyrmex.config_management.deploy_configuration",
+          "codomyrmex.config_management.encrypt_configuration",
+          "codomyrmex.config_management.load_configuration",
+          "codomyrmex.config_management.manage_secrets",
+          "codomyrmex.config_management.monitor_config_changes",
+          "codomyrmex.config_management.validate_configuration",
+          "codomyrmex.containerization.build_containers",
+          "codomyrmex.containerization.cli_commands",
+          "codomyrmex.containerization.manage_container_registry",
+          "codomyrmex.containerization.manage_containers",
+          "codomyrmex.containerization.optimize_containers",
+          "codomyrmex.containerization.orchestrate_kubernetes",
+          "codomyrmex.containerization.scan_container_security",
+          "codomyrmex.cost_management.cli_commands",
+          "codomyrmex.create_ascii_art",
+          "codomyrmex.create_bar_chart",
+          "codomyrmex.create_branch",
+          "codomyrmex.create_commit_timeline_diagram",
+          "codomyrmex.create_git_branch_diagram",
+          "codomyrmex.create_git_workflow_diagram",
+          "codomyrmex.create_line_plot",
+          "codomyrmex.create_pie_chart",
+          "codomyrmex.create_repository_structure_diagram",
+          "codomyrmex.create_tag",
+          "codomyrmex.dark.cli_commands",
+          "codomyrmex.data_lineage.cli_commands",
+          "codomyrmex.data_visualization.cli_commands",
+          "codomyrmex.data_visualization.get_available_palettes",
+          "codomyrmex.data_visualization.get_available_plot_types",
+          "codomyrmex.data_visualization.get_available_styles",
+          "codomyrmex.data_visualization.visualize_git_repository",
+          "codomyrmex.database_management.backup_database",
+          "codomyrmex.database_management.cli_commands",
+          "codomyrmex.database_management.generate_schema",
+          "codomyrmex.database_management.manage_databases",
+          "codomyrmex.database_management.monitor_database",
+          "codomyrmex.database_management.optimize_database",
+          "codomyrmex.dependency_injection.get_inject_metadata",
+          "codomyrmex.dependency_injection.get_injectable_metadata",
+          "codomyrmex.dependency_injection.get_injectable_params",
+          "codomyrmex.dependency_injection.inject",
+          "codomyrmex.dependency_injection.injectable",
+          "codomyrmex.dependency_injection.is_injectable",
+          "codomyrmex.deployment.cli_commands",
+          "codomyrmex.documentation.aggregate_docs",
+          "codomyrmex.documentation.assess_site",
+          "codomyrmex.documentation.build_static_site",
+          "codomyrmex.documentation.check_doc_environment",
+          "codomyrmex.documentation.cli_commands",
+          "codomyrmex.documentation.generate_quality_report",
+          "codomyrmex.documentation.install_dependencies",
+          "codomyrmex.documentation.print_assessment_checklist",
+          "codomyrmex.documentation.serve_static_site",
+          "codomyrmex.documentation.start_dev_server",
+          "codomyrmex.documentation.validate_doc_versions",
+          "codomyrmex.documents.build_query",
+          "codomyrmex.documents.cli_commands",
+          "codomyrmex.documents.convert_document",
+          "codomyrmex.documents.extract_metadata",
+          "codomyrmex.documents.format_document",
+          "codomyrmex.documents.get_config",
+          "codomyrmex.documents.get_document_version",
+          "codomyrmex.documents.index_document",
+          "codomyrmex.documents.merge_documents",
+          "codomyrmex.documents.parse_document",
+          "codomyrmex.documents.read_csv",
+          "codomyrmex.documents.read_document",
+          "codomyrmex.documents.read_html",
+          "codomyrmex.documents.read_json",
+          "codomyrmex.documents.read_markdown",
+          "codomyrmex.documents.read_pdf",
+          "codomyrmex.documents.read_text",
+          "codomyrmex.documents.read_xml",
+          "codomyrmex.documents.read_yaml",
+          "codomyrmex.documents.search_documents",
+          "codomyrmex.documents.search_index",
+          "codomyrmex.documents.split_document",
+          "codomyrmex.documents.validate_document",
+          "codomyrmex.edge_computing.cli_commands",
+          "codomyrmex.encryption.cli_commands",
+          "codomyrmex.encryption.compute_hmac",
+          "codomyrmex.encryption.decrypt",
+          "codomyrmex.encryption.decrypt_data",
+          "codomyrmex.encryption.decrypt_file",
+          "codomyrmex.encryption.derive_key_hkdf",
+          "codomyrmex.encryption.encrypt",
+          "codomyrmex.encryption.encrypt_data",
+          "codomyrmex.encryption.encrypt_file",
+          "codomyrmex.encryption.generate_aes_key",
+          "codomyrmex.encryption.generate_key",
+          "codomyrmex.encryption.get_encryptor",
+          "codomyrmex.encryption.hash_data",
+          "codomyrmex.encryption.verify_hmac",
+          "codomyrmex.environment_setup.cli_commands",
+          "codomyrmex.environment_setup.ensure_dependencies_installed",
+          "codomyrmex.environment_setup.is_uv_available",
+          "codomyrmex.environment_setup.is_uv_environment",
+          "codomyrmex.environment_setup.validate_python_version",
+          "codomyrmex.events.get_event_bus",
+          "codomyrmex.events.get_event_logger",
+          "codomyrmex.events.get_event_stats",
+          "codomyrmex.events.publish_event",
+          "codomyrmex.events.subscribe_to_events",
+          "codomyrmex.events.unsubscribe_from_events",
+          "codomyrmex.evolutionary_ai.cli_commands",
+          "codomyrmex.evolutionary_ai.crossover",
+          "codomyrmex.evolutionary_ai.tournament_selection",
+          "codomyrmex.exceptions.format_exception_chain",
+          "codomyrmex.execute_code",
+          "codomyrmex.feature_flags.cli_commands",
+          "codomyrmex.feature_store.cli_commands",
+          "codomyrmex.fpf.cli_commands",
+          "codomyrmex.generate_documentation",
+          "codomyrmex.generate_report",
+          "codomyrmex.get_commit_history",
+          "codomyrmex.get_current_branch",
+          "codomyrmex.get_module_readme",
+          "codomyrmex.get_status",
+          "codomyrmex.git_diff",
+          "codomyrmex.git_operations.add_files",
+          "codomyrmex.git_operations.add_remote",
+          "codomyrmex.git_operations.amend_commit",
+          "codomyrmex.git_operations.analyze_repository_structure",
+          "codomyrmex.git_operations.check_git_availability",
+          "codomyrmex.git_operations.cherry_pick",
+          "codomyrmex.git_operations.cli_commands",
+          "codomyrmex.git_operations.fetch_changes",
+          "codomyrmex.git_operations.get_config",
+          "codomyrmex.git_operations.get_diff",
+          "codomyrmex.git_operations.get_pull_request",
+          "codomyrmex.git_operations.get_pull_requests",
+          "codomyrmex.git_operations.get_repository_info",
+          "codomyrmex.git_operations.get_repository_metadata",
+          "codomyrmex.git_operations.is_git_repository",
+          "codomyrmex.git_operations.list_remotes",
+          "codomyrmex.git_operations.visualize_commit_activity",
+          "codomyrmex.git_operations.visualize_git_branches",
+          "codomyrmex.git_status",
+          "codomyrmex.graph_rag.cli_commands",
+          "codomyrmex.i18n.cli_commands",
+          "codomyrmex.i18n.init",
+          "codomyrmex.i18n.t",
+          "codomyrmex.ide.cli_commands",
+          "codomyrmex.identity.cli_commands",
+          "codomyrmex.inference_optimization.cli_commands",
+          "codomyrmex.initialize_git_repository",
+          "codomyrmex.json_query",
+          "codomyrmex.list_directory",
+          "codomyrmex.list_module_functions",
+          "codomyrmex.list_modules",
+          "codomyrmex.list_stashes",
+          "codomyrmex.list_tags",
+          "codomyrmex.llm.cli_commands",
+          "codomyrmex.llm.convert_tool_to_mcp",
+          "codomyrmex.llm.get_config",
+          "codomyrmex.logging_monitoring.cli_commands",
+          "codomyrmex.logging_monitoring.get_logger",
+          "codomyrmex.logistics.cli_commands",
+          "codomyrmex.maintenance.add_deprecation_notice",
+          "codomyrmex.maintenance.add_deprecation_notices_main",
+          "codomyrmex.maintenance.analyze_code_quality",
+          "codomyrmex.maintenance.analyze_project_dependencies",
+          "codomyrmex.maintenance.analyze_project_main",
+          "codomyrmex.maintenance.analyze_project_structure",
+          "codomyrmex.maintenance.check_dependencies",
+          "codomyrmex.maintenance.consolidate_dependencies",
+          "codomyrmex.maintenance.dependency_analyzer_main",
+          "codomyrmex.maintenance.dependency_checker_main",
+          "codomyrmex.maintenance.dependency_consolidator_main",
+          "codomyrmex.maintenance.generate_analysis_report",
+          "codomyrmex.maintenance.validate_dependencies_main",
+          "codomyrmex.market.cli_commands",
+          "codomyrmex.merge_branch",
+          "codomyrmex.metrics.cli_commands",
+          "codomyrmex.metrics.get_metrics",
+          "codomyrmex.migration.cli_commands",
+          "codomyrmex.model_context_protocol.cli_commands",
+          "codomyrmex.model_evaluation.analyze_quality",
+          "codomyrmex.model_ops.cli_commands",
+          "codomyrmex.model_ops.exact_match_metric",
+          "codomyrmex.model_ops.length_ratio_metric",
+          "codomyrmex.model_registry.cli_commands",
+          "codomyrmex.module_info",
+          "codomyrmex.multimodal.cli_commands",
+          "codomyrmex.networking.cli_commands",
+          "codomyrmex.networking.get_http_client",
+          "codomyrmex.notification.cli_commands",
+          "codomyrmex.observability_dashboard.cli_commands",
+          "codomyrmex.orchestrator.batch",
+          "codomyrmex.orchestrator.chain",
+          "codomyrmex.orchestrator.chain_scripts",
+          "codomyrmex.orchestrator.cli_commands",
+          "codomyrmex.orchestrator.condition",
+          "codomyrmex.orchestrator.discover_scripts",
+          "codomyrmex.orchestrator.fan_out_fan_in",
+          "codomyrmex.orchestrator.get_script_config",
+          "codomyrmex.orchestrator.load_config",
+          "codomyrmex.orchestrator.parallel",
+          "codomyrmex.orchestrator.pipe",
+          "codomyrmex.orchestrator.python_func",
+          "codomyrmex.orchestrator.retry",
+          "codomyrmex.orchestrator.shell",
+          "codomyrmex.orchestrator.step",
+          "codomyrmex.orchestrator.timeout",
+          "codomyrmex.orchestrator.workflow",
+          "codomyrmex.pai_awareness",
+          "codomyrmex.pai_status",
+          "codomyrmex.pattern_matching.analyze_repository_path",
+          "codomyrmex.pattern_matching.cli_commands",
+          "codomyrmex.pattern_matching.get_embedding_function",
+          "codomyrmex.pattern_matching.print_once",
+          "codomyrmex.performance.cached_function",
+          "codomyrmex.performance.cli_commands",
+          "codomyrmex.performance.get_system_metrics",
+          "codomyrmex.performance.lazy_import",
+          "codomyrmex.performance.monitor_performance",
+          "codomyrmex.performance.profile_function",
+          "codomyrmex.plugin_system.cli_commands",
+          "codomyrmex.privacy.cli_commands",
+          "codomyrmex.prompt_engineering.cli_commands",
+          "codomyrmex.prompt_engineering.get_default_criteria",
+          "codomyrmex.prompt_engineering.get_default_registry",
+          "codomyrmex.prompt_engineering.list_strategies",
+          "codomyrmex.prompt_engineering.list_templates",
+          "codomyrmex.prompt_engineering.quick_evaluate",
+          "codomyrmex.prompt_engineering.score_completeness",
+          "codomyrmex.prompt_engineering.score_relevance",
+          "codomyrmex.prompt_engineering.score_response_length",
+          "codomyrmex.prompt_engineering.score_structure",
+          "codomyrmex.prompt_testing.cli_commands",
+          "codomyrmex.pull_changes",
+          "codomyrmex.push_changes",
+          "codomyrmex.quantum.bell_state",
+          "codomyrmex.quantum.circuit_stats",
+          "codomyrmex.quantum.circuit_to_ascii",
+          "codomyrmex.quantum.cli_commands",
+          "codomyrmex.quantum.ghz_state",
+          "codomyrmex.quantum.qft",
+          "codomyrmex.rate_limiting.cli_commands",
+          "codomyrmex.read_file",
+          "codomyrmex.rebase_branch",
+          "codomyrmex.scan_project_security",
+          "codomyrmex.scheduler.at",
+          "codomyrmex.scheduler.cli_commands",
+          "codomyrmex.scheduler.cron",
+          "codomyrmex.scheduler.every",
+          "codomyrmex.scrape.cli_commands",
+          "codomyrmex.scrape.get_config",
+          "codomyrmex.search.cli_commands",
+          "codomyrmex.search.quick_search",
+          "codomyrmex.search_codebase",
+          "codomyrmex.search_memory",
+          "codomyrmex.security.analyze_communication",
+          "codomyrmex.security.analyze_directory_security",
+          "codomyrmex.security.analyze_email",
+          "codomyrmex.security.analyze_file_security",
+          "codomyrmex.security.analyze_threats",
+          "codomyrmex.security.analyze_user_behavior",
+          "codomyrmex.security.apply_framework",
+          "codomyrmex.security.apply_pattern",
+          "codomyrmex.security.apply_principle",
+          "codomyrmex.security.assess_cognitive_threats",
+          "codomyrmex.security.assess_physical_security",
+          "codomyrmex.security.assess_risk",
+          "codomyrmex.security.assess_training_effectiveness",
+          "codomyrmex.security.audit_access_logs",
+          "codomyrmex.security.audit_code_security",
+          "codomyrmex.security.calculate_risk_score",
+          "codomyrmex.security.check_access_permission",
+          "codomyrmex.security.check_compliance",
+          "codomyrmex.security.check_compliance_with_practices",
+          "codomyrmex.security.check_perimeter_security",
+          "codomyrmex.security.detect_anomalous_behavior",
+          "codomyrmex.security.detect_phishing_attempt",
+          "codomyrmex.security.detect_social_engineering",
+          "codomyrmex.security.evaluate_human_factors",
+          "codomyrmex.security.generate_security_report",
+          "codomyrmex.security.get_best_practices",
+          "codomyrmex.security.get_framework",
+          "codomyrmex.security.get_security_patterns",
+          "codomyrmex.security.get_security_principles",
+          "codomyrmex.security.grant_access",
+          "codomyrmex.security.log_physical_event",
+          "codomyrmex.security.manage_access_points",
+          "codomyrmex.security.monitor_physical_access",
+          "codomyrmex.security.monitor_security_events",
+          "codomyrmex.security.revoke_access",
+          "codomyrmex.security.scan_physical_vulnerabilities",
+          "codomyrmex.security.scan_vulnerabilities",
+          "codomyrmex.security_audit_code",
+          "codomyrmex.serialization.cli_commands",
+          "codomyrmex.serialization.deserialize",
+          "codomyrmex.serialization.serialize",
+          "codomyrmex.service_mesh.cli_commands",
+          "codomyrmex.service_mesh.with_circuit_breaker",
+          "codomyrmex.service_mesh.with_retry",
+          "codomyrmex.skills.cli_commands",
+          "codomyrmex.smart_contracts.cli_commands",
+          "codomyrmex.smart_contracts.ether_to_wei",
+          "codomyrmex.smart_contracts.gwei_to_wei",
+          "codomyrmex.smart_contracts.wei_to_ether",
+          "codomyrmex.spatial.cli_commands",
+          "codomyrmex.stash_changes",
+          "codomyrmex.static_analysis.analyze_code_quality",
+          "codomyrmex.static_analysis.analyze_codebase",
+          "codomyrmex.static_analysis.check_pyrefly_available",
+          "codomyrmex.static_analysis.cli_commands",
+          "codomyrmex.static_analysis.get_available_tools",
+          "codomyrmex.streaming.broadcast",
+          "codomyrmex.streaming.cli_commands",
+          "codomyrmex.switch_branch",
+          "codomyrmex.telemetry.cli_commands",
+          "codomyrmex.telemetry.get_current_span",
+          "codomyrmex.telemetry.link_span",
+          "codomyrmex.telemetry.start_span",
+          "codomyrmex.telemetry.traced",
+          "codomyrmex.templating.cli_commands",
+          "codomyrmex.templating.get_default_engine",
+          "codomyrmex.templating.render",
+          "codomyrmex.templating.render_file",
+          "codomyrmex.terminal_interface.cli_commands",
+          "codomyrmex.testing.cli_commands",
+          "codomyrmex.testing.fixture",
+          "codomyrmex.testing.property_test",
+          "codomyrmex.tool_use.tool",
+          "codomyrmex.tool_use.validate_input",
+          "codomyrmex.tool_use.validate_output",
+          "codomyrmex.utils.async_retry",
+          "codomyrmex.utils.async_timed_operation",
+          "codomyrmex.utils.check_command_available",
+          "codomyrmex.utils.deep_merge",
+          "codomyrmex.utils.ensure_directory",
+          "codomyrmex.utils.flatten_dict",
+          "codomyrmex.utils.gather_with_concurrency",
+          "codomyrmex.utils.get_command_version",
+          "codomyrmex.utils.get_env",
+          "codomyrmex.utils.get_timestamp",
+          "codomyrmex.utils.hash_content",
+          "codomyrmex.utils.hash_file",
+          "codomyrmex.utils.log_performance",
+          "codomyrmex.utils.make_async",
+          "codomyrmex.utils.quote_command",
+          "codomyrmex.utils.retry",
+          "codomyrmex.utils.safe_json_dumps",
+          "codomyrmex.utils.safe_json_loads",
+          "codomyrmex.utils.split_command",
+          "codomyrmex.utils.stream_command",
+          "codomyrmex.utils.timed_operation",
+          "codomyrmex.utils.timing_decorator",
+          "codomyrmex.utils.with_retry",
+          "codomyrmex.validation.cli_commands",
+          "codomyrmex.validation.get_errors",
+          "codomyrmex.validation.is_valid",
+          "codomyrmex.validation.validate",
+          "codomyrmex.vector_store.cli_commands",
+          "codomyrmex.vector_store.normalize_embedding",
+          "codomyrmex.video.cli_commands",
+          "codomyrmex.video.configure",
+          "codomyrmex.video.get_config",
+          "codomyrmex.wallet.cli_commands",
+          "codomyrmex.wallet.get_wallet_manager",
+          "codomyrmex.wallet.hash_response",
+          "codomyrmex.workflow_testing.cli_commands"
+        ],
+        "trusted": []
+      },
+      "counts": {
+        "untrusted": 128,
+        "verified": 479,
+        "trusted": 0
+      }
+    }
+  }
+}

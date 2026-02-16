@@ -267,7 +267,7 @@ class TestConstants:
         assert RESOURCE_COUNT == 2
 
     def test_prompt_count(self):
-        assert PROMPT_COUNT == 5  # 3 original + codomyrmexVerify + codomyrmexTrust
+        assert PROMPT_COUNT == 10  # 3 original + 7 expansion prompts
 
     def test_direct_call_matches_registry(self):
         """call_tool and get_tool_registry should expose the same tools."""

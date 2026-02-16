@@ -219,7 +219,7 @@ class TestVerifyCapabilities:
 
     def test_has_prompts_section(self):
         report = verify_capabilities()
-        assert report["prompts"]["count"] == 5  # 3 original + codomyrmexVerify + codomyrmexTrust
+        assert report["prompts"]["count"] == 10  # 3 original + 7 expansion prompts
 
     def test_mcp_server_healthy(self):
         report = verify_capabilities()

@@ -576,6 +576,42 @@ _PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
         ),
     ),
     (
+        "codomyrmexAnalyze",
+        "Perform deep analysis of a Codomyrmex project or specific file",
+        [{"name": "path", "description": "Path to analyze (default: '.')", "required": False}],
+        "Run the /codomyrmexAnalyze workflow for deep structural and quality analysis of '{path}'.",
+    ),
+    (
+        "codomyrmexMemory",
+        "Add a new entry to the Codomyrmex agentic long-term memory",
+        [
+            {"name": "content", "description": "Content to remember", "required": True},
+            {"name": "importance", "description": "Importance score 1-10", "required": False},
+        ],
+        "Run the /codomyrmexMemory workflow to persist: '{content}' (Importance: {importance}).",
+    ),
+    (
+        "codomyrmexSearch",
+        "Search for patterns in the codebase using regex",
+        [
+            {"name": "pattern", "description": "Regex search pattern", "required": True},
+            {"name": "path", "description": "Search root path", "required": False},
+        ],
+        "Run the /codomyrmexSearch workflow for pattern '{pattern}' in '{path}'.",
+    ),
+    (
+        "codomyrmexDocs",
+        "Retrieve README or SPEC documentation for any Codomyrmex module",
+        [{"name": "module", "description": "Module name", "required": True}],
+        "Run the /codomyrmexDocs workflow to get documentation for module '{module}'.",
+    ),
+    (
+        "codomyrmexStatus",
+        "Get detailed system health and PAI awareness status",
+        [],
+        "Run the /codomyrmexStatus workflow for a full system health and PAI integration report.",
+    ),
+    (
         "codomyrmexVerify",
         "Verify all Codomyrmex capabilities available to Claude Code via MCP",
         [],
@@ -833,7 +869,7 @@ def get_skill_manifest() -> dict[str, Any]:
 
     return {
         "name": "Codomyrmex",
-        "version": "0.4.0",
+        "version": "0.1.0",
         "description": (
             "Modular coding workspace exposing 100+ modules for AI-assisted "
             "development, code analysis, testing, documentation, and automation."

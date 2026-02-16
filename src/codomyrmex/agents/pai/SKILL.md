@@ -4,7 +4,7 @@ description: Full-spectrum coding workspace skill providing 100+ modules for AI-
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 0.4.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server`
+**Version**: 0.1.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server`
 
 ## Description
 
@@ -42,9 +42,10 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 | `codomyrmex.checksum_file` | Data | Calculate file checksum |
 | `codomyrmex.list_modules` | Discovery | List all Codomyrmex modules |
 | `codomyrmex.module_info` | Discovery | Get module docstring, exports, path |
-| `codomyrmex.pai_status` | PAI | PAI installation status |
-| `codomyrmex.pai_awareness` | PAI | Full PAI awareness data |
-| `codomyrmex.run_tests` | Testing | Run pytest for any module |
+| `codomyrmex.run_tests`              | Testing   | Run pytest for any module            |
+| `codomyrmex.list_module_functions` | Discovery | List functions/classes in any module |
+| `codomyrmex.call_module_function`  | Discovery | Call any function in any module      |
+| `codomyrmex.get_module_readme`     | Discovery | Read module README/SPEC docs         |
 
 ## Resources
 
@@ -60,6 +61,13 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 | `codomyrmex.analyze_module` | Analyze a module (structure → tests → docs) |
 | `codomyrmex.debug_issue` | Debug an issue using codomyrmex tools |
 | `codomyrmex.create_test` | Generate zero-mock tests for a module |
+| `codomyrmexAnalyze` | Deep project/file analysis workflow |
+| `codomyrmexMemory`  | Add to agentic long-term memory     |
+| `codomyrmexSearch`  | Codebase regex search workflow      |
+| `codomyrmexDocs`    | Retrieve module documentation       |
+| `codomyrmexStatus`  | System health & PAI awareness report|
+| `codomyrmexVerify`  | Capability audit & trust promotion  |
+| `codomyrmexTrust`   | Destructive tool trust granting     |
 
 ## Algorithm Phase Mapping
 
@@ -77,7 +85,7 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 
 **When executing a workflow, output this notification directly:**
 
-```
+```bash
 Running the **WorkflowName** workflow in the **Codomyrmex** skill to ACTION...
 ```
 
@@ -90,19 +98,19 @@ Running the **WorkflowName** workflow in the **Codomyrmex** skill to ACTION...
 
 ### Analyze & Test
 
-```
+```bash
 list_modules → module_info → analyze_python → run_tests
 ```
 
 ### Code Review
 
-```
+```bash
 git_status → git_diff → search_codebase → analyze_python
 ```
 
 ### PAI Health Check
 
-```
+```bash
 pai_status → pai_awareness → list_modules
 ```
 
