@@ -14,7 +14,7 @@ Persists information into the agent's long-term memory for future retrieval and 
 
 ```bash
 cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
-from codomyrmex.agentic_memory.core import add_memory
+from codomyrmex.agentic_memory import add_memory
 import sys
 content = sys.argv[1] if len(sys.argv) > 1 else ''
 importance = int(sys.argv[2]) if len(sys.argv) > 2 else 5
@@ -26,6 +26,6 @@ print(result)
 " "{{content}}" "{{importance}}"
 ```
 
-2. Confirmation:
+1. Confirmation:
    - The memory is indexed and added to the RAG-enabled vector store.
    - It will be automatically retrieved during future task planning.

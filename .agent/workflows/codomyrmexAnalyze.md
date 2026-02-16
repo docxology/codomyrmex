@@ -14,7 +14,7 @@ Runs a comprehensive analysis of the specified path using the Codomyrmex coding 
 
 ```bash
 cd /Users/mini/Documents/GitHub/codomyrmex && uv run python -c "
-from codomyrmex.coding.execution.executor import analyze_project
+from codomyrmex.coding import analyze_project
 import json
 import sys
 path = sys.argv[1] if len(sys.argv) > 1 else '.'
