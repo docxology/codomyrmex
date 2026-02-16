@@ -869,7 +869,7 @@ def get_skill_manifest() -> dict[str, Any]:
 
     return {
         "name": "Codomyrmex",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "description": (
             "Modular coding workspace exposing 100+ modules for AI-assisted "
             "development, code analysis, testing, documentation, and automation."

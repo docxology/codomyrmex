@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
 
 ## System Concept
 

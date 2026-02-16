@@ -1,40 +1,37 @@
-# Personal AI Infrastructure — Agents Module
+# PAI Documentation Hub
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+Central navigation for **Personal AI Infrastructure (PAI)** integration with the Codomyrmex ecosystem.
 
-## Overview
+**Upstream**: [github.com/danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
-The Agents module supports Personal AI Infrastructure through autonomous task execution, code generation, and multi-agent coordination.
+## Documentation Suite
 
-## Local-First AI
+### Core
 
-Supports local LLM backends (Ollama, Fabric) for fully offline agent operations
+| Document | Purpose |
+|:---|:---|
+| [**README.md**](PAI/README.md) | Bidirectional architecture, PAI Principles mapping, quick start |
+| [**ARCHITECTURE.md**](PAI/ARCHITECTURE.md) | Three-layer deep dive (PAIBridge → MCPBridge → TrustGateway) |
+| [**FLOWS.md**](PAI/FLOWS.md) | 6 Mermaid diagrams for operational sequences |
+| [**SIGNPOSTS.md**](PAI/SIGNPOSTS.md) | Line-level code pointers to 60+ symbols |
+| [**AGENTS.md**](PAI/AGENTS.md) | Agent coordination guide |
 
-## PAI Capabilities
+### PAI Element Deep Dives
 
-- Local agent execution without cloud dependencies
-- Custom agent configurations via YAML
-- Multi-agent orchestration with local models
+| Document | PAI Element |
+|:---|:---|
+| [**ALGORITHM.md**](PAI/ALGORITHM.md) | The Algorithm v0.2.25 — 7 phases, ISC, depth levels |
+| [**SKILLS.md**](PAI/SKILLS.md) | Skill System — architecture, priority, assembly |
+| [**TELOS.md**](PAI/TELOS.md) | Deep Goal Understanding — 10 identity files, memory |
+| [**HOOKS.md**](PAI/HOOKS.md) | Hook System — 8 events, FormatReminder, security |
+| [**WORKFLOWS.md**](PAI/WORKFLOWS.md) | Workflows & Dispatch — v3.2.1, PMServer |
 
-## Detailed PAI Documentation
+## Quick Links
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/agents/PAI.md](../../../src/codomyrmex/agents/PAI.md)
-
-## Configuration
-
-See [README.md](README.md) for configuration options and environment variables.
-
-## Signposting
-
-### Navigation
-
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+| Resource | Path |
+|:---|:---|
+| PAI Bridge source | [`src/codomyrmex/agents/pai/pai_bridge.py`](../../../src/codomyrmex/agents/pai/pai_bridge.py) |
+| MCP Bridge source | [`src/codomyrmex/agents/pai/mcp_bridge.py`](../../../src/codomyrmex/agents/pai/mcp_bridge.py) |
+| Trust Gateway source | [`src/codomyrmex/agents/pai/trust_gateway.py`](../../../src/codomyrmex/agents/pai/trust_gateway.py) |
+| Claude Client source | [`src/codomyrmex/agents/claude/claude_client.py`](../../../src/codomyrmex/agents/claude/claude_client.py) |
+| Root PAI doc | [`PAI.md`](../../../PAI.md) |
