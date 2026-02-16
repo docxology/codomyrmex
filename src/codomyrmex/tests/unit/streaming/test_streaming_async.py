@@ -5,8 +5,8 @@ import asyncio
 import pytest
 
 try:
-    from codomyrmex.streaming import Event, EventType
-    from codomyrmex.streaming.async_stream import (
+    from codomyrmex.events.streaming import Event, EventType
+    from codomyrmex.events.streaming.async_stream import (
         AsyncStream,
         BatchingStream,
         WebSocketStream,

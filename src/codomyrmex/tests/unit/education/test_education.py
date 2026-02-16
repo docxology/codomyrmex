@@ -22,7 +22,7 @@ import json
 
 import pytest
 
-from codomyrmex.education.curriculum import Curriculum, DifficultyLevel, Lesson
+from codomyrmex.documentation.education.curriculum import Curriculum, DifficultyLevel, Lesson
 
 
 # ======================================================================
@@ -32,7 +32,7 @@ from codomyrmex.education.curriculum import Curriculum, DifficultyLevel, Lesson
 @pytest.mark.unit
 def test_module_import():
     """education module is importable."""
-    from codomyrmex import education
+    from codomyrmex.agents import education
     assert education is not None
 
 

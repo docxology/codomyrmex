@@ -75,6 +75,18 @@ import codomyrmex.telemetry
 uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`metrics/`** | Prometheus/StatsD metrics collection and aggregation |
+| **`dashboard/`** | Unified observability dashboards and alerting |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/telemetry/](../../../docs/modules/telemetry/)

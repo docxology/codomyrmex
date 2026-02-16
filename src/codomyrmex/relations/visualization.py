@@ -1,5 +1,5 @@
 from .crm import ContactManager
-from codomyrmex.visualization import MermaidDiagram
+from codomyrmex.data_visualization import MermaidDiagram
 
 
 def render_social_graph(cm: ContactManager) -> MermaidDiagram:

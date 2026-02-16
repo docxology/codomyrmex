@@ -89,6 +89,17 @@ result = get_available_styles()
 uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`visualization/`** | Multi-format chart export and unified visualization |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/data_visualization/](../../../docs/modules/data_visualization/)

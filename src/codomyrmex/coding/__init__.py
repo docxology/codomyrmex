@@ -5,6 +5,8 @@ debugging. Provides a comprehensive toolkit for running, analyzing, and
 fixing code programmatically.
 
 Submodules:
+    pattern_matching: Consolidated pattern matching capabilities.
+    static_analysis: Consolidated static analysis capabilities.
     execution: Sandboxed code execution with multi-language support.
     sandbox: Container isolation and resource limits.
     review: Static analysis and code quality assessment.
@@ -28,7 +30,7 @@ Example:
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -114,7 +116,13 @@ def cli_commands():
     }
 
 
+from . import static_analysis
+
+from . import pattern_matching
+
 __all__ = [
+    "pattern_matching",
+    "static_analysis",
     "cli_commands",
     # Execution
     "execute_code",

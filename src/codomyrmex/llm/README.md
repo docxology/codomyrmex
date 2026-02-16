@@ -116,6 +116,18 @@ with get_provider(ProviderType.OPENROUTER, api_key=key) as provider:
 uv run python -m pytest src/codomyrmex/tests/ -k llm -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`multimodal/`** | Vision and audio AI model support |
+| **`safety/`** | Content safety filtering and PII detection |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/llm/](../../../docs/modules/llm/)

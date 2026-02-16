@@ -4,6 +4,9 @@ Documentation Module for Codomyrmex.
 This module provides documentation management and website generation
 capabilities for the Codomyrmex project.
 
+Submodules:
+    education: Consolidated education capabilities.
+
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
@@ -23,7 +26,7 @@ Available functions:
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -70,7 +73,10 @@ def cli_commands():
     }
 
 
+from . import education
+
 __all__ = [
+    "education",
     "cli_commands",
     "check_doc_environment",
     "run_command_stream_output",

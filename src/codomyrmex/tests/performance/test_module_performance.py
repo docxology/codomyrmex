@@ -25,7 +25,7 @@ except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
@@ -326,7 +326,7 @@ class TestClass:
 ''')
 
         def analyze_test():
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
             return analyze_file(str(test_file))
 
         result = performance_suite.run_performance_test(

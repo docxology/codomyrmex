@@ -1,5 +1,5 @@
 
-from codomyrmex.defense import ActiveDefense
+from codomyrmex.security.ai_safety import ActiveDefense
 from codomyrmex.identity import IdentityManager, VerificationLevel
 from codomyrmex.market import ReverseAuction
 from codomyrmex.privacy import CrumbCleaner

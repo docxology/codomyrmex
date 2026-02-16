@@ -84,6 +84,17 @@ ws.send({"subscribe": "ticker"})
 uv run python -m pytest src/codomyrmex/tests/ -k networking -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`service_mesh/`** | Circuit breakers, retries, load balancing, health checks |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/networking/](../../../docs/modules/networking/)

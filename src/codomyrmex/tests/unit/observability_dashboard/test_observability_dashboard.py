@@ -10,12 +10,12 @@ class TestObservabilityDashboardImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import observability_dashboard
+        from codomyrmex.telemetry import dashboard as observability_dashboard
         assert observability_dashboard is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.observability_dashboard import __all__
+        from codomyrmex.telemetry.dashboard import __all__
         expected_exports = [
             "MetricType",
             "AlertSeverity",
@@ -38,7 +38,7 @@ class TestMetricType:
 
     def test_metric_type_values(self):
         """Verify all metric types are available."""
-        from codomyrmex.observability_dashboard import MetricType
+        from codomyrmex.telemetry.dashboard import MetricType
 
         assert MetricType.COUNTER.value == "counter"
         assert MetricType.GAUGE.value == "gauge"
@@ -52,7 +52,7 @@ class TestAlertSeverity:
 
     def test_alert_severity_values(self):
         """Verify all alert severities are available."""
-        from codomyrmex.observability_dashboard import AlertSeverity
+        from codomyrmex.telemetry.dashboard import AlertSeverity
 
         assert AlertSeverity.INFO.value == "info"
         assert AlertSeverity.WARNING.value == "warning"
@@ -66,7 +66,7 @@ class TestPanelType:
 
     def test_panel_type_values(self):
         """Verify all panel types are available."""
-        from codomyrmex.observability_dashboard import PanelType
+        from codomyrmex.telemetry.dashboard import PanelType
 
         assert PanelType.GRAPH.value == "graph"
         assert PanelType.STAT.value == "stat"
@@ -82,7 +82,7 @@ class TestMetricValue:
 
     def test_metric_value_creation(self):
         """Verify MetricValue can be created."""
-        from codomyrmex.observability_dashboard import MetricType, MetricValue
+        from codomyrmex.telemetry.dashboard import MetricType, MetricValue
 
         metric = MetricValue(
             name="cpu_usage",
@@ -97,7 +97,7 @@ class TestMetricValue:
 
     def test_metric_value_to_dict(self):
         """Verify metric serialization."""
-        from codomyrmex.observability_dashboard import MetricValue
+        from codomyrmex.telemetry.dashboard import MetricValue
 
         metric = MetricValue(name="test", value=42.0)
         result = metric.to_dict()
@@ -112,7 +112,7 @@ class TestAlert:
 
     def test_alert_creation(self):
         """Verify Alert can be created."""
-        from codomyrmex.observability_dashboard import Alert, AlertSeverity
+        from codomyrmex.telemetry.dashboard import Alert, AlertSeverity
 
         alert = Alert(
             id="alert_1",
@@ -127,7 +127,7 @@ class TestAlert:
 
     def test_alert_resolve(self):
         """Verify alert resolution."""
-        from codomyrmex.observability_dashboard import Alert
+        from codomyrmex.telemetry.dashboard import Alert
 
         alert = Alert(id="test", name="test", message="Test alert")
 
@@ -138,7 +138,7 @@ class TestAlert:
 
     def test_alert_duration(self):
         """Verify duration calculation."""
-        from codomyrmex.observability_dashboard import Alert
+        from codomyrmex.telemetry.dashboard import Alert
 
         alert = Alert(id="test", name="test", message="Test")
 
@@ -147,7 +147,7 @@ class TestAlert:
 
     def test_alert_to_dict(self):
         """Verify alert serialization."""
-        from codomyrmex.observability_dashboard import Alert, AlertSeverity
+        from codomyrmex.telemetry.dashboard import Alert, AlertSeverity
 
         alert = Alert(
             id="test",
@@ -168,7 +168,7 @@ class TestPanel:
 
     def test_panel_creation(self):
         """Verify Panel can be created."""
-        from codomyrmex.observability_dashboard import Panel, PanelType
+        from codomyrmex.telemetry.dashboard import Panel, PanelType
 
         panel = Panel(
             id="cpu_panel",
@@ -183,7 +183,7 @@ class TestPanel:
 
     def test_panel_to_dict(self):
         """Verify panel serialization."""
-        from codomyrmex.observability_dashboard import Panel, PanelType
+        from codomyrmex.telemetry.dashboard import Panel, PanelType
 
         panel = Panel(
             id="test",
@@ -202,7 +202,7 @@ class TestDashboard:
 
     def test_dashboard_creation(self):
         """Verify Dashboard can be created."""
-        from codomyrmex.observability_dashboard import Dashboard
+        from codomyrmex.telemetry.dashboard import Dashboard
 
         dashboard = Dashboard(
             id="system_overview",
@@ -216,7 +216,7 @@ class TestDashboard:
 
     def test_dashboard_add_panel(self):
         """Verify panel addition."""
-        from codomyrmex.observability_dashboard import Dashboard, Panel, PanelType
+        from codomyrmex.telemetry.dashboard import Dashboard, Panel, PanelType
 
         dashboard = Dashboard(id="test", name="Test")
         panel = Panel(id="p1", title="Panel 1", panel_type=PanelType.GRAPH)
@@ -227,7 +227,7 @@ class TestDashboard:
 
     def test_dashboard_get_panel(self):
         """Verify panel retrieval."""
-        from codomyrmex.observability_dashboard import Dashboard, Panel, PanelType
+        from codomyrmex.telemetry.dashboard import Dashboard, Panel, PanelType
 
         dashboard = Dashboard(id="test", name="Test")
         dashboard.add_panel(Panel(id="p1", title="P1", panel_type=PanelType.GRAPH))
@@ -242,7 +242,7 @@ class TestDashboard:
 
     def test_dashboard_chaining(self):
         """Verify method chaining."""
-        from codomyrmex.observability_dashboard import Dashboard, Panel, PanelType
+        from codomyrmex.telemetry.dashboard import Dashboard, Panel, PanelType
 
         dashboard = (
             Dashboard(id="test", name="Test")
@@ -254,7 +254,7 @@ class TestDashboard:
 
     def test_dashboard_to_dict(self):
         """Verify dashboard serialization."""
-        from codomyrmex.observability_dashboard import Dashboard
+        from codomyrmex.telemetry.dashboard import Dashboard
 
         dashboard = Dashboard(
             id="test",
@@ -273,7 +273,7 @@ class TestMetricCollector:
 
     def test_collector_record(self):
         """Verify metric recording."""
-        from codomyrmex.observability_dashboard import MetricCollector
+        from codomyrmex.telemetry.dashboard import MetricCollector
 
         collector = MetricCollector()
         collector.record("cpu_usage", 0.75, labels={"host": "server1"})
@@ -284,7 +284,7 @@ class TestMetricCollector:
 
     def test_collector_get_latest(self):
         """Verify latest metric retrieval."""
-        from codomyrmex.observability_dashboard import MetricCollector
+        from codomyrmex.telemetry.dashboard import MetricCollector
 
         collector = MetricCollector()
         collector.record("cpu_usage", 0.5)
@@ -297,7 +297,7 @@ class TestMetricCollector:
 
     def test_collector_get_latest_missing(self):
         """Verify get_latest returns None for missing metric."""
-        from codomyrmex.observability_dashboard import MetricCollector
+        from codomyrmex.telemetry.dashboard import MetricCollector
 
         collector = MetricCollector()
         latest = collector.get_latest("nonexistent")
@@ -306,7 +306,7 @@ class TestMetricCollector:
 
     def test_collector_list_metric_names(self):
         """Verify metric names listing."""
-        from codomyrmex.observability_dashboard import MetricCollector
+        from codomyrmex.telemetry.dashboard import MetricCollector
 
         collector = MetricCollector()
         collector.record("cpu", 0.5)
@@ -320,7 +320,7 @@ class TestMetricCollector:
 
     def test_collector_get_metrics_with_time_range(self):
         """Verify time-filtered metric retrieval."""
-        from codomyrmex.observability_dashboard import MetricCollector
+        from codomyrmex.telemetry.dashboard import MetricCollector
 
         collector = MetricCollector()
         now = datetime.now()
@@ -335,7 +335,7 @@ class TestMetricCollector:
 
     def test_collector_cleanup_old(self):
         """Verify old metrics cleanup."""
-        from codomyrmex.observability_dashboard import MetricCollector, MetricValue
+        from codomyrmex.telemetry.dashboard import MetricCollector, MetricValue
 
         collector = MetricCollector(retention_minutes=60)
 
@@ -357,7 +357,7 @@ class TestAlertManager:
 
     def test_manager_add_rule(self):
         """Verify rule addition."""
-        from codomyrmex.observability_dashboard import AlertManager, AlertSeverity
+        from codomyrmex.telemetry.dashboard import AlertManager, AlertSeverity
 
         manager = AlertManager()
         manager.add_rule(
@@ -371,7 +371,7 @@ class TestAlertManager:
 
     def test_manager_check_fires_alert(self):
         """Verify alert firing."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(
@@ -387,7 +387,7 @@ class TestAlertManager:
 
     def test_manager_check_no_alert_below_threshold(self):
         """Verify no alert when below threshold."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(
@@ -402,7 +402,7 @@ class TestAlertManager:
 
     def test_manager_get_active_alerts(self):
         """Verify active alerts retrieval."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(
@@ -419,7 +419,7 @@ class TestAlertManager:
 
     def test_manager_auto_resolve(self):
         """Verify automatic alert resolution."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(
@@ -438,7 +438,7 @@ class TestAlertManager:
 
     def test_manager_acknowledge(self):
         """Verify alert acknowledgment."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(
@@ -456,7 +456,7 @@ class TestAlertManager:
 
     def test_manager_get_alert_history(self):
         """Verify alert history retrieval."""
-        from codomyrmex.observability_dashboard import AlertManager
+        from codomyrmex.telemetry.dashboard import AlertManager
 
         manager = AlertManager()
         manager.add_rule(name="test", condition=lambda m: True, message="Test")
@@ -473,7 +473,7 @@ class TestDashboardManager:
 
     def test_manager_create_dashboard(self):
         """Verify dashboard creation."""
-        from codomyrmex.observability_dashboard import DashboardManager
+        from codomyrmex.telemetry.dashboard import DashboardManager
 
         manager = DashboardManager()
         dashboard = manager.create(
@@ -487,7 +487,7 @@ class TestDashboardManager:
 
     def test_manager_get_dashboard(self):
         """Verify dashboard retrieval."""
-        from codomyrmex.observability_dashboard import DashboardManager
+        from codomyrmex.telemetry.dashboard import DashboardManager
 
         manager = DashboardManager()
         manager.create(name="Test Dashboard")
@@ -498,7 +498,7 @@ class TestDashboardManager:
 
     def test_manager_list_dashboards(self):
         """Verify dashboard listing."""
-        from codomyrmex.observability_dashboard import DashboardManager
+        from codomyrmex.telemetry.dashboard import DashboardManager
 
         manager = DashboardManager()
         manager.create(name="Dashboard A")
@@ -509,7 +509,7 @@ class TestDashboardManager:
 
     def test_manager_delete_dashboard(self):
         """Verify dashboard deletion."""
-        from codomyrmex.observability_dashboard import DashboardManager
+        from codomyrmex.telemetry.dashboard import DashboardManager
 
         manager = DashboardManager()
         manager.create(name="To Delete")
@@ -522,7 +522,7 @@ class TestDashboardManager:
 
     def test_manager_get_panel_data(self):
         """Verify panel data retrieval."""
-        from codomyrmex.observability_dashboard import (
+        from codomyrmex.telemetry.dashboard import (
             DashboardManager,
             MetricCollector,
             Panel,
@@ -547,7 +547,7 @@ class TestDashboardManager:
 
     def test_manager_get_panel_data_missing_dashboard(self):
         """Verify empty data for missing dashboard."""
-        from codomyrmex.observability_dashboard import DashboardManager
+        from codomyrmex.telemetry.dashboard import DashboardManager
 
         manager = DashboardManager()
         data = manager.get_panel_data("nonexistent", "panel")

@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 def handle_code_analysis(path: str, output_dir: str | None) -> bool:
     """Handle code analysis command."""
     try:
-        from codomyrmex.static_analysis import analyze_project
+        from codomyrmex.coding.static_analysis import analyze_project
 
         result = analyze_project(path)
         print(f"Code quality analysis for: {path}")

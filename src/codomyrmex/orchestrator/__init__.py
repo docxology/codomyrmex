@@ -10,11 +10,14 @@ Features:
 - Parallel execution with resource management
 - Retry logic and conditional execution
 - Progress streaming and callbacks
-"""
+
+
+Submodules:
+    scheduler: Consolidated scheduler capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -108,7 +111,10 @@ def cli_commands():
     }
 
 
+from . import scheduler
+
 __all__ = [
+    "scheduler",
     # CLI integration
     "cli_commands",
     'templates',

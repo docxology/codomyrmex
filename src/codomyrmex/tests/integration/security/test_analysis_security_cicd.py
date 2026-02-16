@@ -14,7 +14,7 @@ import pytest
 
 # Import modules for integration testing
 try:
-    from codomyrmex.static_analysis import analyze_file, analyze_project
+    from codomyrmex.coding.static_analysis import analyze_file, analyze_project
     STATIC_ANALYSIS_AVAILABLE = True
 except ImportError:
     STATIC_ANALYSIS_AVAILABLE = False
@@ -120,7 +120,7 @@ django==3.2.0
                        reason="Static analysis module not available")
     def test_static_analysis_integration(self):
         """Test that static analysis can analyze the test codebase."""
-        from codomyrmex.static_analysis import analyze_file
+        from codomyrmex.coding.static_analysis import analyze_file
 
         python_file = self.test_files["python_file"]
 
@@ -210,7 +210,7 @@ django==3.2.0
                     "jobs": [
                         {
                             "name": "static_analysis",
-                            "script": "python -m codomyrmex.static_analysis analyze_project .",
+                            "script": "python -m codomyrmex.coding.static_analysis analyze_project .",
                             "artifacts": ["analysis_report.json"]
                         },
                         {
@@ -283,7 +283,7 @@ django==3.2.0
     def test_complete_workflow_integration(self):
         """Test the complete analysis → security → CI/CD workflow."""
         # Step 1: Static analysis
-        from codomyrmex.static_analysis import analyze_project
+        from codomyrmex.coding.static_analysis import analyze_project
         analysis_results = analyze_project(self.test_dir)
 
         assert isinstance(analysis_results, dict)
@@ -353,7 +353,7 @@ django==3.2.0
 
         # Static analysis should handle gracefully
         if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.static_analysis import analyze_project
+            from codomyrmex.coding.static_analysis import analyze_project
             try:
                 result = analyze_project(nonexistent_dir)
                 # Should return some result structure even for errors
@@ -382,7 +382,7 @@ django==3.2.0
         workflow_steps = 0
 
         if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
             analyze_file(self.test_files["python_file"])
             workflow_steps += 1
 
@@ -410,7 +410,7 @@ django==3.2.0
 
         # Collect analysis data
         if STATIC_ANALYSIS_AVAILABLE:
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
             analysis_results = analyze_file(python_file)
             analysis_data["static_analysis"] = analysis_results
 

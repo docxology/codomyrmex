@@ -100,6 +100,17 @@ for err in errors:
 uv run python -m pytest src/codomyrmex/tests/ -k validation -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`schemas/`** | Shared type registry and pydantic model definitions |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/validation/](../../../docs/modules/validation/)

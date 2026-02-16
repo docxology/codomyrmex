@@ -102,7 +102,7 @@ def run_pyrefly_analysis(target_paths: list[str], project_root: str) -> dict
 
 **Usage Example**:
 ```python
-from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
 # Analyze Python files
 result = run_pyrefly_analysis(
@@ -318,7 +318,7 @@ def get_embedding_function(model_name: str = DEFAULT_EMBEDDING_MODEL)
 
 **Usage Example**:
 ```python
-from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
 config = {
     "repository_indexing": True,
@@ -352,7 +352,7 @@ def orchestrate_build_pipeline(build_config: dict[str, any]) -> dict[str, any]
 
 **Usage Example**:
 ```python
-from codomyrmex.build_synthesis.build_orchestrator import (
+from codomyrmex.ci_cd_automation.build.build_orchestrator import (
     check_build_environment,
     synthesize_build_artifact,
     orchestrate_build_pipeline
@@ -527,7 +527,7 @@ def test_create_line_plot_real():
 # From src/codomyrmex/tests/unit/test_static_analysis_comprehensive.py
 def test_parse_pyrefly_real():
     """Test real Pyrefly output parsing."""
-    from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+    from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
     # Real Pyrefly error format
     output = "src/file.py:10:5: error: Undefined variable 'x'"

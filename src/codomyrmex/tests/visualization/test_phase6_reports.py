@@ -1,9 +1,9 @@
 import pytest
 import os
-from codomyrmex.visualization import generate_report
-from codomyrmex.visualization.reports.finance import FinanceReport
-from codomyrmex.visualization.reports.marketing import MarketingReport
-from codomyrmex.visualization.reports.logistics import LogisticsReport
+from codomyrmex.data_visualization import generate_report
+from codomyrmex.data_visualization.reports.finance import FinanceReport
+from codomyrmex.data_visualization.reports.marketing import MarketingReport
+from codomyrmex.data_visualization.reports.logistics import LogisticsReport
 
 def test_finance_report_generation(tmpdir):
     report = FinanceReport()

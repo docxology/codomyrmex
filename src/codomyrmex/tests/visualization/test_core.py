@@ -1,8 +1,8 @@
 import pytest
 from pathlib import Path
-from codomyrmex.visualization.core.theme import Theme
-from codomyrmex.visualization.core.layout import Grid, Section
-from codomyrmex.visualization.core.export import render_html
+from codomyrmex.data_visualization.core.theme import Theme
+from codomyrmex.data_visualization.core.layout import Grid, Section
+from codomyrmex.data_visualization.core.export import render_html
 
 def test_theme_generation():
     theme = Theme(primary="red", background="black")

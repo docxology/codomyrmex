@@ -2,11 +2,14 @@
 Networking module for Codomyrmex.
 
 This module provides HTTP client utilities, WebSocket support, and API client generation.
-"""
+
+
+Submodules:
+    service_mesh: Consolidated service mesh capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -71,7 +74,10 @@ def cli_commands():
     }
 
 
+from . import service_mesh
+
 __all__ = [
+    "service_mesh",
     # Core classes
     "HTTPClient",
     "WebSocketClient",

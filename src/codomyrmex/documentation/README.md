@@ -68,6 +68,17 @@ consistencyreport = ConsistencyReport()
 uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`education/`** | Curriculum design, tutoring, and learning pathways |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/documentation/](../../../docs/modules/documentation/)

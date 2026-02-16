@@ -10,12 +10,12 @@ class TestCostManagementImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import cost_management
+        from codomyrmex.finance import cost as cost_management
         assert cost_management is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.cost_management import __all__
+        from codomyrmex.cloud.cost_management import __all__
         expected_exports = [
             "CostCategory",
             "BudgetPeriod",
@@ -38,7 +38,7 @@ class TestCostCategory:
 
     def test_cost_category_values(self):
         """Verify all cost categories are available."""
-        from codomyrmex.cost_management import CostCategory
+        from codomyrmex.cloud.cost_management import CostCategory
 
         assert CostCategory.LLM_INFERENCE.value == "llm_inference"
         assert CostCategory.LLM_EMBEDDING.value == "llm_embedding"
@@ -55,7 +55,7 @@ class TestBudgetPeriod:
 
     def test_budget_period_values(self):
         """Verify all budget periods are available."""
-        from codomyrmex.cost_management import BudgetPeriod
+        from codomyrmex.cloud.cost_management import BudgetPeriod
 
         assert BudgetPeriod.HOURLY.value == "hourly"
         assert BudgetPeriod.DAILY.value == "daily"
@@ -69,7 +69,7 @@ class TestCostEntry:
 
     def test_cost_entry_creation(self):
         """Verify CostEntry can be created with required fields."""
-        from codomyrmex.cost_management import CostCategory, CostEntry
+        from codomyrmex.cloud.cost_management import CostCategory, CostEntry
 
         entry = CostEntry(
             id="cost_1",
@@ -86,7 +86,7 @@ class TestCostEntry:
 
     def test_cost_entry_to_dict(self):
         """Verify CostEntry serialization to dict."""
-        from codomyrmex.cost_management import CostCategory, CostEntry
+        from codomyrmex.cloud.cost_management import CostCategory, CostEntry
 
         entry = CostEntry(
             id="cost_2",
@@ -110,7 +110,7 @@ class TestBudget:
 
     def test_budget_creation(self):
         """Verify Budget can be created."""
-        from codomyrmex.cost_management import Budget, BudgetPeriod, CostCategory
+        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod, CostCategory
 
         budget = Budget(
             id="daily_llm",
@@ -127,7 +127,7 @@ class TestBudget:
 
     def test_budget_get_period_start_daily(self):
         """Verify daily period start calculation."""
-        from codomyrmex.cost_management import Budget, BudgetPeriod
+        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod
 
         budget = Budget(id="test", name="Test", amount=100.0, period=BudgetPeriod.DAILY)
         reference = datetime(2024, 1, 15, 14, 30, 45)
@@ -139,7 +139,7 @@ class TestBudget:
 
     def test_budget_get_period_start_hourly(self):
         """Verify hourly period start calculation."""
-        from codomyrmex.cost_management import Budget, BudgetPeriod
+        from codomyrmex.cloud.cost_management import Budget, BudgetPeriod
 
         budget = Budget(id="test", name="Test", amount=50.0, period=BudgetPeriod.HOURLY)
         reference = datetime(2024, 1, 15, 14, 30, 45)
@@ -156,7 +156,7 @@ class TestBudgetAlert:
 
     def test_budget_alert_utilization(self):
         """Verify utilization calculation."""
-        from codomyrmex.cost_management import BudgetAlert
+        from codomyrmex.cloud.cost_management import BudgetAlert
 
         alert = BudgetAlert(
             budget_id="test_budget",
@@ -169,7 +169,7 @@ class TestBudgetAlert:
 
     def test_budget_alert_message(self):
         """Verify alert message generation."""
-        from codomyrmex.cost_management import BudgetAlert
+        from codomyrmex.cloud.cost_management import BudgetAlert
 
         alert = BudgetAlert(
             budget_id="test_budget",
@@ -189,7 +189,7 @@ class TestInMemoryCostStore:
 
     def test_store_save_and_retrieve(self):
         """Verify entries can be saved and retrieved."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             CostCategory,
             CostEntry,
             InMemoryCostStore,
@@ -210,7 +210,7 @@ class TestInMemoryCostStore:
 
     def test_store_get_entries_by_date_range(self):
         """Verify filtering by date range."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             CostCategory,
             CostEntry,
             InMemoryCostStore,
@@ -235,7 +235,7 @@ class TestInMemoryCostStore:
 
     def test_store_clear(self):
         """Verify store can be cleared."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             CostCategory,
             CostEntry,
             InMemoryCostStore,
@@ -255,7 +255,7 @@ class TestCostTracker:
 
     def test_tracker_record_cost(self):
         """Verify costs can be recorded."""
-        from codomyrmex.cost_management import CostCategory, CostTracker
+        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
 
         tracker = CostTracker()
         entry = tracker.record(
@@ -270,7 +270,7 @@ class TestCostTracker:
 
     def test_tracker_get_summary(self):
         """Verify cost summary generation."""
-        from codomyrmex.cost_management import CostCategory, CostTracker
+        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
 
         tracker = CostTracker()
         tracker.record(amount=10.0, category=CostCategory.COMPUTE)
@@ -286,7 +286,7 @@ class TestCostTracker:
 
     def test_tracker_get_total_by_category(self):
         """Verify total cost retrieval by category."""
-        from codomyrmex.cost_management import CostCategory, CostTracker
+        from codomyrmex.cloud.cost_management import CostCategory, CostTracker
 
         tracker = CostTracker()
         tracker.record(amount=20.0, category=CostCategory.LLM_INFERENCE)
@@ -302,7 +302,7 @@ class TestBudgetManager:
 
     def test_manager_create_budget(self):
         """Verify budget creation."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             BudgetManager,
             BudgetPeriod,
             CostCategory,
@@ -325,7 +325,7 @@ class TestBudgetManager:
 
     def test_manager_list_budgets(self):
         """Verify listing all budgets."""
-        from codomyrmex.cost_management import BudgetManager, BudgetPeriod, CostTracker
+        from codomyrmex.cloud.cost_management import BudgetManager, BudgetPeriod, CostTracker
 
         tracker = CostTracker()
         manager = BudgetManager(tracker)
@@ -338,7 +338,7 @@ class TestBudgetManager:
 
     def test_manager_can_spend(self):
         """Verify spend allowance check."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             BudgetManager,
             BudgetPeriod,
             CostTracker,
@@ -354,7 +354,7 @@ class TestBudgetManager:
 
     def test_manager_check_budgets_generates_alerts(self):
         """Verify budget check generates alerts when threshold exceeded."""
-        from codomyrmex.cost_management import (
+        from codomyrmex.cloud.cost_management import (
             BudgetManager,
             BudgetPeriod,
             CostCategory,

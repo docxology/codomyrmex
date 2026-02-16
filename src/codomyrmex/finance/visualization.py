@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 from .ledger import Ledger, AccountType
-from codomyrmex.visualization import BarPlot, LinePlot
+from codomyrmex.data_visualization import BarPlot, LinePlot
 
 def plot_account_balances(ledger: Ledger) -> BarPlot:
     """

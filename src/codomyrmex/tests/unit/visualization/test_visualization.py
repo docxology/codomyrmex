@@ -17,7 +17,7 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.visualization import (
+from codomyrmex.data_visualization import (
     Dashboard,
     Grid,
     Theme,
@@ -28,22 +28,22 @@ from codomyrmex.visualization import (
     Report,
     GeneralSystemReport,
 )
-from codomyrmex.visualization.core.theme import DEFAULT_THEME
-from codomyrmex.visualization.core.layout import Section
-from codomyrmex.visualization.components.text import TextBlock, CodeBlock
+from codomyrmex.data_visualization.core.theme import DEFAULT_THEME
+from codomyrmex.data_visualization.core.layout import Section
+from codomyrmex.data_visualization.components.text import TextBlock, CodeBlock
 
 
 @pytest.mark.unit
 def test_module_import():
     """visualization module is importable."""
-    from codomyrmex import visualization
+    from codomyrmex.data_visualization import visualization
     assert visualization is not None
 
 
 @pytest.mark.unit
 def test_module_exports():
     """visualization __all__ contains key classes."""
-    from codomyrmex import visualization
+    from codomyrmex.data_visualization import visualization
     assert "Dashboard" in visualization.__all__
     assert "Grid" in visualization.__all__
     assert "Theme" in visualization.__all__

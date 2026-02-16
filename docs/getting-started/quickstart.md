@@ -223,7 +223,7 @@ print(f"JavaScript Output: {js_result['output']}")
 Analyze your codebase for quality, security, and performance issues:
 
 ```python
-from codomyrmex.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly_analysis
 
 print("🔍 Analyzing code quality...")
 
@@ -314,8 +314,8 @@ EOF
 | **Data Visualization** | `from codomyrmex.data_visualization import create_bar_chart`      | `create_bar_chart()`        |
 | **AI Agents**          | `from codomyrmex.agents import generate_code_snippet`    | `generate_code_snippet()`   |
 | **Code Execution**     | `from codomyrmex.coding import execute_code`      | `execute_code()`            |
-| **Static Analysis**    | `from codomyrmex.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
-| **Pattern Matching**   | `from codomyrmex.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
+| **Static Analysis**    | `from codomyrmex.coding.static_analysis import run_pyrefly_analysis`     | `run_pyrefly_analysis()`    |
+| **Pattern Matching**   | `from codomyrmex.coding.pattern_matching import analyze_repository_path` | `analyze_repository_path()` |
 | **Secure Identity**    | `from codomyrmex.identity import IdentityManager`                 | `IdentityManager()`         |
 
 ---
@@ -327,7 +327,7 @@ EOF
 ### **Code Quality Pipeline**
 
 ```python
-from codomyrmex.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly_analysis
 from codomyrmex.coding import execute_code
 from codomyrmex.agents import refactor_code_snippet
 

@@ -187,7 +187,7 @@ class CodomyrmexDatabase:
 async def analyze_codebase_with_db_cache(codebase_path: str,
                                        db: CodomyrmexDatabase) -> Dict:
     """Analyze codebase with database caching."""
-    from codomyrmex.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_codebase
     import hashlib
 
     # Generate cache key
@@ -479,7 +479,7 @@ class AWSIntegration:
 # Usage example for cloud-native analysis workflow
 async def cloud_analysis_workflow(codebase_path: str, aws_integration: AWSIntegration):
     """Complete cloud-native analysis workflow."""
-    from codomyrmex.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_codebase
     from codomyrmex.data_visualization import create_analysis_dashboard
 
     analysis_id = f"analysis_{int(time.time())}"
@@ -596,7 +596,7 @@ class GitHubIntegration:
 
     async def create_pull_request_analysis(self, pr_number: int) -> Dict:
         """Analyze pull request and create detailed analysis."""
-        from codomyrmex.static_analysis import analyze_diff
+        from codomyrmex.coding.static_analysis import analyze_diff
         from codomyrmex.agents import review_code_changes
 
         async with aiohttp.ClientSession() as session:
@@ -652,8 +652,8 @@ class GitHubIntegration:
     async def _analyze_file_changes(self, filename: str, content: str,
                                   patch: str, session: aiohttp.ClientSession) -> Dict:
         """Analyze individual file changes."""
-        from codomyrmex.static_analysis import analyze_code_quality
-        from codomyrmex.pattern_matching import find_code_patterns
+        from codomyrmex.coding.static_analysis import analyze_code_quality
+        from codomyrmex.coding.pattern_matching import find_code_patterns
 
         try:
             # Static analysis
@@ -1141,7 +1141,7 @@ monitoring_grafana = GrafanaIntegration(
 
 async def monitored_analysis_workflow(codebase_path: str):
     """Analysis workflow with comprehensive monitoring."""
-    from codomyrmex.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_codebase
     import time
 
     start_time = time.time()

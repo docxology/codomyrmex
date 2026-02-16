@@ -6,17 +6,17 @@ Uses real PrometheusExporter (skipping start) and real StatsDClient
 
 import pytest
 
-from codomyrmex.metrics import Metrics
+from codomyrmex.telemetry.metrics import Metrics
 
 try:
-    from codomyrmex.metrics import PrometheusExporter
+    from codomyrmex.telemetry.metrics import PrometheusExporter
     HAS_PROMETHEUS = PrometheusExporter is not None
 except ImportError:
     HAS_PROMETHEUS = False
 
 try:
     import statsd  # noqa: F401
-    from codomyrmex.metrics import StatsDClient
+    from codomyrmex.telemetry.metrics import StatsDClient
     HAS_STATSD = StatsDClient is not None
 except (ImportError, ModuleNotFoundError):
     HAS_STATSD = False

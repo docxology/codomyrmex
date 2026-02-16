@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.chaos_engineering import (
+    from codomyrmex.testing.chaos import (
         ChaosExperiment,
         ChaosMonkey,
         ExperimentResult,

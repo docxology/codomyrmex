@@ -90,6 +90,18 @@ diagnosis = debugger.debug(code="x = 1/0", stdout="", stderr="ZeroDivisionError"
 print(f"Root cause: {diagnosis}")
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`static_analysis/`** | Code quality metrics, security scanning, linting |
+| **`pattern_matching/`** | Code analysis and pattern recognition |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/coding/](../../../docs/modules/coding/)

@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.observability_dashboard.slo import (
+    from codomyrmex.telemetry.dashboard.slo import (
         SLI,
         SLO,
         ErrorBudgetPolicy,

@@ -24,7 +24,7 @@ Provides comprehensive security capabilities organized into four specialized sub
 4. **Vulnerability Assessment**: Assess physical security vulnerabilities
 5. **Perimeter Management**: Manage security perimeter
 
-### Digital Security
+### Digital Security Requirements
 
 1. **Vulnerability Scanning**: Scan for security vulnerabilities
 2. **Code Security Analysis**: Analyze code for security issues
@@ -35,7 +35,7 @@ Provides comprehensive security capabilities organized into four specialized sub
 7. **Security Monitoring**: Monitor security events
 8. **Security Reporting**: Generate security assessment reports
 
-### Cognitive Security
+### Cognitive Security Requirements
 
 1. **Social Engineering Detection**: Detect social engineering attempts
 2. **Phishing Analysis**: Analyze emails and communications for phishing
@@ -43,7 +43,7 @@ Provides comprehensive security capabilities organized into four specialized sub
 4. **Cognitive Threat Assessment**: Assess cognitive security threats
 5. **Behavior Analysis**: Analyze user behavior for security
 
-### Security Theory
+### Theory & Governance Requirements
 
 1. **Security Principles**: Apply security principles
 2. **Security Frameworks**: Use established security frameworks
@@ -51,43 +51,51 @@ Provides comprehensive security capabilities organized into four specialized sub
 4. **Risk Assessment**: Conduct risk assessments
 5. **Architecture Patterns**: Apply security architecture patterns
 6. **Best Practices**: Follow security best practices
+7. **Security Governance**: Policy management, compliance tracking, and security posture reporting.
 
 ## Interface Contracts
 
-### Physical Security
+### Digital Security (`security.digital`)
 
-- `AccessControlSystem`: Manages physical access control
-- `AssetInventory`: Tracks physical assets
-- `SurveillanceMonitor`: Monitors physical security events
-- `PhysicalVulnerabilityScanner`: Scans for physical vulnerabilities
-- `PerimeterManager`: Manages security perimeter
+```python
+class VulnerabilityScanner:
+    def scan_path(self, path: str) -> SecurityScanResult
+    def scan_environment(self) -> SecurityScanResult
 
-### Digital Security
+class SecretsDetector:
+    def scan_file(self, path: str) -> List[SecurityFinding]
+    def scan_directory(self, path: str) -> List[SecurityFinding]
 
-- `VulnerabilityScanner`: Scans for vulnerabilities
-- `SecurityAnalyzer`: Analyzes code security
-- `SecretsDetector`: Detects secrets
-- `EncryptionManager`: Manages encryption
-- `CertificateValidator`: Validates certificates
-- `ComplianceChecker`: Checks compliance
-- `SecurityMonitor`: Monitors security events
+class SecurityAnalyzer:
+    def analyze_code_security(self, path: str) -> List[SecurityIssue]
+```
 
-### Cognitive Security
+### Theory & Governance (`security.theory`, `security.governance`)
 
-- `SocialEngineeringDetector`: Detects social engineering
-- `PhishingAnalyzer`: Analyzes phishing attempts
-- `AwarenessTrainer`: Provides training
-- `CognitiveThreatAssessor`: Assesses cognitive threats
-- `BehaviorAnalyzer`: Analyzes behavior
+```python
+class ThreatModel:
+    def create_model(self, system_name: str, assets: List[str], attack_surface: List[str]) -> ThreatModel
+    def analyze_threats(self) -> Dict[str, Any]
 
-### Security Theory
+class PolicyEngine:
+    def add_policy(self, policy: Policy) -> None
+    def enforce(self, context: Dict[str, Any]) -> None
 
-- `SecurityPrinciple`: Security principles
-- `SecurityFramework`: Security frameworks
-- `ThreatModel`: Threat models
-- `RiskAssessment`: Risk assessments
-- `SecurityPattern`: Security patterns
-- `SecurityBestPractice`: Best practices
+class Contract:
+    def sign(self, signer_id: str, digital_signature: str = "") -> None
+    def terminate(self) -> None
+```
+
+### Physical & Cognitive Security (`security.physical`, `security.cognitive`)
+
+```python
+class AccessControlSystem:
+    def check_access_permission(self, user_id: str, resource_id: str) -> bool
+    def grant_access(self, user_id: str, resource_id: str) -> None
+
+class PhishingAnalyzer:
+    def analyze_email(self, content: str) -> Dict[str, Any]
+```
 
 ## Navigation
 

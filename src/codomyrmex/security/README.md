@@ -150,6 +150,17 @@ instance = SBOMFormat()
 uv run python -m pytest src/codomyrmex/tests/ -k security -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`governance/`** | Policy enforcement and compliance checking |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/security/](../../../docs/modules/security/)

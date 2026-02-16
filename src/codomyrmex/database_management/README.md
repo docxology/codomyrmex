@@ -95,6 +95,18 @@ manager.execute_query("app_db", "CREATE TABLE IF NOT EXISTS logs (id INTEGER PRI
 uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`migration/`** | Database schema migration and cross-provider migration |
+| **`lineage/`** | Data provenance and lineage tracking |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/database_management/](../../../docs/modules/database_management/)

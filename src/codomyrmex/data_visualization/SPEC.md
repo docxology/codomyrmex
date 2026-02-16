@@ -40,6 +40,7 @@ graph TD
 1. **Rich Terminal Output**: Tables, progress bars, syntax highlighting (wrapping `rich`).
 2. **Charting**: Line charts, bar graphs, scatter plots.
 3. **Report Generation**: Embed charts into Markdown or HTML reports.
+4. **Visualization Engine (Consolidated)**: Core rendering engine for complex plotting and theme management.
 
 ### Quality Standards
 

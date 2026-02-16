@@ -2,51 +2,50 @@
 
 ## Module Overview
 
-ML model lifecycle: training, deployment, versioning, and monitoring.
+ML model lifecycle: training, feature engineering, optimization, deployment, and versioning.
 
 ## Key Classes
 
-- **ModelRegistry** — Model versioning and storage
-- **ModelDeployer** — Deploy models to endpoints
-- **ExperimentTracker** — Track training experiments
-- **ModelMonitor** — Monitor deployed models
+- **ModelRegistry** — Model versioning and storage management
+- **FeatureStore** — Centralized feature and embedding management
+- **ModelEvaluator** — Comprehensive model performance verification
+- **InferenceOptimizer** — Latency and cost reduction toolkit
+- **FineTuningJob** — Managed fine-tuning orchestration
 
 ## Agent Instructions
 
-1. **Version models** — Every model gets a version
-2. **Track experiments** — Log hyperparameters and metrics
-3. **Validate before deploy** — Test on held-out data
-4. **Monitor drift** — Watch for data/model drift
-5. **Rollback ready** — Keep previous versions
+1. **Feature Reuse** — Always check the `FeatureStore` before regenerating embeddings or features
+2. **Mandatory Evaluation** — Run `ModelEvaluator` on all new models before registration
+3. **Optimize for Production** — Apply `InferenceOptimizer` tweaks (quantization, etc.) for high-traffic models
+4. **registry.register** — Use the registry for all model versioning to ensure reproducibility
 
 ## Common Patterns
 
 ```python
 from codomyrmex.model_ops import (
-    ModelRegistry, ExperimentTracker, ModelDeployer
+    ModelRegistry, FeatureStore, ModelEvaluator, InferenceOptimizer
 )
 
-# Track experiment
-with ExperimentTracker.start("training_v1") as exp:
-    exp.log_params({"lr": 0.01, "epochs": 100})
-    model = train_model(...)
-    exp.log_metrics({"accuracy": 0.95, "loss": 0.05})
-    exp.log_model(model)
+# 1. Feature Engineering
+fs = FeatureStore()
+fs.push_features("user_123", {"embedding": [0.1, 0.2, ...]})
 
-# Register model
+# 2. Evaluation
+evaluator = ModelEvaluator()
+results = evaluator.evaluate(model_id="v1_candidate", test_dataset=ds)
+print(f"Accuracy: {results['accuracy']}")
+
+# 3. Optimization
+optimizer = InferenceOptimizer()
+optimized_model = optimizer.optimize("v1_candidate", target="latency")
+
+# 4. Registration
 registry = ModelRegistry()
 registry.register(
-    name="classifier",
-    version="1.0.0",
-    model=model,
-    metadata={"framework": "pytorch"}
-)
-
-# Deploy model
-deployer = ModelDeployer()
-endpoint = deployer.deploy(
-    model_uri="models:/classifier/1.0.0",
-    instance_type="gpu.small"
+    name="production_model",
+    version="2.1.0",
+    model_path=optimized_model,
+    metadata={"eval_results": results}
 )
 ```
 

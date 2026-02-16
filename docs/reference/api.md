@@ -218,7 +218,7 @@ create_bar_chart(
 **Quick Example:**
 
 ```python
-from codomyrmex.static_analysis import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis import run_pyrefly_analysis
 
 # Analyze your Python project
 analysis = run_pyrefly_analysis(

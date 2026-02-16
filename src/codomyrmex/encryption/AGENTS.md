@@ -4,47 +4,52 @@
 
 Cryptographic operations: symmetric, asymmetric, hashing, and key management.
 
-## Key Classes
+## Key Components
 
-- **SymmetricEncryptor** — AES encryption
-- **AsymmetricEncryptor** — RSA/EC encryption
-- **KeyManager** — Key generation and storage
-- **Hasher** — Secure hashing (SHA-256/512)
+| Component | Description |
+|-----------|-------------|
+| `Encryptor` | Core symmetric (AES) and asymmetric (RSA) encryption |
+| `KeyManager` | Secure file-based key storage and rotation |
+| `SignatureAlgorithm` | Enumeration of supported HMAC algorithms |
+| `Signer` | Fast HMAC-based JSON and file signing |
+| `SecureDataContainer` | Encrypted storage for JSON-serializable data |
 
-## Agent Instructions
+## Usage for Agents
 
-1. **Use strong keys** — AES-256, RSA-2048 minimum
-2. **Rotate keys** — Regular key rotation
-3. **Store securely** — Never log or expose keys
-4. **Use authenticated** — Prefer AEAD modes (GCM)
-5. **Salt hashes** — Always use salt for passwords
-
-## Common Patterns
+### Symmetric Encryption
 
 ```python
-from codomyrmex.encryption import (
-    SymmetricEncryptor, AsymmetricEncryptor, KeyManager, Hasher
-)
+from codomyrmex.encryption import Encryptor
 
-# Symmetric encryption
-encryptor = SymmetricEncryptor()
-key = encryptor.generate_key()
-ciphertext = encryptor.encrypt(plaintext, key)
-decrypted = encryptor.decrypt(ciphertext, key)
+e = Encryptor(algorithm="AES")
+key = e.generate_key()
+# Encrypt strings directly
+ciphertext = e.encrypt_string("Secret data", key)
+plaintext = e.decrypt_string(ciphertext, key)
+```
 
-# Asymmetric encryption
-asym = AsymmetricEncryptor()
-public_key, private_key = asym.generate_keypair()
-encrypted = asym.encrypt(data, public_key)
-decrypted = asym.decrypt(encrypted, private_key)
+### Digital Signatures
 
-# Key management
-manager = KeyManager()
-manager.store_key("api_key", key, rotate_days=90)
+```python
+from codomyrmex.encryption import Signer
 
-# Secure hashing
-hasher = Hasher()
-hash_value = hasher.hash_password(password, salt=generate_salt())
+signer = Signer(secret_key="my_secret")
+# Sign entire JSON objects
+signed_msg = signer.sign_json({"action": "deploy", "id": 789})
+```
+
+### Key Management
+
+```python
+from codomyrmex.encryption import KeyManager
+from pathlib import Path
+
+km = KeyManager(key_dir=Path("./agent_keys"))
+key = b"..." 
+km.store_key("main_vault", key)
+
+if km.key_exists("main_vault"):
+    key_bytes = km.get_key("main_vault")
 ```
 
 ## Testing Patterns

@@ -1,6 +1,6 @@
 import pytest
-from codomyrmex.visualization.components.media import Image, Video
-from codomyrmex.visualization.components.text import TextBlock, CodeBlock
+from codomyrmex.data_visualization.components.media import Image, Video
+from codomyrmex.data_visualization.components.text import TextBlock, CodeBlock
 
 def test_image_component():
     img = Image(src="test.png", alt="Test Image", caption="A caption")

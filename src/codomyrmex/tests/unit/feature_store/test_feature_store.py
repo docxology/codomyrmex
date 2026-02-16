@@ -8,12 +8,12 @@ class TestFeatureStoreImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import feature_store
+        from codomyrmex.model_ops import feature_store
         assert feature_store is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.feature_store import __all__
+        from codomyrmex.model_ops.feature_store import __all__
         expected_exports = [
             "FeatureType",
             "ValueType",
@@ -36,7 +36,7 @@ class TestFeatureType:
 
     def test_feature_type_values(self):
         """Verify all feature types are available."""
-        from codomyrmex.feature_store import FeatureType
+        from codomyrmex.model_ops.feature_store import FeatureType
 
         assert FeatureType.NUMERIC.value == "numeric"
         assert FeatureType.CATEGORICAL.value == "categorical"
@@ -52,7 +52,7 @@ class TestValueType:
 
     def test_value_type_values(self):
         """Verify all value types are available."""
-        from codomyrmex.feature_store import ValueType
+        from codomyrmex.model_ops.feature_store import ValueType
 
         assert ValueType.INT.value == "int"
         assert ValueType.FLOAT.value == "float"
@@ -68,7 +68,7 @@ class TestFeatureDefinition:
 
     def test_feature_definition_creation(self):
         """Verify FeatureDefinition can be created."""
-        from codomyrmex.feature_store import FeatureDefinition, FeatureType, ValueType
+        from codomyrmex.model_ops.feature_store import FeatureDefinition, FeatureType, ValueType
 
         feature = FeatureDefinition(
             name="user_age",
@@ -83,7 +83,7 @@ class TestFeatureDefinition:
 
     def test_feature_definition_to_dict(self):
         """Verify feature definition serialization."""
-        from codomyrmex.feature_store import FeatureDefinition, FeatureType, ValueType
+        from codomyrmex.model_ops.feature_store import FeatureDefinition, FeatureType, ValueType
 
         feature = FeatureDefinition(
             name="city",
@@ -104,7 +104,7 @@ class TestFeatureValue:
 
     def test_feature_value_creation(self):
         """Verify FeatureValue can be created."""
-        from codomyrmex.feature_store import FeatureValue
+        from codomyrmex.model_ops.feature_store import FeatureValue
 
         value = FeatureValue(
             feature_name="user_age",
@@ -119,7 +119,7 @@ class TestFeatureValue:
 
     def test_feature_value_age(self):
         """Verify age calculation."""
-        from codomyrmex.feature_store import FeatureValue
+        from codomyrmex.model_ops.feature_store import FeatureValue
 
         value = FeatureValue(
             feature_name="test",
@@ -137,7 +137,7 @@ class TestFeatureVector:
 
     def test_feature_vector_creation(self):
         """Verify FeatureVector can be created."""
-        from codomyrmex.feature_store import FeatureVector
+        from codomyrmex.model_ops.feature_store import FeatureVector
 
         vector = FeatureVector(
             entity_id="user_123",
@@ -149,7 +149,7 @@ class TestFeatureVector:
 
     def test_feature_vector_get(self):
         """Verify feature value retrieval."""
-        from codomyrmex.feature_store import FeatureVector
+        from codomyrmex.model_ops.feature_store import FeatureVector
 
         vector = FeatureVector(
             entity_id="test",
@@ -161,7 +161,7 @@ class TestFeatureVector:
 
     def test_feature_vector_to_list(self):
         """Verify conversion to list."""
-        from codomyrmex.feature_store import FeatureVector
+        from codomyrmex.model_ops.feature_store import FeatureVector
 
         vector = FeatureVector(
             entity_id="test",
@@ -178,7 +178,7 @@ class TestFeatureGroup:
 
     def test_feature_group_creation(self):
         """Verify FeatureGroup can be created."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureGroup,
             FeatureType,
@@ -199,7 +199,7 @@ class TestFeatureGroup:
 
     def test_feature_group_feature_names(self):
         """Verify feature names property."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureGroup,
             FeatureType,
@@ -218,7 +218,7 @@ class TestFeatureGroup:
 
     def test_feature_group_get_feature(self):
         """Verify feature retrieval by name."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureGroup,
             FeatureType,
@@ -246,7 +246,7 @@ class TestInMemoryFeatureStore:
 
     def test_store_register_and_get_definition(self):
         """Verify feature registration and retrieval."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureType,
             InMemoryFeatureStore,
@@ -269,7 +269,7 @@ class TestInMemoryFeatureStore:
 
     def test_store_set_and_get_value(self):
         """Verify value storage and retrieval."""
-        from codomyrmex.feature_store import InMemoryFeatureStore
+        from codomyrmex.model_ops.feature_store import InMemoryFeatureStore
 
         store = InMemoryFeatureStore()
 
@@ -282,7 +282,7 @@ class TestInMemoryFeatureStore:
 
     def test_store_value_versioning(self):
         """Verify value versioning on updates."""
-        from codomyrmex.feature_store import InMemoryFeatureStore
+        from codomyrmex.model_ops.feature_store import InMemoryFeatureStore
 
         store = InMemoryFeatureStore()
 
@@ -295,7 +295,7 @@ class TestInMemoryFeatureStore:
 
     def test_store_get_vector(self):
         """Verify vector retrieval."""
-        from codomyrmex.feature_store import InMemoryFeatureStore
+        from codomyrmex.model_ops.feature_store import InMemoryFeatureStore
 
         store = InMemoryFeatureStore()
 
@@ -310,7 +310,7 @@ class TestInMemoryFeatureStore:
 
     def test_store_delete_value(self):
         """Verify value deletion."""
-        from codomyrmex.feature_store import InMemoryFeatureStore
+        from codomyrmex.model_ops.feature_store import InMemoryFeatureStore
 
         store = InMemoryFeatureStore()
 
@@ -327,7 +327,7 @@ class TestFeatureTransform:
 
     def test_transform_add_and_apply(self):
         """Verify transforms can be added and applied."""
-        from codomyrmex.feature_store import FeatureTransform, FeatureVector
+        from codomyrmex.model_ops.feature_store import FeatureTransform, FeatureVector
 
         transform = FeatureTransform()
         transform.add("age", lambda v: v / 100)  # Normalize
@@ -351,7 +351,7 @@ class TestFeatureService:
 
     def test_service_register_and_ingest(self):
         """Verify feature registration and ingestion."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureService,
             FeatureType,
@@ -373,7 +373,7 @@ class TestFeatureService:
 
     def test_service_register_group(self):
         """Verify feature group registration."""
-        from codomyrmex.feature_store import (
+        from codomyrmex.model_ops.feature_store import (
             FeatureDefinition,
             FeatureGroup,
             FeatureService,
@@ -397,7 +397,7 @@ class TestFeatureService:
 
     def test_service_ingest_batch(self):
         """Verify batch ingestion."""
-        from codomyrmex.feature_store import FeatureService
+        from codomyrmex.model_ops.feature_store import FeatureService
 
         service = FeatureService()
 

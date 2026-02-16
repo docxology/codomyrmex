@@ -4,6 +4,10 @@ Database Management Module for Codomyrmex.
 The Database Management module provides database management,
 migration, and administration capabilities for the Codomyrmex ecosystem.
 
+Submodules:
+    lineage: Consolidated lineage capabilities.
+    migration: Consolidated migration capabilities.
+
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Integrates with `security` for database security and compliance.
@@ -30,7 +34,7 @@ Data structures:
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -88,7 +92,13 @@ def cli_commands():
     }
 
 
+from . import migration
+
+from . import lineage
+
 __all__ = [
+    "lineage",
+    "migration",
     # CLI integration
     "cli_commands",
     'audit',

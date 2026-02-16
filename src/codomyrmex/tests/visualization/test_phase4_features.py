@@ -1,8 +1,8 @@
 import pytest
-from codomyrmex.visualization.plots.wordcloud import WordCloud
-from codomyrmex.visualization.plots.confusion_matrix import ConfusionMatrix
-from codomyrmex.visualization.components.chat_bubble import ChatBubble
-from codomyrmex.visualization.components.json_view import JsonView
+from codomyrmex.data_visualization.plots.wordcloud import WordCloud
+from codomyrmex.data_visualization.plots.confusion_matrix import ConfusionMatrix
+from codomyrmex.data_visualization.components.chat_bubble import ChatBubble
+from codomyrmex.data_visualization.components.json_view import JsonView
 
 def test_word_cloud_render():
     words = [("Hello", 10), ("World", 20)]

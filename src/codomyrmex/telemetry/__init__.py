@@ -1,11 +1,15 @@
 """Telemetry module for Codomyrmex.
 
 This module provides OpenTelemetry-compatible tracing and observability tools.
-"""
+
+
+Submodules:
+    dashboard: Consolidated dashboard capabilities.
+    metrics: Consolidated metrics capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -81,7 +85,12 @@ def cli_commands():
     }
 
 
+from . import dashboard
+
+from . import metrics
+
 __all__ = [
+    "dashboard",
     'alerting',
     'sampling',
     'tracing',

@@ -25,7 +25,7 @@ from codomyrmex.logging_monitoring.logger_config import (
 from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
 from codomyrmex.performance import get_system_metrics, profile_function
 from codomyrmex.security.digital import analyze_file_security
-from codomyrmex.static_analysis import analyze_file
+from codomyrmex.coding.static_analysis import analyze_file
 
 """
 Health Checker for Codomyrmex System Discovery

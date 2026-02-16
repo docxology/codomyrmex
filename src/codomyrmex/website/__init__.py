@@ -28,13 +28,19 @@ Public API:
 - WebsiteGenerator: Generates static website from Jinja2 templates.
 - DataProvider: Aggregates data from various system modules.
 - WebsiteServer: HTTP server with API endpoints for dynamic functionality.
-"""
+
+
+Submodules:
+    accessibility: Consolidated accessibility capabilities."""
 
 from .data_provider import DataProvider
 from .generator import WebsiteGenerator
 from .server import WebsiteServer
 
+from . import accessibility
+
 __all__ = [
+    "accessibility",
     "WebsiteGenerator",
     "DataProvider",
     "WebsiteServer",

@@ -89,6 +89,17 @@ uv run python -m pytest src/codomyrmex/tests/unit/website/ -v
 - [Agent Guide](../../../docs/modules/website/AGENTS.md)
 - [Specification](../../../docs/modules/website/SPEC.md)
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`accessibility/`** | WCAG compliance auditing and remediation |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

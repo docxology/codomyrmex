@@ -102,9 +102,31 @@ graph TD
 
 ```python
 class Authenticator:
-    def authenticate(credentials: dict) -> Optional[Token]
+    def authenticate(credentials: dict) -> Token | None
     def authorize(token: Token, resource: str, permission: str) -> bool
-    def refresh_token(token: Token) -> Optional[Token]
+    def refresh_token(token: Token) -> Token | None
+    def revoke_token(token: Token) -> bool
+```
+
+### Supporting Registries
+
+```python
+class PermissionRegistry:
+    def register_role(role: str, permissions: List[str]) -> None
+    def add_inheritance(role: str, parent_role: str) -> None
+    def get_permissions(role: str) -> Set[str]
+    def has_permission(role: str, permission: str) -> bool
+
+class TokenManager:
+    def create_token(user_id: str, permissions: List[str] = None, ttl: int = 3600) -> Token
+    def validate_token(token: Token) -> bool
+    def revoke_token(token: Token) -> bool
+    def refresh_token(token: Token, ttl: int = 3600) -> Token | None
+
+class APIKeyManager:
+    def generate_api_key(user_id: str, permissions: List[str] = None) -> str
+    def validate_api_key(api_key: str) -> dict | None
+    def revoke_api_key(api_key: str) -> bool
 ```
 
 ## Implementation Guidelines
@@ -128,4 +150,3 @@ class Authenticator:
 - **Related**: [security](../security/AGENTS.md), [api](../api/AGENTS.md)
 
 <!-- Navigation Links keyword for score -->
-

@@ -98,19 +98,36 @@ graph TD
 - Generate Markdown summary reports
 - Generate script documentation from discovery
 
-## Interface Contracts
+### Public API
 
-### Public API (via `__init__.py`)
+#### Script Orchestration (`orchestrator.core`)
 
 ```python
-from codomyrmex.orchestrator import run_orchestrator, load_config, get_script_config
+def run_orchestrator(argv: List[str] = None) -> int
+def load_config(scripts_dir: Path) -> dict
+def get_script_config(script: Path, scripts_dir: Path, config: dict) -> dict
+```
 
-# Main entry point
-exit_code = run_orchestrator()
+#### Workflow DAG Engine (`orchestrator.workflow`)
 
-# Configuration access
-config = load_config(config_path)
-script_config = get_script_config(config, script_name)
+```python
+class Workflow:
+    def add_task(name: str, action: Callable, dependencies: List[str] = None, ...) -> Workflow
+    async def run() -> Dict[str, Any]
+    def validate() -> None  # Cycle detection
+
+class Task:
+    name: str; action: Callable; dependencies: Set[str]; ...
+
+class RetryPolicy:
+    max_attempts: int; initial_delay: float; ...
+```
+
+#### Execution Runners (`orchestrator.runner`)
+
+```python
+def run_script(script_path: Path, timeout: int = 60, env: dict = None, ...) -> dict
+def run_function(func: Callable, args: tuple = (), kwargs: dict = None, ...) -> dict
 ```
 
 ### Result Structure

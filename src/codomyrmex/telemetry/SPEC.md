@@ -18,10 +18,10 @@ The `telemetry` module provides a unified observability framework based on the O
 - Enables propagation of trace context across process and network boundaries.
 - Supports parent-child span nesting for recursive workflows (e.g., agent task decomposition).
 
-### Extensibility
+### Metrics and Observability
 
-- Plugin-based architecture for exporters and processors.
-- Allows for application-specific metadata enrichment.
+- Supports recording and aggregating performance metrics (Counters, Gauges, Histograms).
+- Provides a centralized dashboard for real-time system visibility.
 
 ## Functional Requirements
 
@@ -41,6 +41,18 @@ The `telemetry` module provides a unified observability framework based on the O
 - OTLP/HTTP and OTLP/gRPC support (where dependencies allow).
 - Buffering and batching of span data for high-throughput scenarios.
 
+### Metrics (Consolidated)
+
+- Support for standard metric instruments: Counter, UpDownCounter, Gauge, Histogram.
+- Time-series aggregation and periodic export.
+- Dimensionality support through metric attributes.
+
+### Dashboard (Consolidated)
+
+- Real-time visualization of traces and metrics.
+- Sub-second updates for critical system health indicators.
+- Correlated view of logs, traces, and metrics.
+
 ## Interface Contracts
 
 ### `TraceContext`
@@ -50,11 +62,18 @@ The `telemetry` module provides a unified observability framework based on the O
 - `link_span(span: Span, target: Span)`: Context linking.
 - `get_current_span() -> Optional[Span]`
 
-### `Span`
+### `Metrics`
 
-- `set_attribute(key: str, value: Any)`
-- `add_event(name: str, attributes: dict)`
-- `end()`
+- `create_counter(name: str) -> Counter`
+- `create_gauge(name: str) -> Gauge`
+- `create_histogram(name: str) -> Histogram`
+- `record_metric(name: str, value: float, attributes: dict)`
+
+### `Dashboard`
+
+- `start_dashboard_server(port: int)`
+- `register_view(metric_name: str, chart_type: str)`
+- `update_display()`
 
 ## Quality Standards
 

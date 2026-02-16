@@ -11,12 +11,12 @@ class TestNotificationImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import notification
+        from codomyrmex.events import notification
         assert notification is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.notification import __all__
+        from codomyrmex.events.notification import __all__
         expected_exports = [
             "NotificationChannel",
             "NotificationPriority",
@@ -44,7 +44,7 @@ class TestNotificationChannel:
 
     def test_channel_values(self):
         """Verify all notification channels are available."""
-        from codomyrmex.notification import NotificationChannel
+        from codomyrmex.events.notification import NotificationChannel
 
         assert NotificationChannel.EMAIL.value == "email"
         assert NotificationChannel.SLACK.value == "slack"
@@ -60,7 +60,7 @@ class TestNotificationPriority:
 
     def test_priority_values(self):
         """Verify all priorities are available."""
-        from codomyrmex.notification import NotificationPriority
+        from codomyrmex.events.notification import NotificationPriority
 
         assert NotificationPriority.LOW.value == "low"
         assert NotificationPriority.MEDIUM.value == "medium"
@@ -74,7 +74,7 @@ class TestNotificationStatus:
 
     def test_status_values(self):
         """Verify all statuses are available."""
-        from codomyrmex.notification import NotificationStatus
+        from codomyrmex.events.notification import NotificationStatus
 
         assert NotificationStatus.PENDING.value == "pending"
         assert NotificationStatus.SENT.value == "sent"
@@ -88,7 +88,7 @@ class TestNotification:
 
     def test_notification_creation(self):
         """Verify Notification can be created."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             Notification,
             NotificationChannel,
             NotificationPriority,
@@ -109,7 +109,7 @@ class TestNotification:
 
     def test_notification_to_dict(self):
         """Verify notification serialization."""
-        from codomyrmex.notification import Notification, NotificationChannel
+        from codomyrmex.events.notification import Notification, NotificationChannel
 
         notif = Notification(
             id="test",
@@ -129,7 +129,7 @@ class TestNotificationResult:
 
     def test_result_creation(self):
         """Verify NotificationResult can be created."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             NotificationChannel,
             NotificationResult,
             NotificationStatus,
@@ -146,7 +146,7 @@ class TestNotificationResult:
 
     def test_result_is_success(self):
         """Verify is_success property."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             NotificationChannel,
             NotificationResult,
             NotificationStatus,
@@ -173,14 +173,14 @@ class TestConsoleProvider:
 
     def test_provider_channel(self):
         """Verify provider channel."""
-        from codomyrmex.notification import ConsoleProvider, NotificationChannel
+        from codomyrmex.events.notification import ConsoleProvider, NotificationChannel
 
         provider = ConsoleProvider()
         assert provider.channel == NotificationChannel.CONSOLE
 
     def test_provider_send(self, capsys):
         """Verify console output."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             ConsoleProvider,
             Notification,
             NotificationStatus,
@@ -206,14 +206,14 @@ class TestFileProvider:
 
     def test_provider_channel(self):
         """Verify provider channel."""
-        from codomyrmex.notification import FileProvider, NotificationChannel
+        from codomyrmex.events.notification import FileProvider, NotificationChannel
 
         provider = FileProvider()
         assert provider.channel == NotificationChannel.FILE
 
     def test_provider_send(self):
         """Verify file writing."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             FileProvider,
             Notification,
             NotificationStatus,
@@ -248,14 +248,14 @@ class TestWebhookProvider:
 
     def test_provider_channel(self):
         """Verify provider channel."""
-        from codomyrmex.notification import NotificationChannel, WebhookProvider
+        from codomyrmex.events.notification import NotificationChannel, WebhookProvider
 
         provider = WebhookProvider(url="https://example.com/webhook")
         assert provider.channel == NotificationChannel.WEBHOOK
 
     def test_provider_send_mock(self):
         """Verify mock webhook sending."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             Notification,
             NotificationStatus,
             WebhookProvider,
@@ -277,7 +277,7 @@ class TestNotificationTemplate:
 
     def test_template_creation(self):
         """Verify template creation."""
-        from codomyrmex.notification import NotificationPriority, NotificationTemplate
+        from codomyrmex.events.notification import NotificationPriority, NotificationTemplate
 
         template = NotificationTemplate(
             name="test_template",
@@ -290,7 +290,7 @@ class TestNotificationTemplate:
 
     def test_template_render(self):
         """Verify template rendering."""
-        from codomyrmex.notification import NotificationTemplate
+        from codomyrmex.events.notification import NotificationTemplate
 
         template = NotificationTemplate(
             name="alert",
@@ -317,7 +317,7 @@ class TestNotificationRouter:
 
     def test_router_default(self):
         """Verify default routing."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             Notification,
             NotificationChannel,
             NotificationRouter,
@@ -333,7 +333,7 @@ class TestNotificationRouter:
 
     def test_router_rule_matching(self):
         """Verify rule-based routing."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             Notification,
             NotificationChannel,
             NotificationPriority,
@@ -370,27 +370,27 @@ class TestNotificationService:
 
     def test_service_creation(self):
         """Verify service creation."""
-        from codomyrmex.notification import NotificationService
+        from codomyrmex.events.notification import NotificationService
 
         service = NotificationService()
         assert service is not None
 
     def test_service_register_provider(self):
         """Verify provider registration."""
-        from codomyrmex.notification import ConsoleProvider, NotificationService
+        from codomyrmex.events.notification import ConsoleProvider, NotificationService
 
         service = NotificationService()
         service.register_provider(ConsoleProvider())
 
         # Should not raise when sending to console
-        from codomyrmex.notification import Notification
+        from codomyrmex.events.notification import Notification
         notif = Notification(id="test", subject="Test", body="Test")
         result = service.send(notif)
         assert result.is_success is True
 
     def test_service_send_without_provider(self):
         """Verify failure when no provider registered."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             Notification,
             NotificationChannel,
             NotificationService,
@@ -410,7 +410,7 @@ class TestNotificationService:
 
     def test_service_register_template(self):
         """Verify template registration."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             ConsoleProvider,
             NotificationService,
             NotificationTemplate,
@@ -438,7 +438,7 @@ class TestNotificationService:
 
     def test_service_send_from_missing_template(self):
         """Verify failure when template not found."""
-        from codomyrmex.notification import NotificationService, NotificationStatus
+        from codomyrmex.events.notification import NotificationService, NotificationStatus
 
         service = NotificationService()
         result = service.send_from_template("nonexistent", id="test")
@@ -448,7 +448,7 @@ class TestNotificationService:
 
     def test_service_broadcast(self):
         """Verify broadcast to multiple channels."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             ConsoleProvider,
             Notification,
             NotificationChannel,
@@ -472,7 +472,7 @@ class TestNotificationService:
 
     def test_service_history(self):
         """Verify notification history tracking."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             ConsoleProvider,
             Notification,
             NotificationService,
@@ -489,7 +489,7 @@ class TestNotificationService:
 
     def test_service_success_count(self):
         """Verify success count tracking."""
-        from codomyrmex.notification import (
+        from codomyrmex.events.notification import (
             ConsoleProvider,
             Notification,
             NotificationService,
@@ -510,7 +510,7 @@ class TestBuiltinTemplates:
 
     def test_alert_template(self):
         """Verify ALERT_TEMPLATE."""
-        from codomyrmex.notification import ALERT_TEMPLATE, NotificationPriority
+        from codomyrmex.events.notification import ALERT_TEMPLATE, NotificationPriority
 
         assert ALERT_TEMPLATE.name == "alert"
         assert ALERT_TEMPLATE.default_priority == NotificationPriority.HIGH
@@ -528,7 +528,7 @@ class TestBuiltinTemplates:
 
     def test_info_template(self):
         """Verify INFO_TEMPLATE."""
-        from codomyrmex.notification import INFO_TEMPLATE
+        from codomyrmex.events.notification import INFO_TEMPLATE
 
         assert INFO_TEMPLATE.name == "info"
 
@@ -542,7 +542,7 @@ class TestBuiltinTemplates:
 
     def test_error_template(self):
         """Verify ERROR_TEMPLATE."""
-        from codomyrmex.notification import ERROR_TEMPLATE, NotificationPriority
+        from codomyrmex.events.notification import ERROR_TEMPLATE, NotificationPriority
 
         assert ERROR_TEMPLATE.name == "error"
         assert ERROR_TEMPLATE.default_priority == NotificationPriority.CRITICAL

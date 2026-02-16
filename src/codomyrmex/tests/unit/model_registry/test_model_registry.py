@@ -8,12 +8,12 @@ class TestModelRegistryImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import model_registry
+        from codomyrmex.model_ops import registry as model_registry
         assert model_registry is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.model_registry import __all__
+        from codomyrmex.model_ops.registry import __all__
         expected_exports = [
             "ModelStage",
             "ModelFramework",
@@ -35,7 +35,7 @@ class TestModelStage:
 
     def test_model_stage_values(self):
         """Verify all model stages are available."""
-        from codomyrmex.model_registry import ModelStage
+        from codomyrmex.model_ops.registry import ModelStage
 
         assert ModelStage.DEVELOPMENT.value == "development"
         assert ModelStage.STAGING.value == "staging"
@@ -49,7 +49,7 @@ class TestModelFramework:
 
     def test_model_framework_values(self):
         """Verify all model frameworks are available."""
-        from codomyrmex.model_registry import ModelFramework
+        from codomyrmex.model_ops.registry import ModelFramework
 
         assert ModelFramework.SKLEARN.value == "sklearn"
         assert ModelFramework.PYTORCH.value == "pytorch"
@@ -64,7 +64,7 @@ class TestModelMetrics:
 
     def test_metrics_creation(self):
         """Verify ModelMetrics can be created."""
-        from codomyrmex.model_registry import ModelMetrics
+        from codomyrmex.model_ops.registry import ModelMetrics
 
         metrics = ModelMetrics(
             accuracy=0.95,
@@ -78,7 +78,7 @@ class TestModelMetrics:
 
     def test_metrics_to_dict(self):
         """Verify metrics serialization."""
-        from codomyrmex.model_registry import ModelMetrics
+        from codomyrmex.model_ops.registry import ModelMetrics
 
         metrics = ModelMetrics(
             accuracy=0.85,
@@ -98,7 +98,7 @@ class TestModelVersion:
 
     def test_version_creation(self):
         """Verify ModelVersion can be created."""
-        from codomyrmex.model_registry import ModelFramework, ModelStage, ModelVersion
+        from codomyrmex.model_ops.registry import ModelFramework, ModelStage, ModelVersion
 
         version = ModelVersion(
             version="1.0.0",
@@ -113,7 +113,7 @@ class TestModelVersion:
 
     def test_version_full_name(self):
         """Verify full name property."""
-        from codomyrmex.model_registry import ModelVersion
+        from codomyrmex.model_ops.registry import ModelVersion
 
         version = ModelVersion(version="2.0", model_name="my_model")
 
@@ -121,7 +121,7 @@ class TestModelVersion:
 
     def test_version_to_dict(self):
         """Verify version serialization."""
-        from codomyrmex.model_registry import ModelFramework, ModelMetrics, ModelVersion
+        from codomyrmex.model_ops.registry import ModelFramework, ModelMetrics, ModelVersion
 
         version = ModelVersion(
             version="1.0",
@@ -143,7 +143,7 @@ class TestRegisteredModel:
 
     def test_model_creation(self):
         """Verify RegisteredModel can be created."""
-        from codomyrmex.model_registry import RegisteredModel
+        from codomyrmex.model_ops.registry import RegisteredModel
 
         model = RegisteredModel(
             name="my_classifier",
@@ -157,7 +157,7 @@ class TestRegisteredModel:
         """Verify latest version retrieval."""
         from datetime import datetime, timedelta
 
-        from codomyrmex.model_registry import ModelVersion, RegisteredModel
+        from codomyrmex.model_ops.registry import ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
 
@@ -173,7 +173,7 @@ class TestRegisteredModel:
 
     def test_model_production_version(self):
         """Verify production version retrieval."""
-        from codomyrmex.model_registry import ModelStage, ModelVersion, RegisteredModel
+        from codomyrmex.model_ops.registry import ModelStage, ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
 
@@ -186,7 +186,7 @@ class TestRegisteredModel:
 
     def test_model_get_version(self):
         """Verify version retrieval by version string."""
-        from codomyrmex.model_registry import ModelVersion, RegisteredModel
+        from codomyrmex.model_ops.registry import ModelVersion, RegisteredModel
 
         model = RegisteredModel(name="test")
         model.versions = [
@@ -208,7 +208,7 @@ class TestInMemoryModelStore:
 
     def test_store_save_and_load(self):
         """Verify artifact storage and retrieval."""
-        from codomyrmex.model_registry import InMemoryModelStore
+        from codomyrmex.model_ops.registry import InMemoryModelStore
 
         store = InMemoryModelStore()
         artifact = b"model binary data"
@@ -220,7 +220,7 @@ class TestInMemoryModelStore:
 
     def test_store_delete(self):
         """Verify artifact deletion."""
-        from codomyrmex.model_registry import InMemoryModelStore
+        from codomyrmex.model_ops.registry import InMemoryModelStore
 
         store = InMemoryModelStore()
         path = store.save_artifact("model", "1.0", b"data")
@@ -230,7 +230,7 @@ class TestInMemoryModelStore:
 
     def test_store_load_missing(self):
         """Verify loading missing artifact raises error."""
-        from codomyrmex.model_registry import InMemoryModelStore
+        from codomyrmex.model_ops.registry import InMemoryModelStore
 
         store = InMemoryModelStore()
 
@@ -244,7 +244,7 @@ class TestModelRegistry:
 
     def test_registry_register_model(self):
         """Verify model registration."""
-        from codomyrmex.model_registry import (
+        from codomyrmex.model_ops.registry import (
             ModelFramework,
             ModelMetrics,
             ModelRegistry,
@@ -265,7 +265,7 @@ class TestModelRegistry:
 
     def test_registry_duplicate_version_error(self):
         """Verify duplicate version raises error."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
 
@@ -276,7 +276,7 @@ class TestModelRegistry:
 
     def test_registry_get_model(self):
         """Verify model retrieval."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="test_model", version="1.0")
@@ -290,7 +290,7 @@ class TestModelRegistry:
 
     def test_registry_get_version(self):
         """Verify version retrieval."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -302,7 +302,7 @@ class TestModelRegistry:
 
     def test_registry_get_latest(self):
         """Verify latest version retrieval."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -313,7 +313,7 @@ class TestModelRegistry:
 
     def test_registry_transition_stage(self):
         """Verify stage transition."""
-        from codomyrmex.model_registry import ModelRegistry, ModelStage
+        from codomyrmex.model_ops.registry import ModelRegistry, ModelStage
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -325,7 +325,7 @@ class TestModelRegistry:
 
     def test_registry_production_transition_demotes_previous(self):
         """Verify production promotion demotes previous production version."""
-        from codomyrmex.model_registry import ModelRegistry, ModelStage
+        from codomyrmex.model_ops.registry import ModelRegistry, ModelStage
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -345,7 +345,7 @@ class TestModelRegistry:
 
     def test_registry_list_models(self):
         """Verify model listing."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="model_a", version="1.0")
@@ -357,7 +357,7 @@ class TestModelRegistry:
 
     def test_registry_list_versions(self):
         """Verify version listing."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -369,7 +369,7 @@ class TestModelRegistry:
 
     def test_registry_delete_version(self):
         """Verify version deletion."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         registry.register(name="model", version="1.0")
@@ -384,7 +384,7 @@ class TestModelRegistry:
 
     def test_registry_artifact_storage(self):
         """Verify artifact storage and retrieval."""
-        from codomyrmex.model_registry import ModelRegistry
+        from codomyrmex.model_ops.registry import ModelRegistry
 
         registry = ModelRegistry()
         artifact = b"serialized model data"

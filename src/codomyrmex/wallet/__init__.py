@@ -7,7 +7,10 @@ Core Components:
     NaturalRitualRecovery: Multi-factor knowledge-based key recovery.
     BackupManager: Encrypted backup creation and verification.
     KeyRotation: Policy-driven key rotation with audit trail.
-"""
+
+
+Submodules:
+    contracts: Consolidated contracts capabilities."""
 
 from .backup import BackupManager
 from .core import WalletManager
@@ -17,7 +20,7 @@ from .recovery import NaturalRitualRecovery, RitualStep, hash_response
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -46,7 +49,10 @@ def cli_commands():
     }
 
 
+from . import contracts
+
 __all__ = [
+    "contracts",
     # Classes
     "WalletManager",
     "NaturalRitualRecovery",

@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The `code` module provides a unified interface for code execution, sandboxing, review, and monitoring. It consolidates secure code execution and automated code review capabilities into a cohesive structure.
+The `coding` module provides a unified interface for code execution, sandboxing, review, monitoring, static analysis, pattern matching, and debugging. It consolidates secure code execution and automated code analysis capabilities into a cohesive structure.
 
 This module is critical for the "Verification" phase of the AI coding loop, allowing the system to test its own code without risking the host environment, and for continuous quality assessment through automated code review.
 
@@ -15,7 +15,8 @@ This module is critical for the "Verification" phase of the AI coding loop, allo
 - **Submodule Separation**: Clear separation between execution, sandboxing, review, and monitoring concerns
 - **Isolation Providers**: Abstract the sandbox mechanism (Docker, gVisor, or simple `venv` for trusted mode)
 - **Execution Interface**: Standard API (`execute_code()`) regardless of backend
-- **Review Interface**: Unified review API with multiple analysis backends
+- **Analyzer Interface**: Unified API for `static_analysis` and `pattern_matching` backends
+- **Review Interface**: Integrated review API that leverages various analysis sub-modules
 
 ### Internal Coherence
 
@@ -48,25 +49,17 @@ graph TD
     Venv --> Monitor
     Monitor --> Result[Execution Result]
     
-    Code[Code Changes] --> Review[Review Submodule]
-    Review --> Analyzer[Pyscn Analyzer]
-    Review --> Tools[Traditional Tools]
-    Analyzer --> Quality[Quality Assessment]
-    Tools --> Quality
-    Monitor --> Result[Execution Result]
-    
-    Code[Code Changes] --> Review[Review Submodule]
-    Review --> Analyzer[Pyscn Analyzer]
-    Review --> Tools[Traditional Tools]
-    Analyzer --> Quality[Quality Assessment]
-    Tools --> Quality
-    Quality --> Report[Review Report]
-
     Result -->|Failure| Debugger[Debugging Submodule]
     Debugger --> ErrorAnalyzer[Error Analyzer]
     ErrorAnalyzer --> PatchGen[Patch Generator]
     PatchGen --> Verifier[Fix Verifier]
     Verifier -->|Success| Result
+
+    Code --> Static[Static Analysis Submodule]
+    Code --> Patterns[Pattern Matching Submodule]
+    Static --> Review[Review Submodule]
+    Patterns --> Review
+```
 
 ## Functional Requirements
 
@@ -78,12 +71,19 @@ graph TD
 4. **Resource Limits**: Enforce CPU, memory, and time constraints
 5. **Session Management**: Support persistent execution environments
 
-### Code Review
+### Static Analysis (Consolidated)
 
-1. **Analysis**: Run configured checks on files and projects
-2. **Reporting**: Aggregate findings into structured reports
-3. **Quality Gates**: Enforce quality thresholds
-4. **Multiple Analysis Types**: Quality, security, performance, maintainability, complexity, style, documentation
+1. **Linting**: Automated code style and error checking
+2. **Complexity Analysis**: Measuring cyclomatic complexity and maintainability
+3. **Security Scanning**: Searching for common security patterns and vulnerabilities
+4. **Metrics**: Logical lines of code, comment density, etc.
+
+### Pattern Matching (Consolidated)
+
+1. **Structural Search**: Find code patterns based on AST nodes
+2. **Clones Detection**: Identify duplicated or near-duplicate code blocks
+3. **Refactoring detection**: Identify common refactoring patterns across versions
+4. **AST-based transformations**: Perform safe code modifications based on patterns
 
 ### Monitoring
 
@@ -109,20 +109,36 @@ graph TD
 ### Public API
 
 **Execution:**
+
 - `execute_code(language: str, code: str, stdin: Optional[str] = None, timeout: Optional[int] = None, session_id: Optional[str] = None) -> dict[str, Any]`
 
 **Review:**
+
 - `analyze_file(file_path: str, analysis_types: list[str] = None) -> list[AnalysisResult]`
 - `analyze_project(project_root: str, target_paths: list[str] = None, analysis_types: list[str] = None) -> AnalysisSummary`
 - `check_quality_gates(project_root: str, thresholds: dict[str, int] = None) -> QualityGateResult`
 - `generate_report(project_root: str, output_path: str, format: str = "html") -> bool`
 
 **Monitoring:**
+
 - `ResourceMonitor` - Track resource usage
 - `ExecutionMonitor` - Monitor execution status
 - `MetricsCollector` - Collect and aggregate metrics
 
+**Static Analysis:**
+
+- `StaticAnalyzer` - Perform advanced linting and complexity checks
+- `SecurityScanner` - Scan for vulnerabilities
+- `MetricCollector` - Gather code statistics
+
+**Pattern Matching:**
+
+- `PatternMatcher` - Search for structural code patterns
+- `CloneDetector` - Find duplicate code
+- `ASTTransformer` - Pattern-based refactorings
+
 **Debugging:**
+
 - `Debugger` - Main orchestration for the debug loop
 - `ErrorAnalyzer` - Parse and diagnose errors
 - `PatchGenerator` - Generate code patches
@@ -151,4 +167,5 @@ graph TD
 - **Package SPEC**: [../SPEC.md](../SPEC.md)
 
 <!-- Navigation Links keyword for score -->
+```markdown
 ```

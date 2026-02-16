@@ -5,6 +5,9 @@ The CI/CD Automation module provides continuous integration and deployment
 capabilities, including pipeline management, automated testing, deployment orchestration,
 and build automation for the Codomyrmex ecosystem.
 
+Submodules:
+    build: Consolidated build capabilities.
+
 Integration:
 - Uses `logging_monitoring` for all logging (ensure `setup_logging()` is called in your main app).
 - Relies on `environment_setup` for environment and dependency checks.
@@ -32,7 +35,7 @@ Data structures:
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -99,6 +102,8 @@ def cli_commands():
         },
     }
 
+
+from . import build
 
 __all__ = [
     # CLI integration

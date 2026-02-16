@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime, date, timedelta
 
 try:
-    from codomyrmex.i18n import (
+    from codomyrmex.utils.i18n import (
         Locale,
         MessageBundle,
         NumberFormatter,
@@ -504,7 +504,7 @@ class TestTranslateFunction:
 
     def test_global_translator_works_end_to_end(self):
         """init() + add bundle + t() works as a full workflow."""
-        import codomyrmex.i18n as i18n_mod
+        import codomyrmex.utils.i18n as i18n_mod
         tr = init("en")
         bundle = MessageBundle.from_dict(Locale("en"), {"welcome": "Welcome!"})
         tr.add_bundle(bundle)

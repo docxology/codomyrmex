@@ -6,11 +6,11 @@ import time
 import pytest
 
 try:
-    from codomyrmex.rate_limiting import (
+    from codomyrmex.api.rate_limiting import (
         RateLimitExceeded,
         RateLimitResult,
     )
-    from codomyrmex.rate_limiting.distributed import (
+    from codomyrmex.api.rate_limiting.distributed import (
         AdaptiveRateLimiter,
         LeakyBucketLimiter,
         RedisRateLimiter,

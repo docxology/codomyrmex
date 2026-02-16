@@ -5,7 +5,7 @@ Provides submodules for 3D modeling, 4D modeling (Synergetics), and world models
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

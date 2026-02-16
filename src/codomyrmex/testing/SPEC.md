@@ -8,16 +8,17 @@ Testing module providing test framework utilities, fixtures, and test infrastruc
 
 ## Functional Requirements
 
-- Pytest integration and configuration
-- Shared fixtures across test suites
-- Test data generation
-- Mock and stub utilities
-- Coverage reporting
+- **Pytest integration**: Standard configuration and optimized test discovery.
+- **Fixtures & Stubs**: Library of reusable test data and environment state.
+- **Property-Based Testing (Consolidated)**: Generating thousands of test cases to verify invariants.
+- **Workflow Testing (Consolidated)**: End-to-end verification of complex multi-step processes.
+- **Chaos Engineering (Consolidated)**: Simulating failures and latency to test system resilience.
+- **Zero-Mock Enforcement**: Tools to audit and ensure real functional verification.
 
 ## Test Categories
 
 | Category | Description |
-|----------|-------------|
+| :--- | :--- |
 | Unit | Isolated component tests |
 | Integration | Cross-component tests |
 | Performance | Load and stress tests |
@@ -26,7 +27,7 @@ Testing module providing test framework utilities, fixtures, and test infrastruc
 ## Key Files
 
 | File | Description |
-|------|-------------|
+| :--- | :--- |
 | `conftest.py` | Shared pytest fixtures |
 | `fixtures/` | Test data fixtures |
 | `mocks/` | Mock implementations |

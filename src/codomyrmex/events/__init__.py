@@ -3,7 +3,11 @@ Event-Driven Architecture for Codomyrmex
 
 This module provides an event system that enables decoupled,
 asynchronous communication between different components of the Codomyrmex platform.
-"""
+
+
+Submodules:
+    notification: Consolidated notification capabilities.
+    streaming: Consolidated streaming capabilities."""
 
 # Re-export base EventError from main exceptions module
 from codomyrmex.exceptions import EventError
@@ -29,7 +33,13 @@ from .core.mixins import EventMixin
 from .emitters.emitter import AsyncEventEmitter
 from .handlers.event_logger import EventLogger, get_event_logger, get_event_stats
 
+from . import streaming
+
+from . import notification
+
 __all__ = [
+    "notification",
+    "streaming",
     # Core classes
     'Event',
     'EventType',

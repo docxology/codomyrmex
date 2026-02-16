@@ -1,8 +1,8 @@
 import pytest
-from codomyrmex.visualization.plots.funnel import FunnelChart
-from codomyrmex.visualization.plots.sankey import SankeyDiagram
-from codomyrmex.visualization.components.timeline import Timeline, TimelineEvent
-from codomyrmex.visualization.components.statbox import StatBox
+from codomyrmex.data_visualization.plots.funnel import FunnelChart
+from codomyrmex.data_visualization.plots.sankey import SankeyDiagram
+from codomyrmex.data_visualization.components.timeline import Timeline, TimelineEvent
+from codomyrmex.data_visualization.components.statbox import StatBox
 
 def test_funnel_chart_render():
     stages = ["Leads", "Sales"]

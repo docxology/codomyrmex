@@ -1,4 +1,4 @@
-from codomyrmex.visualization import generate_report
+from codomyrmex.data_visualization import generate_report
 from pathlib import Path
 import shutil
 

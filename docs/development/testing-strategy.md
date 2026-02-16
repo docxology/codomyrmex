@@ -77,7 +77,7 @@ def test_create_line_plot_basic():
 # Example: Static Analysis integration (ACTUAL IMPLEMENTATION)
 def test_static_analysis_real():
     """Test static analysis with real Pyrefly integration."""
-    from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
+    from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
     import tempfile
     from pathlib import Path
 
@@ -116,7 +116,7 @@ def test_complete_development_workflow():
     """Test full development cycle with real implemented functions."""
     import tempfile
     from pathlib import Path
-    from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+    from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
     from codomyrmex.coding.code_executor import execute_code
     from codomyrmex.data_visualization.line_plot import create_line_plot
 
@@ -379,7 +379,7 @@ print(add(2, 3))",
 # Example: Testing build_synthesis (ACTUAL IMPLEMENTATION)
 def test_build_synthesis_integration():
     """Test build synthesis using real implemented functions."""
-    from codomyrmex.build_synthesis.build_orchestrator import (
+    from codomyrmex.ci_cd_automation.build.build_orchestrator import (
         check_build_environment,
         validate_build_output,
         synthesize_build_artifact

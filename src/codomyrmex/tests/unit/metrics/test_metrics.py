@@ -14,8 +14,8 @@ import socket
 
 import pytest
 
-from codomyrmex import metrics
-from codomyrmex.metrics import (
+from codomyrmex.telemetry import metrics
+from codomyrmex.telemetry.metrics import (
     Counter,
     Gauge,
     Histogram,
@@ -622,7 +622,7 @@ class TestPrometheusExporter:
 
     def test_prometheus_exporter_import(self):
         """Test PrometheusExporter can be imported."""
-        from codomyrmex.metrics import PrometheusExporter
+        from codomyrmex.telemetry.metrics import PrometheusExporter
         assert PrometheusExporter is None or callable(PrometheusExporter)
 
     @pytest.mark.skipif(
@@ -631,7 +631,7 @@ class TestPrometheusExporter:
     )
     def test_prometheus_exporter_creation(self):
         """Test PrometheusExporter creation without starting server."""
-        from codomyrmex.metrics import PrometheusExporter
+        from codomyrmex.telemetry.metrics import PrometheusExporter
         exporter = PrometheusExporter(port=9090, addr="127.0.0.1")
         assert exporter.port == 9090
         assert exporter.addr == "127.0.0.1"
@@ -665,7 +665,7 @@ class TestStatsDClient:
 
     def test_statsd_client_import(self):
         """Test StatsDClient can be imported."""
-        from codomyrmex.metrics import StatsDClient
+        from codomyrmex.telemetry.metrics import StatsDClient
         assert StatsDClient is None or callable(StatsDClient)
 
     @pytest.mark.skipif(
@@ -674,7 +674,7 @@ class TestStatsDClient:
     )
     def test_statsd_client_creation(self):
         """Test StatsDClient creation with real client."""
-        from codomyrmex.metrics import StatsDClient
+        from codomyrmex.telemetry.metrics import StatsDClient
         client = StatsDClient(host="localhost", port=8125, prefix="test")
         assert client is not None
 
@@ -685,7 +685,7 @@ class TestStatsDClient:
     @requires_statsd
     def test_statsd_client_incr(self):
         """Test StatsDClient incr — sends real UDP packet."""
-        from codomyrmex.metrics import StatsDClient
+        from codomyrmex.telemetry.metrics import StatsDClient
         client = StatsDClient()
         client.incr("requests", count=5, rate=0.5)
 
@@ -696,7 +696,7 @@ class TestStatsDClient:
     @requires_statsd
     def test_statsd_client_gauge(self):
         """Test StatsDClient gauge — sends real UDP packet."""
-        from codomyrmex.metrics import StatsDClient
+        from codomyrmex.telemetry.metrics import StatsDClient
         client = StatsDClient()
         client.gauge("memory", 1024.0, rate=1.0)
 
@@ -707,7 +707,7 @@ class TestStatsDClient:
     @requires_statsd
     def test_statsd_client_timing(self):
         """Test StatsDClient timing — sends real UDP packet."""
-        from codomyrmex.metrics import StatsDClient
+        from codomyrmex.telemetry.metrics import StatsDClient
         client = StatsDClient()
         client.timing("request_time", 150.0)
 

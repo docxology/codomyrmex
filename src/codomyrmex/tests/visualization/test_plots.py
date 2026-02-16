@@ -1,7 +1,7 @@
 import pytest
-from codomyrmex.visualization.plots.scatter import ScatterPlot
-from codomyrmex.visualization.plots.heatmap import Heatmap
-from codomyrmex.visualization.plots.mermaid import MermaidDiagram
+from codomyrmex.data_visualization.plots.scatter import ScatterPlot
+from codomyrmex.data_visualization.plots.heatmap import Heatmap
+from codomyrmex.data_visualization.plots.mermaid import MermaidDiagram
 
 def test_scatterplot_render():
     plot = ScatterPlot("Test Plot", [1, 2, 3], [4, 5, 6])
