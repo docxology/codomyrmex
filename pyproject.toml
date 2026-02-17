@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "0.1.2"
+version = "0.1.4"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -114,13 +114,13 @@ dependencies = [
 code_review = [
     "pathlib>=1.0.1",
     "safety>=2.3.0",
-    "tomli>=2.0.0",
+
     "typing-extensions>=4.0.0",
     "vulture>=2.7.0",
 ]
 
 language_models = [
-    "aiohttp>=3.8.0",
+
     "certifi>=2022.0.0",
     "pytest-asyncio>=0.21.0",
     "typing-extensions>=4.0.0",
@@ -138,7 +138,7 @@ cloud = [
 serialization = [
     "protobuf>=4.0.0",
     "msgpack>=1.0.0",
-    "fastavro>=1.8.0",
+
     "pandas>=2.0.0",
     "pyarrow>=12.0.0",
 ]
@@ -157,7 +157,7 @@ modeling_3d = [
     "pyopengl>=3.1.0",
     "pyrr>=0.10.3",
     # "pyvr>=0.1.0",
-    "scipy>=1.7.0",
+
     "trimesh>=3.9.0",
 ]
 
@@ -174,7 +174,7 @@ observability = [
 ]
 
 physical_management = [
-    "aiohttp>=3.8.0",
+
     "alembic>=1.7.0",
     "dynaconf>=3.1.0",
     "isort>=5.9.0",
@@ -183,7 +183,7 @@ physical_management = [
     "mkdocs>=1.2.0",
     "pyserial>=3.5",
     "pytest-asyncio>=0.21.0",
-    "scipy>=1.7.0",
+
     "smbus2>=0.4.0",
     "sqlalchemy>=1.4.0",
     "websockets>=10.0",
@@ -210,7 +210,7 @@ fpf = [
 
 crypto = [
     "cryptography>=42.0.0",
-    "Pillow>=10.0.0",
+    "pillow>=10.0.0",
     "mnemonic>=0.20",
 ]
 
@@ -235,7 +235,7 @@ video = [
 
 dark = [
     "PyMuPDF>=1.23.0",        # PDF rendering and page extraction
-    "Pillow>=10.0.0",         # Image processing for filters
+    "pillow>=10.0.0",         # Image processing for filters
 ]
 
 formal_verification = [
@@ -262,6 +262,7 @@ dev = [
     "mypy>=1.0.0",
     "ruff>=0.1.0",
     "pre-commit>=3.0.0",
+    "pytest-benchmark>=4.0.0",
     "pyyaml>=6.0.2",
 ]
 

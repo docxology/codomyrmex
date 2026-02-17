@@ -12,6 +12,12 @@ import requests as requests_lib
 
 try:
     from codomyrmex import networking
+    # Try importing EphemeralServer, might fail if path issues, handled in tests
+    try:
+        from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
+    except ImportError:
+        EphemeralServer = None
+    
     from codomyrmex.networking import (
         HTTPClient,
         PortScanner,
@@ -143,55 +149,78 @@ class TestHTTPClient:
         assert client.max_retries == 5
         assert client.default_headers["Authorization"] == "Bearer token"
 
-    @requires_network
     def test_get_request(self):
-        client = HTTPClient()
-        response = client.get("https://httpbin.org/get")
-        assert response.status_code == 200
-        data = response.json()
-        assert "url" in data
+        if not EphemeralServer:
+            pytest.skip("EphemeralServer not available")
+            
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.get(f"{server.url}/get")
+            assert response.status_code == 200
+            data = response.json()
+            assert "url" in data
+            assert f"{server.url}/get" == data["url"]
 
-    @requires_network
     def test_post_request(self):
-        client = HTTPClient()
-        response = client.post(
-            "https://httpbin.org/post",
-            json={"name": "test"}
-        )
-        assert response.status_code == 200
-        data = response.json()
-        assert data["json"]["name"] == "test"
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
 
-    @requires_network
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.post(
+                f"{server.url}/post",
+                json={"name": "test"}
+            )
+            assert response.status_code == 200
+            data = response.json()
+            assert data["json"]["name"] == "test"
+
     def test_put_request(self):
-        client = HTTPClient()
-        response = client.put(
-            "https://httpbin.org/put",
-            json={"name": "updated"}
-        )
-        assert response.status_code == 200
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
 
-    @requires_network
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.put(
+                f"{server.url}/put",
+                json={"name": "updated"}
+            )
+            assert response.status_code == 200
+
     def test_delete_request(self):
-        client = HTTPClient()
-        response = client.delete("https://httpbin.org/delete")
-        assert response.status_code == 200
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
 
-    @requires_network
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.delete(f"{server.url}/delete")
+            assert response.status_code == 200
+
     def test_request_with_custom_headers(self):
-        client = HTTPClient()
-        response = client.get(
-            "https://httpbin.org/headers",
-            headers={"X-Custom-Header": "custom-value"}
-        )
-        data = response.json()
-        assert data["headers"]["X-Custom-Header"] == "custom-value"
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
 
-    @requires_network
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.get(
+                f"{server.url}/headers",
+                headers={"X-Custom-Header": "custom-value"}
+            )
+            data = response.json()
+            # headers keys are often lowercased or titlecased depending on server
+            # EphemeralServer echoes exactly what it gets
+            # requests might canonicalize?
+            # Let's check generally
+            assert data["headers"].get("X-Custom-Header") == "custom-value"
+
     def test_request_with_custom_timeout(self):
-        client = HTTPClient()
-        response = client.get("https://httpbin.org/get", timeout=60)
-        assert response.status_code == 200
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
+
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.get(f"{server.url}/get", timeout=60)
+            assert response.status_code == 200
 
     def test_request_error_handling(self):
         """Test that request errors are wrapped in NetworkingError."""
@@ -205,18 +234,24 @@ class TestHTTPClient:
         with pytest.raises(NetworkingError):
             client.get("http://127.0.0.1:1/impossible")
 
-    @requires_network
     def test_response_4xx_error(self):
-        client = HTTPClient()
-        response = client.get("https://httpbin.org/status/404")
-        assert response.status_code == 404
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
+
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.get(f"{server.url}/status/404")
+            assert response.status_code == 404
 
     @requires_network
-    @requires_network
     def test_response_5xx_error(self):
-        client = HTTPClient(max_retries=0)
-        with pytest.raises(NetworkingError):
-            client.get("https://httpbin.org/status/500")
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
+        
+        with EphemeralServer() as server:
+            client = HTTPClient(max_retries=0)
+            with pytest.raises(NetworkingError):
+                client.get(f"{server.url}/status/500")
 
 
 # ==============================================================================
@@ -509,23 +544,29 @@ class TestPortScanner:
 class TestNetworkingIntegration:
     """Integration tests using real services."""
 
-    @requires_network
     def test_http_client_json_workflow(self):
-        client = HTTPClient(headers={"Accept": "application/json"})
-        response = client.get("https://httpbin.org/get")
-        assert response.status_code == 200
-        data = response.json()
-        assert "url" in data
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
 
-    @requires_network
+        with EphemeralServer() as server:
+            client = HTTPClient(headers={"Accept": "application/json"})
+            response = client.get(f"{server.url}/get")
+            assert response.status_code == 200
+            data = response.json()
+            assert "url" in data
+
     def test_http_client_post_json_workflow(self):
-        client = HTTPClient()
-        response = client.post(
-            "https://httpbin.org/post",
-            json={"name": "Bob", "email": "bob@example.com"}
-        )
-        assert response.status_code == 200
-        assert response.json()["json"]["name"] == "Bob"
+        if not EphemeralServer:
+             pytest.skip("EphemeralServer not available")
+
+        with EphemeralServer() as server:
+            client = HTTPClient()
+            response = client.post(
+                f"{server.url}/post",
+                json={"name": "Bob", "email": "bob@example.com"}
+            )
+            assert response.status_code == 200
+            assert response.json()["json"]["name"] == "Bob"
 
     @pytest.mark.asyncio
     async def test_websocket_message_flow(self):
