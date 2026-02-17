@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-02-17
+
+### Added
+
+- `scripts/audit_exports.py` — validates every module has `__all__` (supports annotated assignments)
+- `scripts/audit_imports.py` — AST-based cross-module import audit with architecture layer rules
+- `__all__` to `module_template/__init__.py` and `tests/__init__.py`
+
+### Changed
+
+- 79/79 modules now have `__all__` defined (was 77/79)
+- 0 cross-layer violations across 291 import edges
+- Bumped version to 0.1.5
+
 ## [0.1.4] - 2026-02-17
 
 ### Added

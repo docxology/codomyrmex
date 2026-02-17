@@ -12,3 +12,5 @@ Test Categories:
 - Unit tests: Individual function, class, and module testing
 - Integration tests: Component interaction and workflow testing
 """
+
+__all__: list[str] = []
