@@ -353,7 +353,7 @@ class EducationDataProvider:
         target = (self._content_root / subpath).resolve()
 
         # Security: prevent directory traversal
-        if not str(target).startswith(str(base)):
+        if not target.is_relative_to(base):
             raise PermissionError("Access denied")
 
         if not target.exists():
@@ -404,7 +404,7 @@ class EducationDataProvider:
         target = (self._content_root / filepath).resolve()
 
         # Security: prevent directory traversal
-        if not str(target).startswith(str(base)):
+        if not target.is_relative_to(base):
             raise PermissionError("Access denied")
 
         if not target.exists():
