@@ -4,7 +4,10 @@ Prompt Engineering Module
 Provides tools for prompt template management, version tracking,
 optimization strategies, and evaluation scoring. Part of the
 Codomyrmex modular development platform.
-"""
+
+
+Submodules:
+    testing: Consolidated testing capabilities."""
 
 from __future__ import annotations
 
@@ -44,7 +47,7 @@ from .evaluation import (
 
 # Try to import shared types for interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus, Config
+    from codomyrmex.validation.schemas import Result, ResultStatus, Config
 except ImportError:
     Result = None
     ResultStatus = None
@@ -152,7 +155,10 @@ def _cli_evaluate(args: Any) -> None:
     print(json.dumps(result, indent=2))
 
 
+from . import testing
+
 __all__ = [
+    "testing",
     # Templates
     "PromptTemplate",
     "TemplateRegistry",

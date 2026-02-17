@@ -127,6 +127,17 @@ orchestratortimeouterror = OrchestratorTimeoutError()
 uv run python -m pytest src/codomyrmex/tests/ -k orchestrator -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`scheduler/`** | Cron-like scheduling, one-off timers, recurring tasks |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/orchestrator/](../../../docs/modules/orchestrator/)

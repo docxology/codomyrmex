@@ -181,6 +181,17 @@ echo '{"prompt": "Explain AI", "response": "AI is..."}' | codomyrmex prompt_engi
 uv run python -m pytest src/codomyrmex/tests/unit/prompt_engineering/ -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`testing/`** | Prompt evaluation, A/B testing, and quality scoring |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - [API_SPECIFICATION](API_SPECIFICATION.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)

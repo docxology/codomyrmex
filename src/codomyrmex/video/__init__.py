@@ -45,7 +45,7 @@ __version__ = "0.1.0"
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

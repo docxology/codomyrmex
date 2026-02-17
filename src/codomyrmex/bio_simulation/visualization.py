@@ -1,6 +1,6 @@
 from typing import List
 from .colony import Colony
-from codomyrmex.visualization import ScatterPlot
+from codomyrmex.data_visualization import ScatterPlot
 
 def render_colony_state(colony: Colony) -> ScatterPlot:
     """

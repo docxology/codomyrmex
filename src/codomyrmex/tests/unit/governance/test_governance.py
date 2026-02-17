@@ -19,13 +19,13 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from codomyrmex.governance.contracts import (
+from codomyrmex.security.governance.contracts import (
     Contract,
     ContractError,
     ContractStatus,
     ContractTerm,
 )
-from codomyrmex.governance.policy import PolicyEngine, PolicyError, PolicyRule
+from codomyrmex.security.governance.policy import PolicyEngine, PolicyError, PolicyRule
 
 
 # ======================================================================
@@ -35,7 +35,7 @@ from codomyrmex.governance.policy import PolicyEngine, PolicyError, PolicyRule
 @pytest.mark.unit
 def test_module_import():
     """governance module is importable."""
-    from codomyrmex import governance
+    from codomyrmex.security import governance
     assert governance is not None
 
 

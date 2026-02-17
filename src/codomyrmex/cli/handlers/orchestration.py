@@ -8,7 +8,7 @@ logger = get_logger(__name__)
 def handle_project_build(config_file: str | None) -> bool:
     """Handle project build command."""
     try:
-        from codomyrmex.build_synthesis import orchestrate_build_pipeline
+        from codomyrmex.ci_cd_automation.build import orchestrate_build_pipeline
 
         build_config = {}
         if config_file and Path(config_file).exists():

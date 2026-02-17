@@ -61,3 +61,19 @@ class BioCognitiveVerifier:
             logger.warning(f"Bio-cognitive mismatch: {metric} z-score {z_score:.2f}")
 
         return is_valid
+
+    def enroll(self, user_id: str, metric_type: str, baseline: list[float]) -> None:
+        """Enroll a user with a baseline for a specific metric."""
+        if user_id not in self._baselines:
+            self._baselines[user_id] = {}
+        self._baselines[user_id][metric_type] = list(baseline)
+        logger.info(f"Enrolled user {user_id} for metric {metric_type}")
+
+    def get_confidence(self, user_id: str) -> float:
+        """Calculate aggregate confidence score for a user."""
+        if user_id not in self._baselines:
+            return 0.0
+        
+        # Simple heuristic: more samples = more confidence
+        total_samples = sum(len(v) for v in self._baselines[user_id].values())
+        return min(total_samples / 100.0, 1.0)

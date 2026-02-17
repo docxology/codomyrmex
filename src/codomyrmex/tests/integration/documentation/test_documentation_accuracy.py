@@ -64,7 +64,7 @@ class TestDocumentationAccuracy:
 
     def test_static_analysis_api_exists(self):
         """Test that documented static analysis functions exist."""
-        from codomyrmex.static_analysis.pyrefly_runner import (
+        from codomyrmex.coding.static_analysis.pyrefly_runner import (
             parse_pyrefly_output,
             run_pyrefly_analysis,
         )
@@ -81,7 +81,7 @@ class TestDocumentationAccuracy:
 
     def test_static_analysis_functionality(self):
         """Test that documented static analysis actually works."""
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         # Test with documented usage pattern
         sample_output = "/path/to/file.py:10:5: error: Undefined variable"
@@ -175,7 +175,7 @@ class TestDocumentationAccuracy:
 
     def test_build_synthesis_api_exists(self):
         """Test that documented build synthesis functions exist."""
-        from codomyrmex.build_synthesis.build_orchestrator import (
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             check_build_environment,
         )
 
@@ -296,7 +296,7 @@ class TestDocumentationAccuracy:
         from codomyrmex.data_visualization.line_plot import create_line_plot
 
         from codomyrmex.coding.execution.executor import execute_code
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         with tempfile.TemporaryDirectory() as temp_dir:
             project_path = Path(temp_dir)
@@ -342,11 +342,11 @@ class TestDocumentationAccuracy:
 
         documented_modules = [
             'codomyrmex.data_visualization.line_plot',
-            'codomyrmex.static_analysis.pyrefly_runner',
+            'codomyrmex.coding.static_analysis.pyrefly_runner',
             'codomyrmex.coding.execution.executor',
             'codomyrmex.git_operations.core.git',
             'codomyrmex.environment_setup.env_checker',
-            'codomyrmex.build_synthesis.build_orchestrator',
+            'codomyrmex.ci_cd_automation.build.build_orchestrator',
             'codomyrmex.logging_monitoring.logger_config',
             'codomyrmex.model_context_protocol.mcp_schemas'
         ]

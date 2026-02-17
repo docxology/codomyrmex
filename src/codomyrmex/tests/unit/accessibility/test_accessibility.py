@@ -5,7 +5,7 @@ import json
 import pytest
 
 try:
-    from codomyrmex.accessibility import (
+    from codomyrmex.website.accessibility import (
         A11yChecker,
         AccessibilityIssue,
         AccessibilityReport,
@@ -15,7 +15,7 @@ try:
         calculate_contrast_ratio,
         check_heading_hierarchy,
     )
-    from codomyrmex.accessibility.reporters import AccessibilityReporter
+    from codomyrmex.website.accessibility.reporters import AccessibilityReporter
 
     HAS_MODULE = True
 except ImportError:

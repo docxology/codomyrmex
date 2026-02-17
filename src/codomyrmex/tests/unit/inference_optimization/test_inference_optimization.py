@@ -10,12 +10,12 @@ class TestInferenceOptimizationImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import inference_optimization
+        from codomyrmex.model_ops import optimization as inference_optimization
         assert inference_optimization is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.inference_optimization import __all__
+        from codomyrmex.model_ops.optimization import __all__
         expected_exports = [
             "QuantizationType",
             "BatchingStrategy",
@@ -37,7 +37,7 @@ class TestQuantizationType:
 
     def test_quantization_type_values(self):
         """Verify all quantization types are available."""
-        from codomyrmex.inference_optimization import QuantizationType
+        from codomyrmex.model_ops.optimization import QuantizationType
 
         assert QuantizationType.FP32.value == "fp32"
         assert QuantizationType.FP16.value == "fp16"
@@ -51,7 +51,7 @@ class TestBatchingStrategy:
 
     def test_batching_strategy_values(self):
         """Verify all batching strategies are available."""
-        from codomyrmex.inference_optimization import BatchingStrategy
+        from codomyrmex.model_ops.optimization import BatchingStrategy
 
         assert BatchingStrategy.FIXED.value == "fixed"
         assert BatchingStrategy.DYNAMIC.value == "dynamic"
@@ -64,7 +64,7 @@ class TestOptimizationConfig:
 
     def test_config_defaults(self):
         """Verify default configuration values."""
-        from codomyrmex.inference_optimization import (
+        from codomyrmex.model_ops.optimization import (
             OptimizationConfig,
             QuantizationType,
         )
@@ -80,7 +80,7 @@ class TestOptimizationConfig:
 
     def test_config_custom_values(self):
         """Verify custom configuration values."""
-        from codomyrmex.inference_optimization import (
+        from codomyrmex.model_ops.optimization import (
             OptimizationConfig,
             QuantizationType,
         )
@@ -102,7 +102,7 @@ class TestInferenceStats:
 
     def test_stats_defaults(self):
         """Verify default stats values."""
-        from codomyrmex.inference_optimization import InferenceStats
+        from codomyrmex.model_ops.optimization import InferenceStats
 
         stats = InferenceStats()
 
@@ -113,7 +113,7 @@ class TestInferenceStats:
 
     def test_stats_cache_hit_rate(self):
         """Verify cache hit rate calculation."""
-        from codomyrmex.inference_optimization import InferenceStats
+        from codomyrmex.model_ops.optimization import InferenceStats
 
         stats = InferenceStats(cache_hits=80, cache_misses=20)
         assert stats.cache_hit_rate == 0.8
@@ -128,7 +128,7 @@ class TestInferenceRequest:
 
     def test_request_creation(self):
         """Verify request can be created."""
-        from codomyrmex.inference_optimization import InferenceRequest
+        from codomyrmex.model_ops.optimization import InferenceRequest
 
         request = InferenceRequest(
             id="req_1",
@@ -142,7 +142,7 @@ class TestInferenceRequest:
 
     def test_request_age(self):
         """Verify request age calculation."""
-        from codomyrmex.inference_optimization import InferenceRequest
+        from codomyrmex.model_ops.optimization import InferenceRequest
 
         request = InferenceRequest(id="test", input_data="data")
         time.sleep(0.01)  # Small delay
@@ -156,7 +156,7 @@ class TestInferenceResult:
 
     def test_result_creation(self):
         """Verify result can be created."""
-        from codomyrmex.inference_optimization import InferenceResult
+        from codomyrmex.model_ops.optimization import InferenceResult
 
         result = InferenceResult(
             request_id="req_1",
@@ -176,7 +176,7 @@ class TestInferenceCache:
 
     def test_cache_put_and_get(self):
         """Verify cache put and get operations."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache(max_size=100)
 
@@ -187,7 +187,7 @@ class TestInferenceCache:
 
     def test_cache_miss(self):
         """Verify cache miss returns None."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache()
         result = cache.get("nonexistent")
@@ -196,7 +196,7 @@ class TestInferenceCache:
 
     def test_cache_lru_eviction(self):
         """Verify LRU eviction when cache is full."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache(max_size=2)
 
@@ -210,7 +210,7 @@ class TestInferenceCache:
 
     def test_cache_size_property(self):
         """Verify cache size tracking."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache(max_size=10)
 
@@ -222,7 +222,7 @@ class TestInferenceCache:
 
     def test_cache_clear(self):
         """Verify cache clearing."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache()
         cache.put("key", "value")
@@ -233,7 +233,7 @@ class TestInferenceCache:
 
     def test_cache_contains(self):
         """Verify contains check."""
-        from codomyrmex.inference_optimization import InferenceCache
+        from codomyrmex.model_ops.optimization import InferenceCache
 
         cache = InferenceCache()
         cache.put("exists", "value")
@@ -248,7 +248,7 @@ class TestRequestBatcher:
 
     def test_batcher_creation(self):
         """Verify batcher can be created."""
-        from codomyrmex.inference_optimization import RequestBatcher
+        from codomyrmex.model_ops.optimization import RequestBatcher
 
         batcher = RequestBatcher(
             max_batch_size=16,
@@ -260,7 +260,7 @@ class TestRequestBatcher:
 
     def test_batcher_stats(self):
         """Verify batcher stats initialization."""
-        from codomyrmex.inference_optimization import RequestBatcher
+        from codomyrmex.model_ops.optimization import RequestBatcher
 
         batcher = RequestBatcher()
         stats = batcher.stats
@@ -275,7 +275,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_creation(self):
         """Verify optimizer can be created."""
-        from codomyrmex.inference_optimization import InferenceOptimizer
+        from codomyrmex.model_ops.optimization import InferenceOptimizer
 
         def simple_model(inputs):
             return [f"output_{x}" for x in inputs]
@@ -286,7 +286,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_infer_single(self):
         """Verify single inference."""
-        from codomyrmex.inference_optimization import InferenceOptimizer
+        from codomyrmex.model_ops.optimization import InferenceOptimizer
 
         def echo_model(inputs):
             return inputs
@@ -299,7 +299,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_caching(self):
         """Verify caching behavior."""
-        from codomyrmex.inference_optimization import (
+        from codomyrmex.model_ops.optimization import (
             InferenceOptimizer,
             OptimizationConfig,
         )
@@ -324,7 +324,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_infer_batch(self):
         """Verify batch inference."""
-        from codomyrmex.inference_optimization import InferenceOptimizer
+        from codomyrmex.model_ops.optimization import InferenceOptimizer
 
         def batch_model(inputs):
             return [x.upper() for x in inputs]
@@ -339,7 +339,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_stats(self):
         """Verify stats tracking."""
-        from codomyrmex.inference_optimization import InferenceOptimizer
+        from codomyrmex.model_ops.optimization import InferenceOptimizer
 
         def simple_model(inputs):
             return inputs
@@ -354,7 +354,7 @@ class TestInferenceOptimizer:
 
     def test_optimizer_clear_cache(self):
         """Verify cache clearing."""
-        from codomyrmex.inference_optimization import InferenceOptimizer
+        from codomyrmex.model_ops.optimization import InferenceOptimizer
 
         def simple_model(inputs):
             return inputs

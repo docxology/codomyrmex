@@ -27,7 +27,7 @@ from .env_checker import (
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

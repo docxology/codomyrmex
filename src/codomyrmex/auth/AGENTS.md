@@ -4,48 +4,43 @@
 
 Authentication and authorization with OAuth, JWT, and API keys.
 
-## Key Classes
+## Key Components
 
-- **Authenticator** — Multi-method authentication
-- **APIKeyManager** — API key generation and validation
-- **TokenManager** — JWT token handling
-- **PermissionChecker** — Authorization checks
+| Component | Description |
+|-----------|-------------|
+| `Authenticator` | Main entry point for auth and authorization logic |
+| `PermissionRegistry` | Role-based Access Control (RBAC) manager |
+| `TokenManager` | Lifecycle management for authentication tokens |
+| `APIKeyManager` | Secure generation and validation of API keys |
 
-## Agent Instructions
+## Usage for Agents
 
-1. **Validate all input** — Never trust user-provided tokens
-2. **Use short expiry** — JWT tokens should expire quickly
-3. **Rotate API keys** — Regularly rotate credentials
-4. **Log auth events** — Use audit logging for auth
-5. **Fail securely** — Generic error messages, log details
-
-## Common Patterns
+### Authentication
 
 ```python
-from codomyrmex.auth import (
-    Authenticator, APIKeyManager, TokenManager, requires_auth
-)
+from codomyrmex.auth import Authenticator
 
-# Authenticate request
 auth = Authenticator()
-user = auth.authenticate(request.headers.get("Authorization"))
-if not user:
-    raise AuthError("Invalid credentials")
+# Authenticate with credentials
+token = auth.authenticate({"username": "agent_alpha", "password": "secure_password"})
 
-# API key validation
-keys = APIKeyManager()
-if not keys.validate(api_key):
-    raise AuthError("Invalid API key")
+if token:
+    # Check authorization for a specific permission
+    is_allowed = auth.authorize(token, resource="secure_data", permission="read")
+```
 
-# JWT token management
-tokens = TokenManager(secret="your-secret")
-token = tokens.create(user_id=user.id, expires_in=3600)
-claims = tokens.verify(token)
+### RBAC Management
 
-# Decorator for routes
-@requires_auth(permissions=["read:data"])
-def get_data():
-    return data
+```python
+from codomyrmex.auth.rbac import PermissionRegistry
+
+rbac = PermissionRegistry()
+rbac.register_role("editor", ["read", "write"])
+rbac.add_inheritance("admin", "editor")
+rbac.register_role("admin", ["delete"])
+
+# Admin inherits read and write
+has_perm = rbac.has_permission("admin", "write") # True
 ```
 
 ## Testing Patterns

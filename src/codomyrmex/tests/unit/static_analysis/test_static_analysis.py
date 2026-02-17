@@ -8,7 +8,7 @@ import pytest
 
 # Check if legacy functions exist (they don't - tests expect non-existent API)
 try:
-    from codomyrmex.static_analysis.pyrefly_runner import (
+    from codomyrmex.coding.static_analysis.pyrefly_runner import (
         PYREFLY_ERROR_PATTERN,
         parse_pyrefly_output,
         run_pyrefly_analysis,
@@ -34,7 +34,7 @@ class TestStaticAnalysisComprehensive:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.static_analysis import pyrefly_runner
+            from codomyrmex.coding.static_analysis import pyrefly_runner
             assert pyrefly_runner is not None
         except ImportError as e:
             pytest.fail(f"Failed to import pyrefly_runner: {e}")
@@ -45,7 +45,7 @@ class TestStaticAnalysisComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         result = parse_pyrefly_output("", "/tmp/project")
         assert result == []
@@ -56,7 +56,7 @@ class TestStaticAnalysisComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         # Mock output with typical Pyrefly error format
         output = "/path/to/file.py:123:45: error: Undefined name 'undefined_var'"
@@ -79,7 +79,7 @@ class TestStaticAnalysisComprehensive:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         output = """/path/to/file1.py:10:5: error: Type mismatch
 /path/to/file2.py:25:15: warning: Unused variable
@@ -112,7 +112,7 @@ Some non-matching line
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         output = """This is not an error line
 incomplete:123
@@ -134,7 +134,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         output = "/absolute/path/to/file.py:50:10: error: Absolute path error"
         project_root = "/absolute/path"
@@ -150,7 +150,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         # The regex pattern requires at least some content after the colons
         # So we test with a minimal message instead
@@ -174,7 +174,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is available
         try:
@@ -204,7 +204,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         result = run_pyrefly_analysis([], "/path/to/project")
 
@@ -222,7 +222,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is available
         try:
@@ -256,7 +256,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is available
         try:
@@ -288,7 +288,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is actually available
         try:
@@ -317,7 +317,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is available
         try:
@@ -344,7 +344,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis import pyrefly_runner
+        from codomyrmex.coding.static_analysis import pyrefly_runner
 
         # Check that the pattern exists and is compiled
         assert hasattr(pyrefly_runner, 'PYREFLY_ERROR_PATTERN')
@@ -356,7 +356,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         # Test with relative paths
         output = "src/main.py:15:8: error: Type error"
@@ -373,7 +373,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Test with empty target paths (should return error structure)
         result = run_pyrefly_analysis([], "/tmp")
@@ -394,7 +394,7 @@ incomplete:123
 
         import subprocess
 
-        from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+        from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
         # Check if pyrefly is available
         try:
@@ -426,7 +426,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         output = "/path/to/file.py:1:1: error: Complex error message with    multiple   spaces   and   special:characters"
         project_root = "/path/to"
@@ -443,7 +443,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis import pyrefly_runner
+        from codomyrmex.coding.static_analysis import pyrefly_runner
 
         # Check that PYREFLY_ERROR_PATTERN exists
         assert hasattr(pyrefly_runner, 'PYREFLY_ERROR_PATTERN')
@@ -457,7 +457,7 @@ incomplete:123
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.static_analysis.pyrefly_runner import parse_pyrefly_output
+        from codomyrmex.coding.static_analysis.pyrefly_runner import parse_pyrefly_output
 
         output = """
 /path/to/file.py:10:5: error: First error

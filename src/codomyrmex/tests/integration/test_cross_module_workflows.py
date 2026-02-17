@@ -28,7 +28,7 @@ except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
 try:
-    from codomyrmex.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file
     MODULE_AVAILABILITY["static_analysis"] = True
 except ImportError:
     MODULE_AVAILABILITY["static_analysis"] = False
@@ -214,7 +214,7 @@ for email in emails:
                 temp_file = f.name
 
             try:
-                from codomyrmex.static_analysis import analyze_file
+                from codomyrmex.coding.static_analysis import analyze_file
                 analysis_results = analyze_file(temp_file)
 
                 # Step 3: Execute the code
@@ -248,7 +248,7 @@ for email in emails:
             test_files = self._create_test_project()
 
             # Step 1: Static analysis
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
             analysis_results = analyze_file(test_files["main"])
 
             # Step 2: Security audit
@@ -276,7 +276,7 @@ for email in emails:
                         "jobs": [
                             {
                                 "name": "static_analysis",
-                                "script": "python -m codomyrmex.static_analysis analyze_file main.py"
+                                "script": "python -m codomyrmex.coding.static_analysis analyze_file main.py"
                             }
                         ]
                     },
@@ -483,7 +483,7 @@ print("Result:", algorithm_b({10000}))
 
         # Test 2: File analysis of non-existent file
         if MODULE_AVAILABILITY.get("static_analysis", False):
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
 
             try:
                 result = analyze_file("/nonexistent/file.py")
@@ -574,7 +574,7 @@ eval(input("Enter code: "))  # Code injection
 
         # Test static analysis
         if MODULE_AVAILABILITY.get("static_analysis", False):
-            from codomyrmex.static_analysis import analyze_file
+            from codomyrmex.coding.static_analysis import analyze_file
 
             with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
                 f.write(test_data["code"])
@@ -627,7 +627,7 @@ print(f"Fibonacci(10) = {result}")
 
             # Module 1: Static Analysis
             if MODULE_AVAILABILITY.get("static_analysis", False):
-                from codomyrmex.static_analysis import analyze_file
+                from codomyrmex.coding.static_analysis import analyze_file
                 analysis_results = analyze_file(temp_file)
                 results["static_analysis"] = len(analysis_results)
 

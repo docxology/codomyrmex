@@ -103,6 +103,7 @@ dependencies = [
     "aiohttp>=3.13.3",
     "msgpack>=1.1.2",
     "fastavro>=1.12.1",
+    "mnemonic>=0.21",
 ]
 
 [project.optional-dependencies]
@@ -205,6 +206,12 @@ scrape = [
 
 fpf = [
     "pillow>=10.0.0",
+]
+
+crypto = [
+    "cryptography>=42.0.0",
+    "Pillow>=10.0.0",
+    "mnemonic>=0.20",
 ]
 
 documents = [

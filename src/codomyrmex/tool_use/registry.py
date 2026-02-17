@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
-from codomyrmex.schemas import Result, ResultStatus, ToolDefinition
+from codomyrmex.validation.schemas import Result, ResultStatus, ToolDefinition
 
 from .validation import ValidationResult, validate_input, validate_output
 

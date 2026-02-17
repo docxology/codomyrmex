@@ -29,7 +29,7 @@ from .keys import KeyManager, compute_hmac, derive_key_hkdf, verify_hmac
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

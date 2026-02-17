@@ -82,6 +82,18 @@ subscribe_to_events("monitor", patterns={"error"}, handler=lambda e: alert(e.pay
 uv run python -m pytest src/codomyrmex/tests/ -k events -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`streaming/`** | Real-time data streaming via SSE/WebSocket |
+| **`notification/`** | Multi-channel dispatch (SMTP, webhooks, Slack) |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/events/](../../../docs/modules/events/)

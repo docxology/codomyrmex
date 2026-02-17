@@ -6,12 +6,72 @@
 
 LLM module providing language model integration, prompt management, and output handling for the Codomyrmex platform.
 
-## Functional Requirements
+## Interface Contracts
 
-- Multi-provider support (OpenAI, Anthropic, local models)
-- Prompt template management
-- Output parsing and validation
-- Streaming response support
+### Base Provider (`llm.providers`)
+
+```python
+class LLMProvider(ABC):
+    def complete(messages: List[Message], model: str = None, ...) -> CompletionResponse
+    def complete_stream(messages: List[Message], model: str = None, ...) -> Iterator[str]
+    async def complete_async(messages: List[Message], ...) -> CompletionResponse
+
+class Message:
+    role: str; content: str; tool_calls: List[dict] = None; ...
+
+class CompletionResponse:
+    content: str; model: str; usage: dict; tool_calls: List[dict]; ...
+```
+
+### Routing & Fallback (`llm.router`)
+
+```python
+class ModelRouter:
+    def register_model(config: ModelConfig, provider: ModelProvider = None) -> None
+    def select_model(required_capabilities: List[str] = None, ...) -> ModelConfig
+    def complete(prompt: str, model_name: str = None, ...) -> str
+```
+
+### MCP Integration (`llm.mcp`)
+
+```python
+class MCPBridge:
+    def register_tool(name: str, description: str, input_schema: dict, handler: Callable) -> None
+    async def handle_request(message: dict) -> Optional[dict]
+    async def run_stdio() -> None
+```
+
+### Guardrails (`llm.guardrails`)
+
+```python
+class Guardrail(ABC):
+    def validate(content: str) -> ValidationResult
+
+class SafetyGate:
+    def add_guardrail(guardrail: Guardrail) -> None
+    def check(content: str) -> bool  # Raises SafetyError if blocked
+```
+
+#### Local LLM (`llm.ollama`)
+
+```python
+class OllamaManager:
+    def list_models() -> List[OllamaModel]
+    def download_model(name: str) -> bool
+    def run_model(prompt: str, options: ExecutionOptions) -> ModelExecutionResult
+
+class ModelRunner:
+    def run_streaming(prompt: str, ...) -> Iterator[str]
+    def run_batch(prompts: List[str]) -> List[ModelExecutionResult]
+```
+
+### Fabric Integration (`llm.fabric`)
+
+```python
+class FabricManager:
+    def list_items() -> List[FabricItem]
+    def execute_pipeline(name: str, params: dict) -> dict
+```
 
 ## Navigation Links
 
@@ -19,8 +79,6 @@ LLM module providing language model integration, prompt management, and output h
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

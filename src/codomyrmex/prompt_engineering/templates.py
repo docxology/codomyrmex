@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 try:
-    from codomyrmex.schemas import Config, Result, ResultStatus
+    from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
     Config = None
     Result = None

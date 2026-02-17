@@ -85,64 +85,43 @@ graph TD
 
 ## Functional Requirements
 
-### FR-1: Object Storage Operations
+### Interface Contracts
 
-All storage clients must implement:
+#### Base Client (`cloud.common`)
 
-| Method | Signature | Description |
-|--------|-----------|-------------|
-| `upload_file` | `(local_path, bucket, object_name) -> bool` | Upload local file to storage |
-| `download_file` | `(bucket, object_name, local_path) -> bool` | Download object to local file |
-| `list_objects` | `(bucket) -> list[str]` | List all objects in bucket |
-| `get_metadata` | `(bucket, object_name) -> dict` | Get object metadata |
-| `ensure_bucket` | `(bucket) -> bool` | Create bucket if not exists |
+```python
+class CloudClient(ABC):
+    def list_resources(resource_type: ResourceType = None) -> List[CloudResource]
+    def get_resource(resource_id: str) -> Optional[CloudResource]
+    def create_resource(name: str, resource_type: ResourceType, config: dict) -> CloudResource
+    def delete_resource(resource_id: str) -> bool
+```
 
-### FR-2: Authentication
+#### Object Storage (`cloud.common`)
 
-| Provider | Method |
-|----------|--------|
-| **AWS** | boto3 default credential chain (env, config, IAM role) |
-| **GCP** | Application Default Credentials or service account JSON |
-| **Azure** | DefaultAzureCredential from azure-identity |
-| **Coda.io** | Bearer token authentication via API token |
-| **Infomaniak** | Application Credentials via openstacksdk (OpenStack services) |
-| **Infomaniak Newsletter** | OAuth2 Bearer token via `INFOMANIAK_NEWSLETTER_TOKEN` |
+```python
+class StorageClient(ABC):
+    def list_buckets() -> List[str]
+    def create_bucket(name: str) -> bool
+    def upload_file(bucket: str, key: str, data: bytes, ...) -> str
+    def download_file(bucket: str, key: str) -> bytes
+    def delete_file(bucket: str, key: str) -> bool
+```
 
-### FR-3: Coda.io API Coverage
+#### Compute & Serverless (`cloud.common`)
 
-The Coda client must support all major API v1 endpoints:
+```python
+class ComputeClient(ABC):
+    def list_instances() -> List[dict]
+    def start_instance(instance_id: str) -> bool
+    def stop_instance(instance_id: str) -> bool
+    def create_instance(name: str, instance_type: str, image_id: str, ...) -> dict
 
-| Category | Endpoints |
-|----------|-----------|
-| Docs | list, create, get, update, delete |
-| Pages | list, create, get, update, delete, content, export |
-| Tables | list, get |
-| Columns | list, get |
-| Rows | list, insert, upsert, get, update, delete, push button |
-| Permissions | metadata, list, add, delete, search principals, ACL settings |
-| Publishing | categories, publish, unpublish |
-| Formulas | list, get |
-| Controls | list, get |
-| Automations | trigger webhook |
-| Analytics | doc analytics, page analytics, pack analytics |
-| Miscellaneous | whoami, resolve browser link, mutation status |
-
-### FR-5: Infomaniak Cloud Services
-
-Infomaniak integration must support:
-
-| Service | Client | Operations |
-|---------|--------|------------|
-| Compute | `InfomaniakComputeClient` | Instance CRUD, images, flavors, keypairs |
-| Block Storage | `InfomaniakVolumeClient` | Volume CRUD, attach/detach, snapshots, backups |
-| Network | `InfomaniakNetworkClient` | Networks, routers, security groups, floating IPs, load balancers |
-| Object Storage | `InfomaniakObjectStorageClient` | Swift containers and objects |
-| S3 Storage | `InfomaniakS3Client` | S3-compatible buckets and objects |
-| Identity | `InfomaniakIdentityClient` | Users, projects, application credentials, EC2 credentials |
-| DNS | `InfomaniakDNSClient` | Zones, records, reverse DNS |
-| Orchestration | `InfomaniakHeatClient` | Heat stacks, templates, resources |
-| Metering | `InfomaniakMeteringClient` | Usage, quotas, billing |
-| Newsletter | `InfomaniakNewsletterClient` | Campaigns, mailing lists, contacts, statistics |
+class ServerlessClient(ABC):
+    def list_functions() -> List[dict]
+    def invoke_function(function_name: str, payload: dict) -> dict
+    def create_function(name: str, runtime: str, handler: str, code_path: str, ...) -> dict
+```
 
 ### FR-4: Error Handling
 

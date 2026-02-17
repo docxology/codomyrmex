@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import pytest
 
 try:
-    from codomyrmex.scheduler import (
+    from codomyrmex.orchestrator.scheduler import (
         CronTrigger,
         IntervalTrigger,
         Job,

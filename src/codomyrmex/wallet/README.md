@@ -97,6 +97,17 @@ assert recovery.initiate_recovery("user_1", ["Blue", "7"])
 uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`contracts/`** | Web3 smart contract interfaces and blockchain operations |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/wallet/](../../../docs/modules/wallet/)

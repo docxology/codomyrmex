@@ -71,6 +71,20 @@ datasetsanitizer = DatasetSanitizer()
 uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`evaluation/`** | LLM output scoring, benchmark suites, A/B comparison |
+| **`registry/`** | Model versioning and artifact management |
+| **`optimization/`** | Model quantization, ONNX export, inference acceleration |
+| **`feature_store/`** | ML feature management and storage |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/model_ops/](../../../docs/modules/model_ops/)

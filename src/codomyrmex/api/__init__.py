@@ -21,11 +21,14 @@ The module is organized into submodules:
 - webhooks: Webhook event dispatch and registry
 - mocking: Mock API server for testing
 - pagination: Cursor, offset, and keyset pagination
-"""
+
+
+Submodules:
+    rate_limiting: Consolidated rate limiting capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -225,7 +228,10 @@ def cli_commands():
     }
 
 
+from . import rate_limiting
+
 __all__ = [
+    "rate_limiting",
     # Documentation submodule exports
     "APIDocumentationGenerator",
     "generate_api_docs",

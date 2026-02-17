@@ -103,12 +103,12 @@ def benchmark_data_visualization():
 ### **Static Analysis Module**
 ```python
 # Benchmark: static_analysis performance
-from codomyrmex.static_analysis import analyze_codebase, analyze_file
+from codomyrmex.coding.static_analysis import analyze_codebase, analyze_file
 from pathlib import Path
 
 def benchmark_static_analysis():
     """Performance benchmarks for static analysis (ACTUAL IMPLEMENTATION)."""
-    from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
+    from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis, parse_pyrefly_output
     import time
     import tempfile
     from pathlib import Path
@@ -305,7 +305,7 @@ cache = PerformanceCache(default_ttl=1800, compression=True)
 @cache.cached(ttl=3600)  # 1 hour cache
 def expensive_static_analysis(codebase_path):
     """Cache expensive static analysis results."""
-    from codomyrmex.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_codebase
     return analyze_codebase(codebase_path)
 ```
 
@@ -378,7 +378,7 @@ def analyze_files_parallel(file_paths: List[str]) -> dict:
     processor = OptimizedProcessor()
 
     def analyze_single_file(file_path):
-        from codomyrmex.static_analysis import analyze_file
+        from codomyrmex.coding.static_analysis import analyze_file
         try:
             return {'file': file_path, 'result': analyze_file(file_path)}
         except Exception as e:
@@ -741,7 +741,7 @@ def create_monitored_plot(x, y, title):
 @monitor_performance("static_analysis.analyze_file")
 def analyze_file_monitored(file_path):
     """Analyze file with performance monitoring."""
-    from codomyrmex.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file
     return analyze_file(file_path)
 ```
 

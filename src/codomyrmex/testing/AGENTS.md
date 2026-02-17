@@ -13,11 +13,11 @@ Test utilities, fixtures, and testing patterns for Codomyrmex.
 
 ## Agent Instructions
 
-1. **Use real data** — Avoid mocks; use real implementations with test data
-2. **Isolate tests** — Each test should be independent
-3. **Use fixtures** — Share setup via pytest fixtures in conftest.py
-4. **Cover edge cases** — Test boundaries, errors, empty inputs
-5. **Verify assertions** — Include meaningful assertion messages
+1. **Use real data** — Avoid mocks; use real implementations with test data.
+2. **Property Tests** — Use `property_test` for functions with large input spaces.
+3. **Resilience Testing** — Use `chaos` sub-module to verify recovery from failure.
+4. **Isolate tests** — Each test should be independent and stateless.
+5. **Cover edge cases** — Test boundaries, errors, and malicious inputs.
 
 ## Testing Patterns
 

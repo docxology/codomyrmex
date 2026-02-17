@@ -1,5 +1,5 @@
 import pytest
-from codomyrmex.governance.contracts import Contract, ContractStatus, ContractError
+from codomyrmex.security.governance.contracts import Contract, ContractStatus, ContractError
 
 
 def test_contract_lifecycle():

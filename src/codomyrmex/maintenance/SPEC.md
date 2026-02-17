@@ -20,8 +20,28 @@ The `maintenance` module contains utility scripts for project analysis and maint
 
 ## Interface Contracts
 
-- `analyze_project.py`: Entry point for broad project analysis.
-- `dependency_consolidator.py`: Deduplicates requirements across modules.
+### Dependency Analysis (`maintenance.dependency_analyzer`)
+
+```python
+class DependencyAnalyzer:
+    def scan_all_modules() -> None
+    def detect_circular_dependencies() -> List[Tuple[str, str]]
+    def validate_dependency_hierarchy() -> List[Dict[str, str]]
+    def generate_report() -> str
+```
+
+### Dependency Consolidation (`maintenance.dependency_consolidator`)
+
+```python
+class DependencyConsolidator:
+    def collect_dependencies() -> Dict[str, Set[str]]
+    def find_conflicts() -> List[Conflict]
+    def generate_consolidated_requirements() -> str
+```
+
+### Project Analysis (`maintenance.analyze_project`)
+
+- `analyze_project(path: Path) -> ProjectInsight`
 
 ## Navigation
 
@@ -34,9 +54,7 @@ The `maintenance` module contains utility scripts for project analysis and maint
 
 ## Detailed Architecture and Implementation
 
-
-
-### Design Principles
+### Design Principles (Extended)
 
 1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
 2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.

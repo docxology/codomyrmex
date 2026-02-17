@@ -2,44 +2,41 @@
 
 ## Module Overview
 
-OpenTelemetry-compatible tracing and observability.
+OpenTelemetry-compatible tracing, metrics, and observability.
 
 ## Key Classes
 
 - **TraceContext** — Manage trace context
-- **start_span(name)** — Start a new span
-- **traced** — Decorator for auto-tracing
-- **OTLPExporter** — Export to OTLP endpoint
-- **BatchSpanProcessor** — Batch span processing
+- **MetricCollector** — Record system and application metrics
+- **Dashboard** — Real-time observability visualization
+- **OTLPExporter** — Export telemetry data to OTLP endpoints
 
 ## Agent Instructions
 
-1. **Trace entry points** — Trace API endpoints and jobs
-2. **Use descriptive names** — `user.login` not `func1`
-3. **Add attributes** — Include user_id, request_id
-4. **Link spans** — Use `link_span()` for causality
-5. **Batch in production** — Use `BatchSpanProcessor`
+1. **Trace entry points** — Trace all major agent tasks and API requests
+2. **Instrument long-running tasks** — Use counters and gauges to track task progress
+3. **Use descriptive names** — Ensure metric and span names are globally unique
+4. **Dashboard Registration** — Register new critical metrics with the `Dashboard` for visibility
 
 ## Common Patterns
 
 ```python
-from codomyrmex.telemetry import start_span, traced, TraceContext
+from codomyrmex.telemetry import start_span, MetricCollector, Dashboard
 
-# Context-managed span
-with start_span("process_request") as span:
-    span.set_attribute("user_id", user.id)
-    result = process(data)
-    span.set_attribute("result_count", len(result))
+# Trace a block of code
+with start_span("complex_operation") as span:
+    span.set_attribute("data_size", len(data))
+    process(data)
 
-# Decorator
-@traced("database.query")
-def query_db(sql):
-    return execute(sql)
+# Record Metrics
+metrics = MetricCollector()
+metrics.record_counter("task_completed", 1, {"status": "success"})
+metrics.record_gauge("system_load", 0.75)
 
-# Configure exporter
-from codomyrmex.telemetry import OTLPExporter, BatchSpanProcessor
-exporter = OTLPExporter(endpoint="http://jaeger:4318")
-processor = BatchSpanProcessor(exporter)
+# Start Dashboard for real-time monitoring
+dash = Dashboard()
+dash.start_server(port=8080)
+dash.add_view("task_completed", type="line_chart")
 ```
 
 ## Testing Patterns

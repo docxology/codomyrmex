@@ -1,5 +1,7 @@
 # 🔗 Codomyrmex Module Relationships & Interdependencies
 
+**Version**: v0.1.1 | **Last Updated**: February 2026
+
 This document provides a comprehensive overview of how Codomyrmex modules interact with each other, their dependencies, and data flow patterns.
 
 ## 📋 Module Overview
@@ -8,110 +10,81 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 |--------|-------------|------------------|---------------|-------------|
 | **`environment_setup`** | Environment validation & dependency management | System packages | None | All modules |
 | **`logging_monitoring`** | Centralized logging framework | None | All modules | All modules |
-| **`model_context_protocol`** | AI agent communication standard | JSON Schema | AI modules | AI modules |
+| **`model_context_protocol`** | AI communication standard, auto-discovery | JSON Schema | AI modules | AI modules |
 | **`terminal_interface`** | Rich terminal interactions | Rich, prompt-toolkit | None | Application modules |
 | **`config_management`** | Configuration management | PyYAML, configparser | logging_monitoring | All modules |
-| **`database_management`** | Data persistence | SQLAlchemy, asyncpg | logging_monitoring | All modules |
-| **`llm`** | LLM infrastructure | OpenAI, Anthropic, Ollama | logging_monitoring, model_context_protocol | AI modules |
+| **`database_management`** | Data persistence, **migration**, **backup**, **lineage** | SQLAlchemy, asyncpg | logging_monitoring | All modules |
+| **`llm`** | LLM infrastructure, **multimodal**, **safety filtering** | OpenAI, Anthropic, Ollama | logging_monitoring, model_context_protocol | AI modules |
 | **`performance`** | Performance monitoring | psutil, cProfile | logging_monitoring | All modules |
-| **`metrics`** | Metrics collection and reporting | prometheus_client | logging_monitoring | All modules |
-| **`coding`** | Code execution & review | subprocess, security | logging_monitoring | All modules |
-| **`data_visualization`** | Charting and plotting utilities | matplotlib, seaborn | logging_monitoring | All modules |
-| **`static_analysis`** | Code quality and security analysis | pylint, flake8, bandit | logging_monitoring | build_synthesis, security |
-| **`pattern_matching`** | Code analysis and pattern recognition | cased/kit | logging_monitoring, environment_setup | All modules |
-| **`security`** | Security scanning and threat modeling | bandit, semgrep, cryptography | logging_monitoring, static_analysis | All modules |
+| **`coding`** | Code execution, review, **static analysis**, **pattern matching** | subprocess, security | logging_monitoring | All modules |
+| **`data_visualization`** | Charts, plots, **multi-format export** | matplotlib, seaborn | logging_monitoring | All modules |
+| **`security`** | Security scanning, threat modeling, **vulnerability scanner**, **governance** | bandit, semgrep, cryptography | logging_monitoring | All modules |
 | **`scrape`** | Web scraping and content extraction | BeautifulSoup, requests | logging_monitoring | All modules |
-| **`documents`** | Document processing and management | parsers, extractors | logging_monitoring | All modules |
-| **`cache`** | Caching infrastructure | redis, memory | logging_monitoring | All modules |
+| **`documents`** | Document processing, **RAG chunking** | parsers, extractors | logging_monitoring | All modules |
+| **`cache`** | Caching infrastructure, **multi-strategy invalidation** | redis, memory | logging_monitoring | All modules |
 | **`compression`** | Data compression | zlib, gzip, lz4 | None | All modules |
-| **`encryption`** | Encryption utilities | cryptography | logging_monitoring | All modules |
-| **`networking`** | Network utilities | aiohttp, requests | logging_monitoring | All modules |
-| **`serialization`** | Data serialization | json, yaml, msgpack | None | All modules |
-| **`validation`** | Data validation | pydantic, jsonschema | logging_monitoring | All modules |
-| **`build_synthesis`** | Build automation and scaffolding | build tools | static_analysis, logging_monitoring | All modules |
-| **`git_operations`** | Git workflow automation | GitPython | logging_monitoring | All modules |
-| **`documentation`** | Documentation generation | Docusaurus | All modules | All modules |
-| **`api`** | API infrastructure | OpenAPI, FastAPI | logging_monitoring, static_analysis | All modules |
-| **`ci_cd_automation`** | CI/CD pipeline management | Docker, Kubernetes | logging_monitoring, build_synthesis, containerization | All modules |
-| **`containerization`** | Container management | Docker, Kubernetes | logging_monitoring | ci_cd_automation, build_synthesis |
-| **`logistics`** | Orchestration and scheduling | schedulers | logging_monitoring, all modules | Application modules |
-| **`cloud`** | Cloud integrations | cloud SDKs | logging_monitoring, config_management | All modules |
+| **`encryption`** | Encryption utilities, **digital signing** | cryptography | logging_monitoring | All modules |
+| **`networking`** | Network utilities, **service mesh** | aiohttp, requests | logging_monitoring | All modules |
+| **`serialization`** | Data serialization, **streaming I/O** | json, yaml, msgpack | None | All modules |
+| **`validation`** | Data validation, **shared schema registry** | pydantic, jsonschema | logging_monitoring | All modules |
+| **`git_operations`** | Git workflow automation, **merge resolution** | GitPython | logging_monitoring | All modules |
+| **`documentation`** | Documentation generation, **education** | Docusaurus | All modules | All modules |
+| **`api`** | API infrastructure, **rate limiting** | OpenAPI, FastAPI | logging_monitoring | All modules |
+| **`ci_cd_automation`** | CI/CD pipeline management, **build automation** | Docker, Kubernetes | logging_monitoring, containerization | All modules |
+| **`containerization`** | Container management | Docker, Kubernetes | logging_monitoring | ci_cd_automation |
+| **`logistics`** | Orchestration and scheduling | schedulers | logging_monitoring | Application modules |
+| **`cloud`** | Cloud integrations, **cost management** | cloud SDKs | logging_monitoring, config_management | All modules |
 | **`auth`** | Authentication | OAuth, JWT | logging_monitoring | All modules |
 | **`system_discovery`** | System exploration | introspection | logging_monitoring | Application modules |
-| **`cli`** | Command-line interface | click, argparse | logging_monitoring, all modules | Users |
-| **`website`** | Website generation | Jinja2, Flask | logging_monitoring | Users |
+| **`cli`** | Command-line interface, **shell completion** | click, argparse | logging_monitoring | Users |
+| **`website`** | Website generation, **accessibility** | Jinja2, Flask | logging_monitoring | Users |
 | **`module_template`** | Module creation template | None | None | Developers |
-| **`events`** | Event system and pub/sub | asyncio | logging_monitoring | All modules |
+| **`events`** | Event system, pub/sub, **replay**, **dead letter**, **streaming**, **notifications** | asyncio | logging_monitoring | All modules |
 | **`plugin_system`** | Plugin architecture | importlib | logging_monitoring | All modules |
-| **`agents`** | Agentic framework integrations | AI providers | logging_monitoring, llm | All modules |
+| **`agents`** | Agentic framework integrations, **benchmarks** | AI providers | logging_monitoring, llm | All modules |
 | **`ide`** | IDE integrations | IDE APIs | logging_monitoring, agents | Developers |
 | **`cerebrum`** | Case-based reasoning | numpy, scipy | logging_monitoring | AI modules |
 | **`fpf`** | Functional Programming Framework | None | logging_monitoring | All modules |
 | **`skills`** | Skills framework | None | logging_monitoring, agents | All modules |
 | **`spatial`** | 3D/4D modeling and visualization | Open3D, Trimesh | logging_monitoring | Specialized use cases |
 | **`physical_management`** | Physical system simulation | Physics engines | logging_monitoring | Specialized use cases |
-| **`utils`** | Common utilities | None | None | All modules |
-| **`tools`** | Utility tools | None | logging_monitoring | All modules |
+| **`utils`** | Common utilities, **hashing**, **retry**, **i18n** | None | None | All modules |
 | **`templating`** | Template engine | Jinja2 | None | All modules |
 | **`tests`** | Test infrastructure | pytest | All modules | Developers |
-| **`accessibility`** | WCAG compliance auditing | axe-core, color-contrast | logging_monitoring | All modules |
-| **`agentic_memory`** | Long-term agent memory | vector stores | logging_monitoring, llm | agents, cerebrum |
-| **`audio`** | Audio processing & transcription | whisper, pydub | logging_monitoring | multimodal, llm |
-| **`bio_simulation`** | Ant colony simulation | numpy | logging_monitoring | visualization, examples |
-| **`chaos_engineering`** | Fault injection & resilience | failure injectors | logging_monitoring, metrics | testing, performance |
+| **`agentic_memory`** | Long-term agent memory, **compression** | vector stores | logging_monitoring, llm | agents, cerebrum |
+| **`audio`** | Audio processing & transcription | whisper, pydub | logging_monitoring | llm |
+| **`bio_simulation`** | Ant colony simulation | numpy | logging_monitoring | data_visualization, examples |
 | **`collaboration`** | Multi-agent collaboration | events, agents | logging_monitoring, agents, events | agents, orchestrator |
-| **`concurrency`** | Distributed synchronization | threading, asyncio | logging_monitoring | All modules |
-| **`cost_management`** | Infrastructure & LLM cost tracking | metrics, billing APIs | logging_monitoring, metrics, llm | observability_dashboard |
-| **`dark`** | Dark mode & PDF processing | PyMuPDF, Pillow | logging_monitoring | documents, visualization |
-| **`data_lineage`** | Data provenance tracking | graph stores | logging_monitoring, database_management | observability_dashboard |
+| **`concurrency`** | Distributed synchronization, **channels**, **rate limiting** | threading, asyncio | logging_monitoring | All modules |
+| **`dark`** | Dark mode & PDF processing | PyMuPDF, Pillow | logging_monitoring | documents |
 | **`defense`** | Active defense systems | security, encryption | logging_monitoring, security, encryption | identity, privacy |
 | **`dependency_injection`** | IoC container & lifecycle | None | None | All modules |
 | **`deployment`** | Deployment strategies | cloud SDKs | logging_monitoring, containerization, cloud | ci_cd_automation |
 | **`edge_computing`** | Edge deployment & IoT | MQTT, gRPC | logging_monitoring, networking | deployment, cloud |
-| **`education`** | Curriculum & tutoring | llm, templating | logging_monitoring, llm, templating | examples |
 | **`embodiment`** | Physical/robotic integration | hardware drivers | logging_monitoring, spatial | physical_management |
 | **`evolutionary_ai`** | Genetic algorithms | numpy, scipy | logging_monitoring | bio_simulation, model_ops |
 | **`examples`** | Code examples & templates | All modules | All modules | Developers |
 | **`exceptions`** | Centralized exception hierarchy | None | None | All modules |
 | **`feature_flags`** | Feature toggle management | config_management | logging_monitoring, config_management | All modules |
-| **`feature_store`** | ML feature management | database_management | logging_monitoring, database_management | model_ops, inference_optimization |
-| **`finance`** | Financial operations | decimal, pandas | logging_monitoring, database_management | visualization, examples |
-| **`governance`** | Policy enforcement | smart_contracts | logging_monitoring, security | identity, wallet |
+| **`finance`** | Financial operations | decimal, pandas | logging_monitoring, database_management | data_visualization, examples |
 | **`graph_rag`** | Knowledge graph RAG | networkx, llm | logging_monitoring, llm, vector_store | agents, cerebrum |
-| **`i18n`** | Internationalization | babel, gettext | logging_monitoring | All modules |
 | **`identity`** | 3-Tier personas & verification | encryption, auth | logging_monitoring, encryption, auth | defense, wallet, privacy |
-| **`inference_optimization`** | Model optimization | onnxruntime, quantizers | logging_monitoring, llm | llm, model_ops |
-| **`market`** | Anonymous markets | smart_contracts, privacy | logging_monitoring, smart_contracts, privacy | wallet |
-| **`meme`** | Information dynamics | networkx, llm | logging_monitoring, llm | visualization, examples |
-| **`migration`** | Cross-provider migration | database_management | logging_monitoring, database_management | deployment, cloud |
-| **`model_evaluation`** | LLM output scoring | llm, metrics | logging_monitoring, llm, metrics | model_ops, prompt_testing |
-| **`model_ops`** | ML model operations | mlflow, experiment tracking | logging_monitoring, model_registry | inference_optimization |
-| **`model_registry`** | Model versioning | database_management | logging_monitoring, database_management | model_ops, inference_optimization |
-| **`multimodal`** | Vision & audio AI | Pillow, whisper | logging_monitoring, llm, audio | agents, llm |
-| **`notification`** | Multi-channel dispatch | SMTP, webhooks | logging_monitoring, config_management | All modules |
-| **`observability_dashboard`** | Unified monitoring | metrics, telemetry | logging_monitoring, metrics, telemetry | visualization |
-| **`orchestrator`** | Workflow execution | events, concurrency | logging_monitoring, events, concurrency | All modules |
+| **`market`** | Anonymous markets | privacy | logging_monitoring, privacy | wallet |
+| **`meme`** | Information dynamics | networkx, llm | logging_monitoring, llm | data_visualization, examples |
+| **`model_ops`** | ML operations, **evaluation**, **registry**, **optimization**, **feature store** | mlflow | logging_monitoring | llm |
+| **`orchestrator`** | Workflow execution, **scheduling** | events, concurrency | logging_monitoring, events, concurrency | All modules |
 | **`privacy`** | Crumb scrubbing & mixnets | encryption | logging_monitoring, encryption | identity, defense |
-| **`prompt_engineering`** | Prompt template management | llm, templating | logging_monitoring, llm, templating | prompt_testing, agents |
-| **`prompt_testing`** | Prompt evaluation & A/B testing | model_evaluation | logging_monitoring, model_evaluation | prompt_engineering |
+| **`prompt_engineering`** | Prompt management, **A/B testing** | llm, templating | logging_monitoring, llm, templating | agents |
 | **`quantum`** | Quantum algorithm primitives | numpy, cirq | logging_monitoring | examples, evolutionary_ai |
-| **`rate_limiting`** | API rate limiting | asyncio, redis | logging_monitoring, cache | api, networking |
-| **`relations`** | CRM & social graphs | networkx | logging_monitoring, database_management | visualization, examples |
-| **`scheduler`** | Task scheduling | cron triggers | logging_monitoring, concurrency | orchestrator, logistics |
-| **`schemas`** | Shared type registry | pydantic | None | All modules |
-| **`search`** | Full-text search | TF-IDF, fuzzy | logging_monitoring | documents, database_management |
-| **`service_mesh`** | Circuit breakers & load balancing | retry, circuit breakers | logging_monitoring, networking | api, cloud |
-| **`smart_contracts`** | Web3 & blockchain | web3.py | logging_monitoring, encryption | market, governance |
-| **`streaming`** | Real-time data streaming | SSE, WebSocket | logging_monitoring, events | api, notification |
-| **`telemetry`** | OpenTelemetry tracing | opentelemetry | logging_monitoring | observability_dashboard, performance |
-| **`testing`** | Test fixtures & generators | pytest, factory | logging_monitoring | tests, Developers |
-| **`tool_use`** | Tool registry & composition | schemas | logging_monitoring, schemas | agents, orchestrator |
-| **`tree_sitter`** | AST parsing & analysis | tree-sitter | logging_monitoring | pattern_matching, static_analysis |
+| **`relations`** | CRM & social graphs | networkx | logging_monitoring, database_management | data_visualization, examples |
+| **`search`** | Full-text search, **hybrid BM25+semantic** | TF-IDF, fuzzy | logging_monitoring | documents, database_management |
+| **`telemetry`** | OpenTelemetry tracing, **metrics**, **dashboards** | opentelemetry | logging_monitoring | performance |
+| **`testing`** | Test fixtures, generators, **workflow testing**, **chaos engineering** | pytest, factory | logging_monitoring | tests, Developers |
+| **`tool_use`** | Tool registry & composition | validation | logging_monitoring, validation | agents, orchestrator |
+| **`tree_sitter`** | AST parsing & analysis | tree-sitter | logging_monitoring | coding |
 | **`vector_store`** | Embeddings storage | faiss, chromadb | logging_monitoring, llm | graph_rag, agentic_memory |
-| **`video`** | Video processing | ffmpeg, opencv | logging_monitoring | multimodal, documents |
-| **`visualization`** | Unified visualization | matplotlib, plotly | logging_monitoring, data_visualization | All modules |
-| **`wallet`** | Self-custody & recovery | encryption | logging_monitoring, encryption | identity, market |
-| **`workflow_testing`** | Workflow validation | orchestrator, testing | logging_monitoring, orchestrator, testing | ci_cd_automation |
+| **`video`** | Video processing | ffmpeg, opencv | logging_monitoring | llm, documents |
+| **`wallet`** | Self-custody, recovery, **smart contracts** | encryption | logging_monitoring, encryption | identity, market |
 
 ## 🔄 Core Data Flow Patterns
 
@@ -121,21 +94,19 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 graph LR
     subgraph "Primary Workflow"
         UserCode["User Code"]
-        StaticAnalysis["Static Analysis<br/>& Testing"]
-        BuildSynth["Build Synthesis<br/>& Deploy"]
+        CodingAnalysis["Coding Module<br/>(static analysis + patterns)"]
+        CICD["CI/CD Automation<br/>(incl. build)"]
 
-        UserCode --> StaticAnalysis
-        StaticAnalysis --> BuildSynth
+        UserCode --> CodingAnalysis
+        CodingAnalysis --> CICD
     end
 
     subgraph "Supporting Services"
-        AICode["AI Code<br/>Assistance"]
-        PatternMatch["Pattern Matching<br/>& Analysis"]
-        GitOps["Git Operations<br/>& Version Control"]
+        AICode["AI Agents<br/>& Benchmarks"]
+        GitOps["Git Operations<br/>& Merge Resolution"]
 
         UserCode --> AICode
-        StaticAnalysis --> PatternMatch
-        BuildSynth --> GitOps
+        CICD --> GitOps
     end
 ```
 
@@ -145,13 +116,13 @@ graph LR
 graph TD
     CodeInput["Code Input"]
 
-    PatternMatch["Pattern Matching<br/>Analysis"]
-    AICode["AI Code<br/>Enhancement"]
+    Coding["Coding Module<br/>(static analysis + pattern matching)"]
+    AICode["AI Agents<br/>Enhancement"]
     CodeExec["Code Execution<br/>Validation"]
-    DataViz["Data Visualization<br/>Analysis"]
+    DataViz["Data Visualization<br/>& Export"]
 
-    CodeInput --> PatternMatch
-    PatternMatch --> AICode
+    CodeInput --> Coding
+    Coding --> AICode
     AICode --> CodeExec
     AICode --> DataViz
 ```
@@ -222,15 +193,16 @@ graph TD
   result = generate_code("Create a hello world function", "python")
   ```
 
-#### **`pattern_matching` Integration Points**
+#### **`coding.pattern_matching` Integration Points**
 
 - **Consumes**: `logging_monitoring`, `environment_setup`, `agents`
 - **Provides**: Code analysis, pattern recognition, dependency mapping
+- **Now a sub-module of `coding`**
 - **Cross-Module Usage**:
 
   ```python
-  # Used by static_analysis for comprehensive analysis
-  from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+  # Pattern matching is now part of the coding module
+  from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
   # Comprehensive analysis workflow
   analysis_results = analyze_repository_path(repo_path="./src", output_dir="./analysis")
@@ -238,15 +210,16 @@ graph TD
 
 ### **🔍 Analysis & Quality Modules**
 
-#### **`static_analysis` Integration Points**
+#### **`coding.static_analysis` Integration Points**
 
 - **Consumes**: `logging_monitoring`
 - **Provides**: Code quality metrics, security scanning, linting
+- **Now a sub-module of `coding`**
 - **Cross-Module Usage**:
 
   ```python
-  # Used by build_synthesis for quality gates
-  from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+  # Static analysis is now part of the coding module
+  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
   # Quality check before build
   issues = run_pyrefly_analysis(target_paths=["src/"], project_root=".")
@@ -274,16 +247,17 @@ graph TD
 
 ### **🏗️ Build & Deployment Modules**
 
-#### **`build_synthesis` Integration Points**
+#### **`ci_cd_automation.build` Integration Points**
 
-- **Consumes**: `static_analysis`, `logging_monitoring`, `git_operations`
+- **Consumes**: `coding.static_analysis`, `logging_monitoring`, `git_operations`
 - **Provides**: Automated building, code scaffolding, deployment
+- **Now a sub-module of `ci_cd_automation`**
 - **Cross-Module Usage**:
 
   ```python
-  # Orchestrates multiple modules for complete build pipeline
-  from codomyrmex.build_synthesis.build_orchestrator import orchestrate_build_pipeline
-  from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+  # Build automation is now part of ci_cd_automation
+  from codomyrmex.ci_cd_automation.build.build_orchestrator import orchestrate_build_pipeline
+  from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
   # Complete build workflow
   build_config = {"target": "python_wheel", "clean": True}
@@ -302,7 +276,7 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  # Used by build_synthesis for version control integration
+  # Used by ci_cd_automation.build for version control integration
   from codomyrmex.git_operations.git_wrapper import create_branch, commit_changes
 
   # Automated release workflow
@@ -319,9 +293,9 @@ graph TD
 - **Cross-Module Usage**:
 
   ```python
-  # Used by pattern_matching for analysis visualization
+  # Used by coding.pattern_matching for analysis visualization
   from codomyrmex.data_visualization.plotter import create_heatmap
-  from codomyrmex.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
+  from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import analyze_repository_path
 
   # Visualize analysis results
   analysis = analyze_repository_path(path, config)
@@ -404,28 +378,30 @@ graph TD
   result = template.render(code=source, language="python")
   ```
 
-#### **`model_evaluation` Integration Points**
+#### **`model_ops.evaluation` Integration Points**
 
-- **Consumes**: `logging_monitoring`, `llm`, `metrics`
+- **Consumes**: `logging_monitoring`, `llm`, `telemetry.metrics`
 - **Provides**: LLM output scoring, benchmark suites, A/B comparison
+- **Now a sub-module of `model_ops`**
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.model_evaluation import Evaluator, BenchmarkSuite
+  from codomyrmex.model_ops.evaluation import Evaluator, BenchmarkSuite
 
   # Score LLM outputs against reference answers
   evaluator = Evaluator(metrics=["bleu", "rouge", "semantic_similarity"])
   scores = evaluator.evaluate(predictions, references)
   ```
 
-#### **`inference_optimization` Integration Points**
+#### **`model_ops.optimization` Integration Points**
 
 - **Consumes**: `logging_monitoring`, `llm`
 - **Provides**: Model quantization, ONNX export, inference acceleration
+- **Now a sub-module of `model_ops`**
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.inference_optimization import optimize_model, quantize
+  from codomyrmex.model_ops.optimization import optimize_model, quantize
 
   # Optimize model for production inference
   optimized = optimize_model(model_path, target="onnx")
@@ -478,29 +454,15 @@ graph TD
   bus.publish("build.completed", {"status": "success"})
   ```
 
-#### **`scheduler` Integration Points**
-
-- **Consumes**: `logging_monitoring`, `concurrency`
-- **Provides**: Cron-like scheduling, one-off timers, recurring tasks
-- **Cross-Module Usage**:
-
-  ```python
-  from codomyrmex.scheduler import Scheduler, CronTrigger
-
-  # Schedule recurring analysis
-  scheduler = Scheduler()
-  scheduler.add_job(run_analysis, CronTrigger(hour=2))
-  scheduler.start()
-  ```
-
-#### **`orchestrator` Integration Points**
+#### **`orchestrator` Integration Points** (includes scheduler)
 
 - **Consumes**: `logging_monitoring`, `events`, `concurrency`
-- **Provides**: Workflow definition, step sequencing, error recovery
+- **Provides**: Workflow definition, step sequencing, error recovery, **cron-like scheduling**
 - **Cross-Module Usage**:
 
   ```python
   from codomyrmex.orchestrator import Workflow, Step
+  from codomyrmex.orchestrator.scheduler import Scheduler, CronTrigger
 
   # Define multi-step workflows
   workflow = Workflow("deploy_pipeline")
@@ -508,16 +470,21 @@ graph TD
   workflow.add_step(Step("build", build_artifacts, depends_on="test"))
   workflow.add_step(Step("deploy", deploy, depends_on="build"))
   workflow.execute()
+
+  # Schedule recurring analysis
+  scheduler = Scheduler()
+  scheduler.add_job(run_analysis, CronTrigger(hour=2))
+  scheduler.start()
   ```
 
-#### **`service_mesh` Integration Points**
+#### **`networking` Integration Points** (includes service_mesh)
 
-- **Consumes**: `logging_monitoring`, `networking`
-- **Provides**: Circuit breakers, retries, load balancing, health checks
+- **Consumes**: `logging_monitoring`
+- **Provides**: HTTP clients, WebSocket support, diagnostics, **circuit breakers, load balancing**
 - **Cross-Module Usage**:
 
   ```python
-  from codomyrmex.service_mesh import CircuitBreaker, RetryPolicy
+  from codomyrmex.networking.service_mesh import CircuitBreaker, RetryPolicy
 
   # Resilient external service calls
   breaker = CircuitBreaker(failure_threshold=5, reset_timeout=30)
@@ -528,8 +495,8 @@ graph TD
 
 #### **`security` Integration Points**
 
-- **Consumes**: `logging_monitoring`, `static_analysis`
-- **Provides**: Vulnerability scanning, threat modeling, secrets detection
+- **Consumes**: `logging_monitoring`, `coding.static_analysis`
+- **Provides**: Vulnerability scanning, threat modeling, secrets detection, **governance**
 - **Cross-Module Usage**:
 
   ```python
@@ -681,18 +648,18 @@ graph LR
 
         subgraph "AI & Intelligence Layer"
             AI["agents"]
-            PATTERN["pattern_matching"]
+            MOPS["model_ops"]
         end
 
         subgraph "Analysis & Quality Layer"
-            STATIC["static_analysis"]
-            EXEC["code"]
+            CODE["coding (static_analysis, patterns)"]
+            SEC["security (governance)"]
         end
 
         subgraph "Build & Deploy Layer"
-            BUILD["build_synthesis"]
+            CICD["ci_cd_automation (build)"]
             GIT["git_operations"]
-            DOCS["documentation"]
+            DOCS["documentation (education)"]
         end
 
         subgraph "Visualization Layer"
@@ -705,59 +672,45 @@ graph LR
     AI -.-> LOG
     AI -.-> MCP
 
-    PATTERN -.-> ENV
-    PATTERN -.-> LOG
+    MOPS -.-> LOG
 
-    STATIC -.-> LOG
-    EXEC -.-> LOG
+    CODE -.-> LOG
+    SEC -.-> LOG
 
-    BUILD -.-> LOG
+    CICD -.-> LOG
     GIT -.-> LOG
     DOCS -.-> LOG
 
     VIZ -.-> LOG
 
     %% Functional dependencies (solid lines)
-    AI --> EXEC
-    AI --> PATTERN
-    STATIC --> BUILD
-    BUILD --> GIT
-    BUILD --> DOCS
-    PATTERN --> AI
+    AI --> CODE
+    SEC --> CODE
+    CICD --> GIT
+    CICD --> DOCS
 ```
 
 ### **Dependency Matrix Table**
 
-**Key Modules Dependency Matrix** (showing core module dependencies):
+**Key Modules Dependency Matrix** (showing core module dependencies, post-consolidation):
 
-| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | agents | data_visualization | static_analysis | pattern_matching | coding | build_synthesis | git_operations | documentation |
-|-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|-----------------|------------------|------------------------|-----------------|---------------|---------------|
-| **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **model_context_protocol** | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **terminal_interface** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **config_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **database_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **llm** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **performance** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **agents** | ✅ | ✅ | ✅ | ✅ Self | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
-| **data_visualization** | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| **static_analysis** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ | ❌ | ✅ |
-| **pattern_matching** | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ✅ |
-| **coding** | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ✅ |
-| **security** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **llm/ollama** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **build_synthesis** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self | ✅ | ✅ |
-| **git_operations** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ Self | ✅ |
-| **documentation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self |
-| **ci_cd_automation** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| **containerization** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **orchestrator** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **system_discovery** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **cli** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **module_template** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **spatial** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **physical_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Consumer Module | environment_setup | logging_monitoring | model_context_protocol | agents | data_visualization | coding | security | git_operations | ci_cd_automation | documentation |
+|-----------------|-------------------|-------------------|-------------------------|----------------|-------------------|--------|----------|---------------|-----------------|---------------|
+| **environment_setup** | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **logging_monitoring** | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **model_context_protocol** | ❌ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **config_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **database_management** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **llm** | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **agents** | ✅ | ✅ | ✅ | ✅ Self | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| **data_visualization** | ❌ | ✅ | ❌ | ❌ | ✅ Self | ✅ | ❌ | ❌ | ❌ | ✅ |
+| **coding** | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ Self | ❌ | ❌ | ❌ | ✅ |
+| **security** | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ Self | ❌ | ❌ | ✅ |
+| **ci_cd_automation** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ Self | ✅ |
+| **orchestrator** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **documentation** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ Self |
+| **model_ops** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **testing** | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
 **Legend:**
 
@@ -794,7 +747,7 @@ def enhance_code_with_ai(code_snippet, enhancement_request):
 
 ```python
 from codomyrmex.data_visualization.plotter import create_bar_chart
-from codomyrmex.static_analysis.pyrefly_runner import run_pyrefly_analysis
+from codomyrmex.coding.static_analysis.pyrefly_runner import run_pyrefly_analysis
 
 def visualize_analysis_results(target_paths, project_root):
     """Create visual representation of analysis results"""

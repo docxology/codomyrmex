@@ -644,12 +644,12 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     
     # ── Phase 1: Discover @mcp_tool decorated functions ──
     scan_targets = [
-        "codomyrmex.visualization",
+        "codomyrmex.data_visualization",
         "codomyrmex.llm",
         "codomyrmex.agentic_memory",
         "codomyrmex.security",
         "codomyrmex.git_operations.core.git",
-        "codomyrmex.static_analysis.static_analyzer",
+        "codomyrmex.coding.static_analysis.static_analyzer",
         "codomyrmex.coding.execution.executor",
         "codomyrmex.documentation.scripts.auto_generate_docs",
         "codomyrmex.data_visualization.charts.line_plot",

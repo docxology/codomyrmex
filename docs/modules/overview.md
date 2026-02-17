@@ -1,6 +1,6 @@
 # Codomyrmex Module System Overview
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
 
 Codomyrmex is built on a **modular architecture** where each module provides specific functionality while maintaining clear interfaces and minimal coupling. This design allows for flexible composition, independent development, and easy extensibility.
 
@@ -37,47 +37,44 @@ graph TD
     end
 
     subgraph "Service Layer"
-        AICodeEditing["AI Code<br/>Editing"]
-        Documentation["Documentation<br/>Generation"]
-        BuildSynthesis["Build<br/>Synthesis"]
-        StaticAnalysis["Static Analysis<br/>& Quality"]
+        AIAgents["AI Agents<br/>& Benchmarks"]
+        Documentation["Documentation<br/>& Education"]
+        CICD["CI/CD<br/>(incl. build)"]
+        Coding["Coding<br/>(static analysis, patterns)"]
     end
 
     subgraph "Core Layer"
-        CodeExecution["Code Execution<br/>Sandbox"]
-        DataVisualization["Data Visualization<br/>& Plotting"]
-        PatternMatching["Pattern<br/>Matching"]
-        GitOperations["Git Operations<br/>& Version Control"]
+        ModelOps["Model Ops<br/>(eval, registry, optimization)"]
+        DataViz["Data Visualization<br/>& Export"]
+        Testing["Testing<br/>(workflow, chaos)"]
+        GitOperations["Git Operations<br/>& Merge Resolution"]
     end
 
     subgraph "Foundation Layer"
         LoggingMonitoring["Logging &<br/>Monitoring"]
         EnvironmentSetup["Environment<br/>Setup"]
-        ModelContextProtocol["Model Context<br/>Protocol"]
-        TerminalInterface["Terminal<br/>Interface"]
+        MCP["Model Context<br/>Protocol"]
+        Telemetry["Telemetry<br/>(metrics, dashboard)"]
+        Events["Events<br/>(streaming, notifications)"]
     end
 
-    %% Dependencies flow upward (dotted lines show "depends on")
-    AICodeEditing -.-> LoggingMonitoring
-    AICodeEditing -.-> EnvironmentSetup
-    AICodeEditing -.-> ModelContextProtocol
+    %% Dependencies flow upward
+    AIAgents -.-> LoggingMonitoring
+    AIAgents -.-> EnvironmentSetup
+    AIAgents -.-> MCP
 
     Documentation -.-> LoggingMonitoring
-    Documentation -.-> BuildSynthesis
 
-    BuildSynthesis -.-> StaticAnalysis
-    BuildSynthesis -.-> LoggingMonitoring
+    CICD -.-> LoggingMonitoring
+    CICD -.-> Coding
 
-    StaticAnalysis -.-> LoggingMonitoring
-    StaticAnalysis -.-> PatternMatching
+    Coding -.-> LoggingMonitoring
 
-    CodeExecution -.-> LoggingMonitoring
-    DataVisualization -.-> LoggingMonitoring
-    PatternMatching -.-> LoggingMonitoring
-    PatternMatching -.-> EnvironmentSetup
+    ModelOps -.-> LoggingMonitoring
+    DataViz -.-> LoggingMonitoring
+    Testing -.-> LoggingMonitoring
     GitOperations -.-> LoggingMonitoring
 
-    InteractiveShell -.-> TerminalInterface
     InteractiveShell -.-> SystemDiscovery
     SystemDiscovery -.-> LoggingMonitoring
 ```
@@ -103,21 +100,17 @@ graph TD
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
 | **`logging_monitoring`** | Centralized logging system | Structured logging, multiple formats, log aggregation |
-| **`environment_setup`** | Environment validation | Dependency checking, API key management, setup automation |
-| **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
+| **`environment_setup`** | Environment validation | Dependency checking, API key management, setup automation, dependency resolution |
+| **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications, auto-discovery |
 | **`terminal_interface`** | Rich terminal interactions | Colored output, progress bars, interactive prompts |
 | **`config_management`** | Configuration management | Centralized config loading, deployment, monitoring, secret management |
-| **`database_management`** | Data persistence | Database operations, migrations, backups, performance monitoring |
-| **`llm`** | LLM infrastructure | Language model integration, provider abstraction, Ollama support |
-| **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
-| **`metrics`** | Metrics collection | System metrics, custom metrics, aggregation, reporting |
-| **`concurrency`** | Distributed synchronization | Locks, semaphores, thread-safe primitives |
+| **`database_management`** | Data persistence | Database operations, **migrations**, **backups**, performance monitoring, **data lineage** |
+| **`concurrency`** | Distributed synchronization | Locks, semaphores, thread-safe primitives, **channels**, **rate limiting** |
 | **`dependency_injection`** | IoC container | Service registration, constructor injection, lifecycle scoping |
-| **`rate_limiting`** | API rate limiting | Fixed window, sliding window, token bucket algorithms |
-| **`scheduler`** | Task scheduling | Cron triggers, interval scheduling, one-time jobs |
-| **`schemas`** | Shared type registry | Standardized types, cross-module interoperability |
-| **`streaming`** | Real-time data streaming | Server-sent events, pub-sub patterns |
-| **`telemetry`** | Observability | OpenTelemetry traces, spans, context propagation |
+| **`serialization`** | Data serialization | JSON, YAML, binary formats, schema validation, **streaming I/O** |
+| **`telemetry`** | Observability | OpenTelemetry traces, spans, context propagation, **metrics collection**, **dashboards** |
+| **`events`** | Event system | Event bus, pub/sub, event handlers, **replay**, **dead letter**, **streaming**, **notifications** |
+| **`validation`** | Data validation | Schema validation, input sanitization, constraint checking, **shared schema registry** |
 
 ### **⚙️ Core Functional Modules**
 
@@ -125,23 +118,19 @@ graph TD
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| **`coding`** | Code execution and review | Multi-language support, sandboxing, code review, security isolation |
-| **`static_analysis`** | Code quality analysis | Linting, security scanning, complexity metrics, quality gates |
-| **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling |
-| **`pattern_matching`** | Code pattern analysis | Pattern recognition, dependency analysis, code understanding |
-| **`git_operations`** | Version control automation | Git workflows, branch management, commit automation |
-| **`security`** | Security scanning and audit | Vulnerability detection, compliance checking, threat modeling |
+| **`coding`** | Code execution and review | Multi-language sandboxing, code review, **static analysis**, **pattern matching** |
+| **`data_visualization`** | Charts and plots | Static/interactive plots, multiple formats, customizable styling, **multi-format export** |
+| **`git_operations`** | Version control automation | Git workflows, branch management, commit automation, **merge conflict resolution** |
+| **`security`** | Security scanning and audit | Vulnerability detection, compliance checking, threat modeling, **vulnerability scanner**, **governance** |
 | **`scrape`** | Web scraping | Content extraction, crawling, data collection |
-| **`documents`** | Document processing | Document parsing, metadata extraction, search indexing |
-| **`cache`** | Caching infrastructure | In-memory caching, distributed cache, cache invalidation |
+| **`documents`** | Document processing | Document parsing, metadata extraction, search indexing, **RAG chunking** |
+| **`cache`** | Caching infrastructure | In-memory caching, distributed cache, **multi-strategy invalidation** |
 | **`compression`** | Data compression | Multiple algorithms, streaming compression, file archiving |
-| **`encryption`** | Encryption utilities | Symmetric/asymmetric encryption, key management, secure storage |
-| **`networking`** | Network utilities | HTTP clients, WebSocket support, network diagnostics |
-| **`serialization`** | Data serialization | JSON, YAML, binary formats, schema validation |
-| **`validation`** | Data validation | Schema validation, input sanitization, constraint checking |
-| **`accessibility`** | WCAG compliance | Accessibility auditing, color contrast, screen reader support |
-| **`search`** | Full-text search | TF-IDF indexing, fuzzy matching, relevance ranking |
-| **`tree_sitter`** | AST parsing | Language-agnostic parsing, syntax trees, code navigation |
+| **`encryption`** | Encryption utilities | Symmetric/asymmetric encryption, key management, secure storage, **digital signing** |
+| **`networking`** | Network utilities | HTTP clients, WebSocket support, network diagnostics, **service mesh** |
+| **`search`** | Full-text search | TF-IDF indexing, fuzzy matching, relevance ranking, **hybrid BM25+semantic search** |
+| **`crypto`** | Cryptography | Cryptography utilities, currency, encoding, protocols, steganography |
+| **`tree_sitter`** | AST parsing | Language-agnostic parsing, syntax trees, code navigation (sub-package of `coding/parsers`) |
 
 ### **🔧 Service Modules**
 
@@ -149,24 +138,19 @@ graph TD
 
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
-| **`build_synthesis`** | Build automation | Multi-language builds, artifact generation, deployment pipelines |
-| **`documentation`** | Documentation generation | Website generation, API docs, tutorial creation |
-| **`api`** | API infrastructure | OpenAPI/Swagger specs, REST API building, versioning |
-| **`ci_cd_automation`** | CI/CD pipeline management | Pipeline orchestration, deployment automation, monitoring |
+| **`documentation`** | Documentation generation | Website generation, API docs, tutorial creation, **education & tutoring** |
+| **`api`** | API infrastructure | OpenAPI/Swagger specs, REST API building, versioning, **rate limiting** |
+| **`ci_cd_automation`** | CI/CD pipeline management | Pipeline orchestration, deployment automation, monitoring, **build synthesis** |
 | **`containerization`** | Container management | Docker lifecycle, image building, Kubernetes orchestration |
 | **`logistics`** | Orchestration and scheduling | Task orchestration, workflow scheduling, resource allocation |
-| **`cloud`** | Cloud integrations | Cloud provider APIs, resource management, deployment |
+| **`cloud`** | Cloud integrations | Cloud provider APIs, resource management, deployment, **cost management** |
 | **`auth`** | Authentication | OAuth, API keys, token management, access control |
-| **`chaos_engineering`** | Resilience testing | Fault injection, failure simulation, chaos experiments |
-| **`cost_management`** | Infrastructure cost tracking | LLM cost tracking, budget alerts, optimization |
 | **`deployment`** | Deployment strategies | Blue/green, canary, rolling deployments |
 | **`edge_computing`** | Edge deployment | IoT gateways, edge inference, offline-first patterns |
-| **`migration`** | Cross-provider migration | Data migration, schema evolution, provider switching |
-| **`model_ops`** | ML operations | Model lifecycle, experiment tracking, serving |
-| **`observability_dashboard`** | Unified monitoring | Dashboard generation, metric aggregation, alerting |
-| **`orchestrator`** | Workflow execution | DAG execution, step composition, retry policies |
-| **`service_mesh`** | Service coordination | Circuit breakers, load balancing, retry policies |
-| **`workflow_testing`** | Workflow validation | End-to-end testing, scenario replay, regression checks |
+| **`model_ops`** | ML operations | Model lifecycle, experiment tracking, serving, **evaluation**, **registry**, **optimization**, **feature store** |
+| **`orchestrator`** | Workflow execution | DAG execution, step composition, retry policies, **scheduling** |
+| **`testing`** | Test infrastructure | Fixtures, data generators, **workflow validation**, **chaos engineering** |
+| **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
 
 ### **🎮 Application Modules**
 
@@ -176,9 +160,8 @@ graph TD
 |--------|---------|-------------|
 | **`system_discovery`** | System exploration | Module scanning, capability discovery, health monitoring |
 | **`terminal_interface`** | Interactive exploration | Command shell, foraging interface, guided discovery |
-| **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell |
-| **`website`** | Website generation | Static site generation, templating, local server |
-| **`notification`** | Multi-channel dispatch | Email, Slack, webhook, SMS notification delivery |
+| **`cli`** | Command-line interface | CLI commands, scripting support, interactive shell, **shell completion** |
+| **`website`** | Website generation | Static site generation, templating, local server, **accessibility** |
 | **`audio`** | Audio processing | Transcription, synthesis, audio analysis |
 | **`video`** | Video processing | Video analysis, frame extraction, transcription |
 
@@ -189,13 +172,28 @@ graph TD
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
 | **`identity`** | Identity & Verification | 3-Tier personas, bio-cognitive verification, revocation |
-| **`wallet`** | Self-Custody | Secure key management, Natural Ritual recovery, key rotation |
+| **`wallet`** | Self-Custody | Secure key management, Natural Ritual recovery, key rotation, **smart contracts** |
 | **`defense`** | Active Defense | Exploit detection, context poisoning, rabbit hole containment |
 | **`market`** | Anonymous Markets | Reverse auctions, demand aggregation, anonymous bidding |
 | **`privacy`** | Privacy & Anonymity | Crumb scrubbing, mixnet simulation, dynamic blacklists |
 | **`dark`** | Dark mode & PDF ops | Dark mode utilities, PDF processing, steganography |
-| **`smart_contracts`** | Web3 integration | Blockchain smart contracts, token operations |
-| **`governance`** | Policy enforcement | Contracts management, dispute resolution, compliance |
+
+### **🧠 Intelligence Modules**
+
+*AI reasoning and agent capabilities*
+
+| Module | Purpose | Key Features |
+|--------|---------|-------------|
+| **`agents`** | Agentic framework integrations | Jules, Claude, Codex integration, agent orchestration, **benchmarks** |
+| **`cerebrum`** | Case-based reasoning | Bayesian inference, active inference, reasoning engine |
+| **`fpf`** | Functional Programming Framework | Combinator engine, transformation pipelines, composition |
+| **`skills`** | Skills framework | Skill definitions, execution, chaining |
+| **`agentic_memory`** | Long-term agent memory | Retrieval, persistence, contextual recall, **memory compression** |
+| **`graph_rag`** | Knowledge graph RAG | Graph-enhanced retrieval, knowledge extraction |
+| **`llm`** | LLM infrastructure | Language model integration, provider abstraction, Ollama support, **multimodal**, **safety filtering** |
+| **`prompt_engineering`** | Prompt management | Template versioning, optimization, evaluation, **A/B testing** |
+| **`vector_store`** | Embeddings storage | Similarity search, HNSW indexing, retrieval |
+| **`tool_use`** | Tool registry & composition | Tool validation, chain abstraction, workflow tools |
 
 ### **🔗 Integration Modules**
 
@@ -206,32 +204,9 @@ graph TD
 | **`model_context_protocol`** | AI communication standard | Standardized LLM interfaces, tool specifications |
 | **`module_template`** | Module creation template | Template for creating new modules with standard structure |
 | **`ide`** | IDE integrations | Antigravity, Cursor, VS Code automation and control |
-| **`events`** | Event system | Event bus, pub/sub, event handlers |
 | **`plugin_system`** | Plugin architecture | Plugin loading, registration, lifecycle management |
 | **`collaboration`** | Multi-agent collaboration | Swarm coordination, shared context, team workflows |
 | **`feature_flags`** | Feature toggles | Feature gates, rollout strategies, A/B routing |
-| **`i18n`** | Internationalization | Translation management, locale bundles, pluralization |
-
-### **🧠 Intelligence Modules**
-
-*AI reasoning and agent capabilities*
-
-| Module | Purpose | Key Features |
-|--------|---------|-------------|
-| **`agents`** | Agentic framework integrations | Jules, Claude, Codex integration, agent orchestration |
-| **`cerebrum`** | Case-based reasoning | Bayesian inference, active inference, reasoning engine |
-| **`fpf`** | Functional Programming Framework | Combinator engine, transformation pipelines, composition |
-| **`skills`** | Skills framework | Skill definitions, execution, chaining |
-| **`agentic_memory`** | Long-term agent memory | Retrieval, persistence, contextual recall |
-| **`graph_rag`** | Knowledge graph RAG | Graph-enhanced retrieval, knowledge extraction |
-| **`inference_optimization`** | Model inference | Quantization, batching, caching, optimization |
-| **`model_evaluation`** | Model output scoring | Composable scorers, evaluation pipelines |
-| **`model_registry`** | Model versioning | Model lifecycle, version tracking, metadata |
-| **`multimodal`** | Vision & audio AI | Image analysis, audio processing, cross-modal fusion |
-| **`prompt_engineering`** | Prompt management | Template versioning, optimization, evaluation |
-| **`prompt_testing`** | Prompt evaluation | A/B testing, regression testing, quality scoring |
-| **`vector_store`** | Embeddings storage | Similarity search, HNSW indexing, retrieval |
-| **`tool_use`** | Tool registry & composition | Tool validation, chain abstraction, workflow tools |
 
 ### **🚀 Advanced Modules**
 
@@ -245,8 +220,6 @@ graph TD
 | **`embodiment`** | Physical/robotic integration | Hardware interfaces, sensor fusion, motor control |
 | **`evolutionary_ai`** | Genetic algorithms | Evolutionary optimization, population dynamics, fitness |
 | **`quantum`** | Quantum computing | Algorithm primitives, circuit simulation, qubit operations |
-| **`data_lineage`** | Data provenance | Lineage tracking, transformation history, audit trails |
-| **`feature_store`** | ML feature management | Feature pipelines, versioning, serving |
 
 ### **🛠️ Utility Modules**
 
@@ -255,17 +228,14 @@ graph TD
 | Module | Purpose | Key Features |
 |--------|---------|-------------|
 | **`exceptions`** | Exception hierarchy | Centralized exception classes, error handling, error codes |
-| **`utils`** | Common utilities | Helper functions, CLI helpers, shared utilities |
-| **`tools`** | Utility tools | Tool registry, tool execution, helper tools |
+| **`utils`** | Common utilities | Helper functions, CLI helpers, shared utilities, **hashing**, **retry**, **i18n** |
 | **`templating`** | Template engine | Jinja2-style templating, code generation, scaffolding |
 | **`tests`** | Test infrastructure | Unit tests, integration tests, test utilities |
-| **`testing`** | Test fixtures | Data generators, mock factories, test helpers |
 | **`examples`** | Code examples | Usage examples, tutorials, demo applications |
-| **`visualization`** | Unified visualization | Cross-module dashboards, report generation |
 | **`meme`** | Information dynamics | Memetic warfare, meme propagation, evolution modeling |
-| **`education`** | Learning & tutoring | Curriculum generation, interactive tutoring, assessments |
 | **`finance`** | Financial operations | Double-entry bookkeeping, tax compliance, forecasting |
 | **`relations`** | CRM & social graphs | Contact management, social network analysis, graph metrics |
+| **`maintenance`** | System health | Health checks, cleanup routines, diagnostics |
 
 ## 🔄 Module Communication Patterns
 
@@ -287,15 +257,9 @@ code_result = generate_code_snippet("Create a factorial function", "python")
 Modules can publish and subscribe to events:
 
 ```python
-# Publishing events
 from codomyrmex.logging_monitoring import get_logger
 logger = get_logger(__name__)
 logger.info("Code generation completed", extra={"event_type": "code_generated"})
-
-# Subscribing to events
-def on_code_generated(event_data):
-    # Automatically run static analysis on generated code
-    pass
 ```
 
 ### **3. Pipeline Composition**
@@ -303,17 +267,15 @@ def on_code_generated(event_data):
 Modules can be chained together in processing pipelines:
 
 ```python
-# Analysis → AI Enhancement → Validation Pipeline
 def enhance_code_pipeline(source_code):
-    # 1. Analyze existing code
-    analysis = pattern_matching.analyze_code(source_code)
+    # 1. Analyze existing code (static_analysis is now in coding)
+    analysis = coding.static_analysis.analyze_code(source_code)
 
     # 2. Generate improvements with AI
     improvements = agents.suggest_improvements(source_code, analysis)
 
     # 3. Validate generated code
-    validation = code.validate_code(improvements)
-
+    validation = coding.validate_code(improvements)
     return validation
 ```
 
@@ -359,101 +321,6 @@ def enhance_code_pipeline(source_code):
    - Integration patterns with other modules
    - Security considerations and best practices
 
-### **Module Integration Best Practices**
-
-1. **Dependency Management**:
-   - Minimize dependencies on other modules
-   - Use foundation modules (logging, environment) as needed
-   - Pin exact versions in `pyproject.toml`
-
-2. **Error Handling**:
-
-   ```python
-   from codomyrmex.logging_monitoring.logger_config import get_logger
-
-   logger = get_logger(__name__)
-
-   try:
-       result = risky_operation()
-       logger.info("Operation completed successfully")
-       return result
-   except ValueError as e:
-       logger.error(f"Validation error: {e}")
-       raise
-   except Exception as e:
-       logger.error(f"Unexpected error: {e}", exc_info=True)
-       raise
-   ```
-
-3. **Configuration** {#module-specific-configuration}:
-
-   ```python
-   import os
-   from codomyrmex.environment_setup import check_and_setup_env_vars
-
-   # Ensure environment is configured
-   check_and_setup_env_vars(project_root)
-
-   # Use environment variables for configuration
-   API_KEY = os.getenv("MY_MODULE_API_KEY")
-   DEBUG_MODE = os.getenv("MY_MODULE_DEBUG", "false").lower() == "true"
-   ```
-
-## 🎯 Module Discovery and Usage
-
-### **Discovering Available Modules**
-
-```python
-from codomyrmex.system_discovery import SystemDiscovery
-
-discovery = SystemDiscovery()
-modules = discovery.discover_modules()
-
-for module_name, module_info in modules.items():
-    print(f"Module: {module_name}")
-    print(f"Capabilities: {len(module_info.capabilities)}")
-    print(f"Status: {'✅' if module_info.is_importable else '❌'}")
-```
-
-### **Using Modules Programmatically**
-
-```python
-# Import specific functionality
-from codomyrmex.data_visualization import create_bar_chart
-from codomyrmex.agents import generate_code_snippet
-
-# Use modules in combination
-def create_code_with_visualization():
-    # Generate code
-    code_result = generate_code_snippet(
-        "Create a function that calculates prime numbers up to n",
-        "python"
-    )
-
-    if code_result["status"] == "success":
-        # Create visualization of the process
-        create_bar_chart(
-            categories=["Generated", "Validated", "Ready"],
-            values=[1, 1, 1],
-            title="Code Generation Pipeline Status",
-            output_path="generation_status.png"
-        )
-```
-
-### **Interactive Module Exploration** {#interactive-module-exploration}
-
-```bash
-# Launch the interactive shell
-python -c "
-from codomyrmex.terminal_interface import InteractiveShell
-InteractiveShell().run()
-"
-
-# Or use the orchestrator
-./start_here.sh
-# Choose option 7: Interactive Shell
-```
-
 ## 🔍 Module Health and Monitoring
 
 ### **Module Status Checking**
@@ -467,27 +334,6 @@ status = discovery.check_module_health()
 print(f"Modules working: {status['working_count']}/{status['total_count']}")
 print(f"Dependencies satisfied: {status['dependencies_ok']}")
 print(f"Tests passing: {status['tests_passing']}")
-```
-
-### **Performance Monitoring**
-
-```python
-from codomyrmex.logging_monitoring import get_logger
-import time
-
-logger = get_logger(__name__)
-
-def timed_operation():
-    start_time = time.time()
-    try:
-        result = expensive_operation()
-        duration = time.time() - start_time
-        logger.info(f"Operation completed in {duration:.2f}s")
-        return result
-    except Exception as e:
-        duration = time.time() - start_time
-        logger.error(f"Operation failed after {duration:.2f}s: {e}")
-        raise
 ```
 
 ---

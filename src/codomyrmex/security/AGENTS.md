@@ -6,57 +6,65 @@ Security utilities: input validation, vulnerability scanning, and hardening.
 
 ## Key Classes
 
-- **InputValidator** — Validate and sanitize input
-- **VulnerabilityScanner** — Scan for security issues
-- **SecurityHardener** — Apply security best practices
-- **PermissionChecker** — Check access permissions
+| Component | Description |
+|-----------|-------------|
+| `VulnerabilityScanner` | Comprehensive scanning for vulnerabilities |
+| `SecretsDetector` | Identify exposed API keys and secrets |
+| `SecurityAnalyzer` | Analyze source code for common security pitfalls |
+| `ThreatModel` | Structured risk assessment for system architectures |
+| `PolicyEngine` | Governance rule enforcement and compliance |
 
-## Agent Instructions
+## Usage for Agents
 
-1. **Validate all input** — Never trust user data
-2. **Escape output** — Context-aware escaping
-3. **Least privilege** — Minimal permissions
-4. **Log security events** — Audit trail
-5. **Scan dependencies** — Check for vulnerabilities
-
-## Common Patterns
+### Vulnerability Scanning
 
 ```python
-from codomyrmex.security import (
-    InputValidator, VulnerabilityScanner, sanitize_html
-)
+from codomyrmex.security import VulnerabilityScanner
 
-# Validate input
-validator = InputValidator()
-if not validator.validate_email(email):
-    raise ValueError("Invalid email")
-
-# Sanitize HTML
-safe_html = sanitize_html(user_content)
-
-# Scan for vulnerabilities
 scanner = VulnerabilityScanner()
-report = scanner.scan_dependencies("pyproject.toml")
-for vuln in report.vulnerabilities:
-    print(f"{vuln.package}: {vuln.severity} - {vuln.cve}")
-
-# Check permissions
-checker = PermissionChecker()
-if not checker.can_access(user, resource):
-    raise PermissionDenied()
+results = scanner.scan_project_security("./src")
+if results.get("vulnerabilities"):
+    print(f"Found {results['vulnerabilities']['count']} vulnerabilities")
 ```
 
-## Testing Patterns
+### Secrets Detection
 
 ```python
-# Verify input validation
-validator = InputValidator()
-assert validator.validate_email("test@example.com")
-assert not validator.validate_email("invalid")
+from codomyrmex.security import SecretsDetector
 
-# Verify sanitization
-html = sanitize_html("<script>alert('xss')</script>")
-assert "<script>" not in html
+detector = SecretsDetector()
+findings = detector.scan_directory_for_secrets("./src")
+for finding in findings:
+    print(f"Secret leaked in {finding.file_path}: {finding.secret_type}")
+```
+
+### Threat Modeling
+
+```python
+from codomyrmex.security import create_threat_model, analyze_threats
+
+model = create_threat_model(
+    system_name="Auth API",
+    assets=["User DB", "API Keys"],
+    attack_surface=["/login", "/signup"]
+)
+analysis = analyze_threats(model)
+print(f"Total threats identified: {analysis['total_threats']}")
+```
+
+### Policy Enforcement
+
+```python
+from codomyrmex.security.governance import PolicyEngine, Policy
+
+engine = PolicyEngine()
+# Rule: password must be present in context
+engine.add_policy(Policy("PasswordRule", lambda c: "password" in c, "Missing password"))
+
+try:
+    engine.enforce({"username": "admin"})
+except Exception as e:
+    print(f"Enforcement failed: {e}")
 ```
 
 ## Navigation

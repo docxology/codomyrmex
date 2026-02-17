@@ -5,7 +5,7 @@ import re
 import pytest
 
 try:
-    from codomyrmex.model_evaluation import (
+    from codomyrmex.model_ops.evaluation import (
         BenchmarkCase,
         BenchmarkResult,
         BenchmarkSuite,

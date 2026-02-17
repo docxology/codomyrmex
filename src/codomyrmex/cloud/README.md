@@ -278,6 +278,17 @@ client.send_test(campaign_id="123", email="test@activeinference.tech")
 | [PAI.md](PAI.md) | Personal AI infrastructure context |
 | [API_SPECIFICATION.md](API_SPECIFICATION.md) | Complete API reference |
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`cost_management/`** | Infrastructure and LLM cost tracking and optimization |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/cloud/](../../../docs/modules/cloud/)

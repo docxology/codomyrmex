@@ -53,7 +53,7 @@ graph LR
 # New APIs (additive, backward compatible)
 from codomyrmex.agents import enhance_code_batch
 from codomyrmex.data_visualization import create_interactive_dashboard
-from codomyrmex.static_analysis import analyze_security_vulnerabilities
+from codomyrmex.coding.static_analysis import analyze_security_vulnerabilities
 
 # New configuration options
 from codomyrmex.environment_setup import configure_advanced_caching
@@ -164,7 +164,7 @@ from codomyrmex.analysis.static import run_analysis
 
 # After (v1.0.0) - NEW STRUCTURE
 from codomyrmex.data_visualization import create_line_plot
-from codomyrmex.static_analysis import analyze_codebase
+from codomyrmex.coding.static_analysis import analyze_codebase
 
 # Function signature changes
 # Before
@@ -258,7 +258,7 @@ class CodomyrmexMigrator:
         import_mapping = {
             # v0.x.x → v1.0.0 import mappings
             'from codomyrmex.coding.data_visualization import': 'from codomyrmex.data_visualization import',
-            'from codomyrmex.analysis.static import': 'from codomyrmex.static_analysis import',
+            'from codomyrmex.analysis.static import': 'from codomyrmex.coding.static_analysis import',
             'from codomyrmex.ai.code_editing import': 'from codomyrmex.agents import',
             'from codomyrmex.utils.environment import': 'from codomyrmex.environment_setup import',
         }
@@ -561,7 +561,7 @@ visualization:
         # Check specific changes
         main_py_content = (test_project / "src" / "main.py").read_text()
         assert 'from codomyrmex.data_visualization import' in main_py_content
-        assert 'from codomyrmex.static_analysis import' in main_py_content
+        assert 'from codomyrmex.coding.static_analysis import' in main_py_content
         assert 'analyze_codebase(' in main_py_content
 
         # Verify backup was created

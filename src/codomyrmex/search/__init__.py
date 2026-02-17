@@ -6,7 +6,7 @@ Full-text search with TF-IDF scoring, fuzzy matching, and query parsing.
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

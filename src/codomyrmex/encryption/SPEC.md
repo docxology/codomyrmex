@@ -117,8 +117,48 @@ graph TD
 class Encryptor:
     def encrypt(data: bytes, key: bytes) -> bytes
     def decrypt(data: bytes, key: bytes) -> bytes
+    def encrypt_string(plaintext: str, key: bytes, encoding: str = "utf-8") -> str
+    def decrypt_string(ciphertext: str, key: bytes, encoding: str = "utf-8") -> str
+    def encrypt_file(input_path: str, output_path: str, key: bytes) -> bool
+    def decrypt_file(input_path: str, output_path: str, key: bytes) -> bool
     def generate_key() -> bytes
+    def generate_key_pair(key_size: int = 2048) -> Tuple[bytes, bytes]
     def derive_key(password: str, salt: bytes) -> bytes
+    def sign(data: bytes, private_key: bytes) -> bytes
+    def verify(data: bytes, signature: bytes, public_key: bytes) -> bool
+```
+
+### Digital Signatures (HMAC-based)
+
+```python
+class Signer:
+    def sign(data: str | bytes, key_id: str = "") -> SignatureResult
+    def verify(data: str | bytes, signature: str) -> bool
+    def sign_json(obj: Dict[str, Any], key_id: str = "") -> Dict[str, Any]
+    def verify_json(signed_obj: Dict[str, Any]) -> bool
+
+def sign_file(path: Path, secret_key: str) -> str
+def verify_file(path: Path, signature: str, secret_key: str) -> bool
+```
+
+### Key Management
+
+```python
+class KeyManager:
+    def store_key(key_id: str, key: bytes) -> bool
+    def get_key(key_id: str) -> Optional[bytes]
+    def delete_key(key_id: str) -> bool
+    def list_keys() -> List[str]
+    def key_exists(key_id: str) -> bool
+    def rotate_key(key_id: str, new_key: bytes) -> Optional[bytes]
+```
+
+### Secure Data Container
+
+```python
+class SecureDataContainer:
+    def pack(data: Any, metadata: Dict[str, Any] | None = None) -> bytes
+    def unpack(encrypted_data: bytes) -> Dict[str, Any]
 ```
 
 ### Authenticated Encryption Interface

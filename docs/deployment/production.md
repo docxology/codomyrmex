@@ -505,7 +505,7 @@ def cache_result(expiry=3600, key_prefix='codomyrmex'):
 @cache_result(expiry=1800)  # 30 minutes
 def analyze_large_codebase(codebase_path):
     """Cache expensive static analysis results."""
-    from codomyrmex.static_analysis import analyze_codebase
+    from codomyrmex.coding.static_analysis import analyze_codebase
     return analyze_codebase(codebase_path)
 ```
 
@@ -540,7 +540,7 @@ def async_code_enhancement(self, code, enhancement_options):
 @celery_app.task
 def batch_analysis_task(file_paths):
     """Process multiple files in batch."""
-    from codomyrmex.static_analysis import analyze_file
+    from codomyrmex.coding.static_analysis import analyze_file
     results = {}
 
     for file_path in file_paths:

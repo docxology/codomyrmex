@@ -126,6 +126,17 @@ breaker = CircuitBreaker(failure_threshold=5, recovery_timeout=30)
 response = breaker.call(lambda: api.handle_request("/users", method="GET"))
 ```
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`rate_limiting/`** | API rate limiting with token bucket and sliding window algorithms |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/api/](../../../docs/modules/api/)

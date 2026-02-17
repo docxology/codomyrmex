@@ -66,6 +66,18 @@ records = gen.generate_many(100)
 - `fixture_utils.py` - Core fixture utilities (FixtureManager, decorator)
 - `strategies.py` - Generation strategies (GeneratorStrategy, IntGenerator, etc.)
 
+
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`workflow/`** | Workflow validation and end-to-end testing |
+| **`chaos/`** | Fault injection and resilience testing |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
 - **Full Documentation**: [docs/modules/testing/](../../../docs/modules/testing/)

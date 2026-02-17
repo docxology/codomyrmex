@@ -2,67 +2,61 @@
 
 ## Module Overview
 
-Code generation, editing, and transformation utilities.
+Unified toolkit for code execution, analysis, review, and transformation.
 
 ## Key Classes
 
-- **CodeGenerator** — Generate code from specs
-- **CodeEditor** — Edit existing code
-- **CodeTransformer** — AST-based transforms
-- **DiffApplier** — Apply code diffs
+- **CodeReviewer** — Orchestrate code quality reviews
+- **StaticAnalyzer** — Run deep linting and complexity analysis
+- **PatternMatcher** — Search for structural patterns (AST-based)
+- **CodeGenerator** — Generate code from functional specs
+- **Debugger** — Automated error diagnosis and patching
 
 ## Agent Instructions
 
-1. **Parse before edit** — Use AST for safe edits
-2. **Preserve formatting** — Maintain style
-3. **Generate tests** — Create tests with code
-4. **Validate output** — Syntax check generated code
-5. **Document changes** — Explain transformations
+1. **Analyze before fix** — Use `StaticAnalyzer` to verify code quality before suggesting fixes
+2. **Structural Search** — Use `PatternMatcher` to find all instances of a pattern before refactoring
+3. **Sandbox execution** — Always use `coding.execution` for untrusted code
+4. **Metric-driven review** — Check `CodeMetrics` during reviews
 
 ## Common Patterns
 
 ```python
 from codomyrmex.coding import (
-    CodeGenerator, CodeEditor, CodeTransformer, DiffApplier
+    CodeReviewer, StaticAnalyzer, PatternMatcher, Debugger
 )
 
-# Generate code
-generator = CodeGenerator()
-code = generator.generate_function(
-    name="calculate_tax",
-    params=["amount", "rate"],
-    return_type="float",
-    docstring="Calculate tax amount"
+# Deep Static Analysis
+analyzer = StaticAnalyzer()
+results = analyzer.analyze_project("./src")
+print(f"Complexity: {results.complexity}")
+
+# Find occurrences of a pattern
+matcher = PatternMatcher()
+occurrences = matcher.find_pattern(
+    "Assignment(target=Name(id='x'), value=Constant(value=1))"
 )
 
-# Edit code
-editor = CodeEditor("src/main.py")
-editor.add_import("from datetime import datetime")
-editor.add_method("MyClass", method_code)
-editor.save()
-
-# Transform code
-transformer = CodeTransformer()
-new_code = transformer.rename_function(code, "old_name", "new_name")
-new_code = transformer.add_type_hints(code)
-
-# Apply diffs
-applier = DiffApplier()
-result = applier.apply(original, diff)
+# Automated Debug Loop
+debugger = Debugger()
+diagnosis = debugger.diagnose(failing_script_path)
+if diagnosis.can_fix:
+    patch = debugger.generate_patch(diagnosis)
+    debugger.apply_and_verify(patch)
 ```
 
 ## Testing Patterns
 
 ```python
-# Verify code generation
-gen = CodeGenerator()
-code = gen.generate_function("foo", ["x"])
-assert "def foo(x):" in code
+# Verify static analysis findings
+analyzer = StaticAnalyzer()
+results = analyzer.analyze_file("bad_code.py")
+assert any(r.type == "Complexity" for r in results)
 
-# Verify transformation
-transformer = CodeTransformer()
-result = transformer.rename_function("def old(): pass", "old", "new")
-assert "def new():" in result
+# Verify pattern matching
+matcher = PatternMatcher()
+matches = matcher.find_in_string("x = 10", "Assignment")
+assert len(matches) == 1
 ```
 
 ## Navigation

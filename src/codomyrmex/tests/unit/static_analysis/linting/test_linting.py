@@ -6,7 +6,7 @@ import tempfile
 
 import pytest
 
-from codomyrmex.static_analysis.linting import (
+from codomyrmex.coding.static_analysis.linting import (
     LineLengthRule,
     Linter,
     LintIssue,

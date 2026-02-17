@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from codomyrmex.visualization.reports.general import GeneralSystemReport
+from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 def test_general_report_generation(tmp_path):
     report = GeneralSystemReport()

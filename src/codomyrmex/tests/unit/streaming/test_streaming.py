@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.streaming import (
+    from codomyrmex.events.streaming import (
         Event,
         EventType,
         InMemoryStream,

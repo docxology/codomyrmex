@@ -158,26 +158,85 @@ graph TD
 
 ### Public API
 
-- `AgentInterface`: Abstract base class for all agents
-  - `execute(request: AgentRequest) -> AgentResponse`
-  - `stream(request: AgentRequest) -> Iterator[str]`
-  - `setup() -> None`
-  - `test_connection() -> bool`
-- `CodeEditor`: Specialized agent for code manipulation (generation, refactoring)
-- `AgentRequest`, `AgentResponse`: Request/response data structures
-- `AgentCapabilities`: Enum of agent capabilities
-- `AgentConfig`: Configuration management
-- `BaseAgent`: Base implementation class with common functionality
-- `CLIAgentBase`: Base class for CLI-based agents with subprocess handling
-- `APIAgentBase`: Base class for API-based agents with error handling and token extraction
-- `AgentOrchestrator`: Multi-agent coordination
-- Framework-specific clients:
-  - CLI-based: `JulesClient`, `GeminiClient`, `OpenCodeClient`, `MistralVibeClient`, `EveryCodeClient`
-  - API-based: `ClaudeClient`, `CodexClient`, `O1Client`, `DeepSeekClient`, `QwenClient`
-- `AgentRegistry`: Agent discovery and health probing (`agent_setup/`)
-- `AgentPool`: Multi-agent load balancing (`pooling/`)
-- `AgentBenchmark`: Evaluation and scoring (`evaluation/`)
-- `ConversationManager`: Conversation persistence (`history/`)
+#### Core Agents (`agents.core`)
+
+```python
+class AgentInterface(ABC):
+    def get_capabilities() -> List[AgentCapabilities]
+    def execute(request: AgentRequest) -> AgentResponse
+    def stream(request: AgentRequest) -> Iterator[str]
+    def setup() -> None
+    def test_connection() -> bool
+    def supports_capability(capability: AgentCapabilities) -> bool
+
+class BaseAgent(AgentInterface):
+    """Base implementation with common validation and config handling."""
+```
+
+#### Discovery & Setup (`agents.agent_setup`)
+
+```python
+class AgentRegistry:
+    def list_agents() -> List[AgentDescriptor]
+    def probe_agent(name: str) -> ProbeResult
+    def probe_all() -> List[ProbeResult]
+    def get_operative() -> List[str]
+
+@dataclass
+class AgentDescriptor:
+    name: str; display_name: str; agent_type: str; env_var: str; ...
+```
+
+#### Orchestration (`agents.generic`)
+
+```python
+class AgentOrchestrator:
+    def plan_task(goal: str, agents: List[str]) -> TaskPlan
+    def execute_plan(plan: TaskPlan) -> TaskResult
+    def coordinate(agent_a: str, agent_b: str, task: str) -> bool
+```
+
+#### Tool Management (`agents.core.registry`)
+
+```python
+class ToolRegistry:
+    def register_function(func: Callable, name: str = None, ...) -> None
+    def get_tool(name: str) -> Optional[Tool]
+    def execute(tool_name: str, **kwargs) -> Any
+```
+
+### Pooling & Health (`agents.pooling`)
+
+```python
+class AgentPool:
+    def add_agent(agent: AgentInterface) -> None
+    def get_agent(name: str) -> AgentInterface
+    def get_operative() -> List[AgentInterface]
+    def balancing_strategy(strategy: str) -> None
+```
+
+### Evaluation & History (`agents.evaluation`, `agents.history`)
+
+```python
+class AgentEvaluator:
+    def benchmark(agent: AgentInterface, dataset: List[Case]) -> Report
+    def score_response(response: AgentResponse, expected: str) -> float
+
+class ConversationHistory:
+    def add_message(session_id: str, message: Message) -> None
+    def get_history(session_id: str) -> List[Message]
+    def persist() -> None
+```
+
+### specialized Agents (`agents.infrastructure`, `agents.git_agent`)
+
+```python
+class InfrastructureAgent(BaseAgent):
+    def provision(resource_type: str, config: dict) -> bool
+
+class GitAgent(BaseAgent):
+    def commit_and_push(message: str) -> bool
+```
 
 ### Dependencies
 

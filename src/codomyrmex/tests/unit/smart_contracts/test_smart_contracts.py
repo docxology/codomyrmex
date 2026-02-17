@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.smart_contracts import (
+    from codomyrmex.wallet.contracts import (
         Address,
         Contract,
         ContractCall,

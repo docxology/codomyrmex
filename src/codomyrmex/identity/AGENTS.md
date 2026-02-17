@@ -18,8 +18,9 @@ Secure Cognitive Agent module handling all identity-related operations. Ensures 
 ## Active Files
 
 - `__init__.py` - Module initialization and exports
-- `identity_manager.py` - Core persona management
-- `bio_verifier.py` - Bio-cognitive verification
+- `manager.py` - Core persona management
+- `biocognitive.py` - Bio-cognitive verification
+- `identity.py` - Base identity class
 - `README.md` - Human documentation
 - `SPEC.md` - Functional specification
 
@@ -45,7 +46,7 @@ from codomyrmex.identity import BioCognitiveVerifier
 
 verifier = BioCognitiveVerifier()
 # Verify user based on behavioral patterns
-is_valid = verifier.verify(user_id="u1", metric_type="keystroke", value=0.15)
+is_valid = verifier.verify(user_id="u1", metric="keystroke", current_value=0.15)
 ```
 
 ## Agent Guidelines

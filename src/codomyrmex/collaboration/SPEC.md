@@ -32,15 +32,33 @@ graph TD
 
 ## Interface Contracts
 
-### `TaskDecomposer`
+### Communication (`collaboration.communication`)
 
-- `decompose(mission: str) -> List[str]`
+```python
+class Broadcaster:
+    def subscribe(topic: str, subscriber_id: str, handler: Callable, ...) -> str
+    async def publish(topic: str, message: AgentMessage) -> int
+    def list_topics() -> List[TopicInfo]
 
-### `SwarmManager`
+class DirectMessenger:
+    async def send_private(recipient_id: str, message: AgentMessage) -> bool
+```
 
-- `add_agents(agents: List[AgentProxy])`
-- `consensus_vote(proposal: Any) -> Any`
-- `execute(mission: str)`
+### Coordination (`collaboration.coordination`)
+
+```python
+class VotingMechanism:
+    def create_proposal(title: str, proposer_id: str, ...) -> Proposal
+    def cast_vote(proposal_id: str, voter_id: str, vote: VoteType, ...) -> Vote
+    def tally_votes(proposal_id: str, total_voters: int) -> VotingResult
+
+class ConsensusBuilder:
+    def propose_value(key: str, agent_id: str, value: Any) -> None
+    async def reach_consensus(key: str, agents: List[Agent], ...) -> Optional[Any]
+
+class TaskDecomposer:
+    def decompose(mission: str) -> List[Task]
+```
 
 ## Technical Constraints
 

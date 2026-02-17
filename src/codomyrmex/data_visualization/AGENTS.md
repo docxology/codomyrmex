@@ -10,6 +10,7 @@ Charts, graphs, and visual data representations.
 - **LineChart** — Time series visualization
 - **BarChart** — Categorical comparisons
 - **Dashboard** — Multiple chart layout
+- **VisualizationEngine** — Core rendering and theme control
 
 ## Agent Instructions
 
@@ -43,8 +44,10 @@ dashboard.add_chart(chart, row=0, col=0)
 dashboard.add_chart(bar, row=0, col=1)
 dashboard.render("dashboard.html")
 
-# Export
-export_chart(chart, "growth.png", dpi=300)
+# Visualization Engine & Themes
+from codomyrmex.data_visualization.visualization import VisualizationEngine, Theme
+engine = VisualizationEngine(theme=Theme.DARK)
+engine.render_to_file(data, "output.png")
 ```
 
 ## Testing Patterns

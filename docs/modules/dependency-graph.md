@@ -10,17 +10,28 @@ graph TD
         ENV[environment_setup]
         LOG[logging_monitoring]
         MCP[model_context_protocol]
+        TEL["telemetry (metrics, dashboard)"]
+        EVT["events (streaming, notifications)"]
+        VAL["validation (schemas)"]
+        DB["database_management (migration, lineage)"]
+        SER[serialization]
+        CACHE[cache]
+        CONC[concurrency]
+        ENC[encryption]
     end
 
     subgraph "AI & Intelligence Layer"
         AI[agents]
-        PATTERN[pattern_matching]
+        LLM["llm (multimodal, safety)"]
+        MO["model_ops (eval, registry, optimization, features)"]
+        PE["prompt_engineering (testing)"]
+        MEM[agentic_memory]
+        GRAG[graph_rag]
     end
 
     subgraph "Analysis & Quality Layer"
-        STATIC[static_analysis]
-        EXEC[code]
-        SECURITY[security]
+        CODE["coding (static_analysis, pattern_matching)"]
+        SECURITY["security (governance)"]
     end
 
     subgraph "Visualization Layer"
@@ -28,51 +39,52 @@ graph TD
     end
 
     subgraph "Build & Deploy Layer"
-        BUILD[build_synthesis]
+        CICD["ci_cd_automation (build)"]
         GIT[git_operations]
         CONTAINER[containerization]
-        CICD[ci_cd_automation]
     end
 
     subgraph "Application Layer"
-        ORCH[orchestrator]
+        ORCH["orchestrator (scheduler)"]
         TERM[terminal_interface]
         DISCO[system_discovery]
+        TEST["testing (workflow, chaos)"]
+        API["api (rate_limiting)"]
+        NET["networking (service_mesh)"]
     end
 
     %% Foundation dependencies
     AI -.-> LOG
     AI -.-> ENV
     AI -.-> MCP
-    PATTERN -.-> LOG
-    PATTERN -.-> ENV
+    LLM -.-> LOG
+    MO -.-> LOG
 
     %% Analysis dependencies
-    STATIC -.-> LOG
-    EXEC -.-> LOG
+    CODE -.-> LOG
     SECURITY -.-> LOG
-    SECURITY --> STATIC
+    SECURITY --> CODE
 
     %% Visualization
     VIZ -.-> LOG
 
     %% Build dependencies
-    BUILD -.-> LOG
-    BUILD --> STATIC
     GIT -.-> LOG
     CONTAINER -.-> LOG
     CICD -.-> LOG
-    CICD --> BUILD
     CICD --> CONTAINER
 
     %% Application dependencies
     ORCH -.-> LOG
     TERM -.-> LOG
     DISCO -.-> LOG
+    TEST -.-> LOG
+    API -.-> LOG
 
     style ENV fill:#e1f5ff
     style LOG fill:#e1f5ff
     style MCP fill:#e1f5ff
+    style TEL fill:#e1f5ff
 ```
 
 ## Dependency Rules
@@ -80,17 +92,17 @@ graph TD
 ### Foundation Layer
 
 - **No dependencies**: These modules form the base of the system
-- Modules: `environment_setup`, `logging_monitoring`, `model_context_protocol`
+- Modules: `environment_setup`, `logging_monitoring`, `model_context_protocol`, `telemetry`, `events`, `validation`, `database_management`, `serialization`, `cache`, `concurrency`, `encryption`
 
 ### AI & Intelligence Layer
 
 - **Can depend on**: Foundation layer only
-- Modules: `agents`, `pattern_matching`
+- Modules: `agents`, `llm`, `model_ops`, `prompt_engineering`, `agentic_memory`, `graph_rag`
 
 ### Analysis & Quality Layer
 
 - **Can depend on**: Foundation layer, and other analysis modules
-- Modules: `static_analysis`, `coding`, `security`
+- Modules: `coding` (includes static_analysis + pattern_matching), `security` (includes governance)
 
 ### Visualization Layer
 
@@ -100,12 +112,12 @@ graph TD
 ### Build & Deploy Layer
 
 - **Can depend on**: Foundation layer, analysis layer
-- Modules: `build_synthesis`, `git_operations`, `containerization`, `ci_cd_automation`
+- Modules: `ci_cd_automation` (includes build), `git_operations`, `containerization`
 
 ### Application Layer
 
 - **Can depend on**: All layers (orchestration modules)
-- Modules: `orchestrator`, `terminal_interface`, `system_discovery`
+- Modules: `orchestrator` (includes scheduler), `terminal_interface`, `system_discovery`, `testing` (includes workflow + chaos), `api` (includes rate_limiting), `networking` (includes service_mesh)
 
 ## Violations
 
@@ -120,7 +132,7 @@ Run `python -m codomyrmex.tools.dependency_analyzer` to check for violations.
 
 ---
 
-*Last updated: Run `python -m codomyrmex.tools.dependency_analyzer` to regenerate*
+*Last updated: February 2026*
 
 ## Navigation Links
 

@@ -21,11 +21,14 @@ Usage:
 
     client = CodaClient(api_token="your-api-token")
     docs = client.list_docs()
-"""
+
+
+Submodules:
+    cost_management: Consolidated cost management capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -158,7 +161,10 @@ def cli_commands():
     }
 
 
+from . import cost_management
+
 __all__ = [
+    "cost_management",
     # Client
     "CodaClient",
     # Models

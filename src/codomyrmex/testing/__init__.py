@@ -2,11 +2,15 @@
 Testing Utilities
 
 Property-based testing, fuzzing, fixtures, and test data generation.
-"""
+
+
+Submodules:
+    chaos: Consolidated chaos capabilities.
+    workflow: Consolidated workflow capabilities."""
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -62,7 +66,13 @@ def cli_commands():
     }
 
 
+from . import workflow
+
+from . import chaos
+
 __all__ = [
+    "chaos",
+    "workflow",
     # CLI integration
     "cli_commands",
     # Generators

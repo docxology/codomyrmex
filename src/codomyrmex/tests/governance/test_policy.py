@@ -1,5 +1,5 @@
 import pytest
-from codomyrmex.governance.policy import PolicyRule, PolicyEngine, PolicyError
+from codomyrmex.security.governance.policy import PolicyRule, PolicyEngine, PolicyError
 
 
 def test_policy_enforcement():

@@ -10,12 +10,12 @@ class TestMultimodalImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import multimodal
+        from codomyrmex.llm import multimodal
         assert multimodal is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.multimodal import __all__
+        from codomyrmex.llm.multimodal import __all__
         expected_exports = [
             "MediaType",
             "ImageFormat",
@@ -39,7 +39,7 @@ class TestMediaType:
 
     def test_media_type_values(self):
         """Verify all media types are available."""
-        from codomyrmex.multimodal import MediaType
+        from codomyrmex.llm.multimodal import MediaType
 
         assert MediaType.IMAGE.value == "image"
         assert MediaType.AUDIO.value == "audio"
@@ -53,7 +53,7 @@ class TestImageFormat:
 
     def test_image_format_values(self):
         """Verify all image formats are available."""
-        from codomyrmex.multimodal import ImageFormat
+        from codomyrmex.llm.multimodal import ImageFormat
 
         assert ImageFormat.PNG.value == "png"
         assert ImageFormat.JPEG.value == "jpeg"
@@ -67,7 +67,7 @@ class TestAudioFormat:
 
     def test_audio_format_values(self):
         """Verify all audio formats are available."""
-        from codomyrmex.multimodal import AudioFormat
+        from codomyrmex.llm.multimodal import AudioFormat
 
         assert AudioFormat.WAV.value == "wav"
         assert AudioFormat.MP3.value == "mp3"
@@ -81,7 +81,7 @@ class TestMediaContent:
 
     def test_content_creation(self):
         """Verify MediaContent can be created."""
-        from codomyrmex.multimodal import MediaContent, MediaType
+        from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         content = MediaContent(
             media_type=MediaType.IMAGE,
@@ -94,7 +94,7 @@ class TestMediaContent:
 
     def test_content_size_bytes(self):
         """Verify size calculation."""
-        from codomyrmex.multimodal import MediaContent, MediaType
+        from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         data = b"x" * 1000
         content = MediaContent(media_type=MediaType.IMAGE, data=data)
@@ -103,7 +103,7 @@ class TestMediaContent:
 
     def test_content_hash(self):
         """Verify hash generation."""
-        from codomyrmex.multimodal import MediaContent, MediaType
+        from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         content = MediaContent(media_type=MediaType.IMAGE, data=b"test data")
 
@@ -111,7 +111,7 @@ class TestMediaContent:
 
     def test_content_to_base64(self):
         """Verify base64 encoding."""
-        from codomyrmex.multimodal import MediaContent, MediaType
+        from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         data = b"hello world"
         content = MediaContent(media_type=MediaType.TEXT, data=data)
@@ -123,7 +123,7 @@ class TestMediaContent:
 
     def test_content_from_base64(self):
         """Verify base64 decoding."""
-        from codomyrmex.multimodal import MediaContent, MediaType
+        from codomyrmex.llm.multimodal import MediaContent, MediaType
 
         original = b"test content"
         b64 = base64.b64encode(original).decode('utf-8')
@@ -140,7 +140,7 @@ class TestImageContent:
 
     def test_image_content_creation(self):
         """Verify ImageContent can be created."""
-        from codomyrmex.multimodal import ImageContent, MediaType
+        from codomyrmex.llm.multimodal import ImageContent, MediaType
 
         image = ImageContent(
             data=b"fake png data",
@@ -156,7 +156,7 @@ class TestImageContent:
 
     def test_image_content_dimensions(self):
         """Verify dimensions property."""
-        from codomyrmex.multimodal import ImageContent, MediaType
+        from codomyrmex.llm.multimodal import ImageContent, MediaType
 
         image = ImageContent(
             data=b"data",
@@ -169,7 +169,7 @@ class TestImageContent:
 
     def test_image_content_aspect_ratio(self):
         """Verify aspect ratio calculation."""
-        from codomyrmex.multimodal import ImageContent, MediaType
+        from codomyrmex.llm.multimodal import ImageContent, MediaType
 
         image = ImageContent(
             data=b"data",
@@ -187,7 +187,7 @@ class TestAudioContent:
 
     def test_audio_content_creation(self):
         """Verify AudioContent can be created."""
-        from codomyrmex.multimodal import AudioContent, MediaType
+        from codomyrmex.llm.multimodal import AudioContent, MediaType
 
         audio = AudioContent(
             data=b"fake audio data",
@@ -209,7 +209,7 @@ class TestMultimodalMessage:
 
     def test_message_creation(self):
         """Verify MultimodalMessage can be created."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = MultimodalMessage(
             id="msg_1",
@@ -222,7 +222,7 @@ class TestMultimodalMessage:
 
     def test_message_add_text(self):
         """Verify text addition."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = MultimodalMessage(id="msg_1")
         message.add_text("Hello!")
@@ -231,7 +231,7 @@ class TestMultimodalMessage:
 
     def test_message_add_image_bytes(self):
         """Verify image addition from bytes."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = MultimodalMessage(id="msg_1")
         message.add_image(b"fake image data")
@@ -241,7 +241,7 @@ class TestMultimodalMessage:
 
     def test_message_has_images(self):
         """Verify has_images property."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = MultimodalMessage(id="msg_1")
         assert message.has_images is False
@@ -251,7 +251,7 @@ class TestMultimodalMessage:
 
     def test_message_to_dict(self):
         """Verify message serialization."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = MultimodalMessage(id="msg_1", text="Test", role="assistant")
         result = message.to_dict()
@@ -260,7 +260,7 @@ class TestMultimodalMessage:
 
     def test_message_chaining(self):
         """Verify method chaining."""
-        from codomyrmex.multimodal import MultimodalMessage
+        from codomyrmex.llm.multimodal import MultimodalMessage
 
         message = (
             MultimodalMessage(id="msg_1")
@@ -278,7 +278,7 @@ class TestImageProcessor:
 
     def test_processor_creation(self):
         """Verify ImageProcessor can be created."""
-        from codomyrmex.multimodal import ImageProcessor
+        from codomyrmex.llm.multimodal import ImageProcessor
 
         processor = ImageProcessor(
             max_size_bytes=5 * 1024 * 1024,
@@ -289,7 +289,7 @@ class TestImageProcessor:
 
     def test_processor_validate_valid(self):
         """Verify validation of valid image."""
-        from codomyrmex.multimodal import ImageProcessor, MediaContent, MediaType
+        from codomyrmex.llm.multimodal import ImageProcessor, MediaContent, MediaType
 
         processor = ImageProcessor()
         content = MediaContent(
@@ -303,7 +303,7 @@ class TestImageProcessor:
 
     def test_processor_validate_wrong_type(self):
         """Verify validation rejects non-image."""
-        from codomyrmex.multimodal import ImageProcessor, MediaContent, MediaType
+        from codomyrmex.llm.multimodal import ImageProcessor, MediaContent, MediaType
 
         processor = ImageProcessor()
         content = MediaContent(
@@ -317,7 +317,7 @@ class TestImageProcessor:
 
     def test_processor_validate_too_large(self):
         """Verify validation rejects oversized image."""
-        from codomyrmex.multimodal import ImageProcessor, MediaContent, MediaType
+        from codomyrmex.llm.multimodal import ImageProcessor, MediaContent, MediaType
 
         processor = ImageProcessor(max_size_bytes=100)
         content = MediaContent(
@@ -331,7 +331,7 @@ class TestImageProcessor:
 
     def test_processor_process(self):
         """Verify processing returns metadata."""
-        from codomyrmex.multimodal import ImageProcessor, MediaContent, MediaType
+        from codomyrmex.llm.multimodal import ImageProcessor, MediaContent, MediaType
 
         processor = ImageProcessor()
         content = MediaContent(
@@ -353,7 +353,7 @@ class TestAudioProcessor:
 
     def test_processor_creation(self):
         """Verify AudioProcessor can be created."""
-        from codomyrmex.multimodal import AudioProcessor
+        from codomyrmex.llm.multimodal import AudioProcessor
 
         processor = AudioProcessor(
             max_duration_seconds=60.0,
@@ -364,7 +364,7 @@ class TestAudioProcessor:
 
     def test_processor_validate_valid(self):
         """Verify validation of valid audio."""
-        from codomyrmex.multimodal import AudioContent, AudioProcessor, MediaType
+        from codomyrmex.llm.multimodal import AudioContent, AudioProcessor, MediaType
 
         processor = AudioProcessor()
         content = AudioContent(
@@ -379,7 +379,7 @@ class TestAudioProcessor:
 
     def test_processor_validate_too_long(self):
         """Verify validation rejects long audio."""
-        from codomyrmex.multimodal import AudioContent, AudioProcessor, MediaType
+        from codomyrmex.llm.multimodal import AudioContent, AudioProcessor, MediaType
 
         processor = AudioProcessor(max_duration_seconds=60.0)
         content = AudioContent(
@@ -399,7 +399,7 @@ class TestMultimodalMessageBuilder:
 
     def test_builder_basic(self):
         """Verify basic builder usage."""
-        from codomyrmex.multimodal import MultimodalMessageBuilder
+        from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
         message = (
             MultimodalMessageBuilder("msg_1")
@@ -412,7 +412,7 @@ class TestMultimodalMessageBuilder:
 
     def test_builder_with_image(self):
         """Verify builder with image."""
-        from codomyrmex.multimodal import MultimodalMessageBuilder
+        from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
         message = (
             MultimodalMessageBuilder("msg_1")
@@ -426,7 +426,7 @@ class TestMultimodalMessageBuilder:
 
     def test_builder_with_audio(self):
         """Verify builder with audio."""
-        from codomyrmex.multimodal import MultimodalMessageBuilder
+        from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
         message = (
             MultimodalMessageBuilder("msg_1")
@@ -441,7 +441,7 @@ class TestMultimodalMessageBuilder:
         """Verify builder with base64 image."""
         import base64
 
-        from codomyrmex.multimodal import MultimodalMessageBuilder
+        from codomyrmex.llm.multimodal import MultimodalMessageBuilder
 
         b64_data = base64.b64encode(b"image bytes").decode('utf-8')
 

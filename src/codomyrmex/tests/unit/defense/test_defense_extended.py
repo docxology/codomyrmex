@@ -1,6 +1,6 @@
 
 import pytest
-from codomyrmex.defense import ActiveDefense, RabbitHole
+from codomyrmex.security.ai_safety import ActiveDefense, RabbitHole
 import asyncio
 
 def test_exploit_detection():

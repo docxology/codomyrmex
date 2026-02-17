@@ -122,11 +122,12 @@ graph TD
 
 ```python
 class IdentityManager:
-    def create_persona(persona_id: str, name: str, level: VerificationLevel) -> Persona
-    def set_active_persona(persona_id: str) -> None
-    def get_active_persona() -> Optional[Persona]
-    def revoke_persona(persona_id: str) -> bool
-    def export_persona(persona_id: str) -> dict
+    def create_persona(id: str, name: str, level: VerificationLevel) -> Persona
+    def set_active_persona(id: str) -> None
+    @property
+    def active_persona() -> Optional[Persona]
+    def revoke_persona(id: str) -> bool
+    def export_persona(id: str) -> dict
     def list_personas() -> List[Persona]
 ```
 
@@ -134,9 +135,17 @@ class IdentityManager:
 
 ```python
 class BioCognitiveVerifier:
-    def verify(user_id: str, metric_type: str, value: float) -> bool
+    def verify(user_id: str, metric: str, current_value: float) -> bool
     def enroll(user_id: str, metric_type: str, baseline: List[float]) -> None
     def get_confidence(user_id: str) -> float
+    def record_metric(user_id: str, metric: str, value: float) -> None
+```
+
+### Identity API
+
+```python
+class Identity:
+    def process(data: Any) -> Any
 ```
 
 ### Dependencies

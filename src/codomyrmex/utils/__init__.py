@@ -8,7 +8,10 @@ This package provides:
 - File/path utilities (ensure_directory, hash_file)
 - Retry decorators and timing utilities
 - Script execution base classes
-"""
+
+
+Submodules:
+    i18n: Consolidated i18n capabilities."""
 
 import functools
 import hashlib
@@ -293,7 +296,10 @@ from .script_base import (
     run_script,
 )
 
+from . import i18n
+
 __all__ = [
+    "i18n",
     # Core utilities
     "ensure_directory",
     "safe_json_loads",

@@ -8,12 +8,12 @@ from datetime import datetime
 import pytest
 
 try:
-    from codomyrmex.scheduler import (
+    from codomyrmex.orchestrator.scheduler import (
         Job,
         JobStatus,
         Scheduler,
     )
-    from codomyrmex.scheduler.advanced import (
+    from codomyrmex.orchestrator.scheduler.advanced import (
         DependencyScheduler,
         DependencyStatus,
         JobPipeline,

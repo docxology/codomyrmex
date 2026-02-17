@@ -68,9 +68,14 @@ class Metric(ABC):
 class Counter(Metric):
     """Counter metric (only increases)."""
 
-    def __init__(self, name: str, description: str = "", labels: list[str] | None = None):
-        super().__init__(name, description, labels)
-        self._values: dict[str, float] = {}
+    def __init__(self, name: str, description: str = "", labels: dict[str, str] | None = None, value: float = 0.0):
+        super().__init__(name, description, list(labels.keys()) if labels else None)
+        self._values: dict[str, float] = {"": value}
+        if labels:
+            self.labels = labels
+            self._values[self._key(labels)] = value
+        else:
+            self.labels = {}
 
     @property
     def metric_type(self) -> MetricType:
@@ -83,22 +88,34 @@ class Counter(Metric):
 
     def inc(self, value: float = 1.0, labels: dict[str, str] | None = None) -> None:
         """Increment the counter."""
-        key = self._key(labels)
+        key = self._key(labels or self.labels)
         with self._lock:
-            self._values[key] = self._values.get(key, 0) + value
+            self._values[key] = self._values.get(key, 0.0) + value
+
+    def get(self, labels: dict[str, str] | None = None) -> float:
+        """Get counter value."""
+        return self.get_value(labels)
 
     def get_value(self, labels: dict[str, str] | None = None) -> float:
         """Get counter value."""
-        key = self._key(labels)
-        return self._values.get(key, 0)
+        key = self._key(labels or self.labels)
+        return self._values.get(key, 0.0)
 
+    @property
+    def value(self) -> float:
+        return self.get_value()
 
 class Gauge(Metric):
     """Gauge metric (can go up and down)."""
 
-    def __init__(self, name: str, description: str = "", labels: list[str] | None = None):
-        super().__init__(name, description, labels)
-        self._values: dict[str, float] = {}
+    def __init__(self, name: str, description: str = "", labels: dict[str, str] | None = None, value: float = 0.0):
+        super().__init__(name, description, list(labels.keys()) if labels else None)
+        self._values: dict[str, float] = {"": value}
+        if labels:
+            self.labels = labels
+            self._values[self._key(labels)] = value
+        else:
+            self.labels = {}
 
     @property
     def metric_type(self) -> MetricType:
@@ -111,25 +128,32 @@ class Gauge(Metric):
 
     def set(self, value: float, labels: dict[str, str] | None = None) -> None:
         """Set the gauge value."""
-        key = self._key(labels)
+        key = self._key(labels or self.labels)
         with self._lock:
             self._values[key] = value
 
     def inc(self, value: float = 1.0, labels: dict[str, str] | None = None) -> None:
         """Increment the gauge."""
-        key = self._key(labels)
+        key = self._key(labels or self.labels)
         with self._lock:
-            self._values[key] = self._values.get(key, 0) + value
+            self._values[key] = self._values.get(key, 0.0) + value
 
     def dec(self, value: float = 1.0, labels: dict[str, str] | None = None) -> None:
         """Decrement the gauge."""
         self.inc(-value, labels)
 
+    def get(self, labels: dict[str, str] | None = None) -> float:
+        """Get gauge value."""
+        return self.get_value(labels)
+
     def get_value(self, labels: dict[str, str] | None = None) -> float:
         """Get gauge value."""
-        key = self._key(labels)
-        return self._values.get(key, 0)
+        key = self._key(labels or self.labels)
+        return self._values.get(key, 0.0)
 
+    @property
+    def value(self) -> float:
+        return self.get_value()
 
 class Histogram(Metric):
     """Histogram metric for distributions."""
@@ -140,12 +164,13 @@ class Histogram(Metric):
         self,
         name: str,
         description: str = "",
-        labels: list[str] | None = None,
+        labels: dict[str, str] | None = None,
         buckets: list[float] | None = None,
     ):
-        super().__init__(name, description, labels)
+        super().__init__(name, description, list(labels.keys()) if labels else None)
         self.buckets = sorted(buckets or self.DEFAULT_BUCKETS)
-        self._observations: list[float] = []
+        self.labels = labels or {}
+        self.values: list[float] = []
         self._bucket_counts: dict[float, int] = {b: 0 for b in self.buckets}
 
     @property
@@ -155,26 +180,30 @@ class Histogram(Metric):
     def observe(self, value: float) -> None:
         """Observe a value."""
         with self._lock:
-            self._observations.append(value)
+            self.values.append(value)
             for bucket in self.buckets:
                 if value <= bucket:
                     self._bucket_counts[bucket] += 1
 
+    def get(self, labels: dict[str, str] | None = None) -> dict[str, Any]:
+        """Get histogram stats."""
+        return self.get_value(labels)
+
     def get_value(self, labels: dict[str, str] | None = None) -> dict[str, Any]:
         """Get histogram stats."""
         with self._lock:
-            if not self._observations:
-                return {"count": 0, "sum": 0, "buckets": self._bucket_counts}
+            if not self.values:
+                return {"count": 0, "sum": 0.0, "min": 0.0, "max": 0.0, "avg": 0.0, "buckets": self._bucket_counts}
 
             return {
-                "count": len(self._observations),
-                "sum": sum(self._observations),
-                "min": min(self._observations),
-                "max": max(self._observations),
-                "mean": statistics.mean(self._observations),
+                "count": len(self.values),
+                "sum": sum(self.values),
+                "min": min(self.values),
+                "max": max(self.values),
+                "avg": sum(self.values) / len(self.values),
+                "mean": sum(self.values) / len(self.values),
                 "buckets": dict(self._bucket_counts),
             }
-
 
 class Summary(Metric):
     """Summary metric with quantiles."""
@@ -185,11 +214,14 @@ class Summary(Metric):
         self,
         name: str,
         description: str = "",
-        labels: list[str] | None = None,
+        labels: dict[str, str] | None = None,
         quantiles: list[float] | None = None,
     ):
-        super().__init__(name, description, labels)
+        super().__init__(name, description, list(labels.keys()) if labels else None)
         self.quantiles = quantiles or self.DEFAULT_QUANTILES
+        self.labels = labels or {}
+        self.count: int = 0
+        self.sum: float = 0.0
         self._observations: list[float] = []
 
     @property
@@ -199,13 +231,19 @@ class Summary(Metric):
     def observe(self, value: float) -> None:
         """Observe a value."""
         with self._lock:
+            self.count += 1
+            self.sum += value
             self._observations.append(value)
+
+    def get(self, labels: dict[str, str] | None = None) -> dict[str, Any]:
+        """Get summary stats."""
+        return self.get_value(labels)
 
     def get_value(self, labels: dict[str, str] | None = None) -> dict[str, Any]:
         """Get summary stats with quantiles."""
         with self._lock:
-            if not self._observations:
-                return {"count": 0, "sum": 0, "quantiles": {}}
+            if self.count == 0:
+                return {"count": 0, "sum": 0.0, "avg": 0.0, "quantiles": {}}
 
             sorted_obs = sorted(self._observations)
             quantile_values = {}
@@ -216,8 +254,9 @@ class Summary(Metric):
                 quantile_values[q] = sorted_obs[idx]
 
             return {
-                "count": len(self._observations),
-                "sum": sum(self._observations),
+                "count": self.count,
+                "sum": self.sum,
+                "avg": self.sum / self.count,
                 "quantiles": quantile_values,
             }
 
@@ -311,8 +350,121 @@ class MetricsRegistry:
 
     def get(self, name: str) -> Metric | None:
         """Get a metric by name."""
-        return self._metrics.get(name)
+from .aggregator import MetricAggregator
 
+try:
+    from .prometheus_exporter import PrometheusExporter
+except ImportError:
+    PrometheusExporter = None
+
+try:
+    from .statsd_client import StatsDClient
+except ImportError:
+    StatsDClient = None
+
+
+try:
+    from codomyrmex.exceptions import CodomyrmexError
+except ImportError:
+    class CodomyrmexError(Exception): pass
+
+class MetricsError(CodomyrmexError):
+    """Base class for metrics errors."""
+    pass
+
+# Alias for compatibility with older tests/code
+class Metrics(MetricsRegistry):
+    """Alias for MetricsRegistry for compatibility."""
+    def __init__(self, backend="in_memory"):
+        super().__init__()
+        self.backend = backend
+        self._counters: dict[str, Counter] = {}
+        self._gauges: dict[str, Gauge] = {}
+        self._histograms: dict[str, Histogram] = {}
+        self._summaries: dict[str, Summary] = {}
+
+    def _make_key(self, name: str, labels: dict | None = None) -> str:
+        """Create a key from name and labels."""
+        if labels:
+            label_str = ",".join(f"{k}={v}" for k, v in sorted(labels.items()))
+            return f"{name}{{{label_str}}}"
+        return name
+
+    def counter(self, name: str, labels: dict | None = None, description: str = "") -> Counter:
+        key = self._make_key(name, labels)
+        if key not in self._counters:
+            self._counters[key] = Counter(name=name, labels=labels, description=description)
+        return self._counters[key]
+
+    def gauge(self, name: str, labels: dict | None = None, description: str = "") -> Gauge:
+        key = self._make_key(name, labels)
+        if key not in self._gauges:
+            self._gauges[key] = Gauge(name=name, labels=labels, description=description)
+        return self._gauges[key]
+
+    def histogram(self, name: str, labels: dict | None = None, description: str = "") -> Histogram:
+        key = self._make_key(name, labels)
+        if key not in self._histograms:
+            self._histograms[key] = Histogram(name=name, labels=labels, description=description)
+        return self._histograms[key]
+
+    def summary(self, name: str, labels: dict | None = None, description: str = "") -> Summary:
+        key = self._make_key(name, labels)
+        if key not in self._summaries:
+            self._summaries[key] = Summary(name=name, labels=labels, description=description)
+        return self._summaries[key]
+
+    def export(self) -> dict[str, Any]:
+        """Export all metrics to a dictionary."""
+        return {
+            "counters": {k: {"value": c.value, "labels": c.labels} for k, c in self._counters.items()},
+            "gauges": {k: {"value": g.value, "labels": g.labels} for k, g in self._gauges.items()},
+            "histograms": {k: {"stats": h.get(), "labels": h.labels} for k, h in self._histograms.items()},
+            "summaries": {k: {"stats": s.get(), "labels": s.labels} for k, s in self._summaries.items()},
+        }
+
+    def export_prometheus(self) -> str:
+        """Export metrics in Prometheus format."""
+        lines = []
+        for key, counter in self._counters.items():
+            val = counter.value
+            if "{" in key:
+                name = key.split("{")[0]
+                labels = key.split("{")[1].rstrip("}")
+                labels = labels.replace("=", '="').replace(",", '",') + '"'
+                lines.append(f"{name}_total{{{labels}}} {val}")
+            else:
+                lines.append(f"{counter.name}_total {val}")
+
+        for key, gauge in self._gauges.items():
+            val = gauge.value
+            if "{" in key:
+                name = key.split("{")[0]
+                labels = key.split("{")[1].rstrip("}")
+                labels = labels.replace("=", '="').replace(",", '",') + '"'
+                lines.append(f"{name}{{{labels}}} {val}")
+            else:
+                lines.append(f"{gauge.name} {val}")
+
+        for key, histogram in self._histograms.items():
+            stats = histogram.get()
+            if "{" in key:
+                name = key.split("{")[0]
+                labels = key.split("{")[1].rstrip("}")
+                labels = labels.replace("=", '="').replace(",", '",') + '"'
+                lines.append(f"{name}_count{{{labels}}} {stats['count']}")
+                lines.append(f"{name}_sum{{{labels}}} {stats['sum']}")
+            else:
+                lines.append(f"{histogram.name}_count {stats['count']}")
+                lines.append(f"{histogram.name}_sum {stats['sum']}")
+
+        return "\n".join(lines)
+
+def get_metrics(backend="in_memory") -> Metrics:
+    """Helper to get a metrics instance."""
+    return Metrics(backend=backend)
+
+from .aggregator import MetricAggregator
 
 __all__ = [
     # Enums
@@ -329,4 +481,10 @@ __all__ = [
     "Timer",
     # Core
     "MetricsRegistry",
+    "Metrics",
+    "MetricsError",
+    "get_metrics",
+    "MetricAggregator",
+    "PrometheusExporter",
+    "StatsDClient",
 ]

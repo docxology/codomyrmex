@@ -1,8 +1,8 @@
 import pytest
-from codomyrmex.visualization.plots.histogram import Histogram
-from codomyrmex.visualization.plots.pie import PieChart
-from codomyrmex.visualization.plots.box import BoxPlot
-from codomyrmex.visualization.plots.area import AreaPlot
+from codomyrmex.data_visualization.plots.histogram import Histogram
+from codomyrmex.data_visualization.plots.pie import PieChart
+from codomyrmex.data_visualization.plots.box import BoxPlot
+from codomyrmex.data_visualization.plots.area import AreaPlot
 
 def test_histogram_render():
     data = [1, 2, 2, 3, 3, 3]

@@ -3,7 +3,7 @@
 import pytest
 
 try:
-    from codomyrmex.service_mesh import (
+    from codomyrmex.networking.service_mesh import (
         CircuitBreaker,
         CircuitBreakerConfig,
         CircuitOpenError,

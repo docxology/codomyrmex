@@ -3,13 +3,16 @@ Validation module for Codomyrmex.
 
 This module provides unified input validation framework with support for
 JSON Schema, Pydantic models, and custom validators.
-"""
+
+
+Submodules:
+    schemas: Consolidated schemas capabilities."""
 
 from typing import Any, Optional
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

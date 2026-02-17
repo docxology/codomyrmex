@@ -1,10 +1,13 @@
 # Module Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Comprehensive documentation for all 105 Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
+Comprehensive documentation for all Codomyrmex modules. Each module has its own subdirectory with detailed documentation, API specifications, and usage examples.
+
+> [!NOTE]
+> In v0.1.1, 28 thin and overlapping modules were consolidated into their natural host modules. See the consolidation table below for the new canonical locations.
 
 ## Key Documentation Files
 
@@ -23,21 +26,18 @@ Core infrastructure used by all other modules.
 
 | Module | Description |
 |--------|-------------|
-| [cache/](cache/) | In-memory and distributed caching |
+| [cache/](cache/) | In-memory and distributed caching, invalidation strategies |
 | [compression/](compression/) | Data compression utilities |
-| [concurrency/](concurrency/) | Distributed locks, semaphores, and synchronization |
+| [concurrency/](concurrency/) | Distributed locks, semaphores, channels, and rate limiting |
 | [config_management/](config_management/) | Configuration management |
-| [database_management/](database_management/) | Data persistence |
-| [encryption/](encryption/) | Encryption and cryptographic utilities |
-| [environment_setup/](environment_setup/) | Development environment validation |
-| [events/](events/) | Event-driven architecture primitives |
+| [database_management/](database_management/) | Data persistence, backup, migration, and lineage tracking |
+| [encryption/](encryption/) | Encryption, cryptographic utilities, and digital signing |
+| [environment_setup/](environment_setup/) | Development environment validation and dependency resolution |
+| [events/](events/) | Event-driven architecture: pub/sub, replay, dead letter, streaming, notifications |
 | [logging_monitoring/](logging_monitoring/) | Centralized logging and monitoring |
-| [rate_limiting/](rate_limiting/) | API rate limiting (fixed window, sliding window, token bucket) |
-| [scheduler/](scheduler/) | Task scheduling with cron, interval, and one-time triggers |
-| [serialization/](serialization/) | Data serialization formats |
-| [streaming/](streaming/) | Real-time data streaming with SSE/pub-sub |
-| [telemetry/](telemetry/) | OpenTelemetry-based observability |
-| [validation/](validation/) | Data and schema validation |
+| [serialization/](serialization/) | Data serialization formats and streaming I/O |
+| [telemetry/](telemetry/) | OpenTelemetry observability, metrics collection, and dashboards |
+| [validation/](validation/) | Data and schema validation, shared schema registry |
 
 ### AI & Intelligence Modules
 
@@ -45,19 +45,14 @@ AI-powered capabilities for code generation and analysis.
 
 | Module | Description |
 |--------|-------------|
-| [agentic_memory/](agentic_memory/) | Long-term agent memory with retrieval and persistence |
-| [agents/](agents/) | AI agent framework (Claude, Codex, Gemini, Jules, Mistral) |
+| [agentic_memory/](agentic_memory/) | Long-term agent memory with retrieval, persistence, and compression |
+| [agents/](agents/) | AI agent framework (Claude, Codex, Gemini, Jules, Mistral) with benchmarks |
 | [cerebrum/](cerebrum/) | Case-based reasoning and Bayesian inference |
 | [graph_rag/](graph_rag/) | Knowledge graph-enhanced RAG |
-| [inference_optimization/](inference_optimization/) | Model quantization, batching, and caching |
-| [llm/](llm/) | LLM provider abstraction and Ollama support |
-| [model_context_protocol/](model_context_protocol/) | MCP implementation and standardized LLM interfaces |
-| [model_evaluation/](model_evaluation/) | LLM output scoring, composable scorers, and evaluation |
-| [model_ops/](model_ops/) | ML model operations and evaluation |
-| [model_registry/](model_registry/) | Model versioning and lifecycle management |
-| [prompt_engineering/](prompt_engineering/) | Prompt template management, versioning, and optimization |
-| [multimodal/](multimodal/) | Vision, audio, and image processing |
-| [prompt_testing/](prompt_testing/) | Prompt evaluation and A/B testing |
+| [llm/](llm/) | LLM provider abstraction, Ollama support, multimodal, and safety filtering |
+| [model_context_protocol/](model_context_protocol/) | MCP implementation, tool discovery, and standardized LLM interfaces |
+| [model_ops/](model_ops/) | ML model operations, evaluation, registry, optimization, and feature store |
+| [prompt_engineering/](prompt_engineering/) | Prompt template management, versioning, optimization, and testing |
 | [vector_store/](vector_store/) | Embeddings storage with similarity search |
 
 ### Code & Analysis Modules
@@ -66,12 +61,8 @@ Code analysis and pattern recognition.
 
 | Module | Description |
 |--------|-------------|
-| [accessibility/](accessibility/) | WCAG compliance and accessibility utilities |
-| [coding/](coding/) | Safe code execution sandbox |
-| [pattern_matching/](pattern_matching/) | Code pattern recognition |
-| [static_analysis/](static_analysis/) | Code quality analysis |
-| [schemas/](schemas/) | Shared schema registry and standardized types |
-| [tree_sitter/](tree_sitter/) | AST parsing and analysis |
+| [coding/](coding/) | Safe code execution, static analysis, and pattern matching |
+| [coding/parsers/tree_sitter/](coding/parsers/tree_sitter/) | AST parsing and analysis |
 
 ### Data & Visualization Modules
 
@@ -79,9 +70,8 @@ Data management and visualization.
 
 | Module | Description |
 |--------|-------------|
-| [data_lineage/](data_lineage/) | Data provenance and lineage tracking |
-| [data_visualization/](data_visualization/) | Charts and plots |
-| [feature_store/](feature_store/) | Feature management for ML pipelines |
+| [data_visualization/](data_visualization/) | Charts, plots, and multi-format export |
+| [search/](search/) | Full-text search with TF-IDF, fuzzy matching, and hybrid BM25+semantic |
 
 ### DevOps & Infrastructure Modules
 
@@ -89,22 +79,17 @@ Build, deployment, and infrastructure management.
 
 | Module | Description |
 |--------|-------------|
-| [build_synthesis/](build_synthesis/) | Build automation |
-| [chaos_engineering/](chaos_engineering/) | Fault injection and resilience testing |
-| [ci_cd_automation/](ci_cd_automation/) | CI/CD pipeline management |
-| [cloud/](cloud/) | Cloud provider integration |
+| [ci_cd_automation/](ci_cd_automation/) | CI/CD pipeline management and build automation |
+| [cloud/](cloud/) | Cloud provider integration and cost management |
 | [containerization/](containerization/) | Docker/Kubernetes management |
-| [cost_management/](cost_management/) | Infrastructure and LLM cost tracking |
 | [dependency_injection/](dependency_injection/) | IoC container, service registration, lifecycle scoping |
 | [deployment/](deployment/) | Deployment strategies and orchestration |
 | [edge_computing/](edge_computing/) | Edge deployment and IoT gateways |
-| [git_operations/](git_operations/) | Git workflow automation |
-| [migration/](migration/) | Cross-provider migration tools |
-| [observability_dashboard/](observability_dashboard/) | Unified monitoring dashboards |
-| [orchestrator/](orchestrator/) | Workflow execution engine |
+| [git_operations/](git_operations/) | Git workflow automation and merge conflict resolution |
+| [networking/](networking/) | Network utilities and service mesh |
+| [orchestrator/](orchestrator/) | Workflow execution engine and scheduling |
 | [performance/](performance/) | Performance profiling and benchmarking |
-| [service_mesh/](service_mesh/) | Circuit breakers, load balancing, retry policies |
-| [workflow_testing/](workflow_testing/) | End-to-end workflow validation |
+| [testing/](testing/) | Test fixtures, generators, workflow testing, and chaos engineering |
 
 ### Security & Cognitive Modules
 
@@ -112,15 +97,15 @@ Autonomous security and economic capabilities.
 
 | Module | Description |
 |--------|-------------|
+| [auth/](auth/) | Authentication and authorization |
 | [dark/](dark/) | Dark mode utilities and PDF processing |
+| [crypto/](crypto/) | Cryptography utilities and protocols |
 | [defense/](defense/) | Active defense systems |
 | [identity/](identity/) | 3-Tier personas, bio-verification |
 | [market/](market/) | Reverse auctions, demand aggregation |
 | [privacy/](privacy/) | Crumb scrubbing, mixnet routing |
-| [security/](security/) | Security scanning and hardening |
-| [smart_contracts/](smart_contracts/) | Web3 and blockchain smart contract interfaces |
-| [wallet/](wallet/) | Self-custody, Natural Ritual recovery |
-| [governance/](governance/) | Contracts management, policy enforcement, dispute resolution |
+| [security/](security/) | Security scanning, hardening, vulnerability scanning, and governance |
+| [wallet/](wallet/) | Self-custody, Natural Ritual recovery, and smart contracts |
 
 ### Interface & Communication Modules
 
@@ -128,18 +113,17 @@ User interfaces and communication channels.
 
 | Module | Description |
 |--------|-------------|
-| [api/](api/) | REST/GraphQL API framework |
+| [api/](api/) | REST/GraphQL API framework with rate limiting |
 | [audio/](audio/) | Audio processing and transcription |
-| [cli/](cli/) | Command-line interface |
+| [cli/](cli/) | Command-line interface with shell completion |
 | [collaboration/](collaboration/) | Multi-agent collaboration and swarm coordination |
-| [documents/](documents/) | Document processing |
+| [documents/](documents/) | Document processing and RAG chunking |
 | [fpf/](fpf/) | File processing framework |
 | [ide/](ide/) | IDE integration |
-| [notification/](notification/) | Multi-channel notification dispatch |
 | [skills/](skills/) | Skill management system |
 | [terminal_interface/](terminal_interface/) | Rich terminal formatting |
 | [video/](video/) | Video processing and analysis |
-| [website/](website/) | Web content management |
+| [website/](website/) | Web content management and accessibility |
 
 ### Framework & Utilities Modules
 
@@ -147,35 +131,64 @@ Supporting utilities and infrastructure.
 
 | Module | Description |
 |--------|-------------|
-| [auth/](auth/) | Authentication and authorization |
 | [bio_simulation/](bio_simulation/) | Ant colony simulation, pheromone foraging, genetic algorithms |
-| [documentation/](documentation/) | Documentation generation |
-| [education/](education/) | Curriculum generation, interactive tutoring, assessments |
+| [documentation/](documentation/) | Documentation generation and education |
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
 | [examples/](examples/) | Code examples and templates |
 | [exceptions/](exceptions/) | Centralized exception hierarchy and error handling |
 | [feature_flags/](feature_flags/) | Feature toggle management |
 | [finance/](finance/) | Double-entry bookkeeping, tax compliance, payroll, forecasting |
-| [i18n/](i18n/) | Translation, localization, and message bundles |
 | [logistics/](logistics/) | Logistics and supply chain |
+| [maintenance/](maintenance/) | System maintenance and health checks |
 | [meme/](meme/) | Memetic warfare, information dynamics, meme propagation |
-| [metrics/](metrics/) | Metrics collection and aggregation |
 | [module_template/](module_template/) | Module scaffolding template |
-| [networking/](networking/) | Network utilities |
 | [physical_management/](physical_management/) | Physical asset management |
 | [plugin_system/](plugin_system/) | Plugin architecture |
 | [quantum/](quantum/) | Quantum algorithm primitives and circuit simulation |
+| [relations/](relations/) | Entity relationship management |
 | [scrape/](scrape/) | Web scraping utilities |
-| [search/](search/) | Full-text search with TF-IDF and fuzzy matching |
 | [spatial/](spatial/) | Spatial data processing |
 | [system_discovery/](system_discovery/) | Module discovery and health monitoring |
 | [templating/](templating/) | Template rendering engine |
-| [testing/](testing/) | Test fixtures and data generators |
 | [tests/](tests/) | Project test suite |
 | [tool_use/](tool_use/) | Tool registry, composition, and validation for workflows |
-| [tools/](tools/) | Development tools |
-| [utils/](utils/) | General utilities |
+| [utils/](utils/) | General utilities, hashing, retry, and i18n |
+
+## v0.1.1 Module Consolidation Map
+
+The following modules have been absorbed into their host modules:
+
+| Former Module | Now Located In |
+|---------------|---------------|
+| `metrics` | `telemetry/metrics/` |
+| `observability_dashboard` | `telemetry/dashboard/` |
+| `static_analysis` | `coding/static_analysis/` |
+| `pattern_matching` | `coding/pattern_matching/` |
+| `visualization` | `data_visualization/` |
+| `model_evaluation` | `model_ops/evaluation/` |
+| `model_registry` | `model_ops/registry/` |
+| `inference_optimization` | `model_ops/optimization/` |
+| `prompt_testing` | `prompt_engineering/testing/` |
+| `workflow_testing` | `testing/workflow/` |
+| `chaos_engineering` | `testing/chaos/` |
+| `rate_limiting` | `api/rate_limiting/` |
+| `build_synthesis` | `ci_cd_automation/build/` |
+| `scheduler` | `orchestrator/scheduler/` |
+| `streaming` | `events/streaming/` |
+| `service_mesh` | `networking/service_mesh/` |
+| `migration` | `database_management/migration/` |
+| `schemas` | `validation/schemas/` |
+| `cost_management` | `cloud/cost_management/` |
+| `data_lineage` | `database_management/lineage/` |
+| `feature_store` | `model_ops/feature_store/` |
+| `i18n` | `utils/i18n/` |
+| `accessibility` | `website/accessibility/` |
+| `education` | `documentation/education/` |
+| `multimodal` | `llm/multimodal/` |
+| `notification` | `events/notification/` |
+| `smart_contracts` | `wallet/contracts/` |
+| `governance` | `security/governance/` |
 
 ## Module Documentation Standard
 

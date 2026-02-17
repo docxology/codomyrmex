@@ -4,7 +4,13 @@ Provides ML model operations including:
 - Dataset management and sanitization
 - Fine-tuning job management
 - Model evaluation and metrics
-"""
+
+
+Submodules:
+    feature_store: Consolidated feature store capabilities.
+    optimization: Consolidated optimization capabilities.
+    registry: Consolidated registry capabilities.
+    evaluation: Consolidated evaluation capabilities."""
 
 import json
 import uuid
@@ -13,7 +19,7 @@ from collections.abc import Callable
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -305,7 +311,16 @@ def cli_commands():
     }
 
 
+from . import registry
+
+from . import optimization
+
+from . import feature_store
+
 __all__ = [
+    "feature_store",
+    "optimization",
+    "registry",
     # CLI integration
     "cli_commands",
     # Submodules

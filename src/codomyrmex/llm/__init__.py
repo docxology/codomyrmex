@@ -1,6 +1,8 @@
 """LLM integration modules for Codomyrmex.
 
 Submodules:
+    safety: Consolidated safety capabilities.
+    multimodal: Consolidated multimodal capabilities.
     - ollama: Local LLM model management via Ollama
     - fabric: Microsoft Fabric AI integration
     - providers: Multi-provider LLM client interfaces
@@ -17,7 +19,7 @@ Submodules:
 
 # Shared schemas for cross-module interop
 try:
-    from codomyrmex.schemas import Result, ResultStatus
+    from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None
@@ -81,7 +83,13 @@ def cli_commands():
     }
 
 
+from . import multimodal
+
+from . import safety
+
 __all__ = [
+    "safety",
+    "multimodal",
     'cli_commands',
     'OllamaManager',
     'ModelRunner',

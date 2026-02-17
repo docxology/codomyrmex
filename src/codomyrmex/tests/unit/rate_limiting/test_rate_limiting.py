@@ -4,7 +4,7 @@
 import pytest
 
 try:
-    from codomyrmex.rate_limiting import (
+    from codomyrmex.api.rate_limiting import (
         FixedWindowLimiter,
         QuotaManager,
         RateLimiter,

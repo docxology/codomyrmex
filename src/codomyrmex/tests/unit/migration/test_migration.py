@@ -8,12 +8,12 @@ class TestMigrationImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex import migration
+        from codomyrmex.database_management import migration
         assert migration is not None
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""
-        from codomyrmex.migration import __all__
+        from codomyrmex.database_management.migration import __all__
         expected_exports = [
             "MigrationStatus",
             "MigrationDirection",
@@ -37,7 +37,7 @@ class TestMigrationStatus:
 
     def test_migration_status_values(self):
         """Verify all migration statuses are available."""
-        from codomyrmex.migration import MigrationStatus
+        from codomyrmex.database_management.migration import MigrationStatus
 
         assert MigrationStatus.PENDING.value == "pending"
         assert MigrationStatus.RUNNING.value == "running"
@@ -52,7 +52,7 @@ class TestMigrationDirection:
 
     def test_migration_direction_values(self):
         """Verify all migration directions are available."""
-        from codomyrmex.migration import MigrationDirection
+        from codomyrmex.database_management.migration import MigrationDirection
 
         assert MigrationDirection.UP.value == "up"
         assert MigrationDirection.DOWN.value == "down"
@@ -64,7 +64,7 @@ class TestMigrationStep:
 
     def test_step_creation(self):
         """Verify MigrationStep can be created."""
-        from codomyrmex.migration import MigrationStep
+        from codomyrmex.database_management.migration import MigrationStep
 
         step = MigrationStep(
             id="add_column",
@@ -77,7 +77,7 @@ class TestMigrationStep:
 
     def test_step_run_up(self):
         """Verify step up execution."""
-        from codomyrmex.migration import MigrationStep
+        from codomyrmex.database_management.migration import MigrationStep
 
         executed = [False]
 
@@ -93,7 +93,7 @@ class TestMigrationStep:
 
     def test_step_run_down(self):
         """Verify step down execution."""
-        from codomyrmex.migration import MigrationStep
+        from codomyrmex.database_management.migration import MigrationStep
 
         executed = [False]
 
@@ -109,7 +109,7 @@ class TestMigrationStep:
 
     def test_step_without_functions(self):
         """Verify step without functions returns True."""
-        from codomyrmex.migration import MigrationStep
+        from codomyrmex.database_management.migration import MigrationStep
 
         step = MigrationStep(id="empty", name="Empty Step")
 
@@ -123,7 +123,7 @@ class TestMigrationResult:
 
     def test_result_creation(self):
         """Verify MigrationResult can be created."""
-        from codomyrmex.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
 
         result = MigrationResult(
             migration_id="v1_to_v2",
@@ -137,7 +137,7 @@ class TestMigrationResult:
 
     def test_result_progress(self):
         """Verify progress calculation."""
-        from codomyrmex.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
 
         result = MigrationResult(
             migration_id="test",
@@ -150,7 +150,7 @@ class TestMigrationResult:
 
     def test_result_to_dict(self):
         """Verify result serialization."""
-        from codomyrmex.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
 
         result = MigrationResult(
             migration_id="test",
@@ -171,7 +171,7 @@ class TestMigration:
 
     def test_migration_creation(self):
         """Verify Migration can be created."""
-        from codomyrmex.migration import Migration
+        from codomyrmex.database_management.migration import Migration
 
         migration = Migration(
             id="v1_to_v2",
@@ -186,7 +186,7 @@ class TestMigration:
 
     def test_migration_add_step(self):
         """Verify step addition."""
-        from codomyrmex.migration import Migration, MigrationStep
+        from codomyrmex.database_management.migration import Migration, MigrationStep
 
         migration = Migration(id="test", name="Test", version="1.0")
 
@@ -197,7 +197,7 @@ class TestMigration:
 
     def test_migration_add_simple_step(self):
         """Verify simple step addition."""
-        from codomyrmex.migration import Migration
+        from codomyrmex.database_management.migration import Migration
 
         migration = Migration(id="test", name="Test", version="1.0")
 
@@ -213,7 +213,7 @@ class TestMigration:
 
     def test_migration_chaining(self):
         """Verify method chaining works."""
-        from codomyrmex.migration import Migration, MigrationStep
+        from codomyrmex.database_management.migration import Migration, MigrationStep
 
         migration = (
             Migration(id="test", name="Test", version="1.0")
@@ -231,7 +231,7 @@ class TestFieldRenameTransformer:
 
     def test_field_rename(self):
         """Verify field renaming."""
-        from codomyrmex.migration import FieldRenameTransformer
+        from codomyrmex.database_management.migration import FieldRenameTransformer
 
         transformer = FieldRenameTransformer({
             "old_name": "new_name",
@@ -253,7 +253,7 @@ class TestFieldTypeTransformer:
 
     def test_field_type_conversion(self):
         """Verify field type conversion."""
-        from codomyrmex.migration import FieldTypeTransformer
+        from codomyrmex.database_management.migration import FieldTypeTransformer
 
         transformer = FieldTypeTransformer({
             "age": int,
@@ -271,7 +271,7 @@ class TestFieldTypeTransformer:
 
     def test_field_type_handles_errors(self):
         """Verify type conversion handles errors gracefully."""
-        from codomyrmex.migration import FieldTypeTransformer
+        from codomyrmex.database_management.migration import FieldTypeTransformer
 
         transformer = FieldTypeTransformer({"value": int})
 
@@ -288,7 +288,7 @@ class TestCompositeTransformer:
 
     def test_composite_applies_all(self):
         """Verify composite transformer applies all transformers."""
-        from codomyrmex.migration import (
+        from codomyrmex.database_management.migration import (
             CompositeTransformer,
             FieldRenameTransformer,
             FieldTypeTransformer,
@@ -312,7 +312,7 @@ class TestMigrationRunner:
 
     def test_runner_run_migration(self):
         """Verify migration execution."""
-        from codomyrmex.migration import Migration, MigrationRunner, MigrationStatus
+        from codomyrmex.database_management.migration import Migration, MigrationRunner, MigrationStatus
 
         runner = MigrationRunner()
 
@@ -338,7 +338,7 @@ class TestMigrationRunner:
 
     def test_runner_handles_failure(self):
         """Verify failure handling."""
-        from codomyrmex.migration import Migration, MigrationRunner, MigrationStatus
+        from codomyrmex.database_management.migration import Migration, MigrationRunner, MigrationStatus
 
         runner = MigrationRunner()
 
@@ -355,7 +355,7 @@ class TestMigrationRunner:
 
     def test_runner_rollback(self):
         """Verify rollback execution."""
-        from codomyrmex.migration import (
+        from codomyrmex.database_management.migration import (
             Migration,
             MigrationRunner,
             MigrationStatus,
@@ -387,7 +387,7 @@ class TestMigrationRunner:
 
     def test_runner_is_completed(self):
         """Verify completion tracking."""
-        from codomyrmex.migration import Migration, MigrationRunner
+        from codomyrmex.database_management.migration import Migration, MigrationRunner
 
         runner = MigrationRunner()
         migration = Migration(id="tracked", name="Test", version="1.0")
@@ -406,7 +406,7 @@ class TestDataMigrator:
 
     def test_migrator_migrate(self):
         """Verify data migration."""
-        from codomyrmex.migration import DataMigrator, FieldRenameTransformer
+        from codomyrmex.database_management.migration import DataMigrator, FieldRenameTransformer
 
         migrator = DataMigrator()
         migrator.add_transformer(FieldRenameTransformer({"old": "new"}))
@@ -424,7 +424,7 @@ class TestDataMigrator:
 
     def test_migrator_migrate_single(self):
         """Verify single record migration."""
-        from codomyrmex.migration import DataMigrator, FieldTypeTransformer
+        from codomyrmex.database_management.migration import DataMigrator, FieldTypeTransformer
 
         migrator = DataMigrator()
         migrator.add_transformer(FieldTypeTransformer({"count": int}))
@@ -435,7 +435,7 @@ class TestDataMigrator:
 
     def test_migrator_chaining(self):
         """Verify transformer chaining."""
-        from codomyrmex.migration import (
+        from codomyrmex.database_management.migration import (
             DataMigrator,
             FieldRenameTransformer,
             FieldTypeTransformer,

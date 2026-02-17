@@ -8,6 +8,9 @@ specialized submodules:
 - cognitive: Cognitive security practices
 - theory: Generic security considerations and theory
 
+Submodules:
+    governance: Consolidated governance capabilities.
+
 Integration:
 - Uses `logging_monitoring` for all logging
 - Relies on `environment_setup` for environment validation
@@ -148,7 +151,10 @@ except ImportError:
     THEORY_AVAILABLE = False
 
 # Build __all__ dynamically
+from . import governance
+
 __all__ = [
+    "governance",
     'audit',
     'compliance',
     'secrets',
