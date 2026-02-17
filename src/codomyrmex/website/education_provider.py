@@ -9,8 +9,6 @@ All data is stored in Python dictionaries and lost on server restart.
 
 from __future__ import annotations
 
-import hashlib
-import os
 from pathlib import Path
 from typing import Any
 
@@ -69,12 +67,14 @@ class EducationDataProvider:
         """List all curricula with summary info."""
         result = []
         for cur in self._curricula.values():
-            result.append({
-                "name": cur.name,
-                "level": cur.level,
-                "module_count": len(cur),
-                "total_duration_minutes": cur.total_duration(),
-            })
+            result.append(
+                {
+                    "name": cur.name,
+                    "level": cur.level,
+                    "module_count": len(cur),
+                    "total_duration_minutes": cur.total_duration(),
+                }
+            )
         return result
 
     def get_curriculum(self, name: str) -> dict[str, Any] | None:
@@ -92,7 +92,9 @@ class EducationDataProvider:
             "modules": cur.get_modules(),
         }
 
-    def add_module(self, curriculum_name: str, module_data: dict[str, Any]) -> dict[str, Any]:
+    def add_module(
+        self, curriculum_name: str, module_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Add a module to a curriculum.
 
         Args:
@@ -135,7 +137,9 @@ class EducationDataProvider:
 
         lesson = cur.get_module(module_name)
         if lesson is None:
-            raise KeyError(f"Module '{module_name}' not found in curriculum '{curriculum_name}'")
+            raise KeyError(
+                f"Module '{module_name}' not found in curriculum '{curriculum_name}'"
+            )
 
         if "content" in module_data:
             lesson.content = module_data["content"]
@@ -317,15 +321,17 @@ class EducationDataProvider:
         certs = []
         for assessment in self._assessments.values():
             for cert in assessment.certificates:
-                certs.append({
-                    "certificate_id": cert.certificate_id,
-                    "student": cert.student,
-                    "curriculum": cert.curriculum_name,
-                    "score": cert.score,
-                    "passed": cert.passed,
-                    "issued_at": cert.issued_at,
-                    "verification_hash": cert.verification_hash,
-                })
+                certs.append(
+                    {
+                        "certificate_id": cert.certificate_id,
+                        "student": cert.student,
+                        "curriculum": cert.curriculum_name,
+                        "score": cert.score,
+                        "passed": cert.passed,
+                        "issued_at": cert.issued_at,
+                        "verification_hash": cert.verification_hash,
+                    }
+                )
         return certs
 
     # ── Content browsing ───────────────────────────────────────────
@@ -361,21 +367,23 @@ class EducationDataProvider:
             if item.name.startswith("."):
                 continue
             if item.is_file():
-                entries.append({
-                    "name": item.name,
-                    "type": "file",
-                    "extension": item.suffix,
-                    "size": item.stat().st_size,
-                })
+                entries.append(
+                    {
+                        "name": item.name,
+                        "type": "file",
+                        "extension": item.suffix,
+                        "size": item.stat().st_size,
+                    }
+                )
             elif item.is_dir():
-                children = [
-                    c for c in item.iterdir() if not c.name.startswith(".")
-                ]
-                entries.append({
-                    "name": item.name,
-                    "type": "directory",
-                    "children_count": len(children),
-                })
+                children = [c for c in item.iterdir() if not c.name.startswith(".")]
+                entries.append(
+                    {
+                        "name": item.name,
+                        "type": "directory",
+                        "children_count": len(children),
+                    }
+                )
 
         return {
             "path": str(target.relative_to(base)) if subpath else "",
@@ -412,9 +420,23 @@ class EducationDataProvider:
 
         ext = target.suffix.lower()
         text_extensions = {
-            ".txt", ".md", ".json", ".yaml", ".yml", ".py", ".js",
-            ".css", ".html", ".xml", ".csv", ".toml", ".cfg", ".ini",
-            ".log", ".sh", ".bat",
+            ".txt",
+            ".md",
+            ".json",
+            ".yaml",
+            ".yml",
+            ".py",
+            ".js",
+            ".css",
+            ".html",
+            ".xml",
+            ".csv",
+            ".toml",
+            ".cfg",
+            ".ini",
+            ".log",
+            ".sh",
+            ".bat",
         }
         image_extensions = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico"}
 

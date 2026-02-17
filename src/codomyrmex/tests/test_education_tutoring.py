@@ -9,8 +9,7 @@ session creation, quiz generation, answer evaluation, and session progress.
 
 from __future__ import annotations
 
-import pytest
-from hypothesis import given, settings, assume
+from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 
 from codomyrmex.website.education_provider import EducationDataProvider
@@ -21,11 +20,17 @@ AVAILABLE_TOPICS = st.sampled_from(["python_basics", "data_structures"])
 QUIZ_DIFFICULTIES = st.sampled_from(["easy", "medium", "hard"])
 DIFFICULTY_ORDER = ["easy", "medium", "hard"]
 
-STUDENT_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+STUDENT_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
 ANSWER_STRINGS = st.text(min_size=0, max_size=100)
 
@@ -81,9 +86,8 @@ def test_property9_quiz_questions_respect_difficulty_and_fields(
 
         # Difficulty at or above requested level
         q_idx = DIFFICULTY_ORDER.index(q["difficulty"])
-        assert q_idx >= min_idx, (
-            f"Question difficulty '{q['difficulty']}' is below requested '{difficulty}'"
-        )
+        msg = f"Question difficulty '{q['difficulty']}' below requested '{difficulty}'"
+        assert q_idx >= min_idx, msg
 
 
 # ── Property 10: Answer evaluation consistency ────────────────────
@@ -137,7 +141,9 @@ def test_property11_session_progress_internal_consistency(
     sid = session["session_id"]
 
     # Generate enough questions
-    questions = provider.generate_quiz(topic=topic, difficulty="easy", count=max(len(answers), 1))
+    questions = provider.generate_quiz(
+        topic=topic, difficulty="easy", count=max(len(answers), 1)
+    )
     assume(len(questions) >= len(answers))
 
     # Record each answer

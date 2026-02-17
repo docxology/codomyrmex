@@ -15,7 +15,6 @@ import pytest
 
 from codomyrmex.website.data_provider import DataProvider
 
-
 # ── Property 1: Service browser resource completeness ──────────────
 # Feature: local-web-viewer, Property 1: Service browser resource completeness
 # Validates: Requirements 1.2, 1.3, 1.4, 1.5, 1.6
@@ -43,7 +42,8 @@ def test_property1_agents_have_required_fields(provider: DataProvider) -> None:
     for agent in agents:
         assert "name" in agent, f"Agent missing 'name': {agent}"
         assert "type" in agent, f"Agent {agent.get('name')} missing 'type'"
-        assert "description" in agent, f"Agent {agent.get('name')} missing 'description'"
+        name = agent.get("name")
+        assert "description" in agent, f"Agent {name} missing 'description'"
 
 
 def test_property1_scripts_have_required_fields(provider: DataProvider) -> None:
@@ -52,7 +52,8 @@ def test_property1_scripts_have_required_fields(provider: DataProvider) -> None:
     assert len(scripts) > 0, "Expected at least one script"
     for script in scripts:
         assert "name" in script, f"Script missing 'name': {script}"
-        assert "description" in script, f"Script {script.get('name')} missing 'description'"
+        name = script.get("name")
+        assert "description" in script, f"Script {name} missing 'description'"
 
 
 def test_property1_tools_have_required_fields(provider: DataProvider) -> None:

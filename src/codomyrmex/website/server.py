@@ -25,10 +25,12 @@ from .education_provider import EducationDataProvider
 logger = get_logger(__name__)
 
 # Allowed origins for CORS/CSRF validation
-_ALLOWED_ORIGINS = frozenset({
-    "http://localhost:8787",
-    "http://127.0.0.1:8787",
-})
+_ALLOWED_ORIGINS = frozenset(
+    {
+        "http://localhost:8787",
+        "http://127.0.0.1:8787",
+    }
+)
 
 
 class WebsiteServer(http.server.SimpleHTTPRequestHandler):
@@ -53,11 +55,11 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
-        self.send_header('Access-Control-Max-Age', '86400')
-        self.send_header('Vary', 'Origin')
+        self.send_header("Access-Control-Allow-Origin", "http://localhost:8787")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
+        self.send_header("Access-Control-Max-Age", "86400")
+        self.send_header("Vary", "Origin")
         self.end_headers()
 
     def _validate_origin(self) -> bool:
@@ -94,7 +96,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         # Education POST routes
         elif parsed_path.path == "/api/education/curricula":
             self.handle_curriculum_create()
-        elif parsed_path.path.startswith("/api/education/curricula/") and parsed_path.path.endswith("/modules"):
+        elif parsed_path.path.startswith(
+            "/api/education/curricula/"
+        ) and parsed_path.path.endswith("/modules"):
             self.handle_module_add(parsed_path.path)
         elif parsed_path.path == "/api/education/sessions":
             self.handle_session_create()
@@ -102,7 +106,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_quiz_generate()
         elif parsed_path.path == "/api/education/quiz/answer":
             self.handle_quiz_answer()
-        elif parsed_path.path.startswith("/api/education/exams") and parsed_path.path.endswith("/submit"):
+        elif parsed_path.path.startswith(
+            "/api/education/exams"
+        ) and parsed_path.path.endswith("/submit"):
             self.handle_exam_submit(parsed_path.path)
         elif parsed_path.path == "/api/education/exams":
             self.handle_exam_create()
@@ -192,15 +198,15 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
         try:
             try:
-                content_length = int(self.headers.get('Content-Length', 0))
+                content_length = int(self.headers.get("Content-Length", 0))
             except (TypeError, ValueError):
                 content_length = 0
             module = None
             if content_length > 0:
                 try:
                     post_data = self.rfile.read(content_length)
-                    data = json.loads(post_data.decode('utf-8'))
-                    module = data.get('module')
+                    data = json.loads(post_data.decode("utf-8"))
+                    module = data.get("module")
                 except (json.JSONDecodeError, KeyError):
                     self.send_json_response({"error": "Invalid JSON"}, status=400)
                     return
@@ -240,15 +246,15 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
     def handle_config_save(self) -> None:
         """Handle config save request."""
-        content_length = int(self.headers.get('Content-Length', 0))
+        content_length = int(self.headers.get("Content-Length", 0))
         if content_length == 0:
             self.send_error(400, "No content provided")
             return
 
         post_data = self.rfile.read(content_length)
-        data = json.loads(post_data.decode('utf-8'))
-        content = data.get('content')
-        filename = data.get('filename')
+        data = json.loads(post_data.decode("utf-8"))
+        content = data.get("content")
+        filename = data.get("filename")
 
         if not filename:
             # Extract from URL path
@@ -349,7 +355,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def handle_execute(self) -> None:
         """Execute a script from the scripts directory."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -357,13 +363,13 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
-        script_name = data.get('script')
-        args = data.get('args', [])
+        script_name = data.get("script")
+        args = data.get("args", [])
 
         if not script_name:
             self.send_error(400, "Script name required")
@@ -373,7 +379,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         script_path = (self.root_dir / "scripts" / script_name).resolve()
         scripts_root = (self.root_dir / "scripts").resolve()
 
-        if not str(script_path).startswith(str(scripts_root)) or not script_path.exists():
+        if (
+            not str(script_path).startswith(str(scripts_root))
+            or not script_path.exists()
+        ):
             self.send_error(403, f"Invalid script path: {script_name}")
             return
 
@@ -386,36 +395,38 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             # Ensure we capture both stdout and stderr
             result = subprocess.run(
                 cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 text=True,
                 env=env,
-                cwd=self.root_dir, # Run from project root
-                timeout=300 # 5 minute timeout safety
+                cwd=self.root_dir,  # Run from project root
+                timeout=300,  # 5 minute timeout safety
             )
 
             response = {
                 "success": result.returncode == 0,
                 "stdout": result.stdout,
                 "stderr": result.stderr,
-                "returncode": result.returncode
+                "returncode": result.returncode,
             }
 
             self.send_json_response(response)
 
         except subprocess.TimeoutExpired:
-            self.send_json_response({
-                "success": False,
-                "error": "Script execution timed out after 300 seconds",
-                "stderr": "TimeoutExpired"
-            }, status=504)
+            self.send_json_response(
+                {
+                    "success": False,
+                    "error": "Script execution timed out after 300 seconds",
+                    "stderr": "TimeoutExpired",
+                },
+                status=504,
+            )
         except Exception as e:
             self.send_json_response({"success": False, "error": str(e)}, status=500)
 
     def handle_chat(self) -> None:
         """Proxy chat requests to Ollama."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -423,7 +434,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -431,30 +442,28 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         ollama_url = "http://localhost:11434/api/chat"
 
         # Get the message from frontend
-        user_message = data.get('message', '')
+        user_message = data.get("message", "")
         # Use provided model or fall back to system default
-        system_model = "llama3.1:latest" # Fallback
+        system_model = "llama3.1:latest"  # Fallback
         if self.data_provider:
             llm_config = self.data_provider.get_llm_config()
             system_model = llm_config.get("default_model", "llama3.1:latest")
 
-        model = data.get('model') or system_model
+        model = data.get("model") or system_model
 
         # Format for Ollama API
         ollama_payload = {
             "model": model,
-            "messages": [
-                {"role": "user", "content": user_message}
-            ],
-            "stream": False  # Non-streaming for simplicity
+            "messages": [{"role": "user", "content": user_message}],
+            "stream": False,  # Non-streaming for simplicity
         }
 
-            # If the frontend already sends proper format, use it
-        if 'messages' in data:
+        # If the frontend already sends proper format, use it
+        if "messages" in data:
             ollama_payload = {
-                "model": data.get('model') or system_model,
-                "messages": data['messages'],
-                "stream": False
+                "model": data.get("model") or system_model,
+                "messages": data["messages"],
+                "stream": False,
             }
 
         try:
@@ -463,20 +472,23 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()
                 # Extract the assistant's message
-                response_text = result.get('message', {}).get('content', 'No response')
+                response_text = result.get("message", {}).get("content", "No response")
 
-                self.send_json_response({
-                    "response": response_text,
-                    "model": model,
-                    "success": True
-                })
+                self.send_json_response(
+                    {"response": response_text, "model": model, "success": True}
+                )
             else:
-                self.send_json_response({
-                    "error": f"Ollama error: {ollama_resp.status_code} - {ollama_resp.text[:200]}"
-                }, status=502)
+                self.send_json_response(
+                    {
+                        "error": f"Ollama error: {ollama_resp.status_code} - {ollama_resp.text[:200]}"
+                    },
+                    status=502,
+                )
 
         except requests.exceptions.ConnectionError:
-            self.send_json_response({"error": "Ollama service not reachable. Is it running?"}, status=503)
+            self.send_json_response(
+                {"error": "Ollama service not reachable. Is it running?"}, status=503
+            )
         except requests.exceptions.Timeout:
             self.send_json_response({"error": "Ollama request timed out"}, status=504)
         except Exception as e:
@@ -489,7 +501,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 "system": self.data_provider.get_system_summary(),
                 "modules": self.data_provider.get_modules(),
                 "agents": self.data_provider.get_actual_agents(),
-                "scripts": self.data_provider.get_available_scripts()
+                "scripts": self.data_provider.get_available_scripts(),
             }
             self.send_json_response(data)
         else:
@@ -514,7 +526,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def handle_awareness_summary(self) -> None:
         """Handle POST /api/awareness/summary — generate Ollama AI summary."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -522,7 +534,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -533,7 +545,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             system_model = "llama3.1:latest"
 
-        model = data.get('model') or system_model
+        model = data.get("model") or system_model
 
         if not self.data_provider:
             self.send_json_response({"error": "Data provider missing"}, status=500)
@@ -574,11 +586,13 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             if ollama_resp.status_code == 200:
                 result = ollama_resp.json()
                 summary_text = result.get("message", {}).get("content", "No response")
-                self.send_json_response({
-                    "summary": summary_text,
-                    "model": model,
-                    "success": True,
-                })
+                self.send_json_response(
+                    {
+                        "summary": summary_text,
+                        "model": model,
+                        "success": True,
+                    }
+                )
             else:
                 self.send_json_response(
                     {"error": f"Ollama error: {ollama_resp.status_code}"},
@@ -600,16 +614,23 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def do_PUT(self) -> None:
         """Handle PUT requests (module updates)."""
         if not self._validate_origin():
-            self.send_json_response({"status": "error", "message": "Origin not allowed"}, status=403)
+            self.send_json_response(
+                {"status": "error", "message": "Origin not allowed"}, status=403
+            )
             return
 
         parsed_path = urlparse(self.path)
 
         # PUT /api/education/curricula/<name>/modules/<mod>
-        if parsed_path.path.startswith("/api/education/curricula/") and "/modules/" in parsed_path.path:
+        if (
+            parsed_path.path.startswith("/api/education/curricula/")
+            and "/modules/" in parsed_path.path
+        ):
             self.handle_module_update(parsed_path.path)
         else:
-            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+            self.send_json_response(
+                {"status": "error", "message": "Endpoint not found"}, status=404
+            )
 
     # ── Helper: read JSON body ─────────────────────────────────────
 
@@ -620,13 +641,17 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
-            self.send_json_response({"status": "error", "message": "No content provided"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "No content provided"}, status=400
+            )
             return None
         try:
             raw = self.rfile.read(content_length)
             return json.loads(raw.decode("utf-8"))
         except (json.JSONDecodeError, UnicodeDecodeError):
-            self.send_json_response({"status": "error", "message": "Invalid JSON"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Invalid JSON"}, status=400
+            )
             return None
 
     # ── Education GET dispatchers ──────────────────────────────────
@@ -652,7 +677,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         elif sub == "":
             self.handle_curriculum_get(name)
         else:
-            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+            self.send_json_response(
+                {"status": "error", "message": "Endpoint not found"}, status=404
+            )
 
     def _dispatch_session_get(self, path: str) -> None:
         """Route GET /api/education/sessions/<id>/progress."""
@@ -664,7 +691,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         if sub == "progress":
             self.handle_session_progress(session_id)
         else:
-            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+            self.send_json_response(
+                {"status": "error", "message": "Endpoint not found"}, status=404
+            )
 
     # ── Curriculum handlers ────────────────────────────────────────
 
@@ -681,10 +710,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         name = body.get("name")
         level = body.get("level")
         if not name:
-            self.send_json_response({"status": "error", "message": "Missing field: name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: name"}, status=400
+            )
             return
         if not level:
-            self.send_json_response({"status": "error", "message": "Missing field: level"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: level"}, status=400
+            )
             return
         try:
             result = self.education_provider.create_curriculum(name, level)
@@ -698,18 +731,25 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         """GET /api/education/curricula/<name> — get curriculum details."""
         result = self.education_provider.get_curriculum(name)
         if result is None:
-            self.send_json_response({"status": "error", "message": f"Curriculum '{name}' not found"}, status=404)
+            self.send_json_response(
+                {"status": "error", "message": f"Curriculum '{name}' not found"},
+                status=404,
+            )
         else:
             self.send_json_response({"status": "ok", "data": result})
 
     def handle_module_add(self, path: str) -> None:
         """POST /api/education/curricula/<name>/modules — add a module."""
-        cur_name = path.replace("/api/education/curricula/", "", 1).replace("/modules", "")
+        cur_name = path.replace("/api/education/curricula/", "", 1).replace(
+            "/modules", ""
+        )
         body = self._read_json_body()
         if body is None:
             return
         if not body.get("name"):
-            self.send_json_response({"status": "error", "message": "Missing field: name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: name"}, status=400
+            )
             return
         try:
             result = self.education_provider.add_module(cur_name, body)
@@ -726,7 +766,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         rest = path.replace("/api/education/curricula/", "", 1)
         parts = rest.split("/modules/", 1)
         if len(parts) != 2:
-            self.send_json_response({"status": "error", "message": "Invalid path"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Invalid path"}, status=400
+            )
             return
         cur_name, mod_name = parts[0], parts[1]
         body = self._read_json_body()
@@ -773,10 +815,15 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         student_name = body.get("student_name")
         topic = body.get("topic")
         if not student_name:
-            self.send_json_response({"status": "error", "message": "Missing field: student_name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: student_name"},
+                status=400,
+            )
             return
         if not topic:
-            self.send_json_response({"status": "error", "message": "Missing field: topic"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: topic"}, status=400
+            )
             return
         result = self.education_provider.create_session(student_name, topic)
         self.send_json_response({"status": "ok", "data": result})
@@ -796,7 +843,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         topic = body.get("topic")
         if not topic:
-            self.send_json_response({"status": "error", "message": "Missing field: topic"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: topic"}, status=400
+            )
             return
         difficulty = body.get("difficulty", "easy")
         count = body.get("count", 5)
@@ -811,16 +860,22 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         question_id = body.get("question_id")
         answer = body.get("answer")
         if not question_id:
-            self.send_json_response({"status": "error", "message": "Missing field: question_id"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: question_id"}, status=400
+            )
             return
         if answer is None:
-            self.send_json_response({"status": "error", "message": "Missing field: answer"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: answer"}, status=400
+            )
             return
 
         session_id = body.get("session_id")
         try:
             if session_id:
-                result = self.education_provider.record_answer(session_id, question_id, answer)
+                result = self.education_provider.record_answer(
+                    session_id, question_id, answer
+                )
             else:
                 result = self.education_provider.evaluate_answer(question_id, answer)
             self.send_json_response({"status": "ok", "data": result})
@@ -836,7 +891,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         curriculum_name = body.get("curriculum_name")
         if not curriculum_name:
-            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: curriculum_name"},
+                status=400,
+            )
             return
         module_names = body.get("module_names")
         try:
@@ -854,11 +912,16 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         curriculum_name = body.get("curriculum_name")
         if not curriculum_name:
-            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: curriculum_name"},
+                status=400,
+            )
             return
         answers = body.get("answers", {})
         try:
-            result = self.education_provider.grade_submission(curriculum_name, exam_id, answers)
+            result = self.education_provider.grade_submission(
+                curriculum_name, exam_id, answers
+            )
             self.send_json_response({"status": "ok", "data": result})
         except KeyError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=404)
@@ -872,16 +935,25 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         curriculum_name = body.get("curriculum_name")
         score = body.get("score")
         if not student:
-            self.send_json_response({"status": "error", "message": "Missing field: student"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: student"}, status=400
+            )
             return
         if not curriculum_name:
-            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: curriculum_name"},
+                status=400,
+            )
             return
         if score is None:
-            self.send_json_response({"status": "error", "message": "Missing field: score"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing field: score"}, status=400
+            )
             return
         try:
-            result = self.education_provider.generate_certificate(student, curriculum_name, float(score))
+            result = self.education_provider.generate_certificate(
+                student, curriculum_name, float(score)
+            )
             self.send_json_response({"status": "ok", "data": result})
         except KeyError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=404)
@@ -898,6 +970,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def handle_content_tree(self, query: str) -> None:
         """GET /api/content/tree?path= — list output file tree."""
         from urllib.parse import parse_qs
+
         params = parse_qs(query)
         subpath = params.get("path", [""])[0]
         try:
@@ -911,10 +984,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def handle_content_file(self, query: str) -> None:
         """GET /api/content/file?path= — get file content or serve file."""
         from urllib.parse import parse_qs
+
         params = parse_qs(query)
         filepath = params.get("path", [""])[0]
         if not filepath:
-            self.send_json_response({"status": "error", "message": "Missing query parameter: path"}, status=400)
+            self.send_json_response(
+                {"status": "error", "message": "Missing query parameter: path"},
+                status=400,
+            )
             return
         try:
             result = self.education_provider.get_file_content(filepath)
@@ -927,10 +1004,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
-        self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
-        self.send_header('Vary', 'Origin')
+        self.send_header("Content-type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "http://localhost:8787")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
+        self.send_header("Vary", "Origin")
         self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
+        self.wfile.write(json.dumps(data).encode("utf-8"))

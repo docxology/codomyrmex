@@ -19,12 +19,19 @@ from codomyrmex.website.education_provider import EducationDataProvider
 
 # ── Strategies ─────────────────────────────────────────────────────
 
-SAFE_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N"), whitelist_characters="-_",
-                           max_codepoint=127),
-    min_size=1,
-    max_size=20,
-).map(str.strip).filter(lambda s: len(s) > 0 and not s.startswith("."))
+SAFE_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N"),
+            whitelist_characters="-_",
+            max_codepoint=127,
+        ),
+        min_size=1,
+        max_size=20,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0 and not s.startswith("."))
+)
 
 FILE_CONTENT = st.text(min_size=0, max_size=200).filter(lambda s: "\r" not in s)
 

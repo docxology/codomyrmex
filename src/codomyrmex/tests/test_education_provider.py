@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import json
 
-import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
@@ -22,24 +21,41 @@ from codomyrmex.website.education_provider import EducationDataProvider
 VALID_LEVELS = st.sampled_from(["beginner", "intermediate", "advanced", "expert"])
 
 # Curriculum names: non-empty printable strings without leading/trailing whitespace
-CURRICULUM_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+CURRICULUM_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
-MODULE_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+MODULE_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
 MODULE_CONTENT = st.text(min_size=0, max_size=200)
 
 OBJECTIVES = st.lists(st.text(min_size=1, max_size=60), min_size=0, max_size=5)
 
 EXERCISES = st.lists(
-    st.fixed_dictionaries({"prompt": st.text(min_size=1, max_size=80), "solution": st.text(min_size=0, max_size=80)}),
+    st.fixed_dictionaries(
+        {
+            "prompt": st.text(min_size=1, max_size=80),
+            "solution": st.text(min_size=0, max_size=80),
+        }
+    ),
     min_size=0,
     max_size=3,
 )
@@ -149,11 +165,14 @@ def test_property4_curriculum_export_json_round_trip(
     provider.create_curriculum(cur_name, level)
 
     for mod_name in mod_names:
-        provider.add_module(cur_name, {
-            "name": mod_name,
-            "content": "some content",
-            "duration_minutes": 30,
-        })
+        provider.add_module(
+            cur_name,
+            {
+                "name": mod_name,
+                "content": "some content",
+                "duration_minutes": 30,
+            },
+        )
 
     exported = provider.export_curriculum(cur_name, fmt="json")
     parsed = json.loads(exported)
@@ -191,11 +210,14 @@ def test_property5_module_update_then_read(
     """After updating a module, the curriculum SHALL show updated values."""
     provider = EducationDataProvider()
     provider.create_curriculum(cur_name, level)
-    provider.add_module(cur_name, {
-        "name": mod_name,
-        "content": "original",
-        "duration_minutes": 10,
-    })
+    provider.add_module(
+        cur_name,
+        {
+            "name": mod_name,
+            "content": "original",
+            "duration_minutes": 10,
+        },
+    )
 
     update_data = {
         "content": new_content,

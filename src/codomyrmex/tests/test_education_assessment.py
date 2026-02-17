@@ -9,8 +9,7 @@ exam creation, grading invariants, and certificate round trips.
 
 from __future__ import annotations
 
-import pytest
-from hypothesis import given, settings, assume
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from codomyrmex.website.education_provider import EducationDataProvider
@@ -19,27 +18,47 @@ from codomyrmex.website.education_provider import EducationDataProvider
 
 VALID_LEVELS = st.sampled_from(["beginner", "intermediate", "advanced", "expert"])
 
-CURRICULUM_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+CURRICULUM_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
-MODULE_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+MODULE_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
-STUDENT_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+STUDENT_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
 ANSWER_STRINGS = st.text(min_size=0, max_size=50)
 
-SCORES = st.floats(min_value=0.0, max_value=100.0, allow_nan=False, allow_infinity=False)
+SCORES = st.floats(
+    min_value=0.0, max_value=100.0, allow_nan=False, allow_infinity=False
+)
 
 
 def _build_provider_with_modules(cur_name, level, mod_names):
@@ -47,11 +66,14 @@ def _build_provider_with_modules(cur_name, level, mod_names):
     provider = EducationDataProvider()
     provider.create_curriculum(cur_name, level)
     for mod_name in mod_names:
-        provider.add_module(cur_name, {
-            "name": mod_name,
-            "content": f"Content for {mod_name}",
-            "duration_minutes": 30,
-        })
+        provider.add_module(
+            cur_name,
+            {
+                "name": mod_name,
+                "content": f"Content for {mod_name}",
+                "duration_minutes": 30,
+            },
+        )
     return provider
 
 

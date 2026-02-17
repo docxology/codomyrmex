@@ -9,7 +9,7 @@ learning path prerequisite ordering and level filtering.
 
 from __future__ import annotations
 
-from hypothesis import given, settings, assume
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from codomyrmex.website.education_provider import EducationDataProvider
@@ -18,17 +18,29 @@ from codomyrmex.website.education_provider import EducationDataProvider
 
 VALID_LEVELS = ["beginner", "intermediate", "advanced", "expert"]
 
-CURRICULUM_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=40,
-).map(str.strip).filter(lambda s: len(s) > 0)
+CURRICULUM_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=40,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
-MODULE_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"),
-    min_size=1,
-    max_size=30,
-).map(str.strip).filter(lambda s: len(s) > 0)
+MODULE_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N", "Zs"), whitelist_characters="-_"
+        ),
+        min_size=1,
+        max_size=30,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
 
 # ── Property 6: Learning path respects prerequisites ──────────────
@@ -52,12 +64,15 @@ def test_property6_learning_path_respects_prerequisites(
     # First module has no prerequisites; each subsequent depends on the previous
     for i, mod_name in enumerate(mod_names):
         prereqs = [mod_names[i - 1]] if i > 0 else []
-        provider.add_module(cur_name, {
-            "name": mod_name,
-            "content": f"Content for {mod_name}",
-            "duration_minutes": 30,
-            "prerequisites": prereqs,
-        })
+        provider.add_module(
+            cur_name,
+            {
+                "name": mod_name,
+                "content": f"Content for {mod_name}",
+                "duration_minutes": 30,
+                "prerequisites": prereqs,
+            },
+        )
 
     result = provider.get_learning_path(cur_name, level="beginner")
     path = result["path"]
@@ -70,9 +85,8 @@ def test_property6_learning_path_respects_prerequisites(
     for i, mod_name in enumerate(mod_names):
         if i > 0:
             prereq = mod_names[i - 1]
-            assert position[prereq] < position[mod_name], (
-                f"Prerequisite '{prereq}' should appear before '{mod_name}' in path"
-            )
+            msg = f"Prerequisite '{prereq}' should appear before '{mod_name}'"
+            assert position[prereq] < position[mod_name], msg
 
 
 # ── Property 7: Learning path level filtering reduces or preserves path length ──
@@ -95,12 +109,15 @@ def test_property7_level_filtering_reduces_or_preserves_length(
 
     for i, mod_name in enumerate(mod_names):
         prereqs = [mod_names[i - 1]] if i > 0 else []
-        provider.add_module(cur_name, {
-            "name": mod_name,
-            "content": f"Content for {mod_name}",
-            "duration_minutes": 30,
-            "prerequisites": prereqs,
-        })
+        provider.add_module(
+            cur_name,
+            {
+                "name": mod_name,
+                "content": f"Content for {mod_name}",
+                "duration_minutes": 30,
+                "prerequisites": prereqs,
+            },
+        )
 
     level_a = VALID_LEVELS[level_a_idx]
     level_b = VALID_LEVELS[level_a_idx + 1]
@@ -108,6 +125,8 @@ def test_property7_level_filtering_reduces_or_preserves_length(
     path_a = provider.get_learning_path(cur_name, level=level_a)["path"]
     path_b = provider.get_learning_path(cur_name, level=level_b)["path"]
 
-    assert len(path_b) <= len(path_a), (
-        f"Path for '{level_b}' ({len(path_b)}) should be <= path for '{level_a}' ({len(path_a)})"
+    msg = (
+        f"Path for '{level_b}' ({len(path_b)}) "
+        f"should be <= path for '{level_a}' ({len(path_a)})"
     )
+    assert len(path_b) <= len(path_a), msg

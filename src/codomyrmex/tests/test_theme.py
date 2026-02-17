@@ -29,12 +29,17 @@ class TestThemeToggle:
     def test_js_reads_localstorage_theme(self):
         """Theme init reads from localStorage."""
         js = _read(JS_PATH)
-        assert "localStorage.getItem('theme')" in js or 'localStorage.getItem("theme")' in js
+        assert (
+            "localStorage.getItem('theme')" in js
+            or 'localStorage.getItem("theme")' in js
+        )
 
     def test_js_writes_localstorage_theme(self):
         """Theme toggle writes to localStorage."""
         js = _read(JS_PATH)
-        assert "localStorage.setItem('theme'" in js or 'localStorage.setItem("theme"' in js
+        assert (
+            "localStorage.setItem('theme'" in js or 'localStorage.setItem("theme"' in js
+        )
 
     def test_js_sets_data_theme_attribute(self):
         """Theme toggle sets data-theme attribute on html element."""
@@ -54,7 +59,7 @@ class TestThemeToggle:
         """base.html contains the theme toggle button."""
         html = _read(HTML_PATH)
         assert 'id="theme-toggle"' in html
-        assert 'aria-label' in html
+        assert "aria-label" in html
 
     def test_css_has_dark_theme_variables(self):
         """CSS defines dark theme overrides."""

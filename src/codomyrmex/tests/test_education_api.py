@@ -12,19 +12,18 @@ from __future__ import annotations
 import http.server
 import json
 import threading
-from typing import Any
-from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 import pytest
-from hypothesis import given, settings, assume
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from codomyrmex.website.server import WebsiteServer
 from codomyrmex.website.data_provider import DataProvider
-
+from codomyrmex.website.server import WebsiteServer
 
 # ── Test server fixture ────────────────────────────────────────────
+
 
 @pytest.fixture(scope="module")
 def api_server():
@@ -44,7 +43,9 @@ def api_server():
     server.shutdown()
 
 
-def _api_request(base_url: str, method: str, path: str, body: dict | None = None) -> tuple[int, dict]:
+def _api_request(
+    base_url: str, method: str, path: str, body: dict | None = None
+) -> tuple[int, dict]:
     """Make an API request and return (status_code, parsed_json)."""
     url = f"{base_url}{path}"
     data = json.dumps(body).encode("utf-8") if body else None
@@ -62,23 +63,34 @@ def _api_request(base_url: str, method: str, path: str, body: dict | None = None
 # Feature: local-web-viewer, Property 15: API JSON structure consistency
 # Validates: Requirements 6.4
 
-CURRICULUM_NAMES = st.text(
-    alphabet=st.characters(whitelist_categories=("L", "N"), whitelist_characters="-_",
-                           max_codepoint=127),
-    min_size=1,
-    max_size=30,
-).map(str.strip).filter(lambda s: len(s) > 0)
+CURRICULUM_NAMES = (
+    st.text(
+        alphabet=st.characters(
+            whitelist_categories=("L", "N"),
+            whitelist_characters="-_",
+            max_codepoint=127,
+        ),
+        min_size=1,
+        max_size=30,
+    )
+    .map(str.strip)
+    .filter(lambda s: len(s) > 0)
+)
 
 VALID_LEVELS = st.sampled_from(["beginner", "intermediate", "advanced", "expert"])
 
 
 @given(name=CURRICULUM_NAMES, level=VALID_LEVELS)
 @settings(max_examples=50)
-def test_property15_api_json_structure_consistency(api_server: str, name: str, level: str) -> None:
+def test_property15_api_json_structure_consistency(
+    api_server: str, name: str, level: str
+) -> None:
     """Successful API responses SHALL be valid JSON with status field.
     Error responses SHALL contain status='error' and non-empty message."""
     # Successful: create curriculum
-    status, data = _api_request(api_server, "POST", "/api/education/curricula", {"name": name, "level": level})
+    status, data = _api_request(
+        api_server, "POST", "/api/education/curricula", {"name": name, "level": level}
+    )
 
     # First call should succeed (201-ish) or conflict if name reused across examples
     assert isinstance(data, dict)
@@ -120,12 +132,16 @@ def test_property15_api_json_structure_consistency(api_server: str, name: str, l
 
 @given(fake_name=CURRICULUM_NAMES)
 @settings(max_examples=50)
-def test_property16_nonexistent_resource_returns_error(api_server: str, fake_name: str) -> None:
+def test_property16_nonexistent_resource_returns_error(
+    api_server: str, fake_name: str
+) -> None:
     """Requesting a nonexistent resource SHALL return 404 with descriptive error."""
     # Use a name prefixed to avoid collision with any created curricula
     resource_name = f"__nonexistent__{fake_name}"
 
-    status, data = _api_request(api_server, "GET", f"/api/education/curricula/{resource_name}")
+    status, data = _api_request(
+        api_server, "GET", f"/api/education/curricula/{resource_name}"
+    )
     assert status == 404
     assert isinstance(data, dict)
     assert data.get("status") == "error"
@@ -133,7 +149,9 @@ def test_property16_nonexistent_resource_returns_error(api_server: str, fake_nam
     assert len(data["message"]) > 0
 
     # Nonexistent session progress
-    status2, data2 = _api_request(api_server, "GET", f"/api/education/sessions/{resource_name}/progress")
+    status2, data2 = _api_request(
+        api_server, "GET", f"/api/education/sessions/{resource_name}/progress"
+    )
     assert status2 == 404
     assert data2.get("status") == "error"
     assert len(data2.get("message", "")) > 0
