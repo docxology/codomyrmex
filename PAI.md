@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## What Is PAI?
 
@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is a **104-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is a **78-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              104 modules of dev-platform tools
+     Algorithm + Skills + Hooks              78 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["104 Module Tools"]
+        Modules["78 Module Tools"]
     end
 
     Algo --> Agents
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 18 static tools + 554 auto-discovered (607 total) across file ops, code analysis, git, security, all 104 modules
+**Tools**: 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) curates 53 of these for MCP exposure.
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -77,9 +77,9 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 | **OBSERVE** (1/7) | Understand the request | `pattern_matching`, `search`, `documents`, `system_discovery` |
 | **THINK** (2/7) | Select capabilities, expand ISC | `cerebrum`, `agents/theory/`, `graph_rag` |
 | **PLAN** (3/7) | Finalize approach | `orchestrator` (workflow DAGs), `logistics` |
-| **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `build_synthesis` |
+| **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build/` |
 | **EXECUTE** (5/7) | Run the work | `agents` (all providers), `coding` (sandbox), `git_operations` |
-| **VERIFY** (6/7) | Validate against ISC | `static_analysis`, `security`, `testing` |
+| **VERIFY** (6/7) | Validate against ISC | `coding/static_analysis/`, `security`, `testing` |
 | **LEARN** (7/7) | Capture improvements | `agentic_memory`, `logging_monitoring` |
 
 ## Per-User Separation
@@ -97,7 +97,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 104 Python modules
+├── src/codomyrmex/                 # 78 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation
@@ -146,12 +146,12 @@ Condensed view of what PAI agents can access:
 |--------|---------|---------|
 | **AI Agents** | `agents/` (11 providers), `agents/ai_code_editing/` | BUILD/EXECUTE — code generation, review, refactoring |
 | **LLM** | `llm/`, `model_context_protocol/` | Model management, tool interfaces |
-| **Reasoning** | `cerebrum/`, `graph_rag/`, `pattern_matching/` | THINK — case-based reasoning, pattern recognition |
+| **Reasoning** | `cerebrum/`, `graph_rag/`, `coding/pattern_matching/` | THINK — case-based reasoning, pattern recognition |
 | **Knowledge** | `documents/`, `agentic_memory/`, `search/` | OBSERVE/LEARN — document processing, memory |
-| **Code Ops** | `coding/`, `static_analysis/`, `git_operations/` | BUILD/VERIFY — sandbox execution, analysis, VCS |
+| **Code Ops** | `coding/` (includes `static_analysis/`, `pattern_matching/`), `git_operations/` | BUILD/VERIFY — sandbox execution, analysis, VCS |
 | **Workflow** | `orchestrator/`, `events/`, `logistics/` | PLAN/EXECUTE — DAG workflows, pub/sub, scheduling |
 | **Security** | `security/`, `encryption/`, `auth/` | VERIFY — vulnerability scanning, data protection |
-| **DevOps** | `build_synthesis/`, `ci_cd_automation/`, `containerization/` | EXECUTE — multi-language builds, pipelines, containers |
+| **DevOps** | `ci_cd_automation/` (includes `build/`), `containerization/` | EXECUTE — builds, pipelines, containers |
 | **Interface** | `cli/`, `terminal_interface/`, `ide/` | User interaction, rich output |
 
 ## RASP Documentation Pattern
@@ -197,9 +197,11 @@ Every codomyrmex module has a `PAI.md` file describing its AI capabilities. Thes
 - [MCP Bridge Docs](src/codomyrmex/model_context_protocol/PAI.md) — Full MCP integration details
 - [Agent System Integration](src/codomyrmex/agents/PAI.md) — PAI agent &harr; codomyrmex mapping
 - [Source Module Map](src/codomyrmex/PAI.md) — All modules with PAI capabilities
+- [Detailed PAI Reference](docs/pai/) — Architecture, tools, API, workflows
 - [Connecting Tutorial](docs/getting-started/tutorials/connecting-pai.md) — Step-by-step setup
 
 ## Version History
 
+- **v0.4.0** (February 2026) — Bidirectional link completion, docs/pai/ reference, version sync
 - **v0.2.0** (February 2026) — Full rewrite: actual PAI system bridge documentation
 - **v0.1.0** (February 2026) — Initial generic PAI concept documentation

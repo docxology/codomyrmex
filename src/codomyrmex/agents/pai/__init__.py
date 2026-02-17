@@ -35,6 +35,15 @@ Example:
 Version: v0.4.0
 """
 
+from .mcp_bridge import (
+    PROMPT_COUNT,
+    RESOURCE_COUNT,
+    TOOL_COUNT,
+    call_tool,
+    create_codomyrmex_mcp_server,
+    get_skill_manifest,
+    get_tool_registry,
+)
 from .pai_bridge import (
     ALGORITHM_PHASES,
     PAI_PRINCIPLES,
@@ -48,17 +57,6 @@ from .pai_bridge import (
     PAISkillInfo,
     PAIToolInfo,
 )
-
-from .mcp_bridge import (
-    TOOL_COUNT,
-    RESOURCE_COUNT,
-    PROMPT_COUNT,
-    call_tool,
-    create_codomyrmex_mcp_server,
-    get_skill_manifest,
-    get_tool_registry,
-)
-
 from .trust_gateway import (
     DESTRUCTIVE_TOOL_COUNT,
     DESTRUCTIVE_TOOLS,

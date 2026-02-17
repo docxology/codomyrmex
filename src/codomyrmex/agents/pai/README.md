@@ -79,7 +79,7 @@ server = create_codomyrmex_mcp_server()
 server.run()  # stdio or HTTP
 ```
 
-**21+ Tools** | **2 Resources** | **3 Prompts**
+**18 Static + Auto-Discovered Tools** | **2 Resources** | **10 Prompts**
 
 The bridge now supports **Dynamic Discovery**, automatically exposing tools decorated with `@mcp_tool` from key modules (`visualization`, `llm`, `security`, `memory`).
 
@@ -102,8 +102,8 @@ trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 
 **Trust Levels**: `UNTRUSTED → VERIFIED → TRUSTED`
 
-- **Safe** (12 tools): Auto-promoted to VERIFIED by `/codomyrmexVerify`
-- **Destructive** (3 tools: `write_file`, `run_command`, `run_tests`): Require `/codomyrmexTrust`
+- **Safe** (14 static tools): Auto-promoted to VERIFIED by `/codomyrmexVerify`
+- **Destructive** (4 tools: `write_file`, `run_command`, `run_tests`, `call_module_function`): Require `/codomyrmexTrust`
 
 ## API Methods
 

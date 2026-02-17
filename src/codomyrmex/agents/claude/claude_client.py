@@ -12,8 +12,8 @@ with support for:
 
 import random
 import time
-from typing import Any
 from collections.abc import Callable, Iterator
+from typing import Any
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

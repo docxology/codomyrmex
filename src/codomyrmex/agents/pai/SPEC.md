@@ -1,6 +1,6 @@
 # pai — Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 
@@ -68,7 +68,7 @@ Exposes all Codomyrmex modules to PAI via MCP protocol or direct Python calls.
 
 | Function | Returns | Description |
 |----------|---------|-------------|
-| `create_codomyrmex_mcp_server()` | `MCPServer` | Fully-configured MCP server (18+ tools, 2 resources, 5 prompts) |
+| `create_codomyrmex_mcp_server()` | `MCPServer` | Fully-configured MCP server (18 static tools, 2 resources, 10 prompts) |
 | `get_tool_registry()` | `MCPToolRegistry` | Pre-populated tool registry |
 | `get_skill_manifest()` | `dict` | PAI-compatible skill manifest |
 | `call_tool(name, **kwargs)` | `dict` | Direct Python call (no MCP overhead) |

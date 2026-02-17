@@ -4,7 +4,7 @@ description: Full-spectrum coding workspace skill providing 100+ modules for AI-
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 0.1.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server`
+**Version**: 0.4.0 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server`
 
 ## Description
 
@@ -26,7 +26,7 @@ trust_all()             # Step 2: Grant full execution trust
 result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 ```
 
-## Tools (15)
+## Tools (18)
 
 | Tool | Category | Description |
 |------|----------|-------------|
@@ -42,6 +42,8 @@ result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 | `codomyrmex.checksum_file` | Data | Calculate file checksum |
 | `codomyrmex.list_modules` | Discovery | List all Codomyrmex modules |
 | `codomyrmex.module_info` | Discovery | Get module docstring, exports, path |
+| `codomyrmex.pai_status` | PAI | Get PAI installation status and component inventory |
+| `codomyrmex.pai_awareness` | PAI | Get full PAI awareness data (missions, projects, tasks) |
 | `codomyrmex.run_tests`              | Testing   | Run pytest for any module            |
 | `codomyrmex.list_module_functions` | Discovery | List functions/classes in any module |
 | `codomyrmex.call_module_function`  | Discovery | Call any function in any module      |
@@ -120,7 +122,7 @@ pai_status → pai_awareness → list_modules
 |--------|---------|
 | Core Infrastructure | `logging_monitoring`, `config_management`, `environment_setup`, `events`, `exceptions`, `utils`, `schemas` |
 | AI & Agents | `agents`, `llm`, `model_context_protocol`, `orchestrator`, `prompt_engineering`, `cerebrum`, `agentic_memory` |
-| Code & Analysis | `coding` (incl. `parsers.tree_sitter`), `static_analysis`, `documentation`, `git_operations`, `build_synthesis`, `testing`, `validation` |
+| Code & Analysis | `coding` (incl. `parsers.tree_sitter`), `static_analysis`, `documentation`, `git_operations`, `ci_cd_automation/build`, `testing`, `validation` |
 | Data & Storage | `database_management`, `vector_store`, `cache`, `serialization`, `data_lineage`, `data_visualization`, `graph_rag` |
 | Security | `security`, `auth`, `encryption`, `privacy`, `defense`, `identity`, `wallet` |
 | Infrastructure | `cloud`, `containerization`, `deployment`, `ci_cd_automation`, `networking`, `telemetry`, `performance`, `metrics` |

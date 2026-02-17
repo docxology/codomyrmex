@@ -29,6 +29,7 @@ from .skill_registry import SkillRegistry
 from .skill_sync import SkillSync
 from .skills_manager import SkillsManager
 
+
 def cli_commands():
     """Return CLI commands for the skills module."""
     def _list_skills():

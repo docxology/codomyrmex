@@ -1,5 +1,7 @@
 # Agent Guidelines - Coding
 
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Unified toolkit for code execution, analysis, review, and transformation.

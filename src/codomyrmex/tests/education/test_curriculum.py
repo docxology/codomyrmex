@@ -5,7 +5,7 @@ def test_curriculum_basics():
     curr = Curriculum("Python", "beginner")
     assert len(curr._modules) == 0
 
-    lesson = curr.add_module("Intro", "Hello World", duration_minutes=30)
+    lesson = curr.add_module("Intro", content="Hello World", duration_minutes=30)
 
     assert len(curr._modules) == 1
     assert curr._modules["Intro"] == lesson

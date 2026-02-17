@@ -26,7 +26,6 @@ All methods use **real filesystem operations** — zero mocks.
 from __future__ import annotations
 
 import json
-import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -675,7 +674,3 @@ class PAIBridge:
             return json.loads(path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
         except (json.JSONDecodeError, OSError):
             return None
-"""
-Overwrite=true
-CodeContent=above
-"""

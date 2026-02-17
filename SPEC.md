@@ -32,7 +32,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 104 modules.
+- Consistent directory structure and naming conventions across all 78 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -72,7 +72,6 @@ graph TB
     end
 
     subgraph Service["Service Layer"]
-        BS[build_synthesis]
         DOC[documentation]
         API[api]
         CICD[ci_cd_automation]
@@ -85,10 +84,8 @@ graph TB
 
     subgraph Core["Core Layer"]
         AGT[agents]
-        SA[static_analysis]
         COD[coding]
         LLM[llm]
-        PM[pattern_matching]
         GIT[git_operations]
         SEC[security]
         PERF[performance]
@@ -108,8 +105,8 @@ graph TB
 ```
 
 - **Foundation Layer**: Core infrastructure consumed by every other layer. Provides logging, environment validation, MCP interfaces, and terminal formatting.
-- **Core Layer**: Primary capabilities including agent frameworks, code analysis, LLM integration, pattern recognition, version control, security scanning, performance profiling, and data visualization.
-- **Service Layer**: Higher-level orchestration that composes core capabilities into build automation, documentation generation, API management, CI/CD pipelines, container management, database operations, configuration, logistics workflows, and workflow orchestration.
+- **Core Layer**: Primary capabilities including agent frameworks, code analysis (within `coding/`), LLM integration, version control, security scanning, performance profiling, and data visualization.
+- **Service Layer**: Higher-level orchestration that composes core capabilities into documentation generation, API management, CI/CD pipelines (includes build automation), container management, database operations, configuration, logistics workflows, and workflow orchestration.
 - **Application Layer**: User-facing entry points. The CLI provides the primary human interface; `system_discovery` provides module health monitoring and dynamic registration.
 
 ## Quality Standards

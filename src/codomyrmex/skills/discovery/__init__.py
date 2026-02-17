@@ -8,11 +8,11 @@ import hashlib
 import inspect
 import json
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Type
-from collections.abc import Callable
+from typing import Any
 
 
 class SkillCategory(Enum):
@@ -165,15 +165,15 @@ class FunctionSkill(Skill):
             param_type = "string"
             if name in type_hints:
                 hint = type_hints[name]
-                if hint == int:
+                if hint is int:
                     param_type = "integer"
-                elif hint == float:
+                elif hint is float:
                     param_type = "number"
-                elif hint == bool:
+                elif hint is bool:
                     param_type = "boolean"
-                elif hint == list:
+                elif hint is list:
                     param_type = "array"
-                elif hint == dict:
+                elif hint is dict:
                     param_type = "object"
 
             parameters.append(ParameterSchema(

@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Agents Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 

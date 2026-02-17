@@ -1,53 +1,61 @@
 # Codomyrmex Agents — src/codomyrmex/documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Documentation generation module providing website generation, API documentation, and tutorial creation capabilities. Automates creation and maintenance of project documentation.
+Documentation generation and quality management module. Provides Docusaurus-based website generation, documentation consistency checking, quality assessment scoring, and doc aggregation utilities.
 
 ## Active Components
 
-- `API_SPECIFICATION.md` – Project file
-- `CHANGELOG.md` – Project file
-- `MCP_TOOL_SPECIFICATION.md` – Project file
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SECURITY.md` – Project file
-- `SPEC.md` – Project file
-- `USAGE_EXAMPLES.md` – Project file
-- `__init__.py` – Project file
-- `bug_taxonomy.md` – Project file
-- `consistency_checker.py` – Project file
-- `coverage_assessment.md` – Project file
-- `docs/` – Directory containing docs components
-- `documentation_website.py` – Project file
-- `docusaurus.config.js` – Project file
-- `package-lock.json` – Project file
-- `package.json` – Project file
-- `quality_assessment.py` – Project file
-- `pyproject.toml` – Dependencies (root-level, managed via `uv`)
-- `scripts/` – Directory containing scripts components
-- `sidebars.js` – Project file
-- `src/` – Directory containing src components
-- `static/` – Directory containing static components
+- **`documentation_website.py`** — Core website lifecycle: `check_doc_environment()`, `install_dependencies()`, `start_dev_server()`, `build_static_site()`, `serve_static_site()`, `aggregate_docs()`, `validate_doc_versions()`, `assess_site()`
+- **`consistency_checker.py`** — `DocumentationConsistencyChecker`: validates naming conventions, formatting standards, and content alignment across markdown files. Produces `ConsistencyReport` with per-file `ConsistencyIssue` entries
+- **`quality_assessment.py`** — `DocumentationQualityAnalyzer`: scores documentation on 5 axes (completeness, consistency, technical accuracy, readability, structure). `generate_quality_report()` produces a project-wide quality summary
+- **`education/`** — Curriculum and tutorial generation submodule
+- **`docusaurus.config.js`** — Docusaurus site configuration
+- **`sidebars.js`** — Documentation sidebar navigation structure
+- **`docs/`** — Static documentation content for the generated site
+- **`scripts/`** — Build and deployment scripts for the documentation site
+- **`src/`** — Docusaurus React components and pages
+- **`static/`** — Static assets (images, stylesheets) for the documentation site
 
 ## Operating Contracts
 
-- Maintain alignment between code, documentation, and configured workflows.
-- Ensure Model Context Protocol interfaces remain available for sibling agents.
-- Record outcomes in shared telemetry and update TODO queues when necessary.
+- Call `check_doc_environment()` before any build operation to verify Node.js and npm are available.
+- Use `aggregate_docs()` to collect module documentation before building the site.
+- `DocumentationConsistencyChecker` operates on markdown files only — pass directory paths for recursive checks.
+- Quality scores are 0-100 floats; `generate_quality_report()` analyzes key project files (`README.md`, `AGENTS.md`).
+- The `education` submodule handles curriculum content separately from the main doc site.
 
 ## Common Patterns
 
 ```python
-from codomyrmex.documentation import ConsistencyIssue, ConsistencyReport, DocumentationConsistencyChecker
+from codomyrmex.documentation import (
+    check_doc_environment, build_static_site, aggregate_docs,
+    DocumentationConsistencyChecker, DocumentationQualityAnalyzer,
+    generate_quality_report
+)
 
-# Agent uses ConsistencyIssue
-instance = ConsistencyIssue()
+# Check environment and build site
+check_doc_environment()
+aggregate_docs("./src")
+build_static_site()
+
+# Check documentation consistency
+checker = DocumentationConsistencyChecker()
+report = checker.check_directory("./docs", recursive=True)
+print(f"Files: {report.files_checked}, Issues: {len(report.issues)}")
+
+# Assess documentation quality
+analyzer = DocumentationQualityAnalyzer()
+scores = analyzer.analyze_file(Path("README.md"))
+print(f"Overall: {scores['overall_score']:.1f}/100")
+
+# Generate project-wide quality report
+report = generate_quality_report(Path("."))
 ```
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [codomyrmex](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../../README.md - Main project documentation
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)
+- **Parent**: [codomyrmex](../README.md)

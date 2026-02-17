@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This is the main source directory containing the `codomyrmex` Python package with 107 specialized modules organized across four architectural layers.
+This is the main source directory containing the `codomyrmex` Python package with 78 specialized modules organized across four architectural layers.
 
 ## AI Agent Guidance
 
@@ -19,9 +19,9 @@ This is the main source directory containing the `codomyrmex` Python package wit
 
 | Layer | Modules | Purpose |
 |-------|---------|---------|
-| Foundation | `logging_monitoring`, `environment_setup`, `model_context_protocol`, `terminal_interface`, `config_management`, `metrics` | Core infrastructure |
-| Core | `coding`, `static_analysis`, `llm`, `git_operations`, `security`, `data_visualization` | Primary functionality |
-| Service | `build_synthesis`, `documentation`, `api`, `ci_cd_automation`, `containerization`, `database_management` | Higher-level services |
+| Foundation | `logging_monitoring`, `environment_setup`, `model_context_protocol`, `terminal_interface`, `config_management`, `telemetry` | Core infrastructure |
+| Core | `coding`, `llm`, `git_operations`, `security`, `data_visualization`, `performance` | Primary functionality |
+| Service | `ci_cd_automation`, `documentation`, `api`, `containerization`, `database_management`, `orchestrator` | Higher-level services |
 | Specialized | `agents`, `cerebrum`, `meme`, `fpf`, `spatial`, `evolutionary_ai`, `quantum` | Advanced features |
 
 ### Key Patterns

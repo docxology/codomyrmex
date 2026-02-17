@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 104 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 78 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -61,16 +61,15 @@ Codomyrmex is a modular development platform with 104 specialized modules organi
 
 2. **Core Layer** - Primary capabilities:
    - `agents` - AI agent framework integrations
-   - `static_analysis` - Code quality, linting, security scanning
+   - `static_analysis` - Code quality, linting, security scanning (in `coding/static_analysis/`)
    - `coding` - Code execution sandbox and review
    - `llm` - LLM infrastructure (Ollama, providers)
-   - `pattern_matching` - Code pattern recognition
+   - `pattern_matching` - Code pattern recognition (in `coding/pattern_matching/`)
    - `git_operations` - Version control automation
 
 3. **Service Layer** - Higher-level orchestration:
-   - `build_synthesis` - Multi-language build automation
+   - `ci_cd_automation` - Pipeline management (includes build automation)
    - `documentation` - Doc generation
-   - `ci_cd_automation` - Pipeline management
    - `containerization` - Docker/K8s management
    - `orchestrator` - Workflow execution
 
@@ -99,12 +98,13 @@ Each module is self-contained with standard structure:
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 18+ tools (15 core + 3 universal proxy + dynamic discovery), 2 resources, 5 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools; the Codomyrmex PAI Skill curates 53 for MCP, with 2 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
 - **Bridge Doc**: [`/PAI.md`](PAI.md) is the authoritative document mapping the PAI Algorithm phases to codomyrmex modules
 - **Agent Mapping**: PAI subagent types (Engineer, Architect, QATester) consume codomyrmex agent providers and tools — see [`src/codomyrmex/agents/PAI.md`](src/codomyrmex/agents/PAI.md)
+- **Detailed Reference**: [`docs/pai/`](docs/pai/) — Architecture, tools, API, workflows for PAI-Codomyrmex integration
 
 Key PAI system references (in `~/.claude/skills/PAI/`):
 

@@ -4,8 +4,8 @@ Provides adapters that bridge the ClaudeClient with other Codomyrmex modules,
 enabling seamless integration for code editing, LLM operations, and code execution.
 """
 
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from codomyrmex.agents.core import AgentIntegrationAdapter, AgentRequest
 from codomyrmex.logging_monitoring import get_logger

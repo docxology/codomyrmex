@@ -27,7 +27,32 @@ except ImportError:
 # Submodule exports
 from . import evaluation, training
 
-# Import evaluation components
+# Import evaluation components (scorer/benchmark/quality + metrics patterns)
+try:
+    from .evaluation import (
+        BenchmarkCase,
+        BenchmarkResult,
+        BenchmarkSuite,
+        CompositeScorer,
+        ContainsScorer,
+        DimensionScore,
+        ExactMatchScorer,
+        LengthScorer,
+        QualityAnalyzer,
+        QualityDimension,
+        QualityReport,
+        RegexScorer,
+        Scorer,
+        SuiteResult,
+        WeightedScorer,
+        analyze_quality,
+        create_default_scorer,
+    )
+    _EVALUATION_AVAILABLE = True
+except ImportError:
+    _EVALUATION_AVAILABLE = False
+
+# Metric classes (always available — pure Python, no external deps)
 from .evaluation import (
     AccuracyMetric,
     AUCROCMetric,
@@ -293,8 +318,8 @@ def cli_commands():
                 "  Available pipelines:\n"
                 "    - Dataset preparation (Dataset, DatasetSanitizer)\n"
                 "    - Fine-tuning (FineTuningJob)\n"
-                "    - Evaluation (ModelEvaluator, Evaluator)\n"
-                f"  Task types: {', '.join(tt.value if hasattr(tt, 'value') else str(tt) for tt in TaskType)}"
+                "    - Evaluation (Scorer, BenchmarkSuite, QualityAnalyzer)\n"
+                f"  Evaluation available: {_EVALUATION_AVAILABLE}"
             ),
         },
         "status": {
@@ -303,7 +328,7 @@ def cli_commands():
                 f"Model Ops v{__version__}\n"
                 f"  Datasets submodule: {'available' if datasets is not None else 'not available'}\n"
                 f"  Fine-tuning submodule: {'available' if fine_tuning is not None else 'not available'}\n"
-                "  Evaluation submodule: available\n"
+                f"  Evaluation submodule: {'available' if _EVALUATION_AVAILABLE else 'not available'}\n"
                 "  Training submodule: available\n"
                 "  Status: ready"
             ),
@@ -331,7 +356,28 @@ __all__ = [
     "DatasetSanitizer",
     "FineTuningJob",
     "Evaluator",
-    # Evaluation components
+    # Evaluation components (scorer/benchmark/quality)
+    "Scorer",
+    "ExactMatchScorer",
+    "ContainsScorer",
+    "LengthScorer",
+    "RegexScorer",
+    "CompositeScorer",
+    "WeightedScorer",
+    "create_default_scorer",
+    "BenchmarkCase",
+    "BenchmarkResult",
+    "BenchmarkSuite",
+    "SuiteResult",
+    "QualityDimension",
+    "DimensionScore",
+    "QualityReport",
+    "QualityAnalyzer",
+    "analyze_quality",
+    # Metric functions
+    "exact_match_metric",
+    "length_ratio_metric",
+    # Metric classes
     "TaskType",
     "EvaluationResult",
     "Metric",
@@ -347,9 +393,6 @@ __all__ = [
     "AUCROCMetric",
     "ModelEvaluator",
     "create_evaluator",
-    # Metric functions
-    "exact_match_metric",
-    "length_ratio_metric",
 ]
 
 __version__ = "0.1.0"

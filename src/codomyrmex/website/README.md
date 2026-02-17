@@ -43,7 +43,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 |-------|-------------|
 | `WebsiteGenerator` | Generate static site from Jinja2 templates |
 | `DataProvider` | Aggregate data from Codomyrmex modules |
-| `WebsiteServer` | HTTP server with 21 API endpoints |
+| `WebsiteServer` | HTTP server with 22 API endpoints |
 
 ## API Endpoints
 

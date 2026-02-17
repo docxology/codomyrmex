@@ -1,9 +1,9 @@
 # Codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.2 | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 104 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 78 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 104 independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 78 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -68,7 +68,7 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | Guide | Description |
 |-------|-------------|
 | [**Architecture**](docs/project/architecture.md) | System design and principles |
-| [**Module Overview**](docs/modules/overview.md) | Understanding the 104 module system |
+| [**Module Overview**](docs/modules/overview.md) | Understanding the 78 module system |
 | [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
 | [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
 
@@ -140,7 +140,7 @@ uv run scripts/documentation/examples/advanced_workflow.py
 
 **Quick Links:**
 
-- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 104 modules
+- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 78 modules
 - 📖 **[Full Documentation](docs/)** - Complete documentation
 - 🎯 **[Module Documentation](docs/modules/)** - Per-module guides
 - 💻 **[Scripts](scripts/)** - Utility and automation scripts
@@ -853,7 +853,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **104 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **78 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -1021,7 +1021,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/static_analysis/     # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 104 modules total
+│   └── ...                  # 78 modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -1499,9 +1499,9 @@ pie title Module Development Status (February 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 104 modules
+- **Lines of Code**: ~50K+ across 78 modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 104 core modules
+- **Module Count**: 78 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

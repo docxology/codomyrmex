@@ -52,13 +52,11 @@ graph TB
     end
 
     subgraph "Module Layer - Analysis & Quality"
-        StaticAnalysis["Static<br/>Analysis"]
-        PatternMatch["Pattern<br/>Matching"]
-        CodeExec["Code Execution<br/>Sandbox"]
+        CodeExec["Coding<br/>(static_analysis, pattern_matching)"]
     end
 
     subgraph "Module Layer - Build & Deploy"
-        Build["Build<br/>Synthesis"]
+        CICD["CI/CD Automation<br/>(includes build)"]
         Git["Git<br/>Operations"]
         Docs["Documentation<br/>Generation"]
     end
@@ -80,25 +78,22 @@ graph TB
 
     %% Service Layer connections
     Discovery --> AICode
-    Discovery --> StaticAnalysis
+    Discovery --> CodeExec
     Status --> DataViz
     Terminal --> Shell
 
     %% Module interconnections
     AICode --> CodeExec
     AICode --> MCP
-    StaticAnalysis --> Build
-    PatternMatch --> AICode
-    Build --> Git
-    Build --> Docs
+    CodeExec --> CICD
+    CICD --> Git
+    CICD --> Docs
 
     %% Foundation connections
     AICode --> Logging
-    StaticAnalysis --> Logging
     CodeExec --> Logging
     DataViz --> Logging
-    PatternMatch --> Logging
-    Build --> Logging
+    CICD --> Logging
     Git --> Logging
     Docs --> Logging
 
@@ -143,10 +138,8 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 **Purpose**: Primary capabilities that users directly interact with
 
 - **`agents`**: AI-powered code generation and modification
-- **`static_analysis`**: Code quality analysis and security scanning
-- **`coding`**: Safe code execution environment
+- **`coding`**: Safe code execution environment (includes `static_analysis/` and `pattern_matching/` sub-modules)
 - **`data_visualization`**: Chart and plot generation
-- **`pattern_matching`**: Code pattern analysis and recognition
 - **`git_operations`**: Git workflow automation
 - **`security`**: Security vulnerability scanning and compliance
 - **`llm/ollama`**: Local LLM integration via Ollama
@@ -156,8 +149,7 @@ The Codomyrmex architecture follows a **layered approach** with clear separation
 **Purpose**: Higher-level services that orchestrate core modules
 
 - **`documentation`**: Documentation website generation
-- **`build_synthesis`**: Build automation and code scaffolding
-- **`ci_cd_automation`**: CI/CD pipeline management and deployment
+- **`ci_cd_automation`**: CI/CD pipeline management, build automation, and deployment (includes `build/` sub-module)
 - **`containerization`**: Docker and Kubernetes container management
 
 ### Integration Modules

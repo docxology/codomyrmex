@@ -6,10 +6,13 @@ Rate limiting with fixed window, sliding window, and token bucket algorithms.
 
 from .models import RateLimitExceeded, RateLimitResult
 from .limiters import (
+    CompositeRateLimiter,
     FixedWindowLimiter,
     RateLimiter,
+    RateLimiterMiddleware,
     SlidingWindowLimiter,
     TokenBucketLimiter,
+    create_rate_limiter,
 )
 from .strategies import QuotaManager, create_limiter
 
@@ -53,6 +56,9 @@ __all__ = [
     "FixedWindowLimiter",
     "SlidingWindowLimiter",
     "TokenBucketLimiter",
+    "CompositeRateLimiter",
+    "RateLimiterMiddleware",
+    "create_rate_limiter",
     "QuotaManager",
     "create_limiter",
     # CLI integration

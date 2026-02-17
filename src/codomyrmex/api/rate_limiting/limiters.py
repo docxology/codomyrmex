@@ -31,6 +31,34 @@ class RateLimiter(ABC):
         """Reset quota for a key."""
         pass
 
+    def consume(self, key: str, cost: int = 1, *, tokens: int | None = None) -> RateLimitResult:
+        """Consume quota, returning a result instead of raising.
+
+        This is a convenience wrapper around acquire() that catches
+        RateLimitExceeded and returns a denied result instead.
+
+        Args:
+            key: Rate limit key.
+            cost: Number of units to consume.
+            tokens: Alias for cost (for token bucket style usage).
+
+        Returns:
+            RateLimitResult with allowed=True if successful, or
+            allowed=False if the limit was exceeded.
+        """
+        effective_cost = tokens if tokens is not None else cost
+        try:
+            return self.acquire(key, effective_cost)
+        except RateLimitExceeded as e:
+            check_result = self.check(key, effective_cost)
+            return RateLimitResult(
+                allowed=False,
+                remaining=check_result.remaining,
+                limit=check_result.limit,
+                reset_at=check_result.reset_at,
+                retry_after=e.retry_after,
+            )
+
 
 class FixedWindowLimiter(RateLimiter):
     """Fixed window rate limiter."""
@@ -182,10 +210,12 @@ class TokenBucketLimiter(RateLimiter):
         capacity: int,
         refill_rate: float,
         refill_interval: float = 1.0,
+        initial_tokens: int | None = None,
     ):
         self.capacity = capacity
         self.refill_rate = refill_rate
         self.refill_interval = refill_interval
+        self._initial_tokens = initial_tokens if initial_tokens is not None else capacity
         self._buckets: dict[str, tuple[float, float]] = {}
         self._lock = threading.Lock()
 
@@ -193,11 +223,16 @@ class TokenBucketLimiter(RateLimiter):
         """Get current token count for key."""
         now = time.time()
         if key not in self._buckets:
-            return float(self.capacity)
+            # Initialize the bucket on first access
+            self._buckets[key] = (float(self._initial_tokens), now)
+            return float(self._initial_tokens)
         tokens, last_update = self._buckets[key]
         elapsed = now - last_update
         refilled = (elapsed / self.refill_interval) * self.refill_rate
-        return min(self.capacity, tokens + refilled)
+        current = min(self.capacity, tokens + refilled)
+        # Update the stored state so future calls see the refill
+        self._buckets[key] = (current, now)
+        return current
 
     def check(self, key: str, cost: int = 1) -> RateLimitResult:
         """Check without consuming."""
@@ -233,3 +268,115 @@ class TokenBucketLimiter(RateLimiter):
         with self._lock:
             if key in self._buckets:
                 del self._buckets[key]
+
+
+class CompositeRateLimiter(RateLimiter):
+    """Composite rate limiter that enforces multiple limiters simultaneously.
+
+    A request is only allowed if ALL constituent limiters allow it.
+    Useful for applying different rate limit policies together
+    (e.g., per-second + per-minute + per-hour limits).
+    """
+
+    def __init__(self, limiters: dict[str, RateLimiter]):
+        """Initialize composite rate limiter.
+
+        Args:
+            limiters: Dictionary of name → RateLimiter instances.
+        """
+        self.limiters = limiters
+
+    def check(self, key: str, cost: int = 1) -> RateLimitResult:
+        """Check all limiters without consuming quota.
+
+        Returns the most restrictive result (lowest remaining).
+        """
+        most_restrictive = None
+        for _name, limiter in self.limiters.items():
+            result = limiter.check(key, cost)
+            if most_restrictive is None or result.remaining < most_restrictive.remaining:
+                most_restrictive = result
+        if most_restrictive is None:
+            return RateLimitResult(allowed=True, remaining=0, limit=0)
+        return most_restrictive
+
+    def acquire(self, key: str, cost: int = 1) -> RateLimitResult:
+        """Acquire quota from all limiters.
+
+        All limiters must allow the request. If any raises
+        RateLimitExceeded, the exception propagates.
+        """
+        results = []
+        for _name, limiter in self.limiters.items():
+            results.append(limiter.acquire(key, cost))
+        # Return the most restrictive result
+        if not results:
+            return RateLimitResult(allowed=True, remaining=0, limit=0)
+        return min(results, key=lambda r: r.remaining)
+
+    def reset(self, key: str) -> None:
+        """Reset all limiters for key."""
+        for limiter in self.limiters.values():
+            limiter.reset(key)
+
+
+class RateLimiterMiddleware:
+    """Middleware wrapper around any RateLimiter.
+
+    Provides a simplified interface: ``check()`` acquires a token
+    and returns a RateLimitResult (instead of raising), while
+    ``would_allow()`` inspects without consuming.
+    """
+
+    def __init__(self, limiter: RateLimiter):
+        self.limiter = limiter
+
+    def check(self, key: str, cost: int = 1) -> RateLimitResult:
+        """Acquire quota, returning a result instead of raising."""
+        try:
+            return self.limiter.acquire(key, cost)
+        except RateLimitExceeded:
+            result = self.limiter.check(key, cost)
+            return RateLimitResult(
+                allowed=False,
+                remaining=result.remaining,
+                limit=result.limit,
+                reset_at=result.reset_at,
+            )
+
+    def would_allow(self, key: str, cost: int = 1) -> bool:
+        """Check whether a request would be allowed without consuming."""
+        result = self.limiter.check(key, cost)
+        return result.allowed
+
+    def reset(self, key: str) -> None:
+        """Reset limiter state for key."""
+        self.limiter.reset(key)
+
+
+def create_rate_limiter(strategy: str, **kwargs) -> RateLimiter:
+    """Factory function to create a rate limiter by strategy name.
+
+    Args:
+        strategy: One of 'fixed_window', 'sliding_window', 'token_bucket'.
+        **kwargs: Strategy-specific parameters.
+
+    Returns:
+        Configured RateLimiter instance.
+
+    Raises:
+        ValueError: If strategy is not recognized.
+    """
+    factories = {
+        "fixed_window": FixedWindowLimiter,
+        "sliding_window": SlidingWindowLimiter,
+        "token_bucket": TokenBucketLimiter,
+    }
+    if strategy not in factories:
+        raise ValueError(
+            f"Unknown limiter type: {strategy!r}. "
+            f"Available: {', '.join(factories)}"
+        )
+    return factories[strategy](**kwargs)
+
+

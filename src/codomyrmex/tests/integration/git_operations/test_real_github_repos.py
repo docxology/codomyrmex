@@ -38,7 +38,7 @@ from codomyrmex.git_operations import (
 )
 
 
-def test_repository(repo_info, base_dir):
+def _run_repo_test(repo_info, base_dir):
     """Test all operations on a single repository."""
     print(f'\n🔄 TESTING {repo_info["name"].upper()} ({repo_info["type"]})')
     print('=' * 50)

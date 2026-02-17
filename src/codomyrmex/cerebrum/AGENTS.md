@@ -1,5 +1,7 @@
 # Agent Guidelines - Cerebrum
 
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Cognitive architecture for reasoning, planning, and decision-making.

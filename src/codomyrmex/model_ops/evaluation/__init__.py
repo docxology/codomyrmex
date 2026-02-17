@@ -59,7 +59,6 @@ except ImportError as _exc:
     _AVAILABLE = False
     _import_error = str(_exc)
 
-    # Provide informative stubs so imports don't break at module level
     def _not_available(*args, **kwargs):
         raise ImportError(
             f"model_evaluation module is not available: {_import_error}"
@@ -85,6 +84,25 @@ except ImportError as _exc:
     QualityAnalyzer = None
     analyze_quality = _not_available
 
+# Metrics module (classification/regression evaluation)
+from .metrics import (
+    AccuracyMetric,
+    AUCROCMetric,
+    ConfusionMatrix,
+    EvaluationResult,
+    F1Metric,
+    MAEMetric,
+    Metric,
+    ModelEvaluator,
+    MSEMetric,
+    PrecisionMetric,
+    R2Metric,
+    RecallMetric,
+    RMSEMetric,
+    TaskType,
+    create_evaluator,
+)
+
 
 __all__ = [
     # Scorers
@@ -107,6 +125,23 @@ __all__ = [
     "QualityReport",
     "QualityAnalyzer",
     "analyze_quality",
+    # Metrics
+    "TaskType",
+    "EvaluationResult",
+    "Metric",
+    "AccuracyMetric",
+    "PrecisionMetric",
+    "RecallMetric",
+    "F1Metric",
+    "MSEMetric",
+    "MAEMetric",
+    "RMSEMetric",
+    "R2Metric",
+    "AUCROCMetric",
+    "ConfusionMatrix",
+    "ModelEvaluator",
+    "create_evaluator",
 ]
 
 __version__ = "0.1.0"
+

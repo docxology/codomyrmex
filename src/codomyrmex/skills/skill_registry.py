@@ -3,9 +3,14 @@
 Handles indexing, categorizing, and searching skills.
 """
 
+from __future__ import annotations
+
 import logging
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from codomyrmex.skills.skill_loader import SkillLoader
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -18,7 +23,7 @@ except ImportError:
 class SkillRegistry:
     """Indexes and categorizes skills for search and discovery."""
 
-    def __init__(self, skill_loader: "SkillLoader"):
+    def __init__(self, skill_loader: SkillLoader):
         """
         Initialize SkillRegistry.
 

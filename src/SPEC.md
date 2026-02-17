@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 104 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 78 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
@@ -67,14 +67,12 @@ graph TD
         MCP[model_context_protocol]
         Terminal[terminal_interface]
         Config[config_management]
-        Metrics[metrics]
+        Telemetry[telemetry]
     end
 
     subgraph "Core Layer"
-        Static[static_analysis]
         Coding[coding]
         Viz[data_visualization]
-        Pattern[pattern_matching]
         Git[git_operations]
         Security[security]
         LLM[llm]
@@ -82,7 +80,6 @@ graph TD
     end
 
     subgraph "Service Layer"
-        Build[build_synthesis]
         Docs[documentation]
         API[api]
         CICD[ci_cd_automation]
@@ -105,9 +102,7 @@ graph TD
     Package --> Env
     Package --> MCP
     Package --> Terminal
-    Package --> Static
     Package --> Coding
-    Package --> Build
     Package --> Docs
 ```
 
@@ -119,11 +114,18 @@ The `src/` directory contains:
 - `__init__.py` - Package initialization and re-exports
 - Documentation files (README.md, AGENTS.md, SPEC.md)
 
-The `codomyrmex/` package contains:
-
-- 104 module subdirectories organized by layer
+- `codomyrmex/` - Main Python package with all modules
 - Package-level files (**init**.py, cli.py, exceptions.py)
 - Comprehensive documentation for each module
+
+> **Note**: Several capabilities that were previously planned as standalone modules
+> have been consolidated into their parent modules:
+>
+> - `static_analysis` → `coding/static_analysis/`
+> - `pattern_matching` → `coding/pattern_matching/`
+> - `build_synthesis` → `ci_cd_automation/build/`
+> - `metrics` → `telemetry/`
+> - `i18n` → `utils/i18n/`
 
 ## Module Discovery
 
@@ -134,30 +136,28 @@ The `codomyrmex/` package contains:
 - `model_context_protocol` - MCP integration
 - `terminal_interface` - CLI utilities
 - `config_management` - Configuration management
-- `metrics` - Metrics collection
+- `telemetry` - Telemetry, tracing, metrics
 
 ### Core Layer Modules
 
-- `static_analysis` - Code quality analysis
-- `coding` - Code execution and sandboxing
-- `data_visualization` - Charts and plots
-- `pattern_matching` - Pattern recognition
+- `coding` - Code execution, static analysis (`coding/static_analysis/`), pattern matching (`coding/pattern_matching/`)
+- `data_visualization` - Charts, plots, and visualization
 - `git_operations` - Git workflows
-- `security` - Security scanning
-- `llm` - LLM infrastructure
+- `security` - Security scanning (includes governance)
+- `llm` - LLM infrastructure (includes inference optimization, multimodal)
 - `performance` - Performance monitoring
 - `cache`, `compression`, `encryption`, `networking`, `serialization`
 - `scrape`, `documents` - Web scraping and document processing
 
 ### Service Layer Modules
 
-- `build_synthesis` - Build automation
+- `ci_cd_automation` - CI/CD pipelines (includes build automation at `ci_cd_automation/build/`)
 - `documentation` - Documentation generation
 - `api` - API infrastructure
-- `ci_cd_automation` - CI/CD pipelines
 - `containerization` - Docker management
-- `database_management` - Database operations
-- `logistics` - Workflow orchestration
+- `database_management` - Database operations, migrations, lineage
+- `orchestrator` - Workflow orchestration (includes scheduling)
+- `logistics` - Workflow logistics
 - `auth`, `cloud` - Authentication and cloud services
 
 ### Specialized Layer Modules

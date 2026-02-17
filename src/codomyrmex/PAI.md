@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — src/codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -138,7 +138,7 @@ graph TB
         PM["pattern_matching, search, documents"]
         CB["cerebrum, agents/theory, graph_rag"]
         OR["orchestrator, logistics"]
-        CE["agents/ai_code_editing, coding, build_synthesis"]
+        CE["agents/ai_code_editing, coding, ci_cd_automation/build"]
         AG["agents (all providers), git_operations"]
         SA["static_analysis, security, testing"]
         AM["agentic_memory, logging_monitoring"]
@@ -160,7 +160,7 @@ graph TB
 | **OBSERVE** | `pattern_matching`, `search`, `documents`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
 | **THINK** | `cerebrum`, `agents/theory/`, `graph_rag` | Case-based reasoning, deliberative architecture, knowledge graphs |
 | **PLAN** | `orchestrator`, `logistics` | DAG-based workflow construction, scheduling |
-| **BUILD** | `agents/ai_code_editing/`, `coding`, `build_synthesis` | Code generation, sandbox execution, multi-language builds |
+| **BUILD** | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build` | Code generation, sandbox execution, multi-language builds |
 | **EXECUTE** | `agents/` (all providers), `coding`, `git_operations` | Agent dispatch, sandboxed execution, version control |
 | **VERIFY** | `static_analysis`, `security`, `testing` | Code quality, vulnerability scanning, test execution |
 | **LEARN** | `agentic_memory`, `logging_monitoring` | Long-term memory capture, structured logging |

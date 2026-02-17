@@ -231,6 +231,10 @@ class ConsoleExporter(SpanExporter):
             else:
                 print(json.dumps(data, default=str))
 
+    def shutdown(self) -> None:
+        """No-op shutdown for console exporter."""
+        pass
+
 
 class InMemoryExporter(SpanExporter):
     """Store spans in memory (useful for testing)."""
@@ -258,6 +262,10 @@ class InMemoryExporter(SpanExporter):
         """Clear all spans."""
         with self._lock:
             self.spans.clear()
+
+    def shutdown(self) -> None:
+        """Clear spans on shutdown."""
+        self.clear()
 
 
 # Thread-local storage for context

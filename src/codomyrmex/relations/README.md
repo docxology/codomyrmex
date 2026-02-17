@@ -20,11 +20,19 @@ uv add codomyrmex
 - **`Interaction`** — Record of communication
 - **`Deal`** — Business opportunity tracking
 
+### UOR (Universal Object Reference)
+
+- **`PrismEngine`** — PRISM triadic coordinate engine
+- **`UOREntity`** — Content-addressed entity with structural identity
+- **`EntityManager`** — Entity CRUD + similarity search
+- **`UORGraph`** — Content-addressed relationship graph
+
 ### Submodules
 
 - `crm/` — Contact management
 - `social_media/` — Platform integration
 - `network_analysis/` — Social graph processing
+- `uor/` — Universal Object Reference (PRISM coordinates, content-addressed entities)
 
 ## Quick Start
 

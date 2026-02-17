@@ -8,7 +8,7 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FuturesTimeoutError
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -103,10 +103,10 @@ class SkillExecutor:
             future = executor.submit(self.execute, skill, **kwargs)
             try:
                 return future.result(timeout=timeout)
-            except FuturesTimeoutError:
+            except FuturesTimeoutError as err:
                 raise SkillExecutionError(
                     f"Skill {skill_name} timed out after {timeout}s"
-                )
+                ) from err
 
     def execute_chain(self, skills: list, **kwargs) -> Any:
         """

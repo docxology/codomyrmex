@@ -1,122 +1,95 @@
 # Codomyrmex Agents — src/codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Main package directory containing 107 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 78 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Active Components
 
-- `PAI.md` – Project file
-- `README.md` – Project file
-- `SPEC.md` – Project file
-- `__init__.py` – Project file
-- `accessibility/` – Accessibility testing and compliance
+- `PAI.md` – Personal AI Infrastructure documentation
+- `README.md` – Package overview
+- `SPEC.md` – Technical specification
+- `__init__.py` – Package initialization with lazy imports
 - `agentic_memory/` – Memory systems for AI agents
-- `agents/` – Agentic framework integrations
+- `agents/` – Agentic framework integrations (Jules, Claude, Codex, PAI)
 - `api/` – API infrastructure and resilience
 - `audio/` – Audio processing and transcription
 - `auth/` – Authentication and authorization
 - `bio_simulation/` – Biological simulation (Ant Colony)
-- `build_synthesis/` – Build automation
-- `cache/` – Caching infrastructure
-- `cerebrum/` – Case-based reasoning
-- `chaos_engineering/` – Chaos engineering
-- `ci_cd_automation/` – CI/CD pipelines
+- `cache/` – Caching infrastructure (multi-strategy invalidation)
+- `cerebrum/` – Case-based reasoning and Bayesian inference
+- `ci_cd_automation/` – CI/CD pipelines (includes build automation, formerly `build_synthesis`)
 - `cli/` – Command line interface
-- `cloud/` – Cloud provider integration
-- `coding/` – Code execution and review
-- `collaboration/` – Team collaboration
+- `cloud/` – Cloud provider integration (includes cost management)
+- `coding/` – Code execution, review, static analysis, pattern matching (includes formerly standalone `static_analysis/`, `pattern_matching/`, `tree_sitter/`)
+- `collaboration/` – Team collaboration and multi-agent sessions
 - `compression/` – Data compression
-- `concurrency/` – Concurrency utilities
+- `concurrency/` – Concurrency utilities, distributed sync, rate limiting
 - `config_management/` – Configuration management
-- `containerization/` – Container management
-- `cost_management/` – Cost tracking and budgets
-- `dark/` – Dark patterns and adversarial analysis
-- `data_lineage/` – Data lineage tracking
-- `data_visualization/` – Charts and plots
-- `database_management/` – Database operations
+- `containerization/` – Container management (Docker/K8s)
+- `crypto/` – Cryptographic operations
+- `dark/` – Dark mode and PDF processing
+- `data_visualization/` – Charts, plots, and visualization (includes formerly standalone `visualization/`)
+- `database_management/` – Database operations, migrations, backups, lineage
 - `defense/` – Active fiduciary defense
-- `dependency_injection/` – Dependency injection framework
-- `deployment/` – Deployment automation
-- `documentation/` – Documentation generation
-- `documents/` – Document processing
-- `edge_computing/` – Edge computing scenarios
-- `education/` – Curriculum and tutoring
-- `embodiment/` – Physical embodiment
-- `encryption/` – Data encryption
-- `environment_setup/` – Environment validation
-- `events/` – Event system
+- `dependency_injection/` – IoC container and lifecycle
+- `deployment/` – Deployment automation (blue-green, canary, rolling)
+- `documentation/` – Documentation generation (includes education content)
+- `documents/` – Document processing and RAG chunking
+- `edge_computing/` – Edge deployment and IoT scenarios
+- `embodiment/` – Physical/robotic integration
+- `encryption/` – Data encryption and digital signing
+- `environment_setup/` – Environment validation and setup
+- `events/` – Event system, pub/sub, streaming, notifications
 - `evolutionary_ai/` – Evolutionary algorithms
 - `examples/` – Usage examples
-- `exceptions/` – Exception hierarchy
+- `exceptions/` – Centralized exception hierarchy
 - `feature_flags/` – Feature flag management
-- `feature_store/` – ML feature storage
 - `finance/` – Financial ledger and treasury
-- `fpf/` – Functional programming framework
-- `git_operations/` – Git automation
-- `governance/` – Legal contracts and policy
+- `fpf/` – Functional Programming Framework
+- `git_operations/` – Git automation and merge resolution
 - `graph_rag/` – Graph-based RAG
-- `i18n/` – Internationalization
 - `ide/` – IDE integration
 - `identity/` – Identity and Persona Management
-- `inference_optimization/` – Inference caching/batching
-- `llm/` – LLM infrastructure
+- `llm/` – LLM infrastructure (includes inference optimization, multimodal)
 - `logging_monitoring/` – Centralized logging
-- `logistics/` – Workflow logistics
+- `logistics/` – Workflow logistics and orchestration
+- `maintenance/` – Dependency analysis and project maintenance
 - `market/` – Anonymous marketplaces
 - `meme/` – Unified Memetic Warfare & Information Dynamics
-- `metrics/` – Metrics collection
-- `migration/` – Data migration
-- `model_context_protocol/` – MCP interfaces
-- `model_evaluation/` – Model quality evaluation
-- `model_ops/` – ML model operations
-- `model_registry/` – Model versioning
+- `model_context_protocol/` – MCP interfaces and auto-discovery
+- `model_ops/` – ML model operations (includes evaluation, registry, feature store, optimization)
 - `module_template/` – Module scaffolding
-- `multimodal/` – Multimodal processing
-- `networking/` – Network utilities
-- `notification/` – Notification channels
-- `observability_dashboard/` – Dashboards and alerts
-- `orchestrator/` – Workflow orchestration
-- `pattern_matching/` – Code pattern analysis
-- `performance/` – Performance monitoring
+- `networking/` – Network utilities (includes service mesh)
+- `orchestrator/` – Workflow orchestration (includes scheduling)
+- `performance/` – Performance monitoring and profiling
 - `physical_management/` – Physical systems
 - `plugin_system/` – Plugin architecture
 - `privacy/` – Data minimization and mixnets
-- `prompt_engineering/` – Prompt design and optimization
-- `prompt_testing/` – Prompt evaluation
+- `prompt_engineering/` – Prompt design, optimization, and testing
 - `quantum/` – Quantum computing simulation
-- `rate_limiting/` – Rate limiting utilities
-- `relations/` – CRM and Social Graph
-- `scheduler/` – Task scheduling
-- `schemas/` – Data schemas
+- `relations/` – CRM and Social Graph (includes UOR)
 - `scrape/` – Web scraping
 - `search/` – Search and indexing
-- `security/` – Security scanning
+- `security/` – Security scanning (includes governance)
 - `serialization/` – Data serialization
-- `service_mesh/` – Service mesh networking
 - `skills/` – Agent skills library
-- `smart_contracts/` – Smart contract utilities
 - `spatial/` – 3D/4D modeling
-- `static_analysis/` – Code quality
-- `streaming/` – Data streaming
 - `system_discovery/` – Module discovery
-- `telemetry/` – Telemetry and tracing
+- `telemetry/` – Telemetry, tracing, metrics, dashboards
 - `templating/` – Template management
 - `terminal_interface/` – Terminal UI
-- `testing/` – Test utilities
-- `tests/` – Test suites
+- `testing/` – Test utilities (includes chaos engineering, workflow testing)
+- `tests/` – Test suites (unit and integration)
 - `tool_use/` – LLM tool usage
-- `maintenance/` – Dependency analysis and project maintenance
-- `utils/` – General utilities
-- `validation/` – Input validation
+- `utils/` – General utilities (includes i18n, hashing, retry)
+- `validation/` – Input validation (includes schemas)
 - `vector_store/` – Vector database abstraction
 - `video/` – Video processing
-- `visualization/` – Central Visualization Module and Dashboarding
-- `wallet/` – Self-custody wallets
-- `website/` – Website generation
-- `workflow_testing/` – Workflow testing
+- `wallet/` – Self-custody wallets (includes smart contracts)
+- `website/` – Website generation (includes accessibility)
 
 ## Operating Contracts
 
@@ -124,7 +97,20 @@ Main package directory containing 107 specialized modules for the Codomyrmex pla
 - Ensure Model Context Protocol interfaces remain available for sibling agents.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
-## Navigation Links
+## Signposting
 
-- **📁 Parent Directory**: [src](../README.md) - Parent directory documentation
-- **🏠 Project Root**: ../../README.md - Main project documentation
+### Document Hierarchy
+
+- **Self**: [AGENTS.md](AGENTS.md) — Module coordination hub
+- **Parent**: [src/AGENTS.md](../AGENTS.md) — Source directory coordination
+
+### Sibling Documents
+
+- [README.md](README.md) — Package overview
+- [SPEC.md](SPEC.md) — Technical specification
+- [PAI.md](PAI.md) — Personal AI Infrastructure
+
+### Navigation Links
+
+- **📁 Parent Directory**: [src](../README.md)
+- **🏠 Project Root**: [../../README.md](../../README.md)

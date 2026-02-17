@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Model Context Protocol Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -95,7 +95,7 @@ All built-in tools delegate to `tools.py` implementations with real functionalit
 
 ### Discovered Tools (~18) — From MCP Specifications
 
-Additional tools are auto-discovered from `MCP_TOOL_SPECIFICATION.md` files across all 106 modules. These are prefixed with `{module}__` to avoid collisions (e.g., `git_operations__git_status`). Tools with matching entries in `_SPEC_TOOL_IMPLEMENTATIONS` are wired to real `tools.py` functions; others return structured metadata as spec-only placeholders.
+Additional tools are auto-discovered from `MCP_TOOL_SPECIFICATION.md` files across all modules. These are prefixed with `{module}__` to avoid collisions (e.g., `git_operations__git_status`). Tools with matching entries in `_SPEC_TOOL_IMPLEMENTATIONS` are wired to real `tools.py` functions; others return structured metadata as spec-only placeholders.
 
 ### Registered Resources
 

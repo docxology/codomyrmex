@@ -1,14 +1,16 @@
 # Personal AI Infrastructure Context: docs/modules/
 
+**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
-Comprehensive documentation hub for all 104 Codomyrmex modules. This directory contains per-module RASP documentation sets (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
+Comprehensive documentation hub for all 78 Codomyrmex modules. This directory contains per-module RASP documentation sets (README.md, AGENTS.md, SPEC.md) and system-level architecture documents that describe module relationships, dependencies, and integration patterns.
 
 ## AI Agent Guidance
 
 ### Context for Agents
 
-- **104 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
+- **78 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
 - **System-level views** — overview, relationships, dependency graph
 - **Module categories** — Foundation, AI & Intelligence, Code & Analysis, Data & Visualization, DevOps & Infrastructure, Security & Cognitive, Interface & Communication, Framework & Utilities
 
@@ -46,6 +48,7 @@ This file describes the AI context for the `docs/modules/` directory. It is dist
 | Document | Purpose |
 |----------|---------|
 | [`/PAI.md`](../../PAI.md) | **Authoritative bridge** — maps the actual PAI system (`~/.claude/skills/PAI/`) to codomyrmex modules |
+| [`docs/pai/`](../pai/) | Detailed PAI-Codomyrmex reference — architecture, tools, API, workflows |
 | `src/codomyrmex/<module>/PAI.md` | Per-module AI capabilities (RASP pattern) |
 | This file (`docs/modules/PAI.md`) | AI agent context for the documentation directory |
 

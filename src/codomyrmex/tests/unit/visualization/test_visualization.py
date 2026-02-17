@@ -36,14 +36,14 @@ from codomyrmex.data_visualization.components.text import TextBlock, CodeBlock
 @pytest.mark.unit
 def test_module_import():
     """visualization module is importable."""
-    from codomyrmex.data_visualization import visualization
+    import codomyrmex.data_visualization as visualization
     assert visualization is not None
 
 
 @pytest.mark.unit
 def test_module_exports():
     """visualization __all__ contains key classes."""
-    from codomyrmex.data_visualization import visualization
+    import codomyrmex.data_visualization as visualization
     assert "Dashboard" in visualization.__all__
     assert "Grid" in visualization.__all__
     assert "Theme" in visualization.__all__

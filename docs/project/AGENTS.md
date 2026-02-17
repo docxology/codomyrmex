@@ -25,12 +25,12 @@ Project-level documentation for architecture, contributing guidelines, and proje
 
 - Update architecture diagrams when structure changes
 - Verify contributing steps work for new contributors
-- Keep module count references at 104 (or update if modules are added/removed)
+- Keep module count references at 78 (or update if modules are added/removed)
 
 ### Key Architectural Components
 
 - **Layered Architecture**: Foundation → Core → Service → Application
-- **Module System**: 104 independent, composable modules
+- **Module System**: 78 independent, composable modules
 - **Secure Cognitive Layer**: Identity, Wallet, Defense, Market, Privacy
 
 ## Operating Contracts

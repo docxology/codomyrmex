@@ -125,11 +125,13 @@ from .pagination import (
 from .rate_limiting import (
     CompositeRateLimiter,
     FixedWindowLimiter,
+    RateLimitExceeded,
     RateLimiterMiddleware,
     RateLimitResult,
-    RateLimitStrategy,
     SlidingWindowLimiter,
     TokenBucketLimiter,
+    QuotaManager,
+    create_limiter,
     create_rate_limiter,
 )
 from .rate_limiting import (
@@ -291,7 +293,7 @@ __all__ = [
     "HMACAuthenticator",
     "create_authenticator",
     # Rate limiting
-    "RateLimitStrategy",
+    "RateLimitExceeded",
     "RateLimitResult",
     "RateLimiterBase",
     "FixedWindowLimiter",
@@ -299,6 +301,8 @@ __all__ = [
     "TokenBucketLimiter",
     "CompositeRateLimiter",
     "RateLimiterMiddleware",
+    "QuotaManager",
+    "create_limiter",
     "create_rate_limiter",
     # Circuit breaker
     "CircuitState",

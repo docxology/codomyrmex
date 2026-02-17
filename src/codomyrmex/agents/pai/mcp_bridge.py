@@ -637,11 +637,10 @@ _PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     """Scan all modules for @mcp_tool definitions AND auto-discover all public functions."""
     from codomyrmex.model_context_protocol.discovery import (
-        discover_tools,
         discover_all_public_tools,
-        DiscoveredTool,
+        discover_tools,
     )
-    
+
     # ── Phase 1: Discover @mcp_tool decorated functions ──
     scan_targets = [
         "codomyrmex.data_visualization",
@@ -658,11 +657,11 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
         "codomyrmex.data_visualization.mermaid.mermaid_generator",
         "codomyrmex.terminal_interface.utils.terminal_utils",
     ]
-    
+
     catalog = discover_tools(module_paths=scan_targets)
     tools: list[tuple[str, str, Any, dict[str, Any]]] = []
     seen_names: set[str] = set()
-    
+
     for tool in catalog.list_all():
         if tool.handler:
             tools.append((tool.name, tool.description, tool.handler, tool.input_schema))
@@ -671,7 +670,7 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     # ── Phase 2: Auto-discover ALL public functions from every module ──
     auto_tools = discover_all_public_tools()
-    
+
     for tool in auto_tools:
         if tool.name in seen_names:
             continue  # Already registered via @mcp_tool
@@ -695,7 +694,7 @@ def get_tool_registry() -> MCPToolRegistry:
         A registry with core static tools + dynamically discovered module tools.
     """
     registry = MCPToolRegistry()
-    
+
     # 1. Register Core Static Tools
     for name, description, handler, input_schema in _TOOL_DEFINITIONS:
         registry.register(
@@ -707,7 +706,7 @@ def get_tool_registry() -> MCPToolRegistry:
             },
             handler=handler,
         )
-        
+
     # 2. Register Dynamic Module Tools
     dynamic_tools = _discover_dynamic_tools()
     for name, description, handler, input_schema in dynamic_tools:
@@ -720,7 +719,7 @@ def get_tool_registry() -> MCPToolRegistry:
             },
             handler=handler,
         )
-        
+
     return registry
 
 
@@ -745,7 +744,7 @@ def create_codomyrmex_mcp_server(
     registry = get_tool_registry()
     # The server uses its own internal registry, so we copy over
     # (or ideally server accepts a pre-built registry, but standard pattern confirms manual reg)
-    
+
     for tool_name in registry.list_tools():
         tool = registry.get_tool(tool_name)
         if tool:
@@ -814,16 +813,16 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     # Check static definitions first (fast path)
     tool_map = {t[0]: t[2] for t in _TOOL_DEFINITIONS}
     handler = tool_map.get(name)
-    
+
     if handler:
         return handler(**kwargs)
-        
+
     # Fallback to dynamic discovery if not found static
     # optimization: could cache this or scan only on miss
     dynamic_tools = _discover_dynamic_tools()
     dynamic_map = {t[0]: t[2] for t in dynamic_tools}
     handler = dynamic_map.get(name)
-    
+
     if handler is None:
         all_tools = sorted(list(tool_map.keys()) + list(dynamic_map.keys()))
         raise KeyError(
@@ -852,7 +851,7 @@ def get_skill_manifest() -> dict[str, Any]:
         }
         for t in _TOOL_DEFINITIONS
     ]
-    
+
     # Merge dynamic tools
     dynamic_list = _discover_dynamic_tools()
     dynamic_tools = [
@@ -864,7 +863,7 @@ def get_skill_manifest() -> dict[str, Any]:
         }
         for t in dynamic_list
     ]
-    
+
     all_tools = static_tools + dynamic_tools
 
     return {
@@ -1003,7 +1002,7 @@ def get_total_tool_count() -> int:
 
 
 # Legacy constants for backwards compat — prefer get_total_tool_count()
-TOOL_COUNT = len(_TOOL_DEFINITIONS)  # Static base count (15)
+TOOL_COUNT = len(_TOOL_DEFINITIONS)  # Static base count (18)
 RESOURCE_COUNT = len(_RESOURCE_DEFINITIONS)
 PROMPT_COUNT = len(_PROMPT_DEFINITIONS)
 

@@ -21,23 +21,21 @@ Example::
 from __future__ import annotations
 
 import enum
-import importlib
 import json
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.agents.pai.mcp_bridge import (
-    RESOURCE_COUNT,
-    _TOOL_DEFINITIONS,
-    _RESOURCE_DEFINITIONS,
     _PROMPT_DEFINITIONS,
+    _RESOURCE_DEFINITIONS,
+    RESOURCE_COUNT,
     call_tool,
     create_codomyrmex_mcp_server,
     get_skill_manifest,
     get_tool_registry,
     get_total_tool_count,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -211,15 +209,15 @@ class TrustRegistry:
 
     def __init__(self) -> None:
         self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
-        
+
         # Initialize default state with ALL known tools (static + dynamic)
         registry = get_tool_registry()
         all_tool_names = registry.list_tools()
-        
+
         self._levels: dict[str, TrustLevel] = {}
         for name in all_tool_names:
             self._levels[name] = TrustLevel.UNTRUSTED
-            
+
         # Load persisted state if available
         self._load()
 
@@ -227,7 +225,7 @@ class TrustRegistry:
         """Load trust state from disk."""
         if not self._ledger_path.exists():
             return
-            
+
         try:
             data = json.loads(self._ledger_path.read_text())
             for name, level_val in data.items():
@@ -266,10 +264,10 @@ class TrustRegistry:
             if name in self._levels and self._levels[name] == TrustLevel.UNTRUSTED:
                 self._levels[name] = TrustLevel.VERIFIED
                 promoted.append(name)
-        
+
         if promoted:
             self._save()
-            
+
         return sorted(promoted)
 
     def trust_tool(self, tool_name: str) -> TrustLevel:
@@ -293,10 +291,10 @@ class TrustRegistry:
             if self._levels[name] != TrustLevel.TRUSTED:
                 self._levels[name] = TrustLevel.TRUSTED
                 promoted.append(name)
-        
+
         if promoted:
             self._save()
-            
+
         logger.info("All %d tools promoted to TRUSTED", len(promoted))
         return sorted(promoted)
 
@@ -575,8 +573,6 @@ __all__ = [
     "SAFE_TOOLS",
     "SAFE_TOOL_COUNT",
     "DESTRUCTIVE_TOOL_COUNT",
-    "_get_destructive_tools",
-    "_is_destructive",
     "verify_capabilities",
     "trust_tool",
     "trust_all",
