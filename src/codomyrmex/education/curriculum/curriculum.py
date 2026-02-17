@@ -157,8 +157,8 @@ class Curriculum:
                     queue.append(neighbor)
 
         # Optionally skip early modules for advanced students
-        if student_idx > 0 and len(path) > student_idx:
-            path = path[student_idx:]
+        if student_idx > 0:
+            path = path[min(student_idx, len(path)):]
 
         return path
 

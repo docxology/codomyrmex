@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Assessment &amp; Certification</h1>
+
+<div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+    <div class="card">
+        <h2>Create Exam</h2>
+        <form id="exam-form" style="display: grid; gap: 0.75rem;">
+            <div>
+                <label for="exam-curriculum">Curriculum Name</label>
+                <input id="exam-curriculum" name="curriculum_name" placeholder="e.g. Python Fundamentals" required style="display: block; width: 100%; margin-top: 0.25rem;">
+            </div>
+            <div>
+                <label for="exam-modules">Module Filter (optional, comma-separated)</label>
+                <input id="exam-modules" name="module_names" placeholder="e.g. Variables, Functions" style="display: block; width: 100%; margin-top: 0.25rem;">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Exam</button>
+        </form>
+    </div>
+
+    <div id="exam-results">
+        <div class="card">
+            <div class="card-title">Results</div>
+            <p class="empty-state">Submit an exam to see results.</p>
+        </div>
+    </div>
+</div>
+
+<div id="exam-container" style="margin-bottom: 2rem;"></div>
+
+<h2>Certificates</h2>
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h3>Generate Certificate</h3>
+    <form id="certificate-form" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+            <label for="cert-student">Student</label>
+            <input id="cert-student" name="student" placeholder="Student name" required style="display: block; margin-top: 0.25rem;">
+        </div>
+        <div>
+            <label for="cert-curriculum">Curriculum</label>
+            <input id="cert-curriculum" name="curriculum_name" placeholder="Curriculum name" required style="display: block; margin-top: 0.25rem;">
+        </div>
+        <div>
+            <label for="cert-score">Score (%)</label>
+            <input id="cert-score" name="score" type="number" min="0" max="100" step="0.1" placeholder="85.0" required style="display: block; margin-top: 0.25rem; width: 100px;">
+        </div>
+        <button type="submit" class="btn btn-primary">Generate</button>
+    </form>
+</div>
+
+<div id="certificates-list">
+    <p class="empty-state">Loading certificates...</p>
+</div>
+{% endblock %}

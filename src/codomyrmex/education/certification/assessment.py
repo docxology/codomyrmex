@@ -9,7 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
 
@@ -105,7 +105,7 @@ class Assessment:
         exam = {
             "exam_id": exam_id,
             "curriculum": self.curriculum.name,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "questions": questions,
             "total_points": sum(q["points"] for q in questions),
         }
@@ -182,7 +182,7 @@ class Assessment:
             Certificate data dict.
         """
         cert_id = str(uuid4())
-        issued_at = datetime.utcnow().isoformat()
+        issued_at = datetime.now(timezone.utc).isoformat()
         passed = score >= self.passing_score
 
         # Create a verification hash

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Content Browser - Codomyrmex{% endblock %}
+
+{% block extra_head %}
+<style>
+    .content-layout {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 1.5rem;
+        min-height: 60vh;
+    }
+    .content-sidebar {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem;
+        overflow-y: auto;
+        max-height: 70vh;
+    }
+    .content-main {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: 70vh;
+    }
+    @media (max-width: 768px) {
+        .content-layout { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Content Browser</h1>
+
+<div class="content-layout">
+    <div class="content-sidebar">
+        <h3>Files</h3>
+        <div id="content-tree">
+            <p class="empty-state">Loading file tree...</p>
+        </div>
+    </div>
+    <div class="content-main">
+        <div id="file-preview">
+            <p class="empty-state">Select a file to preview its contents.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

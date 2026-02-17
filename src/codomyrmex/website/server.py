@@ -20,6 +20,7 @@ import requests
 from codomyrmex.logging_monitoring import get_logger
 
 from .data_provider import DataProvider
+from .education_provider import EducationDataProvider
 
 logger = get_logger(__name__)
 
@@ -38,17 +39,22 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     # Class-level configuration to be set before starting the server
     root_dir: Path = Path(".")
     data_provider: DataProvider | None = None
+    education_provider: EducationDataProvider | None = None
     _test_lock = threading.Lock()
     _test_running = False
 
     def __init__(self, *args, **kwargs):
+        if WebsiteServer.education_provider is None:
+            WebsiteServer.education_provider = EducationDataProvider(
+                content_root=WebsiteServer.root_dir / "output"
+            )
         super().__init__(*args, **kwargs)
 
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         self.send_response(204)
         self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
         self.send_header('Access-Control-Max-Age', '86400')
         self.send_header('Vary', 'Origin')
@@ -85,6 +91,23 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_awareness_summary()
         elif parsed_path.path.startswith("/api/config"):
             self.handle_config_save()
+        # Education POST routes
+        elif parsed_path.path == "/api/education/curricula":
+            self.handle_curriculum_create()
+        elif parsed_path.path.startswith("/api/education/curricula/") and parsed_path.path.endswith("/modules"):
+            self.handle_module_add(parsed_path.path)
+        elif parsed_path.path == "/api/education/sessions":
+            self.handle_session_create()
+        elif parsed_path.path == "/api/education/quiz":
+            self.handle_quiz_generate()
+        elif parsed_path.path == "/api/education/quiz/answer":
+            self.handle_quiz_answer()
+        elif parsed_path.path.startswith("/api/education/exams") and parsed_path.path.endswith("/submit"):
+            self.handle_exam_submit(parsed_path.path)
+        elif parsed_path.path == "/api/education/exams":
+            self.handle_exam_create()
+        elif parsed_path.path == "/api/education/certificates":
+            self.handle_certificate_generate()
         else:
             self.send_error(404, "Endpoint not found")
 
@@ -120,6 +143,22 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_llm_config()
         elif parsed_path.path == "/api/tools":
             self.handle_tools_list()
+        # Education API routes
+        elif parsed_path.path == "/api/education/curricula":
+            self.handle_curricula_list()
+        elif parsed_path.path == "/api/education/topics":
+            self.handle_topics_list()
+        elif parsed_path.path == "/api/education/certificates":
+            self.handle_certificates_list()
+        elif parsed_path.path.startswith("/api/education/curricula/"):
+            self._dispatch_education_get(parsed_path.path, parsed_path.query)
+        elif parsed_path.path.startswith("/api/education/sessions/"):
+            self._dispatch_session_get(parsed_path.path)
+        # Content API routes
+        elif parsed_path.path == "/api/content/tree":
+            self.handle_content_tree(parsed_path.query)
+        elif parsed_path.path == "/api/content/file":
+            self.handle_content_file(parsed_path.query)
         else:
             super().do_GET()
 
@@ -558,12 +597,339 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_json_response({"error": str(e)}, status=500)
 
+    def do_PUT(self) -> None:
+        """Handle PUT requests (module updates)."""
+        if not self._validate_origin():
+            self.send_json_response({"status": "error", "message": "Origin not allowed"}, status=403)
+            return
+
+        parsed_path = urlparse(self.path)
+
+        # PUT /api/education/curricula/<name>/modules/<mod>
+        if parsed_path.path.startswith("/api/education/curricula/") and "/modules/" in parsed_path.path:
+            self.handle_module_update(parsed_path.path)
+        else:
+            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+
+    # ── Helper: read JSON body ─────────────────────────────────────
+
+    def _read_json_body(self) -> dict | None:
+        """Read and parse JSON from the request body. Returns None on error (response already sent)."""
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        if content_length == 0:
+            self.send_json_response({"status": "error", "message": "No content provided"}, status=400)
+            return None
+        try:
+            raw = self.rfile.read(content_length)
+            return json.loads(raw.decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            self.send_json_response({"status": "error", "message": "Invalid JSON"}, status=400)
+            return None
+
+    # ── Education GET dispatchers ──────────────────────────────────
+
+    def _dispatch_education_get(self, path: str, query: str) -> None:
+        """Route GET /api/education/curricula/<name>/... sub-paths."""
+        from urllib.parse import parse_qs
+
+        # Strip prefix: /api/education/curricula/<name>[/rest]
+        rest = path.replace("/api/education/curricula/", "", 1)
+        parts = rest.split("/", 1)
+        name = parts[0]
+        sub = parts[1] if len(parts) > 1 else ""
+
+        if sub == "export":
+            params = parse_qs(query)
+            fmt = params.get("format", ["json"])[0]
+            self.handle_curriculum_export(name, fmt)
+        elif sub == "learning-path":
+            params = parse_qs(query)
+            level = params.get("level", ["beginner"])[0]
+            self.handle_learning_path(name, level)
+        elif sub == "":
+            self.handle_curriculum_get(name)
+        else:
+            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+
+    def _dispatch_session_get(self, path: str) -> None:
+        """Route GET /api/education/sessions/<id>/progress."""
+        rest = path.replace("/api/education/sessions/", "", 1)
+        parts = rest.split("/", 1)
+        session_id = parts[0]
+        sub = parts[1] if len(parts) > 1 else ""
+
+        if sub == "progress":
+            self.handle_session_progress(session_id)
+        else:
+            self.send_json_response({"status": "error", "message": "Endpoint not found"}, status=404)
+
+    # ── Curriculum handlers ────────────────────────────────────────
+
+    def handle_curricula_list(self) -> None:
+        """GET /api/education/curricula — list all curricula."""
+        data = self.education_provider.list_curricula()
+        self.send_json_response({"status": "ok", "data": data})
+
+    def handle_curriculum_create(self) -> None:
+        """POST /api/education/curricula — create a curriculum."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        name = body.get("name")
+        level = body.get("level")
+        if not name:
+            self.send_json_response({"status": "error", "message": "Missing field: name"}, status=400)
+            return
+        if not level:
+            self.send_json_response({"status": "error", "message": "Missing field: level"}, status=400)
+            return
+        try:
+            result = self.education_provider.create_curriculum(name, level)
+            self.send_json_response({"status": "ok", "data": result})
+        except ValueError as e:
+            msg = str(e)
+            code = 409 if "already exists" in msg else 400
+            self.send_json_response({"status": "error", "message": msg}, status=code)
+
+    def handle_curriculum_get(self, name: str) -> None:
+        """GET /api/education/curricula/<name> — get curriculum details."""
+        result = self.education_provider.get_curriculum(name)
+        if result is None:
+            self.send_json_response({"status": "error", "message": f"Curriculum '{name}' not found"}, status=404)
+        else:
+            self.send_json_response({"status": "ok", "data": result})
+
+    def handle_module_add(self, path: str) -> None:
+        """POST /api/education/curricula/<name>/modules — add a module."""
+        cur_name = path.replace("/api/education/curricula/", "", 1).replace("/modules", "")
+        body = self._read_json_body()
+        if body is None:
+            return
+        if not body.get("name"):
+            self.send_json_response({"status": "error", "message": "Missing field: name"}, status=400)
+            return
+        try:
+            result = self.education_provider.add_module(cur_name, body)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+        except ValueError as e:
+            msg = str(e)
+            code = 409 if "already exists" in msg else 400
+            self.send_json_response({"status": "error", "message": msg}, status=code)
+
+    def handle_module_update(self, path: str) -> None:
+        """PUT /api/education/curricula/<name>/modules/<mod> — update a module."""
+        rest = path.replace("/api/education/curricula/", "", 1)
+        parts = rest.split("/modules/", 1)
+        if len(parts) != 2:
+            self.send_json_response({"status": "error", "message": "Invalid path"}, status=400)
+            return
+        cur_name, mod_name = parts[0], parts[1]
+        body = self._read_json_body()
+        if body is None:
+            return
+        try:
+            result = self.education_provider.update_module(cur_name, mod_name, body)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_curriculum_export(self, name: str, fmt: str) -> None:
+        """GET /api/education/curricula/<name>/export?format=json — export curriculum."""
+        try:
+            result = self.education_provider.export_curriculum(name, fmt)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+        except ValueError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=400)
+
+    def handle_learning_path(self, name: str, level: str) -> None:
+        """GET /api/education/curricula/<name>/learning-path?level=beginner."""
+        try:
+            result = self.education_provider.get_learning_path(name, level)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+        except ValueError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=400)
+
+    # ── Tutoring handlers ──────────────────────────────────────────
+
+    def handle_topics_list(self) -> None:
+        """GET /api/education/topics — list available topics."""
+        topics = self.education_provider.list_topics()
+        self.send_json_response({"status": "ok", "data": topics})
+
+    def handle_session_create(self) -> None:
+        """POST /api/education/sessions — create a tutoring session."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        student_name = body.get("student_name")
+        topic = body.get("topic")
+        if not student_name:
+            self.send_json_response({"status": "error", "message": "Missing field: student_name"}, status=400)
+            return
+        if not topic:
+            self.send_json_response({"status": "error", "message": "Missing field: topic"}, status=400)
+            return
+        result = self.education_provider.create_session(student_name, topic)
+        self.send_json_response({"status": "ok", "data": result})
+
+    def handle_session_progress(self, session_id: str) -> None:
+        """GET /api/education/sessions/<id>/progress — get session progress."""
+        try:
+            result = self.education_provider.get_session_progress(session_id)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_quiz_generate(self) -> None:
+        """POST /api/education/quiz — generate quiz questions."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        topic = body.get("topic")
+        if not topic:
+            self.send_json_response({"status": "error", "message": "Missing field: topic"}, status=400)
+            return
+        difficulty = body.get("difficulty", "easy")
+        count = body.get("count", 5)
+        questions = self.education_provider.generate_quiz(topic, difficulty, count)
+        self.send_json_response({"status": "ok", "data": questions})
+
+    def handle_quiz_answer(self) -> None:
+        """POST /api/education/quiz/answer — evaluate and optionally record an answer."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        question_id = body.get("question_id")
+        answer = body.get("answer")
+        if not question_id:
+            self.send_json_response({"status": "error", "message": "Missing field: question_id"}, status=400)
+            return
+        if answer is None:
+            self.send_json_response({"status": "error", "message": "Missing field: answer"}, status=400)
+            return
+
+        session_id = body.get("session_id")
+        try:
+            if session_id:
+                result = self.education_provider.record_answer(session_id, question_id, answer)
+            else:
+                result = self.education_provider.evaluate_answer(question_id, answer)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    # ── Assessment handlers ────────────────────────────────────────
+
+    def handle_exam_create(self) -> None:
+        """POST /api/education/exams — create an exam."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        curriculum_name = body.get("curriculum_name")
+        if not curriculum_name:
+            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            return
+        module_names = body.get("module_names")
+        try:
+            result = self.education_provider.create_exam(curriculum_name, module_names)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_exam_submit(self, path: str) -> None:
+        """POST /api/education/exams/<id>/submit — grade an exam submission."""
+        rest = path.replace("/api/education/exams/", "", 1)
+        exam_id = rest.replace("/submit", "")
+        body = self._read_json_body()
+        if body is None:
+            return
+        curriculum_name = body.get("curriculum_name")
+        if not curriculum_name:
+            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            return
+        answers = body.get("answers", {})
+        try:
+            result = self.education_provider.grade_submission(curriculum_name, exam_id, answers)
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_certificate_generate(self) -> None:
+        """POST /api/education/certificates — generate a certificate."""
+        body = self._read_json_body()
+        if body is None:
+            return
+        student = body.get("student")
+        curriculum_name = body.get("curriculum_name")
+        score = body.get("score")
+        if not student:
+            self.send_json_response({"status": "error", "message": "Missing field: student"}, status=400)
+            return
+        if not curriculum_name:
+            self.send_json_response({"status": "error", "message": "Missing field: curriculum_name"}, status=400)
+            return
+        if score is None:
+            self.send_json_response({"status": "error", "message": "Missing field: score"}, status=400)
+            return
+        try:
+            result = self.education_provider.generate_certificate(student, curriculum_name, float(score))
+            self.send_json_response({"status": "ok", "data": result})
+        except KeyError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+        except (ValueError, TypeError) as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=400)
+
+    def handle_certificates_list(self) -> None:
+        """GET /api/education/certificates — list all certificates."""
+        certs = self.education_provider.list_certificates()
+        self.send_json_response({"status": "ok", "data": certs})
+
+    # ── Content browser handlers ───────────────────────────────────
+
+    def handle_content_tree(self, query: str) -> None:
+        """GET /api/content/tree?path= — list output file tree."""
+        from urllib.parse import parse_qs
+        params = parse_qs(query)
+        subpath = params.get("path", [""])[0]
+        try:
+            result = self.education_provider.list_output_files(subpath)
+            self.send_json_response({"status": "ok", "data": result})
+        except ValueError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=403)
+        except FileNotFoundError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_content_file(self, query: str) -> None:
+        """GET /api/content/file?path= — get file content or serve file."""
+        from urllib.parse import parse_qs
+        params = parse_qs(query)
+        filepath = params.get("path", [""])[0]
+        if not filepath:
+            self.send_json_response({"status": "error", "message": "Missing query parameter: path"}, status=400)
+            return
+        try:
+            result = self.education_provider.get_file_content(filepath)
+            self.send_json_response({"status": "ok", "data": result})
+        except ValueError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=403)
+        except FileNotFoundError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
         self.send_header('Vary', 'Origin')
         self.end_headers()

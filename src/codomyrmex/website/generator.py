@@ -66,7 +66,7 @@ class WebsiteGenerator:
         }
 
         # 3. Render Pages
-        pages = ["index.html", "health.html", "modules.html", "tools.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html", "awareness.html"]
+        pages = ["index.html", "health.html", "modules.html", "tools.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html", "awareness.html", "curriculum.html", "tutoring.html", "assessment.html", "content.html"]
         for page in pages:
             try:
                 self._render_page(page, context)
