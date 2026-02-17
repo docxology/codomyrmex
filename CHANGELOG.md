@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-02-17
+
+### Added
+
+- `EphemeralServer` utility for local HTTP testing (`tests/utils/ephemeral_server.py`)
+- `pytest-benchmark` baselines for import time and AST parsing
+- Benchmarks test suite (`tests/benchmarks/test_benchmarks.py`)
+
+### Changed
+
+- Networking tests now use local `EphemeralServer` instead of external `httpbin.org`
+- Bumped version to 0.1.4 in `pyproject.toml` and `__init__.py`
+- Updated roadmap: v0.1.5–7 focus on modularity/testing/orchestration, v0.1.8–9 cognitive, v0.2.0 stable swarm
+
 ## [0.1.2] - 2026-02-17
 
 ### Added
