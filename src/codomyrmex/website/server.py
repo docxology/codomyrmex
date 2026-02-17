@@ -976,12 +976,12 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         try:
             result = self.education_provider.list_output_files(subpath)
             self.send_json_response({"status": "ok", "data": result})
+        except PermissionError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except ValueError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except FileNotFoundError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=404)
-
-    def handle_content_file(self, query: str) -> None:
         """GET /api/content/file?path= — get file content or serve file."""
         from urllib.parse import parse_qs
 
@@ -996,6 +996,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         try:
             result = self.education_provider.get_file_content(filepath)
             self.send_json_response({"status": "ok", "data": result})
+        except PermissionError as e:
+            self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except ValueError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except FileNotFoundError as e:

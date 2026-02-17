@@ -56,12 +56,13 @@ function showNotification(message, type = 'error') {
 async function apiFetch(url, options = {}) {
     try {
         const resp = await fetch(url, options);
-        const data = await resp.json();
-        if (!resp.ok || data.status === 'error') {
-            showNotification(data.message || `Request failed (${resp.status})`);
+        const json = await resp.json();
+        if (!resp.ok || json.status === 'error') {
+            showNotification(json.message || `Request failed (${resp.status})`);
             return null;
         }
-        return data;
+        // Unwrap {status: "ok", data: <payload>} envelope
+        return json.data !== undefined ? json.data : json;
     } catch (err) {
         showNotification('Network error: ' + err.message);
         return null;
@@ -181,7 +182,7 @@ async function addModule(e, curriculumName) {
     e.preventDefault();
     const form = e.target;
     const moduleData = {
-        title: form.querySelector('[name="title"]').value.trim(),
+        name: form.querySelector('[name="title"]').value.trim(),
         content: form.querySelector('[name="content"]').value.trim(),
         objectives: form.querySelector('[name="objectives"]').value.split(',').map(s => s.trim()).filter(Boolean),
         duration_minutes: parseInt(form.querySelector('[name="duration_minutes"]').value) || 30,
@@ -393,7 +394,7 @@ async function submitAnswer(questionIndex) {
 
     const sessionId = document.getElementById('session-id')?.value;
     const payload = {
-        question: q,
+        question_id: q.id,
         answer: selected.value
     };
     if (sessionId) payload.session_id = sessionId;
@@ -502,7 +503,7 @@ async function submitExam(e) {
     const data = await apiFetch(`/api/education/exams/${encodeURIComponent(currentExam.exam_id)}/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers })
+        body: JSON.stringify({ curriculum_name: currentExam.curriculum_name, answers })
     });
     if (!data) return;
 
