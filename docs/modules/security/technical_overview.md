@@ -4,7 +4,7 @@
 
 ## Architecture
 
-The Security module is organized into 8 submodules with a central `__init__.py` that re-exports all public APIs:
+The Security module is organized into 10 submodules with a central `__init__.py` that re-exports all public APIs:
 
 ```mermaid
 graph TB
@@ -19,6 +19,8 @@ graph TB
     PHY["physical/<br/>5 component files<br/>AccessControlSystem, AssetInventory, etc."]
     COG["cognitive/<br/>5 component files<br/>SocialEngineeringDetector, PhishingAnalyzer, etc."]
     THY["theory/<br/>6 component files<br/>SecurityPrinciple, ThreatModel, RiskAssessor, etc."]
+    AIS["ai_safety/<br/>AISafetyMonitor<br/>ActiveDefense, RabbitHole"]
+    GOV["governance/<br/>4 component files<br/>Contract, PolicyEngine, DisputeResolver"]
 
     INIT --> SCAN
     INIT --> SEC
@@ -28,6 +30,8 @@ graph TB
     INIT -->|"try/except"| PHY
     INIT -->|"try/except"| COG
     INIT -->|"try/except"| THY
+    INIT -->|"try/except"| AIS
+    INIT --> GOV
 ```
 
 ## Conditional Import Pattern
@@ -216,10 +220,11 @@ class ComplianceReport:
 
 ## Design Decisions
 
-### Why 8 Submodules?
+### Why 10 Submodules?
 The security domain naturally decomposes into:
 - **4 core capabilities** (scanning, secrets, audit, compliance) that have no external dependencies and are self-contained
 - **4 domain areas** (digital, physical, cognitive, theory) that may require external packages and contain multiple component files
+- **2 specialized submodules** (ai_safety for AI-specific security, governance for policy and contracts)
 
 This separation ensures the core capabilities are always available while domain-specific features gracefully degrade.
 
@@ -250,6 +255,8 @@ The secrets module uses high-entropy string detection (pattern: 40+ base64 chars
 | physical | `tests/unit/security/test_security_physical.py` | Covered |
 | cognitive | `tests/unit/security/test_security_cognitive.py` | Covered |
 | theory | `tests/unit/security/test_security_theory.py` | Covered |
+| ai_safety | (no dedicated test file) | Planned |
+| governance | (no dedicated test file) | Planned |
 
 ## Navigation
 

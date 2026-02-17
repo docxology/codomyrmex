@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -19,6 +20,15 @@ def get_access_control_system() -> "AccessControlSystem":
     return _GLOBAL_ACS
 
 
+class AccessLevel(Enum):
+    """Security clearance levels for access control."""
+    PUBLIC = "public"
+    RESTRICTED = "restricted"
+    CONFIDENTIAL = "confidential"
+    SECRET = "secret"
+    TOP_SECRET = "top_secret"
+
+
 @dataclass
 class AccessPermission:
     """Represents an access permission."""
@@ -36,6 +46,7 @@ class AccessControlSystem:
     def __init__(self):
 
         self.permissions: dict[str, list[AccessPermission]] = {}
+        self.audit_trail: list[dict] = []
         logger.info("AccessControlSystem initialized")
 
     def grant_access(
@@ -58,6 +69,13 @@ class AccessControlSystem:
             self.permissions[user_id] = []
 
         self.permissions[user_id].append(permission)
+        self.audit_trail.append({
+            "action": "grant",
+            "user_id": user_id,
+            "resource": resource,
+            "permission_type": permission_type,
+            "timestamp": datetime.now().isoformat(),
+        })
         logger.info(f"Granted {permission_type} access to {user_id} for {resource}")
         return permission
 
@@ -68,9 +86,19 @@ class AccessControlSystem:
                 p for p in self.permissions[user_id]
                 if p.resource != resource
             ]
+            self.audit_trail.append({
+                "action": "revoke",
+                "user_id": user_id,
+                "resource": resource,
+                "timestamp": datetime.now().isoformat(),
+            })
             logger.info(f"Revoked access for {user_id} to {resource}")
             return True
         return False
+
+    def list_permissions(self, user_id: str) -> list[AccessPermission]:
+        """List all permissions for a user."""
+        return self.permissions.get(user_id, [])
 
     def check_access(self, user_id: str, resource: str, permission_type: str) -> bool:
         """Check if user has access permission."""

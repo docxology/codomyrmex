@@ -1,15 +1,18 @@
 """
 Security Module for Codomyrmex.
 
-The Security module provides comprehensive security capabilities organized into four
+The Security module provides comprehensive security capabilities organized into nine
 specialized submodules:
 - physical: Physical security practices
 - digital: Digital security
 - cognitive: Cognitive security practices
 - theory: Generic security considerations and theory
-
-Submodules:
-    governance: Consolidated governance capabilities.
+- ai_safety: AI-specific security monitoring and defense
+- scanning: Static application security testing
+- secrets: Secret detection and exposure auditing
+- audit: Security audit logging
+- compliance: Compliance standards checking
+- governance: Consolidated governance capabilities
 
 Integration:
 - Uses `logging_monitoring` for all logging

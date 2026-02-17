@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Website module provides a template-based system for generating dashboards, a live development server with 18 REST API endpoints, and operational tooling for the Codomyrmex project.
+The Website module provides a template-based system for generating dashboards, a live development server with 21 REST API endpoints, and operational tooling for the Codomyrmex project.
 
 ## Architecture
 
@@ -13,7 +13,7 @@ The Website module provides a template-based system for generating dashboards, a
 1. **Generator** (`generator.py`): Renders Jinja2 templates with data from DataProvider.
 2. **Data Provider** (`data_provider.py`): Aggregates module, agent, script, config, pipeline, and PAI data.
 3. **Server** (`server.py`): HTTP request handler with REST API endpoints and CORS/CSRF validation.
-4. **Templates** (`templates/`): 10 Jinja2 HTML pages plus `base.html` layout.
+4. **Templates** (`templates/`): 12 Jinja2 HTML pages plus `base.html` layout.
 5. **Assets** (`assets/`): CSS and JS static files.
 
 ### Data Flow
@@ -52,6 +52,8 @@ class DataProvider:
     def get_health_status(self) -> dict: ...
     def get_pipeline_status(self) -> list[dict]: ...
     def get_pai_awareness_data(self) -> dict: ...
+    def get_mcp_tools(self) -> dict: ...
+    def get_llm_config(self) -> dict: ...
     def run_tests(self, module: str | None = None) -> dict: ...
 ```
 
@@ -89,6 +91,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 | `/api/refresh` | POST | Refresh system data |
 | `/api/awareness/summary` | POST | Generate AI summary |
 | `/api/llm/config` | GET | Retrieve LLM configuration |
+| `/api/tools` | GET | MCP tools, resources, prompts |
+| `/api/trust/status` | GET | Trust gateway counts and destructive tools |
+| `/api/pai/action` | POST | Execute PAI action (verify/trust/reset/status) |
 
 ## Dependencies
 

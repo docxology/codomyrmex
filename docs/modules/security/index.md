@@ -23,6 +23,8 @@
 - [physical/README.md](physical/README.md) - Physical security: access control, asset tracking, surveillance, perimeters
 - [cognitive/README.md](cognitive/README.md) - Cognitive security: social engineering, phishing, awareness training, behavior analysis
 - [theory/README.md](theory/README.md) - Security theory: principles, frameworks, threat modeling, risk assessment, patterns
+- [ai_safety/README.md](ai_safety/README.md) - AI safety: jailbreak detection, prompt injection defense, adversarial containment, safety monitoring
+- [governance/README.md](governance/README.md) - Governance: contract management, policy enforcement, dispute resolution
 
 ### Source Code
 - [`src/codomyrmex/security/__init__.py`](../../../src/codomyrmex/security/__init__.py) - Master exports
@@ -34,6 +36,8 @@
 - [`src/codomyrmex/security/physical/__init__.py`](../../../src/codomyrmex/security/physical/__init__.py) - Physical security exports
 - [`src/codomyrmex/security/cognitive/__init__.py`](../../../src/codomyrmex/security/cognitive/__init__.py) - Cognitive security exports
 - [`src/codomyrmex/security/theory/__init__.py`](../../../src/codomyrmex/security/theory/__init__.py) - Theory exports
+- [`src/codomyrmex/security/ai_safety/__init__.py`](../../../src/codomyrmex/security/ai_safety/__init__.py) - AI safety exports
+- [`src/codomyrmex/security/governance/__init__.py`](../../../src/codomyrmex/security/governance/__init__.py) - Governance exports
 
 ### Tests
 - [`src/codomyrmex/tests/unit/security/scanning/test_scanning.py`](../../../src/codomyrmex/tests/unit/security/scanning/test_scanning.py)

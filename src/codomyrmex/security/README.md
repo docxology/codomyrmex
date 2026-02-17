@@ -4,7 +4,7 @@
 
 ## Overview
 
-Comprehensive security module organized into four specialized submodules: digital, physical, cognitive, and theory. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks.
+Comprehensive security module organized into nine specialized submodules: digital, physical, cognitive, theory, ai_safety, governance, scanning, secrets, audit, and compliance. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks. The ai_safety submodule provides jailbreak detection, prompt injection defense, and adversarial containment. The governance submodule provides contract management, policy enforcement, and dispute resolution. The scanning, secrets, audit, and compliance submodules provide core standalone capabilities.
 
 
 ## Installation
@@ -82,6 +82,11 @@ uv sync
 - **`check_perimeter_security()`** -- Check perimeter integrity
 - **`manage_access_points()`** -- Manage physical access points
 
+### AI Safety
+
+- **`AISafetyMonitor`** -- Unified AI safety monitoring combining jailbreak detection and prompt injection defense
+- Note: `ActiveDefense` and `RabbitHole` are optionally available when their respective dependencies are installed
+
 ### Cognitive Security
 
 - **`SocialEngineeringDetector`** -- Detects social engineering attempts
@@ -99,6 +104,12 @@ uv sync
 - **`BehaviorAnalyzer`** -- User behavior analytics for security
 - **`analyze_user_behavior()`** -- Analyze user behavior patterns
 - **`detect_anomalous_behavior()`** -- Detect behavioral anomalies
+
+### Governance
+
+- **`Contract`**, **`ContractTerm`**, **`ContractStatus`** -- Contract lifecycle management
+- **`PolicyRule`**, **`PolicyEngine`** -- Policy enforcement engine
+- **`DisputeResolver`**, **`DisputeStatus`** -- Dispute resolution workflow
 
 ### Security Theory
 
@@ -132,6 +143,8 @@ uv sync
 - `physical/` - Physical security: access control, assets, surveillance, perimeters
 - `cognitive/` - Cognitive security: social engineering, phishing, behavior analysis
 - `theory/` - Security theory: threat models, risk, frameworks, patterns
+- `ai_safety/` - AI safety: jailbreak detection, prompt injection defense, adversarial containment
+- `governance/` - Governance: contracts, policy enforcement, dispute resolution
 - `security_theory/` - Additional security theory resources
 
 ## Quick Start
@@ -158,6 +171,7 @@ The following modules have been consolidated into this module as sub-packages:
 | Sub-module | Description |
 |------------|-------------|
 | **`governance/`** | Policy enforcement and compliance checking |
+| **`ai_safety/`** | AI safety: jailbreak detection, prompt injection defense, adversarial containment |
 
 Original standalone modules remain as backward-compatible re-export wrappers.
 

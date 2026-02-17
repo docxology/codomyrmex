@@ -1,11 +1,24 @@
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """Physical surveillance monitoring."""
 
 logger = get_logger(__name__)
+
+
+class EventType(Enum):
+    """Types of physical security events."""
+    ACCESS = "access"
+    MOVEMENT = "movement"
+    ALARM = "alarm"
+    INTRUSION = "intrusion"
+    TAILGATING = "tailgating"
+    MAINTENANCE = "maintenance"
+    ENVIRONMENTAL = "environmental"
+    EMERGENCY = "emergency"
 
 
 @dataclass
@@ -56,6 +69,30 @@ class SurveillanceMonitor:
             description=f"Physical access by {user_id}",
             severity="low",
         )
+
+    def get_events(
+        self,
+        location: str | None = None,
+        severity: str | None = None,
+        event_type: str | None = None,
+    ) -> list[PhysicalEvent]:
+        """Filter events by location, severity, and/or event type."""
+        results = self.events
+
+        if location is not None:
+            results = [e for e in results if e.location == location]
+
+        if severity is not None:
+            results = [e for e in results if e.severity == severity]
+
+        if event_type is not None:
+            results = [e for e in results if e.event_type == event_type]
+
+        return results
+
+    def get_recent_events(self, count: int = 10) -> list[PhysicalEvent]:
+        """Return the last N events."""
+        return self.events[-count:]
 
 
 def monitor_physical_access(
