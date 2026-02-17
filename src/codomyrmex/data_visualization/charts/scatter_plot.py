@@ -99,6 +99,10 @@ class ScatterPlot:
         self.dot_color = dot_color
         self.alpha = alpha
 
+    @property
+    def data(self) -> dict[str, list]:
+        return {"x": self.x_data, "y": self.y_data}
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the scatter plot.

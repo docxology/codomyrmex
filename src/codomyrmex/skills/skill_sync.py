@@ -137,7 +137,7 @@ class SkillSync:
 
         try:
             logger.info(f"Pulling latest changes from upstream: {self.upstream_dir}")
-            success = pull_changes(str(self.upstream_dir))
+            success = pull_changes(repository_path=str(self.upstream_dir))
 
             if success:
                 logger.info("Successfully pulled upstream changes")

@@ -110,6 +110,10 @@ class BarChart:
         self.horizontal = horizontal
         self.bar_color = bar_color
 
+    @property
+    def data(self) -> dict[str, list]:
+        return {"x": self.categories, "y": self.values}
+
     def render(self, output_path: str = None, show_plot: bool = False):
         """
         Render the bar chart.
@@ -118,7 +122,7 @@ class BarChart:
             output_path: Optional path to save the chart
             show_plot: Whether to display the plot interactively
         """
-        create_bar_chart(
+        return create_bar_chart(
             categories=self.categories,
             values=self.values,
             title=self.title,

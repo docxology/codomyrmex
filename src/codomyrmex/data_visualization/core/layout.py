@@ -8,6 +8,7 @@ from typing import Any
 class Section:
     """A section within a layout."""
     title: str = ""
+    description: str = ""
     children: list[Any] = field(default_factory=list)
     css_class: str = ""
     width: str = "100%"
@@ -21,7 +22,8 @@ class Section:
         )
         cls = f' class="{self.css_class}"' if self.css_class else ""
         title_html = f"<h2>{self.title}</h2>" if self.title else ""
-        return f'<div{cls} style="width:{self.width}">{title_html}{inner}</div>'
+        desc_html = f"<p>{self.description}</p>" if self.description else ""
+        return f'<div{cls} style="width:{self.width}">{title_html}{desc_html}{inner}</div>'
 
 
 @dataclass
@@ -31,7 +33,14 @@ class Grid:
     gap: str = "16px"
     sections: list[Section] = field(default_factory=list)
 
-    def add_section(self, section: Section) -> None:
+    def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
+        description = kwargs.get("description", "")
+        full_width = kwargs.get("full_width", False)
+        width = "100%" if full_width else f"{100/self.columns}%" # Simplistic width
+        
+        section = Section(title=title, description=description, width=width)
+        if content:
+            section.add(content)
         self.sections.append(section)
 
     def render(self) -> str:

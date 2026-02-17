@@ -51,6 +51,10 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
         ["git", "commit", "-m", "init"],
         cwd=str(path), capture_output=True, check=True,
     )
+    subprocess.run(
+        ["git", "branch", "-M", "main"],
+        cwd=str(path), capture_output=True, check=True,
+    )
 
 
 # ---- Tests ----
@@ -109,6 +113,17 @@ def test_sync_upstream(temp_dir):
     skills_dir = temp_dir / "skills"
     manager = SkillsManager(skills_dir, str(origin), "main")
     manager.initialize()
+
+
+    # Configure pull strategy and identity to allow merging
+    for args in [
+        ["git", "config", "pull.rebase", "false"],
+        ["git", "config", "user.email", "test@example.com"],
+        ["git", "config", "user.name", "Test User"],
+    ]:
+        subprocess.run(
+            args, cwd=str(skills_dir / "upstream"), capture_output=True, check=True
+        )
 
     result = manager.sync_upstream()
     assert result is True

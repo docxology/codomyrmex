@@ -15,6 +15,7 @@ Submodules:
 
 __version__ = "0.1.0"
 
+from typing import Any, Dict
 from . import exceptions
 from . import export
 
@@ -28,8 +29,18 @@ from .reports._base import BaseReport as Report
 
 # Charts & Plotting Functions
 from .charts.area_chart import AreaChart, create_area_chart
-from .charts.bar_chart import BarChart, create_bar_chart
+from .charts.bar_chart import BarChart
 from .charts.box_plot import BoxPlot, create_box_plot
+
+def create_bar_chart(data: Any, title: str = "Bar Chart") -> Any:
+    """Create a bar chart from a dictionary of data."""
+    # Extract categories and values from the data dictionary if possible
+    categories = data.get("categories", []) if isinstance(data, dict) else []
+    values = data.get("values", []) if isinstance(data, dict) else []
+    
+    # Initialize BarChart with extracted data
+    chart = BarChart(categories=categories, values=values, title=title)
+    return chart.render()
 from .charts.heatmap import Heatmap, create_heatmap
 from .charts.histogram import Histogram, create_histogram
 from .charts.line_plot import LinePlot, create_line_plot
@@ -41,57 +52,7 @@ from pathlib import Path
 from typing import Any
 
 
-class Dashboard:
-    """Dashboard container for visualization components."""
-
-    def __init__(self, title: str = "Dashboard", theme: Theme | None = None):
-        self.title = title
-        self.theme = theme or DEFAULT_THEME
-        self.sections: list[Any] = []
-
-    def add_section(self, section: Any) -> None:
-        self.sections.append(section)
-
-    def render(self) -> str:
-        inner = "\n".join(
-            getattr(s, "render", lambda: str(s))() for s in self.sections
-        )
-        return f"<div class='dashboard'><h1>{self.title}</h1>{inner}</div>"
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "title": self.title,
-            "theme": self.theme.name,
-            "section_count": len(self.sections),
-        }
-
-
-class Card:
-    """Card component for dashboards."""
-
-    def __init__(self, title: str = "", content: str = "", **kwargs: Any):
-        self.title = title
-        self.content = content
-        self.kwargs = kwargs
-
-    def render(self) -> str:
-        return f"<div class='card'><h3>{self.title}</h3><p>{self.content}</p></div>"
-
-
-class Table:
-    """Table component for data display."""
-
-    def __init__(self, headers: list[str] | None = None, rows: list[list] | None = None, **kwargs):
-        self.headers = headers or []
-        self.rows = rows or []
-
-    def render(self) -> str:
-        header = "".join(f"<th>{h}</th>" for h in self.headers)
-        body = "".join(
-            "<tr>" + "".join(f"<td>{c}</td>" for c in row) + "</tr>"
-            for row in self.rows
-        )
-        return f"<table><thead><tr>{header}</tr></thead><tbody>{body}</tbody></table>"
+from .core.ui import Dashboard, Card, Table
 
 
 class BarPlot:
@@ -128,6 +89,7 @@ def generate_report(title: str = "Report", output_dir: str | Path | None = None,
 
     return html
 
+BarPlot = BarChart
 
 __all__ = [
     "exceptions",
@@ -154,6 +116,7 @@ __all__ = [
     # Chart Classes
     "AreaChart",
     "BarChart",
+    "BarPlot",
     "BoxPlot",
     "Heatmap",
     "Histogram",

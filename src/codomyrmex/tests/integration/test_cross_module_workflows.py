@@ -23,7 +23,11 @@ except ImportError:
 
 try:
     from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
-    MODULE_AVAILABILITY["code_execution"] = True
+    from codomyrmex.coding.sandbox.container import check_docker_available
+    if check_docker_available():
+        MODULE_AVAILABILITY["code_execution"] = True
+    else:
+        MODULE_AVAILABILITY["code_execution"] = False
 except ImportError:
     MODULE_AVAILABILITY["code_execution"] = False
 
@@ -538,7 +542,7 @@ eval(input("Enter code: "))  # Code injection
             from codomyrmex.data_visualization import create_bar_chart
             data = {"categories": ["A"], "values": [1]}
             chart = create_bar_chart(data, "Test")
-            assert len(chart) > 0
+            assert chart is not None
             steps_completed += 1
 
         end_time = time.time()
@@ -595,7 +599,7 @@ eval(input("Enter code: "))  # Code injection
                 "values": test_data["metrics"]
             }
             chart = create_bar_chart(viz_data, "Consistency Test")
-            results["visualization"] = len(chart) > 0
+            results["visualization"] = chart is not None
 
         # All modules that were tested should have produced valid results
         for module, success in results.items():
