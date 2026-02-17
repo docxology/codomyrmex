@@ -23,6 +23,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  actions: write
+  contents: read
+
 env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"
@@ -103,14 +107,20 @@ jobs:
     steps:
       - name: Trigger CI Workflow
         uses: actions/github-script@v7
+        continue-on-error: true
         with:
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'ci.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
-            });
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'ci.yml',
+                ref: context.ref.replace('refs/heads/', '') || context.sha
+              });
+              core.info('CI workflow triggered successfully');
+            } catch (error) {
+              core.warning(`Unable to trigger CI workflow: ${error.message}`);
+            }
 
   coordinate-security:
     name: Trigger Security Workflow
@@ -129,14 +139,20 @@ jobs:
     steps:
       - name: Trigger Security Workflow
         uses: actions/github-script@v7
+        continue-on-error: true
         with:
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'security.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
-            });
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'security.yml',
+                ref: context.ref.replace('refs/heads/', '') || context.sha
+              });
+              core.info('Security workflow triggered successfully');
+            } catch (error) {
+              core.warning(`Unable to trigger Security workflow: ${error.message}`);
+            }
 
   coordinate-docs:
     name: Trigger Documentation Workflow
@@ -152,14 +168,20 @@ jobs:
     steps:
       - name: Trigger Documentation Workflow
         uses: actions/github-script@v7
+        continue-on-error: true
         with:
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'documentation.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
-            });
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'documentation.yml',
+                ref: context.ref.replace('refs/heads/', '') || context.sha
+              });
+              core.info('Documentation workflow triggered successfully');
+            } catch (error) {
+              core.warning(`Unable to trigger Documentation workflow: ${error.message}`);
+            }
 
   coordinate-benchmarks:
     name: Trigger Benchmarks
@@ -176,14 +198,20 @@ jobs:
     steps:
       - name: Trigger Benchmarks Workflow
         uses: actions/github-script@v7
+        continue-on-error: true
         with:
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'benchmarks.yml',
-              ref: context.ref.replace('refs/heads/', '') || 'main'
-            });
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'benchmarks.yml',
+                ref: context.ref.replace('refs/heads/', '') || context.sha
+              });
+              core.info('Benchmarks workflow triggered successfully');
+            } catch (error) {
+              core.warning(`Unable to trigger Benchmarks workflow: ${error.message}`);
+            }
 
   smart-testing:
     name: Smart Testing Strategy
