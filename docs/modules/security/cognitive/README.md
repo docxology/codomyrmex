@@ -40,6 +40,14 @@ When `COGNITIVE_AVAILABLE` is `True`, the following 15 symbols are re-exported:
 | `analyze_user_behavior()` | Analyze user behavior patterns |
 | `detect_anomalous_behavior()` | Detect anomalous behavior |
 
+## Implementation Details
+
+- Social engineering detection uses regex pattern matching across 5 tactic categories (urgency, authority, information gathering, reward, fear)
+- Phishing analysis checks 8 indicators including suspicious URLs, urgency language, sensitive info requests, excessive punctuation, and sender domain mismatch
+- Behavior analysis computes statistical profiles from user history and detects anomalies via baseline comparison
+- Cognitive threat assessment generates threats based on training level, access level, environment, recent incidents, and social media exposure
+- Awareness training includes TrainingTopic and TrainingDifficulty enums with predefined training templates
+
 ## Tests
 
 [`src/codomyrmex/tests/unit/security/test_security_cognitive.py`](../../../../src/codomyrmex/tests/unit/security/test_security_cognitive.py)

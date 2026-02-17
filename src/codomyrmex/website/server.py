@@ -91,6 +91,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_tests_run()
         elif parsed_path.path == "/api/awareness/summary":
             self.handle_awareness_summary()
+        elif parsed_path.path == "/api/pai/action":
+            self.handle_pai_action()
         elif parsed_path.path.startswith("/api/config"):
             self.handle_config_save()
         # Education POST routes
@@ -165,6 +167,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_content_tree(parsed_path.query)
         elif parsed_path.path == "/api/content/file":
             self.handle_content_file(parsed_path.query)
+        elif parsed_path.path == "/api/trust/status":
+            self.handle_trust_status()
         else:
             super().do_GET()
 
@@ -1002,6 +1006,95 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except FileNotFoundError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_trust_status(self) -> None:
+        """Handle GET /api/trust/status — return trust gateway tool counts."""
+        try:
+            from codomyrmex.agents.pai.trust_gateway import get_trust_report
+            report = get_trust_report()
+            counts = report.get("counts", {})
+            self.send_json_response({
+                "counts": {
+                    "untrusted": counts.get("untrusted", 0),
+                    "verified": counts.get("verified", 0),
+                    "trusted": counts.get("trusted", 0),
+                },
+                "total_tools": report.get("total_tools", 0),
+                "destructive_tools": report.get("destructive_tools", {}),
+            })
+        except Exception as e:
+            # Fallback if trust gateway not available
+            self.send_json_response({
+                "counts": {"untrusted": 0, "verified": 0, "trusted": 0},
+                "error": str(e),
+            })
+
+    def handle_pai_action(self) -> None:
+        """Handle POST /api/pai/action — execute a PAI workflow action."""
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        if content_length == 0:
+            self.send_json_response({"error": "No content provided"}, status=400)
+            return
+        try:
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+        except (json.JSONDecodeError, KeyError):
+            self.send_json_response({"error": "Invalid JSON"}, status=400)
+            return
+
+        action = data.get("action", "")
+        result: dict = {}
+
+        try:
+            if action == "verify":
+                from codomyrmex.agents.pai.trust_gateway import verify_capabilities
+                raw = verify_capabilities()
+                result = {
+                    "modules": len(raw.get("modules", [])),
+                    "tools_total": raw.get("tools", {}).get("total", 0),
+                    "promoted": raw.get("trust", {}).get("promoted", 0),
+                }
+            elif action == "trust":
+                from codomyrmex.agents.pai.trust_gateway import trust_all
+                raw = trust_all()
+                result = raw
+            elif action == "reset":
+                from codomyrmex.agents.pai.trust_gateway import reset_trust
+                reset_trust()
+                result = {"message": "Trust levels reset to UNTRUSTED"}
+            elif action == "status":
+                from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
+                result = _tool_pai_status()
+            else:
+                self.send_json_response(
+                    {"error": f"Unknown action: {action}", "success": False},
+                    status=400,
+                )
+                return
+
+            # After any trust-changing action, include updated counts
+            from codomyrmex.agents.pai.trust_gateway import get_trust_report
+            report = get_trust_report()
+            counts = report.get("counts", {})
+
+            self.send_json_response({
+                "success": True,
+                "action": action,
+                "result": result,
+                "trust_counts": {
+                    "untrusted": counts.get("untrusted", 0),
+                    "verified": counts.get("verified", 0),
+                    "trusted": counts.get("trusted", 0),
+                },
+            })
+        except Exception as e:
+            self.send_json_response(
+                {"success": False, "error": str(e), "action": action},
+                status=500,
+            )
 
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""

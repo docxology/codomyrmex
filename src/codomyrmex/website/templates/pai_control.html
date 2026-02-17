@@ -1,0 +1,592 @@
+{% extends "base.html" %}
+
+{% block title %}PAI Control Panel - Codomyrmex{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="margin: 0;">PAI Control Panel</h1>
+    <a href="awareness.html" class="btn btn-primary"
+        style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <span>←</span> PAI Awareness Dashboard
+    </a>
+</div>
+
+<p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+    Administrative interface for Codomyrmex + PAI operations. Execute workflows, manage trust levels, and run system
+    audits.
+</p>
+
+<!-- Quick Actions Grid -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2 class="card-title">Quick Actions</h2>
+    <div class="cp-actions-grid">
+        <button class="cp-action-card" data-action="verify" id="action-verify">
+            <span class="cp-action-icon">🔍</span>
+            <span class="cp-action-title">Verify Capabilities</span>
+            <span class="cp-action-desc">Audit modules, tools, resources & promote safe tools to VERIFIED</span>
+            <span class="cp-action-workflow">/codomyrmexVerify</span>
+        </button>
+        <button class="cp-action-card" data-action="trust" id="action-trust">
+            <span class="cp-action-icon">🔓</span>
+            <span class="cp-action-title">Trust All Tools</span>
+            <span class="cp-action-desc">Promote all tools to TRUSTED — enables write, run, test operations</span>
+            <span class="cp-action-workflow">/codomyrmexTrust</span>
+        </button>
+        <button class="cp-action-card" data-action="status" id="action-status">
+            <span class="cp-action-icon">📊</span>
+            <span class="cp-action-title">System Status</span>
+            <span class="cp-action-desc">Get MCP health, module counts, bridge verification & PAI awareness</span>
+            <span class="cp-action-workflow">/codomyrmexStatus</span>
+        </button>
+        <button class="cp-action-card" data-action="analyze" id="action-analyze">
+            <span class="cp-action-icon">🧬</span>
+            <span class="cp-action-title">Analyze Code</span>
+            <span class="cp-action-desc">Run complexity, maintainability & quality analysis via coding engine</span>
+            <span class="cp-action-workflow">/codomyrmexAnalyze</span>
+        </button>
+        <button class="cp-action-card" data-action="search" id="action-search">
+            <span class="cp-action-icon">🔎</span>
+            <span class="cp-action-title">Search Codebase</span>
+            <span class="cp-action-desc">High-performance regex search across the project</span>
+            <span class="cp-action-workflow">/codomyrmexSearch</span>
+        </button>
+        <button class="cp-action-card" data-action="docs" id="action-docs">
+            <span class="cp-action-icon">📖</span>
+            <span class="cp-action-title">Module Docs</span>
+            <span class="cp-action-desc">Retrieve README or SPEC documentation for any module</span>
+            <span class="cp-action-workflow">/codomyrmexDocs</span>
+        </button>
+        <button class="cp-action-card" data-action="memory" id="action-memory">
+            <span class="cp-action-icon">🧠</span>
+            <span class="cp-action-title">Add Memory</span>
+            <span class="cp-action-desc">Persist information to the agentic long-term memory store</span>
+            <span class="cp-action-workflow">/codomyrmexMemory</span>
+        </button>
+        <button class="cp-action-card" data-action="reset" id="action-reset">
+            <span class="cp-action-icon">🔄</span>
+            <span class="cp-action-title">Reset Trust</span>
+            <span class="cp-action-desc">Revoke all trust levels and return to UNTRUSTED state</span>
+            <span class="cp-action-workflow">reset_trust()</span>
+        </button>
+    </div>
+</div>
+
+<!-- Trust Status Panel -->
+<div class="cp-panels-grid">
+    <div class="card">
+        <h2 class="card-title">Trust Gateway Status</h2>
+        <div id="trust-status" class="cp-status-panel">
+            <div class="cp-trust-level">
+                <div class="cp-trust-meter">
+                    <div class="cp-trust-segment cp-trust-untrusted" id="trust-seg-untrusted">
+                        <span class="cp-trust-count" id="trust-untrusted-count">--</span>
+                        <span class="cp-trust-label">Untrusted</span>
+                    </div>
+                    <div class="cp-trust-segment cp-trust-verified" id="trust-seg-verified">
+                        <span class="cp-trust-count" id="trust-verified-count">--</span>
+                        <span class="cp-trust-label">Verified</span>
+                    </div>
+                    <div class="cp-trust-segment cp-trust-trusted" id="trust-seg-trusted">
+                        <span class="cp-trust-count" id="trust-trusted-count">--</span>
+                        <span class="cp-trust-label">Trusted</span>
+                    </div>
+                </div>
+            </div>
+            <table class="cp-trust-table" id="destructive-tools-table" style="margin-top: 1rem;">
+                <thead>
+                    <tr>
+                        <th>Destructive Tool</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>codomyrmex.write_file</code></td>
+                        <td><span class="cp-level-badge cp-level-untrusted" id="lvl-write-file">UNTRUSTED</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>codomyrmex.run_command</code></td>
+                        <td><span class="cp-level-badge cp-level-untrusted" id="lvl-run-command">UNTRUSTED</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>codomyrmex.run_tests</code></td>
+                        <td><span class="cp-level-badge cp-level-untrusted" id="lvl-run-tests">UNTRUSTED</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Module Bridge Status</h2>
+        <div id="bridge-status" class="cp-status-panel">
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">Total Modules</span>
+                <span class="cp-stat-value" id="bridge-modules">{{ awareness.metrics.skill_count if awareness and
+                    awareness.metrics else '--' }}</span>
+            </div>
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">MCP Tools Discovered</span>
+                <span class="cp-stat-value" id="bridge-tools">--</span>
+            </div>
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">PAI Skills Loaded</span>
+                <span class="cp-stat-value" id="bridge-skills">{{ awareness.metrics.skill_count if awareness and
+                    awareness.metrics else '--' }}</span>
+            </div>
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">PAI Hooks Active</span>
+                <span class="cp-stat-value" id="bridge-hooks">{{ awareness.metrics.hook_count if awareness and
+                    awareness.metrics else '--' }}</span>
+            </div>
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">Work Sessions</span>
+                <span class="cp-stat-value" id="bridge-sessions">{{ awareness.memory.work_sessions_count if awareness
+                    and awareness.memory else '--' }}</span>
+            </div>
+            <div class="cp-stat-row">
+                <span class="cp-stat-label">Memory Files</span>
+                <span class="cp-stat-value" id="bridge-memory">{{ awareness.memory.total_files if awareness and
+                    awareness.memory else '--' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Output Console -->
+<div class="card" style="margin-top: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="card-title" style="margin: 0;">Action Console</h2>
+        <button id="clear-console" class="btn" style="padding: 0.2rem 0.8rem; font-size: 0.8rem;">Clear</button>
+    </div>
+    <div id="action-console" class="cp-console" role="log" aria-live="polite">
+        <pre id="console-output"
+            style="margin: 0; white-space: pre-wrap; font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">Ready. Click an action above or use the Claude Code workflows: /codomyrmexVerify, /codomyrmexTrust, /codomyrmexStatus, /codomyrmexAnalyze, /codomyrmexSearch, /codomyrmexDocs, /codomyrmexMemory</pre>
+    </div>
+</div>
+
+<!-- Bidirectional Navigation -->
+<div class="cp-crosslinks" style="margin-top: 1.5rem;">
+    <a href="awareness.html" class="cp-crosslink-card">
+        <span class="cp-crosslink-icon">🌐</span>
+        <div>
+            <span class="cp-crosslink-title">PAI Awareness Dashboard</span>
+            <span class="cp-crosslink-desc">View missions, projects, tasks, TELOS profile & ecosystem map</span>
+        </div>
+        <span class="cp-crosslink-arrow">→</span>
+    </a>
+    <a href="index.html" class="cp-crosslink-card">
+        <span class="cp-crosslink-icon">◆</span>
+        <div>
+            <span class="cp-crosslink-title">Codomyrmex Command Center</span>
+            <span class="cp-crosslink-desc">System status, module overview, git state & coverage metrics</span>
+        </div>
+        <span class="cp-crosslink-arrow">→</span>
+    </a>
+</div>
+
+<style>
+    .cp-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .cp-action-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+        padding: 1rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+        color: var(--text-primary);
+        font-family: inherit;
+    }
+
+    .cp-action-card:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+
+    .cp-action-card:active {
+        transform: translateY(0);
+    }
+
+    .cp-action-card.running {
+        border-color: #f59e0b;
+        animation: pulse-border 1.5s infinite;
+    }
+
+    @keyframes pulse-border {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+        }
+    }
+
+    .cp-action-icon {
+        font-size: 1.5rem;
+    }
+
+    .cp-action-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .cp-action-desc {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        line-height: 1.3;
+    }
+
+    .cp-action-workflow {
+        font-size: 0.7rem;
+        font-family: 'Fira Code', monospace;
+        color: var(--accent-color);
+        background: rgba(59, 130, 246, 0.1);
+        padding: 0.15rem 0.4rem;
+        border-radius: 3px;
+        margin-top: 0.25rem;
+    }
+
+    .cp-panels-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .cp-trust-meter {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .cp-trust-segment {
+        flex: 1;
+        text-align: center;
+        padding: 0.75rem;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .cp-trust-untrusted {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .cp-trust-verified {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .cp-trust-trusted {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .cp-trust-count {
+        font-size: 1.4rem;
+        font-weight: 700;
+        font-family: 'Fira Code', monospace;
+    }
+
+    .cp-trust-untrusted .cp-trust-count {
+        color: #ef4444;
+    }
+
+    .cp-trust-verified .cp-trust-count {
+        color: #3b82f6;
+    }
+
+    .cp-trust-trusted .cp-trust-count {
+        color: #10b981;
+    }
+
+    .cp-trust-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+    }
+
+    .cp-trust-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+
+    .cp-trust-table th,
+    .cp-trust-table td {
+        padding: 0.4rem 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+        text-align: left;
+    }
+
+    .cp-trust-table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+    }
+
+    .cp-level-badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 3px;
+        font-weight: 600;
+    }
+
+    .cp-level-untrusted {
+        background: #fecaca;
+        color: #991b1b;
+    }
+
+    .cp-level-verified {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .cp-level-trusted {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .cp-stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .cp-stat-row:last-child {
+        border-bottom: none;
+    }
+
+    .cp-stat-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .cp-stat-value {
+        font-family: 'Fira Code', monospace;
+        font-weight: 600;
+        color: var(--accent-color);
+    }
+
+    .cp-console {
+        margin-top: 0.75rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .cp-crosslinks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .cp-crosslink-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+    }
+
+    .cp-crosslink-card:hover {
+        border-color: var(--accent-color);
+        background: var(--bg-tertiary);
+    }
+
+    .cp-crosslink-icon {
+        font-size: 1.5rem;
+    }
+
+    .cp-crosslink-title {
+        font-weight: 600;
+        display: block;
+    }
+
+    .cp-crosslink-desc {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        display: block;
+        margin-top: 0.15rem;
+    }
+
+    .cp-crosslink-arrow {
+        font-size: 1.2rem;
+        color: var(--accent-color);
+        margin-left: auto;
+    }
+
+    @media (max-width: 900px) {
+        .cp-actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .cp-panels-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cp-crosslinks {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .cp-actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    (function () {
+        const consoleEl = document.getElementById('console-output');
+        const clearBtn = document.getElementById('clear-console');
+
+        function log(msg, type) {
+            const ts = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'info' ? 'ℹ️' : '▶';
+            consoleEl.textContent += '\n[' + ts + '] ' + prefix + ' ' + msg;
+            consoleEl.parentElement.scrollTop = consoleEl.parentElement.scrollHeight;
+        }
+
+        clearBtn.addEventListener('click', () => {
+            consoleEl.textContent = 'Console cleared.';
+        });
+
+        function updateTrustCounts(counts) {
+            const u = document.getElementById('trust-untrusted-count');
+            const v = document.getElementById('trust-verified-count');
+            const t = document.getElementById('trust-trusted-count');
+            if (u && counts.untrusted !== undefined) u.textContent = counts.untrusted;
+            if (v && counts.verified !== undefined) v.textContent = counts.verified;
+            if (t && counts.trusted !== undefined) t.textContent = counts.trusted;
+
+            // Update destructive tool badges
+            const level = counts.trusted > 0 ? 'trusted' : counts.verified > 0 ? 'verified' : 'untrusted';
+            const label = level.toUpperCase();
+            const cls = 'cp-level-' + level;
+            ['lvl-write-file', 'lvl-run-command', 'lvl-run-tests'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = label;
+                    el.className = 'cp-level-badge ' + cls;
+                }
+            });
+        }
+
+        // Wire up action buttons via real API
+        document.querySelectorAll('.cp-action-card').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const action = btn.dataset.action;
+                const supported = ['verify', 'trust', 'status', 'reset'];
+
+                if (!supported.includes(action)) {
+                    log(action + ': Use Claude Code workflow — ' + btn.querySelector('.cp-action-workflow').textContent, 'info');
+                    return;
+                }
+
+                btn.classList.add('running');
+                log('Executing ' + action + '...', 'info');
+
+                try {
+                    const resp = await fetch('/api/pai/action', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: action })
+                    });
+                    const data = await resp.json();
+
+                    if (data.success) {
+                        log(action + ' completed successfully', 'success');
+                        if (data.result) {
+                            const summary = typeof data.result === 'string'
+                                ? data.result
+                                : JSON.stringify(data.result, null, 2);
+                            // Truncate long output for readability
+                            const lines = summary.split('\n');
+                            if (lines.length > 30) {
+                                log(lines.slice(0, 30).join('\n') + '\n... (' + (lines.length - 30) + ' more lines)');
+                            } else {
+                                log(summary);
+                            }
+                        }
+                        if (data.trust_counts) {
+                            updateTrustCounts(data.trust_counts);
+                            log('Trust counts updated: ' + data.trust_counts.untrusted + ' untrusted | ' + data.trust_counts.verified + ' verified | ' + data.trust_counts.trusted + ' trusted', 'info');
+                        }
+                    } else {
+                        log(action + ' failed: ' + (data.error || 'Unknown error'), 'error');
+                    }
+                } catch (err) {
+                    log('Network error: ' + err.message, 'error');
+                } finally {
+                    btn.classList.remove('running');
+                }
+            });
+        });
+
+        // Load initial trust status from real API
+        (async function loadTrustStatus() {
+            try {
+                const resp = await fetch('/api/trust/status');
+                const data = await resp.json();
+                if (data.counts) {
+                    updateTrustCounts(data.counts);
+                }
+                // Update bridge tools count
+                const toolsEl = document.getElementById('bridge-tools');
+                if (toolsEl) {
+                    const total = (data.counts?.untrusted || 0) + (data.counts?.verified || 0) + (data.counts?.trusted || 0);
+                    toolsEl.textContent = total;
+                }
+            } catch (e) {
+                log('Could not load trust status: ' + e.message, 'info');
+            }
+        })();
+
+        // Load awareness data for bridge stats
+        (async function loadBridgeStats() {
+            try {
+                const resp = await fetch('/api/awareness');
+                const data = await resp.json();
+                const skills = data.skills || [];
+                const hooks = data.hooks || [];
+                const el = (id) => document.getElementById(id);
+                if (el('bridge-modules')) el('bridge-modules').textContent = data.metrics?.skill_count || skills.length || '--';
+                if (el('bridge-skills')) el('bridge-skills').textContent = skills.length || '--';
+                if (el('bridge-hooks')) el('bridge-hooks').textContent = hooks.length || '--';
+                if (el('bridge-sessions')) el('bridge-sessions').textContent = data.memory?.work_sessions_count || '--';
+                if (el('bridge-memory')) el('bridge-memory').textContent = data.memory?.total_files || '--';
+            } catch (e) {
+                // Silently fail
+            }
+        })();
+    })();
+</script>
+{% endblock %}

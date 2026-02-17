@@ -23,6 +23,20 @@
 {% block content %}
 <h1>PAI Awareness</h1>
 
+<!-- Cross-link to PAI Control Panel -->
+<div
+    style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(16,185,129,0.08)); border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; margin-bottom: 1.5rem;">
+    <span style="font-size: 1.2rem;">🎛️</span>
+    <div style="flex: 1;">
+        <strong style="font-size: 0.9rem;">PAI Control Panel</strong>
+        <span style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">Admin actions: Verify,
+            Trust, Analyze, Search, Memory</span>
+    </div>
+    <a href="pai_control.html"
+        style="text-decoration: none; padding: 0.35rem 0.85rem; background: var(--accent-color); color: #fff; border-radius: 6px; font-size: 0.82rem; font-weight: 600; white-space: nowrap;">Open
+        Control Panel →</a>
+</div>
+
 <!-- Metrics Bar -->
 <div class="awareness-metrics" role="region" aria-label="PAI ecosystem metrics">
     <div class="awareness-metric-card">
@@ -80,7 +94,8 @@
         {% endfor %}
     </div>
     {% else %}
-    <p style="color: var(--text-secondary);">No missions found. PAI mission data is loaded from ~/.claude/MEMORY/STATE/missions/.</p>
+    <p style="color: var(--text-secondary);">No missions found. PAI mission data is loaded from
+        ~/.claude/MEMORY/STATE/missions/.</p>
     {% endif %}
 </div>
 
@@ -89,7 +104,7 @@
     <h2 class="card-title">Ecosystem Map</h2>
     {% if awareness.missions or awareness.projects %}
     <div class="mermaid">
-{{ awareness.mermaid_graph | safe }}
+        {{ awareness.mermaid_graph | safe }}
     </div>
     {% else %}
     <p style="color: var(--text-secondary);">No missions or projects to visualize.</p>
@@ -121,7 +136,9 @@
                 {% endif %}
                 {% if project.completion_percentage > 0 %}
                 <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: {{ project.completion_percentage }}%;" role="progressbar" aria-valuenow="{{ project.completion_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar-fill" style="width: {{ project.completion_percentage }}%;"
+                        role="progressbar" aria-valuenow="{{ project.completion_percentage }}" aria-valuemin="0"
+                        aria-valuemax="100"></div>
                 </div>
                 {% endif %}
             </div>
@@ -164,7 +181,8 @@
         </button>
     </div>
     <div id="ai-summary-content" role="region" aria-live="polite" aria-label="AI-generated summary">
-        <p style="color: var(--text-secondary);">Click "Generate Summary" to get an Ollama-powered analysis of your PAI ecosystem state.</p>
+        <p style="color: var(--text-secondary);">Click "Generate Summary" to get an Ollama-powered analysis of your PAI
+            ecosystem state.</p>
     </div>
 </div>
 
@@ -181,7 +199,8 @@
         </div>
         {% endfor %}
     </div>
-    <p class="memory-total">Total files: {{ awareness.memory.total_files }} | Work sessions: {{ awareness.memory.work_sessions_count }}</p>
+    <p class="memory-total">Total files: {{ awareness.memory.total_files }} | Work sessions: {{
+        awareness.memory.work_sessions_count }}</p>
     {% else %}
     <p style="color: var(--text-secondary);">No memory data found. PAI memory is stored in ~/.claude/MEMORY/.</p>
     {% endif %}
@@ -209,7 +228,7 @@
             if (skills.length > 0) {
                 html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Skills (' + skills.length + ')</h3>';
                 html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">';
-                skills.forEach(function(s) {
+                skills.forEach(function (s) {
                     const name = typeof s === 'string' ? s : (s.name || s);
                     html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(59,130,246,0.15); color: var(--accent-color); border: 1px solid rgba(59,130,246,0.3);">' + name + '</span>';
                 });
@@ -219,7 +238,7 @@
             if (hooks.length > 0) {
                 html += '<h3 style="margin-bottom: 0.5rem; font-size: 1rem;">Hooks (' + hooks.length + ')</h3>';
                 html += '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
-                hooks.forEach(function(h) {
+                hooks.forEach(function (h) {
                     const name = typeof h === 'string' ? h : (h.name || h);
                     html += '<span style="display: inline-block; padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">' + name + '</span>';
                 });
@@ -278,15 +297,34 @@
     }
 
     /* Mission styles */
-    .mission-list { display: flex; flex-direction: column; gap: 1rem; }
+    .mission-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
     .mission-item {
         padding: 0.75rem;
         background: var(--bg-tertiary);
         border-radius: 6px;
     }
-    .mission-header { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .mission-title { font-weight: 600; }
-    .mission-desc { font-size: 0.85rem; color: var(--text-secondary); margin: 0.5rem 0 0; }
+
+    .mission-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .mission-title {
+        font-weight: 600;
+    }
+
+    .mission-desc {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin: 0.5rem 0 0;
+    }
 
     /* Status badges */
     .status-badge {
@@ -296,12 +334,36 @@
         text-transform: uppercase;
         font-weight: 600;
     }
-    .status-badge-active { background: #10b981; color: #fff; }
-    .status-badge-paused { background: #f59e0b; color: #fff; }
-    .status-badge-completed { background: #6b7280; color: #fff; }
-    .status-badge-in_progress { background: #3b82f6; color: #fff; }
-    .status-badge-blocked { background: #ef4444; color: #fff; }
-    .status-badge-unknown { background: #94a3b8; color: #fff; }
+
+    .status-badge-active {
+        background: #10b981;
+        color: #fff;
+    }
+
+    .status-badge-paused {
+        background: #f59e0b;
+        color: #fff;
+    }
+
+    .status-badge-completed {
+        background: #6b7280;
+        color: #fff;
+    }
+
+    .status-badge-in_progress {
+        background: #3b82f6;
+        color: #fff;
+    }
+
+    .status-badge-blocked {
+        background: #ef4444;
+        color: #fff;
+    }
+
+    .status-badge-unknown {
+        background: #94a3b8;
+        color: #fff;
+    }
 
     /* Priority tags */
     .priority-tag {
@@ -310,9 +372,21 @@
         border-radius: 3px;
         font-weight: 600;
     }
-    .priority-high { background: #fecaca; color: #991b1b; }
-    .priority-medium { background: #fef08a; color: #854d0e; }
-    .priority-low { background: #d1fae5; color: #065f46; }
+
+    .priority-high {
+        background: #fecaca;
+        color: #991b1b;
+    }
+
+    .priority-medium {
+        background: #fef08a;
+        color: #854d0e;
+    }
+
+    .priority-low {
+        background: #d1fae5;
+        color: #065f46;
+    }
 
     .completion-badge {
         font-size: 0.75rem;
@@ -326,6 +400,7 @@
         gap: 0.25rem;
         margin-top: 0.5rem;
     }
+
     .project-tag {
         font-size: 0.7rem;
         padding: 0.1rem 0.4rem;
@@ -336,27 +411,68 @@
     }
 
     /* Project styles */
-    .project-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
     .project-item {
         padding: 0.75rem;
         background: var(--bg-tertiary);
         border-radius: 6px;
     }
-    .project-header { display: flex; align-items: center; gap: 0.5rem; }
-    .project-title { font-weight: 600; font-size: 0.9rem; }
-    .project-goal { font-size: 0.8rem; color: var(--text-secondary); margin: 0.25rem 0; }
 
-    .task-breakdown { display: flex; gap: 0.5rem; margin-top: 0.25rem; flex-wrap: wrap; }
+    .project-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .project-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .project-goal {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin: 0.25rem 0;
+    }
+
+    .task-breakdown {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.25rem;
+        flex-wrap: wrap;
+    }
+
     .task-stat {
         font-size: 0.7rem;
         padding: 0.1rem 0.35rem;
         border-radius: 3px;
         font-family: 'Fira Code', monospace;
     }
-    .task-stat.done { background: #d1fae5; color: #065f46; }
-    .task-stat.active { background: #dbeafe; color: #1e40af; }
-    .task-stat.remaining { background: var(--bg-secondary); color: var(--text-secondary); }
-    .task-stat.blocked { background: #fecaca; color: #991b1b; }
+
+    .task-stat.done {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .task-stat.active {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .task-stat.remaining {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+    }
+
+    .task-stat.blocked {
+        background: #fecaca;
+        color: #991b1b;
+    }
 
     .progress-bar-container {
         height: 4px;
@@ -365,6 +481,7 @@
         margin-top: 0.5rem;
         overflow: hidden;
     }
+
     .progress-bar-fill {
         height: 100%;
         background: var(--accent-color);
@@ -373,15 +490,35 @@
     }
 
     /* TELOS styles */
-    .telos-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .telos-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
     .telos-item {
         padding: 0.75rem;
         background: var(--bg-tertiary);
         border-radius: 6px;
     }
-    .telos-header { display: flex; justify-content: space-between; align-items: center; }
-    .telos-name { font-weight: 600; font-size: 0.9rem; }
-    .telos-size { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+
+    .telos-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .telos-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .telos-size {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        font-family: 'Fira Code', monospace;
+    }
+
     .telos-preview {
         font-size: 0.8rem;
         color: var(--text-secondary);
@@ -400,9 +537,11 @@
         align-items: center;
         margin-bottom: 1rem;
     }
+
     #ai-summary-content {
         min-height: 3rem;
     }
+
     #ai-summary-content pre {
         white-space: pre-wrap;
         font-family: inherit;
@@ -416,6 +555,7 @@
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 0.75rem;
     }
+
     .memory-item {
         display: flex;
         flex-direction: column;
@@ -424,8 +564,18 @@
         background: var(--bg-tertiary);
         border-radius: 6px;
     }
-    .memory-name { font-weight: 600; font-size: 0.9rem; }
-    .memory-stat { font-size: 0.75rem; color: var(--text-secondary); font-family: 'Fira Code', monospace; }
+
+    .memory-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .memory-stat {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        font-family: 'Fira Code', monospace;
+    }
+
     .memory-total {
         margin-top: 0.75rem;
         font-size: 0.85rem;
@@ -439,14 +589,29 @@
         justify-content: center;
         padding: 1rem;
         overflow-x: auto;
+        min-height: 400px;
+    }
+
+    .mermaid svg {
+        max-width: 100%;
+        height: auto;
+        min-height: 350px;
     }
 
     @media (max-width: 900px) {
-        .awareness-metrics { grid-template-columns: repeat(3, 1fr); }
-        .awareness-grid { grid-template-columns: 1fr; }
+        .awareness-metrics {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .awareness-grid {
+            grid-template-columns: 1fr;
+        }
     }
+
     @media (max-width: 600px) {
-        .awareness-metrics { grid-template-columns: repeat(2, 1fr); }
+        .awareness-metrics {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 </style>
 

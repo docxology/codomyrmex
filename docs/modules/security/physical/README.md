@@ -42,6 +42,14 @@ When `PHYSICAL_AVAILABLE` is `True`, the following 17 symbols are re-exported:
 | `check_perimeter_security()` | Check perimeter security status |
 | `manage_access_points()` | Manage physical access points |
 
+## Implementation Details
+
+- Access control includes AccessLevel enum (5 levels from PUBLIC to TOP_SECRET) with full audit trail on grant/revoke operations
+- Asset inventory includes AssetType enum (8 types) with update_status(), list_assets() filtering, and decommission_asset() methods
+- Surveillance includes EventType enum (8 types) with get_events() multi-criteria filtering and get_recent_events()
+- Perimeter management includes AccessPointType (8 types) and SecurityLevel (5 levels) enums with get_vulnerable_points() method
+- Physical vulnerability scanner accepts optional references to other subsystems and performs real vulnerability checks (expired permissions, low-security access points, surveillance gaps, stale assets)
+
 ## Tests
 
 [`src/codomyrmex/tests/unit/security/test_security_physical.py`](../../../../src/codomyrmex/tests/unit/security/test_security_physical.py)

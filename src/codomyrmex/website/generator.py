@@ -79,6 +79,7 @@ class WebsiteGenerator:
             "docs.html",
             "pipelines.html",
             "awareness.html",
+            "pai_control.html",
             "curriculum.html",
             "tutoring.html",
             "assessment.html",

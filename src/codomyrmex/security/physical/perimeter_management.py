@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -16,6 +17,27 @@ def get_perimeter_manager() -> "PerimeterManager":
     if _GLOBAL_PERIMETER is None:
         _GLOBAL_PERIMETER = PerimeterManager()
     return _GLOBAL_PERIMETER
+
+
+class AccessPointType(Enum):
+    """Types of physical access points."""
+    DOOR = "door"
+    GATE = "gate"
+    WINDOW = "window"
+    LOADING_DOCK = "loading_dock"
+    EMERGENCY_EXIT = "emergency_exit"
+    ROOF_ACCESS = "roof_access"
+    UNDERGROUND = "underground"
+    VEHICLE_ENTRY = "vehicle_entry"
+
+
+class SecurityLevel(Enum):
+    """Security levels for access points and perimeter zones."""
+    MINIMAL = "minimal"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    MAXIMUM = "maximum"
 
 
 @dataclass
@@ -74,6 +96,13 @@ class PerimeterManager:
     def manage_access_points(self) -> list[AccessPoint]:
         """Get all access points."""
         return list(self.access_points.values())
+
+    def get_vulnerable_points(self) -> list[AccessPoint]:
+        """Return access points with low security level or non-active status."""
+        return [
+            point for point in self.access_points.values()
+            if point.security_level == "low" or point.status != "active"
+        ]
 
 
 def check_perimeter_security(

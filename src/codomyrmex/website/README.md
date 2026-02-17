@@ -35,6 +35,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 - **Agents** — List all AI agent integrations
 - **Ollama Chat** — Chat with local LLM models
 - **PAI Awareness** — Mission/project/task dashboard with Mermaid graphs
+- **PAI Control Panel** — Administrative interface with workflow actions, trust management, and bridge status
 
 ## Exports
 
@@ -42,7 +43,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 |-------|-------------|
 | `WebsiteGenerator` | Generate static site from Jinja2 templates |
 | `DataProvider` | Aggregate data from Codomyrmex modules |
-| `WebsiteServer` | HTTP server with 18 API endpoints |
+| `WebsiteServer` | HTTP server with 21 API endpoints |
 
 ## API Endpoints
 
@@ -66,6 +67,10 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 | `/api/tests` | POST | Run pytest suite |
 | `/api/refresh` | POST | Refresh system data |
 | `/api/awareness/summary` | POST | Generate AI summary |
+| `/api/llm/config` | GET | Retrieve LLM configuration |
+| `/api/tools` | GET | MCP tools, resources, prompts |
+| `/api/trust/status` | GET | Trust gateway counts + destructive tools |
+| `/api/pai/action` | POST | Execute PAI action (verify/trust/reset/status) |
 
 ## Directory Structure
 
@@ -74,7 +79,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 | `generator.py` | Static site generator |
 | `data_provider.py` | Data aggregation layer (1122 lines) |
 | `server.py` | HTTP server with REST API |
-| `templates/` | 10 Jinja2 HTML templates + base layout |
+| `templates/` | 12 Jinja2 HTML templates + base layout |
 | `assets/` | CSS and JS static files |
 
 ## Testing
@@ -88,7 +93,6 @@ uv run python -m pytest src/codomyrmex/tests/unit/website/ -v
 - [Module Documentation](../../../docs/modules/website/README.md)
 - [Agent Guide](../../../docs/modules/website/AGENTS.md)
 - [Specification](../../../docs/modules/website/SPEC.md)
-
 
 ## Consolidated Sub-modules
 
