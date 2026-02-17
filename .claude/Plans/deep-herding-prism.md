@@ -1,171 +1,106 @@
-# Plan: Cognitive Perspectives Documentation Suite
+# Plan: Create PAI Agent Examples in scripts/agents/pai/
 
 ## Context
 
-Daniel wants a new `docs/cognitive/` directory with 7 documents covering cognitive science and engineering frameworks applied to codomyrmex. The `docs/bio/` suite (11 essays) already covers biological metaphors (stigmergy as ant trails, FEP as brain theory). The cognitive/ suite takes the **complementary formal theory angle** — not "codomyrmex is like an ant colony" but "codomyrmex implements these cognitive architectures."
+Daniel requested creating `scripts/agents/pai/` with many comprehensive examples demonstrating the full PAI (Personal AI Infrastructure) integration API. The existing flat scripts (`pai_example.py` — read-only discovery, `pai_dashboard.py` — web dashboard, `simulate_pai_chat.py` — slash command simulator) don't exercise the trust lifecycle, MCP server operations, tool invocation patterns, or Algorithm orchestration. The `pai/` subfolder fills this gap with 10 substantive Python scripts + 4 RASP docs, exercising all 31 public symbols from `src/codomyrmex/agents/pai/`.
 
-The directory exists but is empty. The codebase has deep cognitive implementations: `cerebrum/inference/active_inference.py` (full FEP agent), `crypto/analysis/entropy.py` (Shannon entropy), `security/cognitive/` (threat assessment), `meme/` (12 submodules), `bio_simulation/ant_colony/` (colony simulation).
+## Files to Create (14 total)
 
-## Unifying Narrative
+### RASP Documentation (4 files)
 
-**Codomyrmex is a cognitive architecture.** The 7 documents prove this in sequence:
+| File | Purpose |
+|------|---------|
+| `scripts/agents/pai/README.md` | Index, quick start, learning path, script table |
+| `scripts/agents/pai/AGENTS.md` | Method coverage matrix, operating contracts |
+| `scripts/agents/pai/SPEC.md` | Functional requirements, API surface, constraints |
+| `scripts/agents/pai/PAI.md` | AI strategy, Algorithm phase mapping, symbol index |
 
-1. **Signal & Information Theory** — The formal language (entropy, channels, coding)
-2. **Stigmergy** — How agents coordinate without communication
-3. **Cognitive Modeling** — What a mind looks like when built from modules
-4. **Active Inference** — How that mind selects actions (FEP implementation)
-5. **Cognitive Security** — How that mind fails under attack
-6. **Ergonomics** — How human minds couple to the system
-7. **Industrialization** — How cognitive systems survive production
+### Python Scripts (10 files)
 
-Arc: **medium → coordination → architecture → agency → threat → interface → scale**
+| # | File | ~Lines | Description | Key API Exercised |
+|---|------|--------|-------------|-------------------|
+| 1 | `trust_lifecycle.py` | 180 | Full UNTRUSTED->VERIFIED->TRUSTED state machine with enforcement | `TrustRegistry`, `verify_capabilities`, `trust_tool`, `trust_all`, `trusted_call_tool`, `reset_trust`, `SAFE_TOOLS`, `DESTRUCTIVE_TOOLS` |
+| 2 | `mcp_server_ops.py` | 170 | MCP server creation, registry inspection, health validation | `create_codomyrmex_mcp_server`, `get_tool_registry`, `get_total_tool_count`, `TOOL_COUNT`, `RESOURCE_COUNT`, `PROMPT_COUNT` |
+| 3 | `tool_invocation.py` | 160 | Direct, trusted, dynamic, and error-handling tool call patterns | `call_tool`, `trusted_call_tool`, `verify_capabilities`, `trust_all` |
+| 4 | `skill_manifest.py` | 150 | Manifest generation, algorithm-to-tool mapping, knowledge scope | `get_skill_manifest`, `get_tool_registry`, `ALGORITHM_PHASES` |
+| 5 | `agent_personality.py` | 140 | Agent personality discovery and cross-referencing | `PAIBridge.list_agents`, `get_agent_info`, `list_skills` |
+| 6 | `memory_explorer.py` | 150 | Memory system three-tier deep dive | `PAIBridge.list_memory_stores`, `get_memory_info`, `PAIConfig` |
+| 7 | `algorithm_orchestrator.py` | 200 | **Capstone**: 7-phase Algorithm walkthrough using tools at each phase | Nearly all 31 symbols |
+| 8 | `claude_pai_bridge.py` | 180 | Claude client + PAI bridge combined workflow | `ClaudeClient`, `ClaudeIntegrationAdapter`, `PAIBridge`, `call_tool`, `get_skill_manifest` |
+| 9 | `security_audit.py` | 150 | Security config, TELOS, destructive tool classification | `get_security_config`, `get_telos_files`, `SAFE_TOOLS`, `DESTRUCTIVE_TOOLS`, `TrustLevel` |
+| 10 | `hook_lifecycle.py` | 140 | Hook system enumeration, active/archived analysis | `list_hooks`, `list_active_hooks`, `get_hook_info` |
 
-## Files to Create (8 total)
+## Script Conventions (from existing scripts/agents/ patterns)
 
-### 1. `docs/cognitive/README.md` — Suite Index
+```python
+#!/usr/bin/env python3
+"""Docstring with Usage and Upstream link."""
+import argparse, json, sys
+from pathlib import Path
 
-Structure (following `docs/bio/README.md` pattern):
-- Series metadata header: `**Series**: Cognitive Science & Engineering | **Status**: Active | **Last Updated**: February 2026`
-- **Theoretical Position** (2 paragraphs): Codomyrmex as cognitive architecture. Reference Newell (1990), ACT-R, Global Workspace Theory. The 7 subsystems.
-- **Document Index** table: Document | Theoretical Domain | Primary Modules | Key Formalism
-- **Suggested Reading Order**: Foundation → Signal/Info Theory, Stigmergy. Core → Cognitive Modeling, Active Inference. Applied → Cognitive Security, Ergonomics, Industrialization.
-- **Relationship to Biological Perspectives**: Complementary lenses on same platform. Bio = analogical, Cognitive = formal identity.
-- **Related Resources** footer
+try:
+    import codomyrmex
+except ImportError:
+    project_root = Path(__file__).resolve().parent.parent.parent.parent
+    sys.path.insert(0, str(project_root / "src"))
 
-### 2. `docs/cognitive/signal_information_theory.md`
+from codomyrmex.utils.cli_helpers import (
+    setup_logging, print_info, print_success, print_warning, print_error
+)
 
-**Title**: "Signal, Entropy, and the Channel"
-- **The Theory**: Shannon (1948) entropy H = -sum p log p. Channel capacity. Source/channel coding. Kolmogorov complexity.
-- **Architectural Mapping** table:
-  - Shannon entropy → `crypto/analysis/entropy.py:shannon_entropy()`, `byte_entropy()`
-  - Channel capacity → `model_context_protocol/` (MCP as bounded channel)
-  - Source coding → `telemetry/` (structured spans as efficient encoding)
-  - Noise/redundancy → `meme/cybernetic/engine.py:PIDController`
-  - Steganography → `crypto/steganography/`
-  - Randomness testing → `crypto/analysis/entropy.py:chi_squared_test()`
-- **Design Implications**: Measure entropy of data channels; rate-limit by information rate; channel capacity constrains tool signatures
-- Cross-ref: `bio/superorganism.md`, `bio/stigmergy.md`
-- **Citations**: Shannon 1948, Cover & Thomas 2006, Kolmogorov 1965, MacKay 2003
-- **Docxology**: GLOSSOPETRAE, InsightSpike-AI, QuadMath
+def main() -> int:
+    args = parse_args()
+    setup_logging()
+    # ... graceful degradation, sections, cleanup
+    return 0
 
-### 3. `docs/cognitive/stigmergy.md`
+if __name__ == "__main__":
+    sys.exit(main())
+```
 
-**Title**: "Algorithmic Stigmergy: Marker-Based Coordination"
-- **The Theory**: Heylighen (2016) formal definition. Distinguish from message-passing. ACO (Dorigo & Stutzle 2004). GFlowNets (Bengio 2021). Convergence properties. Qualitative vs quantitative stigmergy.
-- **Architectural Mapping** table:
-  - Marker deposition → `events/event_bus.py:EventBus`
-  - Evaporation → `cache/` (TTL-based expiry)
-  - ACO simulation → `bio_simulation/ant_colony/colony.py:Colony`
-  - Flow network → `orchestrator/parallel_runner.py` (fan-out-fan-in)
-  - Reinforcement → `agentic_memory/` (access frequency drives retention)
-- **Design Implications**: Convergence guarantees, evaporation rate optimization, GFlowNet-style workflow scheduling
-- Cross-ref: `bio/stigmergy.md` (biological treatment → this is the formal theory)
-- **Citations**: Heylighen 2016, Dorigo & Stutzle 2004, Bengio et al. 2021
-- **Docxology**: gfacs (GFlowNets + ACO)
+Key conventions:
+- `argparse` with `--section`/`--phase` selectors + `--json` + `--help`
+- Graceful degradation: return 0 when PAI not installed
+- Trust reset on exit for scripts that modify trust state
+- `cli_helpers` for all formatted output
 
-### 4. `docs/cognitive/cognitive_modeling.md`
+## Learning Path
 
-**Title**: "Cognitive Architecture: Case-Based Reasoning, Working Memory, and the Cerebrum"
-- **The Theory**: Newell (1990) unified cognition. ACT-R (Anderson 2007). CBR 4R cycle (Aamodt & Plaza 1994). Bayesian brain (Tenenbaum et al. 2011). Miller's 7±2.
-- **Architectural Mapping** table:
-  - Declarative memory → `agentic_memory/memory.py`
-  - Working memory → `cerebrum/core/` (bounded short-term state)
-  - CBR → `cerebrum/core/` (CaseBase, CaseRetriever)
-  - Bayesian inference → `cerebrum/inference/bayesian.py:BayesianNetwork`
-  - Episodic memory → `graph_rag/`
-  - Production rules → `orchestrator/workflow.py` (condition-action triggers)
-- **Design Implications**: CBR for institutional knowledge, explicit WM capacity limits, Bayesian prior engineering
-- Cross-ref: `bio/memory_and_forgetting.md`
-- **Citations**: Newell 1990, Anderson 2007, Aamodt & Plaza 1994, Miller 1956
-- **Docxology**: enactive_inference_model, InsightSpike-AI
+```
+Tier 1 — PAIBridge read-only:
+  agent_personality.py → memory_explorer.py → hook_lifecycle.py → security_audit.py
 
-### 5. `docs/cognitive/active_inference.md`
+Tier 2 — MCP layer:
+  mcp_server_ops.py → skill_manifest.py → tool_invocation.py
 
-**Title**: "Active Inference: The Free Energy Principle in Executable Code"
-- **The Theory**: Friston (2006, 2010) variational free energy F = -log P(o|s) + KL[q(s)||p(s)]. Expected free energy (EFE). Policy selection via softmax over -G. Markov blanket (Pearl 1988). Perception-action loop.
-- **Architectural Mapping** table (direct code correspondence):
-  - Variational free energy → `cerebrum/inference/active_inference.py:VariationalFreeEnergy.compute()`
-  - EFE → `VariationalFreeEnergy.compute_expected_free_energy()`
-  - Policy selection → `PolicySelector.select_policy()` (softmax with temperature)
-  - Belief state → `BeliefState` (dict of state→prob; `entropy()` method)
-  - Active inference agent → `ActiveInferenceAgent` (full perception-action loop: `predict()`, `select_action()`, `update_beliefs()`)
-  - Markov blanket → MCP tool schemas (module API surface = formal blanket)
-  - Amortized inference → `skills/discovery/` (fast lookup as learned recognition model)
-- **Design Implications**: F decomposition as engineering handle, EFE's epistemic value = info-seeking, blanket integrity = modularity
-- Cross-ref: `bio/free_energy.md` (biology → this traces the implementation)
-- **Citations**: Friston 2006, 2010; Parr, Pezzulo & Friston 2022; Pearl 1988
-- **Docxology**: active-inference-sim-lab, FEP_RL_VAE, RxInferExamples.jl, enactive_inference_model, Active_Inference_for_Fun
+Tier 3 — Trust state machine:
+  trust_lifecycle.py
 
-### 6. `docs/cognitive/cognitive_security.md`
+Tier 4 — Integration (capstone):
+  claude_pai_bridge.py → algorithm_orchestrator.py
+```
 
-**Title**: "Cognitive Security: Epistemic Defense and Information Warfare"
-- **The Theory**: Cognitive security = protecting epistemic processes against adversarial manipulation. Kill chain adapted to cognitive attacks (Hutchins 2011). Meme theory (Dawkins 1976, Blackmore 1999) as contagion model. Social engineering as belief-state exploitation. Cialdini's influence principles.
-- **Architectural Mapping** table:
-  - Threat assessment → `security/cognitive/cognitive_threat_assessment.py:CognitiveThreatAssessor`
-  - `CognitiveThreat` dataclass: `threat_id`, `threat_type`, `severity`, `human_factors`, `mitigation`
-  - Social engineering → `security/cognitive/social_engineering_detector.py`
-  - Phishing → `security/cognitive/phishing_analyzer.py`
-  - Epistemic verification → `meme/epistemic/` (truth verification)
-  - Contagion modeling → `meme/contagion/` (SIR epidemic models)
-  - Framing detection → `meme/neurolinguistic/framing.py`
-  - Trust gateway → `agents/pai/trust_gateway.py` (epistemic consent architecture)
-- **Design Implications**: human_factors as explicit attack surface modeling, fabrication penalty as formal epistemic prior, trust gateway as cognitive security architecture
-- Cross-ref: `bio/immune_system.md`
-- **Citations**: Hutchins 2011, Dawkins 1976, Blackmore 1999, Cialdini 2006, Mercier & Sperber 2017
-- **Docxology**: p3if, Personal_AI_Infrastructure, GLOSSOPETRAE
+## Non-duplication with existing scripts
 
-### 7. `docs/cognitive/ergonomics.md`
+| Existing Script | What it covers | How new scripts go deeper |
+|----------------|----------------|--------------------------|
+| `pai_example.py` | Read-only PAIBridge discovery (11 subsystems) | New scripts exercise *mutable* trust state, *call* tools, *run* MCP servers |
+| `pai_dashboard.py` | Web dashboard launcher | New scripts are CLI-first programmatic demonstrations |
+| `simulate_pai_chat.py` | Slash command simulator | New scripts use the Python API directly, not slash commands |
 
-**Title**: "Cognitive Ergonomics: Human Factors and the Operator Interface"
-- **The Theory**: GOMS model (Card, Moran & Newell 1983). Fitts's Law. Cognitive load theory (Sweller 1988): intrinsic/extraneous/germane. Mental models (Norman 1988). CLI-first as cognitive ergonomics (Unix philosophy, McIlroy 1978).
-- **Architectural Mapping** table:
-  - Fitts's Law → `cli/core.py` (command depth minimized)
-  - GOMS → CLI noun/verb hierarchy
-  - Rich output → `terminal_interface/` (structured, colored output reduces parsing load)
-  - Mental model support → `system_discovery/` (`codomyrmex modules` makes system legible)
-  - Cognitive load reduction → `documentation/education/curriculum.py` (progressive disclosure)
-  - Composability → `cli/` + `orchestrator/` (JSON/YAML shell-composable output)
-- **Design Implications**: Command depth predicts Fitts's Law performance, Rich reduces extraneous load, curriculum.py is formal cognitive load management
-- Cross-ref: `bio/eusociality.md` (weak parallel — note explicitly)
-- **Citations**: Card, Moran & Newell 1983; Fitts 1954; Sweller 1988; Norman 1988
-- **Docxology**: Personal_AI_Infrastructure
+## Critical Source Files (reuse, don't reimplement)
 
-### 8. `docs/cognitive/industrialization.md`
-
-**Title**: "Industrialization: Process Engineering for Cognitive Systems at Scale"
-- **The Theory**: Scientific management (Taylor 1911). Assembly line and quality control (Deming 1982). SRE (Beyer et al. 2016): SLOs, error budgets, toil. CI/CD as continuous quality gate (Humble & Farley 2010). Spiral model (Boehm 1988).
-- **Architectural Mapping** table:
-  - Quality gates → `ci_cd_automation/pipeline_manager.py`
-  - Assembly line → `orchestrator/workflow.py` (DAG stages)
-  - Rollback → `ci_cd_automation/` (automated deployment rollback)
-  - Performance monitoring → `ci_cd_automation/performance_optimizer.py`
-  - Containerization → `containerization/` (standardized execution units)
-  - Model versioning → `model_ops/evaluation/metrics.py`
-  - SRE metrics → `telemetry/` (alerting, dashboard)
-- **Design Implications**: Rollback as designed-in quality control, fan-out-fan-in as assembly line (Little's Law), model registry as product version management
-- Cross-ref: `bio/metabolism.md`
-- **Citations**: Humble & Farley 2010, Beyer et al. 2016, Deming 1982, Taylor 1911
-- **Docxology**: gastown, MetaInformAnt
-
-## Document Pattern (from `docs/bio/`)
-
-Every document follows this exact structure:
-1. `**Series**: [Cognitive Perspectives](./README.md) | **Topic**: [topic]`
-2. `## The Theory` — Formal framework, academic grounding (replaces bio's "The Biology")
-3. `## Architectural Mapping` — Table + prose connecting theory to modules with source paths
-4. `## Design Implications` — Engineering consequences of the theory
-5. `## Further Reading` — Academic citations, author-year format
-6. `## See Also` — Cross-refs within cognitive/ and to bio/ counterparts
-7. Navigation footer: `*Return to [series index](./README.md) | [Bio perspectives](../bio/README.md) | [Project README](../../README.md)*`
-
-Target length: 80-120 lines per document. No padding. Substantive throughout.
+- `src/codomyrmex/agents/pai/__init__.py` — 31 public exports
+- `src/codomyrmex/agents/pai/pai_bridge.py` — PAIBridge, PAIConfig, dataclasses
+- `src/codomyrmex/agents/pai/mcp_bridge.py` — MCP server, tool registry, call_tool
+- `src/codomyrmex/agents/pai/trust_gateway.py` — TrustLevel, TrustRegistry, trust functions
+- `src/codomyrmex/agents/claude/claude_client.py` — ClaudeClient
+- `src/codomyrmex/agents/claude/claude_integration.py` — ClaudeIntegrationAdapter
 
 ## Verification
 
-After creating all 8 files:
-1. All relative links resolve (spot-check 5+ cross-references)
-2. Every source path reference exists in the codebase
-3. Pattern matches `docs/bio/` formatting (header style, section order, footer)
-4. No overlap/redundancy with `docs/bio/` content (complementary, not duplicative)
-5. Academic citations are real (verifiable authors, years, journals)
-6. Docxology repo references match actual repos at github.com/docxology
+1. All 14 files created and non-empty
+2. Each Python script runs: `uv run python scripts/agents/pai/<script>.py --help` exits 0
+3. No writes to `~/.claude/` (read-only against PAI filesystem)
+4. Trust state reset verified (trust_lifecycle.py, tool_invocation.py, algorithm_orchestrator.py)
+5. All 31 public symbols exercised across the suite (coverage matrix in AGENTS.md)
