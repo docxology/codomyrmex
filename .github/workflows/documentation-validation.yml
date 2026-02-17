@@ -23,6 +23,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  pull-requests: write
+  contents: read
+
 env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"
@@ -231,8 +235,9 @@ jobs:
       - name: Consolidate results
         run: |
           # Move all JSON results to output directory
-          find artifacts -name "*.json" -exec cp {} output/ \;
-          find artifacts -name "*.html" -exec cp {} output/ \;
+          mkdir -p artifacts
+          find artifacts -name "*.json" -exec cp {} output/ \; 2>/dev/null || true
+          find artifacts -name "*.html" -exec cp {} output/ \; 2>/dev/null || true
 
       - name: Generate dashboard
         run: |
@@ -287,7 +292,8 @@ jobs:
 
       - name: Consolidate results
         run: |
-          find artifacts -name "*.json" -exec cp {} output/ \;
+          mkdir -p artifacts
+          find artifacts -name "*.json" -exec cp {} output/ \; 2>/dev/null || true
 
       - name: Enforce quality gates
         run: |
