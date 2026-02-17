@@ -7,8 +7,7 @@ produces certificates for students who pass.
 from __future__ import annotations
 
 import hashlib
-import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
@@ -153,12 +152,14 @@ class Assessment:
 
             pts = min(pts, max_pts)
             earned += pts
-            breakdown.append({
-                "question_id": qid,
-                "module": question["module"],
-                "points_possible": max_pts,
-                "points_earned": round(pts, 2),
-            })
+            breakdown.append(
+                {
+                    "question_id": qid,
+                    "module": question["module"],
+                    "points_possible": max_pts,
+                    "points_earned": round(pts, 2),
+                }
+            )
 
         score_pct = (earned / total * 100) if total > 0 else 0.0
 

@@ -30,7 +30,9 @@ class TutoringSession:
     session_id: str = field(default_factory=lambda: str(uuid4()))
     student_name: str = ""
     topic: str = ""
-    started_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    started_at: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
     questions_asked: int = 0
     correct_answers: int = 0
     history: list[dict[str, Any]] = field(default_factory=list)
@@ -82,7 +84,12 @@ class Tutor:
             },
             {
                 "question": "Which decorator makes a method a class method?",
-                "choices": ["@staticmethod", "@classmethod", "@property", "@abstractmethod"],
+                "choices": [
+                    "@staticmethod",
+                    "@classmethod",
+                    "@property",
+                    "@abstractmethod",
+                ],
                 "answer": "@classmethod",
                 "difficulty": "medium",
             },
@@ -172,10 +179,15 @@ class Tutor:
             List of question dicts, each with 'id', 'question', 'choices'.
         """
         bank = self._QUESTION_BANK.get(topic, [])
-        min_idx = self._DIFFICULTY_ORDER.index(difficulty) if difficulty in self._DIFFICULTY_ORDER else 0
+        min_idx = (
+            self._DIFFICULTY_ORDER.index(difficulty)
+            if difficulty in self._DIFFICULTY_ORDER
+            else 0
+        )
 
         eligible = [
-            q for q in bank
+            q
+            for q in bank
             if self._DIFFICULTY_ORDER.index(q.get("difficulty", "easy")) >= min_idx
         ]
 
@@ -183,14 +195,16 @@ class Tutor:
 
         quiz: list[dict[str, Any]] = []
         for q in selected:
-            quiz.append({
-                "id": str(uuid4()),
-                "question": q["question"],
-                "choices": q["choices"],
-                "difficulty": q["difficulty"],
-                # Answer is NOT included -- used internally for grading
-                "_answer": q["answer"],
-            })
+            quiz.append(
+                {
+                    "id": str(uuid4()),
+                    "question": q["question"],
+                    "choices": q["choices"],
+                    "difficulty": q["difficulty"],
+                    # Answer is NOT included -- used internally for grading
+                    "_answer": q["answer"],
+                }
+            )
         return quiz
 
     def evaluate_answer(self, question: dict[str, Any], answer: str) -> dict[str, Any]:
@@ -206,7 +220,11 @@ class Tutor:
         expected = question.get("_answer", "")
         is_correct = answer.strip().lower() == expected.strip().lower()
 
-        feedback = "Correct!" if is_correct else f"Incorrect. The correct answer is: {expected}"
+        feedback = (
+            "Correct!"
+            if is_correct
+            else f"Incorrect. The correct answer is: {expected}"
+        )
 
         return {
             "correct": is_correct,
@@ -263,11 +281,13 @@ class Tutor:
             session.questions_asked += 1
             if result["correct"]:
                 session.correct_answers += 1
-            session.history.append({
-                "question": question.get("question", ""),
-                "answer": answer,
-                "correct": result["correct"],
-            })
+            session.history.append(
+                {
+                    "question": question.get("question", ""),
+                    "answer": answer,
+                    "correct": result["correct"],
+                }
+            )
         return result
 
     @property

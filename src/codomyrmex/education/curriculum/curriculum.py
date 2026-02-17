@@ -8,13 +8,14 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from enum import Enum, auto
+from enum import Enum
 from typing import Any
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 
 class DifficultyLevel(Enum):
     """Difficulty levels for educational content."""
+
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -104,7 +105,9 @@ class Curriculum:
             ValueError: If a module with the same name already exists.
         """
         if name in self._modules:
-            raise ValueError(f"Module '{name}' already exists in curriculum '{self.name}'")
+            raise ValueError(
+                f"Module '{name}' already exists in curriculum '{self.name}'"
+            )
 
         lesson = Lesson(
             title=name,
@@ -131,10 +134,12 @@ class Curriculum:
             Ordered list of module names forming the learning path.
         """
         level_order = ["beginner", "intermediate", "advanced", "expert"]
-        student_idx = level_order.index(student_level) if student_level in level_order else 0
+        student_idx = (
+            level_order.index(student_level) if student_level in level_order else 0
+        )
 
         # Simple topological sort (Kahn's algorithm)
-        in_degree: dict[str, int] = {name: 0 for name in self._modules}
+        in_degree: dict[str, int] = dict.fromkeys(self._modules, 0)
         adjacency: dict[str, list[str]] = {name: [] for name in self._modules}
 
         for name, lesson in self._modules.items():
@@ -158,7 +163,7 @@ class Curriculum:
 
         # Optionally skip early modules for advanced students
         if student_idx > 0:
-            path = path[min(student_idx, len(path)):]
+            path = path[min(student_idx, len(path)) :]
 
         return path
 
@@ -202,7 +207,9 @@ class Curriculum:
             lines = [f"Curriculum: {self.name} (Level: {self.level})", "=" * 50]
             for i, lesson in enumerate(self._modules.values(), 1):
                 lines.append(f"\n{i}. {lesson.title} ({lesson.duration_minutes} min)")
-                lines.append(f"   Prerequisites: {', '.join(lesson.prerequisites) or 'None'}")
+                lines.append(
+                    f"   Prerequisites: {', '.join(lesson.prerequisites) or 'None'}"
+                )
                 for obj in lesson.objectives:
                     lines.append(f"   - {obj}")
             lines.append(f"\nTotal duration: {self.total_duration()} minutes")
