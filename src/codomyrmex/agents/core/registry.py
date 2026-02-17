@@ -107,3 +107,49 @@ class ToolRegistry:
             raise ValueError(f"Tool '{tool_name}' not found")
 
         return tool.func(**kwargs)
+
+    @classmethod
+    def from_mcp(cls, mcp_registry: Any, *, prefix: str = "") -> "ToolRegistry":
+        """Create a ToolRegistry from an MCP tool registry.
+
+        Bridges ``model_context_protocol.MCPToolRegistry`` (or any object
+        with a ``list_tools()`` method returning objects with ``name``,
+        ``description``, ``input_schema``, and ``handler`` attributes) into
+        the agent-level ToolRegistry.
+
+        Args:
+            mcp_registry: An MCP-style tool registry instance.
+            prefix: Optional prefix for tool names (e.g. ``"mcp."``)
+
+        Returns:
+            A new ``ToolRegistry`` populated with bridged tools.
+
+        Raises:
+            TypeError: If *mcp_registry* doesn't expose ``list_tools()``.
+        """
+        if not hasattr(mcp_registry, "list_tools"):
+            raise TypeError(
+                f"Expected an MCP registry with list_tools(), got {type(mcp_registry).__name__}"
+            )
+
+        registry = cls()
+        for mcp_tool in mcp_registry.list_tools():
+            name = f"{prefix}{mcp_tool.name}" if prefix else mcp_tool.name
+            description = getattr(mcp_tool, "description", "MCP tool")
+            handler = getattr(mcp_tool, "handler", None)
+            input_schema = getattr(mcp_tool, "input_schema", {"type": "object", "properties": {}})
+
+            if handler is None:
+                registry.logger.warning(f"MCP tool '{name}' has no handler, skipping")
+                continue
+
+            tool = Tool(
+                name=name,
+                func=handler,
+                description=description,
+                args_schema=input_schema,
+            )
+            registry.register(tool)
+
+        registry.logger.info(f"Bridged {len(registry._tools)} tools from MCP registry")
+        return registry

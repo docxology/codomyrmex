@@ -10,3 +10,17 @@ class ChatBubble(BaseComponent):
     message: str = ""
     role: str = "user"
     timestamp: str = ""
+
+    def render(self) -> str:
+        align = "right" if self.role == "user" else "left"
+        label = self.role.capitalize()
+        return (
+            f'<div class="chat-bubble" style="float: {align}; '
+            f'padding: 8px; margin: 4px; border-radius: 8px;">'
+            f'<strong>{label}</strong>: {self.message}'
+            f'<div class="timestamp">{self.timestamp}</div>'
+            f'</div>'
+        )
+
+    def __str__(self) -> str:
+        return self.render()

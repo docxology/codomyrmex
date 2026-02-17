@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 from collections.abc import Iterator
 
 from codomyrmex.logging_monitoring import get_logger
@@ -138,6 +138,51 @@ class AgentInterface(ABC):
         pass
 
 
+@runtime_checkable
+class AgentProtocol(Protocol):
+    """Protocol defining the plan-act-observe agent lifecycle.
+
+    Any agent that supports structured reasoning should implement
+    these three methods.  ``BaseAgent`` provides default no-op
+    implementations so adoption is incremental.
+    """
+
+    def plan(self, request: AgentRequest) -> list[str]:
+        """Generate a plan of actions to execute.
+
+        Args:
+            request: The incoming agent request.
+
+        Returns:
+            Ordered list of action descriptions the agent intends to take.
+        """
+        ...
+
+    def act(self, action: str, context: dict[str, Any] | None = None) -> AgentResponse:
+        """Execute a single planned action.
+
+        Args:
+            action: The action string (e.g. tool name or reasoning step).
+            context: Optional context from previous observations.
+
+        Returns:
+            Agent response from executing the action.
+        """
+        ...
+
+    def observe(self, response: AgentResponse) -> dict[str, Any]:
+        """Process the result of an action and extract observations.
+
+        Args:
+            response: The response from the most recent ``act()`` call.
+
+        Returns:
+            Observation dict that can feed into the next ``plan()``
+            or ``act()`` call.
+        """
+        ...
+
+
 class BaseAgent(AgentInterface):
     """Base implementation of AgentInterface with common functionality."""
 
@@ -158,6 +203,26 @@ class BaseAgent(AgentInterface):
         super().__init__(config)
         self.name = name
         self.capabilities = capabilities or []
+
+    # ------------------------------------------------------------------
+    # AgentProtocol default implementations (plan / act / observe)
+    # ------------------------------------------------------------------
+
+    def plan(self, request: AgentRequest) -> list[str]:
+        """Default plan: single step that executes the prompt directly."""
+        return [request.prompt]
+
+    def act(self, action: str, context: dict[str, Any] | None = None) -> AgentResponse:
+        """Default act: wrap the action string as an AgentRequest and execute."""
+        return self.execute(AgentRequest(prompt=action, context=context))
+
+    def observe(self, response: AgentResponse) -> dict[str, Any]:
+        """Default observe: return content and success status."""
+        return {
+            "content": response.content,
+            "success": response.is_success(),
+            "error": response.error,
+        }
 
     def setup(self) -> None:
         """

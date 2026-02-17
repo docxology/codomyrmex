@@ -1,5 +1,5 @@
 from .curriculum import Curriculum
-from codomyrmex.data_visualization import MermaidDiagram
+from codomyrmex.data_visualization.plots.mermaid import MermaidDiagram
 
 def render_curriculum_path(curriculum: Curriculum) -> MermaidDiagram:
     """
@@ -14,4 +14,4 @@ def render_curriculum_path(curriculum: Curriculum) -> MermaidDiagram:
         for prereq_id in lesson.prerequisites:
             diagram += f"    {prereq_id} --> {lesson.id}\n"
             
-    return MermaidDiagram("Curriculum Path", diagram)
+    return MermaidDiagram(title="Curriculum Path", definition=diagram)

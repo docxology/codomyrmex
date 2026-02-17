@@ -8,8 +8,8 @@ def test_relations_visualization():
     cm = ContactManager()
     cm.add_contact("Alice", email="alice@example.com")
     diagram = render_social_graph(cm)
-    assert "Alice" in diagram.data
-    assert "graph TD" in diagram.data
+    assert "Alice" in diagram.definition
+    assert "graph TD" in diagram.definition
 
 
 def test_education_curriculum_structure():

@@ -13,7 +13,7 @@ import pytest
 
 from codomyrmex.crypto.exceptions import RandomError
 from codomyrmex.crypto.random import (
-    TestResult,
+    NistTestResult,
     block_frequency_test,
     generate_nonce,
     generate_uuid4,
@@ -162,7 +162,7 @@ class TestMonobitTest:
     def test_passes_for_random_data(self) -> None:
         data = os.urandom(1024)
         result = monobit_test(data)
-        assert isinstance(result, TestResult)
+        assert isinstance(result, NistTestResult)
         assert result.test_name == "Monobit (Frequency) Test"
         assert result.passed is True
         assert result.p_value >= 0.01
@@ -192,7 +192,7 @@ class TestRunsTest:
     def test_passes_for_random_data(self) -> None:
         data = os.urandom(1024)
         result = runs_test(data)
-        assert isinstance(result, TestResult)
+        assert isinstance(result, NistTestResult)
         assert result.test_name == "Runs Test"
         assert result.passed is True
         assert result.p_value >= 0.01
@@ -216,7 +216,7 @@ class TestBlockFrequencyTest:
     def test_passes_for_random_data(self) -> None:
         data = os.urandom(1024)
         result = block_frequency_test(data)
-        assert isinstance(result, TestResult)
+        assert isinstance(result, NistTestResult)
         assert result.test_name == "Block Frequency Test"
         assert result.passed is True
         assert result.p_value >= 0.01
@@ -245,7 +245,7 @@ class TestRunNistSuite:
         data = os.urandom(1024)
         results = run_nist_suite(data)
         assert len(results) == 3
-        assert all(isinstance(r, TestResult) for r in results)
+        assert all(isinstance(r, NistTestResult) for r in results)
 
     def test_all_pass_for_random_data(self) -> None:
         data = os.urandom(1024)

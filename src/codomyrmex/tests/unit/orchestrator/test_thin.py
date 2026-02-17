@@ -463,20 +463,6 @@ class TestPythonFunc:
         assert result is not None
         assert isinstance(result, dict)
 
-    @pytest.mark.skip(reason="Local functions cannot be pickled for multiprocessing")
-    def test_python_func_basic(self):
-        """Test running a Python function."""
-        pass
-
-    @pytest.mark.skip(reason="Local functions cannot be pickled for multiprocessing")
-    def test_python_func_with_kwargs(self):
-        """Test running function with kwargs."""
-        pass
-
-    @pytest.mark.skip(reason="Local functions cannot be pickled for multiprocessing")
-    def test_python_func_with_timeout(self):
-        """Test function with timeout."""
-        pass
 
 
 class TestRetry:

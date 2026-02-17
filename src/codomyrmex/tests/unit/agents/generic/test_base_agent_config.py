@@ -21,9 +21,8 @@ if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
 
-@pytest.mark.unit
-class TestAgent(BaseAgent):
-    """Test agent for configuration testing."""
+class StubAgent(BaseAgent):
+    """Stub agent for configuration testing."""
 
     def _execute_impl(self, request):
         """Test implementation."""
@@ -41,7 +40,7 @@ class TestBaseAgentConfigExtraction:
     def test_get_config_value_from_provided_config(self):
         """Test getting config value from provided config dict."""
         config = {"test_key": "value_from_provided"}
-        agent = TestAgent(
+        agent = StubAgent(
             name="test",
             capabilities=[AgentCapabilities.CODE_GENERATION],
             config={"other_key": "other_value"},
@@ -51,7 +50,7 @@ class TestBaseAgentConfigExtraction:
 
     def test_get_config_value_from_instance_config(self):
         """Test getting config value from instance config."""
-        agent = TestAgent(
+        agent = StubAgent(
             name="test",
             capabilities=[AgentCapabilities.CODE_GENERATION],
             config={"test_key": "value_from_instance"},
@@ -70,7 +69,7 @@ class TestBaseAgentConfigExtraction:
             test_config.test_key = "value_from_agent_config"
             set_config(test_config)
 
-            agent = TestAgent(
+            agent = StubAgent(
                 name="test",
                 capabilities=[AgentCapabilities.CODE_GENERATION],
                 config={},
@@ -83,7 +82,7 @@ class TestBaseAgentConfigExtraction:
 
     def test_get_config_value_default(self):
         """Test getting config value falls back to default."""
-        agent = TestAgent(
+        agent = StubAgent(
             name="test",
             capabilities=[AgentCapabilities.CODE_GENERATION],
             config={},
@@ -104,7 +103,7 @@ class TestBaseAgentConfigExtraction:
 
             # Provided config should win
             provided_config = {"test_key": "value_from_provided"}
-            agent = TestAgent(
+            agent = StubAgent(
                 name="test",
                 capabilities=[AgentCapabilities.CODE_GENERATION],
                 config={"test_key": "value_from_instance"},
@@ -120,7 +119,7 @@ class TestBaseAgentConfigExtraction:
 
     def test_get_config_value_none_handling(self):
         """Test that None values are handled correctly."""
-        agent = TestAgent(
+        agent = StubAgent(
             name="test",
             capabilities=[AgentCapabilities.CODE_GENERATION],
             config={"test_key": None},
@@ -131,7 +130,7 @@ class TestBaseAgentConfigExtraction:
 
     def test_get_config_value_missing_agent_config_attribute(self):
         """Test handling missing AgentConfig attribute gracefully."""
-        agent = TestAgent(
+        agent = StubAgent(
             name="test",
             capabilities=[AgentCapabilities.CODE_GENERATION],
             config={},

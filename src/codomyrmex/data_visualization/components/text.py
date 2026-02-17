@@ -11,10 +11,11 @@ class TextBlock(BaseComponent):
     is_markdown: bool = False
 
     def render(self) -> str:
-        md_class = "markdown" if self.is_markdown else ""
-        cls = f"component-text {self.css_class} {md_class}".strip()
-        return f"<div class='{cls}'>{self.content}</div>"
-    
+        text = self.content.replace("\n", "<br>")
+        md_class = " markdown" if self.is_markdown else ""
+        cls = f"component-text{md_class}"
+        return f"<div class='{cls}'>{text}</div>"
+
     def __str__(self) -> str:
         return self.render()
 
@@ -25,7 +26,7 @@ class CodeBlock(BaseComponent):
     language: str = "python"
 
     def render(self) -> str:
-        return f"<pre><code class='language-{self.language}'>{self.code}</code></pre>"
+        return f'<pre><code class="language-{self.language}">{self.code}</code></pre>'
 
     def __str__(self) -> str:
         return self.render()

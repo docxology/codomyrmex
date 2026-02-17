@@ -15,6 +15,7 @@ from .memory import (
     SummaryMemory,
     VectorStoreMemory,
 )
+from .user_profile import UserProfile
 
 # Shared schemas for cross-module interop
 try:
@@ -71,6 +72,8 @@ __all__ = [
     # Enhanced
     "VectorStoreMemory",
     "SummaryMemory",
+    # User Profile
+    "UserProfile",
     # CLI
     "cli_commands",
     "search_memory",

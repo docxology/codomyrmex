@@ -6,11 +6,11 @@ from typing import Any
 from .theme import Theme, DEFAULT_THEME
 from .layout import Grid
 
-@dataclass
+
 @dataclass
 class Card:
     """Card component for highlighting information."""
-    title: str
+    title: str = ""
     content: str = ""
     value: Any = None
     description: str = ""
@@ -24,7 +24,7 @@ class Card:
             parts.append(f"<p>{self.content}</p>")
         if self.description:
             parts.append(f"<p class='description'>{self.description}</p>")
-        
+
         inner = "".join(parts)
         return f"<div class='{self.css_class}'>{inner}</div>"
 
@@ -58,12 +58,30 @@ class Dashboard:
         self.title = title
         self.theme = theme or DEFAULT_THEME
         self.grid = Grid()
-        self.sections: list[Any] = self.grid.sections  # Alias for backward compat if needed
+        self.sections: list[Any] = self.grid.sections  # Alias for backward compat
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
         self.grid.add_section(title, content, **kwargs)
 
-    def render(self) -> str:
+    def render(self, output_path: str | None = None) -> str:
+        """Render the dashboard as an HTML string.
+
+        Args:
+            output_path: If provided, write the HTML to this file path.
+
+        Returns:
+            Complete HTML string.
+        """
         inner = self.grid.render()
         css = self.theme.css
-        return f"<html><head><style>{css}</style></head><body><h1>{self.title}</h1>{inner}</body></html>"
+        html = f"<html><head><style>{css}</style></head><body><h1>{self.title}</h1>{inner}</body></html>"
+        if output_path:
+            from pathlib import Path
+            Path(output_path).write_text(html)
+        return html
+
+    def __str__(self) -> str:
+        return self.render()
+
+    def __repr__(self) -> str:
+        return f"Dashboard(title={self.title!r}, sections={len(self.sections)})"

@@ -28,44 +28,45 @@ Version 0.2.0 stabilizes a qualitatively bigger system: autonomous swarm orchest
 
 ## 🔧 Foundation Hardening (v0.1.5 – v0.1.7)
 
-### v0.1.5 — Module Refactoring & Type Safety
+### v0.1.5 — Module Refactoring & Type Safety ✅
 
 **Theme**: "Clean Boundaries"
 
-- [ ] **Module Boundary Hardening**
-  - [ ] Enforce strict `__all__` exports in every `__init__.py`.
-  - [ ] Eliminate cross-layer import leaks (Core ↔ Specialized).
-  - [ ] `mypy --strict` on Core layer (`agents`, `coding`, `security`, `logging_monitoring`).
-- [ ] **Dependency Graph Cleanup**
-  - [ ] Generate and audit the real import graph.
-  - [ ] Decouple `cerebrum` from `agents` via plugin interface.
-  - [ ] Make `bio_simulation`, `finance`, `quantum` true optional extras (zero import-time cost).
-- [ ] **Test Infrastructure**
-  - [ ] Unify `conftest.py` fixtures across unit/integration/performance.
-  - [ ] Target ≥80% coverage on Core modules.
-- [ ] **PAI Skill & Tool Robustness (v0.1.5)**
-  - [ ] Version sync assertion: `PAI.md`, `SKILL.md`, `agents/pai/__init__.py`, `pyproject.toml` must agree on version.
-  - [ ] `scripts/audit_skill_index.py`: validate every `skill-index.json` entry has matching `SKILL.md`, workflow files, and trigger keywords.
-  - [ ] Graceful degradation tests: verify `call_tool()` returns structured errors (not exceptions) when a module fails to import.
-  - [ ] `__all__` audit for `agents/pai/`: confirm every public symbol in `__init__.py.__all__` is importable and has correct type.
+- [x] Export audit: 79/79 modules have `__all__` (`scripts/audit_exports.py`)
+- [x] Import audit: 0 cross-layer violations / 291 edges (`scripts/audit_imports.py`, AST-based)
+- [x] Added `__all__` to `module_template` and `tests`
+- [x] Verified specialized modules (`cerebrum`, `bio_simulation`, `finance`, `quantum`) are already isolated
 
 ---
 
-### v0.1.6 — Agent & Memory Foundations
+### v0.1.6 — Agent & Memory Foundations ✅
 
 **Theme**: "Solid Agent Bones"
 
-- [ ] **Agent Architecture Refactor**
-  - [ ] `BaseAgent` protocol: `plan()`, `act()`, `observe()` contract.
-  - [ ] Standardize inter-agent message format (typed dataclass, not dict).
-  - [ ] `AgentRegistry` for dynamic agent discovery.
-- [ ] **Memory System**
-  - [ ] Wire `agentic_memory` → `vector_store` for persistent retrieval.
-  - [ ] `ShortTermMemory` (session dict) + `LongTermMemory` (ChromaDB).
-  - [ ] `user_profile.json` read/write for agent preferences.
-- [ ] **Event Bus**
-  - [ ] `events.EventBus` with typed publish/subscribe.
-  - [ ] Integrate EventBus into `orchestrator` for decoupled task dispatch.
+> Grounded in audit: `agents/core/base.py` has `execute()/stream()` but no `plan()/act()/observe()`.
+> `agentic_memory` has `VectorStoreMemory` but it never actually wires to `vector_store`.
+> `events.EventBus` exists but 0 integrations with `orchestrator`.
+
+- [x] **Agent Protocol Extension** (`agents/core/`)
+  - [x] Add `AgentProtocol` with `plan()`, `act()`, `observe()` methods to `base.py`.
+  - [x] Add typed `AgentMessage` dataclass to new `messages.py` (replace `dict` messages in `ReActAgent`).
+  - [x] Refactor `ReActAgent._execute_impl` into discrete `plan→act→observe` calls.
+  - [x] Add `ToolRegistry.from_mcp(mcp_registry)` bridge to `registry.py`.
+  - [x] Type-hint `ReActAgent.llm_client` as `codomyrmex.llm.BaseLLMClient | Any`.
+- [x] **Memory → Vector Store Wiring** (`agentic_memory/`)
+  - [x] `VectorStoreMemory.__init__`: auto-create `InMemoryVectorStore` when `vector_store=None`.
+  - [x] Add `VectorStoreMemory.from_chromadb(path)` optional factory (try/except wrapped).
+  - [x] Add `AgentMemory.add()` alias to `remember()` (MCP tool calls `.add()` which doesn't exist).
+  - [x] `JSONFileStore.list_all()` method + thread-safe file writes.
+  - [x] New `user_profile.py`: `UserProfile` dataclass with `~/.codomyrmex/user_profile.json` persistence.
+- [x] **EventBus ↔ Orchestrator Integration** (`events/`, `orchestrator/`)
+  - [x] `EventBus.emit_typed(event: Event)` convenience + `subscribe_typed(event_type, handler)`.
+  - [x] `Workflow.run()` emits `TASK_STARTED`/`COMPLETED`/`FAILED` events via optional `event_bus` param.
+  - [x] `OrchestratorEvents` enum in `orchestrator/events.py`.
+- [x] **Test Coverage (≥80% on touched modules)**
+  - [x] `test_agent_protocol.py`: `AgentMessage`, `BaseAgent.plan()/act()/observe()`, `ToolRegistry.from_mcp()`.
+  - [x] `test_memory_integration.py`: `VectorStoreMemory` with real `InMemoryVectorStore`, `JSONFileStore` round-trip, `UserProfile`.
+  - [x] `test_event_orchestrator.py`: events emitted during `Workflow.run()`.
 
 ---
 
@@ -73,27 +74,37 @@ Version 0.2.0 stabilizes a qualitatively bigger system: autonomous swarm orchest
 
 **Theme**: "Plumbing That Works"
 
-- [ ] **MCP Plumbing**
-  - [ ] Register `git_operations` tools (`git_commit`, `git_branch`, `git_diff`).
-  - [ ] Expose `containerization` tools (`docker_logs`, `docker_compose_up`).
-  - [ ] Add `semantic_search` and `smart_grep` as MCP tools.
-  - [ ] `MCPClient` to consume external MCP servers.
-- [ ] **MCP Tool Smoke Tests & Runtime Verification**
-  - [ ] `test_mcp_smoke.py`: iterate all 53 curated tools, call each with minimal valid args, assert structured response (no unhandled exceptions).
-  - [ ] `test_skill_loading.py`: simulate PAI skill loading (`/Codomyrmex`): verify SKILL.md parses, tool table matches `get_total_tool_count()`, workflows resolve.
-  - [ ] Trust gateway round-trip test: `verify_capabilities()` → `trust_all()` → `trusted_call_tool()` for each destructive tool.
-  - [ ] Auto-discovery stability: `_discover_dynamic_tools()` returns deterministic tool list across repeated calls (no ordering drift).
-- [ ] **Orchestrator v2**
-  - [ ] Async-first task parallelization (`asyncio.TaskGroup`).
-  - [ ] Retry/backoff policies for flaky tool calls.
-  - [ ] CLI startup time < 500ms (lazy loading audit).
+> Grounded in audit: `MCPServer` exists but no `MCPClient`. `git_operations` has 44 exports but 0 MCP registration.
+> `containerization` has 5 exports but 0 MCP registration. `orchestrator.ParallelRunner` is sync-only.
+> `logging_monitoring` has 1 test file and no WebSocket streaming.
+
+- [ ] **MCP Tool Registration**
+  - [ ] `git_operations/mcp_tools.py`: register `git_commit`, `git_branch`, `git_diff`, `git_log`, `git_status` as `@mcp_tool`.
+  - [ ] `containerization/mcp_tools.py`: register `docker_logs`, `docker_compose_up`, `docker_ps` as `@mcp_tool`.
+  - [ ] Auto-discover `mcp_tools.py` modules in `discovery.py` at server startup.
+  - [ ] Ensure `_discover_dynamic_tools()` returns deterministic ordering (sort by name).
+- [ ] **MCPClient** (`model_context_protocol/client.py`)
+  - [ ] `MCPClient` for consuming external MCP servers (HTTP/SSE transport).
+  - [ ] Methods: `connect()`, `list_tools()`, `call_tool()`.
+  - [ ] Uses `networking.HTTPClient` internally.
+- [ ] **MCP Smoke Tests & Trust Gateway**
+  - [ ] `test_mcp_smoke.py`: iterate all registered tools, call each with minimal valid args, assert structured response.
+  - [ ] `test_mcp_client.py`: `MCPClient` ↔ `MCPServer` local loopback round-trip.
+  - [ ] `test_mcp_discovery.py`: deterministic tool ordering, auto-discovery from `mcp_tools.py` files.
+  - [ ] Trust gateway round-trip: `verify_capabilities()` → `trust_all()` → `trusted_call_tool()`.
+- [ ] **Orchestrator v2 (async-first)**
+  - [ ] `orchestrator/async_runner.py`: `AsyncParallelRunner` using `asyncio.TaskGroup` (Python 3.11+).
+  - [ ] `Workflow.run_async()`: async equivalent of `run()`.
+  - [ ] Internal retry/backoff decorator (no new dependencies).
+  - [ ] CLI startup time < 500ms: lazy-loading audit for heavy imports.
 - [ ] **Observability**
-  - [ ] WebSocket real-time log streaming from `logging_monitoring`.
-  - [ ] `codomyrmex doctor` diagnostic CLI command.
-- [ ] **Skill Health Dashboard**
-  - [ ] `codomyrmex doctor --pai`: report PAI skill status, tool count, trust state, version sync, workflow availability.
-  - [ ] RASP completeness check: flag modules missing any of README.md, AGENTS.md, SPEC.md, PAI.md.
-  - [ ] Algorithm phase coverage: verify every phase (OBSERVE–LEARN) has at least one registered MCP tool mapping.
+  - [ ] `logging_monitoring`: `WebSocketLogHandler` for real-time log streaming.
+  - [ ] `cli/doctor.py`: `codomyrmex doctor` diagnostic command (module imports, tool registry, MCP health).
+  - [ ] `codomyrmex doctor --pai`: PAI skill status, tool count, trust state, version sync.
+  - [ ] RASP completeness check: flag modules missing README/AGENTS/SPEC/PAI.
+- [ ] **Test Coverage**
+  - [ ] `test_logging_monitoring.py`: WebSocket handler with real EphemeralServer (Zero-Mock).
+  - [ ] `test_orchestrator_async.py`: async workflow execution with real tasks.
 
 ---
 

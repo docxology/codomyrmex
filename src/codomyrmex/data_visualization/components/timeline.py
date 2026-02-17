@@ -11,7 +11,28 @@ class TimelineEvent(BaseComponent):
     label: str = ""
     description: str = ""
 
+    def render(self) -> str:
+        return (
+            f'<div class="timeline-event">'
+            f'<time>{self.timestamp}</time>'
+            f'<h4>{self.label}</h4>'
+            f'<p>{self.description}</p>'
+            f'</div>'
+        )
+
+    def __str__(self) -> str:
+        return self.render()
+
 @dataclass
 class Timeline(BaseComponent):
     """Timeline component."""
     events: list = field(default_factory=list)
+
+    def render(self) -> str:
+        inner = "\n".join(
+            e.render() if hasattr(e, "render") else str(e) for e in self.events
+        )
+        return f'<div class="timeline">{inner}</div>'
+
+    def __str__(self) -> str:
+        return self.render()

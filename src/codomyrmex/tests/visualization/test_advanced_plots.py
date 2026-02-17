@@ -9,7 +9,7 @@ def test_histogram_render():
     plot = Histogram("Test Hist", data, bins=3)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Hist\"" in html
+    assert 'alt="Test Hist"' in html
 
 def test_pie_chart_render():
     labels = ['A', 'B']
@@ -17,19 +17,19 @@ def test_pie_chart_render():
     plot = PieChart("Test Pie", labels, sizes)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Pie\"" in html
+    assert 'alt="Test Pie"' in html
 
 def test_box_plot_render():
     data = [[1, 2, 3], [2, 3, 4]]
     plot = BoxPlot("Test Box", data, labels=['G1', 'G2'])
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Box\"" in html
-    
+    assert 'alt="Test Box"' in html
+
 def test_area_plot_render():
     x = [1, 2, 3]
     y = [10, 20, 15]
     plot = AreaPlot("Test Area", x, y)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Area\"" in html
+    assert 'alt="Test Area"' in html

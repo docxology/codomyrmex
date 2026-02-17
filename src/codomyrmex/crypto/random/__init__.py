@@ -8,7 +8,7 @@ from codomyrmex.crypto.random.generator import (
     secure_random_string,
 )
 from codomyrmex.crypto.random.testing import (
-    TestResult,
+    NistTestResult,
     block_frequency_test,
     monobit_test,
     run_nist_suite,
@@ -16,7 +16,7 @@ from codomyrmex.crypto.random.testing import (
 )
 
 __all__ = [
-    "TestResult",
+    "NistTestResult",
     "block_frequency_test",
     "generate_nonce",
     "generate_uuid4",

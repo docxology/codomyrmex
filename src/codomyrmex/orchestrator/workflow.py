@@ -151,7 +151,8 @@ class Workflow:
         name: str,
         timeout: float | None = None,
         fail_fast: bool = True,
-        progress_callback: ProgressCallback | None = None
+        progress_callback: ProgressCallback | None = None,
+        event_bus: Any = None,
     ):
         """Initialize workflow.
 
@@ -160,16 +161,26 @@ class Workflow:
             timeout: Overall workflow timeout in seconds
             fail_fast: Stop on first failure if True
             progress_callback: Callback for progress updates (task_name, status, details)
+            event_bus: Optional ``EventBus`` instance for typed event publishing
         """
         self.name = name
         self.timeout = timeout
         self.fail_fast = fail_fast
         self.progress_callback = progress_callback
+        self._event_bus = event_bus
         self.tasks: dict[str, Task] = {}
         self.task_results: dict[str, TaskResult] = {}
         self.logger = get_logger(f"Workflow.{name}")
         self._start_time: float | None = None
         self._cancelled = False
+
+    def _publish_event(self, event: Any) -> None:
+        """Publish event to EventBus if one is attached."""
+        if self._event_bus is not None:
+            try:
+                self._event_bus.publish(event)
+            except Exception as exc:
+                self.logger.warning(f"EventBus publish failed: {exc}")
 
     def add_task(
         self,
@@ -283,6 +294,13 @@ class Workflow:
         self.logger.info(f"Starting workflow '{self.name}' with {len(self.tasks)} tasks.")
         self._emit_progress("workflow", "started", {"total_tasks": len(self.tasks)})
 
+        # Emit typed event
+        try:
+            from .orchestrator_events import workflow_started as _ws
+            self._publish_event(_ws(self.name, len(self.tasks)))
+        except ImportError:
+            pass
+
         # Reset task states
         for task in self.tasks.values():
             task.status = TaskStatus.PENDING
@@ -350,6 +368,11 @@ class Workflow:
             for task in runnable:
                 task.status = TaskStatus.RUNNING
                 self._emit_progress(task.name, "running", {})
+                try:
+                    from .orchestrator_events import task_started as _ts
+                    self._publish_event(_ts(self.name, task.name))
+                except ImportError:
+                    pass
                 coroutines.append(self._execute_task_with_retry(task))
 
             results = await asyncio.gather(*coroutines, return_exceptions=True)
@@ -362,6 +385,11 @@ class Workflow:
                     self.task_results[task.name] = task.get_result()
                     self.logger.error(f"Task '{task.name}' failed: {result}")
                     self._emit_progress(task.name, "failed", {"error": str(result)})
+                    try:
+                        from .orchestrator_events import task_failed as _tf
+                        self._publish_event(_tf(self.name, task.name, str(result)))
+                    except ImportError:
+                        pass
 
                     if self.fail_fast:
                         self.logger.info("Fail-fast: stopping workflow")
@@ -383,6 +411,15 @@ class Workflow:
                         "execution_time": task.execution_time,
                         "attempts": task.attempts
                     })
+                    try:
+                        from .orchestrator_events import task_completed as _tc
+                        self._publish_event(_tc(
+                            self.name, task.name,
+                            execution_time=task.execution_time,
+                            attempts=task.attempts,
+                        ))
+                    except ImportError:
+                        pass
 
         # Summary
         elapsed = time.time() - self._start_time
@@ -392,6 +429,22 @@ class Workflow:
             "skipped": len(skipped_tasks),
             "elapsed": elapsed
         })
+
+        # Emit typed workflow completed/failed event
+        try:
+            from .orchestrator_events import workflow_completed as _wc, workflow_failed as _wf
+            if failed_tasks:
+                self._publish_event(_wf(self.name, f"{len(failed_tasks)} tasks failed"))
+            else:
+                self._publish_event(_wc(
+                    self.name,
+                    completed=len(completed_tasks),
+                    failed=len(failed_tasks),
+                    skipped=len(skipped_tasks),
+                    elapsed=elapsed,
+                ))
+        except ImportError:
+            pass
 
         results = {name: task.result for name, task in self.tasks.items()}
         return results

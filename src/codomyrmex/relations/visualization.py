@@ -1,5 +1,5 @@
 from .crm import ContactManager
-from codomyrmex.data_visualization import MermaidDiagram
+from codomyrmex.data_visualization.plots.mermaid import MermaidDiagram
 
 
 def render_social_graph(cm: ContactManager) -> MermaidDiagram:
@@ -13,4 +13,4 @@ def render_social_graph(cm: ContactManager) -> MermaidDiagram:
         safe_name = contact.name.replace(" ", "_")
         diagram += f"    {safe_name}[{contact.name}]\n"
 
-    return MermaidDiagram("Social Graph", diagram)
+    return MermaidDiagram(title="Social Graph", definition=diagram)

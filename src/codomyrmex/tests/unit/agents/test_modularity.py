@@ -1,6 +1,6 @@
 """Tests for agent modularity and flexibility.
 
-Tests use real implementations only. TestAgent is a test adapter
+Tests use real implementations only. StubAgent is a test adapter
 that implements BaseAgent interface for testing, not a mock.
 """
 
@@ -24,9 +24,8 @@ if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
 
-@pytest.mark.unit
-class TestAgent(BaseAgent):
-    """Test agent for testing modularity.
+class StubAgent(BaseAgent):
+    """Stub agent for testing modularity.
 
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
@@ -51,13 +50,13 @@ class TestAgent(BaseAgent):
 
 
 @pytest.mark.unit
-class TestAgentSwapping:
+class StubAgentSwapping:
     """Test agent swapping functionality."""
 
     def test_switching_between_agent_implementations(self):
         """Test switching between different agent implementations."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
 
         request = AgentRequest(prompt="test")
 
@@ -73,8 +72,8 @@ class TestAgentSwapping:
 
     def test_hot_swapping_agents_in_orchestrator(self):
         """Test hot-swapping agents in orchestrator."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_GENERATION])
 
         orchestrator = AgentOrchestrator([agent1])
         request = AgentRequest(prompt="test")
@@ -92,11 +91,11 @@ class TestAgentSwapping:
 
     def test_agent_capability_discovery(self):
         """Test discovering agent capabilities."""
-        agent1 = TestAgent("agent1", [
+        agent1 = StubAgent("agent1", [
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
-        agent2 = TestAgent("agent2", [
+        agent2 = StubAgent("agent2", [
             AgentCapabilities.CODE_ANALYSIS,
             AgentCapabilities.TEXT_COMPLETION
         ])
@@ -111,9 +110,9 @@ class TestAgentSwapping:
 
     def test_capability_based_selection(self):
         """Test selecting agents by capability."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        agent3 = TestAgent("agent3", [
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
+        agent3 = StubAgent("agent3", [
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
@@ -132,9 +131,9 @@ class TestAgentSwapping:
 
     def test_multi_agent_coordination_different_capabilities(self):
         """Test coordinating multiple agents with different capabilities."""
-        code_gen_agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
-        code_edit_agent = TestAgent("code_edit", [AgentCapabilities.CODE_EDITING])
-        analysis_agent = TestAgent("analysis", [AgentCapabilities.CODE_ANALYSIS])
+        code_gen_agent = StubAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
+        code_edit_agent = StubAgent("code_edit", [AgentCapabilities.CODE_EDITING])
+        analysis_agent = StubAgent("analysis", [AgentCapabilities.CODE_ANALYSIS])
 
         orchestrator = AgentOrchestrator([
             code_gen_agent,
@@ -172,8 +171,8 @@ class TestModularIntegration:
 
     def test_cross_agent_compatibility(self):
         """Test that different agents can work together."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_GENERATION])
 
         orchestrator = AgentOrchestrator([agent1, agent2])
         request = AgentRequest(prompt="test")
@@ -188,10 +187,10 @@ class TestModularIntegration:
         orchestrator = AgentOrchestrator([])
 
         # Add agents dynamically
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
         orchestrator.agents.append(agent1)
 
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
         orchestrator.agents.append(agent2)
 
         assert len(orchestrator.agents) == 2
@@ -203,8 +202,8 @@ class TestModularIntegration:
 
     def test_agent_lifecycle_management(self):
         """Test agent lifecycle management."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_GENERATION])
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_GENERATION])
 
         orchestrator = AgentOrchestrator([agent1, agent2])
 
@@ -224,7 +223,7 @@ class TestModularIntegration:
 
     def test_mixed_agent_types_structure(self):
         """Test mixing different agent types structure."""
-        test_agent = TestAgent("test", [AgentCapabilities.CODE_GENERATION])
+        test_agent = StubAgent("test", [AgentCapabilities.CODE_GENERATION])
         opencode_agent = OpenCodeClient()
 
         orchestrator = AgentOrchestrator([test_agent, opencode_agent])
@@ -236,9 +235,9 @@ class TestModularIntegration:
 
     def test_dynamic_capability_matching(self):
         """Test dynamic capability matching for agent selection."""
-        agent1 = TestAgent("agent1", [AgentCapabilities.CODE_GENERATION])
-        agent2 = TestAgent("agent2", [AgentCapabilities.CODE_EDITING])
-        agent3 = TestAgent("agent3", [
+        agent1 = StubAgent("agent1", [AgentCapabilities.CODE_GENERATION])
+        agent2 = StubAgent("agent2", [AgentCapabilities.CODE_EDITING])
+        agent3 = StubAgent("agent3", [
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING,
             AgentCapabilities.CODE_ANALYSIS

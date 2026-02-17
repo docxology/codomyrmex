@@ -22,7 +22,7 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-from .event_schema import Event, EventSchema
+from .event_schema import Event, EventSchema, EventType
 
 
 @dataclass
@@ -119,6 +119,45 @@ class EventBus:
 
         logger.info(f"Subscribed {subscriber_id} to {len(event_patterns)} event patterns")
         return subscriber_id
+
+    def emit_typed(self, event: Event) -> None:
+        """Publish a typed event with validation.
+
+        This is a convenience wrapper around :meth:`publish` that asserts the
+        event has a valid ``event_type`` attribute before dispatching.
+
+        Args:
+            event: An ``Event`` instance with a valid ``EventType``.
+        """
+        if not isinstance(getattr(event, "event_type", None), EventType):
+            raise TypeError(
+                f"emit_typed requires event.event_type to be EventType, "
+                f"got {type(getattr(event, 'event_type', None))}"
+            )
+        self.publish(event)
+
+    def subscribe_typed(
+        self,
+        event_type: EventType,
+        handler: Callable[[Event], Any],
+        subscriber_id: str | None = None,
+        **kwargs: Any,
+    ) -> str:
+        """Subscribe to a single typed event.
+
+        Convenience wrapper around :meth:`subscribe` for the common case of
+        listening to exactly one ``EventType``.
+
+        Args:
+            event_type: The ``EventType`` to subscribe to.
+            handler: Callback invoked when a matching event is published.
+            subscriber_id: Optional subscriber identifier.
+            **kwargs: Additional keyword arguments passed to :meth:`subscribe`.
+
+        Returns:
+            The subscriber ID (auto-generated if not provided).
+        """
+        return self.subscribe([event_type], handler, subscriber_id, **kwargs)
 
     def unsubscribe(self, subscriber_id: str) -> bool:
         """Unsubscribe from events."""

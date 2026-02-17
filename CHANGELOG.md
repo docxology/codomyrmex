@@ -7,7 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.5] - 2026-02-17
+## [0.1.6] - 2026-02-17
+
+### Added
+
+- `AgentProtocol` with `plan()`, `act()`, `observe()` methods in `agents/core/base.py`
+- `AgentMessage` dataclass with typed role, tool calls, serialization in `agents/core/messages.py`
+- `ToolRegistry.from_mcp()` bridge for MCP→agent tool bridging in `agents/core/registry.py`
+- `VectorStoreMemory.from_chromadb()` optional factory in `agentic_memory/memory.py`
+- `AgentMemory.add()` alias for MCP tool compatibility
+- `UserProfile` dataclass with JSON persistence in `agentic_memory/user_profile.py`
+- `EventBus.emit_typed()` and `subscribe_typed()` convenience methods in `events/core/event_bus.py`
+- `orchestrator_events.py` with 7 typed event factory functions (workflow/task lifecycle)
+- `Workflow.run()` now emits lifecycle events via optional `event_bus` parameter
+- `JSONFileStore.list_all()` method with thread-safe file writes
+- `BasePlot` enhanced with `__str__`, `__repr__`, `save()`, `to_dict()` methods
+- `BarChart` and `LinePlot` upgraded from stubs to real matplotlib renderers
+- Full submodule exports: plots (19 classes), components (14 classes), reports (5 classes)
+- `test_agent_protocol.py`: 20 tests for AgentMessage, plan/act/observe, ToolRegistry.from_mcp
+- `test_memory_integration.py`: 12 tests for stores, AgentMemory, VectorStoreMemory, UserProfile
+- `test_event_orchestrator.py`: 17 tests for emit_typed, subscribe_typed, Workflow events
+- `test_enhanced_methods.py`: 22 tests for visualization enhancements
+
+### Changed
+
+- `ReActAgent._execute_impl` refactored into discrete `plan→act→observe` calls
+- `ReActAgent.llm_client` type-hinted as `BaseLLMClient | Any` (TYPE_CHECKING import)
+- `RadarChart` now inherits from `BasePlot` (was standalone dataclass)
+- All 19 plot subclasses call `super().__init__()` for proper `BasePlot` method inheritance
+- Main `data_visualization/__init__.py` cleaned: removed dead `BarPlot`, expanded `__all__` to 30+ items
+- Bumped version to 0.1.6
 
 ### Added
 

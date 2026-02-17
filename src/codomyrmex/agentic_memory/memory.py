@@ -93,6 +93,29 @@ class AgentMemory:
 
         return memory
 
+    def add(
+        self,
+        content: str,
+        importance: MemoryImportance = MemoryImportance.MEDIUM,
+        metadata: dict[str, Any] | None = None,
+        memory_type: MemoryType = MemoryType.EPISODIC,
+    ) -> Memory:
+        """Alias for ``remember()`` — provides MCP tool compatibility."""
+        return self.remember(
+            content=content,
+            memory_type=memory_type,
+            importance=importance,
+            metadata=metadata,
+        )
+
+    def search(
+        self,
+        query: str,
+        limit: int = 5,
+    ) -> list[RetrievalResult]:
+        """Alias for ``recall()`` — provides MCP tool compatibility."""
+        return self.recall(query, k=limit)
+
     def recall(
         self,
         query: str,
@@ -282,8 +305,72 @@ class VectorStoreMemory(AgentMemory):
         hybrid_weight: float = 0.5,  # Balance between vector and keyword
     ):
         super().__init__(store, embedding_fn, max_memories)
+
+        # Auto-create a vector store if none provided
+        if vector_store is None:
+            try:
+                from codomyrmex.vector_store import InMemoryVectorStore as _IMVS
+                vector_store = _IMVS()
+            except ImportError:
+                pass  # vector_store module not available — graceful degradation
+
         self._vector_store = vector_store
         self.hybrid_weight = hybrid_weight
+
+    @classmethod
+    def from_chromadb(
+        cls,
+        path: str,
+        *,
+        embedding_fn: Callable[[str], list[float]] | None = None,
+        max_memories: int = 10000,
+    ) -> "VectorStoreMemory":
+        """Create a VectorStoreMemory backed by ChromaDB.
+
+        Args:
+            path: Filesystem path for the ChromaDB persistent store.
+            embedding_fn: Optional embedding function.
+            max_memories: Maximum memories to retain.
+
+        Returns:
+            A ``VectorStoreMemory`` with ChromaDB backing.
+
+        Raises:
+            ImportError: If ``chromadb`` is not installed.
+        """
+        try:
+            import chromadb  # type: ignore[import-untyped]
+        except ImportError:
+            raise ImportError(
+                "chromadb is required for from_chromadb(). "
+                "Install with: pip install chromadb"
+            )
+
+        client = chromadb.PersistentClient(path=path)
+        collection = client.get_or_create_collection("codomyrmex_memory")
+
+        class _ChromaVectorStore:
+            """Adapter wrapping ChromaDB collection as a VectorStore-like object."""
+
+            def add(self, id: str, embedding: list[float], metadata: dict | None = None) -> None:
+                collection.add(ids=[id], embeddings=[embedding], metadatas=[metadata or {}])
+
+            def search(self, query: list[float], k: int = 10) -> list:
+                results = collection.query(query_embeddings=[query], n_results=k)
+                from codomyrmex.vector_store.models import SearchResult
+                return [
+                    SearchResult(id=rid, score=1.0, embedding=[], metadata=meta or {})
+                    for rid, meta in zip(results["ids"][0], results["metadatas"][0])
+                ]
+
+            def delete(self, id: str) -> None:
+                collection.delete(ids=[id])
+
+        return cls(
+            vector_store=_ChromaVectorStore(),
+            embedding_fn=embedding_fn,
+            max_memories=max_memories,
+        )
 
     def remember(
         self,

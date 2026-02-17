@@ -12,7 +12,7 @@ def test_treemap_render():
     plot = TreeMap("Test Tree", data)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Tree\"" in html
+    assert 'alt="Test Tree"' in html
 
 def test_network_graph_render():
     nodes = ["A", "B", "C"]
@@ -20,7 +20,7 @@ def test_network_graph_render():
     plot = NetworkGraph("Test Net", nodes, edges)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Net\"" in html
+    assert 'alt="Test Net"' in html
 
 def test_heatmap_table_component():
     headers = ["Col A", "Col B"]
@@ -28,9 +28,9 @@ def test_heatmap_table_component():
         [10, 20],
         [5, 40]
     ]
-    table = HeatmapTable(headers, rows, "Test Heatmap")
+    table = HeatmapTable(headers=headers, rows=rows, title="Test Heatmap")
     html = str(table)
     assert "Test Heatmap" in html
     assert "Col A" in html
-    assert "40" in html # Check content
-    assert "rgba(0, 123, 255" in html # Check coloring
+    assert "40" in html  # Check content
+    assert "rgba(0, 123, 255" in html  # Check coloring

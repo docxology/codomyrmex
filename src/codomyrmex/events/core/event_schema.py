@@ -95,6 +95,15 @@ class EventType(Enum):
     SECURITY_SCAN_COMPLETE = "security.scan_complete"
     SECURITY_ALERT = "security.alert"
 
+    # Orchestrator / Workflow events
+    WORKFLOW_STARTED = "workflow.started"
+    WORKFLOW_COMPLETED = "workflow.completed"
+    WORKFLOW_FAILED = "workflow.failed"
+    TASK_STARTED = "task.started"
+    TASK_COMPLETED = "task.completed"
+    TASK_FAILED = "task.failed"
+    TASK_RETRYING = "task.retrying"
+
     # Custom events (for extensions)
     CUSTOM = "custom"
 

@@ -45,9 +45,8 @@ class _SimpleNamespace:
 # Concrete test subclass of APIAgentBase
 # ---------------------------------------------------------------------------
 
-@pytest.mark.unit
-class TestAPIAgentBase(APIAgentBase):
-    """Test implementation of APIAgentBase."""
+class StubAPIAgentBase(APIAgentBase):
+    """Stub implementation of APIAgentBase for testing."""
 
     def __init__(
         self,
@@ -92,7 +91,7 @@ class TestAPIAgentBase(APIAgentBase):
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseInitialization:
+class StubAPIAgentBaseInitialization:
     """Test APIAgentBase initialization."""
 
     def test_init_with_config_dict(self):
@@ -104,7 +103,7 @@ class TestAPIAgentBaseInitialization:
             "test_max_tokens": 2000,
             "test_temperature": 0.5,
         }
-        agent = TestAPIAgentBase(config=config)
+        agent = StubAPIAgentBase(config=config)
         assert agent.model == "model-v1"
         assert agent.timeout == 30
         assert agent.max_tokens == 2000
@@ -119,7 +118,7 @@ class TestAPIAgentBaseInitialization:
         agent_config.test_max_tokens = 4000
         agent_config.test_temperature = 0.7
 
-        agent = TestAPIAgentBase(agent_config=agent_config)
+        agent = StubAPIAgentBase(agent_config=agent_config)
         assert agent.model == "model-v2"
         assert agent.timeout == 60
         assert agent.max_tokens == 4000
@@ -128,13 +127,13 @@ class TestAPIAgentBaseInitialization:
     def test_init_missing_api_key(self):
         """Test initialization fails without API key."""
         with pytest.raises(AgentConfigurationError) as exc_info:
-            TestAPIAgentBase(config={})
+            StubAPIAgentBase(config={})
         assert "API key not configured" in str(exc_info.value)
 
     def test_init_missing_client_library(self):
         """Test initialization fails when client library is None."""
         with pytest.raises(AgentError) as exc_info:
-            TestAPIAgentBase(client_class=None)
+            StubAPIAgentBase(client_class=None)
         assert "client library not installed" in str(exc_info.value)
 
     def test_init_client_initialization_error(self):
@@ -143,7 +142,7 @@ class TestAPIAgentBaseInitialization:
             raise ValueError("Client init failed")
 
         with pytest.raises(AgentError) as exc_info:
-            TestAPIAgentBase(
+            StubAPIAgentBase(
                 config={"test_api_key": "key"},
                 client_init_func=failing_init,
             )
@@ -151,19 +150,19 @@ class TestAPIAgentBaseInitialization:
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseConfigExtraction:
+class StubAPIAgentBaseConfigExtraction:
     """Test configuration extraction methods."""
 
     def test_extract_config_value_from_dict(self):
         """Test extracting config value from provided dict."""
         config = {"test_key": "value_from_dict"}
-        agent = TestAPIAgentBase(config={"test_api_key": "key", **config})
+        agent = StubAPIAgentBase(config={"test_api_key": "key", **config})
         value = agent._extract_config_value("test_key", config=config)
         assert value == "value_from_dict"
 
     def test_extract_config_value_from_instance_config(self):
         """Test extracting config value from instance config."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key", "test_key": "value_from_instance"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key", "test_key": "value_from_instance"})
         value = agent._extract_config_value("test_key")
         assert value == "value_from_instance"
 
@@ -171,7 +170,7 @@ class TestAPIAgentBaseConfigExtraction:
         """Test extracting config value from AgentConfig."""
         agent_config = AgentConfig()
         agent_config.test_key = "value_from_agent_config"
-        agent = TestAPIAgentBase(
+        agent = StubAPIAgentBase(
             config={"test_api_key": "key"},
             agent_config=agent_config,
         )
@@ -180,18 +179,18 @@ class TestAPIAgentBaseConfigExtraction:
 
     def test_extract_config_value_default(self):
         """Test extracting config value falls back to default."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         value = agent._extract_config_value("test_key", default="default_value")
         assert value == "default_value"
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseErrorHandling:
+class StubAPIAgentBaseErrorHandling:
     """Test error handling methods."""
 
     def test_handle_api_error_with_api_error_class(self):
         """Test handling API errors with specific error class."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         api_error = _SimpleNamespace(status_code=429)
 
         with pytest.raises(AgentError) as exc_info:
@@ -200,7 +199,7 @@ class TestAPIAgentBaseErrorHandling:
 
     def test_handle_api_error_generic(self):
         """Test handling generic errors."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         generic_error = ValueError("Generic error")
 
         with pytest.raises(AgentError) as exc_info:
@@ -209,12 +208,12 @@ class TestAPIAgentBaseErrorHandling:
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseTokenExtraction:
+class StubAPIAgentBaseTokenExtraction:
     """Test token extraction methods."""
 
     def test_extract_tokens_anthropic(self):
         """Test extracting tokens from Anthropic response."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         response = _SimpleNamespace(
             usage=_SimpleNamespace(input_tokens=10, output_tokens=20)
         )
@@ -225,7 +224,7 @@ class TestAPIAgentBaseTokenExtraction:
 
     def test_extract_tokens_openai(self):
         """Test extracting tokens from OpenAI response."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         response = _SimpleNamespace(
             usage=_SimpleNamespace(prompt_tokens=15, completion_tokens=25)
         )
@@ -236,7 +235,7 @@ class TestAPIAgentBaseTokenExtraction:
 
     def test_extract_tokens_unknown_provider(self):
         """Test extracting tokens from unknown provider returns zeros."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         response = _SimpleNamespace()
 
         input_tokens, output_tokens = agent._extract_tokens_from_response(response, "unknown")
@@ -245,12 +244,12 @@ class TestAPIAgentBaseTokenExtraction:
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseResponseBuilding:
+class StubAPIAgentBaseResponseBuilding:
     """Test response building methods."""
 
     def test_build_agent_response(self):
         """Test building agent response."""
-        agent = TestAPIAgentBase(config={"test_api_key": "key"})
+        agent = StubAPIAgentBase(config={"test_api_key": "key"})
         response = agent._build_agent_response(
             content="test content",
             metadata={"key": "value"},
@@ -266,7 +265,7 @@ class TestAPIAgentBaseResponseBuilding:
 
 
 @pytest.mark.unit
-class TestAPIAgentBaseExecution:
+class StubAPIAgentBaseExecution:
     """Test execution methods."""
 
     def test_execute_impl_not_implemented(self):

@@ -27,7 +27,7 @@ _SIGNIFICANCE_LEVEL = 0.01  # alpha = 1%
 
 
 @dataclass
-class TestResult:
+class NistTestResult:
     """Result of a single NIST randomness test."""
 
     test_name: str
@@ -50,7 +50,7 @@ def _erfc(x: float) -> float:
     return math.erfc(x)
 
 
-def monobit_test(data: bytes) -> TestResult:
+def monobit_test(data: bytes) -> NistTestResult:
     """NIST SP 800-22 Frequency (Monobit) Test.
 
     Determines whether the number of ones and zeros in a binary sequence
@@ -60,7 +60,7 @@ def monobit_test(data: bytes) -> TestResult:
         data: At least 1 byte of random data to test.
 
     Returns:
-        TestResult with the monobit test outcome.
+        NistTestResult with the monobit test outcome.
 
     Raises:
         RandomError: If data is empty.
@@ -82,7 +82,7 @@ def monobit_test(data: bytes) -> TestResult:
         n, s_n, s_obs, p_value, passed,
     )
 
-    return TestResult(
+    return NistTestResult(
         test_name="Monobit (Frequency) Test",
         passed=passed,
         p_value=p_value,
@@ -90,7 +90,7 @@ def monobit_test(data: bytes) -> TestResult:
     )
 
 
-def runs_test(data: bytes) -> TestResult:
+def runs_test(data: bytes) -> NistTestResult:
     """NIST SP 800-22 Runs Test.
 
     Determines whether the number of runs (uninterrupted sequences of
@@ -101,7 +101,7 @@ def runs_test(data: bytes) -> TestResult:
         data: At least 1 byte of random data to test.
 
     Returns:
-        TestResult with the runs test outcome. If the prerequisite check
+        NistTestResult with the runs test outcome. If the prerequisite check
         fails, p_value is set to 0.0.
 
     Raises:
@@ -121,7 +121,7 @@ def runs_test(data: bytes) -> TestResult:
         logger.debug(
             "Runs test: prerequisite failed, pi=%.4f, tau=%.4f", pi, tau,
         )
-        return TestResult(
+        return NistTestResult(
             test_name="Runs Test",
             passed=False,
             p_value=0.0,
@@ -146,7 +146,7 @@ def runs_test(data: bytes) -> TestResult:
         n, pi, v_obs, p_value, passed,
     )
 
-    return TestResult(
+    return NistTestResult(
         test_name="Runs Test",
         passed=passed,
         p_value=p_value,
@@ -154,7 +154,7 @@ def runs_test(data: bytes) -> TestResult:
     )
 
 
-def block_frequency_test(data: bytes, block_size: int = 128) -> TestResult:
+def block_frequency_test(data: bytes, block_size: int = 128) -> NistTestResult:
     """NIST SP 800-22 Block Frequency Test.
 
     Divides the bit sequence into non-overlapping blocks of *block_size*
@@ -169,7 +169,7 @@ def block_frequency_test(data: bytes, block_size: int = 128) -> TestResult:
         block_size: Number of bits per block (M). Defaults to 128.
 
     Returns:
-        TestResult with the block frequency test outcome.
+        NistTestResult with the block frequency test outcome.
 
     Raises:
         RandomError: If there is not enough data for at least one block.
@@ -209,7 +209,7 @@ def block_frequency_test(data: bytes, block_size: int = 128) -> TestResult:
         n, num_blocks, block_size, chi_squared, p_value, passed,
     )
 
-    return TestResult(
+    return NistTestResult(
         test_name="Block Frequency Test",
         passed=passed,
         p_value=p_value,
@@ -217,7 +217,7 @@ def block_frequency_test(data: bytes, block_size: int = 128) -> TestResult:
     )
 
 
-def run_nist_suite(data: bytes) -> list[TestResult]:
+def run_nist_suite(data: bytes) -> list[NistTestResult]:
     """Run all implemented NIST SP 800-22 tests.
 
     Executes the monobit, runs, and block frequency tests on the
@@ -227,9 +227,9 @@ def run_nist_suite(data: bytes) -> list[TestResult]:
         data: Random data to test (recommend >= 128 bytes).
 
     Returns:
-        A list of TestResult objects, one per test.
+        A list of NistTestResult objects, one per test.
     """
-    results: list[TestResult] = []
+    results: list[NistTestResult] = []
     results.append(monobit_test(data))
     results.append(runs_test(data))
 
@@ -241,7 +241,7 @@ def run_nist_suite(data: bytes) -> list[TestResult]:
     else:
         # Use a smaller block size or skip
         results.append(
-            TestResult(
+            NistTestResult(
                 test_name="Block Frequency Test",
                 passed=False,
                 p_value=0.0,

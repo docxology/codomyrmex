@@ -9,7 +9,7 @@ def test_violin_plot_render():
     plot = ViolinPlot("Test Violin", data, labels=['G1', 'G2'])
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Violin\"" in html
+    assert 'alt="Test Violin"' in html
 
 def test_radar_chart_render():
     categories = ['A', 'B', 'C']
@@ -17,8 +17,8 @@ def test_radar_chart_render():
     plot = RadarChart("Test Radar", categories, values)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Radar\"" in html
-    
+    assert 'alt="Test Radar"' in html
+
 def test_candlestick_chart_render():
     dates = ["2023-01-01", "2023-01-02"]
     opens = [10, 11]
@@ -28,7 +28,7 @@ def test_candlestick_chart_render():
     plot = CandlestickChart("Test Candle", dates, opens, highs, lows, closes)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Candle\"" in html
+    assert 'alt="Test Candle"' in html
 
 def test_gantt_chart_render():
     tasks = ["Task 1", "Task 2"]
@@ -37,4 +37,4 @@ def test_gantt_chart_render():
     plot = GanttChart("Test Gantt", tasks, starts, durations)
     html = plot.to_html()
     assert "data:image/png;base64" in html
-    assert "alt=\"Test Gantt\"" in html
+    assert 'alt="Test Gantt"' in html

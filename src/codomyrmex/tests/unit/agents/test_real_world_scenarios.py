@@ -1,6 +1,6 @@
 """Real-world scenario tests for agent usage patterns.
 
-Tests use real implementations only. TestAgent is a test adapter
+Tests use real implementations only. StubAgent is a test adapter
 that implements BaseAgent interface for testing, not a mock.
 """
 
@@ -24,8 +24,8 @@ if not _HAS_AGENTS:
     pytest.skip("agents deps not available", allow_module_level=True)
 
 
-class TestAgent(BaseAgent):
-    """Test agent for real-world scenario testing.
+class StubAgent(BaseAgent):
+    """Stub agent for real-world scenario testing.
 
     This is a test adapter implementing BaseAgent interface, not a mock.
     """
@@ -80,7 +80,7 @@ class TestSimpleScenarios:
 
     def test_basic_code_generation_request(self):
         """Test basic code generation request."""
-        agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
+        agent = StubAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
 
         request = AgentRequest(
             prompt="Generate a Python function to calculate fibonacci",
@@ -95,7 +95,7 @@ class TestSimpleScenarios:
 
     def test_simple_text_completion(self):
         """Test simple text completion."""
-        agent = TestAgent("text", [AgentCapabilities.TEXT_COMPLETION])
+        agent = StubAgent("text", [AgentCapabilities.TEXT_COMPLETION])
 
         request = AgentRequest(
             prompt="Complete this sentence: The weather today is",
@@ -109,7 +109,7 @@ class TestSimpleScenarios:
 
     def test_single_file_code_analysis(self):
         """Test analyzing a single file."""
-        agent = TestAgent("analyzer", [AgentCapabilities.CODE_ANALYSIS])
+        agent = StubAgent("analyzer", [AgentCapabilities.CODE_ANALYSIS])
 
         code_content = """
 def example_function():
@@ -135,7 +135,7 @@ class TestComplexScenarios:
 
     def test_multi_step_code_generation_with_context(self):
         """Test multi-step code generation with context passing."""
-        agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
+        agent = StubAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
 
         # Step 1: Generate initial function
         request1 = AgentRequest(
@@ -163,8 +163,8 @@ class TestComplexScenarios:
 
     def test_code_review_workflow_with_multiple_agents(self):
         """Test code review workflow using multiple agents."""
-        code_gen_agent = TestAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
-        review_agent = TestAgent("reviewer", [AgentCapabilities.CODE_ANALYSIS])
+        code_gen_agent = StubAgent("code_gen", [AgentCapabilities.CODE_GENERATION])
+        review_agent = StubAgent("reviewer", [AgentCapabilities.CODE_ANALYSIS])
 
         orchestrator = AgentOrchestrator([code_gen_agent, review_agent])
 
@@ -191,7 +191,7 @@ class TestComplexScenarios:
 
     def test_complex_refactoring_across_multiple_files(self):
         """Test complex refactoring scenario across multiple files."""
-        agent = TestAgent("refactor", [
+        agent = StubAgent("refactor", [
             AgentCapabilities.CODE_GENERATION,
             AgentCapabilities.CODE_EDITING
         ])
@@ -225,9 +225,9 @@ class TestComplexScenarios:
 
     def test_multi_agent_codebase_analysis(self):
         """Test multi-agent codebase analysis."""
-        structure_agent = TestAgent("structure", [AgentCapabilities.CODE_ANALYSIS])
-        quality_agent = TestAgent("quality", [AgentCapabilities.CODE_ANALYSIS])
-        security_agent = TestAgent("security", [AgentCapabilities.CODE_ANALYSIS])
+        structure_agent = StubAgent("structure", [AgentCapabilities.CODE_ANALYSIS])
+        quality_agent = StubAgent("quality", [AgentCapabilities.CODE_ANALYSIS])
+        security_agent = StubAgent("security", [AgentCapabilities.CODE_ANALYSIS])
 
         orchestrator = AgentOrchestrator([
             structure_agent,
@@ -253,8 +253,8 @@ class TestComplexScenarios:
 
     def test_error_recovery_and_retry_scenarios(self):
         """Test error recovery and retry scenarios."""
-        failing_agent = TestAgent("failing", [AgentCapabilities.CODE_GENERATION])
-        backup_agent = TestAgent("backup", [AgentCapabilities.CODE_GENERATION])
+        failing_agent = StubAgent("failing", [AgentCapabilities.CODE_GENERATION])
+        backup_agent = StubAgent("backup", [AgentCapabilities.CODE_GENERATION])
 
         # Make first agent fail
         failing_agent.should_succeed = False
@@ -272,7 +272,7 @@ class TestComplexScenarios:
 
     def test_context_management_across_operations(self):
         """Test managing context across multiple operations."""
-        agent = TestAgent("context_agent", [AgentCapabilities.CODE_GENERATION])
+        agent = StubAgent("context_agent", [AgentCapabilities.CODE_GENERATION])
 
         # Build up context across operations
         context = {"project": "test_project", "language": "python"}
@@ -301,9 +301,9 @@ class TestComplexScenarios:
 
     def test_capability_based_workflow(self):
         """Test workflow that selects agents by capability."""
-        code_gen = TestAgent("gen", [AgentCapabilities.CODE_GENERATION])
-        code_edit = TestAgent("edit", [AgentCapabilities.CODE_EDITING])
-        code_analyze = TestAgent("analyze", [AgentCapabilities.CODE_ANALYSIS])
+        code_gen = StubAgent("gen", [AgentCapabilities.CODE_GENERATION])
+        code_edit = StubAgent("edit", [AgentCapabilities.CODE_EDITING])
+        code_analyze = StubAgent("analyze", [AgentCapabilities.CODE_ANALYSIS])
 
         orchestrator = AgentOrchestrator([code_gen, code_edit, code_analyze])
 

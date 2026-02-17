@@ -4,6 +4,7 @@ from .base import (
     AgentCapabilities,
     AgentIntegrationAdapter,
     AgentInterface,
+    AgentProtocol,
     AgentRequest,
     AgentResponse,
     BaseAgent,
@@ -19,6 +20,7 @@ from .exceptions import (
     OpenCodeError,
     SessionError,
 )
+from .messages import AgentMessage, MessageRole, ToolCall, ToolResult
 from .parsers import (
     CodeBlock,
     ParseResult,
@@ -38,6 +40,7 @@ __all__ = [
     "AgentCapabilities",
     "AgentInterface",
     "AgentIntegrationAdapter",
+    "AgentProtocol",
     "AgentRequest",
     "AgentResponse",
     # Config
@@ -54,6 +57,11 @@ __all__ = [
     "OpenCodeError",
     "ConfigError",
     "SessionError",
+    # Messages
+    "AgentMessage",
+    "MessageRole",
+    "ToolCall",
+    "ToolResult",
     # Parsers
     "parse_json_response",
     "parse_code_blocks",
@@ -72,3 +80,4 @@ __all__ = [
     # ReAct
     "ReActAgent",
 ]
+
