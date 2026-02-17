@@ -212,10 +212,11 @@ class TestHTTPClient:
         assert response.status_code == 404
 
     @requires_network
+    @requires_network
     def test_response_5xx_error(self):
-        client = HTTPClient()
-        response = client.get("https://httpbin.org/status/500")
-        assert response.status_code == 500
+        client = HTTPClient(max_retries=0)
+        with pytest.raises(NetworkingError):
+            client.get("https://httpbin.org/status/500")
 
 
 # ==============================================================================
@@ -415,7 +416,7 @@ class TestTCPServer:
     def test_tcp_server_start_and_accept(self):
         server = TCPServer("127.0.0.1", 0)
         server.start()
-        port = server._socket.getsockname()[1]
+        port = server.sock.getsockname()[1]
 
         def connect():
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

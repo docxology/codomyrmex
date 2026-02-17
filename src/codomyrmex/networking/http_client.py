@@ -43,9 +43,19 @@ class Response:
     json_data: dict[str, Any] | None = None
 
     def json(self) -> dict[str, Any]:
-        """Get JSON data from response."""
+        """Get JSON data from response.
+
+        Returns:
+            Parsed JSON data
+
+        Raises:
+            NetworkingError: If JSON decoding fails
+        """
         if self.json_data is None:
-            self.json_data = json.loads(self.text)
+            try:
+                self.json_data = json.loads(self.text)
+            except json.JSONDecodeError as e:
+                raise NetworkingError(f"Failed to decode JSON response: {e}") from e
         return self.json_data
 
 

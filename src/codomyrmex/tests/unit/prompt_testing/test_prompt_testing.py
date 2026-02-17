@@ -8,7 +8,7 @@ class TestPromptTestingImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex.testing import prompt as prompt_testing
+        from codomyrmex.prompt_engineering import testing as prompt_testing
         assert prompt_testing is not None
 
     def test_public_api_exists(self):

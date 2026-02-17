@@ -68,10 +68,13 @@ class Metric(ABC):
 class Counter(Metric):
     """Counter metric (only increases)."""
 
-    def __init__(self, name: str, description: str = "", labels: dict[str, str] | None = None, value: float = 0.0):
-        super().__init__(name, description, list(labels.keys()) if labels else None)
+    def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+        allowed = labels
+        if isinstance(labels, dict):
+            allowed = list(labels.keys())
+        super().__init__(name, description, allowed)
         self._values: dict[str, float] = {"": value}
-        if labels:
+        if isinstance(labels, dict):
             self.labels = labels
             self._values[self._key(labels)] = value
         else:
@@ -108,10 +111,13 @@ class Counter(Metric):
 class Gauge(Metric):
     """Gauge metric (can go up and down)."""
 
-    def __init__(self, name: str, description: str = "", labels: dict[str, str] | None = None, value: float = 0.0):
-        super().__init__(name, description, list(labels.keys()) if labels else None)
+    def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+        allowed = labels
+        if isinstance(labels, dict):
+            allowed = list(labels.keys())
+        super().__init__(name, description, allowed)
         self._values: dict[str, float] = {"": value}
-        if labels:
+        if isinstance(labels, dict):
             self.labels = labels
             self._values[self._key(labels)] = value
         else:
@@ -164,12 +170,15 @@ class Histogram(Metric):
         self,
         name: str,
         description: str = "",
-        labels: dict[str, str] | None = None,
+        labels: dict[str, str] | list[str] | None = None,
         buckets: list[float] | None = None,
     ):
-        super().__init__(name, description, list(labels.keys()) if labels else None)
+        allowed = labels
+        if isinstance(labels, dict):
+            allowed = list(labels.keys())
+        super().__init__(name, description, allowed)
         self.buckets = sorted(buckets or self.DEFAULT_BUCKETS)
-        self.labels = labels or {}
+        self.labels = labels if isinstance(labels, dict) else {}
         self.values: list[float] = []
         self._bucket_counts: dict[float, int] = {b: 0 for b in self.buckets}
 
@@ -214,12 +223,15 @@ class Summary(Metric):
         self,
         name: str,
         description: str = "",
-        labels: dict[str, str] | None = None,
+        labels: dict[str, str] | list[str] | None = None,
         quantiles: list[float] | None = None,
     ):
-        super().__init__(name, description, list(labels.keys()) if labels else None)
+        allowed = labels
+        if isinstance(labels, dict):
+            allowed = list(labels.keys())
+        super().__init__(name, description, allowed)
         self.quantiles = quantiles or self.DEFAULT_QUANTILES
-        self.labels = labels or {}
+        self.labels = labels if isinstance(labels, dict) else {}
         self.count: int = 0
         self.sum: float = 0.0
         self._observations: list[float] = []
@@ -350,6 +362,8 @@ class MetricsRegistry:
 
     def get(self, name: str) -> Metric | None:
         """Get a metric by name."""
+        with self._lock:
+            return self._metrics.get(name)
 from .aggregator import MetricAggregator
 
 try:

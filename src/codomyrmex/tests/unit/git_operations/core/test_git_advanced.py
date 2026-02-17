@@ -53,6 +53,7 @@ def git_repo(tmp_path):
         f.write("# Test\n")
     subprocess.run(["git", "add", "."], cwd=repo, capture_output=True, check=True)
     subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=repo, capture_output=True, check=True)
+    subprocess.run(["git", "branch", "-m", "main"], cwd=repo, capture_output=True, check=True)
     return repo
 
 
@@ -168,7 +169,7 @@ def test_get_commit_details(git_repo):
 
 @pytest.mark.unit
 def test_config_ops(git_repo):
-    assert set_config("user.name", "NewTester", "local", git_repo) is True
+    assert set_config("user.name", "NewTester", repository_path=git_repo) is True
     assert get_config("user.name", git_repo) == "NewTester"
 
 

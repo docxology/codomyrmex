@@ -1,3 +1,6 @@
 [submodule "src/codomyrmex/dark/pdf/vendor/dark-pdf"]
 	path = src/codomyrmex/dark/pdf/vendor/dark-pdf
 	url = https://github.com/benjifriedman/dark-pdf
+[submodule "src/codomyrmex/formal_verification/vendor/z3"]
+	path = src/codomyrmex/formal_verification/vendor/z3
+	url = https://github.com/Z3Prover/z3.git

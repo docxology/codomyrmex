@@ -27,6 +27,10 @@ def temp_git_repo(temp_dir: str) -> Generator[str, None, None]:
 
     # Initialize Git repository
     initialize_git_repository(repo_path, initial_commit=True)
+    
+    # Ensure we are on 'main' regardless of system default
+    import subprocess
+    subprocess.run(["git", "branch", "-m", "main"], cwd=repo_path, capture_output=True, check=False)
 
     yield repo_path
 

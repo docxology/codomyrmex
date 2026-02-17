@@ -238,6 +238,10 @@ dark = [
     "Pillow>=10.0.0",         # Image processing for filters
 ]
 
+formal_verification = [
+    "z3-solver>=4.8.0",       # Z3 SMT solver (constraint solving, formal verification)
+]
+
 [project.urls]
 Homepage = "https://github.com/docxology/codomyrmex"
 Repository = "https://github.com/docxology/codomyrmex"

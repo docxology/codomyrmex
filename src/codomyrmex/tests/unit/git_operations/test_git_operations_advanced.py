@@ -19,6 +19,7 @@ Test Coverage:
 
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -92,6 +93,14 @@ class TestAdvancedGitOperations(unittest.TestCase):
 
         # Initialize repository for most tests
         self.assertTrue(initialize_git_repository(self.repo_dir))
+        
+        # Ensure we are on 'main' regardless of system default (master vs main)
+        subprocess.run(
+            ["git", "branch", "-m", "main"], 
+            cwd=self.repo_dir, 
+            capture_output=True, 
+            check=False
+        )
 
     def tearDown(self):
         """Clean up test fixtures after each test."""
@@ -457,8 +466,15 @@ class TestAdvancedGitOperations(unittest.TestCase):
 
         # Verify all tags were created
         tags = list_tags(self.repo_dir)
+        # We need to ensure tags list is not empty before checking specific tags
+        self.assertIsInstance(tags, list)
+        if not tags:
+             # If tags are empty, print for debugging (though capture_output usually hides this)
+             print(f"DEBUG: No tags found in {self.repo_dir}")
+        
         for i in range(branch_count):
-            self.assertIn(f"branch-{i}-v1.0", tags)
+            tag_name = f"branch-{i}-v1.0"
+            self.assertIn(tag_name, tags, f"Tag {tag_name} not found in {tags}")
 
     # ==================== ERROR HANDLING VALIDATION ====================
 

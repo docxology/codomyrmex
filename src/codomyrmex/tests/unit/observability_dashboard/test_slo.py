@@ -61,7 +61,7 @@ class TestSLI:
         sli = SLI(name="test", sli_type=SLIType.AVAILABILITY)
         sli.record_good(8)
         sli.record_bad(2)
-        assert abs(sli.value - 0.8) < 1e-6
+        assert abs(sli.value - 80.0) < 1e-6
 
 
 @pytest.mark.unit

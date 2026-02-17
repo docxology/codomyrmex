@@ -10,7 +10,7 @@ class TestCostManagementImports:
 
     def test_module_imports(self):
         """Verify module can be imported without errors."""
-        from codomyrmex.finance import cost as cost_management
+        from codomyrmex.cloud import cost_management
         assert cost_management is not None
 
     def test_public_api_exists(self):

@@ -4,76 +4,79 @@
 
 ## Overview
 
-The Environment Setup module validates the development environment, checks dependencies, and ensures the codomyrmex ecosystem can run correctly. It is a **Foundation Layer** module that other modules depend on for environment validation.
+The Environment Setup module validates the development environment, ensures dependency integrity, and creates a stable runtime for Codomyrmex agents. It acts as the **Gatekeeper** for the system, preventing execution in misconfigured environments. It is a **Foundation Layer** module.
 
 ## PAI Capabilities
 
-### Environment Validation
+### Comprehensive Validation
 
-Validate that the runtime environment meets requirements:
+The primary entry point for agents to verify their runtime environment.
+
+```python
+from codomyrmex.environment_setup import validate_environment_completeness
+
+# Single call to validate Python version, dependencies, and .env
+if validate_environment_completeness():
+    print("System ready for PAI execution")
+else:
+    print("Environment misconfigured - check logs")
+    exit(1)
+```
+
+### Granular Checks
+
+Individual checks for specific resource availablity.
 
 ```python
 from codomyrmex.environment_setup import (
     validate_python_version,
     is_uv_available,
-    is_uv_environment,
     ensure_dependencies_installed,
     check_and_setup_env_vars,
 )
 
-# Check Python version compatibility
-valid = validate_python_version()  # True if Python >= required version
+# 1. Check Runtime
+if not validate_python_version():
+    raise SystemError("Python 3.10+ required")
 
-# Check uv package manager
-uv_available = is_uv_available()      # True if uv is installed
-uv_env = is_uv_environment()          # True if running inside uv venv
+# 2. Check Tooling
+if is_uv_available():
+    print("Using 'uv' for fast package management")
 
-# Verify dependencies
-deps_ok = ensure_dependencies_installed()  # True if all deps satisfied
-
-# Validate and setup environment variables
-check_and_setup_env_vars()  # Checks required env vars, prompts if missing
-```
-
-### CLI Commands
-
-```bash
-codomyrmex environment_setup check   # Validate Python version, uv, env vars
-codomyrmex environment_setup deps    # List and verify installed dependencies
+# 3. Check Configuration
+if not check_and_setup_env_vars("/path/to/repo_root"):
+    print("Warning: .env file not found")
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `validate_python_version()` | Function | Check Python version meets minimum requirement |
-| `is_uv_available()` | Function | Check if `uv` package manager is installed |
-| `is_uv_environment()` | Function | Check if running inside a `uv`-managed virtual environment |
-| `ensure_dependencies_installed()` | Function | Verify all required dependencies are installed |
-| `check_and_setup_env_vars()` | Function | Validate and setup required environment variables |
-| `cli_commands()` | Function | CLI command registration |
+| `validate_environment_completeness` | Function | **Primary entry point**: Runs all checks |
+| `ensure_dependencies_installed` | Function | Verifies `cased/kit` and `python-dotenv` |
+| `check_and_setup_env_vars` | Function | Loads `.env` into `os.environ` |
+| `validate_python_version` | Function | Enforces Python 3.10+ requirement |
+| `is_uv_available` | Function | Detects `uv` package manager |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Environment Setup Contribution |
 |-------|-------------------------------|
-| **OBSERVE** | `validate_python_version()`, `is_uv_available()` — assess environment state |
-| **VERIFY** | `ensure_dependencies_installed()` — confirm all dependencies present before execution |
-| **EXECUTE** | `check_and_setup_env_vars()` — ensure environment is ready for tool execution |
-
-## Dependencies
-
-- Uses `logging_monitoring` for all logging
-- Core module that other modules depend on (upward dependency only)
-- Integrates with `python-dotenv` for `.env` file support
+| **OBSERVE** | `validate_environment_completeness` — Initial system health check |
+| **PLAN** | `is_uv_available` — Determine available tooling for build steps |
+| **VERIFY** | `ensure_dependencies_installed` — Pre-flight check before complex operations |
 
 ## Architecture Role
 
-**Foundation Layer** — One of the 4 foundation modules. Called early in startup sequences and by modules that need to validate their runtime environment before operating.
+**Foundation Layer** — Critical dependency for:
+
+1. **CLI Entry Points** (fail fast if env is bad)
+2. **Agent Initialization** (ensure config is loaded)
+3. **Build Tools** (leverage `uv` if present)
 
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)
 - **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
 - **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
-- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)
