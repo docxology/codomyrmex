@@ -73,6 +73,11 @@ def cli_commands():
     }
 
 
+# MCP Errors and Validation (v0.1.8)
+from .errors import MCPErrorCode, MCPToolError, FieldError
+from .validation import ValidationResult, validate_tool_arguments
+
+
 __all__ = [
     "MCPErrorDetail",
     "MCPMessage",
@@ -85,6 +90,11 @@ __all__ = [
     "MCPClient",
     "MCPClientConfig",
     "MCPClientError",
+    "MCPErrorCode",
+    "MCPToolError",
+    "FieldError",
+    "ValidationResult",
+    "validate_tool_arguments",
     "schemas",
     "adapters",
     "validators",

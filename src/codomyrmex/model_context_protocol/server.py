@@ -286,31 +286,76 @@ class MCPServer:
     async def _call_tool(self, params: dict[str, Any]) -> dict[str, Any]:
         """Execute a tool.
 
+        Validates arguments against the tool's ``inputSchema`` before dispatch.
+        Returns a structured ``MCPToolError`` on validation failure.
+
         MCP 2025-06-18: When a tool defines an outputSchema, the response
         includes a 'structuredContent' field with the typed return value
         alongside the standard 'content' array.
         """
-        tool_call = MCPToolCall(
-            tool_name=params.get("name"),
-            arguments=params.get("arguments", {}),
+        from .validation import validate_tool_arguments
+        from .errors import (
+            MCPToolError,
+            MCPErrorCode,
+            FieldError,
+            not_found_error,
+            validation_error,
+            execution_error,
         )
 
-        result = self._tool_registry.execute(tool_call)
+        tool_name = params.get("name", "")
+        arguments = params.get("arguments", {})
+
+        # ── Look up the tool ──────────────────────────────────────────
+        tool_entry = self._tool_registry.get(tool_name) if tool_name else None
+        if not tool_entry:
+            return not_found_error(tool_name).to_mcp_response()
+
+        # ── Validate arguments against inputSchema ────────────────────
+        tool_schema = tool_entry.get("schema", {})
+        vr = validate_tool_arguments(tool_name, arguments, tool_schema)
+
+        if not vr.valid:
+            field_errors = [
+                FieldError(field=e.split(":")[0].strip(), constraint=e)
+                for e in vr.errors
+            ]
+            return validation_error(
+                tool_name=tool_name,
+                message=f"Validation failed for tool {tool_name!r}: {'; '.join(vr.errors)}",
+                field_errors=field_errors,
+            ).to_mcp_response()
+
+        # ── Execute with validated (and possibly coerced) arguments ───
+        tool_call = MCPToolCall(
+            tool_name=tool_name,
+            arguments=vr.coerced_args,
+        )
+
+        try:
+            result = self._tool_registry.execute(tool_call)
+        except Exception as exc:
+            return execution_error(tool_name, exc).to_mcp_response()
 
         if result.status == "success":
             content = [{"type": "text", "text": json.dumps(result.data)}]
             response: dict[str, Any] = {"content": content}
 
             # MCP 2025-06-18: Include structuredContent when outputSchema exists
-            tool_name = params.get("name")
-            tool_entry = self._tool_registry.get(tool_name) if tool_name else None
-            if tool_entry and "outputSchema" in tool_entry.get("schema", {}):
+            if "outputSchema" in tool_schema:
                 response["structuredContent"] = result.data
 
             return response
         else:
-            content = [{"type": "text", "text": result.error.error_message if result.error else "Unknown error"}]
-            return {"content": content, "isError": True}
+            # Wrap legacy MCPToolResult errors in structured envelope
+            err_msg = result.error.error_message if result.error else "Unknown error"
+            err_type = result.error.error_type if result.error else "Unknown"
+            return MCPToolError(
+                code=MCPErrorCode.EXECUTION_ERROR,
+                message=err_msg,
+                tool_name=tool_name,
+                module=err_type,
+            ).to_mcp_response()
 
     async def _list_resources(self, params: dict[str, Any]) -> dict[str, Any]:
         """List available resources."""

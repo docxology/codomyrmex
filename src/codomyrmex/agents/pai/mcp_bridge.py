@@ -828,31 +828,64 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         **kwargs: Tool arguments.
 
     Returns:
-        Tool result dictionary.
+        Tool result dictionary.  On error, returns a dict with
+        ``"error"`` key containing a structured :class:`MCPToolError` dict.
 
     Raises:
         KeyError: If the tool name is not registered.
     """
-    # Check static definitions first (fast path)
-    tool_map = {t[0]: t[2] for t in _TOOL_DEFINITIONS}
-    handler = tool_map.get(name)
+    from codomyrmex.model_context_protocol.errors import (
+        MCPToolError,
+        MCPErrorCode,
+        execution_error,
+        not_found_error,
+    )
+    from codomyrmex.model_context_protocol.validation import validate_tool_arguments
 
-    if handler:
-        return handler(**kwargs)
+    # Look up handler + schema ---------------------------------------
+    tool_map = {t[0]: (t[2], t[3]) for t in _TOOL_DEFINITIONS}
+    entry = tool_map.get(name)
 
-    # Fallback to dynamic discovery if not found static
-    # optimization: could cache this or scan only on miss
-    dynamic_tools = _discover_dynamic_tools()
-    dynamic_map = {t[0]: t[2] for t in dynamic_tools}
-    handler = dynamic_map.get(name)
+    if entry is None:
+        dynamic_tools = _discover_dynamic_tools()
+        dynamic_map = {t[0]: (t[2], t[3]) for t in dynamic_tools}
+        entry = dynamic_map.get(name)
 
-    if handler is None:
-        all_tools = sorted(list(tool_map.keys()) + list(dynamic_map.keys()))
+    if entry is None:
+        all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
         raise KeyError(
             f"Unknown tool: {name!r}. "
-            f"Available: {all_tools}"
+            f"Available (static): {all_static}"
         )
-    return handler(**kwargs)
+
+    handler, input_schema = entry
+
+    # Validate arguments against schema -----------------------------
+    vr = validate_tool_arguments(name, kwargs, {"inputSchema": input_schema})
+    if not vr.valid:
+        return {"error": MCPToolError(
+            code=MCPErrorCode.VALIDATION_ERROR,
+            message=f"Validation failed: {'; '.join(vr.errors)}",
+            tool_name=name,
+        ).to_dict()}
+
+    # Execute with structured error wrapping ------------------------
+    try:
+        return handler(**vr.coerced_args)
+    except ImportError as exc:
+        module_hint = name.split(".")[1] if "." in name else name
+        return {"error": execution_error(
+            name, exc, module=module_hint,
+            suggestion=f"Module dependency missing. Run: uv sync --extra {module_hint}",
+        ).to_dict()}
+    except TimeoutError as exc:
+        return {"error": MCPToolError(
+            code=MCPErrorCode.TIMEOUT,
+            message=str(exc),
+            tool_name=name,
+        ).to_dict()}
+    except Exception as exc:
+        return {"error": execution_error(name, exc).to_dict()}
 
 
 def get_skill_manifest() -> dict[str, Any]:
