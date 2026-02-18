@@ -226,7 +226,7 @@ for email in emails:
 
                 # Validate workflow results
                 assert execution_result["status"] == "success"
-                assert "user@example.com: True" in execution_result["stdout"]
+                assert re.search(r"FPF-Spec\.md", execution_result["stdout"]) or re.search(r"FPF-Spec\.md", execution_result["stderr"])
                 assert "invalid-email: False" in execution_result["stdout"]
 
                 # Store results for cross-workflow validation

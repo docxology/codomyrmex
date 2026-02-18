@@ -4,42 +4,24 @@
 
 ## Overview
 
-Validation module for Codomyrmex. This is an **Extended Layer** module.
+Validation utilities for system integrity and integration. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
 ```python
-from codomyrmex.validation import Validator, ValidationManager, ValidationResult, rules, sanitizers, schemas
+from codomyrmex.validation import validate_pai_integration
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `rules` | Function/Constant | Rules |
-| `sanitizers` | Function/Constant | Sanitizers |
-| `schemas` | Function/Constant | Schemas |
-| `Validator` | Class | Validator |
-| `ValidationManager` | Class | Validationmanager |
-| `ValidationResult` | Class | Validationresult |
-| `ValidationWarning` | Class | Validationwarning |
-| `ContextualValidator` | Class | Contextualvalidator |
-| `ValidationIssue` | Class | Validationissue |
-| `TypeSafeParser` | Class | Typesafeparser |
-| `ValidationSummary` | Class | Validationsummary |
-| `validate` | Function/Constant | Validate |
-| `is_valid` | Function/Constant | Is valid |
-| `get_errors` | Function/Constant | Get errors |
-| `ValidationError` | Class | Validationerror |
-
-*Plus 9 additional exports.*
-
+| `validate_pai_integration` | Function/Constant | Validate pai integration |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Validation Contribution |
 |-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
 | **VERIFY** | Validation and quality checks |
 
 ## Architecture Role

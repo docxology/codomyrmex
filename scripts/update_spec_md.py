@@ -2,91 +2,39 @@
 """
 scripts/update_spec_md.py
 
-Updates SPEC.md to include any modules missing from the module lists.
-Adds them to the 'Specialized Layer' section by default.
+Thin wrapper around codomyrmex.documentation.maintenance.update_spec.
 """
 
 import argparse
 from pathlib import Path
+import sys
 
-# List of all modules (same logic as before)
-def get_all_modules(src_dir: Path):
-    modules = []
-    for item in src_dir.iterdir():
-        if item.is_dir() and not item.name.startswith(".") and item.name != "__pycache__":
-            if (item / "__init__.py").exists():
-                modules.append(item.name)
-    return set(modules)
+# Ensure src is in path
+PROJ_ROOT = Path(__file__).resolve().parent.parent
+SRC_DIR = PROJ_ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    from codomyrmex.documentation.maintenance import update_spec
+except ImportError as e:
+    print(f"Error importing codomyrmex module: {e}")
+    sys.exit(1)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Update SPEC.md with missing modules.")
-    parser.add_argument("--root", type=Path, default=Path(__file__).parent.parent, help="Project root directory")
+    parser.add_argument("--root", type=Path, default=PROJ_ROOT, help="Project root directory")
     args = parser.parse_args()
 
-    root_dir = args.root
-    src_dir = root_dir / "src" / "codomyrmex"
-    spec_path = src_dir / "SPEC.md"
+    src_dir = args.root / "src" / "codomyrmex"
     
-    if not spec_path.exists():
-        print(f"Error: SPEC.md not found at {spec_path}")
+    if not src_dir.exists():
+        print(f"Error: Source directory {src_dir} does not exist.")
         return
 
-    content = spec_path.read_text()
-    all_modules = get_all_modules(src_dir)
-    
-    # We look for the "Specialized Layer" definition in the mermaid chart or the text list
-    # Let's target the text list: "#### Specialized Layer" ... "**Modules**:"
-    
-    start_marker = "#### Specialized Layer"
-    modules_marker = "**Modules**:"
-    
-    start_idx = content.find(start_marker)
-    if start_idx == -1:
-        print("Could not find Specialized Layer section")
-        return
-        
-    modules_idx = content.find(modules_marker, start_idx)
-    if modules_idx == -1:
-        print("Could not find Modules list in Specialized Layer section")
-        return
-        
-    modules_idx += len(modules_marker)
-    
-    # Find the end of the list (next section usually starts with **Characteristics**)
-    end_idx = content.find("**Characteristics**", modules_idx)
-    
-    if end_idx == -1:
-        end_idx = len(content)
-        
-    current_list_block = content[modules_idx:end_idx]
-    
-    # Identify which modules are already mentioned in the WHOLE file to avoid dupes anywhere
-    # (e.g. if they are in Core Layer)
-    existing_modules = set()
-    for m in all_modules:
-        if f"`{m}`" in content or f"`{m}<" in content or f"[{m}]" in content:
-            existing_modules.add(m)
-            
-    missing = all_modules - existing_modules
-    
-    if missing:
-        print(f"Adding {len(missing)} missing modules to Specialized Layer: {missing}")
-        
-        new_entries = ""
-        for m in sorted(missing):
-            # Try to get a simple description from restore_descriptions.py map if possible, 
-            # or just default.
-            new_entries += f"\n- `{m}`: Specialized module"
-            
-        # Append to the end of the current list block
-        # The current list ends with a newline usually
-        new_list_block = current_list_block.rstrip() + new_entries + "\n\n"
-        
-        final_content = content[:modules_idx] + new_list_block + content[end_idx:]
-        spec_path.write_text(final_content)
-        print("Updated SPEC.md")
-    else:
-        print("No missing modules found in SPEC.md")
+    update_spec(src_dir)
+
 
 if __name__ == "__main__":
     main()

@@ -50,25 +50,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
-"""
-
-# """Main entry point and utility functions
-
-This module provides github_library_generator functionality including:
-- 7 functions: main, __init__, fetch_repositories...
-- 1 classes: GitHubLibraryGenerator
-
-Usage:
-    # Example usage here
-"""
-GitHub Repository Library Generator
-
-This script automatically generates a repository library file by fetching
-repositories from the GitHub API for a specified user.
-"""
-
-logger = get_logger(__name__)
 
 class GitHubLibraryGenerator:
     """Generator for repository library from GitHub API."""

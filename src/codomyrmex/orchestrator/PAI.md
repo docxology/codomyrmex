@@ -9,13 +9,14 @@ Script Orchestrator Module This is a **Service Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.orchestrator import Workflow, Task, TaskStatus, templates, state, triggers
+from codomyrmex.orchestrator import Workflow, Task, TaskStatus, scheduler, templates, state
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `scheduler` | Function/Constant | Scheduler |
 | `templates` | Function/Constant | Templates |
 | `state` | Function/Constant | State |
 | `triggers` | Function/Constant | Triggers |
@@ -29,9 +30,8 @@ from codomyrmex.orchestrator import Workflow, Task, TaskStatus, templates, state
 | `TaskStatus` | Class | Taskstatus |
 | `TaskResult` | Class | Taskresult |
 | `RetryPolicy` | Class | Retrypolicy |
-| `WorkflowError` | Class | Workflowerror |
 
-*Plus 43 additional exports.*
+*Plus 44 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping

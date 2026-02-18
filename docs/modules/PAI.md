@@ -10,7 +10,7 @@ Comprehensive documentation hub for all 78 Codomyrmex modules. This directory co
 
 ### Context for Agents
 
-- **78 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
+- **82 module subdirectories** — each with README.md, AGENTS.md, SPEC.md
 - **System-level views** — overview, relationships, dependency graph
 - **Module categories** — Foundation, AI & Intelligence, Code & Analysis, Data & Visualization, DevOps & Infrastructure, Security & Cognitive, Interface & Communication, Framework & Utilities
 

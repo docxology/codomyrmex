@@ -9,13 +9,15 @@ Database Management Module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.database_management import DatabaseManager, DatabaseConnection, MigrationManager, audit, sharding, replication
+from codomyrmex.database_management import DatabaseManager, DatabaseConnection, MigrationManager, lineage, migration, audit
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `lineage` | Function/Constant | Lineage |
+| `migration` | Function/Constant | Migration |
 | `audit` | Function/Constant | Audit |
 | `sharding` | Function/Constant | Sharding |
 | `replication` | Function/Constant | Replication |
@@ -28,10 +30,8 @@ from codomyrmex.database_management import DatabaseManager, DatabaseConnection, 
 | `Migration` | Class | Migration |
 | `BackupManager` | Class | Backupmanager |
 | `backup_database` | Function/Constant | Backup database |
-| `Backup` | Class | Backup |
-| `DatabaseMonitor` | Class | Databasemonitor |
 
-*Plus 6 additional exports.*
+*Plus 8 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping

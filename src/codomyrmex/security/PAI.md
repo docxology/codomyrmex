@@ -9,13 +9,14 @@ Security Module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.security import audit, compliance, secrets
+from codomyrmex.security import governance, audit, compliance
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `governance` | Function/Constant | Governance |
 | `audit` | Function/Constant | Audit |
 | `compliance` | Function/Constant | Compliance |
 | `secrets` | Function/Constant | Secrets |

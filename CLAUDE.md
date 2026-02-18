@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 82+ specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 82 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 

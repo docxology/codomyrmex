@@ -1,6 +1,6 @@
 # Codomyrmex Project Roadmap & To-Do
 
-**Status**: Active | **Last Updated**: February 18, 2026 | **Current**: v0.1.6 | **Target**: v0.4.0
+**Status**: Active | **Last Updated**: February 18, 2026 | **Current**: v0.1.7 | **Target**: v0.4.0
 
 Versions 0.1.7–0.1.9 harden foundations (testing, MCP plumbing, async orchestration, PAI workflows).
 Version 0.2.0 certifies production-grade agent infrastructure.

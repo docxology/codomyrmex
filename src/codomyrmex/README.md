@@ -11,85 +11,89 @@ Main package directory containing 78 specialized modules for the Codomyrmex plat
 - `PAI.md` – Personal AI Infrastructure documentation
 - `README.md` – This file
 - `SPEC.md` – Module specification
-- `__init__.py` – Package initialization with lazy imports
-- `agentic_memory/` – Memory systems for AI agents
-- `agents/` – Agentic framework integrations (Jules, Claude, Codex, PAI)
-- `api/` – API infrastructure and resilience
-- `audio/` – Audio processing and transcription
-- `auth/` – Authentication and authorization
-- `bio_simulation/` – Biological simulation (Ant Colony)
-- `cache/` – Caching infrastructure (multi-strategy invalidation)
-- `cerebrum/` – Case-based reasoning and Bayesian inference
-- `ci_cd_automation/` – CI/CD pipelines (includes build automation)
-- `cli/` – Command line interface
-- `cloud/` – Cloud provider integration (includes cost management)
-- `coding/` – Code execution, review, static analysis, pattern matching
-- `collaboration/` – Team collaboration and multi-agent sessions
-- `compression/` – Data compression
-- `concurrency/` – Concurrency utilities, distributed sync, rate limiting
-- `config_management/` – Configuration management
-- `containerization/` – Container management (Docker/K8s)
-- `crypto/` – Cryptographic operations
-- `dark/` – Dark mode and PDF processing
-- `data_visualization/` – Charts, plots, and visualization
-- `database_management/` – Database operations, migrations, backups, lineage
-- `defense/` – Active fiduciary defense
-- `dependency_injection/` – IoC container and lifecycle
-- `deployment/` – Deployment automation (blue-green, canary, rolling)
-- `documentation/` – Documentation generation (includes education content)
-- `documents/` – Document processing and RAG chunking
-- `edge_computing/` – Edge deployment and IoT scenarios
-- `embodiment/` – Physical/robotic integration
-- `encryption/` – Data encryption and digital signing
-- `environment_setup/` – Environment validation and setup
-- `events/` – Event system, pub/sub, streaming, notifications
-- `evolutionary_ai/` – Evolutionary algorithms
-- `examples/` – Usage examples
-- `exceptions/` – Centralized exception hierarchy
-- `feature_flags/` – Feature flag management
-- `finance/` – Financial ledger and treasury
-- `fpf/` – Functional Programming Framework
-- `git_operations/` – Git automation and merge resolution
-- `graph_rag/` – Graph-based RAG
-- `ide/` – IDE integration
-- `identity/` – Identity and Persona Management
-- `llm/` – LLM infrastructure (includes inference optimization, multimodal)
-- `logging_monitoring/` – Centralized logging
-- `logistics/` – Workflow logistics and orchestration
-- `maintenance/` – Dependency analysis and project maintenance
-- `market/` – Anonymous marketplaces
-- `meme/` – Unified Memetic Warfare & Information Dynamics
-- `model_context_protocol/` – MCP interfaces and auto-discovery
-- `model_ops/` – ML model operations (includes evaluation, registry, optimization)
-- `module_template/` – Module scaffolding
-- `networking/` – Network utilities (includes service mesh)
-- `orchestrator/` – Workflow orchestration (includes scheduling)
-- `performance/` – Performance monitoring and profiling
-- `physical_management/` – Physical systems
-- `plugin_system/` – Plugin architecture
-- `privacy/` – Data minimization and mixnets
-- `prompt_engineering/` – Prompt design, optimization, and testing
-- `quantum/` – Quantum computing simulation
-- `relations/` – CRM and Social Graph (includes UOR)
-- `scrape/` – Web scraping
-- `search/` – Search and indexing
-- `security/` – Security scanning (includes governance)
-- `serialization/` – Data serialization
-- `skills/` – Agent skills library
-- `spatial/` – 3D/4D modeling
-- `system_discovery/` – Module discovery
-- `telemetry/` – Telemetry, tracing, metrics, dashboards
-- `templating/` – Template management
-- `terminal_interface/` – Terminal UI
-- `testing/` – Test utilities (includes chaos engineering, workflow testing)
-- `tests/` – Test suites (unit and integration)
-- `tool_use/` – LLM tool usage
-- `utils/` – General utilities (includes i18n, hashing, retry)
-- `validation/` – Input validation (includes schemas)
-- `vector_store/` – Vector database abstraction
-- `video/` – Video processing
-- `wallet/` – Self-custody wallets (includes smart contracts)
-- `website/` – Website generation (includes accessibility)
+- `__init__.py` – Package initialization
+- `agentic_memory/` – Module
+- `agents/` – Module
+- `api/` – Module
+- `audio/` – Module
+- `auth/` – Module
+- `bio_simulation/` – Module
+- `cache/` – Module
+- `cerebrum/` – Module
+- `ci_cd_automation/` – Module
+- `cli/` – Module
+- `cloud/` – Module
+- `coding/` – Module
+- `collaboration/` – Module
+- `compression/` – Module
+- `concurrency/` – Module
+- `config_management/` – Module
+- `containerization/` – Module
+- `crypto/` – Module
+- `dark/` – Module
+- `data_visualization/` – Module
+- `database_management/` – Module
+- `defense/` – Module
+- `dependency_injection/` – Module
+- `deployment/` – Module
+- `documentation/` – Module
+- `documents/` – Module
+- `edge_computing/` – Module
+- `embodiment/` – Module
+- `encryption/` – Module
+- `environment_setup/` – Module
+- `events/` – Module
+- `evolutionary_ai/` – Module
+- `examples/` – Module
+- `exceptions/` – Module
+- `feature_flags/` – Module
+- `finance/` – Module
+- `formal_verification/` – Module
+- `fpf/` – Module
+- `git_operations/` – Module
+- `graph_rag/` – Module
+- `ide/` – Module
+- `identity/` – Module
+- `llm/` – Module
+- `logging_monitoring/` – Module
+- `logistics/` – Module
+- `maintenance/` – Module
+- `market/` – Module
+- `meme/` – Module
+- `model_context_protocol/` – Module
+- `model_ops/` – Module
+- `module_template/` – Module
+- `networking/` – Module
+- `networks/` – Module
+- `orchestrator/` – Module
+- `performance/` – Module
+- `physical_management/` – Module
+- `plugin_system/` – Module
+- `privacy/` – Module
+- `prompt_engineering/` – Module
+- `quantum/` – Module
+- `relations/` – Module
+- `scrape/` – Module
+- `search/` – Module
+- `security/` – Module
+- `serialization/` – Module
+- `simulation/` – Module
+- `skills/` – Module
+- `spatial/` – Module
+- `static_analysis/` – Module
+- `system_discovery/` – Module
+- `telemetry/` – Module
+- `templating/` – Module
+- `terminal_interface/` – Module
+- `testing/` – Module
+- `tests/` – Module
+- `tool_use/` – Module
+- `utils/` – Module
+- `validation/` – Module
+- `vector_store/` – Module
+- `video/` – Module
+- `wallet/` – Module
+- `website/` – Module
 
 ## Navigation
 

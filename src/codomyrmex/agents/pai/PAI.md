@@ -44,7 +44,7 @@ The `mcp_bridge.py` module exposes all Codomyrmex capabilities as MCP tools:
 - **2 Resources**: module inventory, system status
 - **10 Prompts** (3 dotted + 7 camelCase workflows)
 - **Algorithm Mapping**: Each tool maps to an Algorithm phase (OBSERVE → LEARN)
-- **Knowledge Scope**: 7 domains covering all 78 modules
+- **Knowledge Scope**: 7 domains covering all 82 modules
 
 ```python
 from codomyrmex.agents.pai import call_tool

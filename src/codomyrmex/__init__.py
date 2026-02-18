@@ -5,7 +5,7 @@ four-layer architecture for AI-assisted software development, code analysis,
 testing, documentation generation, and workflow automation.
 """
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 import os
 import pkgutil
@@ -64,6 +64,7 @@ _submodules = [
     "exceptions",
     "feature_flags",
     "finance",
+    "formal_verification",
     "fpf",
     "git_operations",
     "graph_rag",
@@ -74,11 +75,12 @@ _submodules = [
     "logistics",
     "maintenance",
     "market",
+    "meme",
     "model_context_protocol",
     "model_ops",
     "module_template",
-    "meme",
     "networking",
+    "networks",
     "orchestrator",
     "performance",
     "physical_management",
@@ -91,8 +93,10 @@ _submodules = [
     "search",
     "security",
     "serialization",
+    "simulation",
     "skills",
     "spatial",
+    "static_analysis",
     "system_discovery",
     "telemetry",
     "templating",
@@ -165,6 +169,7 @@ __all__ = [
     "exceptions",
     "feature_flags",
     "finance",
+    "formal_verification",
     "fpf",
     "git_operations",
     "graph_rag",
@@ -180,6 +185,7 @@ __all__ = [
     "model_ops",
     "module_template",
     "networking",
+    "networks",
     "orchestrator",
     "performance",
     "physical_management",
@@ -192,8 +198,10 @@ __all__ = [
     "search",
     "security",
     "serialization",
+    "simulation",
     "skills",
     "spatial",
+    "static_analysis",
     "system_discovery",
     "telemetry",
     "templating",

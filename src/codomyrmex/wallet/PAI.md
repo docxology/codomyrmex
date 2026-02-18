@@ -9,13 +9,14 @@ Wallet Module. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, BackupManager, hash_response, create_wallet, get_wallet_manager
+from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, BackupManager, contracts, hash_response, create_wallet
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `contracts` | Function/Constant | Contracts |
 | `WalletManager` | Class | Walletmanager |
 | `NaturalRitualRecovery` | Class | Naturalritualrecovery |
 | `BackupManager` | Class | Backupmanager |
@@ -30,6 +31,9 @@ from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, BackupManage
 | `hash_response` | Function/Constant | Hash response |
 | `create_wallet` | Function/Constant | Create wallet |
 | `get_wallet_manager` | Function/Constant | Get wallet manager |
+
+*Plus 1 additional exports.*
+
 
 ## PAI Algorithm Phase Mapping
 

@@ -4,12 +4,12 @@
 
 ## Overview
 
-Dark modes module - network, hardware, software, PDF dark mode utilities. This is an **Extended Layer** module.
+Dark modes module - PDF dark mode utilities. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
 ```python
-from codomyrmex.dark import PDF_AVAILABLE, pdf, network, hardware
+from codomyrmex.dark import PDF_AVAILABLE, pdf
 ```
 
 ## Key Exports
@@ -18,9 +18,6 @@ from codomyrmex.dark import PDF_AVAILABLE, pdf, network, hardware
 |--------|------|---------|
 | `__version__` | Function/Constant |   version   |
 | `pdf` | Function/Constant | Pdf |
-| `network` | Function/Constant | Network |
-| `hardware` | Function/Constant | Hardware |
-| `software` | Function/Constant | Software |
 | `PDF_AVAILABLE` | Class | Pdf available |
 
 ## PAI Algorithm Phase Mapping

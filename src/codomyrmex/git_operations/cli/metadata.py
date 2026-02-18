@@ -34,19 +34,6 @@ from codomyrmex.logging_monitoring.logger_config import get_logger
 
 
 
-#!/usr/bin/env python3
-"""
-Repository Metadata CLI - Command Line Interface for Repository Metadata Management
-
-This script provides a command-line interface for managing repository metadata,
-including status tracking, permissions, versions, and comprehensive reporting.
-"""
-
-    CloneStatus,
-    RepositoryMetadataManager,
-)
-
-
 # Add src to path for imports
 current_dir = Path(__file__).parent
 src_dir = current_dir.parent.parent.parent / "src"

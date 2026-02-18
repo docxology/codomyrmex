@@ -4,7 +4,7 @@
 
 ## Overview
 
-Maintenance Module for Codomyrmex. This is an **Extended Layer** module.
+Tools Module for Codomyrmex. This is an **Extended Layer** module.
 
 ## PAI Capabilities
 
@@ -32,7 +32,7 @@ from codomyrmex.maintenance import DependencyAnalyzer, analyze_project_structure
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | Tools Contribution |
+| Phase | Maintenance Contribution |
 |-------|------------------------------|
 | **THINK** | Analysis and reasoning |
 | **VERIFY** | Validation and quality checks |

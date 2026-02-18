@@ -9,13 +9,15 @@ Event-Driven Architecture for Codomyrmex This is a **Service Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.events import Event, EventType, EventPriority, get_event_bus, publish_event, subscribe_to_events
+from codomyrmex.events import Event, EventType, EventPriority, notification, streaming, get_event_bus
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `notification` | Function/Constant | Notification |
+| `streaming` | Function/Constant | Streaming |
 | `Event` | Class | Event |
 | `EventType` | Class | Eventtype |
 | `EventPriority` | Class | Eventpriority |
@@ -29,10 +31,8 @@ from codomyrmex.events import Event, EventType, EventPriority, get_event_bus, pu
 | `subscribe_to_events` | Function/Constant | Subscribe to events |
 | `unsubscribe_from_events` | Function/Constant | Unsubscribe from events |
 | `get_event_logger` | Function/Constant | Get event logger |
-| `get_event_stats` | Function/Constant | Get event stats |
-| `EventError` | Class | Eventerror |
 
-*Plus 7 additional exports.*
+*Plus 9 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping

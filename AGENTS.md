@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 78 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 82 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -208,16 +208,16 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `register_tool(name: str, tool: callable) -> None`, `execute_tool(name: str, args: dict) -> Any`
 - `utils/` - General utilities
   - Key Functions: `ensure_directory`, `safe_write`
-- `validation/` - input validation
+- `validation/` - Input validation
   - Key Classes: `Validator`, `Schema`
 - `templating/` - Template management
   - Key Classes: `TemplateEngine`
 - `ide/` - IDE Integration
   - Key Classes: `EditorInterface`
 - `cloud/` - Cloud provider integration
-  - Key Classes: `AWSClient`, `GCPClient`, `InfomaniakComputeClient`, `InfomaniakVolumeClient`, `InfomaniakNetworkClient`, `InfomaniakObjectStorageClient`, `InfomaniakS3Client`, `InfomaniakIdentityClient`, `InfomaniakDNSClient`, `InfomaniakHeatClient`, `InfomaniakMeteringClient`, `InfomaniakNewsletterClient`
+  - Key Classes: `AWSClient`, `GCPClient`, `InfomaniakComputeClient`
 - `networking/` - Network utilities
-  - Key Classes: `NetworkClient`
+  - Key Classes: `NetworkClient`, `HTTPClient`
 - `serialization/` - Data serialization
   - Key Classes: `Serializer`
 - `compression/` - Data compression
@@ -242,20 +242,60 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `EvolutionaryOptimizer`, `GeneticAlgorithm`
 - `feature_flags/` - Feature flag management
   - Key Classes: `FeatureFlagManager`, `FlagEvaluator`
-- `metrics/` - Metrics collection and reporting
-  - Key Classes: `MetricsCollector`, `MetricsReporter`
 - `model_ops/` - ML model operations
   - Key Classes: `ModelManager`, `ModelRegistry`
 - `skills/` - Agent skills and capabilities
   - Key Classes: `SkillRegistry`, `SkillExecutor`
 - `telemetry/` - Telemetry and observability
   - Key Classes: `TelemetryClient`, `TraceManager`
-- `tree_sitter/` - Tree-sitter parsing utilities
-  - Key Classes: `TreeSitterParser`, `ASTNavigator`
 - `website/` - Website generation and management
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
 - `meme/` - Memetics & Information Dynamics
   - Key Classes: `MemeSpecific`, `NarrativeEngine`
+- `agentic_memory/` - Long-term agent memory and recall
+  - Key Classes: `AgentMemory`, `VectorStoreMemory`
+- `audio/` - Audio processing and transcription
+  - Key Classes: `AudioProcessor`, `Transcriber`
+- `bio_simulation/` - Biological simulation
+  - Key Classes: `BioSimulator`
+- `crypto/` - Cryptographic utilities
+  - Key Classes: `CryptoEngine`
+- `dark/` - Dark mode utilities for PDFs and interfaces
+  - Key Classes: `DarkModeConverter`
+- `dependency_injection/` - Dependency injection framework
+  - Key Classes: `Container`, `Provider`
+- `edge_computing/` - Edge computing and IoT
+  - Key Classes: `EdgeNode`, `EdgeOrchestrator`
+- `finance/` - Financial operations and tracking
+  - Key Classes: `FinanceTracker`, `TransactionManager`
+- `formal_verification/` - Formal verification and proofs
+  - Key Classes: `Verifier`, `ProofEngine`
+- `graph_rag/` - Graph-based retrieval augmented generation
+  - Key Classes: `GraphRAG`, `KnowledgeGraph`
+- `logistics/` - Logistics-layer orchestration and scheduling
+  - Key Classes: `LogisticsPlanner`, `ShipmentTracker`
+- `maintenance/` - Documentation maintenance utilities
+  - Key Functions: `update_root_docs`, `finalize_docs`
+- `networks/` - Network topology and analysis
+  - Key Classes: `NetworkAnalyzer`, `TopologyBuilder`
+- `pattern_matching/` - Code pattern analysis
+  - Key Classes: `PatternMatcher`, `ASTAnalyzer`
+- `prompt_engineering/` - Prompt engineering and optimization
+  - Key Classes: `PromptOptimizer`, `PromptTemplate`
+- `quantum/` - Quantum computing interfaces
+  - Key Classes: `QuantumCircuit`, `QuantumSimulator`
+- `relations/` - Relationship management
+  - Key Classes: `RelationshipManager`
+- `search/` - Search and retrieval
+  - Key Classes: `SearchEngine`, `IndexBuilder`
+- `simulation/` - Simulation framework
+  - Key Classes: `Simulator`, `SimulationEngine`
+- `tool_use/` - Tool invocation and management
+  - Key Classes: `ToolRegistry`, `ToolExecutor`
+- `vector_store/` - Vector storage and similarity search
+  - Key Classes: `InMemoryVectorStore`, `VectorIndex`
+- `video/` - Video processing and analysis
+  - Key Classes: `VideoProcessor`, `FrameExtractor`
 
 **Secure Cognitive Layer**:
 
@@ -400,6 +440,8 @@ Before completing significant changes:
 
 ## Version History
 
+- **v0.1.7** (February 2026) - Module count corrected to 82, version synchronized, missing modules added to discovery
+- **v0.1.6** (February 2026) - Agent & memory foundations, event orchestration
 - **v0.1.0** (February 2026) - Initial repository structure and agent coordination framework
 
 ## Related Documentation

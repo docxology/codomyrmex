@@ -1,10 +1,10 @@
 # codomyrmex - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Core Python package containing 30+ specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent, well-tested modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
+Core Python package containing 82 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent, well-tested modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
 
 ## Design Principles
 
@@ -270,6 +270,21 @@ graph TB
 - `video`: specialized module
 - `dark`: specialized module
 - `visualization`: Central Visualization module
+- `bio_simulation`: Specialized module
+- `crypto`: Specialized module
+- `dependency_injection`: Specialized module
+- `edge_computing`: Specialized module
+- `exceptions`: Specialized module
+- `finance`: Specialized module
+- `formal_verification`: Specialized module
+- `networks`: Specialized module
+- `prompt_engineering`: Specialized module
+- `quantum`: Specialized module
+- `relations`: Specialized module
+- `search`: Specialized module
+- `simulation`: Specialized module
+- `tool_use`: Specialized module
+- `vector_store`: Specialized module
 
 **Characteristics**:
 

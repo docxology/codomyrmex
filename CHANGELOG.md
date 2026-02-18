@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-02-18
+
+### Changed
+
+- Corrected module count from various stale values (78, 80, 82+, 83) to verified 82 across all root documentation
+- Updated `__init__.py` version from 0.1.6 to 0.1.7
+- Synchronized version across `README.md`, `AGENTS.md`, `PAI.md`, `SPEC.md`, `CLAUDE.md`, `TO-DO.md`
+- Added 21 previously unlisted modules to `AGENTS.md` Module Discovery section
+- Removed duplicate Surface table accidentally inserted in `PAI.md`
+- Updated `AGENTS.md` version history with v0.1.6 and v0.1.7 entries
+- Refactored `scripts/` to thin orchestrator pattern delegating to `maintenance` library
+- Added configuration/CLI args to audit and update scripts
+
+### Fixed
+
+- `SPEC.md` version was stale at v0.1.1 (now v0.1.7)
+- `CHANGELOG.md` line 83 referenced "78 modules" (historical, preserved as-is)
+- `AGENTS.md` version history was missing v0.1.2–v0.1.6 entries
+
 ## [0.1.6] - 2026-02-17
 
 ### Added

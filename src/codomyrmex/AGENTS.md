@@ -8,88 +8,92 @@ Main package directory containing 78 specialized modules for the Codomyrmex plat
 
 ## Active Components
 
-- `PAI.md` – Personal AI Infrastructure documentation
-- `README.md` – Package overview
-- `SPEC.md` – Technical specification
-- `__init__.py` – Package initialization with lazy imports
+- `PAI.md` – Project file
+- `README.md` – Project file
+- `SPEC.md` – Project file
+- `__init__.py` – Project file
 - `agentic_memory/` – Memory systems for AI agents
-- `agents/` – Agentic framework integrations (Jules, Claude, Codex, PAI)
+- `agents/` – Agentic framework integrations
 - `api/` – API infrastructure and resilience
-- `audio/` – Audio processing and transcription
+- `audio/` – Module component
 - `auth/` – Authentication and authorization
-- `bio_simulation/` – Biological simulation (Ant Colony)
-- `cache/` – Caching infrastructure (multi-strategy invalidation)
-- `cerebrum/` – Case-based reasoning and Bayesian inference
-- `ci_cd_automation/` – CI/CD pipelines (includes build automation, formerly `build_synthesis`)
+- `bio_simulation/` – Module component
+- `cache/` – Caching infrastructure
+- `cerebrum/` – Case-based reasoning
+- `ci_cd_automation/` – CI/CD pipelines
 - `cli/` – Command line interface
-- `cloud/` – Cloud provider integration (includes cost management)
-- `coding/` – Code execution, review, static analysis, pattern matching (includes formerly standalone `static_analysis/`, `pattern_matching/`, `tree_sitter/`)
-- `collaboration/` – Team collaboration and multi-agent sessions
+- `cloud/` – Cloud provider integration
+- `coding/` – Code execution and review
+- `collaboration/` – Team collaboration
 - `compression/` – Data compression
-- `concurrency/` – Concurrency utilities, distributed sync, rate limiting
+- `concurrency/` – Concurrency utilities
 - `config_management/` – Configuration management
-- `containerization/` – Container management (Docker/K8s)
-- `crypto/` – Cryptographic operations
-- `dark/` – Dark mode and PDF processing
-- `data_visualization/` – Charts, plots, and visualization (includes formerly standalone `visualization/`)
-- `database_management/` – Database operations, migrations, backups, lineage
-- `defense/` – Active fiduciary defense
-- `dependency_injection/` – IoC container and lifecycle
-- `deployment/` – Deployment automation (blue-green, canary, rolling)
-- `documentation/` – Documentation generation (includes education content)
-- `documents/` – Document processing and RAG chunking
-- `edge_computing/` – Edge deployment and IoT scenarios
-- `embodiment/` – Physical/robotic integration
-- `encryption/` – Data encryption and digital signing
-- `environment_setup/` – Environment validation and setup
-- `events/` – Event system, pub/sub, streaming, notifications
+- `containerization/` – Container management
+- `crypto/` – Module component
+- `dark/` – Module component
+- `data_visualization/` – Charts and plots
+- `database_management/` – Database operations
+- `defense/` – Module component
+- `dependency_injection/` – Module component
+- `deployment/` – Deployment automation
+- `documentation/` – Documentation generation
+- `documents/` – Document processing
+- `edge_computing/` – Module component
+- `embodiment/` – Physical embodiment
+- `encryption/` – Data encryption
+- `environment_setup/` – Environment validation
+- `events/` – Event system
 - `evolutionary_ai/` – Evolutionary algorithms
 - `examples/` – Usage examples
-- `exceptions/` – Centralized exception hierarchy
+- `exceptions/` – Module component
 - `feature_flags/` – Feature flag management
-- `finance/` – Financial ledger and treasury
-- `fpf/` – Functional Programming Framework
-- `git_operations/` – Git automation and merge resolution
+- `finance/` – Module component
+- `formal_verification/` – Module component
+- `fpf/` – Functional programming framework
+- `git_operations/` – Git automation
 - `graph_rag/` – Graph-based RAG
 - `ide/` – IDE integration
-- `identity/` – Identity and Persona Management
-- `llm/` – LLM infrastructure (includes inference optimization, multimodal)
+- `identity/` – Module component
+- `llm/` – LLM infrastructure
 - `logging_monitoring/` – Centralized logging
-- `logistics/` – Workflow logistics and orchestration
-- `maintenance/` – Dependency analysis and project maintenance
-- `market/` – Anonymous marketplaces
-- `meme/` – Unified Memetic Warfare & Information Dynamics
-- `model_context_protocol/` – MCP interfaces and auto-discovery
-- `model_ops/` – ML model operations (includes evaluation, registry, feature store, optimization)
+- `logistics/` – Workflow logistics
+- `maintenance/` – Module component
+- `market/` – Module component
+- `meme/` – Module component
+- `model_context_protocol/` – MCP interfaces
+- `model_ops/` – ML model operations
 - `module_template/` – Module scaffolding
-- `networking/` – Network utilities (includes service mesh)
-- `orchestrator/` – Workflow orchestration (includes scheduling)
-- `performance/` – Performance monitoring and profiling
+- `networking/` – Network utilities
+- `networks/` – Module component
+- `orchestrator/` – Workflow orchestration
+- `performance/` – Performance monitoring
 - `physical_management/` – Physical systems
 - `plugin_system/` – Plugin architecture
-- `privacy/` – Data minimization and mixnets
-- `prompt_engineering/` – Prompt design, optimization, and testing
-- `quantum/` – Quantum computing simulation
-- `relations/` – CRM and Social Graph (includes UOR)
+- `privacy/` – Module component
+- `prompt_engineering/` – Module component
+- `quantum/` – Module component
+- `relations/` – Module component
 - `scrape/` – Web scraping
-- `search/` – Search and indexing
-- `security/` – Security scanning (includes governance)
+- `search/` – Module component
+- `security/` – Security scanning
 - `serialization/` – Data serialization
-- `skills/` – Agent skills library
+- `simulation/` – Module component
+- `skills/` – Agent skills
 - `spatial/` – 3D/4D modeling
+- `static_analysis/` – Code quality
 - `system_discovery/` – Module discovery
-- `telemetry/` – Telemetry, tracing, metrics, dashboards
+- `telemetry/` – Telemetry and tracing
 - `templating/` – Template management
 - `terminal_interface/` – Terminal UI
-- `testing/` – Test utilities (includes chaos engineering, workflow testing)
-- `tests/` – Test suites (unit and integration)
-- `tool_use/` – LLM tool usage
-- `utils/` – General utilities (includes i18n, hashing, retry)
-- `validation/` – Input validation (includes schemas)
-- `vector_store/` – Vector database abstraction
-- `video/` – Video processing
-- `wallet/` – Self-custody wallets (includes smart contracts)
-- `website/` – Website generation (includes accessibility)
+- `testing/` – Test utilities
+- `tests/` – Test suites
+- `tool_use/` – Module component
+- `utils/` – General utilities
+- `validation/` – Input validation
+- `vector_store/` – Module component
+- `video/` – Module component
+- `wallet/` – Module component
+- `website/` – Website generation
 
 ## Operating Contracts
 

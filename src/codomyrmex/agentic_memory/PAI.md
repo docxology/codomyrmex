@@ -9,7 +9,7 @@ Agentic Memory Module This is a **Core Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory
+from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory, search_memory, add_memory
 ```
 
 ## Key Exports
@@ -28,11 +28,17 @@ from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory
 | `KnowledgeMemory` | Class | Knowledgememory |
 | `VectorStoreMemory` | Class | Vectorstorememory |
 | `SummaryMemory` | Class | Summarymemory |
+| `UserProfile` | Class | Userprofile |
+| `search_memory` | Function/Constant | Search memory |
+
+*Plus 1 additional exports.*
+
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Agentic Memory Contribution |
 |-------|------------------------------|
+| **OBSERVE** | Data gathering and state inspection |
 | **LEARN** | Learning and knowledge capture |
 
 ## Architecture Role

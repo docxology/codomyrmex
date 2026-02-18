@@ -1,9 +1,9 @@
 # Codomyrmex
 
-**Version**: v0.1.6 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-0.1.6-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-0.1.7-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 82+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 82 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 82+ independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 82 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -838,7 +838,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **82+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **82 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -995,7 +995,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 82+ modules total
+│   └── ...                  # 82 modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -1026,7 +1026,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 80 Modules"]
+        CoreSrc["src/codomyrmex/ 82 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -1475,9 +1475,9 @@ pie title Module Development Status (February 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 82+ modules
+- **Lines of Code**: ~50K+ across 82 modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 80 core modules
+- **Module Count**: 82 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

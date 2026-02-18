@@ -9,29 +9,29 @@ Model Operations module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, evaluation, training, create_evaluator
+from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, feature_store, optimization, registry
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `feature_store` | Function/Constant | Feature store |
+| `optimization` | Function/Constant | Optimization |
+| `registry` | Function/Constant | Registry |
 | `evaluation` | Function/Constant | Evaluation |
 | `training` | Function/Constant | Training |
 | `Dataset` | Class | Dataset |
 | `DatasetSanitizer` | Class | Datasetsanitizer |
 | `FineTuningJob` | Class | Finetuningjob |
 | `Evaluator` | Class | Evaluator |
-| `TaskType` | Class | Tasktype |
-| `EvaluationResult` | Class | Evaluationresult |
-| `Metric` | Class | Metric |
-| `AccuracyMetric` | Class | Accuracymetric |
-| `PrecisionMetric` | Class | Precisionmetric |
-| `RecallMetric` | Class | Recallmetric |
-| `F1Metric` | Class | F1metric |
-| `ConfusionMatrix` | Class | Confusionmatrix |
+| `Scorer` | Class | Scorer |
+| `ExactMatchScorer` | Class | Exactmatchscorer |
+| `ContainsScorer` | Class | Containsscorer |
+| `LengthScorer` | Class | Lengthscorer |
+| `RegexScorer` | Class | Regexscorer |
 
-*Plus 9 additional exports.*
+*Plus 29 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping
