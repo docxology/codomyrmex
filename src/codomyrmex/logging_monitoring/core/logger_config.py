@@ -159,6 +159,41 @@ def setup_logging(force: bool = True) -> None:
     _logging_configured = True
 
 
+def enable_structured_json(logger_name: str | None = None) -> None:
+    """Switch a logger (or the root) to structured JSON output.
+
+    Parameters
+    ----------
+    logger_name:
+        If ``None``, applies to the root logger.
+        Otherwise, applies to the named logger.
+
+    Usage::
+
+        enable_structured_json()                     # root logger
+        enable_structured_json("codomyrmex.mcp")     # specific logger
+    """
+    target = logging.getLogger(logger_name)
+    formatter = JSONFormatter()
+    for handler in target.handlers:
+        handler.setFormatter(formatter)
+    # If logger has no handlers yet, add a JSON-formatted stdout handler
+    if not target.handlers:
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(formatter)
+        target.addHandler(handler)
+
+
+def configure_all_structured() -> None:
+    """Apply JSON formatting to all ``codomyrmex.*`` loggers."""
+    manager = logging.Logger.manager
+    for name, logger_ref in list(manager.loggerDict.items()):
+        if name.startswith("codomyrmex") and isinstance(logger_ref, logging.Logger):
+            enable_structured_json(name)
+    # Also configure the root codomyrmex logger
+    enable_structured_json("codomyrmex")
+
+
 def get_logger(name: str) -> logging.Logger:
     """Get a logger instance with the specified name.
 
