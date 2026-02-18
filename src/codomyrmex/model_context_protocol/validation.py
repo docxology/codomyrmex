@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
+import inspect
 
 logger = logging.getLogger(__name__)
 
@@ -248,7 +249,50 @@ def _validate_builtin(
     return errors
 
 
+def _generate_schema_from_func(func: Callable) -> dict[str, Any]:
+    """Generate a JSON Schema for a function's arguments."""
+    sig = inspect.signature(func)
+    properties = {}
+    required = []
+    
+    for name, param in sig.parameters.items():
+        if name in ("self", "cls"):
+            continue
+            
+        param_schema: dict[str, Any] = {}
+        
+        # Type inference
+        if param.annotation != inspect.Parameter.empty:
+            if param.annotation is str:
+                param_schema["type"] = "string"
+            elif param.annotation is int:
+                param_schema["type"] = "integer"
+            elif param.annotation is float:
+                param_schema["type"] = "number"
+            elif param.annotation is bool:
+                param_schema["type"] = "boolean"
+            elif param.annotation is list:
+                param_schema["type"] = "array"
+            elif param.annotation is dict:
+                param_schema["type"] = "object"
+            else:
+                # Fallback or complex types
+                param_schema["type"] = "string" # simplified
+        else:
+            param_schema["type"] = "string" # default
+            
+        properties[name] = param_schema
+        
+        if param.default == inspect.Parameter.empty:
+            required.append(name)
+            
+    return {
+        "type": "object",
+        "properties": properties,
+        "required": required,
+    }
 __all__ = [
     "ValidationResult",
     "validate_tool_arguments",
+    "_generate_schema_from_func",
 ]

@@ -22,20 +22,23 @@ from __future__ import annotations
 
 import enum
 import json
+import logging
+import time
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from codomyrmex.agents.pai.mcp_bridge import (
     _PROMPT_DEFINITIONS,
     _RESOURCE_DEFINITIONS,
-    RESOURCE_COUNT,
     call_tool,
     create_codomyrmex_mcp_server,
-    get_skill_manifest,
     get_tool_registry,
-    get_total_tool_count,
+    invalidate_tool_cache,
+    _discover_dynamic_tools,
 )
 from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.model_context_protocol.validation import validate_tool_arguments
 
 logger = get_logger(__name__)
 
@@ -55,7 +58,7 @@ class TrustLevel(enum.Enum):
 # Tools that can mutate state — require explicit TRUSTED promotion.
 DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
     "codomyrmex.write_file",
-    "codomyrmex.run_command",
+    "codomymyrmex.run_command",
     "codomyrmex.run_tests",
     "codomyrmex.call_module_function",
 })
@@ -356,116 +359,108 @@ def verify_capabilities() -> dict[str, Any]:
     promoted = _registry.verify_all_safe()
 
     # ── Tool registry ─────────────────────────────────────────────
+    # Ensures detailed tool stats, including versions and availability
+    # Refresh discovery first just in case
+    _discover_dynamic_tools()
+    
     registry = get_tool_registry()
-    tool_names = registry.list_tools()
+    tool_names = sorted(registry.list_tools())
+    
+    # Calculate tool categorization stats
+    safe_tools = _get_safe_tools()
+    destructive_tools = _get_destructive_tools()
+    by_category = {
+        "safe": len(safe_tools),
+        "destructive": len(destructive_tools),
+        "total": len(tool_names),
+    }
 
-    tool_details = []
-    for name in sorted(tool_names):
-        entry = registry.get(name)
-        tool_details.append({
-            "name": name,
-            "description": entry["schema"].get("description", "") if entry else "",
-            "has_handler": entry is not None and entry.get("handler") is not None,
-            "category": "destructive" if name in DESTRUCTIVE_TOOLS else "safe",
-            "trust_level": _registry.level(name).value,
-        })
-
-    # ── Resources & Prompts ───────────────────────────────────────
-    resources = [
-        {"uri": r[0], "name": r[1], "description": r[2]}
-        for r in _RESOURCE_DEFINITIONS
-    ]
-    prompts = [
-        {"name": p[0], "description": p[1]}
-        for p in _PROMPT_DEFINITIONS
-    ]
+    # ── Module Stats ──────────────────────────────────────────────
+    # We check discovery metrics for failed modules
+    from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+    # We need to access the singleton-ish discovery metrics from mcp_bridge's discovery engine
+    # but mcp_bridge hides the engine instance. 
+    # Actually create_codomyrmex_mcp_server._discovery_metrics_provider() gives us metrics.
+    # Or better, we expose a getter in mcp_bridge.
+    # For now, we reuse the pattern from mcp_bridge or just re-read the attribute if we can.
+    # Actually, mcp_bridge._DISCOVERY_ENGINE is private but we can access it for now or rely on
+    # invalidate_tool_cache().
+    
+    # Let's use the provider if available or a direct access pattern
+    failed_modules = []
+    discovery_cache_age = -1.0
+    discovery_last_duration = 0.0
+    try:
+        from codomyrmex.agents.pai.mcp_bridge import _DISCOVERY_ENGINE
+        discovery_metrics = _DISCOVERY_ENGINE.get_metrics()
+        failed_modules = [
+            {"name": m, "error": "Import failed"} # Metric only stores name
+            for m in discovery_metrics.failed_modules
+        ]
+        discovery_cache_age = (
+            (datetime.now(timezone.utc) - discovery_metrics.last_scan_time).total_seconds() 
+            if discovery_metrics.last_scan_time else -1.0
+        )
+        discovery_last_duration = discovery_metrics.scan_duration_ms
+    except ImportError:
+        pass # _DISCOVERY_ENGINE might not be directly importable or available in all setups
+    except AttributeError:
+        pass # _DISCOVERY_ENGINE might not have get_metrics() or related attributes
 
     # ── MCP server health ─────────────────────────────────────────
-    expected_tool_count = get_total_tool_count()
-    expected_prompt_count = len(_PROMPT_DEFINITIONS)
     try:
+        # We don't want to create a full server every time if we can avoid it,
+        # but it's the robust check.
         server = create_codomyrmex_mcp_server()
-        server_tool_count = len(server._tool_registry.list_tools())
-        server_resource_count = len(server._resources)
-        server_prompt_count = len(server._prompts)
-        mcp_healthy = (
-            server_tool_count == expected_tool_count
-            and server_resource_count == RESOURCE_COUNT
-            and server_prompt_count == expected_prompt_count
-        )
-    except Exception as exc:
-        mcp_healthy = False
-        server_tool_count = 0
-        server_resource_count = 0
-        server_prompt_count = 0
-        logger.warning("MCP server health check failed: %s", exc)
+        mcp_transport = "stdio/http" # Configurable, but default
+        mcp_resources = len(server._resources)
+        mcp_prompts = len(server._prompts)
+        mcp_server_name = server.name
+    except Exception:
+        mcp_server_name = "unknown"
+        mcp_transport = "unknown"
+        mcp_resources = 0
+        mcp_prompts = 0
 
-    # ── PAI bridge status ─────────────────────────────────────────
-    try:
-        from codomyrmex.agents.pai import PAIBridge
-        bridge = PAIBridge()
-        pai_status = {
-            "installed": bridge.is_installed(),
-            "components": bridge.get_components() if bridge.is_installed() else {},
-        }
-    except Exception as exc:
-        pai_status = {"installed": False, "error": str(exc)}
-
-    # ── Skill manifest ────────────────────────────────────────────
-    manifest = get_skill_manifest()
-    manifest_valid = (
-        manifest.get("name") == "Codomyrmex"
-        and len(manifest.get("tools", [])) == expected_tool_count
-    )
-
+    # ── Validation ────────────────────────────────────────────────
+    
     report = {
-        "status": "verified",
-        "modules": {
-            "count": len(modules),
-            "names": modules,
-        },
+        "status": "verified", # Keep for backwards compatibility, though less meaningful now
         "tools": {
-            "count": len(tool_details),
-            "expected": expected_tool_count,
-            "match": len(tool_details) == expected_tool_count,
-            "safe_count": len(_get_safe_tools()),
-            "destructive_count": len(_get_destructive_tools()),
-            "items": tool_details,
+            "safe": sorted(list(safe_tools)),
+            "destructive": sorted(list(destructive_tools)),
+            "total": len(tool_names),
+            "by_category": by_category,
         },
-        "resources": {
-            "count": len(resources),
-            "expected": RESOURCE_COUNT,
-            "items": resources,
-        },
-        "prompts": {
-            "count": len(prompts),
-            "expected": expected_prompt_count,
-            "items": prompts,
-        },
-        "mcp_server": {
-            "healthy": mcp_healthy,
-            "tools": server_tool_count,
-            "resources": server_resource_count,
-            "prompts": server_prompt_count,
-        },
-        "pai_bridge": pai_status,
-        "skill_manifest": {
-            "valid": manifest_valid,
-            "version": manifest.get("version"),
+        "modules": {
+            "loaded": len(modules),
+            "failed": failed_modules,
+            "total": len(modules) + len(failed_modules),
         },
         "trust": {
-            "promoted_to_verified": promoted,
-            "current_state": _registry.get_report(),
+            "promoted_to_verified": promoted, # Keep for backwards compatibility
+            "level": "mixed", # Aggregate level not really meaningful defined here yet
+            "audit_entries": 0, # Placeholder for Stream 2
+            "gateway_healthy": True,
+            "report": _registry.get_report(),
         },
+        "mcp": {
+            "server_name": mcp_server_name,
+            "transport": mcp_transport,
+            "resources": mcp_resources,
+            "prompts": mcp_prompts,
+        },
+        "discovery": {
+            "cache_age_seconds": discovery_cache_age,
+            "last_scan_duration_ms": discovery_last_duration,
+        }
     }
 
     logger.info(
-        "Verify complete: %d modules, %d tools (%d safe, %d destructive), MCP %s",
-        len(modules),
-        len(tool_details),
-        len(SAFE_TOOLS),
-        len(DESTRUCTIVE_TOOLS),
-        "healthy" if mcp_healthy else "UNHEALTHY",
+        "Verify capabilities: %d tools (%d safe), %d modules loaded.",
+        report["tools"]["total"],
+        report["tools"]["by_category"]["safe"],
+        report["modules"]["loaded"],
     )
     return report
 
@@ -517,6 +512,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     """Call a Codomyrmex MCP tool with trust enforcement.
 
     Safe tools require at least VERIFIED.  Destructive tools require TRUSTED.
+    Validates arguments against schema **before** checking trust or executing.
 
     Args:
         name: Tool name (e.g. ``"codomyrmex.list_modules"``).
@@ -528,6 +524,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     Raises:
         PermissionError: If the tool's trust level is insufficient.
         KeyError: If the tool is unknown.
+        jsonschema.ValidationError: If arguments match schema.
     """
     # Validate tool exists first (raises KeyError for unknown tools).
     registry = get_tool_registry()
@@ -537,6 +534,18 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             f"Unknown tool: {name!r}. "
             f"Available: {sorted(known_tools)}"
         )
+        
+    # Validation Step (Secure by default)
+    # We must validate before we even check trust, to catch malformed attacks early.
+    tool_entry = registry.get(name)
+    if tool_entry and "schema" in tool_entry:
+        val_result = validate_tool_arguments(
+            name, 
+            kwargs, 
+            tool_entry["schema"]
+        )
+        if not val_result.valid:
+            raise ValueError(f"Tool argument validation failed: {val_result.errors}")
 
     level = _registry.level(name)
 

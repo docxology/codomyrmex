@@ -27,6 +27,7 @@ import inspect
 import json
 import subprocess
 import sys
+import yaml
 import os
 import threading
 import time
@@ -268,6 +269,78 @@ def _tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict
         return {"error": "Test execution timed out (120s limit)"}
     except Exception as exc:
         return {"error": str(exc)}
+
+
+def _tool_list_workflows(**_kwargs: Any) -> dict[str, Any]:
+    """List available Claude Code workflows from .agent/workflows.
+    
+    Parses YAML frontmatter to extract descriptions.
+    """
+    workflows_dir = _PROJECT_ROOT / ".agent" / "workflows"
+    if not workflows_dir.exists():
+        return {"workflows": [], "count": 0, "error": "No workflow directory found"}
+        
+    results = []
+    warnings = []
+    
+    for item in workflows_dir.glob("*.md"):
+        try:
+            content = item.read_text(encoding="utf-8")
+            # Parse YAML frontmatter
+            description = "No description"
+            if content.startswith("---"):
+                parts = content.split("---", 2)
+                if len(parts) >= 3:
+                    try:
+                        frontmatter = yaml.safe_load(parts[1])
+                        if isinstance(frontmatter, dict):
+                            description = frontmatter.get("description", description)
+                    except yaml.YAMLError:
+                        warnings.append(f"Invalid YAML frontmatter in {item.name}")
+            
+            results.append({
+                "name": item.stem, # filename without .md
+                "description": description,
+                "filepath": str(item),
+                "size_bytes": item.stat().st_size,
+            })
+        except Exception as e:
+            warnings.append(f"Failed to read {item.name}: {e}")
+            
+    return {
+        "workflows": sorted(results, key=lambda x: x["name"]), 
+        "count": len(results),
+        "warnings": warnings
+    }
+
+
+def _tool_invalidate_cache(module: str | None = None) -> dict[str, Any]:
+    """Invalidate the dynamic tool discovery cache.
+    
+    Args:
+        module: Optional. If provided, invalidates and rescans only that module.
+                If None, clears the entire cache.
+    """
+    if module:
+        # We call scan_module from discovery engine
+        if _DISCOVERY_ENGINE is None:
+             return {"error": "Discovery engine not initialized"}
+             
+        report = _DISCOVERY_ENGINE.scan_module(module)
+        
+        # Force a cache refresh next time get_tool_registry is called
+        global _CACHE_TIMESTAMP
+        _CACHE_TIMESTAMP = 0.0 
+        
+        return {
+             "cleared": False, # We didn't clear everything
+             "rescanned_module": module,
+             "tools_found": len(report.tools),
+             "failed": bool(report.failed_modules)
+        }
+    else:
+        invalidate_tool_cache()
+        return {"cleared": True, "rescan_duration_ms": 0.0, "new_tool_count": 0} # stats avail on next call
 
 
 # =====================================================================
@@ -512,6 +585,23 @@ _TOOL_DEFINITIONS: list[tuple[str, str, Any, dict[str, Any]]] = [
             "required": ["module"],
         },
     ),
+    (
+        "codomyrmex.list_workflows",
+        "List available Claude Code workflows",
+        _tool_list_workflows,
+        {"type": "object", "properties": {}},
+    ),
+    (
+        "codomyrmex.invalidate_cache",
+        "Invalidate dynamic tool discovery cache",
+        _tool_invalidate_cache,
+        {
+            "type": "object",
+            "properties": {
+                "module": {"type": "string", "description": "Specific module to rescan (optional)"},
+            },
+        },
+    ),
 ]
 
 
@@ -641,6 +731,7 @@ _DYNAMIC_TOOLS_CACHE: list[tuple[str, str, Any, dict[str, Any]]] | None = None
 _DYNAMIC_TOOLS_CACHE_LOCK = threading.Lock()
 _CACHE_EXPIRY: float | None = None  # monotonic timestamp when cache expires
 _DEFAULT_CACHE_TTL: float = float(os.environ.get("CODOMYRMEX_MCP_CACHE_TTL", "300"))
+_DISCOVERY_ENGINE: Any | None = None
 
 
 def invalidate_tool_cache() -> None:
@@ -653,68 +744,54 @@ def invalidate_tool_cache() -> None:
 
 
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
-    """Scan all modules for @mcp_tool definitions AND auto-discover all public functions.
-
-    Uses a TTL-based cache (default 300 s, configurable via
-    ``CODOMYRMEX_MCP_CACHE_TTL`` env var).  Cache hits are tracked
-    for discovery metrics.
+    """Scan modules for @mcp_tool definitions using MCPDiscovery engine.
+    
+    Uses a TTL-based cache.
     """
-    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY
+    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY, _DISCOVERY_ENGINE
     now = time.monotonic()
     with _DYNAMIC_TOOLS_CACHE_LOCK:
         if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now < _CACHE_EXPIRY:
             logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
+            # Record cache hit if engine available
+            if _DISCOVERY_ENGINE:
+                 _DISCOVERY_ENGINE.record_cache_hit()
             return _DYNAMIC_TOOLS_CACHE
 
-    from codomyrmex.model_context_protocol.discovery import (
-        discover_all_public_tools,
-        discover_tools,
-    )
+    if _DISCOVERY_ENGINE is None:
+        from codomyrmex.model_context_protocol.discovery import MCPDiscovery
+        _DISCOVERY_ENGINE = MCPDiscovery()
 
     t0 = time.monotonic()
 
-    # ── Phase 1: Discover @mcp_tool decorated functions ──
+    # Scan targets - covering key modules
     scan_targets = [
         "codomyrmex.data_visualization",
         "codomyrmex.llm",
         "codomyrmex.agentic_memory",
         "codomyrmex.security",
-        "codomyrmex.git_operations.core.git",
-        "codomyrmex.coding.static_analysis.static_analyzer",
-        "codomyrmex.coding.execution.executor",
-        "codomyrmex.documentation.scripts.auto_generate_docs",
-        "codomyrmex.data_visualization.charts.line_plot",
-        "codomyrmex.data_visualization.charts.bar_chart",
-        "codomyrmex.data_visualization.charts.pie_chart",
-        "codomyrmex.data_visualization.mermaid.mermaid_generator",
-        "codomyrmex.terminal_interface.utils.terminal_utils",
+        "codomyrmex.git_operations", 
+        "codomyrmex.coding", 
+        "codomyrmex.documentation",
+        "codomyrmex.terminal_interface",
     ]
-
-    catalog = discover_tools(module_paths=scan_targets)
+    
+    for target in scan_targets:
+        try:
+             _DISCOVERY_ENGINE.scan_package(target)
+        except Exception as e:
+             logger.warning(f"Failed to scan package {target}: {e}")
+        
     tools: list[tuple[str, str, Any, dict[str, Any]]] = []
-    seen_names: set[str] = set()
-
-    for tool in catalog.list_all():
+    
+    for tool in _DISCOVERY_ENGINE.list_tools():
         if tool.handler:
-            tools.append((tool.name, tool.description, tool.handler, tool.input_schema))
-            seen_names.add(tool.name)
-            logger.debug(f"Discovered decorated tool: {tool.name}")
-
-    # ── Phase 2: Auto-discover ALL public functions from every module ──
-    auto_tools = discover_all_public_tools()
-
-    for tool in auto_tools:
-        if tool.name in seen_names:
-            continue  # Already registered via @mcp_tool
-        if tool.handler:
-            tools.append((tool.name, tool.description, tool.handler, tool.input_schema))
-            seen_names.add(tool.name)
-            logger.debug(f"Auto-discovered tool: {tool.name}")
-
+            tools.append((tool.name, tool.description, tool.handler, tool.parameters))
+            
     elapsed_ms = (time.monotonic() - t0) * 1000
     logger.info(
-        "Dynamic tools discovered: %d (%d auto) in %.0fms",
-        len(tools), len(auto_tools), elapsed_ms,
+        "Dynamic tools discovered: %d in %.0fms",
+        len(tools), elapsed_ms,
     )
 
     with _DYNAMIC_TOOLS_CACHE_LOCK:

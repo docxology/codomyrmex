@@ -1,478 +1,75 @@
-"""
-MCP Tool Discovery Module
+"""MCP tool and server auto-discovery and registration.
 
-Provides mechanisms for automatically discovering and registering MCP tools
-from modules, files, and external servers.
+Provides mechanisms for discovering available MCP servers,
+tools, and resources at runtime via introspection.  Supports
+error-isolated scanning, incremental refresh, and runtime metrics.
 """
 
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Set
-from pathlib import Path
+from __future__ import annotations
+
 import importlib
 import importlib.util
-import json
-import ast
+import inspect
+import logging
+import pkgutil
+import time
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
+from types import ModuleType
+from typing import Any, Callable
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+logger = logging.getLogger(__name__)
 
-logger = get_logger(__name__)
+
+# =====================================================================
+# Data models
+# =====================================================================
 
 
 @dataclass
 class DiscoveredTool:
-    """Represents a discovered MCP tool."""
+    """A tool discovered via introspection."""
+
     name: str
     description: str
-    source: str  # "module", "file", "external"
-    source_path: str
-    input_schema: Dict[str, Any]
-    handler: Optional[Callable] = None
-    version: str = "1.0.0"
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    module_path: str
+    callable_name: str
+    parameters: dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
+    version: str = "1.0"
+    requires: list[str] = field(default_factory=list)
+    available: bool = True
+    unavailable_reason: str | None = None
+    handler: Callable | None = None
 
-
-class ModuleScanner:
-    """
-    Scans Python modules for MCP tool definitions.
-    
-    Looks for:
-    - Functions decorated with @tool
-    - Classes that inherit from Tool
-    - MCP_TOOLS dictionaries
-    """
-    
-    def __init__(self, base_path: Optional[Path] = None):
-        self.base_path = base_path or Path.cwd()
-        self._discovered: List[DiscoveredTool] = []
-    
-    def scan_module(self, module_path: str) -> List[DiscoveredTool]:
-        """Scan a Python module for tools."""
-        try:
-            module = importlib.import_module(module_path)
-        except ImportError as e:
-            logger.warning(f"Could not import module {module_path}: {e}")
-            return []
-        
-        tools = []
-        
-        # Look for MCP_TOOLS dict
-        if hasattr(module, "MCP_TOOLS"):
-            mcp_tools = getattr(module, "MCP_TOOLS")
-            if isinstance(mcp_tools, dict):
-                for name, spec in mcp_tools.items():
-                    tools.append(DiscoveredTool(
-                        name=name,
-                        description=spec.get("description", ""),
-                        source="module",
-                        source_path=module_path,
-                        input_schema=self._build_schema(spec.get("parameters", {})),
-                    ))
-        
-        # Look for decorated functions
-        for attr_name in dir(module):
-            attr = getattr(module, attr_name)
-            if callable(attr) and hasattr(attr, "_mcp_tool"):
-                tool_meta = attr._mcp_tool
-                tools.append(DiscoveredTool(
-                    name=tool_meta.get("name", attr_name),
-                    description=tool_meta.get("description", attr.__doc__ or ""),
-                    source="module",
-                    source_path=module_path,
-                    input_schema=tool_meta.get("schema", {}),
-                    handler=attr,
-                ))
-        
-        self._discovered.extend(tools)
-        return tools
-    
-    def scan_directory(
-        self,
-        directory: Path,
-        pattern: str = "*.py",
-        recursive: bool = True,
-    ) -> List[DiscoveredTool]:
-        """Scan a directory for tools."""
-        tools = []
-        
-        glob_method = directory.rglob if recursive else directory.glob
-        
-        for py_file in glob_method(pattern):
-            if py_file.name.startswith("_"):
-                continue
-            
-            try:
-                # Convert file path to module path
-                rel_path = py_file.relative_to(self.base_path)
-                module_path = str(rel_path.with_suffix("")).replace("/", ".")
-                
-                file_tools = self.scan_module(module_path)
-                tools.extend(file_tools)
-            except Exception as e:
-                logger.debug(f"Skipping {py_file}: {e}")
-        
-        return tools
-    
-    def _build_schema(self, params: Dict) -> Dict[str, Any]:
-        """Build JSON Schema from parameter spec."""
-        properties = {}
-        required = []
-        
-        for name, spec in params.items():
-            properties[name] = {
-                "type": spec.get("type", "string"),
-            }
-            if "description" in spec:
-                properties[name]["description"] = spec["description"]
-            if "default" in spec:
-                properties[name]["default"] = spec["default"]
-            if spec.get("required"):
-                required.append(name)
-        
-        return {
-            "type": "object",
-            "properties": properties,
-            "required": required,
+    def to_mcp_schema(self) -> dict[str, Any]:
+        """Convert to MCP tool schema format."""
+        schema = {
+            "name": self.name,
+            "description": self.description,
+            "inputSchema": self.parameters,
+            "tags": self.tags,
+            "x-codomyrmex": {
+                "module": self.module_path,
+                "callable": self.callable_name,
+                "version": self.version,
+                "available": self.available,
+            },
         }
+        if not self.available:
+            schema["description"] += f" (UNAVAILABLE: {self.unavailable_reason})"
+        return schema
 
 
-class SpecificationScanner:
-    """
-    Scans MCP_TOOL_SPECIFICATION.md files for tool definitions.
-    """
-    
-    def scan_spec_file(self, spec_path: Path) -> List[DiscoveredTool]:
-        """Parse an MCP_TOOL_SPECIFICATION.md file."""
-        tools = []
-        
-        if not spec_path.exists():
-            return tools
-        
-        content = spec_path.read_text()
-        
-        # Simple parsing - look for tool sections
-        current_tool = None
-        current_section = None
-        
-        for line in content.split("\n"):
-            # Tool header (## Tool: name)
-            if line.startswith("## ") and "tool" in line.lower():
-                if current_tool:
-                    tools.append(current_tool)
-                
-                name = line.replace("##", "").strip()
-                name = name.split(":")[-1].strip() if ":" in name else name
-                
-                current_tool = DiscoveredTool(
-                    name=name,
-                    description="",
-                    source="specification",
-                    source_path=str(spec_path),
-                    input_schema={},
-                )
-            
-            # Section headers
-            elif line.startswith("### "):
-                current_section = line.replace("###", "").strip().lower()
-            
-            # Content
-            elif current_tool and current_section:
-                if "description" in current_section and not current_tool.description:
-                    current_tool.description = line.strip()
-                elif "invocation" in current_section:
-                    current_tool.name = line.strip().strip("`")
-        
-        if current_tool:
-            tools.append(current_tool)
-        
-        return tools
+@dataclass
+class DiscoveredServer:
+    """An MCP server discovered via introspection."""
 
-
-class ExternalServerDiscovery:
-    """
-    Discovers tools from external MCP servers.
-    """
-    
-    def __init__(self):
-        self._servers: Dict[str, Dict[str, Any]] = {}
-    
-    def register_server(
-        self,
-        name: str,
-        transport: str,
-        endpoint: str,
-    ) -> None:
-        """Register an external MCP server."""
-        self._servers[name] = {
-            "name": name,
-            "transport": transport,
-            "endpoint": endpoint,
-        }
-    
-    async def discover_from_server(self, server_name: str) -> List[DiscoveredTool]:
-        """Discover tools from a registered server."""
-        if server_name not in self._servers:
-            return []
-        
-        server = self._servers[server_name]
-        tools = []
-        
-        # For now, return empty - would need actual server connection
-        # This is a placeholder for HTTP/stdio transport implementation
-        logger.info(f"Would discover from {server['endpoint']}")
-        
-        return tools
-
-
-class ToolCatalog:
-    """
-    Central catalog of all discovered MCP tools.
-    """
-    
-    def __init__(self):
-        self._tools: Dict[str, DiscoveredTool] = {}
-        self._tags: Dict[str, Set[str]] = {}  # tag -> tool names
-        self._sources: Dict[str, Set[str]] = {}  # source -> tool names
-    
-    def add(self, tool: DiscoveredTool) -> None:
-        """Add a tool to the catalog."""
-        self._tools[tool.name] = tool
-        
-        for tag in tool.tags:
-            if tag not in self._tags:
-                self._tags[tag] = set()
-            self._tags[tag].add(tool.name)
-        
-        if tool.source not in self._sources:
-            self._sources[tool.source] = set()
-        self._sources[tool.source].add(tool.name)
-    
-    def get(self, name: str) -> Optional[DiscoveredTool]:
-        """Get a tool by name."""
-        return self._tools.get(name)
-    
-    def list_all(self) -> List[DiscoveredTool]:
-        """List all tools."""
-        return list(self._tools.values())
-    
-    def search(
-        self,
-        query: Optional[str] = None,
-        tags: Optional[List[str]] = None,
-        source: Optional[str] = None,
-    ) -> List[DiscoveredTool]:
-        """Search for tools."""
-        results = list(self._tools.values())
-        
-        if query:
-            query_lower = query.lower()
-            results = [
-                t for t in results
-                if query_lower in t.name.lower() or query_lower in t.description.lower()
-            ]
-        
-        if tags:
-            matching_names = set()
-            for tag in tags:
-                matching_names.update(self._tags.get(tag, set()))
-            results = [t for t in results if t.name in matching_names]
-        
-        if source:
-            source_names = self._sources.get(source, set())
-            results = [t for t in results if t.name in source_names]
-        
-        return results
-    
-    def to_json(self) -> str:
-        """Export catalog as JSON."""
-        return json.dumps([
-            {
-                "name": t.name,
-                "description": t.description,
-                "source": t.source,
-                "source_path": t.source_path,
-                "input_schema": t.input_schema,
-                "version": t.version,
-                "tags": t.tags,
-            }
-            for t in self._tools.values()
-        ], indent=2)
-
-
-# Convenience function
-def discover_tools(
-    module_paths: Optional[List[str]] = None,
-    directories: Optional[List[Path]] = None,
-    spec_files: Optional[List[Path]] = None,
-) -> ToolCatalog:
-    """
-    Discover tools from multiple sources.
-    
-    Args:
-        module_paths: Python module paths to scan
-        directories: Directories to scan for Python files
-        spec_files: MCP_TOOL_SPECIFICATION.md files to parse
-    
-    Returns:
-        ToolCatalog with all discovered tools
-    """
-    catalog = ToolCatalog()
-    
-    module_scanner = ModuleScanner()
-    spec_scanner = SpecificationScanner()
-    
-    if module_paths:
-        for path in module_paths:
-            for tool in module_scanner.scan_module(path):
-                catalog.add(tool)
-    
-    if directories:
-        for directory in directories:
-            for tool in module_scanner.scan_directory(Path(directory)):
-                catalog.add(tool)
-    
-    if spec_files:
-        for spec_file in spec_files:
-            for tool in spec_scanner.scan_spec_file(Path(spec_file)):
-                catalog.add(tool)
-    
-    return catalog
-
-
-def discover_all_public_tools(
-    *,
-    include_classes: bool = False,
-    excluded_modules: Optional[Set[str]] = None,
-) -> List[DiscoveredTool]:
-    """Discover ALL public functions from every codomyrmex module.
-
-    Scans all top-level packages under ``codomyrmex.*``, imports each one,
-    and introspects public functions to build MCP-ready tool descriptors
-    with auto-generated JSON schemas from type annotations.
-
-    Args:
-        include_classes: If True, also register class constructors.
-        excluded_modules: Module names to skip (e.g. ``{"tests", "examples"}``).
-
-    Returns:
-        List of :class:`DiscoveredTool` objects with handlers attached.
-    """
-    import inspect
-    import os
-
-    from codomyrmex.model_context_protocol.decorators import _generate_schema_from_signature
-
-    if excluded_modules is None:
-        excluded_modules = {"tests", "examples", "module_template"}
-
-    # Find the codomyrmex source root
-    codomyrmex_pkg = importlib.import_module("codomyrmex")
-    src_root = Path(codomyrmex_pkg.__file__).parent
-
-    # Enumerate all top-level sub-packages
-    module_dirs = []
-    for entry in sorted(os.listdir(src_root)):
-        entry_path = src_root / entry
-        if (
-            entry_path.is_dir()
-            and not entry.startswith(("_", "."))
-            and (entry_path / "__init__.py").exists()
-            and entry not in excluded_modules
-        ):
-            module_dirs.append(entry)
-
-    tools: List[DiscoveredTool] = []
-    seen_names: Set[str] = set()
-
-    for module_name in module_dirs:
-        fqn = f"codomyrmex.{module_name}"
-        try:
-            mod = importlib.import_module(fqn)
-        except Exception as exc:
-            logger.debug(f"Skipping {fqn}: {exc}")
-            continue
-
-        for attr_name in sorted(dir(mod)):
-            if attr_name.startswith("_"):
-                continue
-
-            obj = getattr(mod, attr_name, None)
-            if obj is None:
-                continue
-
-            # Skip objects not defined in this module
-            obj_module = getattr(obj, "__module__", "") or ""
-            if not obj_module.startswith(fqn):
-                continue
-
-            # Skip already-decorated @mcp_tool functions (discovered elsewhere)
-            if hasattr(obj, "_mcp_tool"):
-                continue
-
-            is_function = inspect.isfunction(obj)
-            is_class = inspect.isclass(obj) and include_classes
-
-            if not (is_function or is_class):
-                continue
-
-            tool_name = f"codomyrmex.{module_name}.{attr_name}"
-            if tool_name in seen_names:
-                continue
-            seen_names.add(tool_name)
-
-            # Build description from docstring
-            doc = inspect.getdoc(obj) or f"Call {module_name}.{attr_name}"
-            # Truncate long docstrings for the MCP description
-            first_line = doc.split("\n")[0].strip()
-            if len(first_line) > 200:
-                first_line = first_line[:197] + "..."
-
-            # Auto-generate schema
-            try:
-                if is_function:
-                    schema = _generate_schema_from_signature(obj)
-                else:
-                    # For classes, generate schema from __init__
-                    schema = _generate_schema_from_signature(obj.__init__)
-            except Exception:
-                schema = {"type": "object", "properties": {}}
-
-            # Create a handler closure that calls the real function
-            def _make_handler(fn, mod_name, fn_name):
-                """Create a handler closure bound to the specific function."""
-                def handler(**kwargs):
-                    try:
-                        result = fn(**kwargs)
-                        return {"result": result}
-                    except Exception as e:
-                        return {"error": f"{type(e).__name__}: {e}"}
-                handler.__name__ = f"_auto_{mod_name}_{fn_name}"
-                handler.__doc__ = f"Auto-generated handler for {mod_name}.{fn_name}"
-                return handler
-
-            tools.append(DiscoveredTool(
-                name=tool_name,
-                description=first_line,
-                source="auto_discovery",
-                source_path=fqn,
-                input_schema=schema,
-                handler=_make_handler(obj, module_name, attr_name),
-                tags=[module_name, "auto_discovered"],
-            ))
-
-    logger.info(
-        f"Auto-discovered {len(tools)} public tools from "
-        f"{len(module_dirs)} modules"
-    )
-    return tools
-
-
-# =====================================================================
-# Stream 3: Discovery Hardening — error-isolated scanning & metrics
-# =====================================================================
-
-import time as _time
-from datetime import datetime, timezone
+    name: str
+    module_path: str
+    tools: list[DiscoveredTool] = field(default_factory=list)
+    resources: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -486,11 +83,10 @@ class FailedModule:
 
 @dataclass
 class DiscoveryReport:
-    """Result of a package/module scan with per-module error isolation.
+    """Result of a package scan with error isolation.
 
-    ``tools`` contains the successfully discovered tools.
-    ``failed_modules`` records every module that raised on import.
-    ``scan_duration_ms`` is wall-clock time for the scan.
+    Contains the list of discovered tools alongside any modules
+    that failed to import, plus timing information.
     """
 
     tools: list[DiscoveredTool] = field(default_factory=list)
@@ -511,171 +107,272 @@ class DiscoveryMetrics:
     last_scan_time: datetime | None = None
 
 
-class MCPDiscoveryEngine:
-    """Error-isolated discovery engine with incremental refresh and metrics.
+# =====================================================================
+# Discovery engine
+# =====================================================================
 
-    Wraps :class:`ModuleScanner` to catch per-module import errors,
-    track scan timing, and expose runtime metrics.
 
-    Usage::
+class MCPDiscovery:
+    """Auto-discovery engine for MCP tools and servers.
 
-        engine = MCPDiscoveryEngine()
-        report = engine.scan_package("codomyrmex.search")
-        assert report.failed_modules == []
-
-        # Incremental refresh of one module
-        report2 = engine.scan_module("codomyrmex.search.mcp_tools")
-
-        # Metrics
-        m = engine.get_metrics()
-        print(m.total_tools, m.cache_hits)
+    Scans Python packages for MCP-compatible tools and servers,
+    building a registry of available capabilities.  Supports
+    error-isolated scanning, incremental refresh, and runtime metrics.
     """
 
     def __init__(self) -> None:
-        self._tools: dict[str, DiscoveredTool] = {}
-        self._cache_hits: int = 0
-        self._last_scan_time: datetime | None = None
-        self._last_scan_duration_ms: float = 0.0
-        self._last_modules_scanned: int = 0
-        self._last_failed_modules: list[str] = []
+        self._registry: dict[str, DiscoveredTool] = {}
+        self._failed_modules: list[FailedModule] = []
+        self._metrics = DiscoveryMetrics()
 
     # ── Full package scan (error-isolated) ───────────────────────
 
     def scan_package(self, package_name: str) -> DiscoveryReport:
-        """Scan a Python package with per-module error isolation.
+        """Scan a Python package for MCP tools with error isolation.
 
-        Each sub-module is imported inside its own ``try/except``
-        so one broken module never kills the full scan.
+        Each sub-module is imported inside its own ``try/except`` block
+        so that a broken module never kills the full scan.  The returned
+        :class:`DiscoveryReport` lists both the discovered tools *and*
+        any modules that failed to load.
         """
-        import pkgutil
+        start_time = time.perf_counter()
+        discovered_tools: list[DiscoveredTool] = []
+        failed_modules: list[FailedModule] = []
+        modules_scanned = 0
 
-        report = DiscoveryReport()
-        t0 = _time.monotonic()
-        scanner = ModuleScanner()
-
+        # Import the root package first
         try:
-            package = importlib.import_module(package_name)
-        except (ImportError, SyntaxError, Exception) as exc:
-            report.failed_modules.append(FailedModule(
-                module=package_name,
-                error=str(exc),
-                error_type=type(exc).__name__,
-            ))
-            report.scan_duration_ms = (_time.monotonic() - t0) * 1000
-            logger.warning("Cannot import package %s: %s", package_name, exc)
-            return report
+            root_pkg = importlib.import_module(package_name)
+        except ImportError as e:
+            logger.error(f"Failed to import root package {package_name}: {e}")
+            return DiscoveryReport(
+                failed_modules=[
+                    FailedModule(package_name, str(e), type(e).__name__)
+                ]
+            )
 
-        if not hasattr(package, "__path__"):
-            report.modules_scanned = 1
-            tools = scanner.scan_module(package_name)
-            report.tools.extend(tools)
-            for tool in tools:
-                self._tools[tool.name] = tool
-            report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+        # Walk through all submodules
+        path = getattr(root_pkg, "__path__", [])
+        if not path:
+            # Single module, just scan it
+            report = self.scan_module(package_name)
             self._update_metrics(report)
             return report
 
-        for _importer, modname, _ispkg in pkgutil.walk_packages(
-            package.__path__, prefix=package_name + "."
-        ):
-            report.modules_scanned += 1
+        for _, name, _ in pkgutil.walk_packages(path, prefix=f"{package_name}."):
+            modules_scanned += 1
             try:
-                tools = scanner.scan_module(modname)
-                report.tools.extend(tools)
-            except (ImportError, SyntaxError, RecursionError) as exc:
-                report.failed_modules.append(FailedModule(
-                    module=modname, error=str(exc), error_type=type(exc).__name__,
-                ))
-                logger.warning("Error scanning %s: %s", modname, exc)
-            except Exception as exc:
-                report.failed_modules.append(FailedModule(
-                    module=modname, error=str(exc), error_type=type(exc).__name__,
-                ))
-                logger.warning("Unexpected error scanning %s: %s", modname, exc)
+                # Import module in isolation
+                module = importlib.import_module(name)
+                # Scan correctly imported module
+                module_tools = self._scan_module(module)
+                discovered_tools.extend(module_tools)
+                # Update main registry incrementally
+                for tool in module_tools:
+                    self._registry[tool.name] = tool
 
-        for tool in report.tools:
-            self._tools[tool.name] = tool
+            except Exception as e:
+                # Isolate failure
+                logger.debug(f"Failed to scan module {name}: {e}")
+                failed_modules.append(
+                    FailedModule(name, str(e), type(e).__name__)
+                )
+                self._failed_modules.append(
+                    FailedModule(name, str(e), type(e).__name__)
+                )
 
-        report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+        duration = (time.perf_counter() - start_time) * 1000.0
+        report = DiscoveryReport(
+            tools=discovered_tools,
+            failed_modules=failed_modules,
+            scan_duration_ms=duration,
+            modules_scanned=modules_scanned,
+        )
         self._update_metrics(report)
         return report
 
     # ── Incremental single-module scan ───────────────────────────
 
     def scan_module(self, module_name: str) -> DiscoveryReport:
-        """Scan a single module (incremental refresh).
+        """Scan a single module for MCP tools (incremental refresh).
 
-        Merges discovered tools into the existing registry
-        without clearing tools from other modules.
+        Imports the named module, scans it for ``@mcp_tool`` markers,
+        and merges discovered tools into the existing registry without
+        clearing other tools.
+
+        Args:
+            module_name: Fully-qualified module name
+                         (e.g. ``"codomyrmex.search.mcp_tools"``).
+
+        Returns:
+            A :class:`DiscoveryReport` for this single module.
         """
-        report = DiscoveryReport()
-        t0 = _time.monotonic()
-        scanner = ModuleScanner()
-
+        start_time = time.perf_counter()
         try:
-            report.modules_scanned = 1
-            tools = scanner.scan_module(module_name)
-            report.tools.extend(tools)
+            module = importlib.import_module(module_name)
+            tools = self._scan_module(module)
+            
+            # Update registry
             for tool in tools:
-                self._tools[tool.name] = tool
-        except Exception as exc:
-            report.failed_modules.append(FailedModule(
-                module=module_name, error=str(exc), error_type=type(exc).__name__,
-            ))
-            logger.warning("Error scanning module %s: %s", module_name, exc)
+                self._registry[tool.name] = tool
+                
+            duration = (time.perf_counter() - start_time) * 1000.0
+            report = DiscoveryReport(
+                tools=tools,
+                scan_duration_ms=duration,
+                modules_scanned=1,
+            )
+            self._update_metrics(report)
+            return report
+            
+        except Exception as e:
+            duration = (time.perf_counter() - start_time) * 1000.0
+            fail = FailedModule(module_name, str(e), type(e).__name__)
+            self._failed_modules.append(fail)
+            # Update metrics even on failure
+            self._metrics.scan_duration_ms += duration
+            self._metrics.failed_modules.append(module_name)
+            
+            return DiscoveryReport(
+                failed_modules=[fail],
+                scan_duration_ms=duration,
+                modules_scanned=1,
+            )
 
-        report.scan_duration_ms = (_time.monotonic() - t0) * 1000
-        return report
+    # ── Private helpers ──────────────────────────────────────────
 
-    # ── Helpers ──────────────────────────────────────────────────
+    def _scan_module(self, module: Any) -> list[DiscoveredTool]:
+        """Scan a single already-imported module for MCP tool markers."""
+        tools = []
+        for name, obj in inspect.getmembers(module):
+            if hasattr(obj, "_mcp_tool_meta"):
+                meta = getattr(obj, "_mcp_tool_meta")
+                
+                # Check requirements
+                available = True
+                unavailable_reason = None
+                if meta.get("requires"):
+                    missing = []
+                    for req in meta["requires"]:
+                        if not importlib.util.find_spec(req):
+                            missing.append(req)
+                    
+                    if missing:
+                        available = False
+                        unavailable_reason = (
+                            f"Missing dependencies: {', '.join(missing)}. "
+                            f"Install via 'uv add {' '.join(missing)}'"
+                        )
+
+                tool = DiscoveredTool(
+                    name=meta["name"] or name,
+                    description=meta["description"] or (obj.__doc__ or "").strip(),
+                    module_path=module.__name__,
+                    callable_name=name,
+                    parameters=meta.get("parameters", {}),
+                    tags=meta.get("tags", []),
+                    version=meta.get("version", "1.0"),
+                    requires=meta.get("requires", []),
+                    available=available,
+                    unavailable_reason=unavailable_reason,
+                    handler=obj,
+                )
+                tools.append(tool)
+        return tools
 
     def _update_metrics(self, report: DiscoveryReport) -> None:
-        self._last_scan_time = datetime.now(timezone.utc)
-        self._last_scan_duration_ms = report.scan_duration_ms
-        self._last_modules_scanned = report.modules_scanned
-        self._last_failed_modules = [f.module for f in report.failed_modules]
+        """Update internal metrics after a scan."""
+        self._metrics.total_tools = len(self._registry)
+        self._metrics.scan_duration_ms = report.scan_duration_ms
+        self._metrics.modules_scanned = report.modules_scanned
+        self._metrics.last_scan_time = datetime.now(timezone.utc)
+        self._metrics.failed_modules = [m.module for m in self._failed_modules]
 
-    def record_cache_hit(self) -> None:
-        """Increment cache-hit counter (called by bridge TTL cache)."""
-        self._cache_hits += 1
+    # ── Registry accessors ───────────────────────────────────────
 
-    # ── Metrics ─────────────────────────────────────────────────
-
-    def get_metrics(self) -> DiscoveryMetrics:
-        """Return current discovery metrics."""
-        return DiscoveryMetrics(
-            total_tools=len(self._tools),
-            scan_duration_ms=self._last_scan_duration_ms,
-            failed_modules=list(self._last_failed_modules),
-            modules_scanned=self._last_modules_scanned,
-            cache_hits=self._cache_hits,
-            last_scan_time=self._last_scan_time,
-        )
-
-    # ── Registry accessors ──────────────────────────────────────
+    def register_tool(self, tool: DiscoveredTool) -> None:
+        """Manually register a tool."""
+        self._registry[tool.name] = tool
 
     def get_tool(self, name: str) -> DiscoveredTool | None:
-        return self._tools.get(name)
+        return self._registry.get(name)
 
-    def list_tools(self) -> list[DiscoveredTool]:
-        return list(self._tools.values())
+    def list_tools(self, tag: str | None = None) -> list[DiscoveredTool]:
+        """List all discovered tools, optionally filtered by tag."""
+        if tag:
+            return [t for t in self._registry.values() if tag in t.tags]
+        return list(self._registry.values())
 
     @property
     def tool_count(self) -> int:
-        return len(self._tools)
+        return len(self._registry)
+
+    def record_cache_hit(self) -> None:
+        """Increment cache-hit counter (called by bridge cache logic)."""
+        self._metrics.cache_hits += 1
+
+    # ── Metrics ──────────────────────────────────────────────────
+
+    def get_metrics(self) -> DiscoveryMetrics:
+        """Return current discovery metrics."""
+        return self._metrics
 
 
-__all__ = [
-    "DiscoveredTool",
-    "ModuleScanner",
-    "SpecificationScanner",
-    "ExternalServerDiscovery",
-    "ToolCatalog",
-    "discover_tools",
-    "discover_all_public_tools",
-    # Stream 3
-    "FailedModule",
-    "DiscoveryReport",
-    "DiscoveryMetrics",
-    "MCPDiscoveryEngine",
-]
+# =====================================================================
+# Decorator
+# =====================================================================
+
+
+def mcp_tool(
+    name: str | None = None,
+    description: str = "",
+    tags: list[str] | None = None,
+    version: str = "1.0",
+    requires: list[str] | None = None,
+) -> Callable:
+    """Decorator to mark a function as an MCP tool.
+
+    Args:
+        name: Override the tool name (default: function name).
+        description: Tool description (default: docstring).
+        tags: List of tags for classification.
+        version: Semantic version string.
+        requires: List of importable package names required by this tool.
+                  If any are missing, the tool will be registered as unavailable.
+    """
+    def decorator(func: Callable) -> Callable:
+        # Extract parameters using pydantic or typed-dict generation logic if needed
+        # For now, we rely on the bridge to inspect signatures at runtime
+        # but here we just mark it.
+        # Ideally we should generate the JSON schema here to avoid repeated inspection.
+        
+        # We assume parameters will be extracted/validated by the bridge/server logic
+        # Here we just store metadata.
+        # But wait, DiscoveredTool needs parameters.
+        # Let's extract them here.
+        
+        from codomyrmex.model_context_protocol.validation import (
+             # We might not want to couple tightly here if validation module is heavy
+             # But validation.py is lightweight.
+             _generate_schema_from_func
+        )
+        
+        try:
+            params = _generate_schema_from_func(func)
+        except Exception:
+            params = {}
+
+        setattr(func, "_mcp_tool_meta", {
+            "name": name,
+            "description": description,
+            "tags": tags or [],
+            "parameters": params,
+            "version": version,
+            "requires": requires or [],
+        })
+        return func
+    return decorator
+
+
+# Alias for backward compatibility with tests
+MCPDiscoveryEngine = MCPDiscovery
