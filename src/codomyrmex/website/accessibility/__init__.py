@@ -6,6 +6,7 @@ WCAG compliance checking and accessibility utilities.
 
 __version__ = "0.1.0"
 
+from .checker import A11yChecker
 from .models import (
     AccessibilityIssue,
     AccessibilityReport,
@@ -13,7 +14,6 @@ from .models import (
     WCAGLevel,
     WCAGRule,
 )
-from .checker import A11yChecker
 from .reporters import AccessibilityReporter
 from .utils import calculate_contrast_ratio, check_heading_hierarchy
 

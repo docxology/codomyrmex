@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Curriculum - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Curriculum Management</h1>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2>Create Curriculum</h2>
+    <form id="create-curriculum-form" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+            <label for="curr-name">Name</label>
+            <input id="curr-name" name="name" placeholder="e.g. Python Fundamentals" required style="display: block; margin-top: 0.25rem;">
+        </div>
+        <div>
+            <label for="curr-level">Level</label>
+            <select id="curr-level" name="level" style="display: block; margin-top: 0.25rem;">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+
+<h2>Curricula</h2>
+<div class="grid" id="curricula-list">
+    <p class="empty-state">Loading...</p>
+</div>
+
+<div id="curriculum-detail" class="hidden" style="margin-top: 2rem;"></div>
+{% endblock %}

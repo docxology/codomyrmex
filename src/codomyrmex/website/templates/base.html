@@ -20,9 +20,14 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <nav aria-label="Main navigation">
-            <a href="index.html" class="logo">
-                <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
-            </a>
+            <div class="nav-top-row">
+                <a href="index.html" class="logo">
+                    <span style="color: var(--accent-color)" aria-hidden="true">◆</span> Codomyrmex
+                </a>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+                    <span aria-hidden="true">🌙</span>
+                </button>
+            </div>
             <div class="nav-links">
                 <div class="nav-group" role="group" aria-label="Operations">
                     <span class="nav-group-label">Operations</span>
@@ -47,6 +52,14 @@
                     <a href="awareness.html" class="nav-link" data-shortcut="0">Awareness</a>
                     <a href="pai_control.html" class="nav-link">Control</a>
                 </div>
+                <div class="nav-divider" aria-hidden="true"></div>
+                <div class="nav-group" role="group" aria-label="Education">
+                    <span class="nav-group-label">Education</span>
+                    <a href="curriculum.html" class="nav-link">Curriculum</a>
+                    <a href="tutoring.html" class="nav-link">Tutoring</a>
+                    <a href="assessment.html" class="nav-link">Assessment</a>
+                    <a href="content.html" class="nav-link">Content</a>
+                </div>
             </div>
         </nav>
     </header>
@@ -56,6 +69,7 @@
     </main>
 
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/education.js"></script>
 </body>
 
 </html>

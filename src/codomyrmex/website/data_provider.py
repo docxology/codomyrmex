@@ -18,8 +18,8 @@ from typing import Any
 
 import yaml
 
-from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.llm.ollama.config_manager import ConfigManager
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -30,10 +30,17 @@ class DataProvider:
     """
 
     # Utility modules that don't need API specs
-    _UTILITY_MODULES = frozenset({
-        "__pycache__", "tests", "utils", "exceptions", "skills",
-        "module_template", "examples",
-    })
+    _UTILITY_MODULES = frozenset(
+        {
+            "__pycache__",
+            "tests",
+            "utils",
+            "exceptions",
+            "skills",
+            "module_template",
+            "examples",
+        }
+    )
 
     _PAI_ROOT: Path = Path.home() / ".claude"
 
@@ -49,7 +56,7 @@ class DataProvider:
             "environment": os.getenv("CODOMYRMEX_ENV", "Development"),
             "module_count": len(self.get_modules()),
             "agent_count": len(self.get_actual_agents()),
-            "last_build": self._get_last_build_time()
+            "last_build": self._get_last_build_time(),
         }
 
     def _compute_module_status(self, module_path: Path) -> str:
@@ -90,13 +97,15 @@ class DataProvider:
                 if description == "No description available":
                     description = self._get_description_from_markdown(item)
 
-                modules.append({
-                    "name": item.name,
-                    "status": self._compute_module_status(item),
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": description,
-                    "submodules": self._get_submodules(item)
-                })
+                modules.append(
+                    {
+                        "name": item.name,
+                        "status": self._compute_module_status(item),
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": description,
+                        "submodules": self._get_submodules(item),
+                    }
+                )
 
         return sorted(modules, key=lambda x: x["name"])
 
@@ -105,11 +114,13 @@ class DataProvider:
         submodules = []
         for item in module_path.iterdir():
             if item.is_dir() and (item / "__init__.py").exists():
-                submodules.append({
-                    "name": item.name,
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": self._get_description(item)
-                })
+                submodules.append(
+                    {
+                        "name": item.name,
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": self._get_description(item),
+                    }
+                )
         return sorted(submodules, key=lambda x: x["name"])
 
     def get_actual_agents(self) -> list[dict[str, Any]]:
@@ -133,13 +144,15 @@ class DataProvider:
                 if description == "No description available":
                     description = self._get_description_from_markdown(item)
 
-                agents.append({
-                    "name": item.name,
-                    "status": self._compute_module_status(item),
-                    "path": str(item.relative_to(self.root_dir)),
-                    "description": description,
-                    "type": self._get_agent_type(item.name)
-                })
+                agents.append(
+                    {
+                        "name": item.name,
+                        "status": self._compute_module_status(item),
+                        "path": str(item.relative_to(self.root_dir)),
+                        "description": description,
+                        "type": self._get_agent_type(item.name),
+                    }
+                )
 
         return sorted(agents, key=lambda x: x["name"])
 
@@ -157,19 +170,36 @@ class DataProvider:
             return "Framework"
         return "Agent"
 
-
     def get_mcp_tools(self) -> dict[str, Any]:
         """Return MCP tools, resources, and prompts from the PAI bridge."""
         try:
             from codomyrmex.agents.pai.mcp_bridge import get_skill_manifest
+
             manifest = get_skill_manifest()
 
             # Classify tools as safe vs destructive using trust gateway patterns
             destructive_patterns = {
-                "write", "delete", "remove", "execute", "run", "drop",
-                "create", "update", "modify", "set", "reset", "clear",
-                "purge", "destroy", "kill", "terminate", "send", "push",
-                "mutate", "shutdown", "stop",
+                "write",
+                "delete",
+                "remove",
+                "execute",
+                "run",
+                "drop",
+                "create",
+                "update",
+                "modify",
+                "set",
+                "reset",
+                "clear",
+                "purge",
+                "destroy",
+                "kill",
+                "terminate",
+                "send",
+                "push",
+                "mutate",
+                "shutdown",
+                "stop",
             }
 
             tools = []
@@ -177,13 +207,17 @@ class DataProvider:
                 name = tool.get("name", "")
                 parts = name.lower().split(".")
                 last_part = parts[-1] if parts else ""
-                is_destructive = any(last_part.startswith(p) for p in destructive_patterns)
-                tools.append({
-                    "name": name,
-                    "description": tool.get("description", ""),
-                    "category": tool.get("category", "general"),
-                    "is_destructive": is_destructive,
-                })
+                is_destructive = any(
+                    last_part.startswith(p) for p in destructive_patterns
+                )
+                tools.append(
+                    {
+                        "name": name,
+                        "description": tool.get("description", ""),
+                        "category": tool.get("category", "general"),
+                        "is_destructive": is_destructive,
+                    }
+                )
 
             return {
                 "tools": tools,
@@ -213,13 +247,15 @@ class DataProvider:
             rel_path = path.relative_to(scripts_dir)
             title, description = self._get_script_metadata(path)
 
-            scripts.append({
-                "name": str(rel_path),
-                "title": title,
-                "path": str(rel_path),
-                "full_path": str(path),
-                "description": description
-            })
+            scripts.append(
+                {
+                    "name": str(rel_path),
+                    "title": title,
+                    "path": str(rel_path),
+                    "full_path": str(path),
+                    "description": description,
+                }
+            )
 
         return sorted(scripts, key=lambda x: x["name"])
 
@@ -261,7 +297,7 @@ class DataProvider:
                     docstring = content[start:end].strip()
 
             if docstring:
-                lines = docstring.split('\n')
+                lines = docstring.split("\n")
                 # Try to find a title
                 # 1. explicit "Title: ..."
                 for line in lines:
@@ -300,7 +336,6 @@ class DataProvider:
                     continue
         return "No description available"
 
-
     def get_config_files(self) -> list[dict[str, str]]:
         """Scans for configuration files."""
         configs = []
@@ -310,11 +345,13 @@ class DataProvider:
         for pattern in patterns:
             for path in self.root_dir.glob(pattern):
                 if path.is_file():
-                    configs.append({
-                        "name": path.name,
-                        "path": path.name, # Relative to root
-                        "type": path.suffix.lstrip(".")
-                    })
+                    configs.append(
+                        {
+                            "name": path.name,
+                            "path": path.name,  # Relative to root
+                            "type": path.suffix.lstrip("."),
+                        }
+                    )
 
         # Also look in config/ dir if it exists
         config_dir = self.root_dir / "config"
@@ -322,17 +359,28 @@ class DataProvider:
             for pattern in patterns:
                 for path in config_dir.glob(pattern):
                     if path.is_file():
-                        configs.append({
-                            "name": f"config/{path.name}",
-                            "path": str(path.relative_to(self.root_dir)),
-                            "type": path.suffix.lstrip(".")
-                        })
+                        configs.append(
+                            {
+                                "name": f"config/{path.name}",
+                                "path": str(path.relative_to(self.root_dir)),
+                                "type": path.suffix.lstrip("."),
+                            }
+                        )
 
         return sorted(configs, key=lambda x: x["name"])
 
-    _SAFE_CONFIG_EXTENSIONS = frozenset({
-        ".toml", ".yaml", ".yml", ".json", ".txt", ".cfg", ".ini", ".conf",
-    })
+    _SAFE_CONFIG_EXTENSIONS = frozenset(
+        {
+            ".toml",
+            ".yaml",
+            ".yml",
+            ".json",
+            ".txt",
+            ".cfg",
+            ".ini",
+            ".conf",
+        }
+    )
 
     def get_config_content(self, filename: str) -> str:
         """Reads content of a config file.
@@ -352,7 +400,9 @@ class DataProvider:
         # Restrict to safe extensions
         suffix = file_path.suffix.lower()
         if suffix not in self._SAFE_CONFIG_EXTENSIONS:
-            raise ValueError(f"File type '{suffix}' is not allowed - only config files permitted")
+            raise ValueError(
+                f"File type '{suffix}' is not allowed - only config files permitted"
+            )
 
         if not file_path.exists():
             raise FileNotFoundError(f"File {filename} not found")
@@ -374,7 +424,9 @@ class DataProvider:
 
         # Only allow updating existing files - refuse to create new ones
         if not file_path.exists():
-            raise FileNotFoundError(f"File {filename} does not exist - refusing to create new files")
+            raise FileNotFoundError(
+                f"File {filename} does not exist - refusing to create new files"
+            )
 
         logger.info("Saving config file: %s", filename)
         file_path.write_text(content, encoding="utf-8")
@@ -393,12 +445,14 @@ class DataProvider:
         # Add src/ READMEs
         src_docs = {"name": "Modules", "children": []}
         if src_root.exists():
-             for path in src_root.rglob("README.md"):
-                  src_docs["children"].append({
-                      "name": str(path.relative_to(src_root).parent),
-                      "path": str(path.relative_to(self.root_dir)),
-                      "type": "file"
-                  })
+            for path in src_root.rglob("README.md"):
+                src_docs["children"].append(
+                    {
+                        "name": str(path.relative_to(src_root).parent),
+                        "path": str(path.relative_to(self.root_dir)),
+                        "type": "file",
+                    }
+                )
         if src_docs["children"]:
             tree["children"].append(src_docs)
 
@@ -415,14 +469,17 @@ class DataProvider:
 
         # Files first, then dirs
         for item in sorted(path.iterdir()):
-            if item.name.startswith("."): continue
+            if item.name.startswith("."):
+                continue
 
             if item.is_file() and item.suffix == ".md":
-                node["children"].append({
-                     "name": item.name,
-                     "path": str(item.relative_to(self.root_dir)),
-                     "type": "file"
-                })
+                node["children"].append(
+                    {
+                        "name": item.name,
+                        "path": str(item.relative_to(self.root_dir)),
+                        "type": "file",
+                    }
+                )
             elif item.is_dir():
                 child_node = self._scan_directory_for_docs(item)
                 # Only add if it has content
@@ -488,8 +545,10 @@ class DataProvider:
         try:
             result = subprocess.run(
                 ["git", "log", "-1", "--format=%ci"],
-                capture_output=True, text=True,
-                cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             )
             timestamp = result.stdout.strip()
             return timestamp if timestamp else "N/A"
@@ -535,20 +594,23 @@ class DataProvider:
                         trigger_list = []
 
                     jobs = data.get("jobs", {})
-                    stages = [
-                        {"name": job_name, "status": "defined"}
-                        for job_name in jobs
-                    ] if isinstance(jobs, dict) else []
+                    stages = (
+                        [{"name": job_name, "status": "defined"} for job_name in jobs]
+                        if isinstance(jobs, dict)
+                        else []
+                    )
 
                 counter += 1
-                pipelines.append({
-                    "id": f"wf-{counter:04d}",
-                    "name": name,
-                    "status": "defined",
-                    "file": str(wf_file.relative_to(self.root_dir)),
-                    "triggers": trigger_list,
-                    "stages": stages,
-                })
+                pipelines.append(
+                    {
+                        "id": f"wf-{counter:04d}",
+                        "name": name,
+                        "status": "defined",
+                        "file": str(wf_file.relative_to(self.root_dir)),
+                        "triggers": trigger_list,
+                        "stages": stages,
+                    }
+                )
             except Exception:
                 continue
 
@@ -558,22 +620,22 @@ class DataProvider:
         """Fallback parser for workflows with embedded heredocs that break yaml.safe_load()."""
         import re
 
-        name_match = re.search(r'^name:\s*(.+)$', content, re.MULTILINE)
+        name_match = re.search(r"^name:\s*(.+)$", content, re.MULTILINE)
         name = name_match.group(1).strip().strip("'\"") if name_match else filename
 
         # Extract top-level trigger keys from 'on:' section (2-space indent only)
         triggers = []
         in_on = False
         for line in content.splitlines():
-            if re.match(r'^on:\s*$', line):
+            if re.match(r"^on:\s*$", line):
                 in_on = True
                 continue
             if in_on:
                 # A new top-level key exits the on: section
-                if re.match(r'^[a-zA-Z_][\w-]*:', line):
+                if re.match(r"^[a-zA-Z_][\w-]*:", line):
                     break
                 # Only capture trigger names at exactly 2-space indent
-                m = re.match(r'^  ([a-zA-Z_][\w-]*):', line)
+                m = re.match(r"^  ([a-zA-Z_][\w-]*):", line)
                 if m:
                     triggers.append(m.group(1))
 
@@ -596,19 +658,21 @@ class DataProvider:
                 heredoc_terminator = heredoc_match.group(1)
                 continue
 
-            if re.match(r'^jobs:\s*$', line):
+            if re.match(r"^jobs:\s*$", line):
                 in_jobs = True
                 continue
             if in_jobs:
                 # Job definitions are at exactly 2-space indent under jobs:
-                if re.match(r'^  [a-zA-Z_][\w-]*:', line):
-                    job_name = line.strip().split(':')[0].strip()
-                    if job_name and not job_name.startswith('#'):
+                if re.match(r"^  [a-zA-Z_][\w-]*:", line):
+                    job_name = line.strip().split(":")[0].strip()
+                    if job_name and not job_name.startswith("#"):
                         stages.append({"name": job_name, "status": "defined"})
 
         return {"name": name, "triggers": triggers, "stages": stages}
 
-    def _compute_overall_status(self, modules: list[dict[str, Any]], git_info: dict[str, str]) -> tuple[str, str]:
+    def _compute_overall_status(
+        self, modules: list[dict[str, Any]], git_info: dict[str, str]
+    ) -> tuple[str, str]:
         """Compute overall system status from module health and git availability.
 
         Returns (status_text, status_class) where status_class is 'ok', 'warn', or 'err'.
@@ -675,10 +739,18 @@ class DataProvider:
                 "with_api_spec": modules_with_api_spec,
                 "with_mcp_spec": modules_with_mcp_spec,
                 "needing_api_spec": modules_needing_api_spec,
-                "test_coverage_pct": round(modules_with_tests / max(len(modules), 1) * 100, 1),
-                "api_spec_pct": round(modules_with_api_spec / max(len(modules), 1) * 100, 1),
-                "api_spec_contextual_pct": round(modules_with_api_spec / max(modules_needing_api_spec, 1) * 100, 1),
-                "mcp_spec_pct": round(modules_with_mcp_spec / max(len(modules), 1) * 100, 1),
+                "test_coverage_pct": round(
+                    modules_with_tests / max(len(modules), 1) * 100, 1
+                ),
+                "api_spec_pct": round(
+                    modules_with_api_spec / max(len(modules), 1) * 100, 1
+                ),
+                "api_spec_contextual_pct": round(
+                    modules_with_api_spec / max(modules_needing_api_spec, 1) * 100, 1
+                ),
+                "mcp_spec_pct": round(
+                    modules_with_mcp_spec / max(len(modules), 1) * 100, 1
+                ),
             },
             "architecture_layers": self._get_architecture_layers(),
             "llm_config": self.get_llm_config(),
@@ -695,7 +767,7 @@ class DataProvider:
                     "default_model": config_manager.config.default_model,
                     "preferred_models": config_manager.config.preferred_models,
                     "available_models": config_manager.get_available_models(),
-                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}"
+                    "ollama_host": f"{config_manager.config.server_host}:{config_manager.config.server_port}",
                 }
         except Exception as e:
             logger.warning(f"Failed to load LLM config: {e}")
@@ -705,7 +777,7 @@ class DataProvider:
             "default_model": "llama3.1:latest",
             "preferred_models": ["llama3.1:latest", "codellama:latest"],
             "available_models": ["llama3.1:latest"],
-            "ollama_host": "localhost:11434"
+            "ollama_host": "localhost:11434",
         }
 
     def _get_git_info(self) -> dict[str, str]:
@@ -713,24 +785,42 @@ class DataProvider:
         try:
             branch = subprocess.run(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             last_commit = subprocess.run(
                 ["git", "log", "-1", "--format=%h %s (%ar)"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             commit_count = subprocess.run(
                 ["git", "rev-list", "--count", "HEAD"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             ).stdout.strip()
 
             status_result = subprocess.run(
                 ["git", "status", "--porcelain"],
-                capture_output=True, text=True, cwd=self.root_dir, timeout=5
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                timeout=5,
             )
-            dirty_count = len([l for l in status_result.stdout.strip().split("\n") if l.strip()])
+            dirty_count = len(
+                [
+                    line
+                    for line in status_result.stdout.strip().split("\n")
+                    if line.strip()
+                ]
+            )
 
             return {
                 "branch": branch,
@@ -754,14 +844,44 @@ class DataProvider:
             layer_defs = data.get("layers", [])
         except Exception:
             layer_defs = [
-                {"name": "Foundation", "color": "#10b981",
-                 "modules": ["logging_monitoring", "environment_setup", "model_context_protocol", "terminal_interface"]},
-                {"name": "Core", "color": "#3b82f6",
-                 "modules": ["agents", "static_analysis", "coding", "llm", "pattern_matching", "git_operations"]},
-                {"name": "Service", "color": "#8b5cf6",
-                 "modules": ["build_synthesis", "documentation", "ci_cd_automation", "containerization", "orchestrator"]},
-                {"name": "Application", "color": "#f59e0b",
-                 "modules": ["cli", "system_discovery", "website"]},
+                {
+                    "name": "Foundation",
+                    "color": "#10b981",
+                    "modules": [
+                        "logging_monitoring",
+                        "environment_setup",
+                        "model_context_protocol",
+                        "terminal_interface",
+                    ],
+                },
+                {
+                    "name": "Core",
+                    "color": "#3b82f6",
+                    "modules": [
+                        "agents",
+                        "static_analysis",
+                        "coding",
+                        "llm",
+                        "pattern_matching",
+                        "git_operations",
+                    ],
+                },
+                {
+                    "name": "Service",
+                    "color": "#8b5cf6",
+                    "modules": [
+                        "build_synthesis",
+                        "documentation",
+                        "ci_cd_automation",
+                        "containerization",
+                        "orchestrator",
+                    ],
+                },
+                {
+                    "name": "Application",
+                    "color": "#f59e0b",
+                    "modules": ["cli", "system_discovery", "website"],
+                },
             ]
 
         existing_modules = {m["name"] for m in self.get_modules()}
@@ -771,11 +891,13 @@ class DataProvider:
         for layer in layer_defs:
             present = [m for m in layer.get("modules", []) if m in existing_modules]
             classified.update(layer.get("modules", []))
-            result.append({
-                "name": layer["name"],
-                "modules": present,
-                "color": layer.get("color", "#94a3b8"),
-            })
+            result.append(
+                {
+                    "name": layer["name"],
+                    "modules": present,
+                    "color": layer.get("color", "#94a3b8"),
+                }
+            )
 
         other = sorted(existing_modules - classified)
         if other:
@@ -793,38 +915,51 @@ class DataProvider:
             xml_path = tf.name
 
         try:
-            cmd = [sys.executable, "-m", "pytest", f"--junitxml={xml_path}", "-q", "--no-header"]
-            
+            cmd = [
+                sys.executable,
+                "-m",
+                "pytest",
+                f"--junitxml={xml_path}",
+                "-q",
+                "--no-header",
+            ]
+
             if module and module != "all":
-                test_path = self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
+                test_path = (
+                    self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
+                )
                 if test_path.exists():
                     cmd.append(str(test_path))
                 else:
                     os.unlink(xml_path)
                     return {"error": f"No tests found for module: {module}"}
-            
+
             # Inject PYTHONPATH to include src/
             env = os.environ.copy()
             src_path = self.root_dir / "src"
             env["PYTHONPATH"] = str(src_path) + os.pathsep + env.get("PYTHONPATH", "")
 
             result = subprocess.run(
-                cmd, capture_output=True, text=True,
-                cwd=self.root_dir, env=env, timeout=600
+                cmd,
+                capture_output=True,
+                text=True,
+                cwd=self.root_dir,
+                env=env,
+                timeout=600,
             )
 
             # Parse XML
             passed = failed = skipped = errors = 0
-            
+
             if os.path.exists(xml_path) and os.path.getsize(xml_path) > 0:
                 try:
                     tree = ET.parse(xml_path)
                     root = tree.getroot()
-                    
+
                     # JUnit XML format: <testsuites> or <testsuite>
                     # Attributes: tests, failures, errors, skipped
                     # But individual test cases are more reliable to iterate
-                    
+
                     for testcase in root.iter("testcase"):
                         # Check for failure, error, skipped elements inside testcase
                         if testcase.find("failure") is not None:
@@ -835,7 +970,7 @@ class DataProvider:
                             skipped += 1
                         else:
                             passed += 1
-                            
+
                 except ET.ParseError:
                     # XML might be malformed if pytest crashed early
                     errors += 1
@@ -849,14 +984,14 @@ class DataProvider:
                 "failed": failed,
                 "skipped": skipped,
                 "errors": errors,
-                "warnings": 0, # XML doesn't strictly track warnings easily without plugins
+                "warnings": 0,  # XML doesn't strictly track warnings easily without plugins
                 "total": passed + failed + skipped + errors,
                 "success": failed == 0 and errors == 0 and result.returncode == 0,
                 "returncode": result.returncode,
-                "output": (result.stdout + result.stderr)[-5000:], # Cap output
+                "output": (result.stdout + result.stderr)[-5000:],  # Cap output
                 "module": module or "all",
             }
-            
+
         except subprocess.TimeoutExpired:
             return {"error": "Test run timed out after 600 seconds"}
         except Exception as e:
@@ -865,7 +1000,7 @@ class DataProvider:
             if os.path.exists(xml_path):
                 try:
                     os.unlink(xml_path)
-                except:
+                except OSError:
                     pass
 
     # ── PAI Awareness Methods ──────────────────────────────────────────
@@ -901,17 +1036,19 @@ class DataProvider:
                 except Exception:
                     pass
 
-            missions.append({
-                "id": mission_dir.name,
-                "title": data.get("title", mission_dir.name),
-                "status": data.get("status", "unknown"),
-                "priority": data.get("priority", "MEDIUM"),
-                "description": data.get("description", ""),
-                "success_criteria": data.get("success_criteria", []),
-                "linked_projects": data.get("linked_projects", []),
-                "completion_percentage": progress.get("completion_percentage", 0),
-                "recent_activity": progress.get("recent_activity", []),
-            })
+            missions.append(
+                {
+                    "id": mission_dir.name,
+                    "title": data.get("title", mission_dir.name),
+                    "status": data.get("status", "unknown"),
+                    "priority": data.get("priority", "MEDIUM"),
+                    "description": data.get("description", ""),
+                    "success_criteria": data.get("success_criteria", []),
+                    "linked_projects": data.get("linked_projects", []),
+                    "completion_percentage": progress.get("completion_percentage", 0),
+                    "recent_activity": progress.get("recent_activity", []),
+                }
+            )
 
         missions.sort(key=lambda m: priority_order.get(m["priority"], 99))
         return missions
@@ -946,18 +1083,20 @@ class DataProvider:
                 except Exception:
                     pass
 
-            projects.append({
-                "id": project_dir.name,
-                "title": data.get("title", project_dir.name),
-                "status": data.get("status", "unknown"),
-                "goal": data.get("goal", ""),
-                "priority": data.get("priority", "MEDIUM"),
-                "parent_mission": data.get("parent_mission", ""),
-                "tags": data.get("tags", []),
-                "completion_percentage": progress.get("completion_percentage", 0),
-                "task_counts": progress.get("task_counts", {}),
-                "recent_activity": progress.get("recent_activity", []),
-            })
+            projects.append(
+                {
+                    "id": project_dir.name,
+                    "title": data.get("title", project_dir.name),
+                    "status": data.get("status", "unknown"),
+                    "goal": data.get("goal", ""),
+                    "priority": data.get("priority", "MEDIUM"),
+                    "parent_mission": data.get("parent_mission", ""),
+                    "tags": data.get("tags", []),
+                    "completion_percentage": progress.get("completion_percentage", 0),
+                    "task_counts": progress.get("task_counts", {}),
+                    "recent_activity": progress.get("recent_activity", []),
+                }
+            )
 
         projects.sort(key=lambda p: (p["parent_mission"], p["title"]))
         return projects
@@ -1014,12 +1153,14 @@ class DataProvider:
             except Exception:
                 content = ""
                 size = 0
-            telos.append({
-                "name": md_file.stem,
-                "filename": md_file.name,
-                "size_bytes": size,
-                "preview": content[:200],
-            })
+            telos.append(
+                {
+                    "name": md_file.stem,
+                    "filename": md_file.name,
+                    "size_bytes": size,
+                    "preview": content[:200],
+                }
+            )
 
         telos.sort(key=lambda t: t["name"])
         return telos
@@ -1049,11 +1190,13 @@ class DataProvider:
                 file_count = 0
                 subdir_count = 0
             total_files += file_count
-            directories.append({
-                "name": item.name,
-                "file_count": file_count,
-                "subdir_count": subdir_count,
-            })
+            directories.append(
+                {
+                    "name": item.name,
+                    "file_count": file_count,
+                    "subdir_count": subdir_count,
+                }
+            )
 
         # Count work sessions
         work_dir = memory_dir / "WORK"
@@ -1102,7 +1245,7 @@ class DataProvider:
             status_class = _sanitize(mission.get("status", "unknown"))
             lines.append(f"    class {m_id} {status_class}")
 
-            for proj_ref in (mission.get("linked_projects") or []):
+            for proj_ref in mission.get("linked_projects") or []:
                 p_id = "P_" + _sanitize(str(proj_ref))
                 linked_project_ids.add(str(proj_ref))
                 lines.append(f"    {m_id} --> {p_id}")
@@ -1149,7 +1292,13 @@ class DataProvider:
             # Sum all to get total (there is no 'total' key in progress.json)
             total_tasks += sum(
                 tc.get(k, 0)
-                for k in ("completed", "in_progress", "remaining", "blocked", "optional")
+                for k in (
+                    "completed",
+                    "in_progress",
+                    "remaining",
+                    "blocked",
+                    "optional",
+                )
             )
             completed_tasks += tc.get("completed", 0)
 
@@ -1164,7 +1313,8 @@ class DataProvider:
             skills_dir = self._PAI_ROOT / "skills"
             if skills_dir.exists():
                 skills = sorted(
-                    d.name for d in skills_dir.iterdir()
+                    d.name
+                    for d in skills_dir.iterdir()
                     if d.is_dir() and not d.name.startswith(".")
                 )
         except Exception:
@@ -1173,7 +1323,8 @@ class DataProvider:
             hooks_dir = self._PAI_ROOT / "hooks"
             if hooks_dir.exists():
                 hooks = sorted(
-                    f.stem for f in hooks_dir.iterdir()
+                    f.stem
+                    for f in hooks_dir.iterdir()
                     if f.is_file() and not f.name.startswith(".")
                 )
         except Exception:
@@ -1208,5 +1359,4 @@ class DataProvider:
         try:
             return self._build_pai_mermaid_graph(missions, projects)
         except Exception:
-            return "graph TD\n    ERR[\"Graph unavailable\"]"
-
+            return 'graph TD\n    ERR["Graph unavailable"]'

@@ -7,6 +7,7 @@ from typing import Any
 
 class WCAGLevel(Enum):
     """WCAG conformance levels."""
+
     A = "A"
     AA = "AA"
     AAA = "AAA"
@@ -14,6 +15,7 @@ class WCAGLevel(Enum):
 
 class IssueType(Enum):
     """Types of accessibility issues."""
+
     ERROR = "error"
     WARNING = "warning"
     NOTICE = "notice"
@@ -22,6 +24,7 @@ class IssueType(Enum):
 @dataclass
 class AccessibilityIssue:
     """An accessibility issue."""
+
     code: str
     message: str
     selector: str = ""
@@ -34,6 +37,7 @@ class AccessibilityIssue:
 @dataclass
 class AccessibilityReport:
     """Accessibility audit report."""
+
     url: str = ""
     issues: list[AccessibilityIssue] = field(default_factory=list)
     passed: int = 0

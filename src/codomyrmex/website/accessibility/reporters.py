@@ -3,7 +3,7 @@
 import json
 from typing import Any
 
-from .models import AccessibilityReport, IssueType
+from .models import AccessibilityReport
 
 
 class AccessibilityReporter:
@@ -50,7 +50,7 @@ class AccessibilityReporter:
     def to_markdown(self) -> str:
         """Markdown formatted report with table of issues."""
         lines = [
-            f"# Accessibility Report",
+            "# Accessibility Report",
             "",
             f"**Score**: {self.report.score:.1f}%",
             f"**Passed**: {self.report.passed} | "

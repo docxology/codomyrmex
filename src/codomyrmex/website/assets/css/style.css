@@ -1,16 +1,31 @@
+/* ── Theme: CSS Custom Properties ──────────────────────────────── */
 :root {
-    --bg-primary: #0f111a;
-    --bg-secondary: #1a1d2d;
-    --bg-tertiary: #242942;
-    --text-primary: #e0e6ed;
-    --text-secondary: #a8b5c7;
-    --accent-color: #3b82f6;
-    --accent-hover: #60a5fa;
-    --border-color: #334155;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-tertiary: #e8e8e8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --accent-color: #2563eb;
+    --accent-hover: #1d4ed8;
+    --border-color: #e0e0e0;
+    --success-color: #16a34a;
+    --error-color: #dc2626;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-family: var(--font-sans);
+    --transition: all 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #999999;
+    --accent-color: #60a5fa;
+    --accent-hover: #93c5fd;
+    --border-color: #404040;
     --success-color: #10b981;
     --error-color: #ef4444;
-    --font-family: 'Inter', sans-serif;
-    --transition: all 0.3s ease;
 }
 
 * {
@@ -32,7 +47,7 @@ body {
 
 /* Header & Nav */
 header {
-    background-color: rgba(26, 29, 45, 0.8);
+    background-color: var(--bg-secondary);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
@@ -41,12 +56,18 @@ header {
 }
 
 nav {
-    max-width: 1400px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .logo {
@@ -63,14 +84,15 @@ nav {
 .nav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    gap: 0.25rem 1rem;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .nav-group {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .nav-group-label {
@@ -92,9 +114,9 @@ nav {
 .nav-link {
     color: var(--text-secondary);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    padding: 0.5rem 0;
+    padding: 0.35rem 0;
     position: relative;
     transition: var(--transition);
 }
@@ -217,7 +239,7 @@ h1 {
 }
 
 .btn-secondary:hover {
-    background-color: #333b5c;
+    background-color: var(--border-color);
 }
 
 .btn:disabled {
@@ -620,6 +642,47 @@ textarea:focus-visible {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Error Notification Banner */
+.notification-banner {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    max-width: 400px;
+    animation: fadeIn 0.3s ease;
+}
+
+.notification-banner.error {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.notification-banner.success {
+    background-color: var(--success-color);
+    color: white;
 }
 
 /* Accessibility: Skip-to-content link */

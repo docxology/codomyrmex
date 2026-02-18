@@ -15,13 +15,14 @@ from codomyrmex.logging_monitoring import get_logger
 from .data_provider import DataProvider
 
 logger = get_logger(__name__)
+
+
 class WebsiteGenerator:
     """
     Generates the static website.
     """
 
     def __init__(self, output_dir: str, root_dir: str | None = None):
-
 
         self.output_dir = Path(output_dir)
         # Assuming we are running from project root, or passing it in.
@@ -40,7 +41,7 @@ class WebsiteGenerator:
 
         self.env = Environment(
             loader=FileSystemLoader(self.templates_dir),
-            autoescape=select_autoescape(['html', 'xml'])
+            autoescape=select_autoescape(["html", "xml"]),
         )
 
     def generate(self) -> None:
@@ -66,7 +67,24 @@ class WebsiteGenerator:
         }
 
         # 3. Render Pages
-        pages = ["index.html", "health.html", "modules.html", "tools.html", "scripts.html", "chat.html", "agents.html", "config.html", "docs.html", "pipelines.html", "awareness.html", "pai_control.html"]
+        pages = [
+            "index.html",
+            "health.html",
+            "modules.html",
+            "tools.html",
+            "scripts.html",
+            "chat.html",
+            "agents.html",
+            "config.html",
+            "docs.html",
+            "pipelines.html",
+            "awareness.html",
+            "pai_control.html",
+            "curriculum.html",
+            "tutoring.html",
+            "assessment.html",
+            "content.html",
+        ]
         for page in pages:
             try:
                 self._render_page(page, context)

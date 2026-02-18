@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Tutoring - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Interactive Tutoring</h1>
+
+<div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+    <div class="card">
+        <h2>Start Session</h2>
+        <form id="session-form" style="display: grid; gap: 0.75rem;">
+            <div>
+                <label for="student-name">Your Name</label>
+                <input id="student-name" name="student_name" placeholder="Enter your name" required style="display: block; width: 100%; margin-top: 0.25rem;">
+            </div>
+            <div>
+                <label for="topic-select">Topic</label>
+                <select id="topic-select" name="topic" style="display: block; width: 100%; margin-top: 0.25rem;">
+                    <option>Loading topics...</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Start Session</button>
+        </form>
+        <input type="hidden" id="session-id">
+        <div id="session-info" class="hidden" style="margin-top: 1rem;">
+            <p>Session active for topic: <strong id="session-topic"></strong></p>
+        </div>
+    </div>
+
+    <div id="session-progress">
+        <div class="card">
+            <div class="card-title">Session Progress</div>
+            <p class="empty-state">Start a session to see progress.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h2>Generate Quiz</h2>
+    <form id="quiz-form" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+            <label for="quiz-difficulty">Difficulty</label>
+            <select id="quiz-difficulty" name="difficulty" style="display: block; margin-top: 0.25rem;">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div>
+            <label for="quiz-count">Questions</label>
+            <input id="quiz-count" name="count" type="number" value="5" min="1" max="20" style="display: block; margin-top: 0.25rem; width: 80px;">
+        </div>
+        <button type="submit" class="btn btn-primary">Generate Quiz</button>
+    </form>
+</div>
+
+<div id="quiz-container"></div>
+{% endblock %}
