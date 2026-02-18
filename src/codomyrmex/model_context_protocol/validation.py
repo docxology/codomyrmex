@@ -60,6 +60,10 @@ def validate_tool_arguments(
         ``valid=True`` with (optionally coerced) ``coerced_args`` on success,
         or ``valid=False`` with human-readable ``errors`` on failure.
     """
+    # Normalise None → empty dict
+    if arguments is None:
+        arguments = {}
+
     # Extract the actual JSON Schema object
     input_schema = _extract_input_schema(schema)
     if input_schema is None:
