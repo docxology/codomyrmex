@@ -27,6 +27,7 @@ import inspect
 import json
 import subprocess
 import sys
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -634,8 +635,26 @@ _PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
 # Dynamic Discovery Integration
 # ─────────────────────────────────────────────────────────────────────
 
+# NOTE: cache added v0.1.7; v0.1.9 adds _tool_invalidate_cache() MCP tool
+_DYNAMIC_TOOLS_CACHE: list[tuple[str, str, Any, dict[str, Any]]] | None = None
+_DYNAMIC_TOOLS_CACHE_LOCK = threading.Lock()
+
+
+def invalidate_tool_cache() -> None:
+    """Clear the dynamic tool discovery cache."""
+    global _DYNAMIC_TOOLS_CACHE
+    with _DYNAMIC_TOOLS_CACHE_LOCK:
+        _DYNAMIC_TOOLS_CACHE = None
+    logger.info("Dynamic tool cache invalidated")
+
+
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     """Scan all modules for @mcp_tool definitions AND auto-discover all public functions."""
+    global _DYNAMIC_TOOLS_CACHE
+    with _DYNAMIC_TOOLS_CACHE_LOCK:
+        if _DYNAMIC_TOOLS_CACHE is not None:
+            return _DYNAMIC_TOOLS_CACHE
+
     from codomyrmex.model_context_protocol.discovery import (
         discover_all_public_tools,
         discover_tools,
@@ -680,6 +699,10 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
             logger.debug(f"Auto-discovered tool: {tool.name}")
 
     logger.info(f"Total dynamic tools discovered: {len(tools)} ({len(auto_tools)} auto-discovered)")
+
+    with _DYNAMIC_TOOLS_CACHE_LOCK:
+        _DYNAMIC_TOOLS_CACHE = tools
+
     return tools
 
 
@@ -868,7 +891,7 @@ def get_skill_manifest() -> dict[str, Any]:
 
     return {
         "name": "Codomyrmex",
-        "version": "0.1.1",
+        "version": "0.1.7",  # TODO(v0.2.0): read from importlib.metadata.version("codomyrmex")
         "description": (
             "Modular coding workspace exposing 100+ modules for AI-assisted "
             "development, code analysis, testing, documentation, and automation."
@@ -1012,6 +1035,7 @@ __all__ = [
     "get_tool_registry",
     "get_skill_manifest",
     "call_tool",
+    "invalidate_tool_cache",
     "TOOL_COUNT",
     "RESOURCE_COUNT",
     "PROMPT_COUNT",

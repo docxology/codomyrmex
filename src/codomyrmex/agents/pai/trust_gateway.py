@@ -552,6 +552,7 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             f"Run /codomyrmexVerify or call verify_capabilities() first."
         )
 
+    # TODO(v0.1.9): audit log entry — tool_name, args_hash, result_status, trust_level, timestamp
     return call_tool(name, **kwargs)
 
 

@@ -321,3 +321,88 @@ class TestMCPClientTimeout:
                 await client.list_tools()
 
         asyncio.run(_test())
+
+
+# ======================================================================
+# Concurrency Tests — verify thread safety of concurrent tool calls
+# ======================================================================
+
+
+class _CountingTransport:
+    """Transport that tracks concurrent call count and returns echo results."""
+
+    def __init__(self):
+        self._active = 0
+        self._max_active = 0
+        self._total = 0
+        import threading
+        self._lock = threading.Lock()
+
+    async def send(self, message, *, timeout=30.0):
+        with self._lock:
+            self._active += 1
+            self._total += 1
+            self._max_active = max(self._max_active, self._active)
+
+        # Simulate brief work to allow overlap
+        await asyncio.sleep(0.01)
+
+        with self._lock:
+            self._active -= 1
+
+        method = message.get("method", "")
+        params = message.get("params", {})
+
+        if method == "tools/call":
+            tool_args = params.get("arguments", {})
+            return {
+                "jsonrpc": "2.0",
+                "id": message.get("id"),
+                "result": {
+                    "content": [{"type": "text", "text": json.dumps({"echo": tool_args.get("text", "")})}]
+                },
+            }
+
+        return {
+            "jsonrpc": "2.0",
+            "id": message.get("id"),
+            "result": {},
+        }
+
+    async def send_notification(self, message):
+        pass
+
+    async def close(self):
+        pass
+
+
+@pytest.mark.unit
+class TestMCPClientConcurrency:
+    """Test MCPClient thread safety under concurrent tool calls."""
+
+    def test_concurrent_call_tool(self):
+        """Run 10 concurrent call_tool invocations and verify no corruption."""
+        async def _test():
+            transport = _CountingTransport()
+            client = MCPClient(MCPClientConfig(name="concurrency-client"))
+            client._transport = transport
+            client._initialized = True
+
+            tasks = [
+                client.call_tool("echo", {"text": f"msg-{i}"})
+                for i in range(10)
+            ]
+            results = await asyncio.gather(*tasks)
+
+            # All 10 should return successfully
+            assert len(results) == 10
+            for i, result in enumerate(results):
+                assert "content" in result
+                data = json.loads(result["content"][0]["text"])
+                # Each result should be a valid echo response
+                assert "echo" in data
+
+            # Transport should have handled all 10 calls
+            assert transport._total == 10
+
+        asyncio.run(_test())

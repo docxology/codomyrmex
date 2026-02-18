@@ -237,6 +237,7 @@ class TestBenchmarkingScenarios:
         python_sorted = python_sort(test_data)
         assert bubble_sorted == python_sorted == sorted(test_data)
 
+    @pytest.mark.performance
     @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
                        reason="Performance module not available")
     def test_memory_intensive_benchmark(self):
