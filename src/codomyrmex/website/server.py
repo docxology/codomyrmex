@@ -24,11 +24,12 @@ from .education_provider import EducationDataProvider
 
 logger = get_logger(__name__)
 
-# Allowed origins for CORS/CSRF validation
+# Port and allowed origins (configurable via environment)
+_PORT = int(os.environ.get("CODOMYRMEX_PORT", "8787"))
 _ALLOWED_ORIGINS = frozenset(
     {
-        "http://localhost:8787",
-        "http://127.0.0.1:8787",
+        f"http://localhost:{_PORT}",
+        f"http://127.0.0.1:{_PORT}",
     }
 )
 
@@ -55,7 +56,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "http://localhost:8787")
+        self.send_header("Access-Control-Allow-Origin", f"http://localhost:{_PORT}")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
         self.send_header("Access-Control-Max-Age", "86400")
@@ -859,6 +860,16 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             )
             return
         difficulty = body.get("difficulty", "easy")
+        valid_difficulties = {"easy", "medium", "hard"}
+        if difficulty not in valid_difficulties:
+            self.send_json_response(
+                {
+                    "status": "error",
+                    "message": f"Invalid difficulty: must be one of {sorted(valid_difficulties)}",
+                },
+                status=400,
+            )
+            return
         count = body.get("count", 5)
         questions = self.education_provider.generate_quiz(topic, difficulty, count)
         self.send_json_response({"status": "ok", "data": questions})
@@ -1121,7 +1132,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
         self.send_header("Content-type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "http://localhost:8787")
+        self.send_header("Access-Control-Allow-Origin", f"http://localhost:{_PORT}")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Origin")
         self.send_header("Vary", "Origin")
