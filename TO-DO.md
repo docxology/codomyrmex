@@ -1,6 +1,6 @@
 # Codomyrmex Project Roadmap & To-Do
 
-**Status**: Active | **Last Updated**: February 18, 2026 | **Current**: v0.1.7 | **Target**: v0.4.0
+**Status**: Active | **Last Updated**: February 18, 2026 | **Current**: v0.1.8-dev (Streams 1-2 ✅) | **Target**: v0.4.0
 
 v0.1.8–0.1.9 harden foundations (MCP robustness, async orchestration, observability, PAI workflows, CLI diagnostics).
 v0.2.0 certifies production-grade agent infrastructure.
@@ -69,119 +69,95 @@ v0.3.0 layers cognitive architecture. v0.4.0 delivers swarm orchestration.
 >
 > - `json_formatter.py`, `logger_config.py`, `rotation.py`, `audit_logger.py`, `performance.py`. No WebSocket handler. No `enable_structured_json()`. No EventBus→logging bridge.
 
-### Stream 1: MCP Schema Validation & Error Envelope
+### ✅ Stream 1: MCP Schema Validation & Error Envelope
 
-**Goal**: Every MCP tool invocation validates inputs before dispatch, returns structured errors, and logs context for debugging.
+> **Completed**: Commit `bf23e0e5` | 47 new tests | 91/91 MCP tests pass
+>
+> **New files**: `errors.py` (130 lines — `MCPToolError`, `MCPErrorCode` enum with 8 codes, `FieldError`, factory helpers), `validation.py` (120 lines — `jsonschema` + fallback validator, type coercion str→int/bool/float).
+> **Modified**: `server.py` `_call_tool()` (pre-dispatch validation), `mcp_bridge.py` `call_tool()` (exception wrapping to `MCPToolError`), `__init__.py` (exports).
+> **Tests**: `test_mcp_validation.py` (20), `test_mcp_error_envelope.py` (16), `test_mcp_bridge_errors.py` (11).
 
-| Deliverable | File | Description |
-|-------------|------|-------------|
-| **Schema validation middleware** | `model_context_protocol/validation.py` (NEW, ~120 lines) | `validate_tool_arguments(tool_name: str, arguments: dict, schema: dict) → ValidationResult`. Uses `jsonschema.validate()` (dep: `jsonschema>=4.23.0` confirmed in `pyproject.toml:51`). Returns `ValidationResult(valid=bool, errors=list[str], coerced_args=dict)`. Supports type coercion for common cases (str→int, str→bool). |
-| **Server-side pre-validation** | `model_context_protocol/server.py` `_call_tool()` at line 286 | Before `self._tool_registry.execute(tool_call)`: retrieve tool schema via `_tool_registry.get(tool_name)`, call `validate_tool_arguments()`. On failure: return `MCPToolError(code="VALIDATION_ERROR", message=str, field_errors=[{field, constraint, value}])`. Never reach the handler. |
-| **Structured error envelope** | `model_context_protocol/errors.py` (NEW, ~80 lines) | `MCPToolError` dataclass: `code: str` (VALIDATION_ERROR, EXECUTION_ERROR, TIMEOUT, NOT_FOUND, RATE_LIMITED, INTERNAL), `message: str`, `tool_name: str`, `field_errors: list[dict]`, `suggestion: str | None`,`correlation_id: str`. Serializes to MCP`isError: true` with structured JSON in content text. |
-| **Client-side error parsing** | `model_context_protocol/client.py` `_send()` at line 100 | Parse `isError: true` responses into typed `MCPToolError` objects. Expose `MCPToolCallResult.error: MCPToolError | None` for programmatic inspection. Preserve backward compat: `MCPClientError` still raised for RPC-level errors; tool-level errors are surfaced in result. |
-| **Bridge error wrapping** | `agents/pai/mcp_bridge.py` `call_tool()` at line 820 | Wrap every tool handler in `try/except (ImportError, TimeoutError, jsonschema.ValidationError, Exception)`. Build `MCPToolError` with `tool_name`, `error_type` (from exception class), `module` (from tool name prefix), and `suggestion` (e.g., "Module 'X' is not installed. Run: uv sync --extra X"). Log via `logging.getLogger('codomyrmex.mcp')`. |
+### ✅ Stream 2: MCP Transport Robustness
 
-**Test Plan** (all zero-mock, in `tests/unit/mcp/`):
-
-| Test | File | What it validates |
-|------|------|-------------------|
-| `test_mcp_validation.py` | NEW, ~15 tests | Valid args pass, invalid type rejected, missing required field rejected, extra field ignored (additionalProperties), coercion str→int, deeply nested schema, array items schema, enum validation, pattern validation, min/max constraints |
-| `test_mcp_error_envelope.py` | NEW, ~10 tests | `MCPToolError` serialization/deserialization round-trip, all 6 error codes, field_errors present on validation failure, correlation_id uniqueness, backward compat with old `isError` clients |
-| `test_mcp_bridge_errors.py` | NEW, ~8 tests | ImportError→`EXECUTION_ERROR` with suggestion, TimeoutError→`TIMEOUT`, generic Exception→`INTERNAL`, ValidationError→`VALIDATION_ERROR` with field details, missing tool→`NOT_FOUND`, all errors include tool_name and module |
-
-### Stream 2: MCP Transport Robustness
-
-**Goal**: MCP client handles transient failures, detects unhealthy servers, and provides per-tool timeout control.
-
-| Deliverable | File | Description |
-|-------------|------|-------------|
-| **Health check** | `model_context_protocol/client.py` | `async def health_check(self) → HealthStatus`. Sends `initialize` if not yet initialized, else `tools/list`. Returns `HealthStatus(healthy=bool, latency_ms=float, server_info=dict, tools_count=int, error=str|None)`. Timeout: 5s (not configurable, fast-fail). |
-| **Transport retry** | `model_context_protocol/client.py` `_HTTPTransport.send()` | On `aiohttp.ClientResponseError` (5xx) or `asyncio.TimeoutError`: retry up to 3 times with exponential backoff (0.5s, 1s, 2s). On `aiohttp.ClientConnectionError`: retry once, then raise `MCPClientError("Server unreachable")`. Log each retry via `codomyrmex.mcp.transport` logger. |
-| **Connection pooling** | `model_context_protocol/client.py` `_HTTPTransport` | Share `aiohttp.ClientSession` across multiple `send()` calls (already done per instance). Add `TCPConnector(limit=20, ttl_dns_cache=300)` to control connection pool size and DNS cache. Add `keepalive_timeout=30`. |
-| **Per-tool timeout** | `model_context_protocol/server.py` `_call_tool()` | Tool schema may include `"x-timeout": <seconds>` field. If present, wrap `_tool_registry.execute()` in `asyncio.wait_for(coro, timeout=tool_timeout)`. Default: `MCPServerConfig.default_tool_timeout` (30s). On timeout: return `MCPToolError(code="TIMEOUT", tool_name=..., message=f"Tool {name} timed out after {t}s")`. |
-| **Circuit breaker** | `model_context_protocol/circuit_breaker.py` (NEW, ~100 lines) | `CircuitBreaker(failure_threshold=5, reset_timeout=60, half_open_max=2)`. States: CLOSED→OPEN→HALF_OPEN→CLOSED. Tracks failures per tool name. When OPEN: immediately return `MCPToolError(code="CIRCUIT_OPEN")` without calling handler. Integrates with server `_call_tool()`. Thread-safe with `threading.Lock`. |
-| **Rate limiter** | `model_context_protocol/server.py` | Wire existing `concurrency/rate_limiter.py` `RateLimiter` into `_call_tool()`. Config: `MCPServerConfig.rate_limit_per_second: int = 0` (0=disabled). When rate-limited: return `MCPToolError(code="RATE_LIMITED", message="...", suggestion="Retry after {delay}s")`. Per-tool overrides via `"x-rate-limit"` in tool schema. |
-
-**Test Plan**:
-
-| Test | File | What it validates |
-|------|------|-------------------|
-| `test_mcp_health_check.py` | NEW, ~6 tests | Healthy server returns latency + tool count, unhealthy server returns error, timeout on unresponsive server, health check before/after initialization |
-| `test_mcp_transport_retry.py` | NEW, ~8 tests | 503 retried and succeeds on 2nd attempt, 500 retried 3 times then fails, connection error retried once, non-retriable 400 not retried, retry delays follow exponential backoff (verify with time assertion ±100ms) |
-| `test_mcp_timeout_isolation.py` | NEW, ~6 tests | Slow tool (3s sleep) times out at 2s, fast tool succeeds at same 2s limit, default timeout applies when no `x-timeout`, `x-timeout` overrides default, timeout error includes tool name |
-| `test_mcp_circuit_breaker.py` | NEW, ~8 tests | 5 failures opens circuit, 6th call returns immediately without handler, circuit resets after timeout, half-open allows 2 probes, success in half-open closes circuit, failure in half-open re-opens, per-tool isolation (tool A open doesn't affect tool B) |
-| `test_mcp_rate_limiter.py` | NEW, ~5 tests | Under limit succeeds, over limit returns RATE_LIMITED, per-tool override, disabled by default, rate limit resets after window |
+> **Completed**: Commit `c1c7445b` | 47 new tests | 139/139 MCP tests pass (zero regressions)
+>
+> **New files**: `circuit_breaker.py` (232 lines — `CircuitBreaker` state machine CLOSED→OPEN→HALF_OPEN, async context manager, global registry, metrics), `rate_limiter.py` (162 lines — token-bucket algorithm, per-tool overrides).
+> **Client upgrades** (`client.py`): retry with exponential backoff (`max_retries`, `retry_delay`), `health_check()` ping/fallback, connection pooling via `aiohttp.TCPConnector` (`connection_pool_size`), per-call timeout on `call_tool()`, structured `MCPToolError` parsing from server responses.
+> **Server upgrades** (`server.py`): per-tool execution timeout via `asyncio.wait_for`, rate limiter integration (`RATE_LIMITED` error code), `MCPServerConfig` new fields (`default_tool_timeout`, `per_tool_timeouts`, `rate_limit_rate`, `rate_limit_burst`).
+> **Tests**: `test_circuit_breaker.py` (17), `test_rate_limiter.py` (12), `test_transport_robustness.py` (18). Updated `test_mcp_http_and_errors.py` for retry wrapping.
 
 ### Stream 3: MCP Discovery Hardening
 
 **Goal**: Tool discovery is fast, resilient to module failures, and supports incremental refresh.
 
+> **Post-Stream-2 Context**: Discovery (`discovery.py`, 146 lines) still imports all modules eagerly. `mcp_bridge.py` cache has no TTL. No error isolation — one broken module kills full scan. Circuit breaker and rate limiter are now available but not yet wired into discovery.
+
 | Deliverable | File | Description |
-|-------------|------|-------------|
-| **Error-isolated scanning** | `model_context_protocol/discovery.py` `scan_package()` | Wrap each module import in `try/except (ImportError, SyntaxError, Exception)`. Log failure via `codomyrmex.mcp.discovery` logger. Continue scanning remaining modules. Return `DiscoveryReport(tools=list, failed_modules=list[{module, error}], scan_duration_ms=float)`. |
-| **Cache with TTL** | `agents/pai/mcp_bridge.py` `_discover_dynamic_tools()` | Add `_CACHE_EXPIRY: float | None = None` alongside `_DYNAMIC_TOOLS_CACHE`. Default TTL: 300s (5 min). On cache hit: check`time.monotonic() <_CACHE_EXPIRY`. On miss/expired: rescan and update both`_DYNAMIC_TOOLS_CACHE` and `_CACHE_EXPIRY`. Configurable via`CODOMYRMEX_MCP_CACHE_TTL` env var. |
-| **Warm-up at server start** | `agents/pai/mcp_bridge.py` `create_codomyrmex_mcp_server()` | Before returning server: call `_discover_dynamic_tools()` eagerly. Log warm-up duration. Add `MCPServerConfig.warm_up: bool = True`. When `False`: lazy discovery on first tool call. |
-| **Incremental scan** | `model_context_protocol/discovery.py` | `MCPDiscovery.scan_module(module_name: str) → list[DiscoveredTool]`. Scans single module, merges results into existing registry. Used by `_tool_invalidate_cache()` to refresh one module without full rescan. |
-| **Discovery metrics** | `model_context_protocol/discovery.py` | `MCPDiscovery.get_metrics() → DiscoveryMetrics` dataclass: `total_tools: int`, `scan_duration_ms: float`, `failed_modules: list[str]`, `modules_scanned: int`, `cache_hits: int`, `last_scan_time: datetime`. Exposed as MCP resource `codomyrmex://discovery/metrics`. |
+| --- | --- | --- |
+| **Error-isolated scanning** | `discovery.py` `scan_package()` | `try/except` per module import. `DiscoveryReport(tools, failed_modules, scan_duration_ms)`. Continue on failure. |
+| **Cache with TTL** | `mcp_bridge.py` `_discover_dynamic_tools()` | `_CACHE_EXPIRY` + `time.monotonic()`. Default 300s. `CODOMYRMEX_MCP_CACHE_TTL` env var. |
+| **Warm-up** | `mcp_bridge.py` `create_codomyrmex_mcp_server()` | Eager `_discover_dynamic_tools()` at server start. `MCPServerConfig.warm_up: bool = True`. |
+| **Incremental scan** | `discovery.py` | `MCPDiscovery.scan_module(name)` — single module refresh without full rescan. |
+| **Discovery metrics** | `discovery.py` | `DiscoveryMetrics` dataclass. Exposed as MCP resource `codomyrmex://discovery/metrics`. |
 
-**Test Plan**:
-
-| Test | File | What it validates |
-|------|------|-------------------|
-| `test_mcp_discovery_resilience.py` | NEW, ~8 tests | Broken module import doesn't kill discovery, `DiscoveryReport.failed_modules` populated, all other modules still registered, SyntaxError handled, recursive import loop handled |
-| `test_mcp_cache_ttl.py` | NEW, ~6 tests | Cache hit within TTL, cache miss after TTL expiry, env var override, `invalidate_tool_cache()` forces immediate rescan, warm-up populates cache before first call |
-| `test_mcp_incremental_scan.py` | NEW, ~4 tests | Single module scan adds new tools without clearing others, rescanned module updates tool definitions, scan non-existent module returns empty list + error |
+**Tests**: `test_mcp_discovery_resilience.py` (~8), `test_mcp_cache_ttl.py` (~6), `test_mcp_incremental_scan.py` (~4).
 
 ### Stream 4: MCP Stress & Concurrency Tests
 
-**Goal**: Prove the MCP infrastructure handles concurrent load without deadlocks, data corruption, or performance degradation.
+**Goal**: Prove MCP handles concurrent load without deadlocks, data corruption, or performance degradation.
 
-| Test | File | What it validates |
-|------|------|-------------------|
-| `test_mcp_concurrent_tools.py` | NEW, ~8 tests | 50 concurrent `call_tool()` invocations via `asyncio.gather()` — all return correct results. 20 concurrent tool registrations — no duplicate entries, no dropped tools. 10 concurrent discovery scans — cache consistency maintained. Mixed read/write: concurrent `list_tools()` + `register_tool()` — no `RuntimeError` on dict mutation. |
-| `test_mcp_stress.py` | NEW, ~5 tests | 1000 sequential tool calls — throughput ≥100 calls/s. Memory usage stable (no leak) after 10K calls (check via `tracemalloc`). Server handles malformed JSON-RPC gracefully (no crash). Client handles malformed server response gracefully. Large tool argument (1MB JSON) doesn't crash or timeout. |
-| `test_mcp_transport_stress.py` | NEW, ~4 tests | HTTP transport: 50 concurrent requests to real `EphemeralServer`. Stdio transport: rapid message exchange (100 messages in 2s). Transport reconnect after server restart. Partial JSON response handling. |
-| `test_mcp_tool_isolation.py` | NEW, ~5 tests | Tool A throws exception — Tool B still callable. Tool A modifies global state — Tool B sees clean state (verify via `threading.local()`). Tool A takes 5s — Tool B returns immediately (timeout isolation). Destructive tool blocked while safe tool proceeds. |
+> **Post-Stream-2 Context**: Rate limiter and circuit breaker are implemented but not yet stress-tested under concurrent load. `ToolRegistry` is thread-safe (`_lock`). `_call_tool()` now has `asyncio.wait_for` wrapping — must verify no race conditions under concurrent timeout+success paths.
+
+| Test File | Coverage |
+| --- | --- |
+| `test_mcp_concurrent_tools.py` (~8) | 50 concurrent `call_tool()`, 20 concurrent registrations, mixed read/write |
+| `test_mcp_stress.py` (~5) | 1K sequential calls ≥100/s, memory stability (10K calls, `tracemalloc`), malformed JSON-RPC, 1MB argument |
+| `test_mcp_transport_stress.py` (~4) | 50 concurrent HTTP requests, rapid stdio (100 msgs/2s), reconnect, partial JSON |
+| `test_mcp_tool_isolation.py` (~5) | Exception isolation, global state isolation, timeout isolation |
 
 ### Stream 5: Orchestrator v2 (async-first)
 
-| Deliverable | File | Description |
-|-------------|------|-------------|
-| `AsyncParallelRunner` | `orchestrator/async_runner.py` (NEW) | Native `asyncio.TaskGroup` (3.11+) parallel execution. Inputs: list of async callables + optional dependency DAG. `asyncio.Semaphore` for concurrency limiting. `fail_fast` via `TaskGroup` exception propagation. Replaces thread-pool pattern in `parallel_runner.py` for async workloads. |
-| `Workflow.run()` upgrade | `orchestrator/workflow.py:279–450` | Replace `asyncio.gather()` with `TaskGroup` for structured concurrency within topological levels. Preserve existing `RetryPolicy` integration and conditional task execution. Add `workflow_id` correlation for observability. |
-| Unified retry | `orchestrator/retry_policy.py` | Wire `PipelineRetryExecutor` into `Workflow.run()` — currently `Workflow` has its own inline retry. Consolidate. Extract standalone `@with_retry` decorator from `PipelineRetryExecutor.execute_async()`. |
-| `AsyncScheduler` | `orchestrator/scheduler/scheduler.py` | Add `priority: int` to `Job` model. New `AsyncScheduler` variant using `TaskGroup`. Wire scheduler lifecycle events into `EventBus`. |
+> **Post-Stream-2 Context**: `ParallelRunner` uses `ThreadPoolExecutor`. `Workflow.run()` uses `asyncio.gather()` (not `TaskGroup`). `RetryPolicy` exists standalone but isn't wired into `Workflow`. Now that client has retry with exponential backoff, the orchestrator retry should be consolidated to share the same pattern.
 
-**Tests**: `test_async_runner.py` (10 tasks, DAG, error propagation, semaphore), `test_scheduler_async.py` (5 jobs, priority, triggers).
+| Deliverable | File | Description |
+| --- | --- | --- |
+| `AsyncParallelRunner` | `orchestrator/async_runner.py` (NEW) | Native `asyncio.TaskGroup` (3.11+), `Semaphore`, `fail_fast`. |
+| `Workflow.run()` upgrade | `orchestrator/workflow.py` | `TaskGroup` structured concurrency, `workflow_id` correlation. |
+| Unified retry | `orchestrator/retry_policy.py` | Wire `PipelineRetryExecutor` into `Workflow`. `@with_retry` decorator. |
+| `AsyncScheduler` | `orchestrator/scheduler/scheduler.py` | `priority: int`, `TaskGroup`, `EventBus` lifecycle events. |
+
+**Tests**: `test_async_runner.py` (10 tasks, DAG, semaphore), `test_scheduler_async.py` (5 jobs, priority, triggers).
 
 ### Stream 6: Observability Pipeline
 
-| Deliverable | File | Description |
-|-------------|------|-------------|
-| WebSocket log handler | `logging_monitoring/ws_handler.py` (NEW) | `WebSocketLogHandler(logging.Handler)` for real-time structured log streaming. `asyncio.Queue` bridges sync→async. Filters: level, module, event type. |
-| Structured JSON toggle | `logging_monitoring/logger_config.py` | `enable_structured_json(logger_name=None)`. `configure_all(level, json_mode, ws_endpoint)`. |
-| Event→log bridge | `logging_monitoring/event_bridge.py` (NEW) | `EventLoggingBridge` subscribes to `EventBus.subscribe_typed()`, logs agent/workflow/MCP events as structured JSON with correlation IDs. |
-| Scheduler events | `orchestrator/orchestrator_events.py` | Add `scheduler_job_started/completed/failed()` factories. |
-| **MCP observability** | `model_context_protocol/server.py` | Add `_on_tool_call` hook: logs tool name, args hash, duration, result status, error code. Emits `EventBus` event `MCP_TOOL_CALLED`. Metrics: `mcp_tool_call_total`, `mcp_tool_call_duration_seconds`, `mcp_tool_call_errors_total` (Prometheus-style counters stored in server state, exposed as resource `codomyrmex://mcp/metrics`). |
+> **Post-Stream-2 Context**: `server.py` `_call_tool()` now has rate limiter + per-tool timeout — ideal hooks for metrics. `MCPToolError` has `correlation_id` — can thread through to observability. `circuit_breaker.py` already has `metrics` property — wire to event bridge.
 
-**Tests**: `test_ws_handler.py`, `test_event_bridge.py`, `test_mcp_observability.py` (verify tool call metrics increment, duration tracked, error counter incremented on failure).
+| Deliverable | File | Description |
+| --- | --- | --- |
+| WebSocket log handler | `logging_monitoring/ws_handler.py` (NEW) | `WebSocketLogHandler(logging.Handler)`, `asyncio.Queue` sync→async bridge. |
+| Structured JSON toggle | `logging_monitoring/logger_config.py` | `enable_structured_json()`, `configure_all()`. |
+| Event→log bridge | `logging_monitoring/event_bridge.py` (NEW) | `EventLoggingBridge` → `EventBus.subscribe_typed()`. |
+| MCP observability | `server.py` | `_on_tool_call` hook, `MCP_TOOL_CALLED` event, Prometheus-style counters (`mcp_tool_call_total`, `_duration_seconds`, `_errors_total`). Resource `codomyrmex://mcp/metrics`. |
+
+**Tests**: `test_ws_handler.py`, `test_event_bridge.py`, `test_mcp_observability.py`.
 
 ### Stream 7: Performance Baselines
 
+> **Post-Stream-2 Context**: `circuit_breaker.py` and `rate_limiter.py` add overhead per call — must benchmark. Connection pooling should improve HTTP throughput — verify. `validation.py` runs `jsonschema.validate()` per call — measure overhead.
+
 | Deliverable | File | Description |
-|-------------|------|-------------|
-| CLI startup benchmark | `scripts/benchmark_startup.py` (NEW) | Measure `codomyrmex --help` wall-clock. Target: <500ms. |
-| Module-level lazy loading | 4 heavy `__init__.py` files | Defer `matplotlib`, `chromadb`, `pyarrow`, `sentence_transformers`. |
-| API benchmarks | `performance/benchmark.py` | Time: `create_codomyrmex_mcp_server()`, `get_tool_registry()`, `_discover_dynamic_tools()`, `Workflow.run()` (10-task DAG), `Scheduler.schedule()` (100 jobs). |
-| Import profiling | CI script | `python -X importtime` → top-20 heaviest. Target: total <200ms. |
-| **MCP discovery benchmark** | `tests/performance/test_mcp_performance.py` (NEW) | Cold discovery time <3s. Cached discovery <10ms. `call_tool()` overhead (excluding handler) <2ms. `create_codomyrmex_mcp_server()` <5s. |
+| --- | --- | --- |
+| CLI startup benchmark | `scripts/benchmark_startup.py` (NEW) | `codomyrmex --help` wall-clock < 500ms. |
+| Lazy loading | 4 heavy `__init__.py` files | Defer `matplotlib`, `chromadb`, `pyarrow`, `sentence_transformers`. |
+| API benchmarks | `performance/benchmark.py` | `create_codomyrmex_mcp_server()`, `get_tool_registry()`, `_discover_dynamic_tools()`, `Workflow.run()`. |
+| MCP benchmarks | `tests/performance/test_mcp_performance.py` (NEW) | Cold discovery < 3s. Cached < 10ms. `call_tool()` overhead < 2ms. Validation overhead < 1ms. Circuit breaker check < 0.1ms. |
 
 **v0.1.8 Gate Criteria**:
 
-- Full test suite 0 failures. MCP test count ≥200 (up from 137).
+- Full test suite 0 failures. MCP test count ≥250 (currently 139, target 111+ more from Streams 3-7).
 - Schema validation rejects 100% of invalid inputs in fuzz suite.
 - Circuit breaker prevents cascade failures under 50-concurrent-request load.
-- CLI startup <500ms, import time <200ms, MCP discovery (cached) <10ms.
+- CLI startup < 500ms, import time < 200ms, MCP discovery (cached) < 10ms.
 - Event bridge captures all lifecycle events with correlation IDs.
 
 ---
