@@ -100,9 +100,19 @@ class TestConnectionPool:
 
     def test_max_connections_timeout(self):
         """Should timeout when max connections reached."""
-        # Known deadlock in ConnectionPool._create_connection (re-entrant lock)
-        # when pool is at capacity. Skip until production code is fixed.
-        pytest.skip("ConnectionPool.acquire deadlocks due to re-entrant _lock in _create_connection")
+        factory = MockConnectionFactory()
+        pool = ConnectionPool(factory, config=PoolConfig(min_connections=1, max_connections=1))
+
+        # Acquire the only connection
+        conn = pool.acquire(timeout=1.0)
+        assert conn is not None
+
+        # Now pool is at capacity — next acquire should timeout
+        with pytest.raises(TimeoutError):
+            pool.acquire(timeout=0.2)
+
+        pool.release(conn)
+        pool.close()
 
     def test_stats(self):
         """Should track stats."""

@@ -17,4 +17,7 @@ from codomyrmex.performance.monitoring.performance_monitor import (  # noqa: F40
     track_resource_usage,
     _performance_monitor,
     HAS_PSUTIL,
+    clear_performance_metrics,
+    get_performance_stats,
+    performance_context,
 )

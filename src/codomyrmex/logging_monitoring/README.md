@@ -6,18 +6,24 @@ Centralized logging with configurable levels, formats, and outputs.
 
 ## Key Exports
 
-### Classes
-- **`AuditLogger`** — Specialized logger for recording immutable security and audit events.
-- **`JSONFormatter`** — Formatter that outputs log records as JSON objects.
-- **`LogContext`** — Context manager for correlation ID and contextual logging.
-- **`PerformanceLogger`** — Logger specialized for performance metrics and timing operations.
-- **`LogRotationManager`** — Configures and manages rotating file handlers for loggers.
+The following are exported from the top-level `__init__.py`:
 
 ### Functions
 - **`setup_logging()`** — Configure the logging system for the application.
-- **`get_logger()`** — Get a logger instance with the specified name.
-- **`log_with_context()`** — Log a message with additional context data.
-- **`create_correlation_id()`** — Generate a unique correlation ID for request tracing.
+- **`get_logger(name)`** — Get a logger instance with the specified name.
+
+### Submodule Classes (importable from subpackages)
+- **`AuditLogger`** — Specialized logger for recording immutable security and audit events (in `audit/`).
+- **`JSONFormatter`** — Formatter that outputs log records as JSON objects (in `formatters/`).
+- **`LogContext`** — Context manager for correlation ID and contextual logging (in `core/`).
+- **`PerformanceLogger`** — Logger specialized for performance metrics and timing operations (in `handlers/`).
+- **`LogRotationManager`** — Configures and manages rotating file handlers for loggers (in `handlers/`).
+
+### Submodule Functions (importable from subpackages)
+- **`log_with_context()`** — Log a message with additional context data (in `core/`).
+- **`create_correlation_id()`** — Generate a unique correlation ID for request tracing (in `core/`).
+
+**Note**: Only `setup_logging` and `get_logger` are re-exported at the package level. Other classes and functions must be imported from their respective subpackages (e.g., `from codomyrmex.logging_monitoring.core import LogContext`).
 
 ## Quick Start
 

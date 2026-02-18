@@ -1,9 +1,9 @@
 """Agents Module for Codomyrmex.
 
-This module provides integration with 11 agentic frameworks:
+This module provides integration with 12 agentic frameworks:
 
 - **API-based**: Claude, Codex, O1, DeepSeek, Qwen (extend ``APIAgentBase``)
-- **CLI-based**: Jules, OpenCode, Gemini, Mistral Vibe, Every Code (extend ``CLIAgentBase``)
+- **CLI-based**: Jules, OpenCode, OpenClaw, Gemini, Mistral Vibe, Every Code (extend ``CLIAgentBase``)
 - **Local**: Ollama (via ``llm/ollama/``)
 
 Integration:
@@ -16,7 +16,7 @@ Available classes:
 - AgentInterface: Abstract base class for all agents
 - AgentRequest, AgentResponse: Request/response data structures
 - AgentCapabilities: Enum of agent capabilities
-- AgentConfig: Configuration management for all 11 agents
+- AgentConfig: Configuration management for all 12 agents
 
 Available submodules:
 - agent_setup: Agent discovery, YAML config, interactive setup wizard
@@ -81,6 +81,11 @@ try:
     from codomyrmex.agents.mistral_vibe import MistralVibeClient
 except ImportError:
     MistralVibeClient = None
+
+try:
+    from codomyrmex.agents.openclaw import OpenClawClient
+except ImportError:
+    OpenClawClient = None
 
 try:
     from codomyrmex.agents.opencode import OpenCodeClient
@@ -204,6 +209,7 @@ def cli_commands():
             "gemini": GeminiClient,
             "jules": JulesClient,
             "mistral_vibe": MistralVibeClient,
+            "openclaw": OpenClawClient,
             "opencode": OpenCodeClient,
             "every_code": EveryCodeClient,
             "o1": O1Client,
@@ -251,6 +257,7 @@ __all__ = [
     "GeminiClient",
     "JulesClient",
     "MistralVibeClient",
+    "OpenClawClient",
     "OpenCodeClient",
     "ReactiveArchitecture",
     "DeliberativeArchitecture",

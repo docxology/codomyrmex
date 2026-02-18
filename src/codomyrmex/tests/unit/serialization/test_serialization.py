@@ -40,10 +40,12 @@ except ImportError:
     AVRO_AVAILABLE = False
 
 try:
-    import pandas
-    import pyarrow
+    import pandas as _pd
+    import pyarrow  # noqa: F401
+    # Verify pandas can actually use pyarrow for parquet (version compat check)
+    _pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
     PARQUET_AVAILABLE = True
-except ImportError:
+except (ImportError, Exception):
     PARQUET_AVAILABLE = False
 
 # Import serialization module and components
@@ -519,6 +521,7 @@ class TestAvroSerialization:
 # Parquet Serialization Tests
 # ==============================================================================
 
+@pytest.mark.skipif(not PARQUET_AVAILABLE, reason="pyarrow/pandas parquet support not available")
 class TestParquetSerialization:
     """Tests for Apache Parquet serialization."""
 

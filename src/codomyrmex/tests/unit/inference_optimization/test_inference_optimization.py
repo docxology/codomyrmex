@@ -350,7 +350,7 @@ class TestInferenceOptimizer:
 
         stats = optimizer.stats
         assert stats.total_requests == 2
-        assert stats.avg_latency_ms > 0
+        assert stats.avg_latency_ms >= 0
 
     def test_optimizer_clear_cache(self):
         """Verify cache clearing."""

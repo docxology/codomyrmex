@@ -217,7 +217,7 @@ docker-run:
 
 # Git workflow helpers
 git-status:
-	git status
+	uv run pre-commit run --all-files
 
 git-clean:
 	git clean -fd

@@ -35,8 +35,22 @@ def _init_bare_repo(path: Path) -> None:
     )
 
 
-def _init_repo_with_commit(path: Path) -> None:
-    """Create a git repo with a single commit at *path*."""
+def _default_branch(path: Path) -> str:
+    """Return the default branch name (e.g. 'master' or 'main') for a repo."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=str(path),
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip() or "master"
+
+
+def _init_repo_with_commit(path: Path) -> str:
+    """Create a git repo with a single commit at *path*.
+
+    Returns the default branch name (e.g. ``'master'`` or ``'main'``).
+    """
     path.mkdir(parents=True, exist_ok=True)
     subprocess.run(["git", "init"], cwd=str(path), capture_output=True, check=True)
     subprocess.run(
@@ -53,6 +67,7 @@ def _init_repo_with_commit(path: Path) -> None:
         ["git", "commit", "-m", "init"],
         cwd=str(path), capture_output=True, check=True,
     )
+    return _default_branch(path)
 
 
 # ---- Tests ----
@@ -76,10 +91,10 @@ def test_check_upstream_status_not_exists(temp_dir):
 def test_clone_upstream(temp_dir):
     """Test cloning upstream repository from a local bare repo."""
     bare = temp_dir / "bare_origin.git"
-    _init_repo_with_commit(bare)
+    branch = _init_repo_with_commit(bare)
 
     upstream_dir = temp_dir / "skills" / "upstream"
-    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync = SkillSync(upstream_dir, str(bare), branch)
 
     result = sync.clone_upstream()
     assert result is True
@@ -90,13 +105,13 @@ def test_clone_upstream(temp_dir):
 def test_clone_upstream_force(temp_dir):
     """Test force-cloning upstream repository."""
     bare = temp_dir / "bare_origin.git"
-    _init_repo_with_commit(bare)
+    branch = _init_repo_with_commit(bare)
 
     upstream_dir = temp_dir / "skills" / "upstream"
     upstream_dir.mkdir(parents=True, exist_ok=True)
     (upstream_dir / "stale_file.txt").write_text("stale")
 
-    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync = SkillSync(upstream_dir, str(bare), branch)
 
     result = sync.clone_upstream(force=True)
     assert result is True
@@ -107,10 +122,10 @@ def test_clone_upstream_force(temp_dir):
 def test_pull_upstream(temp_dir):
     """Test pulling upstream changes from a real cloned repo."""
     bare = temp_dir / "bare_origin.git"
-    _init_repo_with_commit(bare)
+    branch = _init_repo_with_commit(bare)
 
     upstream_dir = temp_dir / "skills" / "upstream"
-    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync = SkillSync(upstream_dir, str(bare), branch)
     sync.clone_upstream()
 
     result = sync.pull_upstream()
@@ -121,12 +136,12 @@ def test_pull_upstream(temp_dir):
 def test_pull_upstream_not_git(temp_dir):
     """Test pulling when directory exists but is not a git repo."""
     bare = temp_dir / "bare_origin.git"
-    _init_repo_with_commit(bare)
+    branch = _init_repo_with_commit(bare)
 
     upstream_dir = temp_dir / "skills" / "upstream"
     upstream_dir.mkdir(parents=True)
     # Directory exists but is NOT a git repo → should re-clone
-    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync = SkillSync(upstream_dir, str(bare), branch)
 
     result = sync.pull_upstream()
     assert result is True
@@ -136,12 +151,13 @@ def test_pull_upstream_not_git(temp_dir):
 def test_get_upstream_version(temp_dir):
     """Test getting upstream version (commit hash)."""
     bare = temp_dir / "bare_origin.git"
-    _init_repo_with_commit(bare)
+    branch = _init_repo_with_commit(bare)
 
     upstream_dir = temp_dir / "skills" / "upstream"
-    sync = SkillSync(upstream_dir, str(bare), "main")
+    sync = SkillSync(upstream_dir, str(bare), branch)
     sync.clone_upstream()
 
     version = sync.get_upstream_version()
     assert isinstance(version, str)
     assert len(version) >= 7  # short SHA or full
+

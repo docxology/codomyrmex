@@ -29,6 +29,13 @@ from .schemas.mcp_schemas import (
 
 # MCP Server
 from .server import MCPServer, MCPServerConfig
+from .main import main, run_server
+
+# MCP Decorators
+from .decorators import mcp_tool
+
+# MCP Client
+from .client import MCPClient, MCPClientConfig, MCPClientError
 
 # Shared schemas for cross-module interop
 try:
@@ -74,11 +81,17 @@ __all__ = [
     "MCPToolResult",
     "MCPServer",
     "MCPServerConfig",
+    "mcp_tool",
+    "MCPClient",
+    "MCPClientConfig",
+    "MCPClientError",
     "schemas",
     "adapters",
     "validators",
     "discovery",
     "cli_commands",
+    "main",
+    "run_server",
 ]
 
 

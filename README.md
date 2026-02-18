@@ -1,9 +1,9 @@
 # Codomyrmex
 
-**Version**: v0.1.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.6 | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-0.1.6-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -11,12 +11,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 78 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 82+ specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 78 independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 82+ independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -68,7 +68,7 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | Guide | Description |
 |-------|-------------|
 | [**Architecture**](docs/project/architecture.md) | System design and principles |
-| [**Module Overview**](docs/modules/overview.md) | Understanding the 78 module system |
+| [**Module Overview**](docs/modules/overview.md) | Understanding the module system |
 | [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
 | [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
 
@@ -140,7 +140,7 @@ uv run scripts/documentation/examples/advanced_workflow.py
 
 **Quick Links:**
 
-- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all 78 modules
+- 📚 **[Source Code](src/codomyrmex/README.md)** - Browse all modules
 - 📖 **[Full Documentation](docs/)** - Complete documentation
 - 🎯 **[Module Documentation](docs/modules/)** - Per-module guides
 - 💻 **[Scripts](scripts/)** - Utility and automation scripts
@@ -211,7 +211,6 @@ graph TB
     end
 
     subgraph buildDeploy ["Module Layer - Build & Deploy"]
-        Build["Build Synthesis"]
         Git["Git Operations"]
         Docs["Documentation Generation"]
         APIDocs["API Documentation"]
@@ -237,12 +236,14 @@ graph TB
 
     subgraph extensions ["Module Layer - Extensions"]
         ModTemplate["Module Template"]
-        Tools["Utility Tools"]
+        ToolUse["Tool Use"]
         Meme["Meme (Info Dynamics)"]
         SysDiscovery["System Discovery"]
         Cerebrum["Cerebrum (Reasoning)"]
         FPF["FPF (Functional)"]
         IDE["IDE Integration"]
+        Networks["Networks"]
+        Simulation["Simulation"]
     end
 
     subgraph foundation ["Foundation Layer"]
@@ -259,7 +260,7 @@ graph TB
     %% Service Layer connections
     Discovery --> AICode
     Discovery --> StaticAnalysis
-    Discovery --> Build
+    Discovery --> CICDAuto
     Status --> DataViz
     Terminal --> Shell
 
@@ -268,36 +269,31 @@ graph TB
     AICode --> MCP
     AICode --> Ollama
     AICode --> LLM
-    StaticAnalysis --> Build
+    StaticAnalysis --> CICDAuto
     StaticAnalysis --> PatternMatch
     StaticAnalysis --> Coding
     StaticAnalysis --> Security
     PatternMatch --> AICode
     PatternMatch --> Coding
     Perf --> Coding
-    Perf --> Build
     Perf --> CICDAuto
-    Build --> Git
-    Build --> Docs
-    Build --> APIDocs
-    Build --> APIStd
-    Build --> CICDAuto
-    Build --> Container
+    CICDAuto --> Git
+    CICDAuto --> Docs
+    CICDAuto --> Container
     Docs --> StaticAnalysis
     APIDocs --> APIStd
-    CICDAuto --> Build
     CICDAuto --> Security
     Container --> PhysMgmt
     Container --> Events
     DataViz --> Spatial
-    Database --> Build
+    Database --> CICDAuto
     Database --> Events
     ConfigMgmt --> Environment
     Events --> PluginSys
     PluginSys --> ModTemplate
     SysDiscovery --> ModTemplate
-    SysDiscovery --> Tools
-    Meme --> Tools
+    SysDiscovery --> ToolUse
+    Meme --> ToolUse
     Meme --> Events
 
     %% Foundation connections (all modules depend on foundation)
@@ -306,7 +302,6 @@ graph TB
     Coding -.-> Logging
     Security -.-> Logging
     Perf -.-> Logging
-    Build -.-> Logging
     Git -.-> Logging
     Docs -.-> Logging
     APIDocs -.-> Logging
@@ -321,7 +316,7 @@ graph TB
     Events -.-> Logging
     PluginSys -.-> Logging
     ModTemplate -.-> Logging
-    Tools -.-> Logging
+    ToolUse -.-> Logging
     SysDiscovery -.-> Logging
     Discovery -.-> Logging
     Status -.-> Logging
@@ -332,7 +327,6 @@ graph TB
     Coding -.-> Environment
     Security -.-> Environment
     Perf -.-> Environment
-    Build -.-> Environment
     Git -.-> Environment
     Docs -.-> Environment
     APIDocs -.-> Environment
@@ -347,7 +341,7 @@ graph TB
     Events -.-> Environment
     PluginSys -.-> Environment
     ModTemplate -.-> Environment
-    Tools -.-> Environment
+    ToolUse -.-> Environment
     SysDiscovery -.-> Environment
     Discovery -.-> Environment
     Status -.-> Environment
@@ -389,7 +383,6 @@ graph TD
     end
 
     subgraph service ["Service Layer"]
-        BuildSynth["build_synthesis"]
         Documentation["documentation"]
         API["api"]
         CICD["ci_cd_automation"]
@@ -407,7 +400,9 @@ graph TD
         Meme["meme"]
         Events["events"]
         PluginSys["plugin_system"]
-        Tools["tools"]
+        ToolUse["tool_use"]
+        Networks["networks"]
+        Simulation["simulation"]
     end
 
     %% Foundation dependencies (minimal)
@@ -440,7 +435,6 @@ graph TD
     Security --> Coding
 
     %% Service layer dependencies
-    Logging --> BuildSynth
     Logging --> Documentation
     Logging --> API
     Logging --> CICD
@@ -450,27 +444,23 @@ graph TD
     Logging --> Logistics
     Logging --> PhysMgmt
 
-    Env --> BuildSynth
     Env --> CICD
     Env --> Container
     Env --> ConfigMgmt
     Env --> Database
     Env --> PhysMgmt
 
-    Agents --> BuildSynth
+    Agents --> CICD
     Agents --> Documentation
     Agents --> Logistics
 
-    StaticAnalysis --> BuildSynth
     StaticAnalysis --> CICD
 
-    Coding --> BuildSynth
     Coding --> CICD
 
     DataViz --> Documentation
     DataViz --> API
 
-    GitOps --> BuildSynth
     GitOps --> CICD
     GitOps --> Logistics
 
@@ -480,7 +470,6 @@ graph TD
     Performance --> CICD
     Performance --> Container
 
-    BuildSynth --> Logistics
     Documentation --> Logistics
     CICD --> Logistics
     Container --> Logistics
@@ -493,7 +482,9 @@ graph TD
     Logging --> Spatial
     Logging --> Events
     Logging --> PluginSys
-    Logging --> Tools
+    Logging --> ToolUse
+    Logging --> Networks
+    Logging --> Simulation
 
     Env --> SysDiscovery
     Env --> ModuleTemplate
@@ -501,12 +492,12 @@ graph TD
     Env --> PluginSys
 
     SysDiscovery --> ModuleTemplate
-    SysDiscovery --> Tools
+    SysDiscovery --> ToolUse
     DataViz --> Spatial
     Events --> PluginSys
     PluginSys --> ModuleTemplate
     Meme --> Events
-    Meme --> Tools
+    Meme --> ToolUse
 ```
 
 ### Workflow Execution Architecture
@@ -640,7 +631,7 @@ flowchart TD
     Modules --> Dev{Development Tasks}
 
     Dev -->|Code Analysis| Analysis["Static Analysis Code Review"]
-    Dev -->|Build & Deploy| Build["Build Synthesis CI/CD Automation"]
+    Dev -->|Build & Deploy| Build["CI/CD Automation & Deployment"]
     Dev -->|AI Assistance| AI["AI Code Editing Pattern Matching"]
     Dev -->|Visualization| Viz["Data Visualization 3D Modeling"]
     Dev -->|Infrastructure| Infra["Container Management Database Operations"]
@@ -701,7 +692,6 @@ graph TD
     subgraph serviceLayer ["Service Layer"]
         AICodeEditing["AI Code Editing"]
         Documentation["Documentation Generation"]
-        BuildSynthesis["Build Synthesis"]
         StaticAnalysis["Static Analysis & Quality"]
         Orchestrator["Orchestrator"]
         CICDAutomation["CI/CD Automation"]
@@ -747,22 +737,18 @@ graph TD
     AICodeEditing -.-> PatternMatching
 
     Documentation -.-> LoggingMonitoring
-    Documentation -.-> BuildSynthesis
+    Documentation -.-> CICDAutomation
     Documentation -.-> StaticAnalysis
-
-    BuildSynthesis -.-> StaticAnalysis
-    BuildSynthesis -.-> LoggingMonitoring
-    BuildSynthesis -.-> GitOperations
 
     StaticAnalysis -.-> LoggingMonitoring
     StaticAnalysis -.-> PatternMatching
     StaticAnalysis -.-> CodeReview
 
     Orchestrator -.-> LoggingMonitoring
-    Orchestrator -.-> BuildSynthesis
+    Orchestrator -.-> CICDAutomation
     Orchestrator -.-> Documentation
 
-    CICDAutomation -.-> BuildSynthesis
+    CICDAutomation -.-> GitOperations
     CICDAutomation -.-> SecurityAudit
     CICDAutomation -.-> LoggingMonitoring
 
@@ -773,7 +759,7 @@ graph TD
     Containerization -.-> LoggingMonitoring
 
     DatabaseManagement -.-> LoggingMonitoring
-    DatabaseManagement -.-> BuildSynthesis
+    DatabaseManagement -.-> CICDAutomation
 
     ConfigManagement -.-> EnvironmentSetup
     ConfigManagement -.-> LoggingMonitoring
@@ -813,10 +799,10 @@ Primary capabilities for development workflows:
 | Module | Purpose | Key Features |
 | :--- | :--- | :--- |
 | [**agents**](src/codomyrmex/agents/) | Agentic framework integrations | AI code editing, task management, various providers |
-| [**static_analysis**](src/codomyrmex/static_analysis/) | Code quality analysis | Linting, security scanning, complexity metrics |
+| [**static_analysis**](src/codomyrmex/coding/static_analysis/) | Code quality analysis | Linting, security scanning, complexity metrics |
 | [**coding**](src/codomyrmex/coding/) | Code execution & review | Safe sandbox execution, automated code review |
 | [**data_visualization**](src/codomyrmex/data_visualization/) | Charts and plots | Static/interactive plots, multiple formats |
-| [**pattern_matching**](src/codomyrmex/pattern_matching/) | Code pattern analysis | Pattern recognition, dependency analysis |
+| [**pattern_matching**](src/codomyrmex/coding/pattern_matching/) | Code pattern analysis | Pattern recognition, dependency analysis |
 | [**git_operations**](src/codomyrmex/git_operations/) | Version control automation | Git workflows, branch management, commit automation |
 | [**security**](src/codomyrmex/security/) | Security scanning | Vulnerability detection, compliance checking, threat assessment |
 | [**llm**](src/codomyrmex/llm/) | LLM infrastructure | Model management, local/remote providers (Ollama), benchmarking |
@@ -828,7 +814,6 @@ Higher-level services that orchestrate core modules:
 
 | Module | Purpose | Key Features |
 | :--- | :--- | :--- |
-| [**build_synthesis**](src/codomyrmex/build_synthesis/) | Build automation | Multi-language builds, artifact generation, pipelines |
 | [**documentation**](src/codomyrmex/documentation/) | Documentation generation | Website generation, API docs, tutorial creation |
 | [**api**](src/codomyrmex/api/) | API infrastructure | OpenAPI/Swagger specs, standardization, documentation |
 | [**ci_cd_automation**](src/codomyrmex/ci_cd_automation/) | CI/CD pipeline management | Pipeline orchestration, deployment automation |
@@ -849,11 +834,11 @@ Advanced capabilities for specific domains:
 | [**module_template**](src/codomyrmex/module_template/) | Module creation templates | Scaffold generation, template management |
 | [**events**](src/codomyrmex/events/) | Event system | Message passing, pub/sub patterns, event logging |
 | [**plugin_system**](src/codomyrmex/plugin_system/) | Plugin architecture | Extension loading, plugin management, interfaces |
-| [**tools**](src/codomyrmex/tools/) | Utility tools | Development helpers, analysis utilities |
+| [**tool_use**](src/codomyrmex/tool_use/) | Tool use | Tool invocation, management, and orchestration |
 
 ## Explore Modules
 
-Codomyrmex includes **78 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **82+ modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -871,28 +856,26 @@ Essential infrastructure used by all other modules:
 Primary capabilities for development workflows:
 
 - **[agents](src/codomyrmex/agents/)** - Agentic framework integrations with AI code editing, task management, and various providers
-- **[static_analysis](src/codomyrmex/static_analysis/)** - Code quality analysis with linting, security scanning, and complexity metrics
+- **[static_analysis](src/codomyrmex/coding/static_analysis/)** - Code quality analysis with linting, security scanning, and complexity metrics
 - **[coding](src/codomyrmex/coding/)** - Code execution and review with safe sandbox execution and automated code review
 - **[data_visualization](src/codomyrmex/data_visualization/)** - Charts and plots with static/interactive plots and multiple formats
-- **[pattern_matching](src/codomyrmex/pattern_matching/)** - Code pattern analysis with pattern recognition and dependency analysis
+- **[pattern_matching](src/codomyrmex/coding/pattern_matching/)** - Code pattern analysis with pattern recognition and dependency analysis
 - **[git_operations](src/codomyrmex/git_operations/)** - Version control automation with Git workflows, branch management, and commit automation
 - **[security](src/codomyrmex/security/)** - Security scanning with vulnerability detection, compliance checking, and threat assessment
 - **[llm](src/codomyrmex/llm/)** - LLM infrastructure with model management, local/remote providers (Ollama), and benchmarking
 - **[performance](src/codomyrmex/performance/)** - Performance monitoring with profiling, optimization, and benchmarking
 - **[cache](src/codomyrmex/cache/)** - Multi-level caching with pluggable backends
-- **[metrics](src/codomyrmex/metrics/)** - Metrics collection and reporting
 - **[validation](src/codomyrmex/validation/)** - Input validation and schema enforcement
 - **[serialization](src/codomyrmex/serialization/)** - Data serialization formats
 - **[utils](src/codomyrmex/utils/)** - Common utility functions
 - **[auth](src/codomyrmex/auth/)** - Authentication and authorization
 - **[templating](src/codomyrmex/templating/)** - Template rendering engine
-- **[tree_sitter](src/codomyrmex/tree_sitter/)** - Tree-sitter code parsing and analysis
+- **[prompt_engineering](src/codomyrmex/prompt_engineering/)** - Prompt engineering and optimization
 
 ### Service Layer
 
 Higher-level services that orchestrate core modules:
 
-- **[build_synthesis](src/codomyrmex/build_synthesis/)** - Build automation with multi-language builds, artifact generation, and pipelines
 - **[documentation](src/codomyrmex/documentation/)** - Documentation generation with website generation, API docs, and tutorial creation
 - **[api](src/codomyrmex/api/)** - API infrastructure with OpenAPI/Swagger specs, standardization, and documentation
 - **[ci_cd_automation](src/codomyrmex/ci_cd_automation/)** - CI/CD pipeline management with pipeline orchestration and deployment automation
@@ -903,8 +886,6 @@ Higher-level services that orchestrate core modules:
 - **[orchestrator](src/codomyrmex/orchestrator/)** - Workflow execution and task orchestration
 - **[testing](src/codomyrmex/testing/)** - Test framework and automation
 - **[deployment](src/codomyrmex/deployment/)** - Deployment automation and strategies
-- **[migration](src/codomyrmex/migration/)** - Data and schema migration tools
-- **[notification](src/codomyrmex/notification/)** - Alert and notification delivery
 - **[collaboration](src/codomyrmex/collaboration/)** - Team collaboration tools
 - **[concurrency](src/codomyrmex/concurrency/)** - Concurrent execution and threading
 
@@ -918,7 +899,7 @@ Advanced capabilities for specific domains:
 - **[module_template](src/codomyrmex/module_template/)** - Module creation templates with scaffold generation and template management
 - **[events](src/codomyrmex/events/)** - Event system with message passing, pub/sub patterns, and event logging
 - **[plugin_system](src/codomyrmex/plugin_system/)** - Plugin architecture with extension loading, plugin management, and interfaces
-- **[tools](src/codomyrmex/tools/)** - Utility tools with development helpers and analysis utilities
+- **[tool_use](src/codomyrmex/tool_use/)** - Tool invocation, management, and orchestration
 - **[cerebrum](src/codomyrmex/cerebrum/)** - Advanced reasoning and inference engine
 - **[fpf](src/codomyrmex/fpf/)** - Functional Programming Framework
 - **[ide](src/codomyrmex/ide/)** - IDE integration and protocol support
@@ -934,13 +915,9 @@ Advanced AI/ML capabilities and intelligent systems:
 
 - **[agentic_memory](src/codomyrmex/agentic_memory/)** - Long-term agent memory and recall
 - **[graph_rag](src/codomyrmex/graph_rag/)** - Graph-based retrieval augmented generation
-- **[inference_optimization](src/codomyrmex/inference_optimization/)** - LLM inference speed and cost optimization
 - **[model_ops](src/codomyrmex/model_ops/)** - ML model lifecycle management
-- **[model_registry](src/codomyrmex/model_registry/)** - Model versioning and registry
-- **[feature_store](src/codomyrmex/feature_store/)** - Feature management for ML pipelines
 - **[evolutionary_ai](src/codomyrmex/evolutionary_ai/)** - Evolutionary algorithms and genetic programming
-- **[prompt_testing](src/codomyrmex/prompt_testing/)** - Prompt quality testing and evaluation
-- **[multimodal](src/codomyrmex/multimodal/)** - Multi-modal AI (text, image, audio)
+- **[prompt_engineering](src/codomyrmex/prompt_engineering/)** - Prompt engineering and optimization
 
 ### Security & Cognitive Layer
 
@@ -951,7 +928,7 @@ Identity, privacy, and cognitive defense systems:
 - **[defense](src/codomyrmex/defense/)** - Active defense against cognitive exploits
 - **[market](src/codomyrmex/market/)** - Anonymous economic coordination and reverse auctions
 - **[privacy](src/codomyrmex/privacy/)** - Data minimization and mixnet routing
-- **[cost_management](src/codomyrmex/cost_management/)** - Cost tracking and budget management
+- **[finance](src/codomyrmex/finance/)** - Financial operations and tracking
 
 ### Media & Content Layer
 
@@ -971,10 +948,7 @@ Media processing and content management:
 Monitoring, telemetry, and operational tooling:
 
 - **[telemetry](src/codomyrmex/telemetry/)** - Telemetry data collection
-- **[observability_dashboard](src/codomyrmex/observability_dashboard/)** - Monitoring dashboards
-- **[data_lineage](src/codomyrmex/data_lineage/)** - Data provenance tracking
 - **[feature_flags](src/codomyrmex/feature_flags/)** - Feature flag management
-- **[workflow_testing](src/codomyrmex/workflow_testing/)** - Workflow integration testing
 - **[cli](src/codomyrmex/cli/)** - Command-line interface (entry point)
 - **[embodiment](src/codomyrmex/embodiment/)** - Physical/robotic embodiment interfaces
 
@@ -985,26 +959,26 @@ Monitoring, telemetry, and operational tooling:
 | Category | Modules |
 | :--- | :--- |
 | **Foundation** | [logging_monitoring](src/codomyrmex/logging_monitoring/) • [environment_setup](src/codomyrmex/environment_setup/) • [model_context_protocol](src/codomyrmex/model_context_protocol/) • [terminal_interface](src/codomyrmex/terminal_interface/) |
-| **Core** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) • [static_analysis](src/codomyrmex/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/pattern_matching/) • [security](src/codomyrmex/security/) • [data_visualization](src/codomyrmex/data_visualization/) • [git_operations](src/codomyrmex/git_operations/) • [performance](src/codomyrmex/performance/) • [cache](src/codomyrmex/cache/) • [metrics](src/codomyrmex/metrics/) • [validation](src/codomyrmex/validation/) • [serialization](src/codomyrmex/serialization/) • [utils](src/codomyrmex/utils/) • [auth](src/codomyrmex/auth/) • [templating](src/codomyrmex/templating/) • [tree_sitter](src/codomyrmex/tree_sitter/) |
-| **Service** | [build_synthesis](src/codomyrmex/build_synthesis/) • [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) • [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [logistics](src/codomyrmex/logistics/) • [orchestrator](src/codomyrmex/orchestrator/) • [testing](src/codomyrmex/testing/) • [deployment](src/codomyrmex/deployment/) • [migration](src/codomyrmex/migration/) • [notification](src/codomyrmex/notification/) • [collaboration](src/codomyrmex/collaboration/) • [concurrency](src/codomyrmex/concurrency/) |
-| **Specialized** | [spatial](src/codomyrmex/spatial/) • [physical_management](src/codomyrmex/physical_management/) • [system_discovery](src/codomyrmex/system_discovery/) • [module_template](src/codomyrmex/module_template/) • [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [tools](src/codomyrmex/tools/) • [cerebrum](src/codomyrmex/cerebrum/) • [fpf](src/codomyrmex/fpf/) • [ide](src/codomyrmex/ide/) • [cloud](src/codomyrmex/cloud/) • [networking](src/codomyrmex/networking/) • [scrape](src/codomyrmex/scrape/) • [encryption](src/codomyrmex/encryption/) • [compression](src/codomyrmex/compression/) |
-| **AI & Intelligence** | [agentic_memory](src/codomyrmex/agentic_memory/) • [graph_rag](src/codomyrmex/graph_rag/) • [inference_optimization](src/codomyrmex/inference_optimization/) • [model_ops](src/codomyrmex/model_ops/) • [model_registry](src/codomyrmex/model_registry/) • [feature_store](src/codomyrmex/feature_store/) • [evolutionary_ai](src/codomyrmex/evolutionary_ai/) • [prompt_testing](src/codomyrmex/prompt_testing/) • [multimodal](src/codomyrmex/multimodal/) |
-| **Security & Cognitive** | [identity](src/codomyrmex/identity/) • [wallet](src/codomyrmex/wallet/) • [defense](src/codomyrmex/defense/) • [market](src/codomyrmex/market/) • [privacy](src/codomyrmex/privacy/) • [cost_management](src/codomyrmex/cost_management/) |
+| **Core** | [agents](src/codomyrmex/agents/) • [llm](src/codomyrmex/llm/) • [static_analysis](src/codomyrmex/coding/static_analysis/) • [coding](src/codomyrmex/coding/) • [pattern_matching](src/codomyrmex/coding/pattern_matching/) • [security](src/codomyrmex/security/) • [data_visualization](src/codomyrmex/data_visualization/) • [git_operations](src/codomyrmex/git_operations/) • [performance](src/codomyrmex/performance/) • [cache](src/codomyrmex/cache/) • [validation](src/codomyrmex/validation/) • [serialization](src/codomyrmex/serialization/) • [utils](src/codomyrmex/utils/) • [auth](src/codomyrmex/auth/) • [templating](src/codomyrmex/templating/) • [prompt_engineering](src/codomyrmex/prompt_engineering/) |
+| **Service** | [documentation](src/codomyrmex/documentation/) • [api](src/codomyrmex/api/) • [ci_cd_automation](src/codomyrmex/ci_cd_automation/) • [containerization](src/codomyrmex/containerization/) • [database_management](src/codomyrmex/database_management/) • [config_management](src/codomyrmex/config_management/) • [logistics](src/codomyrmex/logistics/) • [orchestrator](src/codomyrmex/orchestrator/) • [testing](src/codomyrmex/testing/) • [deployment](src/codomyrmex/deployment/) • [collaboration](src/codomyrmex/collaboration/) • [concurrency](src/codomyrmex/concurrency/) |
+| **Specialized** | [spatial](src/codomyrmex/spatial/) • [physical_management](src/codomyrmex/physical_management/) • [system_discovery](src/codomyrmex/system_discovery/) • [module_template](src/codomyrmex/module_template/) • [events](src/codomyrmex/events/) • [plugin_system](src/codomyrmex/plugin_system/) • [tool_use](src/codomyrmex/tool_use/) • [cerebrum](src/codomyrmex/cerebrum/) • [fpf](src/codomyrmex/fpf/) • [ide](src/codomyrmex/ide/) • [cloud](src/codomyrmex/cloud/) • [networking](src/codomyrmex/networking/) • [networks](src/codomyrmex/networks/) • [simulation](src/codomyrmex/simulation/) • [scrape](src/codomyrmex/scrape/) • [encryption](src/codomyrmex/encryption/) • [compression](src/codomyrmex/compression/) |
+| **AI & Intelligence** | [agentic_memory](src/codomyrmex/agentic_memory/) • [graph_rag](src/codomyrmex/graph_rag/) • [model_ops](src/codomyrmex/model_ops/) • [evolutionary_ai](src/codomyrmex/evolutionary_ai/) • [prompt_engineering](src/codomyrmex/prompt_engineering/) |
+| **Security & Cognitive** | [identity](src/codomyrmex/identity/) • [wallet](src/codomyrmex/wallet/) • [defense](src/codomyrmex/defense/) • [market](src/codomyrmex/market/) • [privacy](src/codomyrmex/privacy/) • [finance](src/codomyrmex/finance/) |
 | **Media & Content** | [audio](src/codomyrmex/audio/) • [video](src/codomyrmex/video/) • [documents](src/codomyrmex/documents/) • [dark](src/codomyrmex/dark/) • [website](src/codomyrmex/website/) • [skills](src/codomyrmex/skills/) • [examples](src/codomyrmex/examples/) • [tests](src/codomyrmex/tests/) |
-| **Observability & Operations** | [telemetry](src/codomyrmex/telemetry/) • [observability_dashboard](src/codomyrmex/observability_dashboard/) • [data_lineage](src/codomyrmex/data_lineage/) • [feature_flags](src/codomyrmex/feature_flags/) • [workflow_testing](src/codomyrmex/workflow_testing/) • [cli](src/codomyrmex/cli/) • [embodiment](src/codomyrmex/embodiment/) |
+| **Observability & Operations** | [telemetry](src/codomyrmex/telemetry/) • [feature_flags](src/codomyrmex/feature_flags/) • [cli](src/codomyrmex/cli/) • [embodiment](src/codomyrmex/embodiment/) |
 
 ## Common Use Cases
 
 ### Development Workflows
 
-- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/static_analysis/) → [Code review](src/codomyrmex/coding/) → [Security scan](src/codomyrmex/security/)
-- **AI-Assisted Development**: [AI code editing](src/codomyrmex/agents/ai_code_editing/) with [pattern matching](src/codomyrmex/pattern_matching/) for code refactoring
-- **Build & Deploy**: [Build synthesis](src/codomyrmex/build_synthesis/) → [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
+- **Code Analysis Pipeline**: [Static analysis](src/codomyrmex/coding/static_analysis/) → [Code review](src/codomyrmex/coding/) → [Security scan](src/codomyrmex/security/)
+- **AI-Assisted Development**: [AI code editing](src/codomyrmex/agents/ai_code_editing/) with [pattern matching](src/codomyrmex/coding/pattern_matching/) for code refactoring
+- **Build & Deploy**: [CI/CD automation](src/codomyrmex/ci_cd_automation/) → [Container management](src/codomyrmex/containerization/)
 
 ### Research & Analysis
 
 - **Data Science Workflow**: [Coding](src/codomyrmex/coding/sandbox/) → [Data visualization](src/codomyrmex/data_visualization/) → [Performance monitoring](src/codomyrmex/performance/)
-- **System Exploration**: [System discovery](src/codomyrmex/system_discovery/) → [Pattern analysis](src/codomyrmex/pattern_matching/) → [Documentation generation](src/codomyrmex/documentation/)
+- **System Exploration**: [System discovery](src/codomyrmex/system_discovery/) → [Pattern analysis](src/codomyrmex/coding/pattern_matching/) → [Documentation generation](src/codomyrmex/documentation/)
 
 ### Production Operations
 
@@ -1019,9 +993,9 @@ See **[executable examples](src/codomyrmex/examples/)** for working demonstratio
 codomyrmex/
 ├── /src/codomyrmex/          # Core source modules
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
-│   ├── /src/codomyrmex/static_analysis/     # Code quality analysis
+│   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 78 modules total
+│   └── ...                  # 82+ modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -1052,7 +1026,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 94 Modules"]
+        CoreSrc["src/codomyrmex/ 80 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -1091,8 +1065,10 @@ Each module is self-contained with:
 - Own dependencies (managed in `pyproject.toml`)
 - Tests (`tests/`)
 - API documentation (`API_SPECIFICATION.md`)
-- Usage examples (`USAGE_EXAMPLES.md`)
-- Security considerations (`SECURITY.md`)
+- MCP tool definitions (`MCP_TOOL_SPECIFICATION.md`)
+- Agent integration (`AGENTS.md`)
+- Technical specification (`SPEC.md`)
+- PAI integration (`PAI.md`)
 
 See **[module system overview](docs/modules/overview.md)** for detailed module architecture and relationships.
 
@@ -1331,7 +1307,7 @@ graph TD
 
     subgraph infrastructureModules ["Infrastructure Modules"]
         GitOps["Git Operations: Version Control"]
-        BuildSynth["Build Synthesis: Multi-Language Builds"]
+        CICDAuto["CI/CD Automation: Builds & Deployment"]
         ContainerMgmt["Container Management: Docker, K8s"]
         DatabaseMgmt["Database Management: Migrations, Queries"]
     end
@@ -1356,12 +1332,12 @@ graph TD
     TaskScheduler --> Security
 
     AICode --> GitOps
-    StaticAnalysis --> BuildSynth
+    StaticAnalysis --> CICDAuto
     Code --> ContainerMgmt
     Security --> DatabaseMgmt
 
     GitOps --> DataVisualization
-    BuildSynth --> Documentation
+    CICDAuto --> Documentation
     ContainerMgmt --> Reporting
     DatabaseMgmt --> DataVisualization
 
@@ -1371,8 +1347,8 @@ graph TD
     %% Cross-module dependencies
     AICode -.->|"Code Review"| StaticAnalysis
     StaticAnalysis -.->|"Security Scan"| Security
-    BuildSynth -.->|"Container Build"| ContainerMgmt
-    GitOps -.->|"Version Control"| BuildSynth
+    CICDAuto -.->|"Container Build"| ContainerMgmt
+    GitOps -.->|"Version Control"| CICDAuto
 ```
 
 ### Development Workflow Architecture
@@ -1484,10 +1460,10 @@ graph TD
 
 ```mermaid
 pie title Module Development Status (February 2026)
-    "Production Ready" : 12
-    "Beta" : 8
-    "Alpha" : 6
-    "Planning" : 4
+    "Production Ready" : 15
+    "Beta" : 20
+    "Alpha" : 30
+    "Stub/Planning" : 15
 ```
 
 | Level | Description | Example Modules |
@@ -1499,9 +1475,9 @@ pie title Module Development Status (February 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~50K+ across 78 modules
+- **Lines of Code**: ~50K+ across 82+ modules
 - **Test Coverage**: ≥80% target (currently 75%)
-- **Module Count**: 78 core modules
+- **Module Count**: 80 core modules
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

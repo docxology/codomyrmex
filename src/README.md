@@ -1,16 +1,16 @@
 # src
 
-**Version**: v0.1.2 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.6 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 78 specialized modules for AI-assisted development workflows.
+Source code directory containing all Python packages and modules for the Codomyrmex platform. The main package `codomyrmex/` contains 80 specialized modules for AI-assisted development workflows.
 
 ## Directory Contents
 
 | Directory | Description |
 |-----------|-------------|
-| [**codomyrmex/**](codomyrmex/) | Main Python package with 78 modules |
+| [**codomyrmex/**](codomyrmex/) | Main Python package with 82+ modules |
 
 ### Key Files
 
@@ -23,7 +23,7 @@ Source code directory containing all Python packages and modules for the Codomyr
 
 ```
 src/
-├── codomyrmex/           # Main package (78 modules)
+├── codomyrmex/           # Main package (82+ modules)
 │   ├── agents/           # AI agent integrations
 │   ├── llm/              # LLM infrastructure
 │   ├── orchestrator/     # Workflow orchestration

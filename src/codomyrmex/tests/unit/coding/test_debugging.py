@@ -72,13 +72,12 @@ class TestDebugger:
 
         result = self.debugger.debug(source, "", stderr, 1)
         # The debugger may or may not produce a fix (depends on LLM availability),
-        # but it should not crash and should return something
+        # but it should not crash and should return a result or None
         # With no LLM client, patcher returns empty patches, so result may be None
-        # The important thing is the flow doesn't crash
-        assert True  # Flow completed without error
+        assert result is None or isinstance(result, dict)
 
     def test_debug_flow_no_error(self):
         """Test debug flow when exit code is 0 (no error)."""
         result = self.debugger.debug("print('ok')", "ok", "", 0)
-        # Should handle gracefully (no error to debug)
-        assert True  # Flow completed without error
+        # Should handle gracefully when there is no error to debug
+        assert result is None or isinstance(result, dict)

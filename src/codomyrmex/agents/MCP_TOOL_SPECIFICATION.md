@@ -4,7 +4,7 @@ This document outlines the specification for tools within the Agents module that
 
 ## 1. Overview
 
-The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 11 providers (5 API, 5 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
+The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 12 providers (5 API, 6 CLI, 1 local), parsing utilities, and discovery/health-probing via `AgentRegistry`.
 
 - **Configuration**: Agents may require API keys, model configurations, and capability settings.
 

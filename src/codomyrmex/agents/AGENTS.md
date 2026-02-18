@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Multi-provider agent framework with 11 provider integrations (5 API, 5 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
+Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 local), session management, response parsing, multi-agent pooling, evaluation, conversation history, and an interactive setup wizard. Core layer for intelligent automation workflows.
 
 ## Active Components
 

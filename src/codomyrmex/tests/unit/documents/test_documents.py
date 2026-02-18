@@ -1262,8 +1262,10 @@ class TestErrorHandling:
 
         try:
             write_document(doc, tmp_path / "output.txt")
-            assert True
+            # Successful write: verify the file was created
+            assert (tmp_path / "output.txt").exists()
         except DocumentWriteError:
+            # Write error is acceptable (e.g., format not supported)
             pass
 
     @pytest.mark.skipif(convert_document is None, reason="Document converter not available")

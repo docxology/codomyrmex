@@ -11,14 +11,22 @@ from .base import (
 )
 from .config import AgentConfig, get_config, reset_config, set_config
 from .exceptions import (
+    AgentConfigurationError,
     AgentError,
+    AgentTimeoutError,
     ClaudeError,
     CodexError,
     ConfigError,
+    ContextError,
+    EveryCodeError,
+    ExecutionError,
     GeminiError,
     JulesError,
+    MistralVibeError,
+    OpenClawError,
     OpenCodeError,
     SessionError,
+    ToolError,
 )
 from .messages import AgentMessage, MessageRole, ToolCall, ToolResult
 from .parsers import (
@@ -49,14 +57,22 @@ __all__ = [
     "reset_config",
     "set_config",
     # Exceptions
+    "AgentConfigurationError",
     "AgentError",
+    "AgentTimeoutError",
     "ClaudeError",
     "CodexError",
+    "ConfigError",
+    "ContextError",
+    "EveryCodeError",
+    "ExecutionError",
     "GeminiError",
     "JulesError",
+    "MistralVibeError",
+    "OpenClawError",
     "OpenCodeError",
-    "ConfigError",
     "SessionError",
+    "ToolError",
     # Messages
     "AgentMessage",
     "MessageRole",

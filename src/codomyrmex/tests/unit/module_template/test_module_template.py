@@ -112,8 +112,8 @@ class TestModuleTemplate:
         # for new modules by ensuring basic importability
         try:
             from codomyrmex import module_template
-            # If we get here, the template structure is valid
-            assert True
+            # Verify the template module was loaded and has expected attributes
+            assert hasattr(module_template, '__name__')
         except ImportError:
             # Template should be importable
             pytest.fail("Template module should be importable")

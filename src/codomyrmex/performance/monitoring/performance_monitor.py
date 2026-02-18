@@ -377,3 +377,39 @@ def track_resource_usage(operation: str):
             f"cpu_delta={cpu_used:+.1f}%, "
             f"memory_delta={memory_delta:+.1f}MB"
         )
+
+
+def clear_performance_metrics() -> None:
+    """Clear all metrics from the global performance monitor."""
+    _performance_monitor.clear_metrics()
+
+
+def get_performance_stats(function_name: str | None = None) -> dict[str, Any]:
+    """Get performance statistics from the global monitor.
+
+    Args:
+        function_name: If specified, only return stats for this function.
+
+    Returns:
+        Dictionary containing performance statistics.
+    """
+    return _performance_monitor.get_stats(function_name)
+
+
+@contextmanager
+def performance_context(operation: str):
+    """Context manager that records execution time of a block.
+
+    Args:
+        operation: Name of the operation being tracked.
+    """
+    start_time = time.time()
+    try:
+        yield
+    finally:
+        execution_time = time.time() - start_time
+        _performance_monitor.record_metrics(
+            function_name=operation,
+            execution_time=execution_time,
+        )
+

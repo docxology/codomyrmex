@@ -6,19 +6,24 @@ The `model_context_protocol` module primarily defines the Model Context Protocol
 
 This API specification details these Pydantic models, which constitute the programmable interface of this module.
 
-## Python Module: `model_context_protocol.mcp_schemas`
+## Python Module: `codomyrmex.model_context_protocol.schemas.mcp_schemas`
 
 This module provides Pydantic models for validating and constructing MCP messages.
 
 To use these models, import them into your Python code:
 ```python
-from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
+from codomyrmex.model_context_protocol import MCPToolCall, MCPToolResult, MCPErrorDetail
+```
+
+Or from the schemas submodule directly:
+```python
+from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolCall, MCPToolResult, MCPErrorDetail
 ```
 
 ### 1. Pydantic Model: `MCPErrorDetail`
 
 -   **Description**: Represents the standard structure for detailed error information within an `MCPToolResult` when a tool execution fails.
--   **Source File**: `model_context_protocol/mcp_schemas.py`
+-   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
 -   **Fields**:
     -   `error_type` (str, required): A unique code or type for the error (e.g., `"ValidationError"`, `"FileNotFoundError"`).
@@ -41,7 +46,7 @@ from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPEr
 ### 2. Pydantic Model: `MCPToolCall`
 
 -   **Description**: Represents an MCP Tool Call message sent by an AI agent to invoke a specific tool.
--   **Source File**: `model_context_protocol/mcp_schemas.py`
+-   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
 -   **Fields**:
     -   `tool_name` (str, required): The unique invocation name of the tool to be called (e.g., `"ai_code_editing.generate_code_snippet"`).
@@ -66,7 +71,7 @@ from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPEr
 ### 3. Pydantic Model: `MCPToolResult`
 
 -   **Description**: Represents an MCP Tool Result message sent back by a tool to the AI agent after execution.
--   **Source File**: `model_context_protocol/mcp_schemas.py`
+-   **Source File**: `model_context_protocol/schemas/mcp_schemas.py`
 
 -   **Fields**:
     -   `status` (str, required): Indicates the outcome of the tool execution.
@@ -110,7 +115,7 @@ from model_context_protocol.mcp_schemas import MCPToolCall, MCPToolResult, MCPEr
 
 ## Data Models
 
-The Pydantic models (`MCPErrorDetail`, `MCPToolCall`, `MCPToolResult`) described above are the primary data models provided by this module's API.
+The Pydantic models (`MCPErrorDetail`, `MCPToolCall`, `MCPToolResult`, `MCPMessage`, `MCPToolRegistry`) described above are the primary data models provided by this module's API. Additionally, the module exports `MCPServer` and `MCPServerConfig` for running an MCP server, and the `mcp_tool` decorator from `decorators.py` for registering functions as MCP tools.
 
 ## Authentication & Authorization
 

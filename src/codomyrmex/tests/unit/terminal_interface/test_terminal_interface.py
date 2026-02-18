@@ -132,13 +132,9 @@ class TestInteractiveShell:
     def test_do_help(self):
         """Test help command."""
         # Help command uses cmd module's built-in help system
-        # Just test that it doesn't raise an error
-        try:
-            self.shell.do_help("")
-            # If we get here without exception, the test passes
-            assert True
-        except Exception as e:
-            pytest.fail(f"Help command raised an exception: {e}")
+        # Verify it completes without raising and returns None (cmd convention)
+        result = self.shell.do_help("")
+        assert result is None
 
     def test_do_quit(self, capsys):
         """Test quit command with real print."""

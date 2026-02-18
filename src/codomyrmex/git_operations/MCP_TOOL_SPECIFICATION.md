@@ -1,15 +1,73 @@
 # Git Operations - MCP Tool Specification
 
-This document outlines the specification for tools within the Git Operations module that are intended to be integrated with the Model Context Protocol (MCP).
+This document outlines the specification for tools within the Git Operations module that are integrated with the Model Context Protocol (MCP). These tools are defined in `mcp_tools.py` and exposed via the `@mcp_tool` decorator.
 
 ## General Considerations
 
 - **Tool Integration**: This module provides version control automation and Git workflow management.
 - **Configuration**: Operations are performed relative to a repository root, which can be specified or auto-detected.
+- **Implementation**: All tools are defined in `mcp_tools.py` using the `@mcp_tool` decorator.
 
 ---
 
-## Tool: `git_status`
+## Tool: `git_check_availability`
+
+### 1. Tool Purpose and Description
+
+Check if git is available on the current system.
+
+### 2. Invocation Name
+
+`codomyrmex.git_check_availability`
+
+### 3. Input Schema (Parameters)
+
+No parameters required.
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` | `"ok"` |
+| `git_available` | `boolean` | Whether git is installed | `true` |
+
+### 5. Idempotency
+
+- **Idempotent**: Yes
+
+---
+
+## Tool: `git_is_repo`
+
+### 1. Tool Purpose and Description
+
+Check if a directory is a git repository.
+
+### 2. Invocation Name
+
+`codomyrmex.git_is_repo`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | Yes | Path to check | `"/projects/myapp"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `is_git_repository` | `boolean` | Whether path is a git repo | `true` |
+| `path` | `string` | Checked path | `"/projects/myapp"` |
+
+### 5. Idempotency
+
+- **Idempotent**: Yes
+
+---
+
+## Tool: `git_repo_status`
 
 ### 1. Tool Purpose and Description
 
@@ -17,145 +75,57 @@ Gets the current status of a Git repository, including staged/unstaged changes, 
 
 ### 2. Invocation Name
 
-`git_status`
+`codomyrmex.git_repo_status`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository (default: current directory) | `"/path/to/repo"` |
-| `include_untracked` | `boolean` | No | Include untracked files (default: true) | `true` |
-| `include_ignored` | `boolean` | No | Include ignored files | `false` |
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `branch` | `string` | Current branch name | `"main"` |
-| `ahead` | `integer` | Commits ahead of upstream | `2` |
-| `behind` | `integer` | Commits behind upstream | `0` |
-| `staged` | `array[object]` | Staged changes | `[{"file": "a.py", "status": "modified"}]` |
-| `unstaged` | `array[object]` | Unstaged changes | `[{"file": "b.py", "status": "modified"}]` |
-| `untracked` | `array[string]` | Untracked files | `["new_file.py"]` |
-| `is_clean` | `boolean` | True if working directory is clean | `false` |
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `git_status` | `object` | Status information from `get_status()` | `{...}` |
 
 ### 5. Error Handling
 
-- **Not a Repository**: Returns error if path is not a Git repository
-- **Corrupted Repository**: Returns error with details
+- Returns `{"status": "error", "error": "<message>"}` if path is not a Git repository.
 
 ### 6. Idempotency
 
 - **Idempotent**: Yes
 
-### 7. Usage Examples
-
-```json
-{
-  "tool_name": "git_status",
-  "arguments": {
-    "repository_path": "/projects/myapp",
-    "include_untracked": true
-  }
-}
-```
-
-### 8. Security Considerations
-
-- **Path Validation**: Repository paths should be validated to prevent directory traversal
-
 ---
 
-## Tool: `git_commit`
+## Tool: `git_current_branch`
 
 ### 1. Tool Purpose and Description
 
-Creates a new commit with the specified files and message.
+Get the current branch name of a git repository.
 
 ### 2. Invocation Name
 
-`git_commit`
+`codomyrmex.git_current_branch`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository | `"/path/to/repo"` |
-| `message` | `string` | Yes | Commit message | `"Fix login bug"` |
-| `files` | `array[string]` | No | Specific files to commit (default: all staged) | `["src/auth.py"]` |
-| `author` | `string` | No | Author override | `"John <john@example.com>"` |
-| `allow_empty` | `boolean` | No | Allow empty commits | `false` |
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `commit_hash` | `string` | Full commit SHA | `"abc123..."` |
-| `short_hash` | `string` | Short commit SHA | `"abc123"` |
-| `files_committed` | `integer` | Number of files in commit | `3` |
-| `insertions` | `integer` | Lines added | `25` |
-| `deletions` | `integer` | Lines removed | `10` |
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `branch` | `string` | Current branch name | `"main"` |
 
-### 5. Error Handling
+### 5. Idempotency
 
-- **Nothing to Commit**: Returns error if no changes to commit
-- **Merge Conflict**: Returns error if unresolved conflicts exist
-- **Pre-commit Hook Failure**: Returns error with hook output
-
-### 6. Idempotency
-
-- **Idempotent**: No, creates new commit each time
-
----
-
-## Tool: `git_branch`
-
-### 1. Tool Purpose and Description
-
-Manages Git branches - create, delete, list, or switch branches.
-
-### 2. Invocation Name
-
-`git_branch`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository | `"/path/to/repo"` |
-| `action` | `string` | Yes | Action: "list", "create", "delete", "checkout" | `"create"` |
-| `branch_name` | `string` | Conditional | Branch name (required for create/delete/checkout) | `"feature/new-login"` |
-| `start_point` | `string` | No | Starting point for new branch | `"main"` |
-| `force` | `boolean` | No | Force operation | `false` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `branches` | `array[object]` | List of branches (for "list" action) | See below |
-| `current_branch` | `string` | Current branch after operation | `"feature/new-login"` |
-
-**Branch object structure (for list action):**
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `name` | `string` | Branch name |
-| `is_current` | `boolean` | Whether this is the current branch |
-| `upstream` | `string` | Upstream tracking branch |
-| `last_commit` | `string` | Last commit hash |
-
-### 5. Error Handling
-
-- **Branch Exists**: Returns error when creating existing branch
-- **Branch Not Found**: Returns error when deleting/checking out non-existent branch
-- **Uncommitted Changes**: Returns error if checkout would overwrite changes
-
-### 6. Idempotency
-
-- **Idempotent**: list=Yes, create=No (fails if exists), delete=Yes, checkout=Yes
+- **Idempotent**: Yes
 
 ---
 
@@ -163,40 +133,27 @@ Manages Git branches - create, delete, list, or switch branches.
 
 ### 1. Tool Purpose and Description
 
-Shows differences between commits, branches, or working directory.
+Get the diff of uncommitted changes in a git repository.
 
 ### 2. Invocation Name
 
-`git_diff`
+`codomyrmex.git_diff`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository | `"/path/to/repo"` |
-| `target` | `string` | No | Commit/branch to compare against | `"HEAD~1"` |
-| `source` | `string` | No | Source commit/branch (default: working dir) | `"main"` |
-| `files` | `array[string]` | No | Specific files to diff | `["src/auth.py"]` |
-| `stat_only` | `boolean` | No | Only show statistics | `false` |
-| `context_lines` | `integer` | No | Number of context lines | `3` |
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
+| `staged` | `boolean` | No | Show staged changes only (default: `false`) | `true` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `diff` | `string` | Full diff output | `"diff --git..."` |
-| `files_changed` | `integer` | Number of files changed | `5` |
-| `insertions` | `integer` | Lines added | `100` |
-| `deletions` | `integer` | Lines removed | `50` |
-| `file_stats` | `array[object]` | Per-file statistics | See below |
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `diff` | `string` | Diff output | `"diff --git..."` |
 
-### 5. Error Handling
-
-- **Invalid Reference**: Returns error if commit/branch doesn't exist
-- **Binary Files**: Indicates when diff contains binary files
-
-### 6. Idempotency
+### 5. Idempotency
 
 - **Idempotent**: Yes
 
@@ -206,50 +163,217 @@ Shows differences between commits, branches, or working directory.
 
 ### 1. Tool Purpose and Description
 
-Shows commit history with customizable formatting and filtering.
+Get recent commit history for a git repository.
 
 ### 2. Invocation Name
 
-`git_log`
+`codomyrmex.git_log`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository | `"/path/to/repo"` |
-| `branch` | `string` | No | Branch to show history for | `"main"` |
-| `limit` | `integer` | No | Maximum commits to return | `10` |
-| `since` | `string` | No | Show commits since date | `"2024-01-01"` |
-| `author` | `string` | No | Filter by author | `"john@example.com"` |
-| `path` | `string` | No | Filter by file path | `"src/"` |
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
+| `max_count` | `integer` | No | Maximum commits to return (default: 10) | `20` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "success" or "error" | `"success"` |
-| `commits` | `array[object]` | List of commits | See below |
-| `total_count` | `integer` | Total matching commits | `150` |
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `commits` | `array` | List of commit objects | `[...]` |
 
-**Commit object structure:**
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `hash` | `string` | Full commit SHA |
-| `short_hash` | `string` | Short commit SHA |
-| `author` | `string` | Author name and email |
-| `date` | `string` | Commit date (ISO format) |
-| `message` | `string` | Commit message |
-| `files_changed` | `integer` | Number of files changed |
-
-### 5. Error Handling
-
-- **Invalid Branch**: Returns error if branch doesn't exist
-- **Invalid Date Format**: Returns error for malformed date
-
-### 6. Idempotency
+### 5. Idempotency
 
 - **Idempotent**: Yes
+
+---
+
+## Tool: `git_init`
+
+### 1. Tool Purpose and Description
+
+Initialize a new git repository at the given path.
+
+### 2. Invocation Name
+
+`codomyrmex.git_init`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | Yes | Path where to initialize the repo | `"/projects/new-app"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `initialized` | `boolean` | Whether initialization succeeded | `true` |
+| `path` | `string` | Repository path | `"/projects/new-app"` |
+| `result` | `any` | Result from `initialize_git_repository()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: No. Fails if already initialized.
+
+---
+
+## Tool: `git_clone`
+
+### 1. Tool Purpose and Description
+
+Clone a git repository from a URL to a local path.
+
+### 2. Invocation Name
+
+`codomyrmex.git_clone`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `url` | `string` | Yes | Repository URL to clone | `"https://github.com/org/repo.git"` |
+| `path` | `string` | Yes | Local destination path | `"/projects/repo"` |
+| `branch` | `string` | No | Branch to clone (default: default branch) | `"develop"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `cloned` | `boolean` | Whether clone succeeded | `true` |
+| `result` | `any` | Result from `clone_repository()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: No. Fails if destination path already exists.
+
+---
+
+## Tool: `git_commit`
+
+### 1. Tool Purpose and Description
+
+Stage files and create a commit with a message.
+
+### 2. Invocation Name
+
+`codomyrmex.git_commit`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
+| `message` | `string` | Yes | Commit message | `"Fix login bug"` |
+| `files` | `array[string]` | No | Specific files to stage before commit | `["src/auth.py"]` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `committed` | `boolean` | Whether commit succeeded | `true` |
+| `result` | `any` | Result from `commit_changes()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: No. Creates a new commit each time.
+
+---
+
+## Tool: `git_create_branch`
+
+### 1. Tool Purpose and Description
+
+Create a new branch in a git repository.
+
+### 2. Invocation Name
+
+`codomyrmex.git_create_branch`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
+| `branch_name` | `string` | Yes | Name for the new branch | `"feature/new-login"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `branch` | `string` | Branch name | `"feature/new-login"` |
+| `result` | `any` | Result from `create_branch()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: No. Fails if branch already exists.
+
+---
+
+## Tool: `git_switch_branch`
+
+### 1. Tool Purpose and Description
+
+Switch to a different branch in a git repository.
+
+### 2. Invocation Name
+
+`codomyrmex.git_switch_branch`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | Yes | Path to repository | `"/path/to/repo"` |
+| `branch_name` | `string` | Yes | Branch to switch to | `"feature/new-login"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `branch` | `string` | Current branch after switch | `"feature/new-login"` |
+| `result` | `any` | Result from `switch_branch()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: Yes (switching to current branch is a no-op).
+
+---
+
+## Tool: `git_pull`
+
+### 1. Tool Purpose and Description
+
+Pull latest changes from a remote git repository.
+
+### 2. Invocation Name
+
+`codomyrmex.git_pull`
+
+### 3. Input Schema (Parameters)
+
+| Parameter Name | Type | Required | Description | Example Value |
+|:---------------|:-----|:---------|:------------|:--------------|
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
+| `remote` | `string` | No | Remote name (default: `"origin"`) | `"upstream"` |
+
+### 4. Output Schema (Return Value)
+
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `pulled` | `boolean` | Whether pull succeeded | `true` |
+| `result` | `any` | Result from `pull_changes()` | `...` |
+
+### 5. Idempotency
+
+- **Idempotent**: Yes (if already up to date, returns success).
 
 ---
 
@@ -257,41 +381,42 @@ Shows commit history with customizable formatting and filtering.
 
 ### 1. Tool Purpose and Description
 
-Pushes local commits to a remote repository.
+Push local commits to a remote git repository.
 
 ### 2. Invocation Name
 
-`git_push`
+`codomyrmex.git_push`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `repository_path` | `string` | No | Path to repository | `"/path/to/repo"` |
-| `remote` | `string` | No | Remote name (default: origin) | `"origin"` |
-| `branch` | `string` | No | Branch to push (default: current) | `"main"` |
-| `force` | `boolean` | No | Force push (use with caution) | `false` |
-| `set_upstream` | `boolean` | No | Set upstream tracking | `true` |
+| `path` | `string` | No | Path to repository (default: `"."`) | `"/path/to/repo"` |
+| `remote` | `string` | No | Remote name (default: `"origin"`) | `"upstream"` |
 
 ### 4. Output Schema (Return Value)
 
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "success" or "error" |
-| `commits_pushed` | `integer` | Number of commits pushed |
-| `remote_url` | `string` | URL of the remote |
+| Field Name | Type | Description | Example Value |
+|:-----------|:-----|:------------|:--------------|
+| `status` | `string` | `"ok"` or `"error"` | `"ok"` |
+| `pushed` | `boolean` | Whether push succeeded | `true` |
+| `result` | `any` | Result from `push_changes()` | `...` |
 
 ### 5. Error Handling
 
-- **Remote Not Found**: Returns error if remote doesn't exist
-- **Push Rejected**: Returns error if push is rejected (need pull)
-- **Authentication Failed**: Returns error for auth issues
+- Returns `{"status": "error", "error": "<message>"}` on failures (remote not found, auth issues, etc.).
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes (if already pushed, returns success)
+- **Idempotent**: Yes (if already pushed, returns success).
 
 ---
+
+## Security Considerations (All Tools)
+
+- **Path Validation**: Repository paths should be validated to prevent directory traversal.
+- **Credential Handling**: Git credentials are managed by the system's git credential helper; never stored in tool responses.
+- **Remote Operations**: `git_push`, `git_pull`, and `git_clone` perform network operations.
 
 ## Navigation Links
 

@@ -1,107 +1,78 @@
 # Codomyrmex Project Roadmap & To-Do
 
-**Status**: Active | **Last Updated**: February 2026 | **Strategic Target**: v0.4.0
+**Status**: Active | **Last Updated**: February 18, 2026 | **Current**: v0.1.6 | **Target**: v0.4.0
 
-This document outlines the phased roadmap for the Codomyrmex ecosystem.
-Versions 0.1.7–0.1.9 harden foundations (testing, MCP plumbing, PAI workflows).
-Version 0.2.0 certifies robust production-grade agent infrastructure.
-Version 0.3.0 layers cognitive architecture on the hardened base.
-Version 0.4.0 delivers autonomous swarm orchestration.
+Versions 0.1.7–0.1.9 harden foundations (testing, MCP plumbing, async orchestration, PAI workflows).
+Version 0.2.0 certifies production-grade agent infrastructure.
+Version 0.3.0 layers cognitive architecture. Version 0.4.0 delivers swarm orchestration.
 
 ---
 
-## ✅ Completed Releases
+## ✅ Completed Releases (v0.1.3 – v0.1.6)
 
-### v0.1.3 — Foundation Hardening
+<details>
+<summary><strong>v0.1.3</strong> — Foundation Hardening</summary>
 
-- [x] RASP standardization audit (`scripts/audit_rasp.py`).
-- [x] Dependency pruning in `pyproject.toml` via `uv`.
-- [x] Pre-release test verification (networking, logging — 84 pass, 2 skip).
+RASP standardization (`scripts/audit_rasp.py`), dependency pruning via `uv`, pre-release test verification (84 pass, 2 skip).
+</details>
 
-### v0.1.4 — Descaffold & Zero-Mock Certification
+<details>
+<summary><strong>v0.1.4</strong> — Descaffold & Zero-Mock Certification</summary>
 
-- [x] `EphemeralServer` replaces external `httpbin.org` in networking tests.
-- [x] LLM tests verified real API calls (OpenRouter/Ollama).
-- [x] `pytest-benchmark` baselines (import time, AST parsing).
-- [x] Coverage checks for Core and Specialized modules.
+`EphemeralServer` replaces external `httpbin.org`, real LLM API tests (OpenRouter/Ollama), `pytest-benchmark` baselines, coverage checks.
+</details>
 
----
+<details>
+<summary><strong>v0.1.5</strong> — Module Refactoring & Type Safety</summary>
 
-## 🔧 Foundation Hardening (v0.1.5 – v0.1.9)
+Export audit (79/79 modules have `__all__`), import audit (0 cross-layer violations / 291 edges), thin module implementation (`simulation`, `networks`).
+</details>
 
-### v0.1.5 — Module Refactoring & Type Safety ✅
+<details>
+<summary><strong>v0.1.6</strong> — Agent & Memory Foundations</summary>
 
-**Theme**: "Clean Boundaries"
-
-- [x] Export audit: 79/79 modules have `__all__` (`scripts/audit_exports.py`)
-- [x] Import audit: 0 cross-layer violations / 291 edges (`scripts/audit_imports.py`, AST-based)
-- [x] Added `__all__` to `module_template` and `tests`
-- [x] Verified specialized modules (`cerebrum`, `bio_simulation`, `finance`, `quantum`) are already isolated
+`AgentProtocol` with `plan()/act()/observe()`, `AgentMessage` dataclass, `ToolRegistry.from_mcp()`, `VectorStoreMemory` auto-wiring to `InMemoryVectorStore`, `UserProfile` persistence, `EventBus.emit_typed()/subscribe_typed()`, `OrchestratorEvents` enum, `Workflow.run()` lifecycle events. Tests: `test_agent_protocol.py`, `test_memory_integration.py`, `test_event_orchestrator.py`.
+</details>
 
 ---
 
-### v0.1.6 — Agent & Memory Foundations ✅
-
-**Theme**: "Solid Agent Bones"
-
-> Grounded in audit: `agents/core/base.py` has `execute()/stream()` but no `plan()/act()/observe()`.
-> `agentic_memory` has `VectorStoreMemory` but it never actually wires to `vector_store`.
-> `events.EventBus` exists but 0 integrations with `orchestrator`.
-
-- [x] **Agent Protocol Extension** (`agents/core/`)
-  - [x] Add `AgentProtocol` with `plan()`, `act()`, `observe()` methods to `base.py`.
-  - [x] Add typed `AgentMessage` dataclass to new `messages.py` (replace `dict` messages in `ReActAgent`).
-  - [x] Refactor `ReActAgent._execute_impl` into discrete `plan→act→observe` calls.
-  - [x] Add `ToolRegistry.from_mcp(mcp_registry)` bridge to `registry.py`.
-  - [x] Type-hint `ReActAgent.llm_client` as `codomyrmex.llm.BaseLLMClient | Any`.
-- [x] **Memory → Vector Store Wiring** (`agentic_memory/`)
-  - [x] `VectorStoreMemory.__init__`: auto-create `InMemoryVectorStore` when `vector_store=None`.
-  - [x] Add `VectorStoreMemory.from_chromadb(path)` optional factory (try/except wrapped).
-  - [x] Add `AgentMemory.add()` alias to `remember()` (MCP tool calls `.add()` which doesn't exist).
-  - [x] `JSONFileStore.list_all()` method + thread-safe file writes.
-  - [x] New `user_profile.py`: `UserProfile` dataclass with `~/.codomyrmex/user_profile.json` persistence.
-- [x] **EventBus ↔ Orchestrator Integration** (`events/`, `orchestrator/`)
-  - [x] `EventBus.emit_typed(event: Event)` convenience + `subscribe_typed(event_type, handler)`.
-  - [x] `Workflow.run()` emits `TASK_STARTED`/`COMPLETED`/`FAILED` events via optional `event_bus` param.
-  - [x] `OrchestratorEvents` enum in `orchestrator/events.py`.
-- [x] **Test Coverage (≥80% on touched modules)**
-  - [x] `test_agent_protocol.py`: `AgentMessage`, `BaseAgent.plan()/act()/observe()`, `ToolRegistry.from_mcp()`.
-  - [x] `test_memory_integration.py`: `VectorStoreMemory` with real `InMemoryVectorStore`, `JSONFileStore` round-trip, `UserProfile`.
-  - [x] `test_event_orchestrator.py`: events emitted during `Workflow.run()`.
-
----
+## 🔧 Foundation Hardening (v0.1.7 – v0.1.9)
 
 ### v0.1.7 — Test Integrity & MCP Plumbing
 
 **Theme**: "Fix the Floor, Wire the Pipes"
 
-> Grounded in audit: 72 pre-existing test failures (20 async event-loop, 8 schema import, 5 pyarrow, 5 skill_sync).
-> Only 2 `mcp_tools.py` files exist (`formal_verification`, `logistics`). No `MCPClient`.
-> `git_operations` has 44 exports but 0 MCP registration. `containerization` has 5 exports and 0 MCP registration.
-> Auto-discovery finds 483 public tools from 76 modules. 535 total tools registered.
+> **Grounded Audit (Feb 18 2026)**:
+>
+> - **Live test run**: `7 failed, 8205 passed, 245 skipped, 7 xfailed` in 497s.
+> - Actual failures: 5 in `test_module_performance.py` (performance baselines), 1 in `test_benchmarking.py` (memory benchmark), 1 in `test_visualization_integration.py` (education curriculum).
+> - Previous streaming/schema/serialization/skill failures appear **already fixed or properly skipped** (245 skips includes gated tests).
+> - `asyncio_mode = auto` already configured in `pytest.ini:6`.
+> - `events/streaming/` subpackage EXISTS with 5 files: `__init__.py`, `async_stream.py`, `models.py`, `processors.py`, `stream.py`.
+> - Serialization tests already have `PARQUET_AVAILABLE` skipif guards.
+> - 6 `mcp_tools.py` files registered. `MCPClient` already implemented (355 lines). 535 total tools.
+> - 1 deprecated `get_event_loop()` at `test_async_concurrency.py:817`.
 
-- [ ] **Fix Pre-Existing Test Failures (72 → 0)**
-  - [ ] `streaming/test_streaming_async.py` (20 failures): add `pytest-asyncio` fixtures, replace deprecated `get_event_loop()` with `asyncio.Runner` / `@pytest.mark.asyncio`.
-  - [ ] `utils/test_utils_integration.py` (5 failures): same async event loop fix — `make_async`, `gather_with_concurrency`, `async_timed_operation`.
-  - [ ] `schemas/test_schemas.py` + `validation/schemas/test_schemas.py` (8 failures): add `database_management.schemas` re-export or fix import path.
-  - [ ] `serialization/test_serialization*.py` (5 failures): gate parquet tests behind `pytest.importorskip("pyarrow")`.
-  - [ ] `skills/test_skill_sync.py` (5 failures): gate git-dependent tests behind `@pytest.mark.skipif(not HAS_GIT_REMOTE)` or fix fixture expectations.
-  - [ ] Verify: full suite achieves **0 failures, ≤240 skips**.
-- [ ] **MCP Tool Registration Sprint**
-  - [ ] `git_operations/mcp_tools.py`: register `git_commit`, `git_branch`, `git_diff`, `git_log`, `git_status` as `@mcp_tool`.
-  - [ ] `containerization/mcp_tools.py`: register `docker_logs`, `docker_compose_up`, `docker_ps` as `@mcp_tool`.
-  - [ ] `coding/mcp_tools.py`: register `parse_file`, `list_symbols`, `find_references` as `@mcp_tool`.
-  - [ ] `search/mcp_tools.py`: register `search_codebase`, `search_files` as `@mcp_tool`.
-  - [ ] Auto-discover all `mcp_tools.py` modules in `discovery.py` at server startup.
-  - [ ] Ensure `_discover_dynamic_tools()` returns deterministic ordering (sort by name).
-- [ ] **MCPClient** (`model_context_protocol/client.py`)
-  - [ ] `MCPClient` for consuming external MCP servers (HTTP/SSE transport).
-  - [ ] Methods: `connect()`, `list_tools()`, `call_tool()`.
-  - [ ] Uses `networking.HTTPClient` internally.
+- [ ] **Fix Remaining Test Failures (7 → 0)**
+  - [ ] **Performance baselines** (5 failures in `tests/performance/test_module_performance.py`): `test_code_execution_performance`, `test_static_analysis_performance`, `test_security_audit_performance`, `test_data_visualization_performance`, `test_performance_module_performance`. Investigate: likely tight timing thresholds that fail in CI. Fix: relax baselines or mark as `@pytest.mark.slow` with higher tolerance.
+  - [ ] **Memory benchmark** (1 failure in `tests/performance/test_benchmarking.py::test_memory_intensive_benchmark`): likely resource constraint. Fix: adjust memory allocation threshold or gate behind `@pytest.mark.resource_intensive`.
+  - [ ] **Visualization integration** (1 failure in `tests/test_visualization_integration.py::test_education_curriculum_structure`): investigate fixture or data source issue.
+  - [ ] Fix deprecated `get_event_loop()` at `tests/unit/concurrency/test_async_concurrency.py:817` — replace with `asyncio.get_running_loop()`.
+  - [ ] **Gate target**: full suite achieves **0 failures, ≤240 skips** (currently at 245 skips — audit 5 skips for potential re-enablement).
+- [x] **MCP Tool Registration Sprint** — ✅ Complete
+  - [x] 6 `mcp_tools.py` files: `git_operations`, `containerization`, `coding`, `search`, `formal_verification`, `logistics`.
+  - [x] Auto-discovery in `discovery.py` at server startup. Deterministic ordering (sort by name).
+- [x] **MCPClient** (`model_context_protocol/client.py`) — ✅ Already implemented
+  - [x] `MCPClient` class (355 lines): `connect_stdio()`, `connect_http()`, `initialize()`, `list_tools()`, `call_tool()`, `list_resources()`, `read_resource()`, `list_prompts()`, `get_prompt()`, `close()`.
+  - [x] Transport layer: `_StdioTransport` (subprocess stdin/stdout) + `_HttpTransport` (aiohttp). `MCPClientConfig`, `MCPClientError`.
 - [ ] **MCP Tests (Zero-Mock)**
-  - [ ] `test_mcp_smoke.py`: iterate all registered tools, call each with minimal valid args, assert structured response.
-  - [ ] `test_mcp_client.py`: `MCPClient` ↔ `MCPServer` local loopback round-trip.
-  - [ ] `test_mcp_discovery.py`: deterministic tool ordering, auto-discovery from `mcp_tools.py` files.
+  - [x] `test_mcp_smoke.py` — ✅ EXISTS (13 tests): import checks, safe tool execution, `@mcp_tool` metadata validation for `git_operations`, `coding`, `search`, `containerization`, `formal_verification`.
+  - [x] `test_mcp_client.py` — ✅ EXISTS (9 tests): `MCPClient` ↔ `MCPServer` loopback via `_InMemoryTransport` (zero-mock). Tests lifecycle, tool listing, tool invocation (echo/add), resource listing/reading, prompt listing/rendering.
+  - [x] `test_mcp_discovery.py` — ✅ EXISTS (7 tests): importability, tool counts per module, duplicate detection, description/category validation, total tool count ≥30 assertion.
+  - [x] `test_mcp_server.py`, `test_mcp_tools.py`, `test_mcp_bridge.py` — ✅ EXISTS in `tests/unit/model_context_protocol/` and `tests/unit/agents/`.
+  - [ ] `test_mcp_client_http.py` (NEW): HTTP transport loopback — start ephemeral `aiohttp` MCP server, connect via `MCPClient.connect_http()`, run full JSONRPC protocol.
+  - [ ] `test_mcp_error_timeout.py` (NEW): tool raises → verify structured error response; server unreachable → verify `MCPClientError` with timeout; concurrent `call_tool()` → verify thread safety.
+- [ ] **Thread Safety: `ToolRegistry`** — add `threading.Lock` to `ToolRegistry._tools` in `agents/core/registry.py` (confirmed: only shared-state class lacking a lock).
 
 ---
 
@@ -109,26 +80,38 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 
 **Theme**: "Concurrent Backbone"
 
-> Grounded in audit: `Workflow.run()` is already async but `ParallelRunner` is sync-only.
-> `logging_monitoring` has 1 test file and no WebSocket streaming.
-> CLI startup time untested. 79 modules = heavy import tree.
+> **Grounded Audit (Feb 18 2026)**:
+>
+> - `ParallelRunner` (328 lines, `orchestrator/parallel_runner.py`) is **thread-pool based** (`concurrent.futures.ThreadPoolExecutor`). `run_scripts_async` wraps sync via `asyncio.to_thread()`. No native `asyncio.TaskGroup` parallelism.
+> - `Workflow.run()` (645 lines, `orchestrator/workflow.py`) already has async topological sort, `RetryPolicy` with exponential backoff, semaphore-based concurrency, EventBus integration, conditional task execution. Concurrent task execution within topological levels uses `asyncio.gather()`, not `TaskGroup`.
+> - `orchestrator/scheduler/` **already exists** (4 files: `scheduler.py`, `advanced.py`, `models.py`, `triggers.py`). `Scheduler` class has heapq priority queue, cron/interval/once triggers, thread-pool executor. Thread-safe with `threading.Lock`.
+> - `orchestrator/retry_policy.py` **already exists** (163 lines): `RetryPolicy`, `PipelineRetryExecutor` with sync `.execute()` + async `.execute_async()`, exponential backoff, jitter, dead-letter outcome routing.
+> - `logging_monitoring/` has 4 Python files: `__init__.py`, `json_formatter.py`, `logger_config.py`, `rotation.py`. Plus `audit/audit_logger.py`, `handlers/performance.py` in subdirs. **No WebSocket handler**. No `enable_structured_json()` switch.
+> - `EventBus` has `emit_typed()`/`subscribe_typed()` (v0.1.6) and `threading.RLock` (line 87) but NO logging pipeline bridge.
+> - `__getattr__` lazy loading already exists in main `__init__.py:112`. No lazy loading in individual heavy modules.
+> - `performance/benchmark.py` exists with `pytest-benchmark` baselines.
+> - CLI startup time untested. 79 modules in import tree. Heavy imports: `matplotlib`, `chromadb`, `sentence_transformers`, `scipy`, `torch`.
 
 - [ ] **Orchestrator v2 (async-first)**
-  - [ ] `orchestrator/async_runner.py`: `AsyncParallelRunner` using `asyncio.TaskGroup` (Python 3.11+).
-  - [ ] Unified `Workflow.run()` with concurrent task execution (topological sort + semaphore).
-  - [ ] Internal retry/backoff decorator (no new dependencies).
-  - [ ] `orchestrator/scheduler.py`: priority-based task scheduling with resource limits.
+  - [ ] `orchestrator/async_runner.py` (NEW): `AsyncParallelRunner` using `asyncio.TaskGroup` (Python 3.11+). Takes list of async callables + optional dependency DAG. Uses `asyncio.Semaphore` for concurrency limiting. Supports `fail_fast` mode via `TaskGroup` exception propagation. Replaces thread-pool pattern in `parallel_runner.py` for async workloads.
+  - [ ] Upgrade `Workflow.run()` in `orchestrator/workflow.py` (line 279–450): replace `asyncio.gather()` with `asyncio.TaskGroup` for structured concurrent task execution within topological levels. Preserve existing `RetryPolicy` integration.
+  - [ ] Unify retry: wire existing `orchestrator/retry_policy.py` `PipelineRetryExecutor` into `Workflow.run()` — currently `Workflow` has its own inline retry logic (v0.1.6 `RetryPolicy` in `workflow.py`). Consolidate to single `PipelineRetryExecutor` and deprecate inline retry. Extract standalone `@with_retry` decorator from `PipelineRetryExecutor.execute_async()`.
+  - [ ] Extend existing `orchestrator/scheduler/scheduler.py`: add `priority: int` field to `Job` model in `scheduler/models.py`. Add `AsyncScheduler` variant that uses `asyncio.TaskGroup` instead of `concurrent.futures.ThreadPoolExecutor`. Wire `Scheduler` events into `EventBus`.
 - [ ] **Observability**
-  - [ ] `logging_monitoring/ws_handler.py`: `WebSocketLogHandler` for real-time log streaming.
-  - [ ] Structured JSON log output mode for all modules.
-  - [ ] Centralized log aggregation: `EventBus` → logging pipeline.
+  - [ ] `logging_monitoring/ws_handler.py` (NEW): `WebSocketLogHandler(logging.Handler)` for real-time structured log streaming to connected WebSocket clients. Uses `asyncio.Queue` to bridge sync `logging.emit()` with async WebSocket sending. Transport via `aiohttp` (already in dependencies). Configurable: filter by level, module, event type.
+  - [ ] `logging_monitoring/logger_config.py` update: add `enable_structured_json(logger_name: str | None = None)` function that replaces default handler with existing `json_formatter.JsonFormatter`. Add `configure_all(level, json_mode, ws_endpoint)` convenience.
+  - [ ] `logging_monitoring/event_bridge.py` (NEW): `EventLoggingBridge` — subscribes to `EventBus.subscribe_typed()` (v0.1.6), logs all agent/workflow/MCP events as structured JSON via `logging.getLogger('codomyrmex.events')`. Auto-enriches with correlation IDs from `OrchestratorEvents`.
+  - [ ] `orchestrator/orchestrator_events.py` update: add `scheduler_job_started()`, `scheduler_job_completed()`, `scheduler_job_failed()` factory functions (module uses factory pattern, not enum — 8 existing factories: `workflow_started/completed/failed`, `task_started/completed/failed/retrying`). Wire scheduler lifecycle into EventBus.
 - [ ] **Performance Baselines**
-  - [ ] CLI startup time target: `< 500ms`. Lazy-loading audit for heavy imports.
-  - [ ] Benchmark public API entry points (`performance/benchmark.py`).
-  - [ ] Profile and optimize hot-path imports (defer `matplotlib`, `chromadb`, `pyarrow`).
+  - [ ] CLI startup target: `< 500ms`. Create `scripts/benchmark_startup.py` — measure `codomyrmex --help` wall-clock time. Identify heavy import chain: `matplotlib` (~200ms), `chromadb` (~300ms), `sentence_transformers` (~400ms), `scipy` (~150ms).
+  - [ ] Extend lazy loading: main `__init__.py:112` already has `__getattr__`. Add `__getattr__`-based lazy loading to `data_visualization/__init__.py` (defers `matplotlib`), `agentic_memory/__init__.py` (defers `chromadb`), `serialization/__init__.py` (defers `pyarrow`), `vector_store/__init__.py` (defers `chromadb`).
+  - [ ] Benchmark public API entry points via `performance/benchmark.py` — add timing for: `create_codomyrmex_mcp_server()`, `get_tool_registry()`, `_discover_dynamic_tools()`, `Workflow.run()` (10-task DAG), `Scheduler.schedule()` (100 jobs).
+  - [ ] Profile import tree: `python -X importtime -c "import codomyrmex" 2>&1` → identify top-20 heaviest imports. Target: total import < 200ms.
 - [ ] **Test Coverage**
-  - [ ] `test_async_runner.py`: async parallel execution with real tasks, dependency resolution, error propagation.
-  - [ ] `test_ws_handler.py`: WebSocket handler with real `EphemeralServer` (Zero-Mock).
+  - [ ] `test_async_runner.py`: async parallel execution with 10 real async tasks, DAG dependency resolution, error propagation through `TaskGroup`, semaphore concurrency limiting (verify max 3 concurrent).
+  - [ ] `test_ws_handler.py`: WebSocket handler with real `EphemeralServer` (Zero-Mock) — connect, send logs, verify receipt, filter by level.
+  - [ ] `test_event_bridge.py`: `EventLoggingBridge` subscribes to `EventBus`, captures `TASK_STARTED`/`COMPLETED`/`FAILED` events as structured JSON log records.
+  - [ ] `test_scheduler_async.py`: `AsyncScheduler` schedules 5 jobs, executes via `TaskGroup`, verifies job completion order respects priorities and triggers.
 
 ---
 
@@ -136,38 +119,55 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 
 **Theme**: "Bulletproof Workflows"
 
-> Grounded in audit: 7 Claude Code workflows exist (`/codomyrmexAnalyze`, `/codomyrmexDocs`,
-> `/codomyrmexMemory`, `/codomyrmexSearch`, `/codomyrmexStatus`, `/codomyrmexTrust`, `/codomyrmexVerify`).
-> `verify_capabilities()` reports 535 tools (483 auto-discovered), MCP server healthy, PAI bridge installed.
-> Trust gateway works but needs end-to-end integration tests and error recovery.
-> `_discover_dynamic_tools()` is called ~12× during server creation (redundant).
+> **Grounded Audit (Feb 18 2026)**:
+>
+> - 7 Claude Code workflows in `.agent/workflows/`: `codomyrmexAnalyze` (753B), `codomyrmexDocs` (679B), `codomyrmexMemory` (856B), `codomyrmexSearch` (846B), `codomyrmexStatus` (751B), `codomyrmexTrust` (1880B), `codomyrmexVerify` (1481B).
+> - `verify_capabilities()` reports 535 tools (483 auto-discovered), MCP server healthy, PAI bridge installed.
+> - Trust gateway (585 lines, `agents/pai/trust_gateway.py`): 3-tier model (UNTRUSTED→VERIFIED→TRUSTED), destructive tool pattern detection via `_is_destructive()`, `_FrozenSetProxy` for lazy tool sets. **No audit log**. **No input validation** before tool dispatch.
+> - `_discover_dynamic_tools()` (line 637–683 of `agents/pai/mcp_bridge.py`): **NO caching** — re-imports all 76+ modules per `get_tool_registry()` call. Phase 1 scans 13 hardcoded module paths, Phase 2 calls `discover_all_public_tools()`.
+> - `concurrency/`: `channels.py`, `distributed_lock.py`, `lock_manager.py`, `rate_limiter.py`, `semaphore.py`, `redis_lock.py`. Plus `locks/` and `semaphores/` sub-packages. No managed async worker pool. No dead-letter queue.
+> - `defense/`: `active.py`, `defense.py`, `rabbithole.py`. Honeytoken patterns exist but NOT activated in test environments.
+> - CLI `core.py` (643 lines): auto-discovered module commands, main entry point, `_discover_module_commands()`. **No `doctor` subcommand**.
+> - Thread-safety: `EventBus` has `threading.RLock` ✅, `AgentMemory` has `threading.Lock` ✅, `JSONFileStore` has `threading.Lock` ✅ (at `stores.py:73`), `Scheduler` has `threading.Lock` ✅. **`ToolRegistry` is the only shared-state class lacking a lock** ❌ (`agents/core/registry.py:34-155`).
+> - `jsonschema>=4.23.0` confirmed in `pyproject.toml:51` — input validation viable.
+> - `scripts/audit_rasp.py` exists for RASP completeness checks.
 
 - [ ] **PAI Bridge Hardening** (`agents/pai/`)
-  - [ ] Deduplicate `_discover_dynamic_tools()` calls: cache registry at module level (currently called 12× per server create).
-  - [ ] `verify_capabilities()` response structure: normalize `tools` key to always contain `safe`/`destructive` lists.
-  - [ ] Error recovery: every workflow gracefully handles import failures, missing modules, timeouts.
-  - [ ] `mcp_bridge.py`: add `list_workflows()` tool exposing the 7 Claude Code workflows via MCP.
-- [ ] **Claude Code Workflow Integration Tests** (Zero-Mock)
-  - [ ] `test_workflow_analyze.py`: `/codomyrmexAnalyze` on a sample directory → valid JSON with metrics.
-  - [ ] `test_workflow_docs.py`: `/codomyrmexDocs` for 5+ core modules → README content returned.
-  - [ ] `test_workflow_status.py`: `/codomyrmexStatus` → system_status + pai_awareness JSON.
-  - [ ] `test_workflow_trust.py`: full trust lifecycle: `verify_capabilities()` → `trust_all()` → `trusted_call_tool()` → `reset_trust()`.
-  - [ ] `test_workflow_verify.py`: `/codomyrmexVerify` → all sections populated (modules, tools, resources, prompts, trust).
-  - [ ] `test_workflow_search.py`: `/codomyrmexSearch` for known patterns → matching results.
-  - [ ] `test_workflow_memory.py`: `/codomyrmexMemory` add/recall round-trip.
-- [ ] **CLI Doctor** (`cli/doctor.py`)
-  - [ ] `codomyrmex doctor`: module imports, tool registry, MCP health, test suite summary.
-  - [ ] `codomyrmex doctor --pai`: PAI skill status, tool count, trust state, version sync.
-  - [ ] `codomyrmex doctor --workflows`: validate all 7 Claude Code workflows execute without error.
-  - [ ] RASP completeness check: flag modules missing README/AGENTS/SPEC/PAI.
+  - [ ] Cache `_discover_dynamic_tools()`: add `_TOOL_REGISTRY_CACHE: MCPToolRegistry | None = None` at module level in `mcp_bridge.py`. `get_tool_registry()` returns cache if populated; `invalidate_tool_cache()` forces refresh. **Expected: ~12× faster server creation.**
+  - [ ] `verify_capabilities()` response normalization: always return `{ tools: { safe: [...], destructive: [...], total: int }, modules: { loaded: int, failed: [] }, trust: { level: str, audit_entries: int } }`. Wire to `_LazyToolSets.safe_tools()` / `.destructive_tools_set()` from `trust_gateway.py`.
+  - [ ] Error recovery: wrap every MCP tool handler with `try/except (ImportError, TimeoutError, Exception)`. Return structured error JSON: `{ "error": str, "error_type": str, "module": str, "suggestion": str }`. Log via `logging.getLogger('codomyrmex.mcp')`.
+  - [ ] `_tool_list_workflows()` MCP tool (NEW in `mcp_bridge.py`): reads `.agent/workflows/*.md` YAML frontmatter → returns `{ "workflows": [ { "name": str, "description": str, "filepath": str } ] }`.
+  - [ ] `_tool_invalidate_cache()` MCP tool (NEW): clears `_TOOL_REGISTRY_CACHE`, forces re-discovery. Useful for development workflows where modules change.
+- [ ] **Claude Code Workflow Integration Tests** (Zero-Mock, in `tests/integration/workflows/`)
+  - [ ] `test_workflow_analyze.py`: `/codomyrmexAnalyze` on `src/codomyrmex/utils/` → valid JSON with file counts, line counts, function counts.
+  - [ ] `test_workflow_docs.py`: `/codomyrmexDocs` for `orchestrator`, `events`, `agents`, `model_context_protocol`, `logging_monitoring` → each returns non-empty README content.
+  - [ ] `test_workflow_status.py`: `/codomyrmexStatus` → dict with `system_status`, `pai_awareness`, `mcp_health`, `trust_level` keys.
+  - [ ] `test_workflow_trust.py`: full trust lifecycle: `verify_capabilities()` → `trust_all()` → `trusted_call_tool('codomyrmex_list_modules')` → `reset_trust()` → verify UNTRUSTED state restored.
+  - [ ] `test_workflow_verify.py`: `/codomyrmexVerify` → dict with `modules` (≥79), `tools` (≥535), `resources`, `prompts`, `trust` sections.
+  - [ ] `test_workflow_search.py`: `/codomyrmexSearch` for `"def main"` pattern → ≥3 matching files including `cli/core.py`.
+  - [ ] `test_workflow_memory.py`: `/codomyrmexMemory` add entry `"test_entry"` → recall → verify round-trip data integrity.
+  - [ ] `test_workflow_error_recovery.py` (NEW): invoke workflow with invalid module → verify structured error response, no crash.
+- [ ] **CLI Doctor** (`cli/doctor.py` — NEW file, register in `cli/core.py` via existing subparser pattern)
+  - [ ] `codomyrmex doctor`: validate module imports (all 79), tool registry count (`get_total_tool_count()`), MCP server health (`create_codomyrmex_mcp_server()` instantiation succeeds), test suite dry-run (`pytest --co -q` returns 0 exit).
+  - [ ] `codomyrmex doctor --pai`: PAI skill status (`PAIBridge.get_status()`), tool count, trust state (`TrustGateway` default level), version sync check (`PAI.md` ↔ `SKILL.md` ↔ `pyproject.toml` all match).
+  - [ ] `codomyrmex doctor --workflows`: validate all 7 Claude Code workflows parse without error. Check YAML frontmatter. Verify referenced tools exist in registry.
+  - [ ] `codomyrmex doctor --rasp`: RASP completeness check — leverage `scripts/audit_rasp.py` logic to flag modules missing `README.md`/`AGENTS.md`/`SPEC.md`/`PAI.md`.
+  - [ ] `codomyrmex doctor --imports`: run `python -X importtime -c "import codomyrmex"`, report top-10 heaviest imports, flag any > 100ms.
+  - [ ] Output format: structured JSON (`--json`) or human-readable table (default). Exit codes: 0=healthy, 1=warnings, 2=errors.
 - [ ] **Concurrency Hardening**
-  - [ ] Thread-safety audit: all shared state in `EventBus`, `ToolRegistry`, `AgentMemory` uses locks.
-  - [ ] `concurrency/pool.py`: managed async worker pool for parallel tool calls.
-  - [ ] Dead-letter handling for timed-out MCP tool invocations.
+  - [ ] Thread-safety audit: `ToolRegistry._tools` lock added in v0.1.7 ✅. `JSONFileStore` already has `threading.Lock` at `stores.py:73` ✅ — verify `list_all()` also acquires lock (currently does NOT hold lock during iteration). `EventBus` ✅ has `RLock`, `AgentMemory` ✅ has `Lock`, `Scheduler` ✅ has `Lock`.
+  - [ ] `concurrency/pool.py` (NEW): `AsyncWorkerPool` using `asyncio.TaskGroup` + `asyncio.Semaphore`. Methods: `submit(coro) → Future`, `shutdown(wait=True)`, `map(func, items) → list[result]`. Integrates with existing `concurrency/semaphore.py`.
+  - [ ] `concurrency/dead_letter.py` (NEW): `DeadLetterQueue` for timed-out or failed MCP tool invocations. Fields: `tool_name`, `args`, `error`, `timestamp`, `retry_count`. Persistence: JSON file at `~/.codomyrmex/dead_letters.json`. Methods: `add(entry)`, `replay(tool_name) → list[result]`, `purge(older_than)`.
+  - [ ] Wire `DeadLetterQueue` into `PipelineRetryExecutor` — when `RetryOutcome.DEAD_LETTER`, auto-enqueue to dead letter.
 - [ ] **Security Pre-Audit**
-  - [ ] Trust gateway: add audit log for all `trusted_call_tool()` invocations.
-  - [ ] Input validation: MCP tool arguments validated against schemas before dispatch.
-  - [ ] `defense` module: activate honeytoken patterns in test environments.
+  - [ ] Trust gateway audit log: add `_audit_log: list[dict]` to `TrustGateway` class. Every `trusted_call_tool()` logs `{ timestamp: ISO8601, tool_name: str, args_hash: str, result_status: str, trust_level: str }`. Methods: `get_audit_log(since: datetime | None = None) → list[dict]`, `export_audit_log(path: Path)`.
+  - [ ] Input validation: MCP tool arguments validated against tool `input_schema` before dispatch using `jsonschema.validate()` (confirmed in deps: `jsonschema>=4.23.0`). Add to `call_tool()` in `mcp_bridge.py`. On validation failure: return `{ "error": "validation_error", "details": str(validation_error) }` without calling tool.
+  - [ ] `defense` module honeytoken activation: set `CODOMYRMEX_TEST_MODE=1` env var in test `conftest.py` → triggers `defense/active.py` honeytoken patterns. Add `test_honeytoken_activation.py` to verify honeytoken detection fires on simulated intrusion paths.
+  - [ ] Dependency audit: add `uv pip audit` or equivalent to CI. Flag any known CVEs in transitive dependencies.
+- [ ] **Documentation Sync**
+  - [ ] Update `CHANGELOG.md` with v0.1.9 entry covering PAI hardening, CLI doctor, workflow tests.
+  - [ ] Update `SKILL.md` with new MCP tools (`_tool_list_workflows`, `_tool_invalidate_cache`).
+  - [ ] Update `AGENTS.md` in `agents/pai/`, `cli/`, `concurrency/`, `defense/` with new capabilities.
 
 ---
 
@@ -180,29 +180,31 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 > through PAI, Claude Code, and MCP interfaces. No new cognitive features — just bulletproof plumbing.
 
 - [ ] **Complete MCP Coverage**
-  - [ ] Every module with public functions has auto-discovered MCP tools (currently 483/535).
-  - [ ] `MCPClient` ↔ `MCPServer` full round-trip verified.
+  - [ ] Every module with public functions has auto-discovered MCP tools (target: 600+ tools).
+  - [ ] `MCPClient` ↔ `MCPServer` full round-trip verified (both stdio and HTTP).
   - [ ] Tool count parity: `get_total_tool_count()` matches SKILL.md tool table.
-  - [ ] MCP tool argument schemas fully typed (no `Any` in tool signatures).
+  - [ ] MCP tool argument schemas fully typed (eliminate `Any` in tool signatures).
+  - [ ] `_discover_dynamic_tools()` cached and <100ms (v0.1.9 prerequisite).
 - [ ] **PAI Integration Certification**
-  - [ ] All 7 Claude Code workflows (`/codomyrmex*`) pass integration tests.
-  - [ ] `verify_capabilities()` returns accurate, normalized results.
-  - [ ] `trust_all()` → `trusted_call_tool()` → `reset_trust()` lifecycle tested end-to-end.
+  - [ ] All 7+ Claude Code workflows pass integration tests.
+  - [ ] `verify_capabilities()` returns accurate, normalized results with safe/destructive breakdown.
+  - [ ] Full trust lifecycle tested end-to-end with audit log verification.
   - [ ] Skill manifest (`get_skill_manifest()`) matches actual capabilities.
   - [ ] PAI version sync: `PAI.md` ↔ `SKILL.md` ↔ `agents/pai/__init__.py` ↔ `pyproject.toml` all `0.2.0`.
 - [ ] **Logging & Observability**
-  - [ ] Structured JSON logging available across all modules.
-  - [ ] `WebSocketLogHandler` for real-time streaming.
-  - [ ] `codomyrmex doctor` CLI fully operational with `--pai` and `--workflows` flags.
-  - [ ] EventBus → logging pipeline: all agent/workflow events are observable.
+  - [ ] Structured JSON logging available across all modules via `enable_structured_json()`.
+  - [ ] `WebSocketLogHandler` streaming verified with real connections.
+  - [ ] `codomyrmex doctor` CLI fully operational: `--pai`, `--workflows`, `--rasp`, `--imports`.
+  - [ ] `EventBus` → logging pipeline: all agent/workflow/scheduler events observable.
 - [ ] **Concurrency & Performance**
-  - [ ] `AsyncParallelRunner` for concurrent workflow execution.
+  - [ ] `AsyncParallelRunner` for truly async concurrent workflow execution.
   - [ ] CLI startup `< 500ms`, import time `< 200ms`.
-  - [ ] Thread-safe shared state: `EventBus`, `ToolRegistry`, `AgentMemory`, `JSONFileStore`.
+  - [ ] All shared state thread-safe: `ToolRegistry`, `JSONFileStore` (plus existing `EventBus`, `AgentMemory`).
   - [ ] Performance benchmarks for all public API entry points.
+  - [ ] Dead-letter queue operational for failed MCP tool invocations.
 - [ ] **Test Suite Health**
-  - [ ] Full regression: 8,000+ tests, **0 failures**, ≤100 skips.
-  - [ ] All async tests use `pytest-asyncio` with proper event loop management.
+  - [ ] Full regression: **0 failures**, ≤100 skips.
+  - [ ] All async tests use `pytest-asyncio` with `asyncio_mode = auto`.
   - [ ] Optional-dependency tests gated behind `pytest.importorskip()`.
   - [ ] Coverage ≥ 80% on all actively maintained modules.
 - [ ] **Documentation Freeze**
@@ -218,30 +220,28 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 **Theme**: "Thinking Agents"
 *Cognitive architecture layered on the hardened v0.2.0 base.*
 
-> Grounded in audit: `cerebrum` has 3 files, `meme` has 2, `graph_rag` has 4 — all functional but unintegrated.
-> No chain-of-thought wrapper exists in `llm`. `prompt_engineering` has 5 files but no agent integration.
+> Grounded: `cerebrum` has 3 files, `meme` has 2, `graph_rag` has 4 — all functional but unintegrated.
+> No chain-of-thought wrapper in `llm`. `prompt_engineering` has 5 files but no agent integration.
 
 - [ ] **Chain-of-Thought Reasoning**
   - [ ] `llm/chain_of_thought.py`: CoT prompting wrapper (structured reasoning extraction).
   - [ ] `agents/core/thinking_agent.py`: `ThinkingAgent` extending `ReActAgent` with reasoning traces.
   - [ ] Sliding window context management for unbounded conversations.
 - [ ] **Cerebrum + GraphRAG Integration**
-  - [ ] `cerebrum/case_retrieval.py`: `CaseBase` retrieval for past successful code-generation patterns.
+  - [ ] `cerebrum/case_retrieval.py`: `CaseBase` retrieval for past successful code patterns.
   - [ ] `graph_rag/agent_bridge.py`: wires graph retrieval into agent context windows.
   - [ ] Bayesian reasoning hooks in `orchestrator` decision-making.
 - [ ] **Memetic Analysis**
   - [ ] `meme/anti_pattern_detector.py`: detect repetitive anti-patterns in codebase.
-  - [ ] `meme/drift_tracker.py`: track concept drift between documentation and code.
+  - [ ] `meme/drift_tracker.py`: track concept drift between docs and code.
 - [ ] **Prompt Engineering Integration**
   - [ ] Wire `prompt_engineering` templates into agent planning phase.
   - [ ] Dynamic prompt selection based on task type and context.
 - [ ] **Security Hardening**
-  - [ ] Harden `wallet` module for secure key management (key rotation, encrypted storage).
-  - [ ] Dependency scanning in CI/CD (`uv audit` or equivalent).
+  - [ ] Harden `wallet` module (key rotation, encrypted storage).
+  - [ ] Dependency scanning in CI/CD.
 - [ ] **Test Coverage**
-  - [ ] `test_chain_of_thought.py`: CoT extraction with real LLM calls.
-  - [ ] `test_case_retrieval.py`: case base storage and retrieval round-trip.
-  - [ ] `test_anti_pattern_detector.py`: known anti-pattern detection on sample code.
+  - [ ] `test_chain_of_thought.py`, `test_case_retrieval.py`, `test_anti_pattern_detector.py`.
 
 ---
 
@@ -250,31 +250,30 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 **Theme**: "Swarm Orchestration"
 *Autonomous multi-agent collaboration on hardened, thinking foundations.*
 
-> Grounded in audit: `collaboration` has 3 files. `agents` has ReActAgent but no multi-agent protocol.
-> `orchestrator` has 13 files but no agent-to-agent coordination. `identity` has 5 files (agent identity management exists).
+> Grounded: `collaboration` has 3 files. `agents` has ReActAgent but no multi-agent protocol.
+> `orchestrator` has 20+ files but no agent-to-agent coordination. `identity` has 5 files.
 
 - [ ] **Swarm Protocol** (`collaboration/swarm/`)
   - [ ] `SwarmProtocol`: typed multi-agent collaboration (Coder ↔ Reviewer ↔ DevOps roles).
-  - [ ] `AgentPool`: managed pool of agents with capability-based routing.
-  - [ ] `SwarmMessage`: inter-agent message format extending `AgentMessage`.
+  - [ ] `AgentPool`: managed pool with capability-based routing.
+  - [ ] `SwarmMessage`: inter-agent format extending `AgentMessage`.
   - [ ] Agent identity + capability advertisement via `identity` module.
 - [ ] **Self-Healing Workflows** (`orchestrator/self_healing.py`)
   - [ ] Auto-diagnose build failures using `ThinkingAgent`.
-  - [ ] Config-aware retry: fix configuration issues and retry failed tasks.
+  - [ ] Config-aware retry: fix config issues and retry.
   - [ ] Dead-letter queue for permanently failed tasks with structured diagnostics.
 - [ ] **Project-Level Context** (`agents/context/`)
-  - [ ] `ProjectContext`: agents understand full repository structure, not single files.
+  - [ ] `ProjectContext`: agents understand full repo structure.
   - [ ] `git_operations` + `coding.parsers` → automatic repo indexing.
-  - [ ] Context-aware tool selection based on file types and project structure.
+  - [ ] Context-aware tool selection based on file types.
 - [ ] **Meta-Agent** (`agents/meta/`)
-  - [ ] `MetaAgent`: rewrites its own prompt strategies based on observed outcomes.
-  - [ ] Feedback loop: outcome → scoring → prompt adjustment → next attempt.
+  - [ ] `MetaAgent`: rewrites its own prompt strategies based on outcomes.
+  - [ ] Feedback loop: outcome → scoring → prompt adjustment.
   - [ ] Strategy library persistence via `agentic_memory`.
 - [ ] **Release Certification**
   - [ ] Full regression: 10,000+ tests, 0 failures.
-  - [ ] API stability contract: no breaking changes from v0.2.x/v0.3.x public APIs.
-  - [ ] Performance: CLI startup < 500ms, import time < 200ms, MCP tool registration < 100ms.
-  - [ ] Documentation: all modules have current SPEC.md, AGENTS.md, README.md.
+  - [ ] API stability contract: no breaking changes from v0.2.x/v0.3.x.
+  - [ ] Performance: CLI startup < 500ms, import < 200ms, MCP tool registration < 100ms.
   - [ ] MCP tool count > 600 registered tools with trust gateway verified.
 
 ---
@@ -282,8 +281,8 @@ Version 0.4.0 delivers autonomous swarm orchestration.
 ## 🔄 Ongoing Technical Debt
 
 - [ ] Continuous removal of magic numbers and hardcoded paths.
-- [ ] Keep `SPEC.md` / `AGENTS.md` synchronized with code changes.
+- [ ] Keep `SPEC.md` / `AGENTS.md` / `CHANGELOG.md` synchronized with code changes.
 - [ ] Enforce `mypy --strict` progressively across the codebase.
 - [ ] Keep PAI bridge versions synchronized: `PAI.md` ↔ `SKILL.md` ↔ `agents/pai/__init__.py` ↔ `pyproject.toml`.
-- [ ] Keep `skill-index.json` triggers/workflows consistent with actual skill files and workflow implementations.
-- [ ] Maintain MCP tool count parity: SKILL.md tool table count must equal `get_total_tool_count()` at release time.
+- [ ] Keep `skill-index.json` triggers/workflows consistent with actual skill files.
+- [ ] Maintain MCP tool count parity: SKILL.md ↔ `get_total_tool_count()` at release time.

@@ -14,6 +14,6 @@ def test_relations_visualization():
 
 def test_education_curriculum_structure():
     curr = Curriculum("Test", "beginner")
-    lesson = curr.add_module("Intro", "Introduction content", duration_minutes=10)
+    lesson = curr.add_module("Intro", content="Introduction content", duration_minutes=10)
     assert lesson.title == "Intro"
     assert len(curr._modules) == 1

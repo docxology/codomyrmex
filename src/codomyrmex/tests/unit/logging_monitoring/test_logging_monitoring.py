@@ -182,11 +182,8 @@ class TestLoggingMonitoring:
 
         # Should be valid UUID format
         import uuid
-        try:
-            uuid.UUID(correlation_id)
-            assert True
-        except ValueError:
-            assert False, "Correlation ID is not a valid UUID"
+        parsed = uuid.UUID(correlation_id)  # raises ValueError if invalid
+        assert str(parsed) == correlation_id
 
     def test_log_context_manager(self, caplog):
         """Test LogContext context manager."""

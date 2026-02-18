@@ -50,43 +50,33 @@ These functions are primarily sourced from the `env_checker.py` script.
     - `False` if version requirements are not met or validation fails
 - **Events Emitted**: N/A
 
-### Function 4: `check_package_versions() -> Dict[str, str]`
-
-- **Source**: `environment_setup.env_checker.check_package_versions`
-- **Description**: Retrieves all installed Python packages and their versions using pkg_resources.
-- **Method**: N/A (Python function)
-- **Path**: N/A (Importable function)
-- **Parameters/Arguments**: None
-- **Request Body**: N/A
-- **Returns/Response**: `Dict[str, str]`
-    - Keys: Package names (lowercase)
-    - Values: Package version strings
-- **Events Emitted**: N/A
-
-### Function 5: `validate_environment_completeness() -> Dict[str, bool]`
+### Function 4: `validate_environment_completeness(repo_root: str | None = None) -> bool`
 
 - **Source**: `environment_setup.env_checker.validate_environment_completeness`
-- **Description**: Performs comprehensive validation of the development environment, checking Python version, dependencies, environment type, package manager availability, and configuration files.
+- **Description**: Performs comprehensive validation of the development environment, checking Python version, dependencies, environment variables, and configuration. This is the primary validation function to call before running Codomyrmex operations.
 - **Method**: N/A (Python function)
-- **Path**: N/A (Importable function)
-- **Parameters/Arguments**: None
+- **Path**: N/A (Importable function: `from codomyrmex.environment_setup.env_checker import validate_environment_completeness`)
+- **Parameters/Arguments**:
+    - `repo_root` (str | None, optional): The root directory of the repository. If not provided, defaults to the parent directory of the codomyrmex package.
 - **Request Body**: N/A
-- **Returns/Response**: `Dict[str, bool]`
-    - Keys: Validation categories ("python_version", "core_dependencies", "environment_type", "package_manager", "config_files")
-    - Values: `True` if validation passes, `False` if validation fails
+- **Returns/Response**: `bool`
+    - `True` if all environment checks pass (dependencies installed, .env file loaded, Python version valid)
+    - `False` otherwise
 - **Events Emitted**: N/A
+- **Note**: This function is not re-exported from `__init__.py`; import it directly from `env_checker`.
 
-### Function 6: `generate_environment_report() -> str`
+### Function 5: `generate_environment_report() -> str`
 
 - **Source**: `environment_setup.env_checker.generate_environment_report`
-- **Description**: Generates a comprehensive, human-readable report of the current environment status, including all validation results and recommendations.
+- **Description**: Generates an environment status report. Currently a placeholder that returns a static string; future implementation will return a detailed report.
 - **Method**: N/A (Python function)
-- **Path**: N/A (Importable function)
+- **Path**: N/A (Importable function: `from codomyrmex.environment_setup.env_checker import generate_environment_report`)
 - **Parameters/Arguments**: None
 - **Request Body**: N/A
 - **Returns/Response**: `str`
-    - Formatted multi-line string containing environment status report with status indicators and recommendations
+    - Currently returns a placeholder string. Will return a full report once implemented.
 - **Events Emitted**: N/A
+- **Note**: This function is not re-exported from `__init__.py`; import it directly from `env_checker`.
 
 ## Data Models
 

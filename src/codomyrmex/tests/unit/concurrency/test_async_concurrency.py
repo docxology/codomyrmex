@@ -814,7 +814,7 @@ class TestLocalSemaphoreAsyncInteraction:
                 results.append(f"released_{task_id}")
 
         # Run blocking operations in thread pool
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         tasks = [
             loop.run_in_executor(None, blocking_operation, i)
             for i in range(5)

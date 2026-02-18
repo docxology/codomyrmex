@@ -12,6 +12,14 @@ try:
 except ImportError:
     SERIALIZATION_AVAILABLE = False
 
+try:
+    import pandas as _pd
+    import pyarrow  # noqa: F401
+    _pd.DataFrame({"_test": [1]}).to_parquet("/dev/null")
+    PARQUET_AVAILABLE = True
+except (ImportError, Exception):
+    PARQUET_AVAILABLE = False
+
 pytestmark = pytest.mark.skipif(
     not SERIALIZATION_AVAILABLE,
     reason="serialization dependencies (msgpack, etc.) not installed",
@@ -44,6 +52,7 @@ def test_avro_serialization():
     assert deserialized == data
 
 @pytest.mark.unit
+@pytest.mark.skipif(not PARQUET_AVAILABLE, reason="pyarrow/pandas parquet support not available")
 def test_parquet_serialization():
     """Test Parquet serialization/deserialization."""
     data = [
@@ -55,3 +64,4 @@ def test_parquet_serialization():
     # Pandas might return records in different order or with slightly different types,
     # but for simple dicts it should match.
     assert deserialized == data
+

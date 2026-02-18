@@ -53,20 +53,20 @@ class TestSchemasModuleImport:
 
     def test_schemas_module_import(self):
         """Test that schemas module can be imported."""
-        from codomyrmex.database_management import schemas
+        from codomyrmex.validation import schemas
 
         assert schemas is not None
 
     def test_schemas_version(self):
         """Test that schemas module exposes a version string."""
-        from codomyrmex.database_management import schemas
+        from codomyrmex.validation import schemas
 
         assert hasattr(schemas, "__version__")
         assert schemas.__version__ == "0.1.0"
 
     def test_all_27_exports_importable(self):
         """Every name listed in __all__ should be importable from the package."""
-        from codomyrmex.database_management import schemas
+        from codomyrmex.validation import schemas
 
         expected = [
             "Result", "ResultStatus", "Task", "TaskStatus",
@@ -82,7 +82,7 @@ class TestSchemasModuleImport:
 
     def test_all_list_length(self):
         """The __all__ list should contain exactly 27 names."""
-        from codomyrmex.database_management import schemas
+        from codomyrmex.validation import schemas
 
         assert len(schemas.__all__) == 27
 

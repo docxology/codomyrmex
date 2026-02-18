@@ -117,8 +117,9 @@ class TestComprehensiveImprovements:
             assert "message" in error_data
             assert "context" in error_data
 
-        # 4. Verify everything worked without issues
-        assert True
+        # 4. Verify logger is functional and error serialized correctly
+        assert logger is not None
+        assert error_data["message"] == "Integration test error"
 
 
 if __name__ == "__main__":

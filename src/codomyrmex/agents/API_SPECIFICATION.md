@@ -4,7 +4,7 @@
 
 ## 1. Overview
 
-The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 11 providers, response parsing utilities, multi-agent pooling, evaluation, and conversation history.
+The `agents` module is the core framework for AI agent integration in Codomyrmex. It provides abstract interfaces, concrete client implementations for 12 providers, response parsing utilities, multi-agent pooling, evaluation, and conversation history.
 
 ## 2. Core Components
 
@@ -36,6 +36,7 @@ The `agents` module is the core framework for AI agent integration in Codomyrmex
 | `GeminiClient` | `gemini/` | `gemini` | OAuth/API key, slash commands, @ files |
 | `MistralVibeClient` | `mistral_vibe/` | `vibe` | Mistral AI models |
 | `EveryCodeClient` | `every_code/` | `code` | Multi-agent orchestration, browser |
+| `OpenClawClient` | `openclaw/` | `openclaw` | OpenClaw CLI agent |
 
 #### Local
 
@@ -62,7 +63,7 @@ The `agents` module is the core framework for AI agent integration in Codomyrmex
 
 - **`AgentRequest`**: Encapsulates input prompt, context, and parameters
 - **`AgentResponse`**: Encapsulates output text, error, metadata, tokens, execution time
-- **`AgentConfig`**: Configuration dataclass with env var fallbacks for all 11 agents
+- **`AgentConfig`**: Configuration dataclass with env var fallbacks for all 12 agents
 - **`AgentCapabilities`**: Enum (CODE_GENERATION, CODE_EDITING, CODE_ANALYSIS, TEXT_COMPLETION, STREAMING, MULTI_TURN)
 
 ## 3. Interface Contract

@@ -60,10 +60,18 @@ def resource_limits_context(limits: ExecutionLimits):
         # Set CPU time limit (soft limit)
         soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
         old_limits[resource.RLIMIT_CPU] = (soft, hard)
+        
+        # Calculate usage to set a relative limit
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        current_cpu = usage.ru_utime + usage.ru_stime
+        # Add buffer and round up
+        relative_limit = int(current_cpu) + limits.time_limit + 1
+        
         if hard != resource.RLIM_INFINITY:
-             limited_time = min(limits.time_limit, hard)
+             limited_time = min(relative_limit, hard)
         else:
-             limited_time = limits.time_limit
+             limited_time = relative_limit
+             
         try:
             resource.setrlimit(resource.RLIMIT_CPU, (limited_time, hard))
         except (ValueError, OSError) as e:

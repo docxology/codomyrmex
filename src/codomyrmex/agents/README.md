@@ -4,7 +4,7 @@
 
 ## Overview
 
-Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 11 provider integrations, session management, response parsing, and theoretical architecture foundations.
+Agentic framework integrations providing AI code editing, task management, and multi-provider support. Core layer for intelligent automation workflows with 12 provider integrations, session management, response parsing, and theoretical architecture foundations.
 
 When used with [PAI](../../../PAI.md) (`~/.claude/skills/PAI/`), this module maps to PAI's three-tier agent system: Task Subagents (Engineer, Architect, QATester) dispatch through `AgentOrchestrator`, Named Agents consume tools via MCP, and Custom Agents extend `BaseAgent`. See [PAI.md](PAI.md) for full integration details.
 
@@ -46,6 +46,7 @@ uv sync
 - **`MistralVibeClient`** — Mistral Vibe CLI integration
 - **`EveryCodeClient`** — Every Code CLI (multi-agent orchestration)
 - **`OpenCodeClient`** — OpenCode CLI integration
+- **`OpenClawClient`** — OpenClaw CLI integration
 - **`DroidController`** — Droid controller integration
 - **`O1Client`** — OpenAI o1/o3 reasoning models (lazy-loaded)
 - **`DeepSeekClient`** — DeepSeek Coder integration (lazy-loaded)
@@ -101,6 +102,7 @@ uv sync
 - `jules/` - Jules CLI client
 - `mistral_vibe/` - Mistral Vibe CLI client
 - `o1/` - OpenAI o1/o3 reasoning model client
+- `openclaw/` - OpenClaw CLI client
 - `opencode/` - OpenCode CLI client
 - `pai/` - PAI system bridge (discovery, validation, status)
 - `pooling/` - Multi-agent load balancing and failover

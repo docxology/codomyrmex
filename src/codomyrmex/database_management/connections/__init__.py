@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, ContextManager, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Dict, Generic, Iterator, List, Optional, TypeVar
 from collections.abc import Callable
 
 T = TypeVar('T')
@@ -204,11 +204,23 @@ class ConnectionPool(Generic[T]):
             self._create_connection()
 
     def _create_connection(self) -> Connection[T]:
-        """Create a new connection and add to pool."""
+        """Create a new connection and add to pool.
+
+        Thread-safe: acquires ``_lock`` internally.
+        """
         conn = self.factory.create()
         with self._lock:
             self._all_connections.append(conn)
-            self._pool.put(conn)
+        self._pool.put(conn)
+        return conn
+
+    def _create_connection_unlocked(self) -> Connection[T]:
+        """Create a connection while ``_lock`` is already held by the caller.
+
+        The caller **must** be holding ``self._lock`` when calling this.
+        """
+        conn = self.factory.create()
+        self._all_connections.append(conn)
         return conn
 
     def _validate_connection(self, conn: Connection[T]) -> bool:
@@ -267,9 +279,7 @@ class ConnectionPool(Generic[T]):
                 # Try to create new connection if under limit
                 with self._lock:
                     if len(self._all_connections) < self.config.max_connections:
-                        conn = self._create_connection()
-                        # Get it back from pool
-                        self._pool.get_nowait()
+                        conn = self._create_connection_unlocked()
                         conn.mark_used()
                         self._total_checkouts += 1
                         return conn
@@ -286,7 +296,11 @@ class ConnectionPool(Generic[T]):
             # Replenish if below minimum
             with self._lock:
                 if len(self._all_connections) < self.config.min_connections:
-                    self._create_connection()
+                    replenish = True
+                else:
+                    replenish = False
+            if replenish:
+                self._create_connection()
             return
 
         conn.mark_idle()
@@ -304,7 +318,7 @@ class ConnectionPool(Generic[T]):
                 self._all_connections.remove(conn)
 
     @contextmanager
-    def connection(self) -> ContextManager[Connection[T]]:
+    def connection(self) -> Iterator[Connection[T]]:
         """Context manager for connection checkout."""
         conn = self.acquire()
         try:

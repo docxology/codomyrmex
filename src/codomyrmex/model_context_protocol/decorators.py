@@ -51,17 +51,23 @@ def mcp_tool(
         
         # Attach metadata to the function object
         # This allows scanners to find it without importing everything at once
-        setattr(func, "_mcp_tool", {
+        tool_meta = {
             "name": tool_name,
             "description": tool_desc,
             "schema": tool_schema,
             "category": category,
             "module": func.__module__,
-        })
+        }
+        setattr(func, "_mcp_tool", tool_meta)
+        setattr(func, "_mcp_tool_meta", tool_meta)
         
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
+        
+        # Copy metadata onto wrapper so scanners find it via dir()
+        wrapper._mcp_tool = tool_meta  # type: ignore[attr-defined]
+        wrapper._mcp_tool_meta = tool_meta  # type: ignore[attr-defined]
             
         return wrapper
     

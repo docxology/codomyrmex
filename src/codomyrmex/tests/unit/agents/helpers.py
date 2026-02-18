@@ -55,6 +55,7 @@ import os
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_AVAILABLE = (SDK_AVAILABLE and GEMINI_API_KEY is not None) or check_tool_available("gemini")
 JULES_AVAILABLE = check_tool_available("jules")
+OPENCLAW_AVAILABLE = check_tool_available("openclaw")
 OPENCODE_AVAILABLE = check_tool_available("opencode")
 VIBE_AVAILABLE = check_tool_available("vibe")
 EVERY_CODE_AVAILABLE = check_tool_available("code") or check_tool_available("coder")

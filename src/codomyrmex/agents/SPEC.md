@@ -136,11 +136,11 @@ graph TD
 ### Core Capabilities
 
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
-   - CLI-based: Jules, Gemini, OpenCode, Mistral Vibe, Every Code
+   - CLI-based: Jules, Gemini, OpenCode, OpenClaw, Mistral Vibe, Every Code
    - API-based: Claude, Codex, O1, DeepSeek, Qwen
    - Local: Ollama
 2. **Unified Interface**: Provide consistent interface across all agent frameworks
-3. **Agent Discovery**: `AgentRegistry` with live health probes for all 11 agents
+3. **Agent Discovery**: `AgentRegistry` with live health probes for all 12 agents
 4. **Code Generation**: Generate code using various agent frameworks
 5. **Code Editing**: Edit and refactor code using agents
 6. **Streaming Support**: Support streaming responses where available

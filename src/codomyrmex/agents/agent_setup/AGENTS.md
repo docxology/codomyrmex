@@ -6,7 +6,7 @@ This module is consumed by autonomous agents to configure and verify agent avail
 
 | Function / Class | Purpose |
 |-----------------|---------|
-| `AgentRegistry.probe_all()` | Probe all 11 agents, returns `list[ProbeResult]` |
+| `AgentRegistry.probe_all()` | Probe all 12 agents, returns `list[ProbeResult]` |
 | `AgentRegistry.get_operative()` | Returns names of currently working agents |
 | `load_config()` / `save_config()` | YAML config persistence |
 | `run_setup_wizard(non_interactive=True)` | Programmatic status scan |

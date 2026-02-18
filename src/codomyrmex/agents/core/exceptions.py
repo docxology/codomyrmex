@@ -143,6 +143,17 @@ class EveryCodeError(AgentError):
             self.context["exit_code"] = exit_code
 
 
+class OpenClawError(AgentError):
+    """Raised when OpenClaw CLI operations fail."""
+
+    def __init__(self, message: str = "OpenClaw operation failed", command: str | None = None, exit_code: int | None = None, **kwargs):
+        super().__init__(message, **kwargs)
+        if command:
+            self.context["command"] = command
+        if exit_code is not None:
+            self.context["exit_code"] = exit_code
+
+
 # Aliases for backward compatibility or cleaner imports
 ConfigError = AgentConfigurationError
 

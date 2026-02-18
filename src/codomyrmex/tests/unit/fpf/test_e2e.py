@@ -13,7 +13,7 @@ from codomyrmex.fpf import FPFClient, FPFFetcher
 @pytest.mark.integration
 def test_e2e_load_from_file_workflow(tmp_path, monkeypatch):
     """Test end-to-end workflow: load from file."""
-    spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
+    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
 
@@ -70,7 +70,7 @@ Test solution.
 @pytest.mark.integration
 def test_e2e_search_workflow():
     """Test end-to-end workflow: search."""
-    spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
+    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
 
@@ -88,7 +88,7 @@ def test_e2e_search_workflow():
 @pytest.mark.integration
 def test_e2e_export_workflow():
     """Test end-to-end workflow: export."""
-    spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
+    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
 
@@ -107,7 +107,7 @@ def test_e2e_export_workflow():
 @pytest.mark.integration
 def test_e2e_context_building_workflow():
     """Test end-to-end workflow: context building."""
-    spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
+    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
 
@@ -133,7 +133,7 @@ def test_e2e_context_building_workflow():
 @pytest.mark.integration
 def test_e2e_full_pipeline():
     """Test complete end-to-end pipeline."""
-    spec_path = Path(__file__).parent.parent / "FPF-Spec.md"
+    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
     if not spec_path.exists():
         pytest.skip("FPF-Spec.md not found")
 

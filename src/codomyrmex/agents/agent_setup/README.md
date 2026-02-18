@@ -19,7 +19,7 @@ uv run python -m codomyrmex.agents.agent_setup --config /path/to/agents.yaml
 
 | Feature | Description |
 |---------|-------------|
-| **Agent Registry** | Declarative catalog of all 11 agents (API, CLI, local) |
+| **Agent Registry** | Declarative catalog of all 12 agents (API, CLI, local) |
 | **Live Probing** | Real health checks — env vars, `shutil.which`, HTTP to Ollama |
 | **Setup Wizard** | Interactive terminal guide: scan → configure → save |
 | **YAML Config** | Persist API keys/paths to `~/.codomyrmex/agents.yaml` (0o600 perms) |

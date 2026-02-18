@@ -1,4 +1,3 @@
-
 """Tool Registry for Agents.
 
 This module provides a registry for tools that can be used by agents.
@@ -6,13 +5,15 @@ Tools are functions or methods that are exposed to the LLM.
 """
 
 import inspect
+import threading
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
+
 
 @dataclass
 class Tool:
@@ -36,14 +37,16 @@ class ToolRegistry:
 
     def __init__(self):
         self._tools: dict[str, Tool] = {}
+        self._lock = threading.Lock()
         self.logger = get_logger(self.__class__.__name__)
 
     def register(self, tool: Tool):
         """Register a tool instance."""
-        if tool.name in self._tools:
-            self.logger.warning(f"Overwriting tool '{tool.name}'")
-        self._tools[tool.name] = tool
-        self.logger.debug(f"Registered tool: {tool.name}")
+        with self._lock:
+            if tool.name in self._tools:
+                self.logger.warning(f"Overwriting tool '{tool.name}'")
+            self._tools[tool.name] = tool
+            self.logger.debug(f"Registered tool: {tool.name}")
 
     def register_function(self, func: Callable, name: str | None = None, description: str | None = None):
         """Register a python function as a tool."""
@@ -90,22 +93,25 @@ class ToolRegistry:
 
     def get_tool(self, name: str) -> Tool | None:
         """Get a tool by name."""
-        return self._tools.get(name)
+        with self._lock:
+            return self._tools.get(name)
 
     def list_tools(self) -> list[Tool]:
         """List all registered tools."""
-        return list(self._tools.values())
+        with self._lock:
+            return list(self._tools.values())
 
     def get_schemas(self) -> list[dict[str, Any]]:
         """Get all tool schemas."""
-        return [tool.to_schema() for tool in self._tools.values()]
+        with self._lock:
+            return [tool.to_schema() for tool in self._tools.values()]
 
     def execute(self, tool_name: str, **kwargs) -> Any:
         """Execute a tool by name."""
-        tool = self.get_tool(tool_name)
+        with self._lock:
+            tool = self._tools.get(tool_name)
         if not tool:
             raise ValueError(f"Tool '{tool_name}' not found")
-
         return tool.func(**kwargs)
 
     @classmethod

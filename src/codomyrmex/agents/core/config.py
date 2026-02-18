@@ -1,3 +1,5 @@
+"""Configuration management for agents module."""
+
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -5,9 +7,9 @@ from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
-"""Configuration management for agents module."""
-
 logger = get_logger(__name__)
+
+
 @dataclass
 class AgentConfig:
     """Configuration for agent framework integrations."""
@@ -30,6 +32,12 @@ class AgentConfig:
     codex_timeout: int = 60
     codex_max_tokens: int = 4096
     codex_temperature: float = 0.0
+
+    # OpenClaw configuration
+    openclaw_command: str = "openclaw"
+    openclaw_timeout: int = 60
+    openclaw_working_dir: str | None = None
+    openclaw_thinking_level: str | None = None
 
     # OpenCode configuration
     opencode_command: str = "opencode"
@@ -129,6 +137,12 @@ class AgentConfig:
         self.codex_max_tokens = _env_or("codex_max_tokens", "CODEX_MAX_TOKENS", int)
         self.codex_temperature = _env_or("codex_temperature", "CODEX_TEMPERATURE", float)
 
+        # OpenClaw configuration
+        self.openclaw_command = _env_or("openclaw_command", "OPENCLAW_COMMAND")
+        self.openclaw_timeout = _env_or("openclaw_timeout", "OPENCLAW_TIMEOUT", int)
+        self.openclaw_working_dir = _env_or("openclaw_working_dir", "OPENCLAW_WORKING_DIR")
+        self.openclaw_thinking_level = _env_or("openclaw_thinking_level", "OPENCLAW_THINKING_LEVEL")
+
         # OpenCode configuration
         self.opencode_command = _env_or("opencode_command", "OPENCODE_COMMAND")
         self.opencode_timeout = _env_or("opencode_timeout", "OPENCODE_TIMEOUT", int)
@@ -218,6 +232,10 @@ class AgentConfig:
             "codex_timeout": self.codex_timeout,
             "codex_max_tokens": self.codex_max_tokens,
             "codex_temperature": self.codex_temperature,
+            "openclaw_command": self.openclaw_command,
+            "openclaw_timeout": self.openclaw_timeout,
+            "openclaw_working_dir": self.openclaw_working_dir,
+            "openclaw_thinking_level": self.openclaw_thinking_level,
             "opencode_command": self.opencode_command,
             "opencode_timeout": self.opencode_timeout,
             "opencode_working_dir": self.opencode_working_dir,
@@ -286,6 +304,9 @@ class AgentConfig:
 
         if self.codex_timeout <= 0:
             errors.append("codex_timeout must be positive")
+
+        if self.openclaw_timeout <= 0:
+            errors.append("openclaw_timeout must be positive")
 
         if self.opencode_timeout <= 0:
             errors.append("opencode_timeout must be positive")

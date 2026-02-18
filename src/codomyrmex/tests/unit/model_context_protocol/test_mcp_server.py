@@ -17,7 +17,7 @@ pydantic = pytest.importorskip("pydantic")
 
 def _run(coro):
     """Run an async coroutine synchronously."""
-    return asyncio.get_event_loop().run_until_complete(coro)
+    return asyncio.run(coro)
 
 
 def _make_server(code_dir):

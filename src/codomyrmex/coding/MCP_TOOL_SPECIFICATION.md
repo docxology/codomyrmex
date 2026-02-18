@@ -2,6 +2,24 @@
 
 This document defines the Model Context Protocol (MCP) tools for the `coding` module, which provides comprehensive code execution, sandboxing, review, monitoring, and debugging capabilities.
 
+## Implementation Status
+
+The following tools are **implemented** in `mcp_tools.py` via the `@mcp_tool` decorator:
+
+| Implemented Tool Function | Corresponds to Spec |
+|:--------------------------|:--------------------|
+| `code_execute` | `coding_execute_code` (simplified interface) |
+| `code_list_languages` | (not in original spec) |
+| `code_review_file` | `coding_analyze_file` (simplified interface) |
+| `code_review_project` | `coding_analyze_project` (simplified interface) |
+| `code_debug` | `coding_debug_code` (simplified interface) |
+
+The following tools are **specified but not yet implemented** in `mcp_tools.py`:
+- `coding_check_quality_gates` -- planned
+- `coding_monitor_execution` -- planned
+- `coding_generate_report` -- planned
+- `coding_run_in_docker` -- planned
+
 ## General Considerations for Coding Tools
 
 - **Dependencies**: Requires `logging_monitoring` module. Docker is required for sandboxed execution. Static analysis tools (ruff, mypy) are required for code review.

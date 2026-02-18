@@ -143,4 +143,4 @@ class TestErrorBudgetPolicy:
         tracker = SLOTracker()
         policy = ErrorBudgetPolicy(tracker=tracker)
         policy.add_policy("freeze_deploys", action=lambda: "frozen")
-        assert True  # No error raised
+        assert "freeze_deploys" in policy._policies
