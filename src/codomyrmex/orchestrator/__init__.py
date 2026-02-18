@@ -60,6 +60,18 @@ from .parallel_runner import (
     run_parallel,
     run_parallel_async,
 )
+from .async_runner import (
+    AsyncParallelRunner,
+    AsyncTaskResult,
+    AsyncExecutionResult,
+)
+from .async_scheduler import (
+    AsyncScheduler,
+    AsyncJob,
+    AsyncJobStatus,
+    SchedulerMetrics,
+)
+from .retry_policy import with_retry
 from .runner import run_function, run_script
 from .thin import (
     StepResult,
@@ -153,6 +165,17 @@ __all__ = [
     "ExecutionResult",
     "run_parallel",
     "run_parallel_async",
+    # Async runner (Stream 5)
+    "AsyncParallelRunner",
+    "AsyncTaskResult",
+    "AsyncExecutionResult",
+    # Async scheduler (Stream 5)
+    "AsyncScheduler",
+    "AsyncJob",
+    "AsyncJobStatus",
+    "SchedulerMetrics",
+    # Retry decorator (Stream 5)
+    "with_retry",
     # Thin orchestration
     "run",
     "run_async",

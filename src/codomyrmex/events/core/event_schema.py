@@ -104,6 +104,12 @@ class EventType(Enum):
     TASK_FAILED = "task.failed"
     TASK_RETRYING = "task.retrying"
 
+    # Scheduler events
+    JOB_SCHEDULED = "job.scheduled"
+    JOB_STARTED = "job.started"
+    JOB_COMPLETED = "job.completed"
+    JOB_FAILED = "job.failed"
+
     # Custom events (for extensions)
     CUSTOM = "custom"
 

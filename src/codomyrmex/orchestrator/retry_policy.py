@@ -160,3 +160,121 @@ class PipelineRetryExecutor:
             attempts=policy.max_attempts,
             total_delay=total_delay,
         )
+
+
+# ---------------------------------------------------------------------------
+# @with_retry decorator
+# ---------------------------------------------------------------------------
+
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def with_retry(
+    *,
+    max_attempts: int = 3,
+    base_delay: float = 1.0,
+    max_delay: float = 60.0,
+    exponential_base: float = 2.0,
+    retry_on: tuple[type[Exception], ...] = (Exception,),
+) -> Callable[[F], F]:
+    """Decorator that retries a function with exponential backoff.
+
+    Works with both sync and async functions.  Uses the same backoff
+    formula as :class:`RetryPolicy`.
+
+    Parameters
+    ----------
+    max_attempts:
+        Total attempts (1 = no retry).
+    base_delay:
+        Base delay in seconds for the first retry.
+    max_delay:
+        Maximum delay cap.
+    exponential_base:
+        Multiplier for exponential growth.
+    retry_on:
+        Exception types that trigger a retry.
+
+    Usage::
+
+        @with_retry(max_attempts=3, base_delay=0.5)
+        async def fetch(url: str) -> str: ...
+
+        @with_retry(max_attempts=5, retry_on=(IOError,))
+        def read_file(path: str) -> str: ...
+    """
+    policy = RetryPolicy(
+        max_attempts=max_attempts,
+        base_delay=base_delay,
+        max_delay=max_delay,
+        exponential_base=exponential_base,
+        retryable_errors=retry_on,
+    )
+
+    def decorator(func: F) -> F:
+        import functools
+
+        if asyncio.iscoroutinefunction(func):
+
+            @functools.wraps(func)
+            async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
+                last_exc: Exception | None = None
+                for attempt in range(1, policy.max_attempts + 1):
+                    try:
+                        return await func(*args, **kwargs)
+                    except policy.retryable_errors as exc:
+                        last_exc = exc
+                        if attempt < policy.max_attempts:
+                            delay = policy.compute_delay(attempt - 1)
+                            logger.warning(
+                                "%s attempt %d/%d failed (%s), retrying in %.2fs",
+                                func.__name__, attempt, policy.max_attempts,
+                                exc, delay,
+                            )
+                            await asyncio.sleep(delay)
+                        else:
+                            logger.error(
+                                "%s failed after %d attempts: %s",
+                                func.__name__, policy.max_attempts, exc,
+                            )
+                raise last_exc  # type: ignore[misc]
+
+            return async_wrapper  # type: ignore[return-value]
+
+        else:
+
+            @functools.wraps(func)
+            def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
+                last_exc: Exception | None = None
+                for attempt in range(1, policy.max_attempts + 1):
+                    try:
+                        return func(*args, **kwargs)
+                    except policy.retryable_errors as exc:
+                        last_exc = exc
+                        if attempt < policy.max_attempts:
+                            delay = policy.compute_delay(attempt - 1)
+                            logger.warning(
+                                "%s attempt %d/%d failed (%s), retrying in %.2fs",
+                                func.__name__, attempt, policy.max_attempts,
+                                exc, delay,
+                            )
+                            time.sleep(delay)
+                        else:
+                            logger.error(
+                                "%s failed after %d attempts: %s",
+                                func.__name__, policy.max_attempts, exc,
+                            )
+                raise last_exc  # type: ignore[misc]
+
+            return sync_wrapper  # type: ignore[return-value]
+
+    return decorator
+
+
+__all__ = [
+    "RetryOutcome",
+    "RetryPolicy",
+    "RetryResult",
+    "PipelineRetryExecutor",
+    "with_retry",
+]
