@@ -88,6 +88,12 @@ from .circuit_breaker import (
     reset_all_circuits,
 )
 from .rate_limiter import RateLimiter, RateLimiterConfig
+from .discovery import (
+    FailedModule,
+    DiscoveryReport,
+    DiscoveryMetrics,
+    MCPDiscoveryEngine,
+)
 
 
 __all__ = [
@@ -118,6 +124,11 @@ __all__ = [
     "reset_all_circuits",
     "RateLimiter",
     "RateLimiterConfig",
+    # Stream 3
+    "FailedModule",
+    "DiscoveryReport",
+    "DiscoveryMetrics",
+    "MCPDiscoveryEngine",
     "schemas",
     "adapters",
     "validators",

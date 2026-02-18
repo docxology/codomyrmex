@@ -27,7 +27,9 @@ import inspect
 import json
 import subprocess
 import sys
+import os
 import threading
+import time
 from pathlib import Path
 from typing import Any
 
@@ -632,33 +634,44 @@ _PROMPT_DEFINITIONS: list[tuple[str, str, list[dict[str, Any]], str]] = [
 # =====================================================================
 
 # ─────────────────────────────────────────────────────────────────────
-# Dynamic Discovery Integration
+# Dynamic Discovery Integration (v0.1.8 Stream 3: TTL cache)
 # ─────────────────────────────────────────────────────────────────────
 
-# NOTE: cache added v0.1.7; v0.1.9 adds _tool_invalidate_cache() MCP tool
 _DYNAMIC_TOOLS_CACHE: list[tuple[str, str, Any, dict[str, Any]]] | None = None
 _DYNAMIC_TOOLS_CACHE_LOCK = threading.Lock()
+_CACHE_EXPIRY: float | None = None  # monotonic timestamp when cache expires
+_DEFAULT_CACHE_TTL: float = float(os.environ.get("CODOMYRMEX_MCP_CACHE_TTL", "300"))
 
 
 def invalidate_tool_cache() -> None:
-    """Clear the dynamic tool discovery cache."""
-    global _DYNAMIC_TOOLS_CACHE
+    """Clear the dynamic tool discovery cache and its TTL."""
+    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY
     with _DYNAMIC_TOOLS_CACHE_LOCK:
         _DYNAMIC_TOOLS_CACHE = None
+        _CACHE_EXPIRY = None
     logger.info("Dynamic tool cache invalidated")
 
 
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
-    """Scan all modules for @mcp_tool definitions AND auto-discover all public functions."""
-    global _DYNAMIC_TOOLS_CACHE
+    """Scan all modules for @mcp_tool definitions AND auto-discover all public functions.
+
+    Uses a TTL-based cache (default 300 s, configurable via
+    ``CODOMYRMEX_MCP_CACHE_TTL`` env var).  Cache hits are tracked
+    for discovery metrics.
+    """
+    global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY
+    now = time.monotonic()
     with _DYNAMIC_TOOLS_CACHE_LOCK:
-        if _DYNAMIC_TOOLS_CACHE is not None:
+        if _DYNAMIC_TOOLS_CACHE is not None and _CACHE_EXPIRY is not None and now < _CACHE_EXPIRY:
+            logger.debug("Discovery cache hit (expires in %.1fs)", _CACHE_EXPIRY - now)
             return _DYNAMIC_TOOLS_CACHE
 
     from codomyrmex.model_context_protocol.discovery import (
         discover_all_public_tools,
         discover_tools,
     )
+
+    t0 = time.monotonic()
 
     # ── Phase 1: Discover @mcp_tool decorated functions ──
     scan_targets = [
@@ -698,10 +711,15 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
             seen_names.add(tool.name)
             logger.debug(f"Auto-discovered tool: {tool.name}")
 
-    logger.info(f"Total dynamic tools discovered: {len(tools)} ({len(auto_tools)} auto-discovered)")
+    elapsed_ms = (time.monotonic() - t0) * 1000
+    logger.info(
+        "Dynamic tools discovered: %d (%d auto) in %.0fms",
+        len(tools), len(auto_tools), elapsed_ms,
+    )
 
     with _DYNAMIC_TOOLS_CACHE_LOCK:
         _DYNAMIC_TOOLS_CACHE = tools
+        _CACHE_EXPIRY = time.monotonic() + _DEFAULT_CACHE_TTL
 
     return tools
 
@@ -763,6 +781,13 @@ def create_codomyrmex_mcp_server(
     config = MCPServerConfig(name=name, transport=transport)
     server = MCPServer(config=config)
 
+    # ── Warm-up: eagerly populate discovery cache ─────────────────
+    if config.warm_up:
+        t0 = time.monotonic()
+        _discover_dynamic_tools()
+        warm_ms = (time.monotonic() - t0) * 1000
+        logger.info("Discovery warm-up completed in %.0fms", warm_ms)
+
     # ── Register tools (Static + Dynamic) ──────────────────────────
     registry = get_tool_registry()
     # The server uses its own internal registry, so we copy over
@@ -807,6 +832,28 @@ def create_codomyrmex_mcp_server(
             arguments=prompt_args,
             template=template,
         )
+
+    # ── Register discovery metrics resource ────────────────────────
+    def _discovery_metrics_provider() -> str:
+        from codomyrmex.model_context_protocol.discovery import MCPDiscovery as _Disc
+        disc = _Disc()
+        m = disc.get_metrics()
+        return json.dumps({
+            "total_tools": m.total_tools,
+            "scan_duration_ms": m.scan_duration_ms,
+            "failed_modules": m.failed_modules,
+            "modules_scanned": m.modules_scanned,
+            "cache_hits": m.cache_hits,
+            "last_scan_time": m.last_scan_time.isoformat() if m.last_scan_time else None,
+        })
+
+    server.register_resource(
+        uri="codomyrmex://discovery/metrics",
+        name="Discovery Metrics",
+        description="Runtime metrics from MCP tool discovery (scan time, failures, cache hits).",
+        mime_type="application/json",
+        content_provider=_discovery_metrics_provider,
+    )
 
     logger.info(
         "Codomyrmex MCP server created: %d tools, %d resources, %d prompts",

@@ -467,6 +467,204 @@ def discover_all_public_tools(
     return tools
 
 
+# =====================================================================
+# Stream 3: Discovery Hardening — error-isolated scanning & metrics
+# =====================================================================
+
+import time as _time
+from datetime import datetime, timezone
+
+
+@dataclass
+class FailedModule:
+    """Record of a module that failed to import during scanning."""
+
+    module: str
+    error: str
+    error_type: str
+
+
+@dataclass
+class DiscoveryReport:
+    """Result of a package/module scan with per-module error isolation.
+
+    ``tools`` contains the successfully discovered tools.
+    ``failed_modules`` records every module that raised on import.
+    ``scan_duration_ms`` is wall-clock time for the scan.
+    """
+
+    tools: list[DiscoveredTool] = field(default_factory=list)
+    failed_modules: list[FailedModule] = field(default_factory=list)
+    scan_duration_ms: float = 0.0
+    modules_scanned: int = 0
+
+
+@dataclass
+class DiscoveryMetrics:
+    """Runtime metrics for the discovery engine."""
+
+    total_tools: int = 0
+    scan_duration_ms: float = 0.0
+    failed_modules: list[str] = field(default_factory=list)
+    modules_scanned: int = 0
+    cache_hits: int = 0
+    last_scan_time: datetime | None = None
+
+
+class MCPDiscoveryEngine:
+    """Error-isolated discovery engine with incremental refresh and metrics.
+
+    Wraps :class:`ModuleScanner` to catch per-module import errors,
+    track scan timing, and expose runtime metrics.
+
+    Usage::
+
+        engine = MCPDiscoveryEngine()
+        report = engine.scan_package("codomyrmex.search")
+        assert report.failed_modules == []
+
+        # Incremental refresh of one module
+        report2 = engine.scan_module("codomyrmex.search.mcp_tools")
+
+        # Metrics
+        m = engine.get_metrics()
+        print(m.total_tools, m.cache_hits)
+    """
+
+    def __init__(self) -> None:
+        self._tools: dict[str, DiscoveredTool] = {}
+        self._cache_hits: int = 0
+        self._last_scan_time: datetime | None = None
+        self._last_scan_duration_ms: float = 0.0
+        self._last_modules_scanned: int = 0
+        self._last_failed_modules: list[str] = []
+
+    # ── Full package scan (error-isolated) ───────────────────────
+
+    def scan_package(self, package_name: str) -> DiscoveryReport:
+        """Scan a Python package with per-module error isolation.
+
+        Each sub-module is imported inside its own ``try/except``
+        so one broken module never kills the full scan.
+        """
+        import pkgutil
+
+        report = DiscoveryReport()
+        t0 = _time.monotonic()
+        scanner = ModuleScanner()
+
+        try:
+            package = importlib.import_module(package_name)
+        except (ImportError, SyntaxError, Exception) as exc:
+            report.failed_modules.append(FailedModule(
+                module=package_name,
+                error=str(exc),
+                error_type=type(exc).__name__,
+            ))
+            report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+            logger.warning("Cannot import package %s: %s", package_name, exc)
+            return report
+
+        if not hasattr(package, "__path__"):
+            report.modules_scanned = 1
+            tools = scanner.scan_module(package_name)
+            report.tools.extend(tools)
+            for tool in tools:
+                self._tools[tool.name] = tool
+            report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+            self._update_metrics(report)
+            return report
+
+        for _importer, modname, _ispkg in pkgutil.walk_packages(
+            package.__path__, prefix=package_name + "."
+        ):
+            report.modules_scanned += 1
+            try:
+                tools = scanner.scan_module(modname)
+                report.tools.extend(tools)
+            except (ImportError, SyntaxError, RecursionError) as exc:
+                report.failed_modules.append(FailedModule(
+                    module=modname, error=str(exc), error_type=type(exc).__name__,
+                ))
+                logger.warning("Error scanning %s: %s", modname, exc)
+            except Exception as exc:
+                report.failed_modules.append(FailedModule(
+                    module=modname, error=str(exc), error_type=type(exc).__name__,
+                ))
+                logger.warning("Unexpected error scanning %s: %s", modname, exc)
+
+        for tool in report.tools:
+            self._tools[tool.name] = tool
+
+        report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+        self._update_metrics(report)
+        return report
+
+    # ── Incremental single-module scan ───────────────────────────
+
+    def scan_module(self, module_name: str) -> DiscoveryReport:
+        """Scan a single module (incremental refresh).
+
+        Merges discovered tools into the existing registry
+        without clearing tools from other modules.
+        """
+        report = DiscoveryReport()
+        t0 = _time.monotonic()
+        scanner = ModuleScanner()
+
+        try:
+            report.modules_scanned = 1
+            tools = scanner.scan_module(module_name)
+            report.tools.extend(tools)
+            for tool in tools:
+                self._tools[tool.name] = tool
+        except Exception as exc:
+            report.failed_modules.append(FailedModule(
+                module=module_name, error=str(exc), error_type=type(exc).__name__,
+            ))
+            logger.warning("Error scanning module %s: %s", module_name, exc)
+
+        report.scan_duration_ms = (_time.monotonic() - t0) * 1000
+        return report
+
+    # ── Helpers ──────────────────────────────────────────────────
+
+    def _update_metrics(self, report: DiscoveryReport) -> None:
+        self._last_scan_time = datetime.now(timezone.utc)
+        self._last_scan_duration_ms = report.scan_duration_ms
+        self._last_modules_scanned = report.modules_scanned
+        self._last_failed_modules = [f.module for f in report.failed_modules]
+
+    def record_cache_hit(self) -> None:
+        """Increment cache-hit counter (called by bridge TTL cache)."""
+        self._cache_hits += 1
+
+    # ── Metrics ─────────────────────────────────────────────────
+
+    def get_metrics(self) -> DiscoveryMetrics:
+        """Return current discovery metrics."""
+        return DiscoveryMetrics(
+            total_tools=len(self._tools),
+            scan_duration_ms=self._last_scan_duration_ms,
+            failed_modules=list(self._last_failed_modules),
+            modules_scanned=self._last_modules_scanned,
+            cache_hits=self._cache_hits,
+            last_scan_time=self._last_scan_time,
+        )
+
+    # ── Registry accessors ──────────────────────────────────────
+
+    def get_tool(self, name: str) -> DiscoveredTool | None:
+        return self._tools.get(name)
+
+    def list_tools(self) -> list[DiscoveredTool]:
+        return list(self._tools.values())
+
+    @property
+    def tool_count(self) -> int:
+        return len(self._tools)
+
+
 __all__ = [
     "DiscoveredTool",
     "ModuleScanner",
@@ -475,5 +673,9 @@ __all__ = [
     "ToolCatalog",
     "discover_tools",
     "discover_all_public_tools",
+    # Stream 3
+    "FailedModule",
+    "DiscoveryReport",
+    "DiscoveryMetrics",
+    "MCPDiscoveryEngine",
 ]
-

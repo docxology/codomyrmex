@@ -31,6 +31,7 @@ class MCPServerConfig:
         per_tool_timeouts: Per-tool timeout overrides ``{tool_name: seconds}``.
         rate_limit_rate: Global rate limit (requests/second).
         rate_limit_burst: Global rate limit burst ceiling.
+        warm_up: Eagerly populate discovery cache at server start.
     """
     name: str = "codomyrmex-mcp-server"
     version: str = "1.0.0"
@@ -40,6 +41,7 @@ class MCPServerConfig:
     per_tool_timeouts: dict[str, float] | None = None
     rate_limit_rate: float = 50.0
     rate_limit_burst: int = 100
+    warm_up: bool = True
 
 
 class MCPServer:
