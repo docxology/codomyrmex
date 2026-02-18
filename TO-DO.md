@@ -86,21 +86,14 @@ v0.3.0 layers cognitive architecture. v0.4.0 delivers swarm orchestration.
 > **Server upgrades** (`server.py`): per-tool execution timeout via `asyncio.wait_for`, rate limiter integration (`RATE_LIMITED` error code), `MCPServerConfig` new fields (`default_tool_timeout`, `per_tool_timeouts`, `rate_limit_rate`, `rate_limit_burst`).
 > **Tests**: `test_circuit_breaker.py` (17), `test_rate_limiter.py` (12), `test_transport_robustness.py` (18). Updated `test_mcp_http_and_errors.py` for retry wrapping.
 
-### Stream 3: MCP Discovery Hardening
+### ✅ Stream 3: MCP Discovery Hardening
 
-**Goal**: Tool discovery is fast, resilient to module failures, and supports incremental refresh.
-
-> **Post-Stream-2 Context**: Discovery (`discovery.py`, 146 lines) still imports all modules eagerly. `mcp_bridge.py` cache has no TTL. No error isolation — one broken module kills full scan. Circuit breaker and rate limiter are now available but not yet wired into discovery.
-
-| Deliverable | File | Description |
-| --- | --- | --- |
-| **Error-isolated scanning** | `discovery.py` `scan_package()` | `try/except` per module import. `DiscoveryReport(tools, failed_modules, scan_duration_ms)`. Continue on failure. |
-| **Cache with TTL** | `mcp_bridge.py` `_discover_dynamic_tools()` | `_CACHE_EXPIRY` + `time.monotonic()`. Default 300s. `CODOMYRMEX_MCP_CACHE_TTL` env var. |
-| **Warm-up** | `mcp_bridge.py` `create_codomyrmex_mcp_server()` | Eager `_discover_dynamic_tools()` at server start. `MCPServerConfig.warm_up: bool = True`. |
-| **Incremental scan** | `discovery.py` | `MCPDiscovery.scan_module(name)` — single module refresh without full rescan. |
-| **Discovery metrics** | `discovery.py` | `DiscoveryMetrics` dataclass. Exposed as MCP resource `codomyrmex://discovery/metrics`. |
-
-**Tests**: `test_mcp_discovery_resilience.py` (~8), `test_mcp_cache_ttl.py` (~6), `test_mcp_incremental_scan.py` (~4).
+> **Completed**: Commit `13a3a2de` | 34 new tests | 173/173 MCP tests pass (zero regressions)
+>
+> **New in `discovery/__init__.py`** (~200 lines): `MCPDiscoveryEngine` with error-isolated `scan_package()` (per-module `try/except`), incremental `scan_module()`, `DiscoveryReport`/`FailedModule`/`DiscoveryMetrics` dataclasses, cache-hit tracking, `get_metrics()`.
+> **Updated `mcp_bridge.py`**: TTL cache (`_CACHE_EXPIRY`, default 300s, `CODOMYRMEX_MCP_CACHE_TTL` env var), warm-up in `create_codomyrmex_mcp_server()`, `codomyrmex://discovery/metrics` MCP resource.
+> **Updated `server.py`**: `MCPServerConfig.warm_up: bool = True`.
+> **Tests**: `test_mcp_discovery_engine.py` (17), `test_mcp_discovery_cache.py` (9), `test_mcp_discovery_metrics.py` (8).
 
 ### Stream 4: MCP Stress & Concurrency Tests
 
