@@ -17,6 +17,7 @@ import asyncio
 import json
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -27,12 +28,27 @@ logger = get_logger(__name__)
 
 @dataclass
 class MCPClientConfig:
-    """Configuration for an MCP client connection."""
+    """Configuration for an MCP client connection.
+
+    Attributes:
+        name: Client identity name.
+        version: Client version string.
+        timeout_seconds: Default per-request timeout.
+        protocol_version: MCP protocol version to negotiate.
+        max_retries: Max retry attempts for transient errors.
+        retry_delay: Base delay (seconds) between retries (doubled each attempt).
+        health_check_interval: Seconds between health pings (0 = disabled).
+        connection_pool_size: Max simultaneous HTTP connections.
+    """
 
     name: str = "codomyrmex-mcp-client"
     version: str = "0.1.0"
     timeout_seconds: float = 30.0
     protocol_version: str = "2025-06-18"
+    max_retries: int = 3
+    retry_delay: float = 0.5
+    health_check_interval: float = 0.0
+    connection_pool_size: int = 10
 
 
 class MCPClient:
@@ -97,8 +113,19 @@ class MCPClient:
         self._request_id += 1
         return self._request_id
 
-    async def _send(self, method: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
-        """Send a JSON-RPC request and return the response."""
+    async def _send(
+        self,
+        method: str,
+        params: dict[str, Any] | None = None,
+        *,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        """Send a JSON-RPC request with automatic retry.
+
+        Retries on ``asyncio.TimeoutError``, ``OSError``, and
+        ``ConnectionError`` up to ``config.max_retries`` times with
+        exponential back-off.
+        """
         msg: dict[str, Any] = {
             "jsonrpc": "2.0",
             "id": self._next_id(),
@@ -106,12 +133,34 @@ class MCPClient:
             "params": params or {},
         }
         assert self._transport is not None, "Not connected — use a context manager"
-        response = await self._transport.send(msg, timeout=self.config.timeout_seconds)
-        if "error" in response:
-            raise MCPClientError(
-                f"RPC error on {method}: {response['error'].get('message', response['error'])}"
-            )
-        return response.get("result", {})
+        effective_timeout = timeout or self.config.timeout_seconds
+        last_exc: Exception | None = None
+
+        for attempt in range(1, self.config.max_retries + 1):
+            try:
+                response = await self._transport.send(msg, timeout=effective_timeout)
+                if "error" in response:
+                    raise MCPClientError(
+                        f"RPC error on {method}: {response['error'].get('message', response['error'])}"
+                    )
+                return response.get("result", {})
+            except (asyncio.TimeoutError, OSError, ConnectionError) as exc:
+                last_exc = exc
+                if attempt < self.config.max_retries:
+                    delay = self.config.retry_delay * (2 ** (attempt - 1))
+                    logger.warning(
+                        "MCP request %s attempt %d/%d failed (%s), retrying in %.1fs",
+                        method, attempt, self.config.max_retries, exc, delay,
+                    )
+                    await asyncio.sleep(delay)
+                else:
+                    logger.error(
+                        "MCP request %s failed after %d attempts: %s",
+                        method, self.config.max_retries, exc,
+                    )
+        raise MCPClientError(
+            f"Request {method} failed after {self.config.max_retries} retries: {last_exc}"
+        )
 
     async def _notify(self, method: str, params: dict[str, Any] | None = None) -> None:
         """Send a JSON-RPC notification (no response expected)."""
@@ -153,25 +202,71 @@ class MCPClient:
         """Server info returned during initialization."""
         return self._server_info
 
+    async def health_check(self) -> dict[str, Any]:
+        """Ping the server and return latency + status.
+
+        Returns::
+
+            {"ok": True, "latency_ms": 12.3, "server": ...}
+
+        Raises:
+            MCPClientError: If the server is unreachable.
+        """
+        t0 = time.monotonic()
+        try:
+            result = await self._send("ping", timeout=5.0)
+            latency = (time.monotonic() - t0) * 1000
+            return {"ok": True, "latency_ms": round(latency, 2), "server": self._server_info}
+        except MCPClientError:
+            # Many servers don't implement ping — fall back to tools/list
+            try:
+                await self._send("tools/list", timeout=5.0)
+                latency = (time.monotonic() - t0) * 1000
+                return {"ok": True, "latency_ms": round(latency, 2), "server": self._server_info}
+            except Exception as exc:
+                latency = (time.monotonic() - t0) * 1000
+                return {"ok": False, "latency_ms": round(latency, 2), "error": str(exc)}
+
     async def list_tools(self) -> list[dict[str, Any]]:
         """List tools exposed by the server."""
         result = await self._send("tools/list")
         return result.get("tools", [])
 
-    async def call_tool(self, name: str, arguments: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def call_tool(
+        self,
+        name: str,
+        arguments: dict[str, Any] | None = None,
+        *,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
         """Invoke a tool on the server.
 
         Args:
             name: Tool name.
             arguments: Tool arguments dict.
+            timeout: Optional per-call timeout override.
 
         Returns:
-            The tool result dict (``content``, ``structuredContent``, etc.).
+            The tool result dict.  If the server returned a structured
+            ``MCPToolError``, it is available under the ``"_error"`` key.
         """
-        result = await self._send("tools/call", {
-            "name": name,
-            "arguments": arguments or {},
-        })
+        result = await self._send(
+            "tools/call",
+            {"name": name, "arguments": arguments or {}},
+            timeout=timeout,
+        )
+
+        # Parse structured MCPToolError from server response
+        if result.get("isError"):
+            try:
+                from .errors import MCPToolError as _MCPToolError
+                content_text = result.get("content", [{}])[0].get("text", "")
+                parsed = _MCPToolError.from_json(content_text)
+                if parsed:
+                    result["_error"] = parsed
+            except Exception:
+                pass  # leave unstructured
+
         return result
 
     async def list_resources(self) -> list[dict[str, Any]]:
@@ -257,10 +352,14 @@ class _StdioTransport(_Transport):
 
 
 class _HTTPTransport(_Transport):
-    """HTTP transport — sends JSON-RPC to ``/mcp`` endpoint."""
+    """HTTP transport — sends JSON-RPC to ``/mcp`` endpoint.
 
-    def __init__(self, base_url: str) -> None:
+    Supports connection pooling via ``pool_size`` parameter.
+    """
+
+    def __init__(self, base_url: str, *, pool_size: int = 10) -> None:
         self._base_url = base_url.rstrip("/")
+        self._pool_size = pool_size
         self._session: Any = None
 
     async def _get_session(self) -> Any:
@@ -268,7 +367,11 @@ class _HTTPTransport(_Transport):
             try:
                 import aiohttp
 
-                self._session = aiohttp.ClientSession()
+                connector = aiohttp.TCPConnector(
+                    limit=self._pool_size,
+                    enable_cleanup_closed=True,
+                )
+                self._session = aiohttp.ClientSession(connector=connector)
             except ImportError:
                 raise MCPClientError(
                     "aiohttp is required for HTTP transport — pip install aiohttp"
@@ -343,8 +446,12 @@ class _HTTPContextManager:
         self._client: MCPClient | None = None
 
     async def __aenter__(self) -> MCPClient:
-        client = MCPClient(self._config)
-        client._transport = _HTTPTransport(self._base_url)
+        cfg = self._config or MCPClientConfig()
+        client = MCPClient(cfg)
+        client._transport = _HTTPTransport(
+            self._base_url,
+            pool_size=cfg.connection_pool_size,
+        )
         await client.initialize()
         self._client = client
         return client

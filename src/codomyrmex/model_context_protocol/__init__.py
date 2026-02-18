@@ -73,9 +73,21 @@ def cli_commands():
     }
 
 
-# MCP Errors and Validation (v0.1.8)
+# MCP Errors and Validation (v0.1.8 Stream 1)
 from .errors import MCPErrorCode, MCPToolError, FieldError
 from .validation import ValidationResult, validate_tool_arguments
+
+# MCP Transport Robustness (v0.1.8 Stream 2)
+from .circuit_breaker import (
+    CircuitBreaker,
+    CircuitBreakerConfig,
+    CircuitOpenError,
+    CircuitState,
+    get_circuit_breaker,
+    get_all_circuit_metrics,
+    reset_all_circuits,
+)
+from .rate_limiter import RateLimiter, RateLimiterConfig
 
 
 __all__ = [
@@ -90,11 +102,22 @@ __all__ = [
     "MCPClient",
     "MCPClientConfig",
     "MCPClientError",
+    # Stream 1
     "MCPErrorCode",
     "MCPToolError",
     "FieldError",
     "ValidationResult",
     "validate_tool_arguments",
+    # Stream 2
+    "CircuitBreaker",
+    "CircuitBreakerConfig",
+    "CircuitOpenError",
+    "CircuitState",
+    "get_circuit_breaker",
+    "get_all_circuit_metrics",
+    "reset_all_circuits",
+    "RateLimiter",
+    "RateLimiterConfig",
     "schemas",
     "adapters",
     "validators",

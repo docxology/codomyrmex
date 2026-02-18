@@ -258,12 +258,14 @@ class TestMCPClientErrorHandling:
 
         asyncio.run(_test())
 
-    def test_transport_error_propagates(self):
-        """Raw transport exceptions should propagate directly."""
-        client = MCPClient(MCPClientConfig(name="err-client"))
+    def test_transport_error_retried_and_wrapped(self):
+        """Raw transport errors (ConnectionError, OSError) are retried then wrapped."""
+        client = MCPClient(MCPClientConfig(
+            name="err-client", max_retries=1, retry_delay=0.01,
+        ))
         client._transport = _ServerExplodingTransport(ConnectionError("refused"))
 
-        with pytest.raises(ConnectionError, match="refused"):
+        with pytest.raises(MCPClientError, match="failed after 1 retries"):
             asyncio.run(client.initialize())
 
     def test_close_without_transport(self):
@@ -290,35 +292,61 @@ class TestMCPClientTimeout:
     """Test MCPClient timeout behavior."""
 
     def test_timeout_on_initialize(self):
-        """Client should timeout if transport takes too long."""
-        config = MCPClientConfig(name="timeout-client", timeout_seconds=0.1)
+        """Client should timeout and wrap in MCPClientError after retry."""
+        config = MCPClientConfig(
+            name="timeout-client", timeout_seconds=0.1,
+            max_retries=1, retry_delay=0.01,
+        )
         client = MCPClient(config)
         client._transport = _TimeoutTransport()
 
-        with pytest.raises(asyncio.TimeoutError):
+        with pytest.raises(MCPClientError, match="failed after 1 retries"):
             asyncio.run(client.initialize())
 
     def test_timeout_on_call_tool(self):
-        """Tool call should timeout if transport takes too long."""
+        """Tool call timeout is retried then wrapped in MCPClientError."""
         async def _test():
-            config = MCPClientConfig(name="timeout-client", timeout_seconds=0.1)
+            config = MCPClientConfig(
+                name="timeout-client", timeout_seconds=0.1,
+                max_retries=1, retry_delay=0.01,
+            )
             client = MCPClient(config)
             client._transport = _TimeoutTransport()
             client._initialized = True
-            with pytest.raises(asyncio.TimeoutError):
+            with pytest.raises(MCPClientError, match="failed after 1 retries"):
                 await client.call_tool("echo", {"text": "hello"})
 
         asyncio.run(_test())
 
     def test_timeout_on_list_tools(self):
-        """List tools should timeout if transport takes too long."""
+        """List tools timeout is retried then wrapped in MCPClientError."""
         async def _test():
-            config = MCPClientConfig(name="timeout-client", timeout_seconds=0.1)
+            config = MCPClientConfig(
+                name="timeout-client", timeout_seconds=0.1,
+                max_retries=1, retry_delay=0.01,
+            )
             client = MCPClient(config)
             client._transport = _TimeoutTransport()
             client._initialized = True
-            with pytest.raises(asyncio.TimeoutError):
+            with pytest.raises(MCPClientError, match="failed after 1 retries"):
                 await client.list_tools()
+
+        asyncio.run(_test())
+
+    def test_timeout_recorded_by_transport(self):
+        """Verify timeout parameter is forwarded to transport."""
+        async def _test():
+            config = MCPClientConfig(
+                name="timeout-client", timeout_seconds=0.1,
+                max_retries=1, retry_delay=0.01,
+            )
+            client = MCPClient(config)
+            transport = _TimeoutTransport()
+            client._transport = transport
+            client._initialized = True
+            with pytest.raises(MCPClientError):
+                await client.call_tool("echo", {})
+            assert transport.last_timeout == 0.1
 
         asyncio.run(_test())
 

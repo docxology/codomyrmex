@@ -20,11 +20,26 @@ from .schemas.mcp_schemas import (
 
 @dataclass
 class MCPServerConfig:
-    """Configuration for MCP server."""
+    """Configuration for MCP server.
+
+    Attributes:
+        name: Server identity.
+        version: Server version string.
+        transport: Transport type ("stdio" or "http").
+        log_level: Logging level.
+        default_tool_timeout: Default per-tool execution timeout (seconds, 0 = no limit).
+        per_tool_timeouts: Per-tool timeout overrides ``{tool_name: seconds}``.
+        rate_limit_rate: Global rate limit (requests/second).
+        rate_limit_burst: Global rate limit burst ceiling.
+    """
     name: str = "codomyrmex-mcp-server"
     version: str = "1.0.0"
     transport: str = "stdio"  # "stdio" or "http"
     log_level: str = "INFO"
+    default_tool_timeout: float = 60.0
+    per_tool_timeouts: dict[str, float] | None = None
+    rate_limit_rate: float = 50.0
+    rate_limit_burst: int = 100
 
 
 class MCPServer:
@@ -45,6 +60,13 @@ class MCPServer:
         self._prompts: dict[str, dict[str, Any]] = {}
         self._initialized = False
         self._request_id = 0
+
+        # Rate limiter
+        from .rate_limiter import RateLimiter, RateLimiterConfig
+        self._rate_limiter = RateLimiter(RateLimiterConfig(
+            rate=self.config.rate_limit_rate,
+            burst=self.config.rate_limit_burst,
+        ))
 
     # =========================================================================
     # Tool Management
@@ -311,6 +333,14 @@ class MCPServer:
         if not tool_entry:
             return not_found_error(tool_name).to_mcp_response()
 
+        # ── Rate-limit check ──────────────────────────────────────────
+        if not self._rate_limiter.allow(tool_name):
+            return MCPToolError(
+                code=MCPErrorCode.RATE_LIMITED,
+                message=f"Rate limit exceeded for tool {tool_name!r}",
+                tool_name=tool_name,
+            ).to_mcp_response()
+
         # ── Validate arguments against inputSchema ────────────────────
         tool_schema = tool_entry.get("schema", {})
         vr = validate_tool_arguments(tool_name, arguments, tool_schema)
@@ -326,6 +356,11 @@ class MCPServer:
                 field_errors=field_errors,
             ).to_mcp_response()
 
+        # ── Compute per-tool timeout ──────────────────────────────────
+        tool_timeout = self.config.default_tool_timeout
+        if self.config.per_tool_timeouts and tool_name in self.config.per_tool_timeouts:
+            tool_timeout = self.config.per_tool_timeouts[tool_name]
+
         # ── Execute with validated (and possibly coerced) arguments ───
         tool_call = MCPToolCall(
             tool_name=tool_name,
@@ -333,7 +368,21 @@ class MCPServer:
         )
 
         try:
-            result = self._tool_registry.execute(tool_call)
+            if tool_timeout > 0:
+                result = await asyncio.wait_for(
+                    asyncio.get_event_loop().run_in_executor(
+                        None, self._tool_registry.execute, tool_call
+                    ),
+                    timeout=tool_timeout,
+                )
+            else:
+                result = self._tool_registry.execute(tool_call)
+        except asyncio.TimeoutError:
+            return MCPToolError(
+                code=MCPErrorCode.TIMEOUT,
+                message=f"Tool {tool_name!r} timed out after {tool_timeout}s",
+                tool_name=tool_name,
+            ).to_mcp_response()
         except Exception as exc:
             return execution_error(tool_name, exc).to_mcp_response()
 
