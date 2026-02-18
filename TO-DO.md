@@ -119,20 +119,16 @@ v0.3.0 layers cognitive architecture. v0.4.0 delivers swarm orchestration.
 
 ---
 
-### Stream 6: Observability Pipeline
+### ✅ Stream 6: Observability Pipeline
 
-**Goal**: Wire structured logging, WebSocket streaming, and MCP tool-call metrics into a unified observability pipeline.
-
-> **Post-Stream-5 Context**: `AsyncScheduler` emits `EventBus` lifecycle events (`JOB_SCHEDULED/STARTED/COMPLETED/FAILED`). `AsyncParallelRunner` fires `on_task_complete` callbacks. `Workflow.run()` already emits `WORKFLOW_STARTED/COMPLETED/FAILED` and `TASK_STARTED/COMPLETED/FAILED/RETRYING` events via `orchestrator_events.py`. The event bridge should subscribe to all these event types. The `@with_retry` decorator logs all retry attempts — the bridge should capture these logical entries. MCP tools have `correlation_id` via `MCPToolError`.
-
-| Deliverable | File | Description |
-| --- | --- | --- |
-| WebSocket log handler | `logging_monitoring/ws_handler.py` (NEW) | `WebSocketLogHandler(logging.Handler)` with `asyncio.Queue` sync→async bridge. Broadcast to all connected clients. Backpressure: drop oldest if queue exceeds 1000 entries. |
-| Structured JSON toggle | `logging_monitoring/logger_config.py` | `enable_structured_json(logger_name=None)` → configure formatter for JSON output. `configure_all()` applies to all `codomyrmex.*` loggers. |
-| Event→log bridge | `logging_monitoring/event_bridge.py` (NEW) | `EventLoggingBridge` subscribes to `EventBus` typed events (including scheduler events from Stream 5). Logs each as structured JSON entry. `correlation_id` threading from MCP calls. |
-| MCP observability | `server.py` | `_on_tool_call` pre/post hooks. Prometheus-style counters: `mcp_tool_call_total`, `mcp_tool_duration_seconds`, `mcp_tool_errors_total`. Resource `codomyrmex://mcp/metrics`. Wire circuit breaker states into health resource. |
-
-**Tests** (~12): `test_ws_handler.py` (handler init, queue backpressure, broadcast), `test_event_bridge.py` (subscribe, structured output, correlation, scheduler event types), `test_mcp_observability.py` (counters incremented, duration tracked, error counted).
+> **Completed**: Commit `8c92635a` | 39 new tests | 248/248 MCP tests pass (zero regressions)
+>
+> **New files** (4 production + 3 test files, +1075 lines):
+> `ws_handler.py`: `WebSocketLogHandler` with `asyncio.Queue` sync→async bridge. Multi-client broadcast. Backpressure: drop oldest when queue full. Client add/remove management.
+> `event_bridge.py`: `EventLoggingBridge` subscribes to `EventBus` typed events (including scheduler events). Structured JSON output. `correlation_id` threading. Start/stop lifecycle.
+> `logger_config.py`: Added `enable_structured_json(logger_name)` and `configure_all_structured()` for programmatic JSON toggle.
+> `observability.py`: `MCPObservabilityHooks` with Prometheus-style counters (`mcp_tool_call_total`, `mcp_tool_duration_seconds`, `mcp_tool_errors_total`), per-tool metrics, JSON resource, thread-safe singleton.
+> **Tests**: `test_ws_handler.py` (13), `test_event_bridge.py` (11), `test_mcp_observability.py` (15).
 
 ---
 
@@ -140,29 +136,30 @@ v0.3.0 layers cognitive architecture. v0.4.0 delivers swarm orchestration.
 
 **Goal**: Establish quantitative performance baselines and enforce them in CI via `pytest-benchmark`.
 
-> **Post-Stream-5 Context**: Stream 4 proved 1K calls/s sequential throughput and <5MB growth over 10K operations. Stream 5 adds `AsyncParallelRunner` and `AsyncScheduler` — benchmark these against the legacy `ParallelRunner` and `Scheduler`. `@with_retry` overhead should be < 0.1ms per call when no retry occurs. `AsyncScheduler.run_all()` with 100 jobs and `max_concurrency=4` should complete in < 1s.
+> **Post-Stream-6 Context**: The observability pipeline now provides `MCPObservabilityHooks` counters tracking tool call totals, durations, and errors. `WebSocketLogHandler` processes records via `asyncio.Queue`. `EventLoggingBridge` captures all lifecycle events. Stream 7 should benchmark the overhead of these observability hooks alongside the async runner/scheduler from Stream 5 and the core MCP path. `enable_structured_json()` adds a per-call formatting cost that should be benchmarked. `@with_retry` no-retry-path overhead is a key metric.
 
 | Deliverable | File | Description |
 | --- | --- | --- |
 | CLI startup benchmark | `scripts/benchmark_startup.py` (NEW) | `codomyrmex --help` wall-clock < 500ms. `python -X importtime` analysis for heaviest imports. |
 | Lazy loading | 4 heavy `__init__.py` files | Defer `matplotlib`, `chromadb`, `pyarrow`, `sentence_transformers`. Conditional import behind `TYPE_CHECKING`. |
 | API benchmarks | `performance/benchmark.py` | `create_codomyrmex_mcp_server()`, `get_tool_registry()`, `_discover_dynamic_tools()`, `Workflow.run()`, `AsyncParallelRunner.run()`, `AsyncScheduler.run_all()`. Use `pytest-benchmark`. |
-| MCP benchmarks | `tests/performance/test_mcp_performance.py` (NEW) | Cold discovery < 3s. Cached < 10ms. `call_tool()` overhead < 2ms. Validation overhead < 1ms. Circuit breaker check < 0.1ms. Rate limiter check < 0.05ms. `@with_retry` overhead < 0.1ms (no-retry path). |
+| MCP benchmarks | `tests/performance/test_mcp_performance.py` (NEW) | Cold discovery < 3s. Cached < 10ms. `call_tool()` overhead < 2ms. Validation overhead < 1ms. `MCPObservabilityHooks.on_tool_call_end()` overhead < 0.05ms. `@with_retry` no-retry-path < 0.1ms. |
 
 **Tests** (~10): `test_mcp_performance.py` (6 benchmark assertions), `test_lazy_imports.py` (4 import-time assertions).
 
 ---
 
-**v0.1.8 Gate Criteria** (updated post-Stream 5):
+**v0.1.8 Gate Criteria** (updated post-Stream 6):
 
-- Full MCP test suite 0 failures, total MCP test count ≥ 250 (currently 209, ~41 more from Streams 6-7).
+- Full MCP test suite 0 failures, total MCP test count ≥ 250 (currently 248, ~2 more from Stream 7).
 - Orchestrator test count ≥ 34 (new async runner + scheduler tests, currently 34).
 - Schema validation rejects 100% of invalid inputs (verified Stream 1) and handles `None` arguments (fixed Stream 4).
 - Circuit breaker prevents cascade failures under 50-concurrent-request load (verified Stream 4).
 - `AsyncParallelRunner` respects `max_concurrency` semaphore bounds under load (verified Stream 5).
 - `AsyncScheduler` executes jobs in priority order with lifecycle events (verified Stream 5).
+- `EventLoggingBridge` captures all lifecycle events with correlation IDs (verified Stream 6).
+- `MCPObservabilityHooks` tracks tool call metrics with thread safety (verified Stream 6).
 - CLI startup < 500ms, import time < 200ms, MCP discovery (cached) < 10ms.
-- Event bridge captures all lifecycle events with correlation IDs.
 
 ---
 
