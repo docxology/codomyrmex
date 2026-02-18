@@ -104,7 +104,7 @@ async function loadCurriculaList() {
     }
 
     list.innerHTML = data.map(c => `
-        <div class="card" onclick="loadCurriculum('${c.name.replace(/'/g, "\\'")}')">
+        <div class="card" data-curriculum="${escapeHtml(c.name)}" style="cursor:pointer;">
             <div class="card-title">
                 ${escapeHtml(c.name)}
                 <span class="status-badge">${escapeHtml(c.level)}</span>
@@ -112,6 +112,10 @@ async function loadCurriculaList() {
             <p>${c.module_count} modules · ${c.total_duration_minutes} min</p>
         </div>
     `).join('');
+
+    list.querySelectorAll('[data-curriculum]').forEach(card => {
+        card.addEventListener('click', () => loadCurriculum(card.dataset.curriculum));
+    });
 }
 
 async function loadCurriculum(name) {
@@ -126,8 +130,8 @@ async function loadCurriculum(name) {
 
     // Export buttons
     html += `<div style="margin: 1rem 0; display: flex; gap: 0.5rem;">`;
-    html += `<button class="btn btn-secondary" onclick="exportCurriculum('${data.name.replace(/'/g, "\\'")}', 'json')">Export JSON</button>`;
-    html += `<button class="btn btn-secondary" onclick="exportCurriculum('${data.name.replace(/'/g, "\\'")}', 'text')">Export Text</button>`;
+    html += `<button class="btn btn-secondary" data-export="json">Export JSON</button>`;
+    html += `<button class="btn btn-secondary" data-export="text">Export Text</button>`;
     html += `</div>`;
 
     // Module list
@@ -140,7 +144,7 @@ async function loadCurriculum(name) {
             if (m.prerequisites.length > 0) {
                 html += `<p style="font-size: 0.85rem; color: var(--text-secondary);">Prerequisites: ${m.prerequisites.map(escapeHtml).join(', ')}</p>`;
             }
-            html += `<button class="btn btn-secondary" style="margin-top: 0.5rem;" onclick="showEditModule('${data.name.replace(/'/g, "\\'")}', '${m.title.replace(/'/g, "\\'")}')">Edit</button>`;
+            html += `<button class="btn btn-secondary" style="margin-top: 0.5rem;" data-edit-module="${escapeHtml(m.title)}">Edit</button>`;
             html += `</div>`;
         });
     }
@@ -148,7 +152,7 @@ async function loadCurriculum(name) {
     // Add module form
     html += `
         <h3>Add Module</h3>
-        <form id="add-module-form" onsubmit="addModule(event, '${data.name.replace(/'/g, "\\'")}')">
+        <form id="add-module-form">
             <div style="display: grid; gap: 0.75rem; max-width: 500px;">
                 <input name="title" placeholder="Module title" required>
                 <textarea name="content" placeholder="Module content" rows="3" required></textarea>
@@ -164,7 +168,7 @@ async function loadCurriculum(name) {
         <h3 style="margin-top: 1.5rem;">Learning Path</h3>
         <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem;">
             <label for="level-select">Level:</label>
-            <select id="level-select" onchange="loadLearningPath('${data.name.replace(/'/g, "\\'")}')">
+            <select id="level-select">
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
@@ -174,6 +178,18 @@ async function loadCurriculum(name) {
 
     detail.innerHTML = html;
     detail.classList.remove('hidden');
+
+    // Bind event listeners
+    detail.querySelectorAll('[data-export]').forEach(btn => {
+        btn.addEventListener('click', () => exportCurriculum(data.name, btn.dataset.export));
+    });
+    detail.querySelectorAll('[data-edit-module]').forEach(btn => {
+        btn.addEventListener('click', () => showEditModule(data.name, btn.dataset.editModule));
+    });
+    const addForm = document.getElementById('add-module-form');
+    if (addForm) addForm.addEventListener('submit', (e) => addModule(e, data.name));
+    const levelSelect = document.getElementById('level-select');
+    if (levelSelect) levelSelect.addEventListener('change', () => loadLearningPath(data.name));
 
     loadLearningPath(data.name);
 }
@@ -219,11 +235,13 @@ function showEditModule(curriculumName, moduleName) {
                 <input name="prerequisites" placeholder="Prerequisites (comma-separated)">
                 <div style="display:flex;gap:0.5rem;">
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('edit-module-overlay').remove()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" id="edit-cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>`;
     document.body.appendChild(overlay);
+
+    overlay.querySelector('#edit-cancel-btn').addEventListener('click', () => overlay.remove());
 
     overlay.querySelector('form').addEventListener('submit', async (ev) => {
         ev.preventDefault();
@@ -375,11 +393,15 @@ function renderQuiz(questions) {
                 html += `</div>`;
             });
         }
-        html += `<button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="submitAnswer(${i})">Submit Answer</button>`;
+        html += `<button class="btn btn-primary" style="margin-top: 0.5rem;" data-submit-answer="${i}">Submit Answer</button>`;
         html += `<div id="feedback-${i}" style="margin-top: 0.5rem;"></div>`;
         html += `</div>`;
     });
     container.innerHTML = html;
+
+    container.querySelectorAll('[data-submit-answer]').forEach(btn => {
+        btn.addEventListener('click', () => submitAnswer(parseInt(btn.dataset.submitAnswer)));
+    });
 }
 
 async function submitAnswer(questionIndex) {
@@ -473,7 +495,7 @@ function renderExam(exam) {
     if (!container) return;
 
     let html = `<h3>Exam: ${escapeHtml(exam.curriculum_name)}</h3>`;
-    html += `<form id="exam-submit-form" onsubmit="submitExam(event)">`;
+    html += `<form id="exam-submit-form">`;
     html += `<input type="hidden" name="exam_id" value="${exam.exam_id}">`;
 
     exam.questions.forEach((q, i) => {
@@ -487,6 +509,9 @@ function renderExam(exam) {
     html += `<button type="submit" class="btn btn-primary">Submit Exam</button>`;
     html += `</form>`;
     container.innerHTML = html;
+
+    const examForm = document.getElementById('exam-submit-form');
+    if (examForm) examForm.addEventListener('submit', (e) => submitExam(e));
 }
 
 async function submitExam(e) {

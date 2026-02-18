@@ -638,6 +638,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
     # ── Helper: read JSON body ─────────────────────────────────────
 
+    _MAX_BODY_SIZE = 10 * 1024 * 1024  # 10 MB
+
     def _read_json_body(self) -> dict | None:
         """Read and parse JSON from the request body. Returns None on error (response already sent)."""
         try:
@@ -647,6 +649,11 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         if content_length == 0:
             self.send_json_response(
                 {"status": "error", "message": "No content provided"}, status=400
+            )
+            return None
+        if content_length > self._MAX_BODY_SIZE:
+            self.send_json_response(
+                {"status": "error", "message": "Request body too large"}, status=413
             )
             return None
         try:
@@ -986,6 +993,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_json_response({"status": "error", "message": str(e)}, status=403)
         except FileNotFoundError as e:
             self.send_json_response({"status": "error", "message": str(e)}, status=404)
+
+    def handle_content_file(self, query: str) -> None:
         """GET /api/content/file?path= — get file content or serve file."""
         from urllib.parse import parse_qs
 
@@ -1011,28 +1020,33 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         """Handle GET /api/trust/status — return trust gateway tool counts."""
         try:
             from codomyrmex.agents.pai.trust_gateway import get_trust_report
+
             report = get_trust_report()
             counts = report.get("counts", {})
-            self.send_json_response({
-                "counts": {
-                    "untrusted": counts.get("untrusted", 0),
-                    "verified": counts.get("verified", 0),
-                    "trusted": counts.get("trusted", 0),
-                },
-                "total_tools": report.get("total_tools", 0),
-                "destructive_tools": report.get("destructive_tools", {}),
-            })
+            self.send_json_response(
+                {
+                    "counts": {
+                        "untrusted": counts.get("untrusted", 0),
+                        "verified": counts.get("verified", 0),
+                        "trusted": counts.get("trusted", 0),
+                    },
+                    "total_tools": report.get("total_tools", 0),
+                    "destructive_tools": report.get("destructive_tools", {}),
+                }
+            )
         except Exception as e:
             # Fallback if trust gateway not available
-            self.send_json_response({
-                "counts": {"untrusted": 0, "verified": 0, "trusted": 0},
-                "error": str(e),
-            })
+            self.send_json_response(
+                {
+                    "counts": {"untrusted": 0, "verified": 0, "trusted": 0},
+                    "error": str(e),
+                }
+            )
 
     def handle_pai_action(self) -> None:
         """Handle POST /api/pai/action — execute a PAI workflow action."""
         try:
-            content_length = int(self.headers.get('Content-Length', 0))
+            content_length = int(self.headers.get("Content-Length", 0))
         except (TypeError, ValueError):
             content_length = 0
         if content_length == 0:
@@ -1040,7 +1054,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             return
         try:
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
+            data = json.loads(post_data.decode("utf-8"))
         except (json.JSONDecodeError, KeyError):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
@@ -1051,6 +1065,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         try:
             if action == "verify":
                 from codomyrmex.agents.pai.trust_gateway import verify_capabilities
+
                 raw = verify_capabilities()
                 result = {
                     "modules": len(raw.get("modules", [])),
@@ -1059,14 +1074,17 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 }
             elif action == "trust":
                 from codomyrmex.agents.pai.trust_gateway import trust_all
+
                 raw = trust_all()
                 result = raw
             elif action == "reset":
                 from codomyrmex.agents.pai.trust_gateway import reset_trust
+
                 reset_trust()
                 result = {"message": "Trust levels reset to UNTRUSTED"}
             elif action == "status":
                 from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
+
                 result = _tool_pai_status()
             else:
                 self.send_json_response(
@@ -1077,19 +1095,22 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
             # After any trust-changing action, include updated counts
             from codomyrmex.agents.pai.trust_gateway import get_trust_report
+
             report = get_trust_report()
             counts = report.get("counts", {})
 
-            self.send_json_response({
-                "success": True,
-                "action": action,
-                "result": result,
-                "trust_counts": {
-                    "untrusted": counts.get("untrusted", 0),
-                    "verified": counts.get("verified", 0),
-                    "trusted": counts.get("trusted", 0),
-                },
-            })
+            self.send_json_response(
+                {
+                    "success": True,
+                    "action": action,
+                    "result": result,
+                    "trust_counts": {
+                        "untrusted": counts.get("untrusted", 0),
+                        "verified": counts.get("verified", 0),
+                        "trusted": counts.get("trusted", 0),
+                    },
+                }
+            )
         except Exception as e:
             self.send_json_response(
                 {"success": False, "error": str(e), "action": action},
