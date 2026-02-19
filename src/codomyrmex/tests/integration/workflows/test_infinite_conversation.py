@@ -253,3 +253,123 @@ class TestInfiniteConversation:
             assert len(turn.content) > 5, f"Turn too short: {turn.content!r}"
             assert turn.provider == "ollama"
             assert turn.model == model_name
+
+    def test_conversation_export_to_jsonl(self, relay_dir, model_name, tmp_path):
+        """Conversation can be exported to JSONL and imported back."""
+        import json
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        orch = ConversationOrchestrator(
+            channel="test-export",
+            agents=[
+                {"identity": "exporter", "persona": "assistant",
+                 "provider": "ollama", "model": model_name},
+            ],
+            seed_prompt="Say one word.",
+            relay_dir=relay_dir,
+        )
+
+        orch.run(rounds=1)
+        export_path = tmp_path / "conv.jsonl"
+        result_path = orch.get_log().export(export_path)
+
+        assert result_path.exists()
+        lines = result_path.read_text().strip().split("\n")
+        assert len(lines) >= 2  # header + at least 1 turn
+
+        # First line is summary, rest are turns.
+        summary = json.loads(lines[0])
+        assert summary["channel_id"] == "test-export"
+        assert summary["status"] == "completed"
+
+        turn_data = json.loads(lines[1])
+        assert turn_data["speaker"] == "exporter"
+        assert len(turn_data["content"]) > 0
+
+    def test_correlation_id_threaded(self, relay_dir, model_name):
+        """Each conversation gets a unique correlation ID in its log."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        orch = ConversationOrchestrator(
+            channel="test-cid",
+            agents=[
+                {"identity": "cid-bot", "persona": "assistant",
+                 "provider": "ollama", "model": model_name},
+            ],
+            seed_prompt="Hi",
+            relay_dir=relay_dir,
+        )
+
+        orch.run(rounds=1)
+        log = orch.get_log()
+
+        assert log.correlation_id != "", "Should have a correlation ID"
+        assert log.correlation_id.startswith("conv-test-cid-")
+        assert log.summary()["correlation_id"] == log.correlation_id
+
+    def test_antigravity_agent_identity(self, relay_dir, model_name):
+        """Agent configured as 'antigravity' provider uses a real LLM."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        orch = ConversationOrchestrator(
+            channel="test-antigravity",
+            agents=[
+                {"identity": "antigravity-coder", "persona": "Antigravity code agent",
+                 "provider": "antigravity", "model": model_name},
+            ],
+            seed_prompt="Respond with one word.",
+            relay_dir=relay_dir,
+        )
+
+        transcript = orch.run(rounds=1)
+        assert len(transcript) == 1
+        assert transcript[0].speaker == "antigravity-coder"
+        assert len(transcript[0].content) > 0
+        assert "[Error" not in transcript[0].content
+
+    def test_agent_specific_system_prompts(self, relay_dir, model_name):
+        """Different personas produce different response styles."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        orch = ConversationOrchestrator(
+            channel="test-personas",
+            agents=[
+                {"identity": "poet", "persona": "a poet who speaks in metaphors",
+                 "provider": "ollama", "model": model_name},
+                {"identity": "engineer", "persona": "a systems engineer who is precise",
+                 "provider": "ollama", "model": model_name},
+            ],
+            seed_prompt="Describe the sunrise in one sentence.",
+            relay_dir=relay_dir,
+        )
+
+        transcript = orch.run(rounds=1)
+        assert len(transcript) == 2
+        # Both produce real content (different due to different personas).
+        assert transcript[0].content != transcript[1].content
+        assert len(transcript[0].content) > 5
+        assert len(transcript[1].content) > 5
+
+    def test_multi_provider_identity(self, relay_dir, model_name):
+        """Agents report correct provider identity in turns."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        orch = ConversationOrchestrator(
+            channel="test-providers",
+            agents=[
+                {"identity": "o-bot", "persona": "assistant",
+                 "provider": "ollama", "model": model_name},
+                {"identity": "a-bot", "persona": "reviewer",
+                 "provider": "antigravity", "model": model_name},
+            ],
+            seed_prompt="Hi",
+            relay_dir=relay_dir,
+        )
+
+        transcript = orch.run(rounds=1)
+        assert len(transcript) == 2
+        assert transcript[0].provider == "ollama"
+        assert transcript[1].provider == "antigravity"
+        for t in transcript:
+            assert "[Error" not in t.content
+
