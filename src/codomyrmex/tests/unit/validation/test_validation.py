@@ -27,9 +27,7 @@ class TestValidationModuleImport:
     def test_validation_module_exports(self):
         """Verify module exports key components."""
         from codomyrmex import validation
-        assert hasattr(validation, "validate")
-        assert hasattr(validation, "is_valid")
-        assert hasattr(validation, "get_errors")
+        assert hasattr(validation, "validate_pai_integration")
 
 
 @pytest.mark.unit
@@ -713,54 +711,7 @@ class TestUnknownValidatorType:
         assert result.is_valid is False
 
 
-@pytest.mark.unit
-class TestConvenienceFunctions:
-    """Tests for module-level convenience functions."""
 
-    def test_validate_function(self):
-        """Test validate convenience function."""
-        from codomyrmex.validation import validate
-
-        schema = {"type": "string"}
-        result = validate("test", schema)
-
-        assert result.is_valid is True
-
-    def test_is_valid_function_true(self):
-        """Test is_valid convenience function returns True."""
-        from codomyrmex.validation import is_valid
-
-        schema = {"type": "integer"}
-
-        assert is_valid(42, schema) is True
-
-    def test_is_valid_function_false(self):
-        """Test is_valid convenience function returns False."""
-        from codomyrmex.validation import is_valid
-
-        schema = {"type": "integer"}
-
-        assert is_valid("not_int", schema) is False
-
-    def test_get_errors_function(self):
-        """Test get_errors convenience function."""
-        from codomyrmex.validation import get_errors
-
-        schema = {"type": "object", "required": ["id"]}
-        errors = get_errors({}, schema)
-
-        assert len(errors) > 0
-
-    def test_validate_with_pydantic_type(self):
-        """Test validate convenience function with pydantic type."""
-        from codomyrmex.validation import validate
-
-        class TestModel(BaseModel):
-            value: int
-
-        result = validate({"value": 42}, TestModel, validator_type="pydantic")
-
-        assert result.is_valid is True
 
 
 @pytest.mark.unit

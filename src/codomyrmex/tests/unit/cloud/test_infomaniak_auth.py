@@ -454,6 +454,13 @@ class TestAuthFunctions:
 
 # =========================================================================
 
+try:
+    import openstack
+    HAS_OPENSTACK = True
+except ImportError:
+    HAS_OPENSTACK = False
+
+@pytest.mark.skipif(not HAS_OPENSTACK, reason="openstacksdk is required")
 class TestClientFactoryMethodsExpanded:
     """Factory method tests for clients not previously tested."""
 

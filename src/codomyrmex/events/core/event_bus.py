@@ -23,6 +23,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 from .event_schema import Event, EventSchema, EventType
+from codomyrmex.logging_monitoring.correlation import get_correlation_id
 
 
 @dataclass
@@ -173,6 +174,12 @@ class EventBus:
         # Basic validation
         if not hasattr(event, 'event_type'):
             return
+
+        # Auto-inject correlation ID if not present
+        if event.correlation_id is None:
+            cid = get_correlation_id()
+            if cid:
+                event.correlation_id = cid
 
         self.events_published += 1
 

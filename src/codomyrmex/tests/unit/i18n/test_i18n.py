@@ -509,7 +509,7 @@ class TestTranslateFunction:
         bundle = MessageBundle.from_dict(Locale("en"), {"welcome": "Welcome!"})
         tr.add_bundle(bundle)
         # The global _default_translator is the same object
-        assert i18n_mod._default_translator is tr
+        assert getattr(i18n_mod, "_default_translator") is tr
         assert t("welcome") == "Welcome!"
 
 

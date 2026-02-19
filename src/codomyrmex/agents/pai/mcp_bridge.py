@@ -969,35 +969,43 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         MCPErrorCode,
         execution_error,
     )
+    from codomyrmex.logging_monitoring.correlation import with_correlation
     
     # Check if tool is known first to match original behavior's KeyError
     # (trusted_call_tool will also check, but let's be explicit about "registration" vs "trust")
     # Actually trusted_call_tool handles this via get_tool_registry() lookup.
     
-    try:
-        return trusted_call_tool(name, **kwargs)
-    except KeyError:
-        # Re-raise KeyError to maintain contract if tool not found
-        all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
-        raise KeyError(f"Unknown tool: {name!r}. Available (static): {all_static}")
-    except SecurityError as exc:
-        return {"error": MCPToolError(
-            code=MCPErrorCode.ACCESS_DENIED,
-            message=str(exc),
-            tool_name=name
-        ).to_dict()}
-    except TimeoutError as exc:
-        return {"error": MCPToolError(
-            code=MCPErrorCode.TIMEOUT,
-            message=str(exc),
-            tool_name=name,
-        ).to_dict()}
-    except Exception as exc:
-        # Wrap other execution errors
-        module_hint = name.split(".")[1] if "." in name else name
-        return {"error": execution_error(
-            name, exc, module=module_hint
-        ).to_dict()}
+    with with_correlation():
+        try:
+            return trusted_call_tool(name, **kwargs)
+        except KeyError:
+            # Re-raise KeyError to maintain contract if tool not found
+            all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
+            raise KeyError(f"Unknown tool: {name!r}. Available (static): {all_static}")
+        except SecurityError as exc:
+            return {"error": MCPToolError(
+                code=MCPErrorCode.ACCESS_DENIED,
+                message=str(exc),
+                tool_name=name
+            ).to_dict()}
+        except ValueError as exc:
+            from codomyrmex.model_context_protocol.errors import validation_error
+            return {"error": validation_error(
+                tool_name=name,
+                message=str(exc)
+            ).to_dict()}
+        except TimeoutError as exc:
+            return {"error": MCPToolError(
+                code=MCPErrorCode.TIMEOUT,
+                message=str(exc),
+                tool_name=name,
+            ).to_dict()}
+        except Exception as exc:
+            # Wrap other execution errors
+            module_hint = name.split(".")[1] if "." in name else name
+            return {"error": execution_error(
+                name, exc, module=module_hint
+            ).to_dict()}
 
 
 def get_skill_manifest() -> dict[str, Any]:

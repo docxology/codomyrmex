@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.9 | **Status**: Active | **Last Updated**: February 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.

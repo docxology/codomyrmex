@@ -1,9 +1,9 @@
 # Codomyrmex
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.9 | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-0.1.7-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-0.1.9-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 

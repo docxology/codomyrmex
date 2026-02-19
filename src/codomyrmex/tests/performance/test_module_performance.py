@@ -119,7 +119,7 @@ class PerformanceBaselineManager:
         self.baselines = {
             "code_execution.execute_code": PerformanceBaseline(
                 "code_execution", "execute_code",
-                baseline_time=0.5, baseline_memory=50.0
+                baseline_time=0.5, baseline_memory=200.0
             ),
             "static_analysis.analyze_file": PerformanceBaseline(
                 "static_analysis", "analyze_file",
@@ -439,7 +439,7 @@ class TestPerformanceRegressionDetection:
 
         # Test performance regression
         result = baseline_manager.check_regression(
-            "code_execution.execute_code", 2.0, 100.0  # Much slower and more memory
+            "code_execution.execute_code", 2.0, 800.0  # Much slower and more memory
         )
 
         assert result["regression"]

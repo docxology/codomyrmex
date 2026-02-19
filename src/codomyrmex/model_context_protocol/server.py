@@ -16,6 +16,7 @@ from .schemas.mcp_schemas import (
     MCPToolCall,
     MCPToolRegistry,
 )
+from codomyrmex.logging_monitoring.correlation import with_correlation
 
 
 @dataclass
@@ -228,33 +229,38 @@ class MCPServer:
     # Request Handling
     # =========================================================================
 
-    async def handle_request(self, message: dict[str, Any]) -> dict[str, Any] | None:
+    async def handle_request(
+        self,
+        message: dict[str, Any],
+        correlation_id: str | None = None
+    ) -> dict[str, Any] | None:
         """Handle incoming JSON-RPC message."""
         method = message.get("method", "")
         params = message.get("params", {})
         request_id = message.get("id")
 
-        # Notifications have no id
-        if request_id is None:
-            await self._handle_notification(method, params)
-            return None
+        with with_correlation(correlation_id):
+            # Notifications have no id
+            if request_id is None:
+                await self._handle_notification(method, params)
+                return None
 
-        try:
-            result = await self._dispatch(method, params)
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "result": result,
-            }
-        except Exception as e:
-            return {
-                "jsonrpc": "2.0",
-                "id": request_id,
-                "error": {
-                    "code": -32603,
-                    "message": str(e),
+            try:
+                result = await self._dispatch(method, params)
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "result": result,
                 }
-            }
+            except Exception as e:
+                return {
+                    "jsonrpc": "2.0",
+                    "id": request_id,
+                    "error": {
+                        "code": -32603,
+                        "message": str(e),
+                    }
+                }
 
     async def _handle_notification(self, method: str, params: dict[str, Any]) -> None:
         """Handle notifications."""
@@ -492,6 +498,8 @@ class MCPServer:
                     break
 
                 message = json.loads(line.strip())
+                
+                # stdio transport does not have HTTP headers, but we could parse top-level if we wanted
                 response = await self.handle_request(message)
 
                 if response:
@@ -559,10 +567,16 @@ class MCPServer:
         @app.post("/mcp")
         async def mcp_endpoint(request: Request):
             body = await request.json()
-            response = await server.handle_request(body)
+            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
+            response = await server.handle_request(body, correlation_id=cid)
+            
+            headers = {}
+            if cid:
+                headers["X-Correlation-ID"] = cid
+                
             if response is None:
-                return JSONResponse(content={"status": "accepted"}, status_code=202)
-            return JSONResponse(content=response)
+                return JSONResponse(content={"status": "accepted"}, status_code=202, headers=headers)
+            return JSONResponse(content=response, headers=headers)
 
         # --- Convenience REST endpoints ---
         @app.get("/tools")
@@ -586,11 +600,17 @@ class MCPServer:
                 body = await request.json()
             except Exception:
                 body = {}
+            
+            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")    
             result = await server._call_tool({
                 "name": tool_name,
                 "arguments": body,
             })
-            return JSONResponse(content=result)
+            
+            headers = {}
+            if cid:
+                headers["X-Correlation-ID"] = cid
+            return JSONResponse(content=result, headers=headers)
 
         @app.get("/resources")
         async def list_resources():

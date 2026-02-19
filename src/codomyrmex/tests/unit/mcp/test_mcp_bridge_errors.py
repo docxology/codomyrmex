@@ -8,6 +8,12 @@ import pytest
 
 from codomyrmex.agents.pai.mcp_bridge import call_tool
 from codomyrmex.model_context_protocol.errors import MCPErrorCode
+from codomyrmex.agents.pai.trust_gateway import trust_all
+
+
+@pytest.fixture(autouse=True)
+def setup_trust():
+    trust_all()
 
 
 # ── Tool not found ───────────────────────────────────────────────────

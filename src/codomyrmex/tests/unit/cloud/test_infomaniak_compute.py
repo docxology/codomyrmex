@@ -24,6 +24,13 @@ from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
 from _stubs import make_stub_image, make_stub_server
 
+import pytest
+try:
+    import openstack
+    HAS_OPENSTACK = True
+except ImportError:
+    HAS_OPENSTACK = False
+
 # =========================================================================
 # Base Class & Construction
 # =========================================================================
@@ -61,6 +68,7 @@ class TestComputeClientBase:
 
         mock_openstack_connection.close.assert_called_once()
 
+    @pytest.mark.skipif(not HAS_OPENSTACK, reason="openstacksdk is required")
     def test_from_env_delegates_to_create_openstack_connection(self, monkeypatch):
         """from_env() delegates to create_openstack_connection and returns a client."""
         mock_conn = Stub()

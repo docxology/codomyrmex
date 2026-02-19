@@ -102,6 +102,7 @@ class TestAuditLog:
     def test_audit_log_records_blocked(self, mock_registry):
         """Verify untrusted calls are logged as blocked."""
         mock_registry.is_trusted.return_value = False
+        mock_registry.is_at_least_verified.return_value = False
         mock_registry.level.return_value = TrustLevel.UNTRUSTED
         
         with pytest.raises(trust_gateway.SecurityError):
@@ -239,5 +240,5 @@ class TestDestructiveConfirmation:
         with patch.object(trust_gateway, "DESTRUCTIVE_TOOLS", frozenset({"codomyrmex.write_file", "run_command"})):
              # run_command needs to require confirmation now.
              
-             with pytest.raises(trust_gateway.SecurityError, match="Token mismatch"):
+             with pytest.raises(trust_gateway.SecurityError, match="Confirmation token does not match tool"):
                 trusted_call_tool("run_command", confirmation_token=token, command="ls")

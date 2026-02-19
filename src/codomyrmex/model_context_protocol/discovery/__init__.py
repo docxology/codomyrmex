@@ -244,7 +244,8 @@ class MCPDiscovery:
     def _scan_module(self, module: Any) -> list[DiscoveredTool]:
         """Scan a single already-imported module for MCP tool markers."""
         tools = []
-        for name, obj in inspect.getmembers(module):
+        
+        def _add_if_tool(name, obj):
             if hasattr(obj, "_mcp_tool_meta"):
                 meta = getattr(obj, "_mcp_tool_meta")
                 
@@ -278,6 +279,13 @@ class MCPDiscovery:
                     handler=obj,
                 )
                 tools.append(tool)
+
+        for name, obj in inspect.getmembers(module):
+            _add_if_tool(name, obj)
+            if inspect.isclass(obj) and getattr(obj, "__module__", None) == module.__name__:
+                for method_name, method_obj in inspect.getmembers(obj):
+                    _add_if_tool(method_name, method_obj)
+                    
         return tools
 
     def _update_metrics(self, report: DiscoveryReport) -> None:
