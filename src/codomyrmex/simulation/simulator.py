@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 from codomyrmex.simulation.agent import Agent, Action
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_logger(__name__)
 
@@ -62,6 +63,7 @@ class Simulator:
             del self.agents[agent_id]
             logger.debug(f"Removed agent {agent_id}")
 
+    @mcp_tool(name="Simulator.run", description="Run the simulation loop")
     def run(self) -> SimulationResult:
         """Run the simulation until completion or max steps."""
         self._running = True

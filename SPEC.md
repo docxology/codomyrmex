@@ -109,6 +109,31 @@ graph TB
 - **Service Layer**: Higher-level orchestration that composes core capabilities into documentation generation, API management, CI/CD pipelines (includes build automation), container management, database operations, configuration, logistics workflows, and workflow orchestration.
 - **Application Layer**: User-facing entry points. The CLI provides the primary human interface; `system_discovery` provides module health monitoring and dynamic registration.
 
+## API Specifications
+
+### Simulation Module (`codomyrmex.simulation`)
+
+#### `Simulator`
+
+- `__init__(config: SimulationConfig = None, agents: List[Agent] = None)`: Initialize simulation.
+- `run() -> SimulationResult`: Execute simulation loop.
+- `add_agent(agent: Agent)`: Add agent to environment.
+- `remove_agent(agent_id: str)`: Remove agent from environment.
+
+#### `Agent` (Abstract Base Class)
+
+- `act(observation: dict) -> Action`: logic for agent decision making.
+- `learn(reward: float)`: logic for agent learning.
+
+### Networks Module (`codomyrmex.networks`)
+
+#### `NetworkGraph`
+
+- `add_node(node_id: str, data: Any = None) -> Node`: Add node to graph.
+- `add_edge(source_id: str, target_id: str, weight: float = 1.0) -> Edge`: Add edge between nodes.
+- `get_neighbors(node_id: str) -> List[Node]`: Get adjacent nodes.
+- `shortest_path(start_id: str, end_id: str) -> List[Node]`: Find shortest path (Dijkstra).
+
 ## Quality Standards
 
 - **Coupling**: Aim for loose coupling between modules and high cohesion within each module.

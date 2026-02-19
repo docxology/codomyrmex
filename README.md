@@ -23,6 +23,8 @@ Codomyrmex is a **modular development platform** that brings together 82 special
 - 📚 **Documentation** - Automated documentation generation, API specs, and tutorials
 - 🔒 **Security First** - Built-in security scanning, vulnerability detection, and compliance checking
 - 🌐 **Polyglot Support** - Language-agnostic interfaces supporting Python, JavaScript, Go, Rust, Java
+- 🕸️ **Network Analysis** - Graph algorithms and network modeling capabilities
+- 🧪 **Simulation** - Agent-based modeling and system dynamics simulations
 
 ### Why Codomyrmex?
 

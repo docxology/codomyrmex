@@ -7,6 +7,8 @@ from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar, Generic
 from dataclasses import dataclass, field
 import heapq
 
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 T = TypeVar("T")
 
 
@@ -92,6 +94,7 @@ class NetworkGraph(Generic[T]):
             return []
         return [edge.target for edge in self._adj[node_id]]
 
+    @mcp_tool(name="NetworkGraph.shortest_path", description="Find the shortest path between two nodes using Dijkstra's algorithm")
     def shortest_path(self, start_id: str, end_id: str) -> Optional[List[Node[T]]]:
         """Find the shortest path between two nodes using Dijkstra's algorithm.
 

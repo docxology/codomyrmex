@@ -946,6 +946,11 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
 
     This is the fastest way to invoke tools from Python code.
     Supports both static core tools and dynamically discovered module tools.
+    
+    Delegates to ``trust_gateway.trusted_call_tool`` to ensure:
+    1. Authorization policies are enforced.
+    2. Audit logs are recorded.
+    3. Destructive actions are confirmed.
 
     Args:
         name: Tool name (e.g. ``"codomyrmex.list_modules"``).
@@ -954,53 +959,32 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     Returns:
         Tool result dictionary.  On error, returns a dict with
         ``"error"`` key containing a structured :class:`MCPToolError` dict.
-
+    
     Raises:
         KeyError: If the tool name is not registered.
     """
+    from codomyrmex.agents.pai.trust_gateway import trusted_call_tool, SecurityError
     from codomyrmex.model_context_protocol.errors import (
         MCPToolError,
         MCPErrorCode,
         execution_error,
-        not_found_error,
     )
-    from codomyrmex.model_context_protocol.validation import validate_tool_arguments
-
-    # Look up handler + schema ---------------------------------------
-    tool_map = {t[0]: (t[2], t[3]) for t in _TOOL_DEFINITIONS}
-    entry = tool_map.get(name)
-
-    if entry is None:
-        dynamic_tools = _discover_dynamic_tools()
-        dynamic_map = {t[0]: (t[2], t[3]) for t in dynamic_tools}
-        entry = dynamic_map.get(name)
-
-    if entry is None:
-        all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
-        raise KeyError(
-            f"Unknown tool: {name!r}. "
-            f"Available (static): {all_static}"
-        )
-
-    handler, input_schema = entry
-
-    # Validate arguments against schema -----------------------------
-    vr = validate_tool_arguments(name, kwargs, {"inputSchema": input_schema})
-    if not vr.valid:
-        return {"error": MCPToolError(
-            code=MCPErrorCode.VALIDATION_ERROR,
-            message=f"Validation failed: {'; '.join(vr.errors)}",
-            tool_name=name,
-        ).to_dict()}
-
-    # Execute with structured error wrapping ------------------------
+    
+    # Check if tool is known first to match original behavior's KeyError
+    # (trusted_call_tool will also check, but let's be explicit about "registration" vs "trust")
+    # Actually trusted_call_tool handles this via get_tool_registry() lookup.
+    
     try:
-        return handler(**vr.coerced_args)
-    except ImportError as exc:
-        module_hint = name.split(".")[1] if "." in name else name
-        return {"error": execution_error(
-            name, exc, module=module_hint,
-            suggestion=f"Module dependency missing. Run: uv sync --extra {module_hint}",
+        return trusted_call_tool(name, **kwargs)
+    except KeyError:
+        # Re-raise KeyError to maintain contract if tool not found
+        all_static = sorted(t[0] for t in _TOOL_DEFINITIONS)
+        raise KeyError(f"Unknown tool: {name!r}. Available (static): {all_static}")
+    except SecurityError as exc:
+        return {"error": MCPToolError(
+            code=MCPErrorCode.ACCESS_DENIED,
+            message=str(exc),
+            tool_name=name
         ).to_dict()}
     except TimeoutError as exc:
         return {"error": MCPToolError(
@@ -1009,7 +993,11 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             tool_name=name,
         ).to_dict()}
     except Exception as exc:
-        return {"error": execution_error(name, exc).to_dict()}
+        # Wrap other execution errors
+        module_hint = name.split(".")[1] if "." in name else name
+        return {"error": execution_error(
+            name, exc, module=module_hint
+        ).to_dict()}
 
 
 def get_skill_manifest() -> dict[str, Any]:
