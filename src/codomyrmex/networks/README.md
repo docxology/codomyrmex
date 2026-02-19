@@ -1,6 +1,6 @@
 # Networks Module
 
-**Version**: v0.1.0 | **Status**: Alpha
+**Version**: v0.1.7 | **Status**: Alpha
 
 Graph data structures for representing and manipulating networks of nodes and edges. Provides a generic, typed API for building, querying, and traversing network topologies within the Codomyrmex ecosystem.
 

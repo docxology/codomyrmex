@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Tracing
 
 **Module**: `codomyrmex.telemetry.tracing`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

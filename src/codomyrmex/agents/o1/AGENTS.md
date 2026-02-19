@@ -1,7 +1,7 @@
 # AI Agent Guidelines - O1
 
 **Module**: `codomyrmex.agents.o1`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

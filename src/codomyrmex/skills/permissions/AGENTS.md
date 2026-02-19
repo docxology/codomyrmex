@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Permissions
 
 **Module**: `codomyrmex.skills.permissions`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

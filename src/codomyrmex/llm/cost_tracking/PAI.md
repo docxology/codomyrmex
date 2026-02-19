@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Cost Tracking
 
 **Module**: `codomyrmex.llm.cost_tracking`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

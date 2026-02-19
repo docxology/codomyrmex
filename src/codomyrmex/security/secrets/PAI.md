@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Secrets
 
 **Module**: `codomyrmex.security.secrets`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

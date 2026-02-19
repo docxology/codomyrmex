@@ -58,7 +58,7 @@ class Dashboard:
         self.title = title
         self.theme = theme or DEFAULT_THEME
         self.grid = Grid()
-        self.sections: list[Any] = self.grid.sections  # Alias for backward compat
+        self.sections: list[Any] = self.grid.sections  # DEPRECATED(v0.2.0): Use self.grid.sections directly. Will be removed in v0.3.0.
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
         self.grid.add_section(title, content, **kwargs)

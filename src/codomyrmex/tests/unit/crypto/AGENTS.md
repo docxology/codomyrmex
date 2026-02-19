@@ -1,6 +1,6 @@
 # Crypto Tests — Agent Responsibilities
 
-**Version**: v0.1.0 | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Last Updated**: February 2026
 
 ## Agent Test Ownership
 

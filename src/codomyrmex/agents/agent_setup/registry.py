@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any
 from collections.abc import Callable
 
+from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -88,7 +89,8 @@ def _probe_cli_binary(name: str, binary: str) -> ProbeResult:
     )
 
 
-def _probe_ollama(base_url: str = "http://localhost:11434") -> ProbeResult:
+def _probe_ollama(base_url: str = "") -> ProbeResult:
+    base_url = base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
     """Check Ollama server reachability and list models."""
     import urllib.request
     import urllib.error
@@ -126,7 +128,8 @@ def _probe_ollama(base_url: str = "http://localhost:11434") -> ProbeResult:
 class AgentRegistry:
     """Central catalog of all known agents with live probing."""
 
-    def __init__(self, ollama_base_url: str = "http://localhost:11434"):
+    def __init__(self, ollama_base_url: str = ""):
+        ollama_base_url = ollama_base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
         self._ollama_base_url = ollama_base_url
         self._descriptors: list[AgentDescriptor] = self._build_catalog()
 

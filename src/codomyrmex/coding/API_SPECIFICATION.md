@@ -1,6 +1,6 @@
 # Coding Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `coding` module provides a unified environment for code execution, sandboxing, analysis, and debugging. It integrates Docker-based isolation with static analysis tools.

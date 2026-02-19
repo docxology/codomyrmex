@@ -124,7 +124,7 @@ def lazy_function(
     """
     loader = get_lazy_loader(module_name, package)
 
-    @wraps(lambda: None)  # Placeholder for the actual function
+    @wraps(lambda: None)  # Wraps sentinel — actual function resolved at call time
     def lazy_wrapper(*args, **kwargs):
 
 

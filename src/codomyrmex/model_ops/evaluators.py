@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from model_ops directly instead. Will be removed in v0.3.0.
 """
 Evaluators module - alias for backward compatibility.
 

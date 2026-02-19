@@ -1,7 +1,7 @@
 # Technical Specification - History
 
 **Module**: `codomyrmex.agents.history`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

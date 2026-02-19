@@ -1,7 +1,7 @@
 # AI Agents — Functional Specification
 
 **Module**: `codomyrmex.agents`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

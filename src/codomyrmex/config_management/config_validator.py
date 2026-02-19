@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from config_management.validation.config_validator instead. Will be removed in v0.3.0.
 """Backward-compatible shim -- delegates to config_management.validation.config_validator."""
 
 from .validation.config_validator import (  # noqa: F401

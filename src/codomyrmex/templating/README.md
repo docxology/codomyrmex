@@ -1,6 +1,6 @@
 # Templating Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Template engine support (Jinja2, Mako) for code generation and dynamic content.
 

@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 
+from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
 """Configuration management for Language Models module."""
@@ -48,7 +49,7 @@ class LLMConfig:
     DEFAULT_TOP_P = 0.9
     DEFAULT_TOP_K = 40
     DEFAULT_TIMEOUT = 30
-    DEFAULT_BASE_URL = "http://localhost:11434"
+    DEFAULT_BASE_URL = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
 
     # Output configuration
     OUTPUT_ROOT = Path("src/codomyrmex.llm/outputs")

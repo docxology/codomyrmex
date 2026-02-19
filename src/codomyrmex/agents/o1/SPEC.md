@@ -1,7 +1,7 @@
 # Technical Specification - O1
 
 **Module**: `codomyrmex.agents.o1`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

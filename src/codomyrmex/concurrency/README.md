@@ -1,6 +1,6 @@
 # Concurrency Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Distributed locks, semaphores, and synchronization primitives.
 

@@ -1,6 +1,6 @@
 # Security Cognitive Submodule
 
-**Version**: v0.1.0 | **Source**: [`src/codomyrmex/security/cognitive/`](../../../../src/codomyrmex/security/cognitive/)
+**Version**: v0.1.7 | **Source**: [`src/codomyrmex/security/cognitive/`](../../../../src/codomyrmex/security/cognitive/)
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # 🔗 Codomyrmex Module Relationships & Interdependencies
 
-**Version**: v0.1.1 | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Last Updated**: February 2026
 
 This document provides a comprehensive overview of how Codomyrmex modules interact with each other, their dependencies, and data flow patterns.
 

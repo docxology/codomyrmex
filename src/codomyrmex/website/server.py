@@ -17,17 +17,24 @@ from urllib.parse import urlparse
 
 import requests
 
+from codomyrmex.config_management.defaults import (
+    DEFAULT_CORS_ORIGINS,
+    DEFAULT_OLLAMA_MODEL,
+    DEFAULT_OLLAMA_URL,
+)
 from codomyrmex.logging_monitoring import get_logger
 
 from .data_provider import DataProvider
 
 logger = get_logger(__name__)
 
+# Configuration from environment variables
+_CORS_ORIGINS = os.getenv("CODOMYRMEX_CORS_ORIGINS", DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787")
+_OLLAMA_URL = os.getenv("CODOMYRMEX_OLLAMA_URL", DEFAULT_OLLAMA_URL)
+_DEFAULT_MODEL = os.getenv("CODOMYRMEX_DEFAULT_MODEL", DEFAULT_OLLAMA_MODEL)
+
 # Allowed origins for CORS/CSRF validation
-_ALLOWED_ORIGINS = frozenset({
-    "http://localhost:8787",
-    "http://127.0.0.1:8787",
-})
+_ALLOWED_ORIGINS = frozenset(origin.strip() for origin in _CORS_ORIGINS.split(",") if origin.strip())
 
 
 class WebsiteServer(http.server.SimpleHTTPRequestHandler):
@@ -44,10 +51,17 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def _cors_origin(self) -> str:
+        """Return the matching CORS origin for the current request, or the first allowed origin."""
+        origin = self.headers.get("Origin", "")
+        if origin in _ALLOWED_ORIGINS:
+            return origin
+        return next(iter(_ALLOWED_ORIGINS))
+
     def do_OPTIONS(self) -> None:
         """Handle CORS preflight requests."""
         self.send_response(204)
-        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
+        self.send_header('Access-Control-Allow-Origin', self._cors_origin())
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
         self.send_header('Access-Control-Max-Age', '86400')
@@ -393,15 +407,15 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
-        ollama_url = "http://localhost:11434/api/chat"
+        ollama_url = f"{_OLLAMA_URL}/api/chat"
 
         # Get the message from frontend
         user_message = data.get('message', '')
         # Use provided model or fall back to system default
-        system_model = "llama3.1:latest" # Fallback
+        system_model = _DEFAULT_MODEL
         if self.data_provider:
             llm_config = self.data_provider.get_llm_config()
-            system_model = llm_config.get("default_model", "llama3.1:latest")
+            system_model = llm_config.get("default_model", _DEFAULT_MODEL)
 
         model = data.get('model') or system_model
 
@@ -494,9 +508,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
         if self.data_provider:
             llm_config = self.data_provider.get_llm_config()
-            system_model = llm_config.get("default_model", "llama3.1:latest")
+            system_model = llm_config.get("default_model", _DEFAULT_MODEL)
         else:
-            system_model = "llama3.1:latest"
+            system_model = _DEFAULT_MODEL
 
         model = data.get('model') or system_model
 
@@ -532,7 +546,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
         try:
             ollama_resp = requests.post(
-                "http://localhost:11434/api/chat",
+                f"{_OLLAMA_URL}/api/chat",
                 json=ollama_payload,
                 timeout=60,
             )
@@ -655,7 +669,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         """Send a JSON response with the given data and HTTP status code."""
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8787')
+        self.send_header('Access-Control-Allow-Origin', self._cors_origin())
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Origin')
         self.send_header('Vary', 'Origin')

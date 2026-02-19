@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Sharding
 
 **Module**: `codomyrmex.database_management.sharding`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

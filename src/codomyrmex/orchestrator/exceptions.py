@@ -168,7 +168,7 @@ class ConcurrencyError(OrchestrationError):
             self.context["max_workers"] = max_workers
 
 
-# Alias for backward compatibility
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use OrchestratorTimeoutError. Will be removed in v0.3.0.
 TimeoutError = OrchestratorTimeoutError
 
 

@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Templates
 
 **Module**: `codomyrmex.orchestrator.templates`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

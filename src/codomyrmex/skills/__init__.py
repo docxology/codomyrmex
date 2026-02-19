@@ -16,6 +16,7 @@ except ImportError:
 
 # New submodule exports
 from . import (
+    arscontexta,
     composition,
     discovery,
     execution,
@@ -67,6 +68,7 @@ __all__ = [
     "SkillSync",
     "SkillRegistry",
     # Submodules
+    "arscontexta",
     "discovery",
     "execution",
     "composition",

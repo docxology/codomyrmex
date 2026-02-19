@@ -1,6 +1,6 @@
 # Simulation Module
 
-**Version**: v0.1.0 | **Status**: Alpha
+**Version**: v0.1.7 | **Status**: Alpha
 
 Core simulation engine for agent-based modeling and system dynamics simulations within Codomyrmex. Provides a step-based simulation loop with configurable parameters, seeding, and result collection.
 

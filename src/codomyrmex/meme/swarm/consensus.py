@@ -9,9 +9,9 @@ from codomyrmex.meme.swarm.models import SwarmAgent
 def reach_consensus(agents: List[SwarmAgent], proposal: str, threshold: float = 0.6) -> bool:
     """Simple majority/threshold consensus check.
     
-    Agents are assumed to vote based on internal state (placeholder logic).
+    Agents vote based on internal state — 'positive' state counts as yes.
     """
-    # Placeholder: agents in 'positive' state vote yes
+    # Agents in 'positive' state vote yes
     votes = sum(1 for a in agents if a.state == "positive")
     ratio = votes / len(agents) if agents else 0.0
     return ratio >= threshold

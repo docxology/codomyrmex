@@ -1,6 +1,6 @@
 # Market Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Reverse auction and demand aggregation for AI service procurement.
 

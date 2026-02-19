@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Warmers
 
 **Module**: `codomyrmex.cache.warmers`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

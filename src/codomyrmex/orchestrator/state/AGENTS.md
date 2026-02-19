@@ -1,7 +1,7 @@
 # AI Agent Guidelines - State
 
 **Module**: `codomyrmex.orchestrator.state`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

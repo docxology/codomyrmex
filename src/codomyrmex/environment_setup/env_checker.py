@@ -159,7 +159,7 @@ def generate_environment_report() -> str:
     Returns:
         A placeholder string. Will return a full report once implemented.
     """
-    return "Environment report generation placeholder."
+    raise NotImplementedError("Environment report generation not yet implemented")
 
 def validate_environment_completeness(repo_root: str | None = None) -> bool:
     """Validate that the environment is fully configured for Codomyrmex.

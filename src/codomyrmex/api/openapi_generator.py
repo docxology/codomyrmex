@@ -15,6 +15,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
+
 
 try:
     from codomyrmex.logging_monitoring.logger_config import get_logger
@@ -147,7 +149,7 @@ class DocumentationOpenAPIGenerator:
         title: str,
         version: str,
         endpoints: list[Any],
-        base_url: str = "http://localhost:8000",
+        base_url: str = os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL),
     ) -> dict[str, Any]:
         """
         Generate OpenAPI 3.0 specification from endpoint list.
@@ -907,7 +909,7 @@ def generate_openapi_spec(
     title: str,
     version: str,
     endpoints: list[Any],
-    base_url: str = "http://localhost:8000",
+    base_url: str = "",
 ) -> dict[str, Any]:
     """
     Convenience function to generate OpenAPI specification from endpoints.
@@ -921,6 +923,7 @@ def generate_openapi_spec(
     Returns:
         Dict containing OpenAPI specification
     """
+    base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
     generator = DocumentationOpenAPIGenerator()
     return generator.generate_spec(title, version, endpoints, base_url)
 

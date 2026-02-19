@@ -228,24 +228,7 @@ class ConfigMigrator:
         Returns:
             True if configuration is valid for the target version
         """
-        # This would implement version-specific validation
-        # For now, just check if required fields for target version are present
-
-        # Placeholder implementation
-        required_fields_by_version = {
-            "1.0.0": ["name", "version"],
-            "2.0.0": ["name", "version", "api_key"],
-            "3.0.0": ["name", "version", "api_key", "timeout"]
-        }
-
-        required_fields = required_fields_by_version.get(target_version, [])
-        missing_fields = [field for field in required_fields if field not in config]
-
-        if missing_fields:
-            logger.warning(f"Configuration missing required fields for version {target_version}: {missing_fields}")
-            return False
-
-        return True
+        raise NotImplementedError("Config migration validation requires migration rule definitions")
 
     def register_migration(self, from_version: str, to_version: str, migrator: Callable) -> None:
         """

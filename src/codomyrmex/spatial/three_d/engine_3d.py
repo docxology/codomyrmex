@@ -89,8 +89,7 @@ class Camera3D:
 
     def look_at(self, target: Vector3D) -> None:
         """Point camera at target."""
-        # Implementation placeholder
-        pass
+        raise NotImplementedError("3D look_at requires configured rendering engine")
 
 
 @dataclass

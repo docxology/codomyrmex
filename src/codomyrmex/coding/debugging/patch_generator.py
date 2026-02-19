@@ -117,10 +117,9 @@ class PatchGenerator:
             return []
 
         try:
-            # This is a placeholder for the actual LLM call
-            # response = self.llm_client.complete(prompt)
-            # patches = self._parse_response(response)
-            return []
+            raise NotImplementedError("Patch generation requires configured LLM backend — use llm module")
+        except NotImplementedError:
+            raise
         except Exception as e:
             logger.error(f"Failed to generate patch: {e}")
             return []

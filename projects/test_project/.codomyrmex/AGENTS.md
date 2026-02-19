@@ -1,6 +1,6 @@
 # Codomyrmex Agents — projects/test_project/.codomyrmex
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Signposting
 - **Parent**: [test_project](../AGENTS.md)

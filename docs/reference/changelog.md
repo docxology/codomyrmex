@@ -18,7 +18,7 @@ For changes specific to individual modules, see:
 - **Data Visualization**: [Changelog](../../src/codomyrmex/data_visualization/CHANGELOG.md)
 - **Code Execution Sandbox**: [Changelog](../../src/codomyrmex/coding/MIGRATION_COMPLETE.md)
 - **Static Analysis**: [Changelog](../../src/codomyrmex/static_analysis/CHANGELOG.md)
-- **Build Synthesis**: [Changelog](../../src/codomyrmex/build_synthesis/CHANGELOG.md)
+- **Build Synthesis**: [Changelog](../../src/codomyrmex/deployment/CHANGELOG.md)
 - **Documentation**: [Changelog](../../src/codomyrmex/documentation/CHANGELOG.md)
 - **Pattern Matching**: [Changelog](../../src/codomyrmex/pattern_matching/CHANGELOG.md)
 - **Git Operations**: [README](../../src/codomyrmex/git_operations/README.md)

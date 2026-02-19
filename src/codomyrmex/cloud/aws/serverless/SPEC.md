@@ -1,6 +1,6 @@
 # AWS Serverless - Specification
 
-**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Implements the `cloud/common` abstract interface for serverless operations:
 - Resource provisioning and lifecycle management
 - Configuration and scaling
 - Monitoring and metrics integration
-- Cost tracking via the `cost_management` module
+- Cost tracking via the `performance` module
 
 ## Provider-Specific Services
 

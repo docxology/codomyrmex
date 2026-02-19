@@ -1,6 +1,6 @@
 # Feature Flags Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Feature flag management with evaluation strategies and gradual rollout.
 

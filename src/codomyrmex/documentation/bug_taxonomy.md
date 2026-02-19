@@ -157,7 +157,7 @@ Codomyrmex employs a synergistic combination of its modules to proactively and r
 **Catalyzing Improvement:**
 *   **Feedback Loop to `static_analysis`:** Codomyrmex can (with user consent) learn from typos corrected by developers or `ai_code_editing`. If certain types of typos are common in a project, new custom linting rules can be suggested or automatically added to `static_analysis`.
 *   **`documentation` & Style Guides:** Insights from common typos can inform the evolution of project coding standards and documentation, managed and versioned within the `documentation` module.
-*   **`build_synthesis`:** Ensures that all typo detection mechanisms are consistently applied across all development and CI environments.
+*   **`deployment`:** Ensures that all typo detection mechanisms are consistently applied across all development and CI environments.
 
 **Securing Against:**
 *   **Reduced Error Surface:** By minimizing typos, especially those that might lead to logical flaws or incorrect data handling (e.g., assigning to the wrong variable), Codomyrmex reduces the potential attack surface that could be exploited.
@@ -170,7 +170,7 @@ Codomyrmex employs a synergistic combination of its modules to proactively and r
 | Prevention             | `static_analysis`, `ai_code_editing`, `pattern_matching`, `git_operations`      | Automated checks, intelligent code generation, pattern enforcement, pre-commit hooks.                                                            |
 | Detection              | `static_analysis`, `ai_code_editing`                                            | Advanced semantic analysis, AI-powered code review.                                                                                              |
 | Fixing                 | `ai_code_editing`                                                               | Intelligent suggestions, automated corrections, refactoring support.                                                                             |
-| Catalyzing Improvement | `static_analysis` (custom rules), `documentation`, `build_synthesis`, `model_context_protocol` | Learning from mistakes, evolving standards, consistent enforcement, building better code understanding.                                        |
+| Catalyzing Improvement | `static_analysis` (custom rules), `documentation`, `deployment`, `model_context_protocol` | Learning from mistakes, evolving standards, consistent enforcement, building better code understanding.                                        |
 | Securing Against       | `static_analysis`, `git_operations`, `ai_code_editing`                          | Reducing error-prone code, ensuring easier security reviews, and preventing typos in security-critical code.                                     |
 
 #### Illustrative Diagram: Typo Lifecycle and Codomyrmex
@@ -191,7 +191,7 @@ graph TD
         C1 -- `static_analysis` (Deeper Semantic Checks) / `ai_code_editing` (Review Mode) --> F1;
         G1 --> H1[Clean Code];
         H1 -- `git_operations` (Pre-commit Hook) --> I1[Verified Code in VCS];
-        I1 -- `build_synthesis` (CI Check) --> J1[Robust Build];
+        I1 -- `deployment` (CI Check) --> J1[Robust Build];
     end
 
     style A1 fill:#e6ffe6,stroke:#333,stroke-width:2px
@@ -462,7 +462,7 @@ Codomyrmex provides comprehensive support for managing memory and other resource
 
 **Catalyzing Improvement:**
 *   **Custom Allocator Design (`ai_code_editing`):** For projects requiring fine-grained memory control, Codomyrmex can assist in designing and implementing custom allocators with built-in tracking and debugging features, as described in the article.
-*   **Memory Usage Benchmarking (`build_synthesis`, `data_visualization`):** Integrates memory profiling into CI/CD pipelines (`build_synthesis`) to track memory usage over time and detect regressions. `data_visualization` provides dashboards for memory trends.
+*   **Memory Usage Benchmarking (`deployment`, `data_visualization`):** Integrates memory profiling into CI/CD pipelines (`deployment`) to track memory usage over time and detect regressions. `data_visualization` provides dashboards for memory trends.
 *   **Education and Best Practices (`documentation`):** Insights from leak detection feed into `documentation`, reinforcing best practices for memory management within the specific project or language context.
 
 **Securing Against:**
@@ -477,7 +477,7 @@ Codomyrmex provides comprehensive support for managing memory and other resource
 | Prevention             | `static_analysis`, `ai_code_editing`, `pattern_matching`, `environment_setup`                 | RAII enforcement, smart pointer usage, custom rule adherence, default integration of memory debuggers.                                    |
 | Detection              | `code_execution_sandbox`, `logging_monitoring`, `data_visualization`, `static_analysis`     | Runtime profiling, anomaly detection, results visualization, advanced static path analysis.                                                 |
 | Fixing                 | `ai_code_editing`                                                                           | Pinpoints allocation/deallocation mismatches, suggests fixes, automates refactoring to safer patterns.                                  |
-| Catalyzing Improvement | `ai_code_editing` (custom allocators), `build_synthesis`, `data_visualization`, `documentation` | Assists in advanced memory management design, CI integration for memory tracking, trend dashboards, best practice documentation.             |
+| Catalyzing Improvement | `ai_code_editing` (custom allocators), `deployment`, `data_visualization`, `documentation` | Assists in advanced memory management design, CI integration for memory tracking, trend dashboards, best practice documentation.             |
 | Securing Against       | All above                                                                                   | Prevents DoS from resource exhaustion, ensures predictable performance, reduces risk of sensitive data exposure from leaked memory.           |
 
 ---
@@ -517,7 +517,7 @@ Memory overwrites are critical security risks. Codomyrmex leverages multiple str
 **Prevention:**
 *   **`static_analysis` for Boundary Violations:** Detects potential buffer overflows by analyzing array/pointer arithmetic, string operations (e.g., `strcpy`, `sprintf`), and loop bounds. It can also identify use-after-free scenarios by tracking pointer lifetimes and aliasing.
 *   **`ai_code_editing` for Safe Alternatives:** Promotes the use of bounds-checked data structures (e.g., `std::vector`, `std::string` in C++, safe array types in other languages) and safer function alternatives (e.g., `strncpy` with correct size parameter, `snprintf`). It can refactor unsafe C-style code to more modern and secure idioms.
-*   **`environment_setup` & `build_synthesis` for Sanitizers:** Assists in configuring builds with tools like AddressSanitizer (ASan), which provides robust detection of buffer overflows, use-after-free, and other memory errors. `build_synthesis` ensures these sanitizers are part of regular debug builds and CI test runs.
+*   **`environment_setup` & `deployment` for Sanitizers:** Assists in configuring builds with tools like AddressSanitizer (ASan), which provides robust detection of buffer overflows, use-after-free, and other memory errors. `deployment` ensures these sanitizers are part of regular debug builds and CI test runs.
 *   **`pattern_matching` for Secure Coding Standards:** Enforces rules against known unsafe patterns and promotes the use of defensive programming techniques related to memory handling.
 
 **Detection:**
@@ -543,7 +543,7 @@ Memory overwrites are critical security risks. Codomyrmex leverages multiple str
 
 | Aspect                 | Codomyrmex Modules/Features                                                                         | Description                                                                                                                                                           |
 |------------------------|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Prevention             | `static_analysis`, `ai_code_editing`, `environment_setup`, `build_synthesis`, `pattern_matching`        | Boundary checks, safe alternative promotion, sanitizer integration, secure coding standards.                                                                          |
+| Prevention             | `static_analysis`, `ai_code_editing`, `environment_setup`, `deployment`, `pattern_matching`        | Boundary checks, safe alternative promotion, sanitizer integration, secure coding standards.                                                                          |
 | Detection              | `code_execution_sandbox` (with ASan), `logging_monitoring`, `ai_code_editing`, `data_visualization`                                       | Runtime detection via sanitizers, crash/report analysis, state space visualization.                                                                        |
 | Fixing                 | `ai_code_editing`, `git_operations`                                                                                         | Precise error correction based on diagnostics, intelligent bisection assistance.                                                                                      |
 | Catalyzing Improvement | `model_context_protocol`, `ai_code_editing` (concurrency model refactoring), `documentation`                   | Assists in advanced memory management design, CI integration for memory tracking, trend dashboards, best practice documentation.                                            |
@@ -591,7 +591,7 @@ Race conditions are notoriously difficult. Codomyrmex combines static analysis, 
 *   **`static_analysis` for Concurrency Patterns:** Detects common data race patterns, such as unprotected access to shared data, incorrect use of synchronization primitives (mutexes, semaphores, atomics), and potential deadlocks through lock order analysis.
 *   **`ai_code_editing` for Safe Concurrency:** Suggests safer concurrency patterns like immutability, message passing (actors, channels), thread-local storage, or correct lock usage. It can help refactor code to minimize shared mutable state and guide the implementation of complex synchronization logic.
 *   **`pattern_matching` for Concurrency Guidelines:** Enforces project-specific concurrency models and guidelines, e.g., rules about which data can be shared, preferred synchronization mechanisms, or avoidance of known problematic patterns.
-*   **`environment_setup` & `build_synthesis` for Thread Sanitizer (TSan):** Assists in configuring builds with ThreadSanitizer, which dynamically detects data races and other threading errors. `build_synthesis` ensures TSan is used in CI tests.
+*   **`environment_setup` & `deployment` for Thread Sanitizer (TSan):** Assists in configuring builds with ThreadSanitizer, which dynamically detects data races and other threading errors. `deployment` ensures TSan is used in CI tests.
 
 **Detection:**
 *   **`code_execution_sandbox` with TSan:** Runs applications and tests with TSan enabled. TSan reports provide detailed information about conflicting memory accesses, including stack traces for involved threads.
@@ -617,7 +617,7 @@ Race conditions are notoriously difficult. Codomyrmex combines static analysis, 
 
 | Aspect                 | Codomyrmex Modules/Features                                                                                         | Description                                                                                                                                                                |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Prevention             | `static_analysis`, `ai_code_editing`, `pattern_matching`, `environment_setup`, `build_synthesis`                        | Detects unsafe patterns, suggests safe alternatives, enforces guidelines, integrates TSan by default.                                                                 |
+| Prevention             | `static_analysis`, `ai_code_editing`, `pattern_matching`, `environment_setup`, `deployment`                        | Detects unsafe patterns, suggests safe alternatives, enforces guidelines, integrates TSan by default.                                                                 |
 | Detection              | `code_execution_sandbox` (with TSan), `logging_monitoring`, `ai_code_editing`, `model_context_protocol`, Stress Testing | Comprehensive test execution, state visualization, AI-assisted debugging, symbolic analysis.                                                              |
 | Fixing                 | `ai_code_editing`, `git_operations`                                                                                         | Intelligent corrections, test-driven refactoring, alternative algorithmic suggestions.                                                      |
 | Catalyzing Improvement | `model_context_protocol`, `ai_code_editing` (concurrency model refactoring), `documentation`                   | Knowledge base growth, automated test generation for edge cases, refinement of coding standards.                                            |
@@ -751,7 +751,7 @@ These "Heisenbugs" are challenging. Codomyrmex focuses on enhancing observabilit
 
 **Fixing:**
 *   **`ai_code_editing` for Code "Massaging":** If a hard-to-reproduce bug is confirmed, `ai_code_editing` can suggest slight, semantically equivalent modifications to the source code (e.g., reordering operations, breaking down complex expressions, adding `volatile` qualifiers, disabling specific optimizations locally via pragmas) that might circumvent the bug. It can learn from a corpus of known compiler workarounds.
-*   **`build_synthesis` for Configuration Management:** Manages build configurations to, for example, disable a problematic optimization pass for a specific file or module until the compiler bug is fixed upstream.
+*   **`deployment` for Configuration Management:** Manages build configurations to, for example, disable a problematic optimization pass for a specific file or module until the compiler bug is fixed upstream.
 
 **Catalyzing Improvement:**
 *   **`documentation` of Compiler Issues:** Maintains a record of known compiler bugs affecting the project, along with their workarounds and status of vendor fixes. This helps avoid rediscovering the same issues.
@@ -765,8 +765,8 @@ These "Heisenbugs" are challenging. Codomyrmex focuses on enhancing observabilit
 | Aspect                 | Codomyrmex Modules/Features                                                                                              | Description                                                                                                                                                                       |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Prevention (Misdiagnosis)| `static_analysis` (UB detection), General Bug Finding Tools                                                            | Helps eliminate undefined behavior and own-code bugs before suspecting the compiler.                                                                                                |
-| Detection/Diagnosis    | `build_synthesis`, `environment_setup`, `code_execution_sandbox`, `ai_code_editing` (Assembly/MRE)                         | Automates comparative compilation, tests different compiled versions, assists in assembly inspection and MRE generation.                                                        |
-| Working Around         | `ai_code_editing` (Code Massaging), `build_synthesis` (Configuration Management)                                         | Suggests source code modifications to circumvent bugs, manages build flags to disable problematic optimizations locally.                                                              |
+| Detection/Diagnosis    | `deployment`, `environment_setup`, `code_execution_sandbox`, `ai_code_editing` (Assembly/MRE)                         | Automates comparative compilation, tests different compiled versions, assists in assembly inspection and MRE generation.                                                        |
+| Working Around         | `ai_code_editing` (Code Massaging), `deployment` (Configuration Management)                                         | Suggests source code modifications to circumvent bugs, manages build flags to disable problematic optimizations locally.                                                              |
 | Catalyzing Improvement | `documentation`, MRE Generation for Bug Reports                                                                          | Records known compiler issues and workarounds, facilitates high-quality bug reporting to vendors.                                                                                 |
 | Securing Against       | Defense in Depth (General Security Practices)                                                                            | Extremely rare for compiler bugs to be exploitable vulnerabilities, but general security practices and ability to switch compilers provide some mitigation.                         |
 

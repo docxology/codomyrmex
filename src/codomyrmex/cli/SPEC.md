@@ -1,6 +1,6 @@
 # cli - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -41,7 +41,7 @@ graph TD
     
     AI --> agents[agents module]
     Analysis --> static_analysis[static_analysis module]
-    Build --> build_synthesis[build_synthesis module]
+    Build --> deployment[deployment module]
     FPF --> fpf_module[fpf module]
     Skills --> skills_module[skills module]
 ```

@@ -1169,7 +1169,7 @@ def get_total_tool_count() -> int:
     return len(get_tool_registry().list_tools())
 
 
-# Legacy constants for backwards compat — prefer get_total_tool_count()
+# DEPRECATED(v0.2.0): Legacy constants for backward compatibility. Will be removed in v0.3.0.
 TOOL_COUNT = len(_TOOL_DEFINITIONS)  # Static base count (18)
 RESOURCE_COUNT = len(_RESOURCE_DEFINITIONS)
 PROMPT_COUNT = len(_PROMPT_DEFINITIONS)

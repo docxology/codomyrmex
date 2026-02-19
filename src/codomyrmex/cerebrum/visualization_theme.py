@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from cerebrum.visualization.visualization_theme instead. Will be removed in v0.3.0.
 """Re-export shim for backward compatibility.
 
 The visualization_theme module was moved to cerebrum/visualization/visualization_theme.py.

@@ -1,7 +1,7 @@
 # Validation — Functional Specification
 
 **Module**: `codomyrmex.validation`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

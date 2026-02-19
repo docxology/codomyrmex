@@ -14,7 +14,7 @@ A central construct is the Markov blanket -- the set of states separating a syst
 
 **[`cerebrum`](../../src/codomyrmex/cerebrum/)** directly implements active inference agents that maintain probabilistic beliefs, generate predictions, compute prediction errors, and select actions minimizing expected free energy. This module operationalizes the mathematics as executable code.
 
-**[`inference_optimization`](../../src/codomyrmex/inference_optimization/)** implements amortized inference: training recognition models that map observations directly to approximate posteriors, bypassing expensive iterative optimization. This parallels the brain learning fast perceptual shortcuts that reduce computational surprise.
+**[`performance`](../../src/codomyrmex/performance/)** implements amortized inference: training recognition models that map observations directly to approximate posteriors, bypassing expensive iterative optimization. This parallels the brain learning fast perceptual shortcuts that reduce computational surprise.
 
 **[`telemetry`](../../src/codomyrmex/telemetry/)** closes the perception-action loop. Telemetry data constitutes sensory input; system responses (scaling, rerouting, alerting) constitute motor output. Active inference requires this closed loop between sensing and acting.
 

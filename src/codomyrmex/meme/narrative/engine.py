@@ -10,13 +10,7 @@ class NarrativeEngine:
 
     def analyze(self, text: str) -> Narrative:
         """Analyze text to extract narrative structure."""
-        # Placeholder implementation
-        return Narrative(
-            title="Analyzed Narrative",
-            theme="Unknown",
-            arc=None,  # type: ignore
-            content_segments=[text]
-        )
+        raise NotImplementedError("Narrative analysis requires configured NLP backend")
 
     def generate(self, template: NarrativeTemplate, params: Dict[str, str]) -> str:
         """Generate a story from a template and parameters."""

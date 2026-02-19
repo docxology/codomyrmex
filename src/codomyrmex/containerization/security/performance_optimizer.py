@@ -44,14 +44,14 @@ class ContainerMetrics:
 
 
 class PerformanceOptimizer:
-    """Placeholder performance optimizer (legacy alias)."""
+    """Legacy alias for ContainerOptimizer."""
 
     def __init__(self):
         pass
 
     def optimize(self, config: dict) -> dict:
         """Optimize container configuration."""
-        return config
+        raise NotImplementedError("Container performance optimization requires configured profiling backend")
 
 
 class ContainerOptimizer:
@@ -84,15 +84,7 @@ class ContainerOptimizer:
         Returns:
             ContainerMetrics with current values
         """
-        # Stub implementation - in production would query Docker API
-        metrics = ContainerMetrics(
-            container_id=container_id,
-            cpu_percent=0.0,
-            memory_usage_mb=0.0,
-            memory_limit_mb=512.0
-        )
-        self._metrics_history.append(metrics)
-        return metrics
+        raise NotImplementedError("Container metrics collection requires configured Docker API connection")
 
     def optimize_resources(self, container_id: str) -> dict[str, Any]:
         """
@@ -104,12 +96,7 @@ class ContainerOptimizer:
         Returns:
             Optimization recommendations
         """
-        return {
-            "container_id": container_id,
-            "recommendations": [],
-            "optimized": True,
-            "note": "Stub implementation - integrate with Docker API for production"
-        }
+        raise NotImplementedError("Container resource optimization requires configured Docker API connection")
 
     def get_recommendations(self, container_id: str) -> list[str]:
         """
@@ -121,11 +108,7 @@ class ContainerOptimizer:
         Returns:
             List of recommendations
         """
-        return [
-            "Consider setting memory limits",
-            "Enable resource monitoring",
-            "Review CPU allocation"
-        ]
+        raise NotImplementedError("Container performance recommendations require configured profiling backend")
 
     def get_metrics_history(self) -> list[ContainerMetrics]:
         """Get history of collected metrics."""

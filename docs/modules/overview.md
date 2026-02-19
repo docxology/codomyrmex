@@ -1,6 +1,6 @@
 # Codomyrmex Module System Overview
 
-**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 Codomyrmex is built on a **modular architecture** where each module provides specific functionality while maintaining clear interfaces and minimal coupling. This design allows for flexible composition, independent development, and easy extensibility.
 

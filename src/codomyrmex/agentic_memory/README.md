@@ -1,6 +1,6 @@
 # Agentic Memory Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Long-term agent memory with retrieval, persistence, and automatic pruning.
 

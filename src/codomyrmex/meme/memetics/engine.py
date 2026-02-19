@@ -158,9 +158,8 @@ class MemeticEngine:
                 if len(parents) < 2:
                     break
                 p1, p2 = random.sample(parents, 2)
-                # Placeholder for memeplex recombination logic
-                # For now just clone p1
-                child = p1  # efficient copy needed in real impl
+                # Simple cloning — upgrade to crossover recombination when memeplex algebra is implemented
+                child = p1
                 offspring.append(child)
             
             current_pop = parents + offspring

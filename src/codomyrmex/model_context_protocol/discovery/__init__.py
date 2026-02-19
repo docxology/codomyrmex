@@ -374,5 +374,5 @@ def mcp_tool(
     return decorator
 
 
-# Alias for backward compatibility with tests
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use MCPDiscovery. Will be removed in v0.3.0.
 MCPDiscoveryEngine = MCPDiscovery

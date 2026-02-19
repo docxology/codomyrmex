@@ -4,10 +4,13 @@ Distributed Rate Limiting
 Rate limiting with Redis backend for distributed systems.
 """
 
+import os
 import threading
 import time
 from dataclasses import dataclass
 from typing import Any
+
+from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
 
 from . import RateLimiter, RateLimitExceeded, RateLimitResult
 
@@ -15,7 +18,11 @@ from . import RateLimiter, RateLimitExceeded, RateLimitResult
 @dataclass
 class DistributedRateLimiterConfig:
     """Configuration for distributed rate limiting."""
-    redis_url: str = "redis://localhost:6379"
+    redis_url: str = ""
+
+    def __post_init__(self):
+        if not self.redis_url:
+            self.redis_url = os.getenv("REDIS_URL", DEFAULT_REDIS_URL)
     key_prefix: str = "ratelimit:"
     sync_interval: float = 0.1  # Seconds between syncs
 

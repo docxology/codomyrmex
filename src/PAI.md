@@ -1,10 +1,10 @@
 # Personal AI Infrastructure Context: src/
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-This is the main source directory containing the `codomyrmex` Python package with 78 specialized modules organized across four architectural layers.
+This is the main source directory containing the `codomyrmex` Python package with 82 specialized modules organized across four architectural layers.
 
 ## AI Agent Guidance
 

@@ -162,26 +162,26 @@ The following modules have been absorbed into their host modules:
 | Former Module | Now Located In |
 |---------------|---------------|
 | `metrics` | `telemetry/metrics/` |
-| `observability_dashboard` | `telemetry/dashboard/` |
+| `telemetry` | `telemetry/dashboard/` |
 | `static_analysis` | `coding/static_analysis/` |
 | `pattern_matching` | `coding/pattern_matching/` |
 | `visualization` | `data_visualization/` |
 | `model_evaluation` | `model_ops/evaluation/` |
-| `model_registry` | `model_ops/registry/` |
-| `inference_optimization` | `model_ops/optimization/` |
-| `prompt_testing` | `prompt_engineering/testing/` |
-| `workflow_testing` | `testing/workflow/` |
+| `model_ops` | `model_ops/registry/` |
+| `performance` | `model_ops/optimization/` |
+| `prompt_engineering` | `prompt_engineering/testing/` |
+| `testing` | `testing/workflow/` |
 | `chaos_engineering` | `testing/chaos/` |
 | `rate_limiting` | `api/rate_limiting/` |
-| `build_synthesis` | `ci_cd_automation/build/` |
+| `deployment` | `ci_cd_automation/build/` |
 | `scheduler` | `orchestrator/scheduler/` |
 | `streaming` | `events/streaming/` |
 | `service_mesh` | `networking/service_mesh/` |
 | `migration` | `database_management/migration/` |
 | `schemas` | `validation/schemas/` |
-| `cost_management` | `cloud/cost_management/` |
-| `data_lineage` | `database_management/lineage/` |
-| `feature_store` | `model_ops/feature_store/` |
+| `performance` | `cloud/performance/` |
+| `telemetry` | `database_management/lineage/` |
+| `vector_store` | `model_ops/vector_store/` |
 | `i18n` | `utils/i18n/` |
 | `accessibility` | `website/accessibility/` |
 | `education` | `documentation/education/` |

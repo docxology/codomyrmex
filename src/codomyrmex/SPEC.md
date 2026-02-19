@@ -1,6 +1,6 @@
 # codomyrmex - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.8 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -65,14 +65,14 @@ graph TB
         MCP[model_context_protocol<br/>MCP integration]
         Terminal[terminal_interface<br/>CLI utilities]
         Config[config_management<br/>Configuration]
-        Metrics[metrics<br/>Metrics collection]
+        Telemetry[telemetry<br/>Metrics & tracing]
     end
 
     subgraph "Core Layer - Primary Functionality"
         Static[static_analysis<br/>Code quality]
         Coding[coding<br/>Execution & sandboxing]
-        Viz[data_visualization<br/>Charts & plots]
-        Pattern[pattern_matching<br/>Pattern analysis]
+        DataViz[data_visualization<br/>Charts & plots]
+        Search[search<br/>Code search]
         Git[git_operations<br/>Version control]
         Security[security<br/>Security scanning]
         LLM[llm<br/>LLM infrastructure]
@@ -87,7 +87,6 @@ graph TB
     end
 
     subgraph "Service Layer - Higher-Level Services"
-        Build[build_synthesis<br/>Build automation]
         Docs[documentation<br/>Doc generation]
         API[api<br/>API infrastructure]
         CICD[ci_cd_automation<br/>CI/CD pipelines]
@@ -97,12 +96,13 @@ graph TB
         Orchestrator[orchestrator<br/>DAG Workflows]
         Auth[auth<br/>Authentication]
         Cloud[cloud<br/>Cloud services]
+        Deployment[deployment<br/>Deployment automation]
     end
 
     subgraph "Specialized Layer - Advanced Features"
         Spatial[spatial<br/>3D/4D modeling]
         Cerebrum[cerebrum<br/>Reasoning engine]
-        FPF[fpf<br/>First Principles]
+        FPF[fpf<br/>Functional Programming]
         Agents[agents<br/>AI agents]
         Events[events<br/>Event system]
         Plugin[plugin_system<br/>Plugins]
@@ -117,7 +117,6 @@ graph TB
         Skills[skills<br/>Skills management]
         IDE[ide<br/>IDE integration]
         Meme[meme<br/>Memetics & Info War]
-        Viz[visualization<br/>Central Viz]
         Audio[audio<br/>Audio Processing]
         Video[video<br/>Video Processing]
         Dark[dark<br/>Dark Mode]
@@ -127,15 +126,17 @@ graph TB
     Env --> Coding
     MCP --> Agents
     Terminal --> Coding
-    Config --> Build
-    Coding --> Build
-    Static --> Build
-    Git --> Build
-    Build --> CICD
-    Logistics --> Build
-    Agents --> Build
+    Config --> CICD
+    Coding --> CICD
+    Static --> CICD
+    Git --> CICD
+    Logistics --> CICD
+    Agents --> CICD
     LLM --> Agents
 ```
+
+> [!NOTE]
+> The diagram above shows representative modules per layer. The full list of all 82 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
 
 ### Module Layer Descriptions
 
@@ -150,7 +151,7 @@ graph TB
 - `model_context_protocol`: MCP tool specifications and protocol handling
 - `terminal_interface`: Interactive CLI and terminal utilities
 - `config_management`: Configuration loading, validation, and secret management
-- `metrics`: Metrics collection and aggregation infrastructure
+- `telemetry`: Metrics collection, tracing, and observability
 
 **Characteristics**:
 
@@ -168,7 +169,7 @@ graph TB
 - `static_analysis`: Code quality analysis and linting
 - `coding`: Secure code execution and sandboxing
 - `data_visualization`: Charts, plots, and visualizations
-- `pattern_matching`: Code pattern recognition and AST analysis
+- `search`: Code search and pattern discovery
 - `git_operations`: Git workflow automation
 - `security`: Security scanning and vulnerability detection
 - `llm`: LLM infrastructure and model management
@@ -194,7 +195,7 @@ graph TB
 
 **Modules**:
 
-- `build_synthesis`: Build automation and code synthesis
+- `deployment`: Deployment automation and release management
 - `documentation`: Documentation generation tools
 - `api`: API infrastructure and OpenAPI generation
 - `ci_cd_automation`: CI/CD pipeline management
@@ -220,7 +221,7 @@ graph TB
 
 - `spatial`: 3D/4D spatial modeling and visualization
 - `cerebrum`: Case-based reasoning and Bayesian inference
-- `fpf`: First Principles Framework integration
+- `fpf`: Functional Programming Framework
 - `agents`: AI agent integrations (CodeEditor, Claude, Codex, Jules, etc.)
 - `events`: Event system and pub/sub
 - `plugin_system`: Plugin architecture
@@ -234,57 +235,41 @@ graph TB
 - `templating`: Template rendering engine
 - `skills`: Skills management and integration
 - `ide`: IDE integration
-- `agentic_memory`: Specialized module
-- `cli`: Specialized module
-- `collaboration`: Specialized module
-- `concurrency`: Specialized module
-- `cost_management`: Specialized module
-- `data_lineage`: Specialized module
-- `deployment`: Specialized module
-- `embodiment`: Specialized module
-- `evolutionary_ai`: Specialized module
-- `examples`: Specialized module
-- `feature_flags`: Specialized module
-- `feature_store`: Specialized module
-- `graph_rag`: Specialized module
-- `inference_optimization`: Specialized module
-- `migration`: Specialized module
-- `model_ops`: Specialized module
-- `meme`: Specialized module
-- `model_registry`: Specialized module
-- `multimodal`: Specialized module
-- `notification`: Specialized module
-- `observability_dashboard`: Specialized module
-- `prompt_testing`: Specialized module
-- `telemetry`: Specialized module
-- `testing`: Specialized module
-- `tests`: Specialized module
-
-- `workflow_testing`: Specialized module
-- `defense`: Specialized module
-- `identity`: Specialized module
-- `market`: Specialized module
-- `privacy`: Specialized module
-- `wallet`: Specialized module
-- `audio`: specialized module
-- `video`: specialized module
-- `dark`: specialized module
-- `visualization`: Central Visualization module
-- `bio_simulation`: Specialized module
-- `crypto`: Specialized module
-- `dependency_injection`: Specialized module
-- `edge_computing`: Specialized module
-- `exceptions`: Specialized module
-- `finance`: Specialized module
-- `formal_verification`: Specialized module
-- `networks`: Specialized module
-- `prompt_engineering`: Specialized module
-- `quantum`: Specialized module
-- `relations`: Specialized module
-- `search`: Specialized module
-- `simulation`: Specialized module
-- `tool_use`: Specialized module
-- `vector_store`: Specialized module
+- `agentic_memory`: Long-term memory systems for AI agents
+- `audio`: Audio processing and analysis
+- `bio_simulation`: Biological simulation models
+- `cli`: Command-line interface
+- `collaboration`: Team collaboration tools
+- `concurrency`: Concurrency utilities and async patterns
+- `crypto`: Cryptographic operations
+- `dark`: Dark mode and theming
+- `defense`: Active countermeasures and containment
+- `dependency_injection`: DI container and patterns
+- `edge_computing`: Edge deployment and inference
+- `embodiment`: Physical embodiment interfaces
+- `evolutionary_ai`: Evolutionary algorithms and optimization
+- `examples`: Usage examples and reference implementations
+- `exceptions`: Unified exception hierarchy
+- `feature_flags`: Feature flag management
+- `finance`: Financial modeling and analysis
+- `formal_verification`: Formal verification tools
+- `graph_rag`: Graph-based Retrieval Augmented Generation
+- `identity`: Multi-persona management
+- `market`: Marketplace and auction mechanics
+- `meme`: Memetics and information dynamics
+- `model_ops`: ML model operations and lifecycle
+- `networks`: Network graph analysis
+- `privacy`: Metadata scrubbing and privacy tools
+- `prompt_engineering`: Prompt design and optimization
+- `quantum`: Quantum computing interfaces
+- `relations`: Relationship modeling
+- `simulation`: General simulation framework
+- `testing`: Test utilities and runners
+- `tests`: Package test suites
+- `tool_use`: Tool use abstraction layer
+- `vector_store`: Vector storage and similarity search
+- `video`: Video processing and analysis
+- `wallet`: Self-custody and key management
 
 **Characteristics**:
 
@@ -345,7 +330,7 @@ Modules must integrate with:
 
 ### Dependency Graph
 
-```
+```text
 Foundation Layer (no dependencies)
     ↓
 Core Layer (depends on Foundation)

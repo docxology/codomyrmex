@@ -12,13 +12,13 @@ Trophallaxis -- mouth-to-mouth food transfer between nestmates -- constitutes th
 
 ## Architectural Mapping
 
-**[`cost_management`](../../src/codomyrmex/cost_management/)** implements the energy budget. Every operation consumes resources -- API calls, GPU time, storage -- and cost_management tracks expenditures against allocated budgets, alerts when limits approach, and reports cost attribution by module. This mirrors measuring per-caste metabolic expenditure.
+**[`performance`](../../src/codomyrmex/performance/)** implements the energy budget. Every operation consumes resources -- API calls, GPU time, storage -- and performance tracks expenditures against allocated budgets, alerts when limits approach, and reports cost attribution by module. This mirrors measuring per-caste metabolic expenditure.
 
 **[`performance`](../../src/codomyrmex/performance/)** measures metabolic rate: throughput, latency, and resource utilization. High throughput with low latency indicates metabolic efficiency -- more work per unit of resource, like maximizing ATP yield per glucose molecule. Performance monitoring reveals whether metabolic rate scales sublinearly with load (efficient) or superlinearly (crisis approaching).
 
 **[`rate_limiting`](../../src/codomyrmex/rate_limiting/)** implements homeostatic regulation through negative feedback. Rate limits prevent any single consumer from overwhelming shared resources, maintain steady-state throughput under variable demand, and protect downstream dependencies. The rate limiter is a thermostat for computational metabolism.
 
-**[`inference_optimization`](../../src/codomyrmex/inference_optimization/)** pursues metabolic efficiency at the inference level. Model distillation, quantization, and pruning are computational analogues of adaptations that increase ATP yield: more useful work with less energy. Amortized inference parallels enzymatic catalysis -- upfront investment in efficient machinery that reduces per-operation costs indefinitely.
+**[`performance`](../../src/codomyrmex/performance/)** pursues metabolic efficiency at the inference level. Model distillation, quantization, and pruning are computational analogues of adaptations that increase ATP yield: more useful work with less energy. Amortized inference parallels enzymatic catalysis -- upfront investment in efficient machinery that reduces per-operation costs indefinitely.
 
 **[`cache`](../../src/codomyrmex/cache/)** functions as fat storage. Caching stores expensive computation results for near-zero marginal cost on subsequent requests. Cache hit rates measure how effectively the system exploits stored surplus. Eviction policies correspond to lipolysis -- controlled mobilization of reserves when fresh inputs are unavailable.
 

@@ -1,6 +1,6 @@
 # integration
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -13,5 +13,5 @@ Test files and validation suites.
 
 ## Navigation
 
-- **Parent Directory**: [build_synthesis](../README.md)
+- **Parent Directory**: [deployment](../README.md)
 - **Project Root**: ../../../../../../README.md

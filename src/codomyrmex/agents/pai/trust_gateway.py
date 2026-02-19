@@ -294,7 +294,7 @@ class _LazyToolSets:
         return _get_destructive_tools()
 
 
-# Module-level names for backwards compatibility — computed lazily.
+# DEPRECATED(v0.2.0): Module-level names for backward compatibility -- computed lazily. Will be removed in v0.3.0.
 class _FrozenSetProxy:
     """Proxy that behaves like a frozenset but delegates to lazy computation."""
 
@@ -621,7 +621,7 @@ def verify_capabilities() -> dict[str, Any]:
         "trust": {
             "promoted_to_verified": promoted, # Keep for backwards compatibility
             "level": "mixed", # Aggregate level not really meaningful defined here yet
-            "audit_entries": 0, # Placeholder for Stream 2
+            "audit_entries": 0, # TODO(stream-2): Implement audit entry counting
             "gateway_healthy": True,
             "report": _registry.get_report(),
         },

@@ -791,8 +791,70 @@ class AntigravityClient(IDEClient):
             "last_command": self.get_last_command().to_dict() if self.get_last_command() else None,
         }
 
+# ── Bridge Imports (lazy, optional dependencies) ──────────────────────
+try:
+    from codomyrmex.ide.antigravity.tool_provider import (
+        AntigravityToolProvider,
+        SAFE_TOOLS as AG_SAFE_TOOLS,
+        DESTRUCTIVE_TOOLS as AG_DESTRUCTIVE_TOOLS,
+        CONTROL_TOOLS as AG_CONTROL_TOOLS,
+    )
+except ImportError:
+    AntigravityToolProvider = None
+    AG_SAFE_TOOLS = frozenset()
+    AG_DESTRUCTIVE_TOOLS = frozenset()
+    AG_CONTROL_TOOLS = frozenset()
+
+try:
+    from codomyrmex.ide.antigravity.agent_bridge import AntigravityAgent
+except ImportError:
+    AntigravityAgent = None
+
+try:
+    from codomyrmex.ide.antigravity.skill_adapter import (
+        AntigravityToolSkill,
+        AntigravitySkillFactory,
+    )
+except ImportError:
+    AntigravityToolSkill = None
+    AntigravitySkillFactory = None
+
+try:
+    from codomyrmex.ide.antigravity.history_bridge import ArtifactHistoryBridge
+except ImportError:
+    ArtifactHistoryBridge = None
+
+try:
+    from codomyrmex.ide.antigravity.agent_relay import AgentRelay, RelayMessage
+except ImportError:
+    AgentRelay = None
+    RelayMessage = None
+
+try:
+    from codomyrmex.ide.antigravity.live_bridge import (
+        LiveAgentBridge,
+        ClaudeCodeEndpoint,
+    )
+except ImportError:
+    LiveAgentBridge = None
+    ClaudeCodeEndpoint = None
+
+
 __all__ = [
+    # Core
     "AntigravityClient",
     "Artifact",
     "ConversationContext",
+    # Bridges
+    "AntigravityToolProvider",
+    "AntigravityAgent",
+    "AntigravityToolSkill",
+    "AntigravitySkillFactory",
+    "ArtifactHistoryBridge",
+    # Relay
+    "AgentRelay",
+    "RelayMessage",
+    "LiveAgentBridge",
+    "ClaudeCodeEndpoint",
 ]
+

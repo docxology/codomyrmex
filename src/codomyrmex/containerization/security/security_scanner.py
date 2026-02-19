@@ -61,14 +61,14 @@ class SecurityScanResult:
 
 
 class SecurityScanner:
-    """Placeholder security scanner (legacy alias)."""
+    """Security scanner (not yet implemented)."""
 
     def __init__(self):
         pass
 
     def scan(self, image: str) -> dict:
         """Scan an image for vulnerabilities."""
-        return {"vulnerabilities": [], "status": "not_implemented"}
+        raise NotImplementedError("Container security scanning requires configured scanner backend (e.g., Trivy, Grype)")
 
 
 class ContainerSecurityScanner:
@@ -99,20 +99,7 @@ class ContainerSecurityScanner:
         Returns:
             SecurityScanResult with findings
         """
-        # Stub implementation - in production would integrate with Trivy, Clair, etc.
-        result = SecurityScanResult(
-            image=image,
-            scan_time=datetime.now(),
-            vulnerabilities=[],
-            passed=True,
-            metadata={
-                "scanner": "codomyrmex-stub",
-                "version": "0.1.0",
-                "note": "Stub implementation - integrate with real scanner for production"
-            }
-        )
-        self._scan_history.append(result)
-        return result
+        raise NotImplementedError("Container security scanning requires configured scanner backend (e.g., Trivy, Grype)")
 
     def scan_container(self, container_id: str, **kwargs) -> SecurityScanResult:
         """
@@ -125,13 +112,7 @@ class ContainerSecurityScanner:
         Returns:
             SecurityScanResult with findings
         """
-        return SecurityScanResult(
-            image=f"container:{container_id}",
-            scan_time=datetime.now(),
-            vulnerabilities=[],
-            passed=True,
-            metadata={"type": "container", "container_id": container_id}
-        )
+        raise NotImplementedError("Container security scanning requires configured scanner backend (e.g., Trivy, Grype)")
 
     def check_compliance(self, image: str, policy: str = "default") -> SecurityScanResult:
         """
@@ -144,13 +125,7 @@ class ContainerSecurityScanner:
         Returns:
             SecurityScanResult with compliance status
         """
-        return SecurityScanResult(
-            image=image,
-            scan_time=datetime.now(),
-            vulnerabilities=[],
-            passed=True,
-            metadata={"policy": policy, "compliant": True}
-        )
+        raise NotImplementedError("Container security scanning requires configured scanner backend (e.g., Trivy, Grype)")
 
     def get_scan_history(self) -> list[SecurityScanResult]:
         """Get history of all scans performed."""

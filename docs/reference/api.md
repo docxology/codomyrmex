@@ -321,7 +321,7 @@ print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 
 ### **Service Modules**
 
-#### **[build_synthesis](../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md)**
+#### **[deployment](../../src/codomyrmex/deployment/API_SPECIFICATION.md)**
 
 - **`trigger_build(target, config)`**: Build automation
 - **`synthesize_code_component(template, params)`**: Code generation
@@ -554,7 +554,7 @@ codomyrmex docs generate --module agents --format markdown
 | **data_visualization** | [API Docs](../../src/codomyrmex/data_visualization/API_SPECIFICATION.md) | None | ✅ Stable |
 | **code** | [API Docs](../../src/codomyrmex/coding/README.md) | [MCP Tools](../../src/codomyrmex/coding/README.md#mcp-tools) | 🔄 Evolving |
 | **static_analysis** | [API Docs](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/static_analysis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
-| **build_synthesis** | [API Docs](../../src/codomyrmex/build_synthesis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/build_synthesis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **deployment** | [API Docs](../../src/codomyrmex/deployment/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/deployment/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **pattern_matching** | [API Docs](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/pattern_matching/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **git_operations** | [API Docs](../../src/codomyrmex/git_operations/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/git_operations/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **documentation** | [API Docs](../../src/codomyrmex/documentation/API_SPECIFICATION.md) | None | 🔄 Evolving |

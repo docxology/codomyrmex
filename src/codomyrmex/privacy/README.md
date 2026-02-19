@@ -1,6 +1,6 @@
 # Privacy Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Data sanitization and anonymous routing for privacy protection.
 

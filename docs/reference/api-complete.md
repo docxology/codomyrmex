@@ -340,7 +340,7 @@ result = analyze_repository_path(
 ## 🏗️ Build Synthesis API
 
 ### **Build Operations**
-**Source**: `src/codomyrmex/build_synthesis/build_orchestrator.py`
+**Source**: `src/codomyrmex/deployment/build_orchestrator.py`
 
 ```python
 def check_build_environment() -> dict

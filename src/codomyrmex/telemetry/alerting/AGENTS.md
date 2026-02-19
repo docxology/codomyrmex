@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Alerting
 
 **Module**: `codomyrmex.telemetry.alerting`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

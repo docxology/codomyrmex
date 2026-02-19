@@ -54,9 +54,9 @@ from .static_analyzer import (
 )
 
 
-# Alias for backward compatibility
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use analyze_project() instead. Will be removed in v0.3.0.
 def analyze_codebase(*args, **kwargs):
-    """Alias for analyze_project for backward compatibility."""
+    """Alias for analyze_project."""
     return analyze_project(*args, **kwargs)
 
 

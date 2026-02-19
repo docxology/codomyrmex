@@ -376,8 +376,8 @@ print(add(2, 3))",
 
 ### **Integration Modules**
 ```python
-# Example: Testing build_synthesis (ACTUAL IMPLEMENTATION)
-def test_build_synthesis_integration():
+# Example: Testing deployment (ACTUAL IMPLEMENTATION)
+def test_deployment_integration():
     """Test build synthesis using real implemented functions."""
     from codomyrmex.ci_cd_automation.build.build_orchestrator import (
         check_build_environment,

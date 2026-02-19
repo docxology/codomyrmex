@@ -1,6 +1,6 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/build_synthesis/integration
+# Codomyrmex Agents — src/codomyrmex/tests/unit/deployment/integration
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -19,5 +19,5 @@ Test files and validation suites.
 
 ## Navigation Links
 
-- **📁 Parent Directory**: [build_synthesis](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [deployment](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../../../../README.md - Main project documentation

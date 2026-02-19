@@ -1,6 +1,6 @@
 # integration - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -52,8 +52,8 @@ Integration follows a specialized middleware pattern. External APIs and services
 
 - **Abstraction**: External service details must be hidden behind Codomyrmex-native interfaces.
 - **Resilience**: All external calls must implement circuit breakers and configurable retry policies.
-- **Consistency**: Integrate with `system_discovery` for dynamic registration of external service mocks.
-- **Verification**: Provide integration test suites that include managed mocks for every external dependency.
+- **Consistency**: Integrate with `system_discovery` for dynamic registration of external service availability checks.
+- **Verification**: Provide integration test suites that include skip-when-unavailable guards for every external dependency.
 
 ## Quality Standards
 
@@ -66,11 +66,11 @@ Integration follows a specialized middleware pattern. External APIs and services
 
 - **Connector Protocols**: All connectors must implement the base `IntegrationConnector` class.
 - **Standardized Payloads**: Use typed schemas for data exchange between connectors and core modules.
-- **Mock Interfaces**: Every production connector must have a corresponding, high-fidelity mock implementation.
+- **Test Interfaces**: Every production connector must have a corresponding integration test with skip-when-unavailable guards.
 
 ## Implementation Guidelines
 
-- **Mock-First**: Develop integration features using mocks before connecting to live services.
+- **Integration-First**: Develop integration features against real services with skip-when-unavailable guards for CI environments.
 - **Logging**: Log all outgoing requests and incoming responses (scrubbing sensitive data).
 - **Documentation**: Every integration must provide a `USAGE_EXAMPLES.md` specific to that service.
 

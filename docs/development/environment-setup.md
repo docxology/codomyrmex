@@ -81,7 +81,6 @@ bandit -r src/codomyrmex/       # Security scan
 # Testing framework and coverage
 pytest             # Testing framework
 pytest-cov         # Coverage reporting
-pytest-mock        # Mocking utilities
 
 # Usage
 pytest src/codomyrmex/tests/                           # Run all tests
@@ -206,35 +205,35 @@ pytest -n auto  # Requires pytest-xdist
 - **Coverage reporting**: HTML reports generated in `src/codomyrmex/tests/htmlcov/`
 
 ### **Writing Tests**
-Follow the existing patterns:
+Follow the existing patterns (zero-mock policy -- use skip-when-unavailable guards for external dependencies):
 ```python
 # src/codomyrmex/tests/unit/test_my_module.py
 import pytest
-from unittest.mock import patch, MagicMock
+import shutil
 
 from codomyrmex.my_module import my_function
+
+HAS_EXTERNAL_DEP = shutil.which("external_tool") is not None
 
 
 class TestMyModule:
     """Test suite for my_module"""
-    
+
     def test_my_function_success(self):
         """Test successful execution of my_function"""
         result = my_function("input")
         assert result == "expected_output"
-    
+
     def test_my_function_error_handling(self):
         """Test error handling in my_function"""
         with pytest.raises(ValueError):
             my_function("invalid_input")
-    
-    @patch('codomyrmex.my_module.external_dependency')
-    def test_my_function_with_mock(self, mock_dep):
-        """Test my_function with mocked dependencies"""
-        mock_dep.return_value = "mocked_result"
+
+    @pytest.mark.skipif(not HAS_EXTERNAL_DEP, reason="external_tool not available")
+    def test_my_function_with_external_dep(self):
+        """Test my_function with real external dependency"""
         result = my_function("input")
-        assert result == "mocked_result"
-        mock_dep.assert_called_once_with("input")
+        assert result is not None
 ```
 
 ## 📚 Documentation Development

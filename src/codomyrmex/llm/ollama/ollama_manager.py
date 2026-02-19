@@ -12,8 +12,11 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
+import os
+
 import requests
 
+from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
 
@@ -55,7 +58,7 @@ class OllamaManager:
         self,
         ollama_binary: str = "ollama",
         auto_start_server: bool = True,
-        base_url: str = "http://localhost:11434",
+        base_url: str = os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL),
         use_http_api: bool = True
     ):
         """

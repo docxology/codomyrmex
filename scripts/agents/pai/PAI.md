@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — PAI Scripts Context
 
-**Module**: scripts/agents/pai | **Version**: v0.1.0 | **Status**: Active
+**Module**: scripts/agents/pai | **Version**: v0.1.7 | **Status**: Active
 
 ## Context
 

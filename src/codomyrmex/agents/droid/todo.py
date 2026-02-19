@@ -25,6 +25,7 @@ class TodoItem:
     Supports both the new 3-column format and legacy handler-based format.
     New format columns:
       task_name | task_description | outcomes
+    # DEPRECATED(v0.2.0): Legacy handler-based format below. Will be removed in v0.3.0.
     Legacy format columns:
       operation_id | handler_path | description
     """
@@ -48,7 +49,7 @@ class TodoItem:
         if len(parts) != 3:
             raise ValueError(f"Invalid TODO entry: {raw}")
 
-        # Legacy format if the middle column looks like a module:function
+        # DEPRECATED(v0.2.0): Legacy handler-based format detection. Will be removed in v0.3.0.
         if ":" in parts[1] and "/" not in parts[1]:
             operation_id, handler_path, description = parts
             return cls(task_name=operation_id, description=description, outcomes="", handler_path=handler_path)

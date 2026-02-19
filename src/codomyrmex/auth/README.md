@@ -1,6 +1,6 @@
 # Auth Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Authentication with API keys, tokens, OAuth, and access control.
 

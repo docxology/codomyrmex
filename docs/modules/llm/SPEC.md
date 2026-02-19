@@ -1,7 +1,7 @@
 # LLM — Functional Specification
 
 **Module**: `codomyrmex.llm`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

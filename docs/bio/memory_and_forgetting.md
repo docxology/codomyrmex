@@ -22,7 +22,7 @@ Anderson and Schooler (1991) demonstrated that **adaptive forgetting** mirrors e
 
 - **[`vector_store`](../../src/codomyrmex/vector_store/)** -- distributed engrams: vector embeddings distribute semantic content across high-dimensional representations. Retrieval is content-addressable, like pattern completion in associative networks.
 
-- **[`data_lineage`](../../src/codomyrmex/data_lineage/)** -- provenance memory: records where information came from and how it was transformed, paralleling source monitoring in human memory.
+- **[`telemetry`](../../src/codomyrmex/telemetry/)** -- provenance memory: records where information came from and how it was transformed, paralleling source monitoring in human memory.
 
 ## Design Implications
 

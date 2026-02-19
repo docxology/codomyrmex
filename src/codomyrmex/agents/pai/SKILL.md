@@ -123,7 +123,7 @@ pai_status → pai_awareness → list_modules
 | Core Infrastructure | `logging_monitoring`, `config_management`, `environment_setup`, `events`, `exceptions`, `utils`, `schemas` |
 | AI & Agents | `agents`, `llm`, `model_context_protocol`, `orchestrator`, `prompt_engineering`, `cerebrum`, `agentic_memory` |
 | Code & Analysis | `coding` (incl. `parsers.tree_sitter`), `static_analysis`, `documentation`, `git_operations`, `ci_cd_automation/build`, `testing`, `validation` |
-| Data & Storage | `database_management`, `vector_store`, `cache`, `serialization`, `data_lineage`, `data_visualization`, `graph_rag` |
+| Data & Storage | `database_management`, `vector_store`, `cache`, `serialization`, `telemetry`, `data_visualization`, `graph_rag` |
 | Security | `security`, `auth`, `encryption`, `privacy`, `defense`, `identity`, `wallet` |
 | Infrastructure | `cloud`, `containerization`, `deployment`, `ci_cd_automation`, `networking`, `telemetry`, `performance`, `metrics` |
 | Domain-Specific | `bio_simulation`, `finance`, `logistics`, `spatial`, `education`, `meme`, `embodiment` |

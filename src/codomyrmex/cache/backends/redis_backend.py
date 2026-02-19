@@ -2,8 +2,10 @@
 Redis cache backend (optional).
 """
 
+import os
 from typing import Any
 
+from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 from ..cache import Cache
@@ -21,18 +23,20 @@ except ImportError:
 class RedisCache(Cache):
     """Redis cache implementation."""
 
-    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0, default_ttl: int | None = None):
+    def __init__(self, host: str = "", port: int = 0, db: int = 0, default_ttl: int | None = None):
         """Initialize Redis cache.
 
         Args:
-            host: Redis host
-            port: Redis port
+            host: Redis host (default from REDIS_HOST env or 'localhost')
+            port: Redis port (default from REDIS_PORT env or 6379)
             db: Redis database number
             default_ttl: Default time-to-live in seconds
         """
         if not REDIS_AVAILABLE:
             raise ImportError("redis package not available. Install with: pip install redis")
 
+        host = host or os.getenv("REDIS_HOST", "localhost")
+        port = port or int(os.getenv("REDIS_PORT", "6379"))
         self.client = redis.Redis(host=host, port=port, db=db, decode_responses=False)
         self.default_ttl = default_ttl
         self._stats = CacheStats()

@@ -5,6 +5,7 @@ Provides implementations for OTLP and other telemetry protocols.
 """
 
 import json
+import os
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -12,6 +13,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from queue import Queue
 from typing import Any, Dict, List, Optional
+
+from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
 
 
 @dataclass
@@ -110,7 +113,7 @@ class OTLPExporter(SpanExporter):
 
     def __init__(
         self,
-        endpoint: str = "http://localhost:4317",
+        endpoint: str = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", DEFAULT_OTEL_ENDPOINT),
         headers: dict[str, str] | None = None,
         timeout: float = 10.0,
         compression: str = "none",  # none, gzip

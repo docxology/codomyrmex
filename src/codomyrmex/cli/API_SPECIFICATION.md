@@ -1,6 +1,6 @@
 # CLI Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `cli` module is the command-line interface entry point for Codomyrmex. It processes user commands, dispatches to handlers, and manages interactive sessions.

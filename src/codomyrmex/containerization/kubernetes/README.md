@@ -1,6 +1,6 @@
 # kubernetes
 
-**Version**: v0.1.0 | **Status**: Planned | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Planned | **Last Updated**: February 2026
 
 ## Overview
 

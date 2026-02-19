@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Connections
 
 **Module**: `codomyrmex.database_management.connections`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "0.1.7"
+version = "0.1.8"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -240,6 +240,10 @@ dark = [
 
 formal_verification = [
     "z3-solver>=4.8.0",       # Z3 SMT solver (constraint solving, formal verification)
+]
+
+obsidian = [
+    "python-frontmatter>=1.0.0",  # Robust YAML frontmatter parsing
 ]
 
 [project.urls]

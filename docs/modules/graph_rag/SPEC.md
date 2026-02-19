@@ -1,7 +1,7 @@
 # Graph RAG — Functional Specification
 
 **Module**: `codomyrmex.graph_rag`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

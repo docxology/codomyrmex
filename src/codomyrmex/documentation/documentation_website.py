@@ -109,11 +109,12 @@ if logger is None:
 # Script's directory is 'documentation/'
 DOCUSAURUS_ROOT_DIR = SCRIPT_DIR  # This script is inside the Docusaurus root
 
-DEFAULT_DOCS_PORT = 3000
+DEFAULT_DOCS_PORT = int(os.getenv("DOCS_PORT", "3000"))
 DOCUSAURUS_BASE_PATH = "/codomyrmex/"  # Standard Docusaurus baseUrl, ensure trailing slash if needed by join
 
 # Construct the effective URL by joining, ensuring no double slashes if base_path is / or empty
-_base_url_for_construction = f"http://localhost:{DEFAULT_DOCS_PORT}"
+_docs_host = os.getenv("DOCS_HOST", "localhost")
+_base_url_for_construction = f"http://{_docs_host}:{DEFAULT_DOCS_PORT}"
 _docs_base_path_for_construction = DOCUSAURUS_BASE_PATH.strip("/")
 
 if _docs_base_path_for_construction:  # if base path is not empty or just "/"

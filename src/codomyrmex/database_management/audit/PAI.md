@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Audit
 
 **Module**: `codomyrmex.database_management.audit`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

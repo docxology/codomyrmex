@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from logging_monitoring.formatters.json_formatter instead. Will be removed in v0.3.0.
 """Structured JSON formatter - Backward Compatibility Shim.
 
 This module re-exports JSONFormatter from its new location in the

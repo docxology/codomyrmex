@@ -27,11 +27,7 @@ class RhizomeEngine:
 
     def analyze_resilience(self) -> float:
         """Analyze network resilience (connectivity after random node removal)."""
-        # Placeholder for percolation analysis
-        # Return estimation of giant component size
-        if not self.graph.nodes:
-            return 0.0
-        return 0.95  # Prototype value
+        raise NotImplementedError("Percolation analysis requires configured network simulation backend")
 
     def find_influencers(self, top_n: int = 5) -> List[str]:
         """Identify key influencer nodes via centrality."""

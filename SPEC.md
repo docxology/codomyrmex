@@ -52,7 +52,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 - Comprehensive test coverage enforced through `pytest` with structured markers (`unit`, `integration`, `slow`, `network`, `external`).
 - Test-driven development practices encouraged; tests live alongside source in `src/codomyrmex/tests/unit/<module>/`.
-- Real data analysis preferred over mocked approximations where feasible.
+- Real data analysis required over mocked approximations. Tests use skip-when-unavailable guards for external dependencies.
 
 ### Documentation
 
@@ -137,7 +137,7 @@ graph TB
 ## Quality Standards
 
 - **Coupling**: Aim for loose coupling between modules and high cohesion within each module.
-- **Modularity Gate**: New modules must pass structure validation (RASP documentation — README, AGENTS, SPEC, PAI — plus `__init__.py` and test stubs) before being committed.
+- **Modularity Gate**: New modules must pass structure validation (RASP documentation — README, AGENTS, SPEC, PAI — plus `__init__.py` and test file scaffolding) before being committed.
 - **Documentation Coverage**: 100% of module directories must contain a non-skeletal `README.md` with accurate content.
 - **Interface Stability**: Public API changes require a semantic version bump and updated specification documents.
 - **Test Coverage**: All modules must maintain unit test coverage; integration tests are required for cross-module interactions.

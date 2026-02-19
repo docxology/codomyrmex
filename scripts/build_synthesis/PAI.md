@@ -1,6 +1,6 @@
 # Personal AI Infrastructure - Build Synthesis Context
 
-**Module**: build_synthesis
+**Module**: deployment
 **Status**: Active
 
 ## Context

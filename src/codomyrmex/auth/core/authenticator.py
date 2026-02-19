@@ -128,8 +128,6 @@ class Authenticator:
         Returns:
             True if valid
         """
-        # In a real implementation, this would check against a user database
-        # For now, this is a placeholder
-        return username in self._users and self._users[username].get("password") == password
+        raise NotImplementedError("Credential validation requires configured authentication backend")
 
 

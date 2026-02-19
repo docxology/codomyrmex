@@ -1,6 +1,6 @@
 # Embodiment Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Robotics integration with ROS2, sensors, actuators, and 3D transforms.
 

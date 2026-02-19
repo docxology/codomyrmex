@@ -1,6 +1,6 @@
 # Model Ops Module
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -81,7 +81,7 @@ The following modules have been consolidated into this module as sub-packages:
 | **`evaluation/`** | LLM output scoring, benchmark suites, A/B comparison |
 | **`registry/`** | Model versioning and artifact management |
 | **`optimization/`** | Model quantization, ONNX export, inference acceleration |
-| **`feature_store/`** | ML feature management and storage |
+| **`vector_store/`** | ML feature management and storage |
 
 Original standalone modules remain as backward-compatible re-export wrappers.
 

@@ -1,7 +1,7 @@
 # Orchestrator — Functional Specification
 
 **Module**: `codomyrmex.orchestrator`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

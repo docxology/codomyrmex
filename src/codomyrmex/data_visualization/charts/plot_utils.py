@@ -227,7 +227,7 @@ def apply_style(ax, style_name: str = None):
     return ax
 
 
-# Backward-compat alias
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use save_plot() instead. Will be removed in v0.3.0.
 save_figure = save_plot
 
 

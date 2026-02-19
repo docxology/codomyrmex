@@ -18,6 +18,7 @@ from typing import Any
 
 import yaml
 
+from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.llm.ollama.config_manager import ConfigManager
 
@@ -705,7 +706,7 @@ class DataProvider:
             "default_model": "llama3.1:latest",
             "preferred_models": ["llama3.1:latest", "codellama:latest"],
             "available_models": ["llama3.1:latest"],
-            "ollama_host": "localhost:11434"
+            "ollama_host": os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL).replace("http://", "")
         }
 
     def _get_git_info(self) -> dict[str, str]:

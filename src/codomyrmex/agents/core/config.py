@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
@@ -90,7 +91,7 @@ class AgentConfig:
     qwen_temperature: float = 0.0
 
     # Ollama / local model configuration
-    ollama_base_url: str = "http://localhost:11434"
+    ollama_base_url: str = DEFAULT_OLLAMA_URL
     ollama_default_model: str = "llama3.2"
 
     # General agent configuration

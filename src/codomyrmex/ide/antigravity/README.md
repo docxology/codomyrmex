@@ -1,6 +1,6 @@
 # ide/antigravity
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -44,6 +44,12 @@ Integration with Google DeepMind's Antigravity IDE -- the agentic AI coding assi
 
   **File Operations**
   - `get_active_file()` / `open_file()` / `get_open_files()` -- IDE file management
+
+  **Agent Relay & Live Bridge**
+  - `AgentRelay` -- File-based JSONL message bus for process-independent inter-agent communication
+  - `LiveAgentBridge` -- connects Antigravity to the relay with background polling and auto-tool execution
+  - `ClaudeCodeEndpoint` -- connects Claude Code to the relay with auto-respond capabilities
+  - `relay_cli` -- Command-line interface for managing channels and sending messages
 
 ## Directory Contents
 

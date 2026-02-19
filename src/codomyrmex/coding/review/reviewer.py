@@ -1980,21 +1980,15 @@ def complex_function(data):
 
     def _detect_feature_envy(self) -> list[dict[str, Any]]:
         """Detect feature envy (methods that use more external data than local)."""
-        # This would require more sophisticated AST analysis
-        # For now, return placeholder
-        return []
+        raise NotImplementedError("Code smell detection for feature envy not yet implemented")
 
     def _detect_data_clumps(self) -> list[dict[str, Any]]:
         """Detect data clumps (groups of parameters that are always passed together)."""
-        # This would require more sophisticated AST analysis
-        # For now, return placeholder
-        return []
+        raise NotImplementedError("Code smell detection for data clumps not yet implemented")
 
     def _detect_primitive_obsession(self) -> list[dict[str, Any]]:
         """Detect primitive obsession (using primitives where objects would be better)."""
-        # This would require more sophisticated AST analysis
-        # For now, return placeholder
-        return []
+        raise NotImplementedError("Code smell detection for primitive obsession not yet implemented")
 
     @monitor_performance("suggest_automated_fixes")
     def suggest_automated_fixes(self) -> dict[str, Any]:

@@ -379,7 +379,7 @@ This configuration is:
     ".codomyrmex/"
   ],
   "workflows": ["build-and-test", "deploy"],
-  "required_modules": ["build_synthesis", "code"],
+  "required_modules": ["deployment", "code"],
   "default_config": {
     "frontend": {"framework": "react", "build_tool": "vite"},
     "backend": {"framework": "fastapi", "database": "postgresql"}

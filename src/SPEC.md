@@ -1,10 +1,10 @@
 # src - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 78 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 82 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
@@ -122,10 +122,10 @@ The `src/` directory contains:
 > have been consolidated into their parent modules:
 >
 > - `static_analysis` → `coding/static_analysis/`
-> - `pattern_matching` → `coding/pattern_matching/`
-> - `build_synthesis` → `ci_cd_automation/build/`
-> - `metrics` → `telemetry/`
-> - `i18n` → `utils/i18n/`
+> - `search` provides code pattern capabilities
+> - `deployment` provides build automation capabilities
+> - `telemetry` provides metrics collection
+> - `utils/i18n/` provides internationalization
 
 ## Module Discovery
 
@@ -140,23 +140,24 @@ The `src/` directory contains:
 
 ### Core Layer Modules
 
-- `coding` - Code execution, static analysis (`coding/static_analysis/`), pattern matching (`coding/pattern_matching/`)
+- `coding` - Code execution, static analysis (`coding/static_analysis/`), search
 - `data_visualization` - Charts, plots, and visualization
 - `git_operations` - Git workflows
 - `security` - Security scanning (includes governance)
-- `llm` - LLM infrastructure (includes inference optimization, multimodal)
+- `llm` - LLM infrastructure
 - `performance` - Performance monitoring
 - `cache`, `compression`, `encryption`, `networking`, `serialization`
 - `scrape`, `documents` - Web scraping and document processing
 
 ### Service Layer Modules
 
-- `ci_cd_automation` - CI/CD pipelines (includes build automation at `ci_cd_automation/build/`)
+- `ci_cd_automation` - CI/CD pipelines
+- `deployment` - Deployment automation
 - `documentation` - Documentation generation
 - `api` - API infrastructure
 - `containerization` - Docker management
-- `database_management` - Database operations, migrations, lineage
-- `orchestrator` - Workflow orchestration (includes scheduling)
+- `database_management` - Database operations
+- `orchestrator` - Workflow orchestration
 - `logistics` - Workflow logistics
 - `auth`, `cloud` - Authentication and cloud services
 

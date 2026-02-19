@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Mocking
 
 **Module**: `codomyrmex.api.mocking`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

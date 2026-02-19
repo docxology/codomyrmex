@@ -59,9 +59,7 @@ def get_metadata(file_path: str | Path) -> dict[str, Any]:
 
 def _update_pdf_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
     """Update PDF metadata."""
-    # PDF metadata updates require creating a new PDF
-    # This is a placeholder - full implementation would need PDF manipulation
-    logger.warning("PDF metadata update requires full PDF rewrite - not yet implemented")
+    raise NotImplementedError("PDF metadata update requires configured PDF processing backend")
 
 
 def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None:

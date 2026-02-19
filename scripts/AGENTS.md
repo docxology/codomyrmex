@@ -1,6 +1,6 @@
 # Codomyrmex Agents — scripts
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 Maintenance and automation utilities for project management.
@@ -13,7 +13,7 @@ Maintenance and automation utilities for project management.
 - `agents/` – Directory containing agents components
 - `api/` – Directory containing api components
 - `auth/` – Directory containing auth components
-- `build_synthesis/` – Directory containing build_synthesis components
+- `deployment/` – Directory containing deployment components
 - `cache/` – Directory containing cache components
 - `cerebrum/` – Directory containing cerebrum components
 - `ci_cd_automation/` – Directory containing ci_cd_automation components

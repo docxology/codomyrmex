@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Guardrails
 
 **Module**: `codomyrmex.llm.guardrails`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

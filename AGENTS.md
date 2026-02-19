@@ -130,9 +130,9 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 - `data_visualization/` - Charts and plots
   - Key Classes: `PlotGenerator`, `ChartBuilder`, `DataProcessor`
   - Key Functions: `create_plot(data: pd.DataFrame, plot_type: str) -> str`, `save_visualization(fig: Any, filepath: str) -> None`
-- `pattern_matching/` - Code pattern analysis
-  - Key Classes: `PatternMatcher`, `ASTAnalyzer`, `CodePattern`
-  - Key Functions: `find_patterns(code: str, patterns: list) -> list`, `extract_dependencies(filepath: str) -> dict`
+- `search/` - Code search and retrieval
+  - Key Classes: `SearchEngine`, `IndexBuilder`, `CodeSearcher`
+  - Key Functions: `search(query: str, corpus: list) -> list`, `build_index(path: str) -> Index`
 - `git_operations/` - Version control automation
   - Key Classes: `GitManager`, `CommitBuilder`, `BranchManager`
   - Key Functions: `commit_changes(message: str, files: list = None) -> str`, `create_branch(name: str) -> bool`
@@ -150,9 +150,9 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
 
 **Service Layer**:
 
-- `build_synthesis/` - Build automation
-  - Key Classes: `BuildOrchestrator`, `ArtifactBuilder`, `DependencyResolver`
-  - Key Functions: `build_project(config: dict) -> BuildResult`, `resolve_dependencies(requirements: list) -> dict`
+- `deployment/` - Deployment automation
+  - Key Classes: `DeploymentManager`, `RollbackHandler`
+  - Key Functions: `deploy(config: dict) -> DeployResult`, `rollback(deployment_id: str) -> bool`
 - `documentation/` - Documentation generation tools
   - Key Classes: `DocGenerator`, `APIDocumenter`, `MarkdownRenderer`
   - Key Functions: `generate_docs(source_path: str, output_path: str) -> None`, `extract_api_docs(code: str) -> dict`
@@ -278,8 +278,7 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Functions: `update_root_docs`, `finalize_docs`
 - `networks/` - Network topology and analysis
   - Key Classes: `NetworkAnalyzer`, `TopologyBuilder`
-- `pattern_matching/` - Code pattern analysis
-  - Key Classes: `PatternMatcher`, `ASTAnalyzer`
+
 - `prompt_engineering/` - Prompt engineering and optimization
   - Key Classes: `PromptOptimizer`, `PromptTemplate`
 - `quantum/` - Quantum computing interfaces

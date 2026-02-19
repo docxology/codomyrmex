@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Schemas
 
 **Module**: `codomyrmex.validation.schemas`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

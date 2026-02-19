@@ -1,10 +1,10 @@
-# build_synthesis
+# deployment
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The `build_synthesis` module provides core functionality for Build Synthesis..
+The `deployment` module provides core functionality for Build Synthesis..
 
 ## Directory Contents
 
@@ -12,7 +12,7 @@ The `build_synthesis` module provides core functionality for Build Synthesis..
 - `PAI.md` - PAI integration notes
 - `SPEC.md` - Module specification
 - `integration/` - Subdirectory
-- `test_build_synthesis.py` - Test Build Synthesis
+- `test_deployment.py` - Test Build Synthesis
 - `unit/` - Subdirectory
 
 ## Navigation

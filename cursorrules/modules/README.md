@@ -70,8 +70,8 @@ Module-specific rules that supplement `general.cursorrules`. Each rule file foll
 | Rule | Purpose |
 |------|---------|
 | `metrics` | Metrics collection |
-| `workflow_testing` | E2E workflow tests |
-| `prompt_testing` | LLM prompt evaluation |
+| `testing` | E2E workflow tests |
+| `prompt_engineering` | LLM prompt evaluation |
 | `logging_monitoring` | Logging and monitoring |
 | `performance` | Performance optimization |
 
@@ -81,7 +81,7 @@ Module-specific rules that supplement `general.cursorrules`. Each rule file foll
 |------|---------|
 | `documentation` | Documentation standards |
 | `api_documentation` | API doc generation |
-| `build_synthesis` | Build processes |
+| `deployment` | Build processes |
 | `data_visualization` | Visualization patterns |
 | `module_template` | Module templates |
 

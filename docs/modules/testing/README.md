@@ -1,6 +1,6 @@
 # Testing Module Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -111,7 +111,7 @@ user = (FixtureBuilder("user")
 
 ## Related Modules
 
-- [workflow_testing](../workflow_testing/) - End-to-end workflow validation that complements unit-level test utilities
+- [testing](../testing/) - End-to-end workflow validation that complements unit-level test utilities
 - [logging_monitoring](../logging_monitoring/) - Structured logging for test output and diagnostics
 
 ## Navigation

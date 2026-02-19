@@ -70,7 +70,7 @@ def get_script_config(script_path: Path, scripts_dir: Path, global_config: dict[
     if rel_path in timeout_overrides:
         config["timeout"] = timeout_overrides[rel_path]
 
-    # Traditional scripts section (backwards compatibility)
+    # DEPRECATED(v0.2.0): Traditional scripts section for backward compatibility. Will be removed in v0.3.0.
     scripts_config = global_config.get("scripts", {})
     if rel_path in scripts_config:
         config.update(scripts_config[rel_path])

@@ -346,7 +346,7 @@ class ObjectRegistry:
         self.objects: dict[str, PhysicalObject] = {}
         self._location_index: dict[tuple[int, int, int], set[str]] = (
             {}
-        )  # Legacy grid-based index
+        )  # DEPRECATED(v0.2.0): Legacy grid-based index — use SpatialIndex instead. Will be removed in v0.3.0.
         self.spatial_index = SpatialIndex(grid_size=spatial_grid_size)
         self.event_handlers: dict[EventType, list[Callable[[ObjectEvent], None]]] = (
             defaultdict(list)

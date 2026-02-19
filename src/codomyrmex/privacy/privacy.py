@@ -34,9 +34,7 @@ class Privacy:
         Returns:
             Processed data
         """
-        logger.debug(f"Processing data: {type(data).__name__}")
-        # TODO: Implement processing logic
-        return data
+        raise NotImplementedError("Privacy processing requires configured privacy rules engine")
 
 
 # Convenience function

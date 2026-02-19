@@ -8,6 +8,7 @@ from typing import Any
 
 import yaml
 
+from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 """API Documentation Generator for Codomyrmex API Documentation Module.
@@ -131,7 +132,7 @@ class APIDocumentationGenerator:
         self.documentation: APIDocumentation | None = None
 
     def generate_documentation(
-        self, title: str, version: str, base_url: str = "http://localhost:8000"
+        self, title: str, version: str, base_url: str = ""
     ) -> APIDocumentation:
         """
         Generate comprehensive API documentation.
@@ -144,6 +145,7 @@ class APIDocumentationGenerator:
         Returns:
             APIDocumentation: Generated API documentation
         """
+        base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
         logger.info(f"Generating API documentation: {title} v{version}")
 
         # Discover API endpoints
@@ -275,7 +277,7 @@ class APIDocumentationGenerator:
             # Check for modern ast.Constant first (Python 3.8+)
             if hasattr(decorator.args[0], 'value') and isinstance(getattr(decorator.args[0], 'value', None), str):
                 info["path"] = decorator.args[0].value
-            # Fallback to legacy ast.Str (for backward compatibility)
+            # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
             elif hasattr(decorator.args[0], 's'):
                 info["path"] = decorator.args[0].s
 
@@ -302,7 +304,7 @@ class APIDocumentationGenerator:
                     # Check for modern ast.Constant first (Python 3.8+)
                     if hasattr(kwarg.value.elts[0], 'value') and isinstance(getattr(kwarg.value.elts[0], 'value', None), str):
                         info["method"] = kwarg.value.elts[0].value.upper()
-                    # Fallback to legacy ast.Str (for backward compatibility)
+                    # Python 3.8 compatibility: ast.Str was removed in 3.12, use ast.Constant instead.
                     elif hasattr(kwarg.value.elts[0], 's'):
                         info["method"] = kwarg.value.elts[0].s.upper()
 
@@ -474,7 +476,7 @@ def generate_api_docs(
     title: str,
     version: str,
     source_paths: list[str] | None = None,
-    base_url: str = "http://localhost:8000",
+    base_url: str = "",
 ) -> APIDocumentation:
     """
     Convenience function to generate API documentation.
@@ -484,10 +486,10 @@ def generate_api_docs(
         version: API version
         source_paths: Paths to scan for API endpoints
         base_url: Base URL for the API
-
     Returns:
         APIDocumentation: Generated API documentation
     """
+    base_url = base_url or os.getenv("API_BASE_URL", DEFAULT_API_BASE_URL)
     generator = APIDocumentationGenerator(source_paths)
     return generator.generate_documentation(title, version, base_url)
 

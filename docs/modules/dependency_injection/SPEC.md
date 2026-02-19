@@ -1,7 +1,7 @@
 # Dependency Injection — Functional Specification
 
 **Module**: `codomyrmex.dependency_injection`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

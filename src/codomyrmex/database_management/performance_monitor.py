@@ -458,7 +458,7 @@ class DatabasePerformanceMonitor:
 
         return history
 
-# Alias for backward compatibility
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use DatabasePerformanceMonitor. Will be removed in v0.3.0.
 DatabaseMonitor = DatabasePerformanceMonitor
 
 def monitor_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:

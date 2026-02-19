@@ -1,10 +1,10 @@
 # codomyrmex
 
-**Version**: v0.1.1 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.8 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Main package directory containing 78 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 82 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Directory Contents
 

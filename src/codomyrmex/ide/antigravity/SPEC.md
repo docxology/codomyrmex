@@ -1,6 +1,6 @@
 # antigravity - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -86,6 +86,36 @@ graph TD
 1. Send real messages to IDE chat
 2. Support CLI-based messaging (background)
 3. Support GUI-based messaging (active pane targeting)
+
+### Agent Relay
+
+1. JSONL-backed message persistence
+2. Process-independent
+3. Cursor-based polling
+4. Auto-tool execution
+
+### Relay Architecture
+
+```mermaid
+graph TD
+    subgraph "Relay Channel"
+        JSONL[messages.jsonl]
+    end
+
+    subgraph "Antigravity Process"
+        AG[AntigravityClient]
+        Live[LiveAgentBridge]
+        Live --> AG
+        Live <--> JSONL
+    end
+
+    subgraph "Remote Process"
+        CC[ClaudeCodeEndpoint]
+        CCClient[ClaudeClient]
+        CC --> CCClient
+        CC <--> JSONL
+    end
+```
 
 ## Interface Contracts
 

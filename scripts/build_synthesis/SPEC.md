@@ -1,7 +1,7 @@
 # Build Synthesis Specification
 
 ## 1. Functional Requirements
-The `build_synthesis` module must:
+The `deployment` module must:
 - Provide robust implementations of Build Synthesis logic.
 - Handle errors gracefully without crashing the host process.
 - Expose a clean, type-hinted API.

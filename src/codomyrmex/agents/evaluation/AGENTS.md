@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Evaluation
 
 **Module**: `codomyrmex.agents.evaluation`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

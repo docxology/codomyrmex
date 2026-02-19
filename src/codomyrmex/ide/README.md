@@ -1,6 +1,6 @@
 # IDE Integration Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Programmatic integration with IDEs: Antigravity, Cursor, and VS Code.
 

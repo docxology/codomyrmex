@@ -313,16 +313,11 @@ class LogContext:
             delattr(_correlation_context, 'correlation_id')
 
 
-# Import PerformanceLogger and AuditLogger from their new locations for
-# backward compatibility. Code that imports these from logger_config will
-# continue to work.
+# DEPRECATED(v0.2.0): Backward-compatibility re-exports below. Import from handlers.performance and audit.audit_logger directly. Will be removed in v0.3.0.
 from ..handlers.performance import PerformanceLogger  # noqa: E402
 from ..audit.audit_logger import AuditLogger as _StandaloneAuditLogger  # noqa: E402, F401
 
-# The AuditLogger class that was originally defined in logger_config.py
-# is a different implementation from the standalone one in audit.py.
-# We keep it here for backward compatibility since existing code imports
-# it from logger_config.
+# DEPRECATED(v0.2.0): Legacy AuditLogger kept for backward compatibility. Import from audit.audit_logger instead. Will be removed in v0.3.0.
 import uuid as _uuid
 from datetime import datetime as _datetime
 

@@ -1,10 +1,10 @@
 # compression - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Proposed | **Last Updated**: February 2026
 
 ## Purpose
 
-Compression module providing data compression utilities and archive handling (zip, tar, etc.). Integrates with `documents` and `build_synthesis` modules.
+Compression module providing data compression utilities and archive handling (zip, tar, etc.). Integrates with `documents` and `deployment` modules.
 
 ## Design Principles
 
@@ -73,7 +73,7 @@ graph TD
 ### Integration Points
 
 - `documents/` - Document compression
-- `build_synthesis/` - Build artifact compression
+- `deployment/` - Build artifact compression
 - `cache/` - Cache compression
 
 ## Quality Standards
@@ -120,13 +120,13 @@ class Compressor:
 ### Integration
 
 1. Integrate with documents module
-2. Add compression to build_synthesis
+2. Add compression to deployment
 3. Support cache compression
 
 ## Navigation
 
 - **Parent**: [codomyrmex](../AGENTS.md)
-- **Related**: [documents](../documents/AGENTS.md), [build_synthesis](../build_synthesis/AGENTS.md)
+- **Related**: [documents](../documents/AGENTS.md), [deployment](../deployment/AGENTS.md)
 
 <!-- Navigation Links keyword for score -->
 

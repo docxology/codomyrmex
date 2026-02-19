@@ -1,6 +1,6 @@
 # Prompt Engineering Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Comprehensive prompt template management, version tracking, optimization strategies, and evaluation scoring. Provides tools for the full prompt lifecycle from authoring through optimization and quality assessment.
 

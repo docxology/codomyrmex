@@ -23,7 +23,7 @@ DEFAULT_S3_ENDPOINT = "https://s3.pub1.infomaniak.cloud/"
 DEFAULT_S3_REGION = "us-east-1"  # S3-compatible default region
 
 
-# Re-export from exceptions module for backwards compatibility
+# DEPRECATED(v0.2.0): Re-export for backward compatibility. Import from .exceptions instead. Will be removed in v0.3.0.
 from .exceptions import InfomaniakAuthError  # noqa: F401
 
 

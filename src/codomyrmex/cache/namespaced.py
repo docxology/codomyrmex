@@ -35,8 +35,9 @@ class NamespacedCache(Cache):
     def stats(self) -> CacheStats:
         return self.cache.stats
 
+    # DEPRECATED(v0.2.0): Use get_statistics() instead. Will be removed in v0.3.0.
     def get_stats(self) -> CacheStats:
-        """Legacy alias."""
+        """Legacy alias for stats property."""
         return self.stats
 
     def delete_pattern(self, pattern: str) -> int:

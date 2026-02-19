@@ -19,6 +19,14 @@ uv run python scripts/agents/agent_status.py --verbose
 uv run python scripts/agents/claude_code_demo.py
 ```
 
+## Real Integration
+
+All relay scripts support real LLM backends via `agent_utils.get_llm_client()`:
+
+1. **Claude API**: Set `ANTHROPIC_API_KEY` environment variable.
+2. **Ollama**: Ensure Ollama is running at `http://localhost:11434`.
+3. **Requirement**: One of the above MUST be available. Mocks are disabled.
+
 ## Scripts
 
 | Script | Description |
@@ -28,6 +36,10 @@ uv run python scripts/agents/claude_code_demo.py
 | `orchestrate.py` | Module-scoped script orchestration |
 | `test_gemini_dispatch.py` | Gemini client, CodeEditor, and Orchestrator tests |
 | `claude_code_demo.py` | Claude Code methods demonstration |
+| `relay_chat_demo.py` | **Live Relay** Basic bidirectional chat |
+| `recursive_task.py` | **Live Relay** Recursive delegation/clarification |
+| `discursive_debate.py` | **Live Relay** Multi-turn dialectic debate |
+| `orchestrate_with_ollama.py` | **Full Setup** Auto-starts Ollama, pulls model, runs Relay Chat |
 
 ## Agent Examples
 

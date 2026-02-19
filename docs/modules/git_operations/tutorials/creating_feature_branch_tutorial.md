@@ -66,33 +66,26 @@ def create_feature_branch(repo_path: str, branch_name: str, base_branch: str = "
     return True
 
 def get_current_branch(repo_path: str):
-    # This is a mock, assumes create_feature_branch changed mock state
-    global MOCK_CURRENT_BRANCH
-    return MOCK_CURRENT_BRANCH 
+    """Get current branch using real git operations."""
+    import subprocess
+    result = subprocess.run(["git", "-C", repo_path, "branch", "--show-current"],
+                          capture_output=True, text=True)
+    return result.stdout.strip()
 
-# --- Script --- 
+# --- Script ---
 REPO_PATH = "/path/to/your/codomyrmex-clone" # Replace with your actual repo path
 NEW_BRANCH_NAME = "feature/user-profile-display"
 BASE_BRANCH = "main"
 
-# For mock purposes
-MOCK_CURRENT_BRANCH = BASE_BRANCH 
-
 print(f"Preparing to create feature branch: {NEW_BRANCH_NAME}")
 
-# It's good practice to ensure the base branch (main) is up-to-date first.
-# A real script might call a conceptual `pull_changes(REPO_PATH, branch_name=BASE_BRANCH)` here.
-# print(f"Ensuring '{BASE_BRANCH}' is up-to-date...")
-# if not pull_changes(REPO_PATH, branch_name=BASE_BRANCH):
-#     print(f"Could not update '{BASE_BRANCH}'. Aborting branch creation.")
-#     exit()
+# NOTE: In tests, use @pytest.mark.skipif(not shutil.which("git"), reason="git not available")
+# to skip when git is not present in the CI environment, rather than mocking git operations.
 
 if create_feature_branch(REPO_PATH, NEW_BRANCH_NAME, base_branch=BASE_BRANCH, checkout=True):
-    MOCK_CURRENT_BRANCH = NEW_BRANCH_NAME # Update mock state
     print(f"Successfully created and checked out branch: {NEW_BRANCH_NAME}")
-    # current_actual_branch = get_current_branch(REPO_PATH) # Call to verify
-    # print(f"Current active branch is now: {current_actual_branch}")
-    print(f"Current active branch is now (mocked): {get_current_branch(REPO_PATH)}")
+    current_branch = get_current_branch(REPO_PATH)
+    print(f"Current active branch is now: {current_branch}")
     print("You can now start working on your feature.")
 else:
     print(f"Failed to create feature branch: {NEW_BRANCH_NAME}")

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/ide/antigravity
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -12,6 +12,9 @@ Antigravity IDE integration components providing programmatic control and automa
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
+- `agent_relay.py` – JSONL message bus
+- `live_bridge.py` – Live agent bridge
+- `relay_cli.py` – Relay CLI interface
 
 ## Operating Contracts
 

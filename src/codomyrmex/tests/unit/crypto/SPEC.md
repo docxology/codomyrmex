@@ -1,6 +1,6 @@
 # Crypto Module — Test Specification
 
-**Version**: v0.1.0 | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Last Updated**: February 2026
 
 ## Coverage Targets
 

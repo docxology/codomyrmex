@@ -288,7 +288,7 @@ class SecurityReportGenerator:
 
     def _calculate_overall_risk(self, vuln: dict, comp: dict, mon: dict) -> dict[str, Any]:
         """Calculate overall risk."""
-        # Placeholder logic
+        # Heuristic risk scoring based on vulnerability counts
         score = 0
         if vuln.get("critical_count", 0) > 0: score += 50
         if vuln.get("high_count", 0) > 0: score += 30

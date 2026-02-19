@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Deepseek
 
 **Module**: `codomyrmex.agents.deepseek`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

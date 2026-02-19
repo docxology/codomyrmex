@@ -11,7 +11,7 @@ Submodules:
     code_patterns -- Design pattern detection (singleton, factory, observer, etc.)
     similarity -- Code similarity and duplicate detection
 
-Legacy functions (backward-compatible):
+DEPRECATED(v0.2.0): Legacy function exports below. Use new API instead. Will be removed in v0.3.0.
     get_embedding_function, analyze_repository_path, run_full_analysis,
     print_once, and _perform_* helpers.
 """
@@ -91,7 +91,7 @@ __all__ = [
     # Similarity
     "CodeSimilarity",
     "DuplicateResult",
-    # Legacy functions
+    # DEPRECATED(v0.2.0): Legacy function exports. Use new API instead. Will be removed in v0.3.0.
     "get_embedding_function",
     "analyze_repository_path",
     "run_full_analysis",

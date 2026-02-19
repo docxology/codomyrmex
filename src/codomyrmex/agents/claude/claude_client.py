@@ -443,8 +443,9 @@ class ClaudeClient(APIAgentBase):
             )
             yield f"Error: {str(e)}"
 
+    # DEPRECATED(v0.2.0): Use _build_messages_with_system() instead. Will be removed in v0.3.0.
     def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:
-        """Build Claude messages from request (legacy method).
+        """Build Claude messages from request.
 
         Args:
             request: Agent request

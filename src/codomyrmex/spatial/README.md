@@ -1,6 +1,6 @@
 # Spatial Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 3D/4D spatial modeling, coordinates, physics, and rendering.
 

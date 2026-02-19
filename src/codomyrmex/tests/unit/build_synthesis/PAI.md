@@ -1,11 +1,11 @@
 # Personal AI Infrastructure - Build Synthesis Context
 
-**Module**: build_synthesis
+**Module**: deployment
 **Status**: Active
 
 ## Context
 
-Unit and integration tests for the build_synthesis module with pytest fixtures and mocks.
+Unit and integration tests for the deployment module with pytest fixtures and mocks.
 
 ## AI Strategy
 

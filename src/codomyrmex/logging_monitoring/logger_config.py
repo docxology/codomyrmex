@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from logging_monitoring.core.logger_config instead. Will be removed in v0.3.0.
 """
 Logger Configuration Module - Backward Compatibility Shim.
 

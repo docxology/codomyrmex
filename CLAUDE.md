@@ -132,6 +132,16 @@ Tests use pytest markers defined in `pytest.ini`:
 
 Run specific categories: `uv run pytest -m unit`
 
+## Zero-Mock Policy
+
+This project follows a strict zero-mock/stub/fallback/hardcoded policy:
+
+- **No mocking**: Tests never use `unittest.mock`, `MagicMock`, `monkeypatch`, or `pytest-mock`. External dependencies use `@pytest.mark.skipif` guards.
+- **No production stubs**: Production code never returns placeholder/fake data. Unimplemented features raise `NotImplementedError`.
+- **No silent fallbacks**: Fallback patterns that silently degrade functionality are prohibited. Failures must be explicit.
+- **No hardcoded values**: URLs, ports, and connection strings use `os.getenv()` with centralized defaults from `config_management.defaults`.
+- **No legacy aliases**: Backward compatibility layers must have documented deprecation timelines or be removed.
+
 ## Dependency Management
 
 All dependencies are managed in `pyproject.toml`:

@@ -1,6 +1,6 @@
 # Plugin System Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Extensible plugin architecture for third-party modules.
 

@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Async Ops
 
 **Module**: `codomyrmex.cache.async_ops`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

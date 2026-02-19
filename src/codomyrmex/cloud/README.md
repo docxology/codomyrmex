@@ -285,7 +285,7 @@ The following modules have been consolidated into this module as sub-packages:
 
 | Sub-module | Description |
 |------------|-------------|
-| **`cost_management/`** | Infrastructure and LLM cost tracking and optimization |
+| **`performance/`** | Infrastructure and LLM cost tracking and optimization |
 
 Original standalone modules remain as backward-compatible re-export wrappers.
 

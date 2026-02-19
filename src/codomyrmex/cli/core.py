@@ -52,7 +52,7 @@ from .utils import (
     get_logger,
 )
 
-# Add the src directory to Python path for development (legacy support)
+# DEPRECATED(v0.2.0): Development path injection -- use proper package install. Will be removed in v0.3.0.
 src_dir = Path(__file__).parent.parent.parent
 if str(src_dir) not in sys.path:
     pass

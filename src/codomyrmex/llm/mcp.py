@@ -361,15 +361,7 @@ class MCPBridge:
 
         resource = self._resources[uri]
 
-        # This would normally read the actual resource content
-        # For now, return placeholder
-        return {
-            "contents": [{
-                "uri": uri,
-                "mimeType": resource.mime_type,
-                "text": f"Content of {resource.name}",
-            }]
-        }
+        raise NotImplementedError("MCP resource read not yet implemented for this resource type")
 
     async def _handle_prompt_get(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle prompt get."""

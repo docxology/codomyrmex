@@ -1,3 +1,4 @@
+# DEPRECATED(v0.2.0): Shim module. Import from logging_monitoring.handlers.rotation instead. Will be removed in v0.3.0.
 """Log rotation manager - Backward Compatibility Shim.
 
 This module re-exports LogRotationManager from its new location in the

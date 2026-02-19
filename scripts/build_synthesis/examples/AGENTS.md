@@ -1,6 +1,6 @@
-# Codomyrmex Agents — scripts/build_synthesis/examples
+# Codomyrmex Agents — scripts/deployment/examples
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 Example implementations and demonstrations.
@@ -18,5 +18,5 @@ Example implementations and demonstrations.
 - Record outcomes in shared telemetry and update TODO queues when necessary.
 
 ## Navigation Links
-- **📁 Parent Directory**: [build_synthesis](../README.md) - Parent directory documentation
+- **📁 Parent Directory**: [deployment](../README.md) - Parent directory documentation
 - **🏠 Project Root**: ../../../README.md - Main project documentation

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -18,7 +18,7 @@ Test files and validation suites.
 - `api_documentation/` – Directory containing api_documentation components
 - `api_standardization/` – Directory containing api_standardization components
 - `auth/` – Directory containing auth components
-- `build_synthesis/` – Directory containing build_synthesis components
+- `deployment/` – Directory containing deployment components
 - `cache/` – Directory containing cache components
 - `cerebrum/` – Directory containing cerebrum components
 - `ci_cd_automation/` – Directory containing ci_cd_automation components

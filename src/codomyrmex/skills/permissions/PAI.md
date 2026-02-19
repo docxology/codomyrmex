@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Permissions
 
 **Module**: `codomyrmex.skills.permissions`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

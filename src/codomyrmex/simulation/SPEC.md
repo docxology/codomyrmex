@@ -1,6 +1,6 @@
 # simulation - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Alpha | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Alpha | **Last Updated**: February 2026
 
 ## Purpose
 

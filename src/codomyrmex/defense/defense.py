@@ -34,9 +34,7 @@ class Defense:
         Returns:
             Processed data
         """
-        logger.debug(f"Processing data: {type(data).__name__}")
-        # TODO: Implement processing logic
-        return data
+        raise NotImplementedError("Defense processing requires configured defense rules engine")
 
 
 # Convenience function

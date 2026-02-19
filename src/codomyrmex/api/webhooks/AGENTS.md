@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Webhooks
 
 **Module**: `codomyrmex.api.webhooks`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

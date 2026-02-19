@@ -223,9 +223,8 @@ class SupplyChainVerifier:
         return component.checksum == expected
 
     def verify_signature(self, path: str, signature_path: str) -> bool:
-        """Verify file signature (placeholder)."""
-        # Would integrate with GPG or similar
-        return True
+        """Verify file signature."""
+        raise NotImplementedError("Signature verification requires a cryptographic signing backend — see security module roadmap")
 
     def compute_file_hash(self, path: str, algorithm: str = "sha256") -> str:
         """Compute file hash."""

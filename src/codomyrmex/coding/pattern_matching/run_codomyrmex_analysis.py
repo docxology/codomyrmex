@@ -95,11 +95,10 @@ def run_codomyrmex_analysis(directory: str, patterns: dict[str, str] | None = No
     analyzer = PatternAnalyzer(patterns)
     return analyzer.analyze_file(file_path)
 
-# Stub functions for backward compatibility/expanded API
+# DEPRECATED(v0.2.0): Stub functions for backward compatibility. Will be removed in v0.3.0.
 def get_embedding_function() -> Any:
     """Get the embedding function used for analysis."""
-    # Placeholder for actual embedding logic
-    return lambda x: [0.1] * 128
+    raise NotImplementedError("Embedding function requires configured embedding backend")
 
 def analyze_repository_path(path: str) -> dict[str, Any]:
     """Analyze a repository path."""
@@ -127,7 +126,7 @@ def _perform_text_search(query: str, path: str) -> list[Any]:
 
 def _perform_code_summarization(path: str) -> str:
     """Summarize code."""
-    return "Summary placeholder"
+    raise NotImplementedError("Code summarization requires configured LLM backend")
 
 def _perform_docstring_indexing(path: str) -> None:
     """Index docstrings."""
@@ -143,7 +142,7 @@ def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
 
 def _perform_text_search_context_extraction(query: str, path: str) -> str:
     """Extract context for search."""
-    return "Context placeholder"
+    raise NotImplementedError("Text search context extraction requires configured search backend")
 
 def _perform_chunking_examples(text: str) -> list[str]:
     """Demonstrate chunking."""

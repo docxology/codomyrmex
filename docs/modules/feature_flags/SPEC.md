@@ -1,7 +1,7 @@
 # Feature Flags — Functional Specification
 
 **Module**: `codomyrmex.feature_flags`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

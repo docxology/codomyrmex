@@ -15,7 +15,7 @@ Cross-module cursor rules for multi-module interactions and shared patterns. App
 | `logging_monitoring` | Adding logging, metrics, or observability |
 | `model_context_protocol` | Defining MCP tools or resources |
 | `static_analysis` | Configuring linters, security scanners |
-| `build_synthesis` | Code generation, build processes |
+| `deployment` | Code generation, build processes |
 | `data_visualization` | Charts, plots, visual output |
 | `output_module` | Managing output directories, artifacts |
 | `pattern_matching` | Code analysis, AST operations |

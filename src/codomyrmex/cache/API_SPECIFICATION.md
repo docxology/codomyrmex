@@ -1,6 +1,6 @@
 # Cache Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `cache` module provides a unified interface for data caching strategies in Codomyrmex. It supports ephemeral (in-memory) and persistent (file-based, Redis) caching backends to optimize performance for repeated operations like static analysis or LLM queries.

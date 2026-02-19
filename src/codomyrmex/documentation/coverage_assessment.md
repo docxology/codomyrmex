@@ -46,7 +46,7 @@ The documentation quality is continuously monitored using specialized validation
 | `ai_code_editing` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `static_analysis` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `data_visualization` | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `build_synthesis` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `deployment` | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 #### Good-Quality Modules (75-89 score)
 
@@ -177,7 +177,7 @@ python scripts/documentation/generate_dashboard.py --repo-root . --output output
 ### Immediate Actions (Next Week)
 
 1. **Complete High-Priority Placeholders**
-   - Focus on user-facing modules (ai_code_editing, build_synthesis, etc.)
+   - Focus on user-facing modules (ai_code_editing, deployment, etc.)
    - Use auto-generation tools where possible
 
 2. **Add Missing Files**

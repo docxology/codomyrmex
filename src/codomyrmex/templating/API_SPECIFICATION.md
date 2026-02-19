@@ -1,6 +1,6 @@
 # templating - API Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -273,7 +273,7 @@ code = engine.render(python_template, {
 
 ### Related Modules
 - [`documentation`](../documentation/API_SPECIFICATION.md) - Documentation generation
-- [`build_synthesis`](../build_synthesis/API_SPECIFICATION.md) - Code generation
+- [`deployment`](../deployment/API_SPECIFICATION.md) - Code generation
 - [`module_template`](../module_template/API_SPECIFICATION.md) - Module scaffolding
 
 ---

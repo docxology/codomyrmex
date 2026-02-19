@@ -19,7 +19,7 @@ class Difficulty(Enum):
     EXPERT = "expert"
 
 
-# Backward-compatible alias
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use Difficulty. Will be removed in v0.3.0.
 DifficultyLevel = Difficulty
 
 # Ordered difficulty levels for comparison

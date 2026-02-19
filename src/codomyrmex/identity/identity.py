@@ -34,9 +34,7 @@ class Identity:
         Returns:
             Processed data
         """
-        logger.debug(f"Processing data: {type(data).__name__}")
-        # TODO: Implement processing logic
-        return data
+        raise NotImplementedError("Identity processing requires configured identity provider")
 
 
 # Convenience function

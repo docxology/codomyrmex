@@ -29,8 +29,7 @@ class EpistemicEngine:
     def detect_contradictions(self) -> List[str]:
         """Identify contradictions between facts and beliefs."""
         conflicts = []
-        # Placeholder for real semantic contradiction logic
-        # For now just checking direct negation strings
+        # Simple string-negation heuristic — upgrade to semantic analysis when NLP backend available
         for belief in self.state.beliefs:
             for fact in self.state.facts:
                 if f"not {fact.statement}" in belief.statement:

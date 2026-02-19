@@ -1,7 +1,7 @@
 # AI Agent Guidelines - Circuit Breaker
 
 **Module**: `codomyrmex.api.circuit_breaker`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

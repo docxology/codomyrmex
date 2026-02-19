@@ -70,8 +70,8 @@ Create a new module rule when:
 | AI & Agents | 7 | agents, llm, cerebrum |
 | Infrastructure | 9 | cloud, api, deployment |
 | Development Tools | 14 | cli, testing, utils |
-| Metrics & Testing | 5 | metrics, workflow_testing |
-| Documentation & Build | 5 | documentation, build_synthesis |
+| Metrics & Testing | 5 | metrics, testing |
+| Documentation & Build | 5 | documentation, deployment |
 | Operations | 7 | containerization, ci_cd_automation |
 | Specialized | 6 | model_context_protocol, modeling_3d |
 | **Total** | **60** | |

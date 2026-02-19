@@ -130,4 +130,4 @@ class FixVerifier:
         """
         # Check if patch is actually just the full new file content (easier for LLMs often)
         # Otherwise need 'diff_match_patch' or similar library
-        return source  # Placeholder
+        raise NotImplementedError("Patch application requires configured diff/patch engine")

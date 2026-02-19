@@ -1,7 +1,7 @@
 # LLM Scripts Specification
 
 **Module**: scripts/llm  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Functional Requirements

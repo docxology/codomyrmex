@@ -1,6 +1,6 @@
 # Logistics Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `logistics` module orchestrates complex workflows, handles task queuing, and manages time-based scheduling within Codomyrmex.

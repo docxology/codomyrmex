@@ -1,6 +1,6 @@
 # Crypto Module — PAI Integration
 
-**Version**: v0.1.0 | **PAI Algorithm Mapping** | **Last Updated**: February 2026
+**Version**: v0.1.7 | **PAI Algorithm Mapping** | **Last Updated**: February 2026
 
 ## PAI Algorithm Phase Mapping
 

@@ -1,6 +1,6 @@
 # unit
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -18,7 +18,7 @@ Test files and validation suites.
 - `api_documentation/` – Subdirectory
 - `api_standardization/` – Subdirectory
 - `auth/` – Subdirectory
-- `build_synthesis/` – Subdirectory
+- `deployment/` – Subdirectory
 - `cache/` – Subdirectory
 - `cerebrum/` – Subdirectory
 - `ci_cd_automation/` – Subdirectory

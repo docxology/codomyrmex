@@ -1,6 +1,6 @@
 # Evolutionary AI Module Documentation
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -114,7 +114,7 @@ uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
 
 ## Related Modules
 
-- [inference_optimization](../inference_optimization/) - Optimization techniques that may complement evolutionary search
+- [performance](../performance/) - Optimization techniques that may complement evolutionary search
 - [pattern_matching](../pattern_matching/) - Pattern recognition that can feed fitness evaluation
 
 ## Navigation

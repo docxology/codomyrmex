@@ -4,6 +4,7 @@ Provides database connection, query execution, and transaction management
 for SQLite, PostgreSQL, and MySQL databases.
 """
 
+import os
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -12,6 +13,11 @@ from enum import Enum
 from typing import Any
 from collections.abc import Generator
 
+from codomyrmex.config_management.defaults import (
+    DEFAULT_POSTGRES_HOST,
+    DEFAULT_POSTGRES_PORT,
+    DEFAULT_POSTGRES_USER,
+)
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
@@ -50,9 +56,9 @@ class DatabaseConnection:
     name: str
     db_type: DatabaseType
     database: str
-    host: str = "localhost"
-    port: int = 5432
-    username: str = "postgres"
+    host: str = ""
+    port: int = 0
+    username: str = ""
     password: str = ""
     ssl_mode: str = "prefer"
     connection_pool_size: int = 10
@@ -65,10 +71,13 @@ class DatabaseConnection:
 
     def __post_init__(self):
         """Set defaults based on database type."""
+        self.host = self.host or os.getenv("DB_HOST", DEFAULT_POSTGRES_HOST)
+        self.port = self.port or int(os.getenv("DB_PORT", DEFAULT_POSTGRES_PORT))
+        self.username = self.username or os.getenv("DB_USER", DEFAULT_POSTGRES_USER)
         if self.db_type == DatabaseType.MYSQL:
-            if self.port == 5432:
+            if self.port == int(DEFAULT_POSTGRES_PORT):
                 self.port = 3306
-            if self.username == "postgres":
+            if self.username == DEFAULT_POSTGRES_USER:
                 self.username = "root"
 
     def get_connection_string(self) -> str:

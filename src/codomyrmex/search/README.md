@@ -1,6 +1,6 @@
 # Search Module
 
-**Version**: v0.1.0 | **Status**: Active
+**Version**: v0.1.7 | **Status**: Active
 
 Full-text search with TF-IDF, fuzzy matching, and query parsing.
 

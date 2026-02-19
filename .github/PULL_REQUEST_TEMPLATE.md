@@ -43,7 +43,7 @@ Addresses #
 <!-- Check all that apply -->
 
 - [ ] ai_code_editing
-- [ ] build_synthesis
+- [ ] deployment
 - [ ] code_execution_sandbox
 - [ ] data_visualization
 - [ ] documentation

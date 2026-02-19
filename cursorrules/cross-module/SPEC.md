@@ -1,6 +1,6 @@
 # cursorrules/cross-module - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -49,7 +49,7 @@ Cross-module coding rules and coordination standards defining how Codomyrmex mod
 ```mermaid
 graph TD
     subgraph "Rule Categories"
-        Build[build_synthesis]
+        Build[deployment]
         Viz[data_visualization]
         Log[logging_monitoring]
         MCP[model_context_protocol]

@@ -7,6 +7,7 @@ Provides deployment strategies, managers, and utilities:
 - GitOps synchronization
 """
 
+import os
 from typing import Any, Dict, List, Optional
 
 # Shared schemas for cross-module interop
@@ -94,7 +95,7 @@ class DeploymentManager:
                 DeploymentTarget(
                     id=f"{service_name}-{i}",
                     name=f"{service_name}-instance-{i}",
-                    address=f"localhost:{8000 + i}",
+                    address=f"{os.getenv('DEPLOY_HOST', 'localhost')}:{int(os.getenv('DEPLOY_BASE_PORT', '8000')) + i}",
                 )
                 for i in range(3)
             ]
@@ -183,9 +184,7 @@ class GitOpsSynchronizer:
         Returns:
             True if sync was successful
         """
-        # Stub implementation
-        self._synced = True
-        return True
+        raise NotImplementedError("Git repository sync requires configured git backend and local_path")
 
     def get_version(self) -> str:
         """

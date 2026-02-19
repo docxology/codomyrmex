@@ -1,6 +1,6 @@
 # networking - Functional Specification
 
-**Version**: v0.1.0 | **Status**: Proposed | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Proposed | **Last Updated**: February 2026
 
 ## Purpose
 

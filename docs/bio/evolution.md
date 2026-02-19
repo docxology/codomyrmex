@@ -22,11 +22,11 @@ Eldredge and Gould (1972) proposed **punctuated equilibrium**: long stasis inter
 
 - **[`meme`](../../src/codomyrmex/meme/)** -- cultural evolution: Dawkins's memes as units of cultural selection. Memetic algorithms combine genetic search with local optimization, implementing the Baldwin effect.
 
-- **[`prompt_testing`](../../src/codomyrmex/prompt_testing/)** -- artificial selection: A/B testing prompts is selective breeding for outputs. Selection pressure is explicit and human-directed, but the logic is identical to natural selection.
+- **[`prompt_engineering`](../../src/codomyrmex/prompt_engineering/)** -- artificial selection: A/B testing prompts is selective breeding for outputs. Selection pressure is explicit and human-directed, but the logic is identical to natural selection.
 
-- **[`model_registry`](../../src/codomyrmex/model_registry/)** -- phylogenetic versioning: model versions form a tree of descent with modification. The registry preserves lineage, enabling rollback and branch comparison.
+- **[`model_ops`](../../src/codomyrmex/model_ops/)** -- phylogenetic versioning: model versions form a tree of descent with modification. The registry preserves lineage, enabling rollback and branch comparison.
 
-- **[`feature_store`](../../src/codomyrmex/feature_store/)** -- genotype-phenotype mapping: raw data (genotype) is transformed through feature engineering into representations (phenotype) that models consume. This determines which variation is visible to selection.
+- **[`vector_store`](../../src/codomyrmex/vector_store/)** -- genotype-phenotype mapping: raw data (genotype) is transformed through feature engineering into representations (phenotype) that models consume. This determines which variation is visible to selection.
 
 ## Design Implications
 

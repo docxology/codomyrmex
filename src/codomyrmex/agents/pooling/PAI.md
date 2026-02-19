@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Pooling
 
 **Module**: `codomyrmex.agents.pooling`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

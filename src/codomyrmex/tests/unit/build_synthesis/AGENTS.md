@@ -1,6 +1,6 @@
-# Codomyrmex Agents — src/codomyrmex/tests/unit/build_synthesis
+# Codomyrmex Agents — src/codomyrmex/tests/unit/deployment
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -12,7 +12,7 @@ Test files and validation suites.
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `integration/` – Directory containing integration components
-- `test_build_synthesis.py` – Project file
+- `test_deployment.py` – Project file
 - `unit/` – Directory containing unit components
 
 ## Operating Contracts

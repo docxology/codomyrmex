@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - Embeddings
 
 **Module**: `codomyrmex.llm.embeddings`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

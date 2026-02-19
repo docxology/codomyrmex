@@ -1,7 +1,7 @@
 # Finance — Functional Specification
 
 **Module**: `codomyrmex.finance`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

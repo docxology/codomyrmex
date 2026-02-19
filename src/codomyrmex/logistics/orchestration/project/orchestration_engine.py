@@ -162,7 +162,7 @@ class OrchestrationSession:
         return sess
 
 
-# Backwards compatibility: alias the older internal name to the new dataclass
+# DEPRECATED(v0.2.0): Alias for backward compatibility. Use OrchestrationSession. Will be removed in v0.3.0.
 OrchestrationContext = OrchestrationSession
 
 

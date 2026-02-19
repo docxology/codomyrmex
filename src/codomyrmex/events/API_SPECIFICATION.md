@@ -1,6 +1,6 @@
 # Events Module API Specification
 
-**Version**: v0.1.0 | **Status**: Stable | **Last Updated**: February 2026
+**Version**: v0.1.7 | **Status**: Stable | **Last Updated**: February 2026
 
 ## 1. Overview
 The `events` module enables decoupled, asynchronous communication across the platform via a robust publish-subscribe system. It includes schema validation, prioritization, and persistent logging.

@@ -277,7 +277,7 @@ report = generate_security_report(scan_result, format="pdf")
 ### With Build Synthesis
 ```python
 from codomyrmex.containerization import build_containers, manage_container_registry
-from codomyrmex.build_synthesis import create_build_target
+from codomyrmex.deployment import create_build_target
 
 # Create container build target
 container_target = create_build_target(

@@ -71,8 +71,7 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
 def _to_markdown(content: str, source_format: DocumentFormat) -> str:
     """Convert content to markdown."""
     if source_format == DocumentFormat.HTML:
-        # Basic HTML to markdown (would need markdownify or similar)
-        return content  # Placeholder
+        raise NotImplementedError("HTML-to-markdown conversion requires configured converter backend")
     elif source_format == DocumentFormat.TEXT:
         # Text to markdown (wrap in code block or preserve)
         return content

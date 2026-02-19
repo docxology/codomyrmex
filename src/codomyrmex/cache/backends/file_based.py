@@ -164,8 +164,9 @@ class FileBasedCache(Cache):
         self._stats.size = len(list(self.cache_dir.glob("*.cache")))
         return self._stats
 
+    # DEPRECATED(v0.2.0): Use get_statistics() instead. Will be removed in v0.3.0.
     def get_stats(self) -> CacheStats:
-        """Get cache statistics (legacy alias)."""
+        """Get cache statistics."""
         return self.stats
 
 

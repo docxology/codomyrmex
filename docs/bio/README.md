@@ -20,12 +20,12 @@ The following table maps each essay to its core biological concept and the codom
 | [stigmergy.md](./stigmergy.md) | Indirect coordination | events, cache, logging_monitoring, agentic_memory, bio_simulation |
 | [eusociality.md](./eusociality.md) | Division of labor | agents, orchestrator, plugin_system, identity, system_discovery |
 | [swarm_intelligence.md](./swarm_intelligence.md) | Collective decision-making | meme, concurrency, evolutionary_ai, market, graph_rag |
-| [superorganism.md](./superorganism.md) | Colony as organism | system_discovery, telemetry, observability_dashboard, model_context_protocol, bio_simulation |
+| [superorganism.md](./superorganism.md) | Colony as organism | system_discovery, telemetry, telemetry, model_context_protocol, bio_simulation |
 | [immune_system.md](./immune_system.md) | Digital defense | defense, security, identity, privacy, validation, chaos_engineering |
-| [memory_and_forgetting.md](./memory_and_forgetting.md) | Memory models | agentic_memory, cache, cerebrum, vector_store, data_lineage |
-| [evolution.md](./evolution.md) | Selection and fitness | evolutionary_ai, meme, prompt_testing, model_registry, feature_store |
-| [free_energy.md](./free_energy.md) | Active inference | cerebrum, inference_optimization, telemetry, logging_monitoring, model_ops |
-| [metabolism.md](./metabolism.md) | Resource flow | cost_management, performance, rate_limiting, inference_optimization, cache, streaming |
+| [memory_and_forgetting.md](./memory_and_forgetting.md) | Memory models | agentic_memory, cache, cerebrum, vector_store, telemetry |
+| [evolution.md](./evolution.md) | Selection and fitness | evolutionary_ai, meme, prompt_engineering, model_ops, vector_store |
+| [free_energy.md](./free_energy.md) | Active inference | cerebrum, performance, telemetry, logging_monitoring, model_ops |
+| [metabolism.md](./metabolism.md) | Resource flow | performance, performance, rate_limiting, performance, cache, streaming |
 | [symbiosis.md](./symbiosis.md) | Mutualism, holobiont | model_context_protocol, plugin_system, agents, llm, wallet |
 
 ## Suggested Reading Order

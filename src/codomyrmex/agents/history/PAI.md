@@ -1,7 +1,7 @@
 # Personal AI Infrastructure - History
 
 **Module**: `codomyrmex.agents.history`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

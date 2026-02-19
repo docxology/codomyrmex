@@ -1,7 +1,7 @@
 # Search — Functional Specification
 
 **Module**: `codomyrmex.search`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

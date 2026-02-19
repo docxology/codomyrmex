@@ -1,7 +1,7 @@
 # Utilities — Functional Specification
 
 **Module**: `codomyrmex.utils`  
-**Version**: v0.1.0  
+**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

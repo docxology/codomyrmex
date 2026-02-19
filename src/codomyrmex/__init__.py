@@ -5,7 +5,7 @@ four-layer architecture for AI-assisted software development, code analysis,
 testing, documentation generation, and workflow automation.
 """
 
-__version__ = "0.1.7"
+__version__ = "0.1.8"
 
 import os
 import pkgutil
@@ -125,7 +125,7 @@ def __getattr__(name):
             raise ImportError(f"Failed to import {name}: {e}. You may need to install optional dependencies.")
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
-# For backwards compatibility, still try to import core modules that don't have optional deps
+# DEPRECATED(v0.2.0): Eager imports for backward compatibility. Use lazy __getattr__ imports. Will be removed in v0.3.0.
 # These are the "always available" modules
 try:
     from . import exceptions, utils

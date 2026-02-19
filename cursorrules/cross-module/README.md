@@ -10,7 +10,7 @@ Cross-module cursor rules for multi-module interactions and shared patterns. The
 
 | Rule | Purpose |
 |------|---------|
-| `build_synthesis.cursorrules` | Build processes and code synthesis operations |
+| `deployment.cursorrules` | Build processes and code synthesis operations |
 | `data_visualization.cursorrules` | Plotting, charting, and visualization patterns |
 | `logging_monitoring.cursorrules` | Structured logging, metrics, and observability |
 | `model_context_protocol.cursorrules` | MCP tool and resource specifications |

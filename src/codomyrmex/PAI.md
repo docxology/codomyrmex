@@ -17,7 +17,8 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [llm/](llm/) | Model Management | Local (Ollama) and cloud model integration |
 | [model_context_protocol/](model_context_protocol/) | Tool Standards | Standardized AI tool interfaces |
 | [agents/](agents/) | Agent Framework | Multi-provider AI agent orchestration |
-| [multimodal/](multimodal/) | Multimodal | Audio/Video/Image processing |
+| [audio/](audio/) | Audio Processing | Audio analysis and generation |
+| [video/](video/) | Video Processing | Video analysis and generation |
 
 ### Intelligent Code Operations
 
@@ -25,7 +26,7 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | :--- | :--- | :--- |
 | [agents/ai_code_editing/](agents/ai_code_editing/) | AI Code Editing | Automated refactoring, generation, review |
 | [static_analysis/](static_analysis/) | Code Intelligence | Quality analysis and pattern detection |
-| [pattern_matching/](pattern_matching/) | Pattern Recognition | Code pattern identification |
+| [search/](search/) | Pattern Recognition | Code pattern identification |
 | [coding/](coding/) | Safe Execution | Sandboxed AI code execution |
 
 - **Secure Cognitive Architecture**:
@@ -135,7 +136,7 @@ graph TB
     end
 
     subgraph Modules ["Codomyrmex Modules"]
-        PM["pattern_matching, search, documents"]
+        PM["search, documents"]
         CB["cerebrum, agents/theory, graph_rag"]
         OR["orchestrator, logistics"]
         CE["agents/ai_code_editing, coding, ci_cd_automation/build"]
@@ -156,8 +157,8 @@ graph TB
 ```
 
 | Phase | Modules Used | What They Provide |
-|-------|-------------|------------------|
-| **OBSERVE** | `pattern_matching`, `search`, `documents`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
+| :--- | :--- | :--- |
+| **OBSERVE** | `search`, `documents`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
 | **THINK** | `cerebrum`, `agents/theory/`, `graph_rag` | Case-based reasoning, deliberative architecture, knowledge graphs |
 | **PLAN** | `orchestrator`, `logistics` | DAG-based workflow construction, scheduling |
 | **BUILD** | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build` | Code generation, sandbox execution, multi-language builds |
@@ -172,26 +173,33 @@ The authoritative bridge document is [`/PAI.md`](../../PAI.md) at the project ro
 ### 1. AI-Assisted Code Review
 
 ```python
-from codomyrmex.agents import CodeEditor
-from codomyrmex.static_analysis import CodeAnalyzer
-from codomyrmex.security import SecurityScanner
+from pathlib import Path
+from codomyrmex.static_analysis import scan_imports, check_layer_violations, audit_exports
+from codomyrmex.security import scan_directory  # Security scanning
 
-# Combine AI and static analysis
-analyzer = CodeAnalyzer()
-editor = CodeEditor()
-scanner = SecurityScanner()
+src = Path("src/codomyrmex")
 
-# Review pipeline
-analysis = analyzer.analyze(code)
-ai_review = editor.review(code, context=analysis)
-security = scanner.scan(code)
+# Combine static analysis and security scanning
+edges = scan_imports(src)
+violations = check_layer_violations(edges)
+export_findings = audit_exports(src)
+
+# Review results
+for v in violations:
+    print(f"Layer violation: {v['src']} → {v['dst']}: {v['reason']}")
+for f in export_findings:
+    print(f"Export issue: {f['module']}: {f['detail']}")
 ```
 
 ### 2. Knowledge-Augmented Generation
 
+> [!NOTE]
+> The following example is illustrative of the intended PAI pattern.
+> Class names represent planned API targets; check module `__init__.py` for current exports.
+
 ```python
 from codomyrmex.cerebrum import CerebrumEngine, CaseBase
-from codomyrmex.agents import ClaudeClient
+from codomyrmex.llm import create_provider
 
 # Use case-based reasoning to enhance AI generation
 cerebrum = CerebrumEngine()
@@ -200,9 +208,9 @@ case_base = CaseBase.load("project_patterns")
 # Get similar past cases
 similar_cases = cerebrum.retrieve_similar(current_context)
 
-# Generate with context
-claude = ClaudeClient()
-result = claude.generate(
+# Generate with context via LLM provider
+provider = create_provider("ollama")
+result = provider.generate(
     prompt=user_request,
     context=similar_cases.as_context()
 )

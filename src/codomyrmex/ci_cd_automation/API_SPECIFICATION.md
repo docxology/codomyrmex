@@ -225,7 +225,7 @@ All functions follow consistent error handling patterns:
 
 ### With Build Synthesis
 ```python
-from codomyrmex.build_synthesis import create_build_target
+from codomyrmex.deployment import create_build_target
 from codomyrmex.ci_cd_automation import create_pipeline
 
 # Create build target
