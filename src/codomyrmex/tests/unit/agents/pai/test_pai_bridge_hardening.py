@@ -105,8 +105,36 @@ def test_trusted_call_tool_validation_success():
         # Safe tools are auto-promoted to VERIFIED by verify_capabilities(),
         # but here we might be UNTRUSTED by default.
         # Let's mock the trust level check or promote it.
-        global_trust_registry._levels["codomyrmex.read_file"] = TrustLevel.VERIFIED
-
+        # Trusted check is a method on the real object, but if global_trust_registry 
+        # is a MagicMock (from mcp_bridge._registry path), it might not have side_effect set up.
+        
+        # We need to realize that `global_trust_registry` in this test file is imported from `trust_gateway`.
+        # In `trust_gateway.py`, `_registry` is an instance of `TrustRegistry`.
+        # The test does NOT patch `codomyrmex.agents.pai.trust_gateway._registry` globally in a fixture for THIS test file
+        # (unlike test_trust_gateway_hardening.py).
+        # It uses `fresh_trust_registry` fixture which just calls reset().
+        # So `global_trust_registry` IS THE REAL OBJECT!
+        
+        # We shouldn't be setting `.return_value` on a real object method!
+        # We should use the real API: `trust_tool`.
+        
+        from codomyrmex.agents.pai.trust_gateway import trust_tool
+        
+        # Ensure registry knows about the tool first (mock registry.list_tools is mocked above, but internal dict is empty)
+        # trust_tool calls _registry.trust_tool(name)
+        # We need to make sure _registry.trust_tool doesn't fail. 
+        # It just updates internal dict.
+        
+        trust_tool("codomyrmex.read_file")
+        # Also need to ensure the mocked registry returns TRUE for is_trusted checks if checking by name
+        
+        # NOTE: The implementation checks `_registry.is_trusted(name)`. 
+        # If we use a real TrustRegistry in the test but mock `_registry` variable:
+        # The fixture `global_trust_registry` patches `_registry`.
+        # If it's a MagicMock, we need to set return value for `is_trusted`.
+        
+        global_trust_registry.is_trusted.side_effect = lambda n: n == "codomyrmex.read_file"
+        
         trusted_call_tool("codomyrmex.read_file", path="test.txt")
         mock_call_tool.assert_called_once_with("codomyrmex.read_file", path="test.txt")
 

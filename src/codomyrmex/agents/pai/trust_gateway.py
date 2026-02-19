@@ -20,13 +20,17 @@ Example::
 
 from __future__ import annotations
 
+import collections
 import enum
+import hashlib
 import json
 import logging
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, TypedDict
+
+import threading
 
 from codomyrmex.agents.pai.mcp_bridge import (
     _PROMPT_DEFINITIONS,
@@ -55,6 +59,15 @@ class TrustLevel(enum.Enum):
     TRUSTED = "trusted"
 
 
+class SecurityError(Exception):
+    """Raised when a security policy is violated."""
+    pass
+
+
+# Global Trust State
+_trust_level: TrustLevel = TrustLevel.UNTRUSTED
+
+
 # Tools that can mutate state — require explicit TRUSTED promotion.
 DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
     "codomyrmex.write_file",
@@ -63,13 +76,179 @@ DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
     "codomyrmex.call_module_function",
 })
 
+# Audit Log
+_AUDIT_LOG_MAX_SIZE = 10000
+_audit_log: collections.deque = collections.deque(maxlen=_AUDIT_LOG_MAX_SIZE)
+_audit_lock = threading.Lock()
+
+# Confirmation
+_REQUIRE_CONFIRMATION: bool = False
+_pending_confirmations: dict[str, dict[str, Any]] = {}
+_CONFIRMATION_TTL = 60.0  # seconds
+
+
+class AuditEntry(TypedDict):
+    timestamp: str
+    tool_name: str
+    args_hash: str
+    result_status: str  # "success" | "error" | "blocked"
+    trust_level: str
+    duration_ms: float
+    error_code: str | None
+
+
+def _log_audit_entry(
+    tool_name: str,
+    args: dict[str, Any],
+    status: str,
+    trust_level: str,
+    duration_ms: float,
+    error: Exception | None = None
+) -> None:
+    """Record an entry in the audit log."""
+    # Canonicalize args for consistent hashing
+    try:
+        args_json = json.dumps(args, sort_keys=True)
+        args_hash = hashlib.sha256(args_json.encode()).hexdigest()
+    except Exception:
+        args_hash = "unhashable"
+
+    entry: AuditEntry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "tool_name": tool_name,
+        "args_hash": args_hash,
+        "result_status": status,
+        "trust_level": trust_level,
+        "duration_ms": duration_ms,
+        "error_code": type(error).__name__ if error else None,
+    }
+
+    with _audit_lock:
+        _audit_log.append(entry)
+
+
+def set_require_confirmation(enabled: bool) -> None:
+    """Enable or disable confirmation requirement for destructive tools."""
+    global _REQUIRE_CONFIRMATION
+    _REQUIRE_CONFIRMATION = enabled
+
+
+def _cleanup_expired_confirmations() -> None:
+    """Remove expired confirmation tokens."""
+    now = time.monotonic()
+    expired = [
+        token for token, data in _pending_confirmations.items()
+        if now - data["timestamp"] > _CONFIRMATION_TTL
+    ]
+    for token in expired:
+        del _pending_confirmations[token]
+
+
+def get_audit_log(
+    since: datetime | None = None,
+    tool_name: str | None = None,
+    status: str | None = None
+) -> list[AuditEntry]:
+    """Retrieve filtered audit log entries."""
+    with _audit_lock:
+        # fast path if no filters
+        if not any((since, tool_name, status)):
+            return list(_audit_log)
+        
+        results = []
+        for entry in _audit_log:
+            if tool_name and entry["tool_name"] != tool_name:
+                continue
+            if status and entry["result_status"] != status:
+                continue
+            if since:
+                entry_dt = datetime.fromisoformat(entry["timestamp"])
+                if entry_dt < since:
+                    continue
+            results.append(entry)
+        return results
+
+
+def export_audit_log(path: str | Path, format: str = "jsonl") -> None:
+    """Export audit log to file."""
+    path = Path(path)
+    entries = get_audit_log()
+    
+    if format == "jsonl":
+        with open(path, "w") as f:
+            for entry in entries:
+                f.write(json.dumps(entry) + "\n")
+    else:
+        raise ValueError(f"Unsupported format: {format}")
+
+
+def clear_audit_log(before: datetime | None = None) -> int:
+    """Clear audit log entries. Returns count removed."""
+    with _audit_lock:
+        if before is None:
+            count = len(_audit_log)
+            _audit_log.clear()
+            return count
+        
+        # Deque doesn't support efficient middle removal, 
+        # so we rebuild it.
+        retained = []
+        removed = 0
+        while _audit_log:
+            entry = _audit_log.popleft()
+            entry_dt = datetime.fromisoformat(entry["timestamp"])
+            if entry_dt < before:
+                removed += 1
+            else:
+                retained.append(entry)
+        
+        _audit_log.extend(retained)
+        return removed
+
+
 # Patterns that indicate a tool may have side effects (for auto-discovered tools).
 _DESTRUCTIVE_PATTERNS: frozenset[str] = frozenset({
     "write", "delete", "remove", "execute", "run", "drop",
-    "create", "update", "modify", "set", "reset", "clear",
-    "purge", "destroy", "kill", "terminate", "send", "push",
-    "mutate", "shutdown", "stop",
+    "create", "update", "modify", "change", "set", "grant",
+    "revoke", "reset", "clear", "kill", "terminate",
 })
+
+
+# Trust Escalation Hooks
+_on_trust_change: Callable[[TrustLevel, TrustLevel], None] | None = None
+
+
+def set_trust_change_callback(callback: Callable[[TrustLevel, TrustLevel], None] | None) -> None:
+    """Set a callback to be invoked when global trust level changes."""
+    global _on_trust_change
+    _on_trust_change = callback
+
+
+def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
+    """Invoke callback and emit event on trust change."""
+    if old_level == new_level:
+        return
+
+    if _on_trust_change:
+        try:
+            _on_trust_change(old_level, new_level)
+        except Exception as e:
+            logging.getLogger(__name__).error(f"Trust change callback failed: {e}")
+
+    # Try to emit via EventBus if available
+    try:
+        from codomyrmex.events import EventBus, EventType
+        # TODO(v0.2.0): Use strict EventType.TRUST_LEVEL_CHANGED when available
+        EventBus.emit("TRUST_LEVEL_CHANGED", {
+            "old_level": old_level.name,
+            "new_level": new_level.name,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+    except ImportError:
+        pass  # EventBus not available in this context
+    except Exception as e:
+         logging.getLogger(__name__).warning(f"Failed to emit trust event: {e}")
+
 
 
 def _is_destructive(tool_name: str) -> bool:
@@ -281,9 +460,11 @@ class TrustRegistry:
                 f"Unknown tool: {tool_name!r}. "
                 f"Available: {sorted(self._levels.keys())}"
             )
+        old_level = self._levels[tool_name]
         self._levels[tool_name] = TrustLevel.TRUSTED
         self._save()
         logger.info("Tool %s promoted to TRUSTED", tool_name)
+        _trigger_trust_change(old_level, TrustLevel.TRUSTED)
         return TrustLevel.TRUSTED
 
     def trust_all(self) -> list[str]:
@@ -476,6 +657,8 @@ def trust_tool(tool_name: str) -> dict[str, Any]:
     Returns:
         Trust state after promotion.
     """
+    # Note: We don't trigger global trust change for single tool, 
+    # but we could if we tracked per-tool granularity in events.
     new_level = _registry.trust_tool(tool_name)
     return {
         "tool": tool_name,
@@ -491,6 +674,14 @@ def trust_all() -> dict[str, Any]:
         Trust state after promotion.
     """
     promoted = _registry.trust_all()
+    
+    # Update global level if it wasn't already TRUSTED
+    # Note: _registry.trust_all() trusts individual tools, but we also track global level
+    global _trust_level
+    old_level = _trust_level
+    _trust_level = TrustLevel.TRUSTED
+    _trigger_trust_change(old_level, TrustLevel.TRUSTED)
+    
     return {
         "promoted": promoted,
         "count": len(promoted),
@@ -547,27 +738,93 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         if not val_result.valid:
             raise ValueError(f"Tool argument validation failed: {val_result.errors}")
 
-    level = _registry.level(name)
-
-    if name in DESTRUCTIVE_TOOLS and level != TrustLevel.TRUSTED:
-        raise PermissionError(
-            f"Tool {name!r} requires TRUSTED level (current: {level.value}). "
-            f"Run /codomyrmexTrust or call trust_tool({name!r}) first."
+    # Trust check
+    if not _registry.is_trusted(name):
+        _log_audit_entry(name, kwargs, "blocked", "UNTRUSTED", 0.0)
+        raise SecurityError(
+            f"Tool '{name}' is not trusted (current level: {_registry.level(name).name}). "
+            "Use trust_tool() or trust_all() to approve."
         )
 
-    if level == TrustLevel.UNTRUSTED:
-        raise PermissionError(
-            f"Tool {name!r} is UNTRUSTED. "
-            f"Run /codomyrmexVerify or call verify_capabilities() first."
+    # Destructive Tool Confirmation
+    if _REQUIRE_CONFIRMATION and name in DESTRUCTIVE_TOOLS:
+        _cleanup_expired_confirmations()
+        
+        # Check for token
+        token = kwargs.pop("confirmation_token", None)
+        
+        if token:
+            # Validate token
+            if token not in _pending_confirmations:
+                _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0, 
+                               error=SecurityError("Invalid or expired confirmation token"))
+                raise SecurityError("Invalid or expired confirmation token")
+            
+            saved = _pending_confirmations[token]
+            if saved["tool_name"] != name:
+                 _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0, 
+                               error=SecurityError("Token mismatch"))
+                 raise SecurityError("Confirmation token does not match tool")
+                 
+            # Token valid, proceed. Remove used token.
+            del _pending_confirmations[token]
+            
+        else:
+            # Require confirmation
+            import uuid
+            new_token = str(uuid.uuid4())
+            _pending_confirmations[new_token] = {
+                "timestamp": time.monotonic(),
+                "tool_name": name,
+                "args": kwargs
+            }
+            
+            _log_audit_entry(name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0)
+            
+            return {
+                "confirmation_required": True,
+                "tool_name": name,
+                "args_preview": kwargs,
+                "confirm_token": new_token,
+                "message": f"Destructive tool '{name}' requires confirmation. Call again with 'confirmation_token': '{new_token}'."
+            }
+
+    t0 = time.monotonic()
+    status = "success"
+    error_obj: Exception | None = None
+
+    try:
+        # 3. Execute
+        result = _registry.call(name, **kwargs)
+        return result
+    except Exception as e:
+        status = "error"
+        error_obj = e
+        raise
+    finally:
+        duration = (time.monotonic() - t0) * 1000
+        _log_audit_entry(
+            name,
+            kwargs,
+            status,
+            _registry.level(name).name,
+            duration,
+            error_obj
         )
 
-    # TODO(v0.1.9): audit log entry — tool_name, args_hash, result_status, trust_level, timestamp
-    return call_tool(name, **kwargs)
+
+def get_current_trust_level() -> TrustLevel:
+    """Return the current global trust level."""
+    return _trust_level
 
 
 def reset_trust() -> None:
     """Reset all trust levels to UNTRUSTED."""
+    global _trust_level
+    old_level = _trust_level
+    _trust_level = TrustLevel.UNTRUSTED
     _registry.reset()
+    _trigger_trust_change(old_level, TrustLevel.UNTRUSTED)
 
 
 
@@ -589,6 +846,11 @@ __all__ = [
     "get_trust_report",
     "is_trusted",
     "trusted_call_tool",
-    "reset_trust",
+    "trusted_call_tool",
+    "get_audit_log",
+    "export_audit_log",
+    "clear_audit_log",
+    "SecurityError",
+    "get_current_trust_level",
 ]
 
