@@ -10,6 +10,7 @@ from .handlers import (
     check_environment,
     handle_ai_generate,
     handle_ai_refactor,
+    handle_chat_session,
     handle_code_analysis,
     handle_fpf_analyze,
     handle_fpf_context,
@@ -222,6 +223,16 @@ Examples:
     doctor_parser.add_argument("--json", dest="output_json", action="store_true", help="Output as JSON")
 
     subparsers.add_parser("shell", help="Launch interactive shell")
+
+    # Chat command
+    chat_parser = subparsers.add_parser(
+        "chat", help="Launch infinite conversation and dev_loop"
+    )
+    chat_parser.add_argument("--todo", type=str, default="TO-DO.md", help="Path to TO-DO scaffolding file")
+    chat_parser.add_argument("--rounds", type=int, default=0, help="Number of rounds to run (0 for infinite)")
+    chat_parser.add_argument("--context", nargs="*", help="Extra context files to inject")
+    chat_parser.add_argument("--stream", action="store_true", help="Enable streaming output mode")
+    chat_parser.add_argument("--resume", type=str, help="Resume from an exported JSONL file")
 
     # Workflow commands
     workflow_parser = subparsers.add_parser("workflow", help="Workflow management")
@@ -481,6 +492,15 @@ Examples:
 
     elif args.command == "shell":
         success = run_interactive_shell()
+
+    elif args.command == "chat":
+        success = handle_chat_session(
+            todo_path=args.todo,
+            rounds=args.rounds,
+            context=args.context,
+            stream=args.stream,
+            resume=args.resume
+        )
 
     elif args.command == "doctor":
         from .doctor import run_doctor

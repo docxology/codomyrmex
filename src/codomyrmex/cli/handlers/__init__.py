@@ -2,6 +2,7 @@
 
 from .ai import handle_ai_generate, handle_ai_refactor
 from .analysis import handle_code_analysis, handle_git_analysis, handle_module_test
+from .chat import handle_chat_session
 from .demos import (
     demo_ai_code_editing,
     demo_code_execution,

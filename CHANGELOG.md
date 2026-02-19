@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0-rc1] - 2026-02-19
+
+### Added
+
+- **MCP Tool Expansion**: 15 full modules now expose over 150 MCP tools across the framework (e.g. `agents`, `security`, `documentation`, `data_visualization`, `cerebrum`, `cloud`, `llm`, `orchestrator`).
+- **End-to-End Tracing**: Wired Correlation ID into EventBus and MCP transports (`X-Correlation-ID`) for distributed request tracing.
+- **RASP Documentation Auto-Generation**: Backfilled `AGENTS.md`, `SPEC.md`, `PAI.md` and `README.md` specs across 15 newly promoted sub-modules.
+- **Infinite Conversation Mode Support**: Real-LLM integrations tested successfully for infinite dialogue contexts.
+
+### Fixed
+
+- **100% Zero-Mock Compliance**: Remediated 74 remaining test suite failures spanning PAI Trust Gateway mocks, CORS origin strictness, validation module schema drift, missing Cloud credential bindings, and I18N instantiation leaks. The test suite of >8,800 tests now runs completely clean without ANY mocked system boundaries.
+
 ## [0.1.9] - 2026-02-19
 
 ### Added

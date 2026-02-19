@@ -39,7 +39,7 @@ import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 from codomyrmex.agents.llm_client import OllamaClient, AgentRequest
@@ -301,7 +301,13 @@ class ConversationOrchestrator:
 
     # ── Public API ───────────────────────────────────────────────────
 
-    def run(self, rounds: int = 3, *, max_tokens_per_turn: int = 256) -> list[ConversationTurn]:
+    def run(
+        self,
+        rounds: int = 3,
+        *,
+        max_tokens_per_turn: int = 256,
+        on_turn: Callable[[ConversationTurn], None] | None = None
+    ) -> list[ConversationTurn]:
         """Run the conversation for N rounds (0 = infinite).
 
         A ''round'' consists of every agent speaking once in order.
@@ -309,6 +315,7 @@ class ConversationOrchestrator:
         Args:
             rounds: Number of rounds.  ``0`` means infinite (until ``stop()``).
             max_tokens_per_turn: Hint for max response length.
+            on_turn: Optional callback invoked after each turn.
 
         Returns:
             The conversation transcript.
@@ -316,9 +323,14 @@ class ConversationOrchestrator:
         cid = f"conv-{self.channel_id}-{uuid.uuid4().hex[:8]}"
         with with_correlation(cid) as active_cid:
             self.log.correlation_id = active_cid
-            return self._run_loop(rounds, max_tokens_per_turn)
+            return self._run_loop(rounds, max_tokens_per_turn, on_turn=on_turn)
 
-    def _run_loop(self, rounds: int, max_tokens_per_turn: int) -> list[ConversationTurn]:
+    def _run_loop(
+        self,
+        rounds: int,
+        max_tokens_per_turn: int,
+        on_turn: Callable[[ConversationTurn], None] | None = None
+    ) -> list[ConversationTurn]:
         """Internal loop — runs inside a correlation context."""
         self._running = True
         logger.info(
@@ -327,9 +339,12 @@ class ConversationOrchestrator:
             f"cid={self.log.correlation_id}"
         )
 
-        # Post the seed prompt from a neutral "moderator".
-        self.relay.post_message("moderator", self.seed_prompt)
-        context = self.seed_prompt
+        # Post the seed prompt from a neutral "moderator" if starting fresh.
+        if not self.log.turns:
+            self.relay.post_message("moderator", self.seed_prompt)
+            context = self.seed_prompt
+        else:
+            context = self.log.turns[-1].content
 
         round_num = 0
         while self._running:
@@ -346,6 +361,9 @@ class ConversationOrchestrator:
                 )
                 self.log.turns.append(turn)
                 context = turn.content  # next agent responds to this
+                
+                if on_turn:
+                    on_turn(turn)
 
         self.log.total_rounds = round_num - 1 if rounds > 0 else round_num
         self.log.status = "completed"
@@ -370,6 +388,36 @@ class ConversationOrchestrator:
     def get_log(self) -> ConversationLog:
         """Return the full conversation log."""
         return self.log
+
+    def load_export(self, path: str | Path) -> None:
+        """Load an exported conversation JSONL into the current state."""
+        import json
+        p = Path(path)
+        if not p.exists():
+            raise FileNotFoundError(f"Export not found: {p}")
+            
+        with p.open("r", encoding="utf-8") as f:
+            lines = f.read().splitlines()
+            
+        if not lines:
+            return
+            
+        metadata = json.loads(lines[0])
+        self.channel_id = metadata.get("channel_id", self.channel_id)
+        self.log.channel_id = self.channel_id
+        
+        # We start from 1 since 0 is metadata
+        self.log.turns.clear()
+        for line in lines[1:]:
+            if not line.strip():
+                continue
+            turn_data = json.loads(line)
+            turn = ConversationTurn(**turn_data)
+            self.log.turns.append(turn)
+            # Re-seed into the relay so agents can read it natively if needed
+            self.relay.post_message(turn.speaker, turn.content)
+            
+        logger.info(f"[Orchestrator] Loaded {len(self.log.turns)} turns from {p}")
 
     @classmethod
     def dev_loop(
