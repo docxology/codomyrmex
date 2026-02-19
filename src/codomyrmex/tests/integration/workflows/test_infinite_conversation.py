@@ -373,3 +373,133 @@ class TestInfiniteConversation:
         for t in transcript:
             assert "[Error" not in t.content
 
+
+class TestFileInjection:
+    """Tests for file-injection and TO-DO scaffolding features."""
+
+    def test_file_context_reads_real_file(self, tmp_path):
+        """FileContext reads a real file from disk."""
+        from codomyrmex.agents.orchestrator import FileContext
+
+        f = tmp_path / "sample.md"
+        f.write_text("# Title\n\nSome content here.\n- item 1\n- item 2\n")
+
+        fc = FileContext(path=f)
+        assert fc.name == "sample.md"
+        assert "# Title" in fc.content
+        assert fc.token_estimate > 0
+
+    def test_file_context_clips_long_files(self, tmp_path):
+        """FileContext clips files exceeding max_lines."""
+        from codomyrmex.agents.orchestrator import FileContext
+
+        f = tmp_path / "long.txt"
+        f.write_text("\n".join(f"Line {i}" for i in range(500)))
+
+        fc = FileContext(path=f, max_lines=50)
+        assert "Line 0" in fc.content
+        assert "Line 49" in fc.content
+        assert "450 more lines" in fc.content
+
+    def test_extract_todo_items(self):
+        """extract_todo_items parses unchecked and in-progress checkboxes."""
+        from codomyrmex.agents.orchestrator import extract_todo_items
+
+        text = """\
+# TO-DO
+- [x] Done item
+- [ ] Unchecked item 1
+- [/] In progress item
+- [ ] Unchecked item 2
+- Some other line
+"""
+        items = extract_todo_items(text)
+        assert len(items) == 3
+        assert items[0] == "Unchecked item 1"
+        assert items[1] == "In progress item (in progress)"
+        assert items[2] == "Unchecked item 2"
+
+    def test_context_files_injected_into_prompt(self, relay_dir, model_name, tmp_path):
+        """Files passed via context_files appear in LLM-generated responses."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        ctx_file = tmp_path / "project_info.md"
+        ctx_file.write_text("# Project Zephyr\n\nA wind simulation engine.\n")
+
+        orch = ConversationOrchestrator(
+            channel="test-ctx-inject",
+            agents=[
+                {"identity": "bot", "persona": "assistant who references project files",
+                 "provider": "ollama", "model": model_name},
+            ],
+            seed_prompt="Summarize the project described in the attached files.",
+            context_files=[str(ctx_file)],
+            relay_dir=relay_dir,
+        )
+
+        assert len(orch.context_files) == 1
+        assert orch.context_files[0].name == "project_info.md"
+
+        transcript = orch.run(rounds=1)
+        assert len(transcript) == 1
+        assert "[Error" not in transcript[0].content
+
+    def test_todo_scaffolding_cycles_items(self, relay_dir, model_name, tmp_path):
+        """TO-DO items cycle per round in the development focus."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        todo = tmp_path / "TODO.md"
+        todo.write_text("# Tasks\n- [ ] Build API\n- [ ] Add tests\n- [ ] Write docs\n")
+
+        orch = ConversationOrchestrator(
+            channel="test-todo-cycle",
+            agents=[
+                {"identity": "dev", "persona": "developer",
+                 "provider": "ollama", "model": model_name},
+            ],
+            seed_prompt="Work through each TO-DO item.",
+            todo_path=str(todo),
+            relay_dir=relay_dir,
+        )
+
+        assert len(orch.todo_items) == 3
+        assert orch.todo_items[0] == "Build API"
+        assert orch.todo_items[1] == "Add tests"
+        assert orch.todo_items[2] == "Write docs"
+
+        transcript = orch.run(rounds=2)
+        assert len(transcript) == 2
+        for t in transcript:
+            assert "[Error" not in t.content
+
+    def test_dev_loop_constructor(self, relay_dir, tmp_path, model_name):
+        """dev_loop() creates a pre-configured orchestrator with file context."""
+        from codomyrmex.agents.orchestrator import ConversationOrchestrator
+
+        todo = tmp_path / "TO-DO.md"
+        todo.write_text("# v1.0\n- [ ] Implement feature A\n- [ ] Write tests\n")
+
+        extra = tmp_path / "README.md"
+        extra.write_text("# My Project\n\nA sample project.\n")
+
+        orch = ConversationOrchestrator.dev_loop(
+            todo_path=str(todo),
+            extra_files=[str(extra)],
+            agents=[
+                {"identity": "arch", "persona": "architect",
+                 "provider": "ollama", "model": model_name},
+                {"identity": "dev", "persona": "developer",
+                 "provider": "ollama", "model": model_name},
+            ],
+            relay_dir=relay_dir,
+        )
+
+        assert len(orch.agents) == 2
+        assert len(orch.todo_items) == 2
+        # Extra file + TO-DO file = 2 context files.
+        assert len(orch.context_files) == 2
+
+        transcript = orch.run(rounds=1)
+        assert len(transcript) == 2
+        for t in transcript:
+            assert "[Error" not in t.content

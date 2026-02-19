@@ -3,7 +3,10 @@
 Orchestrates sustained multi-turn conversations between Ollama, Claude Code,
 and Antigravity agents using real LLM inference over the file-based relay bus.
 
-Usage::
+Supports file-injection: inject real project files (TO-DO.md, SPEC.md, source
+files, etc.) into agent context so conversations are grounded in actual code.
+
+Usage — basic conversation::
 
     from codomyrmex.agents.orchestrator import ConversationOrchestrator
 
@@ -15,8 +18,14 @@ Usage::
         ],
     )
     transcript = orch.run(rounds=5)
-    for turn in transcript:
-        print(f"[{turn.speaker}] {turn.content[:80]}")
+
+Usage — file-injected TO-DO development loop::
+
+    orch = ConversationOrchestrator.dev_loop(
+        todo_path="TO-DO.md",
+        extra_files=["CHANGELOG.md", "src/codomyrmex/agents/orchestrator.py"],
+    )
+    transcript = orch.run(rounds=0)  # infinite, scaffolded by TO-DO items
 """
 
 from __future__ import annotations
@@ -24,6 +33,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
@@ -72,6 +82,52 @@ class AgentSpec:
                 self.model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
             else:
                 self.model = "claude-3-haiku-20240307"
+
+
+@dataclass
+class FileContext:
+    """A project file injected into agent context.
+
+    Reads the file on construction; optionally clips to ``max_lines``.
+    """
+
+    path: Path
+    content: str = ""
+    max_lines: int = 200
+
+    def __post_init__(self) -> None:
+        self.path = Path(self.path)
+        if not self.content and self.path.is_file():
+            raw = self.path.read_text(errors="replace")
+            lines = raw.splitlines()
+            if len(lines) > self.max_lines:
+                self.content = "\n".join(lines[: self.max_lines])
+                self.content += f"\n... ({len(lines) - self.max_lines} more lines)"
+            else:
+                self.content = raw
+
+    @property
+    def name(self) -> str:
+        return self.path.name
+
+    @property
+    def token_estimate(self) -> int:
+        return len(self.content.split())
+
+
+def extract_todo_items(text: str) -> list[str]:
+    """Extract unchecked TO-DO items (``- [ ]``) from markdown text.
+
+    Returns a list of item strings, one per unchecked checkbox.
+    """
+    items: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("- [ ]"):
+            items.append(stripped[5:].strip())
+        elif stripped.startswith("- [/]"):
+            items.append(stripped[5:].strip() + " (in progress)")
+    return items
 
 
 @dataclass
@@ -163,6 +219,9 @@ class ConversationOrchestrator:
         agents: List of agent specs (dicts or ``AgentSpec`` instances).
         seed_prompt: Initial prompt to kick off the conversation.
         relay_dir: Override relay storage directory (for tests).
+        context_files: Paths to project files to inject into agent context.
+        todo_path: Path to TO-DO.md for per-round scaffolding.
+        max_retries: Number of LLM retry attempts on failure.
     """
 
     def __init__(
@@ -172,12 +231,39 @@ class ConversationOrchestrator:
         agents: list[dict[str, str] | AgentSpec] | None = None,
         seed_prompt: str = "Let's discuss how AI agents can collaborate effectively.",
         relay_dir: str | None = None,
+        context_files: list[str | Path] | None = None,
+        todo_path: str | Path | None = None,
         max_retries: int = 2,
     ) -> None:
         self.channel_id = channel or f"conv-{uuid.uuid4().hex[:8]}"
         self.seed_prompt = seed_prompt
         self.max_retries = max_retries
         self._running = False
+
+        # Load context files.
+        self.context_files: list[FileContext] = []
+        for fp in (context_files or []):
+            fc = FileContext(path=Path(fp))
+            if fc.content:
+                self.context_files.append(fc)
+                logger.info(
+                    f"[Orchestrator] Loaded context file: {fc.name} "
+                    f"(~{fc.token_estimate} tokens)"
+                )
+
+        # Parse TO-DO items for per-round scaffolding.
+        self.todo_items: list[str] = []
+        if todo_path:
+            todo_fc = FileContext(path=Path(todo_path), max_lines=500)
+            if todo_fc.content:
+                self.todo_items = extract_todo_items(todo_fc.content)
+                # Also add TO-DO as a context file.
+                if todo_fc not in self.context_files:
+                    self.context_files.append(todo_fc)
+                logger.info(
+                    f"[Orchestrator] Extracted {len(self.todo_items)} TO-DO items "
+                    f"for per-round scaffolding"
+                )
 
         # Parse agent specs.
         raw_agents = agents or [
@@ -285,6 +371,70 @@ class ConversationOrchestrator:
         """Return the full conversation log."""
         return self.log
 
+    @classmethod
+    def dev_loop(
+        cls,
+        *,
+        todo_path: str | Path = "TO-DO.md",
+        extra_files: list[str | Path] | None = None,
+        agents: list[dict[str, str]] | None = None,
+        channel: str = "",
+        relay_dir: str | None = None,
+    ) -> "ConversationOrchestrator":
+        """Convenience constructor for TO-DO-scaffolded infinite dev loops.
+
+        Creates an orchestrator pre-loaded with project files and TO-DO
+        items for per-round development scaffolding.
+
+        Args:
+            todo_path: Path to TO-DO.md (or any checklist file).
+            extra_files: Additional project files to inject as context.
+            agents: Agent specs (defaults to architect + developer + reviewer).
+            channel: Relay channel ID.
+            relay_dir: Override relay storage directory.
+
+        Returns:
+            A configured ``ConversationOrchestrator`` ready for ``.run()``.
+        """
+        default_agents = agents or [
+            {
+                "identity": "architect",
+                "persona": (
+                    "software architect who reads the TO-DO and project files, "
+                    "proposes implementation plans, and identifies dependencies"
+                ),
+                "provider": "ollama",
+            },
+            {
+                "identity": "developer",
+                "persona": (
+                    "developer who reviews the architect's plan, writes "
+                    "implementation details, and identifies edge cases"
+                ),
+                "provider": "ollama",
+            },
+            {
+                "identity": "reviewer",
+                "persona": (
+                    "code reviewer who evaluates the proposed changes, "
+                    "checks for correctness, and suggests improvements"
+                ),
+                "provider": "antigravity",
+            },
+        ]
+        return cls(
+            channel=channel or f"devloop-{uuid.uuid4().hex[:6]}",
+            agents=default_agents,
+            seed_prompt=(
+                "Review the TO-DO items and project files below. "
+                "Each round, focus on the next unchecked item. "
+                "Propose concrete implementation steps."
+            ),
+            context_files=extra_files or [],
+            todo_path=todo_path,
+            relay_dir=relay_dir,
+        )
+
     # ── Private ──────────────────────────────────────────────────────
 
     def _execute_turn(
@@ -298,16 +448,41 @@ class ConversationOrchestrator:
         client = self.clients[spec.identity]
         turn_number = len(self.log.turns) + 1
 
-        # Build prompt with full conversation context for the agent.
+        # Build prompt with file context + TO-DO scaffolding.
         recent_turns = self.log.turns[-6:]  # last 6 for context
         history = "\n".join(
             f"[{t.speaker}]: {t.content}" for t in recent_turns
         )
+
+        # File context section.
+        file_section = ""
+        if self.context_files:
+            parts = []
+            for fc in self.context_files:
+                parts.append(f"=== {fc.name} ===\n{fc.content}")
+            file_section = (
+                "\n\nProject Files (read-only reference):\n"
+                + "\n\n".join(parts)
+                + "\n"
+            )
+
+        # Per-round TO-DO focus.
+        todo_focus = ""
+        if self.todo_items:
+            # Cycle through items round-robin.
+            idx = (round_num - 1) % len(self.todo_items)
+            todo_focus = (
+                f"\n\nCurrent Development Focus (round {round_num}): "
+                f"{self.todo_items[idx]}\n"
+            )
+
         prompt = (
             f"System: You are {spec.identity}. Persona: {spec.persona}. "
             f"Keep responses concise (under {max_tokens} tokens). "
-            f"Continue the conversation naturally.\n"
-            f"Conversation so far:\n{history}\n"
+            f"Continue the conversation naturally."
+            f"{file_section}"
+            f"{todo_focus}"
+            f"\nConversation so far:\n{history}\n"
             f"[Last message]: {context}\n"
             f"Your response:"
         )
