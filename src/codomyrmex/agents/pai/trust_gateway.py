@@ -71,7 +71,7 @@ _trust_level: TrustLevel = TrustLevel.UNTRUSTED
 # Tools that can mutate state — require explicit TRUSTED promotion.
 DESTRUCTIVE_TOOLS: frozenset[str] = frozenset({
     "codomyrmex.write_file",
-    "codomymyrmex.run_command",
+    "codomyrmex.run_command",
     "codomyrmex.run_tests",
     "codomyrmex.call_module_function",
 })
@@ -507,6 +507,31 @@ class TrustRegistry:
             "counts": {k: len(v) for k, v in by_level.items()},
         }
 
+    def call(self, name: str, **kwargs: Any) -> dict[str, Any]:
+        """Execute a tool by name via the tool registry.
+
+        Args:
+            name: Fully-qualified tool name.
+            **kwargs: Tool arguments.
+
+        Returns:
+            Tool result dictionary.
+
+        Raises:
+            KeyError: If the tool is not registered.
+        """
+        registry = get_tool_registry()
+        tool = registry.get(name)
+        if tool is None:
+            raise KeyError(f"Unknown tool: {name!r}")
+        handler = tool.get("handler")
+        if handler is None:
+            raise KeyError(f"Tool {name!r} has no handler")
+        result = handler(**kwargs)
+        if isinstance(result, dict):
+            return result
+        return {"result": result}
+
     def reset(self) -> None:
         """Reset all tools to UNTRUSTED."""
         for name in self._levels:
@@ -596,7 +621,7 @@ def verify_capabilities() -> dict[str, Any]:
         mcp_transport = "stdio/http" # Configurable, but default
         mcp_resources = len(server._resources)
         mcp_prompts = len(server._prompts)
-        mcp_server_name = server.name
+        mcp_server_name = server.config.name
     except Exception:
         mcp_server_name = "unknown"
         mcp_transport = "unknown"
@@ -738,13 +763,22 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         if not val_result.valid:
             raise ValueError(f"Tool argument validation failed: {val_result.errors}")
 
-    # Trust check
-    if not _registry.is_trusted(name):
-        _log_audit_entry(name, kwargs, "blocked", "UNTRUSTED", 0.0)
-        raise SecurityError(
-            f"Tool '{name}' is not trusted (current level: {_registry.level(name).name}). "
-            "Use trust_tool() or trust_all() to approve."
-        )
+    # Trust check: safe tools need VERIFIED, destructive tools need TRUSTED
+    current_level = _registry.level(name)
+    if _is_destructive(name):
+        if not _registry.is_trusted(name):
+            _log_audit_entry(name, kwargs, "blocked", current_level.name, 0.0)
+            raise SecurityError(
+                f"Tool '{name}' is not trusted (current level: {current_level.name}). "
+                "Use trust_tool() or trust_all() to approve."
+            )
+    else:
+        if not _registry.is_at_least_verified(name):
+            _log_audit_entry(name, kwargs, "blocked", current_level.name, 0.0)
+            raise SecurityError(
+                f"Tool '{name}' is not trusted (current level: {current_level.name}). "
+                "Use trust_tool() or trust_all() to approve."
+            )
 
     # Destructive Tool Confirmation
     if _REQUIRE_CONFIRMATION and name in DESTRUCTIVE_TOOLS:
