@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-02-19
+
+### Added
+
+- **Stream 3**: 11 workflow integration test files (`tests/integration/workflows/`) — ~54 tests covering all 7 Claude Code workflows (analyze, docs, status, trust, verify, search, memory, roundtrip, concurrent, CLI doctor)
+- **Stream 4**: `cli/doctor.py` — 5 diagnostic checks (module imports, PAI bridge, MCP registry, RASP completeness, workflow validation), `--json` output, exit codes 0/1/2
+- **Stream 5**: `concurrency/pool.py` (AsyncWorkerPool with semaphore bounds), `concurrency/dead_letter.py` (JSONL-backed DeadLetterQueue with replay)
+- **Stream 6**: Honeytoken subsystem in `defense/active.py` — create/check/list canary tokens, thread-safe trigger tracking, 6 unit tests
+- **Stream 7**: `agents/orchestrator.py` — ConversationOrchestrator for infinite multi-agent conversations over AgentRelay, using real Ollama LLM inference (zero mocks), 7 real-LLM integration tests
+
+### Fixed
+
+- `InMemoryStore.list_all()` and `JSONFileStore.list_all()` now acquire lock during iteration (concurrent modification bug)
+
+### Changed
+
+- `concurrency/__init__.py` exports: added AsyncWorkerPool, PoolStats, TaskResult, DeadLetterQueue
+- `defense/active.py`: get_threat_report() now includes honeytoken metrics
+- Bumped version to 0.1.9
+
+## [0.1.8] - 2026-02-19
+
+### Added
+
+- **Stream 1**: MCP schema validation (`validation.py`) and error envelope (`errors.py` — MCPToolError, MCPErrorCode enum)
+- **Stream 2**: MCP transport robustness — `circuit_breaker.py`, `rate_limiter.py`, client retry + health checks + connection pooling
+- **Stream 3**: MCP discovery hardening — `MCPDiscoveryEngine` with error isolation, incremental scanning, TTL cache
+- **Stream 4**: MCP stress/concurrency tests — 36 tests for concurrent execution, memory stability, malformed input handling
+- **Stream 5**: Async-first orchestrator — `AsyncParallelRunner`, `AsyncScheduler`, `@with_retry` decorator
+- **Stream 6**: Observability pipeline — `WebSocketLogHandler`, `EventLoggingBridge`, `MCPObservabilityHooks`
+- **Stream 7**: Performance baselines — `pytest-benchmark` tests, import time analysis, lazy loading verification
+
 ## [0.1.7] - 2026-02-18
 
 ### Changed

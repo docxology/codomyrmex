@@ -95,6 +95,15 @@ from .discovery import (
     MCPDiscoveryEngine,
 )
 
+# MCP Tool Taxonomy (v0.2.0 Stream 1)
+from .taxonomy import (
+    ToolCategory,
+    categorize_tool,
+    categorize_all_tools,
+    generate_taxonomy_report,
+    TaxonomyReport,
+)
+
 
 __all__ = [
     "MCPErrorDetail",
@@ -129,6 +138,12 @@ __all__ = [
     "DiscoveryReport",
     "DiscoveryMetrics",
     "MCPDiscoveryEngine",
+    # v0.2.0 taxonomy
+    "ToolCategory",
+    "categorize_tool",
+    "categorize_all_tools",
+    "generate_taxonomy_report",
+    "TaxonomyReport",
     "schemas",
     "adapters",
     "validators",

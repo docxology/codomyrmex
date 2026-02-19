@@ -41,6 +41,18 @@ except ImportError:
 
 from .core.logger_config import get_logger, setup_logging
 
+# Correlation ID propagation (v0.2.0 Stream 3)
+from .correlation import (
+    new_correlation_id,
+    get_correlation_id,
+    set_correlation_id,
+    clear_correlation_id,
+    with_correlation,
+    CorrelationFilter,
+    enrich_event_data,
+    create_mcp_correlation_header,
+)
+
 def cli_commands():
     """Return CLI commands for the logging_monitoring module."""
     def _show_config():
@@ -64,4 +76,17 @@ def cli_commands():
     }
 
 
-__all__ = ["cli_commands", "setup_logging", "get_logger"]
+__all__ = [
+    "cli_commands",
+    "setup_logging",
+    "get_logger",
+    # v0.2.0 correlation
+    "new_correlation_id",
+    "get_correlation_id",
+    "set_correlation_id",
+    "clear_correlation_id",
+    "with_correlation",
+    "CorrelationFilter",
+    "enrich_event_data",
+    "create_mcp_correlation_header",
+]

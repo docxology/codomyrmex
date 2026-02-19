@@ -209,6 +209,18 @@ Examples:
         "status", help="Show comprehensive system status"
     )
 
+    # Doctor diagnostics
+    doctor_parser = subparsers.add_parser(
+        "doctor", help="Run self-diagnostics on the Codomyrmex ecosystem"
+    )
+    doctor_parser.add_argument("--pai", action="store_true", help="Check PAI bridge health")
+    doctor_parser.add_argument("--mcp", action="store_true", help="Check MCP tool registry")
+    doctor_parser.add_argument("--rasp", action="store_true", help="Check README/AGENTS/SPEC completeness")
+    doctor_parser.add_argument("--workflows", action="store_true", help="Check workflow file validity")
+    doctor_parser.add_argument("--imports", action="store_true", help="Check module imports")
+    doctor_parser.add_argument("--all", dest="all_checks", action="store_true", help="Run all checks")
+    doctor_parser.add_argument("--json", dest="output_json", action="store_true", help="Output as JSON")
+
     subparsers.add_parser("shell", help="Launch interactive shell")
 
     # Workflow commands
@@ -469,6 +481,20 @@ Examples:
 
     elif args.command == "shell":
         success = run_interactive_shell()
+
+    elif args.command == "doctor":
+        from .doctor import run_doctor
+
+        exit_code = run_doctor(
+            pai=args.pai,
+            mcp=args.mcp,
+            rasp=args.rasp,
+            workflows=args.workflows,
+            imports=args.imports,
+            all_checks=args.all_checks,
+            output_json=args.output_json,
+        )
+        success = exit_code == 0
 
     elif args.command == "workflow":
         if args.workflow_action == "list":

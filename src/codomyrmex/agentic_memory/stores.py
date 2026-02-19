@@ -61,7 +61,8 @@ class InMemoryStore(MemoryStore):
 
     def list_all(self) -> list[Memory]:
         """List all memories."""
-        return list(self._memories.values())
+        with self._lock:
+            return list(self._memories.values())
 
 
 class JSONFileStore(MemoryStore):
@@ -111,4 +112,5 @@ class JSONFileStore(MemoryStore):
 
     def list_all(self) -> list[Memory]:
         """List all memories."""
-        return list(self._memories.values())
+        with self._lock:
+            return list(self._memories.values())

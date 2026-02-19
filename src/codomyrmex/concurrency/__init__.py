@@ -28,6 +28,8 @@ from .semaphores.semaphore import (
     BaseSemaphore,
     LocalSemaphore,
 )
+from .pool import AsyncWorkerPool, PoolStats, TaskResult
+from .dead_letter import DeadLetterQueue
 
 def cli_commands():
     """Return CLI commands for the concurrency module."""
@@ -66,5 +68,9 @@ __all__ = [
     "RedisLock",
     "LockManager",
     "ReadWriteLock",
+    "AsyncWorkerPool",
+    "PoolStats",
+    "TaskResult",
+    "DeadLetterQueue",
     "cli_commands",
 ]
