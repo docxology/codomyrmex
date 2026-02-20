@@ -125,7 +125,7 @@ class MCPMessage(BaseModel):
 class MCPToolRegistry:
     """Registry for managing available MCP tools."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the tool registry."""
         self._tools: dict[str, dict[str, Any]] = {}
         logger.info("MCPToolRegistry initialized")
@@ -254,50 +254,45 @@ class MCPToolRegistry:
 # Example Usage (for testing or demonstration)
 if __name__ == "__main__":
     # Example Tool Call
-    tool_call_data = {
-        "tool_name": "example.do_something",
-        "arguments": {"param1": "value1", "param2": 123},
-    }
-    mcp_call = MCPToolCall(**tool_call_data)
+    mcp_call = MCPToolCall(
+        tool_name="example.do_something",
+        arguments={"param1": "value1", "param2": 123},
+    )
     print(f"MCP Call: {mcp_call.model_dump_json(indent=2)}")
 
     # Example Successful Tool Result
-    success_result_data = {
-        "status": "success",
-        "data": {"output_value": "Task completed successfully.", "items_processed": 10},
-        "explanation": "The example tool processed 10 items and finished.",
-    }
-    mcp_success_result = MCPToolResult(**success_result_data)
+    mcp_success_result = MCPToolResult(
+        status="success",
+        data={"output_value": "Task completed successfully.", "items_processed": 10},
+        explanation="The example tool processed 10 items and finished.",
+    )
     print(f"MCP Success Result: {mcp_success_result.model_dump_json(indent=2)}")
 
     # Example Failure Tool Result
-    failure_result_data = {
-        "status": "failure",
-        "error": {
-            "error_type": "ResourceUnavailable",
-            "error_message": "The required resource could not be accessed.",
-            "error_details": {"resource_id": "res_abc123"},
-        },
-    }
-    mcp_failure_result = MCPToolResult(**failure_result_data)
+    mcp_failure_result = MCPToolResult(
+        status="failure",
+        error=MCPErrorDetail(
+            error_type="ResourceUnavailable",
+            error_message="The required resource could not be accessed.",
+            error_details={"resource_id": "res_abc123"},
+        ),
+    )
     print(f"MCP Failure Result: {mcp_failure_result.model_dump_json(indent=2)}")
 
     # Example Failure Tool Result (validation error)
-    invalid_failure_data = {
-        "status": "failure",
-        "data": {"some": "data"},  # Data should be null on failure
-    }
     try:
-        MCPToolResult(**invalid_failure_data)
+        MCPToolResult(
+            status="failure",
+            data={"some": "data"},  # Data should be null on failure
+        )
     except ValueError as e:
         print(f"Validation Error for invalid failure data: {e}")
 
-    invalid_success_data = {
-        "status": "failure",  # Error must be populated
-        "error": None,
-    }
     try:
-        MCPToolResult(**invalid_success_data)
+        MCPToolResult(
+            status="failure",  # Error must be populated
+            error=None,
+        )
     except ValueError as e:
         print(
             f"Validation Error for invalid success data (missing error on failure): {e}"

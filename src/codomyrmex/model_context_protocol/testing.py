@@ -159,7 +159,7 @@ class ServerTester:
     Tests MCP server implementations.
     """
     
-    def __init__(self, server):
+    def __init__(self, server: Any) -> None:
         """
         Args:
             server: MCPServer instance
@@ -326,12 +326,12 @@ class IntegrationTester:
     async def run_scenario(
         self,
         scenario: Dict[str, Any],
-        server,
+        server: Any,
     ) -> TestSuite:
         """Run a single scenario."""
         suite = TestSuite(name=scenario["name"])
         
-        context = {}  # Shared context between steps
+        context: Dict[str, Any] = {}  # Shared context between steps
         
         for i, step in enumerate(scenario["steps"]):
             step_name = step.get("name", f"step_{i}")
@@ -392,7 +392,7 @@ class IntegrationTester:
         
         return suite
     
-    async def run_all(self, server) -> List[TestSuite]:
+    async def run_all(self, server: Any) -> List[TestSuite]:
         """Run all registered scenarios."""
         suites = []
         for scenario in self.scenarios:
@@ -458,12 +458,12 @@ class MockMCPClient:
         })
 
 
-def run_quick_test(server) -> TestSuite:
+def run_quick_test(server: Any) -> TestSuite:
     """Run quick synchronous smoke test."""
     return asyncio.run(_async_quick_test(server))
 
 
-async def _async_quick_test(server) -> TestSuite:
+async def _async_quick_test(server: Any) -> TestSuite:
     """Async implementation of quick test."""
     tester = ServerTester(server)
     return await tester.run_smoke_tests()

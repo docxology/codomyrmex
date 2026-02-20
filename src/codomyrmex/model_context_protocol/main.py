@@ -70,8 +70,14 @@ async def run_server() -> None:
                 
                 # Based on standard MCP implementations, we usually register the function directly.
                 try:
-                    server._tool_registry.register(obj, name=name, **meta)
-                    logger.info(f"Registered tool: {name} from {module.__name__}")
+                    tool_name = meta.get("name", name)
+                    tool_schema = meta.get("schema", {})
+                    server._tool_registry.register(
+                        tool_name=tool_name,
+                        schema=tool_schema,
+                        handler=obj,
+                    )
+                    logger.info(f"Registered tool: {tool_name} from {module.__name__}")
                 except Exception as e:
                     logger.error(f"Failed to register tool {name}: {e}")
 

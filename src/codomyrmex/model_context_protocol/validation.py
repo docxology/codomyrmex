@@ -34,7 +34,7 @@ class ValidationResult:
 
 def validate_tool_arguments(
     tool_name: str,
-    arguments: dict[str, Any],
+    arguments: dict[str, Any] | None,
     schema: dict[str, Any],
     *,
     coerce: bool = True,
@@ -62,7 +62,7 @@ def validate_tool_arguments(
         or ``valid=False`` with human-readable ``errors`` on failure.
     """
     # Normalise None → empty dict
-    if arguments is None:  # pragma: no branch
+    if arguments is None:
         arguments = {}
 
     # Extract the actual JSON Schema object

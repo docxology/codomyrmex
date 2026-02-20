@@ -58,7 +58,7 @@ class DiscoveredTool:
             },
         }
         if not self.available:
-            schema["description"] += f" (UNAVAILABLE: {self.unavailable_reason})"
+            schema["description"] = str(schema["description"]) + f" (UNAVAILABLE: {self.unavailable_reason})"
         return schema
 
 
@@ -245,7 +245,7 @@ class MCPDiscovery:
         """Scan a single already-imported module for MCP tool markers."""
         tools = []
         
-        def _add_if_tool(name, obj):
+        def _add_if_tool(name: str, obj: Any) -> None:
             if hasattr(obj, "_mcp_tool_meta"):
                 meta = getattr(obj, "_mcp_tool_meta")
                 

@@ -58,7 +58,7 @@ class MCPServer:
 
     def __init__(self, config: MCPServerConfig | None = None):
         self.config = config or MCPServerConfig()
-        self._tool_registry = MCPToolRegistry()
+        self._tool_registry: MCPToolRegistry = MCPToolRegistry()
         self._resources: dict[str, dict[str, Any]] = {}
         self._prompts: dict[str, dict[str, Any]] = {}
         self._initialized = False
@@ -81,7 +81,7 @@ class MCPServer:
         description: str | None = None,
         title: str | None = None,
         output_schema: dict[str, Any] | None = None,
-    ):
+    ) -> Callable[..., Any]:
         """Decorator to register a tool.
 
         Args:
@@ -90,7 +90,7 @@ class MCPServer:
             title: Human-friendly display name (MCP 2025-06-18).
             output_schema: JSON Schema for structured output (MCP 2025-06-18).
         """
-        def decorator(func: Callable) -> Callable:
+        def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
             tool_name = name or func.__name__
             tool_desc = description or func.__doc__ or ""
 
@@ -144,7 +144,7 @@ class MCPServer:
         self,
         name: str,
         schema: dict[str, Any],
-        handler: Callable,
+        handler: Callable[..., Any],
         title: str | None = None,
         output_schema: dict[str, Any] | None = None,
     ) -> None:
@@ -287,7 +287,7 @@ class MCPServer:
 
     async def _initialize(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle initialize."""
-        capabilities = {}
+        capabilities: dict[str, Any] = {}
         if self._tool_registry.list_tools():
             capabilities["tools"] = {}
         if self._resources:
@@ -565,7 +565,7 @@ class MCPServer:
 
         # --- MCP JSON-RPC endpoint (Streamable HTTP) ---
         @app.post("/mcp")
-        async def mcp_endpoint(request: Request):
+        async def mcp_endpoint(request: Request) -> JSONResponse:
             body = await request.json()
             cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
             response = await server.handle_request(body, correlation_id=cid)
@@ -585,7 +585,7 @@ class MCPServer:
             return JSONResponse(content=result)
 
         @app.get("/tools/{tool_name}")
-        async def get_tool(tool_name: str):
+        async def get_tool(tool_name: str) -> JSONResponse:
             tool = server._tool_registry.get(tool_name)
             if not tool:
                 return JSONResponse(
@@ -595,7 +595,7 @@ class MCPServer:
             return JSONResponse(content=tool["schema"])
 
         @app.post("/tools/{tool_name}/call")
-        async def call_tool(tool_name: str, request: Request):
+        async def call_tool(tool_name: str, request: Request) -> JSONResponse:
             try:
                 body = await request.json()
             except Exception:
