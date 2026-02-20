@@ -34,6 +34,7 @@ from .profiling.benchmark import (
 try:
     from .monitoring.performance_monitor import (
         PerformanceMonitor,
+        get_system_metrics,
         monitor_performance,
         performance_context,
     )

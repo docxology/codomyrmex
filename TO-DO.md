@@ -164,7 +164,7 @@ During the Zero-Mock stabilization audit, ~50 tests were marked as skipped becau
 - [x] ≤100 skips (Reduced from 170 — Sprint 6 restored 11 skipped tests with real backends)
 - [x] ≥15 modules with `mcp_tools.py` (Completed in Sprint 3)
 - [x] CID wired into MCP + EventBus (Completed in Sprint 2)
-- [ ] `codomyrmex doctor --all` exit 0
+- [x] `codomyrmex doctor --all` exit 0 (Achieved 6/6 checks — fixed `get_system_metrics` import)
 - [x] Infinite conversation CLI operational (Completed in Sprint 4)
 
 ---
