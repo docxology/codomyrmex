@@ -255,8 +255,8 @@ class SpecificationValidator:
     
     def validate_spec_file(self, content: str) -> ValidationResult:
         """Validate specification file content."""
-        errors = []
-        warnings = []
+        errors: list[str] = []
+        warnings: list[str] = []
         
         content_lower = content.lower()
         

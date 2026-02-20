@@ -74,7 +74,7 @@ class FileContent:
             "mime_type": self.mime_type,
         }
         if self.size:
-            result["size"] = self.size
+            result["size"] = self.size  # type: ignore[assignment]
         return result
 
 
@@ -108,7 +108,7 @@ class ToolParameter:
             "description": self.description,
         }
         if self.enum:
-            schema["enum"] = self.enum
+            schema["enum"] = self.enum  # type: ignore[assignment]
         return schema
 
 
@@ -202,7 +202,7 @@ class Message:
         if self.name:
             result["name"] = self.name
         if self.metadata:
-            result["metadata"] = self.metadata
+            result["metadata"] = self.metadata  # type: ignore[assignment]
         return result
 
     @classmethod

@@ -20,7 +20,7 @@ def mcp_tool(
     description: Optional[str] = None,
     schema: Optional[Dict[str, Any]] = None,
     category: str = "general",
-) -> Callable:
+) -> Callable[..., Any]:
     """
     Decorator to mark a function as an MCP tool.
     
@@ -36,7 +36,7 @@ def mcp_tool(
             '''Add two numbers.'''
             return a + b
     """
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         # Get metadata
         base_name = name or func.__name__
         if not base_name.startswith("codomyrmex."):
@@ -95,7 +95,7 @@ def _safe_default(value: Any) -> Any:
     return str(value)
 
 
-def _generate_schema_from_signature(func: Callable) -> Dict[str, Any]:
+def _generate_schema_from_signature(func: Callable[..., Any]) -> Dict[str, Any]:
     """Generate JSON Schema from function signature and type hints."""
     try:
         sig = inspect.signature(func)
@@ -141,7 +141,7 @@ def _generate_schema_from_signature(func: Callable) -> Dict[str, Any]:
         return {"type": "object", "properties": {}}  # Fallback
 
 
-def _map_python_type_to_json(py_type: Type) -> str:
+def _map_python_type_to_json(py_type: Type[Any]) -> str:
     """Map Python types to JSON Schema types."""
     if py_type == str:
         return "string"
