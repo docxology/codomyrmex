@@ -144,7 +144,7 @@ class TestInMemoryStream:
         from codomyrmex.events.streaming.stream import InMemoryStream
         stream = InMemoryStream()
         e = Event(data="test")
-        asyncio.get_event_loop().run_until_complete(stream.publish(e))
+        asyncio.run(stream.publish(e))
         recent = stream.get_recent_events(10)
         assert len(recent) == 1
         assert recent[0].data == "test"
@@ -154,10 +154,10 @@ class TestInMemoryStream:
         from codomyrmex.events.streaming.stream import InMemoryStream
         stream = InMemoryStream()
         received = []
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             stream.subscribe(handler=lambda e: received.append(e))
         )
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             stream.publish(Event(data="hello"))
         )
         assert len(received) == 1
@@ -174,14 +174,14 @@ class TestInMemoryStream:
             await stream.unsubscribe(sub.id)
             await stream.publish(Event(data="after"))
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         assert len(received) == 1
         assert received[0].data == "before"
 
     def test_unsubscribe_unknown_id(self):
         from codomyrmex.events.streaming.stream import InMemoryStream
         stream = InMemoryStream()
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             stream.unsubscribe("nonexistent")
         )
         assert result is False
@@ -196,7 +196,7 @@ class TestInMemoryStream:
             for i in range(10):
                 await stream.publish(Event(data=i))
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         recent = stream.get_recent_events(100)
         assert len(recent) == 5
 
@@ -209,7 +209,7 @@ class TestInMemoryStream:
             for i in range(5):
                 await stream.publish(Event(data=i))
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         assert len(stream.get_recent_events(3)) == 3
         assert len(stream.get_recent_events(10)) == 5
 
@@ -226,7 +226,7 @@ class TestTopicStream:
         async def run():
             await ts.publish("alerts", Event(data="alert!"))
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         assert "alerts" in ts.list_topics()
         recent = ts.topic("alerts").get_recent_events(10)
         assert len(recent) == 1
@@ -242,7 +242,7 @@ class TestTopicStream:
             await ts.publish("metrics", Event(data="cpu=50"))
             await ts.publish("alerts", Event(data="fire!"))
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         # Should only receive the "metrics" event
         assert len(received) == 1
         assert received[0].data == "cpu=50"
@@ -270,7 +270,7 @@ class TestBroadcast:
         s1 = InMemoryStream()
         s2 = InMemoryStream()
         e = Event(data="broadcast_msg")
-        asyncio.get_event_loop().run_until_complete(broadcast([s1, s2], e))
+        asyncio.run(broadcast([s1, s2], e))
         assert len(s1.get_recent_events(10)) == 1
         assert len(s2.get_recent_events(10)) == 1
 

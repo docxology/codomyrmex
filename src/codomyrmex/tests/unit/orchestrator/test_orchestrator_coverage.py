@@ -127,7 +127,7 @@ class TestWorkflow:
         from codomyrmex.orchestrator.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "done")
-        results = asyncio.get_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         assert "step1" in results
         # run() may return TaskResult objects or raw values
         r = results["step1"]
@@ -143,7 +143,7 @@ class TestWorkflow:
         wf.add_task("a", action=lambda: order.append("a") or "a")
         wf.add_task("b", action=lambda: order.append("b") or "b", dependencies=["a"])
         wf.add_task("c", action=lambda: order.append("c") or "c", dependencies=["b"])
-        asyncio.get_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         assert order == ["a", "b", "c"]
 
     def test_validate_detects_missing_dep(self):
@@ -167,7 +167,7 @@ class TestWorkflow:
             raise RuntimeError("boom")
         wf = Workflow("test_wf", fail_fast=False)
         wf.add_task("fail", action=failing)
-        results = asyncio.get_event_loop().run_until_complete(wf.run())
+        results = asyncio.run(wf.run())
         # Failed tasks may return None, TaskResult, or error
         r = results.get("fail")
         if hasattr(r, 'success'):
@@ -180,7 +180,7 @@ class TestWorkflow:
         from codomyrmex.orchestrator.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "ok")
-        asyncio.get_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         summary = wf.get_summary()
         assert isinstance(summary, dict)
 
@@ -188,7 +188,7 @@ class TestWorkflow:
         from codomyrmex.orchestrator.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: 42)
-        asyncio.get_event_loop().run_until_complete(wf.run())
+        asyncio.run(wf.run())
         result = wf.get_task_result("step1")
         assert result is not None
 
