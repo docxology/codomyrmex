@@ -2,7 +2,7 @@ from typing import Any, Callable, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

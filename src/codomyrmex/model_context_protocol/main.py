@@ -9,7 +9,7 @@ import logging
 from typing import Any
 
 from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 # Import tool modules to register them
 try:

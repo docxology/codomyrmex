@@ -11,7 +11,7 @@ import json
 import time
 from contextlib import contextmanager
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

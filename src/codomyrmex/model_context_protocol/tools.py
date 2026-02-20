@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -122,7 +122,7 @@ def list_directory(
             return {"error": f"Not a directory: {path}", "success": False}
         
         glob_method = dir_path.rglob if recursive else dir_path.glob
-        items = []
+        items: list[dict[str, Any]] = []
         
         for item in glob_method(pattern):
             if len(items) >= max_items:
@@ -229,7 +229,7 @@ def analyze_python_file(path: str) -> Dict[str, Any]:
 def search_codebase(
     pattern: str,
     path: str = ".",
-    file_types: List[str] = None,
+    file_types: List[str] | None = None,
     case_sensitive: bool = False,
     max_results: int = 100,
 ) -> Dict[str, Any]:
@@ -403,7 +403,7 @@ def run_shell_command(
     command: str,
     cwd: str = ".",
     timeout: int = 30,
-    env: Dict[str, str] = None,
+    env: Dict[str, str] | None = None,
 ) -> Dict[str, Any]:
     """
     Execute a shell command safely.
@@ -449,7 +449,7 @@ def run_shell_command(
 # DATA UTILITIES
 # ============================================================================
 
-def json_query(path: str, query: str = None) -> Dict[str, Any]:
+def json_query(path: str, query: str | None = None) -> Dict[str, Any]:
     """
     Read and optionally query a JSON file.
     

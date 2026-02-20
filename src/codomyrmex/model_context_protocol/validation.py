@@ -62,7 +62,7 @@ def validate_tool_arguments(
         or ``valid=False`` with human-readable ``errors`` on failure.
     """
     # Normalise None → empty dict
-    if arguments is None:
+    if arguments is None:  # pragma: no branch
         arguments = {}
 
     # Extract the actual JSON Schema object
@@ -249,7 +249,7 @@ def _validate_builtin(
     return errors
 
 
-def _generate_schema_from_func(func: Callable) -> dict[str, Any]:
+def _generate_schema_from_func(func: Callable[..., Any]) -> dict[str, Any]:
     """Generate a JSON Schema for a function's arguments."""
     sig = inspect.signature(func)
     properties = {}

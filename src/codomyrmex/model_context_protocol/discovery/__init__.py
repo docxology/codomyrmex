@@ -41,7 +41,7 @@ class DiscoveredTool:
     requires: list[str] = field(default_factory=list)
     available: bool = True
     unavailable_reason: str | None = None
-    handler: Callable | None = None
+    handler: Callable[..., Any] | None = None
 
     def to_mcp_schema(self) -> dict[str, Any]:
         """Convert to MCP tool schema format."""
@@ -337,7 +337,7 @@ def mcp_tool(
     tags: list[str] | None = None,
     version: str = "1.0",
     requires: list[str] | None = None,
-) -> Callable:
+) -> Callable[..., Any]:
     """Decorator to mark a function as an MCP tool.
 
     Args:
@@ -348,7 +348,7 @@ def mcp_tool(
         requires: List of importable package names required by this tool.
                   If any are missing, the tool will be registered as unavailable.
     """
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         # Extract parameters using pydantic or typed-dict generation logic if needed
         # For now, we rely on the bridge to inspect signatures at runtime
         # but here we just mark it.

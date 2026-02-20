@@ -10,7 +10,7 @@ import inspect
 import functools
 from typing import Any, Callable, Dict, Optional, Type, get_type_hints
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import json
 import re
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -36,8 +36,8 @@ class SchemaValidator:
     
     def validate(self, data: Any) -> ValidationResult:
         """Validate data against the schema."""
-        errors = []
-        warnings = []
+        errors: list[str] = []
+        warnings: list[str] = []
         
         schema_type = self.schema.get("type")
         
@@ -66,7 +66,7 @@ class SchemaValidator:
         
         return ValidationResult(valid=len(errors) == 0, errors=errors, warnings=warnings)
     
-    def _validate_object(self, data: Dict) -> List[str]:
+    def _validate_object(self, data: Dict[str, Any]) -> List[str]:
         """Validate object properties."""
         errors = []
         
@@ -89,7 +89,7 @@ class SchemaValidator:
         
         return errors
     
-    def _validate_array(self, data: List) -> List[str]:
+    def _validate_array(self, data: List[Any]) -> List[str]:
         """Validate array items."""
         errors = []
         
@@ -122,8 +122,8 @@ class ToolCallValidator:
         arguments: Dict[str, Any],
     ) -> ValidationResult:
         """Validate a tool call."""
-        errors = []
-        warnings = []
+        errors: list[str] = []
+        warnings: list[str] = []
         
         # Check tool exists
         if tool_name not in self.tool_schemas:
@@ -175,7 +175,7 @@ class MessageValidator:
     def validate_request(self, message: Dict[str, Any]) -> ValidationResult:
         """Validate a JSON-RPC request."""
         errors = []
-        warnings = []
+        warnings: list[str] = []
         
         # Check jsonrpc version
         if message.get("jsonrpc") != self.JSONRPC_VERSION:
@@ -203,7 +203,7 @@ class MessageValidator:
     def validate_response(self, message: Dict[str, Any]) -> ValidationResult:
         """Validate a JSON-RPC response."""
         errors = []
-        warnings = []
+        warnings: list[str] = []
         
         # Check jsonrpc version
         if message.get("jsonrpc") != self.JSONRPC_VERSION:

@@ -371,6 +371,7 @@ module = [
     "git.*",
     "ollama.*",
     "httpx.*",
+    "jsonschema.*",
 ]
 ignore_missing_imports = true
 
