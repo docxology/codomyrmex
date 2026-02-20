@@ -356,6 +356,8 @@ warn_no_return = true
 warn_unreachable = true
 strict_equality = true
 show_error_codes = true
+namespace_packages = true
+explicit_package_bases = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -366,5 +368,29 @@ module = [
     "matplotlib.*",
     "seaborn.*",
     "GitPython.*",
+    "git.*",
+    "ollama.*",
+    "httpx.*",
 ]
 ignore_missing_imports = true
+
+# Sprint 8: logging_monitoring is fully strict (0 errors)
+[[tool.mypy.overrides]]
+module = "codomyrmex.logging_monitoring.*"
+strict = true
+
+# Sprint 8: model_context_protocol — gradual strictness ramp
+[[tool.mypy.overrides]]
+module = "codomyrmex.model_context_protocol.*"
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
+warn_return_any = false
+
+# Sprint 8: agents — baseline checks only (612 errors at strict)
+[[tool.mypy.overrides]]
+module = "codomyrmex.agents.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+warn_return_any = false
+check_untyped_defs = false

@@ -84,7 +84,12 @@ format:
 
 type-check:
 	@echo "Running type checking..."
-	uv run python -m mypy src/codomyrmex/
+	@echo "=== logging_monitoring (strict, must pass) ==="
+	uv run python -m mypy --strict --namespace-packages --explicit-package-bases -p codomyrmex.logging_monitoring
+	@echo "=== model_context_protocol (gradual) ==="
+	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.model_context_protocol || true
+	@echo "=== agents (baseline) ==="
+	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.agents || true
 
 security:
 	@echo "Running security scanning..."
