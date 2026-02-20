@@ -25,8 +25,11 @@ except ImportError:
 # New submodule exports
 from . import (
     engines,
+    execution,
     monitors,
+    observability,
     pipelines,
+    resilience,
     schedulers,
     state,
     templates,
@@ -53,26 +56,26 @@ from .integration import (
     run_agent_task,
     run_ci_stage,
 )
-from .parallel_runner import (
+from .execution.parallel_runner import (
     BatchRunner,
     ExecutionResult,
     ParallelRunner,
     run_parallel,
     run_parallel_async,
 )
-from .async_runner import (
+from .execution.async_runner import (
     AsyncParallelRunner,
     AsyncTaskResult,
     AsyncExecutionResult,
 )
-from .async_scheduler import (
+from .execution.async_scheduler import (
     AsyncScheduler,
     AsyncJob,
     AsyncJobStatus,
     SchedulerMetrics,
 )
-from .retry_policy import with_retry
-from .runner import run_function, run_script
+from .resilience.retry_policy import with_retry
+from .execution.runner import run_function, run_script
 from .thin import (
     StepResult,
     Steps,
@@ -202,8 +205,11 @@ __all__ = [
     "run_agent_task",
     # Submodules
     "engines",
+    "execution",
+    "monitors",
+    "observability",
+    "resilience",
     "schedulers",
     "workflows",
-    "monitors",
 ]
 

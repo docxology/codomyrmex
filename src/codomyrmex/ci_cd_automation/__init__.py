@@ -58,7 +58,7 @@ from .performance_optimizer import (
     PipelineOptimizer,
     optimize_pipeline_performance,
 )
-from .pipeline_manager import (
+from .pipeline import (
     Pipeline,
     PipelineJob,
     PipelineManager,
@@ -104,6 +104,7 @@ def cli_commands():
 
 
 from . import build
+from . import pipeline
 
 __all__ = [
     # CLI integration
@@ -132,6 +133,8 @@ __all__ = [
     # Performance optimization
     "PipelineOptimizer",
     "optimize_pipeline_performance",
+    # Submodules
+    "pipeline",
     # Exceptions
     "PipelineError",
     "BuildError",

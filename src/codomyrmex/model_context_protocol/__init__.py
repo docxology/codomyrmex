@@ -18,7 +18,7 @@ Available classes:
 from codomyrmex.exceptions import CodomyrmexError
 
 # Submodule exports
-from . import adapters, discovery, schemas, validators
+from . import adapters, discovery, quality, reliability, schemas, transport, validators
 from .schemas.mcp_schemas import (
     MCPErrorDetail,
     MCPMessage,
@@ -28,14 +28,14 @@ from .schemas.mcp_schemas import (
 )
 
 # MCP Server
-from .server import MCPServer, MCPServerConfig
-from .main import main, run_server
+from .transport.server import MCPServer, MCPServerConfig
+from .transport.main import main, run_server
 
 # MCP Decorators
 from .decorators import mcp_tool
 
 # MCP Client
-from .client import MCPClient, MCPClientConfig, MCPClientError
+from .transport.client import MCPClient, MCPClientConfig, MCPClientError
 
 # Shared schemas for cross-module interop
 try:
@@ -75,10 +75,10 @@ def cli_commands():
 
 # MCP Errors and Validation (v0.1.8 Stream 1)
 from .errors import MCPErrorCode, MCPToolError, FieldError
-from .validation import ValidationResult, validate_tool_arguments
+from .quality.validation import ValidationResult, validate_tool_arguments
 
 # MCP Transport Robustness (v0.1.8 Stream 2)
-from .circuit_breaker import (
+from .reliability.circuit_breaker import (
     CircuitBreaker,
     CircuitBreakerConfig,
     CircuitOpenError,
@@ -87,7 +87,7 @@ from .circuit_breaker import (
     get_all_circuit_metrics,
     reset_all_circuits,
 )
-from .rate_limiter import RateLimiter, RateLimiterConfig
+from .reliability.rate_limiter import RateLimiter, RateLimiterConfig
 from .discovery import (
     FailedModule,
     DiscoveryReport,
@@ -96,7 +96,7 @@ from .discovery import (
 )
 
 # MCP Tool Taxonomy (v0.2.0 Stream 1)
-from .taxonomy import (
+from .quality.taxonomy import (
     ToolCategory,
     categorize_tool,
     categorize_all_tools,
@@ -148,6 +148,9 @@ __all__ = [
     "adapters",
     "validators",
     "discovery",
+    "quality",
+    "reliability",
+    "transport",
     "cli_commands",
     "main",
     "run_server",
