@@ -10,12 +10,12 @@ from .logger_config import (
     DETAILED_LOG_FORMAT,
     JSONFormatter,
     LogContext,
-    PerformanceLogger,
     create_correlation_id,
     get_logger,
     log_with_context,
     setup_logging,
 )
+from ..handlers.performance import PerformanceLogger
 
 __all__ = [
     "AuditLogger",

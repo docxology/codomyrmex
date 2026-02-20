@@ -36,8 +36,8 @@ Subpackages:
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
 except ImportError:
-    Result = None
-    ResultStatus = None
+    Result = None  # type: ignore[assignment,misc]
+    ResultStatus = None  # type: ignore[assignment,misc]
 
 from .core.logger_config import get_logger, setup_logging
 
@@ -53,16 +53,16 @@ from .correlation import (
     create_mcp_correlation_header,
 )
 
-def cli_commands():
+def cli_commands() -> dict[str, object]:
     """Return CLI commands for the logging_monitoring module."""
-    def _show_config():
+    def _show_config() -> None:
         import os
         print("Logging configuration:")
         print(f"  CODOMYRMEX_LOG_LEVEL: {os.environ.get('CODOMYRMEX_LOG_LEVEL', 'INFO (default)')}")
         print(f"  CODOMYRMEX_LOG_FILE: {os.environ.get('CODOMYRMEX_LOG_FILE', 'None (console only)')}")
         print(f"  CODOMYRMEX_LOG_FORMAT: {os.environ.get('CODOMYRMEX_LOG_FORMAT', 'default')}")
 
-    def _list_levels():
+    def _list_levels() -> None:
         import logging
         levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         print("Available log levels:")

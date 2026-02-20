@@ -136,12 +136,13 @@ def setup_logging(force: bool = True) -> None:
     if not isinstance(log_level, int):
         log_level = logging.INFO
 
+    formatter: logging.Formatter
     if log_output_type == "JSON":
         formatter = JSONFormatter()
     else:
         formatter = logging.Formatter(log_format_str_text)
 
-    handlers = []
+    handlers: list[logging.Handler] = []
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     handlers.append(console_handler)
@@ -299,7 +300,7 @@ class LogContext:
         _correlation_context.additional_context = self.additional_context
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: Any) -> None:
         """Exit the context, restoring the previous correlation ID if any.
 
         Args:
