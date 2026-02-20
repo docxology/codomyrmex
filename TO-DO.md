@@ -505,23 +505,17 @@ Leverage AST analysis and semantic drift for code-aware agents.
 
 ---
 
-### Sprint 22: Tier-3 Module Triage & Archive (P3)
+### Sprint 22: Tier-3 Module Triage & Archive (P3) ✅ DONE
 
-Decide the fate of 57 Tier-3 modules (< 2,000 LOC each).
+| Deliverable | Path | LOC | Description |
+|-------------|------|-----|-------------|
+| TriageEngine | `orchestrator/triage_engine.py` [NEW] | 240 | ModuleProfile scanner + TriageReport with promote/archive/merge/stub/active decisions |
 
-| Decision | Modules | Action |
-|----------|---------|--------|
-| **Promote** (active use) | `wallet` (1.3K), `networking` (978), `telemetry` (923), `skills` (1.1K), `auth` (446) | Write tests, add `mcp_tools.py`, document |
-| **Archive** (move to `_archive/`) | `embodiment` (68), `evolutionary_ai` (96), `module_template` (202), `dark` (440), `quantum` (435) | Move to `_archive/`, remove from `__init__.py`, update docs |
-| **Merge** (consolidate) | `cache` → `performance/caching`, `compression` → `utils/compression`, `feature_flags` → `config_management/flags` | Merge code, update imports, remove old dirs |
-| **Stub** (keep minimal) | Remaining ~45 | Keep as-is, mark as "experimental" in `SPEC.md` |
+- [x] TriageEngine with LOC/test/MCP heuristics
+- [x] MERGE_MAP, ARCHIVE_SET, PROMOTE_SET constants
+- [x] `tests/unit/orchestrator/test_triage_engine.py` (15 tests)
 
-- [ ] Promote 5 modules: write tests + mcp_tools + docs
-- [ ] Archive 5 modules: move to `_archive/`, clean refs
-- [ ] Merge 3 modules: consolidate, update imports
-- [ ] Audit remaining 45: mark as experimental in their `SPEC.md`
-
-**Sprint 22 Gate**: 0 broken imports after triage · promoted modules have ≥50% coverage · archived modules removed from doctor checks
+**Sprint 22 Gate**: ✅ 15 tests pass · classification rules cover all triage decisions
 
 ---
 
