@@ -358,6 +358,12 @@ strict_equality = true
 show_error_codes = true
 namespace_packages = true
 explicit_package_bases = true
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = false
+init_typed = true
+warn_required_dynamic_aliases = false
 
 [[tool.mypy.overrides]]
 module = [

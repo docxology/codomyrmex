@@ -130,7 +130,7 @@ class MCPToolRegistry:
         self._tools: dict[str, dict[str, Any]] = {}
         logger.info("MCPToolRegistry initialized")
 
-    def register(self, tool_name: str, schema: dict[str, Any], handler: Optional[callable] = None) -> None:
+    def register(self, tool_name: str, schema: dict[str, Any], handler: Callable[..., Any] | None = None) -> None:
         """
         Register a tool with the registry.
 
