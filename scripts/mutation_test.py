@@ -40,6 +40,7 @@ TARGETS = [
         test_files=[
             "src/codomyrmex/tests/unit/mcp/test_mcp_validation.py",
             "src/codomyrmex/tests/unit/validation/test_validation.py",
+            "src/codomyrmex/tests/unit/mcp/test_mutation_kill.py",
         ],
         label="validation.py",
     ),
