@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help install setup test lint format type-check security clean docs serve build deploy
+.PHONY: help install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp
 
 # Default target
 help:
@@ -86,8 +86,8 @@ type-check:
 	@echo "Running type checking..."
 	@echo "=== logging_monitoring (strict, must pass) ==="
 	uv run python -m mypy --strict --namespace-packages --explicit-package-bases -p codomyrmex.logging_monitoring
-	@echo "=== model_context_protocol (gradual) ==="
-	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.model_context_protocol || true
+	@echo "=== model_context_protocol (must pass) ==="
+	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.model_context_protocol
 	@echo "=== agents (baseline) ==="
 	uv run python -m mypy --namespace-packages --explicit-package-bases -p codomyrmex.agents || true
 
@@ -96,6 +96,17 @@ security:
 	uv run python -m bandit -r src/codomyrmex/
 	@echo "Checking for vulnerabilities..."
 	uv run python -m pip-audit
+
+# Performance Benchmarks
+benchmark-mcp:
+	@echo "Running MCP performance benchmarks..."
+	uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_load.py -v --no-cov --no-header
+	@echo "Running MCP benchmark suite..."
+	uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header --benchmark-only 2>/dev/null || \
+		uv run python -m pytest src/codomyrmex/tests/performance/test_mcp_performance.py -v --no-cov --no-header
+
+benchmark: benchmark-mcp
+	@echo "All benchmarks completed."
 
 # Documentation
 docs: docs-check docs-generate
