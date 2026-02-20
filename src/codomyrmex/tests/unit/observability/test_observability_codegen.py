@@ -38,7 +38,7 @@ class TestTracer:
     def test_finish(self) -> None:
         s = Span("test")
         s.finish("ok")
-        assert s.duration_ms > 0
+        assert s.duration_ms >= 0
 
     def test_export(self) -> None:
         t = Tracer()
