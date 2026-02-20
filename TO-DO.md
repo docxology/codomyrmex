@@ -519,7 +519,64 @@ Leverage AST analysis and semantic drift for code-aware agents.
 
 ---
 
-**v0.5.0 Gate (Release)**: Autonomous deployment pipeline · OpenTelemetry traces · code generation + testing loop · Tier-3 triage complete · coverage ≥80% · MCP ≥ 250 tools
+**v0.5.0 Gate (Release)**: ✅ Autonomous deployment pipeline · OpenTelemetry traces · code generation + testing loop · Tier-3 triage complete
+
+---
+
+## v0.6.0 — Cognitive Autonomy
+
+**Theme**: Intelligent workflow orchestration, persistent agent memory, cross-module integration  
+**Depends on**: v0.5.1 ✅ (deployment, observability, code gen, triage)  
+**Effort**: 4 focused sessions | **Sprint count**: 4
+
+### Sprint 23: Workflow Engine (P0)
+
+| Deliverable | Path | Description |
+|-------------|------|-------------|
+| WorkflowStep | `orchestrator/workflow_engine.py` [NEW] | Step/DAG definitions with input/output schemas |
+| WorkflowRunner | `orchestrator/workflow_engine.py` | Execute DAG with topological ordering, error handling |
+| WorkflowTemplate | `orchestrator/workflow_templates.py` [NEW] | Pre-built templates: CI/CD, code-review, data-pipeline |
+
+- [ ] `orchestrator/workflow_engine.py`: step + DAG + runner
+- [ ] `orchestrator/workflow_templates.py`: 3 pre-built templates
+- [ ] Tests: ~20 new tests
+
+### Sprint 24: Agent Memory (P1)
+
+| Deliverable | Path | Description |
+|-------------|------|-------------|
+| MemoryStore | `agents/memory/store.py` [NEW] | Key-value + vector-like memory with TTL |
+| ConversationHistory | `agents/memory/conversation.py` [NEW] | Turn-based conversation tracking with summarization |
+| LearningJournal | `agents/memory/journal.py` [NEW] | Agent learning entries with pattern detection |
+
+- [ ] `agents/memory/store.py`: persistent key-value memory
+- [ ] `agents/memory/conversation.py`: conversation history
+- [ ] `agents/memory/journal.py`: learning journal
+- [ ] Tests: ~20 new tests
+
+### Sprint 25: Cross-Module Integration (P2)
+
+| Deliverable | Path | Description |
+|-------------|------|-------------|
+| IntegrationBus | `events/integration_bus.py` [NEW] | Cross-module event routing with type-safe payloads |
+| ModuleConnector | `orchestrator/module_connector.py` [NEW] | Wire modules together via dependency injection |
+
+- [ ] `events/integration_bus.py`: type-safe event bus
+- [ ] `orchestrator/module_connector.py`: DI-based module wiring
+- [ ] Tests: ~15 new tests
+
+### Sprint 26: Autonomous Planning (P3)
+
+| Deliverable | Path | Description |
+|-------------|------|-------------|
+| PlanEngine | `agents/planner/plan_engine.py` [NEW] | Hierarchical task planning with goal decomposition |
+| PlanExecutor | `agents/planner/executor.py` [NEW] | Execute plans with progress tracking and re-planning |
+
+- [ ] `agents/planner/plan_engine.py`: goal → plan decomposition
+- [ ] `agents/planner/executor.py`: plan execution with re-planning
+- [ ] Tests: ~15 new tests
+
+**v0.6.0 Gate**: Workflows execute DAGs end-to-end · agent memory persists across sessions · cross-module events route correctly · planner decomposes multi-step goals
 
 ---
 
