@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-0.1.9-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-9k%2B%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Coverage](https://img.shields.io/badge/coverage-35%25%20floor-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
