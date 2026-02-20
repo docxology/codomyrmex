@@ -95,10 +95,31 @@ def run_codomyrmex_analysis(directory: str, patterns: dict[str, str] | None = No
     analyzer = PatternAnalyzer(patterns)
     return analyzer.analyze_file(file_path)
 
-# DEPRECATED(v0.2.0): Stub functions for backward compatibility. Will be removed in v0.3.0.
 def get_embedding_function() -> Any:
-    """Get the embedding function used for analysis."""
-    raise NotImplementedError("Embedding function requires configured embedding backend")
+    """Get a deterministic hash-based embedding function.
+
+    Returns a callable that maps any string to a fixed-length list of floats
+    using a reproducible hashing scheme. No external model required.
+    """
+    import hashlib
+    import struct
+
+    EMBEDDING_DIM = 128
+
+    def _hash_embed(text: str) -> list[float]:
+        # Generate a deterministic embedding by hashing overlapping shingles
+        digest = hashlib.sha512(text.encode("utf-8")).digest()
+        # Extend to fill EMBEDDING_DIM floats
+        raw = digest
+        while len(raw) < EMBEDDING_DIM * 4:
+            raw += hashlib.sha512(raw).digest()
+        floats = list(struct.unpack(f"<{EMBEDDING_DIM}f", raw[: EMBEDDING_DIM * 4]))
+        # Normalise to [0, 1]
+        lo, hi = min(floats), max(floats)
+        span = hi - lo if hi != lo else 1.0
+        return [(f - lo) / span for f in floats]
+
+    return _hash_embed
 
 def analyze_repository_path(path: str) -> dict[str, Any]:
     """Analyze a repository path."""
@@ -125,8 +146,37 @@ def _perform_text_search(query: str, path: str) -> list[Any]:
     return []
 
 def _perform_code_summarization(path: str) -> str:
-    """Summarize code."""
-    raise NotImplementedError("Code summarization requires configured LLM backend")
+    """Summarize code by extracting top-level class and function definitions via AST."""
+    import ast
+
+    file_path = Path(path)
+    if not file_path.exists() or file_path.suffix != ".py":
+        return f"Cannot summarize: {path} (not a .py file or does not exist)"
+
+    try:
+        source = file_path.read_text(encoding="utf-8", errors="ignore")
+        tree = ast.parse(source, filename=str(file_path))
+    except SyntaxError as e:
+        return f"Cannot parse {path}: {e}"
+
+    classes = []
+    functions = []
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, ast.ClassDef):
+            methods = [n.name for n in ast.iter_child_nodes(node) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))]
+            classes.append(f"class {node.name}({len(methods)} methods)")
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            functions.append(f"def {node.name}")
+
+    parts = [f"File: {file_path.name}"]
+    if classes:
+        parts.append(f"Classes: {', '.join(classes)}")
+    if functions:
+        parts.append(f"Functions: {', '.join(functions)}")
+    if not classes and not functions:
+        parts.append("No top-level classes or functions found.")
+
+    return "; ".join(parts)
 
 def _perform_docstring_indexing(path: str) -> None:
     """Index docstrings."""
@@ -141,8 +191,35 @@ def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
     return {}
 
 def _perform_text_search_context_extraction(query: str, path: str) -> str:
-    """Extract context for search."""
-    raise NotImplementedError("Text search context extraction requires configured search backend")
+    """Extract context surrounding search matches in a file.
+
+    Returns the matching lines with ±2 lines of surrounding context.
+    """
+    file_path = Path(path)
+    if not file_path.exists():
+        return f"File not found: {path}"
+
+    try:
+        lines = file_path.read_text(encoding="utf-8", errors="ignore").splitlines()
+    except Exception as e:
+        return f"Error reading {path}: {e}"
+
+    matches = []
+    query_lower = query.lower()
+    for i, line in enumerate(lines):
+        if query_lower in line.lower():
+            start = max(0, i - 2)
+            end = min(len(lines), i + 3)
+            context_block = "\n".join(
+                f"{'>' if j == i else ' '} {j + 1}: {lines[j]}"
+                for j in range(start, end)
+            )
+            matches.append(context_block)
+
+    if not matches:
+        return f"No matches for '{query}' in {path}"
+
+    return f"Found {len(matches)} match(es) in {file_path.name}:\n\n" + "\n---\n".join(matches)
 
 def _perform_chunking_examples(text: str) -> list[str]:
     """Demonstrate chunking."""

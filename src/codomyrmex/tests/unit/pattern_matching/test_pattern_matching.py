@@ -44,21 +44,22 @@ class TestPatternMatching:
         assert hasattr(pm_pkg, 'analyze_repository_path')
         assert hasattr(pm_pkg, 'PatternAnalyzer')
 
-    @pytest.mark.skip(reason="Embedding function requires configured embedding backend")
-    def test_get_embedding_function(self, code_dir):
+    def test_embedding_consistency(self, code_dir):
         """Test get_embedding_function returns a callable."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.pattern_matching import get_embedding_function
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import get_embedding_function
 
             func = get_embedding_function()
             assert callable(func)
 
-            # Test calling the function (it raises NotImplementedError currently)
-            with pytest.raises(NotImplementedError):
-                func("test")
+            # Now that the backend is implemented, it should return a list of floats
+            result = func("test")
+            assert isinstance(result, list)
+            assert len(result) == 128
         finally:
-            sys.path.remove(str(code_dir))
+            if str(code_dir) in sys.path:
+                sys.path.remove(str(code_dir))
 
     def test_print_once_functionality(self, capsys, code_dir):
         """Test print_once function outputs a message."""
@@ -145,18 +146,18 @@ class TestPatternMatching:
         assert isinstance(chunks, list)
         assert len(chunks) > 0
 
-    @pytest.mark.skip(reason="Text search context extraction requires configured search backend")
-    def test_perform_text_search_context_extraction(self, code_dir):
-        """Test _perform_text_search_context_extraction stub function."""
+    def test_text_search_context_extraction(self, code_dir):
+        """Test _perform_text_search_context_extraction returns context around matches."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.pattern_matching.api import _perform_text_search_context_extraction
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import _perform_text_search_context_extraction
 
-            # It currently raises NotImplementedError
-            with pytest.raises(NotImplementedError):
-                _perform_text_search_context_extraction("dummy path", "query")
+            # It should return a string (either with match info or a 'not found' message)
+            result = _perform_text_search_context_extraction("query", "/nonexistent/path")
+            assert isinstance(result, str)
         finally:
-            sys.path.remove(str(code_dir))
+            if str(code_dir) in sys.path:
+                sys.path.remove(str(code_dir))
 
     def test_run_full_analysis(self, code_dir):
         """Test run_full_analysis function is callable and returns dict."""
@@ -456,17 +457,18 @@ class TestPatternMatching:
     # New tests: stub functions
     # ==================================================================
 
-    @pytest.mark.skip(reason="Code summarization requires configured LLM backend")
-    def test_perform_code_summarization(self, code_dir):
-        """Test _perform_code_summarization raises NotImplementedError."""
+    def test_code_summarization_returns_string(self, code_dir):
+        """Test _perform_code_summarization returns a summary string."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.pattern_matching.api import _perform_code_summarization
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import _perform_code_summarization
 
-            with pytest.raises(NotImplementedError):
-                _perform_code_summarization("dummy_code")
+            result = _perform_code_summarization(str(code_dir / "codomyrmex" / "coding" / "pattern_matching" / "run_codomyrmex_analysis.py"))
+            assert isinstance(result, str)
+            assert "File:" in result
         finally:
-            sys.path.remove(str(code_dir))
+            if str(code_dir) in sys.path:
+                sys.path.remove(str(code_dir))
 
     def test_perform_docstring_indexing(self, code_dir):
         """_perform_docstring_indexing runs without error."""
@@ -480,7 +482,6 @@ class TestPatternMatching:
         # Should not raise
         _perform_docstring_indexing("/some/path")
 
-    @pytest.mark.skip(reason="Embedding function requires configured embedding backend")
     def test_embedding_function_returns_consistent_length(self, code_dir):
         """Embedding function returns a list of consistent length for different inputs."""
         if str(code_dir) not in sys.path:

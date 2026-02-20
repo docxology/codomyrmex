@@ -496,8 +496,81 @@ class QualityAnalyzer:
         )
 
     def _score_accuracy(self, output: str, context: str) -> DimensionScore:
-        """Score accuracy — requires configured evaluation dataset and metrics."""
-        raise NotImplementedError("Accuracy scoring requires configured evaluation dataset and metrics")
+        """Score accuracy using heuristic signals.
+
+        Heuristics:
+        - Presence of specific facts (numbers, proper nouns, citations) is positive.
+        - Self-contradictory signals ("but not", "however ... not") are negative.
+        - Excessive hedging language ("maybe", "possibly", "I think") is negative.
+        - If context is provided, factual overlap with context boosts score.
+        """
+        if not output.strip():
+            return DimensionScore(
+                dimension=QualityDimension.ACCURACY,
+                score=0.0,
+                explanation="Empty output has no accuracy.",
+                raw_metrics={},
+            )
+
+        words = _tokenize(output)
+        total_words = len(words) or 1
+
+        # Factual density: numbers, capitalised words (proper nouns), citations
+        number_count = len(re.findall(r"\b\d+(?:\.\d+)?\b", output))
+        proper_nouns = len(re.findall(r"\b[A-Z][a-z]{2,}\b", output))
+        citations = len(re.findall(r"\(.*?\d{4}.*?\)", output))
+        factual_signals = number_count + proper_nouns + citations
+        factual_density = min(1.0, factual_signals / max(1, total_words) * 5)
+
+        # Hedging penalty
+        hedging_words = {"maybe", "possibly", "perhaps", "might", "could", "seems", "apparently"}
+        hedge_count = sum(1 for w in words if w in hedging_words)
+        hedge_ratio = hedge_count / total_words
+        hedge_penalty = min(0.4, hedge_ratio * 4)
+
+        # Contradiction penalty (simple pattern)
+        contradiction_patterns = [
+            r"\bbut\s+not\b", r"\bhowever\s+.*\bnot\b",
+            r"\balthough\s+.*\bnot\b", r"\bdespite\s+.*\bnot\b",
+        ]
+        contradiction_count = sum(
+            len(re.findall(p, output, re.IGNORECASE))
+            for p in contradiction_patterns
+        )
+        contradiction_penalty = min(0.3, contradiction_count * 0.1)
+
+        # Context overlap bonus
+        context_bonus = 0.0
+        if context.strip():
+            context_words = set(_tokenize(context))
+            output_words = set(words)
+            overlap = len(context_words & output_words)
+            if context_words:
+                context_bonus = min(0.2, (overlap / len(context_words)) * 0.3)
+
+        score = max(0.0, min(1.0,
+            0.5 + factual_density * 0.3 + context_bonus - hedge_penalty - contradiction_penalty
+        ))
+        score = round(score, 6)
+
+        return DimensionScore(
+            dimension=QualityDimension.ACCURACY,
+            score=score,
+            explanation=f"Factual density: {factual_signals} signals in {total_words} words. "
+                        f"Hedge ratio: {hedge_ratio:.3f}. Contradictions: {contradiction_count}.",
+            raw_metrics={
+                "factual_signals": factual_signals,
+                "number_count": number_count,
+                "proper_nouns": proper_nouns,
+                "citations": citations,
+                "factual_density": round(factual_density, 4),
+                "hedge_count": hedge_count,
+                "hedge_penalty": round(hedge_penalty, 4),
+                "contradiction_count": contradiction_count,
+                "contradiction_penalty": round(contradiction_penalty, 4),
+                "context_bonus": round(context_bonus, 4),
+            },
+        )
 
 
 def analyze_quality(output: str, context: str = "") -> QualityReport:
