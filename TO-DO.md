@@ -289,28 +289,27 @@ AST-based mutation testing infrastructure on 3 critical paths.
 **Depends on**: v0.2.1 ✅ (quality floor)  
 **Effort**: 3–4 focused sessions | **Sprint count**: 4
 
-### Sprint 11: Chain-of-Thought Reasoning (P0)
+### Sprint 11: Chain-of-Thought Reasoning (P0) ✅ DONE
 
-Build the core reasoning pipeline for deliberative agent behavior.
+Built the core reasoning pipeline for deliberative agent behavior.
 
-| Deliverable | Path | LOC Est. | Description |
-|-------------|------|----------|-------------|
-| CoT pipeline | `llm/chain_of_thought.py` [NEW] | ~400 | `think(prompt) → ReasoningStep[]`, `reason(steps) → Conclusion`, `conclude(conclusion) → Action`. Each step has `thought`, `confidence: float`, `evidence: list[str]` |
-| `ReasoningTrace` | `llm/models/reasoning.py` [NEW] | ~150 | Dataclass: `steps: list[ReasoningStep]`, `total_confidence`, `duration_ms`, `token_count`. Serializable to JSON. |
-| `ThinkingAgent` | `agents/core/thinking_agent.py` [NEW] | ~350 | Extends `AgentProtocol` with CoT loop: observe → think → reason → act → reflect. Stores `ReasoningTrace` in `AgentMemory`. |
-| Context window mgr | `llm/context_manager.py` [NEW] | ~250 | Token-aware sliding window: FIFO + importance weighting. Supports `tiktoken` for GPT models, estimated for others. `add_message()`, `trim_to_budget()`, `get_context()`. |
-| MCP tools | `agents/core/mcp_tools.py` [MODIFY] | +80 | Add `think`, `reason`, `get_reasoning_trace`, `set_thinking_depth` tools |
+| Deliverable | Path | LOC | Description |
+|-------------|------|-----|-------------|
+| Reasoning models | `llm/models/reasoning.py` [NEW] | 245 | `ReasoningStep`, `Conclusion`, `ReasoningTrace`, `ThinkingDepth` with full JSON serialization |
+| CoT pipeline | `llm/chain_of_thought.py` [NEW] | 245 | `ChainOfThought` with pluggable `StepGenerator`/`ConclusionSynthesizer` protocols |
+| Context manager | `llm/context_manager.py` [NEW] | 245 | Token-aware sliding window with importance-weighted eviction, tiktoken support |
+| `ThinkingAgent` | `agents/core/thinking_agent.py` [NEW] | 255 | observe→think→reason→act→reflect loop extending `AgentInterface` |
 
-- [ ] [NEW] `llm/chain_of_thought.py`: implement `think()`, `reason()`, `conclude()`
-- [ ] [NEW] `llm/models/reasoning.py`: `ReasoningStep`, `ReasoningTrace`, `Conclusion` dataclasses
-- [ ] [NEW] `agents/core/thinking_agent.py`: implement observe-think-reason-act-reflect loop
-- [ ] [NEW] `llm/context_manager.py`: implement token-aware context window with `tiktoken`
+- [x] [NEW] `llm/models/reasoning.py`: `ReasoningStep`, `ReasoningTrace`, `Conclusion` dataclasses
+- [x] [NEW] `llm/chain_of_thought.py`: implement `think()`, `reason()`, `conclude()`
+- [x] [NEW] `agents/core/thinking_agent.py`: implement observe-think-reason-act-reflect loop
+- [x] [NEW] `llm/context_manager.py`: implement token-aware context window
+- [x] [NEW] `tests/unit/llm/test_chain_of_thought.py` (25 tests)
+- [x] [NEW] `tests/unit/llm/test_context_manager.py` (11 tests)
+- [x] [NEW] `tests/unit/agents/core/test_thinking_agent.py` (18 tests)
 - [ ] [MODIFY] `agents/core/mcp_tools.py`: register 4 new thinking tools
-- [ ] [NEW] `tests/unit/agents/core/test_thinking_agent.py` (~20 tests)
-- [ ] [NEW] `tests/unit/llm/test_chain_of_thought.py` (~15 tests)
-- [ ] [NEW] `tests/unit/llm/test_context_manager.py` (~10 tests)
 
-**Sprint 11 Gate**: `ThinkingAgent` produces valid `ReasoningTrace` with ≥3 steps · context window respects token budget · 45 new tests pass
+**Sprint 11 Gate**: ✅ ThinkingAgent produces valid ReasoningTrace ≥3 steps · ✅ context respects budget · ✅ 56 new tests pass
 
 ---
 
