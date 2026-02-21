@@ -505,12 +505,12 @@ class TestTranslateFunction:
     def test_global_translator_works_end_to_end(self):
         """init() + add bundle + t() works as a full workflow."""
         import codomyrmex.utils.i18n as i18n_mod
-        tr = init("en")
+        tr = i18n_mod.init("en")
         bundle = MessageBundle.from_dict(Locale("en"), {"welcome": "Welcome!"})
         tr.add_bundle(bundle)
         # The global _default_translator is the same object
-        assert getattr(i18n_mod, "_default_translator") is tr
-        assert t("welcome") == "Welcome!"
+        assert i18n_mod._default_translator is tr
+        assert i18n_mod.t("welcome") == "Welcome!"
 
 
 # ---------------------------------------------------------------------------
