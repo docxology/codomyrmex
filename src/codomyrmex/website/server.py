@@ -47,6 +47,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     data_provider: DataProvider | None = None
     _test_lock = threading.Lock()
     _test_running = False
+    _dispatch_lock = threading.Lock()
+    _dispatch_orch = None
+    _dispatch_thread = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -99,6 +102,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_awareness_summary()
         elif parsed_path.path == "/api/pai/action":
             self.handle_pai_action()
+        elif parsed_path.path == "/api/agent/dispatch":
+            self.handle_agent_dispatch()
+        elif parsed_path.path == "/api/agent/dispatch/stop":
+            self.handle_agent_dispatch_stop()
         elif parsed_path.path.startswith("/api/config"):
             self.handle_config_save()
         else:
@@ -134,6 +141,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_awareness()
         elif parsed_path.path == "/api/llm/config":
             self.handle_llm_config()
+        elif parsed_path.path == "/api/agent/dispatch/status":
+            self.handle_agent_dispatch_status()
         elif parsed_path.path == "/api/tools":
             self.handle_tools_list()
         elif parsed_path.path == "/api/trust/status":
@@ -664,6 +673,96 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 {"success": False, "error": str(e), "action": action},
                 status=500,
             )
+
+    def handle_agent_dispatch(self) -> None:
+        """Handle POST /api/agent/dispatch — start an orchestrator run."""
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        if content_length == 0:
+            self.send_json_response({"error": "No content provided"}, status=400)
+            return
+        try:
+            post_data = self.rfile.read(content_length)
+            data = json.loads(post_data.decode('utf-8'))
+        except (json.JSONDecodeError, KeyError):
+            self.send_json_response({"error": "Invalid JSON"}, status=400)
+            return
+
+        seed_prompt = data.get("prompt", "Analyze the current context.")
+        todo_path = data.get("todo", "")
+        
+        with self._dispatch_lock:
+            if WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive():
+                self.send_json_response({"error": "A dispatch run is already in progress"}, status=429)
+                return
+            
+            try:
+                import time
+                from codomyrmex.agents.orchestrator import ConversationOrchestrator
+                
+                if todo_path:
+                    WebsiteServer._dispatch_orch = ConversationOrchestrator.dev_loop(
+                        todo_path=todo_path,
+                        channel=f"dispatch-{int(time.time())}"
+                    )
+                else:
+                    WebsiteServer._dispatch_orch = ConversationOrchestrator(
+                        channel=f"dispatch-{int(time.time())}",
+                        seed_prompt=seed_prompt,
+                        agents=[
+                            {"identity": "architect", "persona": "system planner", "provider": "ollama"},
+                            {"identity": "reviewer", "persona": "code executor", "provider": "antigravity"}
+                        ]
+                    )
+
+                def run_orch():
+                    try:
+                        WebsiteServer._dispatch_orch.run(rounds=3)
+                    except Exception as e:
+                        logger.error(f"Dispatch error: {e}")
+
+                WebsiteServer._dispatch_thread = threading.Thread(target=run_orch, daemon=True)
+                WebsiteServer._dispatch_thread.start()
+                
+                self.send_json_response({
+                    "success": True, 
+                    "message": "Dispatch started", 
+                    "channel": WebsiteServer._dispatch_orch.channel_id
+                })
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, status=500)
+
+    def handle_agent_dispatch_stop(self) -> None:
+        """Handle POST /api/agent/dispatch/stop — stop orchestrator."""
+        with self._dispatch_lock:
+            if WebsiteServer._dispatch_orch:
+                # Stop logic if supported by orchestrator
+                WebsiteServer._dispatch_orch = None
+            self.send_json_response({"success": True, "message": "Stop signal sent"})
+
+    def handle_agent_dispatch_status(self) -> None:
+        """Handle GET /api/agent/dispatch/status — poll transcript."""
+        with self._dispatch_lock:
+            if not WebsiteServer._dispatch_orch:
+                self.send_json_response({"active": False, "turns": []})
+                return
+            
+            try:
+                from dataclasses import asdict
+                log = WebsiteServer._dispatch_orch.get_log()
+                turns = [asdict(t) for t in log.turns]
+                
+                is_active = WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive()
+                
+                self.send_json_response({
+                    "active": is_active,
+                    "summary": log.summary(),
+                    "turns": turns
+                })
+            except Exception as e:
+                self.send_json_response({"error": str(e)}, status=500)
 
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""

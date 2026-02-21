@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Agent Dispatch - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Agent Dispatch Orchestrator</h1>
+
+<div class="panel">
+    <h2>Dispatch Configuration</h2>
+    <div style="margin-bottom: 1rem;">
+        <label for="dispatch-prompt" style="display:block; margin-bottom: 0.5rem;">Seed Prompt / Goal:</label>
+        <textarea id="dispatch-prompt" rows="3" style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">Work through the remaining items in the TO-DO list.</textarea>
+    </div>
+    <div style="margin-bottom: 1rem;">
+        <label for="dispatch-todo" style="display:block; margin-bottom: 0.5rem;">TO-DO Path (Optional file for scaffolding):</label>
+        <input type="text" id="dispatch-todo" value="TO-DO.md" style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+    </div>
+    
+    <div style="margin-bottom: 1rem;">
+        <label style="display:block; margin-bottom: 0.5rem;">Orchestration Setup:</label>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+                <strong>Architect</strong><br>
+                <small>Provider: ollama</small><br>
+                <small>Persona: System Planner</small>
+            </div>
+            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+                <strong>Developer</strong><br>
+                <small>Provider: ollama</small><br>
+                <small>Persona: Code Writer</small>
+            </div>
+            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+                <strong>Reviewer</strong><br>
+                <small>Provider: antigravity</small><br>
+                <small>Persona: Code Executor</small>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+        <button id="dispatch-start-btn" class="btn btn-primary">Start Dispatch Run</button>
+        <button id="dispatch-stop-btn" class="btn btn-danger" disabled>Stop Run</button>
+    </div>
+</div>
+
+<div class="panel" style="margin-top: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2>Live Transcript</h2>
+        <span id="dispatch-status" class="status warning">Inactive</span>
+    </div>
+    <div id="dispatch-transcript" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; min-height: 400px; max-height: 600px; overflow-y: auto; font-family: 'Fira Code', monospace; font-size: 0.9em; white-space: pre-wrap;">
+        <div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">No active dispatch run. Please start a run above.</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const startBtn = document.getElementById('dispatch-start-btn');
+        const stopBtn = document.getElementById('dispatch-stop-btn');
+        const promptInput = document.getElementById('dispatch-prompt');
+        const todoInput = document.getElementById('dispatch-todo');
+        const statusBadge = document.getElementById('dispatch-status');
+        const transcriptDiv = document.getElementById('dispatch-transcript');
+        let pollInterval = null;
+
+        function updateTranscript(turns) {
+            if (!turns || turns.length === 0) return;
+            let html = '';
+            turns.forEach(turn => {
+                const color = turn.provider === 'antigravity' ? 'var(--accent-color)' : (turn.provider === 'claude_code' ? '#d97757' : '#3c82f6');
+                html += `<div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                    <div style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <strong style="color: ${color};"><span aria-hidden="true">■</span> ${turn.speaker}</strong>
+                        <small style="color: var(--text-secondary);">${turn.provider} | ${turn.elapsed_seconds}s | ~${turn.token_estimate} tokens</small>
+                    </div>
+                    <div>${turn.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                </div>`;
+            });
+            transcriptDiv.innerHTML = html;
+            transcriptDiv.scrollTop = transcriptDiv.scrollHeight;
+        }
+
+        async function pollStatus() {
+            try {
+                const res = await fetch('/api/agent/dispatch/status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.active) {
+                        statusBadge.className = 'status success';
+                        statusBadge.textContent = 'Running';
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+                    } else {
+                        statusBadge.className = 'status warning';
+                        statusBadge.textContent = 'Completed / Inactive';
+                        startBtn.disabled = false;
+                        stopBtn.disabled = true;
+                        if (pollInterval) {
+                            clearInterval(pollInterval);
+                            pollInterval = null;
+                        }
+                    }
+                    if (data.turns && data.turns.length > 0) {
+                        updateTranscript(data.turns);
+                    }
+                }
+            } catch (e) {
+                console.error("Polling error", e);
+            }
+        }
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            statusBadge.className = 'status warning';
+            statusBadge.textContent = 'Starting...';
+            transcriptDiv.innerHTML = '<div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">Initializing Agents...</div>';
+
+            try {
+                const res = await fetch('/api/agent/dispatch', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        prompt: promptInput.value,
+                        todo: todoInput.value
+                    })
+                });
+                
+                if (res.ok) {
+                    if (!pollInterval) {
+                        pollInterval = setInterval(pollStatus, 2000);
+                    }
+                } else {
+                    const data = await res.json();
+                    statusBadge.className = 'status error';
+                    statusBadge.textContent = 'Error';
+                    alert(data.error || "Failed to start");
+                    startBtn.disabled = false;
+                }
+            } catch (e) {
+                statusBadge.className = 'status error';
+                statusBadge.textContent = 'Error';
+                alert(e.message);
+                startBtn.disabled = false;
+            }
+        });
+
+        stopBtn.addEventListener('click', async () => {
+            stopBtn.disabled = true;
+            statusBadge.textContent = 'Stopping...';
+            try {
+                await fetch('/api/agent/dispatch/stop', { method: 'POST' });
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        // Initial poll to catch an already-running dispatch
+        pollStatus();
+    });
+</script>
+{% endblock %}
