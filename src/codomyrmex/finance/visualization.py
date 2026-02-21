@@ -1,40 +1,123 @@
-from typing import Any, Dict, List
-from .ledger import Ledger, AccountType
-from codomyrmex.data_visualization import BarPlot, LinePlot
+"""Financial data visualization — account balances, transaction trends, and reports.
 
-def plot_account_balances(ledger: Ledger) -> BarPlot:
-    """
-    Generates a bar chart of account balances.
-    Returns: BarPlot object.
-    """
-    accounts = list(ledger._accounts.values())
-    names = [acc.name for acc in accounts]
-    balances = [acc.balance for acc in accounts]
-    
-    return BarPlot(
-        title="Account Balances",
-        x_label="Account",
-        y_label="Balance",
-        categories=names,
-        values=balances
-    )
+Provides:
+- balance_table: formatted text table of account balances
+- transaction_summary: grouped transaction statistics
+- income_statement_text: simple income statement report
+- balance_sheet_text: simplified balance sheet
+"""
 
-def plot_transaction_volume(ledger: Ledger) -> LinePlot:
-    """
-    Generates a line chart of transaction volume over time.
-    """
-    # Group transactions by date (simplified)
-    if not ledger._transactions:
-        return LinePlot("Transaction Volume", [], [], "Date", "Count")
+from __future__ import annotations
 
-    dates = [t.timestamp.strftime("%Y-%m-%d") for t in ledger._transactions]
-    # Simple count per day (stub)
-    start_date = min(dates) if dates else "N/A"
-    
-    return LinePlot(
-        title=f"Transaction Volume (Since {start_date})",
-        x_label="Transaction Index",
-        y_label="Amount",
-        x_data=list(range(len(ledger._transactions))),
-        y_data=[t.amount for t in ledger._transactions]
-    )
+from collections import defaultdict
+from typing import Any
+
+from .account import Account, AccountType
+
+
+def balance_table(accounts: list[Account]) -> str:
+    """Generate a text table of account balances.
+
+    Args:
+        accounts: List of Account objects.
+
+    Returns:
+        Formatted multi-line table string.
+    """
+    if not accounts:
+        return "No accounts."
+    lines = [f"{'Account':<30} {'Type':<12} {'Balance':>12}"]
+    lines.append("-" * 56)
+    for acct in sorted(accounts, key=lambda a: a.account_type.name):
+        lines.append(f"{acct.name:<30} {acct.account_type.name:<12} {acct.balance:>12,.2f}")
+    total = sum(a.balance for a in accounts)
+    lines.append("-" * 56)
+    lines.append(f"{'TOTAL':<30} {'':12} {total:>12,.2f}")
+    return "\n".join(lines)
+
+
+def group_by_type(accounts: list[Account]) -> dict[str, list[Account]]:
+    """Group accounts by their AccountType."""
+    groups: dict[str, list[Account]] = defaultdict(list)
+    for acct in accounts:
+        groups[acct.account_type.name].append(acct)
+    return dict(groups)
+
+
+def income_statement_text(accounts: list[Account]) -> str:
+    """Generate a simple text income statement.
+
+    Revenue minus Expenses = Net Income.
+    """
+    revenue_accts = [a for a in accounts if a.account_type == AccountType.REVENUE]
+    expense_accts = [a for a in accounts if a.account_type == AccountType.EXPENSE]
+
+    lines = ["INCOME STATEMENT", "=" * 40]
+    lines.append("Revenue:")
+    total_rev = 0.0
+    for acct in revenue_accts:
+        lines.append(f"  {acct.name:<28} {acct.balance:>10,.2f}")
+        total_rev += acct.balance
+    lines.append(f"  {'Total Revenue':<28} {total_rev:>10,.2f}")
+
+    lines.append("")
+    lines.append("Expenses:")
+    total_exp = 0.0
+    for acct in expense_accts:
+        lines.append(f"  {acct.name:<28} {acct.balance:>10,.2f}")
+        total_exp += acct.balance
+    lines.append(f"  {'Total Expenses':<28} {total_exp:>10,.2f}")
+
+    lines.append("-" * 40)
+    net = total_rev - total_exp
+    lines.append(f"  {'NET INCOME':<28} {net:>10,.2f}")
+    return "\n".join(lines)
+
+
+def balance_sheet_text(accounts: list[Account]) -> str:
+    """Generate a simplified balance sheet.
+
+    Assets = Liabilities + Equity.
+    """
+    assets = [a for a in accounts if a.account_type == AccountType.ASSET]
+    liabilities = [a for a in accounts if a.account_type == AccountType.LIABILITY]
+    equity = [a for a in accounts if a.account_type == AccountType.EQUITY]
+
+    lines = ["BALANCE SHEET", "=" * 40]
+
+    lines.append("ASSETS:")
+    total_a = 0.0
+    for acct in assets:
+        lines.append(f"  {acct.name:<28} {acct.balance:>10,.2f}")
+        total_a += acct.balance
+    lines.append(f"  {'Total Assets':<28} {total_a:>10,.2f}")
+
+    lines.append("")
+    lines.append("LIABILITIES:")
+    total_l = 0.0
+    for acct in liabilities:
+        lines.append(f"  {acct.name:<28} {acct.balance:>10,.2f}")
+        total_l += acct.balance
+    lines.append(f"  {'Total Liabilities':<28} {total_l:>10,.2f}")
+
+    lines.append("")
+    lines.append("EQUITY:")
+    total_e = 0.0
+    for acct in equity:
+        lines.append(f"  {acct.name:<28} {acct.balance:>10,.2f}")
+        total_e += acct.balance
+    lines.append(f"  {'Total Equity':<28} {total_e:>10,.2f}")
+
+    lines.append("-" * 40)
+    lines.append(f"  {'L + E':<28} {total_l + total_e:>10,.2f}")
+    balanced = abs(total_a - (total_l + total_e)) < 0.01
+    lines.append(f"  Balanced: {'✅' if balanced else '❌'}")
+    return "\n".join(lines)
+
+
+def accounts_to_csv(accounts: list[Account]) -> str:
+    """Export accounts as CSV."""
+    lines = ["name,type,code,balance"]
+    for acct in accounts:
+        lines.append(f'"{acct.name}","{acct.account_type.name}","{acct.code}",{acct.balance:.2f}')
+    return "\n".join(lines)

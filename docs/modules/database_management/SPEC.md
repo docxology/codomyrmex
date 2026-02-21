@@ -1,7 +1,7 @@
 # Database Management — Functional Specification
 
 **Module**: `codomyrmex.database_management`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

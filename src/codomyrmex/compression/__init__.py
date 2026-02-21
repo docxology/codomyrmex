@@ -84,10 +84,7 @@ __all__ = [
 ]
 
 
-__version__ = "0.1.0"
-
-
-from codomyrmex.exceptions import CompressionError
+__version__ = "1.0.0"
 
 
 def compress(data: bytes, level: int = 6, format: str = "gzip") -> bytes:
@@ -117,3 +114,4 @@ def decompress_file(input_path: str, output_path: str | None = None, format: str
     """Decompress a file."""
     compressor = Compressor(format=format)
     return compressor.decompress_file(input_path, output_path)
+

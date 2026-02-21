@@ -1,5 +1,20 @@
 # Codomyrmex System Architecture
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
+## Overview
+
+This document visualizes the full dependency graph across all 91 Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
+
+- **Foundation** — Essential infrastructure (logging, config, environment, MCP, telemetry, terminal)
+- **Core** — Primary development capabilities (coding, search, encryption, data visualization, LLM, etc.)
+- **Service** — Orchestration and integration (API, auth, CI/CD, cloud, containerization, database, deployment, docs, logistics, orchestrator)
+- **Specialized** — Domain-specific functionality (agents, simulation, quantum, wallet, defense, identity, privacy, and many more)
+
+Arrows denote import-time dependencies: `A --> B` means module A imports from module B.
+
+## Module Dependency Graph
+
 This diagram is auto-generated from static import analysis.
 
 ```mermaid
@@ -420,3 +435,10 @@ graph TD
   website --> logging_monitoring
   website --> validation
 ```
+
+## Navigation
+
+- **Parent**: [docs/README.md](README.md) — Documentation hub
+- **Detailed Architecture**: [project/architecture.md](project/architecture.md) — Design principles and relationships
+- **Module Overview**: [modules/overview.md](modules/overview.md) — Module system guide
+- **Project Root**: [../README.md](../README.md) — Main project README

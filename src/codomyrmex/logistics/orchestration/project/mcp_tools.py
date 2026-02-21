@@ -24,58 +24,13 @@ try:
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False
-    logger.warning("MCP not available - MCP tools will not be functional")
+    logger.error("CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking.")
 
-    # Fallback classes
-    class MCPToolResult:
-        """MCP Tool Result.
+    def __raise_mcp_error(*args, **kwargs):
+        raise RuntimeError("MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed.")
 
-        Args:
-            success: Parameter for the operation.
-            data: Data to process.
-            error: Parameter for the operation.
-            error_details: Parameter for the operation.
-            metadata: Data to process.
-        """
-        def __init__(
-            self,
-            success: bool,
-            data: Any = None,
-            error: str = None,
-            error_details: list = None,
-            metadata: dict = None,
-        ):
-            """
-            Initialize MCPToolResult.
-
-            Args:
-                success: Whether the operation was successful
-                data: The result data
-                error: Error message if any
-                error_details: List of detailed errors
-                metadata: Additional metadata
-            """
-            self.success = success
-            self.data = data
-            self.error = error
-            self.error_details = error_details or []
-            self.metadata = metadata or {}
-
-    class MCPErrorDetail:
-        """MCPErrorDetail.
-
-        A class for handling MCPErrorDetail operations.
-        """
-        def __init__(self, type: str, message: str):
-            """
-            Initialize MCPErrorDetail.
-
-            Args:
-                type: The error type
-                message: The error message
-            """
-            self.type = type
-            self.message = message
+    MCPToolResult = __raise_mcp_error
+    MCPErrorDetail = __raise_mcp_error
 
 
 from .orchestration_engine import get_orchestration_engine
@@ -101,7 +56,7 @@ class OrchestrationMCPTools:
         self.resource_manager = get_resource_manager()
 
         if not MCP_AVAILABLE:
-            logger.warning("MCP not available - tools will return mock results")
+            raise RuntimeError("Cannot initialize OrchestrationMCPTools: MCP not available (Zero-Mock strict mode)")
 
     def get_tool_definitions(self) -> dict[str, dict[str, Any]]:
         """Get MCP tool definitions."""

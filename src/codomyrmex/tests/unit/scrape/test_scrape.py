@@ -220,7 +220,7 @@ def test_exception_hierarchy():
 
 @pytest.mark.unit
 def test_scrape_connection_error_context():
-    """ScrapeConnectionError stores URL and status in context."""
+    """ScrapeConnectionError stores URL and status code as attributes."""
     err = ScrapeConnectionError("Connection failed", url="https://example.com", status_code=503)
-    assert err.context["url"] == "https://example.com"
-    assert err.context["status_code"] == 503
+    assert err.url == "https://example.com"
+    assert err.status_code == 503

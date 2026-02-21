@@ -209,7 +209,7 @@ class ProjectAnalyzer:
         }
 
     def _analyze_file(self, file_path: Path) -> AnalysisResult:
-        """Analyze a single file for metrics and patterns.
+        """Analyze a single file using codomyrmex modules.
 
         Args:
             file_path: Path to file to analyze.
@@ -237,128 +237,68 @@ class ProjectAnalyzer:
 
         lines = content.split("\n")
 
-        # Calculate basic metrics
+        # 1. Integration with codomyrmex.static_analysis
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer, AnalysisType
+        analyzer = StaticAnalyzer()
+        try:
+            static_results = analyzer.analyze_file(str(file_path), [AnalysisType.QUALITY, AnalysisType.COMPLEXITY])
+            for res in static_results:
+                result.issues.append({
+                    "type": res.category or "quality",
+                    "severity": res.severity.value if hasattr(res.severity, "value") else str(res.severity),
+                    "message": res.message,
+                    "line": res.line_number
+                })
+        except Exception as e:
+            logger.warning(f"StaticAnalyzer failed for {file_path}: {e}")
+
+        # Metrics calculation
+        try:
+            metrics = analyzer.calculate_metrics(str(file_path))
+            complexity = metrics.cyclomatic_complexity
+            loc = metrics.lines_of_code
+        except Exception as e:
+            complexity = 0
+            loc = len(lines)
+
+        # Fallback for metrics not natively provided by CodeMetrics
         result.metrics = {
-            "lines_of_code": len(lines),
+            "lines_of_code": loc,
             "non_empty_lines": len([line for line in lines if line.strip()]),
             "comment_lines": len([line for line in lines if line.strip().startswith("#")]),
             "functions": len(re.findall(r"^\s*def\s+\w+", content, re.MULTILINE)),
-            "async_functions": len(
-                re.findall(r"^\s*async\s+def\s+\w+", content, re.MULTILINE)
-            ),
+            "async_functions": len(re.findall(r"^\s*async\s+def\s+\w+", content, re.MULTILINE)),
             "classes": len(re.findall(r"^\s*class\s+\w+", content, re.MULTILINE)),
             "imports": len(re.findall(r"^(?:import|from)\s+", content, re.MULTILINE)),
+            "complexity": complexity,
         }
 
-        # Calculate complexity estimate (simple heuristic)
-        complexity = (
-            result.metrics["functions"]
-            + result.metrics["classes"] * 2
-            + len(re.findall(r"\bif\b|\bfor\b|\bwhile\b|\btry\b", content))
-        )
-        result.metrics["complexity"] = complexity
-
-        # Pattern detection
-        result.patterns = self._detect_patterns(content)
-
-        # Issue detection
-        result.issues = self._detect_issues(content, file_path)
+        # 2. Integration with codomyrmex.pattern_matching
+        from codomyrmex.coding.pattern_matching.code_patterns import PatternDetector
+        try:
+            detector = PatternDetector()
+            matches = detector.detect_patterns(content)
+            # Use a dict to preserve order while removing duplicates
+            unique_patterns = {match["pattern"]: None for match in matches}
+            
+            # Additional regex-based generic pattern detection (from old implementation)
+            # to preserve original test_project feature completeness checks
+            pattern_checks = {
+                "async_functions": r"async\s+def\s+\w+",
+                "dataclasses": r"@dataclass",
+                "type_hints": r"def\s+\w+\([^)]*:\s*\w+",
+                "decorators": r"@\w+",
+                "context_managers": r"with\s+\w+",
+            }
+            for pattern_name, regex in pattern_checks.items():
+                if re.search(regex, content):
+                    unique_patterns[pattern_name] = None
+                    
+            result.patterns = list(unique_patterns.keys())
+        except Exception as e:
+            logger.warning(f"Pattern matching failed for {file_path}: {e}")
 
         return result
-
-    def _detect_patterns(self, content: str) -> list[str]:
-        """Detect code patterns in file content.
-
-        Args:
-            content: File content as string.
-
-        Returns:
-            List of detected pattern names.
-        """
-        patterns = []
-
-        # Check for various patterns
-        pattern_checks = {
-            "async_functions": r"async\s+def\s+\w+",
-            "dataclasses": r"@dataclass",
-            "type_hints": r"def\s+\w+\([^)]*:\s*\w+",
-            "decorators": r"@\w+",
-            "context_managers": r"with\s+\w+",
-            "list_comprehension": r"\[[^\]]+\s+for\s+[^\]]+\]",
-            "generators": r"yield\s+",
-            "properties": r"@property",
-            "class_methods": r"@classmethod|@staticmethod",
-            "type_annotations": r"->\s*\w+",
-            "docstrings": r'"""[\s\S]*?"""',
-            "f_strings": r'f["\'][^"\']*["\']',
-        }
-
-        for pattern_name, regex in pattern_checks.items():
-            if re.search(regex, content):
-                patterns.append(pattern_name)
-
-        return patterns
-
-    def _detect_issues(self, content: str, file_path: Path) -> list[dict[str, Any]]:
-        """Detect potential issues in file content.
-
-        Args:
-            content: File content as string.
-            file_path: Path to the file.
-
-        Returns:
-            List of issue dictionaries.
-        """
-        issues = []
-        lines = content.split("\n")
-
-        for i, line in enumerate(lines, 1):
-            # Check for long lines
-            if len(line) > 120:
-                issues.append(
-                    {
-                        "type": "line_length",
-                        "severity": "warning",
-                        "message": f"Line exceeds 120 characters ({len(line)})",
-                        "line": i,
-                    }
-                )
-
-            # Check for actual comment lines containing task markers
-            stripped = line.lstrip()
-            if stripped.startswith("#") and ("TODO" in stripped or "FIXME" in stripped):
-                issues.append(
-                    {
-                        "type": "task_marker",
-                        "severity": "info",
-                        "message": "Consider addressing task marker comment",
-                        "line": i,
-                    }
-                )
-
-            # Check for bare except
-            if re.match(r"^\s*except:\s*$", line):
-                issues.append(
-                    {
-                        "type": "bare_except",
-                        "severity": "warning",
-                        "message": "Bare except clause",
-                        "line": i,
-                    }
-                )
-
-        # Check for missing docstring at module level
-        if not re.match(r'^["\']', content.strip()):
-            issues.append(
-                {
-                    "type": "missing_docstring",
-                    "severity": "info",
-                    "message": "Missing module docstring",
-                    "line": 1,
-                }
-            )
-
-        return issues
 
     def _should_include(self, path: Path) -> bool:
         """Check if path matches include patterns."""

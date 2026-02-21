@@ -1,6 +1,6 @@
 # Crypto Module — Technical Specification
 
-**Version**: v0.1.7 | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Last Updated**: February 2026
 
 ## Supported Algorithms and Parameters
 

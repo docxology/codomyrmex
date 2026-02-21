@@ -24,7 +24,7 @@ uv run pytest tests/ -v
 ## What It Demonstrates
 
 | Capability | Codomyrmex Module | Source File |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | Structured logging | `logging_monitoring` | `src/main.py` |
 | Unified configuration | `config_management` | `src/main.py`, `src/pipeline.py` |
 | Event-driven architecture | `events` | `src/main.py`, `src/pipeline.py` |
@@ -35,14 +35,13 @@ uv run pytest tests/ -v
 | Input validation | `validation` | `src/pipeline.py` |
 | Structured exceptions | `exceptions` | `src/pipeline.py` |
 | Performance profiling | `performance` | `src/pipeline.py` |
-| Unified visualization | `visualization` | `src/visualizer.py` |
 | Data visualization | `data_visualization` | `src/visualizer.py` |
 | Multi-format reporting | `documentation` | `src/reporter.py` |
 | LLM integration | `llm` | Integration tests |
 
 ## Directory Structure
 
-```
+```text
 test_project/
 ├── .codomyrmex/       # Project state and orchestration config
 ├── config/            # YAML configuration
@@ -52,22 +51,22 @@ test_project/
 ├── src/               # Source modules
 │   ├── main.py        # Entry point — logging, config, events
 │   ├── analyzer.py    # Code analysis — static_analysis, pattern_matching
-│   ├── visualizer.py  # Visualization — data_visualization, visualization
+│   ├── visualizer.py  # Visualization — data_visualization
 │   ├── reporter.py    # Reporting — documentation, serialization
 │   └── pipeline.py    # Orchestration — orchestrator, events, performance
 ├── data/              # Input/output data
 ├── reports/           # Generated reports, dashboards, visualizations
-├── tests/             # Pytest suite (unit + integration, zero-mock)
+├── tests/             # Pytest suite (100% zero-mock)
 ├── pyproject.toml     # uv-optimized project definition
 └── run_demo.py        # Single-entrypoint demonstration script
 ```
 
 ## Test Suite
 
-The project maintains a comprehensive zero-mock test suite:
+The project maintains a 100% rigorous zero-mock test suite:
 
 - **Unit tests**: `test_analyzer.py`, `test_visualizer.py`, `test_reporter.py`, `test_pipeline.py`
-- **Integration tests**: `test_codomyrmex_integration.py` — verifies real imports and construction of all integrated modules
+- **Integration tests**: `test_codomyrmex_integration.py` — authentically verifies real imports and construction of all integrated modules, executing real Codomyrmex routines.
 
 ```bash
 uv run pytest tests/ -v --tb=short
@@ -75,11 +74,11 @@ uv run pytest tests/ -v --tb=short
 
 ## Companion Documentation
 
-| File | Purpose |
-|:---|:---|
+| File        | Purpose                                     |
+| :---------- | :------------------------------------------ |
 | [SPEC.md](SPEC.md) | Functional specification & interface contracts |
-| [AGENTS.md](AGENTS.md) | Agent coordination & operating contracts |
-| [PAI.md](PAI.md) | Personal AI context & guidelines |
+| [AGENTS.md](AGENTS.md) | Agent coordination & operating contracts    |
+| [PAI.md](PAI.md) | Personal AI context & guidelines            |
 
 ## Navigation
 

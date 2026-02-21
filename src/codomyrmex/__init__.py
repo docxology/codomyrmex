@@ -5,7 +5,7 @@ four-layer architecture for AI-assisted software development, code analysis,
 testing, documentation generation, and workflow automation.
 """
 
-__version__ = "0.1.9"
+__version__ = "1.0.0"
 
 import os
 import pkgutil

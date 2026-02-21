@@ -74,6 +74,7 @@ class ThinkingAgent(AgentInterface):
         self,
         config: dict[str, Any] | None = None,
         thinking_config: ThinkingAgentConfig | None = None,
+        knowledge_retriever: Any | None = None,
     ) -> None:
         super().__init__(config)
         self._thinking_config = thinking_config or ThinkingAgentConfig()
@@ -82,6 +83,7 @@ class ThinkingAgent(AgentInterface):
             max_tokens=self._thinking_config.max_context_tokens,
         )
         self._traces: list[ReasoningTrace] = []
+        self._knowledge_retriever = knowledge_retriever
 
     # ── AgentInterface implementation ─────────────────────────────
 
@@ -117,6 +119,29 @@ class ThinkingAgent(AgentInterface):
         }
         if request.context:
             context_data.update(request.context)
+
+        # 1b. Knowledge retrieval — inject graph context if available
+        if self._knowledge_retriever is not None:
+            try:
+                graph_ctx = self._knowledge_retriever.retrieve(request.prompt)
+                context_data["knowledge_entities"] = [
+                    {"name": e.name, "type": e.entity_type.value if hasattr(e.entity_type, "value") else str(e.entity_type)}
+                    for e in graph_ctx.entities[:10]
+                ]
+                context_data["knowledge_relationships"] = [
+                    {"source": r.source_id, "target": r.target_id, "type": r.relation_type.value if hasattr(r.relation_type, "value") else str(r.relation_type)}
+                    for r in graph_ctx.relationships[:10]
+                ]
+                context_data["knowledge_confidence"] = graph_ctx.confidence
+                logger.info(
+                    "ThinkingAgent: knowledge retrieved",
+                    extra={"entities": len(graph_ctx.entities), "confidence": round(graph_ctx.confidence, 3)},
+                )
+            except Exception as exc:
+                logger.warning(
+                    "ThinkingAgent: knowledge retrieval failed (non-fatal)",
+                    extra={"error": str(exc)[:100]},
+                )
 
         logger.info(
             "ThinkingAgent: observe",
@@ -239,6 +264,16 @@ class ThinkingAgent(AgentInterface):
     def context_summary(self) -> dict[str, Any]:
         """Get context window summary."""
         return self._context.summary()
+
+    @property
+    def knowledge_retriever(self) -> Any | None:
+        """Return the attached knowledge retriever, if any."""
+        return self._knowledge_retriever
+
+    @knowledge_retriever.setter
+    def knowledge_retriever(self, retriever: Any | None) -> None:
+        """Set or replace the knowledge retriever at runtime."""
+        self._knowledge_retriever = retriever
 
     def _store_trace(self, trace: ReasoningTrace) -> None:
         """Store a trace, respecting the max_traces limit."""

@@ -1,13 +1,20 @@
-"""
-Benchmarking utilities for Codomyrmex.
+"""Benchmarking utilities with comparison, percentile, and reporting.
 
-Provides tools for measuring execution time and memory usage of functions.
+Provides:
+- run_benchmark: multi-iteration function timing with stats
+- profile_function: single-call time + memory profiling
+- compare_benchmarks: side-by-side comparison of two functions
+- BenchmarkSuite: named collection of benchmarks with tabular report
+- PerformanceProfiler: class-based profiler for OO usage
 """
 
-import time
-import statistics
+from __future__ import annotations
+
 import functools
-from typing import Any, Callable, Dict, Optional
+import statistics
+import time
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict
 
 try:
     import psutil
@@ -16,109 +23,209 @@ except ImportError:
     HAS_PSUTIL = False
 
 
+@dataclass
+class BenchmarkResult:
+    """Result of a single benchmark run."""
+
+    name: str
+    iterations: int
+    times: list[float] = field(default_factory=list)
+
+    @property
+    def average_time(self) -> float:
+        return sum(self.times) / max(len(self.times), 1)
+
+    @property
+    def min_time(self) -> float:
+        return min(self.times) if self.times else 0.0
+
+    @property
+    def max_time(self) -> float:
+        return max(self.times) if self.times else 0.0
+
+    @property
+    def total_time(self) -> float:
+        return sum(self.times)
+
+    @property
+    def stdev(self) -> float:
+        return statistics.stdev(self.times) if len(self.times) > 1 else 0.0
+
+    @property
+    def median(self) -> float:
+        return statistics.median(self.times) if self.times else 0.0
+
+    def percentile(self, p: float) -> float:
+        """Compute the p-th percentile (0–100) of times."""
+        if not self.times:
+            return 0.0
+        sorted_t = sorted(self.times)
+        idx = (p / 100) * (len(sorted_t) - 1)
+        lo = int(idx)
+        hi = min(lo + 1, len(sorted_t) - 1)
+        frac = idx - lo
+        return sorted_t[lo] + frac * (sorted_t[hi] - sorted_t[lo])
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "iterations": self.iterations,
+            "average_time": self.average_time,
+            "min_time": self.min_time,
+            "max_time": self.max_time,
+            "median": self.median,
+            "stdev": self.stdev,
+            "total_time": self.total_time,
+            "p95": self.percentile(95),
+            "p99": self.percentile(99),
+        }
+
+
 def run_benchmark(
-    func: Callable[[], Any], 
-    iterations: int = 5, 
-    warmup: int = 0
+    func: Callable[[], Any],
+    iterations: int = 5,
+    warmup: int = 0,
+    name: str = "",
 ) -> Dict[str, Any]:
-    """
-    Run a benchmark on a function.
+    """Run a benchmark on a function.
 
     Args:
-        func: The function to benchmark. Should be a callable that takes no arguments.
-              Use lambda or functools.partial for functions with arguments.
-        iterations: Number of times to run the function.
-        warmup: Number of warmup iterations to run before measuring.
+        func: Callable with no arguments (use lambda/partial for args).
+        iterations: Number of measured iterations.
+        warmup: Warmup iterations before measuring.
+        name: Optional benchmark name.
 
     Returns:
         Dictionary containing benchmark statistics.
     """
-    # Warmup
     for _ in range(warmup):
         try:
             func()
         except Exception:
             pass
 
-    times = []
-    
+    times: list[float] = []
     for _ in range(iterations):
-        start_time = time.perf_counter()
+        start = time.perf_counter()
         try:
             func()
         except Exception:
-            # We record time even if it fails, or maybe we should note failure?
-            # For simple benchmarking, we assume the function works.
             pass
-        end_time = time.perf_counter()
-        times.append(end_time - start_time)
+        times.append(time.perf_counter() - start)
 
-    if not times:
-        return {
-            "iterations": 0,
-            "average_time": 0.0,
-            "min_time": 0.0,
-            "max_time": 0.0,
-            "total_time": 0.0,
-            "stdev": 0.0,
-        }
-
-    total_time = sum(times)
-    avg_time = total_time / len(times)
-    min_time = min(times)
-    max_time = max(times)
-    stdev = statistics.stdev(times) if len(times) > 1 else 0.0
-
-    return {
-        "iterations": len(times),
-        "average_time": avg_time,
-        "min_time": min_time,
-        "max_time": max_time,
-        "total_time": total_time,
-        "stdev": stdev,
-    }
+    result = BenchmarkResult(name=name or "benchmark", iterations=len(times), times=times)
+    return result.to_dict()
 
 
-def profile_function(func: Callable, *args, **kwargs) -> Dict[str, Any]:
-    """
-    Profile a single function call execution time and memory usage.
+def profile_function(func: Callable, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    """Profile a single function call for time and memory.
 
     Args:
         func: Function to profile.
-        *args: Arguments to pass to the function.
-        **kwargs: Keyword arguments to pass to the function.
+        *args: Positional arguments.
+        **kwargs: Keyword arguments.
 
     Returns:
-        Dictionary containing 'execution_time' (seconds) and 'memory_usage' (MB).
+        Dict with 'execution_time' (seconds) and 'memory_usage' (MB).
     """
     memory_before = 0.0
     if HAS_PSUTIL:
         process = psutil.Process()
         memory_before = process.memory_info().rss / (1024 * 1024)
 
-    start_time = time.perf_counter()
+    start = time.perf_counter()
     try:
         func(*args, **kwargs)
     except Exception:
         pass
-    end_time = time.perf_counter()
-    
+    execution_time = time.perf_counter() - start
+
     memory_after = 0.0
     if HAS_PSUTIL:
         memory_after = process.memory_info().rss / (1024 * 1024)
 
-    execution_time = end_time - start_time
-    memory_usage = max(0.0, memory_after - memory_before)
-
     return {
         "execution_time": execution_time,
-        "memory_usage": memory_usage,
+        "memory_usage": max(0.0, memory_after - memory_before),
     }
+
+
+def compare_benchmarks(
+    func_a: Callable[[], Any],
+    func_b: Callable[[], Any],
+    iterations: int = 10,
+    name_a: str = "A",
+    name_b: str = "B",
+) -> Dict[str, Any]:
+    """Compare two functions side-by-side.
+
+    Returns:
+        Dict with results for both functions and a speedup ratio.
+    """
+    result_a = run_benchmark(func_a, iterations=iterations, name=name_a)
+    result_b = run_benchmark(func_b, iterations=iterations, name=name_b)
+    avg_a = result_a["average_time"]
+    avg_b = result_b["average_time"]
+    speedup = avg_a / avg_b if avg_b > 0 else float("inf")
+    return {
+        name_a: result_a,
+        name_b: result_b,
+        "speedup": round(speedup, 3),
+        "faster": name_b if speedup > 1.0 else name_a,
+    }
+
+
+class BenchmarkSuite:
+    """Collection of named benchmarks with tabular reporting.
+
+    Example::
+
+        suite = BenchmarkSuite()
+        suite.add("sort_1k", lambda: sorted(range(1000, 0, -1)))
+        suite.add("sort_10k", lambda: sorted(range(10000, 0, -1)))
+        suite.run_all()
+        print(suite.report())
+    """
+
+    def __init__(self) -> None:
+        self._benchmarks: dict[str, Callable[[], Any]] = {}
+        self._results: dict[str, Dict[str, Any]] = {}
+
+    def add(self, name: str, func: Callable[[], Any]) -> None:
+        self._benchmarks[name] = func
+
+    def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, Dict[str, Any]]:
+        """Run all registered benchmarks."""
+        self._results = {}
+        for name, func in self._benchmarks.items():
+            self._results[name] = run_benchmark(func, iterations=iterations, warmup=warmup, name=name)
+        return dict(self._results)
+
+    def report(self) -> str:
+        """Generate a tabular report of results."""
+        if not self._results:
+            return "No benchmark results. Call run_all() first."
+        lines = [f"{'Name':<20} {'Avg (ms)':>10} {'Min (ms)':>10} {'Max (ms)':>10} {'P95 (ms)':>10} {'StDev':>10}"]
+        lines.append("-" * 70)
+        for name, r in sorted(self._results.items()):
+            lines.append(
+                f"{name:<20} {r['average_time']*1000:>10.3f} {r['min_time']*1000:>10.3f} "
+                f"{r['max_time']*1000:>10.3f} {r['p95']*1000:>10.3f} {r['stdev']*1000:>10.3f}"
+            )
+        return "\n".join(lines)
+
+    @property
+    def benchmark_count(self) -> int:
+        return len(self._benchmarks)
 
 
 class PerformanceProfiler:
     """Class-based profiler for consistency with tests."""
 
-    def profile_function(self, func: Callable, *args, **kwargs) -> Dict[str, Any]:
+    def profile_function(self, func: Callable, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Profile a function."""
         return profile_function(func, *args, **kwargs)
+
+    def benchmark(self, func: Callable[[], Any], iterations: int = 5) -> Dict[str, Any]:
+        """Run a benchmark."""
+        return run_benchmark(func, iterations=iterations)

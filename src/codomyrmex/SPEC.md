@@ -1,10 +1,10 @@
 # codomyrmex - Functional Specification
 
-**Version**: v0.1.8 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Core Python package containing 82 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent, well-tested modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
+Core Python package containing 91 specialized modules organized in a four-layer architecture. Provides modular development capabilities through independent, well-tested modules with clear interfaces. The package serves as the central coordination point for AI-assisted software development, code analysis, testing, documentation generation, and comprehensive workflow automation.
 
 ## Design Principles
 
@@ -136,7 +136,7 @@ graph TB
 ```
 
 > [!NOTE]
-> The diagram above shows representative modules per layer. The full list of all 82 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
+> The diagram above shows representative modules per layer. The full list of all 91 modules is in the text descriptions below and in [INDEX.md](INDEX.md).
 
 ### Module Layer Descriptions
 

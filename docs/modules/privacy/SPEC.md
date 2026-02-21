@@ -1,7 +1,7 @@
 # Privacy — Functional Specification
 
 **Module**: `codomyrmex.privacy`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

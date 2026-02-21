@@ -1,75 +1,61 @@
-"""Structured JSON formatter for logging.
+"""Structured JSON formatter with pretty printing, filtering, and redaction.
 
-This module provides a JSONFormatter class that outputs log records as
-JSON objects, enabling structured logging for easier parsing, querying,
-and analysis by log aggregation systems.
-
-Example:
-    >>> import logging
-    >>> from codomyrmex.logging_monitoring.formatters import JSONFormatter
-    >>> handler = logging.StreamHandler()
-    >>> handler.setFormatter(JSONFormatter())
-    >>> logger = logging.getLogger("myapp")
-    >>> logger.addHandler(handler)
-    >>> logger.info("Request processed")
-    # Output: {"timestamp": "2024-01-15 10:30:00", "level": "INFO", ...}
+Provides:
+- JSONFormatter: structured log output as JSON with extensible fields
+- PrettyJSONFormatter: indented JSON for development/debug
+- RedactedJSONFormatter: automatic redaction of sensitive fields
 """
+
+from __future__ import annotations
 
 import json
 import logging
+import re
 from typing import Any
 
 
+# Sensitive field patterns for automatic redaction
+_SENSITIVE_PATTERNS = re.compile(
+    r"(password|secret|token|api_key|auth|credential|ssn|credit_card)",
+    re.IGNORECASE,
+)
+
+
 class JSONFormatter(logging.Formatter):
-    """Formatter that outputs log records as JSON objects.
+    """Format log records as JSON strings.
 
-    Converts standard Python log records into JSON-formatted strings containing
+    Converts standard Python log records into structured JSON containing
     timestamp, level, logger name, message, module, line number, and any
-    exception information or extra fields.
+    exception or extra fields.
 
-    Attributes:
-        Inherits all attributes from logging.Formatter.
+    Example::
 
-    Example:
-        >>> formatter = JSONFormatter()
-        >>> handler = logging.FileHandler("app.json.log")
-        >>> handler.setFormatter(formatter)
+        handler = logging.StreamHandler()
+        handler.setFormatter(JSONFormatter())
+        logger = logging.getLogger("myapp")
+        logger.addHandler(handler)
+        logger.info("Request processed")
     """
 
-    def format(self, record: logging.LogRecord) -> str:
-        """Format a log record as a JSON string.
+    def __init__(
+        self,
+        datefmt: str | None = None,
+        include_fields: list[str] | None = None,
+        exclude_fields: list[str] | None = None,
+    ) -> None:
+        super().__init__(datefmt=datefmt)
+        self._include = set(include_fields) if include_fields else None
+        self._exclude = set(exclude_fields) if exclude_fields else set()
 
-        Converts the log record to a dictionary and serializes it to JSON.
-        Includes exception information if present and merges any extra
-        fields attached to the record.
-
-        Args:
-            record: The log record to format.
-
-        Returns:
-            A JSON-formatted string containing the log entry with fields:
-            - timestamp: Formatted time of the log event
-            - level: Log level name (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-            - name: Logger name
-            - message: The formatted log message
-            - module: Source module name
-            - line: Source line number
-            - exception: (optional) Formatted exception traceback
-            - Any additional fields from record.extra
-
-        Example:
-            >>> record = logging.LogRecord(...)
-            >>> json_str = formatter.format(record)
-            >>> data = json.loads(json_str)
-            >>> print(data["level"])  # "INFO"
-        """
+    def _build_entry(self, record: logging.LogRecord) -> dict[str, Any]:
+        """Build the base log entry dict."""
         log_entry: dict[str, Any] = {
             "timestamp": self.formatTime(record, self.datefmt),
             "level": record.levelname,
             "name": record.name,
             "message": record.getMessage(),
             "module": record.module,
-            "line": record.lineno
+            "line": record.lineno,
         }
 
         if record.exc_info:
@@ -78,4 +64,78 @@ class JSONFormatter(logging.Formatter):
         if hasattr(record, "extra"):
             log_entry.update(record.extra)
 
-        return json.dumps(log_entry)
+        # Apply include/exclude filters
+        if self._include:
+            log_entry = {k: v for k, v in log_entry.items() if k in self._include}
+        for key in self._exclude:
+            log_entry.pop(key, None)
+
+        return log_entry
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Format the record as a compact JSON string."""
+        return json.dumps(self._build_entry(record), default=str)
+
+
+class PrettyJSONFormatter(JSONFormatter):
+    """Human-readable JSON formatter with indentation.
+
+    Useful for development and debugging where readability is preferred
+    over compactness.
+    """
+
+    def __init__(self, indent: int = 2, **kwargs: Any) -> None:
+        super().__init__(**kwargs)
+        self._indent = indent
+
+    def format(self, record: logging.LogRecord) -> str:
+        return json.dumps(
+            self._build_entry(record),
+            indent=self._indent,
+            default=str,
+        )
+
+
+class RedactedJSONFormatter(JSONFormatter):
+    """JSON formatter that automatically redacts sensitive fields.
+
+    Fields whose names match common sensitive patterns (password, token,
+    api_key, etc.) are replaced with '[REDACTED]'.
+
+    Args:
+        patterns: Additional regex patterns to redact.
+        replacement: Replacement string for redacted values.
+    """
+
+    def __init__(
+        self,
+        patterns: list[str] | None = None,
+        replacement: str = "[REDACTED]",
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(**kwargs)
+        self._replacement = replacement
+        if patterns:
+            combined = "|".join(patterns)
+            self._pattern = re.compile(
+                f"({_SENSITIVE_PATTERNS.pattern}|{combined})",
+                re.IGNORECASE,
+            )
+        else:
+            self._pattern = _SENSITIVE_PATTERNS
+
+    def _redact(self, data: dict[str, Any]) -> dict[str, Any]:
+        """Recursively redact sensitive fields."""
+        result: dict[str, Any] = {}
+        for key, value in data.items():
+            if self._pattern.search(key):
+                result[key] = self._replacement
+            elif isinstance(value, dict):
+                result[key] = self._redact(value)
+            else:
+                result[key] = value
+        return result
+
+    def format(self, record: logging.LogRecord) -> str:
+        entry = self._build_entry(record)
+        return json.dumps(self._redact(entry), default=str)

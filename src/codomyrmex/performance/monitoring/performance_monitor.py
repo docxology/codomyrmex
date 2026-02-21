@@ -48,14 +48,30 @@ class SystemMonitor:
     def __init__(self, interval: float = 1.0):
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None
+        self._monitoring = False
+        self._monitor_thread = None
 
     def start_monitoring(self):
-        # Implementation placeholder
-        pass
+        """Start continuous background monitoring loop."""
+        if not HAS_PSUTIL or self._monitoring:
+            return
+            
+        self._monitoring = True
+        import threading
+        self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
+        self._monitor_thread.start()
+        
+    def _monitor_loop(self):
+        """Continuously poll resources."""
+        while self._monitoring:
+            self.get_current_metrics()
+            time.sleep(self.interval)
 
     def stop_monitoring(self):
-        # Implementation placeholder
-        pass
+        """Halt the monitoring loop."""
+        self._monitoring = False
+        if self._monitor_thread:
+            self._monitor_thread.join(timeout=2.0)
 
     def get_current_metrics(self) -> SystemMetrics:
         if not HAS_PSUTIL:

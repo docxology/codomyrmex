@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.5.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## What Is PAI?
 
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) curates 53 of these for MCP exposure.
+**Tools**: 18 static tools (15 core + 3 universal proxy) + 97 auto-discovered module tools from 27 modules via `pkgutil` scan. The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces all 115 tools for MCP exposure.
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -74,13 +74,13 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 
 | Algorithm Phase | Purpose | Codomyrmex Modules |
 |----------------|---------|-------------------|
-| **OBSERVE** (1/7) | Understand the request | `pattern_matching`, `search`, `documents`, `system_discovery` |
-| **THINK** (2/7) | Select capabilities, expand ISC | `cerebrum`, `agents/theory/`, `graph_rag` |
-| **PLAN** (3/7) | Finalize approach | `orchestrator` (workflow DAGs), `logistics` |
-| **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build/` |
-| **EXECUTE** (5/7) | Run the work | `agents` (all providers), `coding` (sandbox), `git_operations` |
-| **VERIFY** (6/7) | Validate against ISC | `coding/static_analysis/`, `security`, `testing` |
-| **LEARN** (7/7) | Capture improvements | `agentic_memory`, `logging_monitoring` |
+| **OBSERVE** (1/7) | Understand the request | `pattern_matching`, `search`, `documents`, `system_discovery`, `config_management` |
+| **THINK** (2/7) | Select capabilities, expand ISC | `cerebrum`, `agents/core` (ThinkingAgent), `graph_rag`, `relations` |
+| **PLAN** (3/7) | Finalize approach | `orchestrator` (workflow DAGs), `logistics`, `plugin_system` (dependency resolution) |
+| **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build/`, `documentation` |
+| **EXECUTE** (5/7) | Run the work | `agents` (all providers), `coding` (sandbox), `git_operations`, `containerization`, `cloud`, `events` |
+| **VERIFY** (6/7) | Validate against ISC | `coding/static_analysis/`, `security`, `formal_verification`, `crypto`, `performance`, `maintenance` |
+| **LEARN** (7/7) | Capture improvements | `agentic_memory`, `logging_monitoring`, `scrape` |
 
 ## Per-User Separation
 
@@ -142,17 +142,20 @@ export OLLAMA_HOST="http://localhost:11434"
 
 Condensed view of what PAI agents can access:
 
-| Domain | Modules | PAI Use |
-|--------|---------|---------|
-| **AI Agents** | `agents/` (11 providers), `agents/ai_code_editing/` | BUILD/EXECUTE — code generation, review, refactoring |
-| **LLM** | `llm/`, `model_context_protocol/` | Model management, tool interfaces |
-| **Reasoning** | `cerebrum/`, `graph_rag/`, `coding/pattern_matching/` | THINK — case-based reasoning, pattern recognition |
-| **Knowledge** | `documents/`, `agentic_memory/`, `search/` | OBSERVE/LEARN — document processing, memory |
-| **Code Ops** | `coding/` (includes `static_analysis/`, `pattern_matching/`), `git_operations/` | BUILD/VERIFY — sandbox execution, analysis, VCS |
-| **Workflow** | `orchestrator/`, `events/`, `logistics/` | PLAN/EXECUTE — DAG workflows, pub/sub, scheduling |
-| **Security** | `security/`, `encryption/`, `auth/` | VERIFY — vulnerability scanning, data protection |
-| **DevOps** | `ci_cd_automation/` (includes `build/`), `containerization/` | EXECUTE — builds, pipelines, containers |
-| **Interface** | `cli/`, `terminal_interface/`, `ide/` | User interaction, rich output |
+| Domain | Modules | MCP Tools | PAI Use |
+|--------|---------|-----------|---------|
+| **AI Agents** | `agents/`, `agents/core/` | 7 | BUILD/EXECUTE — agent execution, reasoning traces, ThinkingAgent |
+| **LLM** | `llm/`, `model_context_protocol/` | 6 | Model management, tool schema inspection, text generation |
+| **Reasoning** | `cerebrum/`, `graph_rag/`, `coding/pattern_matching/` | 2 | THINK — case-based reasoning, knowledge retrieval |
+| **Knowledge** | `documents/`, `agentic_memory/`, `search/` | 6 | OBSERVE/LEARN — memory get/put/search, full-text/fuzzy search |
+| **Code Ops** | `coding/`, `git_operations/` | 18 | BUILD/VERIFY — sandbox execution, review, 13 git operations |
+| **Verification** | `formal_verification/`, `performance/` | 8 | VERIFY — Z3 constraint solving, benchmark regression detection |
+| **Workflow** | `orchestrator/`, `events/`, `logistics/` | 5 | PLAN/EXECUTE — DAG analysis, event bus, scheduler metrics |
+| **Security** | `security/`, `crypto/`, `auth/` | 6 | VERIFY — vulnerability/secret scanning, key gen, hash verification |
+| **DevOps** | `ci_cd_automation/`, `containerization/`, `cloud/` | 7 | EXECUTE — builds, container management, cloud instances, S3 |
+| **Data** | `data_visualization/`, `scrape/`, `config_management/` | 7 | Charting/dashboards, HTML extraction, config get/set/validate |
+| **Platform** | `system_discovery/`, `plugin_system/`, `maintenance/`, `logging_monitoring/`, `relations/`, `documentation/` | 8 | Health checks, plugin discovery, RASP auditing, log formatting |
+| **Interface** | `cli/`, `terminal_interface/`, `ide/` | — | User interaction, rich output (no MCP tools) |
 
 ## RASP Documentation Pattern
 

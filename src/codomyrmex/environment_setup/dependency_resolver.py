@@ -133,3 +133,135 @@ class DependencyResolver:
                 if dep.strip() and not dep.startswith("#"):
                     issues.append(f"Unpinned dependency: {dep}")
         return issues
+
+    # ── Virtual environment detection ───────────────────────────────
+
+    def detect_virtualenv(self) -> dict[str, Any]:
+        """Detect whether running inside a virtual environment.
+
+        Returns:
+            Dict with keys: active, path, type (venv, conda, uv, none).
+        """
+        import os
+        import sys
+
+        venv_path = os.environ.get("VIRTUAL_ENV", "")
+        conda_env = os.environ.get("CONDA_DEFAULT_ENV", "")
+
+        if venv_path:
+            # Detect if uv-managed
+            venv_type = "uv" if ".venv" in venv_path or "uv" in venv_path.lower() else "venv"
+            return {"active": True, "path": venv_path, "type": venv_type}
+        elif conda_env:
+            return {"active": True, "path": conda_env, "type": "conda"}
+        elif hasattr(sys, "real_prefix"):
+            return {"active": True, "path": sys.prefix, "type": "virtualenv"}
+        return {"active": False, "path": "", "type": "none"}
+
+    def get_environment_info(self) -> dict[str, Any]:
+        """Get comprehensive environment information.
+
+        Returns:
+            Dict with python_version, platform, virtualenv info, and package count.
+        """
+        import platform
+        import sys
+
+        installed = self.list_installed()
+        venv = self.detect_virtualenv()
+
+        return {
+            "python_version": sys.version,
+            "platform": platform.platform(),
+            "virtualenv": venv,
+            "installed_packages": len(installed),
+        }
+
+    # ── Resolution report ───────────────────────────────────────────
+
+    def generate_report(self, pyproject_path: Path | None = None) -> str:
+        """Generate a full dependency health report.
+
+        Returns:
+            Multi-line text report.
+        """
+        lines = ["# Dependency Health Report", ""]
+
+        # Environment
+        env = self.get_environment_info()
+        lines.append(f"**Python**: {env['python_version'].split()[0]}")
+        lines.append(f"**Platform**: {env['platform']}")
+        lines.append(f"**Virtualenv**: {env['virtualenv']['type']} ({env['virtualenv']['path'] or 'n/a'})")
+        lines.append(f"**Installed packages**: {env['installed_packages']}")
+        lines.append("")
+
+        # Conflicts
+        conflicts = self.check_conflicts()
+        if conflicts:
+            lines.append(f"## Conflicts ({len(conflicts)})")
+            for c in conflicts:
+                lines.append(f"- **{c.package}**: installed={c.installed_version}, "
+                             f"required={c.required_version} (by {c.required_by})")
+            lines.append("")
+            lines.append("## Suggested fixes")
+            for s in self.suggest_resolution(conflicts):
+                lines.append(f"  {s}")
+        else:
+            lines.append("## ✅ No dependency conflicts detected")
+        lines.append("")
+
+        # Pyproject validation
+        if pyproject_path:
+            issues = self.validate_pyproject(pyproject_path)
+            if issues:
+                lines.append(f"## pyproject.toml issues ({len(issues)})")
+                for i in issues:
+                    lines.append(f"- {i}")
+            else:
+                lines.append("## ✅ pyproject.toml looks good")
+
+        return "\n".join(lines)
+
+    def find_outdated(self) -> list[dict[str, str]]:
+        """Find outdated packages.
+
+        Returns:
+            List of dicts with name, version, latest_version.
+        """
+        try:
+            result = subprocess.run(
+                [self._python, "-m", "pip", "list", "--outdated", "--format=json"],
+                capture_output=True, text=True, timeout=60,
+            )
+            packages = json.loads(result.stdout)
+            return [
+                {
+                    "name": p["name"],
+                    "version": p["version"],
+                    "latest_version": p.get("latest_version", "unknown"),
+                }
+                for p in packages
+            ]
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+            return []
+
+    def full_audit(self, pyproject_path: Path | None = None) -> dict[str, Any]:
+        """Run all checks and return a structured audit result.
+
+        Returns:
+            Dict with environment, conflicts, pyproject_issues, outdated, and report.
+        """
+        conflicts = self.check_conflicts()
+        pyproject_issues = self.validate_pyproject(pyproject_path) if pyproject_path else []
+        return {
+            "environment": self.get_environment_info(),
+            "conflicts": [
+                {"package": c.package, "installed": c.installed_version,
+                 "required": c.required_version, "by": c.required_by}
+                for c in conflicts
+            ],
+            "pyproject_issues": pyproject_issues,
+            "suggestions": self.suggest_resolution(conflicts),
+            "conflict_count": len(conflicts),
+            "issue_count": len(pyproject_issues),
+        }

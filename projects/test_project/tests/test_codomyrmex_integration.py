@@ -69,17 +69,18 @@ class TestValidationIntegration:
 
     def test_import_validator(self):
         """Verify Validator class."""
-        from codomyrmex.validation import Validator, ValidationResult
+        from codomyrmex.validation.validator import Validator, ValidationResult
         
         assert Validator is not None
         assert ValidationResult is not None
         
     def test_import_validate_function(self):
-        """Verify validate function."""
-        from codomyrmex.validation import validate, is_valid
+        """Verify validate method."""
+        from codomyrmex.validation.validator import Validator
         
-        assert callable(validate)
-        assert callable(is_valid)
+        validator = Validator()
+        assert callable(validator.validate)
+        assert callable(validator.is_valid)
 
 
 class TestEventsIntegration:
@@ -101,21 +102,22 @@ class TestEventsIntegration:
 
 
 class TestStaticAnalysisIntegration:
-    """Tests for codomyrmex.static_analysis integration."""
+    """Tests for codomyrmex.coding.static_analysis integration."""
 
     def test_import_static_analyzer(self):
         """Verify StaticAnalyzer imports."""
-        from codomyrmex.static_analysis import StaticAnalyzer
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
         
         analyzer = StaticAnalyzer()
         assert analyzer is not None
         
     def test_import_analyze_functions(self):
         """Verify analyze functions."""
-        from codomyrmex.static_analysis import analyze_file, analyze_project
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
         
-        assert callable(analyze_file)
-        assert callable(analyze_project)
+        analyzer = StaticAnalyzer()
+        assert callable(analyzer.analyze_file)
+        assert callable(analyzer.analyze_project)
 
 
 class TestOrchestratorIntegration:
@@ -181,35 +183,32 @@ class TestExceptionsIntegration:
 
 
 class TestVisualizationIntegration:
-    """Tests for codomyrmex.visualization (unified system) integration."""
+    """Tests for codomyrmex.data_visualization (unified system) integration."""
 
     def test_import_dashboard(self):
         """Verify Dashboard class imports."""
-        from codomyrmex.visualization import Dashboard
+        from codomyrmex.data_visualization.core.ui import Dashboard
 
         assert Dashboard is not None
 
     def test_import_report_classes(self):
         """Verify report classes import."""
-        from codomyrmex.visualization import (
-            GeneralSystemReport,
-            generate_report,
-        )
+        from codomyrmex.data_visualization.reports.general import GeneralSystemReport
+        from codomyrmex.data_visualization import generate_report
 
         assert GeneralSystemReport is not None
         assert callable(generate_report)
 
     def test_import_components(self):
         """Verify component classes import."""
-        from codomyrmex.visualization import Card, Table, StatBox
+        from codomyrmex.data_visualization.core.ui import Card, Table
 
         assert Card is not None
         assert Table is not None
-        assert StatBox is not None
 
     def test_construct_general_report(self):
         """Verify GeneralSystemReport can be constructed."""
-        from codomyrmex.visualization import GeneralSystemReport
+        from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
         report = GeneralSystemReport()
         assert report is not None

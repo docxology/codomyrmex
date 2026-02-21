@@ -1,181 +1,157 @@
-"""
-Obsidian Vault Search and Filtering.
+"""Obsidian vault search and filtering.
 
-Full-text search, tag filtering, frontmatter queries, and date filtering
-across vault notes.
+Full-text search with title-boosted scoring, plus tag, frontmatter,
+and date-based filters.
 """
 
 from __future__ import annotations
 
-import re
+from datetime import datetime, date
 from typing import Any
 
-from .models import Note, SearchResult
-from .vault import ObsidianVault
+from codomyrmex.agentic_memory.obsidian.models import Note, SearchResult
+from codomyrmex.agentic_memory.obsidian.parser import extract_tags
+
+
+# ── full-text search ─────────────────────────────────────────────────
 
 
 def search_vault(
-    vault: ObsidianVault, query: str, limit: int = 20
+    vault: Any,
+    query: str,
+    *,
+    limit: int = 50,
 ) -> list[SearchResult]:
-    """Case-insensitive full-text search across note content and titles.
-
-    Scores results by match frequency and location (title matches score higher).
-
-    Args:
-        vault: The Obsidian vault.
-        query: Search query string.
-        limit: Maximum number of results to return.
-
-    Returns:
-        List of SearchResult sorted by relevance score (descending).
-    """
+    """Case-insensitive search across title and content with scoring."""
     if not query.strip():
         return []
 
-    pattern = re.compile(re.escape(query), re.IGNORECASE)
+    q = query.lower()
     results: list[SearchResult] = []
 
-    for note in vault.notes.values():
+    for _rel, note in vault.notes.items():
         score = 0.0
         match_type = "content"
         context = ""
 
-        # Title match (high weight)
-        title_matches = len(pattern.findall(note.title))
-        if title_matches > 0:
-            score += title_matches * 10.0
+        # Title match (boosted — highest priority)
+        if q in note.title.lower():
+            score += 2.0
             match_type = "title"
             context = note.title
 
         # Content match
-        content_matches = list(pattern.finditer(note.content))
-        if content_matches:
-            score += len(content_matches) * 1.0
+        body_lower = note.content.lower()
+        if q in body_lower:
+            score += 1.0
+            idx = body_lower.find(q)
+            start = max(0, idx - 40)
+            end = min(len(note.content), idx + len(q) + 40)
             if match_type != "title":
                 match_type = "content"
-            # Extract context snippet around first match
-            first = content_matches[0]
-            start = max(0, first.start() - 40)
-            end = min(len(note.content), first.end() + 40)
-            snippet = note.content[start:end].replace("\n", " ").strip()
-            if not context:
-                context = f"...{snippet}..."
+                context = note.content[start:end].strip()
 
         # Tag match
         for tag in note.tags:
-            if pattern.search(tag.name):
-                score += 5.0
-                if match_type == "content" and score <= 5.0:
+            if q in tag.name.lower():
+                score += 0.5
+                if match_type not in ("title",):
                     match_type = "tag"
 
-        # Frontmatter match
-        fm_str = str(note.frontmatter)
-        fm_matches = len(pattern.findall(fm_str))
-        if fm_matches > 0:
-            score += fm_matches * 2.0
-            if match_type == "content" and score <= 2.0:
-                match_type = "frontmatter"
-
         if score > 0:
-            results.append(
-                SearchResult(
-                    note=note,
-                    score=score,
-                    context=context,
-                    match_type=match_type,
-                )
-            )
+            results.append(SearchResult(
+                note=note,
+                score=score,
+                match_type=match_type,
+                context=context,
+            ))
 
-    # Sort by score descending
     results.sort(key=lambda r: r.score, reverse=True)
     return results[:limit]
 
 
+# ── tag filter ───────────────────────────────────────────────────────
+
+
 def filter_by_tag(
-    vault: ObsidianVault, tag: str, include_nested: bool = True
+    vault: Any,
+    tag: str,
+    *,
+    include_nested: bool = True,
 ) -> list[Note]:
-    """Filter notes by tag.
+    """Return notes containing the given tag.
 
-    Args:
-        vault: The Obsidian vault.
-        tag: Tag to filter by (without #).
-        include_nested: If True, #parent matches #parent/child.
-
-    Returns:
-        List of matching notes.
+    If *include_nested* is ``True``, ``#parent`` matches ``#parent/child``.
+    A leading ``#`` on *tag* is stripped automatically.
     """
     tag = tag.lstrip("#")
-    matching: list[Note] = []
-
-    for note in vault.notes.values():
-        for note_tag in note.tags:
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        for t in note.tags:
             if include_nested:
-                if note_tag.name == tag or note_tag.name.startswith(tag + "/"):
-                    matching.append(note)
+                if t.name == tag or t.name.startswith(tag + "/"):
+                    results.append(note)
                     break
             else:
-                if note_tag.name == tag:
-                    matching.append(note)
+                if t.name == tag:
+                    results.append(note)
                     break
+    return results
 
-    return matching
+
+# ── frontmatter filter ───────────────────────────────────────────────
 
 
 def filter_by_frontmatter(
-    vault: ObsidianVault, key: str, value: Any = None
+    vault: Any,
+    key: str,
+    value: Any = None,
 ) -> list[Note]:
-    """Filter notes by frontmatter key/value.
-
-    Args:
-        vault: The Obsidian vault.
-        key: Frontmatter key to check.
-        value: If None, checks for key existence. Otherwise checks equality.
-
-    Returns:
-        List of matching notes.
-    """
-    matching: list[Note] = []
-
-    for note in vault.notes.values():
+    """Return notes whose frontmatter contains *key* (optionally with a matching *value*)."""
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
         if key in note.frontmatter:
             if value is None or note.frontmatter[key] == value:
-                matching.append(note)
+                results.append(note)
+    return results
 
-    return matching
+
+# ── date filter ──────────────────────────────────────────────────────
 
 
 def filter_by_date(
-    vault: ObsidianVault,
+    vault: Any,
     *,
     after: str | None = None,
     before: str | None = None,
     date_field: str = "created",
 ) -> list[Note]:
-    """Filter notes by frontmatter date field.
+    """Return notes whose frontmatter *date_field* falls within the
+    ``after``/``before`` range (ISO 8601 date strings)."""
+    after_dt = datetime.fromisoformat(after).date() if after else None
+    before_dt = datetime.fromisoformat(before).date() if before else None
 
-    Args:
-        vault: The Obsidian vault.
-        after: Include notes after this date (YYYY-MM-DD format).
-        before: Include notes before this date (YYYY-MM-DD format).
-        date_field: Frontmatter key containing the date.
-
-    Returns:
-        List of matching notes.
-    """
-    matching: list[Note] = []
-
-    for note in vault.notes.values():
-        date_val = note.frontmatter.get(date_field)
-        if date_val is None:
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        raw = note.frontmatter.get(date_field)
+        if raw is None:
+            continue
+        if isinstance(raw, date):
+            note_date = raw
+        elif isinstance(raw, datetime):
+            note_date = raw.date()
+        elif isinstance(raw, str):
+            try:
+                note_date = datetime.fromisoformat(raw).date()
+            except ValueError:
+                continue
+        else:
             continue
 
-        date_str = str(date_val)[:10]  # Take first 10 chars (YYYY-MM-DD)
-
-        if after and date_str < after:
+        if after_dt and note_date < after_dt:
             continue
-        if before and date_str > before:
+        if before_dt and note_date > before_dt:
             continue
+        results.append(note)
 
-        matching.append(note)
-
-    return matching
+    return results

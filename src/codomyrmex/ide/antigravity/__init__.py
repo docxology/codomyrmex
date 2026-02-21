@@ -839,6 +839,29 @@ except ImportError:
     LiveAgentBridge = None
     ClaudeCodeEndpoint = None
 
+try:
+    from codomyrmex.ide.antigravity.message_scheduler import (
+        MessageScheduler,
+        SchedulerConfig,
+    )
+except ImportError:
+    MessageScheduler = None
+    SchedulerConfig = None
+
+try:
+    from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
+except ImportError:
+    RelayEndpoint = None
+
+try:
+    from codomyrmex.ide.antigravity.antigravity_dispatcher import (
+        AntigravityDispatcher,
+        DispatcherConfig,
+    )
+except ImportError:
+    AntigravityDispatcher = None
+    DispatcherConfig = None
+
 
 __all__ = [
     # Core
@@ -856,5 +879,11 @@ __all__ = [
     "RelayMessage",
     "LiveAgentBridge",
     "ClaudeCodeEndpoint",
+    # Scheduler & Endpoint
+    "MessageScheduler",
+    "SchedulerConfig",
+    "RelayEndpoint",
+    "AntigravityDispatcher",
+    "DispatcherConfig",
 ]
 

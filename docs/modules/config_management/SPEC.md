@@ -1,7 +1,7 @@
 # Config Management — Functional Specification
 
 **Module**: `codomyrmex.config_management`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

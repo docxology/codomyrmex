@@ -1,6 +1,6 @@
 # Codomyrmex Documentation
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -14,11 +14,18 @@ Comprehensive documentation for the Codomyrmex platform. This directory contains
 | [**development/**](development/) | Development environment, testing, contribution |
 | [**reference/**](reference/) | API docs, CLI reference, troubleshooting |
 | [**deployment/**](deployment/) | Production deployment guides |
-| [**modules/**](modules/) | Per-module documentation (105 modules) |
+| [**modules/**](modules/) | Per-module documentation (91 modules) |
 | [**integration/**](integration/) | External service integration |
 | [**examples/**](examples/) | Code examples and demos |
 | [**project/**](project/) | Architecture, roadmap, contributing |
 | [**project_orchestration/**](project_orchestration/) | Multi-project workflow guides |
+| [**bio/**](bio/) | Biological & myrmecological perspectives |
+| [**cognitive/**](cognitive/) | Cognitive science & engineering perspectives |
+| [**compliance/**](compliance/) | Audit reports, policy compliance |
+| [**pai/**](pai/) | PAI-Codomyrmex integration reference |
+| [**security/**](security/) | Security theory & practice guides |
+| [**skills/**](skills/) | Skill system lifecycle & governance |
+| [**agents/**](agents/) | Agent rules and coordination |
 
 ### Secure Cognitive Agent
 

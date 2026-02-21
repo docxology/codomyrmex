@@ -25,6 +25,7 @@ from __future__ import annotations
 import logging
 import threading
 import time
+import warnings
 from collections.abc import Callable
 from typing import Any
 
@@ -320,6 +321,11 @@ class LiveAgentBridge:
 class ClaudeCodeEndpoint:
     """Connects a Claude Code instance to the relay channel.
 
+    .. deprecated::
+        Use :class:`~codomyrmex.ide.antigravity.relay_endpoint.RelayEndpoint`
+        instead.  ``RelayEndpoint`` accepts any LLM client (Ollama, Claude,
+        etc.) and integrates the ``MessageScheduler`` for rate limiting.
+
     Polls for incoming messages and either auto-responds via
     ``ClaudeClient.execute_with_session()`` or dispatches to handlers.
 
@@ -340,6 +346,10 @@ class ClaudeCodeEndpoint:
     ) -> None:
         """Initialize the Claude Code endpoint.
 
+        .. deprecated::
+            Use :class:`~codomyrmex.ide.antigravity.relay_endpoint.RelayEndpoint`
+            instead.
+
         Args:
             channel_id: Relay channel to join.
             claude_client: A ``ClaudeClient`` instance. Lazy-created if None.
@@ -348,6 +358,12 @@ class ClaudeCodeEndpoint:
             auto_respond: Automatically respond to chat messages.
             model: Claude model to use (default from client config).
         """
+        warnings.warn(
+            "ClaudeCodeEndpoint is deprecated; use "
+            "codomyrmex.ide.antigravity.relay_endpoint.RelayEndpoint instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         self.relay = AgentRelay(channel_id)
         self.identity = identity
         self.poll_interval = poll_interval

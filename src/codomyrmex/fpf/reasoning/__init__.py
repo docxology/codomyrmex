@@ -295,18 +295,22 @@ class FirstPrinciplesReasoner:
 
     def decompose(self, problem: str) -> list[str]:
         """Decompose a problem into sub-problems."""
-        # Simple word-based decomposition for demonstration
-        words = problem.split()
-
-        if len(words) <= 3:
+        # Perform rigorous sentence-level tokenization or structural splitting
+        parts = [p.strip() for p in problem.replace(';', '.').replace('\n', '.').split('.') if p.strip()]
+        
+        if not parts:
             return [problem]
-
-        # Split into roughly equal parts
-        mid = len(words) // 2
-        return [
-            " ".join(words[:mid]),
-            " ".join(words[mid:]),
-        ]
+            
+        components = []
+        for part in parts:
+            if len(part.split()) > 10:
+                # Sub-split long sentences on conjunctions
+                sub_parts = [s.strip() for s in part.replace(' and ', ' | ').replace(' or ', ' | ').replace(', but ', ' | ').split(' | ') if s.strip()]
+                components.extend(sub_parts)
+            else:
+                components.append(part)
+                
+        return components if components else [problem]
 
     def identify_assumptions(self, statement: str) -> list[str]:
         """Identify potential assumptions in a statement."""

@@ -1,7 +1,7 @@
 # Model Context Protocol — Functional Specification
 
 **Module**: `codomyrmex.model_context_protocol`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

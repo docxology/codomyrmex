@@ -5,7 +5,7 @@
 
 ## Overview
 
-The `test_project` is a comprehensive reference implementation demonstrating maximal usage of codomyrmex functionalities. It serves as both a validation suite and a template for new Codomyrmex-based projects.
+The `test_project` is a comprehensive 100% "Zero-Mock" reference implementation demonstrating maximal usage of codomyrmex functionalities. It serves as both a validation suite verifying authentic sub-module outputs and a functional template for new Codomyrmex-based projects.
 
 ## AI Context
 
@@ -13,7 +13,7 @@ When working with this project:
 
 ### 1. Purpose Recognition
 
-This project demonstrates the **complete Codomyrmex integration pattern**:
+This project demonstrates the **complete Codomyrmex integration pattern** enforcing explicit Zero-Mock policies:
 
 - Foundation layer: `logging_monitoring`, `config_management`, `terminal_interface`
 - Core layer: `static_analysis`, `data_visualization`, `pattern_matching`
@@ -22,7 +22,7 @@ This project demonstrates the **complete Codomyrmex integration pattern**:
 
 ### 2. Directory Structure
 
-```
+```text
 test_project/
 ├── .codomyrmex/     # Project-specific configuration
 ├── config/          # YAML configuration files

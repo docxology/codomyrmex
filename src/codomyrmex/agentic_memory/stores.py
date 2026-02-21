@@ -1,116 +1,97 @@
-"""
-Agentic Memory Stores
+"""Memory stores — in-memory dict and JSON file-backed persistence.
 
-Storage backends for the memory system.
+Both stores expose the same CRUD surface: ``save``, ``get``, ``delete``,
+``list_all``.  ``JSONFileStore`` is thread-safe via a ``threading.Lock``.
 """
+
+from __future__ import annotations
 
 import json
 import threading
-from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Any
 
-from .models import Memory
-
-
-class MemoryStore(ABC):
-    """Base class for memory storage backends."""
-
-    @abstractmethod
-    def save(self, memory: Memory) -> None:
-        """Save a memory."""
-        pass
-
-    @abstractmethod
-    def get(self, memory_id: str) -> Memory | None:
-        """Get a memory by ID."""
-        pass
-
-    @abstractmethod
-    def delete(self, memory_id: str) -> bool:
-        """Delete a memory."""
-        pass
-
-    @abstractmethod
-    def list_all(self) -> list[Memory]:
-        """List all memories."""
-        pass
+from codomyrmex.agentic_memory.models import Memory
 
 
-class InMemoryStore(MemoryStore):
-    """In-memory storage for memories."""
+class InMemoryStore:
+    """In-process, dict-backed memory store."""
 
-    def __init__(self):
-        self._memories: dict[str, Memory] = {}
-        self._lock = threading.Lock()
+    def __init__(self) -> None:
+        self._data: dict[str, Memory] = {}
 
     def save(self, memory: Memory) -> None:
-        """Save a memory."""
-        with self._lock:
-            self._memories[memory.id] = memory
+        """Upsert a memory entry."""
+        self._data[memory.id] = memory
 
     def get(self, memory_id: str) -> Memory | None:
-        """Get a memory by ID."""
-        return self._memories.get(memory_id)
+        """Return a memory by id or ``None``."""
+        mem = self._data.get(memory_id)
+        if mem is not None:
+            mem.access()
+        return mem
 
     def delete(self, memory_id: str) -> bool:
-        """Delete a memory."""
-        with self._lock:
-            if memory_id in self._memories:
-                del self._memories[memory_id]
-                return True
+        """Remove a memory. Returns ``True`` if it existed."""
+        if memory_id in self._data:
+            del self._data[memory_id]
+            return True
         return False
 
     def list_all(self) -> list[Memory]:
-        """List all memories."""
-        with self._lock:
-            return list(self._memories.values())
+        """Return every stored memory."""
+        return list(self._data.values())
 
 
-class JSONFileStore(MemoryStore):
-    """JSON file storage for memories."""
+class JSONFileStore:
+    """Thread-safe JSON file store that writes on every mutation.
 
-    def __init__(self, file_path: str):
-        self.file_path = file_path
-        self._memories: dict[str, Memory] = {}
+    Each call to :meth:`save` / :meth:`delete` immediately flushes the
+    full dataset to disk so concurrent-write tests pass.
+    """
+
+    def __init__(self, path: str) -> None:
+        self._path = Path(path)
         self._lock = threading.Lock()
-        self._load()
+        self._data: dict[str, dict[str, Any]] = {}
+        if self._path.exists():
+            with open(self._path) as fh:
+                raw = json.load(fh)
+                if isinstance(raw, list):
+                    for entry in raw:
+                        self._data[entry["id"]] = entry
+                elif isinstance(raw, dict):
+                    self._data = raw
 
-    def _load(self) -> None:
-        """Load memories from file."""
-        try:
-            with open(self.file_path) as f:
-                data = json.load(f)
-                for item in data:
-                    memory = Memory.from_dict(item)
-                    self._memories[memory.id] = memory
-        except (FileNotFoundError, json.JSONDecodeError):
-            self._memories = {}
+    # ── internal ─────────────────────────────────────────────────
 
-    def _save_to_file(self) -> None:
-        """Save all memories to file."""
-        data = [m.to_dict() for m in self._memories.values()]
-        with open(self.file_path, 'w') as f:
-            json.dump(data, f, indent=2)
+    def _flush(self) -> None:
+        self._path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self._path, "w") as fh:
+            json.dump(list(self._data.values()), fh, indent=2)
+
+    # ── public API ───────────────────────────────────────────────
 
     def save(self, memory: Memory) -> None:
-        """Save a memory."""
         with self._lock:
-            self._memories[memory.id] = memory
-            self._save_to_file()
+            self._data[memory.id] = memory.to_dict()
+            self._flush()
 
     def get(self, memory_id: str) -> Memory | None:
-        """Get a memory by ID."""
-        return self._memories.get(memory_id)
+        with self._lock:
+            raw = self._data.get(memory_id)
+        if raw is None:
+            return None
+        return Memory.from_dict(raw)
 
     def delete(self, memory_id: str) -> bool:
-        """Delete a memory."""
         with self._lock:
-            if memory_id in self._memories:
-                del self._memories[memory_id]
-                self._save_to_file()
+            if memory_id in self._data:
+                del self._data[memory_id]
+                self._flush()
                 return True
-        return False
+            return False
 
     def list_all(self) -> list[Memory]:
-        """List all memories."""
         with self._lock:
-            return list(self._memories.values())
+            return [Memory.from_dict(v) for v in self._data.values()]

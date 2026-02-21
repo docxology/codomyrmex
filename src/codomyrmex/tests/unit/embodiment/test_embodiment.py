@@ -21,13 +21,15 @@ def test_ros_bridge_pub_sub():
     bridge.simulate_message("/sensor/data", test_msg)
 
     assert len(received) == 1
-    assert received[0] == test_msg
+    assert received[0].payload == test_msg
 
 @pytest.mark.unit
 def test_bridge_publishing():
     """Test publishing interface."""
     bridge = ROS2Bridge("test_node")
-    assert bridge.publish("/cmd_vel", {"speed": 1.0}) is True
+    msg = bridge.publish("/cmd_vel", {"speed": 1.0})
+    assert msg is not None
+    assert msg.topic == "/cmd_vel"
 
 @pytest.mark.unit
 def test_transform_3d():

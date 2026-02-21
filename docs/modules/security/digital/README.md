@@ -1,6 +1,6 @@
 # Security Digital Submodule
 
-**Version**: v0.1.7 | **Source**: [`src/codomyrmex/security/digital/`](../../../../src/codomyrmex/security/digital/)
+**Version**: v1.0.0 | **Source**: [`src/codomyrmex/security/digital/`](../../../../src/codomyrmex/security/digital/)
 
 ## Overview
 

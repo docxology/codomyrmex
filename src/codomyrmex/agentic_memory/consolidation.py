@@ -1,32 +1,31 @@
-"""Memory consolidation — short-term conversations to long-term cases.
+"""Memory → Case consolidation.
 
-Converts recent agent conversation entries (from ``agentic_memory``)
-into structured ``Case`` objects for the ``CaseBase``.  This enables
-long-term learning from agent interactions.
+Converts a batch of ``Memory`` objects into lightweight ``Case``
+records suitable for case-based reasoning, filtering by importance
+and content length.
 """
 
 from __future__ import annotations
 
-import hashlib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.agentic_memory.models import Memory, MemoryImportance, MemoryType
-from codomyrmex.cerebrum.core.cases import Case, CaseBase
-from codomyrmex.logging_monitoring import get_logger
+from codomyrmex.agentic_memory.models import Memory, MemoryImportance
 
-logger = get_logger(__name__)
+
+@dataclass
+class Case:
+    """A distilled memory case with features and context."""
+
+    case_id: str
+    features: dict[str, Any] = field(default_factory=dict)
+    context: dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class ConsolidationConfig:
-    """Configuration for memory consolidation.
-
-    Attributes:
-        min_importance: Minimum memory importance for consolidation.
-        min_content_length: Minimum content length to consolidate.
-        batch_size: How many memories to consolidate per call.
-    """
+    """Tuneable knobs for the consolidation filter."""
 
     min_importance: MemoryImportance = MemoryImportance.MEDIUM
     min_content_length: int = 20
@@ -34,108 +33,44 @@ class ConsolidationConfig:
 
 
 class MemoryConsolidator:
-    """Consolidates short-term memories into long-term cases.
+    """Convert ``Memory`` entries into ``Case`` objects.
 
-    Filters memories by importance and content quality, then
-    converts qualifying entries into ``Case`` objects.
-
-    Usage::
-
-        consolidator = MemoryConsolidator()
-        memories = memory_store.get_recent(100)
-        cases = consolidator.consolidate(memories)
-        for case in cases:
-            case_base.add_case(case)
+    Applies importance and content-length filters and avoids
+    duplicate consolidation.
     """
 
-    def __init__(
-        self,
-        config: ConsolidationConfig | None = None,
-    ) -> None:
-        self._config = config or ConsolidationConfig()
-        self._consolidated_ids: set[str] = set()
+    def __init__(self, config: ConsolidationConfig | None = None) -> None:
+        self.config = config or ConsolidationConfig()
+        self._seen: set[str] = set()
 
-    def consolidate(
-        self,
-        memories: list[Memory],
-    ) -> list[Case]:
-        """Consolidate a batch of memories into cases.
-
-        Args:
-            memories: List of memories to process.
-
-        Returns:
-            List of ``Case`` objects qualifying for long-term storage.
-        """
-        qualifying = [
-            m for m in memories
-            if self._should_consolidate(m)
-        ]
-
-        # Respect batch size
-        batch = qualifying[:self._config.batch_size]
+    def consolidate(self, memories: list[Memory]) -> list[Case]:
+        """Return at most ``batch_size`` cases, skipping duplicates and
+        entries below the configured thresholds."""
         cases: list[Case] = []
+        for mem in memories:
+            if len(cases) >= self.config.batch_size:
+                break
+            if mem.id in self._seen:
+                continue
+            if mem.importance.value < self.config.min_importance.value:
+                continue
+            if len(mem.content) < self.config.min_content_length:
+                continue
 
-        for memory in batch:
-            case = self._memory_to_case(memory)
-            cases.append(case)
-            self._consolidated_ids.add(memory.id)
-
-        logger.info(
-            "Memory consolidation complete",
-            extra={
-                "memories_in": len(memories),
-                "qualifying": len(qualifying),
-                "cases_out": len(cases),
-            },
-        )
-
+            self._seen.add(mem.id)
+            cases.append(
+                Case(
+                    case_id=f"memory-{mem.id}",
+                    features={
+                        "content_summary": mem.content[:120],
+                        "memory_type": mem.memory_type.value,
+                        "importance": mem.importance.value,
+                    },
+                    context={"full_content": mem.content},
+                    metadata={
+                        "source": "consolidation",
+                        "memory_id": mem.id,
+                    },
+                )
+            )
         return cases
-
-    def _should_consolidate(self, memory: Memory) -> bool:
-        """Check if a memory qualifies for consolidation."""
-        if memory.id in self._consolidated_ids:
-            return False
-
-        if memory.importance.value < self._config.min_importance.value:
-            return False
-
-        if len(memory.content) < self._config.min_content_length:
-            return False
-
-        return True
-
-    def _memory_to_case(self, memory: Memory) -> Case:
-        """Convert a single memory to a Case."""
-        features: dict[str, Any] = {
-            "content_summary": memory.content[:200],
-            "memory_type": memory.memory_type.value,
-            "importance": memory.importance.value,
-            "access_count": memory.access_count,
-        }
-
-        context: dict[str, Any] = {
-            "full_content": memory.content,
-            "created_at": memory.created_at.isoformat(),
-            "accessed_at": memory.accessed_at.isoformat(),
-        }
-
-        outcome: dict[str, Any] = memory.metadata.copy()
-
-        return Case(
-            case_id=f"memory-{memory.id}",
-            features=features,
-            context=context,
-            outcome=outcome,
-            metadata={
-                "source": "consolidation",
-                "memory_id": memory.id,
-                "memory_type": memory.memory_type.value,
-            },
-        )
-
-
-__all__ = [
-    "ConsolidationConfig",
-    "MemoryConsolidator",
-]

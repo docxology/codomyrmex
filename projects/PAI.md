@@ -17,7 +17,7 @@ When working with projects:
 
 ## Key Subdirectories
 
-- `test_project/`: Example project demonstrating standard structure
+- `test_project/`: Fully functional 100% Zero-Mock demonstration project for reference
 
 ## Navigation
 

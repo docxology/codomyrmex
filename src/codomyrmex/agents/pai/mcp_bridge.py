@@ -23,8 +23,10 @@ Example — direct call (no MCP overhead)::
 from __future__ import annotations
 
 import importlib
+import importlib.util
 import inspect
 import json
+import pkgutil
 import subprocess
 import sys
 import yaml
@@ -743,9 +745,56 @@ def invalidate_tool_cache() -> None:
     logger.info("Dynamic tool cache invalidated")
 
 
+_FALLBACK_SCAN_TARGETS = [
+    "codomyrmex.data_visualization",
+    "codomyrmex.llm",
+    "codomyrmex.agentic_memory",
+    "codomyrmex.security",
+    "codomyrmex.git_operations",
+    "codomyrmex.coding",
+    "codomyrmex.documentation",
+]
+
+
+def _find_mcp_modules() -> list[str]:
+    """Auto-discover all codomyrmex sub-packages that contain an ``mcp_tools`` module.
+
+    Uses :func:`pkgutil.walk_packages` to walk the ``codomyrmex`` package tree,
+    filtering for modules whose name ends with ``.mcp_tools``.  Returns the
+    *parent* package name for each match (e.g. ``codomyrmex.security``).
+
+    Falls back to :data:`_FALLBACK_SCAN_TARGETS` if the walk fails entirely.
+    """
+    try:
+        root = importlib.import_module("codomyrmex")
+        root_path = getattr(root, "__path__", None)
+        if not root_path:
+            return list(_FALLBACK_SCAN_TARGETS)
+
+        parents: set[str] = set()
+        for importer, name, ispkg in pkgutil.walk_packages(
+            root_path, prefix="codomyrmex."
+        ):
+            if name.endswith(".mcp_tools"):
+                # e.g. "codomyrmex.security.mcp_tools" -> "codomyrmex.security"
+                parent = name.rsplit(".", 1)[0]
+                parents.add(parent)
+
+        if not parents:
+            logger.warning("pkgutil walk found 0 mcp_tools modules; using fallback")
+            return list(_FALLBACK_SCAN_TARGETS)
+
+        logger.info("Auto-discovered %d modules with mcp_tools", len(parents))
+        return sorted(parents)
+
+    except Exception as exc:
+        logger.warning("_find_mcp_modules failed (%s); using fallback targets", exc)
+        return list(_FALLBACK_SCAN_TARGETS)
+
+
 def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
     """Scan modules for @mcp_tool definitions using MCPDiscovery engine.
-    
+
     Uses a TTL-based cache.
     """
     global _DYNAMIC_TOOLS_CACHE, _CACHE_EXPIRY, _DISCOVERY_ENGINE
@@ -764,17 +813,7 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     t0 = time.monotonic()
 
-    # Scan targets - covering key modules
-    scan_targets = [
-        "codomyrmex.data_visualization",
-        "codomyrmex.llm",
-        "codomyrmex.agentic_memory",
-        "codomyrmex.security",
-        "codomyrmex.git_operations", 
-        "codomyrmex.coding", 
-        "codomyrmex.documentation",
-        "codomyrmex.terminal_interface",
-    ]
+    scan_targets = _find_mcp_modules()
     
     for target in scan_targets:
         try:
@@ -1030,17 +1069,30 @@ def get_skill_manifest() -> dict[str, Any]:
 
     # Merge dynamic tools
     dynamic_list = _discover_dynamic_tools()
-    dynamic_tools = [
-        {
-            "name": t[0],
-            "description": t[1],
-            "category": "dynamic",  # TODO: extract category from metadata
-            "input_schema": t[3],
-        }
-        for t in dynamic_list
-    ]
+    dynamic_tools = []
+    for t in dynamic_list:
+        name, description, handler, input_schema = t
+        # Extract category from @mcp_tool metadata on the handler
+        category = "general"
+        if handler and hasattr(handler, "_mcp_tool_meta"):
+            category = handler._mcp_tool_meta.get("category", "general")
+        if category == "general" and "." in name:
+            # Fallback: derive from dotted tool name prefix
+            category = name.split(".")[1]
+        dynamic_tools.append({
+            "name": name,
+            "description": description,
+            "category": category,
+            "input_schema": input_schema,
+        })
 
-    all_tools = static_tools + dynamic_tools
+    # Deduplicate: dynamic tools override static when names collide
+    seen: dict[str, dict[str, Any]] = {}
+    for t in static_tools:
+        seen[t["name"]] = t
+    for t in dynamic_tools:
+        seen[t["name"]] = t  # dynamic wins
+    all_tools = sorted(seen.values(), key=lambda t: t["name"])
 
     return {
         "name": "Codomyrmex",

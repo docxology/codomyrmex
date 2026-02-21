@@ -29,6 +29,7 @@ def init(default_locale: str = "en") -> Translator:
 
 
 def t(key: str, **kwargs) -> str:
+    global _default_translator
     if _default_translator is None:
         init()
     return _default_translator.t(key, **kwargs)

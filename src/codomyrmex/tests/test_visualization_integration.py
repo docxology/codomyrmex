@@ -8,8 +8,9 @@ def test_relations_visualization():
     cm = ContactManager()
     cm.add_contact("Alice", email="alice@example.com")
     diagram = render_social_graph(cm)
-    assert "Alice" in diagram.definition
-    assert "graph TD" in diagram.definition
+    assert "nodes" in diagram
+    assert diagram["node_count"] == 1
+    assert any(n["id"] == "Alice" for n in diagram["nodes"])
 
 
 def test_education_curriculum_structure():

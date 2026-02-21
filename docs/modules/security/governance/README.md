@@ -1,6 +1,6 @@
 # Security Governance Submodule
 
-**Version**: v0.1.7 | **Source**: [`src/codomyrmex/security/governance/`](../../../../src/codomyrmex/security/governance/)
+**Version**: v1.0.0 | **Source**: [`src/codomyrmex/security/governance/`](../../../../src/codomyrmex/security/governance/)
 
 ## Overview
 

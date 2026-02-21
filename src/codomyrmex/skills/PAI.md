@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Skills Module
 
-**Version**: v0.3.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v0.5.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -15,7 +15,7 @@ There are **two separate skill systems** that interact through a well-defined br
 | **Codomyrmex Skills** | `src/codomyrmex/skills/` (this module) | `SkillsManager`, `SkillLoader` | Internal Python skills for the development platform |
 | **PAI Skills** | `~/.claude/skills/` | PAI Algorithm (SKILL.md) | Personal AI skills invoked by the Algorithm |
 
-The **bridge** between them is the Codomyrmex PAI Skill at `~/.claude/skills/Codomyrmex/SKILL.md`. This PAI-side skill exposes codomyrmex capabilities (53 curated MCP tools, 2 resources, 5 prompts) to the PAI Algorithm via the MCP protocol. It also provides the `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
+The **bridge** between them is the Codomyrmex PAI Skill at `~/.claude/skills/Codomyrmex/SKILL.md`. This PAI-side skill exposes codomyrmex capabilities (115 auto-discovered MCP tools from 27 modules, 2 resources, 10 prompts) to the PAI Algorithm via the MCP protocol. It also provides the `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
 
 ### How They Connect
 

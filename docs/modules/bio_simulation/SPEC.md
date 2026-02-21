@@ -1,7 +1,7 @@
 # Bio Simulation — Functional Specification
 
 **Module**: `codomyrmex.bio_simulation`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

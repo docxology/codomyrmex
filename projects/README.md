@@ -10,7 +10,7 @@ Project workspace and templates for Codomyrmex-powered development projects. Thi
 
 | Directory | Description |
 |-----------|-------------|
-| [**test_project/**](test_project/) | Reference implementation demonstrating full Codomyrmex integration |
+| [**test_project/**](test_project/) | 100% Zero-Mock reference implementation demonstrating authentic, full Codomyrmex integration |
 
 ## Creating a New Project
 

@@ -8,7 +8,7 @@ Project workspace containing working projects that use Codomyrmex functionality.
 
 ## Directory Structure
 
-```
+```text
 projects/
 ├── test_project/        # Reference implementation project
 │   ├── src/             # Project source code
@@ -23,7 +23,7 @@ projects/
 
 | Component | Type | Description |
 |-----------|------|-------------|
-| `test_project/` | Project | Reference implementation |
+| `test_project/` | Project | 100% Zero-Mock Reference implementation |
 | [README.md](README.md) | Doc | Directory overview |
 | [SPEC.md](SPEC.md) | Doc | Functional specification |
 | [PAI.md](PAI.md) | Doc | Personal AI considerations |

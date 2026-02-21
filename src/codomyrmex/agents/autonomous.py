@@ -9,22 +9,58 @@ import logging
 import threading
 from typing import Optional, Callable
 
-from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
 from codomyrmex.agents.llm_client import get_llm_client, AgentRequest
 
 logger = logging.getLogger(__name__)
 
+
+def _make_endpoint(
+    channel: str,
+    identity: str,
+    poll_interval: float,
+    client: object,
+    scheduler_config: object | None,
+) -> object:
+    """Create the best available relay endpoint.
+
+    Prefers :class:`RelayEndpoint` (provider-agnostic); falls back to
+    the legacy :class:`ClaudeCodeEndpoint` for backward compatibility.
+    """
+    try:
+        from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint
+        return RelayEndpoint(
+            channel,
+            llm_client=client,
+            identity=identity,
+            poll_interval=poll_interval,
+            auto_respond=False,
+            scheduler_config=scheduler_config,
+        )
+    except ImportError:
+        from codomyrmex.ide.antigravity.live_bridge import ClaudeCodeEndpoint
+        return ClaudeCodeEndpoint(
+            channel,
+            claude_client=client,
+            identity=identity,
+            poll_interval=poll_interval,
+            auto_respond=False,
+        )
+
+
 class AutonomousAgent:
     """A long-lived autonomous agent connected to a Relay Channel.
-    
+
     Attributes:
         identity: The agent's name/ID on the channel.
         persona: Description of the agent's role/personality.
         channel: The relay channel ID to connect to.
         poll_interval: How often to check for messages (seconds).
         think_time: Artificial delay before responding (seconds).
+        scheduler_config: Optional :class:`SchedulerConfig` for rate-limited
+            sending.  When provided, the scheduler's computed delay replaces
+            the raw ``think_time`` sleep.
     """
-    
+
     def __init__(
         self,
         identity: str,
@@ -32,7 +68,8 @@ class AutonomousAgent:
         channel: str,
         poll_interval: float = 1.0,
         think_time: float = 2.0,
-        model: str | None = None
+        model: str | None = None,
+        scheduler_config: object | None = None,
     ):
         self.identity = identity
         self.persona = persona
@@ -40,22 +77,20 @@ class AutonomousAgent:
         self.poll_interval = poll_interval
         self.think_time = think_time
         self.running = False
-        
+        self._scheduler_config = scheduler_config
+
         # Initialize Client
         self.client = get_llm_client(identity)
-        
-        # Initialize Endpoint (wrapper around Relay)
-        # We use ClaudeCodeEndpoint because it has good polling/event logic
-        # But we disable auto-respond to inject our own logic
-        self.endpoint = ClaudeCodeEndpoint(
-            channel,
-            identity=identity,
-            poll_interval=poll_interval,
-            claude_client=self.client,
-            auto_respond=False
+
+        # Initialize Endpoint (provider-agnostic relay wrapper)
+        self.endpoint = _make_endpoint(
+            channel, identity, poll_interval, self.client, scheduler_config,
         )
-        
+
         self.endpoint.on_message(self._handle_message)
+
+        # If scheduler is available on the endpoint, expose it
+        self._scheduler = getattr(self.endpoint, "_scheduler", None)
 
     def start(self, background: bool = True) -> None:
         """Start the agent loop."""
@@ -81,25 +116,31 @@ class AutonomousAgent:
         logger.info(f"[{self.identity}] Sending: {message[:50]}...")
         self.endpoint.relay.post_message(self.identity, message)
 
+    def pause(self) -> None:
+        """Pause message sending (delegates to scheduler if available)."""
+        if self._scheduler is not None:
+            self._scheduler.pause()
+
+    def resume(self) -> None:
+        """Resume message sending (delegates to scheduler if available)."""
+        if self._scheduler is not None:
+            self._scheduler.resume()
+
     def _handle_message(self, msg) -> None:
         """Handle incoming messages."""
-        if not self.running: return
-        
-        # Ignore self-messages and system messages (unless specific)
+        if not self.running:
+            return
+
         if msg.sender == self.identity:
             return
-            
+
         if not msg.is_chat:
             return
 
         logger.info(f"[{self.identity}] Received from {msg.sender}: {msg.content[:50]}...")
-        
-        # Thinking Delay
-        if self.think_time > 0:
-            logger.info(f"[{self.identity}] Thinking ({self.think_time}s)...")
-            time.sleep(self.think_time)
-            
-        if not self.running: return
+
+        if not self.running:
+            return
 
         # Generate Reply
         try:
@@ -110,9 +151,14 @@ class AutonomousAgent:
             )
             req = AgentRequest(prompt=prompt)
             resp = self.client.execute_with_session(req)
-            
+
             reply = resp.content.strip()
             self.send(reply)
-            
+
+            if self._scheduler is not None:
+                self._scheduler.record_success()
+
         except Exception as e:
             logger.error(f"[{self.identity}] Generation error: {e}")
+            if self._scheduler is not None:
+                self._scheduler.record_error()

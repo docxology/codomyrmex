@@ -99,6 +99,47 @@ class UOREntity:
             }
         return result
 
+    def has_attribute(self, key: str) -> bool:
+        """Check if the entity has a specific attribute."""
+        return key in self.attributes
+
+    def set_attribute(self, key: str, value: Any) -> None:
+        """Set an attribute and recompute the content hash."""
+        self.attributes[key] = value
+        self.recompute_hash()
+
+    def remove_attribute(self, key: str) -> Any | None:
+        """Remove an attribute and recompute the hash. Returns the removed value."""
+        value = self.attributes.pop(key, None)
+        if value is not None:
+            self.recompute_hash()
+        return value
+
+    def merge_attributes(self, other: "UOREntity", overwrite: bool = False) -> None:
+        """Merge attributes from another entity.
+
+        Args:
+            other: Source entity to merge from.
+            overwrite: If True, overwrite existing keys.
+        """
+        for k, v in other.attributes.items():
+            if overwrite or k not in self.attributes:
+                self.attributes[k] = v
+        self.recompute_hash()
+
+    def similarity_score(self, other: "UOREntity") -> float:
+        """Compute a simple attribute overlap score between [0, 1]."""
+        if not self.attributes and not other.attributes:
+            return 1.0 if self.entity_type == other.entity_type else 0.0
+        all_keys = set(self.attributes) | set(other.attributes)
+        if not all_keys:
+            return 0.0
+        matching = sum(
+            1 for k in all_keys
+            if self.attributes.get(k) == other.attributes.get(k)
+        )
+        return matching / len(all_keys)
+
 
 @dataclass
 class UORRelationship:
@@ -115,6 +156,8 @@ class UORRelationship:
         relationship_type: Category of the relationship.
         attributes: Arbitrary key-value metadata.
         relationship_hash: SHA256 hash of (source_id, target_id, type, attributes).
+        weight: Numeric strength of the relationship (default 1.0).
+        bidirectional: Whether the relationship is undirected.
         created_at: ISO-format creation timestamp.
     """
 
@@ -124,6 +167,8 @@ class UORRelationship:
     relationship_type: str = "related"
     attributes: dict[str, Any] = field(default_factory=dict)
     relationship_hash: str = ""
+    weight: float = 1.0
+    bidirectional: bool = False
     created_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )
@@ -142,6 +187,21 @@ class UORRelationship:
             "attributes": self.attributes,
         })
 
+    def inverse(self) -> "UORRelationship":
+        """Create the inverse relationship (swap source and target)."""
+        return UORRelationship(
+            source_id=self.target_id,
+            target_id=self.source_id,
+            relationship_type=f"inverse_{self.relationship_type}",
+            attributes=self.attributes,
+            weight=self.weight,
+            bidirectional=self.bidirectional,
+        )
+
+    def involves(self, entity_id: str) -> bool:
+        """Check if an entity is involved in this relationship."""
+        return self.source_id == entity_id or self.target_id == entity_id
+
     def to_dict(self) -> dict[str, Any]:
         """Serialize the relationship to a plain dictionary."""
         return {
@@ -151,5 +211,8 @@ class UORRelationship:
             "relationship_type": self.relationship_type,
             "attributes": self.attributes,
             "relationship_hash": self.relationship_hash,
+            "weight": self.weight,
+            "bidirectional": self.bidirectional,
             "created_at": self.created_at,
         }
+

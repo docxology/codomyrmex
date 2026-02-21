@@ -1,7 +1,7 @@
 # Plugin System — Functional Specification
 
 **Module**: `codomyrmex.plugin_system`  
-**Version**: v0.1.7  
+**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview

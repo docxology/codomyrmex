@@ -1,7 +1,7 @@
 [project]
 name = "test_project"
 version = "1.0.0"
-description = "Comprehensive reference implementation demonstrating codomyrmex capabilities"
+description = "Zero-Mock Reference implementation demonstrating codomyrmex capabilities"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

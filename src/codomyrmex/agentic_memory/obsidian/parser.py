@@ -1,8 +1,6 @@
-"""
-Obsidian Markdown Parser.
+"""Obsidian markdown parser — frontmatter, wikilinks, embeds, tags, callouts, headings.
 
-Parses Obsidian-flavored markdown including frontmatter, wikilinks,
-embeds, callouts, tags, and headings. Supports round-trip serialization.
+All extraction is regex/YAML-based with no external Obsidian dependencies.
 """
 
 from __future__ import annotations
@@ -11,247 +9,178 @@ import re
 from pathlib import Path
 from typing import Any
 
-import yaml
+try:
+    import yaml
+except ImportError:  # pragma: no cover – yaml is an optional dep
+    yaml = None  # type: ignore[assignment]
 
-from .models import Callout, Embed, Note, Tag, WikiLink
-
-# --- Regex patterns ---
-
-# Wikilinks: [[target]], [[target|alias]], [[target#heading]], [[target#^block]]
-_WIKILINK_RE = re.compile(
-    r"(?<!!)\[\[([^\]|#]+?)(?:#([^\]|]*?))?(?:\|([^\]]*?))?\]\]"
+from codomyrmex.agentic_memory.obsidian.models import (
+    Callout,
+    Embed,
+    Note,
+    Tag,
+    Wikilink,
 )
 
-# Embeds: ![[file]], ![[file|W]], ![[file|WxH]]
-_EMBED_RE = re.compile(
-    r"!\[\[([^\]|]+?)(?:\|(\d+)(?:x(\d+))?)?\]\]"
+# ── regex patterns ───────────────────────────────────────────────────
+
+_FM_RE = re.compile(r"^---\n(.*?)^---\n?", re.MULTILINE | re.DOTALL)
+_WIKILINK_RE = re.compile(r"(?<!\!)\[\[([^\]]+?)\]\]")
+_EMBED_RE = re.compile(r"!\[\[([^\]]+?)\]\]")
+_TAG_RE = re.compile(r"(?:^|\s)#([\w][\w/\-]*)", re.MULTILINE)
+_HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$", re.MULTILINE)
+_CALLOUT_RE = re.compile(
+    r"^> \[!([\w]+)\]([+-]?)\s*(.*?)$\n((?:^> .*$\n?)*)",
+    re.MULTILINE,
 )
 
-# Inline tags: #tag, #parent/child (not inside code blocks or URLs)
-_TAG_RE = re.compile(r"(?<!\w)#([\w][\w/\-]*(?:/[\w\-]+)*)")
 
-# Headings: # through ######
-_HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)(?:\s+#*)?$", re.MULTILINE)
-
-# Callout header: > [!type]+/- Title
-_CALLOUT_HEADER_RE = re.compile(
-    r"^>\s*\[!(\w+)\]([+-])?\s*(.*?)$", re.MULTILINE
-)
-
-# Frontmatter delimiters
-_FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n?", re.DOTALL)
-_FRONTMATTER_EMPTY_RE = re.compile(r"^---\s*\n---\s*\n?", re.DOTALL)
-
+# ── frontmatter ──────────────────────────────────────────────────────
 
 def parse_frontmatter(raw: str) -> tuple[dict[str, Any], str]:
-    """Split raw markdown into (frontmatter_dict, body_content).
-
-    Uses PyYAML for parsing. Falls back to empty dict if no frontmatter found.
-    """
-    # Check for empty frontmatter first (---\n---\n)
-    empty_match = _FRONTMATTER_EMPTY_RE.match(raw)
-    if empty_match:
-        # Check if this is truly empty (no content between delimiters)
-        match = _FRONTMATTER_RE.match(raw)
-        if not match:
-            return {}, raw[empty_match.end():]
-
-    match = _FRONTMATTER_RE.match(raw)
+    """Split raw markdown into ``(frontmatter_dict, body)``."""
+    match = _FM_RE.match(raw)
     if not match:
         return {}, raw
-
-    yaml_str = match.group(1)
+    fm_text = match.group(1).strip()
     body = raw[match.end():]
-
-    try:
-        fm = yaml.safe_load(yaml_str)
-        if not isinstance(fm, dict):
-            fm = {}
-    except yaml.YAMLError:
+    if not fm_text:
+        return {}, body
+    if yaml is not None:
+        fm = yaml.safe_load(fm_text) or {}
+    else:
         fm = {}
-
     return fm, body
 
 
-def extract_wikilinks(content: str) -> list[WikiLink]:
-    """Extract wikilinks from markdown content.
+# ── wikilinks ────────────────────────────────────────────────────────
 
-    Handles: [[target]], [[target|alias]], [[target#heading]], [[target#^block]].
-    Skips embeds (handled by extract_embeds).
-    """
-    results = []
-    for match in _WIKILINK_RE.finditer(content):
-        target = match.group(1).strip()
-        heading = match.group(2)
-        alias = match.group(3)
-        if heading is not None:
-            heading = heading.strip() or None
-        if alias is not None:
-            alias = alias.strip() or None
-        results.append(
-            WikiLink(
-                target=target,
-                alias=alias,
-                heading=heading,
-                is_embed=False,
-                raw=match.group(0),
-            )
-        )
+def extract_wikilinks(content: str) -> list[Wikilink]:
+    """Extract ``[[target]]``, ``[[target|alias]]``, ``[[target#heading]]``."""
+    results: list[Wikilink] = []
+    for m in _WIKILINK_RE.finditer(content):
+        raw = m.group(1)
+        alias: str | None = None
+        heading: str | None = None
+
+        # Handle heading + alias: [[Note#Section|Custom Text]]
+        if "|" in raw:
+            target_part, alias = raw.split("|", 1)
+        else:
+            target_part = raw
+
+        if "#" in target_part:
+            target, heading = target_part.split("#", 1)
+        else:
+            target = target_part
+
+        results.append(Wikilink(target=target, alias=alias, heading=heading))
     return results
 
+
+# ── embeds ───────────────────────────────────────────────────────────
 
 def extract_embeds(content: str) -> list[Embed]:
-    """Extract embeds from markdown content.
+    """Extract ``![[file]]`` and ``![[file|WxH]]`` embeds."""
+    results: list[Embed] = []
+    for m in _EMBED_RE.finditer(content):
+        raw = m.group(1)
+        width: int | None = None
+        height: int | None = None
 
-    Handles: ![[file]], ![[file|W]], ![[file|WxH]].
-    """
-    results = []
-    for match in _EMBED_RE.finditer(content):
-        target = match.group(1).strip()
-        width_str = match.group(2)
-        height_str = match.group(3)
-        width = int(width_str) if width_str else None
-        height = int(height_str) if height_str else None
-        results.append(
-            Embed(
-                target=target,
-                width=width,
-                height=height,
-                raw=match.group(0),
-            )
-        )
+        if "|" in raw:
+            target, dims = raw.split("|", 1)
+            if "x" in dims:
+                parts = dims.split("x", 1)
+                width = int(parts[0])
+                height = int(parts[1])
+            else:
+                width = int(dims)
+        else:
+            target = raw
+
+        results.append(Embed(target=target, width=width, height=height))
     return results
 
 
-def extract_tags(content: str, frontmatter: dict[str, Any] | None = None) -> list[Tag]:
-    """Extract tags from content and frontmatter.
+# ── tags ─────────────────────────────────────────────────────────────
 
-    Content tags: #tag, #parent/child
-    Frontmatter tags: from 'tags' key (list of strings).
-    """
+def extract_tags(
+    content: str,
+    frontmatter: dict[str, Any] | None = None,
+) -> list[Tag]:
+    """Extract inline ``#tags`` and frontmatter ``tags`` list."""
     tags: list[Tag] = []
+    for m in _TAG_RE.finditer(content):
+        tags.append(Tag(name=m.group(1), source="content"))
 
-    # Content tags
-    for match in _TAG_RE.finditer(content):
-        tag_name = match.group(1)
-        tags.append(Tag(name=tag_name, source="content"))
-
-    # Frontmatter tags
-    if frontmatter:
-        fm_tags = frontmatter.get("tags", [])
-        if isinstance(fm_tags, list):
-            for t in fm_tags:
-                if isinstance(t, str):
-                    tags.append(Tag(name=t, source="frontmatter"))
-        elif isinstance(fm_tags, str):
-            # Handle comma-separated or single tag
-            for t in fm_tags.split(","):
-                t = t.strip().lstrip("#")
-                if t:
-                    tags.append(Tag(name=t, source="frontmatter"))
-
+    if frontmatter and "tags" in frontmatter:
+        for t in frontmatter["tags"]:
+            tags.append(Tag(name=str(t), source="frontmatter"))
     return tags
 
 
-def extract_callouts(content: str) -> list[Callout]:
-    """Extract callout blocks from markdown content.
-
-    Handles: > [!type] Title, > [!type]+ Title (foldable open),
-    > [!type]- Title (foldable closed).
-    """
-    callouts: list[Callout] = []
-    lines = content.split("\n")
-    i = 0
-
-    while i < len(lines):
-        header_match = _CALLOUT_HEADER_RE.match(lines[i])
-        if header_match:
-            callout_type = header_match.group(1).lower()
-            fold_char = header_match.group(2)
-            title = header_match.group(3).strip()
-
-            foldable = fold_char is not None
-            default_open = fold_char != "-"
-
-            # Collect callout body lines
-            body_lines: list[str] = []
-            i += 1
-            while i < len(lines) and lines[i].startswith(">"):
-                # Strip the leading > and optional space
-                line = lines[i]
-                if line.startswith("> "):
-                    body_lines.append(line[2:])
-                elif line == ">":
-                    body_lines.append("")
-                else:
-                    body_lines.append(line[1:])
-                i += 1
-
-            callouts.append(
-                Callout(
-                    type=callout_type,
-                    title=title,
-                    content="\n".join(body_lines),
-                    foldable=foldable,
-                    default_open=default_open,
-                )
-            )
-        else:
-            i += 1
-
-    return callouts
-
+# ── headings ─────────────────────────────────────────────────────────
 
 def extract_headings(content: str) -> list[tuple[int, str]]:
-    """Extract headings as (level, text) tuples."""
-    return [
-        (len(match.group(1)), match.group(2).strip())
-        for match in _HEADING_RE.finditer(content)
-    ]
+    """Return ``(level, text)`` tuples for every heading."""
+    return [(len(m.group(1)), m.group(2).strip()) for m in _HEADING_RE.finditer(content)]
 
 
-def parse_note(path: Path, raw: str | None = None) -> Note:
-    """Full parse pipeline: read file -> extract all elements -> Note object.
+# ── callouts ─────────────────────────────────────────────────────────
 
-    Args:
-        path: Path to the markdown file.
-        raw: Optional raw content. If None, reads from path.
-    """
+def extract_callouts(content: str) -> list[Callout]:
+    """Extract Obsidian-style callout blocks."""
+    results: list[Callout] = []
+    for m in _CALLOUT_RE.finditer(content):
+        ctype = m.group(1)
+        fold_char = m.group(2)
+        title = m.group(3).strip()
+        body_raw = m.group(4)
+        body = "\n".join(line.lstrip("> ").rstrip() for line in body_raw.strip().split("\n") if line.strip())
+
+        foldable = fold_char in ("-", "+")
+        default_open = fold_char == "+"
+        results.append(Callout(
+            type=ctype, title=title, content=body,
+            foldable=foldable, default_open=default_open,
+        ))
+    return results
+
+
+# ── full note parser ─────────────────────────────────────────────────
+
+def parse_note(path: Path, *, raw: str | None = None) -> Note:
+    """Parse a markdown file (or raw string) into a ``Note``."""
     if raw is None:
-        raw = path.read_text(encoding="utf-8")
+        if not path.exists():
+            raise FileNotFoundError(path)
+        raw = path.read_text()
 
-    frontmatter, body = parse_frontmatter(raw)
-    title = path.stem
-
+    fm, body = parse_frontmatter(raw)
     return Note(
+        title=path.stem,
         path=path,
-        title=title,
-        frontmatter=frontmatter,
+        frontmatter=fm,
         content=body,
-        raw=raw,
         links=extract_wikilinks(body),
         embeds=extract_embeds(body),
-        tags=extract_tags(body, frontmatter),
-        callouts=extract_callouts(body),
+        tags=extract_tags(body, fm),
         headings=extract_headings(body),
+        callouts=extract_callouts(body),
     )
 
 
+# ── serialize ────────────────────────────────────────────────────────
+
 def serialize_note(note: Note) -> str:
-    """Serialize Note back to markdown string. Round-trip safe.
-
-    Reconstructs: frontmatter (if any) + content body.
-    """
+    """Reconstruct markdown text from a ``Note``."""
     parts: list[str] = []
-
     if note.frontmatter:
-        yaml_str = yaml.dump(
-            note.frontmatter,
-            default_flow_style=False,
-            allow_unicode=True,
-            sort_keys=False,
-        ).rstrip("\n")
-        parts.append(f"---\n{yaml_str}\n---\n")
-
+        if yaml is not None:
+            fm_str = yaml.dump(note.frontmatter, default_flow_style=False).strip()
+        else:
+            fm_str = "\n".join(f"{k}: {v}" for k, v in note.frontmatter.items())
+        parts.append(f"---\n{fm_str}\n---\n")
     parts.append(note.content)
     return "".join(parts)

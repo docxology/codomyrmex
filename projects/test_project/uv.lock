@@ -631,7 +631,7 @@ wheels = [
 
 [[package]]
 name = "codomyrmex"
-version = "0.1.0"
+version = "1.0.0"
 source = { editable = "../../" }
 dependencies = [
     { name = "aiohttp" },
@@ -655,6 +655,7 @@ dependencies = [
     { name = "mako" },
     { name = "markdownify" },
     { name = "matplotlib" },
+    { name = "mnemonic" },
     { name = "msgpack" },
     { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -686,8 +687,6 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.13.3" },
-    { name = "aiohttp", marker = "extra == 'language-models'", specifier = ">=3.8.0" },
-    { name = "aiohttp", marker = "extra == 'physical-management'", specifier = ">=3.8.0" },
     { name = "alembic", marker = "extra == 'physical-management'", specifier = ">=1.7.0" },
     { name = "anthropic", specifier = ">=0.64.0" },
     { name = "azure-identity", marker = "extra == 'cloud'", specifier = ">=1.13.0" },
@@ -700,6 +699,7 @@ requires-dist = [
     { name = "chardet", marker = "extra == 'documents'", specifier = ">=5.0.0" },
     { name = "chromadb", specifier = ">=0.4.0" },
     { name = "cryptography", specifier = ">=41.0.0" },
+    { name = "cryptography", marker = "extra == 'crypto'", specifier = ">=42.0.0" },
     { name = "cryptography", marker = "extra == 'security-audit'", specifier = ">=41.0.0" },
     { name = "diff-match-patch", specifier = ">=20230430.0" },
     { name = "docker", specifier = ">=6.0.0" },
@@ -707,7 +707,6 @@ requires-dist = [
     { name = "edge-tts", marker = "extra == 'audio'", specifier = ">=6.1.0" },
     { name = "fastapi", specifier = ">=0.100.0" },
     { name = "fastavro", specifier = ">=1.12.1" },
-    { name = "fastavro", marker = "extra == 'serialization'", specifier = ">=1.8.0" },
     { name = "faster-whisper", marker = "extra == 'audio'", specifier = ">=1.0.0" },
     { name = "firecrawl-py", marker = "extra == 'scrape'", specifier = ">=1.0.0" },
     { name = "flake8", specifier = ">=6.0.0" },
@@ -727,6 +726,8 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "mkdocs", marker = "extra == 'physical-management'", specifier = ">=1.2.0" },
     { name = "mkdocs-material", marker = "extra == 'physical-management'", specifier = ">=7.3.0" },
+    { name = "mnemonic", specifier = ">=0.21" },
+    { name = "mnemonic", marker = "extra == 'crypto'", specifier = ">=0.20" },
     { name = "moderngl", marker = "extra == 'modeling-3d'", specifier = ">=5.6.0" },
     { name = "moviepy", marker = "extra == 'video'", specifier = ">=1.0.3" },
     { name = "msgpack", specifier = ">=1.1.2" },
@@ -742,6 +743,7 @@ requires-dist = [
     { name = "pandas", marker = "extra == 'serialization'", specifier = ">=2.0.0" },
     { name = "paramiko", specifier = ">=3.3.0" },
     { name = "pathlib", marker = "extra == 'code-review'", specifier = ">=1.0.1" },
+    { name = "pillow", marker = "extra == 'crypto'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'dark'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'fpf'", specifier = ">=10.0.0" },
     { name = "pillow", marker = "extra == 'modeling-3d'", specifier = ">=8.0.0" },
@@ -765,6 +767,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'language-models'", specifier = ">=0.21.0" },
     { name = "pytest-asyncio", marker = "extra == 'physical-management'", specifier = ">=0.21.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "python-frontmatter", marker = "extra == 'obsidian'", specifier = ">=1.0.0" },
     { name = "pyttsx3", marker = "extra == 'audio'", specifier = ">=2.90" },
     { name = "pytz", specifier = ">=2024.1" },
     { name = "pyyaml", specifier = ">=6.0.2" },
@@ -774,8 +777,6 @@ requires-dist = [
     { name = "safety", marker = "extra == 'code-review'", specifier = ">=2.3.0" },
     { name = "safety", marker = "extra == 'security-audit'", specifier = ">=2.3.0" },
     { name = "scipy", specifier = ">=1.7.0" },
-    { name = "scipy", marker = "extra == 'modeling-3d'", specifier = ">=1.7.0" },
-    { name = "scipy", marker = "extra == 'physical-management'", specifier = ">=1.7.0" },
     { name = "seaborn", specifier = ">=0.13.0" },
     { name = "sentence-transformers", specifier = ">=2.0.0" },
     { name = "smbus2", marker = "extra == 'physical-management'", specifier = ">=0.4.0" },
@@ -784,7 +785,6 @@ requires-dist = [
     { name = "statsd", marker = "extra == 'observability'", specifier = ">=4.0.0" },
     { name = "tiktoken", specifier = ">=0.5.0" },
     { name = "tomli", specifier = ">=2.0.0" },
-    { name = "tomli", marker = "extra == 'code-review'", specifier = ">=2.0.0" },
     { name = "tqdm", specifier = ">=4.65.0" },
     { name = "tree-sitter", marker = "extra == 'parsing'", specifier = ">=0.20.0" },
     { name = "trimesh", marker = "extra == 'modeling-3d'", specifier = ">=3.9.0" },
@@ -796,16 +796,19 @@ requires-dist = [
     { name = "vulture", marker = "extra == 'code-review'", specifier = ">=2.7.0" },
     { name = "watchdog", specifier = ">=3.0.0" },
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
+    { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "documents", "audio", "video", "dark"]
+provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "black", specifier = ">=23.0.0" },
+    { name = "mutmut", specifier = ">=3.4.0" },
     { name = "mypy", specifier = ">=1.0.0" },
     { name = "pre-commit", specifier = ">=3.0.0" },
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-asyncio", specifier = ">=0.23.0" },
+    { name = "pytest-benchmark", specifier = ">=4.0.0" },
     { name = "pytest-cov", specifier = ">=4.0.0" },
     { name = "pytest-mock", specifier = ">=3.10.0" },
     { name = "pytest-timeout", specifier = ">=2.1.0" },
@@ -2818,6 +2821,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/44/1c/ccf35892684d3a408202e296e56843743e0b4fb1629e59432ea88cdb3909/mmh3-5.2.0-cp314-cp314t-win32.whl", hash = "sha256:6d541038b3fc360ec538fc116de87462627944765a6750308118f8b509a8eec7", size = 41970, upload-time = "2025-07-29T07:43:27.666Z" },
     { url = "https://files.pythonhosted.org/packages/75/b2/b9e4f1e5adb5e21eb104588fcee2cd1eaa8308255173481427d5ecc4284e/mmh3-5.2.0-cp314-cp314t-win_amd64.whl", hash = "sha256:e912b19cf2378f2967d0c08e86ff4c6c360129887f678e27e4dde970d21b3f4d", size = 43063, upload-time = "2025-07-29T07:43:28.582Z" },
     { url = "https://files.pythonhosted.org/packages/6a/fc/0e61d9a4e29c8679356795a40e48f647b4aad58d71bfc969f0f8f56fb912/mmh3-5.2.0-cp314-cp314t-win_arm64.whl", hash = "sha256:e7884931fe5e788163e7b3c511614130c2c59feffdc21112290a194487efb2e9", size = 40455, upload-time = "2025-07-29T07:43:29.563Z" },
+]
+
+[[package]]
+name = "mnemonic"
+version = "0.21"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ff/77/e6232ed59fbd7b90208bb8d4f89ed5aabcf30a524bc2fb8f0dafbe8e7df9/mnemonic-0.21.tar.gz", hash = "sha256:1fe496356820984f45559b1540c80ff10de448368929b9c60a2b55744cc88acf", size = 152462, upload-time = "2024-01-05T10:46:14.895Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/48/5abb16ce7f9d97b728e6b97c704ceaa614362e0847651f379ed0511942a0/mnemonic-0.21-py3-none-any.whl", hash = "sha256:72dc9de16ec5ef47287237b9b6943da11647a03fe7cf1f139fc3d7c4a7439288", size = 92701, upload-time = "2024-01-05T10:46:12.703Z" },
 ]
 
 [[package]]

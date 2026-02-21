@@ -9,10 +9,10 @@ Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (
 ## Active Components
 
 | Component | Type | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `src/main.py` | Entry point | Logging, config, events integration |
 | `src/analyzer.py` | Analysis | Static analysis and pattern matching |
-| `src/visualizer.py` | Visualization | Dashboard generation via `data_visualization` and `visualization` |
+| `src/visualizer.py` | Visualization | Dashboard generation via `data_visualization` |
 | `src/reporter.py` | Reporting | Multi-format output (HTML, JSON, Markdown) via `serialization` |
 | `src/pipeline.py` | Orchestration | DAG-based workflow with `performance` profiling and structured `exceptions` |
 | `config/` | Configuration | YAML settings, modules, workflows |
@@ -33,7 +33,6 @@ Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (
 - `static_analysis` — Code quality and metrics
 - `pattern_matching` — Code pattern recognition
 - `data_visualization` — Charts and dashboards
-- `visualization` — Unified visualization system
 - `validation` — Schema-driven input validation
 
 ### Service Layer
@@ -59,7 +58,7 @@ Authoritative "Mega-Seed" reference implementation demonstrating maximal, real (
 ## Agent Workflows
 
 | Task | Entry Point | Details |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | Run analysis | `uv run python run_demo.py` | Full demo: analyze → visualize → report → pipeline |
 | Run tests | `uv run pytest tests/ -v` | 60+ tests, all zero-mock |
 | Run pipeline only | `uv run python -m src.main --pipeline src/` | DAG-based pipeline execution |

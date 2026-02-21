@@ -30,6 +30,36 @@ class Contract:
     def list_functions(self) -> list[str]:
         return list(self._functions.keys())
 
+    @property
+    def function_count(self) -> int:
+        return len(self._functions)
+
+    def view_functions(self) -> list[str]:
+        """Return names of view (read-only) functions."""
+        return [n for n, f in self._functions.items() if f.view]
+
+    def payable_functions(self) -> list[str]:
+        """Return names of payable functions."""
+        return [n for n, f in self._functions.items() if f.payable]
+
+    def validate(self) -> list[str]:
+        """Validate the contract configuration."""
+        issues: list[str] = []
+        if not self.address:
+            issues.append("Contract address is required")
+        if not self.abi:
+            issues.append("ABI is empty")
+        return issues
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "address": self.address,
+            "name": self.name,
+            "functions": self.list_functions(),
+            "function_count": self.function_count,
+        }
+
+
 
 class ContractCall:
     """Build and execute contract calls."""

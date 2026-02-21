@@ -1,66 +1,181 @@
-"""API key management.
+"""API key management with expiry, rate limits, and rotation.
 
-This module provides APIKeyManager functionality including:
-- API key generation
-- API key validation
-- API key revocation
+Provides:
+- API key generation with configurable prefix and entropy
+- Expiry-based automatic invalidation
+- Per-key rate limits (requests per period)
+- Key rotation (issue new key, revoke old)
+- Key listing and search
 """
 
+from __future__ import annotations
+
 import secrets
+import time
+from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring.logger_config import get_logger
 
 logger = get_logger(__name__)
 
 
+@dataclass
+class APIKey:
+    """Metadata for an issued API key."""
+
+    key: str
+    user_id: str
+    permissions: list[str]
+    created_at: float = field(default_factory=time.time)
+    expires_at: float | None = None  # None = no expiry
+    rate_limit: int = 0  # 0 = unlimited
+    label: str = ""
+    revoked: bool = False
+    request_count: int = 0
+
+    @property
+    def is_expired(self) -> bool:
+        if self.expires_at is None:
+            return False
+        return time.time() > self.expires_at
+
+    @property
+    def is_valid(self) -> bool:
+        return not self.revoked and not self.is_expired
+
+
 class APIKeyManager:
-    """Manager for API key generation and validation."""
+    """Manager for API key generation, validation, and lifecycle.
 
-    def __init__(self):
-        """Initialize API key manager."""
-        # In a real implementation, this would use a database
-        self._api_keys: dict[str, dict] = {}
+    Example::
 
-    def generate_api_key(self, user_id: str, permissions: list[str] = None) -> str:
-        """Generate a new API key for a user.
+        mgr = APIKeyManager(prefix="myapp")
+        key_str = mgr.generate("alice", permissions=["read", "write"], ttl_seconds=3600)
+        info = mgr.validate(key_str)
+        assert info is not None and info.user_id == "alice"
+    """
+
+    def __init__(self, prefix: str = "codomyrmex") -> None:
+        self._prefix = prefix
+        self._keys: dict[str, APIKey] = {}
+
+    def generate(
+        self,
+        user_id: str,
+        permissions: list[str] | None = None,
+        ttl_seconds: float | None = None,
+        rate_limit: int = 0,
+        label: str = "",
+    ) -> str:
+        """Generate a new API key.
 
         Args:
-            user_id: User identifier
-            permissions: Optional list of permissions
+            user_id: Owner of the key.
+            permissions: Granted permissions (default: ["read"]).
+            ttl_seconds: Time-to-live in seconds. None = no expiry.
+            rate_limit: Max requests per minute. 0 = unlimited.
+            label: Human-readable label for the key.
 
         Returns:
-            Generated API key
+            The generated API key string.
         """
-        api_key = f"codomyrmex_{secrets.token_urlsafe(32)}"
-        self._api_keys[api_key] = {
-            "user_id": user_id,
-            "permissions": permissions or ["read"],
-        }
-        logger.info(f"Generated API key for user: {user_id}")
+        key_str = f"{self._prefix}_{secrets.token_urlsafe(32)}"
+        now = time.time()
+        api_key = APIKey(
+            key=key_str,
+            user_id=user_id,
+            permissions=permissions or ["read"],
+            created_at=now,
+            expires_at=(now + ttl_seconds) if ttl_seconds else None,
+            rate_limit=rate_limit,
+            label=label,
+        )
+        self._keys[key_str] = api_key
+        logger.info("Generated API key for %s (label=%s, ttl=%s)", user_id, label, ttl_seconds)
+        return key_str
+
+    # Backward compatibility alias
+    def generate_api_key(self, user_id: str, permissions: list[str] | None = None) -> str:
+        return self.generate(user_id, permissions=permissions)
+
+    def validate(self, key_str: str) -> APIKey | None:
+        """Validate an API key and return its metadata if valid.
+
+        Returns None if the key is unknown, expired, or revoked.
+        Also increments request_count on valid keys.
+        """
+        api_key = self._keys.get(key_str)
+        if api_key is None:
+            return None
+        if not api_key.is_valid:
+            return None
+        api_key.request_count += 1
         return api_key
 
+    # Backward compatibility alias
     def validate_api_key(self, api_key: str) -> dict | None:
-        """Validate an API key and return associated user/permission information.
+        info = self.validate(api_key)
+        if info is None:
+            return None
+        return {"user_id": info.user_id, "permissions": info.permissions}
 
-        Args:
-            api_key: API key to validate
+    def revoke(self, key_str: str) -> bool:
+        """Revoke an API key."""
+        api_key = self._keys.get(key_str)
+        if api_key is None:
+            return False
+        api_key.revoked = True
+        logger.info("Revoked API key: %s...", key_str[:20])
+        return True
 
-        Returns:
-            User/permission info if valid, None otherwise
-        """
-        return self._api_keys.get(api_key)
-
+    # Backward compatibility alias
     def revoke_api_key(self, api_key: str) -> bool:
-        """Revoke an API key.
+        return self.revoke(api_key)
 
-        Args:
-            api_key: API key to revoke
+    def rotate(self, old_key_str: str, ttl_seconds: float | None = None) -> str | None:
+        """Rotate an API key: revoke old, issue new with same permissions.
 
         Returns:
-            True if revocation successful
+            New key string, or None if old key was invalid.
         """
-        if api_key in self._api_keys:
-            del self._api_keys[api_key]
-            logger.info(f"Revoked API key: {api_key[:20]}...")
-            return True
-        return False
+        old = self._keys.get(old_key_str)
+        if old is None:
+            return None
+        self.revoke(old_key_str)
+        return self.generate(
+            user_id=old.user_id,
+            permissions=old.permissions,
+            ttl_seconds=ttl_seconds,
+            rate_limit=old.rate_limit,
+            label=f"{old.label} (rotated)",
+        )
+
+    def list_keys(self, user_id: str | None = None, include_revoked: bool = False) -> list[APIKey]:
+        """List API keys, optionally filtered by user and status.
+
+        Args:
+            user_id: Filter to a specific user.
+            include_revoked: Whether to include revoked keys.
+        """
+        keys = list(self._keys.values())
+        if user_id:
+            keys = [k for k in keys if k.user_id == user_id]
+        if not include_revoked:
+            keys = [k for k in keys if not k.revoked]
+        return keys
+
+    def cleanup_expired(self) -> int:
+        """Remove expired and revoked keys from memory. Returns count removed."""
+        to_remove = [k for k, v in self._keys.items() if not v.is_valid]
+        for key in to_remove:
+            del self._keys[key]
+        return len(to_remove)
+
+    @property
+    def active_count(self) -> int:
+        return sum(1 for k in self._keys.values() if k.is_valid)
+
+    @property
+    def total_count(self) -> int:
+        return len(self._keys)

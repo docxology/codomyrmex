@@ -1,6 +1,6 @@
 """Tests for edge_computing module."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 
@@ -150,9 +150,9 @@ class TestSyncStateFromData:
         assert state.data == data
 
     def test_from_data_sets_updated_at(self):
-        before = datetime.now()
+        before = datetime.now(timezone.utc)
         state = SyncState.from_data({"x": 1}, version=1)
-        after = datetime.now()
+        after = datetime.now(timezone.utc)
         assert before <= state.updated_at <= after
 
 

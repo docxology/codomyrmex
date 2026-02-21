@@ -1,169 +1,159 @@
-"""
-Obsidian Link Graph Analysis.
+"""Obsidian vault link graph — build, query, analyse.
 
-Builds a directed graph of note interconnections using NetworkX.
-Provides backlink analysis, orphan detection, and broken link finding.
+Uses a directed graph (dict-of-sets) so we have zero dependency on
+``networkx`` in core.  The returned object duck-types the subset of the
+``networkx.DiGraph`` API used by the tests.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-import networkx as nx
-
-from .models import Note, WikiLink
-from .vault import ObsidianVault
+from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
 
 
-def build_link_graph(vault: ObsidianVault) -> nx.DiGraph:
-    """Build a directed graph from vault wikilinks.
+# ── lightweight directed graph ───────────────────────────────────────
 
-    Nodes are note titles. Edges represent wikilinks from source to target.
 
-    Args:
-        vault: The Obsidian vault to analyze.
+class _DiGraph:
+    """Minimal directed graph matching the part of the networkx API
+    that the tests exercise."""
 
-    Returns:
-        NetworkX DiGraph with notes as nodes and links as edges.
-    """
-    graph = nx.DiGraph()
+    def __init__(self) -> None:
+        self._adj: dict[str, set[str]] = {}
 
-    # Add all notes as nodes
-    for note in vault.notes.values():
-        graph.add_node(note.title, path=str(note.path))
+    def add_node(self, n: str) -> None:
+        self._adj.setdefault(n, set())
 
-    # Add edges for wikilinks
-    for note in vault.notes.values():
+    def add_edge(self, u: str, v: str) -> None:
+        self._adj.setdefault(u, set()).add(v)
+        self._adj.setdefault(v, set())
+
+    def number_of_nodes(self) -> int:
+        return len(self._adj)
+
+    def number_of_edges(self) -> int:
+        return sum(len(v) for v in self._adj.values())
+
+    def is_directed(self) -> bool:
+        return True
+
+    def successors(self, n: str) -> list[str]:
+        return list(self._adj.get(n, set()))
+
+    def predecessors(self, n: str) -> list[str]:
+        return [u for u, vs in self._adj.items() if n in vs]
+
+    def nodes(self) -> list[str]:
+        return list(self._adj.keys())
+
+
+# ── public API ───────────────────────────────────────────────────────
+
+
+def build_link_graph(vault: Any) -> _DiGraph:
+    """Build a directed link graph from vault notes."""
+    g = _DiGraph()
+    for _rel, note in vault.notes.items():
+        title = note.title
+        g.add_node(title)
         for link in note.links:
-            graph.add_edge(note.title, link.target)
+            g.add_edge(title, link.target)
+    return g
 
-    return graph
 
-
-def get_backlinks(vault: ObsidianVault, path: str) -> list[Note]:
-    """Find notes that link TO the given note.
-
-    Args:
-        vault: The Obsidian vault.
-        path: Relative path or title of the target note.
-
-    Returns:
-        List of notes that contain wikilinks to the target.
-    """
-    target_note = vault.get_note(path)
-    if target_note is None:
-        return []
-
-    target_title = target_note.title
-    backlinks: list[Note] = []
-
-    for note in vault.notes.values():
-        if note.title == target_title:
+def get_backlinks(vault: Any, title: str) -> list[Note]:
+    """Return notes that link *to* the given title."""
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        if note.title == title:
             continue
         for link in note.links:
-            if link.target == target_title:
-                backlinks.append(note)
+            if link.target == title:
+                results.append(note)
                 break
+    return results
 
-    return backlinks
 
-
-def get_forward_links(vault: ObsidianVault, path: str) -> list[Note]:
-    """Find notes that the given note links TO.
-
-    Args:
-        vault: The Obsidian vault.
-        path: Relative path or title of the source note.
-
-    Returns:
-        List of notes that the source links to (only existing notes).
-    """
-    source_note = vault.get_note(path)
-    if source_note is None:
+def get_forward_links(vault: Any, title: str) -> list[Note]:
+    """Return notes linked *from* the given title."""
+    note = vault.get_note(title)
+    if note is None:
         return []
-
-    forward: list[Note] = []
-    for link in source_note.links:
+    results: list[Note] = []
+    for link in note.links:
         target = vault.get_note(link.target)
         if target is not None:
-            forward.append(target)
+            results.append(target)
+    return results
 
-    return forward
 
-
-def find_orphans(vault: ObsidianVault) -> list[Note]:
-    """Find notes with no inbound AND no outbound links.
-
-    Returns:
-        List of orphan notes.
-    """
-    graph = build_link_graph(vault)
+def find_orphans(vault: Any) -> list[Note]:
+    """Return notes with no inbound or outbound links."""
+    g = build_link_graph(vault)
     orphans: list[Note] = []
-
-    for note in vault.notes.values():
-        in_degree = graph.in_degree(note.title) if note.title in graph else 0
-        out_degree = graph.out_degree(note.title) if note.title in graph else 0
-        if in_degree == 0 and out_degree == 0:
+    for _rel, note in vault.notes.items():
+        title = note.title
+        has_outgoing = len(g.successors(title)) > 0
+        has_incoming = len(g.predecessors(title)) > 0
+        if not has_outgoing and not has_incoming:
             orphans.append(note)
-
     return orphans
 
 
-def find_broken_links(vault: ObsidianVault) -> list[tuple[Note, WikiLink]]:
-    """Find wikilinks that point to non-existent notes.
-
-    Returns:
-        List of (source_note, broken_wikilink) tuples.
-    """
-    note_titles = {n.title for n in vault.notes.values()}
-    broken: list[tuple[Note, WikiLink]] = []
-
-    for note in vault.notes.values():
+def find_broken_links(vault: Any) -> list[tuple[Note, Wikilink]]:
+    """Return ``(source_note, wikilink)`` pairs where the target note
+    does not exist in the vault."""
+    results: list[tuple[Note, Wikilink]] = []
+    existing_titles = {n.title for n in vault.notes.values()}
+    for _rel, note in vault.notes.items():
         for link in note.links:
-            # Check if target exists as a title or as a path
-            if link.target not in note_titles:
-                target_note = vault.get_note(link.target)
-                if target_note is None:
-                    broken.append((note, link))
-
-    return broken
+            if link.target not in existing_titles:
+                results.append((note, link))
+    return results
 
 
-def get_link_stats(vault: ObsidianVault) -> dict[str, Any]:
-    """Get link graph statistics.
+def get_link_stats(vault: Any) -> dict[str, Any]:
+    """Return summary statistics about the vault link graph."""
+    g = build_link_graph(vault)
+    n_nodes = g.number_of_nodes()
+    n_edges = g.number_of_edges()
+    max_possible = n_nodes * (n_nodes - 1) if n_nodes > 1 else 1
+    density = n_edges / max_possible if max_possible > 0 else 0.0
 
-    Returns:
-        Dict with: node_count, edge_count, components, density,
-        most_linked (top 5 most-linked-to notes),
-        top_linkers (top 5 notes with most outbound links).
-    """
-    graph = build_link_graph(vault)
+    # Most linked (most incoming edges)
+    incoming: dict[str, int] = {}
+    for node in g.nodes():
+        incoming[node] = len(g.predecessors(node))
+    most_linked = sorted(incoming.items(), key=lambda x: x[1], reverse=True)[:5]
 
-    # Most linked-to (highest in-degree)
-    in_degrees = sorted(graph.in_degree(), key=lambda x: x[1], reverse=True)
-    most_linked = [
-        {"note": name, "inbound_links": deg}
-        for name, deg in in_degrees[:5]
-        if deg > 0
-    ]
+    # Top linkers (most outgoing edges)
+    outgoing: dict[str, int] = {}
+    for node in g.nodes():
+        outgoing[node] = len(g.successors(node))
+    top_linkers = sorted(outgoing.items(), key=lambda x: x[1], reverse=True)[:5]
 
-    # Top linkers (highest out-degree)
-    out_degrees = sorted(graph.out_degree(), key=lambda x: x[1], reverse=True)
-    top_linkers = [
-        {"note": name, "outbound_links": deg}
-        for name, deg in out_degrees[:5]
-        if deg > 0
-    ]
-
-    # Connected components (treat as undirected for this)
-    undirected = graph.to_undirected()
-    components = nx.number_connected_components(undirected) if len(graph) > 0 else 0
+    # Connected components (weakly connected, via BFS)
+    visited: set[str] = set()
+    components = 0
+    for node in g.nodes():
+        if node in visited:
+            continue
+        components += 1
+        stack = [node]
+        while stack:
+            current = stack.pop()
+            if current in visited:
+                continue
+            visited.add(current)
+            stack.extend(g.successors(current))
+            stack.extend(g.predecessors(current))
 
     return {
-        "node_count": graph.number_of_nodes(),
-        "edge_count": graph.number_of_edges(),
+        "node_count": n_nodes,
+        "edge_count": n_edges,
+        "density": round(density, 4),
         "components": components,
-        "density": nx.density(graph) if len(graph) > 1 else 0.0,
         "most_linked": most_linked,
         "top_linkers": top_linkers,
     }

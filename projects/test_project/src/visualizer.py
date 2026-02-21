@@ -22,13 +22,8 @@ import logging
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.visualization import (
-    GeneralSystemReport,
-    Dashboard,
-    Table as VizTable,
-    Card,
-    StatBox,
-)
+from codomyrmex.data_visualization.reports.general import GeneralSystemReport
+from codomyrmex.data_visualization.core.ui import Dashboard, Card, Table as VizTable
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 HAS_VISUALIZATION_MODULE = True  # Exported for integration tests

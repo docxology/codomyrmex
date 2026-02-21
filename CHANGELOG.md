@@ -5,7 +5,159 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] - 2026-02-21 — "General Availability"
+
+### Added
+
+- **APIContract** (`api/api_contract.py`): Frozen API contracts with SHA-256 checksums and backward-compatibility validation
+- **ContractValidator** (`api/api_contract.py`): Detects breaking changes (removals, signature changes, return type changes)
+- **MigrationEngine** (`api/migration_engine.py`): Records renames, removals, deprecations; generates migration plans with markdown
+- **APISurface** (`api/api_surface.py`): Analyzes public API endpoints, modules, coverage, and frozen percentage
+- **BenchmarkRunner** (`performance/benchmark_runner.py`): Timed benchmarks with threshold validation and ops/sec
+- **LoadTester** (`performance/load_tester.py`): Concurrent load simulation with latency percentiles and error rates
+- **MemoryProfiler** (`performance/memory_profiler.py`): GC-based memory snapshots with configurable leak detection
+- **ReleaseValidator** (`release/release_validator.py`): Multi-faceted certification (tests, coverage, security, docs)
+- **PackageBuilder** (`release/package_builder.py`): Builds sdist/wheel with SHA-256 checksums
+- **DistributionManager** (`release/distribution.py`): Pre-flight checks and publishing to PyPI/TestPyPI/GitHub
+- **38 new tests** across 3 test files — all passing
+
+### Metrics
+
+- New tests: 38 (14 + 12 + 12)
+- Test failures: 0
+
+---
+
+## [Unreleased] — v0.9.0 "Production Hardening"
+
+### Added
+
+- **APIVersion** (`model_context_protocol/versioning.py`): Semantic versioning with `@versioned` and `@deprecated` decorators
+- **VersionRegistry** (`model_context_protocol/version_registry.py`): Tool version registry with migration guides
+- **CompatShimGenerator** (`model_context_protocol/compat.py`): Backward-compatibility shim generation with param renaming
+- **ObservabilityPipeline** (`telemetry/pipeline.py`): Unified correlation of spans, metrics, logs, and audit events
+- **MetricAggregator** (`telemetry/metric_aggregator.py`): Counters, gauges, and histograms with percentile stats
+- **AlertEvaluator** (`telemetry/alert_evaluator.py`): Rule-based alerting with severity levels and auto-resolution
+- **DashboardBuilder** (`data_visualization/dashboard_builder.py`): Grafana-compatible dashboard construction
+- **PermissionModel** (`security/permissions.py`): RBAC with admin/operator/viewer hierarchy
+- **ComplianceGenerator** (`security/compliance_report.py`): OWASP Top 10 compliance reporting
+- **SecretScanner** (`security/secret_scanner.py`): Regex + entropy-based secret detection
+- **SecurityDashboard** (`security/dashboard.py`): Aggregate security posture with risk scoring
+- **APIDocExtractor** (`docs_gen/api_doc_extractor.py`): AST-based Python docstring extraction
+- **SearchIndex** (`docs_gen/search_index.py`): Inverted index with title-boosted relevance
+- **SiteGenerator** (`docs_gen/site_generator.py`): Documentation site orchestrator with mkdocs config
+- **55 new tests** across 4 test files — all passing
+
+### Metrics
+
+- New tests: 55 (14 + 14 + 13 + 14)
+- Test failures: 0
+
+---
+
+## [Unreleased] — v0.8.0 "Distributed Intelligence"
+
+### Added
+
+- **AgentSerializer/Deserializer** (`agents/transport/`): JSON-based agent state serialization with HMAC-SHA256 integrity verification
+- **TransportMessage** (`agents/transport/protocol.py`): Wire format with header, payload, and HMAC signing/verification
+- **Checkpoint** (`agents/transport/checkpoint.py`): Durable JSON save/load with StateDelta diff computation
+- **TaskQueue** (`concurrency/task_queue.py`): Priority heap with deduplication, deadline expiry, dead-letter queue, at-least-once delivery
+- **TaskWorker** (`concurrency/task_worker.py`): Error-isolated task processing with timeout and lifecycle management
+- **TaskScheduler** (`concurrency/task_scheduler.py`): Round-robin, least-loaded, and affinity-based task routing with capability filtering
+- **ResultAggregator** (`concurrency/result_aggregator.py`): Per-worker statistics and aggregate result collection
+- **EventStore** (`events/event_store.py`): Append-only event stream with sequence numbers, topic indexing, range/time queries, compaction
+- **EventReplayer** (`events/replayer.py`): Deterministic replay with handler output capture and diff-based verification
+- **StreamProjection** (`events/projections.py`): Counter, latest-per-key, generic fold, group-by, and running aggregate
+- **HeartbeatMonitor** (`orchestrator/heartbeat.py`): Agent liveness detection with healthy/suspect/dead status
+- **AgentSupervisor** (`orchestrator/agent_supervisor.py`): OTP-style supervision (one-for-one/one-for-all/rest-for-one) with escalation
+- **ProcessOrchestrator** (`orchestrator/process_orchestrator.py`): Agent lifecycle management with spawn, shutdown, and crash recovery
+- **53 new tests** across 4 test files — all passing
+
+### Metrics
+
+- New tests: 53 (14 + 14 + 13 + 12)
+- Test failures: 0
+
+---
+
+## [Unreleased] — v0.7.0 "Advanced Agent Capabilities"
+
+### Added
+
+- **FeedbackLoop** (`agents/planner/feedback_loop.py`): Convergent planning-execution cycle wiring PlanEngine → WorkflowRunner → MemoryStore with quality-floor re-planning
+- **PlanEvaluator** (`agents/planner/plan_evaluator.py`): Weighted composite scoring (success×0.4 + time×0.3 + retry×0.2 + memory×0.1) with convergence detection
+- **FeedbackConfig** (`agents/planner/feedback_config.py`): Dataclass for iteration limits, quality floor, scoring weights, memory TTL
+- **SharedMemoryPool** (`collaboration/knowledge/shared_pool.py`): Namespace-isolated multi-agent knowledge store with ACL, cross-namespace search, conflict resolution
+- **KnowledgeRouter** (`collaboration/knowledge/knowledge_router.py`): Expertise-based query routing with tag overlap + domain match + recency weighting
+- **Knowledge Models** (`collaboration/knowledge/models.py`): KnowledgeEntry, ExpertiseProfile, NamespaceACL, QueryResult
+- **WorkflowJournal** (`orchestrator/workflow_journal.py`): Lifecycle event recorder (start/step/complete) with optional MemoryStore persistence
+- **WorkflowAnalytics** (`orchestrator/workflow_analytics.py`): Failure hotspots, duration trends, per-step success rates, insight generation
+- **ImprovementPipeline** (`agents/specialized/improvement_pipeline.py`): Full detect → fix → test → review cycle with safety limits
+- **AntiPatternDetector**: Regex-based detection of bare_except, mutable defaults, star imports, print debug, TODO/FIXME
+- **ImprovementReport** (`agents/specialized/improvement_report.py`): Markdown-renderable report with ProposedChange, TestSuiteResult, ReviewVerdict
+- **ImprovementConfig** (`agents/specialized/improvement_config.py`): Safety limits (max_changes, min_confidence, scope_constraints)
+- **53 new tests** across 4 test files — all passing
+
+### Metrics
+
+- Total tests collected: 9,567
+- New tests: 53 (15 + 13 + 11 + 14)
+- Collection errors: 9 (pre-existing — `agentic_memory` module not yet implemented)
+
+---
+
+## [Unreleased] — v0.6.1 "Stability & Polish"
+
+### Added
+
+- **Thinking MCP Tools**: 4 new `@mcp_tool` functions in `agents/core/mcp_tools.py` — `think`, `get_thinking_depth`, `set_thinking_depth`, `get_last_trace`
+- **Knowledge Wiring**: `ThinkingAgent` now optionally accepts a `GraphRetriever` and auto-retrieves relevant knowledge context before Chain-of-Thought reasoning
+- **Relation Strength Scoring** (`relations/strength_scoring.py`): `RelationStrengthScorer` with exponential/linear/step temporal decay and interaction-type weighting
+- **Performance Regression Detector** (`performance/regression_detector.py`): `RegressionDetector` with configurable warning/critical thresholds
+- **Benchmark Comparison** (`performance/benchmark_comparison.py`): `compute_delta`, `mean`, `stddev`, `coefficient_of_variation` utilities
+- **Web Crawler** (`scrape/crawler.py`): `Crawler` with frontier management, rate limiting, domain scoping, robots.txt, and content dedup
+- **Content Extractor** (`scrape/content_extractor.py`): `ContentExtractor` — regex-based HTML parsing for titles, headings, links, images, meta tags
+- **Plugin Discovery** (`plugin_system/discovery.py`): `PluginDiscovery` — entry point and directory scanning with lifecycle state tracking
+- **Dependency Resolver** (`plugin_system/dependency_resolver.py`): `DependencyResolver` — topological sort with cycle detection and missing dependency reporting
+- **Maintenance Scheduler** (`maintenance/scheduler.py`): `MaintenanceScheduler` with task registration, due-task detection, and retry logic
+- **Health Check Framework** (`maintenance/health_check.py`): `HealthChecker` with registry, batch execution, and aggregate reporting
+- **Structured Log Formatter** (`logging_monitoring/structured_formatter.py`): `StructuredFormatter` — JSON-lines output with correlation ID, configurable fields, stacktrace capture
+- **Log Aggregator** (`logging_monitoring/log_aggregator.py`): `LogAggregator` — in-memory search, filtering, and analytics (rate, error ratio, top modules)
+- **6 new `mcp_tools.py` files**: `performance`, `maintenance`, `relations`, `logging_monitoring`, `plugin_system`, `scrape` (21 → 27 modules with MCP exposure)
+- **37 new tests**: `test_tier3_promotions.py` (19 tests), `test_tier3_promotions_pass2.py` (18 tests)
+
+### Changed
+
+- Synchronized `__version__` in `__init__.py` from `0.1.9` → `0.6.0`
+- Synced `pyproject.toml` version from stale `0.2.1` → `0.6.0`
+
+### Fixed
+
+- **249 collection errors → 0**: Added `pythonpath = src` to `pytest.ini` — tests now resolve `import codomyrmex` without requiring `pip install -e .`
+
+### Metrics
+
+- Modules with `mcp_tools.py`: 21 → **27**
+- `@mcp_tool` decorators: 150 → **162**
+- Tests collected: 9,400 → **9,661**
+- Collection errors: 249 → **0**
+- Tier-3 modules: 43 → **37** (6 promoted to Tier-2)
+
+## [0.6.0] - 2026-02-20
+
+### Added
+
+- **Workflow Engine**: `orchestrator/workflow_engine.py` — `WorkflowStep`, `WorkflowRunner` with DAG-based topological execution (Kahn's algorithm)
+- **Workflow Templates**: `orchestrator/workflow_templates.py` — pre-built CI/CD, code review, and data pipeline templates
+- **Agent Memory Store**: `agents/memory/store.py` — `MemoryStore` with TTL-based expiry, tag search, and access counting
+- **Conversation History**: `agents/memory/conversation.py` — `ConversationHistory` with summary generation
+- **Learning Journal**: `agents/memory/journal.py` — `LearningJournal` with pattern detection
+- **Integration Bus**: `events/integration_bus.py` — cross-module event routing with topic subscriptions and wildcard support
+- **Module Connector**: `orchestrator/module_connector.py` — dependency injection container with singleton caching
+- **Plan Engine**: `agents/planner/plan_engine.py` — hierarchical goal decomposition with keyword-driven task generation
+- **Plan Executor**: `agents/planner/executor.py` — plan execution with progress tracking
+- 45 new tests across workflow, memory, integration, and planning modules
 
 ## [0.2.0-rc1] - 2026-02-19
 

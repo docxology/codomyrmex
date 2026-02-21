@@ -152,5 +152,47 @@ class DerivationTracker:
         """Read-only list of all derivation records."""
         return list(self._records)
 
+    def query_by_operation(self, operation: str) -> list[DerivationRecord]:
+        """Retrieve records matching a specific operation type."""
+        return [r for r in self._records if r.operation == operation]
+
+    def recent(self, n: int = 10) -> list[DerivationRecord]:
+        """Get the N most recent derivation records."""
+        return list(reversed(self._records[-n:]))
+
+    def unique_entities(self) -> list[str]:
+        """Get sorted list of unique entity IDs with derivation records."""
+        return sorted({r.entity_id for r in self._records})
+
+    def operation_counts(self) -> dict[str, int]:
+        """Count records by operation type."""
+        counts: dict[str, int] = {}
+        for r in self._records:
+            counts[r.operation] = counts.get(r.operation, 0) + 1
+        return counts
+
+    def export_json(self) -> list[dict[str, Any]]:
+        """Export all records as a list of dicts."""
+        return [
+            {
+                "id": r.id,
+                "entity_id": r.entity_id,
+                "operation": r.operation,
+                "inputs": r.inputs,
+                "result_hash": r.result_hash,
+                "timestamp": r.timestamp,
+            }
+            for r in self._records
+        ]
+
+    def summary(self) -> dict[str, Any]:
+        """Summary statistics for the derivation log."""
+        return {
+            "total_records": len(self._records),
+            "unique_entities": len(self.unique_entities()),
+            "operation_counts": self.operation_counts(),
+        }
+
     def __len__(self) -> int:
         return len(self._records)
+
