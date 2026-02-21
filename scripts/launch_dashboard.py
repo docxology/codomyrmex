@@ -92,20 +92,33 @@ def main():
     print_info(f"Starting server at http://localhost:{args.port}...")
     
     try:
-        # Create server with allow_reuse_address to avoid "Address already in use" on restarts
-        socketserver.TCPServer.allow_reuse_address = True
-        with socketserver.TCPServer((args.host, args.port), WebsiteServer) as httpd:
-            if args.open:
-                threading.Thread(target=lambda: (time.sleep(1), webbrowser.open(f"http://localhost:{args.port}"))).start()
-            
-            print_success(f"Dashboard active at http://localhost:{args.port}")
-            print_info("Press Ctrl+C to stop.")
-            httpd.serve_forever()
+        max_retries = 10
+        for attempt in range(max_retries):
+            try:
+                # Create server with allow_reuse_address to avoid "Address already in use" on restarts
+                socketserver.TCPServer.allow_reuse_address = True
+                with socketserver.TCPServer((args.host, args.port), WebsiteServer) as httpd:
+                    if args.open:
+                        threading.Thread(target=lambda p=args.port: (time.sleep(1), webbrowser.open(f"http://localhost:{p}"))).start()
+                    
+                    print_success(f"Dashboard active at http://localhost:{args.port}")
+                    print_info("Press Ctrl+C to stop.")
+                    httpd.serve_forever()
+                break # successful exit
+            except OSError as e:
+                if e.errno == 48: # Address already in use
+                    if attempt < max_retries - 1:
+                        print_error(f"Could not bind to port {args.port}: [Errno 48] Address already in use")
+                        args.port += 1
+                        print_info(f"Trying port {args.port}...")
+                    else:
+                        print_error(f"Could not bind to port {args.port}: [Errno 48] Address already in use (max retries reached)")
+                        return 1
+                else:
+                    print_error(f"Could not bind to port {args.port}: {e}")
+                    return 1
     except KeyboardInterrupt:
         print_info("\nServer stopped by user.")
-    except OSError as e:
-        print_error(f"Could not bind to port {args.port}: {e}")
-        return 1
     except Exception as e:
         print_error(f"Server error: {e}")
         return 1
