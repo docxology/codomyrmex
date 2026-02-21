@@ -12,11 +12,12 @@ Core Components:
 Submodules:
     contracts: Consolidated contracts capabilities."""
 
-from .backup import BackupManager
+from . import security
 from .core import WalletManager
 from .exceptions import RitualError, WalletError, WalletKeyError, WalletNotFoundError
-from .key_rotation import KeyRotation, RotationPolicy, RotationRecord
-from .recovery import NaturalRitualRecovery, RitualStep, hash_response
+from .security.backup import BackupManager
+from .security.key_rotation import KeyRotation, RotationPolicy, RotationRecord
+from .security.recovery import NaturalRitualRecovery, RitualStep, hash_response
 
 # Shared schemas for cross-module interop
 try:
@@ -53,6 +54,7 @@ from . import contracts
 
 __all__ = [
     "contracts",
+    "security",
     # Classes
     "WalletManager",
     "NaturalRitualRecovery",

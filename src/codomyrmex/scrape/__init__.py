@@ -32,7 +32,8 @@ from .exceptions import (
     ScrapeTimeoutError,
     ScrapeValidationError,
 )
-from .scraper import Scraper
+from . import extractors
+from .extractors.scraper import Scraper
 
 # Shared schemas for cross-module interop
 try:
@@ -86,6 +87,8 @@ __all__ = [
     "get_config",
     "set_config",
     "reset_config",
+    # Submodules
+    "extractors",
     # CLI integration
     "cli_commands",
 ]

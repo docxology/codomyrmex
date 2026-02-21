@@ -28,21 +28,26 @@ Data structures:
 - DependencyValidator: Validates dependency configurations
 """
 
+from . import deps, health
 from .add_deprecation_notices import add_deprecation_notice
 from .add_deprecation_notices import main as add_deprecation_notices_main
 from .analyze_project import analyze_code_quality, analyze_project_structure
 from .analyze_project import analyze_dependencies as analyze_project_dependencies
 from .analyze_project import generate_report as generate_analysis_report
 from .analyze_project import main as analyze_project_main
-from .dependency_analyzer import DependencyAnalyzer
-from .dependency_analyzer import main as dependency_analyzer_main
-from .dependency_checker import check_dependencies
-from .dependency_checker import main as dependency_checker_main
-from .dependency_consolidator import analyze_dependencies as consolidate_dependencies
-from .dependency_consolidator import main as dependency_consolidator_main
-from .validate_dependencies import main as validate_dependencies_main
+from .deps.dependency_analyzer import DependencyAnalyzer
+from .deps.dependency_analyzer import main as dependency_analyzer_main
+from .deps.dependency_checker import check_dependencies
+from .deps.dependency_checker import main as dependency_checker_main
+from .deps.dependency_consolidator import analyze_dependencies as consolidate_dependencies
+from .deps.dependency_consolidator import main as dependency_consolidator_main
+from .deps.validate_dependencies import main as validate_dependencies_main
 
 __all__ = [
+    # Submodules
+    "deps",
+    "health",
+
     # Main analysis functions
     "analyze_project_structure",
     "analyze_project_dependencies",

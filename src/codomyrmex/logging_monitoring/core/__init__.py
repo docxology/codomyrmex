@@ -16,6 +16,17 @@ from .logger_config import (
     setup_logging,
 )
 from ..handlers.performance import PerformanceLogger
+from .correlation import (
+    new_correlation_id,
+    get_correlation_id,
+    set_correlation_id,
+    clear_correlation_id,
+    with_correlation,
+    CorrelationFilter,
+    enrich_event_data,
+    create_mcp_correlation_header,
+)
+from .log_aggregator import *  # noqa: F401,F403
 
 __all__ = [
     "AuditLogger",

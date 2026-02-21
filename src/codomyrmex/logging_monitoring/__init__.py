@@ -42,7 +42,7 @@ except ImportError:
 from .core.logger_config import get_logger, setup_logging
 
 # Correlation ID propagation (v0.2.0 Stream 3)
-from .correlation import (
+from .core.correlation import (
     new_correlation_id,
     get_correlation_id,
     set_correlation_id,
