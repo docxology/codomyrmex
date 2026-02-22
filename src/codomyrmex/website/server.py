@@ -29,7 +29,10 @@ from .data_provider import DataProvider
 logger = get_logger(__name__)
 
 # Configuration from environment variables
-_CORS_ORIGINS = os.getenv("CODOMYRMEX_CORS_ORIGINS", DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787")
+_CORS_ORIGINS = os.getenv(
+    "CODOMYRMEX_CORS_ORIGINS",
+    DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888",
+)
 _OLLAMA_URL = os.getenv("CODOMYRMEX_OLLAMA_URL", DEFAULT_OLLAMA_URL)
 _DEFAULT_MODEL = os.getenv("CODOMYRMEX_DEFAULT_MODEL", DEFAULT_OLLAMA_MODEL)
 
@@ -635,9 +638,9 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 from codomyrmex.agents.pai.trust_gateway import verify_capabilities
                 raw = verify_capabilities()
                 result = {
-                    "modules": len(raw.get("modules", [])),
+                    "modules": raw.get("modules", {}).get("total", 0),
                     "tools_total": raw.get("tools", {}).get("total", 0),
-                    "promoted": raw.get("trust", {}).get("promoted", 0),
+                    "promoted": len(raw.get("trust", {}).get("promoted_to_verified", [])),
                 }
             elif action == "trust":
                 from codomyrmex.agents.pai.trust_gateway import trust_all
@@ -704,6 +707,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
         seed_prompt = data.get("prompt", "Analyze the current context.")
         todo_path = data.get("todo", "")
+        agents = data.get("agents")
         
         with self._dispatch_lock:
             if WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive():
@@ -717,16 +721,18 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 if todo_path:
                     WebsiteServer._dispatch_orch = ConversationOrchestrator.dev_loop(
                         todo_path=todo_path,
-                        channel=f"dispatch-{int(time.time())}"
+                        channel=f"dispatch-{int(time.time())}",
+                        agents=agents
                     )
                 else:
+                    default_agents = [
+                        {"identity": "architect", "persona": "system planner", "provider": "ollama"},
+                        {"identity": "reviewer", "persona": "code executor", "provider": "antigravity"}
+                    ]
                     WebsiteServer._dispatch_orch = ConversationOrchestrator(
                         channel=f"dispatch-{int(time.time())}",
                         seed_prompt=seed_prompt,
-                        agents=[
-                            {"identity": "architect", "persona": "system planner", "provider": "ollama"},
-                            {"identity": "reviewer", "persona": "code executor", "provider": "antigravity"}
-                        ]
+                        agents=agents if agents else default_agents
                     )
 
                 def run_orch():

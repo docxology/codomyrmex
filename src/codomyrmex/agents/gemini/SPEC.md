@@ -11,11 +11,15 @@ The Gemini Agent provides a standardized interface to Google's Gemini models, su
 ### 2.1 Class Hierarchy
 
 - **`GeminiClient`** (extends `BaseAgent`)
-  - **Responsibilities**: 
+  - **Responsibilities**:
     - SDK Client Initialization.
     - Request validation.
     - Method mapping (generate, stream, embed, files, cache).
   
+- **`GeminiCLIWrapper`** (extends `BaseAgent`)
+  - **Responsibilities**:
+    - CLI subprocess wrapper.
+    - Method mapping to `gemini-cli` npm package (`query`, `list_sessions`, `--extensions`, `mcp`, etc.).
 
 ### 2.2 Integration
 
@@ -59,8 +63,6 @@ The Gemini Agent provides a standardized interface to Google's Gemini models, su
 - **Home**: [Root README](../../../README.md)
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

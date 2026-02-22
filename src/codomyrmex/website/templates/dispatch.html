@@ -9,30 +9,72 @@
     <h2>Dispatch Configuration</h2>
     <div style="margin-bottom: 1rem;">
         <label for="dispatch-prompt" style="display:block; margin-bottom: 0.5rem;">Seed Prompt / Goal:</label>
-        <textarea id="dispatch-prompt" rows="3" style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">Work through the remaining items in the TO-DO list.</textarea>
+        <textarea id="dispatch-prompt" rows="3"
+            style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;">Work through the remaining items in the TO-DO list.</textarea>
     </div>
     <div style="margin-bottom: 1rem;">
-        <label for="dispatch-todo" style="display:block; margin-bottom: 0.5rem;">TO-DO Path (Optional file for scaffolding):</label>
-        <input type="text" id="dispatch-todo" value="TO-DO.md" style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+        <label for="dispatch-todo" style="display:block; margin-bottom: 0.5rem;">TO-DO Path (Optional file for
+            scaffolding):</label>
+        <input type="text" id="dispatch-todo" value="TO-DO.md"
+            style="width: 100%; padding: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
     </div>
-    
+
     <div style="margin-bottom: 1rem;">
         <label style="display:block; margin-bottom: 0.5rem;">Orchestration Setup:</label>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;" id="dispatch-agents">
+            <div class="agent-config" data-identity="architect"
+                style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Architect</strong><br>
-                <small>Provider: ollama</small><br>
-                <small>Persona: System Planner</small>
+                <div style="margin-top: 0.5rem;">
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select class="agent-provider"
+                        style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                        <option value="ollama" selected>Ollama</option>
+                        <option value="claude_code">Claude</option>
+                        <option value="antigravity">Antigravity</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input type="text" class="agent-persona" value="System Planner"
+                        style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                </div>
             </div>
-            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+            <div class="agent-config" data-identity="developer"
+                style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Developer</strong><br>
-                <small>Provider: ollama</small><br>
-                <small>Persona: Code Writer</small>
+                <div style="margin-top: 0.5rem;">
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select class="agent-provider"
+                        style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                        <option value="ollama" selected>Ollama</option>
+                        <option value="claude_code">Claude</option>
+                        <option value="antigravity">Antigravity</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input type="text" class="agent-persona" value="Code Writer"
+                        style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                </div>
             </div>
-            <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
+            <div class="agent-config" data-identity="reviewer"
+                style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); flex: 1;">
                 <strong>Reviewer</strong><br>
-                <small>Provider: antigravity</small><br>
-                <small>Persona: Code Executor</small>
+                <div style="margin-top: 0.5rem;">
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Provider:</label>
+                    <select class="agent-provider"
+                        style="width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                        <option value="ollama">Ollama</option>
+                        <option value="claude_code">Claude</option>
+                        <option value="antigravity" selected>Antigravity</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; color: var(--text-secondary);">Persona:</label>
+                    <input type="text" class="agent-persona" value="Code Executor"
+                        style="width: 100%; padding: 0.3rem; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                </div>
             </div>
         </div>
     </div>
@@ -48,8 +90,10 @@
         <h2>Live Transcript</h2>
         <span id="dispatch-status" class="status warning">Inactive</span>
     </div>
-    <div id="dispatch-transcript" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; min-height: 400px; max-height: 600px; overflow-y: auto; font-family: 'Fira Code', monospace; font-size: 0.9em; white-space: pre-wrap;">
-        <div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">No active dispatch run. Please start a run above.</div>
+    <div id="dispatch-transcript"
+        style="background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; min-height: 400px; max-height: 600px; overflow-y: auto; font-family: 'Fira Code', monospace; font-size: 0.9em; white-space: pre-wrap;">
+        <div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">No active dispatch run. Please
+            start a run above.</div>
     </div>
 </div>
 
@@ -115,16 +159,25 @@
             statusBadge.textContent = 'Starting...';
             transcriptDiv.innerHTML = '<div style="color: var(--text-secondary); text-align: center; margin-top: 2rem;">Initializing Agents...</div>';
 
+            const agentConfigs = Array.from(document.querySelectorAll('.agent-config')).map(el => {
+                return {
+                    identity: el.dataset.identity,
+                    provider: el.querySelector('.agent-provider').value,
+                    persona: el.querySelector('.agent-persona').value
+                };
+            });
+
             try {
                 const res = await fetch('/api/agent/dispatch', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         prompt: promptInput.value,
-                        todo: todoInput.value
+                        todo: todoInput.value,
+                        agents: agentConfigs
                     })
                 });
-                
+
                 if (res.ok) {
                     if (!pollInterval) {
                         pollInterval = setInterval(pollStatus, 2000);

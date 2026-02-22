@@ -4,6 +4,7 @@ from collections.abc import Iterator
 
 from google import genai
 from google.genai import types
+from google.genai.generative_models import ChatSession
 from PIL import Image
 
 from codomyrmex.agents.core import (
@@ -128,6 +129,23 @@ class GeminiClient(BaseAgent):
             logger.error(f"Gemini streaming failed: {e}")
             yield f"\n[Error: {e}]"
 
+    def start_chat(
+        self,
+        history: list[dict[str, Any]] | None = None,
+        enable_automatic_function_calling: bool = False,
+        model: str | None = None,
+    ) -> ChatSession:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        
+        model_name = model or self.default_model
+        model_client = self.client.models.get(model=model_name)
+        
+        return model_client.start_chat(
+            history=history,
+            enable_automatic_function_calling=enable_automatic_function_calling,
+        )
+
     def _build_contents(self, prompt: str, context: dict[str, Any]) -> list[Any]:
         if "contents" in context:
             return context["contents"]
@@ -172,32 +190,35 @@ class GeminiClient(BaseAgent):
 
     def list_models(self) -> list[dict[str, Any]]:
         if not self.client:
-            return []
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return [m.model_dump() for m in self.client.models.list()]
+            return [m.model_dump() for m in self.client.models.list()]
         except Exception as e:
             logger.error(f"Failed to list models: {e}")
-            return []
+            raise GeminiError(f"Failed to list models: {e}") from e
 
     def get_model(self, model_name: str) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return self.client.models.get(model=model_name).model_dump()
-        except Exception:
-            return None
+            return self.client.models.get(model=model_name).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to get model {model_name}: {e}")
+            raise GeminiError(f"Failed to get model {model_name}: {e}") from e
 
     def count_tokens(self, content: str | list[Any], model: str | None = None) -> int:
         if not self.client:
-            return 0
+            raise GeminiError("Gemini Client not initialized")
         try:
-            return self.client.models.count_tokens(model=model or self.default_model, contents=content).total_tokens
-        except Exception:
-            return 0
+            model_name = model or self.default_model
+            return self.client.models.count_tokens(model=model_name, contents=content).total_tokens
+        except Exception as e:
+            logger.error(f"Failed to count tokens: {e}")
+            raise GeminiError(f"Failed to count tokens: {e}") from e
 
     def embed_content(self, content: str | list[str], model: str = "text-embedding-004") -> list[list[float]]:
         if not self.client:
-            return []
+            raise GeminiError("Gemini Client not initialized")
         try:
             resp = self.client.models.embed_content(model=model, contents=content)
             if hasattr(resp, 'embedding'):
@@ -205,111 +226,206 @@ class GeminiClient(BaseAgent):
             if hasattr(resp, 'embeddings'):
                 return [e.values for e in resp.embeddings]
             return []
-        except Exception:
-            return []
+        except Exception as e:
+            logger.error(f"Failed to embed content: {e}")
+            raise GeminiError(f"Failed to embed content: {e}") from e
+
+    def generate_images(self, prompt: str, model: str = "imagen-latest") -> list[dict[str, Any]]:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            result = self.client.models.generate_images(model=model, prompt=prompt)
+            return [img.model_dump() for img in result.images]
+        except Exception as e:
+            logger.error(f"Failed to generate images: {e}")
+            raise GeminiError(f"Failed to generate images: {e}") from e
+
+    def upscale_image(self, image: Any, model: str = "imagen-latest") -> list[dict[str, Any]]:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            result = self.client.models.upscale_image(model=model, image=image)
+            return [img.model_dump() for img in result.images]
+        except Exception as e:
+            logger.error(f"Failed to upscale image: {e}")
+            raise GeminiError(f"Failed to upscale image: {e}") from e
+
+    def edit_image(self, prompt: str, image: Any, model: str = "imagen-latest") -> list[dict[str, Any]]:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            result = self.client.models.edit_image(model=model, prompt=prompt, image=image)
+            return [img.model_dump() for img in result.images]
+        except Exception as e:
+            logger.error(f"Failed to edit image: {e}")
+            raise GeminiError(f"Failed to edit image: {e}") from e
+
+    def generate_videos(self, prompt: str, model: str = "veo-latest") -> list[dict[str, Any]]:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            result = self.client.models.generate_videos(model=model, prompt=prompt)
+            return [video.model_dump() for video in result.videos]
+        except Exception as e:
+            logger.error(f"Failed to generate videos: {e}")
+            raise GeminiError(f"Failed to generate videos: {e}") from e
 
     def upload_file(self, file_path: str, mime_type: str | None = None) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
+            config = types.UploadFileConfig(mime_type=mime_type) if mime_type else None
             file_ref = self.client.files.upload(
                 file=file_path,
-                config=types.UploadFileConfig(mime_type=mime_type) if mime_type else None
+                config=config
             )
             return file_ref.model_dump()
         except Exception as e:
             logger.error(f"Failed to upload file: {e}")
-            return None
+            raise GeminiError(f"Failed to upload file: {e}") from e
 
     def list_files(self) -> list[dict[str, Any]]:
         if not self.client:
-            return []
+            raise GeminiError("Gemini Client not initialized")
         try:
             return [f.model_dump() for f in self.client.files.list()]
-        except Exception:
-            return []
+        except Exception as e:
+            logger.error(f"Failed to list files: {e}")
+            raise GeminiError(f"Failed to list files: {e}") from e
+
+    def get_file(self, file_name: str) -> dict[str, Any] | None:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            return self.client.files.get(name=file_name).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to get file {file_name}: {e}")
+            raise GeminiError(f"Failed to get file {file_name}: {e}") from e
 
     def delete_file(self, file_name: str) -> bool:
         if not self.client:
-            return False
+            raise GeminiError("Gemini Client not initialized")
         try:
             self.client.files.delete(name=file_name)
             return True
-        except Exception:
-            return False
+        except Exception as e:
+            logger.error(f"Failed to delete file {file_name}: {e}")
+            raise GeminiError(f"Failed to delete file {file_name}: {e}") from e
 
     def create_cached_content(self, model: str, contents: Any, ttl: str | None = None, display_name: str | None = None) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             config = types.CreateCachedContentConfig(model=model, contents=contents, ttl=ttl, display_name=display_name)
-             return self.client.caches.create(config=config).model_dump()
-        except Exception:
-            return None
+            config = types.CreateCachedContentConfig(model=model, contents=contents, ttl=ttl, display_name=display_name)
+            return self.client.caches.create(config=config).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to create cached content: {e}")
+            raise GeminiError(f"Failed to create cached content: {e}") from e
 
     def list_cached_contents(self) -> list[dict[str, Any]]:
         if not self.client:
-            return []
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return [c.model_dump() for c in self.client.caches.list()]
-        except Exception:
-            return []
+            return [c.model_dump() for c in self.client.caches.list()]
+        except Exception as e:
+            logger.error(f"Failed to list cached contents: {e}")
+            raise GeminiError(f"Failed to list cached contents: {e}") from e
 
     def get_cached_content(self, name: str) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return self.client.caches.get(name=name).model_dump()
-        except Exception:
-            return None
+            return self.client.caches.get(name=name).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to get cached content {name}: {e}")
+            raise GeminiError(f"Failed to get cached content {name}: {e}") from e
 
     def delete_cached_content(self, name: str) -> bool:
         if not self.client:
-            return False
+            raise GeminiError("Gemini Client not initialized")
         try:
-             self.client.caches.delete(name=name)
-             return True
-        except Exception:
-            return False
+            self.client.caches.delete(name=name)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to delete cached content {name}: {e}")
+            raise GeminiError(f"Failed to delete cached content {name}: {e}") from e
 
     def update_cached_content(self, name: str, ttl: str | None = None) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return self.client.caches.update(name=name, config=types.UpdateCachedContentConfig(ttl=ttl)).model_dump()
-        except Exception:
-            return None
+            return self.client.caches.update(name=name, config=types.UpdateCachedContentConfig(ttl=ttl)).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to update cached content {name}: {e}")
+            raise GeminiError(f"Failed to update cached content {name}: {e}") from e
 
     def create_tuned_model(self, source_model: str, training_data: Any, display_name: str | None = None, epochs: int | None = None) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             job = self.client.tunings.tune(base_model=source_model, training_data=training_data, config=types.CreateTunedModelConfig(display_name=display_name, epoch_count=epochs))
-             return job.model_dump()
-        except Exception:
-            return None
+            job = self.client.tunings.tune(base_model=source_model, training_data=training_data, config=types.CreateTunedModelConfig(display_name=display_name, epoch_count=epochs))
+            return job.model_dump()
+        except Exception as e:
+            logger.error(f"Failed to create tuned model: {e}")
+            raise GeminiError(f"Failed to create tuned model: {e}") from e
 
     def list_tuned_models(self) -> list[dict[str, Any]]:
         if not self.client:
-            return []
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return [m.model_dump() for m in self.client.tunings.list()]
-        except Exception:
-            return []
+            return [m.model_dump() for m in self.client.tunings.list()]
+        except Exception as e:
+            logger.error(f"Failed to list tuned models: {e}")
+            raise GeminiError(f"Failed to list tuned models: {e}") from e
 
     def get_tuned_model(self, name: str) -> dict[str, Any] | None:
         if not self.client:
-            return None
+            raise GeminiError("Gemini Client not initialized")
         try:
-             return self.client.tunings.get(name=name).model_dump()
-        except Exception:
-            return None
+            return self.client.tunings.get(name=name).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to get tuned model {name}: {e}")
+            raise GeminiError(f"Failed to get tuned model {name}: {e}") from e
 
     def delete_tuned_model(self, name: str) -> bool:
         if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            self.client.tunings.delete(name=name)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to delete tuned model {name}: {e}")
+            raise GeminiError(f"Failed to delete tuned model {name}: {e}") from e
+    def create_batch(self, requests: list[Any], model: str | None = None) -> dict[str, Any] | None:
+        if not self.client:
+            raise GeminiError("Gemini Client not initialized")
+        try:
+            return self.client.batches.create(requests=requests, model=model or self.default_model).model_dump()
+        except Exception as e:
+            logger.error(f"Failed to create batch: {e}")
+            raise GeminiError(f"Failed to create batch: {e}") from e
+
+    def get_batch(self, name: str) -> dict[str, Any] | None:
+        if not self.client:
+            return None
+        try:
+            return self.client.batches.get(name=name).model_dump()
+        except Exception:
+            return None
+
+    def list_batches(self) -> list[dict[str, Any]]:
+        if not self.client:
+            return []
+        try:
+            return [b.model_dump() for b in self.client.batches.list()]
+        except Exception:
+            return []
+
+    def delete_batch(self, name: str) -> bool:
+        if not self.client:
             return False
         try:
-             self.client.tunings.delete(name=name)
-             return True
+            self.client.batches.delete(name=name)
+            return True
         except Exception:
             return False

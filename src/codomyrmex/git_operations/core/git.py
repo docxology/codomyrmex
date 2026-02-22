@@ -624,7 +624,7 @@ def merge_branch(
             return False
 
         # Prepare merge command
-        cmd = ["git", "merge"]
+        cmd = ["git", "merge", "--no-edit"]
         if strategy:
             cmd.extend(["-s", strategy])
         cmd.append(source_branch)

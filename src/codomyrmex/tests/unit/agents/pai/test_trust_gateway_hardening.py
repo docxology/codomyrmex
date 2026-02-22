@@ -163,18 +163,14 @@ class TestTrustHooks:
         mock_callback.assert_called_with(TrustLevel.TRUSTED, TrustLevel.UNTRUSTED)
 
     def test_event_emission(self):
-        """Verify EventBus emission."""
-        # Mock EventBus at the source
-        with patch("codomyrmex.events.EventBus") as mock_bus:
-            # We need to ensure logic doesn't fail on import.
-            # trust_gateway does a local import. patching sys.modules is safer.
-            with patch.dict("sys.modules", {"codomyrmex.events": MagicMock(EventBus=mock_bus)}):
-                trust_all()
-                
-            mock_bus.emit.assert_called()
-            args = mock_bus.emit.call_args[0]
-            assert args[0] == "TRUST_LEVEL_CHANGED"
-            assert args[1]["new_level"] == "TRUSTED"
+        """Verify publish_event is called with TRUST_LEVEL_CHANGED on trust_all()."""
+        with patch("codomyrmex.events.publish_event") as mock_publish:
+            trust_all()
+
+        mock_publish.assert_called()
+        args = mock_publish.call_args[0]
+        assert args[0] == "TRUST_LEVEL_CHANGED"
+        assert args[1]["new_level"] == "TRUSTED"
 
 
 class TestDestructiveConfirmation:

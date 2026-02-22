@@ -5,6 +5,7 @@ Tests use a real TCPServer + DataProvider and make real HTTP requests.
 Ollama-dependent tests use real Ollama calls and skip when unavailable.
 """
 
+import importlib.util
 import json
 import socketserver
 import sys
@@ -42,6 +43,12 @@ def _ollama_available() -> tuple[bool, str | None]:
 _OLLAMA_AVAILABLE, _OLLAMA_MODEL = _ollama_available()
 _skip_no_ollama = pytest.mark.skipif(
     not _OLLAMA_AVAILABLE, reason="Ollama server not reachable or no models installed"
+)
+
+_AGENTIC_MEMORY_AVAILABLE = importlib.util.find_spec("codomyrmex.agentic_memory.mcp_tools") is not None
+_skip_no_agentic_memory = pytest.mark.skipif(
+    not _AGENTIC_MEMORY_AVAILABLE,
+    reason="codomyrmex.agentic_memory.mcp_tools not installed",
 )
 
 
@@ -571,6 +578,22 @@ class TestRouting:
         status, _ = live_server.post("/api/nonexistent", {})
         assert status == 404
 
+    def test_get_trust_status_routes_correctly(self, live_server):
+        """Test that GET /api/trust/status resolves."""
+        status, _ = live_server.get("/api/trust/status")
+        assert status == 200
+
+    def test_post_pai_action_routes_correctly(self, live_server):
+        """Test that POST /api/pai/action resolves (even with invalid body)."""
+        status, _ = live_server.post("/api/pai/action", {})
+        assert status == 400  # Empty action, but routed correctly
+
+    def test_get_dispatch_status_routes_correctly(self, live_server):
+        """Test that GET /api/agent/dispatch/status resolves."""
+        WebsiteServer._dispatch_orch = None
+        status, _ = live_server.get("/api/agent/dispatch/status")
+        assert status == 200
+
 
 # ── CORS Preflight Tests ────────────────────────────────────────────
 
@@ -681,3 +704,226 @@ class TestResponseHeaders:
             assert resp.getheader("Access-Control-Allow-Origin") == "http://localhost:8787"
         finally:
             conn.close()
+
+
+# ── Trust Status Endpoint Tests ──────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestTrustStatusEndpoint:
+    """Tests for GET /api/trust/status."""
+
+    def test_returns_200(self, live_server):
+        """GET /api/trust/status returns HTTP 200."""
+        status, data = live_server.get("/api/trust/status")
+        assert status == 200
+
+    def test_response_has_counts_dict_with_required_keys(self, live_server):
+        """Response includes counts dict with untrusted/verified/trusted keys >= 0."""
+        status, data = live_server.get("/api/trust/status")
+        assert status == 200
+        assert isinstance(data, dict)
+        assert "counts" in data
+        counts = data["counts"]
+        for key in ("untrusted", "verified", "trusted"):
+            assert key in counts
+            assert isinstance(counts[key], int)
+            assert counts[key] >= 0
+
+    def test_response_has_total_tools_int(self, live_server):
+        """Response includes total_tools as a non-negative integer."""
+        status, data = live_server.get("/api/trust/status")
+        assert status == 200
+        assert "total_tools" in data
+        assert isinstance(data["total_tools"], int)
+        assert data["total_tools"] >= 0
+
+
+# ── PAI Action Endpoint Tests ────────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestPaiActionEndpoint:
+    """Tests for POST /api/pai/action."""
+
+    def test_empty_action_returns_400(self, live_server):
+        """POST with empty action string returns 400 with success=False."""
+        status, data = live_server.post("/api/pai/action", {})
+        assert status == 400
+        assert isinstance(data, dict)
+        assert data.get("success") is False
+
+    def test_unknown_action_returns_400(self, live_server):
+        """POST with unrecognised action returns 400 with success=False."""
+        status, data = live_server.post("/api/pai/action", {"action": "foobar"})
+        assert status == 400
+        assert data.get("success") is False
+
+    def test_verify_action_returns_correct_shape(self, live_server):
+        """verify action returns 200 with integer modules/tools_total/promoted."""
+        status, data = live_server.post("/api/pai/action", {"action": "verify"})
+        assert status == 200
+        assert data.get("success") is True
+        result = data.get("result", {})
+        assert isinstance(result.get("modules"), int)
+        assert isinstance(result.get("tools_total"), int)
+        assert isinstance(result.get("promoted"), int)
+        assert "trust_counts" in data
+
+    def test_trust_action_returns_200(self, live_server):
+        """trust action returns 200 with success=True."""
+        status, data = live_server.post("/api/pai/action", {"action": "trust"})
+        assert status == 200
+        assert data.get("success") is True
+
+    def test_reset_action_returns_200_with_reset_message(self, live_server):
+        """reset action returns 200 and result message contains 'reset'."""
+        status, data = live_server.post("/api/pai/action", {"action": "reset"})
+        assert status == 200
+        assert data.get("success") is True
+        result = data.get("result", {})
+        assert "reset" in str(result.get("message", "")).lower()
+
+    def test_status_action_returns_200(self, live_server):
+        """status action returns 200 with success=True."""
+        status, data = live_server.post("/api/pai/action", {"action": "status"})
+        assert status == 200
+        assert data.get("success") is True
+
+    def test_add_memory_empty_content_returns_400(self, live_server):
+        """add_memory with empty content returns 400 with success=False."""
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "add_memory", "content": ""}
+        )
+        assert status == 400
+        assert data.get("success") is False
+
+    @_skip_no_agentic_memory
+    def test_add_memory_with_content_returns_200(self, live_server):
+        """add_memory with non-empty content returns 200 with success=True."""
+        status, data = live_server.post(
+            "/api/pai/action", {"action": "add_memory", "content": "test note"}
+        )
+        assert status == 200
+        assert data.get("success") is True
+
+
+# ── Agent Dispatch Status Endpoint Tests ─────────────────────────────
+
+
+@pytest.mark.unit
+class TestAgentDispatchStatusEndpoint:
+    """Tests for GET /api/agent/dispatch/status."""
+
+    def test_returns_200(self, live_server):
+        """GET /api/agent/dispatch/status returns HTTP 200."""
+        WebsiteServer._dispatch_orch = None
+        status, data = live_server.get("/api/agent/dispatch/status")
+        assert status == 200
+
+    def test_active_is_false_when_no_orch(self, live_server):
+        """active=False when no orchestrator has been started."""
+        WebsiteServer._dispatch_orch = None
+        status, data = live_server.get("/api/agent/dispatch/status")
+        assert status == 200
+        assert data.get("active") is False
+
+    def test_turns_list_always_present(self, live_server):
+        """Response always includes a turns list even when inactive."""
+        WebsiteServer._dispatch_orch = None
+        status, data = live_server.get("/api/agent/dispatch/status")
+        assert status == 200
+        assert "turns" in data
+        assert isinstance(data["turns"], list)
+
+
+# ── Agent Dispatch Endpoint Tests ────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestAgentDispatchEndpoint:
+    """Tests for POST /api/agent/dispatch."""
+
+    def test_empty_body_returns_400(self, live_server):
+        """POST with Content-Length 0 returns 400."""
+        conn = http.client.HTTPConnection("127.0.0.1", live_server.port, timeout=10)
+        try:
+            conn.request(
+                "POST",
+                "/api/agent/dispatch",
+                body=b"",
+                headers={
+                    "Content-Type": "application/json",
+                    "Content-Length": "0",
+                    "Origin": "http://127.0.0.1:8787",
+                },
+            )
+            resp = conn.getresponse()
+            resp.read()
+            assert resp.status == 400
+        finally:
+            conn.close()
+
+    def test_with_prompt_returns_dict(self, live_server):
+        """POST with a prompt returns a dict response (200 or 500 if orch unavailable)."""
+        WebsiteServer._dispatch_orch = None
+        WebsiteServer._dispatch_thread = None
+        status, data = live_server.post("/api/agent/dispatch", {"prompt": "hello"})
+        assert status in (200, 500)
+        assert isinstance(data, dict)
+        if status == 200:
+            assert data.get("success") is True
+            assert "channel" in data
+
+    def test_running_thread_returns_429(self, live_server):
+        """Already-running dispatch thread returns 429."""
+        # Create a live thread using an event to control its lifetime
+        stop_event = threading.Event()
+
+        def _keep_alive():
+            stop_event.wait(timeout=10)
+
+        t = threading.Thread(target=_keep_alive, daemon=True)
+        t.start()
+        try:
+            WebsiteServer._dispatch_thread = t
+            status, data = live_server.post("/api/agent/dispatch", {"prompt": "hello"})
+            assert status == 429
+        finally:
+            stop_event.set()
+            t.join(timeout=2)
+            WebsiteServer._dispatch_thread = None
+
+
+# ── Agent Dispatch Stop Endpoint Tests ───────────────────────────────
+
+
+@pytest.mark.unit
+class TestAgentDispatchStopEndpoint:
+    """Tests for POST /api/agent/dispatch/stop."""
+
+    def test_no_active_dispatch_returns_200(self, live_server):
+        """POST when no dispatch is active returns 200 with success=True."""
+        WebsiteServer._dispatch_orch = None
+        status, data = live_server.post("/api/agent/dispatch/stop", {})
+        assert status == 200
+        assert data.get("success") is True
+
+    def test_stop_clears_orch(self, live_server):
+        """POST stop clears WebsiteServer._dispatch_orch to None."""
+
+        class _DummyOrch:
+            pass
+
+        WebsiteServer._dispatch_orch = _DummyOrch()
+        status, data = live_server.post("/api/agent/dispatch/stop", {})
+        assert status == 200
+        assert data.get("success") is True
+        assert WebsiteServer._dispatch_orch is None
+
+    def test_response_always_has_message_field(self, live_server):
+        """Response always includes a message field."""
+        WebsiteServer._dispatch_orch = None
+        status, data = live_server.post("/api/agent/dispatch/stop", {})
+        assert status == 200
+        assert "message" in data

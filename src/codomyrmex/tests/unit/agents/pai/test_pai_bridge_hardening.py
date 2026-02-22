@@ -72,7 +72,7 @@ def test_verify_capabilities_structure():
     assert "destructive" in tools
     assert "total" in tools
     assert "by_category" in tools
-    assert tools["by_category"]["total"] == tools["total"]
+    assert tools["by_category"]["safe"] + tools["by_category"]["destructive"] == tools["total"]
     
     # Check trust structure
     trust = report["trust"]

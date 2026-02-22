@@ -11,9 +11,10 @@ Gemini Agent Integration.. This submodule is scaffolded for future implementatio
 - `AGENTS.md` - Agent integration specification
 - `PAI.md` - PAI integration notes
 - `SPEC.md` - Module specification
-- `__init__.py` - Module entry point (scaffolded, no exports yet)
-- `gemini_client.py` - Gemini Client
-- `gemini_integration.py` - Gemini Integration
+- `__init__.py` – Module entry point
+- `gemini_client.py` – Gemini API SDK Client
+- `gemini_cli.py` – External npm `gemini-cli` agent wrapper
+- `gemini_integration.py` – Gemini Integration
 
 ## Navigation
 

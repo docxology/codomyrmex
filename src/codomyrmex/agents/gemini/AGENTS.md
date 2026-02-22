@@ -13,6 +13,7 @@ Google Gemini-based agent implementation for AI-assisted code development and an
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
 - `gemini_client.py` – Project file
+- `gemini_cli.py` – CLI package wrapper
 - `gemini_integration.py` – Project file
 
 ## Operating Contracts

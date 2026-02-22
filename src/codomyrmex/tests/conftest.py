@@ -110,10 +110,29 @@ def setup_test_environment():
     """Auto-use fixture to set up test environment."""
     # Ensure we're in test mode
     os.environ.setdefault("CODOMYRMEX_TEST_MODE", "true")
+    
+    # Prevent Git from opening an editor or terminal prompt during tests
+    # This prevents VS Code or Vim auto-popping up if a command requires a message check
+    original_git_editor = os.environ.get("GIT_EDITOR")
+    original_git_prompt = os.environ.get("GIT_TERMINAL_PROMPT")
+    os.environ["GIT_EDITOR"] = "true"
+    os.environ["GIT_TERMINAL_PROMPT"] = "0"
+    
     yield
+    
     # Cleanup after test
     if "CODOMYRMEX_TEST_MODE" in os.environ:
         del os.environ["CODOMYRMEX_TEST_MODE"]
+        
+    if original_git_editor is not None:
+        os.environ["GIT_EDITOR"] = original_git_editor
+    elif "GIT_EDITOR" in os.environ:
+        del os.environ["GIT_EDITOR"]
+        
+    if original_git_prompt is not None:
+        os.environ["GIT_TERMINAL_PROMPT"] = original_git_prompt
+    elif "GIT_TERMINAL_PROMPT" in os.environ:
+        del os.environ["GIT_TERMINAL_PROMPT"]
 
 
 # ===== REAL DATA FIXTURES =====

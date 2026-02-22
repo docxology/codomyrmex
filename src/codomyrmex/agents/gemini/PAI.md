@@ -19,6 +19,7 @@ As an AI agent, when working with this module:
 
 - `__init__.py`: Public API export.
 - `SPEC.md`: Technical specification.
+- `gemini_cli.py`: npm `gemini-cli` wrapper.
 
 ## Future Considerations
 
