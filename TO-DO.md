@@ -21,7 +21,7 @@
 
 | Metric | Value | Notes |
 | :--- | ---: | :--- |
-| Top-level modules | 91 | Excluding tests, examples, output, htmlcov |
+| Top-level modules | 93 | Excluding tests, examples, output, htmlcov |
 | `mcp_tools.py` files | 27 | +1 `agentic_memory` |
 | `@mcp_tool` decorators | 138 | Across 45 files |
 | Tests collected | 9,860 | 0 collection errors ✅ |
@@ -64,11 +64,11 @@ All releases below have passed their gates. Sprint details archived in git histo
 
 The TO-DO and root docs have stale numbers. Fix them to match reality.
 
-- [ ] Re-audit coverage: `pytest --cov=codomyrmex --cov-report=term-missing -q` → record real %
-- [ ] Update `README.md` with accurate test count (9,860), module count (91), MCP tool count (138/26)
-- [ ] Update `SPEC.md` with matching numbers
-- [ ] Verify `CHANGELOG.md` has v1.0.0 entry with final metrics
-- [ ] `codomyrmex doctor --all` exit 0
+- [x] Re-audit coverage: `pytest --cov=codomyrmex --cov-report=term-missing -q` → record real %
+- [x] Update `README.md` with accurate test count (9,860), module count (93), MCP tool count (138/26)
+- [x] Update `SPEC.md` with matching numbers
+- [x] Verify `CHANGELOG.md` has v1.0.0 entry with final metrics
+- [x] `codomyrmex doctor --all` exit 0
 
 ### 2. Tier-3 Module Promotion (P1)
 
@@ -88,7 +88,7 @@ Six modules near the 2,000 LOC Tier-2 threshold (from previous audit). Each need
 
 ### 3. MCP Tool Coverage (P2)
 
-26/91 modules have `mcp_tools.py`. High-value gaps:
+26/93 modules have `mcp_tools.py`. High-value gaps:
 
 - [ ] `agentic_memory/mcp_tools.py`: `memory_put`, `memory_get`, `memory_search`
 - [ ] `collaboration/mcp_tools.py`: `swarm_submit_task`, `pool_status`
@@ -108,7 +108,7 @@ Six modules near the 2,000 LOC Tier-2 threshold (from previous audit). Each need
 | :---: | :--- | :--- | :--- |
 | **P0** | ~~Fix 74 test failures~~ | 0 failures | ✅ Done |
 | **P0** | ~~Fix 249→9 collection errors~~ | 0 errors | ✅ Done (agentic_memory created) |
-| **P1** | Root doc sync (stale counts) | no stale numbers | v1.0.1 |
+| **P1** | Root doc sync (stale counts) | no stale numbers | ✅ Done |
 | **P1** | Tier-3 → Tier-2 promotions | ≤37 Tier-3 | v1.0.1 |
 | **P1** | MCP tool coverage 26→30+ | `mcp_tools.py` count | v1.0.1 |
 | **P2** | `mypy --strict` progressive | 0 errors on backbone | Ongoing |

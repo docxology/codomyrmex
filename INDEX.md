@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v0.1.9 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.
@@ -27,7 +27,7 @@
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **82 modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **93 modules** across 4 layers |
 
 ### Infrastructure
 
@@ -61,7 +61,7 @@
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 82-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 93-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

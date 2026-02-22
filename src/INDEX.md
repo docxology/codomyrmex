@@ -10,7 +10,7 @@
 | Item | Type | Description |
 | :--- | :--- | :--- |
 | [**init**.py](__init__.py) | File | Namespace package marker |
-| [codomyrmex/](codomyrmex/) | Package | Main package — **91 modules** |
+| [codomyrmex/](codomyrmex/) | Package | Main package — **93 modules** |
 
 ## Documentation Files
 
@@ -25,7 +25,7 @@
 
 | Entry | Path | Description |
 | :--- | :--- | :--- |
-| Package Init | [codomyrmex/**init**.py](codomyrmex/__init__.py) | 91 lazy-loaded submodules |
+| Package Init | [codomyrmex/**init**.py](codomyrmex/__init__.py) | 93 lazy-loaded submodules |
 | Module Index | [codomyrmex/INDEX.md](codomyrmex/INDEX.md) | Complete module catalog by layer |
 | Module Spec | [codomyrmex/SPEC.md](codomyrmex/SPEC.md) | Functional specification |
 | PAI Map | [codomyrmex/PAI.md](codomyrmex/PAI.md) | Personal AI Infrastructure mapping |

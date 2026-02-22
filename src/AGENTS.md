@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 91 specialized modules organized by architectural layer.
+Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 93 specialized modules organized by architectural layer.
 
 ## Directory Structure
 
@@ -34,7 +34,7 @@ src/
 
 | Component                | Type    | Description                                   |
 | ------------------------ | ------- | --------------------------------------------- |
-| `codomyrmex/`            | Package | Main module package (91 modules)              |
+| `codomyrmex/`            | Package | Main module package (93 modules)              |
 | `codomyrmex.llm/`        | Package | LLM integration subpackage                    |
 | `__init__.py`            | Module  | Package initialization                        |
 | [README.md](README.md)   | Doc     | Directory overview                            |

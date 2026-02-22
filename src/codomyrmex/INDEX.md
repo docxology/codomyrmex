@@ -88,7 +88,7 @@ Advanced features with flexible dependencies.
 | [bio_simulation/](bio_simulation/) | Biological simulation models | 37 |
 | [cerebrum/](cerebrum/) | Case-based reasoning & Bayesian inference | 115 |
 | [cli/](cli/) | Command-line interface | 83 |
-| [collaboration/](collaboration/) | Team collaboration tools | 91 |
+| [collaboration/](collaboration/) | Team collaboration tools | 93 |
 | [concurrency/](concurrency/) | Concurrency utilities & async patterns | 46 |
 | [crypto/](crypto/) | Cryptographic operations | 132 |
 | [dark/](dark/) | Dark mode & theming | 72 |
