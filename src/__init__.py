@@ -5,7 +5,7 @@ providing unified access to the main codomyrmex package and template system.
 
 Package Structure:
     The src/ directory contains:
-    - codomyrmex/: Main Python package with 107 specialized modules
+    - codomyrmex/: Main Python package with 91 specialized modules
     - __init__.py: Package initialization and re-exports
 
     The codomyrmex package is organized in a four-layer architecture:
@@ -58,7 +58,7 @@ License:
     MIT License (see LICENSE file for details)
 """
 
-__version__ = "0.1.9"
+__version__ = "1.0.0"
 __author__ = "Codomyrmex Contributors"
 __email__ = "codomyrmex@example.com"
 __license__ = "MIT"

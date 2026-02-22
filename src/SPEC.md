@@ -1,10 +1,10 @@
 # src - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 82 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
+Source code directory containing the core Codomyrmex platform implementation. Provides modular Python package with 91 specialized modules organized in a layered architecture. The `src/` directory hosts the main `codomyrmex` package, which serves as the central coordination point for all Codomyrmex functionality.
 
 ## Design Principles
 
@@ -113,9 +113,7 @@ The `src/` directory contains:
 - `codomyrmex/` - Main Python package with all modules
 - `__init__.py` - Package initialization and re-exports
 - Documentation files (README.md, AGENTS.md, SPEC.md)
-
-- `codomyrmex/` - Main Python package with all modules
-- Package-level files (**init**.py, cli.py, exceptions.py)
+- Package-level files (cli.py, exceptions.py)
 - Comprehensive documentation for each module
 
 > **Note**: Several capabilities that were previously planned as standalone modules

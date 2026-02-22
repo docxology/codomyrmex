@@ -1,14 +1,14 @@
 # Codomyrmex Agents — src
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 82 specialized modules organized by architectural layer.
+Core source code directory containing all Codomyrmex modules. This is the primary implementation surface with 91 specialized modules organized by architectural layer.
 
 ## Directory Structure
 
-```
+```text
 src/
 ├── codomyrmex/           # Main package
 │   ├── agents/           # AI agent framework
@@ -32,14 +32,14 @@ src/
 
 ## Active Components
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `codomyrmex/` | Package | Main module package (82 modules) |
-| `codomyrmex.llm/` | Package | LLM integration subpackage |
-| `__init__.py` | Module | Package initialization |
-| [README.md](README.md) | Doc | Directory overview |
-| [SPEC.md](SPEC.md) | Doc | Functional specification |
-| [PAI.md](PAI.md) | Doc | Personal AI considerations |
+| Component                | Type    | Description                                   |
+| ------------------------ | ------- | --------------------------------------------- |
+| `codomyrmex/`            | Package | Main module package (91 modules)              |
+| `codomyrmex.llm/`        | Package | LLM integration subpackage                    |
+| `__init__.py`            | Module  | Package initialization                        |
+| [README.md](README.md)   | Doc     | Directory overview                            |
+| [SPEC.md](SPEC.md)       | Doc     | Functional specification                      |
+| [PAI.md](PAI.md)         | Doc     | Personal AI considerations                    |
 
 ## Agent Guidelines
 
@@ -52,23 +52,23 @@ src/
 
 ### Key Entry Points
 
-| Module | Purpose | Priority |
-|--------|---------|----------|
-| `logging_monitoring/` | Start here for logging | Foundation |
-| `environment_setup/` | Environment validation | Foundation |
-| `model_context_protocol/` | AI tool interfaces | Foundation |
-| `agents/` | AI agent framework | Core |
-| `orchestrator/` | Workflow coordination | Service |
+| Module                    | Purpose                     | Priority   |
+| ------------------------- | --------------------------- | ---------- |
+| `logging_monitoring/`     | Start here for logging      | Foundation |
+| `environment_setup/`      | Environment validation      | Foundation |
+| `model_context_protocol/` | AI tool interfaces          | Foundation |
+| `agents/`                 | AI agent framework          | Core       |
+| `orchestrator/`           | Workflow coordination       | Service    |
 
 ### Secure Cognitive Modules
 
-| Module | Purpose |
-|--------|---------|
-| `identity/` | 3-tier personas, bio-verification |
-| `wallet/` | Self-custody, Natural Ritual recovery |
-| `defense/` | Exploit detection, context poisoning |
-| `market/` | Reverse auctions, demand aggregation |
-| `privacy/` | Crumb scrubbing, mixnet routing |
+| Module      | Purpose                            |
+| ----------- | ---------------------------------- |
+| `identity/` | 3-tier personas, bio-verification  |
+| `wallet/`   | Self-custody, Natural Ritual...    |
+| `defense/`  | Exploit detection, context poison  |
+| `market/`   | Reverse auctions, demand agg       |
+| `privacy/`  | Crumb scrubbing, mixnet routing    |
 
 ## Operating Contracts
 

@@ -1,6 +1,6 @@
 # Source Directory Index
 
-**Project**: Codomyrmex | **Version**: v0.1.7 | **Last Updated**: February 2026
+**Project**: Codomyrmex | **Version**: v1.0.0 | **Last Updated**: February 2026
 
 > [!TIP]
 > This INDEX catalogs the `src/` directory structure for maximum discoverability.
@@ -10,7 +10,7 @@
 | Item | Type | Description |
 | :--- | :--- | :--- |
 | [**init**.py](__init__.py) | File | Namespace package marker |
-| [codomyrmex/](codomyrmex/) | Package | Main package — **82 modules** |
+| [codomyrmex/](codomyrmex/) | Package | Main package — **91 modules** |
 
 ## Documentation Files
 
@@ -25,7 +25,7 @@
 
 | Entry | Path | Description |
 | :--- | :--- | :--- |
-| Package Init | [codomyrmex/**init**.py](codomyrmex/__init__.py) | 82 lazy-loaded submodules |
+| Package Init | [codomyrmex/**init**.py](codomyrmex/__init__.py) | 91 lazy-loaded submodules |
 | Module Index | [codomyrmex/INDEX.md](codomyrmex/INDEX.md) | Complete module catalog by layer |
 | Module Spec | [codomyrmex/SPEC.md](codomyrmex/SPEC.md) | Functional specification |
 | PAI Map | [codomyrmex/PAI.md](codomyrmex/PAI.md) | Personal AI Infrastructure mapping |
