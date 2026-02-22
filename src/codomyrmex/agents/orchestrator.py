@@ -230,13 +230,17 @@ def _create_llm_client(spec: AgentSpec) -> Any:
             except Exception as e:
                 logger.error(f"Failed to create Claude client: {e}")
         
-        # Fallback: same Ollama path, preserving the user's model choice.
+        # Fallback: same Ollama path, overriding the user's model choice for valid local inference if they selected Claude but don't have a key.
+        fallback_model = spec.model
+        if spec.provider != "ollama":
+            fallback_model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
+            
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         logger.info(
             f"[{spec.identity}] Provider '{spec.provider}' → "
-            f"Ollama fallback ({spec.model})"
+            f"Ollama fallback ({fallback_model})"
         )
-        return OllamaClient(model=spec.model, base_url=base_url)
+        return OllamaClient(model=fallback_model, base_url=base_url)
 
     raise RuntimeError(f"Unknown provider: {spec.provider}")
 
