@@ -237,9 +237,9 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
 
     # Try to emit via EventBus if available
     try:
-        from codomyrmex.events import EventBus, EventType
+        from codomyrmex.events import publish_event
         # TODO(v0.2.0): Use strict EventType.TRUST_LEVEL_CHANGED when available
-        EventBus.emit("TRUST_LEVEL_CHANGED", {
+        publish_event("TRUST_LEVEL_CHANGED", {
             "old_level": old_level.name,
             "new_level": new_level.name,
             "timestamp": datetime.now(timezone.utc).isoformat()

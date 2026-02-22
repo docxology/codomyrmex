@@ -650,6 +650,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             elif action == "status":
                 from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
                 result = _tool_pai_status()
+            elif action == "add_memory":
+                from codomyrmex.agentic_memory.mcp_tools import memory_put
+                content = data.get("content", "")
+                if not content:
+                    self.send_json_response({"error": "Content is required for add_memory", "success": False}, status=400)
+                    return
+                # memory_put expects **kwargs, so we pass content=content directly
+                result = memory_put(content=content)
             else:
                 self.send_json_response(
                     {"error": f"Unknown action: {action}", "success": False},
