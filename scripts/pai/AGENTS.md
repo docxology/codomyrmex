@@ -1,40 +1,44 @@
-# Codomyrmex PAI — scripts/pai
+# Codomyrmex PAI Integrations (Agent Instructions)
 
-**Version**: v0.1.0 | **Status**: Active | **Last Updated**: February 2026
+## Objective
 
-## Purpose
+This directory (`scripts/pai/`) encapsulates the orchestration logic to spin up the **Personal AI (PAI) Infrastructure** and its ecosystem dashboards. Agents interacting with the PAI server should use the HTTP APIs exposed by `PMServer.ts` at `http://localhost:8888`.
 
-Orchestration scripts for PAI dashboard operations. Provides a clean single entry point for all dashboard lifecycle management: setup, restart, and launch.
+## Core Orchestration
 
-## Script Inventory
+To start the PAI web servers, you should execute:
 
-| File | Lines | Description |
-|------|-------|-------------|
-| `dashboard.py` | ~200 | PAI dashboard orchestrator (setup + restart + run) |
+```bash
+uv run python scripts/pai/dashboard.py
+```
 
-## Method Inventory
+This script ensures `bun ~/.claude/skills/PAI/Tools/PMServer.ts` is running on `:8888` and the localized `WebsiteServer` admin dashboard is running on `:8787`.
 
-### dashboard.py
+## Interfacing with PAI (Agents)
 
-| Function | Description |
-|----------|-------------|
-| `_pids_on_port(port)` | Returns list of PIDs listening on the given port via `lsof` |
-| `kill_port(port)` | Sends SIGTERM then SIGKILL to all processes on port; returns True if any killed |
-| `phase_setup(project_root)` | Generates dashboard static files via `WebsiteGenerator`; writes root redirect |
-| `phase_restart(port)` | Calls `kill_port()` and waits for OS to reclaim the port |
-| `phase_run(project_root, port, host, open_browser)` | Initialises `DataProvider`, binds `WebsiteServer`, optionally opens browser |
-| `parse_args()` | CLI argument parser: `--port`, `--host`, `--restart`, `--no-open`, `--setup-only`, `--no-setup` |
-| `main()` | Entry point — orchestrates phases in order based on flags |
+You **do not** need to execute the raw Python scripts for queries. Instead, access the PAI state completely through the JSON endpoints at `http://localhost:8888`:
 
-## AI Usage Notes
+### 1. Data Retrieval
 
-- `phase_setup` and `phase_run` are safe to call directly from agent code for programmatic dashboard management.
-- `kill_port` uses `lsof` (macOS/Linux); will silently no-op on platforms where `lsof` is unavailable.
-- The script is designed to be **non-interactive** — all output via `print_info` / `print_error`, no prompts.
-- Running `--setup-only` is safe to call repeatedly; `WebsiteGenerator` is idempotent.
+- `GET /api/missions`
+- `GET /api/projects`
+- `GET /api/tasks/summary`
 
-## Dependencies
+### 2. State Mutation
 
-- `codomyrmex.website`: `DataProvider`, `WebsiteGenerator`, `WebsiteServer`
-- `codomyrmex.utils.cli_helpers`: `print_info`, `print_success`, `print_error`, `setup_logging`
-- stdlib: `argparse`, `signal`, `socketserver`, `subprocess`, `threading`, `time`, `webbrowser`
+When manipulating tasks, projects, or missions, post JSON payloads using `curl` or standard HTTP libraries.
+
+- `POST /api/projects`
+- `POST /api/tasks/{project_slug}` (Requires `text`, `priority`, `section`, etc. in JSON body).
+
+### 3. Agentic Dispatch & AI
+
+The PAI Server actively orchestrates multi-agent tasks (Ollama & Claude Code).
+
+- Execute jobs: `POST /api/dispatch/execute` with a JSON payload containing `{"action": "task-implement", "context": {...}, "backend": "claude"}`.
+- Query running jobs: `GET /api/dispatch/jobs`.
+
+## Constraints & Requirements
+
+- Always verify the server is running on `http://localhost:8888` before trying to mutate or query PM state. If not, trigger `scripts/pai/dashboard.py` in the background.
+- Respect the Zero-Mock constraint: all HTTP API calls to PAI must be real, interacting with the actual filesystem backing `PMServer.ts`.
