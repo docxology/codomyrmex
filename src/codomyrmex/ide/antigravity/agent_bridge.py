@@ -249,6 +249,23 @@ if BaseAgent is not None:
                     request_id=request.id,
                 )
 
+        def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
+            """Adapter for ConversationOrchestrator's expected LLM client interface."""
+            response = self.execute(request)
+            
+            # ConversationOrchestrator expects an object with `is_success()`, `content`, `tokens_used`, etc.
+            class AdapterResponse:
+                def __init__(self, resp):
+                    self.content = resp.content
+                    self.tokens_used = 0 
+                    self.execution_time = resp.execution_time
+                    self.error = getattr(resp, "error", None)
+                    
+                def is_success(self):
+                    return not bool(self.error)
+            
+            return AdapterResponse(response)
+
         def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
             """Stream is not supported — yields single response.
 

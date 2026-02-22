@@ -191,9 +191,45 @@ def _create_llm_client(spec: AgentSpec) -> Any:
         if os.environ.get("ANTHROPIC_API_KEY"):
             try:
                 from codomyrmex.agents.llm_client import get_llm_client
-                return get_llm_client(identity=spec.identity)
-            except Exception:
-                pass
+                client = get_llm_client(identity=spec.identity)
+                
+                if spec.provider == "antigravity":
+                    from codomyrmex.ide.antigravity import AntigravityClient
+                    from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
+                    
+                    ag_client = AntigravityClient()
+                    try:
+                        ag_client.connect()
+                    except Exception:
+                        pass
+                        
+                    provider = AntigravityToolProvider(ag_client)
+                    registry = provider.get_tool_registry()
+                    
+                    for tool in registry.list_tools():
+                        client.register_tool(
+                            name=tool.name,
+                            description=tool.description,
+                            input_schema=tool.args_schema,
+                            handler=tool.func
+                        )
+                        
+                    # Wrap the client so execute_with_session calls execute_with_tools
+                    class AntigravityCodeImplementerWrapper:
+                        def __init__(self, base_client):
+                            self.client = base_client
+                            
+                        def execute_with_session(self, request, session=None, session_id=None):
+                            if hasattr(self.client, 'execute_with_tools'):
+                                logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
+                                return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
+                            return self.client.execute_with_session(request, session, session_id)
+                            
+                    return AntigravityCodeImplementerWrapper(client)
+                return client
+            except Exception as e:
+                logger.error(f"Failed to create Claude client: {e}")
+        
         # Fallback: same Ollama path, preserving the user's model choice.
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         logger.info(
