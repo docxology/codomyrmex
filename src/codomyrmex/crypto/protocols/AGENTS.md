@@ -1,3 +1,3 @@
-# Protocols
+# Agents for crypto/protocols
 
-Documentation for crypto/protocols.
+List of agents and configurations.

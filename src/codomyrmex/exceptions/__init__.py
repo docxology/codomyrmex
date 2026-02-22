@@ -1,3 +1,4 @@
+"""Module for exceptions."""
 from __future__ import annotations
 """Codomyrmex Exception Classes
 

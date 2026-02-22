@@ -18,6 +18,15 @@ resolution-markers = [
 ]
 
 [[package]]
+name = "absl-py"
+version = "2.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/64/c7/8de93764ad66968d19329a7e0c147a2bb3c7054c554d4a119111b8f9440f/absl_py-2.4.0.tar.gz", hash = "sha256:8c6af82722b35cf71e0f4d1d47dcaebfff286e27110a99fc359349b247dfb5d4", size = 116543, upload-time = "2026-01-28T10:17:05.322Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/18/a6/907a406bb7d359e6a63f99c313846d9eec4f7e6f7437809e03aa00fa3074/absl_py-2.4.0-py3-none-any.whl", hash = "sha256:88476fd881ca8aab94ffa78b7b6c632a782ab3ba1cd19c9bd423abc4fb4cd28d", size = 135750, upload-time = "2026-01-28T10:17:04.19Z" },
+]
+
+[[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -918,6 +927,7 @@ name = "codomyrmex"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "absl-py" },
     { name = "aiohttp" },
     { name = "anthropic" },
     { name = "bandit" },
@@ -929,7 +939,7 @@ dependencies = [
     { name = "docker" },
     { name = "fastapi" },
     { name = "fastavro" },
-    { name = "flake8" },
+    { name = "fire" },
     { name = "gitpython" },
     { name = "google-genai" },
     { name = "google-generativeai" },
@@ -976,6 +986,11 @@ audio = [
     { name = "pyttsx3" },
     { name = "soundfile" },
 ]
+calendar = [
+    { name = "google-api-python-client" },
+    { name = "google-auth-httplib2" },
+    { name = "google-auth-oauthlib" },
+]
 cloud = [
     { name = "azure-identity" },
     { name = "azure-storage-blob" },
@@ -1002,6 +1017,11 @@ documents = [
     { name = "chardet" },
     { name = "pypdf" },
 ]
+email = [
+    { name = "google-api-python-client" },
+    { name = "google-auth-httplib2" },
+    { name = "google-auth-oauthlib" },
+]
 formal-verification = [
     { name = "z3-solver" },
 ]
@@ -1015,7 +1035,6 @@ language-models = [
     { name = "urllib3" },
 ]
 modeling-3d = [
-    { name = "isort" },
     { name = "moderngl" },
     { name = "pillow" },
     { name = "pygame" },
@@ -1042,7 +1061,6 @@ performance = [
 physical-management = [
     { name = "alembic" },
     { name = "dynaconf" },
-    { name = "isort" },
     { name = "marshmallow" },
     { name = "mkdocs" },
     { name = "mkdocs-material" },
@@ -1080,6 +1098,7 @@ video = [
 [package.dev-dependencies]
 dev = [
     { name = "black" },
+    { name = "fire" },
     { name = "mutmut" },
     { name = "mypy" },
     { name = "pre-commit" },
@@ -1095,6 +1114,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "absl-py", specifier = ">=1.4.0" },
     { name = "aiohttp", specifier = ">=3.13.3" },
     { name = "alembic", marker = "extra == 'physical-management'", specifier = ">=1.7.0" },
     { name = "anthropic", specifier = ">=0.64.0" },
@@ -1117,14 +1137,19 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.100.0" },
     { name = "fastavro", specifier = ">=1.12.1" },
     { name = "faster-whisper", marker = "extra == 'audio'", specifier = ">=1.0.0" },
+    { name = "fire", specifier = ">=0.5.0" },
+    { name = "fire", specifier = ">=0.7.0" },
     { name = "firecrawl-py", marker = "extra == 'scrape'", specifier = ">=1.0.0" },
-    { name = "flake8", specifier = ">=6.0.0" },
     { name = "gitpython", specifier = ">=3.1.0" },
+    { name = "google-api-python-client", marker = "extra == 'calendar'", specifier = ">=2.0.0" },
+    { name = "google-api-python-client", marker = "extra == 'email'", specifier = ">=2.0.0" },
+    { name = "google-auth-httplib2", marker = "extra == 'calendar'", specifier = ">=0.2.0" },
+    { name = "google-auth-httplib2", marker = "extra == 'email'", specifier = ">=0.2.0" },
+    { name = "google-auth-oauthlib", marker = "extra == 'calendar'", specifier = ">=1.0.0" },
+    { name = "google-auth-oauthlib", marker = "extra == 'email'", specifier = ">=1.0.0" },
     { name = "google-cloud-storage", marker = "extra == 'cloud'", specifier = ">=2.10.0" },
     { name = "google-genai", specifier = ">=0.1.0" },
     { name = "google-generativeai", specifier = ">=0.3.0" },
-    { name = "isort", marker = "extra == 'modeling-3d'", specifier = ">=5.9.0" },
-    { name = "isort", marker = "extra == 'physical-management'", specifier = ">=5.9.0" },
     { name = "jinja2", marker = "extra == 'security-audit'", specifier = ">=3.1.0" },
     { name = "jsonschema", specifier = ">=4.23.0" },
     { name = "lizard", specifier = ">=1.17.0" },
@@ -1207,11 +1232,12 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'physical-management'", specifier = ">=10.0" },
     { name = "z3-solver", marker = "extra == 'formal-verification'", specifier = ">=4.8.0" },
 ]
-provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian"]
+provides-extras = ["code-review", "language-models", "cloud", "serialization", "parsing", "modeling-3d", "performance", "observability", "physical-management", "security-audit", "static-analysis", "scrape", "fpf", "crypto", "documents", "audio", "video", "dark", "formal-verification", "obsidian", "calendar", "email"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "black", specifier = ">=23.0.0" },
+    { name = "fire", specifier = ">=0.5.0" },
     { name = "mutmut", specifier = ">=3.4.0" },
     { name = "mypy", specifier = ">=1.0.0" },
     { name = "pre-commit", specifier = ">=3.0.0" },
@@ -1895,6 +1921,18 @@ wheels = [
 ]
 
 [[package]]
+name = "fire"
+version = "0.7.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "termcolor" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c0/00/f8d10588d2019d6d6452653def1ee807353b21983db48550318424b5ff18/fire-0.7.1.tar.gz", hash = "sha256:3b208f05c736de98fb343310d090dcc4d8c78b2a89ea4f32b837c586270a9cbf", size = 88720, upload-time = "2025-08-16T20:20:24.175Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/4c/93d0f85318da65923e4b91c1c2ff03d8a458cbefebe3bc612a6693c7906d/fire-0.7.1-py3-none-any.whl", hash = "sha256:e43fd8a5033a9001e7e2973bab96070694b9f12f2e0ecf96d4683971b5ab1882", size = 115945, upload-time = "2025-08-16T20:20:22.87Z" },
+]
+
+[[package]]
 name = "firecrawl-py"
 version = "4.13.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1910,20 +1948,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0e/ea/b3fc460adf3b0bea4e988b25b44f10bc32542734d3509738bd627032f18a/firecrawl_py-4.13.4.tar.gz", hash = "sha256:2e44f3a0631690bd9589dc87544ce7f22a6159f0dbbfb9ed9e5eb8642f24ef4f", size = 164280, upload-time = "2026-01-23T01:27:30.287Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9c/f3/c3595e568d0e98ddbdbe4913928a4de95fb416fa1d029ab6d4dc0e8b0dba/firecrawl_py-4.13.4-py3-none-any.whl", hash = "sha256:f529c64ce9f81a42ca55e372153937b044aa29288f31908da54a7fdfc68e782b", size = 206309, upload-time = "2026-01-23T01:27:28.556Z" },
-]
-
-[[package]]
-name = "flake8"
-version = "7.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mccabe" },
-    { name = "pycodestyle" },
-    { name = "pyflakes" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/9b/af/fbfe3c4b5a657d79e5c47a2827a362f9e1b763336a52f926126aa6dc7123/flake8-7.3.0.tar.gz", hash = "sha256:fe044858146b9fc69b551a4b490d69cf960fcb78ad1edcb84e7fbb1b4a8e3872", size = 48326, upload-time = "2025-06-20T19:31:35.838Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9f/56/13ab06b4f93ca7cac71078fbe37fcea175d3216f31f85c3168a6bbd0bb9a/flake8-7.3.0-py2.py3-none-any.whl", hash = "sha256:b9696257b9ce8beb888cdbe31cf885c90d31928fe202be0889a7cdafad32f01e", size = 57922, upload-time = "2025-06-20T19:31:34.425Z" },
 ]
 
 [[package]]
@@ -2285,6 +2309,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d5/ad/c1f2b1175096a8d04cf202ad5ea6065f108d26be6fc7215876bde4a7981d/google_auth_httplib2-0.3.0.tar.gz", hash = "sha256:177898a0175252480d5ed916aeea183c2df87c1f9c26705d74ae6b951c268b0b", size = 11134, upload-time = "2025-12-15T22:13:51.825Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/99/d5/3c97526c8796d3caf5f4b3bed2b05e8a7102326f00a334e7a438237f3b22/google_auth_httplib2-0.3.0-py3-none-any.whl", hash = "sha256:426167e5df066e3f5a0fc7ea18768c08e7296046594ce4c8c409c2457dd1f776", size = 9529, upload-time = "2025-12-15T22:13:51.048Z" },
+]
+
+[[package]]
+name = "google-auth-oauthlib"
+version = "1.2.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-auth" },
+    { name = "requests-oauthlib" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/90/dd/211f27c1e927e2292c2a71d5df1a2aaf261ce50ba7d50848c6ee24e20970/google_auth_oauthlib-1.2.4.tar.gz", hash = "sha256:3ca93859c6cc9003c8e12b2a0868915209d7953f05a70f4880ab57d57e56ee3e", size = 21185, upload-time = "2026-01-15T22:03:10.027Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/84/21/fb96db432d187b07756e62971c4d89bdef70259e4cfa76ee32bcc0ac97d1/google_auth_oauthlib-1.2.4-py3-none-any.whl", hash = "sha256:0e922eea5f2baacaf8867febb782e46e7b153236c21592ed76ab3ddb77ffd772", size = 19193, upload-time = "2026-01-15T22:03:09.046Z" },
 ]
 
 [[package]]
@@ -5764,15 +5801,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pycodestyle"
-version = "2.14.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/11/e0/abfd2a0d2efe47670df87f3e3a0e2edda42f055053c85361f19c0e2c1ca8/pycodestyle-2.14.0.tar.gz", hash = "sha256:c4b5b517d278089ff9d0abdec919cd97262a3367449ea1c8b49b91529167b783", size = 39472, upload-time = "2025-06-20T18:49:48.75Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/27/a58ddaf8c588a3ef080db9d0b7e0b97215cee3a45df74f3a94dbbf5c893a/pycodestyle-2.14.0-py2.py3-none-any.whl", hash = "sha256:dd6bf7cb4ee77f8e016f9c8e74a35ddd9f67e1d5fd4184d86c3b98e07099f42d", size = 31594, upload-time = "2025-06-20T18:49:47.491Z" },
-]
-
-[[package]]
 name = "pycparser"
 version = "3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -5935,15 +5963,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/fe/9a/e6bca0eed82db26562c73b5076539a4a08d3cffd19c3cc5913a3e61145fd/pydub-0.25.1.tar.gz", hash = "sha256:980a33ce9949cab2a569606b65674d748ecbca4f0796887fd6f46173a7b0d30f", size = 38326, upload-time = "2021-03-10T02:09:54.659Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a6/53/d78dc063216e62fc55f6b2eebb447f6a4b0a59f55c8406376f76bf959b08/pydub-0.25.1-py2.py3-none-any.whl", hash = "sha256:65617e33033874b59d87db603aa1ed450633288aefead953b30bded59cb599a6", size = 32327, upload-time = "2021-03-10T02:09:53.503Z" },
-]
-
-[[package]]
-name = "pyflakes"
-version = "3.4.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/45/dc/fd034dc20b4b264b3d015808458391acbf9df40b1e54750ef175d39180b1/pyflakes-3.4.0.tar.gz", hash = "sha256:b24f96fafb7d2ab0ec5075b7350b3d2d2218eab42003821c06344973d3ea2f58", size = 64669, upload-time = "2025-06-20T18:45:27.834Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c2/2f/81d580a0fb83baeb066698975cb14a618bdbed7720678566f1b046a95fe8/pyflakes-3.4.0-py2.py3-none-any.whl", hash = "sha256:f742a7dbd0d9cb9ea41e9a24a918996e8170c799fa528688d40dd582c8265f4f", size = 63551, upload-time = "2025-06-20T18:45:26.937Z" },
 ]
 
 [[package]]
@@ -10465,6 +10484,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/0a/d4/2b0cd0fe285e14b36db076e78c93766ff1d529d70408bd1d2a5a84f1d929/tenacity-9.1.2.tar.gz", hash = "sha256:1169d376c297e7de388d18b4481760d478b0e99a777cad3a9c86e556f4b697cb", size = 48036, upload-time = "2025-04-02T08:25:09.966Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/30/643397144bfbfec6f6ef821f36f33e57d35946c44a2352d3c9f0ae847619/tenacity-9.1.2-py3-none-any.whl", hash = "sha256:f77bf36710d8b73a50b2dd155c97b870017ad21afe6ab300326b0371b3b05138", size = 28248, upload-time = "2025-04-02T08:25:07.678Z" },
+]
+
+[[package]]
+name = "termcolor"
+version = "3.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/79/cf31d7a93a8fdc6aa0fbb665be84426a8c5a557d9240b6239e9e11e35fc5/termcolor-3.3.0.tar.gz", hash = "sha256:348871ca648ec6a9a983a13ab626c0acce02f515b9e1983332b17af7979521c5", size = 14434, upload-time = "2025-12-29T12:55:21.882Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/d1/8bb87d21e9aeb323cc03034f5eaf2c8f69841e40e4853c2627edf8111ed3/termcolor-3.3.0-py3-none-any.whl", hash = "sha256:cf642efadaf0a8ebbbf4bc7a31cec2f9b5f21a9f726f4ccbb08192c9c26f43a5", size = 7734, upload-time = "2025-12-29T12:55:20.718Z" },
 ]
 
 [[package]]

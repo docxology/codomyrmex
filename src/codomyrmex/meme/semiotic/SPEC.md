@@ -1,3 +1,3 @@
-# Semiotic
+# Specifications for meme/semiotic
 
-Documentation for meme/semiotic.
+Technical specifications.

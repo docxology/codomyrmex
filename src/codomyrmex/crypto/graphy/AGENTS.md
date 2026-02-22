@@ -1,3 +1,3 @@
-# Graphy
+# Agents for crypto/graphy
 
-Documentation for crypto/graphy.
+List of agents and configurations.

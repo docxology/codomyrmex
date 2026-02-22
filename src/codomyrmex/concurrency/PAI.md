@@ -23,6 +23,10 @@ from codomyrmex.concurrency import BaseLock, LocalLock, BaseSemaphore
 | `RedisLock` | Class | Redislock |
 | `LockManager` | Class | Lockmanager |
 | `ReadWriteLock` | Class | Readwritelock |
+| `AsyncWorkerPool` | Class | Asyncworkerpool |
+| `PoolStats` | Class | Poolstats |
+| `TaskResult` | Class | Taskresult |
+| `DeadLetterQueue` | Class | Deadletterqueue |
 
 ## PAI Algorithm Phase Mapping
 

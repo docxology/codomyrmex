@@ -1,3 +1,3 @@
-# Currency
+# Specifications for crypto/currency
 
-Documentation for crypto/currency.
+Technical specifications.

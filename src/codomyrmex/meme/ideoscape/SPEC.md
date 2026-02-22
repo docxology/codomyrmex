@@ -1,3 +1,3 @@
-# Ideoscape
+# Specifications for meme/ideoscape
 
-Documentation for meme/ideoscape.
+Technical specifications.

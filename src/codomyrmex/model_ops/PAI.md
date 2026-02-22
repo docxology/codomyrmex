@@ -9,14 +9,14 @@ Model Operations module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, vector_store, optimization, registry
+from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, feature_store, optimization, registry
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `vector_store` | Function/Constant | Feature store |
+| `feature_store` | Function/Constant | Feature store |
 | `optimization` | Function/Constant | Optimization |
 | `registry` | Function/Constant | Registry |
 | `evaluation` | Function/Constant | Evaluation |

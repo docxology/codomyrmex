@@ -1,3 +1,3 @@
-# Cybernetic
+# Specifications for meme/cybernetic
 
-Documentation for meme/cybernetic.
+Technical specifications.

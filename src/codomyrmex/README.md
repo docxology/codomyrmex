@@ -19,6 +19,7 @@ Main package directory containing 82 specialized modules for the Codomyrmex plat
 - `auth/` – Module
 - `bio_simulation/` – Module
 - `cache/` – Module
+- `calendar/` – Module
 - `cerebrum/` – Module
 - `ci_cd_automation/` – Module
 - `cli/` – Module
@@ -39,6 +40,7 @@ Main package directory containing 82 specialized modules for the Codomyrmex plat
 - `documentation/` – Module
 - `documents/` – Module
 - `edge_computing/` – Module
+- `email/` – Module
 - `embodiment/` – Module
 - `encryption/` – Module
 - `environment_setup/` – Module

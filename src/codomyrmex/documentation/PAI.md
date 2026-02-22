@@ -9,13 +9,14 @@ Documentation management and audit utilities. This is a **Service Layer** module
 ## PAI Capabilities
 
 ```python
-from codomyrmex.documentation import ModuleAudit, audit_documentation, audit_rasp, update_root_docs
+from codomyrmex.documentation import ModuleAudit, quality, audit_documentation, audit_rasp
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `quality` | Function/Constant | Quality |
 | `ModuleAudit` | Class | Moduleaudit |
 | `audit_documentation` | Function/Constant | Audit documentation |
 | `audit_rasp` | Function/Constant | Audit rasp |

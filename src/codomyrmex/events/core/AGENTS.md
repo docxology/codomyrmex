@@ -1,3 +1,3 @@
-# Core
+# Agents for events/core
 
-Documentation for events/core.
+List of agents and configurations.

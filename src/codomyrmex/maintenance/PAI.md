@@ -9,13 +9,15 @@ Tools Module for Codomyrmex. This is an **Extended Layer** module.
 ## PAI Capabilities
 
 ```python
-from codomyrmex.maintenance import DependencyAnalyzer, analyze_project_structure, analyze_project_dependencies, analyze_code_quality
+from codomyrmex.maintenance import DependencyAnalyzer, deps, health, analyze_project_structure
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `deps` | Function/Constant | Deps |
+| `health` | Function/Constant | Health |
 | `analyze_project_structure` | Function/Constant | Analyze project structure |
 | `analyze_project_dependencies` | Function/Constant | Analyze project dependencies |
 | `analyze_code_quality` | Function/Constant | Analyze code quality |

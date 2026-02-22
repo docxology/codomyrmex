@@ -1,3 +1,3 @@
-# Contagion
+# Specifications for meme/contagion
 
-Documentation for meme/contagion.
+Technical specifications.

@@ -1,3 +1,3 @@
-# Streaming
+# Agents for events/streaming
 
-Documentation for events/streaming.
+List of agents and configurations.

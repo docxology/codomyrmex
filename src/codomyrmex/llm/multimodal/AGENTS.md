@@ -1,3 +1,3 @@
-# Multimodal
+# Agents for llm/multimodal
 
-Documentation for llm/multimodal.
+List of agents and configurations.

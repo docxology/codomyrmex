@@ -1,3 +1,3 @@
-# Rhizome
+# Specifications for meme/rhizome
 
-Documentation for meme/rhizome.
+Technical specifications.

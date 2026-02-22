@@ -1,9 +1,10 @@
-import argparse
+import fire
 import json
 import sys
 from pathlib import Path
 
 import codomyrmex.performance
+from .commands import Command
 
 # Import all handlers
 from .handlers import (
@@ -53,636 +54,191 @@ from .utils import (
     get_logger,
 )
 
-# DEPRECATED(v0.2.0): Development path injection -- use proper package install. Will be removed in v0.3.0.
-src_dir = Path(__file__).parent.parent.parent
-if str(src_dir) not in sys.path:
-    pass
-
 logger = get_logger(__name__)
 
 
-def _discover_module_commands() -> dict:
-    """
-    Auto-discover CLI commands from modules that export cli_commands().
-
-    Each module can define a cli_commands() function in its __init__.py
-    that returns a dict of command definitions:
-
-        def cli_commands():
-            return {
-                "command_name": {
-                    "help": "Description of the command",
-                    "handler": handler_function,
-                    "arguments": [
-                        {"name": "arg_name", "help": "arg description"},
-                        {"name": "--flag", "action": "store_true", "help": "flag desc"},
-                    ],
-                }
-            }
-
-    Returns:
-        Dict mapping command names to their definitions.
-    """
-    import importlib
-
-    discovered = {}
-
-    try:
-        from codomyrmex import list_modules
-        module_names = list_modules()
-    except Exception:
-        module_names = []
-
-    for module_name in module_names:
-        try:
-            mod = importlib.import_module(f"codomyrmex.{module_name}")
-            if hasattr(mod, "cli_commands") and callable(mod.cli_commands):
-                commands = mod.cli_commands()
-                if isinstance(commands, dict):
-                    for cmd_name, cmd_def in commands.items():
-                        # Prefix with module name to avoid collisions
-                        full_name = f"{module_name}:{cmd_name}" if ":" not in cmd_name else cmd_name
-                        discovered[full_name] = {**cmd_def, "_module": module_name}
-        except (ImportError, Exception):
-            # Skip modules that can't be imported or don't have cli_commands
-            continue
-
-    return discovered
-
-
-def _register_discovered_commands(subparsers, discovered_commands: dict) -> None:
-    """Register auto-discovered module commands into the CLI."""
-    if not discovered_commands:
-        return
-
-    # Group by module
-    by_module = {}
-    for cmd_name, cmd_def in discovered_commands.items():
-        module = cmd_def.get("_module", "unknown")
-        if module not in by_module:
-            by_module[module] = {}
-        by_module[module][cmd_name] = cmd_def
-
-    # Create a 'mod' subcommand group for discovered module commands
-    mod_parser = subparsers.add_parser(
-        "mod", help="Auto-discovered module commands"
-    )
-    mod_subparsers = mod_parser.add_subparsers(
-        dest="mod_command", help="Module-specific commands"
-    )
-
-    for cmd_name, cmd_def in discovered_commands.items():
-        cmd_parser = mod_subparsers.add_parser(
-            cmd_name.replace(":", "-"),
-            help=cmd_def.get("help", f"Command from {cmd_def.get('_module', 'unknown')}"),
-        )
-
-        for arg in cmd_def.get("arguments", []):
-            arg_name = arg.pop("name", None)
-            if arg_name:
-                if arg_name.startswith("-"):
-                    cmd_parser.add_argument(arg_name, **arg)
-                else:
-                    cmd_parser.add_argument(arg_name, **arg)
-                # Restore the name for reuse
-                arg["name"] = arg_name
-
-    return by_module
-
-
-def main():
-    """Enhanced main CLI entry point with comprehensive functionality."""
-    parser = argparse.ArgumentParser(
-        description="Codomyrmex - Enhanced Modular Coding Workspace",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  codomyrmex check                           # Check environment setup
-  codomyrmex info                            # Show project information
-  codomyrmex modules                         # List all available modules
-  codomyrmex status                          # Show system status dashboard
-  codomyrmex shell                           # Launch interactive shell
-
-  # Workflow Management
-  codomyrmex workflow list                   # List available workflows
-  codomyrmex workflow create my-workflow     # Create a new workflow
-  codomyrmex workflow run ai-analysis        # Run a specific workflow
-
-  # Project Management
-  codomyrmex project list                    # List available projects
-  codomyrmex project create my-project       # Create a new project
-  codomyrmex project create my-project --template web_application  # Create with template
-
-  # Orchestration System
-  codomyrmex orchestration status            # Show orchestration system status
-  codomyrmex orchestration health            # Check system health
-
-  # AI Operations
-  codomyrmex ai generate "create a function" # Generate code with AI
-  codomyrmex ai refactor file.py "optimize"  # Refactor code with AI
-
-  # Analysis Operations
-  codomyrmex analyze code src/               # Analyze code quality
-  codomyrmex analyze git --repo .            # Analyze git repository
-
-  # Build Operations
-  codomyrmex build project                   # Build the project
-        """,
-    )
-
-    # Main command groups
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
-
-    # Global options
-    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    parser.add_argument(
-        "--performance", "-p", action="store_true", help="Enable performance monitoring"
-    )
-
-    # Environment commands
-    subparsers.add_parser("check", help="Check environment setup")
-
-    subparsers.add_parser("info", help="Show project information")
-
-    subparsers.add_parser("modules", help="List available modules")
-
-    subparsers.add_parser(
-        "status", help="Show comprehensive system status"
-    )
-
-    # Doctor diagnostics
-    doctor_parser = subparsers.add_parser(
-        "doctor", help="Run self-diagnostics on the Codomyrmex ecosystem"
-    )
-    doctor_parser.add_argument("--pai", action="store_true", help="Check PAI bridge health")
-    doctor_parser.add_argument("--mcp", action="store_true", help="Check MCP tool registry")
-    doctor_parser.add_argument("--rasp", action="store_true", help="Check README/AGENTS/SPEC completeness")
-    doctor_parser.add_argument("--workflows", action="store_true", help="Check workflow file validity")
-    doctor_parser.add_argument("--imports", action="store_true", help="Check module imports")
-    doctor_parser.add_argument("--all", dest="all_checks", action="store_true", help="Run all checks")
-    doctor_parser.add_argument("--json", dest="output_json", action="store_true", help="Output as JSON")
-
-    subparsers.add_parser("shell", help="Launch interactive shell")
-
-    # Chat command
-    chat_parser = subparsers.add_parser(
-        "chat", help="Launch infinite conversation and dev_loop"
-    )
-    chat_parser.add_argument("--todo", type=str, default="TO-DO.md", help="Path to TO-DO scaffolding file")
-    chat_parser.add_argument("--rounds", type=int, default=0, help="Number of rounds to run (0 for infinite)")
-    chat_parser.add_argument("--context", nargs="*", help="Extra context files to inject")
-    chat_parser.add_argument("--stream", action="store_true", help="Enable streaming output mode")
-    chat_parser.add_argument("--resume", type=str, help="Resume from an exported JSONL file")
-
-    # Workflow commands
-    workflow_parser = subparsers.add_parser("workflow", help="Workflow management")
-    workflow_subparsers = workflow_parser.add_subparsers(
-        dest="workflow_action", help="Workflow actions"
-    )
-
-    workflow_subparsers.add_parser(
-        "list", help="List available workflows"
-    )
-
-    wf_run_parser = workflow_subparsers.add_parser("run", help="Run a workflow")
-    wf_run_parser.add_argument("workflow_name", help="Name of workflow to run")
-    wf_run_parser.add_argument(
-        "--params", "-p", type=str, help="JSON parameters for workflow"
-    )
-    wf_run_parser.add_argument(
-        "--async", action="store_true", help="Run workflow asynchronously"
-    )
-
-    wf_create_parser = workflow_subparsers.add_parser(
-        "create", help="Create a new workflow"
-    )
-    wf_create_parser.add_argument("name", help="Name for new workflow")
-    wf_create_parser.add_argument("--template", help="Template to base workflow on")
-
-    # Project commands
-    project_parser = subparsers.add_parser("project", help="Project management")
-    project_subparsers = project_parser.add_subparsers(
-        dest="project_action", help="Project actions"
-    )
-
-    proj_create_parser = project_subparsers.add_parser(
-        "create", help="Create a new project"
-    )
-    proj_create_parser.add_argument("name", help="Name for new project")
-    proj_create_parser.add_argument(
-        "--template", default="ai_analysis", help="Project template to use"
-    )
-    proj_create_parser.add_argument("--description", help="Project description")
-    proj_create_parser.add_argument("--path", help="Project directory path")
-
-    project_subparsers.add_parser(
-        "list", help="List available projects"
-    )
-
-    # Orchestration commands
-    orchestration_parser = subparsers.add_parser(
-        "orchestration", help="Orchestration system management"
-    )
-    orchestration_subparsers = orchestration_parser.add_subparsers(
-        dest="orchestration_action", help="Orchestration actions"
-    )
-
-    orchestration_subparsers.add_parser(
-        "status", help="Show orchestration system status"
-    )
-    orchestration_subparsers.add_parser(
-        "health", help="Check orchestration system health"
-    )
-
-    # Module-specific commands
-    module_parser = subparsers.add_parser("module", help="Module-specific operations")
-    module_subparsers = module_parser.add_subparsers(
-        dest="module_action", help="Module actions"
-    )
-
-    mod_test_parser = module_subparsers.add_parser(
-        "test", help="Test a specific module"
-    )
-    mod_test_parser.add_argument("module_name", help="Module to test")
-
-    mod_demo_parser = module_subparsers.add_parser("demo", help="Run module demo")
-    mod_demo_parser.add_argument("module_name", help="Module to demo")
-
-    # AI commands
-    ai_parser = subparsers.add_parser("ai", help="AI-powered operations")
-    ai_subparsers = ai_parser.add_subparsers(dest="ai_action", help="AI actions")
-
-    ai_generate_parser = ai_subparsers.add_parser("generate", help="Generate code")
-    ai_generate_parser.add_argument("prompt", help="Code generation prompt")
-    ai_generate_parser.add_argument(
-        "--language", "-l", default="python", help="Programming language"
-    )
-    ai_generate_parser.add_argument("--provider", default="openai", help="LLM provider")
-
-    ai_refactor_parser = ai_subparsers.add_parser("refactor", help="Refactor code")
-    ai_refactor_parser.add_argument("file", help="File to refactor")
-    ai_refactor_parser.add_argument("instruction", help="Refactoring instruction")
-
-    # Analysis commands
-    analyze_parser = subparsers.add_parser("analyze", help="Code analysis operations")
-    analyze_subparsers = analyze_parser.add_subparsers(
-        dest="analyze_action", help="Analysis actions"
-    )
-
-    analyze_code_parser = analyze_subparsers.add_parser(
-        "code", help="Analyze code quality"
-    )
-    analyze_code_parser.add_argument("path", help="Path to analyze")
-    analyze_code_parser.add_argument("--output", help="Output directory")
-
-    analyze_git_parser = analyze_subparsers.add_parser(
-        "git", help="Analyze git repository"
-    )
-    analyze_git_parser.add_argument("--repo", default=".", help="Repository path")
-
-    # Build commands
-    build_parser = subparsers.add_parser("build", help="Build and synthesis operations")
-    build_subparsers = build_parser.add_subparsers(
-        dest="build_action", help="Build actions"
-    )
-
-    build_project_parser = build_subparsers.add_parser("project", help="Build project")
-    build_project_parser.add_argument("--config", help="Build configuration file")
-
-    # FPF commands
-    fpf_parser = subparsers.add_parser("fpf", help="First Principles Framework operations")
-    fpf_subparsers = fpf_parser.add_subparsers(dest="fpf_action", help="FPF actions")
-
-    fpf_fetch_parser = fpf_subparsers.add_parser("fetch", help="Fetch latest FPF spec from GitHub")
-    fpf_fetch_parser.add_argument("--repo", default="ailev/FPF", help="GitHub repository")
-    fpf_fetch_parser.add_argument("--branch", default="main", help="Branch name")
-    fpf_fetch_parser.add_argument("--output", help="Output file path")
-
-    fpf_parse_parser = fpf_subparsers.add_parser("parse", help="Parse local FPF-Spec.md")
-    fpf_parse_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_parse_parser.add_argument("--output", help="Output JSON file path")
-
-    fpf_export_parser = fpf_subparsers.add_parser("export", help="Export FPF to JSON")
-    fpf_export_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_export_parser.add_argument("--output", required=True, help="Output JSON file path")
-    fpf_export_parser.add_argument("--format", default="json", choices=["json"], help="Export format")
-
-    fpf_search_parser = fpf_subparsers.add_parser("search", help="Search FPF patterns")
-    fpf_search_parser.add_argument("query", help="Search query")
-    fpf_search_parser.add_argument("--file", help="Path to FPF-Spec.md file")
-    fpf_search_parser.add_argument("--status", help="Filter by status")
-    fpf_search_parser.add_argument("--part", help="Filter by part (A, B, C, etc.)")
-
-    fpf_visualize_parser = fpf_subparsers.add_parser("visualize", help="Generate visualizations")
-    fpf_visualize_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_visualize_parser.add_argument("--type", choices=["hierarchy", "dependencies", "shared-terms", "concept-map", "part-hierarchy", "status-distribution"], default="hierarchy", help="Visualization type")
-    fpf_visualize_parser.add_argument("--output", required=True, help="Output file path")
-    fpf_visualize_parser.add_argument("--format", choices=["mermaid", "png"], default="mermaid", help="Output format")
-    fpf_visualize_parser.add_argument("--layout", choices=["hierarchical", "spring", "circular"], default="hierarchical", help="Layout type (for dependency/concept-map)")
-    fpf_visualize_parser.add_argument("--chart-type", choices=["bar", "pie"], default="bar", help="Chart type (for status-distribution)")
-
-    fpf_context_parser = fpf_subparsers.add_parser("context", help="Build context for prompt engineering")
-    fpf_context_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_context_parser.add_argument("--pattern", help="Pattern ID to build context for")
-    fpf_context_parser.add_argument("--output", help="Output file path")
-    fpf_context_parser.add_argument("--depth", type=int, default=1, help="Relationship depth")
-
-    fpf_export_section_parser = fpf_subparsers.add_parser("export-section", help="Export a section (part/pattern)")
-    fpf_export_section_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_export_section_parser.add_argument("--part", help="Part identifier to export (A, B, C, etc.)")
-    fpf_export_section_parser.add_argument("--pattern", help="Pattern ID to export")
-    fpf_export_section_parser.add_argument("--output", required=True, help="Output JSON file path")
-    fpf_export_section_parser.add_argument("--include-dependencies", action="store_true", help="Include dependent patterns")
-
-    fpf_analyze_parser = fpf_subparsers.add_parser("analyze", help="Analyze FPF specification")
-    fpf_analyze_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_analyze_parser.add_argument("--output", help="Output JSON file path")
-
-    fpf_report_parser = fpf_subparsers.add_parser("report", help="Generate comprehensive report")
-    fpf_report_parser.add_argument("file", help="Path to FPF-Spec.md file")
-    fpf_report_parser.add_argument("--output", required=True, help="Output HTML file path")
-    fpf_report_parser.add_argument("--include-analysis", action="store_true", default=True, help="Include analysis sections")
-
-    # Skills commands
-    skills_parser = subparsers.add_parser("skills", help="Skills management operations")
-    skills_subparsers = skills_parser.add_subparsers(dest="skills_action", help="Skills actions")
-
-    skills_sync_parser = skills_subparsers.add_parser("sync", help="Sync with upstream skills repository")
-    skills_sync_parser.add_argument("--force", action="store_true", help="Force re-clone even if directory exists")
-
-    skills_list_parser = skills_subparsers.add_parser("list", help="List available skills")
-    skills_list_parser.add_argument("category", nargs="?", help="Optional category filter")
-
-    skills_get_parser = skills_subparsers.add_parser("get", help="Get a specific skill")
-    skills_get_parser.add_argument("category", help="Skill category")
-    skills_get_parser.add_argument("name", help="Skill name")
-    skills_get_parser.add_argument("--output", help="Output file path (JSON or YAML)")
-
-    skills_search_parser = skills_subparsers.add_parser("search", help="Search skills")
-    skills_search_parser.add_argument("query", help="Search query")
-
-    # Quick orchestration commands (thin orchestration)
-    run_parser = subparsers.add_parser("run", help="Quick run script, module, or directory")
-    run_parser.add_argument("target", help="Script path, module name, directory, or glob pattern")
-    run_parser.add_argument("args", nargs="*", help="Additional arguments")
-    run_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per script")
-    run_parser.add_argument("--parallel", "-p", action="store_true", help="Run in parallel")
-
-    pipe_parser = subparsers.add_parser("pipe", help="Pipe commands together sequentially")
-    pipe_parser.add_argument("commands", nargs="+", help="Commands to pipe")
-    pipe_parser.add_argument("--continue", dest="continue_on_error", action="store_true", help="Continue on error")
-
-    batch_parser = subparsers.add_parser("batch", help="Run multiple targets in parallel")
-    batch_parser.add_argument("targets", nargs="+", help="Targets to run")
-    batch_parser.add_argument("--workers", "-w", type=int, default=4, help="Number of parallel workers")
-    batch_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per target")
-
-    chain_parser = subparsers.add_parser("chain", help="Chain scripts sequentially with result passing")
-    chain_parser.add_argument("scripts", nargs="+", help="Scripts to chain")
-    chain_parser.add_argument("--timeout", "-t", type=int, default=60, help="Timeout per script")
-    chain_parser.add_argument("--continue", dest="continue_on_error", action="store_true", help="Continue on error")
-
-    exec_workflow_parser = subparsers.add_parser("exec", help="Execute workflow from definition file")
-    exec_workflow_parser.add_argument("definition", help="Workflow definition file (YAML/JSON)")
-    exec_workflow_parser.add_argument("--params", "-p", help="JSON parameters")
-
-    # Auto-discover module commands
-    discovered_commands = _discover_module_commands()
-    discovered_by_module = _register_discovered_commands(subparsers, discovered_commands) or {}
-
-    # Parse arguments
-    args = parser.parse_args()
-
-    # Initialize performance monitoring if requested
-    if args.performance and PERFORMANCE_MONITORING_AVAILABLE:
-        from codomyrmex.performance.performance_monitor import PerformanceMonitor
-        monitor = PerformanceMonitor()
-        logger.info("Performance monitoring enabled")
-        codomyrmex.performance._performance_monitor = monitor
-
-    # Set verbose logging
-    if args.verbose:
-        logger.setLevel(10)  # DEBUG level
-        logger.debug("Verbose mode enabled")
-
-    # Route commands
-    success = True
-
-    if args.command == "check":
-        success = check_environment()
-        if success:
-            formatter = TerminalFormatter() if TERMINAL_INTERFACE_AVAILABLE else None
-            msg = "Codomyrmex environment looks good! You can now use all modules and tools."
-            print(f"\n{formatter.success(msg) if formatter else f'🎉 {msg}'}")
-        else:
-            print("\n❌ Environment setup issues detected.")
-            print(
-                "Please run the setup script or check the README for installation instructions."
-            )
-            sys.exit(1)
-
-    elif args.command == "info":
-        show_info()
-
-    elif args.command == "modules":
-        show_modules()
-
-    elif args.command == "status":
-        show_system_status()
-
-    elif args.command == "shell":
-        success = run_interactive_shell()
-
-    elif args.command == "chat":
-        success = handle_chat_session(
-            todo_path=args.todo,
-            rounds=args.rounds,
-            context=args.context,
-            stream=args.stream,
-            resume=args.resume
-        )
-
-    elif args.command == "doctor":
+class Cli:
+    """Codomyrmex CLI"""
+
+    def __init__(self, verbose=False, performance=False):
+        if verbose:
+            logger.setLevel(10)  # DEBUG level
+            logger.debug("Verbose mode enabled")
+        if performance and PERFORMANCE_MONITORING_AVAILABLE:
+            from codomyrmex.performance.performance_monitor import PerformanceMonitor
+            monitor = PerformanceMonitor()
+            logger.info("Performance monitoring enabled")
+            codomyrmex.performance._performance_monitor = monitor
+
+    def check(self):
+        """Check environment setup"""
+        return check_environment()
+
+    def info(self):
+        """Show project information"""
+        return show_info()
+
+    def modules(self):
+        """List available modules"""
+        return show_modules()
+
+    def status(self):
+        """Show comprehensive system status"""
+        return show_system_status()
+
+    def shell(self):
+        """Launch interactive shell"""
+        return run_interactive_shell()
+
+    def doctor(self, pai=False, mcp=False, rasp=False, workflows=False, imports=False, all_checks=False, output_json=False):
+        """Run self-diagnostics on the Codomyrmex ecosystem"""
         from .doctor import run_doctor
-
-        exit_code = run_doctor(
-            pai=args.pai,
-            mcp=args.mcp,
-            rasp=args.rasp,
-            workflows=args.workflows,
-            imports=args.imports,
-            all_checks=args.all_checks,
-            output_json=args.output_json,
+        return run_doctor(
+            pai=pai,
+            mcp=mcp,
+            rasp=rasp,
+            workflows=workflows,
+            imports=imports,
+            all_checks=all_checks,
+            output_json=output_json,
         )
-        success = exit_code == 0
 
-    elif args.command == "workflow":
-        if args.workflow_action == "list":
-            success = list_workflows()
-        elif args.workflow_action == "run":
-            params = {}
-            if args.params:
+    def chat(self, todo="TO-DO.md", rounds=0, context=[], stream=False, resume=None):
+        """Launch infinite conversation and dev_loop"""
+        return handle_chat_session(
+            todo_path=todo,
+            rounds=rounds,
+            context=context,
+            stream=stream,
+            resume=resume,
+        )
+
+    def workflow(self, action, name=None, template=None, params=None, async_run=False):
+        """Workflow management"""
+        if action == "list":
+            return list_workflows()
+        elif action == "run":
+            run_params = {}
+            if params:
                 try:
-                    params = json.loads(args.params)
+                    run_params = json.loads(params)
                 except json.JSONDecodeError:
                     print("❌ Invalid JSON in --params")
                     sys.exit(1)
-            success = run_workflow(args.workflow_name, **params)
-        elif args.workflow_action == "create":
-            success = handle_workflow_create(args.name, args.template)
+            return run_workflow(name, **run_params)
+        elif action == "create":
+            return handle_workflow_create(name, template)
 
-    elif args.command == "project":
-        if args.project_action == "create":
+    def project(self, action, name=None, template=None, description=None, path=None):
+        """Project management"""
+        if action == "list":
+            return handle_project_list()
+        elif action == "create":
             kwargs = {}
-            if args.description:
-                kwargs["description"] = args.description
-            if args.path:
-                kwargs["path"] = args.path
-            success = handle_project_create(args.name, args.template, **kwargs)
-        elif args.project_action == "list":
-            success = handle_project_list()
+            if description:
+                kwargs["description"] = description
+            if path:
+                kwargs["path"] = path
+            return handle_project_create(name, template, **kwargs)
 
-    elif args.command == "orchestration":
-        if args.orchestration_action == "status":
-            success = handle_orchestration_status()
-        elif args.orchestration_action == "health":
-            success = handle_orchestration_health()
+    def orchestration(self, action):
+        """Orchestration system management"""
+        if action == "status":
+            return handle_orchestration_status()
+        elif action == "health":
+            return handle_orchestration_health()
 
-    elif args.command == "ai":
-        if args.ai_action == "generate":
-            success = handle_ai_generate(args.prompt, args.language, args.provider)
-        elif args.ai_action == "refactor":
-            success = handle_ai_refactor(args.file, args.instruction)
+    def ai(self, action, prompt=None, language="python", provider="openai", file=None, instruction=None):
+        """AI-powered operations"""
+        if action == "generate":
+            return handle_ai_generate(prompt, language, provider)
+        elif action == "refactor":
+            return handle_ai_refactor(file, instruction)
 
-    elif args.command == "analyze":
-        if args.analyze_action == "code":
-            success = handle_code_analysis(args.path, args.output)
-        elif args.analyze_action == "git":
-            success = handle_git_analysis(args.repo)
+    def analyze(self, action, path=None, output=None, repo="."):
+        """Code analysis operations"""
+        if action == "code":
+            return handle_code_analysis(path, output)
+        elif action == "git":
+            return handle_git_analysis(repo)
 
-    elif args.command == "build":
-        if args.build_action == "project":
-            success = handle_project_build(args.config)
+    def build(self, action, config=None):
+        """Build and synthesis operations"""
+        if action == "project":
+            return handle_project_build(config)
 
-    elif args.command == "module":
-        if args.module_action == "test":
-            success = handle_module_test(args.module_name)
-        elif args.module_action == "demo":
-            success = handle_module_demo(args.module_name)
+    def module(self, action, name):
+        """Module-specific operations"""
+        if action == "test":
+            return handle_module_test(name)
+        elif action == "demo":
+            return handle_module_demo(name)
 
-    elif args.command == "fpf":
-        if args.fpf_action == "fetch":
-            success = handle_fpf_fetch(args.repo, args.branch, args.output)
-        elif args.fpf_action == "parse":
-            success = handle_fpf_parse(args.file, args.output)
-        elif args.fpf_action == "export":
-            success = handle_fpf_export(args.file, args.output, args.format)
-        elif args.fpf_action == "search":
+    def fpf(self, action, file=None, repo="ailev/FPF", branch="main", output=None, format="json", query=None, status=None, part=None, type="hierarchy", layout="hierarchical", chart_type="bar", pattern=None, depth=1, include_dependencies=False, include_analysis=True):
+        """First Principles Framework operations"""
+        if action == "fetch":
+            return handle_fpf_fetch(repo, branch, output)
+        elif action == "parse":
+            return handle_fpf_parse(file, output)
+        elif action == "export":
+            return handle_fpf_export(file, output, format)
+        elif action == "search":
             filters = {}
-            if args.status:
-                filters["status"] = args.status
-            if args.part:
-                filters["part"] = args.part
-            success = handle_fpf_search(args.query, args.file, filters)
-        elif args.fpf_action == "visualize":
-            success = handle_fpf_visualize(args.file, args.type, args.output, args.format, args.layout, args.chart_type)
-        elif args.fpf_action == "context":
-            success = handle_fpf_context(args.file, args.pattern, args.output, args.depth)
-        elif args.fpf_action == "export-section":
-            success = handle_fpf_export_section(args.file, args.part, args.pattern, args.output, args.include_dependencies)
-        elif args.fpf_action == "analyze":
-            success = handle_fpf_analyze(args.file, args.output)
-        elif args.fpf_action == "report":
-            success = handle_fpf_report(args.file, args.output, args.include_analysis)
+            if status:
+                filters["status"] = status
+            if part:
+                filters["part"] = part
+            return handle_fpf_search(query, file, filters)
+        elif action == "visualize":
+            return handle_fpf_visualize(file, type, output, format, layout, chart_type)
+        elif action == "context":
+            return handle_fpf_context(file, pattern, output, depth)
+        elif action == "export-section":
+            return handle_fpf_export_section(file, part, pattern, output, include_dependencies)
+        elif action == "analyze":
+            return handle_fpf_analyze(file, output)
+        elif action == "report":
+            return handle_fpf_report(file, output, include_analysis)
 
-    elif args.command == "skills":
-        if args.skills_action == "sync":
-            success = handle_skills_sync(args.force)
-        elif args.skills_action == "list":
-            success = handle_skills_list(args.category)
-        elif args.skills_action == "get":
-            success = handle_skills_get(args.category, args.name, args.output)
-        elif args.skills_action == "search":
-            success = handle_skills_search(args.query)
-        else:
-            skills_parser.print_help()
-            success = False
+    def skills(self, action, force=False, category=None, name=None, output=None, query=None):
+        """Skills management operations"""
+        if action == "sync":
+            return handle_skills_sync(force)
+        elif action == "list":
+            return handle_skills_list(category)
+        elif action == "get":
+            return handle_skills_get(category, name, output)
+        elif action == "search":
+            return handle_skills_search(query)
 
-    # Auto-discovered module commands
-    elif args.command == "mod":
-        mod_cmd = getattr(args, "mod_command", None)
-        if mod_cmd:
-            # Find the matching command definition
-            normalized = mod_cmd.replace("-", ":")
-            cmd_def = discovered_commands.get(normalized) or discovered_commands.get(mod_cmd)
-            if cmd_def and "handler" in cmd_def:
-                try:
-                    handler = cmd_def["handler"]
-                    # Pass all parsed args to the handler
-                    success = handler(args)
-                    if success is None:
-                        success = True
-                except Exception as e:
-                    logger.error(f"Module command '{mod_cmd}' failed: {e}")
-                    success = False
-            else:
-                print(f"No handler found for module command: {mod_cmd}")
-                success = False
-        else:
-            print(f"Available module commands: {len(discovered_commands)}")
-            for name, defn in sorted(discovered_commands.items()):
-                print(f"  {name.replace(':', '-')}: {defn.get('help', '')}")
+    def run(self, target, args=[], timeout=60, parallel=False, verbose=False):
+        """Quick run script, module, or directory"""
+        return handle_quick_run(target, args=args, timeout=timeout, parallel=parallel, verbose=verbose)
 
-    # Quick orchestration commands
-    elif args.command == "run":
-        success = handle_quick_run(
-            args.target,
-            args=args.args,
-            timeout=args.timeout,
-            parallel=args.parallel,
-            verbose=args.verbose
-        )
+    def pipe(self, commands, continue_on_error=False):
+        """Pipe commands together sequentially"""
+        return handle_quick_pipe(commands, stop_on_error=not continue_on_error)
 
-    elif args.command == "pipe":
-        success = handle_quick_pipe(
-            args.commands,
-            stop_on_error=not args.continue_on_error
-        )
+    def batch(self, targets, workers=4, timeout=60, verbose=False):
+        """Run multiple targets in parallel"""
+        return handle_quick_batch(targets, workers=workers, timeout=timeout, verbose=verbose)
 
-    elif args.command == "batch":
-        success = handle_quick_batch(
-            args.targets,
-            workers=args.workers,
-            timeout=args.timeout,
-            verbose=args.verbose
-        )
+    def chain(self, scripts, timeout=60, continue_on_error=False):
+        """Chain scripts sequentially with result passing"""
+        return handle_quick_chain(scripts, timeout=timeout, continue_on_error=continue_on_error)
 
-    elif args.command == "chain":
-        success = handle_quick_chain(
-            args.scripts,
-            timeout=args.timeout,
-            continue_on_error=args.continue_on_error
-        )
+    def exec(self, definition, params=None, verbose=False):
+        """Execute workflow from definition file"""
+        return handle_quick_workflow(definition, params=params, verbose=verbose)
 
-    elif args.command == "exec":
-        success = handle_quick_workflow(
-            args.definition,
-            params=args.params,
-            verbose=args.verbose
-        )
 
-    else:
-        if args.command is None:
-            parser.print_help()
-        else:
-            print(f"❌ Unknown command: {args.command}")
-            success = False
+def main():
+    try:
+        fire.Fire(Cli)
+    except Exception as e:
+        print(f"An error occurred: {e}", file=sys.stderr)
+        sys.exit(1)
 
-    # Return success status (exit with code only if not running tests)
-    if __name__ != "__main__":
-        return success  # Return for testing
-    else:
-        sys.exit(0 if success else 1)  # Exit for normal execution
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

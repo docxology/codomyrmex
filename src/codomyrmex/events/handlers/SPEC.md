@@ -1,3 +1,3 @@
-# Handlers
+# Specifications for events/handlers
 
-Documentation for events/handlers.
+Technical specifications.

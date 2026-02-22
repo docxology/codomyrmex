@@ -1,3 +1,3 @@
-# Core
+# Agents for system_discovery/core
 
-Documentation for system_discovery/core.
+List of agents and configurations.

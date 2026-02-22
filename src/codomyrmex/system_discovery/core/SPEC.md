@@ -1,3 +1,3 @@
-# Core
+# Specifications for system_discovery/core
 
-Documentation for system_discovery/core.
+Technical specifications.

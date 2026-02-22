@@ -1,3 +1,3 @@
-# Analysis
+# Specifications for crypto/analysis
 
-Documentation for crypto/analysis.
+Technical specifications.

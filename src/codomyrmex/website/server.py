@@ -695,14 +695,21 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             content_length = int(self.headers.get('Content-Length', 0))
         except (TypeError, ValueError):
             content_length = 0
-        if content_length == 0:
+            
+        data = {}
+        if content_length > 0:
+            try:
+                post_data = self.rfile.read(content_length)
+                payload = post_data.decode('utf-8').strip()
+                if not payload:
+                    self.send_json_response({"error": "No content provided"}, status=400)
+                    return
+                data = json.loads(payload)
+            except (json.JSONDecodeError, KeyError):
+                self.send_json_response({"error": "Invalid JSON"}, status=400)
+                return
+        else:
             self.send_json_response({"error": "No content provided"}, status=400)
-            return
-        try:
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-        except (json.JSONDecodeError, KeyError):
-            self.send_json_response({"error": "Invalid JSON"}, status=400)
             return
 
         seed_prompt = data.get("prompt", "Analyze the current context.")

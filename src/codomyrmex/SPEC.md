@@ -270,6 +270,8 @@ graph TB
 - `vector_store`: Vector storage and similarity search
 - `video`: Video processing and analysis
 - `wallet`: Self-custody and key management
+- `calendar`: Specialized module
+- `email`: Specialized module
 
 **Characteristics**:
 

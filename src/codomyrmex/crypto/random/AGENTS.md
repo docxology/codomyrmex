@@ -1,3 +1,3 @@
-# Random
+# Agents for crypto/random
 
-Documentation for crypto/random.
+List of agents and configurations.

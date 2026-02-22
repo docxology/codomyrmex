@@ -4,7 +4,6 @@ from collections.abc import Iterator
 
 from google import genai
 from google.genai import types
-from google.genai.generative_models import ChatSession
 from PIL import Image
 
 from codomyrmex.agents.core import (
@@ -42,14 +41,15 @@ class GeminiClient(BaseAgent):
             raise ImportError("google-genai package not found. Please install it.")
 
         self.api_key = self.get_config_value("gemini_api_key", config=config) or os.getenv("GEMINI_API_KEY")
+        self.client = None
         if not self.api_key:
             logger.warning("No GEMINI_API_KEY found. Some operations will fail.")
-
-        try:
-            self.client = genai.Client(api_key=self.api_key)
-        except Exception as e:
-            logger.error(f"Failed to initialize Gemini Client: {e}")
-            raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
+        else:
+            try:
+                self.client = genai.Client(api_key=self.api_key)
+            except Exception as e:
+                logger.error(f"Failed to initialize Gemini Client: {e}")
+                raise GeminiError(f"Failed to initialize Gemini Client: {e}") from e
 
         self.default_model = self.get_config_value("gemini_model", default="gemini-2.0-flash", config=config)
 
@@ -134,7 +134,7 @@ class GeminiClient(BaseAgent):
         history: list[dict[str, Any]] | None = None,
         enable_automatic_function_calling: bool = False,
         model: str | None = None,
-    ) -> ChatSession:
+    ) -> Any:
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
         

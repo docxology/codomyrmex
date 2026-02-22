@@ -12,88 +12,90 @@ Main package directory containing 82 specialized modules for the Codomyrmex plat
 - `README.md` – Project file
 - `SPEC.md` – Project file
 - `__init__.py` – Project file
-- `agentic_memory/` – Memory systems for AI agents
-- `agents/` – Agentic framework integrations
-- `api/` – API infrastructure and resilience
+- `agentic_memory/` – Module component
+- `agents/` – Module component
+- `api/` – Module component
 - `audio/` – Module component
-- `auth/` – Authentication and authorization
+- `auth/` – Module component
 - `bio_simulation/` – Module component
-- `cache/` – Caching infrastructure
-- `cerebrum/` – Case-based reasoning
-- `ci_cd_automation/` – CI/CD pipelines
-- `cli/` – Command line interface
-- `cloud/` – Cloud provider integration
-- `coding/` – Code execution and review
-- `collaboration/` – Team collaboration
-- `compression/` – Data compression
-- `concurrency/` – Concurrency utilities
-- `config_management/` – Configuration management
-- `containerization/` – Container management
+- `cache/` – Module component
+- `calendar/` – Module component
+- `cerebrum/` – Module component
+- `ci_cd_automation/` – Module component
+- `cli/` – Module component
+- `cloud/` – Module component
+- `coding/` – Module component
+- `collaboration/` – Module component
+- `compression/` – Module component
+- `concurrency/` – Module component
+- `config_management/` – Module component
+- `containerization/` – Module component
 - `crypto/` – Module component
 - `dark/` – Module component
-- `data_visualization/` – Charts and plots
-- `database_management/` – Database operations
+- `data_visualization/` – Module component
+- `database_management/` – Module component
 - `defense/` – Module component
 - `dependency_injection/` – Module component
-- `deployment/` – Deployment automation
-- `documentation/` – Documentation generation
-- `documents/` – Document processing
+- `deployment/` – Module component
+- `documentation/` – Module component
+- `documents/` – Module component
 - `edge_computing/` – Module component
-- `embodiment/` – Physical embodiment
-- `encryption/` – Data encryption
-- `environment_setup/` – Environment validation
-- `events/` – Event system
-- `evolutionary_ai/` – Evolutionary algorithms
-- `examples/` – Usage examples
+- `email/` – Module component
+- `embodiment/` – Module component
+- `encryption/` – Module component
+- `environment_setup/` – Module component
+- `events/` – Module component
+- `evolutionary_ai/` – Module component
+- `examples/` – Module component
 - `exceptions/` – Module component
-- `feature_flags/` – Feature flag management
+- `feature_flags/` – Module component
 - `finance/` – Module component
 - `formal_verification/` – Module component
-- `fpf/` – Functional programming framework
-- `git_operations/` – Git automation
-- `graph_rag/` – Graph-based RAG
-- `ide/` – IDE integration
+- `fpf/` – Module component
+- `git_operations/` – Module component
+- `graph_rag/` – Module component
+- `ide/` – Module component
 - `identity/` – Module component
-- `llm/` – LLM infrastructure
-- `logging_monitoring/` – Centralized logging
-- `logistics/` – Workflow logistics
+- `llm/` – Module component
+- `logging_monitoring/` – Module component
+- `logistics/` – Module component
 - `maintenance/` – Module component
 - `market/` – Module component
 - `meme/` – Module component
-- `model_context_protocol/` – MCP interfaces
-- `model_ops/` – ML model operations
-- `module_template/` – Module scaffolding
-- `networking/` – Network utilities
+- `model_context_protocol/` – Module component
+- `model_ops/` – Module component
+- `module_template/` – Module component
+- `networking/` – Module component
 - `networks/` – Module component
-- `orchestrator/` – Workflow orchestration
-- `performance/` – Performance monitoring
-- `physical_management/` – Physical systems
-- `plugin_system/` – Plugin architecture
+- `orchestrator/` – Module component
+- `performance/` – Module component
+- `physical_management/` – Module component
+- `plugin_system/` – Module component
 - `privacy/` – Module component
 - `prompt_engineering/` – Module component
 - `quantum/` – Module component
 - `relations/` – Module component
-- `scrape/` – Web scraping
+- `scrape/` – Module component
 - `search/` – Module component
-- `security/` – Security scanning
-- `serialization/` – Data serialization
+- `security/` – Module component
+- `serialization/` – Module component
 - `simulation/` – Module component
-- `skills/` – Agent skills
-- `spatial/` – 3D/4D modeling
-- `static_analysis/` – Code quality
-- `system_discovery/` – Module discovery
-- `telemetry/` – Telemetry and tracing
-- `templating/` – Template management
-- `terminal_interface/` – Terminal UI
-- `testing/` – Test utilities
-- `tests/` – Test suites
+- `skills/` – Module component
+- `spatial/` – Module component
+- `static_analysis/` – Module component
+- `system_discovery/` – Module component
+- `telemetry/` – Module component
+- `templating/` – Module component
+- `terminal_interface/` – Module component
+- `testing/` – Module component
+- `tests/` – Module component
 - `tool_use/` – Module component
-- `utils/` – General utilities
-- `validation/` – Input validation
+- `utils/` – Module component
+- `validation/` – Module component
 - `vector_store/` – Module component
 - `video/` – Module component
 - `wallet/` – Module component
-- `website/` – Website generation
+- `website/` – Module component
 
 ## Operating Contracts
 

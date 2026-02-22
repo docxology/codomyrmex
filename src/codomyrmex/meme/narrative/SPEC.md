@@ -1,3 +1,3 @@
-# Narrative
+# Specifications for meme/narrative
 
-Documentation for meme/narrative.
+Technical specifications.

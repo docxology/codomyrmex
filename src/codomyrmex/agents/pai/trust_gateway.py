@@ -507,6 +507,20 @@ class TrustRegistry:
             "counts": {k: len(v) for k, v in by_level.items()},
         }
 
+    def get_aggregate_level(self) -> str:
+        """Highest trust level present across all tools; 'untrusted' if nothing promoted."""
+        self._load()
+        levels = set(self._levels.values())
+        if TrustLevel.TRUSTED in levels:
+            return "trusted"
+        if TrustLevel.VERIFIED in levels:
+            return "verified"
+        return "untrusted"
+
+    def get_audit_count(self) -> int:
+        """Number of audit log entries recorded this session."""
+        return len(_audit_log)
+
     def call(self, name: str, **kwargs: Any) -> dict[str, Any]:
         """Execute a tool by name via the tool registry.
 
@@ -645,8 +659,8 @@ def verify_capabilities() -> dict[str, Any]:
         },
         "trust": {
             "promoted_to_verified": promoted, # Keep for backwards compatibility
-            "level": "mixed", # Aggregate level not really meaningful defined here yet
-            "audit_entries": 0, # TODO(stream-2): Implement audit entry counting
+            "level": _registry.get_aggregate_level(),
+            "audit_entries": _registry.get_audit_count(),
             "gateway_healthy": True,
             "report": _registry.get_report(),
         },

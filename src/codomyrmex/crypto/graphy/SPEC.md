@@ -1,3 +1,3 @@
-# Graphy
+# Specifications for crypto/graphy
 
-Documentation for crypto/graphy.
+Technical specifications.

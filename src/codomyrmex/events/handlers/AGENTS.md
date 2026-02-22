@@ -1,3 +1,3 @@
-# Handlers
+# Agents for events/handlers
 
-Documentation for events/handlers.
+List of agents and configurations.

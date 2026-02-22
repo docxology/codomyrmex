@@ -1,3 +1,3 @@
-# Swarm
+# Specifications for meme/swarm
 
-Documentation for meme/swarm.
+Technical specifications.

@@ -32,7 +32,7 @@ from codomyrmex.scrape import Scraper, BaseScraper, ScrapeConfig, get_config, se
 | `ScrapeValidationError` | Class | Scrapevalidationerror |
 | `FirecrawlError` | Class | Firecrawlerror |
 
-*Plus 4 additional exports.*
+*Plus 5 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping

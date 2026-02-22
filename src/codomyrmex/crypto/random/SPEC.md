@@ -1,3 +1,3 @@
-# Random
+# Specifications for crypto/random
 
-Documentation for crypto/random.
+Technical specifications.

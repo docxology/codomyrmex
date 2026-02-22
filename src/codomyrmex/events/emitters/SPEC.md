@@ -1,3 +1,3 @@
-# Emitters
+# Specifications for events/emitters
 
-Documentation for events/emitters.
+Technical specifications.

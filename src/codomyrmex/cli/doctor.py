@@ -229,11 +229,11 @@ def run_doctor(
     imports: bool = False,
     all_checks: bool = False,
     output_json: bool = False,
-) -> int:
+) -> bool:
     """Run selected diagnostic checks.
 
     Returns:
-        Exit code: 0=ok, 1=warnings, 2=errors.
+        True if all checks passed, False otherwise.
     """
     checks: list[CheckResult] = []
 
@@ -281,8 +281,4 @@ def run_doctor(
         ok_count = sum(1 for c in checks if c.status == CheckResult.OK)
         print(f"\n  {ok_count}/{total} checks passed\n")
 
-    if has_errors:
-        return 2
-    elif has_warnings:
-        return 1
-    return 0
+    return not has_errors and not has_warnings

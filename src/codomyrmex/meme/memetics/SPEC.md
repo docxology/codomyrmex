@@ -1,3 +1,3 @@
-# Memetics
+# Specifications for meme/memetics
 
-Documentation for meme/memetics.
+Technical specifications.

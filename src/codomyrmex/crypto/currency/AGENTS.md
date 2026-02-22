@@ -1,3 +1,3 @@
-# Currency
+# Agents for crypto/currency
 
-Documentation for crypto/currency.
+List of agents and configurations.

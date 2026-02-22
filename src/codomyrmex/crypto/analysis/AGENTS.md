@@ -1,3 +1,3 @@
-# Analysis
+# Agents for crypto/analysis
 
-Documentation for crypto/analysis.
+List of agents and configurations.

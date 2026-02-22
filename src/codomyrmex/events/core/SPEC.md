@@ -1,3 +1,3 @@
-# Core
+# Specifications for events/core
 
-Documentation for events/core.
+Technical specifications.

@@ -1,3 +1,3 @@
-# Streaming
+# Specifications for events/streaming
 
-Documentation for events/streaming.
+Technical specifications.

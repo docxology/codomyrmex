@@ -1,3 +1,3 @@
-# Epistemic
+# Specifications for meme/epistemic
 
-Documentation for meme/epistemic.
+Technical specifications.

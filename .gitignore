@@ -228,3 +228,6 @@ pids/
 /pipeline_reports
 /optimization_data
 ~/
+
+.gemini/
+gha-creds-*.json

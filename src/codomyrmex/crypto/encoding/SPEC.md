@@ -1,3 +1,3 @@
-# Encoding
+# Specifications for crypto/encoding
 
-Documentation for crypto/encoding.
+Technical specifications.

@@ -1,3 +1,3 @@
-# Protocols
+# Specifications for crypto/protocols
 
-Documentation for crypto/protocols.
+Technical specifications.

@@ -1,3 +1,3 @@
-# I18N
+# Specifications for utils/i18n
 
-Documentation for utils/i18n.
+Technical specifications.

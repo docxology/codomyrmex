@@ -31,7 +31,7 @@ from codomyrmex.orchestrator import Workflow, Task, TaskStatus, scheduler, templ
 | `TaskResult` | Class | Taskresult |
 | `RetryPolicy` | Class | Retrypolicy |
 
-*Plus 44 additional exports.*
+*Plus 55 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping
@@ -42,6 +42,7 @@ from codomyrmex.orchestrator import Workflow, Task, TaskStatus, scheduler, templ
 | **PLAN** | Workflow planning and scheduling |
 | **BUILD** | Artifact creation and code generation |
 | **EXECUTE** | Execution and deployment |
+| **LEARN** | Learning and knowledge capture |
 
 ## Architecture Role
 

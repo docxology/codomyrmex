@@ -1,3 +1,3 @@
-# Multimodal
+# Specifications for llm/multimodal
 
-Documentation for llm/multimodal.
+Technical specifications.

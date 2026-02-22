@@ -62,6 +62,14 @@ logger = get_logger(__name__)
 _PROJECT_ROOT = Path(__file__).resolve().parents[4]  # src/codomyrmex/agents/pai → repo root
 
 
+def _get_package_version() -> str:
+    try:
+        from importlib.metadata import version
+        return version("codomyrmex")
+    except Exception:
+        return "unknown"
+
+
 # =====================================================================
 # Tool Definitions
 # =====================================================================
@@ -1096,7 +1104,7 @@ def get_skill_manifest() -> dict[str, Any]:
 
     return {
         "name": "Codomyrmex",
-        "version": "0.1.7",  # TODO(v0.2.0): read from importlib.metadata.version("codomyrmex")
+        "version": _get_package_version(),
         "description": (
             "Modular coding workspace exposing 100+ modules for AI-assisted "
             "development, code analysis, testing, documentation, and automation."

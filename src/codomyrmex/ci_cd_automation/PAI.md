@@ -31,7 +31,7 @@ from codomyrmex.ci_cd_automation import PipelineManager, Pipeline, PipelineJob, 
 | `generate_pipeline_reports` | Function/Constant | Generate pipeline reports |
 | `PipelineReport` | Class | Pipelinereport |
 
-*Plus 11 additional exports.*
+*Plus 12 additional exports.*
 
 
 ## PAI Algorithm Phase Mapping

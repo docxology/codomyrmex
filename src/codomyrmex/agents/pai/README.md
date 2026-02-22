@@ -136,3 +136,20 @@ trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 - **PAI SKILL**: [SKILL.md](SKILL.md)
 - **Parent**: [agents](../README.md)
 - **Root PAI Bridge**: [../../../../PAI.md](../../../../PAI.md)
+
+## Dashboard & Launch
+
+Launch both PAI servers together using:
+
+```bash
+# Start PAI PM (port 8888) + Codomyrmex Admin (port 8787)
+uv run python scripts/pai/dashboard.py
+
+# Kill existing, regenerate, restart, open browser
+uv run python scripts/pai/dashboard.py --restart
+```
+
+See `scripts/pai/README.md` for full usage and `scripts/pai/dashboard.py` for implementation.
+
+- **PAI Project Manager** (primary): `http://localhost:8888` — 12 tabs, 45+ REST endpoints, AI dispatch
+- **Codomyrmex Admin** (secondary): `http://localhost:8787` — module health, MCP tools, trust gateway

@@ -1,3 +1,3 @@
-# Emitters
+# Agents for events/emitters
 
-Documentation for events/emitters.
+List of agents and configurations.

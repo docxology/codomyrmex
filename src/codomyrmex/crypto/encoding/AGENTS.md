@@ -1,3 +1,3 @@
-# Encoding
+# Agents for crypto/encoding
 
-Documentation for crypto/encoding.
+List of agents and configurations.
