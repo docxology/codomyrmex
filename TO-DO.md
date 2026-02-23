@@ -7,11 +7,11 @@
 ## Release Policy
 
 > [!CAUTION]
-> **No versioned release ships with failing tests. No exceptions.**
+> **No versioned release (even minor ones) ships with mocks, stubs, placeholders, or failing tests. No exceptions.**
 >
 > 1. **0 test failures** — `pytest` exits 0 across entire suite
 > 2. **0 collection errors** — `pytest --co -q` discovers all tests without import/fixture errors
-> 3. **All new code tested** — zero-mock policy
+> 3. **0 mocks, stubs, or placeholders** — absolute zero-mock policy enforced across all non-vendored code
 > 4. **Documentation current** — CHANGELOG, README, SPEC, AGENTS reflect accurate counts
 > 5. **`codomyrmex doctor --all` exit 0**
 
