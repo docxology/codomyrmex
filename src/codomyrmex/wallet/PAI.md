@@ -1,51 +1,47 @@
 # Personal AI Infrastructure — Wallet Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Wallet Module. This is an **Extended Layer** module.
+The Wallet module provides self-custody key management and "Natural Ritual" recovery using zero-knowledge proofs. It enables secure storage of cryptographic keys, API credentials, and agent secrets with recovery mechanisms that don't rely on centralized services. Part of the Secure Cognitive Agent suite.
 
 ## PAI Capabilities
 
+### Self-Custody Key Management
+
 ```python
-from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, BackupManager, contracts, security, hash_response
+from codomyrmex.wallet import Wallet
+
+wallet = Wallet()
+# Store and retrieve cryptographic keys
+# Self-custody: keys never leave the local system
+# Hierarchical key derivation for agent-specific keys
 ```
+
+### Natural Ritual Recovery (ZKP)
+
+- Recovery without centralized servers using zero-knowledge proofs
+- Multi-party threshold recovery for disaster scenarios
+- Biometric and cognitive factor integration
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `contracts` | Function/Constant | Contracts |
-| `security` | Function/Constant | Security |
-| `WalletManager` | Class | Walletmanager |
-| `NaturalRitualRecovery` | Class | Naturalritualrecovery |
-| `BackupManager` | Class | Backupmanager |
-| `KeyRotation` | Class | Keyrotation |
-| `RitualStep` | Class | Ritualstep |
-| `RotationRecord` | Class | Rotationrecord |
-| `RotationPolicy` | Class | Rotationpolicy |
-| `WalletError` | Class | Walleterror |
-| `WalletNotFoundError` | Class | Walletnotfounderror |
-| `WalletKeyError` | Class | Walletkeyerror |
-| `RitualError` | Class | Ritualerror |
-| `hash_response` | Function/Constant | Hash response |
-| `create_wallet` | Function/Constant | Create wallet |
-
-*Plus 2 additional exports.*
-
+| `Wallet` | Class | Self-custody key management engine |
+| ZKP recovery | Various | Zero-knowledge proof based key recovery |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Wallet Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **BUILD** | Artifact creation and code generation |
-| **LEARN** | Learning and knowledge capture |
+|-------|---------------------|
+| **EXECUTE** | Retrieve keys and credentials for secure API access |
+| **VERIFY** | Validate key integrity and custody chain |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `auth/` and `crypto/` for key management.
 
 ## Navigation
 

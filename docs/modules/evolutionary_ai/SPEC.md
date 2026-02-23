@@ -1,53 +1,59 @@
-# Evolutionary AI — Functional Specification
+# evolutionary_ai - Functional Specification
 
-**Module**: `codomyrmex.evolutionary_ai`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Evolutionary AI module for Codomyrmex.
+To enable the discovery of optimal solutions in complex, non-differentiable search spaces through simulated Darwinian evolution.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Modular Operators**: Easily swap mutation or selection methods.
+- **Scalability**: Designed for massive populations across distributed environments.
+- **Determinism**: Support for seeded random number generation for reproducible runs.
+- **Abstraction**: Decouple the evolutionary core from the specific problem domain.
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Genome` | Class | A genome representing an individual's genetic material. |
-| `Population` | Class | A population of individuals for evolutionary algorithms. |
-| `crossover()` | Function | Perform single-point crossover between two genomes. |
-| `mutate()` | Function | Apply mutation to a genome. |
-| `tournament_selection()` | Function | Select an individual using tournament selection. |
-| `random()` | Function | Create a random genome. |
-| `copy()` | Function | Create a copy of this genome. |
+## Architecture
 
-### Submodule Structure
-
-- `fitness/` — Fitness evaluation submodule.
-- `genome/` — Genome representation submodule.
-- `operators/` — Genetic operators for evolutionary AI.
-- `population/` — Population management submodule.
-- `selection/` — Selection methods submodule.
-
-## 3. Dependencies
-
-See `src/codomyrmex/evolutionary_ai/__init__.py` for import dependencies.
-
-## 4. Public API
-
-```python
-from codomyrmex.evolutionary_ai import Genome, Population
+```mermaid
+graph TD
+    Pop[Population] --> Eval[Fitness Evaluator]
+    Eval --> Sel[Selection]
+    Sel --> Cross[Crossover]
+    Cross --> Mut[Mutation]
+    Mut --> Next[Next Generation]
+    Next --> Pop
 ```
 
-## 5. Testing
+## Functional Requirements
+
+- Define custom `Gene` types (binary, integer, float, or structured).
+- Support multiple selection strategies (Tournament, Rank, Stochastic).
+- Implement various crossover methods (Single-point, Two-point, Uniform).
+- Support adaptive mutation rates.
+- Maintain a 'Hall of Fame' for the best-performing individuals.
+
+## Interface Contracts
+
+### `Population`
+
+- `evolve(fitness_scores: List[float])`
+- `get_best_genome() -> Genome`
+- `generations: int` (property)
+
+### `Genome`
+
+- `mutate(rate: float)`
+- `copy() -> Genome`
+- `random(length: int) -> Genome` (classmethod)
+
+## Technical Constraints
+
+- Computationally intensive for large populations and complex fitness functions.
+- Highly dependent on high-quality random number generation.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/evolutionary_ai/)

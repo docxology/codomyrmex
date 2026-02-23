@@ -1,38 +1,60 @@
-# Compression Module — Agent Coordination
+# Agent Guidelines - Compression
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Compression module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Data compression with gzip, zlib, ZIP, and Zstandard support.
 
-- `compress()`: Compress data.
-- `decompress()`: Decompress data.
-- `get_compressor()`: Get a compressor instance.
+## Key Classes
 
-## Agent Usage Patterns
+- **Compressor** — Configurable compression with format detection
+- **ArchiveManager** — ZIP/tar archive creation and extraction
+- **ZstdCompressor** — High-performance Zstandard compression
+- **ParallelCompressor** — Multi-threaded compression
+
+## Agent Instructions
+
+1. **Choose format wisely** — Use gzip for general, zstd for performance
+2. **Use appropriate level** — Higher levels = slower but smaller
+3. **Stream large files** — Use streaming for memory efficiency
+4. **Handle errors** — Catch `CompressionError` for corrupt data
+5. **Use parallel for batches** — `ParallelCompressor` for multiple files
+
+## Common Patterns
 
 ```python
-from codomyrmex.compression import *
+from codomyrmex.compression import compress, decompress, ArchiveManager
 
-# Agent uses compression capabilities
+# Compress data
+compressed = compress(data, level=6, format="gzip")
+
+# Create archive with multiple files
+with ArchiveManager("output.zip", mode="w") as archive:
+    for file in files:
+        archive.add_file(file)
+
+# High-performance for large data
+from codomyrmex.compression import ZstdCompressor
+zstd = ZstdCompressor(level=3)
+result = zstd.compress(large_data)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/compression/](../../../src/codomyrmex/compression/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify round-trip
+from codomyrmex.compression import compress, decompress
 
-## Related Modules
+data = b"test data " * 100
+compressed = compress(data)
+decompressed = decompress(compressed)
+assert decompressed == data
 
-- [Exceptions](../exceptions/AGENTS.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k compression -v
+# Verify compression ratio
+assert len(compressed) < len(data)
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

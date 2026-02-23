@@ -1,83 +1,86 @@
-# Video Module Documentation
+# Video Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Video module provides comprehensive video processing capabilities including manipulation, frame extraction, audio extraction, and analysis. It uses moviepy and OpenCV as backends for robust video operations, with graceful degradation when optional dependencies are not installed. The module exposes a clean API surface with typed models, configurable settings, and granular exception handling.
+The video module provides comprehensive video processing capabilities including manipulation, frame extraction, and analysis. It uses moviepy and OpenCV backends for robust video operations.
 
-## Key Features
+## Features
 
-- **Video Processing**: Resize, crop, rotate, convert, filter, trim, and merge video files
-- **Frame Extraction**: Extract single frames at timestamps, extract at intervals, and generate thumbnails
-- **Audio Extraction**: Extract audio tracks in multiple formats (MP3, WAV, AAC)
-- **Video Analysis**: Get complete metadata (duration, resolution, FPS, codec, frame count), validate videos, and compare two videos
-- **Multiple Backends**: Supports moviepy and OpenCV with automatic detection via availability flags
-- **Visual Filters**: Built-in filters including grayscale, mirror, invert, rotation, brightness, and contrast adjustment
-- **Format Support**: Input: MP4, AVI, MOV, MKV, WEBM, WMV, FLV, M4V. Output: MP4, AVI, MOV, WEBM, MKV
+### Video Processing
+- **Resize** - Scale videos to target dimensions
+- **Crop** - Extract regions from video
+- **Rotate** - Rotate by any angle
+- **Convert** - Change format/codec
+- **Filter** - Apply visual effects
+- **Trim** - Cut to time range
+- **Merge** - Concatenate multiple videos
 
-## Key Components
+### Frame Extraction
+- Extract single frames at timestamp
+- Extract frames at intervals
+- Generate thumbnails
+- Save frames to files
 
-### Processing (`processing/`)
+### Audio Extraction
+- Extract audio tracks
+- Multiple output formats (MP3, WAV, AAC)
 
-| Component | Description |
-|-----------|-------------|
-| `VideoProcessor` | Primary video manipulation class with `resize()`, `crop()`, `rotate()`, `convert()`, `apply_filter()`, `trim()`, and `merge()` methods |
+### Video Analysis
+- Get complete video metadata
+- Duration, resolution, FPS, codec
+- Frame count, aspect ratio
+- Compare two videos
 
-### Extraction (`extraction/`)
+## Key Exports
 
-| Component | Description |
-|-----------|-------------|
-| `FrameExtractor` | Frame and audio extraction with `extract_frame()`, `extract_frames()`, `generate_thumbnail()`, and `extract_audio()` methods |
-
-### Analysis (`analysis/`)
-
-| Component | Description |
-|-----------|-------------|
-| `VideoAnalyzer` | Video metadata and comparison with `get_info()`, `get_duration()`, `has_audio()`, and `is_valid_video()` methods |
-
-### Models and Configuration
-
-| Component | Description |
-|-----------|-------------|
-| `VideoConfig` | Module configuration with `get_config()`, `set_config()`, `reset_config()`, and `configure()` functions |
-| `VideoInfo` | Dataclass containing video metadata (duration, resolution, FPS, codec) |
-| `ProcessingResult` | Dataclass representing the result of a processing operation |
-| `ExtractionResult` | Dataclass representing the result of an extraction operation |
-| `VideoComparison` | Dataclass for comparing two videos |
-| `FilterType` | Enum of available visual filters (GRAYSCALE, MIRROR_HORIZONTAL, MIRROR_VERTICAL, INVERT, ROTATE_90/180/270, BRIGHTNESS, CONTRAST) |
-| `VideoCodec` | Enum of supported video codecs |
-| `AudioCodec` | Enum of supported audio codecs |
+### Processing Classes (when dependencies available)
+- **`VideoProcessor`** — Video manipulation operations (resize, crop, rotate, convert, filter, trim, merge)
+- **`FrameExtractor`** — Frame extraction, thumbnail generation, and audio extraction from video
+- **`VideoAnalyzer`** — Video metadata extraction, duration queries, and comparison
 
 ### Exceptions
+- **`VideoError`** — Base exception for all video-related errors
+- **`VideoReadError`** — Raised when reading a video file fails (not found, corrupted, missing codec)
+- **`VideoWriteError`** — Raised when writing a video file fails (invalid path, disk full, codec error)
+- **`VideoProcessingError`** — Raised when a video processing operation fails (resize, crop, filter)
+- **`FrameExtractionError`** — Raised when frame extraction fails (invalid timestamp, corrupted frame)
+- **`AudioExtractionError`** — Raised when audio extraction from video fails (no audio track, codec error)
+- **`UnsupportedFormatError`** — Raised when the video format is not supported
+- **`VideoAnalysisError`** — Raised when video analysis fails (metadata extraction, codec detection)
 
-| Component | Description |
-|-----------|-------------|
-| `VideoError` | Base exception for all video operations |
-| `VideoReadError` | Error reading video files |
-| `VideoWriteError` | Error writing video files |
-| `VideoProcessingError` | Error during video processing operations |
-| `FrameExtractionError` | Error during frame extraction |
-| `AudioExtractionError` | Error during audio extraction |
-| `UnsupportedFormatError` | Unsupported video format encountered |
-| `VideoAnalysisError` | Error during video analysis |
+### Configuration
+- **`VideoConfig`** — Global configuration for video processing (temp dir, codecs, FPS, bitrate defaults)
+- `get_config` / `set_config` / `reset_config` / `configure` — Configuration management functions
+
+### Data Models
+- **`VideoCodec`** — Enum of common video codecs (H264, H265, VP8, VP9, AV1, MPEG4, MJPEG)
+- **`AudioCodec`** — Enum of common audio codecs (AAC, MP3, OPUS, VORBIS, FLAC, PCM)
+- **`VideoInfo`** — Dataclass with complete video file metadata (duration, resolution, FPS, codec, bitrate)
+- **`ProcessingResult`** — Dataclass result of a video processing operation (output path, dimensions, timing)
+- **`ExtractionResult`** — Dataclass result of frame or audio extraction (frames, timestamps, paths)
+- **`VideoComparison`** — Dataclass result of comparing two videos (resolution, duration, codec differences)
+- **`FilterType`** — Enum of available video filters (grayscale, blur, sharpen, brightness, etc.)
 
 ### Availability Flags
-
-| Flag | Description |
-|------|-------------|
-| `PIL_AVAILABLE` | Whether PIL/Pillow is available for image handling |
-| `MOVIEPY_AVAILABLE` | Whether moviepy backend is available |
-| `OPENCV_AVAILABLE` | Whether OpenCV backend is available |
-| `PROCESSING_AVAILABLE` | Whether any processing backend is available |
-| `EXTRACTION_AVAILABLE` | Whether frame extraction is available |
-| `ANALYSIS_AVAILABLE` | Whether video analysis is available |
+- **`PIL_AVAILABLE`** — Boolean flag indicating whether Pillow (PIL) image dependencies are available
+- **`MOVIEPY_AVAILABLE`** — Boolean flag indicating whether moviepy video editing dependencies are available
+- **`OPENCV_AVAILABLE`** — Boolean flag indicating whether OpenCV (cv2) dependencies are available
+- **`PROCESSING_AVAILABLE`** — Boolean flag indicating whether video processing is available (moviepy or OpenCV)
+- **`EXTRACTION_AVAILABLE`** — Boolean flag indicating whether frame/audio extraction dependencies are available
+- **`ANALYSIS_AVAILABLE`** — Boolean flag indicating whether video analysis dependencies are available
 
 ## Installation
 
 ```bash
-# Install video dependencies
-uv sync --extra video
+uv add codomyrmex
+```
+
+Or for development:
+
+```bash
+uv sync
 ```
 
 ## Quick Start
@@ -89,19 +92,19 @@ from codomyrmex.video import VideoProcessor, FilterType
 
 processor = VideoProcessor()
 
-# Resize video
+# Resize
 result = processor.resize("input.mp4", width=1280, height=720)
 
-# Crop region
+# Crop
 result = processor.crop("input.mp4", x=100, y=50, width=800, height=600)
 
-# Apply visual filter
+# Apply filter
 result = processor.apply_filter("input.mp4", FilterType.GRAYSCALE)
 
-# Trim to time range
+# Trim
 result = processor.trim("input.mp4", start=10.0, end=30.0)
 
-# Merge multiple videos
+# Merge videos
 result = processor.merge(["video1.mp4", "video2.mp4"], "merged.mp4")
 ```
 
@@ -112,7 +115,7 @@ from codomyrmex.video import FrameExtractor
 
 extractor = FrameExtractor()
 
-# Extract single frame at timestamp
+# Extract single frame
 frame = extractor.extract_frame("video.mp4", timestamp=5.0)
 frame.save("frame.png")
 
@@ -120,7 +123,10 @@ frame.save("frame.png")
 thumbnail = extractor.generate_thumbnail("video.mp4")
 thumbnail.save("thumb.jpg")
 
-# Extract audio track
+# Extract multiple frames
+frames = extractor.extract_frames("video.mp4", interval=1.0)
+
+# Extract audio
 audio_path = extractor.extract_audio("video.mp4", audio_format="mp3")
 ```
 
@@ -131,9 +137,11 @@ from codomyrmex.video import VideoAnalyzer
 
 analyzer = VideoAnalyzer()
 
-# Get complete video metadata
+# Get full info
 info = analyzer.get_info("video.mp4")
-print(f"Duration: {info.duration}s, Resolution: {info.width}x{info.height}, FPS: {info.fps}")
+print(f"Duration: {info.duration}s")
+print(f"Resolution: {info.width}x{info.height}")
+print(f"FPS: {info.fps}")
 
 # Quick checks
 duration = analyzer.get_duration("video.mp4")
@@ -141,6 +149,41 @@ has_audio = analyzer.has_audio("video.mp4")
 is_valid = analyzer.is_valid_video("video.mp4")
 ```
 
+## Directory Contents
+
+- `__init__.py` - Main module exports
+- `exceptions.py` - Video-specific exceptions
+- `config.py` - Module configuration
+- `models.py` - Data models
+- `README.md` - This file
+- `SPEC.md` - Technical specification
+- `AGENTS.md` - AI agent guidance
+- `PAI.md` - Programmable AI Interface
+- `API_SPECIFICATION.md` - API reference
+- `MCP_TOOL_SPECIFICATION.md` - MCP tools
+- `processing/` - Video processing operations
+- `extraction/` - Frame/audio extraction
+- `analysis/` - Video analysis
+
+## Supported Formats
+
+### Input
+MP4, AVI, MOV, MKV, WEBM, WMV, FLV, M4V
+
+### Output
+MP4, AVI, MOV, WEBM, MKV
+
+## Available Filters
+
+| Filter | Description |
+|--------|-------------|
+| GRAYSCALE | Black and white |
+| MIRROR_HORIZONTAL | Flip horizontally |
+| MIRROR_VERTICAL | Flip vertically |
+| INVERT | Invert colors |
+| ROTATE_90/180/270 | Rotate by degrees |
+| BRIGHTNESS | Adjust brightness |
+| CONTRAST | Adjust contrast |
 
 ## Testing
 
@@ -148,13 +191,8 @@ is_valid = analyzer.is_valid_video("video.mp4")
 uv run python -m pytest src/codomyrmex/tests/ -k video -v
 ```
 
-## Related Modules
-
-- [audio](../audio/) - Audio processing capabilities (complementary media processing)
-- [data_visualization](../data_visualization/) - Visualization tools that may consume video analysis output
-- [compression](../compression/) - General compression utilities applicable to media files
-
 ## Navigation
 
-- **Source**: [src/codomyrmex/video/](../../../src/codomyrmex/video/)
-- **Parent**: [docs/modules/](../README.md)
+- **Full Documentation**: [docs/modules/video/](../../../docs/modules/video/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

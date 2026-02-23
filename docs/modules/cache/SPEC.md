@@ -1,59 +1,134 @@
-# Cache — Functional Specification
+# cache - Functional Specification
 
-**Module**: `codomyrmex.cache`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Cache module for Codomyrmex.
+Caching module providing unified caching strategies for code analysis results, LLM responses, build artifacts, and other frequently accessed data. Integrates with the `performance` module to optimize platform responsiveness and reduce redundant computations.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `get_cache()` | Function | Get a cache instance by name. |
+- Provider-agnostic caching interface
+- Support for multiple backends (Redis, in-memory, file-based)
+- Clear separation between cache strategies and implementations
 
-### Submodule Structure
+### Internal Coherence
 
-- `async_ops/` — Async Ops Submodule
-- `backends/` — Cache backend implementations.
-- `distributed/` — Distributed Cache submodule.
-- `invalidation/` — Cache Invalidation Module
-- `policies/` — Cache eviction policies.
-- `replication/` — Replication Submodule
-- `serializers/` — Cache serialization utilities.
-- `warmers/` — Cache Warmers Module
+- Unified cache key generation
+- Consistent TTL and invalidation patterns
+- Integration with logging and monitoring
 
-### Source Files
+### Parsimony
 
-- `cache.py`
-- `cache_manager.py`
-- `exceptions.py`
-- `namespaced.py`
-- `stats.py`
-- `ttl_manager.py`
+- Essential caching operations only
+- Minimal dependencies
+- Focus on performance-critical use cases
 
-## 3. Dependencies
+### Functionality
 
-See `src/codomyrmex/cache/__init__.py` for import dependencies.
+- Working implementations for common caching scenarios
+- Support for cache warming and preloading
+- Cache statistics and monitoring
 
-## 4. Public API
+### Testing
+
+- Unit tests for all cache backends
+- Integration tests with real data
+- Performance benchmarks
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each backend
+- Performance characteristics documented
+
+## Architecture
+
+```mermaid
+graph TD
+    CacheInterface[Cache Interface]
+    InMemoryCache[In-Memory Cache]
+    FileCache[File-Based Cache]
+    RedisCache[Redis Cache]
+    CacheManager[Cache Manager]
+    
+    CacheInterface --> InMemoryCache
+    CacheInterface --> FileCache
+    CacheInterface --> RedisCache
+    CacheManager --> CacheInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **Get/Set Operations**: Basic cache get and set with TTL
+2. **Invalidation**: Clear cache entries by key or pattern
+3. **Statistics**: Track hit/miss rates and performance metrics
+4. **Multi-Backend Support**: Switch between cache backends
+5. **Serialization**: Automatic serialization/deserialization
+
+### Integration Points
+
+- `performance/` - Performance monitoring integration
+- `logging_monitoring/` - Cache operation logging
+- `config_management/` - Cache configuration
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Backend-specific tests
+- Performance benchmarks
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Cache Interface
 
 ```python
-from codomyrmex.cache import get_cache
+class Cache:
+    def get(key: str) -> Optional[Any]
+    def set(key: str, value: Any, ttl: Optional[int] = None) -> bool
+    def delete(key: str) -> bool
+    def clear() -> bool
+    def exists(key: str) -> bool
+    @property
+    def stats() -> CacheStats
 ```
 
-## 5. Testing
+## Implementation Guidelines
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cache -v
-```
+### Backend Implementation
 
-## References
+1. Implement Cache interface for each backend
+2. Handle serialization/deserialization
+3. Support TTL and expiration
+4. Provide statistics collection
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/cache/)
+### Integration
+
+1. Integrate with performance monitoring
+2. Add logging for cache operations
+3. Support configuration via config_management
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [performance](../performance/AGENTS.md), [config_management](../config_management/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->

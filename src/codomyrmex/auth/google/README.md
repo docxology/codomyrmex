@@ -1,5 +1,7 @@
 # Google Auth for Codomyrmex
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 This submodule handles interactive and cached OAuth 2.0 device/server flows for integrating Google Cloud services programmatically.
 
 ## Configuration

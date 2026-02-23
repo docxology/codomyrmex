@@ -1,11 +1,10 @@
 # Deployment Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 The deployment module provides deployment strategy implementations and orchestration for service rollouts. It supports rolling, blue-green, and canary deployment patterns with configurable health checks, batch sizing, traffic switching, and staged percentage-based rollouts. Includes a high-level deployment manager for simplified orchestration and a GitOps synchronizer for Git-based configuration management.
-
 
 ## Installation
 
@@ -70,7 +69,6 @@ from codomyrmex.deployment import DeploymentManager, GitOpsSynchronizer
 # Initialize DeploymentManager
 instance = DeploymentManager()
 ```
-
 
 ## Testing
 

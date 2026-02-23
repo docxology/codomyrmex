@@ -1,5 +1,7 @@
 # Agent Guidelines - Validation
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Data validation, schema checking, and input sanitization.

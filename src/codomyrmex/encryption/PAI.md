@@ -1,51 +1,40 @@
 # Personal AI Infrastructure — Encryption Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Encryption module for Codomyrmex. This is an **Extended Layer** module.
+The Encryption module provides symmetric and asymmetric encryption, key generation, and secure data handling for protecting sensitive information in AI agent workflows. It ensures data-at-rest and data-in-transit security.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.encryption import Encryptor, KeyManager, AESGCMEncryptor, encrypt, decrypt, generate_key
-```
+### Encryption Operations
+
+- Symmetric encryption (AES-256-GCM)
+- Asymmetric encryption (RSA, Ed25519)
+- Key pair generation and management
+- Secure envelope encryption for large payloads
+- Password-based key derivation (Argon2)
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `Encryptor` | Class | Encryptor |
-| `KeyManager` | Class | Keymanager |
-| `AESGCMEncryptor` | Class | Aesgcmencryptor |
-| `SecureDataContainer` | Class | Securedatacontainer |
-| `EncryptionError` | Class | Encryptionerror |
-| `encrypt` | Function/Constant | Encrypt |
-| `decrypt` | Function/Constant | Decrypt |
-| `generate_key` | Function/Constant | Generate key |
-| `get_encryptor` | Function/Constant | Get encryptor |
-| `encrypt_data` | Function/Constant | Encrypt data |
-| `decrypt_data` | Function/Constant | Decrypt data |
-| `generate_aes_key` | Function/Constant | Generate aes key |
-| `encrypt_file` | Function/Constant | Encrypt file |
-| `decrypt_file` | Function/Constant | Decrypt file |
-| `hash_data` | Function/Constant | Hash data |
-
-*Plus 4 additional exports.*
-
+| Symmetric engines | Various | AES-based encryption/decryption |
+| Asymmetric engines | Various | RSA/Ed25519 key operations |
+| Key generators | Various | Cryptographic key generation |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Encryption Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **BUILD** | Artifact creation and code generation |
-| **VERIFY** | Validation and quality checks |
+|-------|--------------------------|
+| **BUILD** | Encrypt sensitive artifacts before storage |
+| **EXECUTE** | Secure data transfer between agents and services |
+| **VERIFY** | Verify data integrity via encryption-based checksums |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Core Layer** — Foundational cryptography consumed by `wallet/`, `auth/`, `security/`, and `privacy/` modules.
 
 ## Navigation
 

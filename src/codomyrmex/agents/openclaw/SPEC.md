@@ -1,6 +1,6 @@
 # OpenClaw - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -29,8 +29,7 @@ The `openclaw` module integrates the OpenClaw autonomous AI agent framework into
 3. **Message Send**: Route messages to channels via `send_message`.
 4. **Gateway**: Manage control plane via `start_gateway` / `get_gateway_status`.
 5. **Doctor**: Health check via `run_doctor`.
-6. **Version**: Version info via `get_openclaw_version`.
-
+6. 
 ## Interface Contracts
 
 ### Public API

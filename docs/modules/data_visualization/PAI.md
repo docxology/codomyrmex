@@ -4,27 +4,42 @@
 
 ## Overview
 
-The Data Visualization module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Data Visualization module provides charting, dashboards, and visual reporting for code metrics, performance data, and analytics. It generates interactive charts and static visualizations for agent-produced data.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/data_visualization/PAI.md](../../../src/codomyrmex/data_visualization/PAI.md)
+- Chart generation (bar, line, scatter, heatmap)
+- Dashboard composition with multiple chart panels
+- Performance regression visualization
+- Metric trend analysis and alerting visuals
+- Export to PNG, SVG, and interactive HTML
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Chart generators | Various | Create charts from data |
+| Dashboard builders | Various | Compose multi-panel dashboards |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Data Visualization Contribution |
+|-------|----------------------------------|
+| **OBSERVE** | Visualize codebase metrics for understanding |
+| **VERIFY** | Chart performance benchmark results for regression detection |
+| **LEARN** | Generate trend visualizations for long-term tracking |
+
+## MCP Integration
+
+Charting and dashboard tools available for PAI agent consumption.
+
+## Architecture Role
+
+**Core Layer** — Consumed by `performance/` (benchmark visualization), `maintenance/` (health dashboards), and the PAI dashboard.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

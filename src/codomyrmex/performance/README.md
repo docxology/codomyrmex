@@ -1,9 +1,8 @@
 # Performance Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Lazy loading, caching, and performance monitoring utilities.
-
 
 ## Installation
 
@@ -97,7 +96,6 @@ print(f"CPU: {metrics['cpu_percent']}%, Memory: {metrics['memory_percent']}%")
 | `PerformanceMonitor` | System metrics (requires psutil) |
 | `monitor_performance` | Decorator for timing |
 | `performance_context` | Context manager for profiling |
-
 
 ## Documentation
 

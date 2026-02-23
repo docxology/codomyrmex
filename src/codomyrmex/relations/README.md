@@ -1,10 +1,10 @@
 # Relations Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Social relationship management and external communication engine. Integrates CRM capabilities, social media management, and network analysis.
+The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities. It enables agents to track contacts, analyze social graphs, and maintain bidirectional entity relationships.
 
 ## Installation
 
@@ -16,33 +16,53 @@ uv add codomyrmex
 
 ### CRM
 
-- **`Contact`** — External entity representation
-- **`Interaction`** — Record of communication
-- **`Deal`** — Business opportunity tracking
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Contact` | Class | Contact record with metadata |
+| `ContactManager` | Class | Contact CRUD and search |
+| `Interaction` | Class | Tracked interaction with a contact |
 
-### UOR (Universal Object Reference)
+### Network Analysis
 
-- **`PrismEngine`** — PRISM triadic coordinate engine
-- **`UOREntity`** — Content-addressed entity with structural identity
-- **`EntityManager`** — Entity CRUD + similarity search
-- **`UORGraph`** — Content-addressed relationship graph
+| Export | Type | Purpose |
+|--------|------|---------|
+| `SocialGraph` | Class | Social relationship graph |
+| `GraphMetrics` | Class | Centrality, clustering, connectivity metrics |
 
-### Submodules
+### Universal Object Reference (UOR)
 
-- `crm/` — Contact management
-- `social_media/` — Platform integration
-- `network_analysis/` — Social graph processing
-- `uor/` — Universal Object Reference (PRISM coordinates, content-addressed entities)
+| Export | Type | Purpose |
+|--------|------|---------|
+| UOR types | Various | Bidirectional entity references across modules |
 
 ## Quick Start
 
 ```python
-from codomyrmex.relations import Contact, Interaction
+from codomyrmex.relations import Contact, ContactManager, SocialGraph, GraphMetrics
 
-contact = Contact(name="Jane Doe", email="jane@example.com")
-contact.log(Interaction(type="email", summary="Introductory call"))
+# Contact management
+manager = ContactManager()
+contact = Contact(name="Alice", role="developer")
+manager.add(contact)
+
+# Social graph analysis
+graph = SocialGraph()
+graph.add_relationship(contact_a, contact_b, type="collaborator")
+metrics = GraphMetrics(graph)
+print(metrics.centrality())
+```
+
+## Architecture
+
+```
+relations/
+├── __init__.py          # All exports
+├── crm.py               # Contact, ContactManager, Interaction
+├── network_analysis.py  # SocialGraph, GraphMetrics
+├── uor.py               # Universal Object Reference
+└── tests/               # Zero-Mock tests
 ```
 
 ## Navigation
 
-- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [Parent](../README.md)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

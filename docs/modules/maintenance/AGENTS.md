@@ -1,42 +1,65 @@
-# Tools Module — Agent Coordination
+# Agent Guidelines - Maintenance
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Tools Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Project maintenance utilities: dependency analysis, circular import detection, requirements consolidation, and deprecation management.
 
-- Tools operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **DependencyAnalyzer** — AST-based import scanner and circular dependency detector
+- **analyze_project_structure()** — Project directory and file analysis
+- **analyze_code_quality()** — Code quality metrics
+- **check_dependencies()** — Dependency validation
+- **dependency_consolidator** — Requirements file consolidation
+
+## Agent Instructions
+
+1. **Analyze first** — Run `DependencyAnalyzer` to understand import graph
+2. **Check violations** — Use `validate_dependency_hierarchy()` for layer violations
+3. **Consolidate deps** — Use consolidator to find scattered requirements.txt
+4. **Deprecation notices** — Add notices to legacy requirements.txt pointing to pyproject.toml
+5. **Log results** — Generate reports via `generate_report()`
+
+## Common Patterns
 
 ```python
-from codomyrmex.tools import *
+from codomyrmex.maintenance.dependency_analyzer import DependencyAnalyzer
+from codomyrmex.maintenance.analyze_project import (
+    analyze_project_structure,
+    analyze_code_quality,
+)
+from codomyrmex.maintenance.dependency_checker import check_dependencies
 
-# Agent uses tools capabilities
+# Analyze dependency graph
+analyzer = DependencyAnalyzer(".")
+analyzer.scan_all_modules()
+circular = analyzer.detect_circular_dependencies()
+violations = analyzer.validate_dependency_hierarchy()
+
+report = analyzer.generate_report()
+print(report)
+
+# Project structure analysis
+structure = analyze_project_structure()
+quality = analyze_code_quality()
+
+# Dependency validation
+deps = check_dependencies()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/tools/](../../../src/codomyrmex/tools/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+from codomyrmex.maintenance.dependency_analyzer import DependencyAnalyzer
 
-
-## Key Components
-
-- **`DependencyAnalyzer`** — Analyzes module dependencies for circular imports and hierarchy violations.
-- **`get_module_name()`** — Extract module name from file path.
-- **`get_dependency_location()`** — Determine where dependencies are located in pyproject.toml.
-- **`add_deprecation_notice()`** — Add deprecation notice to requirements.txt file.
-- **`main()`** — Main function.
-- **`analyze_project_structure()`** — Analyze the overall project structure.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tools -v
+analyzer = DependencyAnalyzer(".")
+result = analyzer.analyze()
+assert "modules" in result
+assert "circular_dependencies" in result
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

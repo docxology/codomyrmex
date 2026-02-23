@@ -1,5 +1,7 @@
 # Agents Guide: Cultural Dynamics
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `cultural_dynamics` submodule to understand the macro-environment in which you operate. Do not push against the `zeitgeist` unless you have overwhelming force; instead, ride the wave.

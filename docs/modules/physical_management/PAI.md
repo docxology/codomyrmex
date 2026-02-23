@@ -4,27 +4,39 @@
 
 ## Overview
 
-The Physical Management module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Physical Management module provides physical infrastructure management capabilities — server provisioning, hardware monitoring, environmental controls, and physical asset tracking for on-premise deployments.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/physical_management/PAI.md](../../../src/codomyrmex/physical_management/PAI.md)
+- Physical server provisioning and decommissioning
+- Hardware health monitoring (CPU, memory, disk, network)
+- Environmental controls (temperature, power)
+- Physical asset inventory and tracking
+- Capacity planning and resource forecasting
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Hardware monitors | Various | Physical system health tracking |
+| Asset managers | Various | Physical asset lifecycle |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Physical Management Contribution |
+|-------|-----------------------------------|
+| **OBSERVE** | Monitor hardware health and resource utilization |
+| **PLAN** | Capacity planning for physical infrastructure |
+| **EXECUTE** | Provision/decommission physical resources |
+| **VERIFY** | Validate hardware health and capacity |
+
+## Architecture Role
+
+**Specialized Layer** — Infrastructure management consumed by `cloud/` (hybrid deployments) and `deployment/` (on-premise releases).
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

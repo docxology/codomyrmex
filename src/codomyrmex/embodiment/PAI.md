@@ -1,37 +1,40 @@
 # Personal AI Infrastructure — Embodiment Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Embodiment module for Codomyrmex. This is an **Extended Layer** module.
+The Embodiment module provides interfaces for physical and robotic system integration — bridging AI agent reasoning with real-world actuators, sensors, and embodied interaction systems. It enables PAI agents to interact with IoT devices, robotic platforms, and physical simulations.
+
+> [!NOTE]
+> This module is being restructured. Core functionality remains available for backward compatibility.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.embodiment import ROS2Bridge, Transform3D, ros, sensors, actuators
-```
+### Physical System Integration
+
+- Hardware abstraction for sensor and actuator interfaces
+- Robot control protocol adapters
+- Physical state tracking and feedback loops
+- Simulation-to-real transfer utilities
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `ROS2Bridge` | Class | Ros2bridge |
-| `Transform3D` | Class | Transform3d |
-| `ros` | Function/Constant | Ros |
-| `sensors` | Function/Constant | Sensors |
-| `actuators` | Function/Constant | Actuators |
-| `transformation` | Function/Constant | Transformation |
+| Module API | Various | Physical system integration interfaces |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Embodiment Contribution |
-|-------|------------------------------|
-| **EXECUTE** | General module operations |
+|-------|--------------------------|
+| **OBSERVE** | Read physical sensor data and environment state |
+| **EXECUTE** | Send commands to actuators and physical systems |
+| **VERIFY** | Validate physical state matches expected outcomes |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Advanced domain-specific module for physical/robotic integration. Minimal dependencies.
 
 ## Navigation
 

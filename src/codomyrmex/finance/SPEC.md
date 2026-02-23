@@ -1,47 +1,43 @@
-# Finance - Functional Specification
+# Finance — Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Provide a robust, audit-ready financial system for AI agents to manage economic activities, track value flow, and ensure compliance.
-
-## Design Principles
-
-### Integrity
-
-- Double-entry accounting for all transactions
-- Immutable transaction logs
-- Cryptographic verification of ledger state
-
-### Compliance
-
-- Built-in tax estimation logic
-- Regulatory reporting formats
-
-## Architecture
-
-```mermaid
-graph TD
-    Ledger[Ledger Engine] --> Taxes[Tax Module]
-    Ledger --> Forecasting[Forecasting]
-    Payroll[Payroll] --> Ledger
-    Market[Market Module] --> Ledger
-```
+Complete financial management: double-entry bookkeeping, tax compliance, payroll, and financial forecasting.
 
 ## Functional Requirements
 
-1. **Ledger**: Record debit/credit pairs with atomic consistency.
-2. **Taxes**: Estimate tax obligations based on jurisdictional rules.
-3. **Payroll**: Manage recurring payments to agents and humans.
-4. **Forecasting**: Project runway based on spending patterns.
+### Ledger
 
-## Interface Contracts
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Ledger()` | Constructor | Create empty ledger |
+| `ledger.record(txn)` | `record(Transaction) → None` | Record a balanced transaction |
+| `ledger.trial_balance()` | `→ dict[str, Decimal]` | Compute trial balance |
 
-- `Ledger.record(transaction)`
-- `TaxEstimator.calculate(income, jurisdiction)`
-- `Forecaster.predict_cashflow(months)`
+### Transactions
+
+| Constraint | Description |
+|------------|-------------|
+| Immutability | Transactions cannot be modified after creation |
+| Balance | `debit_amount == credit_amount` (enforced at record time) |
+| Account naming | Must follow `Category:Subcategory` format |
+
+### Tax and Payroll
+
+| Interface | Description |
+|-----------|-------------|
+| `TaxCalculator(jurisdiction)` | Tax estimation for a given jurisdiction |
+| `PayrollProcessor()` | Employee payment processing and stub generation |
+| `Forecaster()` | Financial projection and trend modeling |
+
+## Non-Functional Requirements
+
+- **Precision**: All monetary values use `Decimal` (no floating point)
+- **Auditability**: Full transaction log with timestamps and audit trail
+- **Atomicity**: Ledger records are atomic — balanced or rejected
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [Parent](../SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

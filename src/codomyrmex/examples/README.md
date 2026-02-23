@@ -1,6 +1,6 @@
 # Examples Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Reference implementations, sample outputs, and learning resources.
 
@@ -47,7 +47,6 @@ Use these examples to:
 - Test parsing logic against known-good data
 - Learn module integration patterns
 
-
 ## Installation
 
 ```bash
@@ -59,7 +58,6 @@ Or for development:
 ```bash
 uv sync
 ```
-
 
 ## Documentation
 

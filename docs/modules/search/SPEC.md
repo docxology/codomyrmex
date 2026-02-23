@@ -1,55 +1,56 @@
-# Search — Functional Specification
+# Search - Functional Specification
 
-**Module**: `codomyrmex.search`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Full-text search, semantic search, and indexing utilities.
+Search module providing full-text search, fuzzy matching, and semantic search capabilities for document retrieval.
 
-## 2. Architecture
+## Functional Requirements
 
-### Components
+- Full-text indexing and search
+- Fuzzy string matching
+- Query parsing with operators
+- Result ranking and scoring
+- Highlight matching terms
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Document` | Class | A searchable document. |
-| `SearchResult` | Class | A search result. |
-| `Tokenizer` | Class | Abstract tokenizer. |
-| `SimpleTokenizer` | Class | Simple whitespace and punctuation tokenizer. |
-| `SearchIndex` | Class | Abstract search index. |
-| `InMemoryIndex` | Class | In-memory inverted index with TF-IDF scoring. |
-| `FuzzyMatcher` | Class | Fuzzy string matching utilities. |
-| `QueryParser` | Class | Parse search queries with operators. |
-| `create_index()` | Function | Create a search index. |
-| `quick_search()` | Function | Quick search over a list of strings. |
-| `tokenize()` | Function | tokenize |
-| `tokenize()` | Function | tokenize |
-| `index()` | Function | Index a document. |
+## Core Classes
 
-### Source Files
+| Class | Description |
+|-------|-------------|
+| `SearchIndex` | Abstract search index |
+| `InMemoryIndex` | In-memory full-text index |
+| `FuzzyMatcher` | Fuzzy string matching |
+| `QueryParser` | Parse search queries |
+| `Tokenizer` | Text tokenization |
+| `SearchResult` | Search result with score |
 
-- `semantic.py`
+## Key Functions
 
-## 3. Dependencies
+| Function | Description |
+|----------|-------------|
+| `create_index()` | Create search index |
+| `quick_search(query, corpus)` | Simple search |
 
-See `src/codomyrmex/search/__init__.py` for import dependencies.
+## Query Operators
 
-## 4. Public API
+- `AND`, `OR`, `NOT` — Boolean operators
+- `"phrase"` — Exact phrase match
+- `field:value` — Field-specific search
 
-```python
-from codomyrmex.search import Document, SearchResult, Tokenizer, SimpleTokenizer, SearchIndex
-```
+## Design Principles
 
-## 5. Testing
+1. **Fast Indexing**: Efficient incremental updates
+2. **Relevance**: TF-IDF and BM25 ranking
+3. **Flexibility**: Custom analyzers and tokenizers
+4. **Scalability**: Handle large document sets
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k search -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/search/)

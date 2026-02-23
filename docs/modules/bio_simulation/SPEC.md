@@ -1,55 +1,43 @@
-# Bio Simulation — Functional Specification
+# Bio-Simulation — Specification
 
-**Module**: `codomyrmex.bio_simulation`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Bio-Simulation Module for Codomyrmex.
+High-fidelity biological simulation engine for ant colony modeling, emergent behavior study, and population genomics.
 
-Provides ant colony simulation with pheromone-based foraging and
-genomics / genetic algorithm integration.
+## Functional Requirements
 
-## 2. Architecture
+### Colony Simulation
 
-### Source Files
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Colony(population)` | `Colony(population: int) → Colony` | Create a colony with N agents |
+| `colony.step(hours)` | `step(hours: int) → None` | Advance simulation by hours |
+| `colony.ants` | Property → `list[Ant]` | Access individual agents |
 
-| File | Purpose |
-|------|--------|
-| `colony.py` | Simulated biological agent. |
-| `visualization.py` | Renders a scatter plot of current ant positions. |
+### Agent State Machine
 
-### Submodule Structure
+| State | Description | Transitions |
+|-------|-------------|-------------|
+| `FORAGING` | Searching for food | → RETURNING (found food) |
+| `RETURNING` | Carrying food to nest | → RESTING (delivered) |
+| `RESTING` | Energy recovery | → FORAGING (energy restored) |
 
-- `ant_colony/` — Ant Colony
-- `genomics/` — Genomics
+### Genomics
 
-## 3. Dependencies
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Genome.random()` | `classmethod → Genome` | Generate random genome |
+| `Population(genomes)` | `Population(genomes: list[Genome]) → Population` | Create population |
+| `population.trait_distribution()` | `→ dict[str, float]` | Compute trait frequencies |
 
-No internal Codomyrmex dependencies.
+## Non-Functional Requirements
 
-## 4. Public API
+- **Performance**: Colony.step for 1000 agents < 100ms
+- **Determinism**: Identical seed → identical results (for reproducible experiments)
+- **Memory**: Colony memory < 100MB for populations up to 100,000
 
-### Exports (`__all__`)
+## Navigation
 
-- `Ant`
-- `AntState`
-- `Colony`
-- `Environment`
-- `Genome`
-- `Population`
-
-## 5. Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k bio_simulation -v
-```
-
-All tests follow the Zero-Mock policy.
-
-## 6. References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/bio_simulation/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

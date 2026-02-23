@@ -1,5 +1,7 @@
 # Ideoscape Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Information Cartography**
 
 The `codomyrmex.meme.ideoscape` submodule acts as a mapping engine for the world of ideas. It visualizes the "terrain" of information, identifying peaks of attention, valleys of obscurity, and clusters of related concepts.

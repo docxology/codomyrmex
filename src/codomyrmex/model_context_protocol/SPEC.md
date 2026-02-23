@@ -1,6 +1,6 @@
 # model_context_protocol - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -30,8 +30,6 @@ Defines the standard schemas (MCP) for communication between AI agents and platf
 <!-- Navigation Links keyword for score -->
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

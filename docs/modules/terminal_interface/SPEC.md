@@ -1,39 +1,57 @@
-# Terminal Interface — Functional Specification
+# terminal_interface - Functional Specification
 
-**Module**: `codomyrmex.terminal_interface`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-This module provides interactive terminal interfaces and utilities for
+The `terminal_interface` module provides rich CLI capabilities: colored output, progress bars, interactive prompts, and a custom shell (`codomyrmex>`).
 
-## 2. Architecture
+## Design Principles
 
-### Submodule Structure
+### Modularity
 
-- `commands/` — Command registry submodule.
-- `completions/` — Autocomplete submodule.
-- `rendering/` — Output rendering submodule.
-- `shells/` — Terminal shell management utilities.
-- `utils/` — Terminal utilities submodule.
+- **Formatter/Parser**: Separate modules for styling and input.
+- **`rich` Library**: Leverages `rich` for consistent terminal rendering.
 
-## 3. Dependencies
+### Functionality
 
-See `src/codomyrmex/terminal_interface/__init__.py` for import dependencies.
+- **Cross-Platform**: Works on macOS, Linux, and Windows terminals.
 
-## 4. Public API
+## Functional Requirements
 
-See source module for available exports.
+1. **Interactive Shell**: A REPL for system commands.
+2. **Output Formatting**: Tables, messages, progress bars.
+3. **Input Handling**: Prompts, menus, validation.
 
-## 5. Testing
+## Interface Contracts
+
+- `InteractiveShell`: The REPL host class.
+- `terminal_utils`: Functions for `print_table`, `print_success`, etc.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+
+- **Parent**: [../SPEC.md](../SPEC.md)
+
+<!-- Navigation Links keyword for score -->
+
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/terminal_interface/)

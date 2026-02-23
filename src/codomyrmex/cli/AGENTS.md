@@ -1,5 +1,7 @@
 # Agent Guidelines - CLI
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Command-line interface framework with argument parsing and subcommands.

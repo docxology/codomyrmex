@@ -1,5 +1,7 @@
 # Agent Guidelines - Edge Computing
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Edge node management, function deployment, and synchronization.

@@ -4,27 +4,40 @@
 
 ## Overview
 
-The Model Ops module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Model Ops (MLOps) module provides model lifecycle management — versioning, registering, deploying, and monitoring machine learning and AI models in production.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/model_ops/PAI.md](../../../src/codomyrmex/model_ops/PAI.md)
+- Model versioning and registry
+- Model deployment and serving
+- A/B testing for model variants
+- Performance monitoring and drift detection
+- Model rollback and promotion
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Model registry | Various | Model versioning and storage |
+| Deployment managers | Various | Model serving and scaling |
+| Monitoring | Various | Drift detection and alerting |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Model Ops Contribution |
+|-------|-------------------------|
+| **PLAN** | Select model version for deployment |
+| **EXECUTE** | Deploy and serve models |
+| **VERIFY** | Monitor model performance and detect drift |
+| **LEARN** | Register new model versions from training runs |
+
+## Architecture Role
+
+**Service Layer** — Consumes `llm/` (model management), `performance/` (benchmarking). Interface between model development and production serving.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

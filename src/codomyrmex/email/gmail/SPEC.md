@@ -1,5 +1,7 @@
 # Google Mail Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Design Considerations
 
 The `GmailProvider` class provides a translation layer between the `google-api-python-client` DTOs and the system's `EmailMessage` models.

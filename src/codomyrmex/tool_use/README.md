@@ -1,6 +1,6 @@
 # Tool Use Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Registry, composition, and validation infrastructure for tool-based workflows. Provides a central registry for managing tools, a chain abstraction for sequential tool pipelines, and JSON-schema-like input/output validation utilities.
 

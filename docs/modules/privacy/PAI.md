@@ -4,37 +4,65 @@
 
 ## Overview
 
-The Privacy module supports Personal AI Infrastructure through personal data protection with scrubbing and anonymization.
-
-## Local-First AI
-
-All data processing runs locally; PII detection and removal without external services
+The Privacy module provides metadata scrubbing ("Crumb Cleaning") and anonymous communication ("Mixnet Routing") for AI agent operations. It ensures that sensitive data does not leak through agent traces, logs, or network requests. Part of the Secure Cognitive Agent suite.
 
 ## PAI Capabilities
 
-- Local PII detection and scrubbing
-- Privacy-preserving data sharing
-- Mixnet-based communication
+### Crumb Cleaning (Data Sanitization)
 
-## Detailed PAI Documentation
+```python
+from codomyrmex.privacy import CrumbCleaner
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/privacy/PAI.md](../../../src/codomyrmex/privacy/PAI.md)
+cleaner = CrumbCleaner()
+# Scrub PII, API keys, tokens from agent output
+# Remove tracking metadata from documents
+# Sanitize log entries before persistence
+```
 
-## Configuration
+### Mixnet Proxying (Anonymous Communication)
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.privacy import MixnetProxy
 
-## Signposting
+proxy = MixnetProxy()
+# Route API requests through anonymizing mixnets
+# Strip identifying headers and metadata
+# Prevent correlation of agent requests
+```
 
-### Navigation
+### CLI Integration
+
+```python
+from codomyrmex.privacy import cli_commands
+
+commands = cli_commands()
+# Available: scan (detect privacy issues), report (generate privacy report)
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `CrumbCleaner` | Class | PII and metadata scrubbing engine |
+| `MixnetProxy` | Class | Anonymous communication proxy |
+| `cli_commands` | Function | CLI commands for privacy scanning and reporting |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Privacy Contribution |
+|-------|----------------------|
+| **OBSERVE** | Scan codebase and agent traces for data leaks |
+| **EXECUTE** | Route sensitive API calls through mixnet proxies |
+| **VERIFY** | Verify that agent outputs are free of PII and tracking metadata |
+| **LEARN** | Sanitize learning data before persistence to memory |
+
+## Architecture Role
+
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `agents/`, `logging_monitoring/`, and `agentic_memory/`.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,6 +1,6 @@
 # Search Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Full-text search with TF-IDF, fuzzy matching, and query parsing.
 

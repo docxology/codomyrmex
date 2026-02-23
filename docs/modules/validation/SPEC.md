@@ -1,57 +1,131 @@
-# Validation — Functional Specification
+# validation - Functional Specification
 
-**Module**: `codomyrmex.validation`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Validation module for Codomyrmex.
+Validation module providing unified input validation framework with support for JSON Schema, Pydantic models, and custom validators. Consolidates validation logic currently scattered across modules.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `validate()` | Function | Validate data against a schema. |
-| `is_valid()` | Function | Check if data is valid against a schema. |
-| `get_errors()` | Function | Get validation errors for data. |
+- Schema-agnostic validation interface
+- Support for multiple validation libraries
+- Pluggable validator system
 
-### Submodule Structure
+### Internal Coherence
 
-- `rules/` — Rules Submodule
-- `sanitizers/` — Sanitizers Submodule
-- `schemas/` — Validation Schemas Module
+- Unified validation error format
+- Consistent validation patterns
+- Integration with error handling
 
-### Source Files
+### Parsimony
 
-- `contextual.py`
-- `examples_validator.py`
-- `exceptions.py`
-- `parser.py`
-- `summary.py`
-- `validation_manager.py`
-- `validator.py`
+- Essential validation operations
+- Minimal dependencies
+- Focus on common validation scenarios
 
-## 3. Dependencies
+### Functionality
 
-See `src/codomyrmex/validation/__init__.py` for import dependencies.
+- Working implementations for common validation needs
+- Support for nested validation
+- Custom validator registration
 
-## 4. Public API
+### Testing
+
+- Unit tests for all validators
+- Integration tests with real schemas
+- Edge case validation
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each validator type
+- Schema format documentation
+
+## Architecture
+
+```mermaid
+graph TD
+    ValidatorInterface[Validator Interface]
+    JSONSchemaValidator[JSON Schema Validator]
+    PydanticValidator[Pydantic Validator]
+    CustomValidator[Custom Validator]
+    ValidationManager[Validation Manager]
+    
+    ValidatorInterface --> JSONSchemaValidator
+    ValidatorInterface --> PydanticValidator
+    ValidatorInterface --> CustomValidator
+    ValidationManager --> ValidatorInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **Schema Validation**: Validate data against JSON Schema
+2. **Model Validation**: Validate against Pydantic models
+3. **Custom Validators**: Register and use custom validation functions
+4. **Error Reporting**: Structured validation error messages
+5. **Nested Validation**: Support for complex nested structures
+
+### Integration Points
+
+- `config_management/` - Configuration validation
+- `api/` - API request/response validation
+- `documents/` - Document schema validation
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Validator-specific tests
+- Schema validation tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Validator Interface
 
 ```python
-from codomyrmex.validation import validate, is_valid, get_errors
+class Validator:
+    def validate(data: Any, schema: Any) -> ValidationResult
+    def is_valid(data: Any, schema: Any) -> bool
+    def get_errors(data: Any, schema: Any) -> list[ValidationError]
 ```
 
-## 5. Testing
+## Implementation Guidelines
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k validation -v
-```
+### Validator Implementation
 
-## References
+1. Implement Validator interface for each type
+2. Provide structured error messages
+3. Support nested validation
+4. Handle validation errors gracefully
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/validation/)
+### Integration
+
+1. Integrate with config_management
+2. Add validation to API endpoints
+3. Support document validation
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [config_management](../config_management/AGENTS.md), [api](../api/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->
+

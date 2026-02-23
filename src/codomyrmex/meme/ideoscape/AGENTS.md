@@ -1,5 +1,7 @@
 # Agents Guide: Ideoscape
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `ideoscape` submodule to orient yourself within the broader informational environment. Treat ideas as physical terrain.

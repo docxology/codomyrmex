@@ -1,9 +1,8 @@
 # Edge Computing Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Edge deployment, IoT gateways, and latency-sensitive function execution.
-
 
 ## Installation
 
@@ -88,13 +87,11 @@ result = runtime.invoke("sensor-proc", {"temp": 25})
 | `SyncState` | Versioned state with checksum |
 | `EdgeExecutionError` | Error during edge execution |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
 ```
-
 
 ## Documentation
 

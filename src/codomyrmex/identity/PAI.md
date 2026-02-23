@@ -1,35 +1,58 @@
 # Personal AI Infrastructure — Identity Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Identity Module. This is an **Extended Layer** module.
+The Identity module provides multi-persona management and bio-cognitive verification for AI agents. It enables agents to maintain distinct identities, verify user biometrics, and manage persona-specific contexts. Part of the Secure Cognitive Agent suite.
 
 ## PAI Capabilities
 
+### Multi-Persona Management
+
 ```python
-from codomyrmex.identity import Persona, VerificationLevel, IdentityManager
+from codomyrmex.identity import IdentityManager, Persona, VerificationLevel
+
+manager = IdentityManager()
+
+# Create and manage distinct personas
+persona = Persona(
+    name="researcher",
+    verification_level=VerificationLevel.VERIFIED
+)
+manager.register(persona)
+```
+
+### Bio-Cognitive Verification
+
+```python
+from codomyrmex.identity import BioCognitiveVerifier
+
+verifier = BioCognitiveVerifier()
+# Verify user identity through multi-factor bio-cognitive challenges
+# Supports behavioral biometrics, knowledge proofs, and cognitive patterns
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `Persona` | Class | Persona |
-| `VerificationLevel` | Class | Verificationlevel |
-| `IdentityManager` | Class | Identitymanager |
-| `BioCognitiveVerifier` | Class | Biocognitiveverifier |
+| `IdentityManager` | Class | Multi-persona lifecycle management |
+| `Persona` | Class | Identity data model with verification state |
+| `VerificationLevel` | Enum | UNVERIFIED, VERIFIED, TRUSTED levels |
+| `BioCognitiveVerifier` | Class | Multi-factor identity verification |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Identity Contribution |
-|-------|------------------------------|
-| **VERIFY** | Validation and quality checks |
+|-------|------------------------|
+| **OBSERVE** | Identify current user and select appropriate persona context |
+| **EXECUTE** | Gate sensitive operations behind identity verification |
+| **VERIFY** | Validate agent actions against persona permissions |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `auth/` for credential binding and `agents/pai/` trust gateway.
 
 ## Navigation
 

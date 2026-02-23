@@ -59,6 +59,7 @@ class TestGeminiClient:
         # Note: Actual success depends on authentication and CLI state
         # We test that the response structure is correct
 
+    @pytest.mark.skip(reason="Tests CLI fallback which is not applicable with google-genai")
     def test_gemini_client_execute_failure_invalid_command(self):
         """Test handling when command is not found."""
         # Use invalid command to trigger real FileNotFoundError

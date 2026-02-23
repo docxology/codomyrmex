@@ -1,5 +1,7 @@
 # Audio Module - AI Agent Guidelines
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Purpose
 
 The audio module enables AI agents to:

@@ -1,50 +1,132 @@
-# Compression — Functional Specification
+# compression - Functional Specification
 
-**Module**: `codomyrmex.compression`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Compression module for Codomyrmex.
+Compression module providing data compression utilities and archive handling (zip, tar, etc.). Integrates with `documents` and `deployment` modules.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `compress()` | Function | Compress data. |
-| `decompress()` | Function | Decompress data. |
-| `get_compressor()` | Function | Get a compressor instance. |
-| `compress_file()` | Function | Compress a file. |
-| `decompress_file()` | Function | Decompress a file. |
+- Format-agnostic compression interface
+- Support for multiple compression formats
+- Pluggable compression system
 
-### Source Files
+### Internal Coherence
 
-- `archive_manager.py`
-- `compressor.py`
-- `parallel.py`
-- `zstd_compressor.py`
+- Unified compression/decompression
+- Consistent archive patterns
+- Integration with file operations
 
-## 3. Dependencies
+### Parsimony
 
-See `src/codomyrmex/compression/__init__.py` for import dependencies.
+- Essential compression operations
+- Minimal dependencies
+- Focus on common formats
 
-## 4. Public API
+### Functionality
+
+- Working implementations for common formats
+- Support for archive creation/extraction
+- Compression level configuration
+
+### Testing
+
+- Unit tests for all formats
+- Integration tests with archives
+- Compression/decompression round-trip tests
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each format
+- Archive format documentation
+
+## Architecture
+
+```mermaid
+graph TD
+    CompressionInterface[Compression Interface]
+    ZipCompressor[ZIP Compressor]
+    TarCompressor[TAR Compressor]
+    GzipCompressor[Gzip Compressor]
+    ArchiveManager[Archive Manager]
+    
+    CompressionInterface --> ZipCompressor
+    CompressionInterface --> TarCompressor
+    CompressionInterface --> GzipCompressor
+    ArchiveManager --> CompressionInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **Compress**: Compress data to various formats
+2. **Decompress**: Decompress data from various formats
+3. **Archive**: Create and extract archives
+4. **Streaming**: Support streaming compression
+5. **Levels**: Configurable compression levels
+
+### Integration Points
+
+- `documents/` - Document compression
+- `deployment/` - Build artifact compression
+- `cache/` - Cache compression
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Format-specific tests
+- Round-trip compression tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Compression Interface
 
 ```python
-from codomyrmex.compression import compress, decompress, get_compressor, compress_file, decompress_file
+class Compressor:
+    def compress(data: bytes, level: int = 6) -> bytes
+    def decompress(data: bytes) -> bytes
+    def create_archive(files: list[Path], output: Path) -> bool
+    def extract_archive(archive: Path, output: Path) -> bool
 ```
 
-## 5. Testing
+## Implementation Guidelines
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k compression -v
-```
+### Compression Implementation
 
-## References
+1. Implement Compression interface for each format
+2. Handle compression/decompression errors
+3. Support streaming operations
+4. Provide archive management
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/compression/)
+### Integration
+
+1. Integrate with documents module
+2. Add compression to deployment
+3. Support cache compression
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [documents](../documents/AGENTS.md), [deployment](../deployment/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->
+

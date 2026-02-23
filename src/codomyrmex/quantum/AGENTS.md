@@ -1,5 +1,7 @@
 # Agent Guidelines - Quantum
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Quantum computing simulation with gates, circuits, and algorithms.

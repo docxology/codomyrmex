@@ -1,44 +1,75 @@
 # Personal AI Infrastructure — Compression Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Compression module for Codomyrmex. This is an **Extended Layer** module.
+The Compression module provides multi-format data compression with gzip, zstd, and parallel compression engines. It includes archive management, streaming compression, and convenient file-level APIs for reducing storage and transfer costs.
 
 ## PAI Capabilities
 
+### Compression API
+
 ```python
-from codomyrmex.compression import Compressor, ArchiveManager, CompressionError, compress, decompress, get_compressor
+from codomyrmex.compression import compress, decompress, get_compressor
+
+# Compress/decompress data in memory
+compressed = compress(data, level=6, format="gzip")
+original = decompress(compressed, format="gzip")
+
+# Get a specific compressor engine
+compressor = get_compressor("zstd")
+```
+
+### File Operations
+
+```python
+from codomyrmex.compression import compress_file, decompress_file
+
+# Compress/decompress files on disk
+output_path = compress_file("data.json", format="gzip", level=6)
+original_path = decompress_file("data.json.gz")
+```
+
+### Advanced Engines
+
+```python
+from codomyrmex.compression import ZstdCompressor, ParallelCompressor, ArchiveManager
+
+# Zstandard for high-performance compression
+zstd = ZstdCompressor(level=3)
+
+# Parallel compression for large datasets
+para = ParallelCompressor(workers=4, format="gzip")
+
+# Archive management (tar, zip)
+archive = ArchiveManager()
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `Compressor` | Class | Compressor |
-| `ArchiveManager` | Class | Archivemanager |
-| `CompressionError` | Class | Compressionerror |
-| `ZstdCompressor` | Class | Zstdcompressor |
-| `ParallelCompressor` | Class | Parallelcompressor |
-| `compress` | Function/Constant | Compress |
-| `decompress` | Function/Constant | Decompress |
-| `get_compressor` | Function/Constant | Get compressor |
-| `compress_data` | Function/Constant | Compress data |
-| `decompress_data` | Function/Constant | Decompress data |
-| `auto_decompress` | Function/Constant | Auto decompress |
-| `compress_file` | Function/Constant | Compress file |
-| `decompress_file` | Function/Constant | Decompress file |
+| `compress` | Function | Compress bytes data |
+| `decompress` | Function | Decompress bytes data |
+| `compress_file` | Function | Compress a file on disk |
+| `decompress_file` | Function | Decompress a file on disk |
+| `get_compressor` | Function | Get engine by format |
+| `ArchiveManager` | Class | Archive creation and extraction |
+| `ZstdCompressor` | Class | Zstandard compression engine |
+| `ParallelCompressor` | Class | Multi-threaded compression |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Compression Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
+|-------|--------------------------|
+| **BUILD** | Compress build artifacts and deployment packages |
+| **EXECUTE** | Stream-compress large data transfers |
+| **LEARN** | Compress memory snapshots and log archives |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Core Layer** — Consumed by `serialization/`, `containerization/`, `ci_cd_automation/`, and `agentic_memory/` for efficient data storage.
 
 ## Navigation
 

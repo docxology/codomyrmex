@@ -1,5 +1,7 @@
 # deployment - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To enable robust, automated, and observable software and model deployments, reducing human error and downtime through standardized release strategies.

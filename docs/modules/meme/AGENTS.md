@@ -1,5 +1,7 @@
 # Meme Module — Agent Coordination
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 codomyrmex.meme — Unified Memetic Warfare & Information Dynamics Module.
@@ -94,7 +96,7 @@ for meme in memes:
 
 ## Integration Points
 
-- **Source**: [src/codomyrmex/meme/](../../../src/codomyrmex/meme/)
+- **Docs**: [Module Documentation](../../../docs/modules/meme/README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **PAI**: [PAI.md](PAI.md)
 

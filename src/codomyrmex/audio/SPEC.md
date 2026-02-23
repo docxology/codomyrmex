@@ -1,5 +1,7 @@
 # Audio Module Technical Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Overview
 
 The audio module provides speech-to-text (STT) and text-to-speech (TTS) capabilities through a provider-based architecture that allows flexibility between offline and online processing.

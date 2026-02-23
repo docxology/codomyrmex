@@ -1,33 +1,56 @@
 # Personal AI Infrastructure — Defense Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Defense Module. This is an **Extended Layer** module.
+The Defense module provides active countermeasures and "Rabbit Hole" containment for AI safety. It detects and mitigates adversarial prompts, infinite loops, and resource exhaustion attacks targeting AI agents. Part of the Secure Cognitive Agent suite.
+
+> [!NOTE]
+> This module is deprecated in favor of `security.ai_safety`. Imports are forwarded for backward compatibility.
 
 ## PAI Capabilities
 
+### Active Defense
+
 ```python
-from codomyrmex.defense import ActiveDefense, RabbitHole
+from codomyrmex.defense import ActiveDefense
+
+defense = ActiveDefense()
+# Monitor agent behavior for anomalies
+# Detect adversarial prompt injection attempts
+# Enforce resource limits on agent execution
+```
+
+### Rabbit Hole Containment
+
+```python
+from codomyrmex.defense import RabbitHole
+
+containment = RabbitHole()
+# Detect when agents enter infinite reasoning loops
+# Automatically break out of unproductive cycles
+# Log containment events for post-mortem analysis
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `ActiveDefense` | Class | Activedefense |
-| `RabbitHole` | Class | Rabbithole |
+| `ActiveDefense` | Class | Adversarial detection and active countermeasures |
+| `RabbitHole` | Class | Infinite loop detection and cycle-breaking containment |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Defense Contribution |
-|-------|------------------------------|
-| **EXECUTE** | General module operations |
+|-------|----------------------|
+| **EXECUTE** | Monitor agent execution for adversarial behavior; enforce resource limits |
+| **VERIFY** | Validate that agent actions are within safety boundaries |
+| **LEARN** | Log containment events and defense activations for improving safety |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Being migrated to `security.ai_safety`.
 
 ## Navigation
 

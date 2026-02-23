@@ -64,7 +64,7 @@ except ImportError:
             pass
 
         def create_error_context(**kwargs):
-            pass
+            return dict(kwargs)
     pass
 
 @dataclass

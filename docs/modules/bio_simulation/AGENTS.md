@@ -1,63 +1,37 @@
-# Bio Simulation Module — Agent Coordination
+# Agent Instructions for `codomyrmex.bio_simulation`
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Bio-Simulation Module for Codomyrmex.
+## Context
 
-Provides ant colony simulation with pheromone-based foraging and
-genomics / genetic algorithm integration.
+The Bio-Simulation module provides high-fidelity ant colony simulation with individual agent behavior, pheromone signaling, and population genomics. It is used for studying emergent behavior patterns that inform the Codomyrmex agent architecture.
 
-## Key Capabilities
+## Usage Guidelines
 
-- **`Colony`** — Ant colony simulation environment
-- **`Ant`** — Individual agent in simulation
-- **`PheromoneGrid`** — Environmental signaling layer
-- `ant_colony/` — Eusocial behavior logic
-- `genomics/` — Gene expression and trait mapping
+1. **Importing**: Import from the module root.
 
-## Agent Usage Patterns
+   ```python
+   from codomyrmex.bio_simulation import Colony, Ant, AntState, Environment, Genome, Population
+   ```
 
-```python
-from codomyrmex.bio_simulation import Colony
+2. **Colony Simulation**: Create colonies with `Colony(population=N)` and advance time with `colony.step(hours=H)`. Each step processes agent state machines, pheromone diffusion, and resource depletion.
 
-colony = Colony(population=1000)
-colony.step(hours=24)
-```
+3. **Genomics**: Use `Genome.random()` for synthetic genomes. `Population` tracks allele frequencies and trait distributions across generations.
 
-## Key Components
+4. **Zero-Mock Policy**: Tests must instantiate real `Colony` and `Population` objects — no mocking of simulation state. Use small populations (N < 100) for test speed.
 
-| Export | Type |
-|--------|------|
-| `Ant` | Public API |
-| `AntState` | Public API |
-| `Colony` | Public API |
-| `Environment` | Public API |
-| `Genome` | Public API |
-| `Population` | Public API |
+5. **Performance**: Colony simulation is CPU-bound. For populations > 10,000, consider using `step(hours=1)` increments instead of large time jumps.
 
-## Source Files
+## Key Files
 
-| File | Description |
-|------|-------------|
-| `colony.py` | Simulated biological agent. |
-| `visualization.py` | Renders a scatter plot of current ant positions. |
+| File | Purpose |
+|------|---------|
+| `ant_colony/colony.py` | Colony lifecycle and population dynamics |
+| `ant_colony/ant.py` | Individual agent behavior and state machine |
+| `ant_colony/environment.py` | Spatial environment and resource management |
+| `genomics/genome.py` | Genome representation and expression |
+| `genomics/population.py` | Population genetics simulation |
 
-## Submodules
+## Navigation
 
-- `ant_colony/` — Ant Colony
-- `genomics/` — Genomics
-
-## Integration Points
-
-- **Source**: [src/codomyrmex/bio_simulation/](../../../src/codomyrmex/bio_simulation/)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k bio_simulation -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

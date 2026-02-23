@@ -1,39 +1,71 @@
-# Model Ops Module — Agent Coordination
+# Agent Guidelines - Model Ops
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Model Operations module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+ML model lifecycle: training, feature engineering, optimization, deployment, and versioning.
 
-- **Dataset**: A dataset for ML model operations.
-- **DatasetSanitizer**: Utilities for cleaning and filtering datasets.
-- **FineTuningJob**: Fine-tuning job management.
-- **Evaluator**: Model output evaluator with customizable metrics.
-- `exact_match_metric()`: Calculate exact match ratio (strips whitespace before comparison).
-- `length_ratio_metric()`: Calculate average length ratio.
-- `validate()`: Validate the dataset.
+## Key Classes
 
-## Agent Usage Patterns
+- **ModelRegistry** — Model versioning and storage management
+- **FeatureStore** — Centralized feature and embedding management
+- **ModelEvaluator** — Comprehensive model performance verification
+- **InferenceOptimizer** — Latency and cost reduction toolkit
+- **FineTuningJob** — Managed fine-tuning orchestration
+
+## Agent Instructions
+
+1. **Feature Reuse** — Always check the `FeatureStore` before regenerating embeddings or features
+2. **Mandatory Evaluation** — Run `ModelEvaluator` on all new models before registration
+3. **Optimize for Production** — Apply `InferenceOptimizer` tweaks (quantization, etc.) for high-traffic models
+4. **registry.register** — Use the registry for all model versioning to ensure reproducibility
+
+## Common Patterns
 
 ```python
-from codomyrmex.model_ops import Dataset
+from codomyrmex.model_ops import (
+    ModelRegistry, FeatureStore, ModelEvaluator, InferenceOptimizer
+)
 
-# Agent initializes model ops
-instance = Dataset()
+# 1. Feature Engineering
+fs = FeatureStore()
+fs.push_features("user_123", {"embedding": [0.1, 0.2, ...]})
+
+# 2. Evaluation
+evaluator = ModelEvaluator()
+results = evaluator.evaluate(model_id="v1_candidate", test_dataset=ds)
+print(f"Accuracy: {results['accuracy']}")
+
+# 3. Optimization
+optimizer = InferenceOptimizer()
+optimized_model = optimizer.optimize("v1_candidate", target="latency")
+
+# 4. Registration
+registry = ModelRegistry()
+registry.register(
+    name="production_model",
+    version="2.1.0",
+    model_path=optimized_model,
+    metadata={"eval_results": results}
+)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/model_ops/](../../../src/codomyrmex/model_ops/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify registry
+registry = ModelRegistry()
+registry.register("test", "1.0", dummy_model)
+loaded = registry.load("test", "1.0")
+assert loaded is not None
 
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
+# Verify experiment tracking
+with ExperimentTracker.start("test") as exp:
+    exp.log_metrics({"acc": 0.9})
+    assert exp.get_metrics()["acc"] == 0.9
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

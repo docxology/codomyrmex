@@ -1,5 +1,7 @@
 # Memetics Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **The Core Physics of Ideas**
 
 The `codomyrmex.meme.memetics` submodule provides the foundational classes and logic for the entire meme module. It treats memes as discrete units of cultural transmission, analogous to genes in biology, subject to variation, selection, and retention.

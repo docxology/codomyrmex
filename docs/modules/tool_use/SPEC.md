@@ -1,7 +1,8 @@
 # Tool Use — Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.tool_use`  
-**Version**: v1.0.0  
 **Status**: Active
 
 ## 1. Overview
@@ -52,4 +53,4 @@ All tests follow the Zero-Mock policy.
 
 - [README.md](README.md) — Human-readable documentation
 - [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/tool_use/)
+- [Docs](../../../docs/modules/tool_use/)

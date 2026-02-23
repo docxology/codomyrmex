@@ -1,62 +1,51 @@
 # Personal AI Infrastructure — Search Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Search module provides PAI integration for codebase search and retrieval, enabling AI agents to find relevant code and documentation.
+The Search module provides code pattern identification, full-text search, and fuzzy matching for codebase exploration. It powers the PAI Algorithm's OBSERVE phase by enabling agents to find relevant code, patterns, and documentation across the project.
 
 ## PAI Capabilities
 
-### Codebase Search
+### Code Search
 
-Enable AI agents to search code:
+- Regex-based pattern search across source files
+- File type filtering (Python, JavaScript, Markdown, etc.)
+- Result ranking by relevance
+- Context-aware snippet extraction
 
-```python
-from codomyrmex.search import SearchIndex, FuzzyMatcher
+### Fuzzy Matching
 
-# Create index
-index = SearchIndex()
-index.add_documents(code_files)
+- Approximate string matching for typo-tolerant search
+- File path fuzzy matching for navigation
+- Symbol name fuzzy matching for codebase exploration
 
-# Search for relevant code
-results = index.search(
-    "authentication middleware",
-    limit=10
-)
+## Key Exports
 
-for result in results:
-    print(f"{result.file}:{result.line} (score: {result.score:.2f})")
-```
+| Export | Type | Purpose |
+|--------|------|---------|
+| Search functions | Various | Pattern matching, full-text, fuzzy search |
 
-### Semantic Search
+## PAI Algorithm Phase Mapping
 
-Combine with embeddings for semantic search:
+| Phase | Search Contribution |
+|-------|----------------------|
+| **OBSERVE** | Find relevant code, files, and patterns in the codebase |
+| **THINK** | Search results inform reasoning about relevant context |
+| **VERIFY** | Search for potential issues and verify completeness of changes |
 
-```python
-from codomyrmex.search import SemanticSearcher
-from codomyrmex.vector_store import VectorStore
+## MCP Integration
 
-# Semantic search
-searcher = SemanticSearcher(
-    vector_store=VectorStore(),
-    embedding_model="code-bert"
-)
+The `search_code` MCP tool is powered by this module — regex search across code files with type filtering.
 
-# Find semantically similar code
-similar = searcher.find_similar(
-    "function that validates email addresses"
-)
-```
+## Architecture Role
 
-## PAI Integration Points
-
-| Component | PAI Use Case |
-|-----------|-------------|
-| `SearchIndex` | Fast text search |
-| `FuzzyMatcher` | Fuzzy matching |
-| `SemanticSearcher` | AI-powered search |
+**Core Layer** — Primary codebase exploration tool consumed by all agent types. Used by `agents/` (Explore subagent), `documents/` (content search), and MCP `search_code` tool.
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

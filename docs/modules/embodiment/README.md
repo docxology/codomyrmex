@@ -1,54 +1,69 @@
-# Embodiment Module Documentation
+# Embodiment Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+Robotics integration with ROS2, sensors, actuators, and 3D transforms.
 
-The Embodiment module provides physical and robotic system integration capabilities for Codomyrmex. It bridges digital systems with the physical world through sensor and actuator interfaces, ROS2 communication, and 3D spatial transformations. This module enables applications that interact with hardware devices, robotic platforms, and physical environments.
+## Installation
 
-## Key Features
+```bash
+uv add codomyrmex
+```
 
-- **ROS2 Bridge**: Communication bridge for integrating with Robot Operating System 2 (ROS2) ecosystems
-- **3D Transformations**: Spatial transformation utilities for working with 3D coordinate systems
-- **Sensor Integration**: Interfaces for reading and processing data from physical sensors
-- **Actuator Control**: Interfaces for commanding and controlling physical actuators
-- **Modular Subpackages**: Cleanly separated concerns across ros, sensors, actuators, and transformation submodules
+Or for development:
 
-## Key Components
+```bash
+uv sync
+```
 
-| Component | Description |
-|-----------|-------------|
-| `ROS2Bridge` | Communication bridge for ROS2 ecosystem integration |
-| `Transform3D` | 3D spatial transformation representation and operations |
-| `ros` | Submodule for ROS2 communication and bridge functionality |
-| `sensors` | Submodule for sensor data acquisition and processing |
-| `actuators` | Submodule for actuator command and control interfaces |
-| `transformation` | Submodule for spatial coordinate transformations |
+## Key Exports
+
+### Submodules
+- **`actuators/`** — Actuator control submodule.
+- **`ros/`** — ROS integration submodule.
+- **`sensors/`** — Sensor interfaces submodule.
+- **`transformation/`** — Transformations submodule.
 
 ## Quick Start
 
 ```python
 from codomyrmex.embodiment import ROS2Bridge, Transform3D
 
-# Create a ROS2 bridge for robot communication
+# ROS2 integration
 bridge = ROS2Bridge()
+bridge.connect(uri="localhost:9090")
 
-# Work with 3D spatial transformations
+# Subscribe to sensor data
+bridge.subscribe("/camera/image", on_image)
+bridge.subscribe("/lidar/scan", on_scan)
+
+# Publish commands
+bridge.publish("/cmd_vel", {"linear": 0.5, "angular": 0.1})
+
+# 3D transforms
 transform = Transform3D()
+transform.translate(1.0, 0.0, 0.5)
+transform.rotate_euler(roll=0, pitch=0, yaw=45)
+
+# Apply to point
+world_point = transform.apply([0, 0, 0])
 ```
 
-## Architecture
+## Submodules
 
-The module is organized into four subpackages:
+| Module | Description |
+|--------|-------------|
+| `ros` | ROS2 bridge and message handling |
+| `sensors` | Sensor data processing |
+| `actuators` | Motor and actuator control |
+| `transformation` | 3D coordinate transforms |
 
-```
-embodiment/
-  ros/             # ROS2 bridge and communication
-  sensors/         # Sensor data interfaces
-  actuators/       # Actuator control interfaces
-  transformation/  # 3D spatial transformations
-```
+## Exports
 
+| Class | Description |
+|-------|-------------|
+| `ROS2Bridge` | WebSocket bridge to ROS2 |
+| `Transform3D` | 3D position and rotation transform |
 
 ## Testing
 
@@ -56,13 +71,12 @@ embodiment/
 uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
 ```
 
-## Related Modules
+## Documentation
 
-- [model_context_protocol](../model_context_protocol/) - Standardized LLM communication interfaces used across modules
-- [environment_setup](../environment_setup/) - Environment validation for hardware dependencies
+- [Module Documentation](../../../docs/modules/embodiment/README.md)
+- [Agent Guide](../../../docs/modules/embodiment/AGENTS.md)
+- [Specification](../../../docs/modules/embodiment/SPEC.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/embodiment/](../../../src/codomyrmex/embodiment/)
-- **API Specification**: [src/codomyrmex/embodiment/API_SPECIFICATION.md](../../../src/codomyrmex/embodiment/API_SPECIFICATION.md)
-- **Parent**: [docs/modules/](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

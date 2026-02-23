@@ -1,9 +1,8 @@
 # Auth Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Authentication with API keys, tokens, OAuth, and access control.
-
 
 ## Installation
 
@@ -75,13 +74,11 @@ claims = validator.validate(token.jwt)
 | `authenticate(creds)` | Authenticate with credentials |
 | `authorize(token, res, perm)` | Check permission |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k auth -v
 ```
-
 
 ## Documentation
 

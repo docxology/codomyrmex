@@ -4,37 +4,41 @@
 
 ## Overview
 
-The Encryption module supports Personal AI Infrastructure through protecting personal data with local encryption and key management.
-
-## Local-First AI
-
-All cryptographic operations run locally; keys never leave the user's device
+The Encryption module provides symmetric and asymmetric encryption, key generation, and secure data handling for protecting sensitive information in AI agent workflows. It ensures data-at-rest and data-in-transit security.
 
 ## PAI Capabilities
 
-- Local key generation and storage
-- At-rest encryption for personal data
-- Zero-knowledge proof support
+### Encryption Operations
 
-## Detailed PAI Documentation
+- Symmetric encryption (AES-256-GCM)
+- Asymmetric encryption (RSA, Ed25519)
+- Key pair generation and management
+- Secure envelope encryption for large payloads
+- Password-based key derivation (Argon2)
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/encryption/PAI.md](../../../src/codomyrmex/encryption/PAI.md)
+## Key Exports
 
-## Configuration
+| Export | Type | Purpose |
+|--------|------|---------|
+| Symmetric engines | Various | AES-based encryption/decryption |
+| Asymmetric engines | Various | RSA/Ed25519 key operations |
+| Key generators | Various | Cryptographic key generation |
 
-See [README.md](README.md) for configuration options and environment variables.
+## PAI Algorithm Phase Mapping
 
-## Signposting
+| Phase | Encryption Contribution |
+|-------|--------------------------|
+| **BUILD** | Encrypt sensitive artifacts before storage |
+| **EXECUTE** | Secure data transfer between agents and services |
+| **VERIFY** | Verify data integrity via encryption-based checksums |
 
-### Navigation
+## Architecture Role
+
+**Core Layer** — Foundational cryptography consumed by `wallet/`, `auth/`, `security/`, and `privacy/` modules.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

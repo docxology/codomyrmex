@@ -1,52 +1,72 @@
-# Database Management Module — Agent Coordination
+# Agent Guidelines - Database Management
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Database Management Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Database connections, migrations, and query execution.
 
-- Database Management operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **DatabaseConnection** — Connection pooling
+- **MigrationManager** — Schema migrations
+- **QueryBuilder** — Safe query construction
+- **TransactionManager** — Transaction handling
+
+## Agent Instructions
+
+1. **Use connection pool** — Don't create per-request
+2. **Parameterize queries** — Never string concatenation
+3. **Migrate safely** — Test migrations first
+4. **Transaction scope** — Explicit transaction boundaries
+5. **Close connections** — Use context managers
+
+## Common Patterns
 
 ```python
-from codomyrmex.database_management import *
+from codomyrmex.database_management import (
+    DatabaseConnection, QueryBuilder, MigrationManager
+)
 
-# Agent uses database management capabilities
+# Connection pooling
+db = DatabaseConnection(
+    host="localhost",
+    database="mydb",
+    pool_size=10
+)
+
+# Safe query execution
+with db.connection() as conn:
+    result = conn.execute(
+        "SELECT * FROM users WHERE id = ?",
+        [user_id]
+    )
+
+# Query builder
+query = QueryBuilder("users")
+query.select("id", "name").where("active", True).limit(10)
+result = db.execute(query.build())
+
+# Migrations
+migrations = MigrationManager(db)
+migrations.migrate_up()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/database_management/](../../../src/codomyrmex/database_management/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify connection
+db = DatabaseConnection(url="sqlite:///:memory:")
+assert db.is_connected()
 
-
-## Key Components
-
-- **`Backup`** — Database backup information.
-- **`BackupResult`** — Result of a backup operation.
-- **`BackupManager`** — Database backup and restore management system.
-- **`DatabaseType`** — Supported database types.
-- **`QueryResult`** — Result of a query execution.
-- **`backup_database()`** — Convenience function to backup a database.
-- **`connect_database()`** — Convenience function to connect to a database.
-- **`execute_query()`** — Convenience function to execute a single query.
-- **`manage_databases()`** — Create and return a DatabaseManager instance for database administration.
-
-### Submodules
-
-- `audit` — Audit
-- `connections` — Connections
-- `replication` — Replication
-- `sharding` — Sharding
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
+# Verify query builder
+query = QueryBuilder("test")
+query.select("*").where("id", 1)
+sql, params = query.build()
+assert "SELECT" in sql
+assert 1 in params
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

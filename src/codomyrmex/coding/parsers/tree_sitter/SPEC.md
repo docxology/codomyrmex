@@ -1,5 +1,7 @@
 # tree_sitter - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To provide high-fidelity source code parsing across multiple programming languages, enabling advanced static analysis, code transformation, and intelligent auditing within the Codomyrmex ecosystem.

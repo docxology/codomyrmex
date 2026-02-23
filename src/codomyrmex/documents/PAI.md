@@ -1,27 +1,68 @@
 # Personal AI Infrastructure — Documents Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documents Module for Codomyrmex. This is a **Core Layer** module.
+The Documents module is Codomyrmex's universal document I/O engine — the "printer's shop and library." It reads, writes, parses, validates, converts, merges, and splits documents across multiple formats (Markdown, JSON, PDF, YAML, XML, CSV, HTML, plain text). It handles the **mechanics** of document operations, distinct from the `documentation` module which handles the **semantics** of technical documentation.
 
 ## PAI Capabilities
+
+### Multi-Format Document Processing
+
+```python
+from codomyrmex.documents import cli_commands
+
+# The module exposes CLI commands for document operations
+commands = cli_commands()
+# Available: read, write, convert, validate, merge, split
+```
+
+### Format Support
+
+| Format | Read | Write | Parse | Validate |
+|--------|------|-------|-------|----------|
+| Markdown | ✓ | ✓ | ✓ | ✓ |
+| JSON | ✓ | ✓ | ✓ | ✓ |
+| YAML | ✓ | ✓ | ✓ | ✓ |
+| PDF | ✓ | — | ✓ | — |
+| XML | ✓ | ✓ | ✓ | ✓ |
+| CSV | ✓ | ✓ | ✓ | ✓ |
+| HTML | ✓ | ✓ | ✓ | — |
+| Plain Text | ✓ | ✓ | — | — |
+
+### Document Operations
+
+| Operation | Description |
+|-----------|-------------|
+| **Read** | Load document content with metadata extraction |
+| **Write** | Write content with format-specific serialization |
+| **Parse** | Extract structured data from documents |
+| **Validate** | Verify document structure and schema compliance |
+| **Convert** | Transform between formats (e.g., Markdown → HTML) |
+| **Merge** | Combine multiple documents into one |
+| **Split** | Break large documents into sections |
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
+| `cli_commands` | Function | Returns CLI command handlers for document operations |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Documents Contribution |
-|-------|------------------------------|
-| **EXECUTE** | General module operations |
+|-------|------------------------|
+| **OBSERVE** | Read and parse project documents for understanding; extract metadata from source files |
+| **THINK** | Provide structured document content for reasoning context |
+| **BUILD** | Write generated documentation, reports, and artifacts |
+| **EXECUTE** | Convert and merge documents as part of workflows |
+| **VERIFY** | Validate document structure, check format compliance |
+| **LEARN** | Capture and index documents for knowledge retrieval |
 
 ## Architecture Role
 
-**Core Layer** — Part of the codomyrmex layered architecture.
+**Core Layer** — Foundational document I/O used by `documentation`, `agentic_memory`, `search`, and agent modules. No upward dependencies.
 
 ## Navigation
 

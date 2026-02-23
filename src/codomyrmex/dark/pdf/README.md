@@ -1,5 +1,7 @@
 # PDF Dark Mode Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Native Python implementation of PDF dark mode filters, inspired by [dark-pdf](https://github.com/benjifriedman/dark-pdf).
 
 ## How It Works

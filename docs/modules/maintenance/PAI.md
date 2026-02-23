@@ -1,30 +1,41 @@
-# Personal AI Infrastructure — Tools Module
+# Personal AI Infrastructure — Maintenance Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Tools module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Maintenance module provides RASP auditing, documentation health checks, dependency analysis, and automated maintenance operations for keeping the codomyrmex codebase healthy and well-documented.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/tools/PAI.md](../../../src/codomyrmex/tools/PAI.md)
+- RASP documentation compliance auditing across all modules
+- Stale dependency detection and upgrade recommendations
+- Code health metrics collection and trending
+- Automated cleanup operations (dead code, unused imports)
+- Documentation freshness tracking
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| RASP auditor | Various | Documentation compliance checking |
+| Health checkers | Various | Code and dependency health metrics |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Maintenance Contribution |
+|-------|--------------------------|
+| **OBSERVE** | Audit RASP compliance and code health metrics |
+| **VERIFY** | Validate documentation coverage and dependency freshness |
+| **LEARN** | Track maintenance metrics over time |
+
+## Architecture Role
+
+**Platform Layer** — Consumes `documentation/` (doc audits), `static_analysis/` (code analysis), `system_discovery/` (module listing). Provides automated maintenance for the entire project.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

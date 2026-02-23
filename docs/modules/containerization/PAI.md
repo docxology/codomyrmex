@@ -4,27 +4,49 @@
 
 ## Overview
 
-The Containerization module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Containerization module provides Docker container management, Kubernetes orchestration, container registry operations, and container security scanning. It enables PAI agents to build, deploy, and manage containerized applications as part of CI/CD workflows.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/containerization/PAI.md](../../../src/codomyrmex/containerization/PAI.md)
+### Container Lifecycle Management
 
-## Configuration
+```python
+from codomyrmex.containerization import cli_commands
 
-See [README.md](README.md) for configuration options and environment variables.
+commands = cli_commands()
+# Available: build, run, stop, inspect, push, pull, scan
+```
 
-## Signposting
+### Submodule Capabilities
 
-### Navigation
+| Submodule | Purpose | Key Operations |
+|-----------|---------|----------------|
+| Core | Docker container management | Build, run, stop, inspect containers |
+| `kubernetes/` | K8s orchestration | Deploy, scale, monitor Kubernetes resources |
+| `registry/` | Image registry | Push, pull, tag, and manage container images |
+| `security/` | Container security | Vulnerability scanning, policy enforcement |
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `cli_commands` | Function | CLI commands for container operations |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Containerization Contribution |
+|-------|-------------------------------|
+| **BUILD** | Build container images from AI-generated Dockerfiles |
+| **EXECUTE** | Run sandboxed code execution in containers; deploy services |
+| **VERIFY** | Security scan container images for vulnerabilities |
+
+## Architecture Role
+
+**Service Layer** — Consumes `coding/` for Dockerfile generation. Consumed by `ci_cd_automation/` for deployment pipelines and `cloud/` for container orchestration.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

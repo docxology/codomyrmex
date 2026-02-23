@@ -1,43 +1,86 @@
-# Concurrency — Functional Specification
+# concurrency - Functional Specification
 
-**Module**: `codomyrmex.concurrency`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Concurrency and synchronization module for Codomyrmex.
+The `concurrency` module provides a suite of synchronization primitives to ensure data integrity and resource fairness in multi-process and distributed environments.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Correctness
 
-| Component | Type | Description |
-|-----------|------|-------------|
+- Atomic lock acquisition and release.
+- Support for re-entrant locking (where applicable).
 
-### Source Files
+### Robustness
 
-- `distributed_lock.py`
-- `lock_manager.py`
-- `redis_lock.py`
-- `semaphore.py`
+- Automatic expiration of stale locks.
+- Resilience to process crashes during lock held.
 
-## 3. Dependencies
+### Flexibility
 
-See `src/codomyrmex/concurrency/__init__.py` for import dependencies.
+- Swapable backends (Local, Redis, Etcd) without changing application code.
+- Support for both synchronous and asynchronous usage.
 
-## 4. Public API
+## Functional Requirements
 
-See source module for available exports.
+### Distributed Locking
 
-## 5. Testing
+- Acquire and release locks based on a unique string identifier.
+- Configurable acquisition timeout and lock TTL (Time-to-Live).
+- Methods for checking lock status and ownership.
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k concurrency -v
+### Semaphores
+
+- Limit the number of concurrent participants to a specific value.
+- Support for weighted acquisitions.
+
+### Backend Support
+
+- **Local**: File-based or shared memory locking for single-host multi-processing.
+- **Redis**: High-performance distributed locking using the Redlock algorithm or simple SETNX.
+
+## Interface Contracts
+
+### `BaseLock`
+
+- `acquire(timeout: float) -> bool`
+- `release() -> None`
+- `is_locked() -> bool`
+
+### `DistributedLock` (extends BaseLock)
+
+- `extend(ttl: float) -> bool`
+
+### `ReadWriteLock`
+
+- `acquire_read()`
+- `release_read()`
+- `acquire_write()`
+- `release_write()`
+
+### `LockManager`
+
+- `register_lock(name: str, lock: BaseLock)`
+- `acquire_all(names: List[str]) -> bool`
+- `release_all(names: List[str]) -> None`
+- `@property stats() -> LockStats`
+
+## Quality Standards
+
+- Stress tests for race conditions.
+- Verification of lock cleanup on process termination.
+- ≥80% test coverage.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+
+## API Usage
+
+```python
+from codomyrmex.concurrency import BaseLock, LocalLock, LockStats
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/concurrency/)

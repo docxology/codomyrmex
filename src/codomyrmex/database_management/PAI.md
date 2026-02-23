@@ -1,51 +1,39 @@
 # Personal AI Infrastructure — Database Management Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Database Management Module for Codomyrmex. This is an **Extended Layer** module.
+The Database Management module provides database lifecycle operations — schema management, migrations, connection pooling, and query execution for SQL and NoSQL backends.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.database_management import DatabaseManager, DatabaseConnection, MigrationManager, lineage, migration, audit
-```
+- Connection pool management for multiple databases
+- Schema migration planning and execution
+- Query building and execution with parameterization
+- Database backup and restore operations
+- Health monitoring and performance metrics
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `lineage` | Function/Constant | Lineage |
-| `migration` | Function/Constant | Migration |
-| `audit` | Function/Constant | Audit |
-| `sharding` | Function/Constant | Sharding |
-| `replication` | Function/Constant | Replication |
-| `connections` | Function/Constant | Connections |
-| `DatabaseManager` | Class | Databasemanager |
-| `manage_databases` | Function/Constant | Manage databases |
-| `DatabaseConnection` | Class | Databaseconnection |
-| `MigrationManager` | Class | Migrationmanager |
-| `run_migrations` | Function/Constant | Run migrations |
-| `Migration` | Class | Migration |
-| `BackupManager` | Class | Backupmanager |
-| `backup_database` | Function/Constant | Backup database |
-
-*Plus 8 additional exports.*
-
+| Connection managers | Various | Database connection pooling |
+| Migration engine | Various | Schema versioning and migration |
+| Query builders | Various | Safe parameterized queries |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Database Management Contribution |
-|-------|------------------------------|
-| **BUILD** | Artifact creation and code generation |
-| **EXECUTE** | Execution and deployment |
-| **VERIFY** | Validation and quality checks |
-| **LEARN** | Learning and knowledge capture |
+|-------|-----------------------------------|
+| **OBSERVE** | Query databases for current state and schema information |
+| **BUILD** | Generate migration scripts for schema changes |
+| **EXECUTE** | Run migrations, execute queries, manage connections |
+| **VERIFY** | Validate schema integrity and migration results |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumed by `agentic_memory/` (persistent storage), `serialization/` (object persistence), and `api/` (data backend).
 
 ## Navigation
 

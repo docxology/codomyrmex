@@ -1,9 +1,8 @@
 # Quantum Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Quantum algorithm primitives, circuit simulation, and gate operations.
-
 
 ## Installation
 
@@ -87,13 +86,11 @@ results = simulator.run(qc, shots=1024)
 | RY | `.ry(q, θ)` | Y-axis rotation |
 | RZ | `.rz(q, θ)` | Z-axis rotation |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
 ```
-
 
 ## Documentation
 

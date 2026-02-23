@@ -1,46 +1,36 @@
-# Dark Module Documentation
+# Dark Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+Dark mode utilities for different domains: PDF, network, hardware, and software.
 
-The `dark` module provides dark mode utilities across multiple domains. The primary implemented capability is PDF dark mode filtering, which applies inversion, brightness, contrast, and sepia adjustments to PDF documents. The module also includes placeholder submodules for network, hardware, and software dark mode utilities. PDF processing is powered by PyMuPDF and Pillow, with the filter pipeline inspired by the dark-pdf JavaScript project.
+## Submodules
 
-## Key Features
+| Submodule | Status | Description |
+|-----------|--------|-------------|
+| `pdf` | Implemented | PDF dark mode filters (inversion, brightness, contrast, sepia) |
+| `network` | Planned | Network dark mode utilities — Planned for future implementation |
+| `hardware` | Planned | Hardware dark mode utilities — Planned for future implementation |
+| `software` | Planned | Software dark mode utilities — Planned for future implementation |
 
-- **PDF dark mode conversion**: Apply dark mode filters to PDF documents with a simple one-call API via `DarkPDF`
-- **Configurable filter pipeline**: Adjust inversion, brightness, contrast, and sepia parameters independently
-- **Built-in presets**: Pre-configured filter combinations including `dark`, `sepia`, `high_contrast`, and `low_light`
-- **Batch processing**: Process multiple PDF files in a single call with `DarkPDF.batch()`
-- **Functional API**: Standalone `apply_dark_mode()` function for quick one-off conversions
-- **Graceful dependency handling**: `PDF_AVAILABLE` flag for runtime capability detection when PyMuPDF/Pillow are not installed
-- **Multi-domain architecture**: Organized into `pdf`, `network`, `hardware`, and `software` submodules
+## Key Exports
 
-## Key Components
+### Submodules
+- **`pdf`** — PDF dark mode filters (inversion, brightness, contrast, sepia); `None` if dependencies missing
+- **`network`** — Network dark mode utilities — Planned for future implementation
+- **`hardware`** — Hardware dark mode utilities — Planned for future implementation
+- **`software`** — Software dark mode utilities — Planned for future implementation
 
-| Component | Description |
-|-----------|-------------|
-| `pdf` | Submodule providing PDF dark mode filters; contains `DarkPDF`, `DarkPDFFilter`, and `apply_dark_mode` |
-| `network` | Submodule for network dark mode utilities (placeholder) |
-| `hardware` | Submodule for hardware dark mode utilities (placeholder) |
-| `software` | Submodule for software dark mode utilities (placeholder) |
-| `PDF_AVAILABLE` | Boolean flag indicating whether PDF processing dependencies (PyMuPDF, Pillow) are installed |
-
-## Available Presets
-
-| Preset | Inversion | Brightness | Contrast | Sepia |
-|--------|-----------|------------|----------|-------|
-| `dark` (default) | 0.90 | 0.90 | 0.90 | 0.10 |
-| `sepia` | 0.85 | 0.95 | 0.90 | 0.40 |
-| `high_contrast` | 1.00 | 1.00 | 1.30 | 0.00 |
-| `low_light` | 0.80 | 0.70 | 0.85 | 0.05 |
+### Availability Flags
+- **`PDF_AVAILABLE`** — Boolean flag indicating whether PDF processing dependencies (PyMuPDF, Pillow) are available
 
 ## Installation
 
 ```bash
-# Install dark mode dependencies (PyMuPDF and Pillow)
 uv sync --extra dark
 ```
+
+This installs PyMuPDF and Pillow, required for the PDF submodule.
 
 ## Quick Start
 
@@ -64,10 +54,20 @@ DarkPDF.batch(
 )
 ```
 
+## Available Presets
+
+| Preset | Inversion | Brightness | Contrast | Sepia |
+|--------|-----------|------------|----------|-------|
+| `dark` (default) | 0.90 | 0.90 | 0.90 | 0.10 |
+| `sepia` | 0.85 | 0.95 | 0.90 | 0.40 |
+| `high_contrast` | 1.00 | 1.00 | 1.30 | 0.00 |
+| `low_light` | 0.80 | 0.70 | 0.85 | 0.05 |
+
 ## Credits
 
-The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/dark-pdf), a Next.js application for applying dark mode to PDFs. The original JavaScript filter pipeline has been reimplemented natively in Python using PyMuPDF and Pillow. The dark-pdf source is included as a git submodule at `pdf/vendor/dark-pdf/` for reference.
+The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/dark-pdf), a Next.js application for applying dark mode to PDFs. The original JavaScript filter pipeline has been reimplemented natively in Python using PyMuPDF and Pillow.
 
+The dark-pdf source is included as a git submodule at `pdf/vendor/dark-pdf/` for reference.
 
 ## Testing
 
@@ -75,12 +75,7 @@ The PDF filter logic is inspired by [dark-pdf](https://github.com/benjifriedman/
 uv run python -m pytest src/codomyrmex/tests/ -k dark -v
 ```
 
-## Related Modules
-
-- [documents](../documents/) - Document processing utilities that may consume dark mode outputs
-- [data_visualization](../data_visualization/) - Visualization module where dark theming may be relevant
-
 ## Navigation
 
-- **Source**: [src/codomyrmex/dark/](../../../src/codomyrmex/dark/)
-- **Parent**: [docs/modules/](../README.md)
+- **Full Documentation**: [docs/modules/dark/](../../../docs/modules/dark/)
+- **Parent Directory**: [codomyrmex](../README.md)

@@ -1,5 +1,7 @@
 # feature_flags - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To provide a system for controlling functional and operational aspects of Codomyrmex at runtime, enabling gradual releases and rapid incident response.

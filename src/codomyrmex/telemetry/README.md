@@ -1,11 +1,10 @@
 # Telemetry Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 The telemetry module provides an OpenTelemetry-compatible observability framework for distributed tracing, metrics collection, span processing, and alerting. It supports trace context propagation, multiple span processors (simple and batch), OTLP export, sampling strategies, and configurable alerting -- enabling end-to-end visibility across distributed workflows.
-
 
 ## Installation
 
@@ -68,13 +67,11 @@ uv sync
 import codomyrmex.telemetry
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
 ```
-
 
 ## Consolidated Sub-modules
 

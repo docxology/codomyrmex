@@ -1,6 +1,6 @@
 # Encryption Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -18,7 +18,6 @@ Encryption and cryptographic operations module for Codomyrmex. Provides symmetri
 - **Secure hashing** (SHA-256, SHA-384, SHA-512, MD5)
 - **Key management** with file-based storage, listing, rotation
 - **SecureDataContainer** for encrypting arbitrary JSON-serializable data
-
 
 ## Installation
 
@@ -93,7 +92,6 @@ derived = derive_key_hkdf(b"shared-secret", length=32, info=b"app-v1")
 | `hmac_utils.py` | HMAC computation and constant-time verification |
 | `kdf.py` | HKDF key derivation |
 | `__init__.py` | Public API and convenience functions |
-
 
 ## Testing
 

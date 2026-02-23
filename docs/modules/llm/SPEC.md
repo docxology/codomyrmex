@@ -1,58 +1,98 @@
-# LLM — Functional Specification
+# llm - Functional Specification
 
-**Module**: `codomyrmex.llm`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-LLM integration modules for Codomyrmex.
+LLM module providing language model integration, prompt management, and output handling for the Codomyrmex platform.
 
-## 2. Architecture
+## Interface Contracts
 
-### Components
+### Base Provider (`llm.providers`)
 
-| Component | Type | Description |
-|-----------|------|-------------|
+```python
+class LLMProvider(ABC):
+    def complete(messages: List[Message], model: str = None, ...) -> CompletionResponse
+    def complete_stream(messages: List[Message], model: str = None, ...) -> Iterator[str]
+    async def complete_async(messages: List[Message], ...) -> CompletionResponse
 
-### Submodule Structure
+class Message:
+    role: str; content: str; tool_calls: List[dict] = None; ...
 
-- `chains/` — Chain implementations for LLM reasoning.
-- `cost_tracking/` — LLM Cost Tracking Module
-- `embeddings/` — LLM Embeddings Module
-- `fabric/` — Codomyrmex Fabric Integration Module
-- `guardrails/` — LLM Guardrails Module
-- `memory/` — Conversation memory management for LLMs.
-- `ollama/` — Codomyrmex Ollama Integration Module
-- `prompts/` — LLM Prompts Module
-- `providers/` — LLM Provider abstractions for unified API access.
-- `rag/` — LLM RAG Module
-- `streaming/` — LLM Streaming Module
-- `tools/` — Tool calling framework for LLMs.
+class CompletionResponse:
+    content: str; model: str; usage: dict; tool_calls: List[dict]; ...
+```
 
-### Source Files
+### Routing & Fallback (`llm.router`)
 
-- `config.py`
-- `exceptions.py`
-- `mcp.py`
-- `router.py`
+```python
+class ModelRouter:
+    def register_model(config: ModelConfig, provider: ModelProvider = None) -> None
+    def select_model(required_capabilities: List[str] = None, ...) -> ModelConfig
+    def complete(prompt: str, model_name: str = None, ...) -> str
+```
 
-## 3. Dependencies
+### MCP Integration (`llm.mcp`)
 
-See `src/codomyrmex/llm/__init__.py` for import dependencies.
+```python
+class MCPBridge:
+    def register_tool(name: str, description: str, input_schema: dict, handler: Callable) -> None
+    async def handle_request(message: dict) -> Optional[dict]
+    async def run_stdio() -> None
+```
 
-## 4. Public API
+### Guardrails (`llm.guardrails`)
 
-See source module for available exports.
+```python
+class Guardrail(ABC):
+    def validate(content: str) -> ValidationResult
 
-## 5. Testing
+class SafetyGate:
+    def add_guardrail(guardrail: Guardrail) -> None
+    def check(content: str) -> bool  # Raises SafetyError if blocked
+```
+
+#### Local LLM (`llm.ollama`)
+
+```python
+class OllamaManager:
+    def list_models() -> List[OllamaModel]
+    def download_model(name: str) -> bool
+    def run_model(prompt: str, options: ExecutionOptions) -> ModelExecutionResult
+
+class ModelRunner:
+    def run_streaming(prompt: str, ...) -> Iterator[str]
+    def run_batch(prompts: List[str]) -> List[ModelExecutionResult]
+```
+
+### Fabric Integration (`llm.fabric`)
+
+```python
+class FabricManager:
+    def list_items() -> List[FabricItem]
+    def execute_pipeline(name: str, params: dict) -> dict
+```
+
+## Navigation Links
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k llm -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/llm/)

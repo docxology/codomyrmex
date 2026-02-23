@@ -1,83 +1,108 @@
-# Vector Store Module Documentation
+# Vector Store Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
-
-Embeddings storage with pluggable backends for similarity search.
-
-## Key Features
-
-- **SearchResult** — Result from vector similarity search.
-- **VectorEntry** — A vector entry in the store.
-- **DistanceMetric** — Distance metrics for similarity computation.
-- **VectorStore** — Abstract base class for vector storage backends.
-- **InMemoryVectorStore** — In-memory vector store implementation.
-- **NamespacedVectorStore** — Vector store with namespace support.
-- `create_vector_store()` — Create a vector store with the specified backend.
-- `normalize_embedding()` — Normalize an embedding to unit length.
-- `dimension()` — Get embedding dimension.
-- `cosine()` — Cosine similarity (returns 0-1, higher = more similar).
-
-## Quick Start
-
-```python
-from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric
-
-# Initialize
-instance = SearchResult()
-```
-
+Embeddings storage with similarity search using cosine, euclidean, or dot product metrics.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## API Reference
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
 
 ### Classes
 
-| Class | Description |
-|-------|-------------|
-| `SearchResult` | Result from vector similarity search. |
-| `VectorEntry` | A vector entry in the store. |
-| `DistanceMetric` | Distance metrics for similarity computation. |
-| `VectorStore` | Abstract base class for vector storage backends. |
-| `InMemoryVectorStore` | In-memory vector store implementation. |
-| `NamespacedVectorStore` | Vector store with namespace support. |
+- **`SearchResult`** — Result from vector similarity search.
+- **`VectorEntry`** — A vector entry in the store.
+- **`DistanceMetric`** — Distance metrics for similarity computation.
+- **`VectorStore`** — Abstract base class for vector storage backends.
+- **`InMemoryVectorStore`** — In-memory vector store implementation.
+- **`NamespacedVectorStore`** — Vector store with namespace support.
 
 ### Functions
 
-| Function | Description |
-|----------|-------------|
-| `create_vector_store()` | Create a vector store with the specified backend. |
-| `normalize_embedding()` | Normalize an embedding to unit length. |
-| `dimension()` | Get embedding dimension. |
-| `cosine()` | Cosine similarity (returns 0-1, higher = more similar). |
-| `euclidean()` | Euclidean distance (returns 0+, lower = more similar). |
-| `dot_product()` | Dot product similarity. |
-| `add()` | Add a vector to the store. |
-| `get()` | Get a vector by ID. |
-| `delete()` | Delete a vector by ID. |
-| `search()` | Search for similar vectors. |
-| `count()` | Get total number of vectors. |
-| `clear()` | Clear all vectors. |
-| `add_batch()` | Add multiple vectors at once. |
-| `list_ids()` | List all vector IDs. |
-| `use_namespace()` | Set the current namespace. |
-| `list_namespaces()` | List all namespaces. |
-| `delete_namespace()` | Delete an entire namespace. |
+- **`create_vector_store()`** — Create a vector store with the specified backend.
+- **`normalize_embedding()`** — Normalize an embedding to unit length.
 
-## Directory Contents
+## Quick Start
 
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
+```python
+from codomyrmex.vector_store import (
+    InMemoryVectorStore, NamespacedVectorStore, DistanceMetric, normalize_embedding
+)
 
+# Create store with cosine similarity
+store = InMemoryVectorStore(distance_metric="cosine")
+
+# Add vectors with metadata
+store.add("doc-1", [0.1, 0.2, 0.3], {"title": "Python Guide"})
+store.add("doc-2", [0.2, 0.3, 0.4], {"title": "ML Tutorial"})
+store.add("doc-3", [0.9, 0.1, 0.1], {"title": "Rust Manual"})
+
+# Similarity search
+query = [0.15, 0.25, 0.35]
+results = store.search(query, k=2)
+
+for r in results:
+    print(f"{r.id}: score={r.score:.3f}, title={r.metadata['title']}")
+
+# Filter by metadata
+results = store.search(
+    query,
+    k=5,
+    filter_fn=lambda m: "Python" in m.get("title", "")
+)
+```
+
+## Namespaced Storage
+
+```python
+store = NamespacedVectorStore()
+
+# Separate vector spaces
+store.use_namespace("users").add("u1", user_embedding)
+store.use_namespace("products").add("p1", product_embedding)
+
+# Search within namespace
+store.use_namespace("users")
+results = store.search(query_embedding, k=10)
+
+print(store.list_namespaces())  # ['users', 'products']
+```
+
+## Directory Structure
+
+- `models.py` — Data models (VectorEntry, SearchResult, DistanceMetric)
+- `store.py` — Store implementations (VectorStore, InMemoryVectorStore)
+- `__init__.py` — Public API re-exports
+
+## Exports
+
+| Class | Description |
+| :--- | :--- |
+| `InMemoryVectorStore` | In-memory store with configurable distance |
+| `NamespacedVectorStore` | Multi-namespace vector storage |
+| `VectorEntry` | Vector with id, embedding, metadata |
+| `SearchResult` | Result with id, score, metadata |
+| `DistanceMetric` | Static methods: cosine, euclidean, dot_product |
+| `create_vector_store(backend)` | Factory function |
+| `normalize_embedding(vec)` | Normalize to unit length |
+
+## Distance Metrics
+
+| Metric | Higher = Better? | Use Case |
+| :--- | :--- | :--- |
+| cosine | Yes | Semantic similarity |
+| euclidean | No (lower) | Spatial distance |
+| dot_product | Yes | Magnitude-aware similarity |
 
 ## Testing
 
@@ -85,7 +110,12 @@ uv pip install codomyrmex
 uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
 ```
 
+## Documentation
+
+- [Module Documentation](../../../docs/modules/vector_store/README.md)
+- [Agent Guide](../../../docs/modules/vector_store/AGENTS.md)
+- [Specification](../../../docs/modules/vector_store/SPEC.md)
+
 ## Navigation
 
-- **Source**: [src/codomyrmex/vector_store/](../../../src/codomyrmex/vector_store/)
-- **Parent**: [Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

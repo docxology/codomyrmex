@@ -1,6 +1,6 @@
 # Prompt Engineering Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Comprehensive prompt template management, version tracking, optimization strategies, and evaluation scoring. Provides tools for the full prompt lifecycle from authoring through optimization and quality assessment.
 
@@ -180,7 +180,6 @@ echo '{"prompt": "Explain AI", "response": "AI is..."}' | codomyrmex prompt_engi
 ```bash
 uv run python -m pytest src/codomyrmex/tests/unit/prompt_engineering/ -v
 ```
-
 
 ## Consolidated Sub-modules
 

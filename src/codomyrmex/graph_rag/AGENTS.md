@@ -1,5 +1,7 @@
 # Agent Guidelines - Graph RAG
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Knowledge graph-enhanced RAG with entity relationships and traversal.

@@ -1,5 +1,7 @@
 # Agent Setup
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Interactive configuration and health-check module for all Codomyrmex agents.
 
 ## Quick Start

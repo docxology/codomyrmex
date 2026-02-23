@@ -1,48 +1,73 @@
-# Containerization Module — Agent Coordination
+# Agent Guidelines - Containerization
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Containerization Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Docker container management, image building, and orchestration.
 
-- Containerization operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **ContainerManager** — Manage container lifecycle
+- **ImageBuilder** — Build Docker images
+- **DockerCompose** — Compose file management
+- **Container** — Container operations
+
+## Agent Instructions
+
+1. **Use multi-stage** — Smaller images
+2. **Pin versions** — Specific base image tags
+3. **Clean build** — Remove build artifacts
+4. **Health checks** — Add container health checks
+5. **Log to stdout** — Container logging best practice
+
+## Common Patterns
 
 ```python
-from codomyrmex.containerization import *
+from codomyrmex.containerization import (
+    ContainerManager, ImageBuilder, DockerCompose
+)
 
-# Agent uses containerization capabilities
+# Build image
+builder = ImageBuilder()
+image = builder.build(
+    dockerfile="./Dockerfile",
+    tag="myapp:v1.0",
+    build_args={"ENV": "production"}
+)
+
+# Manage containers
+manager = ContainerManager()
+container = manager.run(
+    image="myapp:v1.0",
+    ports={"8080/tcp": 8080},
+    environment={"API_KEY": key}
+)
+
+# Container operations
+manager.logs(container.id)
+manager.stop(container.id)
+
+# Docker Compose
+compose = DockerCompose("docker-compose.yml")
+compose.up(detach=True)
+compose.down()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/containerization/](../../../src/codomyrmex/containerization/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify image build
+builder = ImageBuilder()
+image = builder.build("./test/Dockerfile", tag="test:latest")
+assert image is not None
 
-
-## Key Components
-
-- **`ContainerError`** — Base exception for container-related errors.
-- **`ImageBuildError`** — Raised when container image build operations fail.
-- **`NetworkError`** — Raised when container network operations fail.
-- **`VolumeError`** — Raised when container volume operations fail.
-- **`RegistryError`** — Raised when container registry operations fail.
-
-### Submodules
-
-- `docker` — Docker
-- `kubernetes` — Kubernetes
-- `registry` — Registry
-- `security` — Security
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
+# Verify container management
+manager = ContainerManager()
+containers = manager.list()
+assert isinstance(containers, list)
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

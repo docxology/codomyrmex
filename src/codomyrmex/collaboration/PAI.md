@@ -1,51 +1,37 @@
 # Personal AI Infrastructure — Collaboration Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Collaboration module for Codomyrmex. This is an **Extended Layer** module.
+The Collaboration module provides multi-agent and multi-user collaboration primitives — shared workspaces, real-time synchronization, and collaborative editing interfaces for team-based AI-assisted development.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.collaboration import TaskPriority, TaskStatus, Task, agents, communication, coordination
-```
+- Shared workspace management for multi-agent collaboration
+- Real-time document synchronization
+- Collaborative code editing with conflict resolution
+- Multi-user session management
+- Role-based collaboration permissions
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `TaskPriority` | Class | Taskpriority |
-| `TaskStatus` | Class | Taskstatus |
-| `Task` | Class | Task |
-| `TaskResult` | Class | Taskresult |
-| `SwarmStatus` | Class | Swarmstatus |
-| `AgentStatus` | Class | Agentstatus |
-| `CollaborationError` | Class | Collaborationerror |
-| `AgentNotFoundError` | Class | Agentnotfounderror |
-| `AgentBusyError` | Class | Agentbusyerror |
-| `TaskExecutionError` | Class | Taskexecutionerror |
-| `TaskNotFoundError` | Class | Tasknotfounderror |
-| `TaskDependencyError` | Class | Taskdependencyerror |
-| `ConsensusError` | Class | Consensuserror |
-| `ChannelError` | Class | Channelerror |
-| `MessageDeliveryError` | Class | Messagedeliveryerror |
-
-*Plus 22 additional exports.*
-
+| Workspace managers | Various | Shared workspace lifecycle |
+| Sync engines | Various | Real-time state synchronization |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Collaboration Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **THINK** | Analysis and reasoning |
-| **EXECUTE** | Execution and deployment |
+|-------|----------------------------|
+| **PLAN** | Coordinate multi-agent work distribution |
+| **EXECUTE** | Synchronize parallel agent work in shared workspaces |
+| **VERIFY** | Resolve conflicts and validate merged results |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `concurrency/` (locks), `events/` (sync events), `git_operations/` (merge resolution). Enables multi-agent parallel work.
 
 ## Navigation
 

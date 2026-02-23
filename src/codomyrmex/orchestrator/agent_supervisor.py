@@ -165,9 +165,16 @@ class AgentSupervisor:
 
     def _apply_strategy(self, crashed_id: str) -> None:
         """Apply the restart strategy (internal)."""
-        # In a real implementation, this would trigger actual restarts.
-        # Here we just record which agents would be restarted.
-        pass
+        agents_to_restart = self.agents_to_restart(crashed_id)
+        for p_id in agents_to_restart:
+            if p_id != crashed_id and p_id in self._agents:
+                self._agents[p_id].append(
+                    CrashRecord(
+                        agent_id=p_id, 
+                        error=f"Cascaded restart due to {crashed_id}",
+                        action_taken=SupervisorAction.RESTART
+                    )
+                )
 
     def total_crashes(self) -> int:
         """Total crashes across all agents."""

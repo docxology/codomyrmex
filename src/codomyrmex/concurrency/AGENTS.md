@@ -1,5 +1,7 @@
 # Agent Guidelines - Concurrency
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Thread pools, locks, semaphores, and distributed locking.

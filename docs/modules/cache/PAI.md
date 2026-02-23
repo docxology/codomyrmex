@@ -4,37 +4,39 @@
 
 ## Overview
 
-The Cache module supports Personal AI Infrastructure through local caching for faster AI inference and data access.
-
-## Local-First AI
-
-In-memory and file-based caching; Redis optional for persistent local caching
+The Cache module provides multi-backend caching with TTL support, LRU eviction, distributed caching, and cache invalidation strategies for optimizing repeated computations and API calls.
 
 ## PAI Capabilities
 
-- Local result caching
-- Embedding cache for repeated queries
-- TTL-based cache management
+- In-memory LRU cache for session-scoped data
+- Disk-backed cache for expensive computation results
+- Distributed caching (Redis-compatible) for multi-agent scenarios
+- TTL-based expiration and manual invalidation
+- Cache warming and preloading strategies
 
-## Detailed PAI Documentation
+## Key Exports
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/cache/PAI.md](../../../src/codomyrmex/cache/PAI.md)
+| Export | Type | Purpose |
+|--------|------|---------|
+| Cache backends | Various | In-memory, disk, distributed cache |
+| Cache decorators | Various | Function-level result caching |
+| Invalidation strategies | Various | TTL, LRU, manual eviction |
 
-## Configuration
+## PAI Algorithm Phase Mapping
 
-See [README.md](README.md) for configuration options and environment variables.
+| Phase | Cache Contribution |
+|-------|---------------------|
+| **OBSERVE** | Cache codebase scan results for repeated access |
+| **EXECUTE** | Cache LLM responses and analysis results |
+| **LEARN** | Persist frequently accessed data for faster retrieval |
 
-## Signposting
+## Architecture Role
 
-### Navigation
+**Foundation Layer** — Cross-cutting caching consumed by `performance/` (CacheManager), `llm/` (response caching), `graph_rag/` (query caching), and `agentic_memory/` (hot memory).
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

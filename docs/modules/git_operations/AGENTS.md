@@ -1,36 +1,70 @@
-# Git Operations Module — Agent Coordination
+# Agent Guidelines - Git Operations
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Git Operations Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Git repository operations: commits, branches, merges, and history.
 
-- Git Operations operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **GitRepo** — Repository operations
+- **Commit** — Commit representation
+- **Branch** — Branch management
+- **DiffManager** — View diffs
+
+## Agent Instructions
+
+1. **Check status first** — Verify clean state
+2. **Branch often** — Feature branches for work
+3. **Small commits** — Atomic, focused commits
+4. **Meaningful messages** — Descriptive commit messages
+5. **Pull before push** — Avoid merge conflicts
+
+## Common Patterns
 
 ```python
-from codomyrmex.git_operations import *
+from codomyrmex.git_operations import GitRepo, Branch
 
-# Agent uses git operations capabilities
+# Open repository
+repo = GitRepo(".")
+
+# Check status
+status = repo.status()
+if status.is_dirty:
+    print(f"Modified: {status.modified_files}")
+
+# Commit changes
+repo.add(["src/main.py"])
+repo.commit("feat: add new feature")
+
+# Branch operations
+branch = Branch(repo)
+branch.create("feature/new-thing")
+branch.checkout("feature/new-thing")
+
+# View history
+for commit in repo.log(limit=10):
+    print(f"{commit.hash[:7]} - {commit.message}")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/git_operations/](../../../src/codomyrmex/git_operations/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify status
+repo = GitRepo(".")
+status = repo.status()
+assert hasattr(status, "is_dirty")
 
-## Related Modules
+# Verify log
+commits = repo.log(limit=5)
+assert len(commits) <= 5
 
-- [Exceptions](../exceptions/AGENTS.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k git_operations -v
+# Verify branch listing
+branches = repo.branches()
+assert "main" in branches or "master" in branches
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

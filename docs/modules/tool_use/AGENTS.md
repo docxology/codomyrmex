@@ -1,5 +1,7 @@
 # Tool Use Module — Agent Coordination
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 Tool Use Module
@@ -65,7 +67,7 @@ print(result.data)  # {"message": "Hello, World!"}
 
 ## Integration Points
 
-- **Source**: [src/codomyrmex/tool_use/](../../../src/codomyrmex/tool_use/)
+- **Docs**: [Module Documentation](../../../docs/modules/tool_use/README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **PAI**: [PAI.md](PAI.md)
 

@@ -1,41 +1,78 @@
 # Personal AI Infrastructure — Documentation Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Documentation management and audit utilities. This is a **Service Layer** module.
+The Documentation module handles the **semantics** of technical documentation — quality auditing, RASP compliance, auto-generation of PAI.md files, and root-level doc synchronization. Distinct from the `documents` module which handles document I/O mechanics.
 
 ## PAI Capabilities
 
+### Documentation Quality Audit
+
 ```python
-from codomyrmex.documentation import ModuleAudit, quality, audit_documentation, audit_rasp
+from codomyrmex.documentation import audit_documentation, audit_rasp, ModuleAudit
+
+# Audit documentation quality across modules
+results = audit_documentation(path="src/codomyrmex")
+
+# Check RASP compliance (README, AGENTS, SPEC, PAI)
+rasp_results = audit_rasp(module_path="src/codomyrmex/agents")
+
+# Full module audit
+audit = ModuleAudit(module_path="src/codomyrmex/llm")
+report = audit.run()
+```
+
+### PAI Doc Generation
+
+```python
+from codomyrmex.documentation import update_pai_docs, generate_pai_md
+
+# Auto-generate PAI.md from module exports and metadata
+pai_content = generate_pai_md(module_path="src/codomyrmex/crypto")
+
+# Update all PAI docs across the project
+update_pai_docs()
+```
+
+### Root Doc Maintenance
+
+```python
+from codomyrmex.documentation import update_root_docs, finalize_docs, update_spec
+
+# Synchronize root README, SPEC with module inventory
+update_root_docs()
+finalize_docs()
+update_spec()
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `quality` | Function/Constant | Quality |
-| `ModuleAudit` | Class | Moduleaudit |
-| `audit_documentation` | Function/Constant | Audit documentation |
-| `audit_rasp` | Function/Constant | Audit rasp |
-| `update_root_docs` | Function/Constant | Update root docs |
-| `finalize_docs` | Function/Constant | Finalize docs |
-| `update_spec` | Function/Constant | Update spec |
-| `update_pai_docs` | Function/Constant | Update pai docs |
-| `generate_pai_md` | Function/Constant | Generate pai md |
+| `audit_documentation` | Function | Project-wide documentation quality audit |
+| `audit_rasp` | Function | RASP compliance check for a module |
+| `ModuleAudit` | Class | Comprehensive single-module doc audit |
+| `update_pai_docs` | Function | Auto-update all PAI.md files |
+| `generate_pai_md` | Function | Generate PAI.md content for a module |
+| `update_root_docs` | Function | Sync root-level documentation |
+| `finalize_docs` | Function | Final documentation pass |
+| `update_spec` | Function | Update SPEC.md |
+| `quality` | Module | Documentation quality metrics |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Documentation Contribution |
-|-------|------------------------------|
-| **BUILD** | Artifact creation and code generation |
-| **VERIFY** | Validation and quality checks |
+|-------|----------------------------|
+| **OBSERVE** | Audit RASP compliance and documentation coverage |
+| **BUILD** | Generate and update PAI.md, README.md, SPEC.md files |
+| **VERIFY** | Validate documentation quality, check for stale references |
+| **LEARN** | Record documentation improvements and audit history |
 
 ## Architecture Role
 
-**Service Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `static_analysis/` (import scanning), `system_discovery/` (module listing), `documents/` (file I/O). Consumed by `maintenance/` for automated doc updates.
 
 ## Navigation
 

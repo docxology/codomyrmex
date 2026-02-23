@@ -84,8 +84,8 @@ Type 'explore' to begin your foraging adventure!
         print(self.intro)
 
     def emptyline(self):
-        """Handle empty lines gracefully."""
-        pass
+        """Handle empty lines gracefully without repeating the last command."""
+        return False
 
     def default(self, line):
         """Handle unknown commands with helpful suggestions."""

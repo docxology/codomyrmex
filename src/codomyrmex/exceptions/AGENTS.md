@@ -1,5 +1,7 @@
 # Agent Guidelines - Exceptions
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 The `exceptions` package is the centralized source for all error types in Codomyrmex. Agents should strictly use these exceptions instead of generic Python exceptions (like `RuntimeError` or `ValueError`) whenever possible to ensure proper error tracking and context propagation.

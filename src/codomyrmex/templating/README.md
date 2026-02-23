@@ -1,9 +1,8 @@
 # Templating Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Template engine support (Jinja2, Mako) for code generation and dynamic content.
-
 
 ## Installation
 
@@ -85,13 +84,11 @@ result = template.render({"data": report_data})
 | jinja2 | `{{ }}` | HTML, configs, general |
 | mako | `${}` | Python-heavy templates |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k templating -v
 ```
-
 
 ## Documentation
 

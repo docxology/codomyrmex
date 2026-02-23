@@ -1,53 +1,48 @@
-# Agentic Memory — Functional Specification
+# Agentic Memory — Specification
 
-**Module**: `codomyrmex.agentic_memory`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Long-term agent memory with retrieval and persistence.
+Provides persistent, structured memory for AI agents with key-value storage, search, and user profiling. Central to the PAI Algorithm's LEARN phase.
 
-## 2. Architecture
+## Functional Requirements
 
-### Components
+### Memory Operations
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `MemoryType` | Class | Types of agent memory. |
-| `MemoryImportance` | Class | Importance levels for memories. |
-| `Memory` | Class | A single memory unit. |
-| `RetrievalResult` | Class | Result of memory retrieval. |
-| `MemoryStore` | Class | Base class for memory storage backends. |
-| `InMemoryStore` | Class | In-memory storage for memories. |
-| `JSONFileStore` | Class | JSON file storage for memories. |
-| `AgentMemory` | Class | Long-term memory system for AI agents. |
-| `ConversationMemory` | Class | Memory optimized for conversation history. |
-| `KnowledgeMemory` | Class | Memory optimized for knowledge/facts. |
-| `age_hours()` | Function | Get memory age in hours. |
-| `recency_score()` | Function | Get recency score (decays over time). |
-| `access()` | Function | Record an access to this memory. |
-| `to_dict()` | Function | Convert to dictionary. |
-| `from_dict()` | Function | Create from dictionary. |
+| Operation | Signature | Description |
+|-----------|-----------|-------------|
+| **Put** | `memory_put(key: str, value: Any) → None` | Store a key-value pair |
+| **Get** | `memory_get(key: str) → Any` | Retrieve value by key; raises `KeyError` if missing |
+| **Search** | `memory_search(query: str, limit: int) → list` | Search memories by pattern |
+| **List** | `memory_list() → list[str]` | Return all stored keys |
 
-## 3. Dependencies
+### Storage Backends
 
-See `src/codomyrmex/agentic_memory/__init__.py` for import dependencies.
+| Backend | Persistence | Performance | Thread-Safe |
+|---------|-------------|-------------|-------------|
+| `InMemoryStore` | Session only | O(1) get/put | Yes |
+| `JSONFileStore` | Disk-backed | O(1) get, O(n) search | Yes (file locks) |
 
-## 4. Public API
+### User Profile
 
-```python
-from codomyrmex.agentic_memory import MemoryType, MemoryImportance, Memory, RetrievalResult, MemoryStore
-```
+| Method | Description |
+|--------|-------------|
+| `UserProfile()` | Initialize or load user preference tracking |
+| Profile fields | Coding style, interaction patterns, preferred models |
 
-## 5. Testing
+## Non-Functional Requirements
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k agentic_memory -v
-```
+- **Latency**: `memory_get` < 1ms (in-memory), < 10ms (file-backed)
+- **Capacity**: Up to 100,000 entries per store
+- **Durability**: `JSONFileStore` flushes on every write
+- **Concurrency**: Thread-safe via locking primitives
 
-## References
+## Architecture
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/agentic_memory/)
+- Depends on: `serialization/` (JSON persistence), `logging_monitoring/` (audit logging)
+- Consumed by: All agent modules, MCP server (`store_memory`, `recall_memory`, `list_memories`)
+
+## Navigation
+
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

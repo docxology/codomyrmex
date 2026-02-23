@@ -1,7 +1,8 @@
 # AI Agent Guidelines - Secrets
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.security.secrets`  
-**Version**: v0.1.7  
 **Status**: Active
 
 ## Purpose

@@ -1,40 +1,85 @@
-# Spatial — Functional Specification
+# spatial - Functional Specification
 
-**Module**: `codomyrmex.spatial`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Spatial modeling module for Codomyrmex.
+Spatial module providing 3D/4D visualization, modeling, and world model capabilities for the Codomyrmex platform. Consolidates all spatial computing functionality.
 
-## 2. Architecture
+## Design Principles
 
-### Submodule Structure
+### Modularity
 
-- `coordinates/` — Coordinate transformation utilities for spatial modeling.
-- `four_d/` — 4D modeling module (Synergetics) for Codomyrmex.
-- `physics/` — Physics Simulation submodule.
-- `rendering/` — Spatial Rendering submodule.
-- `three_d/` — Spatial 3D Modeling and Rendering Module for Codomyrmex.
-- `world_models/` — World modeling module for Codomyrmex.
+- Separate submodules for 3D, 4D, and world models
+- Pluggable rendering backends
+- Clear component boundaries
 
-## 3. Dependencies
+### Performance
 
-See `src/codomyrmex/spatial/__init__.py` for import dependencies.
+- Real-time rendering optimization
+- Efficient geometry processing
+- Memory-efficient mesh handling
 
-## 4. Public API
+## Architecture
 
-See source module for available exports.
+```mermaid
+graph TD
+    subgraph "Spatial Module"
+        ThreeD[three_d/]
+        FourD[four_d/]
+        WorldModels[world_models/]
+    end
 
-## 5. Testing
+    ThreeD --> Scene[Scene Building]
+    ThreeD --> Mesh[Mesh Generation]
+    ThreeD --> Render[Rendering]
+    
+    FourD --> Temporal[Temporal Modeling]
+    WorldModels --> Simulation[World Simulation]
+```
+
+## Functional Requirements
+
+### 3D Modeling (three_d/)
+
+- Scene creation and manipulation
+- Mesh generation (primitives, complex shapes)
+- Camera and lighting control
+- Image rendering
+
+### 4D Modeling (four_d/)
+
+- Time-series spatial data
+- Animation sequences
+- Temporal interpolation
+
+### World Models (world_models/)
+
+- Environment representation
+- Physics simulation
+- Agent-environment interaction
+
+## Navigation Links
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [codomyrmex](../README.md)
+
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k spatial -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/spatial/)

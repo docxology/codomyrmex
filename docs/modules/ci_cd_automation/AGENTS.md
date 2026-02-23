@@ -1,42 +1,64 @@
-# CI/CD Automation Module — Agent Coordination
+# Agent Guidelines - CI/CD Automation
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-CI/CD Automation Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Continuous integration and deployment pipeline automation.
 
-- CI/CD Automation operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **PipelineBuilder** — Build CI/CD pipelines
+- **WorkflowGenerator** — Generate GitHub Actions/GitLab CI
+- **StageRunner** — Run pipeline stages
+- **ArtifactManager** — Manage build artifacts
+
+## Agent Instructions
+
+1. **Fail fast** — Run quick checks first
+2. **Cache dependencies** — Speed up builds
+3. **Parallelize** — Run independent stages in parallel
+4. **Version artifacts** — Tag artifacts with version
+5. **Notify on failure** — Alert on failed builds
+
+## Common Patterns
 
 ```python
-from codomyrmex.ci_cd_automation import *
+from codomyrmex.ci_cd_automation import (
+    PipelineBuilder, WorkflowGenerator, ArtifactManager
+)
 
-# Agent uses ci/cd automation capabilities
+# Build pipeline
+pipeline = PipelineBuilder("main")
+pipeline.add_stage("lint", ["ruff check ."])
+pipeline.add_stage("test", ["pytest"])
+pipeline.add_stage("build", ["python -m build"])
+pipeline.add_stage("deploy", ["./deploy.sh"], on_branch="main")
+
+# Generate GitHub Actions workflow
+generator = WorkflowGenerator("github")
+workflow = generator.from_pipeline(pipeline)
+workflow.save(".github/workflows/ci.yml")
+
+# Manage artifacts
+artifacts = ArtifactManager()
+artifacts.upload("dist/*.whl", version="1.0.0")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/ci_cd_automation/](../../../src/codomyrmex/ci_cd_automation/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify pipeline structure
+pipeline = PipelineBuilder("test")
+pipeline.add_stage("build", ["echo build"])
+assert "build" in pipeline.stages
 
-
-## Key Components
-
-- **`DeploymentStatus`** — Deployment execution status.
-- **`EnvironmentType`** — Types of deployment environments.
-- **`Environment`** — Deployment environment configuration.
-- **`Deployment`** — Deployment configuration and status.
-- **`DeploymentOrchestrator`** — Comprehensive deployment orchestrator for multiple platforms.
-- **`manage_deployments()`** — Convenience function to create deployment orchestrator.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k ci_cd_automation -v
+# Verify workflow generation
+generator = WorkflowGenerator("github")
+workflow = generator.from_pipeline(pipeline)
+assert "jobs" in workflow.to_dict()
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

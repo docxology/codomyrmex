@@ -1,5 +1,7 @@
 # Agent Guidelines - Encryption
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Cryptographic operations: symmetric, asymmetric, hashing, and key management.

@@ -1,38 +1,60 @@
-# Embodiment — Functional Specification
+# embodiment - Functional Specification
 
-**Module**: `codomyrmex.embodiment`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Embodiment module for Codomyrmex.
+To enable Codomyrmex agents to perceive, reason about, and interact with the physical world through robotic systems.
 
-## 2. Architecture
+## Design Principles
 
-### Submodule Structure
+- **Low Latency**: Control loops must meet real-time or near-real-time requirements.
+- **Safety First**: Redundant checks for all physical actions.
+- **Modular Hardware**: Easily adapt to different-shaped robots (drones, arms, rovers).
+- **Sim-to-Real**: Ensure consistency between simulated and physical performance.
 
-- `actuators/` — Actuator control submodule.
-- `ros/` — ROS integration submodule.
-- `sensors/` — Sensor interfaces submodule.
-- `transformation/` — Transformations submodule.
+## Architecture
 
-## 3. Dependencies
+```mermaid
+graph TD
+    Brain[Codomyrmex Intelligence] --> Bridge[ROS2Bridge]
+    Bridge --> ROS2((ROS2 Ecosystem))
+    ROS2 --> Sensors[Physical/Sim Sensors]
+    ROS2 --> Actuators[Motors/Controllers]
+    Sensors -->|Feedback| Bridge
+    Bridge -->|Perception| Brain
+```
 
-See `src/codomyrmex/embodiment/__init__.py` for import dependencies.
+## Functional Requirements
 
-## 4. Public API
+- Connect to existing ROS2 networks.
+- Serialize/Deserialize common ROS2 message types (SensorMsgs, GeometryMsgs).
+- Implement a 'Watchdog' for connection loss detection.
+- Scale sensor data (e.g., resizing high-res images before agent consumption).
+- Enforce 'Soft Limits' on actuator velocity and acceleration.
 
-See source module for available exports.
+## Interface Contracts
 
-## 5. Testing
+### `Transform3D`
+
+- `from_translation(x, y, z) -> Transform3D`
+- `from_rotation(roll, pitch, yaw) -> Transform3D`
+- `apply(point: Tuple[float, float, float]) -> Tuple[float, float, float]`
+- `inverse() -> Transform3D`
+
+### `ROS2Bridge`
+
+- `publish(topic: str, message: dict)`
+- `subscribe(topic: str, callback: Callable)`
+
+## Technical Constraints
+
+- Dependent on the presence of a ROS2 runtime (e.g., Humble, Iron).
+- High bandwidth requirement for vision-based embodiments.
+- Real-time performance may be limited by Python's GC and GIL.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/embodiment/)

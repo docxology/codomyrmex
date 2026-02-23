@@ -1,5 +1,7 @@
 # Agent Guidelines - Data Visualization
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Charts, graphs, and visual data representations.

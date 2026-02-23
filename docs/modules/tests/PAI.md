@@ -4,27 +4,44 @@
 
 ## Overview
 
-The Tests module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Tests module provides PAI integration for test automation and coverage.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/tests/PAI.md](../../../src/codomyrmex/tests/PAI.md)
+### Test Execution
 
-## Configuration
+Run tests programmatically:
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.tests import TestRunner
 
-## Signposting
+runner = TestRunner()
+result = runner.run("tests/")
 
-### Navigation
+print(f"Passed: {result.passed}")
+print(f"Failed: {result.failed}")
+```
 
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
+### Coverage Tracking
 
-### Related Documentation
+Track test coverage:
 
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+```python
+from codomyrmex.tests import CoverageReporter
+
+reporter = CoverageReporter()
+coverage = reporter.run("tests/")
+print(f"Coverage: {coverage.percent}%")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `TestRunner` | Execute tests |
+| `CoverageReporter` | Track coverage |
+| `TestGenerator` | AI-generated tests |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

@@ -1,5 +1,7 @@
 # Agents Guide: Memetics
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `memetics` submodule to analyze, manipulate, and generate raw informational material. This is your toolkit for "genetic engineering" of ideas.

@@ -1,34 +1,77 @@
-# Validation Module — Agent Coordination
+# Agent Guidelines - Validation
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Validation module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Data validation, schema checking, and input sanitization.
 
-- `validate()`: Validate data against a schema.
-- `is_valid()`: Check if data is valid against a schema.
-- `get_errors()`: Get validation errors for data.
+## Key Classes
 
-## Agent Usage Patterns
+- **Validator** — General validation
+- **SchemaValidator** — JSON Schema validation
+- **EmailValidator** — Email format validation
+- **URLValidator** — URL format validation
+
+## Agent Instructions
+
+1. **Validate early** — Check at API boundaries
+2. **Return all errors** — Don't stop at first error
+3. **Use schemas** — Define validation schemas
+4. **Custom messages** — User-friendly error messages
+5. **Whitelist** — Prefer whitelist over blacklist
+
+## Common Patterns
 
 ```python
-from codomyrmex.validation import *
+from codomyrmex.validation import (
+    Validator, SchemaValidator, validate, ValidationError
+)
 
-# Agent uses validation capabilities
+# Simple validation
+validator = Validator()
+errors = validator.validate({
+    "email": "user@example.com",
+    "age": 25
+}, rules={
+    "email": ["required", "email"],
+    "age": ["required", "min:18"]
+})
+
+if errors:
+    raise ValidationError(errors)
+
+# Schema validation
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "count": {"type": "integer"}
+    },
+    "required": ["name"]
+}
+SchemaValidator.validate(data, schema)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/validation/](../../../src/codomyrmex/validation/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify validation
+validator = Validator()
+errors = validator.validate(
+    {"email": "invalid"},
+    rules={"email": ["email"]}
+)
+assert len(errors) > 0
 
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k validation -v
+# Verify valid input
+errors = validator.validate(
+    {"email": "test@test.com"},
+    rules={"email": ["email"]}
+)
+assert len(errors) == 0
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

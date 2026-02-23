@@ -1,9 +1,8 @@
 # System Discovery Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Module scanning, capability discovery, and system status reporting.
-
 
 ## Installation
 
@@ -79,13 +78,11 @@ print(f"Health: {report.health_score}%")
 - **Health monitoring** — Check module status
 - **LLM context** — Provide system awareness to agents
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k system_discovery -v
 ```
-
 
 ## Documentation
 

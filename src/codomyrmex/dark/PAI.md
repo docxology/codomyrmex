@@ -1,34 +1,42 @@
 # Personal AI Infrastructure — Dark Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Dark modes module - PDF dark mode utilities. This is an **Extended Layer** module.
+The Dark module provides PDF dark mode utilities — converting and rendering PDF documents with dark mode color schemes for improved readability in low-light environments.
 
 ## PAI Capabilities
 
 ```python
-from codomyrmex.dark import PDF_AVAILABLE, pdf
+from codomyrmex.dark import PDF_AVAILABLE, pdf, cli_commands
+
+# Check if PDF processing is available
+if PDF_AVAILABLE:
+    # Process PDFs with dark mode transformations
+    result = pdf.convert(input_path="document.pdf", dark_mode=True)
+
+# CLI interface
+commands = cli_commands()
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `__version__` | Function/Constant |   version   |
-| `pdf` | Function/Constant | Pdf |
-| `PDF_AVAILABLE` | Class | Pdf available |
+| `pdf` | Module | PDF processing and dark mode conversion |
+| `PDF_AVAILABLE` | Constant | Whether PDF dependencies are installed |
+| `cli_commands` | Function | CLI commands for dark mode operations |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Dark Contribution |
-|-------|------------------------------|
-| **EXECUTE** | General module operations |
+|-------|-------------------|
+| **EXECUTE** | Convert documents to dark mode for processing and display |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Extended Layer** — Utility module for document rendering. Consumed by `documents/` for PDF output formatting.
 
 ## Navigation
 

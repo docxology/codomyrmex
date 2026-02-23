@@ -4,37 +4,58 @@
 
 ## Overview
 
-The Vector Store module supports Personal AI Infrastructure through local embedding storage for semantic search and RAG.
-
-## Local-First AI
-
-Supports local vector databases (FAISS, ChromaDB) for fully offline semantic search
+The Vector Store module provides embedding-based vector storage and similarity search for AI agent memory and retrieval. It supports multiple backends and enables semantic search over code, documents, and knowledge artifacts.
 
 ## PAI Capabilities
 
-- Local vector database management
-- Privacy-preserving embedding storage
-- Offline similarity search
+### Vector Operations
 
-## Detailed PAI Documentation
+```python
+from codomyrmex.vector_store import VectorStore, VectorDocument, SearchResult
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/vector_store/PAI.md](../../../src/codomyrmex/vector_store/PAI.md)
+store = VectorStore(backend="local")
 
-## Configuration
+# Store documents as vectors
+doc = VectorDocument(content="Authentication endpoint using JWT", metadata={"module": "auth"})
+store.upsert(doc)
 
-See [README.md](README.md) for configuration options and environment variables.
+# Semantic search
+results: list[SearchResult] = store.search("login API", top_k=5)
+```
 
-## Signposting
+### Data Models
 
-### Navigation
+```python
+from codomyrmex.vector_store.models import Embedding, VectorIndex, SimilarityMetric
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `VectorStore` | Class | Vector storage and retrieval engine |
+| `VectorDocument` | Model | Document with embedding metadata |
+| `SearchResult` | Model | Similarity search result |
+| `Embedding` | Model | Vector embedding data model |
+| `VectorIndex` | Model | Index configuration |
+| `SimilarityMetric` | Enum | Cosine, euclidean, dot product |
+| `cli_commands` | Function | CLI commands for vector operations |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Vector Store Contribution |
+|-------|---------------------------|
+| **OBSERVE** | Semantic search for relevant code/docs using vector similarity |
+| **THINK** | Retrieve contextually similar past experiences for reasoning |
+| **LEARN** | Store embeddings of work outcomes for future retrieval |
+
+## Architecture Role
+
+**Core Layer** — Central embedding infrastructure. Consumed by `graph_rag/` (hybrid search), `agentic_memory/` (semantic memory), `search/` (augmented search), and `cerebrum/` (similarity-based reasoning).
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,49 +1,42 @@
 # Personal AI Infrastructure — Logistics Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Logistics Module for Codomyrmex This is a **Service Layer** module.
+The Logistics module provides task scheduling, coordination, and resource management for the PAI Algorithm's PLAN phase. It handles task prioritization, deadline management, and resource allocation across concurrent agent workflows.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.logistics import WorkflowManager, TaskOrchestrator, ProjectManager, routing, optimization, resources
-```
+- Priority-based task scheduling with deadlines
+- Resource allocation and contention management
+- Gantt-style schedule visualization
+- Dependency-aware task ordering
+- Scheduler metrics and utilization tracking
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `WorkflowManager` | Class | Workflowmanager |
-| `TaskOrchestrator` | Class | Taskorchestrator |
-| `ProjectManager` | Class | Projectmanager |
-| `ResourceManager` | Class | Resourcemanager |
-| `OrchestrationEngine` | Class | Orchestrationengine |
-| `OrchestrationSession` | Class | Orchestrationsession |
-| `Queue` | Class | Queue |
-| `Job` | Class | Job |
-| `JobScheduler` | Class | Jobscheduler |
-| `ScheduleManager` | Class | Schedulemanager |
-| `CronScheduler` | Class | Cronscheduler |
-| `CronExpression` | Class | Cronexpression |
-| `RecurringScheduler` | Class | Recurringscheduler |
-| `RecurringSchedule` | Class | Recurringschedule |
-| `TimezoneManager` | Class | Timezonemanager |
-
-*Plus 5 additional exports.*
-
+| Schedulers | Various | Task scheduling and prioritization |
+| Resource managers | Various | Resource allocation and tracking |
+| Metrics | Various | Scheduler utilization and performance |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Logistics Contribution |
-|-------|------------------------------|
-| **PLAN** | Workflow planning and scheduling |
+|-------|-------------------------|
+| **PLAN** | Schedule tasks with priorities and deadlines |
+| **EXECUTE** | Allocate resources and coordinate concurrent work |
+| **VERIFY** | Check schedule adherence and resource utilization |
+
+## MCP Integration
+
+Scheduler metrics exposed for PAI dashboard consumption.
 
 ## Architecture Role
 
-**Service Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumed by `orchestrator/` (workflow scheduling), `agents/` (task distribution), and `calendar/` (deadline integration).
 
 ## Navigation
 

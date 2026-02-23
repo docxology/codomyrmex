@@ -1,11 +1,10 @@
 # Data Visualization Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Comprehensive data visualization module providing chart generation, plotting engines, Mermaid diagram generation, and Git repository visualization. Supports multiple chart types (line, bar, scatter, histogram, pie, heatmap, box plot, area chart), configurable styles and color palettes, and an advanced plotting engine with dashboard creation. Includes specialized visualizers for Git branch topology and commit timelines.
-
 
 ## Installation
 
@@ -82,13 +81,11 @@ from codomyrmex.data_visualization import get_available_styles, get_available_pa
 result = get_available_styles()
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
 ```
-
 
 ## Consolidated Sub-modules
 

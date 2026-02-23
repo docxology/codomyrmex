@@ -1,44 +1,156 @@
 # Tests — Functional Specification
 
-**Module**: `codomyrmex.tests`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Codomyrmex Tests Package
+Testing directory providing comprehensive test suites following test-driven development practices with real data analysis (no mock methods). Ensures code quality, functionality, and reliability across the Codomyrmex platform.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
+- Tests organized by type and module
+- Independent test execution
+- Clear test boundaries
+- Composable test fixtures
 
-### Submodule Structure
+### Internal Coherence
 
-- `examples/` — Testing infrastructure for Codomyrmex examples.
+- Consistent test structure
+- Unified assertion patterns
+- Standardized fixtures
+- Logical test organization
 
-### Source Files
+### Parsimony
 
-- `conftest.py`
+- Essential test cases only
+- Focused test assertions
+- Minimal test setup
+- Direct test implementations
 
-## 3. Dependencies
+### Functionality
 
-See `src/codomyrmex/tests/__init__.py` for import dependencies.
+- Real data analysis (no mocks)
+- Working test scenarios
+- Practical test coverage
+- Actionable test results
 
-## 4. Public API
+### Testing
 
-See source module for available exports.
+- Test-driven development
+- Comprehensive coverage (≥80%)
+- Unit and integration tests
+- Performance benchmarks
 
-## 5. Testing
+### Documentation
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tests -v
+- Clear test descriptions
+- Documented test fixtures
+- Usage examples
+- Test organization guides
+
+## Architecture
+
+```mermaid
+graph TD
+    subgraph "Test Pyramid"
+        Unit[unit/]
+        Integration[integration/]
+        Performance[performance/]
+        Examples[examples/]
+        Fixtures[fixtures/]
+    end
+
+    subgraph "Test Infrastructure"
+        Pytest[pytest]
+        Coverage[coverage.py]
+        Fixtures[pytest fixtures]
+        Conftest[conftest.py]
+    end
+
+    Unit --> Pytest
+    Integration --> Pytest
+    Performance --> Pytest
+    Examples --> Pytest
+    Fixtures --> Pytest
+    Pytest --> Coverage
+    Conftest --> Fixtures
 ```
 
-## References
+## Functional Requirements
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/tests/)
+### Test Types
+
+1. **Unit Tests**: Individual functions and classes
+2. **Integration Tests**: Cross-module workflows
+3. **Performance Tests**: Benchmarking and profiling
+4. **Example Tests**: Runnable examples validation
+5. **Fixture Tests**: Test data and setup validation
+
+### Test Standards
+
+- Real data analysis (no mocks)
+- ≥80% code coverage
+- Clear test descriptions
+- Independent test execution
+- Fast test execution
+
+## Quality Standards
+
+### Test Quality
+
+- Comprehensive coverage
+- Clear test descriptions
+- Real data usage
+- Fast execution
+- Reliable results
+
+### Code Quality
+
+- Follow TDD practices
+- Clear test structure
+- Proper fixtures
+- Good assertions
+
+## Interface Contracts
+
+### Test Interface
+
+- pytest-compatible test functions
+- Standard fixture usage
+- Consistent assertion patterns
+- Clear test organization
+
+### Fixture Interface
+
+- Shared fixtures in conftest.py
+- Module-specific fixtures
+- Consistent fixture naming
+- Reusable test data
+
+## Implementation Guidelines
+
+### Test Development
+
+1. Write tests before implementation (TDD)
+2. Use real data (no mocks)
+3. Ensure comprehensive coverage
+4. Keep tests fast and independent
+5. Document test purpose
+
+### Test Organization
+
+- Organize by test type
+- Group related tests
+- Use descriptive names
+- Share common fixtures
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->

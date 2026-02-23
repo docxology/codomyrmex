@@ -1,41 +1,94 @@
-# Telemetry — Functional Specification
+# telemetry - Functional Specification
 
-**Module**: `codomyrmex.telemetry`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Telemetry module for Codomyrmex.
+The `telemetry` module provides a unified observability framework based on the OpenTelemetry standard. It allows the system to record, correlate, and analyze the performance and behavior of distributed workflows.
 
-## 2. Architecture
+## Design Principles
 
-### Submodule Structure
+### Compatibility
 
-- `alerting/` — Alerting Submodule
-- `context/` — Trace context submodule.
-- `exporters/` — Telemetry exporters for sending trace data to backends.
-- `metrics/` — Telemetry Metrics Module
-- `sampling/` — Sampling Submodule
-- `spans/` — Telemetry span management.
-- `tracing/` — Telemetry Tracing Module
+- Adheres to OpenTelemetry (OTLP) specifications.
+- Supports standard span attributes (HTTP status, error codes, component names).
 
-## 3. Dependencies
+### Distributed Traceability
 
-See `src/codomyrmex/telemetry/__init__.py` for import dependencies.
+- Enables propagation of trace context across process and network boundaries.
+- Supports parent-child span nesting for recursive workflows (e.g., agent task decomposition).
 
-## 4. Public API
+### Metrics and Observability
 
-See source module for available exports.
+- Supports recording and aggregating performance metrics (Counters, Gauges, Histograms).
+- Provides a centralized dashboard for real-time system visibility.
 
-## 5. Testing
+## Functional Requirements
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k telemetry -v
+### Span Management
+
+- Creation and termination of spans with millisecond precision.
+- Attachment of semantic attributes and events to spans.
+- Automatic span status propagation (OK, ERROR, UNSET).
+
+### Context Propagation
+
+- Support for `W3C Trace Parent` headers.
+- Thread-safe and async-aware local context management.
+
+### Data Export
+
+- OTLP/HTTP and OTLP/gRPC support (where dependencies allow).
+- Buffering and batching of span data for high-throughput scenarios.
+
+### Metrics (Consolidated)
+
+- Support for standard metric instruments: Counter, UpDownCounter, Gauge, Histogram.
+- Time-series aggregation and periodic export.
+- Dimensionality support through metric attributes.
+
+### Dashboard (Consolidated)
+
+- Real-time visualization of traces and metrics.
+- Sub-second updates for critical system health indicators.
+- Correlated view of logs, traces, and metrics.
+
+## Interface Contracts
+
+### `TraceContext`
+
+- `start_span(name: str, parent: Optional[Span]) -> Span`
+- `traced(name: str, attributes: dict)`: Decorator interface.
+- `link_span(span: Span, target: Span)`: Context linking.
+- `get_current_span() -> Optional[Span]`
+
+### `Metrics`
+
+- `create_counter(name: str) -> Counter`
+- `create_gauge(name: str) -> Gauge`
+- `create_histogram(name: str) -> Histogram`
+- `record_metric(name: str, value: float, attributes: dict)`
+
+### `Dashboard`
+
+- `start_dashboard_server(port: int)`
+- `register_view(metric_name: str, chart_type: str)`
+- `update_display()`
+
+## Quality Standards
+
+- Comprehensive unit tests for context propagation.
+- Benchmarking of span start/end overhead.
+- ≥80% test coverage.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+
+## API Usage
+
+```python
+import codomyrmex.telemetry
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/telemetry/)

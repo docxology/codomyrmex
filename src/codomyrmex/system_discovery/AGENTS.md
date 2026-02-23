@@ -1,5 +1,7 @@
 # Agent Guidelines - System Discovery
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Module introspection, capability scanning, and system health reporting.

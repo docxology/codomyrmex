@@ -1,5 +1,7 @@
 # Agent Guidelines - Auth
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Authentication and authorization with OAuth, JWT, and API keys.

@@ -9,6 +9,7 @@ import logging
 import random
 from dataclasses import dataclass, field
 from datetime import datetime
+from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any
 from collections.abc import Callable
@@ -48,7 +49,7 @@ class ElectionResult:
         }
 
 
-class LeaderElection:
+class LeaderElection(ABC):
     """
     Base leader election protocol.
 
@@ -73,6 +74,7 @@ class LeaderElection:
         """Get election history."""
         return self._election_history.copy()
 
+    @abstractmethod
     async def elect(self, agents: list[CollaborativeAgent]) -> ElectionResult:
         """
         Run an election among the given agents.

@@ -13,6 +13,7 @@ Runnable code examples demonstrating Codomyrmex capabilities. Organized by compl
 | [**basic-examples.md**](basic-examples.md) | Simple, standalone examples for beginners |
 | [**integration-examples.md**](integration-examples.md) | Cross-module integration patterns |
 | [**orchestration-examples.md**](orchestration-examples.md) | Complex workflow orchestration |
+| [**USAGE_EXAMPLES.md**](USAGE_EXAMPLES.md) | Quick usage examples reference |
 | [AGENTS.md](AGENTS.md) | Agent coordination for examples |
 | [SPEC.md](SPEC.md) | Examples documentation specification |
 | [PAI.md](PAI.md) | Personal AI example patterns |

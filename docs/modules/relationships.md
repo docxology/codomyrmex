@@ -81,7 +81,7 @@ This document provides a comprehensive overview of how Codomyrmex modules intera
 | **`telemetry`** | OpenTelemetry tracing, **metrics**, **dashboards** | opentelemetry | logging_monitoring | performance |
 | **`testing`** | Test fixtures, generators, **workflow testing**, **chaos engineering** | pytest, factory | logging_monitoring | tests, Developers |
 | **`tool_use`** | Tool registry & composition | validation | logging_monitoring, validation | agents, orchestrator |
-| **`tree_sitter`** | AST parsing & analysis | tree-sitter | logging_monitoring | coding |
+| **`static_analysis`** | Static analysis | tree-sitter | logging_monitoring | coding |
 | **`vector_store`** | Embeddings storage | faiss, chromadb | logging_monitoring, llm | graph_rag, agentic_memory |
 | **`video`** | Video processing | ffmpeg, opencv | logging_monitoring | llm, documents |
 | **`wallet`** | Self-custody, recovery, **smart contracts** | encryption | logging_monitoring, encryption | identity, market |

@@ -4,27 +4,38 @@
 
 ## Overview
 
-The Collaboration module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Collaboration module provides multi-agent and multi-user collaboration primitives — shared workspaces, real-time synchronization, and collaborative editing interfaces for team-based AI-assisted development.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/collaboration/PAI.md](../../../src/codomyrmex/collaboration/PAI.md)
+- Shared workspace management for multi-agent collaboration
+- Real-time document synchronization
+- Collaborative code editing with conflict resolution
+- Multi-user session management
+- Role-based collaboration permissions
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Workspace managers | Various | Shared workspace lifecycle |
+| Sync engines | Various | Real-time state synchronization |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Collaboration Contribution |
+|-------|----------------------------|
+| **PLAN** | Coordinate multi-agent work distribution |
+| **EXECUTE** | Synchronize parallel agent work in shared workspaces |
+| **VERIFY** | Resolve conflicts and validate merged results |
+
+## Architecture Role
+
+**Service Layer** — Consumes `concurrency/` (locks), `events/` (sync events), `git_operations/` (merge resolution). Enables multi-agent parallel work.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

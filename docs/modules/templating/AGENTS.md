@@ -1,40 +1,63 @@
-# Templating Module — Agent Coordination
+# Agent Guidelines - Templating
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Templating module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Template engine support (Jinja2, Mako) for code generation and dynamic content.
 
-- **TemplatingError**: Raised when templating operations fail.
-- `get_default_engine()`: Get or create default template engine instance.
-- `render()`: Render a template string with context data.
-- `render_file()`: Load and render a template file.
+## Key Classes
 
-## Agent Usage Patterns
+- **TemplateEngine** — Configurable template engine
+- **Template** — Loaded template object
+- **TemplateManager** — Template directory management
+- **render()** — Convenience function for rendering
+- **render_file()** — Render template from file
+
+## Agent Instructions
+
+1. **Choose engine wisely** — Jinja2 for HTML/configs, Mako for Python-heavy
+2. **Use render() for simple** — Convenience function for quick templates
+3. **Cache templates** — Use `TemplateEngine` for repeated rendering
+4. **Register filters** — Add custom filters for complex transformations
+5. **Handle errors** — Catch `TemplatingError` for invalid templates
+
+## Common Patterns
 
 ```python
-from codomyrmex.templating import TemplatingError
+from codomyrmex.templating import render, TemplateEngine
 
-# Agent initializes templating
-instance = TemplatingError()
+# Simple rendering
+output = render("Hello {{ name }}!", {"name": "World"})
+
+# Complex template with engine
+engine = TemplateEngine(engine="jinja2")
+
+# Add custom filter
+engine.add_filter("uppercase", str.upper)
+
+# Render with data
+template = engine.load_template("report.html.j2")
+result = template.render({
+    "title": "Report",
+    "items": data_items
+})
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/templating/](../../../src/codomyrmex/templating/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify template rendering
+from codomyrmex.templating import render
 
-## Related Modules
+output = render("{{ x + y }}", {"x": 1, "y": 2})
+assert output == "3"
 
-- [Exceptions](../exceptions/AGENTS.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k templating -v
+# Verify file rendering
+output = render_file("templates/test.j2", {"name": "test"})
+assert "test" in output
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

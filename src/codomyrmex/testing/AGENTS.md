@@ -1,5 +1,7 @@
 # Agent Guidelines - Testing
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Test utilities, fixtures, and testing patterns for Codomyrmex.

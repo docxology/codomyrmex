@@ -1,69 +1,43 @@
-# Finance — Functional Specification
+# Finance — Specification
 
-**Module**: `codomyrmex.finance`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Finance Module for Codomyrmex.
+Complete financial management: double-entry bookkeeping, tax compliance, payroll, and financial forecasting.
 
-Provides double-entry bookkeeping, tax compliance, payroll processing,
-and financial forecasting.
+## Functional Requirements
 
-Submodules:
-    ledger -- Double-entry bookkeeping engine
-    forecasting -- Time-series forecasting (moving average, exponential smoothing, linear trend)
-    taxes -- Progressive tax calculation with bracket support
-    payroll -- Payroll processing with tax withholding and pay-stub generation
+### Ledger
 
-## 2. Architecture
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Ledger()` | Constructor | Create empty ledger |
+| `ledger.record(txn)` | `record(Transaction) → None` | Record a balanced transaction |
+| `ledger.trial_balance()` | `→ dict[str, Decimal]` | Compute trial balance |
 
-### Source Files
+### Transactions
 
-| File | Purpose |
-|------|--------|
-| `account.py` | Primary account types in double-entry bookkeeping. |
-| `ledger.py` | Immutable record of a financial event. |
-| `visualization.py` | Generates a bar chart of account balances. |
+| Constraint | Description |
+|------------|-------------|
+| Immutability | Transactions cannot be modified after creation |
+| Balance | `debit_amount == credit_amount` (enforced at record time) |
+| Account naming | Must follow `Category:Subcategory` format |
 
-### Submodule Structure
+### Tax and Payroll
 
-- `forecasting/` — Forecasting
-- `ledger/` — Ledger
-- `payroll/` — Payroll
-- `taxes/` — Taxes
+| Interface | Description |
+|-----------|-------------|
+| `TaxCalculator(jurisdiction)` | Tax estimation for a given jurisdiction |
+| `PayrollProcessor()` | Employee payment processing and stub generation |
+| `Forecaster()` | Financial projection and trend modeling |
 
-## 3. Dependencies
+## Non-Functional Requirements
 
-No internal Codomyrmex dependencies.
+- **Precision**: All monetary values use `Decimal` (no floating point)
+- **Auditability**: Full transaction log with timestamps and audit trail
+- **Atomicity**: Ledger records are atomic — balanced or rejected
 
-## 4. Public API
+## Navigation
 
-### Exports (`__all__`)
-
-- `AccountType`
-- `Account`
-- `TransactionEntry`
-- `Transaction`
-- `Ledger`
-- `LedgerError`
-- `Forecaster`
-- `TaxCalculator`
-- `TaxResult`
-- `PayrollProcessor`
-- `PayStub`
-
-## 5. Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k finance -v
-```
-
-All tests follow the Zero-Mock policy.
-
-## 6. References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/finance/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

@@ -1,5 +1,7 @@
 # Agent Guidelines - Model Ops
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 ML model lifecycle: training, feature engineering, optimization, deployment, and versioning.

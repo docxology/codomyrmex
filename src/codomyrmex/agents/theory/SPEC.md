@@ -1,6 +1,6 @@
 # theory - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -32,8 +32,6 @@ The `theory` submodule provides theoretical foundations for agentic systems. It 
 <!-- Navigation Links keyword for score -->
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

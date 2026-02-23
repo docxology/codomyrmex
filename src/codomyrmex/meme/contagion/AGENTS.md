@@ -1,5 +1,7 @@
 # Agents Guide: Contagion
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `contagion` submodule to model the spread of information and detect viral events.

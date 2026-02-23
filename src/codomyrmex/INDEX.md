@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-**Version**: v0.1.8 | **Modules**: 82 | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Modules**: 84 | **Last Updated**: February 2026
 
 > [!TIP]
 > This INDEX confirms and catalogs every module directory in `src/codomyrmex/`.
@@ -14,7 +14,7 @@
 | [AGENTS.md](AGENTS.md) | Agent coordination & module listing |
 | [SPEC.md](SPEC.md) | Functional specification & architecture |
 | [PAI.md](PAI.md) | Personal AI Infrastructure mapping |
-| [**init**.py](__init__.py) | Canonical Python exports (82 modules) |
+| [**init**.py](__init__.py) | Canonical Python exports (84 modules) |
 
 ---
 
@@ -86,6 +86,7 @@ Advanced features with flexible dependencies.
 | [agents/](agents/) | AI agent integrations (Claude, Codex, Jules…) | 445 |
 | [audio/](audio/) | Audio processing & analysis | 69 |
 | [bio_simulation/](bio_simulation/) | Biological simulation models | 37 |
+| [calendar/](calendar/) | Event management & calendar providers | 23 |
 | [cerebrum/](cerebrum/) | Case-based reasoning & Bayesian inference | 115 |
 | [cli/](cli/) | Command-line interface | 83 |
 | [collaboration/](collaboration/) | Team collaboration tools | 93 |
@@ -95,6 +96,7 @@ Advanced features with flexible dependencies.
 | [defense/](defense/) | Active countermeasures & containment | 22 |
 | [dependency_injection/](dependency_injection/) | DI container & patterns | 19 |
 | [edge_computing/](edge_computing/) | Edge deployment & inference | 68 |
+| [email/](email/) | Email composition & providers | 31 |
 | [embodiment/](embodiment/) | Physical embodiment interfaces | 57 |
 | [events/](events/) | Event system & pub/sub | 110 |
 | [evolutionary_ai/](evolutionary_ai/) | Evolutionary algorithms & optimization | 69 |
@@ -140,14 +142,14 @@ Advanced features with flexible dependencies.
 
 | Check | Status |
 | :--- | :--- |
-| Directories on disk | **82** |
-| Modules in `__init__.py._submodules` | **82** |
-| Modules in `__all__` | **85** (82 modules + 3 utility functions) |
+| Directions on disk | **84** |
+| Modules in `__init__.py._submodules` | **84** |
+| Modules in `__all__` | **87** (84 modules + 3 utility functions) |
 | Foundation Layer | **6** modules |
 | Core Layer | **15** modules |
 | Service Layer | **10** modules |
-| Specialized Layer | **51** modules |
-| **Total** | **82** ✅ |
+| Specialized Layer | **53** modules |
+| **Total** | **84** ✅ |
 
 ---
 

@@ -1,5 +1,7 @@
 # Agent Guidelines - Collaboration
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Multi-agent collaboration, shared state, and coordination patterns.

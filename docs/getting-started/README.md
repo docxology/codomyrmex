@@ -41,8 +41,7 @@ Work through [tutorials/](tutorials/) for hands-on learning.
 | Tutorial | Description |
 |----------|-------------|
 | [Creating a Module](tutorials/creating-a-module.md) | Build your own Codomyrmex module |
-| [AI Code Generation](tutorials/) | Use AI for code generation |
-| [Data Visualization](tutorials/) | Create charts and plots |
+| [Connecting PAI](tutorials/connecting-pai.md) | Connect PAI to Codomyrmex |
 
 ## Prerequisites
 

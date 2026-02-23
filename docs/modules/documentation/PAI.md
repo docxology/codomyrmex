@@ -4,27 +4,79 @@
 
 ## Overview
 
-The Documentation module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Documentation module handles the **semantics** of technical documentation — quality auditing, RASP compliance, auto-generation of PAI.md files, and root-level doc synchronization. Distinct from the `documents` module which handles document I/O mechanics.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/documentation/PAI.md](../../../src/codomyrmex/documentation/PAI.md)
+### Documentation Quality Audit
 
-## Configuration
+```python
+from codomyrmex.documentation import audit_documentation, audit_rasp, ModuleAudit
 
-See [README.md](README.md) for configuration options and environment variables.
+# Audit documentation quality across modules
+results = audit_documentation(path="src/codomyrmex")
 
-## Signposting
+# Check RASP compliance (README, AGENTS, SPEC, PAI)
+rasp_results = audit_rasp(module_path="src/codomyrmex/agents")
 
-### Navigation
+# Full module audit
+audit = ModuleAudit(module_path="src/codomyrmex/llm")
+report = audit.run()
+```
+
+### PAI Doc Generation
+
+```python
+from codomyrmex.documentation import update_pai_docs, generate_pai_md
+
+# Auto-generate PAI.md from module exports and metadata
+pai_content = generate_pai_md(module_path="src/codomyrmex/crypto")
+
+# Update all PAI docs across the project
+update_pai_docs()
+```
+
+### Root Doc Maintenance
+
+```python
+from codomyrmex.documentation import update_root_docs, finalize_docs, update_spec
+
+# Synchronize root README, SPEC with module inventory
+update_root_docs()
+finalize_docs()
+update_spec()
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `audit_documentation` | Function | Project-wide documentation quality audit |
+| `audit_rasp` | Function | RASP compliance check for a module |
+| `ModuleAudit` | Class | Comprehensive single-module doc audit |
+| `update_pai_docs` | Function | Auto-update all PAI.md files |
+| `generate_pai_md` | Function | Generate PAI.md content for a module |
+| `update_root_docs` | Function | Sync root-level documentation |
+| `finalize_docs` | Function | Final documentation pass |
+| `update_spec` | Function | Update SPEC.md |
+| `quality` | Module | Documentation quality metrics |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Documentation Contribution |
+|-------|----------------------------|
+| **OBSERVE** | Audit RASP compliance and documentation coverage |
+| **BUILD** | Generate and update PAI.md, README.md, SPEC.md files |
+| **VERIFY** | Validate documentation quality, check for stale references |
+| **LEARN** | Record documentation improvements and audit history |
+
+## Architecture Role
+
+**Service Layer** — Consumes `static_analysis/` (import scanning), `system_discovery/` (module listing), `documents/` (file I/O). Consumed by `maintenance/` for automated doc updates.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

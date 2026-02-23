@@ -1,6 +1,6 @@
 # mistral_vibe - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -144,8 +144,6 @@ graph TD
 - **Parent SPEC**: [../SPEC.md](../SPEC.md)
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

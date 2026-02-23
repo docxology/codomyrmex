@@ -1,5 +1,7 @@
 # model_ops - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To provide a structured and scalable framework for LLM operations, enabling reproducible model optimization and rigorous performance verification.

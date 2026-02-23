@@ -1,120 +1,74 @@
-# Codomyrmex Agents - Security Module
+# Agent Guidelines - Security
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Purpose
+## Module Overview
 
-The Security module provides comprehensive security capabilities across 8 specialized submodules. This document defines the active components, operating contracts, and agent integration points.
+Security utilities: input validation, vulnerability scanning, and hardening.
 
-## Active Components
+## Key Classes
 
-### Scanning Submodule
-- `SecurityScanner` - Static application security testing engine with extensible rule system
-- `PatternRule`, `SQLInjectionRule`, `HardcodedSecretRule`, `CommandInjectionRule`, `InsecureRandomRule` - Built-in security rules
-- `SecurityFinding`, `ScanResult` - Scan result data models
+| Component | Description |
+|-----------|-------------|
+| `VulnerabilityScanner` | Comprehensive scanning for vulnerabilities |
+| `SecretsDetector` | Identify exposed API keys and secrets |
+| `SecurityAnalyzer` | Analyze source code for common security pitfalls |
+| `ThreatModel` | Structured risk assessment for system architectures |
+| `PolicyEngine` | Governance rule enforcement and compliance |
 
-### Secrets Submodule
-- `SecretScanner` - Multi-pattern secret detection engine (13 built-in patterns)
-- `SecretVault` - Encrypted secret storage with XOR encryption
-- `SecretPatterns` - Configurable pattern collection with confidence scores
-- `DetectedSecret`, `ScanResult` - Detection result data models
+## Usage for Agents
 
-### Audit Submodule
-- `AuditLogger` - Main audit logging service with pluggable storage
-- `InMemoryAuditStore` - Thread-safe in-memory event storage (max 10,000 events)
-- `FileAuditStore` - Append-only file-based event storage
-- `AuditEvent` - Typed audit event with SHA-256 integrity signature
+### Vulnerability Scanning
 
-### Compliance Submodule
-- `ComplianceChecker` - Compliance assessment engine for 6 frameworks
-- `PolicyChecker` - Lambda-based control checker implementation
-- `Control`, `ControlResult`, `ComplianceReport` - Compliance data models
-- `SOC2_CONTROLS` - Pre-built SOC2 control definitions
-
-### Digital Submodule
-- `VulnerabilityScanner` - Vulnerability scanning and code security auditing
-- `SecretsDetector` - Digital secrets detection in codebases
-- `SecurityAnalyzer` - File and directory security analysis
-- `EncryptionManager` - Data encryption/decryption operations
-- `CertificateValidator` - SSL/TLS certificate validation
-- `SecurityMonitor` - Security event monitoring and access log auditing
-- `SecurityReportGenerator` - Security report generation
-- `ComplianceChecker` (digital variant) - Digital compliance checking
-
-### Physical Submodule
-- `AccessControlSystem` - Physical access control with permission checking
-- `AssetInventory` - Physical asset registration and tracking
-- `SurveillanceMonitor` - Physical access monitoring and event logging
-- `PhysicalVulnerabilityScanner` - Physical security vulnerability assessment
-- `PerimeterManager` - Perimeter security and access point management
-
-### Cognitive Submodule
-- `SocialEngineeringDetector` - Social engineering attack detection
-- `PhishingAnalyzer` - Email phishing analysis
-- `AwarenessTrainer` - Security awareness training module creation
-- `CognitiveThreatAssessor` - Cognitive threat and human factors assessment
-- `BehaviorAnalyzer` - User behavior analysis and anomaly detection
-
-### Theory Submodule
-- `SecurityPrinciple` - Security principles with categories
-- `SecurityFramework` - Security framework definitions and compliance checking
-- `ThreatModel` / `ThreatModelBuilder` - Threat modeling and analysis
-- `RiskAssessment` / `RiskAssessor` - Risk assessment and scoring
-- `SecurityPattern` - Security architecture patterns
-- `SecurityBestPractice` - Security best practices with prioritization
-
-## Operating Contracts
-
-### Logging
-All submodules integrate with `logging_monitoring` via `get_logger()` for structured logging. Agents should respect log levels and not suppress security-relevant log output.
-
-### Optional Dependency Handling
-Each submodule uses conditional imports with `*_AVAILABLE` flags:
 ```python
-try:
-    from .digital import VulnerabilityScanner, ...
-    DIGITAL_AVAILABLE = True
-except ImportError:
-    DIGITAL_AVAILABLE = False
+from codomyrmex.security import VulnerabilityScanner
+
+scanner = VulnerabilityScanner()
+results = scanner.scan_project_security("./src")
+if results.get("vulnerabilities"):
+    print(f"Found {results['vulnerabilities']['count']} vulnerabilities")
 ```
-Agents must check availability flags before invoking features that depend on optional packages (`cryptography`, `pyOpenSSL`, `jinja2`).
 
-### Thread Safety
-Core components use `threading.Lock` for concurrent access:
-- `SecurityScanner._lock` for scan ID generation
-- `AuditLogger._lock` for event ID generation
-- `InMemoryAuditStore._lock` for event storage
-- `FileAuditStore._lock` for file writes
-- `ComplianceChecker._lock` for report ID generation
+### Secrets Detection
 
-Agents operating in concurrent environments must not bypass these locks.
+```python
+from codomyrmex.security import SecretsDetector
 
-### Data Integrity
-- `AuditEvent.signature` provides SHA-256 integrity verification
-- `FileAuditStore` uses append-only writes for audit trail immutability
-- `SecretVault` uses key derivation from master password
+detector = SecretsDetector()
+findings = detector.scan_directory_for_secrets("./src")
+for finding in findings:
+    print(f"Secret leaked in {finding.file_path}: {finding.secret_type}")
+```
 
-### Extensibility Points
-Agents can extend the module via abstract base classes:
-- `SecurityRule` (ABC) - Custom scanning rules
-- `AuditStore` (ABC) - Custom audit storage backends
-- `ControlChecker` (ABC) - Custom compliance checkers
+### Threat Modeling
 
-## Agent Integration Points
+```python
+from codomyrmex.security import create_threat_model, analyze_threats
 
-### MCP Tool Interfaces
-Security submodules expose MCP-compatible tool definitions (see source `MCP_TOOL_SPECIFICATION.md` files) for integration with LLM-based agents.
+model = create_threat_model(
+    system_name="Auth API",
+    assets=["User DB", "API Keys"],
+    attack_surface=["/login", "/signup"]
+)
+analysis = analyze_threats(model)
+print(f"Total threats identified: {analysis['total_threats']}")
+```
 
-### Programmatic APIs
-All public APIs are documented in source-level `API_SPECIFICATION.md` files. Key entry points:
-- `SecurityScanner.scan_file()` / `scan_directory()` / `scan_content()`
-- `SecretScanner.scan_text()` / `scan_file()` / `scan_directory()`
-- `AuditLogger.log()` / `log_login()` / `log_data_access()` / `query()`
-- `ComplianceChecker.assess()` / `check_control()`
+### Policy Enforcement
 
-## Navigation Links
+```python
+from codomyrmex.security.governance import PolicyEngine, Policy
 
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [../../../README.md](../../../README.md)
-- **Source**: [`src/codomyrmex/security/`](../../../src/codomyrmex/security/)
-- **Technical Overview**: [technical_overview.md](technical_overview.md)
+engine = PolicyEngine()
+# Rule: password must be present in context
+engine.add_policy(Policy("PasswordRule", lambda c: "password" in c, "Missing password"))
+
+try:
+    engine.enforce({"username": "admin"})
+except Exception as e:
+    print(f"Enforcement failed: {e}")
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

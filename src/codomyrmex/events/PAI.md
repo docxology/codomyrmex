@@ -1,51 +1,53 @@
 # Personal AI Infrastructure — Events Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Event-Driven Architecture for Codomyrmex This is a **Service Layer** module.
+The Events module provides a publish/subscribe (pub/sub) event system for inter-module and inter-agent communication. It enables decoupled, event-driven workflows where modules emit events that other modules react to without direct coupling.
 
 ## PAI Capabilities
 
+### Event Bus
+
 ```python
-from codomyrmex.events import Event, EventType, EventPriority, notification, streaming, get_event_bus
+from codomyrmex.events import EventBus
+
+bus = EventBus()
+
+# Subscribe to events
+@bus.on("code_committed")
+async def on_commit(event):
+    print(f"New commit: {event.data['hash']}")
+
+# Emit events
+bus.emit("code_committed", data={"hash": "abc123", "author": "pai"})
 ```
+
+### Event-Driven Agent Workflows
+
+- Trigger agent actions on codebase changes
+- Chain agent responses through event cascades
+- Decouple module interactions for flexible orchestration
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `notification` | Function/Constant | Notification |
-| `streaming` | Function/Constant | Streaming |
-| `Event` | Class | Event |
-| `EventType` | Class | Eventtype |
-| `EventPriority` | Class | Eventpriority |
-| `EventSchema` | Class | Eventschema |
-| `EventBus` | Class | Eventbus |
-| `AsyncEventEmitter` | Class | Asynceventemitter |
-| `EventLogger` | Class | Eventlogger |
-| `EventMixin` | Class | Eventmixin |
-| `get_event_bus` | Function/Constant | Get event bus |
-| `publish_event` | Function/Constant | Publish event |
-| `subscribe_to_events` | Function/Constant | Subscribe to events |
-| `unsubscribe_from_events` | Function/Constant | Unsubscribe from events |
-| `get_event_logger` | Function/Constant | Get event logger |
-
-*Plus 9 additional exports.*
-
+| `EventBus` | Class | Pub/sub event system |
+| Event types | Various | Typed event definitions |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Events Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **VERIFY** | Validation and quality checks |
-| **LEARN** | Learning and knowledge capture |
+|-------|----------------------|
+| **PLAN** | Define event-driven workflow triggers |
+| **EXECUTE** | Emit and consume events during workflow execution |
+| **LEARN** | Event history provides audit trail of system activity |
 
 ## Architecture Role
 
-**Service Layer** — Part of the codomyrmex layered architecture.
+**Foundation Layer** — Cross-cutting event infrastructure consumed by `orchestrator/`, `agents/`, `git_operations/`, and the PAI dashboard.
 
 ## Navigation
 

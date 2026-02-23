@@ -1,79 +1,36 @@
-# Finance Module — Agent Coordination
+# Agent Instructions for `codomyrmex.finance`
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Finance Module for Codomyrmex.
+## Context
 
-Provides double-entry bookkeeping, tax compliance, payroll processing,
-and financial forecasting.
+The Finance module provides double-entry accounting, tax compliance, payroll processing, and financial forecasting. All financial operations use immutable `Transaction` records and must maintain balanced ledger states.
 
-Submodules:
-    ledger -- Double-entry bookkeeping engine
-    forecasting -- Time-series forecasting (moving average, exponential smoothing, linear trend)
-    taxes -- Progressive tax calculation with bracket support
-    payroll -- Payroll processing with tax withholding and pay-stub generation
+## Usage Guidelines
 
-## Key Capabilities
+1. **Importing**: Import from the module root.
 
-- **`Ledger`** — Double-entry bookkeeping engine
-- **`Transaction`** — Immutable financial record
-- **`Account`** — Chart of accounts management
-- `ledger/` — Core accounting engine
-- `taxes/` — Compliance and estimation
-- `payroll/` — Payment processing
-- `forecasting/` — Financial modeling
+   ```python
+   from codomyrmex.finance import Ledger, Transaction, Account, Forecaster, TaxCalculator, PayrollProcessor
+   ```
 
-## Agent Usage Patterns
+2. **Double-Entry Principle**: Every `Transaction` must have equal debit and credit amounts. The `Ledger` enforces this invariant.
 
-```python
-from codomyrmex.finance import Ledger, Transaction
+3. **Account Chart**: Use standard account naming: `Assets:*`, `Liabilities:*`, `Revenue:*`, `Expenses:*`, `Equity:*`.
 
-ledger = Ledger()
-ledger.record(Transaction(amount=100.00, debit="Assets:Cash", credit="Revenue:Sales"))
-```
+4. **Zero-Mock Policy**: Tests must use real `Ledger` instances with actual transactions. No mocking of financial calculations or storage.
 
-## Key Components
+5. **Tax Calculations**: `TaxCalculator` requires a `jurisdiction` parameter. Results are advisory — always validate with a professional.
 
-| Export | Type |
-|--------|------|
-| `AccountType` | Public API |
-| `Account` | Public API |
-| `TransactionEntry` | Public API |
-| `Transaction` | Public API |
-| `Ledger` | Public API |
-| `LedgerError` | Public API |
-| `Forecaster` | Public API |
-| `TaxCalculator` | Public API |
-| `TaxResult` | Public API |
-| `PayrollProcessor` | Public API |
-| `PayStub` | Public API |
+## Key Files
 
-## Source Files
+| File | Purpose |
+|------|---------|
+| `ledger/` | Core accounting (Ledger, Transaction, Account, Journal) |
+| `taxes/` | TaxCalculator, TaxResult |
+| `payroll/` | PayrollProcessor, PayStub |
+| `forecasting/` | Financial prediction models |
 
-| File | Description |
-|------|-------------|
-| `account.py` | Primary account types in double-entry bookkeeping. |
-| `ledger.py` | Immutable record of a financial event. |
-| `visualization.py` | Generates a bar chart of account balances. |
+## Navigation
 
-## Submodules
-
-- `forecasting/` — Forecasting
-- `ledger/` — Ledger
-- `payroll/` — Payroll
-- `taxes/` — Taxes
-
-## Integration Points
-
-- **Source**: [src/codomyrmex/finance/](../../../src/codomyrmex/finance/)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k finance -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

@@ -1,5 +1,7 @@
 # embodiment - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To enable Codomyrmex agents to perceive, reason about, and interact with the physical world through robotic systems.

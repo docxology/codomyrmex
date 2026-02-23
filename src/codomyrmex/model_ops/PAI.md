@@ -1,50 +1,39 @@
 # Personal AI Infrastructure — Model Ops Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Model Operations module for Codomyrmex. This is an **Extended Layer** module.
+The Model Ops (MLOps) module provides model lifecycle management — versioning, registering, deploying, and monitoring machine learning and AI models in production.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, feature_store, optimization, registry
-```
+- Model versioning and registry
+- Model deployment and serving
+- A/B testing for model variants
+- Performance monitoring and drift detection
+- Model rollback and promotion
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `feature_store` | Function/Constant | Feature store |
-| `optimization` | Function/Constant | Optimization |
-| `registry` | Function/Constant | Registry |
-| `evaluation` | Function/Constant | Evaluation |
-| `training` | Function/Constant | Training |
-| `Dataset` | Class | Dataset |
-| `DatasetSanitizer` | Class | Datasetsanitizer |
-| `FineTuningJob` | Class | Finetuningjob |
-| `Evaluator` | Class | Evaluator |
-| `Scorer` | Class | Scorer |
-| `ExactMatchScorer` | Class | Exactmatchscorer |
-| `ContainsScorer` | Class | Containsscorer |
-| `LengthScorer` | Class | Lengthscorer |
-| `RegexScorer` | Class | Regexscorer |
-
-*Plus 29 additional exports.*
-
+| Model registry | Various | Model versioning and storage |
+| Deployment managers | Various | Model serving and scaling |
+| Monitoring | Various | Drift detection and alerting |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Model Ops Contribution |
-|-------|------------------------------|
-| **THINK** | Analysis and reasoning |
-| **BUILD** | Artifact creation and code generation |
-| **LEARN** | Learning and knowledge capture |
+|-------|-------------------------|
+| **PLAN** | Select model version for deployment |
+| **EXECUTE** | Deploy and serve models |
+| **VERIFY** | Monitor model performance and detect drift |
+| **LEARN** | Register new model versions from training runs |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `llm/` (model management), `performance/` (benchmarking). Interface between model development and production serving.
 
 ## Navigation
 

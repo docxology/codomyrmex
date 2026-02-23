@@ -1,43 +1,67 @@
-# Personal AI Infrastructure — Ide Module
+# Personal AI Infrastructure — IDE Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-IDE Integration Module. This is an **Application Layer** module.
+The IDE module provides client interfaces for controlling and automating integrated development environments. It supports multiple IDE backends (Cursor, Antigravity) with a unified abstract interface for file operations, command execution, and editor state management.
 
 ## PAI Capabilities
 
+### IDE Client Interface
+
 ```python
-from codomyrmex.ide import IDEClient, IDEStatus, IDECommand
+from codomyrmex.ide import IDEClient, IDEStatus, IDECommand, IDECommandResult
+
+# Abstract IDE client with implementations for different editors
+class MyIDEClient(IDEClient):
+    def execute(self, command: IDECommand) -> IDECommandResult:
+        ...
+```
+
+### Cursor IDE Integration
+
+```python
+from codomyrmex.ide.cursor import CursorClient
+
+client = CursorClient()
+# Open files, navigate to symbols, execute editor commands
+# Integrate with Cursor's AI features
+```
+
+### IDE Data Models
+
+```python
+from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult, FileInfo
+
+# IDEStatus: CONNECTED, DISCONNECTED, BUSY
+# IDECommand: structured editor command
+# FileInfo: file metadata for editor context
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `IDEClient` | Class | Ideclient |
-| `IDEStatus` | Class | Idestatus |
-| `IDECommand` | Class | Idecommand |
-| `IDECommandResult` | Class | Idecommandresult |
-| `FileInfo` | Class | Fileinfo |
-| `IDEError` | Class | Ideerror |
-| `ConnectionError` | Class | Connectionerror |
-| `CommandExecutionError` | Class | Commandexecutionerror |
-| `SessionError` | Class | Sessionerror |
-| `ArtifactError` | Class | Artifacterror |
-| `CursorClient` | Class | Cursorclient |
+| `IDEClient` | Abstract Class | Unified IDE interface |
+| `CursorClient` | Class | Cursor IDE implementation |
+| `IDEStatus` | Enum | IDE connection state |
+| `IDECommand` | Dataclass | Structured editor command |
+| `IDECommandResult` | Dataclass | Command execution result |
+| `FileInfo` | Dataclass | File metadata for editors |
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | Ide Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **EXECUTE** | Execution and deployment |
+| Phase | IDE Contribution |
+|-------|-------------------|
+| **OBSERVE** | Read editor state (open files, cursor position, active document) |
+| **BUILD** | Open and edit files through IDE interface |
+| **EXECUTE** | Execute editor commands, apply code changes |
+| **VERIFY** | Check IDE diagnostics and linting results |
 
 ## Architecture Role
 
-**Application Layer** — Part of the codomyrmex layered architecture.
+**Interface Layer** — Top-level user interaction module. Consumes `coding/` (code operations) and `git_operations/` (VCS integration). No MCP tools — operates through direct IDE protocol.
 
 ## Navigation
 

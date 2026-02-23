@@ -1,6 +1,6 @@
 # Coding Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -89,7 +89,6 @@ debugger = Debugger()
 diagnosis = debugger.debug(code="x = 1/0", stdout="", stderr="ZeroDivisionError", exit_code=1)
 print(f"Root cause: {diagnosis}")
 ```
-
 
 ## Consolidated Sub-modules
 

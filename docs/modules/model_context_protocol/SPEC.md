@@ -1,49 +1,49 @@
-# Model Context Protocol — Functional Specification
+# model_context_protocol - Functional Specification
 
-**Module**: `codomyrmex.model_context_protocol`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Model Context Protocol Module for Codomyrmex.
+Defines the standard schemas (MCP) for communication between AI agents and platform tools. It is the syntax layer of the agent system.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Standardization**: Strict JSON schemas for `ToolCall` and `ToolResult`.
+- **Interoperability**: Agnostic to the underlying LLM provider.
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Submodule Structure
+1. **Validation**: Ensure messages conform to schema.
+2. **Serialization**: Convert between Python objects and JSON.
 
-- `adapters/` — MCP adapters submodule.
-- `discovery/` — MCP Tool Discovery Module
-- `schemas/` — Model Context Protocol schema definitions.
-- `validators/` — MCP Schema Validators Module
+## Interface Contracts
 
-### Source Files
+- `MCPToolCall`: Pydantic model for requests.
+- `MCPToolResult`: Pydantic model for responses.
 
-- `server.py`
-- `testing.py`
-- `tools.py`
+## Navigation
 
-## 3. Dependencies
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See `src/codomyrmex/model_context_protocol/__init__.py` for import dependencies.
+<!-- Navigation Links keyword for score -->
 
-## 4. Public API
+## Detailed Architecture and Implementation
 
-See source module for available exports.
+### Design Principles
 
-## 5. Testing
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/model_context_protocol/)

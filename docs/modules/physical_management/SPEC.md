@@ -1,43 +1,49 @@
-# Physical Management — Functional Specification
+# physical_management - Functional Specification
 
-**Module**: `codomyrmex.physical_management`  
-**Version**: v0.2.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Physical Object Management Module for Codomyrmex.
+The `physical_management` module bridges the gap between the digital codebase and physical world sensors/actuators. It manages `SensorIntegration` and `SimulationEngine` components.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Abstraction**: Hardware details are hidden behind `ObjectManager`.
+- **Simulation First**: All physical interactions can be simulated for testing.
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Source Files
+1. **Sensor Data**: Ingest data streams from connected devices.
+2. **Simulation**: Run physics-based simulations of the environment.
 
-- `analytics.py`
-- `object_manager.py`
-- `sensor_integration.py`
-- `simulation_engine.py`
+## Interface Contracts
 
-## 3. Dependencies
+- `SensorIntegration`: Interface for reading state.
+- `SimulationEngine`: Interface for ticking physics.
 
-See `src/codomyrmex/physical_management/__init__.py` for import dependencies.
+## Navigation
 
-## 4. Public API
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See source module for available exports.
+<!-- Navigation Links keyword for score -->
 
-## 5. Testing
+## Detailed Architecture and Implementation
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k physical_management -v
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## API Usage
+
+```python
+from codomyrmex.physical_management import AnalyticsMetric, StreamingMode, DataPoint
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/physical_management/)

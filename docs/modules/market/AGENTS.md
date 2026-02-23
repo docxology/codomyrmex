@@ -1,42 +1,62 @@
-# Market Module — Agent Coordination
+# Market Module - Agent Guide
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Market Module.
-
-## Key Capabilities
-
-- Market operations and management
-
-## Agent Usage Patterns
-
-```python
-from codomyrmex.market import *
-
-# Agent uses market capabilities
-```
-
-## Integration Points
-
-- **Source**: [src/codomyrmex/market/](../../../src/codomyrmex/market/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
-
+Secure Cognitive Agent module enabling anonymous marketplace transactions. Supports reverse auctions and collective bargaining through demand aggregation.
 
 ## Key Components
 
-- **`DemandAggregator`** — Aggregates similar demands into a bulk auction.
-- **`Bid`** — Bid
-- **`AuctionRequest`** — AuctionRequest
-- **`ReverseAuction`** — Manages anonymous reverse auctions.
-- **`Market`** — Main class for market functionality.
-- **`create_market()`** — Create a new Market instance.
+| Component | Description |
+|-----------|-------------|
+| `ReverseAuction` | Buyer-initiated auction system |
+| `DemandAggregator` | Collective bargaining engine |
+| `BidManager` | Bid lifecycle management |
+| `ProviderRegistry` | Service provider tracking |
 
-## Testing Guidelines
+## Usage for Agents
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k market -v
+### Auction Lifecycle
+
+```python
+from codomyrmex.market import ReverseAuction
+
+market = ReverseAuction()
+# 1. Create Request
+auction_id = market.create_request(persona_id="anon_1", description="GPU Compute", max_price=0.50)
+
+# 2. Receive Bids (from providers)
+market.place_bid(auction_id, "provider_A", 0.45, "High speed")
+
+# 3. Select Winner
+best_bid = market.get_best_bid(auction_id)
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+### Demand Aggregation
+
+```python
+from codomyrmex.market import DemandAggregator
+
+aggregator = DemandAggregator()
+# Join collective demand for better pricing
+aggregator.join_demand(item="storage_1TB", persona_id="anon_1")
+```
+
+## Agent Guidelines
+
+1. **Anonymity**: Always use personas, never real identities
+2. **Verification**: Verify provider authenticity before transacting
+3. **Cancellation**: Use `cancel_auction()` for cleanup
+
+## Operating Contracts
+
+- Maintain alignment between code, documentation, and configured workflows
+- Ensure Model Context Protocol interfaces remain available for sibling agents
+- Record outcomes in shared telemetry and update TODO queues when necessary
+
+## Navigation Links
+
+- **📁 Parent**: [codomyrmex/](../README.md)
+- **🏠 Root**: [../../../README.md](../../../README.md)
+- **🔗 Related**: [identity/](../identity/) | [wallet/](../wallet/) | [privacy/](../privacy/)

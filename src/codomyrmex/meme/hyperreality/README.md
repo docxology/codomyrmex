@@ -1,5 +1,7 @@
 # Hyperreality Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Simulation Theory & Simulacra**
 
 The `codomyrmex.meme.hyperreality` submodule models the layers of simulation that obscure reality (Baudrillard, Eco). It deals with simulacra—copies without originals—and the construction of artificial realities.

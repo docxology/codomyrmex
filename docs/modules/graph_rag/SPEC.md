@@ -1,50 +1,66 @@
-# Graph RAG — Functional Specification
+# Technical Specification - Graph Rag
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.graph_rag`  
-**Version**: v1.0.0  
-**Status**: Active
+**Last Updated**: 2026-01-29
 
-## 1. Overview
+## 1. Purpose
 
-Knowledge graph-enhanced RAG with entity relationships.
+Knowledge graph integration with RAG for structured knowledge retrieval and reasoning
 
 ## 2. Architecture
 
-### Components
+### 2.1 Components
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `EntityType` | Class | Types of entities in the knowledge graph. |
-| `RelationType` | Class | Types of relationships in the knowledge graph. |
-| `Entity` | Class | An entity in the knowledge graph. |
-| `Relationship` | Class | A relationship between entities. |
-| `GraphContext` | Class | Context retrieved from the knowledge graph. |
-| `KnowledgeGraph` | Class | In-memory knowledge graph for entity and relationship storage. |
-| `GraphRAGPipeline` | Class | RAG pipeline enhanced with knowledge graph context. |
-| `key()` | Function | Get unique key for this entity. |
-| `to_dict()` | Function | Convert to dictionary. |
-| `key()` | Function | Get unique key for this relationship. |
-| `to_dict()` | Function | Convert to dictionary. |
-| `entity_names()` | Function | Get names of all entities. |
+```
+graph_rag/
+├── __init__.py          # Module exports
+├── README.md            # Documentation
+├── AGENTS.md            # Agent guidelines
+├── SPEC.md              # This file
+├── PAI.md               # Personal AI context
+└── core.py              # Core implementation
+```
 
-## 3. Dependencies
+### 2.2 Dependencies
 
-See `src/codomyrmex/graph_rag/__init__.py` for import dependencies.
+- Python 3.10+
+- Parent module: `codomyrmex`
 
-## 4. Public API
+## 3. Interfaces
+
+### 3.1 Public API
 
 ```python
-from codomyrmex.graph_rag import EntityType, RelationType, Entity, Relationship, GraphContext
+# Primary exports
+# TODO: Define public interface
 ```
+
+### 3.2 Configuration
+
+Environment variables:
+- `CODOMYRMEX_*`: Configuration options
+
+## 4. Implementation Notes
+
+### 4.1 Design Decisions
+
+1. **Decision 1**: Rationale
+
+### 4.2 Limitations
+
+- Known limitation 1
+- Known limitation 2
 
 ## 5. Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k graph_rag -v
+# Run tests for this module
+pytest tests/graph_rag/
 ```
 
-## References
+## 6. Future Considerations
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/graph_rag/)
+- Enhancement 1
+- Enhancement 2

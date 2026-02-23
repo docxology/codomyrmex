@@ -4,27 +4,37 @@
 
 ## Overview
 
-The Serialization module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Serialization module provides multi-format object serialization and deserialization — JSON, YAML, MessagePack, Pickle, and custom formats for data persistence and inter-module communication.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/serialization/PAI.md](../../../src/codomyrmex/serialization/PAI.md)
+- JSON/YAML serialization with schema validation
+- Binary serialization (MessagePack, Pickle) for performance
+- Custom serializer registration for domain types
+- Streaming serialization for large datasets
+- Schema evolution and versioning support
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Serializers | Various | Format-specific encode/decode |
+| Schema validators | Various | Serialization schema enforcement |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Serialization Contribution |
+|-------|----------------------------|
+| **EXECUTE** | Serialize/deserialize data for inter-module communication |
+| **LEARN** | Persist agent state and memory to durable storage |
+
+## Architecture Role
+
+**Foundation Layer** — Cross-cutting data persistence consumed by `agentic_memory/`, `cache/`, `config_management/`, and `events/`.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

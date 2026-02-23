@@ -4,37 +4,48 @@
 
 ## Overview
 
-The Wallet module supports Personal AI Infrastructure through self-custody digital asset management.
-
-## Local-First AI
-
-All wallet operations and key storage happen locally; full self-custody
+The Wallet module provides self-custody key management and "Natural Ritual" recovery using zero-knowledge proofs. It enables secure storage of cryptographic keys, API credentials, and agent secrets with recovery mechanisms that don't rely on centralized services. Part of the Secure Cognitive Agent suite.
 
 ## PAI Capabilities
 
-- Local key management
-- Self-custody recovery mechanisms
-- Offline transaction signing
+### Self-Custody Key Management
 
-## Detailed PAI Documentation
+```python
+from codomyrmex.wallet import Wallet
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/wallet/PAI.md](../../../src/codomyrmex/wallet/PAI.md)
+wallet = Wallet()
+# Store and retrieve cryptographic keys
+# Self-custody: keys never leave the local system
+# Hierarchical key derivation for agent-specific keys
+```
 
-## Configuration
+### Natural Ritual Recovery (ZKP)
 
-See [README.md](README.md) for configuration options and environment variables.
+- Recovery without centralized servers using zero-knowledge proofs
+- Multi-party threshold recovery for disaster scenarios
+- Biometric and cognitive factor integration
 
-## Signposting
+## Key Exports
 
-### Navigation
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Wallet` | Class | Self-custody key management engine |
+| ZKP recovery | Various | Zero-knowledge proof based key recovery |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Wallet Contribution |
+|-------|---------------------|
+| **EXECUTE** | Retrieve keys and credentials for secure API access |
+| **VERIFY** | Validate key integrity and custody chain |
+
+## Architecture Role
+
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `auth/` and `crypto/` for key management.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,38 +1,70 @@
-# Data Visualization Module — Agent Coordination
+# Agent Guidelines - Data Visualization
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Data Visualization Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Charts, graphs, and visual data representations.
 
-- **ChartStyle**: Fallback chart style enum.
-- **ColorPalette**: Fallback color palette enum.
-- **PlotType**: Fallback plot type enum.
-- `get_available_styles()`: Get available chart styles.
-- `get_available_palettes()`: Get available color palettes.
-- `get_available_plot_types()`: Get available plot types.
+## Key Classes
 
-## Agent Usage Patterns
+- **Chart** — Base chart class
+- **LineChart** — Time series visualization
+- **BarChart** — Categorical comparisons
+- **Dashboard** — Multiple chart layout
+- **VisualizationEngine** — Core rendering and theme control
+
+## Agent Instructions
+
+1. **Choose chart type** — Match data to visualization
+2. **Label clearly** — Axes, legends, titles
+3. **Use color wisely** — Accessible palettes
+4. **Interactive** — Add tooltips and zoom
+5. **Export formats** — PNG, SVG, PDF support
+
+## Common Patterns
 
 ```python
-from codomyrmex.data_visualization import ChartStyle
+from codomyrmex.data_visualization import (
+    LineChart, BarChart, Dashboard, export_chart
+)
 
-# Agent initializes data visualization
-instance = ChartStyle()
+# Line chart for time series
+chart = LineChart(title="User Growth")
+chart.add_series("Users", dates, counts)
+chart.set_axis("x", label="Date")
+chart.set_axis("y", label="Active Users")
+
+# Bar chart for comparisons
+bar = BarChart(title="Module Usage")
+bar.add_data(module_names, usage_counts)
+bar.set_colors(["#3498db", "#2ecc71", "#e74c3c"])
+
+# Dashboard with multiple charts
+dashboard = Dashboard(title="Analytics")
+dashboard.add_chart(chart, row=0, col=0)
+dashboard.add_chart(bar, row=0, col=1)
+dashboard.render("dashboard.html")
+
+# Visualization Engine & Themes
+from codomyrmex.data_visualization.visualization import VisualizationEngine, Theme
+engine = VisualizationEngine(theme=Theme.DARK)
+engine.render_to_file(data, "output.png")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/data_visualization/](../../../src/codomyrmex/data_visualization/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify chart creation
+chart = LineChart()
+chart.add_series("test", [1, 2], [10, 20])
+assert len(chart.series) == 1
 
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
+# Verify export
+export_chart(chart, "/tmp/test.png")
+assert Path("/tmp/test.png").exists()
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

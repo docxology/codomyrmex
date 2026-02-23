@@ -4,27 +4,57 @@
 
 ## Overview
 
-The Defense module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Defense module provides active countermeasures and "Rabbit Hole" containment for AI safety. It detects and mitigates adversarial prompts, infinite loops, and resource exhaustion attacks targeting AI agents. Part of the Secure Cognitive Agent suite.
 
-## Detailed PAI Documentation
+> [!NOTE]
+> This module is deprecated in favor of `security.ai_safety`. Imports are forwarded for backward compatibility.
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/defense/PAI.md](../../../src/codomyrmex/defense/PAI.md)
+## PAI Capabilities
 
-## Configuration
+### Active Defense
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.defense import ActiveDefense
 
-## Signposting
+defense = ActiveDefense()
+# Monitor agent behavior for anomalies
+# Detect adversarial prompt injection attempts
+# Enforce resource limits on agent execution
+```
 
-### Navigation
+### Rabbit Hole Containment
+
+```python
+from codomyrmex.defense import RabbitHole
+
+containment = RabbitHole()
+# Detect when agents enter infinite reasoning loops
+# Automatically break out of unproductive cycles
+# Log containment events for post-mortem analysis
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ActiveDefense` | Class | Adversarial detection and active countermeasures |
+| `RabbitHole` | Class | Infinite loop detection and cycle-breaking containment |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Defense Contribution |
+|-------|----------------------|
+| **EXECUTE** | Monitor agent execution for adversarial behavior; enforce resource limits |
+| **VERIFY** | Validate that agent actions are within safety boundaries |
+| **LEARN** | Log containment events and defense activations for improving safety |
+
+## Architecture Role
+
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Being migrated to `security.ai_safety`.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

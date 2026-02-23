@@ -1,5 +1,7 @@
 # Charts Submodule - Programmatic AI Instructions
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Identity
 
 - **Path**: `codomyrmex.data_visualization.charts`

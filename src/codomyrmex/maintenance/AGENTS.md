@@ -1,5 +1,7 @@
 # Agent Guidelines - Maintenance
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Project maintenance utilities: dependency analysis, circular import detection, requirements consolidation, and deprecation management.

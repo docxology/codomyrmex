@@ -1,9 +1,8 @@
 # Feature Flags Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Feature flag management with evaluation strategies and gradual rollout.
-
 
 ## Installation
 
@@ -78,7 +77,6 @@ with manager.override("experimental_feature", True):
 | Class | Description |
 |-------|-------------|
 | `FeatureManager` | Main flag manager |
-
 
 ## Documentation
 

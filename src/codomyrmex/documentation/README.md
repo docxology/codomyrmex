@@ -1,6 +1,6 @@
 # Documentation Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -61,13 +61,11 @@ consistencyissue = ConsistencyIssue()
 consistencyreport = ConsistencyReport()
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k documentation -v
 ```
-
 
 ## Consolidated Sub-modules
 

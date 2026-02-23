@@ -4,27 +4,41 @@
 
 ## Overview
 
-The Embodiment module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Embodiment module provides interfaces for physical and robotic system integration — bridging AI agent reasoning with real-world actuators, sensors, and embodied interaction systems. It enables PAI agents to interact with IoT devices, robotic platforms, and physical simulations.
 
-## Detailed PAI Documentation
+> [!NOTE]
+> This module is being restructured. Core functionality remains available for backward compatibility.
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/embodiment/PAI.md](../../../src/codomyrmex/embodiment/PAI.md)
+## PAI Capabilities
 
-## Configuration
+### Physical System Integration
 
-See [README.md](README.md) for configuration options and environment variables.
+- Hardware abstraction for sensor and actuator interfaces
+- Robot control protocol adapters
+- Physical state tracking and feedback loops
+- Simulation-to-real transfer utilities
 
-## Signposting
+## Key Exports
 
-### Navigation
+| Export | Type | Purpose |
+|--------|------|---------|
+| Module API | Various | Physical system integration interfaces |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Embodiment Contribution |
+|-------|--------------------------|
+| **OBSERVE** | Read physical sensor data and environment state |
+| **EXECUTE** | Send commands to actuators and physical systems |
+| **VERIFY** | Validate physical state matches expected outcomes |
+
+## Architecture Role
+
+**Specialized Layer** — Advanced domain-specific module for physical/robotic integration. Minimal dependencies.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

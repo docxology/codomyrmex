@@ -1,89 +1,179 @@
-# Security Module Documentation
+# Security Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Security module provides comprehensive security capabilities for the Codomyrmex platform, organized into **10 specialized submodules** covering digital, physical, cognitive, and theoretical security domains, plus dedicated audit logging, compliance checking, static scanning, and secrets management.
+Comprehensive security module organized into nine specialized submodules: digital, physical, cognitive, theory, ai_safety, governance, scanning, secrets, audit, and compliance. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks. The ai_safety submodule provides jailbreak detection, prompt injection defense, and adversarial containment. The governance submodule provides contract management, policy enforcement, and dispute resolution. The scanning, secrets, audit, and compliance submodules provide core standalone capabilities.
 
-All submodules use a **conditional import pattern** with graceful degradation: each submodule's exports are wrapped in `try/except ImportError` blocks with corresponding `*_AVAILABLE` flags, allowing the module to function even when optional dependencies are not installed.
+## Installation
 
-## Submodule Summary
+```bash
+uv add codomyrmex
+```
 
-| Submodule | Description | Key Classes | Docs |
-|-----------|-------------|-------------|------|
-| **digital** | Digital security: vulnerability scanning, encryption, certificates, compliance, monitoring, reporting | `VulnerabilityScanner`, `EncryptionManager`, `CertificateValidator`, `SecurityMonitor`, `SecurityReportGenerator` | [digital/](digital/README.md) |
-| **physical** | Physical security: access control, asset tracking, surveillance, perimeter management | `AccessControlSystem`, `AssetInventory`, `SurveillanceMonitor`, `PerimeterManager` | [physical/](physical/README.md) |
-| **cognitive** | Cognitive security: social engineering detection, phishing analysis, awareness training | `SocialEngineeringDetector`, `PhishingAnalyzer`, `AwarenessTrainer`, `BehaviorAnalyzer` | [cognitive/](cognitive/README.md) |
-| **theory** | Security theory: principles, frameworks, threat modeling, risk assessment, patterns, best practices | `SecurityPrinciple`, `SecurityFramework`, `ThreatModel`, `RiskAssessor`, `SecurityPattern` | [theory/](theory/README.md) |
-| **audit** | Audit logging and event tracking with pluggable storage backends | `AuditLogger`, `AuditEvent`, `InMemoryAuditStore`, `FileAuditStore` | [audit/](audit/README.md) |
-| **compliance** | Compliance checking and policy enforcement across frameworks (SOC2, HIPAA, GDPR, PCI-DSS, ISO 27001) | `ComplianceChecker`, `Control`, `ComplianceReport`, `PolicyChecker` | [compliance/](compliance/README.md) |
-| **scanning** | Static application security testing with extensible rule engine | `SecurityScanner`, `SecurityFinding`, `ScanResult`, `PatternRule` | [scanning/](scanning/README.md) |
-| **secrets** | Secret detection, scanning, vault storage, and helper utilities | `SecretScanner`, `SecretVault`, `DetectedSecret`, `SecretPatterns` | [secrets/](secrets/README.md) |
-| **ai_safety** | AI safety: jailbreak detection, prompt injection defense, adversarial containment | `AISafetyMonitor`, `ActiveDefense` (optional), `RabbitHole` (optional) | [ai_safety/](ai_safety/README.md) |
-| **governance** | Governance: contract management, policy enforcement, dispute resolution | `Contract`, `PolicyEngine`, `DisputeResolver` | [governance/](governance/README.md) |
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Core Submodules
+
+- **`audit`** -- Security audit logging and event tracking
+- **`compliance`** -- Compliance standards and requirement checking
+- **`secrets`** -- Secrets detection and exposure auditing
+- **`scanning`** -- Vulnerability and security scanning
+
+### Digital Security
+
+- **`VulnerabilityScanner`** -- Scans code and systems for known vulnerabilities
+- **`scan_vulnerabilities()`** -- Run a vulnerability scan and return results
+- **`audit_code_security()`** -- Audit source code for security issues
+- **`VulnerabilityReport`** -- Structured report from a vulnerability scan
+- **`SecurityScanResult`** -- Result container for security scans
+- **`SecretsDetector`** -- Detects hardcoded secrets, API keys, and credentials in code
+- **`audit_secrets_exposure()`** -- Audit a project for exposed secrets
+- **`scan_file_for_secrets()`** -- Scan a single file for secret patterns
+- **`scan_directory_for_secrets()`** -- Recursively scan a directory for secrets
+- **`SecurityAnalyzer`** -- Static analysis engine for security findings
+- **`SecurityFinding`** -- Individual finding from security analysis
+- **`SecurityIssue`** -- Categorized security issue with severity
+- **`analyze_file_security()`** -- Analyze a single file for security issues
+- **`analyze_directory_security()`** -- Analyze an entire directory tree
+- **`ComplianceChecker`** -- Validates code against compliance standards (OWASP, CIS, etc.)
+- **`ComplianceCheckResult`** -- Result of a compliance check
+- **`ComplianceRequirement`** -- Individual compliance requirement definition
+- **`ComplianceStandard`** -- Compliance standard definition (e.g., OWASP Top 10)
+- **`check_compliance()`** -- Check project compliance against a standard
+- **`SecurityMonitor`** -- Real-time security event monitoring
+- **`monitor_security_events()`** -- Start monitoring for security events
+- **`audit_access_logs()`** -- Audit access log files for anomalies
+- **`SecurityEvent`** -- Structured security event record
+- **`EncryptionManager`** -- Manages encryption/decryption of sensitive data
+- **`encrypt_sensitive_data()`** -- Encrypt data using configured cipher
+- **`decrypt_sensitive_data()`** -- Decrypt previously encrypted data
+- **`CertificateValidator`** -- Validates SSL/TLS certificates
+- **`validate_ssl_certificates()`** -- Validate SSL certificates for a host
+- **`SSLValidationResult`** -- Result of SSL certificate validation
+- **`SecurityReportGenerator`** -- Generates comprehensive security reports
+- **`generate_security_report()`** -- Generate a full security report for a project
+
+### Physical Security
+
+- **`AccessControlSystem`** -- Physical access control management
+- **`check_access_permission()`** -- Check if an entity has physical access
+- **`grant_access()`** -- Grant physical access to an entity
+- **`revoke_access()`** -- Revoke physical access from an entity
+- **`AssetInventory`** -- Track and manage physical assets
+- **`register_asset()`** -- Register a new physical asset
+- **`track_asset()`** -- Track asset location and status
+- **`get_asset_status()`** -- Get current status of an asset
+- **`SurveillanceMonitor`** -- Physical surveillance and monitoring
+- **`monitor_physical_access()`** -- Monitor physical access events
+- **`log_physical_event()`** -- Log a physical security event
+- **`PhysicalVulnerabilityScanner`** -- Scan for physical security vulnerabilities
+- **`assess_physical_security()`** -- Assess overall physical security posture
+- **`scan_physical_vulnerabilities()`** -- Scan for specific physical vulnerabilities
+- **`PerimeterManager`** -- Perimeter security management
+- **`check_perimeter_security()`** -- Check perimeter integrity
+- **`manage_access_points()`** -- Manage physical access points
+
+### AI Safety
+
+- **`AISafetyMonitor`** -- Unified AI safety monitoring combining jailbreak detection and prompt injection defense
+- Note: `ActiveDefense` and `RabbitHole` are optionally available when their respective dependencies are installed
+
+### Cognitive Security
+
+- **`SocialEngineeringDetector`** -- Detects social engineering attempts
+- **`detect_social_engineering()`** -- Analyze content for social engineering patterns
+- **`analyze_communication()`** -- Analyze communications for manipulation
+- **`PhishingAnalyzer`** -- Phishing email and message analysis
+- **`analyze_email()`** -- Analyze an email for phishing indicators
+- **`detect_phishing_attempt()`** -- Detect phishing in arbitrary content
+- **`AwarenessTrainer`** -- Security awareness training management
+- **`create_training_module()`** -- Create a security training module
+- **`assess_training_effectiveness()`** -- Assess training program effectiveness
+- **`CognitiveThreatAssessor`** -- Assess cognitive-level security threats
+- **`assess_cognitive_threats()`** -- Assess cognitive threat landscape
+- **`evaluate_human_factors()`** -- Evaluate human factor risks
+- **`BehaviorAnalyzer`** -- User behavior analytics for security
+- **`analyze_user_behavior()`** -- Analyze user behavior patterns
+- **`detect_anomalous_behavior()`** -- Detect behavioral anomalies
+
+### Governance
+
+- **`Contract`**, **`ContractTerm`**, **`ContractStatus`** -- Contract lifecycle management
+- **`PolicyRule`**, **`PolicyEngine`** -- Policy enforcement engine
+- **`DisputeResolver`**, **`DisputeStatus`** -- Dispute resolution workflow
+
+### Security Theory
+
+- **`SecurityPrinciple`** -- Core security principle definition
+- **`get_security_principles()`** -- Retrieve applicable security principles
+- **`apply_principle()`** -- Apply a security principle to a context
+- **`SecurityFramework`** -- Security framework definition (e.g., NIST, ISO 27001)
+- **`get_framework()`** -- Retrieve a security framework by name
+- **`apply_framework()`** -- Apply a framework to evaluate security posture
+- **`ThreatModel`** -- Threat model definition and analysis
+- **`create_threat_model()`** -- Create a new threat model
+- **`analyze_threats()`** -- Analyze threats within a model
+- **`RiskAssessment`** -- Risk assessment container
+- **`assess_risk()`** -- Perform a risk assessment
+- **`calculate_risk_score()`** -- Calculate a numeric risk score
+- **`SecurityPattern`** -- Reusable security design pattern
+- **`get_security_patterns()`** -- Retrieve applicable security patterns
+- **`apply_pattern()`** -- Apply a security pattern to architecture
+- **`SecurityBestPractice`** -- Security best practice recommendation
+- **`get_best_practices()`** -- Retrieve best practices for a domain
+- **`check_compliance_with_practices()`** -- Check compliance with best practices
 
 ## Directory Contents
 
-- `README.md` - This file (module overview)
-- `SPEC.md` - Design specification and functional requirements
-- `AGENTS.md` - Agent integration and operating contracts
-- `index.md` - Table of contents with deep links
-- `technical_overview.md` - Architecture, data models, and design decisions
-- `digital/README.md` - Digital security submodule documentation
-- `physical/README.md` - Physical security submodule documentation
-- `cognitive/README.md` - Cognitive security submodule documentation
-- `theory/README.md` - Security theory submodule documentation
-- `audit/README.md` - Audit logging submodule documentation
-- `compliance/README.md` - Compliance checking submodule documentation
-- `scanning/README.md` - Security scanning submodule documentation
-- `secrets/README.md` - Secrets management submodule documentation
-- `ai_safety/README.md` - AI safety submodule documentation
-- `governance/README.md` - Governance submodule documentation
+- `__init__.py` - Module entry point with dynamic submodule imports
+- `scanning/` - Vulnerability scanning utilities
+- `secrets/` - Secret detection and exposure auditing
+- `compliance/` - Compliance standards and checking
+- `audit/` - Security audit event logging
+- `digital/` - Digital security: scanning, encryption, certificates, monitoring
+- `physical/` - Physical security: access control, assets, surveillance, perimeters
+- `cognitive/` - Cognitive security: social engineering, phishing, behavior analysis
+- `theory/` - Security theory: threat models, risk, frameworks, patterns
+- `ai_safety/` - AI safety: jailbreak detection, prompt injection defense, adversarial containment
+- `governance/` - Governance: contracts, policy enforcement, dispute resolution
+- `security_theory/` - Additional security theory resources
 
 ## Quick Start
 
 ```python
-# Scan code for security vulnerabilities
-from codomyrmex.security.scanning import SecurityScanner
+from codomyrmex.security import SBOMFormat, LicenseType, Component
 
-scanner = SecurityScanner()
-result = scanner.scan_directory("src/")
-for finding in result.findings:
-    print(f"{finding.severity.value}: {finding.title} at {finding.file_path}:{finding.line_number}")
-
-# Detect secrets in code
-from codomyrmex.security.secrets import SecretScanner
-
-secret_scanner = SecretScanner()
-result = secret_scanner.scan_text('api_key = "AKIA1234567890ABCDEF"')
-print(f"Found {len(result.secrets_found)} secrets")
-
-# Audit logging
-from codomyrmex.security.audit import AuditLogger, AuditEventType
-
-audit = AuditLogger()
-audit.log(event_type=AuditEventType.AUTH_LOGIN, action="user_login", actor="user@example.com")
-
-# Compliance checking
-from codomyrmex.security.compliance import ComplianceChecker, ComplianceFramework
-
-checker = ComplianceChecker(ComplianceFramework.SOC2)
-report = checker.assess({"has_access_policy": True})
-print(f"Compliance score: {report.compliance_score}%")
+# Initialize SBOMFormat
+instance = SBOMFormat()
 ```
 
-## Dependencies
+## Testing
 
-- **Required**: `logging_monitoring` (internal)
-- **Optional**: `cryptography`, `pyOpenSSL` (for digital/encryption and certificate features), `jinja2` (for report generation)
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k security -v
+```
 
-When optional dependencies are missing, the corresponding submodule features are still importable but the availability flag will be `False`.
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`governance/`** | Policy enforcement and compliance checking |
+| **`ai_safety/`** | AI safety: jailbreak detection, prompt injection defense, adversarial containment |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
-- **Source**: [`src/codomyrmex/security/`](../../../src/codomyrmex/security/)
-- **Parent Directory**: [modules](../README.md)
-- **Project Root**: [../../../README.md](../../../README.md)
-- **Technical Overview**: [technical_overview.md](technical_overview.md)
-- **Index**: [index.md](index.md)
+- **Full Documentation**: [docs/modules/security/](../../../docs/modules/security/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

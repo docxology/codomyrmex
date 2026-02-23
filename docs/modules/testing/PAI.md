@@ -4,27 +4,59 @@
 
 ## Overview
 
-The Testing module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Testing module provides PAI integration for test automation, enabling AI agents to generate, run, and validate tests.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/testing/PAI.md](../../../src/codomyrmex/testing/PAI.md)
+### AI-Generated Tests
 
-## Configuration
+Use AI to generate test cases:
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.testing import TestGenerator
+from codomyrmex.llm import LLMClient
 
-## Signposting
+# Generate tests from code
+generator = TestGenerator(llm=LLMClient())
 
-### Navigation
+test_code = generator.generate_tests(
+    source_file="src/auth.py",
+    coverage_target=0.8
+)
 
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
+# Write generated tests
+with open("tests/test_auth.py", "w") as f:
+    f.write(test_code)
+```
 
-### Related Documentation
+### Test Execution
 
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+Run tests programmatically:
+
+```python
+from codomyrmex.testing import TestRunner, CoverageReporter
+
+# Run tests
+runner = TestRunner()
+result = runner.run("tests/")
+
+print(f"Passed: {result.passed}")
+print(f"Failed: {result.failed}")
+
+# Coverage report
+coverage = CoverageReporter()
+coverage.run_with_coverage("tests/")
+print(f"Coverage: {coverage.total_coverage}%")
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `TestGenerator` | AI test generation |
+| `TestRunner` | Automated test execution |
+| `CoverageReporter` | Coverage tracking |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

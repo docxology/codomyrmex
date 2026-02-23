@@ -1,43 +1,36 @@
-# Relations - Functional Specification
+# Relations — Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Maintain and optimize the agent's social graph, managing external relationships and platform presence.
-
-## Design Principles
-
-### Relationship-Centric
-
-- All data is keyed by entity (person, organization)
-- Interactions are immutable history
-
-### Multi-Channel
-
-- Unifies email, social media, and chat interactions
-
-## Architecture
-
-```mermaid
-graph TD
-    CRM[CRM Engine] --> Social[Social Media Manager]
-    CRM --> Network[Network Analysis]
-    Social --> Network
-```
+CRM, social network analysis, and Universal Object Reference (UOR) for tracking entities and their relationships.
 
 ## Functional Requirements
 
-1. **CRM**: Store and retrieve contact details and history.
-2. **Social Media**: Post updates and monitor replies.
-3. **Network Analysis**: Identify key influencers and connection paths.
+### CRM
 
-## Interface Contracts
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Contact(name, role, ...)` | Constructor | Create contact record |
+| `ContactManager.add(contact)` | `→ None` | Add contact to store |
+| `ContactManager.search(query)` | `→ list[Contact]` | Search contacts |
+| `Interaction(contact, type, timestamp)` | Constructor | Record interaction event |
 
-- `CRM.get_contact(id)`
-- `SocialManager.post(content, platforms)`
-- `Graph.analyze_centrality()`
+### Network Analysis
+
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `SocialGraph()` | Constructor | Create empty social graph |
+| `graph.add_relationship(a, b, type)` | `→ None` | Add relationship edge |
+| `GraphMetrics(graph)` | Constructor | Compute graph metrics |
+| `metrics.centrality()` | `→ dict[str, float]` | Node centrality scores |
+
+### UOR
+
+- Bidirectional entity references across module boundaries
+- Supports Contact ↔ Project, Project ↔ Task linking
 
 ## Navigation
 
-- [README](README.md) | [AGENTS](AGENTS.md) | [Parent](../SPEC.md)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

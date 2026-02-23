@@ -4,27 +4,70 @@
 
 ## Overview
 
-The Edge Computing module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Edge Computing module provides PAI integration for edge node management, enabling AI agents to deploy and manage distributed edge infrastructure.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/edge_computing/PAI.md](../../../src/codomyrmex/edge_computing/PAI.md)
+### Edge Deployment
 
-## Configuration
+Deploy functions to edge nodes via cluster:
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.edge_computing import (
+    EdgeCluster, EdgeFunction, EdgeNode, EdgeMetrics, InvocationRecord
+)
 
-## Signposting
+# Create cluster and register nodes
+cluster = EdgeCluster()
+node = EdgeNode(id="edge-1", name="factory-sensor", location="factory-a")
+cluster.register_node(node)
 
-### Navigation
+# Deploy function to all nodes
+func = EdgeFunction(id="fn-1", name="process-data", handler=my_handler)
+count = cluster.deploy_to_all(func)  # -> int (nodes deployed to)
 
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
+# Invoke via runtime
+runtime = cluster.get_runtime("edge-1")
+result = runtime.invoke("fn-1", sensor_data)
 
-### Related Documentation
+# Track metrics
+metrics = EdgeMetrics()
+metrics.record(InvocationRecord(
+    function_id="fn-1", node_id="edge-1",
+    duration_ms=15.2, success=True
+))
+```
 
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+### State Synchronization
+
+Keep edge and cloud in sync:
+
+```python
+from codomyrmex.edge_computing import EdgeSynchronizer, SyncState
+
+sync = EdgeSynchronizer()
+
+# Update local state
+state = sync.update_local({"readings": [1, 2, 3]})
+
+# Apply remote state (accepts if version is newer)
+remote = SyncState.from_data({"readings": [4, 5]}, version=5)
+applied = sync.apply_remote(remote)  # -> bool
+
+# Get pending changes
+changes = sync.get_pending_changes()
+sync.confirm_sync(up_to_version=3)
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `EdgeCluster` | Manage distributed edge nodes |
+| `EdgeRuntime` | Deploy and invoke functions |
+| `EdgeSynchronizer` | State consistency |
+| `EdgeMetrics` | Invocation tracking |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

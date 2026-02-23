@@ -1,5 +1,7 @@
 # Rhizome Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Distributed Network Analysis**
 
 The `codomyrmex.meme.rhizome` submodule models non-hierarchical, interconnected networks of information (Deleuze & Guattari). It focuses on graph topology, connectivity, and resilience in distributed systems.

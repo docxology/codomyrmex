@@ -1,55 +1,85 @@
-# Compression Module Documentation
+# Compression Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
-
-Compression module for Codomyrmex.
-
-## Key Features
-
-- `compress()` — Compress data.
-- `decompress()` — Decompress data.
-- `get_compressor()` — Get a compressor instance.
-- `compress_file()` — Compress a file.
-
-## Quick Start
-
-```python
-from codomyrmex.compression import compress, decompress, get_compressor
-
-# Use the module
-result = compress()
-```
-
+Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## API Reference
+Or for development:
+
+```bash
+uv sync
+```
+
+## Key Exports
 
 ### Functions
+- **`compress()`** — Compress data.
+- **`decompress()`** — Decompress data.
+- **`get_compressor()`** — Get a compressor instance.
+- **`compress_file()`** — Compress a file.
+- **`decompress_file()`** — Decompress a file.
 
-| Function | Description |
-|----------|-------------|
-| `compress()` | Compress data. |
-| `decompress()` | Decompress data. |
-| `get_compressor()` | Get a compressor instance. |
-| `compress_file()` | Compress a file. |
-| `decompress_file()` | Decompress a file. |
+## Quick Start
 
-## Directory Contents
+```python
+from codomyrmex.compression import (
+    compress, decompress, compress_file, decompress_file,
+    Compressor, ArchiveManager, ZstdCompressor, ParallelCompressor
+)
 
-| File | Description |
+# Compress data
+data = b"Hello, World! " * 1000
+compressed = compress(data, level=6, format="gzip")
+print(f"Ratio: {len(data) / len(compressed):.1f}x")
+
+# Decompress
+original = decompress(compressed)
+
+# Compress a file
+output_path = compress_file("data.json", format="gzip")
+
+# Create archives
+with ArchiveManager("backup.zip", mode="w") as archive:
+    archive.add_file("file1.txt")
+    archive.add_directory("data/")
+
+# High-performance compression
+zstd = ZstdCompressor(level=3)
+fast_compressed = zstd.compress(data)
+
+# Parallel compression for large data
+parallel = ParallelCompressor(workers=4)
+result = parallel.compress_files(["file1.txt", "file2.txt"])
+```
+
+## Exports
+
+| Item | Description |
 |------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
+| `compress(data, level, format)` | Compress bytes |
+| `decompress(data, format)` | Decompress bytes |
+| `compress_file(path, format)` | Compress file |
+| `decompress_file(path)` | Decompress file |
+| `Compressor` | Configurable compressor class |
+| `ArchiveManager` | ZIP/tar archive handling |
+| `ZstdCompressor` | High-performance Zstandard |
+| `ParallelCompressor` | Multi-threaded compression |
+| `CompressionError` | Compression exception |
 
+## Formats
 
+| Format | Extension | Best For |
+|--------|-----------|----------|
+| gzip | .gz | General purpose |
+| zlib | .zz | Data streams |
+| zip | .zip | Archives |
+| zstd | .zst | High performance |
 
 ## Testing
 
@@ -57,11 +87,12 @@ uv pip install codomyrmex
 uv run python -m pytest src/codomyrmex/tests/ -k compression -v
 ```
 
-## Related Modules
+## Documentation
 
-- [Exceptions](../exceptions/README.md)
+- [Module Documentation](../../../docs/modules/compression/README.md)
+- [Agent Guide](../../../docs/modules/compression/AGENTS.md)
+- [Specification](../../../docs/modules/compression/SPEC.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/compression/](../../../src/codomyrmex/compression/)
-- **Parent**: [Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

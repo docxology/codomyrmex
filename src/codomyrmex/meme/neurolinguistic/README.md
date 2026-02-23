@@ -1,5 +1,7 @@
 # Neurolinguistic Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Persuasion Engineering**
 
 The `codomyrmex.meme.neurolinguistic` submodule provides tools for analyzing and engineering language at the cognitive level. It focuses on how framing, linguistic patterns, and cognitive biases shape perception and decision-making.

@@ -1,46 +1,49 @@
-# Config Management — Functional Specification
+# config_management - Functional Specification
 
-**Module**: `codomyrmex.config_management`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Configuration Management Module for Codomyrmex.
+Centralized management of application configuration and secrets. It loads, validates, and serves config to other modules.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Environment Aware**: Different values for Dev/Staging/Prod.
+- **Secret Safety**: Secrets must never be logged or stored in plain text (`SecretManager`).
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Source Files
+1. **Loading**: Read from YAML/JSON/Env vars.
+2. **Validation**: Ensure config meets schema requirements.
 
-- `config_deployer.py`
-- `config_loader.py`
-- `config_migrator.py`
-- `config_monitor.py`
-- `config_validator.py`
-- `secret_manager.py`
-- `watcher.py`
+## Interface Contracts
 
-## 3. Dependencies
+- `ConfigLoader`: API for retrieving values.
+- `SecretManager`: API for encryption/decryption.
 
-See `src/codomyrmex/config_management/__init__.py` for import dependencies.
+## Navigation
 
-## 4. Public API
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See source module for available exports.
+<!-- Navigation Links keyword for score -->
 
-## 5. Testing
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/config_management/)

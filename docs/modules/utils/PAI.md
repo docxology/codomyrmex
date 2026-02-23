@@ -4,27 +4,38 @@
 
 ## Overview
 
-The Utils module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Utils module provides shared utility functions used across the codomyrmex ecosystem — string manipulation, path helpers, type coercion, hashing, and general-purpose Python utilities.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/utils/PAI.md](../../../src/codomyrmex/utils/PAI.md)
+- Path normalization and resolution utilities
+- String formatting and sanitization helpers
+- Hash computation (MD5, SHA256) for integrity checks
+- Type conversion and coercion utilities
+- Common data structure helpers
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Path helpers | Various | File path manipulation |
+| String utilities | Various | Formatting and sanitization |
+| Hash functions | Various | Integrity computation |
+| Type coercion | Various | Data type conversions |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Utils Contribution |
+|-------|---------------------|
+| **All Phases** | Cross-cutting utility functions used throughout the system |
+
+## Architecture Role
+
+**Foundation Layer** — Lowest-level utility module with zero codomyrmex dependencies. Consumed by virtually all other modules.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

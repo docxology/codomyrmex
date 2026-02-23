@@ -1,67 +1,68 @@
-# Relations Module Documentation
+# Relations Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Social relationship management and external communication engine. Integrates CRM capabilities, social media management, and network analysis.
+The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities. It enables agents to track contacts, analyze social graphs, and maintain bidirectional entity relationships.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## Key Features
+## Key Exports
 
-- **`Contact`** -- External entity representation for relationship tracking.
-- **`Interaction`** -- Record of communication events.
-- **`Deal`** -- Business opportunity tracking.
+### CRM
 
-## Submodules
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Contact` | Class | Contact record with metadata |
+| `ContactManager` | Class | Contact CRUD and search |
+| `Interaction` | Class | Tracked interaction with a contact |
 
-| Submodule | Description |
-|-----------|-------------|
-| `crm` | Contact management |
-| `social_media` | Platform integration |
-| `network_analysis` | Social graph processing |
+### Network Analysis
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `SocialGraph` | Class | Social relationship graph |
+| `GraphMetrics` | Class | Centrality, clustering, connectivity metrics |
+
+### Universal Object Reference (UOR)
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| UOR types | Various | Bidirectional entity references across modules |
 
 ## Quick Start
 
 ```python
-from codomyrmex.relations import Contact
+from codomyrmex.relations import Contact, ContactManager, SocialGraph, GraphMetrics
 
-contact = Contact(name="Jane Doe", email="jane@example.com")
-contact.log(Interaction(type="email", summary="Introductory call"))
+# Contact management
+manager = ContactManager()
+contact = Contact(name="Alice", role="developer")
+manager.add(contact)
+
+# Social graph analysis
+graph = SocialGraph()
+graph.add_relationship(contact_a, contact_b, type="collaborator")
+metrics = GraphMetrics(graph)
+print(metrics.centrality())
 ```
 
-## API Reference
+## Architecture
 
-### Classes
-
-| Class | Description |
-|-------|-------------|
-| `Contact` | External entity representation |
-| `Interaction` | Record of communication |
-| `Deal` | Business opportunity tracking |
-
-## Directory Contents
-
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k relations -v
+```
+relations/
+├── __init__.py          # All exports
+├── crm.py               # Contact, ContactManager, Interaction
+├── network_analysis.py  # SocialGraph, GraphMetrics
+├── uor.py               # Universal Object Reference
+└── tests/               # Zero-Mock tests
 ```
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/relations/](../../../src/codomyrmex/relations/)
-- **API Spec**: [API_SPECIFICATION.md](../../../src/codomyrmex/relations/API_SPECIFICATION.md)
-- **MCP Spec**: [MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/relations/MCP_TOOL_SPECIFICATION.md)
-- **Parent**: [Modules](../README.md)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

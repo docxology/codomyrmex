@@ -1,5 +1,7 @@
 # Narrative Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Computational Narratology**
 
 The `codomyrmex.meme.narrative` submodule provides tools for analyzing, generating, and restructuring narratives. It uses structuralist theory (Campbell, Propp) to manipulate story arcs and archetypes.

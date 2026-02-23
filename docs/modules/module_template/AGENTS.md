@@ -1,38 +1,76 @@
-# Module Template Module — Agent Coordination
+# Agent Guidelines - Module Template
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Module Template Package
+## Module Overview
 
-## Key Capabilities
+Template for creating new Codomyrmex modules.
 
-- Module Template operations and management
+## Template Structure
 
-## Agent Usage Patterns
+```
+module_name/
+├── README.md           # Module documentation
+├── AGENTS.md           # Agent guidelines
+├── SPEC.md             # Functional specification
+├── PAI.md              # Personal AI Infrastructure  
+├── API_SPECIFICATION.md
+├── __init__.py         # Module exports
+├── core.py             # Core functionality
+└── tests/              # Module tests
+```
+
+## Agent Instructions
+
+1. **Copy template** — Start from this template
+2. **Update all docs** — README, AGENTS, SPEC, PAI
+3. **Define exports** — Clean `__init__.py` exports
+4. **Add tests** — Minimum 80% coverage
+5. **Follow patterns** — Consistent with other modules
+
+## Common Patterns
 
 ```python
-from codomyrmex.module_template import *
+# __init__.py structure
+\"\"\"Module description.
 
-# Agent uses module template capabilities
+This module provides...
+\"\"\"
+
+from .core import MainClass, helper_function
+from .types import CustomType
+
+__all__ = [
+    "MainClass",
+    "helper_function",
+    "CustomType",
+]
+
+__version__ = "0.1.0"
 ```
 
-## Integration Points
-
-- **Source**: [src/codomyrmex/module_template/](../../../src/codomyrmex/module_template/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
-
-
-## Key Components
-
-- **`scaffold_new_module()`** — Create a new Codomyrmex module from the template.
-- **`list_template_files()`** — List all files available in the module template.
-
-## Testing Guidelines
+## Creating a Module
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k module_template -v
+# Copy template
+cp -r src/codomyrmex/module_template src/codomyrmex/new_module
+
+# Update placeholders
+# - module_name in all files
+# - Update descriptions
+# - Implement core.py
+# - Add tests
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Testing Patterns
+
+```python
+# Verify module structure
+import new_module
+assert hasattr(new_module, "__version__")
+assert hasattr(new_module, "__all__")
+```
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

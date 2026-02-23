@@ -1,5 +1,7 @@
 # Agents Guide: Narrative
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `narrative` submodule to structure information in compelling, story-driven formats. Humans process information primarily through narrative; use this to your advantage.

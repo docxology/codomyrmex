@@ -1,49 +1,38 @@
 # Personal AI Infrastructure — Cache Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Cache module for Codomyrmex. This is an **Extended Layer** module.
+The Cache module provides multi-backend caching with TTL support, LRU eviction, distributed caching, and cache invalidation strategies for optimizing repeated computations and API calls.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.cache import Cache, CacheManager, CacheStats, replication, async_ops, warmers
-```
+- In-memory LRU cache for session-scoped data
+- Disk-backed cache for expensive computation results
+- Distributed caching (Redis-compatible) for multi-agent scenarios
+- TTL-based expiration and manual invalidation
+- Cache warming and preloading strategies
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `replication` | Function/Constant | Replication |
-| `async_ops` | Function/Constant | Async ops |
-| `warmers` | Function/Constant | Warmers |
-| `Cache` | Class | Cache |
-| `CacheManager` | Class | Cachemanager |
-| `CacheStats` | Class | Cachestats |
-| `NamespacedCache` | Class | Namespacedcache |
-| `TTLManager` | Class | Ttlmanager |
-| `get_cache` | Function/Constant | Get cache |
-| `CacheError` | Class | Cacheerror |
-| `CacheExpiredError` | Class | Cacheexpirederror |
-| `CacheFullError` | Class | Cachefullerror |
-| `CacheConnectionError` | Class | Cacheconnectionerror |
-| `CacheKeyError` | Class | Cachekeyerror |
-
-*Plus 6 additional exports.*
-
+| Cache backends | Various | In-memory, disk, distributed cache |
+| Cache decorators | Various | Function-level result caching |
+| Invalidation strategies | Various | TTL, LRU, manual eviction |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Cache Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **VERIFY** | Validation and quality checks |
+|-------|---------------------|
+| **OBSERVE** | Cache codebase scan results for repeated access |
+| **EXECUTE** | Cache LLM responses and analysis results |
+| **LEARN** | Persist frequently accessed data for faster retrieval |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Foundation Layer** — Cross-cutting caching consumed by `performance/` (CacheManager), `llm/` (response caching), `graph_rag/` (query caching), and `agentic_memory/` (hot memory).
 
 ## Navigation
 

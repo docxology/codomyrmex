@@ -1,55 +1,36 @@
-# Relations — Functional Specification
+# Relations — Specification
 
-**Module**: `codomyrmex.relations`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Relations Module for Codomyrmex.
+CRM, social network analysis, and Universal Object Reference (UOR) for tracking entities and their relationships.
 
-Provides CRM contact management, social network analysis,
-and graph metrics.
+## Functional Requirements
 
-## 2. Architecture
+### CRM
 
-### Source Files
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `Contact(name, role, ...)` | Constructor | Create contact record |
+| `ContactManager.add(contact)` | `→ None` | Add contact to store |
+| `ContactManager.search(query)` | `→ list[Contact]` | Search contacts |
+| `Interaction(contact, type, timestamp)` | Constructor | Record interaction event |
 
-| File | Purpose |
-|------|--------|
-| `crm.py` | Record of a communication event. |
-| `visualization.py` | Generates a mermaid diagram of social connections. |
+### Network Analysis
 
-### Submodule Structure
+| Interface | Signature | Description |
+|-----------|-----------|-------------|
+| `SocialGraph()` | Constructor | Create empty social graph |
+| `graph.add_relationship(a, b, type)` | `→ None` | Add relationship edge |
+| `GraphMetrics(graph)` | Constructor | Compute graph metrics |
+| `metrics.centrality()` | `→ dict[str, float]` | Node centrality scores |
 
-- `crm/` — Crm
-- `network_analysis/` — Network Analysis
-- `social_media/` — Social Media
+### UOR
 
-## 3. Dependencies
+- Bidirectional entity references across module boundaries
+- Supports Contact ↔ Project, Project ↔ Task linking
 
-No internal Codomyrmex dependencies.
+## Navigation
 
-## 4. Public API
-
-### Exports (`__all__`)
-
-- `Contact`
-- `ContactManager`
-- `GraphMetrics`
-- `Interaction`
-- `SocialGraph`
-
-## 5. Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k relations -v
-```
-
-All tests follow the Zero-Mock policy.
-
-## 6. References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/relations/)
+- [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

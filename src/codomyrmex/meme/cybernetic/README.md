@@ -1,5 +1,7 @@
 # Cybernetic Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Control Systems & Feedback Loops**
 
 The `codomyrmex.meme.cybernetic` submodule provides the control logic for the entire system. It uses principles from cybernetics (Wiener, Ashby) to maintain stability (homeostasis) or drive directed change (heterostasis).

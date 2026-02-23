@@ -1,45 +1,52 @@
-# Plugin System — Functional Specification
+# plugin_system - Functional Specification
 
-**Module**: `codomyrmex.plugin_system`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Plugin System for Codomyrmex
+Enables dynamic extension of the platform. It handles plugin discovery, loading, validation, and lifecycle management.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Isolation**: Plugins should not crash the host.
+- **Security**: Strict validation of plugin metadata and code (`PluginValidator`).
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Source Files
+1. **Discovery**: Find plugins in specified directories.
+2. **Lifecycle**: Load, Initialize, Shutdown hooks.
+3. **Registry**: Maintain database of installed plugins.
 
-- `enforcer.py`
-- `exceptions.py`
-- `plugin_loader.py`
-- `plugin_manager.py`
-- `plugin_registry.py`
-- `plugin_validator.py`
+## Interface Contracts
 
-## 3. Dependencies
+- `PluginManager`: Central coordinator for discovery, validation, and loading.
+- `PluginRegistry`: Manages registered plugins (now uses `register()` instead of `register_plugin()`).
+- `PluginValidator`: Security and metadata validation (now returns unified `ValidationResult` objects with a `.valid` attribute).
+- `Plugin`: Base class for all extensions.
 
-See `src/codomyrmex/plugin_system/__init__.py` for import dependencies.
+## Navigation
 
-## 4. Public API
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See source module for available exports.
+## Detailed Architecture and Implementation
 
-## 5. Testing
+The implementation follows the Unified Streamline principles (v0.1.0), removing backward compatibility aliases in favor of a modern, standardized API.
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Security-First**: Mandatory validation via `PluginValidator` before loading.
+3. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching.
+4. **API Consistency**: Unified return types (e.g., `ValidationResult`) across all validation methods.
+
+### Technical Implementation
+
+The codebase utilizes Python 3.10+ dataclasses and type hinting. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/plugin_system/)

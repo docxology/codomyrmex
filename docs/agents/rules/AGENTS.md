@@ -1,9 +1,18 @@
-# Codomyrmex Root Agentic Context
+# Agent Rules — Agentic Context
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Agent Overview
-This file provides context for autonomous agents operating within the `Codomyrmex Root` module.
+
+Context for autonomous agents operating within the `docs/agents/rules/` directory, which contains the core behavioral rules for all Codomyrmex agents.
 
 ## Operational Directives
-1. **Context Awareness**: Agents modifying or analyzing this directory must understand its role within the broader Codomyrmex system.
+
+1. **Rule Enforcement**: Rules defined here are mandatory for all agents operating in the Codomyrmex ecosystem.
 2. **Functional Enforcement**: Agents must ensure any generated code remains fully functional and real.
-3. **Documentation Sync**: Agents must keep this `AGENTS.md`, `README.md`, and `SPEC.md` synchronized with actual code capabilities.
+3. **Documentation Sync**: Keep RASP files synchronized with actual rule definitions.
+
+## Navigation
+
+- **Parent**: [docs/agents/AGENTS.md](../AGENTS.md)
+- **Root**: [../../AGENTS.md](../../../AGENTS.md)

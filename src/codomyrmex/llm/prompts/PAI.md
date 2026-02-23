@@ -1,7 +1,8 @@
 # Personal AI Infrastructure - Prompts
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.llm.prompts`  
-**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

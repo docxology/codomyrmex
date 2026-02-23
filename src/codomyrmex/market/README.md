@@ -1,9 +1,8 @@
 # Market Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Reverse auction and demand aggregation for AI service procurement.
-
 
 ## Installation
 
@@ -69,13 +68,11 @@ print(f"Total demand: {bulk_order.quantity}")
 | `AuctionRequest` | Buyer's resource request |
 | `DemandAggregator` | Consolidate demand for bulk pricing |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k market -v
 ```
-
 
 ## Documentation
 

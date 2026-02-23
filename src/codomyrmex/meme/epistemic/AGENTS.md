@@ -1,5 +1,7 @@
 # Agents Guide: Epistemic
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `epistemic` submodule to maintain a clear picture of reality and to defend against disinformation.

@@ -1,36 +1,68 @@
-# Networking Module — Agent Coordination
+# Agent Guidelines - Networking
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Networking module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Network utilities: HTTP clients, sockets, protocols, and DNS.
 
-- `get_http_client()`: Get an HTTP client instance.
+## Key Classes
 
-## Agent Usage Patterns
+- **HTTPClient** — Async HTTP client with retries
+- **SocketManager** — TCP/UDP socket handling
+- **DNSResolver** — DNS lookups and caching
+- **NetworkMonitor** — Network health checks
+
+## Agent Instructions
+
+1. **Use async** — Prefer async for concurrent requests
+2. **Set timeouts** — Always configure timeouts
+3. **Retry transients** — Retry on network errors
+4. **Pool connections** — Reuse HTTP connections
+5. **Cache DNS** — Cache DNS lookups
+
+## Common Patterns
 
 ```python
-from codomyrmex.networking import *
+from codomyrmex.networking import (
+    HTTPClient, SocketManager, DNSResolver
+)
 
-# Agent uses networking capabilities
+# HTTP client with retry
+client = HTTPClient(
+    timeout=30,
+    retries=3,
+    backoff_factor=1.5
+)
+
+response = await client.get("https://api.example.com/data")
+print(response.json())
+
+# Socket communication
+socket = SocketManager()
+socket.connect("server.example.com", 8080)
+socket.send(b"Hello")
+data = socket.receive()
+
+# DNS resolution
+resolver = DNSResolver(cache_ttl=300)
+ips = resolver.resolve("example.com")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/networking/](../../../src/codomyrmex/networking/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify HTTP client with real endpoint
+client = HTTPClient()
+response = await client.get("http://httpbin.org/get")
+assert response.status_code == 200
 
-## Related Modules
-
-- [Exceptions](../exceptions/AGENTS.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+# Verify DNS resolver
+resolver = DNSResolver()
+ips = resolver.resolve("localhost")
+assert "127.0.0.1" in ips
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -1,49 +1,69 @@
-# Cerebrum Module — Agent Coordination
+# Agent Guidelines - Cerebrum
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-CEREBRUM Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Cognitive architecture for reasoning, planning, and decision-making.
 
-- Cerebrum operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **CerebrumEngine** — Core reasoning engine
+- **WorkingMemory** — Short-term context
+- **ReasoningChain** — Chain-of-thought reasoning
+- **DecisionModule** — Decision making
+
+## Agent Instructions
+
+1. **Context management** — Update working memory as needed
+2. **Chain reasoning** — Use step-by-step reasoning
+3. **Validate decisions** — Check decision consistency
+4. **Track uncertainty** — Maintain confidence scores
+5. **Explain reasoning** — Provide rationale
+
+## Common Patterns
 
 ```python
-from codomyrmex.cerebrum import *
+from codomyrmex.cerebrum import (
+    CerebrumEngine, WorkingMemory, ReasoningChain
+)
 
-# Agent uses cerebrum capabilities
+# Initialize engine
+engine = CerebrumEngine()
+engine.load_knowledge("domain_knowledge.json")
+
+# Working memory
+memory = WorkingMemory()
+memory.store("user_goal", "Refactor authentication")
+memory.store("constraints", ["maintain compatibility", "add tests"])
+
+# Reasoning chain
+chain = ReasoningChain()
+chain.add_step("Analyze current implementation")
+chain.add_step("Identify refactoring patterns")
+chain.add_step("Generate implementation plan")
+result = chain.execute(memory)
+
+# Decision making
+decision = engine.decide(options, criteria, context)
+print(f"Decision: {decision.choice} (confidence: {decision.confidence})")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/cerebrum/](../../../src/codomyrmex/cerebrum/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify reasoning
+chain = ReasoningChain()
+chain.add_step("Analyze")
+result = chain.execute(context)
+assert result.steps_completed == 1
 
-
-## Key Components
-
-- **`BaseNetworkVisualizer`** — Base class for network visualizations.
-- **`BaseChartVisualizer`** — Base class for chart visualizations.
-- **`ThemeColors`** — Theme color palette.
-- **`ThemeFont`** — Theme font settings.
-- **`Theme`** — Visualization theme manager.
-- **`get_default_theme()`** — Get the default theme instance.
-
-### Submodules
-
-- `core` — Core
-- `fpf` — FPF
-- `inference` — Inference
-- `visualization` — Visualization
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cerebrum -v
+# Verify working memory
+memory = WorkingMemory()
+memory.store("key", "value")
+assert memory.retrieve("key") == "value"
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

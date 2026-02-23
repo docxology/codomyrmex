@@ -4,27 +4,68 @@
 
 ## Overview
 
-The IDE module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The IDE module provides client interfaces for controlling and automating integrated development environments. It supports multiple IDE backends (Cursor, Antigravity) with a unified abstract interface for file operations, command execution, and editor state management.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/ide/PAI.md](../../../src/codomyrmex/ide/PAI.md)
+### IDE Client Interface
 
-## Configuration
+```python
+from codomyrmex.ide import IDEClient, IDEStatus, IDECommand, IDECommandResult
 
-See [README.md](README.md) for configuration options and environment variables.
+# Abstract IDE client with implementations for different editors
+class MyIDEClient(IDEClient):
+    def execute(self, command: IDECommand) -> IDECommandResult:
+        ...
+```
 
-## Signposting
+### Cursor IDE Integration
 
-### Navigation
+```python
+from codomyrmex.ide.cursor import CursorClient
+
+client = CursorClient()
+# Open files, navigate to symbols, execute editor commands
+# Integrate with Cursor's AI features
+```
+
+### IDE Data Models
+
+```python
+from codomyrmex.ide import IDEStatus, IDECommand, IDECommandResult, FileInfo
+
+# IDEStatus: CONNECTED, DISCONNECTED, BUSY
+# IDECommand: structured editor command
+# FileInfo: file metadata for editor context
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `IDEClient` | Abstract Class | Unified IDE interface |
+| `CursorClient` | Class | Cursor IDE implementation |
+| `IDEStatus` | Enum | IDE connection state |
+| `IDECommand` | Dataclass | Structured editor command |
+| `IDECommandResult` | Dataclass | Command execution result |
+| `FileInfo` | Dataclass | File metadata for editors |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | IDE Contribution |
+|-------|-------------------|
+| **OBSERVE** | Read editor state (open files, cursor position, active document) |
+| **BUILD** | Open and edit files through IDE interface |
+| **EXECUTE** | Execute editor commands, apply code changes |
+| **VERIFY** | Check IDE diagnostics and linting results |
+
+## Architecture Role
+
+**Interface Layer** — Top-level user interaction module. Consumes `coding/` (code operations) and `git_operations/` (VCS integration). No MCP tools — operates through direct IDE protocol.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

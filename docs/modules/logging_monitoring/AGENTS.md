@@ -1,45 +1,69 @@
-# Logging & Monitoring Module — Agent Coordination
+# Agent Guidelines - Logging Monitoring
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Codomyrmex Logging Monitoring Module.
+## Module Overview
 
-## Key Capabilities
+Centralized logging with structured output, rotation, and audit trails.
 
-- Logging & Monitoring operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **get_logger(name)** — Get configured logger
+- **configure_logging(config)** — Set logging configuration
+- **JSONFormatter** — Structured JSON log output
+- **LogRotator** — Log file rotation
+- **AuditLogger** — Security audit logging
+
+## Agent Instructions
+
+1. **Use structured** — Prefer JSON for machine parsing
+2. **Add context** — Include request_id, user_id in logs
+3. **Set levels correctly** — DEBUG for dev, WARNING for prod
+4. **Rotate logs** — Use `LogRotator` for long-running
+5. **Audit sensitive** — Use `AuditLogger` for security events
+
+## Common Patterns
 
 ```python
-from codomyrmex.logging_monitoring import *
+from codomyrmex.logging_monitoring import (
+    get_logger, configure_logging, AuditLogger
+)
 
-# Agent uses logging & monitoring capabilities
+# Configure logging
+configure_logging({
+    "level": "INFO",
+    "format": "json",
+    "output": ["console", "file"]
+})
+
+# Get module logger
+log = get_logger("my_module")
+log.info("Processing started", extra={"request_id": req_id})
+log.error("Failed to process", extra={"error": str(e)})
+
+# Audit logging
+audit = AuditLogger("auth")
+audit.log_event("login", user_id=user.id, success=True)
+audit.log_event("access_denied", user_id=user.id, resource="admin")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/logging_monitoring/](../../../src/codomyrmex/logging_monitoring/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify logger creation
+log = get_logger("test")
+assert log is not None
+assert hasattr(log, "info")
 
-
-## Key Components
-
-- **`AuditLogger`** — Specialized logger for recording immutable security and audit events.
-- **`JSONFormatter`** — Formatter that outputs log records as JSON objects.
-- **`LogContext`** — Context manager for correlation ID and contextual logging.
-- **`PerformanceLogger`** — Logger specialized for performance metrics and timing operations.
-- **`LogRotationManager`** — Configures and manages rotating file handlers for loggers.
-- **`setup_logging()`** — Configure the logging system for the application.
-- **`get_logger()`** — Get a logger instance with the specified name.
-- **`log_with_context()`** — Log a message with additional context data.
-- **`create_correlation_id()`** — Generate a unique correlation ID for request tracing.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k logging_monitoring -v
+# Verify JSON formatting
+from codomyrmex.logging_monitoring import JSONFormatter
+fmt = JSONFormatter()
+record = create_log_record("test")
+output = fmt.format(record)
+import json
+assert json.loads(output)  # Valid JSON
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

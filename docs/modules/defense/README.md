@@ -1,47 +1,66 @@
-# Defense Module Documentation
+# Defense Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
-
-Active countermeasures and containment strategies including rabbit hole detection, sandboxing, and threat response.
-
+Active countermeasures and threat containment for AI security.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## Key Features
+Or for development:
 
-- **ActiveDefense** — Active defense system against cognitive exploits.
-- **Defense** — Main class for defense functionality.
-- **RabbitHole** — A simulated environment to contain and waste the time of attackers.
-- `create_defense()` — Create a new Defense instance.
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`ActiveDefense`** — Active defense system against cognitive exploits.
+- **`Defense`** — Main class for defense functionality.
+- **`RabbitHole`** — A simulated environment to contain and waste the time of attackers.
+
+### Functions
+- **`create_defense()`** — Create a new Defense instance.
 
 ## Quick Start
 
 ```python
-from codomyrmex.defense import ActiveDefense, Defense, RabbitHole
+from codomyrmex.defense import ActiveDefense, RabbitHole
 
-instance = ActiveDefense()
+# Active defense with threat response
+defense = ActiveDefense()
+
+# Register threat handlers
+defense.on_threat("injection", handler=quarantine_input)
+defense.on_threat("exfiltration", handler=block_request)
+
+# Check and respond to threats
+if defense.detect(user_input):
+    defense.respond()
+
+# Rabbit hole containment
+hole = RabbitHole()
+hole.enter(suspicious_agent)  # Isolate in sandboxed environment
+hole.monitor()  # Track behavior
+hole.release() if safe else hole.terminate()
 ```
 
-## Source Files
+## Exports
 
-- `active.py`
-- `defense.py`
-- `rabbithole.py`
+| Class | Description |
+|-------|-------------|
+| `ActiveDefense` | Threat detection and automated response |
+| `RabbitHole` | Deceptive containment environment |
 
-## Directory Contents
+## Use Cases
 
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
+- **Injection detection** — Detect and block prompt injection attempts
+- **Agent containment** — Isolate suspicious agents in sandboxed environments
+- **Threat response** — Automated countermeasures for detected threats
 
 ## Testing
 
@@ -49,7 +68,12 @@ instance = ActiveDefense()
 uv run python -m pytest src/codomyrmex/tests/ -k defense -v
 ```
 
+## Documentation
+
+- [Module Documentation](../../../docs/modules/defense/README.md)
+- [Agent Guide](../../../docs/modules/defense/AGENTS.md)
+- [Specification](../../../docs/modules/defense/SPEC.md)
+
 ## Navigation
 
-- **Source**: [src/codomyrmex/defense/](../../../src/codomyrmex/defense/)
-- **Parent**: [Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

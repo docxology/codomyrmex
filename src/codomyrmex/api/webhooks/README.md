@@ -1,5 +1,7 @@
 # Webhooks
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Webhook dispatch and receipt management for event-driven APIs.
 
 ## Overview

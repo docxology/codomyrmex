@@ -1,57 +1,82 @@
-# System Discovery Module Documentation
+# System Discovery Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
-
-Automatic system capability detection, dependency resolution, and environment profiling.
-
+Module scanning, capability discovery, and system status reporting.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## Key Features
+Or for development:
 
-- **FunctionCapability** — Metadata about a discovered function capability.
-- **ClassCapability** — Metadata about a discovered class capability.
-- **ModuleCapability** — Aggregated capability information for a module.
-- **CapabilityScanner** — Advanced capability scanner for the Codomyrmex ecosystem.
-- **ModuleInfo** — Aggregated metadata and capabilities for a single discovered Codomyrmex module.
-- **SystemDiscovery** — Comprehensive system discovery and orchestration for Codomyrmex.
-- `get_system_context()` — Get the current system context for agents.
-- `check_module_availability()` — Check if a module is available and importable.
-- `generate_health_report()` — Convenience function to generate a health report.
-- `format_health_report()` — Convenience function to format a health report.
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Classes
+- **`FunctionCapability`** — Metadata about a discovered function capability.
+- **`ClassCapability`** — Metadata about a discovered class capability.
+- **`ModuleCapability`** — Aggregated capability information for a module.
+- **`CapabilityScanner`** — Advanced capability scanner for the Codomyrmex ecosystem.
+- **`ModuleInfo`** — Aggregated metadata and capabilities for a single discovered Codomyrmex module.
+- **`SystemDiscovery`** — Comprehensive system discovery and orchestration for Codomyrmex.
+- **`HealthStatus`** — Health status enumeration.
+- **`HealthCheckResult`** — Result of a health check.
+
+### Functions
+- **`get_system_context()`** — Get the current system context for agents.
+- **`check_module_availability()`** — Check if a module is available and importable.
 
 ## Quick Start
 
 ```python
-from codomyrmex.system_discovery import FunctionCapability, ClassCapability, ModuleCapability
+from codomyrmex.system_discovery import (
+    SystemDiscovery, StatusReporter, CapabilityScanner, get_system_context
+)
 
-instance = FunctionCapability()
+# Discover all modules
+discovery = SystemDiscovery()
+modules = discovery.scan()
+
+for module in modules:
+    print(f"{module.name}: {len(module.capabilities)} capabilities")
+
+# Get system context for LLM
+context = get_system_context()
+print(context)
+
+# Scan capabilities
+scanner = CapabilityScanner()
+capabilities = scanner.scan_module("codomyrmex.llm")
+for cap in capabilities:
+    print(f"  - {cap.name}: {cap.description}")
+
+# Generate status report
+reporter = StatusReporter()
+report = reporter.generate()
+print(f"Modules: {report.module_count}")
+print(f"Health: {report.health_score}%")
 ```
 
-## Source Files
+## Exports
 
-- `capability_scanner.py`
-- `context.py`
-- `discovery_engine.py`
-- `health_checker.py`
-- `health_reporter.py`
-- `profilers.py`
-- `status_reporter.py`
+| Class | Description |
+|-------|-------------|
+| `SystemDiscovery` | Scan all Codomyrmex modules |
+| `CapabilityScanner` | Extract capabilities from modules |
+| `StatusReporter` | Generate system health reports |
+| `get_system_context()` | Get context string for LLM |
 
-## Directory Contents
+## Use Cases
 
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
+- **Module introspection** — Discover available functionality
+- **Health monitoring** — Check module status
+- **LLM context** — Provide system awareness to agents
 
 ## Testing
 
@@ -59,7 +84,12 @@ instance = FunctionCapability()
 uv run python -m pytest src/codomyrmex/tests/ -k system_discovery -v
 ```
 
+## Documentation
+
+- [Module Documentation](../../../docs/modules/system_discovery/README.md)
+- [Agent Guide](../../../docs/modules/system_discovery/AGENTS.md)
+- [Specification](../../../docs/modules/system_discovery/SPEC.md)
+
 ## Navigation
 
-- **Source**: [src/codomyrmex/system_discovery/](../../../src/codomyrmex/system_discovery/)
-- **Parent**: [Modules](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

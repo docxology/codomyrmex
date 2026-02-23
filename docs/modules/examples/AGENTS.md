@@ -1,32 +1,67 @@
-# Examples Module — Agent Coordination
+# Agent Guidelines - Examples
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Codomyrmex Examples Module.
+## Module Overview
 
-## Key Capabilities
+Reference implementations, demonstrations, and validation reports.
 
-- Examples operations and management
+## Contents
 
-## Agent Usage Patterns
+- **Usage patterns** — Common Codomyrmex usage patterns
+- **Integration examples** — Multi-module integration demos
+- **Validation reports** — Config and link check results
+
+## Agent Instructions
+
+1. **Reference first** — Check examples before implementing new patterns
+2. **Copy and adapt** — Use examples as starting points
+3. **Update examples** — Keep examples in sync with API changes
+4. **Test examples** — Examples should be runnable
+5. **Document patterns** — Examples explain the "how"
+
+## Common Patterns
 
 ```python
-from codomyrmex.examples import *
+# Run an example
+from codomyrmex.examples import run_example
 
-# Agent uses examples capabilities
+run_example("llm_chat")  # Interactive example
+
+# List available examples
+from codomyrmex.examples import list_examples
+
+for example in list_examples():
+    print(f"{example.name}: {example.description}")
+
+# Use example as template
+from codomyrmex.examples import get_example_code
+
+code = get_example_code("agentic_memory_basic")
+# Adapt code to your needs
 ```
 
-## Integration Points
+## Key Examples
 
-- **Source**: [src/codomyrmex/examples/](../../../src/codomyrmex/examples/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+| Example | Description |
+|---------|-------------|
+| `llm_chat` | Basic LLM chat interaction |
+| `agentic_memory` | Memory persistence patterns |
+| `multi_agent` | Multi-agent coordination |
+| `rag_pipeline` | RAG with vector store |
 
-## Testing Guidelines
+## Testing Patterns
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k examples -v
+```python
+# Verify examples are valid Python
+import ast
+from codomyrmex.examples import get_example_code
+
+for example in list_examples():
+    code = get_example_code(example.name)
+    ast.parse(code)  # Should not raise
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

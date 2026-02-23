@@ -4,27 +4,43 @@
 
 ## Overview
 
-The Logistics module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Logistics module provides task scheduling, coordination, and resource management for the PAI Algorithm's PLAN phase. It handles task prioritization, deadline management, and resource allocation across concurrent agent workflows.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/logistics/PAI.md](../../../src/codomyrmex/logistics/PAI.md)
+- Priority-based task scheduling with deadlines
+- Resource allocation and contention management
+- Gantt-style schedule visualization
+- Dependency-aware task ordering
+- Scheduler metrics and utilization tracking
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Schedulers | Various | Task scheduling and prioritization |
+| Resource managers | Various | Resource allocation and tracking |
+| Metrics | Various | Scheduler utilization and performance |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Logistics Contribution |
+|-------|-------------------------|
+| **PLAN** | Schedule tasks with priorities and deadlines |
+| **EXECUTE** | Allocate resources and coordinate concurrent work |
+| **VERIFY** | Check schedule adherence and resource utilization |
+
+## MCP Integration
+
+Scheduler metrics exposed for PAI dashboard consumption.
+
+## Architecture Role
+
+**Service Layer** — Consumed by `orchestrator/` (workflow scheduling), `agents/` (task distribution), and `calendar/` (deadline integration).
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

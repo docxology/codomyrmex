@@ -1,4 +1,4 @@
-# Finance Module Documentation
+# Finance Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
@@ -9,64 +9,62 @@ Complete financial management system for autonomous agents and user businesses. 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## Key Features
+## Key Exports
 
-- **`Ledger`** -- Double-entry bookkeeping engine.
-- **`Transaction`** -- Immutable financial record.
-- **`Account`** -- Chart of accounts management.
+| Export | Type | Purpose |
+|--------|------|---------|
+| `Ledger` | Class | Double-entry bookkeeping engine |
+| `Transaction` | Class | Immutable financial record |
+| `Account` | Class | Chart of accounts management |
+| `Forecaster` | Class | Financial modeling and prediction |
+| `TaxCalculator` | Class | Tax estimation and compliance |
+| `TaxResult` | Class | Tax calculation result data model |
+| `PayrollProcessor` | Class | Employee payment processing |
+| `PayStub` | Class | Pay stub data model |
 
-## Submodules
+### Submodules
 
-| Submodule | Description |
-|-----------|-------------|
-| `ledger` | Core accounting engine |
-| `taxes` | Compliance and estimation |
-| `payroll` | Payment processing |
-| `forecasting` | Financial modeling |
+| Submodule | Purpose |
+|-----------|---------|
+| `ledger/` | Core accounting engine (double-entry, journal, trial balance) |
+| `taxes/` | Tax compliance, estimation, and reporting |
+| `payroll/` | Payment processing and stub generation |
+| `forecasting/` | Financial modeling, projections, and trend analysis |
 
 ## Quick Start
 
 ```python
-from codomyrmex.finance import Ledger
+from codomyrmex.finance import Ledger, Transaction, Forecaster, TaxCalculator
 
+# Double-entry bookkeeping
 ledger = Ledger()
 ledger.record(Transaction(amount=100.00, debit="Assets:Cash", credit="Revenue:Sales"))
+balance = ledger.trial_balance()
+
+# Financial forecasting
+forecaster = Forecaster()
+projection = forecaster.project(ledger, months=12)
+
+# Tax calculation
+tax = TaxCalculator(jurisdiction="US")
+result = tax.estimate(ledger, year=2026)
 ```
 
-## API Reference
+## Architecture
 
-### Classes
-
-| Class | Description |
-|-------|-------------|
-| `Ledger` | Double-entry bookkeeping engine |
-| `Transaction` | Immutable financial record |
-| `Account` | Chart of accounts management |
-
-## Directory Contents
-
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k finance -v
 ```
-
-## Related Modules
-
-- [Governance](../governance/README.md)
+finance/
+├── __init__.py        # All exports
+├── ledger/            # Double-entry accounting
+├── taxes/             # Tax compliance
+├── payroll/           # Payment processing
+├── forecasting/       # Financial modeling
+└── tests/             # Zero-Mock tests
+```
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/finance/](../../../src/codomyrmex/finance/)
-- **API Spec**: [API_SPECIFICATION.md](../../../src/codomyrmex/finance/API_SPECIFICATION.md)
-- **MCP Spec**: [MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/finance/MCP_TOOL_SPECIFICATION.md)
-- **Parent**: [Modules](../README.md)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

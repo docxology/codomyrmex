@@ -1,5 +1,7 @@
 # Swarm Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Collective Intelligence & Emergence**
 
 The `codomyrmex.meme.swarm` submodule models decentralized, self-organizing systems. It implements algorithms for flocking, consensus, and emergent behavior, simulating how individual agents (or ideas) coordinate without a central commander.

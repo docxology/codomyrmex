@@ -4,27 +4,23 @@
 
 ## Overview
 
-The Module Template module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+Module Template Package This is an **Extended Layer** module.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/module_template/PAI.md](../../../src/codomyrmex/module_template/PAI.md)
+## PAI Algorithm Phase Mapping
 
-## Configuration
+| Phase | Module Template Contribution |
+|-------|------------------------------|
+| **EXECUTE** | General module operations |
 
-See [README.md](README.md) for configuration options and environment variables.
+## Architecture Role
 
-## Signposting
+**Extended Layer** — Part of the codomyrmex layered architecture.
 
-### Navigation
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

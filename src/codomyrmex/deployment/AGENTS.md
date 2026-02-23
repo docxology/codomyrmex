@@ -1,5 +1,7 @@
 # Agent Guidelines - Deployment
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Container deployment, infrastructure automation, and environment management.

@@ -1,11 +1,10 @@
 # Security Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Comprehensive security module organized into nine specialized submodules: digital, physical, cognitive, theory, ai_safety, governance, scanning, secrets, audit, and compliance. The digital submodule handles vulnerability scanning, secrets detection, encryption, SSL certificate validation, compliance checking, and security monitoring. The physical submodule manages access control, asset inventory, surveillance, and perimeter security. The cognitive submodule detects social engineering, phishing, and anomalous user behavior. The theory submodule provides threat modeling, risk assessment, and security pattern frameworks. The ai_safety submodule provides jailbreak detection, prompt injection defense, and adversarial containment. The governance submodule provides contract management, policy enforcement, and dispute resolution. The scanning, secrets, audit, and compliance submodules provide core standalone capabilities.
-
 
 ## Installation
 
@@ -156,13 +155,11 @@ from codomyrmex.security import SBOMFormat, LicenseType, Component
 instance = SBOMFormat()
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k security -v
 ```
-
 
 ## Consolidated Sub-modules
 

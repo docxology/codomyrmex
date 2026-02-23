@@ -4,27 +4,36 @@
 
 ## Overview
 
-The CLI module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The CLI module provides the unified command-line interface for all codomyrmex operations. It aggregates CLI commands from all modules into a single `codomyrmex` CLI with subcommands for each capability domain.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/cli/PAI.md](../../../src/codomyrmex/cli/PAI.md)
+- Unified CLI entry point for all codomyrmex operations
+- Module auto-discovery of CLI commands via `cli_commands()` convention
+- Rich formatting with progress bars and color output
+- Interactive prompts for guided workflows
+- Shell completion generation
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| CLI app | Various | Main CLI application and subcommand routing |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | CLI Contribution |
+|-------|-------------------|
+| **OBSERVE** | CLI provides human-readable system status and inspection |
+| **EXECUTE** | CLI commands execute module operations from terminal |
+
+## Architecture Role
+
+**Interface Layer** — Top-level user interaction. Aggregates `cli_commands()` from all modules. No MCP tools — CLI operates through direct terminal I/O.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

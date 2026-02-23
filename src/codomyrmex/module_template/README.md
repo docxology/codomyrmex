@@ -1,11 +1,10 @@
 # Module Template Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Scaffolding module for creating new Codomyrmex modules from a standardized template. The `scaffold_new_module()` function generates a complete module directory with all required documentation files (README, AGENTS, SPEC, API_SPECIFICATION, CHANGELOG, MCP_TOOL_SPECIFICATION, SECURITY, USAGE_EXAMPLES), a customized `__init__.py`, and a core Python source file with a boilerplate class and factory function. Module names are validated to enforce snake_case naming conventions.
-
 
 ## Installation
 
@@ -51,7 +50,6 @@ from codomyrmex.module_template import scaffold_new_module, list_template_files
 
 result = scaffold_new_module()
 ```
-
 
 ## Testing
 

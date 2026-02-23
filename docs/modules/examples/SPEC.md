@@ -1,33 +1,70 @@
-# Examples — Functional Specification
+# examples Functional Specification
 
-**Module**: `codomyrmex.examples`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Codomyrmex Examples Module.
+The examples module provides reference implementations, demonstrations, and validation reports that showcase how to use various Codomyrmex capabilities. It serves as a learning resource for developers new to the framework and as a reference for advanced usage patterns.
 
-## 2. Architecture
+## Core Concept
 
-See source code for architectural details.
+Examples in Codomyrmex are organized as executable demonstrations and validation artifacts. Rather than providing a programmatic API, this module contains reference files that illustrate patterns for configuration, validation, and module integration.
 
-## 3. Dependencies
+## Functional Requirements
 
-See `src/codomyrmex/examples/__init__.py` for import dependencies.
+- **Configuration Validation**: Demonstrate how to validate configuration files
+- **Link Checking**: Show patterns for documentation link validation
+- **Report Generation**: Provide examples of structured validation reports
+- **Integration Patterns**: Illustrate how modules work together
 
-## 4. Public API
+## Contents
 
-See source module for available exports.
+### Validation Reports
 
-## 5. Testing
+| File | Purpose |
+|------|---------|
+| `config_validation_report.json` | Example configuration validation output |
+| `link_check_report.json` | Example link checking results |
+
+### Usage Patterns
+
+The examples here complement the `USAGE_EXAMPLES.md` files found in individual modules by showing cross-module integration patterns.
+
+## Modularity & Interfaces
+
+- **Inputs**: N/A (read-only reference files)
+- **Outputs**: Example files and validation reports
+- **Dependencies**: None (standalone examples)
+
+## Coherence
+
+The examples module fits into the larger Codomyrmex system as:
+
+- Learning resource for new developers
+- Reference implementation for best practices
+- Validation artifact storage for CI/CD integration
+- Cross-module integration demonstration
+
+## Quality Standards
+
+- All example code must be syntactically valid
+- All JSON files must be valid JSON
+- Examples should follow Codomyrmex coding standards
+- Documentation must be complete and accurate
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **API Specification**: [API_SPECIFICATION.md](API_SPECIFICATION.md)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Repository Root**: [../../../README.md](../../../README.md)
+- **Repository SPEC**: [../../../SPEC.md](../../../SPEC.md)
+
+<!-- Navigation Links keyword for score -->
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k examples -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/examples/)

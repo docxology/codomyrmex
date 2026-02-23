@@ -14,6 +14,7 @@ Guides for setting up and working in the Codomyrmex development environment. Cov
 | [**testing-strategy.md**](testing-strategy.md) | Testing best practices and patterns |
 | [**documentation.md**](documentation.md) | Documentation standards and guidelines |
 | [**uv-usage-guide.md**](uv-usage-guide.md) | UV package manager usage guide |
+| [**google-integration.md**](google-integration.md) | Google services integration guide |
 | [AGENTS.md](AGENTS.md) | Agent coordination for development docs |
 | [SPEC.md](SPEC.md) | Development documentation specification |
 | [PAI.md](PAI.md) | Personal AI development considerations |

@@ -1,52 +1,37 @@
 # Personal AI Infrastructure — Utils Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Utilities Package. This is an **Extended Layer** module.
+The Utils module provides shared utility functions used across the codomyrmex ecosystem — string manipulation, path helpers, type coercion, hashing, and general-purpose Python utilities.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.utils import ScriptBase, ScriptConfig, ScriptResult, ensure_directory, safe_json_loads, safe_json_dumps
-```
+- Path normalization and resolution utilities
+- String formatting and sanitization helpers
+- Hash computation (MD5, SHA256) for integrity checks
+- Type conversion and coercion utilities
+- Common data structure helpers
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `ensure_directory` | Function/Constant | Ensure directory |
-| `safe_json_loads` | Function/Constant | Safe json loads |
-| `safe_json_dumps` | Function/Constant | Safe json dumps |
-| `hash_content` | Function/Constant | Hash content |
-| `hash_file` | Function/Constant | Hash file |
-| `timing_decorator` | Function/Constant | Timing decorator |
-| `retry` | Function/Constant | Retry |
-| `get_timestamp` | Function/Constant | Get timestamp |
-| `truncate_string` | Function/Constant | Truncate string |
-| `get_env` | Function/Constant | Get env |
-| `flatten_dict` | Function/Constant | Flatten dict |
-| `deep_merge` | Function/Constant | Deep merge |
-| `ScriptBase` | Class | Scriptbase |
-| `ScriptConfig` | Class | Scriptconfig |
-| `ScriptResult` | Class | Scriptresult |
-
-*Plus 28 additional exports.*
-
+| Path helpers | Various | File path manipulation |
+| String utilities | Various | Formatting and sanitization |
+| Hash functions | Various | Integrity computation |
+| Type coercion | Various | Data type conversions |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Utils Contribution |
-|-------|————————————————————|
-| **OBSERVE** | Data gathering and state inspection |
-| **EXECUTE** | Execution and deployment |
-| **VERIFY** | Validation and quality checks |
-| **LEARN** | Learning and knowledge capture |
+|-------|---------------------|
+| **All Phases** | Cross-cutting utility functions used throughout the system |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Foundation Layer** — Lowest-level utility module with zero codomyrmex dependencies. Consumed by virtually all other modules.
 
 ## Navigation
 

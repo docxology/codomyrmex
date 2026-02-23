@@ -27,7 +27,7 @@
 | Directory | Description |
 | :--- | :--- |
 | [src/](src/INDEX.md) | Source root — namespace package |
-| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **93 modules** across 4 layers |
+| [src/codomyrmex/](src/codomyrmex/INDEX.md) | Main package — **78 modules** across 4 layers |
 
 ### Infrastructure
 
@@ -61,7 +61,7 @@
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 93-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 78-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

@@ -1,5 +1,7 @@
 # Tool Use Module — Agent Coordination
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 Tool Use Module

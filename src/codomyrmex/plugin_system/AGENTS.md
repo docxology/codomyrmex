@@ -1,5 +1,7 @@
 # Agent Guidelines - Plugin System
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Extensible plugin architecture for third-party modules.

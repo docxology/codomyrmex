@@ -1,41 +1,57 @@
 # Personal AI Infrastructure — Vector Store Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Vector Store Module This is an **Extended Layer** module.
+The Vector Store module provides embedding-based vector storage and similarity search for AI agent memory and retrieval. It supports multiple backends and enables semantic search over code, documents, and knowledge artifacts.
 
 ## PAI Capabilities
 
+### Vector Operations
+
 ```python
-from codomyrmex.vector_store import SearchResult, VectorEntry, DistanceMetric, normalize_embedding, create_vector_store
+from codomyrmex.vector_store import VectorStore, VectorDocument, SearchResult
+
+store = VectorStore(backend="local")
+
+# Store documents as vectors
+doc = VectorDocument(content="Authentication endpoint using JWT", metadata={"module": "auth"})
+store.upsert(doc)
+
+# Semantic search
+results: list[SearchResult] = store.search("login API", top_k=5)
+```
+
+### Data Models
+
+```python
+from codomyrmex.vector_store.models import Embedding, VectorIndex, SimilarityMetric
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `SearchResult` | Class | Searchresult |
-| `VectorEntry` | Class | Vectorentry |
-| `DistanceMetric` | Class | Distancemetric |
-| `normalize_embedding` | Function/Constant | Normalize embedding |
-| `VectorStore` | Class | Vectorstore |
-| `InMemoryVectorStore` | Class | Inmemoryvectorstore |
-| `NamespacedVectorStore` | Class | Namespacedvectorstore |
-| `create_vector_store` | Function/Constant | Create vector store |
+| `VectorStore` | Class | Vector storage and retrieval engine |
+| `VectorDocument` | Model | Document with embedding metadata |
+| `SearchResult` | Model | Similarity search result |
+| `Embedding` | Model | Vector embedding data model |
+| `VectorIndex` | Model | Index configuration |
+| `SimilarityMetric` | Enum | Cosine, euclidean, dot product |
+| `cli_commands` | Function | CLI commands for vector operations |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Vector Store Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **BUILD** | Artifact creation and code generation |
-| **LEARN** | Learning and knowledge capture |
+|-------|---------------------------|
+| **OBSERVE** | Semantic search for relevant code/docs using vector similarity |
+| **THINK** | Retrieve contextually similar past experiences for reasoning |
+| **LEARN** | Store embeddings of work outcomes for future retrieval |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Core Layer** — Central embedding infrastructure. Consumed by `graph_rag/` (hybrid search), `agentic_memory/` (semantic memory), `search/` (augmented search), and `cerebrum/` (similarity-based reasoning).
 
 ## Navigation
 

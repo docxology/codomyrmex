@@ -1,5 +1,7 @@
 # Agent Guidelines - Serialization
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Data serialization: JSON, YAML, msgpack, protobuf, and custom formats.

@@ -1,11 +1,10 @@
 # Documents Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Document handling module providing document parsing, generation, and manipulation capabilities. Supports multiple formats including Markdown, JSON, YAML, HTML, XML, CSV, PDF, and plain text.
-
 
 ## Installation
 
@@ -152,7 +151,6 @@ Format-specific read/write handlers:
 - `search/` - Search and indexing
 - `transformation/` - Convert, merge, split, format
 - `utils/` - Encoding detection, file validation
-
 
 ## Testing
 

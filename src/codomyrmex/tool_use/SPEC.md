@@ -1,7 +1,8 @@
 # Tool Use — Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.tool_use`  
-**Version**: v0.1.7  
 **Status**: Active
 
 ## 1. Overview

@@ -1,5 +1,7 @@
 # PAI Integration — Ars Contexta
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Maps the PAI Algorithm phases to Ars Contexta capabilities.
 
 ## Phase Mapping

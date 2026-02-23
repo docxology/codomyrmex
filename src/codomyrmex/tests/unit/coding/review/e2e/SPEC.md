@@ -1,6 +1,6 @@
 # e2e - Test Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -21,8 +21,6 @@ End-to-end tests simulating a full code review workflow.
 
 ## Detailed Architecture and Implementation
 
-
-
 ### Design Principles
 
 1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
@@ -35,8 +33,6 @@ End-to-end tests simulating a full code review workflow.
 The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

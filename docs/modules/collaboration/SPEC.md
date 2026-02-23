@@ -1,48 +1,74 @@
-# Collaboration — Functional Specification
+# collaboration - Functional Specification
 
-**Module**: `codomyrmex.collaboration`  
-**Version**: v0.2.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Collaboration module for Codomyrmex.
+To multiply the effectiveness of individual Codomyrmex agents by enabling them to collaborate, specialize, and reach consensus on complex tasks.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Decentralization**: Avoid single points of failure in agent coordination.
+- **Interoperability**: Agents should be able to collaborate regardless of their underlying model or architecture.
+- **Transparency**: Every step of the collaboration should be traceable.
+- **Feedback Loops**: Constant evaluation and adjustment based on agent feedback.
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Architecture
 
-### Submodule Structure
+```mermaid
+graph TD
+    User([User]) --> SM[SwarmManager]
+    SM --> A1[Agent 1]
+    SM --> A2[Agent 2]
+    A1 <--> A2
+    A1 --> SMH[Shared Memory]
+    A2 --> SMH
+```
 
-- `agents/` — Multi-agent coordination submodule.
-- `communication/` — Inter-agent messaging submodule.
-- `coordination/` — Task coordination submodule.
-- `protocols/` — Multi-agent coordination protocols.
+## Functional Requirements
 
-### Source Files
+- Broadcast messages to an entire swarm or specific groups.
+- Elect a 'Leader' or 'Orchestrator' agent for a specific mission.
+- Implement 'Peer Review' patterns where one agent verifies another's output.
+- Provide a 'Wall' or 'Log' of the collaborative process.
 
-- `exceptions.py`
-- `models.py`
+## Interface Contracts
 
-## 3. Dependencies
+### Communication (`collaboration.communication`)
 
-See `src/codomyrmex/collaboration/__init__.py` for import dependencies.
+```python
+class Broadcaster:
+    def subscribe(topic: str, subscriber_id: str, handler: Callable, ...) -> str
+    async def publish(topic: str, message: AgentMessage) -> int
+    def list_topics() -> List[TopicInfo]
 
-## 4. Public API
+class DirectMessenger:
+    async def send_private(recipient_id: str, message: AgentMessage) -> bool
+```
 
-See source module for available exports.
+### Coordination (`collaboration.coordination`)
 
-## 5. Testing
+```python
+class VotingMechanism:
+    def create_proposal(title: str, proposer_id: str, ...) -> Proposal
+    def cast_vote(proposal_id: str, voter_id: str, vote: VoteType, ...) -> Vote
+    def tally_votes(proposal_id: str, total_voters: int) -> VotingResult
+
+class ConsensusBuilder:
+    def propose_value(key: str, agent_id: str, value: Any) -> None
+    async def reach_consensus(key: str, agents: List[Agent], ...) -> Optional[Any]
+
+class TaskDecomposer:
+    def decompose(mission: str) -> List[Task]
+```
+
+## Technical Constraints
+
+- Large swarms may face coordination overhead and messaging latency.
+- Requires robust serialization for transferring state between agents.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/collaboration/)

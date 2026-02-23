@@ -1,43 +1,63 @@
-# Dark Module — Agent Coordination
+# Agent Guidelines - Dark
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Dark modes module - network, hardware, software, PDF dark mode utilities.
+## Module Overview
 
-## Key Capabilities
+Dark mode utilities for PDFs, network, hardware, and software.
 
-- Dark operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **DarkPDF** — PDF dark mode processing
+- **DarkPDFFilter** — Filter types: inversion, brightness, contrast, sepia
+- **apply_dark_mode(path)** — Apply dark mode to PDF
+
+## Agent Instructions
+
+1. **Use apply_dark_mode** — Convenience function for simple conversions
+2. **Choose filter type** — Inversion for basic, sepia for readability
+3. **Adjust brightness** — Reduce for eye comfort
+4. **Preserve images** — Use smart inversion to skip images
+5. **Check output quality** — Verify text remains readable
+
+## Common Patterns
 
 ```python
-from codomyrmex.dark import *
+from codomyrmex.dark import apply_dark_mode, DarkPDF, DarkPDFFilter
 
-# Agent uses dark capabilities
+# Simple dark mode conversion
+dark_pdf = apply_dark_mode("document.pdf")
+dark_pdf.save("document_dark.pdf")
+
+# Advanced customization
+processor = DarkPDF("document.pdf")
+processor.set_filter(DarkPDFFilter.SEPIA)
+processor.set_brightness(0.8)
+processor.set_contrast(1.1)
+processor.process()
+processor.save("output.pdf")
+
+# Batch processing
+for pdf in pdf_files:
+    apply_dark_mode(pdf).save(pdf.replace(".pdf", "_dark.pdf"))
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/dark/](../../../src/codomyrmex/dark/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify dark mode processing
+from codomyrmex.dark import apply_dark_mode
 
+result = apply_dark_mode("test.pdf")
+assert result is not None
+assert result.page_count > 0
 
-## Key Components
-
-
-### Submodules
-
-- `hardware` — Hardware
-- `network` — Network
-- `pdf` — Pdf
-- `software` — Software
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k dark -v
+# Verify filter application
+processor = DarkPDF("test.pdf")
+processor.set_filter(DarkPDFFilter.INVERSION)
+assert processor.current_filter == DarkPDFFilter.INVERSION
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -151,15 +151,32 @@ def is_uv_environment() -> bool:
 def generate_environment_report() -> str:
     """Generate an environment status report.
 
-    Note:
-        This function is a placeholder. A future implementation will return
-        a detailed report of Python version, dependencies, environment
-        variables, and system configuration.
-
     Returns:
-        A placeholder string. Will return a full report once implemented.
+        A detailed report of Python version, dependencies, environment
+        variables, and system configuration.
     """
-    raise NotImplementedError("Environment report generation not yet implemented")
+    report = [
+        "Codomyrmex Environment Report",
+        "===========================",
+        f"Python Version: {sys.version.split()[0]}",
+        f"Python Executable: {sys.executable}",
+        f"UV Available: {'Yes' if is_uv_available() else 'No'}",
+        f"UV Environment: {'Yes' if is_uv_environment() else 'No'}"
+    ]
+    
+    deps_ok = True
+    try:
+        import cased
+    except ImportError:
+        deps_ok = False
+        
+    try:
+        import dotenv
+    except ImportError:
+        deps_ok = False
+        
+    report.append(f"Dependencies OK: {'Yes' if deps_ok else 'No'}")
+    return "\n".join(report)
 
 def validate_environment_completeness(repo_root: str | None = None) -> bool:
     """Validate that the environment is fully configured for Codomyrmex.

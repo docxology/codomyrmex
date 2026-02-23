@@ -4,27 +4,40 @@
 
 ## Overview
 
-The Database Management module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Database Management module provides database lifecycle operations — schema management, migrations, connection pooling, and query execution for SQL and NoSQL backends.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/database_management/PAI.md](../../../src/codomyrmex/database_management/PAI.md)
+- Connection pool management for multiple databases
+- Schema migration planning and execution
+- Query building and execution with parameterization
+- Database backup and restore operations
+- Health monitoring and performance metrics
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Connection managers | Various | Database connection pooling |
+| Migration engine | Various | Schema versioning and migration |
+| Query builders | Various | Safe parameterized queries |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | Database Management Contribution |
+|-------|-----------------------------------|
+| **OBSERVE** | Query databases for current state and schema information |
+| **BUILD** | Generate migration scripts for schema changes |
+| **EXECUTE** | Run migrations, execute queries, manage connections |
+| **VERIFY** | Validate schema integrity and migration results |
+
+## Architecture Role
+
+**Service Layer** — Consumed by `agentic_memory/` (persistent storage), `serialization/` (object persistence), and `api/` (data backend).
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

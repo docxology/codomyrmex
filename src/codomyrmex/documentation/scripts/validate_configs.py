@@ -229,8 +229,32 @@ class ConfigValidator:
 
     def _attempt_fixes(self, file_path: Path, file_type: str, result: dict[str, Any]):
         """Attempt to automatically fix common issues."""
-        # Implementation for fixes if needed
-        pass
+        if file_type != "json":
+            return  # Auto-fix only implemented for JSON currently
+            
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                
+            fixed = False
+            for error in result["errors"]:
+                if "Missing required sections" in error:
+                    if "output" not in data:
+                        data["output"] = {"format": "json"}
+                        fixed = True
+                    if "logging" not in data:
+                        data["logging"] = {"level": "INFO"}
+                        fixed = True
+                        
+            if fixed:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2)
+                result["fixed"] = True
+                result["valid"] = True
+                result["errors"] = []
+                logger.info(f"Successfully auto-fixed {file_path}")
+        except Exception as e:
+            logger.error(f"Failed to auto-fix {file_path}: {e}")
 
     def print_report(self, results: dict[str, Any], verbose: bool = False):
         """Print validation results."""

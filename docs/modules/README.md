@@ -62,7 +62,7 @@ Code analysis and pattern recognition.
 | Module | Description |
 |--------|-------------|
 | [coding/](coding/) | Safe code execution, static analysis, and pattern matching |
-| [coding/parsers/tree_sitter/](coding/parsers/tree_sitter/) | AST parsing and analysis |
+| [static_analysis/](static_analysis/) | Static analysis and code parsing |
 
 ### Data & Visualization Modules
 

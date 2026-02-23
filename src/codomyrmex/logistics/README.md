@@ -1,11 +1,10 @@
 # Logistics Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Comprehensive logistics module that consolidates orchestration, task management, and scheduling capabilities for the Codomyrmex platform. Provides workflow and project orchestration engines, job queue management, cron and recurring schedule support with timezone awareness, plus submodules for task routing algorithms, schedule optimization, resource allocation, and progress tracking.
-
 
 ## Installation
 
@@ -63,7 +62,6 @@ uv sync
 ```python
 import codomyrmex.logistics
 ```
-
 
 ## Testing
 

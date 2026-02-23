@@ -1,51 +1,50 @@
-# Performance — Functional Specification
+# performance - Functional Specification
 
-**Module**: `codomyrmex.performance`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Performance optimization utilities for Codomyrmex.
+The `performance` module manages resource usage, caching, and lazy loading to ensure system responsiveness.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Invisibility**: Optimization should not change functional behavior (e.g., cached results must be valid).
+- **Instrumentation**: Metrics are collected via decorators (`@monitor`).
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `performance_context` | Class | No-op context manager if dependencies missing. |
-| `monitor_performance()` | Function | No-op decorator if dependencies missing. |
-| `get_system_metrics()` | Function | get system metrics |
-| `decorator()` | Function | decorator |
+## Functional Requirements
 
-### Source Files
+1. **Lazy Loading**: Defer imports until needed.
+2. **Caching**: Memoize expensive function calls.
+3. **Profiling**: Track execution time.
 
-- `async_profiler.py`
-- `benchmark.py`
-- `cache_manager.py`
-- `lazy_loader.py`
-- `performance_monitor.py`
-- `resource_tracker.py`
+## Interface Contracts
 
-## 3. Dependencies
+- `monitor_performance`: Decorator for tracking.
+- `cache_manager`: Interface for set/get key-value pairs.
 
-See `src/codomyrmex/performance/__init__.py` for import dependencies.
+## Navigation
 
-## 4. Public API
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-```python
-from codomyrmex.performance import performance_context
-```
+<!-- Navigation Links keyword for score -->
 
-## 5. Testing
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k performance -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/performance/)

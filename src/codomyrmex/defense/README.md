@@ -1,9 +1,8 @@
 # Defense Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Active countermeasures and threat containment for AI security.
-
 
 ## Installation
 
@@ -63,13 +62,11 @@ hole.release() if safe else hole.terminate()
 - **Agent containment** — Isolate suspicious agents in sandboxed environments
 - **Threat response** — Automated countermeasures for detected threats
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k defense -v
 ```
-
 
 ## Documentation
 

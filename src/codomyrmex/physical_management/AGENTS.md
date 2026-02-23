@@ -1,5 +1,7 @@
 # Agent Guidelines - Physical Management
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Physical device and hardware management for IoT and robotics.

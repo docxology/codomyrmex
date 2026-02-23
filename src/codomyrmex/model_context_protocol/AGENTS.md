@@ -1,5 +1,7 @@
 # Agent Guidelines - Model Context Protocol
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 MCP server/client implementation for AI agent tool access.

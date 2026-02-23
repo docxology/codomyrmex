@@ -1,5 +1,7 @@
 # Agent Guidelines - Spatial
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 3D/4D spatial modeling, physics, coordinates, and rendering.

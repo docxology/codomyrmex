@@ -1,48 +1,63 @@
-# Collaboration Module — Agent Coordination
+# Agent Guidelines - Collaboration
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Collaboration module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Multi-agent collaboration, shared state, and coordination patterns.
 
-- Collaboration operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **CollaborationSession** — Shared workspace for agents
+- **MessageBus** — Inter-agent messaging
+- **SharedState** — Synchronized state
+- **TaskPool** — Distributed task allocation
+
+## Agent Instructions
+
+1. **Use sessions** — Create sessions for related work
+2. **Message async** — Prefer async messaging
+3. **Lock shared state** — Use locks for concurrent access
+4. **Acknowledge tasks** — Confirm task completion
+5. **Handle failures** — Implement task retry logic
+
+## Common Patterns
 
 ```python
-from codomyrmex.collaboration import *
+from codomyrmex.collaboration import (
+    CollaborationSession, MessageBus, SharedState
+)
 
-# Agent uses collaboration capabilities
+# Create collaboration session
+session = CollaborationSession("project_analysis")
+session.add_agent("analyzer")
+session.add_agent("validator")
+
+# Shared state
+state = SharedState()
+state.set("progress", 0.5)
+progress = state.get("progress")
+
+# Inter-agent messaging
+bus = MessageBus()
+bus.subscribe("results", handle_result)
+bus.publish("tasks", {"type": "analyze", "file": "main.py"})
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/collaboration/](../../../src/codomyrmex/collaboration/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify session
+session = CollaborationSession("test")
+session.add_agent("a1")
+assert "a1" in session.agents
 
-
-## Key Components
-
-- **`CollaborationError`** — Base exception for all collaboration module errors.
-- **`AgentNotFoundError`** — Raised when an agent cannot be found in the registry.
-- **`AgentBusyError`** — Raised when an agent is busy and cannot accept new tasks.
-- **`TaskExecutionError`** — Raised when a task fails to execute.
-- **`TaskNotFoundError`** — Raised when a task cannot be found.
-
-### Submodules
-
-- `agents` — Agents
-- `communication` — Communication
-- `coordination` — Coordination
-- `protocols` — Protocols
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k collaboration -v
+# Verify shared state
+state = SharedState()
+state.set("key", "value")
+assert state.get("key") == "value"
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -1,12 +1,13 @@
 # Specification — Ars Contexta
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Formal specification for the Ars Contexta skills submodule.
 
 ## Module Identity
 
 - **Package**: `codomyrmex.skills.arscontexta`
-- **Version**: 1.0.0
-- **Type**: Skills submodule
+- - **Type**: Skills submodule
 - **Category**: Reasoning / Knowledge Management
 
 ## Three-Space Architecture

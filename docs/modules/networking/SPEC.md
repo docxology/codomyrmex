@@ -1,47 +1,157 @@
-# Networking — Functional Specification
+# networking - Functional Specification
 
-**Module**: `codomyrmex.networking`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Networking module for Codomyrmex.
+Networking module providing HTTP client utilities, WebSocket support, and API client generation. Integrates with `api` and `scrape` modules for network operations.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `get_http_client()` | Function | Get an HTTP client instance. |
+- Protocol-agnostic networking interface
+- Support for HTTP, WebSocket, and other protocols
+- Pluggable client system
 
-### Source Files
+### Internal Coherence
 
-- `exceptions.py`
-- `http_client.py`
-- `raw_sockets.py`
-- `ssh_sftp.py`
-- `websocket_client.py`
+- Unified error handling
+- Consistent request/response patterns
+- Integration with logging
 
-## 3. Dependencies
+### Parsimony
 
-See `src/codomyrmex/networking/__init__.py` for import dependencies.
+- Essential networking operations
+- Minimal dependencies
+- Focus on common protocols
 
-## 4. Public API
+### Functionality
+
+- Working implementations for HTTP and WebSocket
+- Support for retries and timeouts
+- API client code generation
+
+### Testing
+
+- Unit tests for all clients
+- Integration tests with mock servers
+- Network error handling tests
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each protocol
+- Client generation documentation
+
+## Architecture
+
+```mermaid
+graph TD
+    ClientInterface[Client Interface]
+    HTTPClient[HTTP Client]
+    WebSocketClient[WebSocket Client]
+    APIClientGenerator[API Client Generator]
+    NetworkManager[Network Manager]
+    
+    ClientInterface --> HTTPClient
+    ClientInterface --> WebSocketClient
+    APIClientGenerator --> ClientInterface
+    NetworkManager --> ClientInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **HTTP Requests**: GET, POST, PUT, DELETE with retries.
+2. **WebSocket**: Connect, send, receive, close.
+3. **SSH/SFTP**: Remote command execution and file transfer.
+4. **Network Diagnostics**: Port scanning and service availability checks.
+5. **Raw Sockets**: Custom TCP/UDP communication.
+6. **Error Handling**: Network error handling and retries.
+7. **Authentication**: Support for various auth methods (Key, Token, Basic).
+
+### Integration Points
+
+- `api/` - API client generation
+- `scrape/` - Web scraping HTTP operations
+- `logging_monitoring/` - Network operation logging
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Protocol-specific tests
+- Mock server integration tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Client Interface
 
 ```python
-from codomyrmex.networking import get_http_client
+
+### `WebSocketClient`
+
+```python
+class WebSocketClient:
+    async def connect()
+    async def send(message: Union[str, bytes, Dict])
+    async def close()
+    def on(handler: Callable[[Any], Any])
 ```
 
-## 5. Testing
+### `PortScanner`
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k networking -v
+```python
+class PortScanner:
+    @staticmethod
+    def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool
+    @staticmethod
+    def scan_range(host: str, start_port: int, end_port: int, ...) -> List[int]
 ```
 
-## References
+### `SSHClient`
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/networking/)
+```python
+class SSHClient:
+    def connect()
+    def execute_command(command: str) -> Tuple[int, str, str]
+    def close()
+```
+
+## Implementation Guidelines
+
+### Client Implementation
+
+1. Implement Client interface for each protocol
+2. Handle retries and timeouts
+3. Support authentication
+4. Provide error handling
+
+### Integration
+
+1. Integrate with api module
+2. Add networking to scrape module
+3. Support logging of network operations
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [api](../api/AGENTS.md), [scrape](../scrape/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->
+```

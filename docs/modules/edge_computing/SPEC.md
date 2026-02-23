@@ -1,51 +1,52 @@
-# Edge Computing — Functional Specification
+# Edge Computing - Functional Specification
 
-**Module**: `codomyrmex.edge_computing`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Edge deployment, IoT gateways, and latency-sensitive patterns.
+Edge computing module providing edge node management, function deployment, and state synchronization for distributed edge systems.
 
-## 2. Architecture
+## Functional Requirements
 
-### Components
+- Edge node discovery and management
+- Function deployment to edge nodes
+- State synchronization (cloud ↔ edge)
+- Offline operation support
+- Resource-aware scheduling
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `EdgeNodeStatus` | Class | Status of an edge node. |
-| `EdgeNode` | Class | An edge computing node. |
-| `EdgeFunction` | Class | A function deployable to edge. |
-| `SyncState` | Class | State synchronization data. |
-| `EdgeSynchronizer` | Class | Synchronize state between edge and cloud. |
-| `EdgeRuntime` | Class | Runtime for edge function execution. |
-| `EdgeExecutionError` | Class | Error during edge function execution. |
-| `EdgeCluster` | Class | Manage a cluster of edge nodes. |
-| `from_data()` | Function | from data |
-| `get_local_state()` | Function | get local state |
-| `update_local()` | Function | Update local state. |
-| `apply_remote()` | Function | Apply remote state if newer. |
-| `get_pending_changes()` | Function | Get changes to sync to remote. |
+## Core Classes
 
-## 3. Dependencies
+| Class | Description |
+|-------|-------------|
+| `EdgeNode` | Edge node representation |
+| `EdgeFunction` | Deployable edge function |
+| `EdgeRuntime` | Function execution runtime |
+| `EdgeCluster` | Cluster of edge nodes |
+| `EdgeSynchronizer` | State sync manager |
+| `EdgeMetrics` | Invocation metrics tracking |
+| `InvocationRecord` | Single invocation record |
 
-See `src/codomyrmex/edge_computing/__init__.py` for import dependencies.
+## Key Functions
 
-## 4. Public API
+| Function | Description |
+|----------|-------------|
+| `EdgeRuntime.deploy(func)` | Deploy function to runtime |
+| `EdgeCluster.register_node(node)` | Register node in cluster |
+| `EdgeSynchronizer.update_local(data)` | Update local state |
 
-```python
-from codomyrmex.edge_computing import EdgeNodeStatus, EdgeNode, EdgeFunction, SyncState, EdgeSynchronizer
-```
+## Design Principles
 
-## 5. Testing
+1. **Offline First**: Work without connectivity
+2. **Resource Aware**: Respect edge constraints
+3. **Eventually Consistent**: Handle sync delays
+4. **Secure**: Encrypted communication
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k edge_computing -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/edge_computing/)

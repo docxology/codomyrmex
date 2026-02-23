@@ -1,5 +1,7 @@
 # Video Module Technical Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Overview
 
 The video module provides video processing, extraction, and analysis capabilities through a clean, modular API backed by moviepy and OpenCV.

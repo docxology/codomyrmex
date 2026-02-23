@@ -1,6 +1,6 @@
 # Video Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -184,7 +184,6 @@ MP4, AVI, MOV, WEBM, MKV
 | ROTATE_90/180/270 | Rotate by degrees |
 | BRIGHTNESS | Adjust brightness |
 | CONTRAST | Adjust contrast |
-
 
 ## Testing
 

@@ -1,11 +1,10 @@
 # Networking Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Networking module providing multi-protocol client implementations for HTTP, WebSocket, SSH/SFTP, and raw TCP/UDP socket communication. The `HTTPClient` handles standard HTTP request/response cycles with configurable timeouts and retry logic. `WebSocketClient` supports persistent bidirectional connections. `SSHClient` provides SSH command execution and SFTP file transfers. Raw socket classes (`TCPClient`, `TCPServer`, `UDPClient`) enable low-level network programming, and `PortScanner` discovers open ports on target hosts. Includes a comprehensive exception hierarchy for granular error handling.
-
 
 ## Installation
 
@@ -77,13 +76,11 @@ ws.connect()
 ws.send({"subscribe": "ticker"})
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k networking -v
 ```
-
 
 ## Consolidated Sub-modules
 

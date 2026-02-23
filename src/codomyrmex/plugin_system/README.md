@@ -1,9 +1,8 @@
 # Plugin System Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Extensible plugin architecture for third-party modules.
-
 
 ## Installation
 
@@ -84,13 +83,11 @@ class MyPlugin(Plugin):
 | `PluginState` | Enum: loaded, active, inactive, error |
 | `PluginError` | Base plugin exception |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
 ```
-
 
 ## Documentation
 

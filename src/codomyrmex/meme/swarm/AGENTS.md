@@ -1,5 +1,7 @@
 # Agents Guide: Swarm
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `swarm` submodule to coordinate with other agents or to simulate mass behavior.

@@ -1,7 +1,8 @@
 # Personal AI Infrastructure - O1
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.agents.o1`  
-**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

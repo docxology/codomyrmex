@@ -1,7 +1,8 @@
 # Personal AI Infrastructure — PAI Bridge Module
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: pai
-**Version**: v0.4.0
 **Status**: Active
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 

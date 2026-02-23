@@ -1,40 +1,62 @@
-# Personal AI Infrastructure — IDEntity Module
+# Personal AI Infrastructure — Identity Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The IDEntity module supports Personal AI Infrastructure through self-sovereign identity management with 3-tier persona system.
-
-## Local-First AI
-
-Identity credentials stored locally with hardware key support; no central authority required
+The Identity module provides multi-persona management and bio-cognitive verification for AI agents. It enables agents to maintain distinct identities, verify user biometrics, and manage persona-specific contexts. Part of the Secure Cognitive Agent suite.
 
 ## PAI Capabilities
 
-- Self-sovereign identity management
-- Local credential storage
-- Offline identity verification
+### Multi-Persona Management
 
-## Detailed PAI Documentation
+```python
+from codomyrmex.identity import IdentityManager, Persona, VerificationLevel
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/identity/PAI.md](../../../src/codomyrmex/identity/PAI.md)
+manager = IdentityManager()
 
-## Configuration
+# Create and manage distinct personas
+persona = Persona(
+    name="researcher",
+    verification_level=VerificationLevel.VERIFIED
+)
+manager.register(persona)
+```
 
-See [README.md](README.md) for configuration options and environment variables.
+### Bio-Cognitive Verification
 
-## Signposting
+```python
+from codomyrmex.identity import BioCognitiveVerifier
 
-### Navigation
+verifier = BioCognitiveVerifier()
+# Verify user identity through multi-factor bio-cognitive challenges
+# Supports behavioral biometrics, knowledge proofs, and cognitive patterns
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `IdentityManager` | Class | Multi-persona lifecycle management |
+| `Persona` | Class | Identity data model with verification state |
+| `VerificationLevel` | Enum | UNVERIFIED, VERIFIED, TRUSTED levels |
+| `BioCognitiveVerifier` | Class | Multi-factor identity verification |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Identity Contribution |
+|-------|------------------------|
+| **OBSERVE** | Identify current user and select appropriate persona context |
+| **EXECUTE** | Gate sensitive operations behind identity verification |
+| **VERIFY** | Validate agent actions against persona permissions |
+
+## Architecture Role
+
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Consumed by `auth/` for credential binding and `agents/pai/` trust gateway.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

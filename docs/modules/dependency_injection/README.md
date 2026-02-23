@@ -1,30 +1,39 @@
-# Dependency Injection Module Documentation
+# Dependency Injection Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+Lightweight, thread-safe Inversion of Control (IoC) container with decorator-based service registration, constructor injection, and lifecycle scoping.
 
-Lightweight, thread-safe Inversion of Control (IoC) container with decorator-based service registration, constructor injection, and lifecycle scoping. Foundation layer module with no dependencies on other codomyrmex modules.
+## Key Exports
 
-## Installation
+### Classes
+- **`Container`** -- IoC container that manages registrations, resolution, and service lifetimes.
+- **`ServiceDescriptor`** -- Dataclass describing a single service binding (interface, implementation, scope, instance, factory).
+- **`ScopeContext`** -- Context manager for scoped service lifetimes within a bounded context.
 
-```bash
-uv pip install codomyrmex
-```
-
-## Key Features
-
-- **`Container`** -- IoC container managing registrations, resolution, and service lifetimes.
-- **`@injectable(scope)`** -- Decorator to mark a class as injectable with a given scope.
-- **`@inject`** -- Decorator to mark a constructor for automatic parameter injection.
+### Enums
 - **`Scope`** -- Lifecycle strategies: `SINGLETON`, `TRANSIENT`, `SCOPED`.
-- **`ScopeContext`** -- Context manager for scoped service lifetimes.
+
+### Decorators
+- **`@injectable(scope, auto_register, tags)`** -- Mark a class as injectable with a given scope.
+- **`@inject`** -- Mark a constructor for automatic parameter injection.
+
+### Exceptions
+- **`ResolutionError`** -- Raised when the container cannot resolve a requested type.
+- **`CircularDependencyError`** -- Raised when a circular dependency chain is detected (inherits from `ResolutionError`).
+
+### Introspection Functions
+- **`is_injectable(cls)`** -- Check whether a class has been marked with `@injectable`.
+- **`get_injectable_metadata(cls)`** -- Retrieve `InjectableMetadata` from a decorated class.
+- **`get_inject_metadata(fn)`** -- Retrieve `InjectMetadata` from a decorated function.
+- **`get_injectable_params(fn)`** -- Retrieve pre-computed injectable parameter hints from a function.
 
 ## Quick Start
 
 ```python
-from codomyrmex.dependency_injection import Container, injectable, inject
+from codomyrmex.dependency_injection import Container, injectable, inject, ScopeContext
 
+# Define services
 @injectable(scope="singleton")
 class AppConfig:
     def __init__(self):
@@ -36,62 +45,60 @@ class UserService:
     def __init__(self, config: AppConfig):
         self.config = config
 
+# Create container and register
 container = Container()
 container.register(AppConfig, AppConfig, scope="singleton")
 container.register(UserService, UserService, scope="transient")
 
-service = container.resolve(UserService)
-assert service.config.debug is True
+# Resolve -- singleton returns same instance, transient creates new each time
+service_a = container.resolve(UserService)
+service_b = container.resolve(UserService)
+assert service_a is not service_b              # transient: different instances
+assert service_a.config is service_b.config    # singleton: same config
+
+# Pre-built instances
+container.register_instance(AppConfig, AppConfig())
+
+# Factory-based registration
+container.register_factory(AppConfig, lambda: AppConfig(), scope="singleton")
+
+# Scoped lifetime (per-context)
+container.register(UserService, UserService, scope="scoped")
+with ScopeContext(container) as scope:
+    a = scope.resolve(UserService)
+    b = scope.resolve(UserService)
+    assert a is b  # same within scope
+
+# Fluent chaining
+container.register(AppConfig, AppConfig).register(UserService, UserService)
+
+# Query
+container.has(AppConfig)           # True
+container.get_descriptor(AppConfig) # ServiceDescriptor
+len(container)                     # number of registrations
+container.reset()                  # clear all
 ```
 
-## API Reference
+## Scope Lifetimes
 
-### Classes
+| Scope | Behavior |
+|-------|----------|
+| `SINGLETON` | One instance for the entire container lifetime. Default. |
+| `TRANSIENT` | A new instance on every `resolve()` call. |
+| `SCOPED` | One instance per `ScopeContext`. Different contexts get different instances. |
 
-| Class | Description |
-|-------|-------------|
-| `Container` | IoC container for registrations and resolution |
-| `ServiceDescriptor` | Dataclass describing a service binding |
-| `ScopeContext` | Context manager for scoped lifetimes |
+## Thread Safety
 
-### Decorators and Functions
-
-| Export | Description |
-|--------|-------------|
-| `@injectable()` | Mark a class as injectable with a given scope |
-| `@inject` | Mark a constructor for automatic parameter injection |
-| `is_injectable(cls)` | Check whether a class has been marked injectable |
-| `get_injectable_metadata(cls)` | Retrieve metadata from a decorated class |
-
-### Exceptions
-
-| Exception | Description |
-|-----------|-------------|
-| `ResolutionError` | Container cannot resolve a requested type |
-| `CircularDependencyError` | Circular dependency chain detected |
-
-## Directory Contents
-
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
+The `Container` uses `threading.RLock` for all registry operations and `threading.local` for per-thread circular dependency detection. `ScopeContext` uses its own `threading.Lock` for the scoped instance cache.
 
 ## Testing
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k dependency_injection -v
+uv run pytest src/codomyrmex/tests/unit/dependency_injection/ -v
 ```
-
-## Related Modules
-
-- [Schemas](../schemas/README.md)
-- [Exceptions](../exceptions/README.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/dependency_injection/](../../../src/codomyrmex/dependency_injection/)
-- **API Spec**: [API_SPECIFICATION.md](../../../src/codomyrmex/dependency_injection/API_SPECIFICATION.md)
-- **MCP Spec**: [MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/dependency_injection/MCP_TOOL_SPECIFICATION.md)
-- **Parent**: [Modules](../README.md)
+- [API_SPECIFICATION](API_SPECIFICATION.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)
+- **Parent**: [Source README](../README.md)
+- **Home**: [Root README](../../../README.md)

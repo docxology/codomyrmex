@@ -1,5 +1,7 @@
 # Text To Speech — Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.audio.text_to_speech`
 **Status**: Active
 

@@ -1,72 +1,81 @@
-# FPF (Functional Programming Framework) Module Documentation
+# FPF (Functional Programming Framework) Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-First Principles Framework (FPF) module.
+First Principles Framework (FPF) module for fetching, parsing, analyzing, and exporting the FPF specification for use in prompt and context engineering. Transforms the static FPF-Spec.md markdown document into a machine-readable, queryable data model with concepts, patterns, relationships, and a searchable index. Includes a high-level `FPFClient` for common workflows and visualization tools for rendering concept graphs.
 
-## Key Features
+## Installation
 
-- **FPFClient** — High-level client for working with FPF specifications.
-- `load_from_file()` — Load and parse FPF specification from a local file.
-- `fetch_and_load()` — Fetch latest FPF specification from GitHub and load it.
-- `search()` — Search for patterns.
-- `get_pattern()` — Get a pattern by ID.
+```bash
+uv add codomyrmex
+```
 
-## Submodules
+Or for development:
 
-| Submodule | Description |
-|-----------|-------------|
-| `constraints` | Constraint Definitions submodule. |
-| `models` | Domain Models submodule. |
-| `optimization` | Constraint Optimization submodule. |
-| `reasoning` | First Principles Framework reasoning utilities. |
+```bash
+uv sync
+```
+
+## Key Exports
+
+### Main Classes
+
+- **`FPFParser`** -- Parses raw FPF-Spec.md markdown content into a structured `FPFSpec` object with sections, patterns, and metadata
+- **`FPFExtractor`** -- Extracts concepts and relationships from a parsed `FPFSpec`
+- **`FPFIndexer`** -- Builds a searchable index over patterns for fast lookup and query
+- **`FPFFetcher`** -- Fetches the latest FPF specification from a GitHub repository
+- **`FPFExporter`** -- Exports `FPFSpec` data to JSON and other formats
+- **`FPFVisualizer`** -- Renders concept graphs and relationship diagrams as text
+- **`FPFVisualizerPNG`** -- Renders concept graphs as PNG images
+- **`ContextBuilder`** -- Builds context strings from FPF patterns for prompt engineering use
+- **`TermAnalyzer`** -- Analyzes term frequency and usage across the specification
+- **`GraphGenerator`** -- Generates graph structures from concept relationships
+- **`SectionManager`** -- Manages individual sections of the FPF specification
+- **`SectionExporter`** -- Exports individual sections to files
+- **`SectionImporter`** -- Imports sections from external files
+- **`FPFAnalyzer`** -- High-level analysis combining pattern statistics, coverage, and quality metrics
+- **`ReportGenerator`** -- Generates human-readable reports from analysis results
+- **`FPFClient`** -- High-level client wrapping parser, extractor, indexer, fetcher, and exporter for convenient end-to-end workflows including `load_from_file()`, `fetch_and_load()`, `search()`, `export_json()`, and `build_context()`
+
+### Models
+
+- **`FPFSpec`** -- Root data model representing the entire parsed specification
+- **`Pattern`** -- A single FPF pattern with ID, name, description, and status
+- **`Concept`** -- A concept extracted from the specification with type classification
+- **`Relationship`** -- A directional relationship between two concepts
+- **`FPFIndex`** -- Searchable index structure for patterns and concepts
+
+### Enums
+
+- **`PatternStatus`** -- Status of a pattern (e.g., draft, active, deprecated)
+- **`ConceptType`** -- Classification of concepts (e.g., principle, practice, pattern)
+- **`RelationshipType`** -- Types of relationships between concepts (e.g., depends_on, implements, extends)
+
+## Directory Contents
+
+- `core/` -- Parser, extractor, context builder, and core data models
+- `analysis/` -- Analyzer, indexer, term analyzer, and report generator
+- `io/` -- Fetcher, exporter, section manager, section importer, section exporter
+- `visualization/` -- Visualizer (text), PNG visualizer, and graph generator
+- `models/` -- Additional model definitions
+- `constraints/` -- Constraint definitions for FPF validation
+- `optimization/` -- Optimization algorithms for pattern selection
+- `reasoning/` -- Reasoning utilities for FPF-based inference
+- `FPF-Spec.md` -- Bundled copy of the FPF specification
 
 ## Quick Start
 
 ```python
 from codomyrmex.fpf import FPFClient
 
-# Initialize
+# Initialize FPFClient
 instance = FPFClient()
 ```
 
-
-## Installation
-
-```bash
-uv pip install codomyrmex
-```
-
-## API Reference
-
-### Classes
-
-| Class | Description |
-|-------|-------------|
-| `FPFClient` | High-level client for working with FPF specifications. |
-
-### Functions
-
-| Function | Description |
-|----------|-------------|
-| `load_from_file()` | Load and parse FPF specification from a local file. |
-| `fetch_and_load()` | Fetch latest FPF specification from GitHub and load it. |
-| `search()` | Search for patterns. |
-| `get_pattern()` | Get a pattern by ID. |
-| `export_json()` | Export the specification to JSON. |
-| `build_context()` | Build context string for prompt engineering. |
-
-## Directory Contents
-
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
 ## Navigation
 
-- **Source**: [src/codomyrmex/fpf/](../../../src/codomyrmex/fpf/)
-- **Parent**: [Modules](../README.md)
+- **Full Documentation**: [docs/modules/fpf/](../../../docs/modules/fpf/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

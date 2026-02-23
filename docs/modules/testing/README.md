@@ -1,120 +1,84 @@
-# Testing Module Documentation
+# Testing Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Testing module provides test fixtures, data generators, and utilities for the Codomyrmex test suite. It offers a comprehensive toolkit for creating reproducible test data, managing fixture lifecycles with scoped cleanup, and building structured datasets for integration and unit testing scenarios.
+Test fixtures, generators, and utilities for the Codomyrmex test suite. Provides a structured framework for creating reusable test data, managing fixture lifecycles with scoping and dependency resolution, and generating random typed data for property-based and integration testing.
 
-## Key Features
+## Installation
 
-- **Test Data Generation**: Type-aware generators for strings, integers, floats, booleans, dates, emails, UUIDs, names, and arbitrary choices
-- **Fixture Management**: Scoped fixture lifecycle management (function, class, module, session) with dependency resolution and automatic cleanup
-- **Data Fixtures**: Pre-defined data collections with filtering and lookup capabilities
-- **Record and Dataset Generation**: Composite generators for producing structured records and complete datasets with CSV export
-- **JSON Fixture Loading**: File-based fixture loading with caching for efficient test setup
-- **Fluent Fixture Building**: Builder pattern for constructing test data with chained method calls
+```bash
+uv add codomyrmex
+```
 
-## Key Components
+Or for development:
 
-### Generators (`generators/`)
+```bash
+uv sync
+```
 
-| Component | Description |
-|-----------|-------------|
-| `Generator` | Abstract base class for all data generators with `generate()` and `generate_many()` methods |
-| `StringGenerator` | Generates random strings with configurable length and character set |
-| `IntegerGenerator` | Generates random integers within a configurable range |
-| `FloatGenerator` | Generates random floats with configurable precision |
-| `BooleanGenerator` | Generates random booleans with configurable true probability |
-| `DateGenerator` | Generates random datetimes within a configurable date range |
-| `EmailGenerator` | Generates random email addresses with realistic domains |
-| `UUIDGenerator` | Generates UUID-formatted identifier strings |
-| `NameGenerator` | Generates random first and last name combinations |
-| `ChoiceGenerator` | Generates random selections from a provided list |
-| `RecordGenerator` | Composes multiple field generators into structured record output |
-| `DatasetGenerator` | Generates complete multi-column datasets with CSV export support |
-| `DataType` | Enum defining supported generated data types |
-| `FieldSpec` | Dataclass for specifying generated field constraints |
+## Key Exports
 
-### Fixtures (`fixtures/`)
+### Fixtures (`fixture_utils.py` & `fixtures/`)
 
-| Component | Description |
-|-----------|-------------|
-| `FixtureManager` | Core fixture registry with scoped lifecycle management and dependency resolution |
-| `DataFixture` | Pre-defined data collection with `filter()`, `find()`, and iteration support |
-| `JSONFixtureLoader` | Loads fixture data from JSON files with built-in caching |
-| `FixtureBuilder` | Fluent builder for constructing fixture data with `with_field()` chaining |
-| `FixtureScope` | Enum defining fixture scopes: `FUNCTION`, `CLASS`, `MODULE`, `SESSION` |
-| `FixtureDefinition` | Dataclass describing a fixture's factory, scope, cleanup, and dependencies |
-| `FixtureInstance` | Dataclass representing an instantiated fixture with creation timestamp |
+- **`FixtureManager`** — Core fixture lifecycle manager with `register()`, `get()`, `cleanup()`, and context manager `use()`. Supports scoped fixtures (function, class, module, session) and dependency resolution.
+- **`DataFixture`** — Pre-defined data fixture with `filter()`, `find()`, and `all()` methods for querying test records.
+- **`JSONFixtureLoader`** — Loads fixtures from JSON files with caching. Instantiated with a base path, then `load("name")` returns a `DataFixture`.
+- **`FixtureBuilder`** — Fluent builder for creating fixture data: `FixtureBuilder("user").with_field("name", "Alice").build()`.
+- **`FixtureScope`** — Enum: `FUNCTION`, `CLASS`, `MODULE`, `SESSION`.
 
-## Quick Start
+### Generators (`strategies.py` & `generators/`)
 
-### Generating Test Data
+- **`RecordGenerator`** — Generates structured records from field-level generators: `gen.add_field("name", NameGenerator()).generate()`.
+- **`DatasetGenerator`** — Generates complete datasets with `generate(rows=N)` and `generate_csv()`.
+- **Type Generators** — `StringGenerator`, `IntegerGenerator`, `FloatGenerator`, `BooleanGenerator`, `DateGenerator`, `EmailGenerator`, `UUIDGenerator`, `NameGenerator`, `ChoiceGenerator`.
+- **`DataType`** — Enum of supported types: STRING, INTEGER, FLOAT, BOOLEAN, DATE, EMAIL, UUID, NAME, ADDRESS, PHONE.
+
+## Usage
 
 ```python
-from codomyrmex.testing.generators import (
-    NameGenerator, EmailGenerator, IntegerGenerator,
-    RecordGenerator, DatasetGenerator, UUIDGenerator
-)
+from codomyrmex.testing.fixture_utils import FixtureManager, FixtureScope
+from codomyrmex.testing.strategies import RecordGenerator, NameGenerator, EmailGenerator
 
-# Generate individual values
-names = NameGenerator()
-print(names.generate())         # "Alice Johnson"
-print(names.generate_many(5))   # List of 5 random names
+# Fixture management
+fixtures = FixtureManager()
+fixtures.register("db", lambda: create_test_db(), scope=FixtureScope.SESSION)
 
-# Build structured records
+with fixtures.use("db") as db:
+    # test with db fixture
+    pass
+
+# Data generation
 gen = RecordGenerator()
 gen.add_field("name", NameGenerator())
 gen.add_field("email", EmailGenerator())
-gen.add_field("age", IntegerGenerator(18, 65))
-
-record = gen.generate()
 records = gen.generate_many(100)
-
-# Generate complete datasets
-dataset = DatasetGenerator("users")
-dataset.add_column("id", UUIDGenerator())
-dataset.add_column("name", NameGenerator())
-csv_output = dataset.generate_csv(rows=1000)
 ```
 
-### Managing Fixtures
+## Directory Contents
 
-```python
-from codomyrmex.testing.fixtures import (
-    FixtureManager, DataFixture, JSONFixtureLoader, FixtureBuilder
-)
+- `API_SPECIFICATION.md` - Programmatic interface documentation
+- `SPEC.md` - Functional specification
+- `PAI.md` - PAI integration details
+- `fixtures/` - Fixture management (pre-existing subpackage)
+- `generators/` - Data generators (pre-existing subpackage)
+- `fixture_utils.py` - Core fixture utilities (FixtureManager, decorator)
+- `strategies.py` - Generation strategies (GeneratorStrategy, IntGenerator, etc.)
 
-# Register and use fixtures with lifecycle management
-fixtures = FixtureManager()
-fixtures.register("db", lambda: create_test_db(), cleanup=lambda db: db.close())
+## Consolidated Sub-modules
 
-with fixtures.use("db") as db:
-    # Test with database fixture - auto-cleanup on exit
-    pass
+The following modules have been consolidated into this module as sub-packages:
 
-# Pre-defined data fixtures
-users = DataFixture([
-    {"id": 1, "name": "Alice", "active": True},
-    {"id": 2, "name": "Bob", "active": False},
-])
-active_users = users.filter(active=True)
+| Sub-module | Description |
+|------------|-------------|
+| **`workflow/`** | Workflow validation and end-to-end testing |
+| **`chaos/`** | Fault injection and resilience testing |
 
-# Fluent fixture building
-user = (FixtureBuilder("user")
-    .with_field("id", 1)
-    .with_field("name", "Test User")
-    .with_field("active", True)
-    .build())
-```
-
-## Related Modules
-
-- [testing](../testing/) - End-to-end workflow validation that complements unit-level test utilities
-- [logging_monitoring](../logging_monitoring/) - Structured logging for test output and diagnostics
+Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/testing/](../../../src/codomyrmex/testing/)
-- **Parent**: [docs/modules/](../README.md)
+- **Full Documentation**: [docs/modules/testing/](../../../docs/modules/testing/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

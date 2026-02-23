@@ -1,0 +1,37 @@
+# API_SPECIFICATION.md
+
+**Version**: v0.1.7 | **Status**: Draft | **Last Updated**: February 2026
+
+## Module: graph_rag
+
+### Overview
+
+Knowledge graph integration with RAG for structured knowledge retrieval and reasoning
+
+### Public API
+
+See `__init__.py` for the complete list of exported classes and functions.
+
+### Dependencies
+
+- Python >= 3.10
+- See `pyproject.toml` for package dependencies
+
+### Usage
+
+```python
+from codomyrmex.graph_rag import *
+```
+
+### Error Handling
+
+All public functions raise standard Python exceptions. Module-specific exceptions inherit from `Exception`.
+
+### Thread Safety
+
+Thread safety varies by component. See individual class documentation for details.
+
+## Navigation
+
+- **Parent**: [README.md](README.md)
+- **Project Root**: [../../README.md](../../README.md)

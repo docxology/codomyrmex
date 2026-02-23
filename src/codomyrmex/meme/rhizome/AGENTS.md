@@ -1,5 +1,7 @@
 # Agents Guide: Rhizome
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `rhizome` submodule to analyze and exploit network structures. Treat connections as the primary reality.

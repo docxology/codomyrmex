@@ -4,27 +4,72 @@
 
 ## Overview
 
-The Performance module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Performance module provides caching, lazy loading, and profiling/benchmarking tools for optimizing codomyrmex module execution. It enables PAI agents to detect performance regressions, cache expensive computations, and lazy-load heavy dependencies.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/performance/PAI.md](../../../src/codomyrmex/performance/PAI.md)
+### Caching
 
-## Configuration
+```python
+from codomyrmex.performance import CacheManager, cached_function
 
-See [README.md](README.md) for configuration options and environment variables.
+manager = CacheManager()
 
-## Signposting
+@cached_function(ttl=3600)
+def expensive_analysis(code: str) -> dict:
+    # Expensive static analysis cached for 1 hour
+    return analyze(code)
+```
 
-### Navigation
+### Lazy Loading
+
+```python
+from codomyrmex.performance import LazyLoader, lazy_import
+
+# Defer heavy imports until first use
+torch = lazy_import("torch")  # Only loaded when accessed
+```
+
+### Benchmarking and Profiling
+
+```python
+from codomyrmex.performance.profiling.benchmark import (
+    BenchmarkSuite, BenchmarkResult, run_benchmark
+)
+
+suite = BenchmarkSuite(name="agent_performance")
+result = run_benchmark(suite)
+# Returns: timing statistics, regression detection, comparison with baselines
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `CacheManager` | Class | Cache lifecycle management |
+| `cached_function` | Decorator | Function-level result caching |
+| `LazyLoader` | Class | Deferred module loading |
+| `lazy_import` | Function | Lazy import utility |
+| `BenchmarkSuite` | Class | Benchmark definition and organization |
+| `BenchmarkResult` | Class | Benchmark result data model |
+| `run_benchmark` | Function | Execute benchmarks and collect results |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Performance Contribution |
+|-------|--------------------------|
+| **OBSERVE** | Profile module load times and identify bottlenecks |
+| **EXECUTE** | Cache expensive computations; lazy-load optional dependencies |
+| **VERIFY** | Run benchmarks to detect performance regressions in changes |
+| **LEARN** | Track performance metrics over time for trend analysis |
+
+## Architecture Role
+
+**Core Layer** — Cross-cutting performance infrastructure. `CacheManager` and `LazyLoader` consumed by all modules needing optimization. Zero-Mock benchmark suite validates performance characteristics.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

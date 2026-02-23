@@ -1,5 +1,7 @@
 # Agent Guidelines - Security
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Security utilities: input validation, vulnerability scanning, and hardening.

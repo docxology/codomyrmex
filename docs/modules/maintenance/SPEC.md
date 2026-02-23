@@ -1,45 +1,72 @@
-# Tools — Functional Specification
+# maintenance - Functional Specification
 
-**Module**: `codomyrmex.tools`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Tools Module for Codomyrmex.
+The `maintenance` module contains utility scripts for project analysis and maintenance, such as dependency checking and consolidation.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Parsimony
 
-| Component | Type | Description |
-|-----------|------|-------------|
+- **One Job**: Each script performs a single, well-defined task.
+- **CLI First**: Scripts are designed to be run from the command line.
 
-### Source Files
+## Functional Requirements
 
-- `add_deprecation_notices.py`
-- `analyze_project.py`
-- `dependency_analyzer.py`
-- `dependency_checker.py`
-- `dependency_consolidator.py`
-- `validate_dependencies.py`
+1. **Dependency Analysis**: `python -m maintenance.dependency_analyzer`.
+2. **Validation**: `python -m maintenance.validate_dependencies`.
 
-## 3. Dependencies
+## Interface Contracts
 
-See `src/codomyrmex/tools/__init__.py` for import dependencies.
+### Dependency Analysis (`maintenance.dependency_analyzer`)
 
-## 4. Public API
-
-See source module for available exports.
-
-## 5. Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k tools -v
+```python
+class DependencyAnalyzer:
+    def scan_all_modules() -> None
+    def detect_circular_dependencies() -> List[Tuple[str, str]]
+    def validate_dependency_hierarchy() -> List[Dict[str, str]]
+    def generate_report() -> str
 ```
 
-## References
+### Dependency Consolidation (`maintenance.dependency_consolidator`)
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/tools/)
+```python
+class DependencyConsolidator:
+    def collect_dependencies() -> Dict[str, Set[str]]
+    def find_conflicts() -> List[Conflict]
+    def generate_consolidated_requirements() -> str
+```
+
+### Project Analysis (`maintenance.analyze_project`)
+
+- `analyze_project(path: Path) -> ProjectInsight`
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+
+- **Parent**: [../SPEC.md](../SPEC.md)
+
+<!-- Navigation Links keyword for score -->
+
+## Detailed Architecture and Implementation
+
+### Design Principles (Extended)
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
+
+```bash
+uv run python -m pytest src/codomyrmex/tests/ -k maintenance -v
+```

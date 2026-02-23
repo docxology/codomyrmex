@@ -1,5 +1,7 @@
 # Dependency Injection Module — Agent Coordination
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 Codomyrmex Dependency Injection Module.
@@ -126,7 +128,7 @@ container.reset()                  # clear all
 
 ## Integration Points
 
-- **Source**: [src/codomyrmex/dependency_injection/](../../../src/codomyrmex/dependency_injection/)
+- **Docs**: [Module Documentation](../../../docs/modules/dependency_injection/README.md)
 - **Spec**: [SPEC.md](SPEC.md)
 - **PAI**: [PAI.md](PAI.md)
 

@@ -1,7 +1,8 @@
 # Personal AI Infrastructure - cloud/common
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: cloud/common  
-**Version**: v0.2.0  
 **Status**: Active
 
 ## Context

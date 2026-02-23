@@ -1,6 +1,6 @@
 # Wallet Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -36,7 +36,6 @@ The `wallet` module provides secure self-custody key management and "Natural Rit
 | `WalletNotFoundError` | Wallet or key not found |
 | `WalletKeyError` | Key storage or retrieval failure |
 | `RitualError` | Recovery ritual operation failure |
-
 
 ## Installation
 
@@ -90,13 +89,11 @@ assert recovery.initiate_recovery("user_1", ["Blue", "7"])
 - [defense](../defense/) - Active defense
 - [privacy](../privacy/) - Data minimization
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k wallet -v
 ```
-
 
 ## Consolidated Sub-modules
 

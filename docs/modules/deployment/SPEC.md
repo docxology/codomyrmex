@@ -1,53 +1,60 @@
-# Deployment — Functional Specification
+# deployment - Functional Specification
 
-**Module**: `codomyrmex.deployment`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Deployment module for Codomyrmex.
+To enable robust, automated, and observable software and model deployments, reducing human error and downtime through standardized release strategies.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Irreversibility Avoidance**: Every deployment action must be reversible.
+- **Observability**: Real-time monitoring of deployment progress and health.
+- **Automation**: Minimize manual intervention in standard release flows.
+- **Provider Agnostic**: Core logic should work across different cloud/platform backends.
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `DeploymentManager` | Class | High-level deployment manager for orchestrating deployments. |
-| `GitOpsSynchronizer` | Class | GitOps synchronization manager. |
-| `deploy()` | Function | Deploy a service version using the specified strategy. |
-| `get_deployment_history()` | Function | Get history of deployments. |
-| `rollback()` | Function | Rollback a service to a previous version. |
-| `sync()` | Function | Synchronize from Git repository. |
-| `get_version()` | Function | Get the current synced version via git rev-parse. |
+## Architecture
 
-### Submodule Structure
-
-- `gitops/` — GitOps integration submodule.
-- `health_checks/` — Deployment health check implementations.
-- `manager/` — Deployment manager submodule.
-- `rollback/` — Rollback management submodule.
-- `strategies/` — Deployment strategies.
-
-## 3. Dependencies
-
-See `src/codomyrmex/deployment/__init__.py` for import dependencies.
-
-## 4. Public API
-
-```python
-from codomyrmex.deployment import DeploymentManager, GitOpsSynchronizer
+```mermaid
+graph TD
+    User([User/CI]) --> DM[DeploymentManager]
+    DM --> Strat[Deployment Strategy]
+    DM --> Ver[Verifiers]
+    Strat --> Env[(Target Environment)]
+    Ver -->|Monitor| Env
+    Env -->|Error| DM
+    DM -->|Rollback| Env
 ```
 
-## 5. Testing
+## Functional Requirements
+
+- **Canary Releases**: Incremental traffic shifting to a new version.
+- **Blue-Green**: Atomic cutover between two identical environments.
+- **Rolling Updates**: Gradual replacement of instances.
+- **Health Checks**: Automated verification (HTTP, metrics, logs).
+- **GitOps Sync**: Automatic deployment based on repository changes via `GitOpsSynchronizer`.
+
+## Interface Contracts
+
+### `GitOpsSynchronizer`
+
+- `sync(repo_url: str, branch: str, target_dir: str) -> bool`
+- `get_current_revision() -> str`
+- `is_synced() -> bool`
+
+### `DeploymentManager`
+
+- `deploy(service: str, version: str, strategy: Strategy) -> bool`
+- `rollback(service: str) -> bool`
+- `get_status(service: str) -> dict`
+
+## Technical Constraints
+
+- Requires integration with load balancers or service meshes for traffic shifting (simulated in core).
+- Dependent on `networking` and `logging_monitoring` modules.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k deployment -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/deployment/)

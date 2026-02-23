@@ -1,5 +1,7 @@
 # Semiotics Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **The Science of Meaning**
 
 The `codomyrmex.meme.semiotic` submodule deals with signs, signifiers, and the construction of meaning. It ensures that memes are not just strings of text, but carriers of semantic value.

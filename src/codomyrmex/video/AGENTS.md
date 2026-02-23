@@ -1,5 +1,7 @@
 # Video Module - AI Agent Guidelines
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Purpose
 
 The video module enables AI agents to:

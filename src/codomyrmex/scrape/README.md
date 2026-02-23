@@ -1,11 +1,10 @@
 # Scrape Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Web scraping module providing a unified interface for extracting content from websites. Supports multiple output formats (Markdown, HTML), site crawling, URL mapping, search, and structured data extraction. Abstracts provider-specific details (currently Firecrawl) behind a consistent API with configurable options and a robust exception hierarchy.
-
 
 ## Installation
 
@@ -67,7 +66,6 @@ from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeResult
 # Initialize ScrapeConfig
 instance = ScrapeConfig()
 ```
-
 
 ## Testing
 

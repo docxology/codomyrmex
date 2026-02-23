@@ -1,64 +1,35 @@
-# Relations Module — Agent Coordination
+# Agent Instructions for `codomyrmex.relations`
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Relations Module for Codomyrmex.
+## Context
 
-Provides CRM contact management, social network analysis,
-and graph metrics.
+The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities for tracking entities and their relationships.
 
-## Key Capabilities
+## Usage Guidelines
 
-- **`Contact`** — External entity representation
-- **`Interaction`** — Record of communication
-- **`Deal`** — Business opportunity tracking
-- `crm/` — Contact management
-- `social_media/` — Platform integration
-- `network_analysis/` — Social graph processing
+1. **Importing**: Import from the module root.
 
-## Agent Usage Patterns
+   ```python
+   from codomyrmex.relations import Contact, ContactManager, Interaction, SocialGraph, GraphMetrics
+   ```
 
-```python
-from codomyrmex.relations import Contact, Interaction
+2. **Contact Management**: Use `ContactManager` for all CRUD operations. Always record `Interaction` events when engaging with contacts.
 
-contact = Contact(name="Jane Doe", email="jane@example.com")
-contact.log(Interaction(type="email", summary="Introductory call"))
-```
+3. **Social Graph**: Use `SocialGraph` for modeling entity relationships. `GraphMetrics` provides centrality, clustering, and connectivity analysis.
 
-## Key Components
+4. **UOR**: Universal Object References enable bidirectional linking between entities across different modules (contacts ↔ projects, projects ↔ tasks).
 
-| Export | Type |
-|--------|------|
-| `Contact` | Public API |
-| `ContactManager` | Public API |
-| `GraphMetrics` | Public API |
-| `Interaction` | Public API |
-| `SocialGraph` | Public API |
+5. **Zero-Mock Policy**: Tests must use real `ContactManager` instances — no mocking of storage or graph operations.
 
-## Source Files
+## Key Files
 
-| File | Description |
-|------|-------------|
-| `crm.py` | Record of a communication event. |
-| `visualization.py` | Generates a mermaid diagram of social connections. |
+| File | Purpose |
+|------|---------|
+| `crm.py` | Contact, ContactManager, Interaction |
+| `network_analysis.py` | SocialGraph, GraphMetrics |
+| `uor.py` | Universal Object Reference |
 
-## Submodules
+## Navigation
 
-- `crm/` — Crm
-- `network_analysis/` — Network Analysis
-- `social_media/` — Social Media
-
-## Integration Points
-
-- **Source**: [src/codomyrmex/relations/](../../../src/codomyrmex/relations/)
-- **Spec**: [SPEC.md](SPEC.md)
-- **PAI**: [PAI.md](PAI.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k relations -v
-```
-
-- Always use real, functional tests — no mocks (Zero-Mock policy)
-- Verify all changes pass existing tests before submitting
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

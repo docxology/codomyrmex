@@ -1,7 +1,9 @@
-# Codomyrmex Root Specification
+# Deps Specification
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-This specification formally defines the expected behavior, interfaces, and architecture for the `Codomyrmex Root` module.
+This specification formally defines the expected behavior, interfaces, and architecture for the `Deps` module.
 
 ## Architectural Constraints
 - **Modularity**: Components must maintain strict modular boundaries.

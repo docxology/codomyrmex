@@ -1,47 +1,138 @@
-# Serialization — Functional Specification
+# serialization - Functional Specification
 
-**Module**: `codomyrmex.serialization`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Serialization module for Codomyrmex.
+Serialization module providing unified data serialization/deserialization with support for JSON, YAML, TOML, MessagePack, and other formats. Integrates with `documents` and `config_management` modules.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `serialize()` | Function | Serialize an object to bytes. |
-| `deserialize()` | Function | Deserialize data to an object. |
+- Format-agnostic serialization interface
+- Support for multiple serialization formats
+- Pluggable serializer system
 
-### Source Files
+### Internal Coherence
 
-- `binary_formats.py`
-- `exceptions.py`
-- `serialization_manager.py`
-- `serializer.py`
+- Unified serialization error handling
+- Consistent encoding/decoding patterns
+- Integration with document handling
 
-## 3. Dependencies
+### Parsimony
 
-See `src/codomyrmex/serialization/__init__.py` for import dependencies.
+- Essential serialization operations
+- Minimal dependencies
+- Focus on common formats
 
-## 4. Public API
+### Functionality
+
+- Working implementations for common formats
+- Support for custom serializers
+- Type preservation where possible
+
+### Testing
+
+- Unit tests for all formats
+- Integration tests with real data
+- Encoding/decoding round-trip tests
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each format
+- Format-specific documentation
+
+## Architecture
+
+```mermaid
+graph TD
+    SerializerInterface[Serializer Interface]
+    JSONSerializer[JSON Serializer]
+    YAMLSerializer[YAML Serializer]
+    TOMLSerializer[TOML Serializer]
+    MessagePackSerializer[MessagePack Serializer]
+    AvroSerializer[Avro Serializer]
+    ParquetSerializer[Parquet Serializer]
+    SerializationManager[Serialization Manager]
+    
+    SerializerInterface --> JSONSerializer
+    SerializerInterface --> YAMLSerializer
+    SerializerInterface --> TOMLSerializer
+    SerializerInterface --> MessagePackSerializer
+    SerializerInterface --> AvroSerializer
+    SerializerInterface --> ParquetSerializer
+    SerializationManager --> SerializerInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **Serialize**: Convert objects to string/bytes
+2. **Deserialize**: Convert string/bytes to objects
+3. **Format Detection**: Auto-detect serialization format
+4. **Type Preservation**: Preserve types where possible
+5. **Binary Efficiency**: Support for Msgpack, Avro, and Parquet.
+6. **Custom Serializers**: Register custom serialization logic.
+7. **Recursive Handling**: Support for circular references in object graphs.
+
+### Integration Points
+
+- `documents/` - Document serialization
+- `config_management/` - Configuration serialization
+- `cache/` - Cache value serialization
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Format-specific tests
+- Round-trip serialization tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Serializer Interface
 
 ```python
-from codomyrmex.serialization import serialize, deserialize
+class Serializer:
+    def serialize(obj: Any) -> str | bytes
+    def deserialize(data: str | bytes) -> Any
+    def detect_format(data: str | bytes) -> Optional[str]
 ```
 
-## 5. Testing
+## Implementation Guidelines
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k serialization -v
-```
+### Serializer Implementation
 
-## References
+1. Implement Serializer interface for each format
+2. Handle encoding/decoding errors
+3. Support type hints
+4. Provide format detection
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/serialization/)
+### Integration
+
+1. Integrate with documents module
+2. Add serialization to config_management
+3. Support cache serialization
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [documents](../documents/AGENTS.md), [config_management](../config_management/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->

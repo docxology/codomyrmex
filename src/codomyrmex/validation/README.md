@@ -1,11 +1,10 @@
 # Validation Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Unified input validation framework for Codomyrmex with support for JSON Schema, Pydantic models, and custom validators. Provides a `Validator` class that validates data against schemas, a `ValidationManager` for managing multiple validators, contextual validation with issue tracking, type-safe parsing, and a comprehensive exception hierarchy for granular error reporting. Includes submodules for reusable validation rules, input sanitizers, and schema definitions.
-
 
 ## Installation
 
@@ -93,13 +92,11 @@ for err in errors:
     print(f"Error: {err}")
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k validation -v
 ```
-
 
 ## Consolidated Sub-modules
 

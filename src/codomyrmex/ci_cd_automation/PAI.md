@@ -1,50 +1,37 @@
-# Personal AI Infrastructure — Ci Cd Automation Module
+# Personal AI Infrastructure — CI/CD Automation Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-CI/CD Automation Module for Codomyrmex. This is a **Service Layer** module.
+The CI/CD Automation module provides multi-language build orchestration, automated testing pipelines, and deployment workflows. It enables PAI agents to build, test, and deploy code artifacts through programmable pipelines.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.ci_cd_automation import PipelineManager, Pipeline, PipelineJob, create_pipeline, run_pipeline, manage_deployments
-```
+- Multi-language build orchestration (Python, JS, Go, Rust)
+- Automated test execution with coverage reporting
+- Deployment pipeline definition and execution
+- Artifact publishing and distribution
+- GitHub Actions / CI provider integration
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `PipelineManager` | Class | Pipelinemanager |
-| `create_pipeline` | Function/Constant | Create pipeline |
-| `run_pipeline` | Function/Constant | Run pipeline |
-| `Pipeline` | Class | Pipeline |
-| `PipelineJob` | Class | Pipelinejob |
-| `PipelineStage` | Class | Pipelinestage |
-| `DeploymentOrchestrator` | Class | Deploymentorchestrator |
-| `manage_deployments` | Function/Constant | Manage deployments |
-| `Deployment` | Class | Deployment |
-| `Environment` | Class | Environment |
-| `PipelineMonitor` | Class | Pipelinemonitor |
-| `monitor_pipeline_health` | Function/Constant | Monitor pipeline health |
-| `generate_pipeline_reports` | Function/Constant | Generate pipeline reports |
-| `PipelineReport` | Class | Pipelinereport |
-
-*Plus 12 additional exports.*
-
+| Build engines | Various | Multi-language build orchestration |
+| Pipeline runners | Various | Test and deployment pipeline execution |
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | Ci Cd Automation Contribution |
-|-------|------------------------------|
-| **PLAN** | Workflow planning and scheduling |
-| **BUILD** | Artifact creation and code generation |
-| **EXECUTE** | Execution and deployment |
+| Phase | CI/CD Contribution |
+|-------|---------------------|
+| **BUILD** | Compile, bundle, and package code artifacts |
+| **EXECUTE** | Run automated test suites and deployment pipelines |
+| **VERIFY** | Check build status, test coverage, and artifact integrity |
 
 ## Architecture Role
 
-**Service Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `containerization/` (Docker builds), `testing/` (test runners), `git_operations/` (VCS hooks). Consumed by `deployment/` for production releases.
 
 ## Navigation
 

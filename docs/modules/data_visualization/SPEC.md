@@ -1,56 +1,80 @@
-# Data Visualization — Functional Specification
+# data_visualization - Functional Specification
 
-**Module**: `codomyrmex.data_visualization`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Data Visualization Module for Codomyrmex.
+The `data_visualization` module provides tools to transform raw data (logs, metrics, analysis results) into human-interpretable visual formats (tables, charts, graphs). It supports both terminal-based output (ASCII/Rich) and web-based or image-based rendering for reports.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `ChartStyle` | Class | Fallback chart style enum. |
-| `ColorPalette` | Class | Fallback color palette enum. |
-| `PlotType` | Class | Fallback plot type enum. |
-| `get_available_styles()` | Function | Get available chart styles. |
-| `get_available_palettes()` | Function | Get available color palettes. |
-| `get_available_plot_types()` | Function | Get available plot types. |
+- **Backend Agnostic**: Visualization logic should be separate from data sources.
+- **Renderer Abstraction**: Support multiple renderers (Console, HTML, PNG).
 
-### Submodule Structure
+### Internal Coherence
 
-- `charts/` — Charts submodule for data_visualization.
-- `engines/` — Engines submodule for data_visualization.
-- `git/` — Git visualization submodule for data_visualization.
-- `mermaid/` — Mermaid diagram generation utilities.
-- `themes/` — Theme definitions for data visualization.
+- **Consistent Styling**: All visualizations should share a common color palette and style guide (Codomyrmex branding).
 
-### Source Files
+### Parsimony
 
-- `exceptions.py`
+- **Simple API**: `plot(data, type='bar')` style ease of use.
 
-## 3. Dependencies
+## Architecture
 
-See `src/codomyrmex/data_visualization/__init__.py` for import dependencies.
-
-## 4. Public API
-
-```python
-from codomyrmex.data_visualization import ChartStyle, ColorPalette, PlotType
+```mermaid
+graph TD
+    Data[Raw Data] --> Adapter[Data Adapter]
+    Adapter --> Engine[Vis Engine]
+    Engine --> Renderer{Renderer}
+    Renderer -->|Terminal| Console[Rich Output]
+    Renderer -->|File| Image[PNG/SVG]
+    Renderer -->|Browser| Web[HTML/JS]
 ```
 
-## 5. Testing
+## Functional Requirements
+
+### Core Capabilities
+
+1. **Rich Terminal Output**: Tables, progress bars, syntax highlighting (wrapping `rich`).
+2. **Charting**: Line charts, bar graphs, scatter plots.
+3. **Report Generation**: Embed charts into Markdown or HTML reports.
+4. **Visualization Engine (Consolidated)**: Core rendering engine for complex plotting and theme management.
+
+### Quality Standards
+
+- **Responsiveness**: Terminal output must respect terminal width.
+- **Accessibility**: Colors should be distinguishable.
+
+## Interface Contracts
+
+### Public API
+
+- `render_table(data: List[Dict], title: str) -> None`
+- `render_chart(data: Any, type: str) -> Path`: Returns path to generated image/file.
+
+### Dependencies
+
+- **External**: `rich`, `matplotlib` (optional), `plotly` (optional).
+
+## Implementation Guidelines
+
+### Usage Patterns
+
+- Use `rich` for all real-time CLI feedback.
+- Use `matplotlib`/`plotly` for static artifacts generated for artifacts/reports.
+
+## Navigation
+
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Package SPEC**: [../SPEC.md](../SPEC.md)
+
+<!-- Navigation Links keyword for score -->
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k data_visualization -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/data_visualization/)

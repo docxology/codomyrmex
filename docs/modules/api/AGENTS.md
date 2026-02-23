@@ -1,55 +1,69 @@
-# API Module — Agent Coordination
+# Agent Guidelines - API
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Unified API Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+RESTful API framework with routing, middleware, and OpenAPI support.
 
-- API operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **APIRouter** — Route definitions
+- **APIApp** — Application instance
+- **Request/Response** — HTTP objects
+- **Middleware** — Request processing
+
+## Agent Instructions
+
+1. **Version APIs** — /v1/, /v2/ prefixes
+2. **Use middleware** — Auth, logging, validation
+3. **Document endpoints** — OpenAPI/Swagger
+4. **Handle errors** — Consistent error format
+5. **Validate input** — Use Pydantic models
+
+## Common Patterns
 
 ```python
-from codomyrmex.api import *
+from codomyrmex.api import APIRouter, APIApp, JSONResponse
 
-# Agent uses api capabilities
+router = APIRouter(prefix="/v1")
+
+@router.get("/users")
+async def list_users():
+    return JSONResponse(users)
+
+@router.post("/users")
+async def create_user(request):
+    data = await request.json()
+    user = create(data)
+    return JSONResponse(user, status=201)
+
+# Create app
+app = APIApp()
+app.include_router(router)
+app.add_middleware(AuthMiddleware)
+app.add_middleware(LoggingMiddleware)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/api/](../../../src/codomyrmex/api/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+from codomyrmex.api.testing import TestClient
 
-## Key Components
+client = TestClient(app)
 
-- **`APISchema`** — API schema definition for documentation generation.
-- **`OpenAPISpecification`** — OpenAPI specification container.
-- **`DocumentationOpenAPIGenerator`** — OpenAPI 3.0 specification generator from code analysis/documentation.
-- **`StandardizationOpenAPIGenerator`** — Generator for OpenAPI specifications from REST/GraphQL API instances.
-- **`generate_openapi_spec()`** — Convenience function to generate OpenAPI specification from endpoints.
-- **`validate_openapi_spec()`** — Convenience function to validate OpenAPI specification.
-- **`create_openapi_generator()`** — Create a new OpenAPI generator for standardization.
-- **`create_openapi_from_rest_api()`** — Create OpenAPI spec from a REST API.
-- **`create_openapi_from_graphql_api()`** — Create OpenAPI spec from a GraphQL API.
+# Test endpoint
+response = client.get("/v1/users")
+assert response.status_code == 200
 
-### Submodules
-
-- `authentication` — Authentication
-- `circuit_breaker` — Circuit Breaker
-- `documentation` — Documentation
-- `mocking` — API Simulation (development endpoints, not test mocking)
-- `pagination` — Pagination
-- `rate_limiting` — Rate Limiting
-- `standardization` — Standardization
-- `webhooks` — Webhooks
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k api -v
+# Test with auth
+response = client.post("/v1/users", 
+    json={"name": "Test"},
+    headers={"Authorization": "Bearer token"}
+)
+assert response.status_code == 201
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

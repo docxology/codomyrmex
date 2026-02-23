@@ -1,5 +1,7 @@
 # Cli Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## 1. Functional Requirements
 
 The `cli` module must:

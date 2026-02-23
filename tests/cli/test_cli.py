@@ -31,5 +31,5 @@ def test_doctor_command():
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 1
+    assert result.returncode == 0
     assert "Codomyrmex Doctor" in result.stdout

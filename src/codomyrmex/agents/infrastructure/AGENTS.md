@@ -1,5 +1,7 @@
 # Agent Guidelines — Infrastructure
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Overview
 
 Infrastructure agent for cloud operations.

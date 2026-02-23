@@ -1,5 +1,7 @@
 # Agent Guidelines - Events
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Event-driven architecture with pub/sub, event sourcing, and handlers.

@@ -1,41 +1,68 @@
-# Plugin System Module — Agent Coordination
+# Agent Guidelines - Plugin System
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Plugin System for Codomyrmex
+## Module Overview
 
-## Key Capabilities
+Extensible plugin architecture for third-party modules.
 
-- Plugin System operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **PluginManager** — Load, activate, deactivate plugins
+- **PluginLoader** — Load plugins from paths
+- **PluginRegistry** — Register and discover plugins
+- **PluginValidator** — Validate plugin structure
+- **Plugin** — Base plugin class
+
+## Agent Instructions
+
+1. **Validate before load** — Use `PluginValidator` to check plugins
+2. **Handle dependencies** — Check plugin dependencies before activation
+3. **Lifecycle order** — Always: load → activate → use → deactivate
+4. **Catch plugin errors** — Wrap plugin calls in try/except
+5. **Use registry** — Register plugins for discovery by other modules
+
+## Common Patterns
 
 ```python
-from codomyrmex.plugin_system import *
+from codomyrmex.plugin_system import PluginManager, PluginError
 
-# Agent uses plugin system capabilities
+manager = PluginManager()
+
+# Load all plugins
+try:
+    manager.load_plugins_from("./plugins")
+except PluginError as e:
+    log.error(f"Plugin load failed: {e}")
+
+# Use a plugin safely
+plugin = manager.get_plugin("my_plugin")
+if plugin:
+    try:
+        plugin.activate()
+        result = plugin.execute(data)
+    except PluginError as e:
+        log.error(f"Plugin error: {e}")
+    finally:
+        plugin.deactivate()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/plugin_system/](../../../src/codomyrmex/plugin_system/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify plugin loading
+manager = PluginManager()
+manager.load_plugins_from("tests/fixtures/plugins")
+assert len(manager.list_plugins()) > 0
 
-
-## Key Components
-
-- **`InterfaceEnforcer`** — Validates that a plugin class implements a specific interface.
-- **`PluginError`** — Base exception for plugin-related errors.
-- **`LoadError`** — Raised when plugin loading fails.
-- **`DependencyError`** — Raised when plugin dependency resolution fails.
-- **`HookError`** — Raised when plugin hook operations fail.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k plugin_system -v
+# Verify plugin lifecycle
+plugin = manager.get_plugin("test_plugin")
+plugin.activate()
+assert plugin.state == PluginState.ACTIVE
+plugin.deactivate()
+assert plugin.state == PluginState.INACTIVE
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

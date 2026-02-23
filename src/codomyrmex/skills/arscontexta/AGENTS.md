@@ -1,5 +1,7 @@
 # Agent Integration — Ars Contexta
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Guidelines for PAI agents consuming Ars Contexta capabilities.
 
 ## Agent Type Mapping

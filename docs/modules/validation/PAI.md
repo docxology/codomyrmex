@@ -4,27 +4,41 @@
 
 ## Overview
 
-The Validation module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Validation module provides system integrity verification and PAI integration validation. It ensures that codomyrmex modules are correctly wired to the PAI system and that cross-module interfaces conform to expected contracts.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/validation/PAI.md](../../../src/codomyrmex/validation/PAI.md)
+### PAI Integration Validation
 
-## Configuration
+```python
+from codomyrmex.validation import validate_pai_integration
 
-See [README.md](README.md) for configuration options and environment variables.
+# Verify that all modules expose correct PAI interfaces
+results = validate_pai_integration()
+# Returns: validation status for RASP docs, MCP specs, module exports
+```
 
-## Signposting
+## Key Exports
 
-### Navigation
+| Export | Type | Purpose |
+|--------|------|---------|
+| `validate_pai_integration` | Function | Verify PAI system integration across all modules |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Validation Contribution |
+|-------|-------------------------|
+| **OBSERVE** | Check module health and interface conformance |
+| **VERIFY** | Validate that all PAI integration points are correctly wired |
+| **LEARN** | Report validation results for tracking system integrity over time |
+
+## Architecture Role
+
+**Foundation Layer** — Cross-cutting validation utility consumed by `maintenance/`, `documentation/`, and CI/CD pipelines. Provides the `Result` and `ResultStatus` schemas used across many modules.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

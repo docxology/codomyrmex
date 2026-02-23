@@ -1,77 +1,89 @@
-# Feature Flags Module Documentation
+# Feature Flags Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+Feature flag management with evaluation strategies and gradual rollout.
 
-The Feature Flags module provides a system for controlling functional and operational aspects of Codomyrmex at runtime. It enables gradual releases and rapid incident response through feature toggles. The module is organized around strategies, storage backends, evaluation logic, and rollout management, with an optional core `FeatureManager` for centralized flag management.
+## Installation
 
-## Key Features
+```bash
+uv add codomyrmex
+```
 
-- **Toggle Strategies**: Configurable strategies for determining feature flag state
-- **Persistent Storage**: Pluggable storage backends for flag configurations
-- **Flag Evaluation**: Evaluation engine for resolving flag values based on context
-- **Rollout Management**: Gradual rollout support for controlled feature releases
-- **Feature Manager**: Optional centralized manager (`FeatureManager`) for coordinating all flag operations
+Or for development:
 
-## Key Components
+```bash
+uv sync
+```
 
-| Component | Description |
-|-----------|-------------|
-| `strategies` | Submodule providing configurable feature flag evaluation strategies |
-| `storage` | Submodule for pluggable flag configuration storage backends |
-| `evaluation` | Submodule for resolving flag values based on runtime context |
-| `rollout` | Submodule for managing gradual feature rollouts |
-| `FeatureManager` | Optional centralized feature flag manager (available when `core` submodule is present) |
+## Key Exports
+
+### Classes
+- **`VariantType`** — Experiment variant types.
+- **`Variant`** — An experiment variant.
+- **`Experiment`** — An A/B test experiment.
+- **`Assignment`** — User's experiment assignment.
+- **`ExperimentEvent`** — An experiment analytics event.
+- **`ExperimentManager`** — Manage A/B test experiments.
+
+### Submodules
+- **`core/`** — Core flag management submodule.
+- **`evaluation/`** — Flag evaluation submodule.
+- **`rollout/`** — Gradual rollout submodule.
+- **`storage/`** — Flag storage submodule.
+- **`strategies/`** — Feature flag evaluation strategies.
 
 ## Quick Start
 
 ```python
 from codomyrmex.feature_flags import strategies, storage, evaluation, rollout
 
-# Access feature flag subsystems
-# Strategies define how flags are evaluated
-# Storage persists flag configurations
-# Evaluation resolves flag values at runtime
-# Rollout manages gradual releases
-```
-
-### With FeatureManager (when available)
-
-```python
+# Using FeatureManager (if available)
 from codomyrmex.feature_flags import FeatureManager
 
-if FeatureManager is not None:
-    manager = FeatureManager()
+manager = FeatureManager()
+
+# Define flags
+manager.define("dark_mode", default=False)
+manager.define("new_checkout", default=False, rollout_percent=25)
+
+# Check flags
+if manager.is_enabled("dark_mode", user_id="user-123"):
+    show_dark_mode()
+
+# Gradual rollout
+if manager.is_enabled("new_checkout", user_id="user-123"):
+    render_new_checkout()
+else:
+    render_old_checkout()
+
+# Override for testing
+with manager.override("experimental_feature", True):
+    run_experiment()
 ```
 
-## Architecture
+## Submodules
 
-The module is organized into five subpackages:
+| Module | Description |
+|--------|-------------|
+| `strategies` | Evaluation strategies (percentage, user segment, etc.) |
+| `storage` | Flag storage backends (memory, file, redis) |
+| `evaluation` | Flag evaluation logic |
+| `rollout` | Gradual rollout management |
+| `core` | Core flag manager |
 
-```
-feature_flags/
-  core/          # Central feature management (optional, provides FeatureManager)
-  strategies/    # Flag evaluation strategies
-  storage/       # Persistent storage backends
-  evaluation/    # Runtime flag resolution
-  rollout/       # Gradual rollout management
-```
+## Exports
 
+| Class | Description |
+|-------|-------------|
+| `FeatureManager` | Main flag manager |
 
-## Testing
+## Documentation
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k feature_flags -v
-```
-
-## Related Modules
-
-- [environment_setup](../environment_setup/) - Environment configuration that may interact with feature flags
-- [logging_monitoring](../logging_monitoring/) - Monitoring flag state changes and rollout progress
+- [Module Documentation](../../../docs/modules/feature_flags/README.md)
+- [Agent Guide](../../../docs/modules/feature_flags/AGENTS.md)
+- [Specification](../../../docs/modules/feature_flags/SPEC.md)
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/feature_flags/](../../../src/codomyrmex/feature_flags/)
-- **API Specification**: [src/codomyrmex/feature_flags/API_SPECIFICATION.md](../../../src/codomyrmex/feature_flags/API_SPECIFICATION.md)
-- **Parent**: [docs/modules/](../README.md)
+- [SPEC](SPEC.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

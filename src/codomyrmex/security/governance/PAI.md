@@ -1,5 +1,7 @@
 # Personal AI Infrastructure - Governance Context
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: governance
 **Status**: Active
 

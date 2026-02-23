@@ -1,5 +1,7 @@
 # Agent Guidelines - Dark
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Dark mode utilities for PDFs, network, hardware, and software.

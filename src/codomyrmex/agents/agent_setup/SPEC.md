@@ -1,5 +1,7 @@
 # Agent Setup — SPEC.md
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 Provide a single entry point for discovering, validating, and configuring all

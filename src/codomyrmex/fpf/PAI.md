@@ -1,51 +1,39 @@
-# Personal AI Infrastructure — Fpf Module
+# Personal AI Infrastructure — FPF Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-First Principles Framework (FPF) module. This is an **Extended Layer** module.
+The FPF (Functional Programming Framework) module provides functional programming primitives and transformations — immutable data structures, monadic composition, currying, pipe/compose, and algebraic data types for building reliable, composable data pipelines.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.fpf import FPFParser, FPFExtractor, FPFIndexer
-```
+### Functional Composition
+
+- `pipe` / `compose` — function composition pipelines
+- `curry` — automatic function currying
+- `map` / `filter` / `reduce` — functional collection operations
+- Immutable data structures for safe concurrent access
+- Result/Option monads for error handling without exceptions
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `FPFParser` | Class | Fpfparser |
-| `FPFExtractor` | Class | Fpfextractor |
-| `FPFIndexer` | Class | Fpfindexer |
-| `FPFFetcher` | Class | Fpffetcher |
-| `FPFExporter` | Class | Fpfexporter |
-| `FPFVisualizer` | Class | Fpfvisualizer |
-| `FPFVisualizerPNG` | Class | Fpfvisualizerpng |
-| `ContextBuilder` | Class | Contextbuilder |
-| `TermAnalyzer` | Class | Termanalyzer |
-| `GraphGenerator` | Class | Graphgenerator |
-| `SectionManager` | Class | Sectionmanager |
-| `SectionExporter` | Class | Sectionexporter |
-| `SectionImporter` | Class | Sectionimporter |
-| `FPFAnalyzer` | Class | Fpfanalyzer |
-| `ReportGenerator` | Class | Reportgenerator |
-
-*Plus 9 additional exports.*
-
+| Functional primitives | Various | Compose, pipe, curry utilities |
+| Algebraic types | Various | Result, Option, Either monads |
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | Fpf Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **THINK** | Analysis and reasoning |
-| **BUILD** | Artifact creation and code generation |
+| Phase | FPF Contribution |
+|-------|-------------------|
+| **THINK** | Compose reasoning pipelines with functional transformations |
+| **BUILD** | Build data transformation pipelines |
+| **EXECUTE** | Chain operations safely with monadic error handling |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Functional programming toolkit used by modules needing composable data transformations.
 
 ## Navigation
 

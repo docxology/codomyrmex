@@ -1,5 +1,7 @@
 # Agents Guide: Semiotics
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `semiotic` submodule to ensure semantic integrity and to decode hidden layers of meaning in inputs.

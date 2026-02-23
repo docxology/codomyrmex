@@ -130,7 +130,7 @@ graph TD
 | **`networking`** | Network utilities | HTTP clients, WebSocket support, network diagnostics, **service mesh** |
 | **`search`** | Full-text search | TF-IDF indexing, fuzzy matching, relevance ranking, **hybrid BM25+semantic search** |
 | **`crypto`** | Cryptography | Cryptography utilities, currency, encoding, protocols, steganography |
-| **`tree_sitter`** | AST parsing | Language-agnostic parsing, syntax trees, code navigation (sub-package of `coding/parsers`) |
+| **`static_analysis`** | Static analysis | Code parsing, pattern matching, syntax trees |
 
 ### **🔧 Service Modules**
 
@@ -151,6 +151,7 @@ graph TD
 | **`orchestrator`** | Workflow execution | DAG execution, step composition, retry policies, **scheduling** |
 | **`testing`** | Test infrastructure | Fixtures, data generators, **workflow validation**, **chaos engineering** |
 | **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
+| **`calendar`** | Event management | Calendar providers, event scheduling |
 
 ### **🎮 Application Modules**
 
@@ -164,6 +165,7 @@ graph TD
 | **`website`** | Website generation | Static site generation, templating, local server, **accessibility** |
 | **`audio`** | Audio processing | Transcription, synthesis, audio analysis |
 | **`video`** | Video processing | Video analysis, frame extraction, transcription |
+| **`email`** | Email communication | Email parsing, IMAP/SMTP integration |
 
 ### **🛡️ Secure Cognitive Modules**
 
@@ -220,6 +222,9 @@ graph TD
 | **`embodiment`** | Physical/robotic integration | Hardware interfaces, sensor fusion, motor control |
 | **`evolutionary_ai`** | Genetic algorithms | Evolutionary optimization, population dynamics, fitness |
 | **`quantum`** | Quantum computing | Algorithm primitives, circuit simulation, qubit operations |
+| **`simulation`** | General simulation framework | Agent-based modeling, discrete event simulation |
+| **`networks`** | Network graph analysis | Graph metrics, community detection |
+| **`formal_verification`** | Formal verification | Model checking, theorem proving |
 
 ### **🛠️ Utility Modules**
 

@@ -1,39 +1,35 @@
-# Relations Agents
+# Agent Instructions for `codomyrmex.relations`
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+## Context
 
-Agents for managing public relations, customer support, and networking.
+The Relations module provides CRM (Contact Relationship Management), social network analysis, and Universal Object Reference (UOR) capabilities for tracking entities and their relationships.
 
-## Agents
+## Usage Guidelines
 
-### `PRManager` (Social Media)
+1. **Importing**: Import from the module root.
 
-- **Role**: Manages public image and outreach.
-- **Capabilities**: `draft_press_release`, `schedule_post`, `analyze_sentiment`.
+   ```python
+   from codomyrmex.relations import Contact, ContactManager, Interaction, SocialGraph, GraphMetrics
+   ```
 
-### `SalesAgent` (CRM)
+2. **Contact Management**: Use `ContactManager` for all CRUD operations. Always record `Interaction` events when engaging with contacts.
 
-- **Role**: Manages leads and deals.
-- **Capabilities**: `qualify_lead`, `update_deal`, `track_interaction`.
+3. **Social Graph**: Use `SocialGraph` for modeling entity relationships. `GraphMetrics` provides centrality, clustering, and connectivity analysis.
 
-### `NetworkerAgent` (Network Analysis)
+4. **UOR**: Universal Object References enable bidirectional linking between entities across different modules (contacts ↔ projects, projects ↔ tasks).
 
-- **Role**: Identifies strategic connections.
-- **Capabilities**: `find_path_to_contact`, `recommend_introduction`.
+5. **Zero-Mock Policy**: Tests must use real `ContactManager` instances — no mocking of storage or graph operations.
 
-## Tools
+## Key Files
 
-| Tool | Agent | Description |
-| :--- | :--- | :--- |
-| `search_contacts` | SalesAgent | Find CRM entry |
-| `publish_tweet` | PRManager | Post to X (Twitter) |
-
-## Integration
-
-These agents integrate with `codomyrmex.agents.core` and use the MCP protocol for tool access.
+| File | Purpose |
+|------|---------|
+| `crm.py` | Contact, ContactManager, Interaction |
+| `network_analysis.py` | SocialGraph, GraphMetrics |
+| `uor.py` | Universal Object Reference |
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md)
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

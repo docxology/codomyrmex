@@ -1,50 +1,43 @@
 # Personal AI Infrastructure — Scrape Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Scrape Module for Codomyrmex. This is an **Extended Layer** module.
+The Scrape module provides HTML extraction, web content parsing, and structured data extraction from web pages. It enables PAI agents to gather information from web sources for research, documentation, and knowledge acquisition.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.scrape import Scraper, BaseScraper, ScrapeConfig, get_config, set_config, reset_config
-```
+### Web Content Extraction
+
+- HTML parsing and content extraction
+- Structured data extraction (tables, lists, metadata)
+- CSS/XPath selector-based targeting
+- JavaScript-rendered page support
+- Rate limiting and polite crawling
+
+### Extractors
+
+| Extractor | Target | Output |
+|-----------|--------|--------|
+| `extractors/` | Web pages | Structured content, text, metadata |
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `Scraper` | Class | Scraper |
-| `BaseScraper` | Class | Basescraper |
-| `ScrapeConfig` | Class | Scrapeconfig |
-| `ScrapeResult` | Class | Scraperesult |
-| `ScrapeOptions` | Class | Scrapeoptions |
-| `ScrapeFormat` | Class | Scrapeformat |
-| `CrawlResult` | Class | Crawlresult |
-| `MapResult` | Class | Mapresult |
-| `SearchResult` | Class | Searchresult |
-| `ExtractResult` | Class | Extractresult |
-| `ScrapeError` | Class | Scrapeerror |
-| `ScrapeConnectionError` | Class | Scrapeconnectionerror |
-| `ScrapeTimeoutError` | Class | Scrapetimeouterror |
-| `ScrapeValidationError` | Class | Scrapevalidationerror |
-| `FirecrawlError` | Class | Firecrawlerror |
-
-*Plus 5 additional exports.*
-
+| Extractor classes | Various | Content extraction from web sources |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Scrape Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **VERIFY** | Validation and quality checks |
+|-------|----------------------|
+| **OBSERVE** | Extract content from web documentation and references |
+| **LEARN** | Capture web content for knowledge base enrichment |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Core Layer** — Content acquisition utility consumed by `documents/` (web document import), `graph_rag/` (knowledge graph population), and `agentic_memory/` (web source indexing).
 
 ## Navigation
 

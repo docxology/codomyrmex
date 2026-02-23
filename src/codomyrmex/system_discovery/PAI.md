@@ -1,36 +1,83 @@
 # Personal AI Infrastructure — System Discovery Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Codomyrmex System Discovery Module This is an **Application Layer** module.
+The System Discovery module provides capability scanning, system context gathering, and status reporting for the codomyrmex ecosystem. It is the primary tool for the PAI Algorithm's OBSERVE phase, enabling agents to understand what modules are available, their health status, and the current environment.
 
 ## PAI Capabilities
 
+### Capability Scanning
+
 ```python
-from codomyrmex.system_discovery import SystemDiscovery, StatusReporter, CapabilityScanner, get_system_context
+from codomyrmex.system_discovery import CapabilityScanner
+
+scanner = CapabilityScanner()
+capabilities = scanner.scan()
+# Returns: available modules, their exports, health status, versions
+```
+
+### System Context
+
+```python
+from codomyrmex.system_discovery import get_system_context
+
+context = get_system_context()
+# Returns: OS, Python version, installed packages, env vars, available services
+```
+
+### Discovery Engine
+
+```python
+from codomyrmex.system_discovery import SystemDiscovery
+
+discovery = SystemDiscovery()
+modules = discovery.discover_modules()
+# Auto-discovers all codomyrmex modules via pkgutil scan
+# Reports RASP documentation coverage, MCP tool specs, test status
+```
+
+### Status Reporting
+
+```python
+from codomyrmex.system_discovery import StatusReporter
+
+reporter = StatusReporter()
+report = reporter.generate()
+# Comprehensive health report: module count, test pass rate, doc coverage
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `SystemDiscovery` | Class | Systemdiscovery |
-| `StatusReporter` | Class | Statusreporter |
-| `CapabilityScanner` | Class | Capabilityscanner |
-| `get_system_context` | Function/Constant | Get system context |
+| `CapabilityScanner` | Class | Scan and catalog available capabilities |
+| `get_system_context` | Function | Gather current system environment context |
+| `SystemDiscovery` | Class | Auto-discover codomyrmex modules |
+| `StatusReporter` | Class | Generate health and status reports |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | System Discovery Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **VERIFY** | Validation and quality checks |
+|-------|-------------------------------|
+| **OBSERVE** | Primary module: scans capabilities, gathers context, discovers modules |
+| **THINK** | Context data informs capability selection and ISC expansion |
+| **PLAN** | Module discovery data helps plan which tools to use in workflows |
+| **VERIFY** | Status reports verify system health after changes |
+
+## MCP Integration
+
+Two MCP tools are powered by this module:
+
+| Tool | MCP Name | Description |
+|------|----------|-------------|
+| Module listing | `list_modules` | List all codomyrmex modules |
+| Module info | `get_module_info` | Get README, file listing for a specific module |
 
 ## Architecture Role
 
-**Application Layer** — Part of the codomyrmex layered architecture.
+**Foundation Layer** — First module invoked in any PAI session. Zero dependencies on other codomyrmex modules. Consumed by `maintenance/`, `documentation/`, and the MCP server startup.
 
 ## Navigation
 

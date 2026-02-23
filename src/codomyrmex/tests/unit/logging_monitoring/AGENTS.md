@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/tests/unit/logging_monitoring
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 

@@ -1,6 +1,6 @@
 # cli - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -70,7 +70,6 @@ graph TD
 - **Technical Documentation**: [AGENTS.md](AGENTS.md)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: [README](../../../README.md)
-
 
 ## Dependencies
 

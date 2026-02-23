@@ -1,40 +1,64 @@
-# Graph RAG Module — Agent Coordination
+# Agent Guidelines - Graph RAG
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Knowledge graph-enhanced RAG with entity relationships.
+## Module Overview
 
-## Key Capabilities
+Knowledge graph-enhanced RAG with entity relationships and traversal.
 
-- **EntityType**: Types of entities in the knowledge graph.
-- **RelationType**: Types of relationships in the knowledge graph.
-- **Entity**: An entity in the knowledge graph.
-- **Relationship**: A relationship between entities.
-- **GraphContext**: Context retrieved from the knowledge graph.
-- `key()`: Get unique key for this entity.
-- `to_dict()`: Convert to dictionary.
-- `key()`: Get unique key for this relationship.
+## Key Classes
 
-## Agent Usage Patterns
+- **KnowledgeGraph** — Entity and relationship storage
+- **Entity** — Node with id, name, type, properties
+- **Relationship** — Edge with source, target, type, weight
+- **EntityType** — Enum: person, organization, location, concept, etc.
+- **RelationType** — Enum: is_a, part_of, related_to, authored_by, etc.
+- **GraphRAGPipeline** — Query graph for LLM context
+
+## Agent Instructions
+
+1. **Build graph incrementally** — Add entities and relationships as discovered
+2. **Use typed entities** — Set `EntityType` for better traversal
+3. **Weight relationships** — Higher weight = stronger connection
+4. **Query multi-hop** — Use path finding for indirect relationships
+5. **Combine with text** — Use graph context alongside text retrieval
+
+## Common Patterns
 
 ```python
-from codomyrmex.graph_rag import EntityType
+from codomyrmex.graph_rag import (
+    KnowledgeGraph, Entity, Relationship, EntityType, RelationType
+)
 
-# Agent initializes graph rag
-instance = EntityType()
+graph = KnowledgeGraph()
+
+# Build knowledge graph
+graph.add_entity(Entity(id="python", name="Python", entity_type=EntityType.CONCEPT))
+graph.add_entity(Entity(id="ml", name="Machine Learning", entity_type=EntityType.CONCEPT))
+graph.add_relationship(Relationship(
+    source_id="python", target_id="ml", relation_type=RelationType.USED_FOR
+))
+
+# Query neighbors
+neighbors = graph.get_neighbors("python")
+
+# Find paths
+path = graph.find_path("python", "ml")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/graph_rag/](../../../src/codomyrmex/graph_rag/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify graph operations
+graph = KnowledgeGraph()
+graph.add_entity(Entity(id="a", name="A", entity_type=EntityType.CONCEPT))
+graph.add_entity(Entity(id="b", name="B", entity_type=EntityType.CONCEPT))
+graph.add_relationship(Relationship("a", "b", RelationType.RELATED_TO))
 
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k graph_rag -v
+assert len(graph.get_neighbors("a")) == 1
+assert graph.get_entity("a").name == "A"
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

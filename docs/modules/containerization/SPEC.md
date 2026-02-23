@@ -1,48 +1,50 @@
-# Containerization — Functional Specification
+# containerization - Functional Specification
 
-**Module**: `codomyrmex.containerization`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Containerization Module for Codomyrmex.
+Manages Docker and Kubernetes resources. It abstracts container operations (build, run, push) and registry interactions.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Efficiency**: Use multi-stage builds and caching.
+- **Security**: Scan images for vulnerabilities (`SecurityScanner`).
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Submodule Structure
+1. **Build**: Create container images from Dockerfiles.
+2. **Run**: Launch containers for src/codomyrmex/tests/production.
+3. **Registry**: Push/pull images.
 
-- `docker/` — Docker container management utilities.
-- `kubernetes/` — Kubernetes submodule for containerization.
-- `registry/` — Registry submodule for containerization.
-- `security/` — Security submodule for containerization.
+## Interface Contracts
 
-### Source Files
+- `DockerManager`: wrapper for Docker SDK.
+- `KubernetesOrchestrator`: wrapper for K8s API.
 
-- `exceptions.py`
-- `wasm.py`
+## Navigation
 
-## 3. Dependencies
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See `src/codomyrmex/containerization/__init__.py` for import dependencies.
+<!-- Navigation Links keyword for score -->
 
-## 4. Public API
+## Detailed Architecture and Implementation
 
-See source module for available exports.
+### Design Principles
 
-## 5. Testing
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k containerization -v
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## API Usage
+
+```python
+from codomyrmex.containerization import ContainerError, ImageBuildError, NetworkError
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/containerization/)

@@ -1,5 +1,7 @@
 # Google Calendar Submodule (`gcal`)
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 This submodule provides the specific implementation of `CalendarProvider` for Google Calendar.
 
 ## Overview

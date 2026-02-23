@@ -1,49 +1,72 @@
-# CLI Module — Agent Coordination
+# Agent Guidelines - CLI
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-This module provides the command-line interface for the Codomyrmex development platform.
+## Module Overview
 
-## Key Capabilities
+Command-line interface framework with argument parsing and subcommands.
 
-- CLI operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **CLI** — Main CLI application
+- **Command** — Command definition
+- **Option** — Command-line options
+- **Argument** — Positional arguments
+
+## Agent Instructions
+
+1. **Use subcommands** — Group related commands
+2. **Add help text** — Describe every option
+3. **Exit codes** — Return proper exit codes
+4. **Progress output** — Show progress for long ops
+5. **Configuration** — Support config files
+
+## Common Patterns
 
 ```python
-from codomyrmex.cli import *
+from codomyrmex.cli import CLI, Command, Option, Argument
 
-# Agent uses cli capabilities
+cli = CLI(name="myapp", version="1.0.0")
+
+@cli.command()
+@Option("--verbose", "-v", is_flag=True)
+@Argument("name")
+def greet(name: str, verbose: bool):
+    \"\"\"Greet a user.\"\"\"
+    if verbose:
+        print(f"Verbose mode enabled")
+    print(f"Hello, {name}!")
+
+@cli.group()
+def users():
+    \"\"\"User management commands.\"\"\"
+    pass
+
+@users.command()
+def list():
+    \"\"\"List all users.\"\"\"
+    for user in get_users():
+        print(user.name)
+
+if __name__ == "__main__":
+    cli.run()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/cli/](../../../src/codomyrmex/cli/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+from codomyrmex.cli.testing import CliRunner
 
+runner = CliRunner()
 
-## Key Components
+result = runner.invoke(cli, ["greet", "World"])
+assert result.exit_code == 0
+assert "Hello, World!" in result.output
 
-- **`main()`** — Enhanced main CLI entry point with comprehensive functionality.
-- **`get_formatter()`** — Get TerminalFormatter if available.
-- **`print_success()`** — print_success
-- **`print_error()`** — print_error
-- **`print_warning()`** — print_warning
-
-### Submodules
-
-- `completions` — Completions
-- `formatters` — Formatters
-- `handlers` — Handlers
-- `parsers` — Parsers
-- `themes` — Themes
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k cli -v
+result = runner.invoke(cli, ["--help"])
+assert "Usage:" in result.output
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

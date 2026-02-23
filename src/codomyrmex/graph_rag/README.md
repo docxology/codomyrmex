@@ -1,6 +1,6 @@
 # Graph RAG Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Knowledge graph-enhanced RAG with entity relationships.
 
@@ -82,7 +82,6 @@ print(context.to_text())
 | `RelationType` | Enum: is_a, part_of, related_to, authored_by, etc. |
 | `GraphRAGPipeline` | Query graph for LLM context |
 | `GraphContext` | Retrieved entities and relationships |
-
 
 ## Testing
 

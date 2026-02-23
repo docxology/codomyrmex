@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Model Context Protocol Module
 
-**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 

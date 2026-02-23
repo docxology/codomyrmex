@@ -1,5 +1,7 @@
 # Agent Guidelines - Scrape
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Web scraping with browser automation and DOM extraction.

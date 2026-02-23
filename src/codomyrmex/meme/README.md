@@ -1,56 +1,63 @@
 # Meme Module
 
-**Unified Memetic Warfare & Information Dynamics**
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-The `codomyrmex.meme` module is a comprehensive framework for modeling, analyzing, and engineering the propagation, mutation, and evolution of information units (memes) through cultural, cognitive, and network substrates. It treats ideas as living entities subject to evolutionary pressures, epidemiological spread, and cybernetic control.
+## Overview
+
+The Meme module is Codomyrmex's advanced memetic analysis engine, providing multi-layered capabilities for studying information propagation, narrative dynamics, and cultural evolution. It bridges semiotics, network theory, and computational linguistics.
+
+## Installation
+
+```bash
+uv add codomyrmex
+```
+
+## Key Exports
+
+### Core Memetics
+
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `memetics` | `MemeticAnalyzer`, `MemeticPattern`, `MutationTracker` | Core meme analysis and mutation tracking |
+| `semiotic` | `Sign`, `CodeSystem`, `Signifier`, `Signified`, `SemioticAnalyzer` | Sign theory and semiotic analysis |
+| `contagion` | `ContagionModel`, `ContagionResult`, `Strain` | Information contagion and propagation modeling |
+| `narrative` | `NarrativeEngine`, `StoryArc`, `NarrativeElement` | Narrative construction and analysis |
+
+### Advanced Analysis
+
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `cultural_dynamics` | Cultural evolution modeling | Track cultural shift patterns |
+| `swarm` | Swarm intelligence integration | Collective decision-making |
+| `neurolinguistic` | Neuro-linguistic processing | Language influence modeling |
+| `hyperreality` | Simulation/hyperreality analysis | Baudrillard-inspired reality layers |
+| `ideoscape` | Ideological landscape mapping | Idea migration and clustering |
+| `rhizome` | Non-hierarchical network analysis | Deleuze & Guattari-inspired connections |
+| `epistemic` | Epistemic verification | Knowledge validation and truthfulness |
+
+## Quick Start
+
+```python
+from codomyrmex.meme import MemeticAnalyzer, MemeticPattern, ContagionModel
+
+# Analyze memetic patterns in content
+analyzer = MemeticAnalyzer()
+patterns = analyzer.detect(content="AI agents will revolutionize coding")
+
+# Model information contagion
+model = ContagionModel()
+result = model.simulate(
+    initial_carriers=10,
+    population=1000,
+    virality=0.3,
+    duration=30
+)
+```
 
 ## Architecture
 
-The module is organized into 12 specialized submodules, clustered by function:
+The module has 11 specialized submodules spanning sign theory, network theory, and computational linguistics. See [SPEC.md](SPEC.md) for the full architecture details.
 
-### Phase 1: Core Engine
+## Navigation
 
-* **`memetics`**: The fundamental physics of the system. Defines `Meme`, `Memeplex`, fitness landscapes, and genetic operators (mutation, recombination).
-* **`semiotic`**: The layer of meaning and interpretation. Handles sign-signified relationships, semiotic drift, and linguistic steganography.
-
-### Phase 2: Propagation
-
-* **`contagion`**: Epidemiological models (SIR, SIS, SEIR) and cascade detection for tracking information spread across networks.
-* **`narrative`**: Computational narratology. Models narrative arcs (Hero's Journey), archetypes, and synthetic myth generation.
-
-### Phase 3: Dynamics
-
-* **`cultural_dynamics`**: Macro-scale analysis of cultural trends, oscillations (zeitgeist), and power dynamics.
-* **`swarm`**: Collective behavior modeling. Implements flocking algorithms, consensus mechanisms, and emergent pattern detection.
-* **`neurolinguistic`**: Micro-scale cognitive engineering. Focuses on framing, linguistic patterns (Milton/Meta models), and bias exploitation.
-
-### Phase 4: Topology
-
-* **`ideoscape`**: Information cartography. Visualizes the "terrain" of ideas using 2D/3D mapping and projection techniques.
-* **`rhizome`**: Network structure analysis. Models distributed, non-hierarchical (rhizomatic) connections and graph topology.
-
-### Phase 5: Reality & Truth
-
-* **`epistemic`**: Truth verification and knowledge warfare. Models facts, beliefs, evidence, and epistemic territory.
-* **`hyperreality`**: Simulation theory. Models Baudrillardian simulacra, reality tunnels, and the levels of simulation.
-
-### Phase 6: Control
-
-* **`cybernetic`**: Second-order cybernetics and control systems. Implements feedback loops, homeostatic regulation, and autonomic control.
-
-## Usage
-
-```python
-from codomyrmex.meme import MemeticEngine, Meme
-
-# Initialize engine
-engine = MemeticEngine()
-
-# Dissect text into memes
-text = "The quick brown fox jumps over the lazy dog."
-memes = engine.dissect(text)
-
-# Analyze fitness
-for meme in memes:
-    print(f"Meme: {meme.content}, Fitness: {meme.fitness}")
-```
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

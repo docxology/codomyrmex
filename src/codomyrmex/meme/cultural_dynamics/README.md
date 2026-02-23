@@ -1,5 +1,7 @@
 # Cultural Dynamics Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Macro-Scale Cultural Modeling**
 
 The `codomyrmex.meme.cultural_dynamics` submodule tracks the large-scale movements of ideology and power in a population. It models culture as a dynamic system subject to oscillation, momentum, and inertia.

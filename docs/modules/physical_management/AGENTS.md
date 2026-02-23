@@ -1,41 +1,65 @@
-# Physical Management Module — Agent Coordination
+# Agent Guidelines - Physical Management
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Physical Object Management Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Physical device and hardware management for IoT and robotics.
 
-- Physical Management operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **DeviceManager** — Manage physical devices
+- **SensorHub** — Collect sensor data
+- **ActuatorController** — Control actuators
+- **ResourceMonitor** — Monitor physical resources
+
+## Agent Instructions
+
+1. **Verify connections** — Check device connectivity
+2. **Handle timeouts** — Physical devices may be slow
+3. **Safe defaults** — Use safe actuator defaults
+4. **Rate limit** — Don't overwhelm hardware
+5. **Log all actions** — Audit trail for physical changes
+
+## Common Patterns
 
 ```python
-from codomyrmex.physical_management import *
+from codomyrmex.physical_management import (
+    DeviceManager, SensorHub, ActuatorController
+)
 
-# Agent uses physical management capabilities
+# Manage devices
+devices = DeviceManager()
+devices.discover()  # Auto-discover devices
+
+for device in devices.list():
+    print(f"{device.id}: {device.status}")
+
+# Collect sensor data
+sensors = SensorHub()
+temp = sensors.read("temperature_01")
+humidity = sensors.read_batch(["humidity_01", "humidity_02"])
+
+# Control actuators
+actuator = ActuatorController("motor_01")
+actuator.set_position(90)  # degrees
+actuator.wait_for_completion()
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/physical_management/](../../../src/codomyrmex/physical_management/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify device discovery (simulation mode)
+devices = DeviceManager(simulation=True)
+devices.add_simulated_device("test_device")
+assert len(devices.list()) == 1
 
-
-## Key Components
-
-- **`AnalyticsMetric`** — Types of analytics metrics.
-- **`StreamingMode`** — Streaming modes for data processing.
-- **`DataPoint`** — A single data point in a stream.
-- **`AnalyticsWindow`** — Time window for analytics calculations.
-- **`DataStream`** — Real-time data stream with analytics capabilities.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k physical_management -v
+# Verify sensor reading (simulation mode)
+sensors = SensorHub(simulation=True)
+value = sensors.read("simulated_sensor")
+assert value is not None
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

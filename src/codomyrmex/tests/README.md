@@ -1,5 +1,7 @@
 # Tests
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 Comprehensive test suite for the Codomyrmex ecosystem.
 
 ## Directory Structure

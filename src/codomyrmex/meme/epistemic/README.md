@@ -1,5 +1,7 @@
 # Epistemic Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Truth & Verification**
 
 The `codomyrmex.meme.epistemic` submodule deals with knowledge, belief, and truth. It provides a rigorous framework for verifying claims, managing evidence, and detecting contradictions or gaslighting.

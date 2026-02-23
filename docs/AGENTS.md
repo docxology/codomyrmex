@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 93 specialized modules.
+Central documentation hub for the Codomyrmex platform. Contains user guides, developer documentation, API references, and module-specific documentation for 78 specialized modules.
 
 ## Documentation Organization
 
@@ -14,11 +14,18 @@ Central documentation hub for the Codomyrmex platform. Contains user guides, dev
 | [**development/**](development/) | Dev environment, testing | Medium - dev workflows |
 | [**reference/**](reference/) | API, CLI, troubleshooting | High - technical reference |
 | [**deployment/**](deployment/) | Production deployment | Medium - operations |
-| [**modules/**](modules/) | Per-module docs (91) | High - module details |
+| [**modules/**](modules/) | Per-module docs (78) | High - module details |
 | [**integration/**](integration/) | External integrations | Medium - integrations |
 | [**examples/**](examples/) | Code examples | Medium - learning |
 | [**project/**](project/) | Architecture, contributing | Low - project info |
 | [**project_orchestration/**](project_orchestration/) | Multi-project workflows | Low - advanced |
+| [**bio/**](bio/) | Biological perspectives | Medium - theory |
+| [**cognitive/**](cognitive/) | Cognitive science perspectives | Medium - theory |
+| [**compliance/**](compliance/) | Audit reports, policy compliance | Medium - quality |
+| [**pai/**](pai/) | PAI integration reference | High - PAI details |
+| [**security/**](security/) | Security theory & practice | High - security |
+| [**skills/**](skills/) | Skill system documentation | Medium - skills |
+| [**agents/**](agents/) | Agent rules and coordination | High - agent guidance |
 
 ### Secure Cognitive Agent Documentation
 

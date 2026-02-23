@@ -1,5 +1,7 @@
 # evolutionary_ai - Functional Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Purpose
 
 To enable the discovery of optimal solutions in complex, non-differentiable search spaces through simulated Darwinian evolution.

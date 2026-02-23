@@ -1,5 +1,7 @@
 # Agents Guide: Hyperreality
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `hyperreality` submodule to distinguish the Real from the Simulacrum.

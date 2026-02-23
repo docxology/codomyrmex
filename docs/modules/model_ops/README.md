@@ -1,81 +1,68 @@
-# Model Ops Module Documentation
+# Model Ops Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Model Operations module for Codomyrmex.
+ML model operations module providing dataset management, fine-tuning job orchestration, and model evaluation with pluggable metrics. The `Dataset` class manages training/evaluation data collections with JSONL I/O and validation for prompt/completion and messages formats. `DatasetSanitizer` filters and cleans datasets by length and key stripping. `FineTuningJob` simulates fine-tuning workflows with status tracking. The `evaluation` submodule provides a comprehensive metrics framework with accuracy, precision, recall, F1, confusion matrix, MSE, MAE, RMSE, R-squared, and AUC-ROC.
 
-## Key Features
+## Key Exports
 
-- **Dataset** — A dataset for ML model operations.
-- **DatasetSanitizer** — Utilities for cleaning and filtering datasets.
-- **FineTuningJob** — Fine-tuning job management.
-- **Evaluator** — Model output evaluator with customizable metrics.
-- `exact_match_metric()` — Calculate exact match ratio (strips whitespace before comparison).
-- `length_ratio_metric()` — Calculate average length ratio.
-- `validate()` — Validate the dataset.
-- `to_jsonl()` — Export dataset to JSONL file.
+### Submodules
 
-## Submodules
+- **`evaluation`** -- Comprehensive model evaluation framework with typed metrics
+- **`training`** -- Training pipeline configuration and execution
 
-| Submodule | Description |
-|-----------|-------------|
-| `datasets` | Dataset management submodule. |
-| `evaluation` | Model evaluation utilities for ML operations. |
-| `fine_tuning` | Fine-tuning submodule. |
-| `training` | Training utilities submodule. |
+### Core Classes
+
+- **`Dataset`** -- Collection of training/evaluation examples with JSONL I/O, validation for prompt/completion and messages formats
+- **`DatasetSanitizer`** -- Utilities for filtering datasets by content length and stripping unwanted keys
+- **`FineTuningJob`** -- Fine-tuning job lifecycle management with status tracking (pending/running/completed)
+- **`Evaluator`** -- Model output evaluator with pluggable custom metric functions
+
+### Evaluation Framework
+
+- **`TaskType`** -- Enum of evaluation task types (classification, regression, etc.)
+- **`EvaluationResult`** -- Container for evaluation results across metrics
+- **`Metric`** -- Base metric class for evaluation
+- **`AccuracyMetric`** -- Classification accuracy metric
+- **`PrecisionMetric`** -- Classification precision metric
+- **`RecallMetric`** -- Classification recall metric
+- **`F1Metric`** -- F1 score (harmonic mean of precision and recall)
+- **`ConfusionMatrix`** -- Confusion matrix computation and analysis
+- **`MSEMetric`** -- Mean Squared Error for regression tasks
+- **`MAEMetric`** -- Mean Absolute Error for regression tasks
+- **`RMSEMetric`** -- Root Mean Squared Error for regression tasks
+- **`R2Metric`** -- R-squared (coefficient of determination) for regression
+- **`AUCROCMetric`** -- Area Under ROC Curve for binary classification
+- **`ModelEvaluator`** -- High-level evaluator orchestrating multiple metrics
+- **`create_evaluator()`** -- Factory function to create a configured ModelEvaluator
+
+### Convenience Metric Functions
+
+- **`exact_match_metric()`** -- Calculate exact match ratio between predictions and references (strips whitespace)
+- **`length_ratio_metric()`** -- Calculate average length ratio between predictions and references
+
+## Directory Contents
+
+- `__init__.py` - Module entry point with Dataset, DatasetSanitizer, FineTuningJob, Evaluator, and metric functions
+- `evaluation/` - Comprehensive metrics framework (Metric base class, typed metrics, ModelEvaluator)
+- `training/` - Training pipeline configuration and execution
+- `datasets/` - Additional dataset utilities and loaders
+- `fine_tuning/` - Fine-tuning job management extensions
+- `evaluators.py` - Legacy evaluator implementations
 
 ## Quick Start
 
 ```python
-from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob
+from codomyrmex.model_ops import Dataset, DatasetSanitizer
 
-# Initialize
-instance = Dataset()
+# Create a Dataset instance
+dataset = Dataset()
+
+# Use DatasetSanitizer for additional functionality
+datasetsanitizer = DatasetSanitizer()
 ```
-
-
-## Installation
-
-```bash
-uv pip install codomyrmex
-```
-
-## API Reference
-
-### Classes
-
-| Class | Description |
-|-------|-------------|
-| `Dataset` | A dataset for ML model operations. |
-| `DatasetSanitizer` | Utilities for cleaning and filtering datasets. |
-| `FineTuningJob` | Fine-tuning job management. |
-| `Evaluator` | Model output evaluator with customizable metrics. |
-
-### Functions
-
-| Function | Description |
-|----------|-------------|
-| `exact_match_metric()` | Calculate exact match ratio (strips whitespace before comparison). |
-| `length_ratio_metric()` | Calculate average length ratio. |
-| `validate()` | Validate the dataset. |
-| `to_jsonl()` | Export dataset to JSONL file. |
-| `from_file()` | Load dataset from JSONL file. |
-| `filter_by_length()` | Filter examples by content length. |
-| `strip_keys()` | Remove specified keys from all examples. |
-| `run()` | Start the fine-tuning job. |
-| `refresh_status()` | Get current job status. Transitions running jobs to completed. |
-| `evaluate()` | Evaluate predictions against references. |
-
-## Directory Contents
-
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
 
 ## Testing
 
@@ -83,7 +70,21 @@ uv pip install codomyrmex
 uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
 ```
 
+## Consolidated Sub-modules
+
+The following modules have been consolidated into this module as sub-packages:
+
+| Sub-module | Description |
+|------------|-------------|
+| **`evaluation/`** | LLM output scoring, benchmark suites, A/B comparison |
+| **`registry/`** | Model versioning and artifact management |
+| **`optimization/`** | Model quantization, ONNX export, inference acceleration |
+| **`vector_store/`** | ML feature management and storage |
+
+Original standalone modules remain as backward-compatible re-export wrappers.
+
 ## Navigation
 
-- **Source**: [src/codomyrmex/model_ops/](../../../src/codomyrmex/model_ops/)
-- **Parent**: [Modules](../README.md)
+- **Full Documentation**: [docs/modules/model_ops/](../../../docs/modules/model_ops/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: ../../../README.md

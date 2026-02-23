@@ -1,50 +1,37 @@
 # Personal AI Infrastructure — Deployment Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Deployment module for Codomyrmex. This is an **Extended Layer** module.
+The Deployment module provides release management, rollback orchestration, and deployment strategy execution for shipping code changes to production environments.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.deployment import DeploymentState, DeploymentTarget, DeploymentResult, health_checks, strategies, rollback
-```
+- Blue/green and canary deployment strategies
+- Rollback orchestration with health check gating
+- Release tagging and changelog generation
+- Multi-environment deployment (staging, production)
+- Deployment verification and smoke testing
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `health_checks` | Function/Constant | Health checks |
-| `strategies` | Function/Constant | Strategies |
-| `rollback` | Function/Constant | Rollback |
-| `DeploymentState` | Class | Deploymentstate |
-| `DeploymentTarget` | Class | Deploymenttarget |
-| `DeploymentResult` | Class | Deploymentresult |
-| `DeploymentStrategy` | Class | Deploymentstrategy |
-| `RollingDeployment` | Class | Rollingdeployment |
-| `BlueGreenDeployment` | Class | Bluegreendeployment |
-| `CanaryDeployment` | Class | Canarydeployment |
-| `create_strategy` | Function/Constant | Create strategy |
-| `CanaryStrategy` | Class | Canarystrategy |
-| `BlueGreenStrategy` | Class | Bluegreenstrategy |
-| `RollingStrategy` | Class | Rollingstrategy |
-
-*Plus 2 additional exports.*
-
+| Deployment strategies | Various | Blue/green, canary, rolling update |
+| Release managers | Various | Version tagging and changelog |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Deployment Contribution |
-|-------|------------------------------|
-| **BUILD** | Artifact creation and code generation |
-| **EXECUTE** | Execution and deployment |
-| **VERIFY** | Validation and quality checks |
+|-------|--------------------------|
+| **PLAN** | Select deployment strategy based on risk assessment |
+| **EXECUTE** | Execute deployment with health check gating |
+| **VERIFY** | Run smoke tests and verify deployment health |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `ci_cd_automation/` (builds), `containerization/` (container deploys), `cloud/` (infrastructure). Top of the deployment pipeline.
 
 ## Navigation
 

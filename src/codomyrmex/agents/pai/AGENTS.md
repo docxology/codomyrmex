@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex/agents/pai
 
-**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 

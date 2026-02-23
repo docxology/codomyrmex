@@ -1,5 +1,7 @@
 # Agent Guidelines - Tree-sitter
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Code parsing with tree-sitter for syntax analysis and AST transformations.

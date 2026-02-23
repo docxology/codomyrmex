@@ -1,58 +1,58 @@
-# Testing — Functional Specification
+# Testing - Functional Specification
 
-**Module**: `codomyrmex.testing`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Test fixtures, generators, property-based testing, and fuzzing utilities.
+Testing module providing test framework utilities, fixtures, and test infrastructure for the Codomyrmex platform.
 
-## 2. Architecture
+## Functional Requirements
 
-### Components
+- **Pytest integration**: Standard configuration and optimized test discovery.
+- **Fixtures & Stubs**: Library of reusable test data and environment state.
+- **Property-Based Testing (Consolidated)**: Generating thousands of test cases to verify invariants.
+- **Workflow Testing (Consolidated)**: End-to-end verification of complex multi-step processes.
+- **Chaos Engineering (Consolidated)**: Simulating failures and latency to test system resilience.
+- **Zero-Mock Enforcement**: Tools to audit and ensure real functional verification.
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `GeneratorStrategy` | Class | Abstract base for value generators. |
-| `IntGenerator` | Class | Generate random integers. |
-| `FloatGenerator` | Class | Generate random floats. |
-| `StringGenerator` | Class | Generate random strings. |
-| `ListGenerator` | Class | Generate random lists. |
-| `DictGenerator` | Class | Generate random dictionaries. |
-| `OneOfGenerator` | Class | Generate one of specified values. |
-| `PropertyTestResult` | Class | Result of a property-based test. |
-| `FuzzingStrategy` | Class | Fuzzing strategies. |
-| `FuzzResult` | Class | Result of a fuzz test. |
-| `property_test()` | Function | Decorator for property-based tests. |
-| `fixture()` | Function | Decorator to create fixtures. |
-| `generate()` | Function | generate |
-| `generate()` | Function | generate |
-| `generate()` | Function | generate |
+## Test Categories
 
-### Submodule Structure
+| Category | Description |
+| :--- | :--- |
+| Unit | Isolated component tests |
+| Integration | Cross-component tests |
+| Performance | Load and stress tests |
+| End-to-End | Full workflow tests |
 
-- `fixtures/` — Testing Fixtures Module
-- `generators/` — Testing Generators Module
+## Key Files
 
-## 3. Dependencies
+| File | Description |
+| :--- | :--- |
+| `conftest.py` | Shared pytest fixtures |
+| `fixtures/` | Test data fixtures |
+| `mocks/` | Mock implementations |
+| `helpers/` | Test utilities |
 
-See `src/codomyrmex/testing/__init__.py` for import dependencies.
+## Design Principles
 
-## 4. Public API
+1. **Isolation**: Tests don't affect each other
+2. **Speed**: Fast feedback loops
+3. **Coverage**: Aim for 80%+ coverage
+4. **Clarity**: Tests document behavior
 
-```python
-from codomyrmex.testing import GeneratorStrategy, IntGenerator, FloatGenerator, StringGenerator, ListGenerator
-```
-
-## 5. Testing
+## Running Tests
 
 ```bash
-uv run python -m pytest src/codomyrmex/tests/ -k testing -v
+# All tests
+pytest
+
+# With coverage
+pytest --cov=codomyrmex
+
+# Specific module
+pytest tests/unit/test_llm.py
 ```
 
-## References
+## Navigation
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/testing/)
+- [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)

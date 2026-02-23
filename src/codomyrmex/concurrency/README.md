@@ -1,9 +1,8 @@
 # Concurrency Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Distributed locks, semaphores, and synchronization primitives.
-
 
 ## Installation
 
@@ -82,13 +81,11 @@ with lock:
 | `ReadWriteLock` | Multiple readers, single writer |
 | `LocalSemaphore` | Limit concurrent access |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k concurrency -v
 ```
-
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 # Droid - Functional Specification
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -48,8 +48,6 @@ The `droid` module defines the **Autonomous Agent** abstraction within the `ai_c
 <!-- Navigation Links keyword for score -->
 
 ## Detailed Architecture and Implementation
-
-
 
 ### Design Principles
 

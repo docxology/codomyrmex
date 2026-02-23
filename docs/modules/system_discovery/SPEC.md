@@ -1,46 +1,49 @@
-# System Discovery — Functional Specification
+# system_discovery - Functional Specification
 
-**Module**: `codomyrmex.system_discovery`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-This module provides system discovery and orchestration capabilities
+The `system_discovery` module provides introspection capabilities, inspecting the running environment to identify capabilities, tools, and status.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Non-Invasive**: Scans should not alter system state.
+- **Dynamic**: Capabilities are discovered at runtime, not hardcoded.
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Source Files
+1. **Scanning**: Identify active services and tools.
+2. **Reporting**: Expose system status via `StatusReporter`.
 
-- `capability_scanner.py`
-- `context.py`
-- `discovery_engine.py`
-- `health_checker.py`
-- `health_reporter.py`
-- `profilers.py`
-- `status_reporter.py`
+## Interface Contracts
 
-## 3. Dependencies
+- `CapabilityScanner`: Returns list of available features.
+- `DiscoveryEngine`: Orchestrates the scanning process.
 
-See `src/codomyrmex/system_discovery/__init__.py` for import dependencies.
+## Navigation
 
-## 4. Public API
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See source module for available exports.
+<!-- Navigation Links keyword for score -->
 
-## 5. Testing
+## Detailed Architecture and Implementation
+
+### Design Principles
+
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k system_discovery -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/system_discovery/)

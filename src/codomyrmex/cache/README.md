@@ -1,11 +1,10 @@
 # Cache Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Unified caching module providing multiple backend strategies for code analysis results, LLM responses, build artifacts, and other frequently accessed data. Features an abstract `Cache` interface with in-memory, file-based, and Redis backends; a `CacheManager` for named cache instance lifecycle; namespace isolation; TTL management; eviction policies; invalidation strategies; serializers; distributed caching; cache warmers; replication; and async operations.
-
 
 ## Installation
 
@@ -77,7 +76,6 @@ from codomyrmex.cache import get_cache
 
 result = get_cache()
 ```
-
 
 ## Testing
 

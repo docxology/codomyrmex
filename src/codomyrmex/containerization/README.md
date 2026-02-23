@@ -1,11 +1,10 @@
 # Containerization Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Container management, orchestration, and deployment module organized into four submodules: Docker lifecycle management, Kubernetes orchestration, container registry operations, and container security/performance optimization. Provides classes for building and managing Docker containers, deploying to Kubernetes clusters, interacting with container registries, and scanning containers for security vulnerabilities. All submodule imports are optional and gracefully degrade if dependencies are unavailable.
-
 
 ## Installation
 
@@ -87,7 +86,6 @@ container = manager.run_container(config)
 scan_result = scan_container_security("myapp:latest")
 print(f"Vulnerabilities found: {len(scan_result.findings)}")
 ```
-
 
 ## Testing
 

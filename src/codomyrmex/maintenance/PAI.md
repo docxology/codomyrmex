@@ -1,47 +1,37 @@
 # Personal AI Infrastructure — Maintenance Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Tools Module for Codomyrmex. This is an **Extended Layer** module.
+The Maintenance module provides RASP auditing, documentation health checks, dependency analysis, and automated maintenance operations for keeping the codomyrmex codebase healthy and well-documented.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.maintenance import DependencyAnalyzer, deps, health, analyze_project_structure
-```
+- RASP documentation compliance auditing across all modules
+- Stale dependency detection and upgrade recommendations
+- Code health metrics collection and trending
+- Automated cleanup operations (dead code, unused imports)
+- Documentation freshness tracking
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `deps` | Function/Constant | Deps |
-| `health` | Function/Constant | Health |
-| `analyze_project_structure` | Function/Constant | Analyze project structure |
-| `analyze_project_dependencies` | Function/Constant | Analyze project dependencies |
-| `analyze_code_quality` | Function/Constant | Analyze code quality |
-| `check_dependencies` | Function/Constant | Check dependencies |
-| `consolidate_dependencies` | Function/Constant | Consolidate dependencies |
-| `add_deprecation_notice` | Function/Constant | Add deprecation notice |
-| `DependencyAnalyzer` | Class | Dependencyanalyzer |
-| `analyze_project_main` | Function/Constant | Analyze project main |
-| `dependency_analyzer_main` | Function/Constant | Dependency analyzer main |
-| `dependency_checker_main` | Function/Constant | Dependency checker main |
-| `dependency_consolidator_main` | Function/Constant | Dependency consolidator main |
-| `validate_dependencies_main` | Function/Constant | Validate dependencies main |
-| `add_deprecation_notices_main` | Function/Constant | Add deprecation notices main |
+| RASP auditor | Various | Documentation compliance checking |
+| Health checkers | Various | Code and dependency health metrics |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Maintenance Contribution |
-|-------|------------------------------|
-| **THINK** | Analysis and reasoning |
-| **VERIFY** | Validation and quality checks |
+|-------|--------------------------|
+| **OBSERVE** | Audit RASP compliance and code health metrics |
+| **VERIFY** | Validate documentation coverage and dependency freshness |
+| **LEARN** | Track maintenance metrics over time |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Platform Layer** — Consumes `documentation/` (doc audits), `static_analysis/` (code analysis), `system_discovery/` (module listing). Provides automated maintenance for the entire project.
 
 ## Navigation
 

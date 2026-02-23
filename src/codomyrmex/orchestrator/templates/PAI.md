@@ -1,7 +1,8 @@
 # Personal AI Infrastructure - Templates
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.orchestrator.templates`  
-**Version**: v0.1.7  
 **Status**: Active
 
 ## Context

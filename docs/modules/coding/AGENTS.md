@@ -1,52 +1,66 @@
-# Coding Module — Agent Coordination
+# Agent Guidelines - Coding
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Coding Module.
+## Module Overview
 
-## Key Capabilities
+Unified toolkit for code execution, analysis, review, and transformation.
 
-- Coding operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **CodeReviewer** — Orchestrate code quality reviews
+- **StaticAnalyzer** — Run deep linting and complexity analysis
+- **PatternMatcher** — Search for structural patterns (AST-based)
+- **CodeGenerator** — Generate code from functional specs
+- **Debugger** — Automated error diagnosis and patching
+
+## Agent Instructions
+
+1. **Analyze before fix** — Use `StaticAnalyzer` to verify code quality before suggesting fixes
+2. **Structural Search** — Use `PatternMatcher` to find all instances of a pattern before refactoring
+3. **Sandbox execution** — Always use `coding.execution` for untrusted code
+4. **Metric-driven review** — Check `CodeMetrics` during reviews
+
+## Common Patterns
 
 ```python
-from codomyrmex.coding import *
+from codomyrmex.coding import (
+    CodeReviewer, StaticAnalyzer, PatternMatcher, Debugger
+)
 
-# Agent uses coding capabilities
+# Deep Static Analysis
+analyzer = StaticAnalyzer()
+results = analyzer.analyze_project("./src")
+print(f"Complexity: {results.complexity}")
+
+# Find occurrences of a pattern
+matcher = PatternMatcher()
+occurrences = matcher.find_pattern(
+    "Assignment(target=Name(id='x'), value=Constant(value=1))"
+)
+
+# Automated Debug Loop
+debugger = Debugger()
+diagnosis = debugger.diagnose(failing_script_path)
+if diagnosis.can_fix:
+    patch = debugger.generate_patch(diagnosis)
+    debugger.apply_and_verify(patch)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/coding/](../../../src/codomyrmex/coding/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify static analysis findings
+analyzer = StaticAnalyzer()
+results = analyzer.analyze_file("bad_code.py")
+assert any(r.type == "Complexity" for r in results)
 
-
-## Key Components
-
-- **`ExecutionTimeoutError`** — Raised when code execution exceeds time limit.
-- **`MemoryLimitError`** — Raised when code execution exceeds memory limit.
-- **`SandboxSecurityError`** — Raised when code violates sandbox security policies.
-- **`SandboxResourceError`** — Raised when sandbox resource allocation fails.
-- **`DebuggerError`** — Raised when debugging operations fail.
-
-### Submodules
-
-- `analysis` — Analysis
-- `debugging` — Debugging
-- `execution` — Execution
-- `generation` — Generation
-- `monitoring` — Monitoring
-- `refactoring` — Refactoring
-- `review` — Review
-- `sandbox` — Sandbox
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k coding -v
+# Verify pattern matching
+matcher = PatternMatcher()
+matches = matcher.find_in_string("x = 10", "Assignment")
+assert len(matches) == 1
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

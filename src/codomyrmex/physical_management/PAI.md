@@ -1,50 +1,38 @@
 # Personal AI Infrastructure — Physical Management Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Physical Object Management Module for Codomyrmex. This is an **Extended Layer** module.
+The Physical Management module provides physical infrastructure management capabilities — server provisioning, hardware monitoring, environmental controls, and physical asset tracking for on-premise deployments.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.physical_management import PhysicalObjectManager, PhysicalObject, ObjectRegistry
-```
+- Physical server provisioning and decommissioning
+- Hardware health monitoring (CPU, memory, disk, network)
+- Environmental controls (temperature, power)
+- Physical asset inventory and tracking
+- Capacity planning and resource forecasting
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `PhysicalObjectManager` | Class | Physicalobjectmanager |
-| `PhysicalObject` | Class | Physicalobject |
-| `ObjectRegistry` | Class | Objectregistry |
-| `ObjectType` | Class | Objecttype |
-| `ObjectStatus` | Class | Objectstatus |
-| `MaterialType` | Class | Materialtype |
-| `EventType` | Class | Eventtype |
-| `MaterialProperties` | Class | Materialproperties |
-| `ObjectEvent` | Class | Objectevent |
-| `SpatialIndex` | Class | Spatialindex |
-| `PhysicsSimulator` | Class | Physicssimulator |
-| `ForceField` | Class | Forcefield |
-| `Constraint` | Class | Constraint |
-| `Vector3D` | Class | Vector3d |
-| `SensorManager` | Class | Sensormanager |
-
-*Plus 14 additional exports.*
-
+| Hardware monitors | Various | Physical system health tracking |
+| Asset managers | Various | Physical asset lifecycle |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Physical Management Contribution |
-|-------|------------------------------|
-| **OBSERVE** | Data gathering and state inspection |
-| **LEARN** | Learning and knowledge capture |
+|-------|-----------------------------------|
+| **OBSERVE** | Monitor hardware health and resource utilization |
+| **PLAN** | Capacity planning for physical infrastructure |
+| **EXECUTE** | Provision/decommission physical resources |
+| **VERIFY** | Validate hardware health and capacity |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Specialized Layer** — Infrastructure management consumed by `cloud/` (hybrid deployments) and `deployment/` (on-premise releases).
 
 ## Navigation
 

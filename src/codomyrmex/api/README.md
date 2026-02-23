@@ -1,6 +1,6 @@
 # API Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -125,7 +125,6 @@ print(f"Allowed: {result.allowed}, Remaining: {result.remaining}")
 breaker = CircuitBreaker(failure_threshold=5, recovery_timeout=30)
 response = breaker.call(lambda: api.handle_request("/users", method="GET"))
 ```
-
 
 ## Consolidated Sub-modules
 

@@ -1,35 +1,48 @@
 # Personal AI Infrastructure — Containerization Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Containerization Module for Codomyrmex. This is a **Service Layer** module.
+The Containerization module provides Docker container management, Kubernetes orchestration, container registry operations, and container security scanning. It enables PAI agents to build, deploy, and manage containerized applications as part of CI/CD workflows.
 
 ## PAI Capabilities
 
+### Container Lifecycle Management
+
 ```python
-from codomyrmex.containerization import docker, kubernetes, registry
+from codomyrmex.containerization import cli_commands
+
+commands = cli_commands()
+# Available: build, run, stop, inspect, push, pull, scan
 ```
+
+### Submodule Capabilities
+
+| Submodule | Purpose | Key Operations |
+|-----------|---------|----------------|
+| Core | Docker container management | Build, run, stop, inspect containers |
+| `kubernetes/` | K8s orchestration | Deploy, scale, monitor Kubernetes resources |
+| `registry/` | Image registry | Push, pull, tag, and manage container images |
+| `security/` | Container security | Vulnerability scanning, policy enforcement |
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `docker` | Function/Constant | Docker |
-| `kubernetes` | Function/Constant | Kubernetes |
-| `registry` | Function/Constant | Registry |
-| `security` | Function/Constant | Security |
+| `cli_commands` | Function | CLI commands for container operations |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Containerization Contribution |
-|-------|------------------------------|
-| **EXECUTE** | General module operations |
+|-------|-------------------------------|
+| **BUILD** | Build container images from AI-generated Dockerfiles |
+| **EXECUTE** | Run sandboxed code execution in containers; deploy services |
+| **VERIFY** | Security scan container images for vulnerabilities |
 
 ## Architecture Role
 
-**Service Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `coding/` for Dockerfile generation. Consumed by `ci_cd_automation/` for deployment pipelines and `cloud/` for container orchestration.
 
 ## Navigation
 

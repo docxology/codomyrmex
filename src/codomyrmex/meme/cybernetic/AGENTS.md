@@ -1,5 +1,7 @@
 # Agents Guide: Cybernetic
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `cybernetic` submodule to "steer the ship." Without control loops, systems drift into entropy.

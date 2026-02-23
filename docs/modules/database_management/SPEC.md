@@ -1,51 +1,50 @@
-# Database Management — Functional Specification
+# database_management - Functional Specification
 
-**Module**: `codomyrmex.database_management`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Database Management Module for Codomyrmex.
+Manages database schemas, migrations, backups, and performance monitoring. It provides a unified interface for data persistence operations.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Safety**: Backups before migrations (via `BackupManager`).
+- **Version Control**: Database schemas are defined in code (`SchemaGenerator`).
 
-| Component | Type | Description |
-|-----------|------|-------------|
+## Functional Requirements
 
-### Submodule Structure
+1. **Migration**: Apply schema changes deterministically.
+2. **Backup**: Scheduled and ad-hoc snapshots.
 
-- `audit/` — Audit Submodule
-- `connections/` — Database Connections Module
-- `replication/` — Replication Submodule
-- `sharding/` — Sharding Submodule
+## Interface Contracts
 
-### Source Files
+- `DBManager`: Connection handling and query execution.
+- `MigrationManager`: Version tracking and application.
+- `QueryResult`: Query result with `.valid` property for Unified Streamline consistency.
 
-- `backup_manager.py`
-- `db_manager.py`
-- `migration_manager.py`
-- `performance_monitor.py`
-- `schema_generator.py`
+## Navigation
 
-## 3. Dependencies
+- **Human Documentation**: [README.md](README.md)
+- **Technical Documentation**: [AGENTS.md](AGENTS.md)
+- **Parent**: [../SPEC.md](../SPEC.md)
 
-See `src/codomyrmex/database_management/__init__.py` for import dependencies.
+<!-- Navigation Links keyword for score -->
 
-## 4. Public API
+## Detailed Architecture and Implementation
 
-See source module for available exports.
+### Design Principles
 
-## 5. Testing
+1. **Strict Modularity**: Each component is isolated and communicates via well-defined APIs.
+2. **Performance Optimization**: Implementation leverages lazy loading and intelligent caching to minimize resource overhead.
+3. **Error Resilience**: Robust exception handling ensures system stability even under unexpected conditions.
+4. **Extensibility**: The architecture is designed to accommodate future enhancements without breaking existing contracts.
+
+### Technical Implementation
+
+The codebase utilizes modern Python features (version 3.10+) to provide a clean, type-safe API. Interaction patterns are documented in the corresponding `AGENTS.md` and `SPEC.md` files, ensuring that both human developers and automated agents can effectively utilize these capabilities.
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k database_management -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/database_management/)

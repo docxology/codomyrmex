@@ -1,5 +1,7 @@
 # Contagion Submodule
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Epidemiological Models of Information**
 
 The `codomyrmex.meme.contagion` submodule provides tools for simulating and analyzing the spread of information using epidemiological models. It treats memes as infectious agents and populations as susceptible hosts.

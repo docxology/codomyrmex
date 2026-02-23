@@ -1,37 +1,66 @@
-# Evolutionary AI Module — Agent Coordination
+# Agent Guidelines - Evolutionary AI
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Evolutionary AI module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Genetic algorithms, neural evolution, and evolutionary optimization.
 
-- **Genome**: A genome representing an individual's genetic material.
-- **Population**: A population of individuals for evolutionary algorithms.
-- `crossover()`: Perform single-point crossover between two genomes.
-- `mutate()`: Apply mutation to a genome.
-- `tournament_selection()`: Select an individual using tournament selection.
+## Key Classes
 
-## Agent Usage Patterns
+- **GeneticAlgorithm** — Classic GA with selection, crossover, mutation
+- **NEATEvolver** — NeuroEvolution of Augmenting Topologies
+- **PopulationManager** — Manage populations across generations
+- **FitnessEvaluator** — Parallel fitness evaluation
+
+## Agent Instructions
+
+1. **Define fitness clearly** — Fitness function drives evolution
+2. **Use diverse populations** — Prevent premature convergence
+3. **Save checkpoints** — Evolution takes time, save progress
+4. **Tune hyperparameters** — Mutation rate, population size matter
+5. **Parallelize evaluation** — Use `FitnessEvaluator` for speed
+
+## Common Patterns
 
 ```python
-from codomyrmex.evolutionary_ai import Genome
+from codomyrmex.evolutionary_ai import (
+    GeneticAlgorithm, PopulationManager, FitnessEvaluator
+)
 
-# Agent initializes evolutionary ai
-instance = Genome()
+# Define fitness function
+def fitness(individual):
+    return evaluate_performance(individual)
+
+# Set up GA
+ga = GeneticAlgorithm(
+    population_size=100,
+    mutation_rate=0.1,
+    crossover_rate=0.7
+)
+
+# Evolve
+for generation in range(100):
+    population = ga.evolve(fitness)
+    best = ga.get_best()
+    print(f"Gen {generation}: fitness={best.fitness:.4f}")
+
+# Parallel evaluation
+evaluator = FitnessEvaluator(workers=8)
+evaluated = evaluator.evaluate_batch(population, fitness)
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/evolutionary_ai/](../../../src/codomyrmex/evolutionary_ai/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k evolutionary_ai -v
+```python
+# Verify evolution improves fitness
+ga = GeneticAlgorithm(population_size=10)
+initial_fitness = ga.get_best().fitness
+for _ in range(10):
+    ga.evolve(lambda x: sum(x.genes))
+assert ga.get_best().fitness >= initial_fitness
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

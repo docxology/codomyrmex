@@ -38,7 +38,135 @@ The PAI Server actively orchestrates multi-agent tasks (Ollama & Claude Code).
 - Execute jobs: `POST /api/dispatch/execute` with a JSON payload containing `{"action": "task-implement", "context": {...}, "backend": "claude"}`.
 - Query running jobs: `GET /api/dispatch/jobs`.
 
+### 4. Calendar Integration (MCP Tools)
+
+The Google Calendar authentication flow completed within the PAI Dashboard saves an OAuth token to `~/.codomyrmex/gcal_token.json`. Autonomous agents can directly leverage this to manage DanielAriFriedman's schedule by invoking the local Codomyrmex MCP tools (`calendar_create_event`, `calendar_list_events`, etc.).
+
 ## Constraints & Requirements
 
 - Always verify the server is running on `http://localhost:8888` before trying to mutate or query PM state. If not, trigger `scripts/pai/dashboard.py` in the background.
 - Respect the Zero-Mock constraint: all HTTP API calls to PAI must be real, interacting with the actual filesystem backing `PMServer.ts`.
+
+---
+
+## Request / Response Schemas
+
+### `POST /api/projects`
+
+**Request body:**
+```json
+{
+  "slug": "my-project",
+  "title": "My Project",
+  "mission": "Ship it by Friday.",
+  "status": "active",
+  "description": "Optional longer description."
+}
+```
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `slug` | string | ✅ | URL-safe identifier, must be unique |
+| `title` | string | ✅ | Human-readable display name |
+| `mission` | string | ✅ | One-sentence purpose statement |
+| `status` | string | ✅ | `"active"` \| `"completed"` \| `"paused"` |
+| `description` | string | ❌ | Extended notes |
+
+**Response (200):**
+```json
+{ "ok": true, "slug": "my-project" }
+```
+
+---
+
+### `POST /api/tasks/{project_slug}`
+
+**Request body:**
+```json
+{
+  "text": "Write unit tests for the auth module",
+  "priority": "high",
+  "section": "Development",
+  "assignee": "daniel",
+  "blocked_by": []
+}
+```
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `text` | string | ✅ | Task description |
+| `priority` | string | ✅ | `"high"` \| `"medium"` \| `"low"` |
+| `section` | string | ❌ | Kanban section label |
+| `assignee` | string | ❌ | Agent or human identifier |
+| `blocked_by` | array | ❌ | List of blocking task IDs |
+
+**Response (200):**
+```json
+{ "ok": true, "task_id": "t_abc123" }
+```
+
+---
+
+## Error Codes Reference
+
+| Code | Meaning | Common Cause |
+|------|---------|-------------|
+| `200` | OK | Request succeeded |
+| `401` | Unauthorized | Missing or invalid auth token |
+| `404` | Not Found | Project slug or task ID does not exist |
+| `409` | Conflict | Duplicate slug on project creation |
+| `500` | Internal Error | PMServer exception — check server logs |
+
+---
+
+## Dispatch Subsystem
+
+The dispatch endpoint runs agentic jobs asynchronously. Select the backend via the `"backend"` field.
+
+| Backend | Value | Notes |
+|---------|-------|-------|
+| Claude Code | `"claude"` | Invokes `claude -p` subprocess |
+| Ollama | `"ollama"` | Local Ollama server must be running |
+
+**Full payload example:**
+```json
+{
+  "action": "task-implement",
+  "backend": "claude",
+  "context": {
+    "project_slug": "my-project",
+    "task_id": "t_abc123",
+    "instructions": "Implement the feature described in the task."
+  }
+}
+```
+
+**Submit a job:**
+```bash
+curl -X POST http://localhost:8888/api/dispatch/execute \
+  -H "Content-Type: application/json" \
+  -d '{"action":"task-implement","backend":"claude","context":{"project_slug":"my-project","task_id":"t_abc123"}}'
+```
+
+**Job polling pattern** — poll `GET /api/dispatch/jobs` every 2 seconds; abandon after 60 seconds (30 attempts):
+```bash
+for i in $(seq 1 30); do
+  STATUS=$(curl -s http://localhost:8888/api/dispatch/jobs | jq -r '.jobs[-1].status')
+  [ "$STATUS" = "done" ] && break
+  sleep 2
+done
+```
+
+---
+
+## Calendar MCP Tools
+
+These tools are accessible directly from agents without HTTP — they call the Google Calendar API through `~/.codomyrmex/gcal_token.json`. All datetimes must be **ISO 8601** strings (e.g., `"2026-02-24T10:00:00Z"`). `danielarifriedman@gmail.com` is injected automatically as an attendee on every create/update call.
+
+| Tool | Key Parameters | Description |
+|------|---------------|-------------|
+| `calendar_list_events` | `days_ahead: int = 7` | List upcoming events |
+| `calendar_create_event` | `summary`, `start_time`, `end_time`, `description`, `location`, `attendees` | Create a new event |
+| `calendar_get_event` | `event_id` | Fetch event details by ID |
+| `calendar_update_event` | `event_id`, `summary`, `start_time`, `end_time`, `description`, `location`, `attendees` | Replace event fields (PUT semantics) |
+| `calendar_delete_event` | `event_id` | Permanently delete an event |

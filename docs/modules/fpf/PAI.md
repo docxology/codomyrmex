@@ -4,27 +4,40 @@
 
 ## Overview
 
-The FPF module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The FPF (Functional Programming Framework) module provides functional programming primitives and transformations — immutable data structures, monadic composition, currying, pipe/compose, and algebraic data types for building reliable, composable data pipelines.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/fpf/PAI.md](../../../src/codomyrmex/fpf/PAI.md)
+### Functional Composition
 
-## Configuration
+- `pipe` / `compose` — function composition pipelines
+- `curry` — automatic function currying
+- `map` / `filter` / `reduce` — functional collection operations
+- Immutable data structures for safe concurrent access
+- Result/Option monads for error handling without exceptions
 
-See [README.md](README.md) for configuration options and environment variables.
+## Key Exports
 
-## Signposting
+| Export | Type | Purpose |
+|--------|------|---------|
+| Functional primitives | Various | Compose, pipe, curry utilities |
+| Algebraic types | Various | Result, Option, Either monads |
 
-### Navigation
+## PAI Algorithm Phase Mapping
+
+| Phase | FPF Contribution |
+|-------|-------------------|
+| **THINK** | Compose reasoning pipelines with functional transformations |
+| **BUILD** | Build data transformation pipelines |
+| **EXECUTE** | Chain operations safely with monadic error handling |
+
+## Architecture Role
+
+**Specialized Layer** — Functional programming toolkit used by modules needing composable data transformations.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

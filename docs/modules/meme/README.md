@@ -1,71 +1,63 @@
-# Meme Module Documentation
+# Meme Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Comprehensive framework for modeling, analyzing, and engineering the propagation, mutation, and evolution of information units (memes) through cultural, cognitive, and network substrates. Organized into 12 specialized submodules across 6 phases.
+The Meme module is Codomyrmex's advanced memetic analysis engine, providing multi-layered capabilities for studying information propagation, narrative dynamics, and cultural evolution. It bridges semiotics, network theory, and computational linguistics.
 
 ## Installation
 
 ```bash
-uv pip install codomyrmex
+uv add codomyrmex
 ```
 
-## Key Features
+## Key Exports
 
-- **Memetic Engine** -- Core `Meme`, `Memeplex`, fitness landscapes, and genetic operators.
-- **Contagion Models** -- Epidemiological models (SIR, SIS, SEIR) and cascade detection.
-- **Narrative Engine** -- Computational narratology with arcs, archetypes, and myth generation.
-- **Swarm Intelligence** -- Flocking algorithms, consensus mechanisms, emergent pattern detection.
-- **Epistemic Mapping** -- Truth verification, knowledge warfare, facts, beliefs, and evidence.
-- **Cybernetic Control** -- Feedback loops, homeostatic regulation, and autonomic control.
+### Core Memetics
 
-## Submodules
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `memetics` | `MemeticAnalyzer`, `MemeticPattern`, `MutationTracker` | Core meme analysis and mutation tracking |
+| `semiotic` | `Sign`, `CodeSystem`, `Signifier`, `Signified`, `SemioticAnalyzer` | Sign theory and semiotic analysis |
+| `contagion` | `ContagionModel`, `ContagionResult`, `Strain` | Information contagion and propagation modeling |
+| `narrative` | `NarrativeEngine`, `StoryArc`, `NarrativeElement` | Narrative construction and analysis |
 
-| Submodule | Phase | Description |
-|-----------|-------|-------------|
-| `memetics` | Core | Meme, Memeplex, fitness, mutation |
-| `semiotic` | Core | Signs, encoding, drift |
-| `contagion` | Propagation | Cascade and epidemic propagation models |
-| `narrative` | Propagation | Narrative arcs, myths, archetypes |
-| `cultural_dynamics` | Dynamics | Cultural oscillation, zeitgeist, power maps |
-| `swarm` | Dynamics | Swarm intelligence and consensus |
-| `neurolinguistic` | Dynamics | Cognitive framing and bias |
-| `hyperreality` | Topology | Simulacra and reality tunnels |
-| `ideoscape` | Topology | Ideational ecosystem ecology |
-| `rhizome` | Topology | Rhizomatic network analysis |
-| `epistemic` | Truth | Epistemic territory and knowledge warfare |
-| `cybernetic` | Control | Feedback loops and control systems |
+### Advanced Analysis
+
+| Submodule | Classes | Purpose |
+|-----------|---------|---------|
+| `cultural_dynamics` | Cultural evolution modeling | Track cultural shift patterns |
+| `swarm` | Swarm intelligence integration | Collective decision-making |
+| `neurolinguistic` | Neuro-linguistic processing | Language influence modeling |
+| `hyperreality` | Simulation/hyperreality analysis | Baudrillard-inspired reality layers |
+| `ideoscape` | Ideological landscape mapping | Idea migration and clustering |
+| `rhizome` | Non-hierarchical network analysis | Deleuze & Guattari-inspired connections |
+| `epistemic` | Epistemic verification | Knowledge validation and truthfulness |
 
 ## Quick Start
 
 ```python
-from codomyrmex.meme import MemeticEngine, Meme
+from codomyrmex.meme import MemeticAnalyzer, MemeticPattern, ContagionModel
 
-engine = MemeticEngine()
-memes = engine.dissect("The quick brown fox jumps over the lazy dog.")
-for meme in memes:
-    print(f"Meme: {meme.content}, Fitness: {meme.fitness}")
+# Analyze memetic patterns in content
+analyzer = MemeticAnalyzer()
+patterns = analyzer.detect(content="AI agents will revolutionize coding")
+
+# Model information contagion
+model = ContagionModel()
+result = model.simulate(
+    initial_carriers=10,
+    population=1000,
+    virality=0.3,
+    duration=30
+)
 ```
 
-## Directory Contents
+## Architecture
 
-| File | Description |
-|------|-------------|
-| `README.md` | This documentation |
-| `AGENTS.md` | Agent coordination guide |
-| `SPEC.md` | Technical specification |
-
-## Testing
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k meme -v
-```
+The module has 11 specialized submodules spanning sign theory, network theory, and computational linguistics. See [SPEC.md](SPEC.md) for the full architecture details.
 
 ## Navigation
 
-- **Source**: [src/codomyrmex/meme/](../../../src/codomyrmex/meme/)
-- **API Spec**: [API_SPECIFICATION.md](../../../src/codomyrmex/meme/API_SPECIFICATION.md)
-- **MCP Spec**: [MCP_TOOL_SPECIFICATION.md](../../../src/codomyrmex/meme/MCP_TOOL_SPECIFICATION.md)
-- **Parent**: [Modules](../README.md)
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

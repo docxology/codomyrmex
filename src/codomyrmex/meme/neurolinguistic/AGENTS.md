@@ -1,5 +1,7 @@
 # Agents Guide: Neurolinguistic
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Operational Directives**
 
 Use the `neurolinguistic` submodule to optimize your communication for maximum impact. Words are weapons; choose them carefully.

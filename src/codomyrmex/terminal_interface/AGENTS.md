@@ -1,5 +1,7 @@
 # Agent Guidelines - Terminal Interface
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Interactive shell, command execution, and terminal rendering.

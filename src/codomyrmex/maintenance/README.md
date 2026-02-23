@@ -1,65 +1,73 @@
 # Maintenance Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Development utilities and helper tools for project analysis, dependency management, and maintenance tasks. Provides command-line utilities that analyze project structure, detect circular imports, validate dependency configurations, and consolidate scattered requirements files into a centralized `pyproject.toml` setup.
+The Maintenance module provides code health analysis, RASP documentation auditing, dependency management, and deprecation notice management for keeping the codomyrmex codebase healthy and well-documented.
+
+## Installation
+
+```bash
+uv add codomyrmex
+```
 
 ## Key Exports
 
-### Analysis Functions
+### Analysis
 
-- **`analyze_project_structure()`** -- Analyze project directory structure and file organization
-- **`analyze_project_dependencies()`** -- Analyze project dependencies from pyproject.toml and requirements files
-- **`analyze_code_quality()`** -- Analyze code quality metrics across the project
-- **`check_dependencies()`** -- Check and validate that all declared project dependencies are satisfiable
-- **`consolidate_dependencies()`** -- Analyze scattered requirements.txt files for consolidation into pyproject.toml
-- **`add_deprecation_notice()`** -- Add deprecation notices to legacy requirements.txt files pointing to pyproject.toml
+| Export | Type | Purpose |
+|--------|------|---------|
+| `analyze_code_quality` | Function | Code quality metrics (complexity, duplication, coverage) |
+| `analyze_project_structure` | Function | Directory structure analysis |
+| `generate_analysis_report` | Function | Generate comprehensive project report |
 
-### Classes
+### Dependencies
 
-- **`DependencyAnalyzer`** -- Scans Python source files via AST to extract imports, build a dependency graph, and detect circular import chains
+| Export | Type | Purpose |
+|--------|------|---------|
+| `DependencyAnalyzer` | Class | Dependency graph analysis |
+| `check_dependencies` | Function | Check for outdated or vulnerable dependencies |
 
-### CLI Entry Points
+### Health & Deprecation
 
-- **`analyze_project_main()`** -- CLI entry point for project structure and code quality analysis
-- **`dependency_analyzer_main()`** -- CLI entry point for circular import detection
-- **`dependency_checker_main()`** -- CLI entry point for dependency validation
-- **`dependency_consolidator_main()`** -- CLI entry point for requirements consolidation
-- **`validate_dependencies_main()`** -- CLI entry point for dependency validation scripts
-- **`add_deprecation_notices_main()`** -- CLI entry point for batch deprecation notice insertion
-
-## Directory Contents
-
-- `analyze_project.py` -- Project structure analysis, dependency scanning, and code quality reporting
-- `dependency_analyzer.py` -- AST-based import extraction and circular dependency detection
-- `dependency_checker.py` -- Validates that project dependencies are installed and satisfiable
-- `dependency_consolidator.py` -- Analyzes module-level requirements.txt files for consolidation
-- `validate_dependencies.py` -- Dependency validation entry point
-- `add_deprecation_notices.py` -- Adds deprecation notices to legacy requirements.txt files
-- `dependency_consolidation_report.md` -- Generated report from dependency consolidation analysis
+| Export | Type | Purpose |
+|--------|------|---------|
+| `deps` | Module | Dependency management utilities |
+| `health` | Module | Code health metrics and monitoring |
+| `add_deprecation_notice` | Function | Add deprecation notices to functions |
 
 ## Quick Start
 
 ```python
-from codomyrmex.maintenance import DependencyAnalyzer
+from codomyrmex.maintenance import analyze_code_quality, DependencyAnalyzer, check_dependencies
 
-# Initialize and use DependencyAnalyzer
-dependencyanalyzer = DependencyAnalyzer()
+# Analyze code quality
+metrics = analyze_code_quality(path="src/codomyrmex/agents")
 
-from codomyrmex.maintenance import get_module_name
-result = get_module_name()
+# Check dependencies
+issues = check_dependencies()
+
+# Analyze dependency graph
+analyzer = DependencyAnalyzer()
+graph = analyzer.analyze("src/codomyrmex")
 ```
 
-## Testing
+## Architecture
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k maintenance -v
+```
+maintenance/
+├── __init__.py                      # All exports
+├── analyze_project.py               # Code quality and structure analysis
+├── add_deprecation_notices.py       # Deprecation notice management
+├── deps/
+│   ├── dependency_analyzer.py       # Dependency graph analysis
+│   ├── dependency_checker.py        # Outdated dependency detection
+│   └── dependency_consolidator.py   # Dependency consolidation
+├── health/                          # Health metric tracking
+└── tests/                           # Zero-Mock tests
 ```
 
 ## Navigation
 
-- **Full Documentation**: [docs/modules/maintenance/](../../../docs/modules/maintenance/)
-- **Parent Directory**: [codomyrmex](../README.md)
-- **Project Root**: ../../../README.md
+- [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

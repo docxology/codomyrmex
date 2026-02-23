@@ -4,27 +4,58 @@
 
 ## Overview
 
-The Market module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Market module provides reverse auction and demand aggregation mechanisms for AI agent resource allocation. It enables agents to bid on tasks, aggregate demand for compute/services, and negotiate resource allocation through market-based mechanisms. Part of the Secure Cognitive Agent suite.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/market/PAI.md](../../../src/codomyrmex/market/PAI.md)
+### Reverse Auctions
 
-## Configuration
+```python
+from codomyrmex.market import ReverseAuction, AuctionRequest, Bid
 
-See [README.md](README.md) for configuration options and environment variables.
+# Create a reverse auction for a task
+auction = ReverseAuction()
+request = AuctionRequest(task="code_review", requirements={"language": "python"})
 
-## Signposting
+# Agents bid on the task
+bid = Bid(agent="claude", cost=0.5, estimated_time=60)
+auction.submit_bid(request, bid)
+```
 
-### Navigation
+### Demand Aggregation
+
+```python
+from codomyrmex.market import DemandAggregator
+
+aggregator = DemandAggregator()
+# Aggregate demand for compute resources across multiple agents
+# Optimize resource allocation based on task priorities
+```
+
+## Key Exports
+
+| Export | Type | Purpose |
+|--------|------|---------|
+| `ReverseAuction` | Class | Task auction engine where providers bid |
+| `AuctionRequest` | Class | Task specification for auction |
+| `Bid` | Class | Provider bid on an auction request |
+| `DemandAggregator` | Class | Multi-agent demand collection and optimization |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Market Contribution |
+|-------|---------------------|
+| **PLAN** | Select optimal agent/model for task via auction mechanism |
+| **EXECUTE** | Allocate compute resources based on aggregated demand |
+| **LEARN** | Track bid outcomes to improve future resource allocation |
+
+## Architecture Role
+
+**Specialized Layer** — Part of the Secure Cognitive Agent suite (`identity`, `wallet`, `defense`, `market`, `privacy`). Provides agent selection logic consumed by `orchestrator/` and `agents/`.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

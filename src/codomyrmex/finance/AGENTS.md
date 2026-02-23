@@ -1,40 +1,36 @@
-# Finance Agents
+# Agent Instructions for `codomyrmex.finance`
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## Overview
+## Context
 
-Specialized agents for financial operations.
+The Finance module provides double-entry accounting, tax compliance, payroll processing, and financial forecasting. All financial operations use immutable `Transaction` records and must maintain balanced ledger states.
 
-## Agents
+## Usage Guidelines
 
-### `AccountantAgent` (Ledger)
+1. **Importing**: Import from the module root.
 
-- **Role**: Maintains the books, reconciles accounts.
-- **Capabilities**: `read_ledger`, `post_transaction`, `reconcile`.
+   ```python
+   from codomyrmex.finance import Ledger, Transaction, Account, Forecaster, TaxCalculator, PayrollProcessor
+   ```
 
-### `CFOAgent` (Forecasting)
+2. **Double-Entry Principle**: Every `Transaction` must have equal debit and credit amounts. The `Ledger` enforces this invariant.
 
-- **Role**: Strategic financial planning.
-- **Capabilities**: `analyze_burn_rate`, `allocate_budget`, `audit_spending`.
+3. **Account Chart**: Use standard account naming: `Assets:*`, `Liabilities:*`, `Revenue:*`, `Expenses:*`, `Equity:*`.
 
-### `ComplianceAgent` (Taxes)
+4. **Zero-Mock Policy**: Tests must use real `Ledger` instances with actual transactions. No mocking of financial calculations or storage.
 
-- **Role**: Ensures regulatory adherence.
-- **Capabilities**: `calculate_tax`, `generate_reports`.
+5. **Tax Calculations**: `TaxCalculator` requires a `jurisdiction` parameter. Results are advisory — always validate with a professional.
 
-## Tools
+## Key Files
 
-| Tool | Agent | Description |
-| :--- | :--- | :--- |
-| `post_entry` | Accountant | Record a transaction |
-| `run_forecast` | CFO | Generate cashflow projection |
-| `audit_log` | Compliance | Review financial history |
-
-## Integration
-
-These agents integrate with `codomyrmex.agents.core` and use the MCP protocol for tool access.
+| File | Purpose |
+|------|---------|
+| `ledger/` | Core accounting (Ledger, Transaction, Account, Journal) |
+| `taxes/` | TaxCalculator, TaxResult |
+| `payroll/` | PayrollProcessor, PayStub |
+| `forecasting/` | Financial prediction models |
 
 ## Navigation
 
-- [README](README.md) | [SPEC](SPEC.md)
+- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

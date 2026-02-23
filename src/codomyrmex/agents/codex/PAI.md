@@ -1,5 +1,7 @@
 # Personal AI Infrastructure - Codex Context
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: codex
 **Status**: Active
 

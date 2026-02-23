@@ -1,5 +1,7 @@
 # Agent Setup — AGENTS.md
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 This module is consumed by autonomous agents to configure and verify agent availability.
 
 ## Key Entry Points

@@ -1,6 +1,6 @@
 # Vector Store Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Embeddings storage with similarity search using cosine, euclidean, or dot product metrics.
 

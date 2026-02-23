@@ -1,9 +1,8 @@
 # Terminal Interface Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Interactive terminal shells, command runners, and rich rendering.
-
 
 ## Installation
 
@@ -73,13 +72,11 @@ print(fmt.table(data, headers=["Name", "Value"]))
 | `CommandRunner` | Execute shell commands with capture |
 | `TerminalFormatter` | Colored output and tables |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k terminal_interface -v
 ```
-
 
 ## Documentation
 

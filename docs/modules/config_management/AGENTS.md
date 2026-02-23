@@ -1,42 +1,70 @@
-# Config Management Module — Agent Coordination
+# Agent Guidelines - Config Management
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Configuration Management Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Configuration loading, validation, and environment management.
 
-- Config Management operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **ConfigLoader** — Load from YAML/JSON/env
+- **ConfigValidator** — Validate configurations
+- **Environment** — Environment-specific configs
+- **SecretManager** — Secure secret handling
+
+## Agent Instructions
+
+1. **Layer configs** — defaults → file → env → args
+2. **Validate early** — Check config at startup
+3. **No secrets in code** — Use SecretManager
+4. **Document settings** — List all config options
+5. **Type coercion** — Handle string→int conversion
+
+## Common Patterns
 
 ```python
-from codomyrmex.config_management import *
+from codomyrmex.config_management import (
+    ConfigLoader, Environment, SecretManager
+)
 
-# Agent uses config management capabilities
+# Load configuration
+config = ConfigLoader.load(
+    path="config.yaml",
+    environment="production",
+    env_prefix="MYAPP_"
+)
+
+# Access values
+db_host = config.get("database.host")
+debug = config.get("debug", default=False)
+
+# Secrets
+secrets = SecretManager()
+api_key = secrets.get("API_KEY")
+
+# Environment-aware
+env = Environment.detect()
+if env.is_production:
+    log_level = "WARNING"
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/config_management/](../../../src/codomyrmex/config_management/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify config loading
+config = ConfigLoader.load("test_config.yaml")
+assert config.get("key") is not None
 
+# Verify environment detection
+env = Environment.detect()
+assert env.name in ["development", "production", "test"]
 
-## Key Components
-
-- **`DeploymentStatus`** — Configuration deployment status.
-- **`EnvironmentType`** — Types of deployment environments.
-- **`Environment`** — Deployment environment configuration.
-- **`ConfigDeployment`** — Configuration deployment record.
-- **`ConfigurationDeployer`** — Configuration deployment and environment management system.
-- **`deploy_configuration()`** — Deploy configuration to an environment.
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k config_management -v
+# Verify validation
+errors = ConfigValidator.validate(config, schema)
+assert len(errors) == 0
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -1,11 +1,10 @@
 # Events Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 Event-driven architecture module enabling decoupled, asynchronous communication between Codomyrmex components. Provides an `EventBus` for publish/subscribe messaging, an `AsyncEventEmitter` for async event dispatch, typed event schemas with priority levels, and an `EventLogger` for auditing event flow. Supports event filtering by type and priority, handler timeout management, and structured event statistics.
-
 
 ## Installation
 
@@ -75,13 +74,11 @@ bus.publish(event)
 subscribe_to_events("monitor", patterns={"error"}, handler=lambda e: alert(e.payload))
 ```
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k events -v
 ```
-
 
 ## Consolidated Sub-modules
 

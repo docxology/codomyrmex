@@ -1,9 +1,8 @@
 # Embodiment Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Robotics integration with ROS2, sensors, actuators, and 3D transforms.
-
 
 ## Installation
 
@@ -66,13 +65,11 @@ world_point = transform.apply([0, 0, 0])
 | `ROS2Bridge` | WebSocket bridge to ROS2 |
 | `Transform3D` | 3D position and rotation transform |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k embodiment -v
 ```
-
 
 ## Documentation
 

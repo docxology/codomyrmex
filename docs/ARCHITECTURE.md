@@ -4,7 +4,7 @@
 
 ## Overview
 
-This document visualizes the full dependency graph across all 91 Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
+This document visualizes the full dependency graph across all 78 Codomyrmex modules, auto-generated from static import analysis. Modules are organized into four architectural layers:
 
 - **Foundation** — Essential infrastructure (logging, config, environment, MCP, telemetry, terminal)
 - **Core** — Primary development capabilities (coding, search, encryption, data visualization, LLM, etc.)

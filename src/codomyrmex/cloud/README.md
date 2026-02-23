@@ -1,6 +1,6 @@
 # Cloud Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -277,7 +277,6 @@ client.send_test(campaign_id="123", email="test@activeinference.tech")
 | [AGENTS.md](AGENTS.md) | AI agent integration guide |
 | [PAI.md](PAI.md) | Personal AI infrastructure context |
 | [API_SPECIFICATION.md](API_SPECIFICATION.md) | Complete API reference |
-
 
 ## Consolidated Sub-modules
 

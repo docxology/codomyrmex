@@ -4,27 +4,52 @@
 
 ## Overview
 
-The Spatial module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Spatial module provides coordinate systems, physics simulation, 3D/4D world models, and rendering for spatial computing applications. It enables PAI agents to work with geographic data, physical simulations, and 3D scenes.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/spatial/PAI.md](../../../src/codomyrmex/spatial/PAI.md)
+### Submodule Capabilities
 
-## Configuration
+| Submodule | Purpose | Key Operations |
+|-----------|---------|----------------|
+| `coordinates` | Coordinate system transformations | GPS, UTM, cartesian conversions |
+| `three_d` | 3D scene management | Mesh operations, spatial indexing |
+| `four_d` | 4D (space+time) modeling | Temporal spatial data |
+| `physics` | Physics simulation | Rigid body dynamics, collision detection |
+| `rendering` | Scene rendering | Visualization, ray tracing |
+| `world_models` | World state representation | Environment modeling for agents |
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.spatial import coordinates, three_d, physics, rendering, world_models, four_d
+```
 
-## Signposting
+## Key Exports
 
-### Navigation
+| Export | Type | Purpose |
+|--------|------|---------|
+| `coordinates` | Module | Coordinate system transformations |
+| `three_d` | Module | 3D scene operations |
+| `four_d` | Module | 4D space-time modeling |
+| `physics` | Module | Physics simulation engine |
+| `rendering` | Module | Scene visualization |
+| `world_models` | Module | Environment state representation |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Spatial Contribution |
+|-------|----------------------|
+| **OBSERVE** | Parse and understand spatial data (coordinates, scenes, environments) |
+| **THINK** | Use world models for spatial reasoning and planning |
+| **EXECUTE** | Generate spatial layouts, coordinate transforms, physics simulations |
+| **VERIFY** | Validate spatial constraints and physical feasibility |
+
+## Architecture Role
+
+**Specialized Layer** — Advanced domain-specific module for spatial computing. Consumed by `embodiment/`, `data_visualization/`, and `simulation/`.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

@@ -1,11 +1,10 @@
 # FPF (Functional Programming Framework) Module
 
-**Version**: v0.1.7 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
 First Principles Framework (FPF) module for fetching, parsing, analyzing, and exporting the FPF specification for use in prompt and context engineering. Transforms the static FPF-Spec.md markdown document into a machine-readable, queryable data model with concepts, patterns, relationships, and a searchable index. Includes a high-level `FPFClient` for common workflows and visualization tools for rendering concept graphs.
-
 
 ## Installation
 

@@ -1,5 +1,7 @@
 # Agent Guidelines — Pdf
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Overview
 
 PDF dark mode filters inspired by dark-pdf.

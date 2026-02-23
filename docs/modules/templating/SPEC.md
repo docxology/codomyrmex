@@ -1,49 +1,131 @@
-# Templating — Functional Specification
+# templating - Functional Specification
 
-**Module**: `codomyrmex.templating`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Templating module for Codomyrmex.
+Templating module providing template engine support (Jinja2, Mako) for code generation, documentation templates, and dynamic content. Consolidates `template/` and `module_template/` functionality.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+### Modularity
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `TemplatingError` | Class | Raised when templating operations fail. |
-| `get_default_engine()` | Function | Get or create default template engine instance. |
-| `render()` | Function | Render a template string with context data. |
-| `render_file()` | Function | Load and render a template file. |
+- Engine-agnostic template interface
+- Support for multiple template engines
+- Pluggable template system
 
-### Submodule Structure
+### Internal Coherence
 
-- `context/` — Context builders submodule.
-- `engines/` — Template engine implementations.
-- `filters/` — Template filters submodule.
-- `loaders/` — Template loaders submodule.
+- Unified template rendering
+- Consistent template patterns
+- Integration with code generation
 
-## 3. Dependencies
+### Parsimony
 
-See `src/codomyrmex/templating/__init__.py` for import dependencies.
+- Essential templating operations
+- Minimal dependencies
+- Focus on common engines
 
-## 4. Public API
+### Functionality
+
+- Working implementations for common engines
+- Support for template inheritance
+- Template caching
+
+### Testing
+
+- Unit tests for all engines
+- Integration tests with templates
+- Template rendering tests
+
+### Documentation
+
+- Complete API specifications
+- Usage examples for each engine
+- Template syntax documentation
+
+## Architecture
+
+```mermaid
+graph TD
+    TemplateInterface[Template Interface]
+    Jinja2Engine[Jinja2 Engine]
+    MakoEngine[Mako Engine]
+    TemplateManager[Template Manager]
+    TemplateCache[Template Cache]
+    
+    TemplateInterface --> Jinja2Engine
+    TemplateInterface --> MakoEngine
+    TemplateManager --> TemplateInterface
+    TemplateCache --> TemplateInterface
+```
+
+## Functional Requirements
+
+### Core Operations
+
+1. **Render**: Render templates with context
+2. **Load**: Load templates from files or strings
+3. **Cache**: Cache compiled templates
+4. **Inheritance**: Support template inheritance
+5. **Filters**: Custom template filters
+
+### Integration Points
+
+- `module_template/` - Module generation templates
+- `documentation/` - Documentation templates
+- `code/` - Code generation templates
+
+## Quality Standards
+
+### Code Quality
+
+- Type hints for all functions
+- PEP 8 compliance
+- Comprehensive error handling
+
+### Testing Standards
+
+- ≥80% coverage
+- Engine-specific tests
+- Template rendering tests
+
+### Documentation Standards
+
+- README.md, AGENTS.md, SPEC.md
+- API_SPECIFICATION.md
+- USAGE_EXAMPLES.md
+
+## Interface Contracts
+
+### Template Interface
 
 ```python
-from codomyrmex.templating import TemplatingError
+class TemplateEngine:
+    def render(template: str, context: dict) -> str
+    def load_template(path: str) -> Template
+    def register_filter(name: str, func: callable) -> None
 ```
 
-## 5. Testing
+## Implementation Guidelines
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k templating -v
-```
+### Template Implementation
 
-## References
+1. Implement Template interface for each engine
+2. Handle template loading and rendering
+3. Support template caching
+4. Provide filter registration
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/templating/)
+### Integration
+
+1. Integrate with module_template
+2. Add templating to documentation
+3. Support code generation
+
+## Navigation
+
+- **Parent**: [codomyrmex](../AGENTS.md)
+- **Related**: [module_template](../module_template/AGENTS.md), [documentation](../documentation/AGENTS.md)
+
+<!-- Navigation Links keyword for score -->
+

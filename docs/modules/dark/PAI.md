@@ -4,27 +4,43 @@
 
 ## Overview
 
-The Dark module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Dark module provides PDF dark mode utilities — converting and rendering PDF documents with dark mode color schemes for improved readability in low-light environments.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/dark/PAI.md](../../../src/codomyrmex/dark/PAI.md)
+```python
+from codomyrmex.dark import PDF_AVAILABLE, pdf, cli_commands
 
-## Configuration
+# Check if PDF processing is available
+if PDF_AVAILABLE:
+    # Process PDFs with dark mode transformations
+    result = pdf.convert(input_path="document.pdf", dark_mode=True)
 
-See [README.md](README.md) for configuration options and environment variables.
+# CLI interface
+commands = cli_commands()
+```
 
-## Signposting
+## Key Exports
 
-### Navigation
+| Export | Type | Purpose |
+|--------|------|---------|
+| `pdf` | Module | PDF processing and dark mode conversion |
+| `PDF_AVAILABLE` | Constant | Whether PDF dependencies are installed |
+| `cli_commands` | Function | CLI commands for dark mode operations |
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Dark Contribution |
+|-------|-------------------|
+| **EXECUTE** | Convert documents to dark mode for processing and display |
+
+## Architecture Role
+
+**Extended Layer** — Utility module for document rendering. Consumed by `documents/` for PDF output formatting.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

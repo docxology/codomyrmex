@@ -4,27 +4,62 @@
 
 ## Overview
 
-The Quantum module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The Quantum module provides PAI integration for quantum computing simulation, enabling AI agents to experiment with quantum algorithms.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/quantum/PAI.md](../../../src/codomyrmex/quantum/PAI.md)
+### Quantum Circuit Building
 
-## Configuration
+Build quantum circuits with a fluent API:
 
-See [README.md](README.md) for configuration options and environment variables.
+```python
+from codomyrmex.quantum import QuantumCircuit, QuantumSimulator
 
-## Signposting
+# Create Bell state circuit
+circuit = QuantumCircuit(2)
+circuit.h(0).cnot(0, 1).measure_all()
 
-### Navigation
+# Simulate — returns dict[str, int] of bitstring -> count
+sim = QuantumSimulator()
+counts = sim.run(circuit, shots=1000)
+print(counts)  # {"00": ~500, "11": ~500}
+```
 
-- **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
+### Quantum Algorithm Exploration
 
-### Related Documentation
+Use built-in algorithm functions and visualization:
 
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+```python
+from codomyrmex.quantum import (
+    qft, bell_state, ghz_state,
+    circuit_to_ascii, circuit_stats
+)
+
+# Quantum Fourier Transform
+qft_circuit = qft(4)
+
+# Analyze circuit with circuit_stats()
+stats = circuit_stats(qft_circuit)
+print(f"Depth: {stats['depth']}")
+print(f"Gates: {stats['num_gates']}")
+print(f"Gate breakdown: {stats['gate_counts']}")
+
+# Visualize as ASCII
+print(circuit_to_ascii(bell_state()))
+# q0: -H--*--M-
+# q1: ----X--M-
+```
+
+## PAI Integration Points
+
+| Component | PAI Use Case |
+|-----------|-------------|
+| `QuantumCircuit` | Build quantum programs (fluent API) |
+| `QuantumSimulator` | Test quantum algorithms |
+| `Gate` / `GateType` | Gate representation |
+| `circuit_to_ascii` | Visualize circuits |
+| `circuit_stats` | Analyze circuit complexity |
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [SPEC](SPEC.md)

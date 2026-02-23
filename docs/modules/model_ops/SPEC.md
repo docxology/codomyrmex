@@ -1,58 +1,69 @@
-# Model Ops — Functional Specification
+# model_ops - Functional Specification
 
-**Module**: `codomyrmex.model_ops`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Model Operations module for Codomyrmex.
+To provide a structured and scalable framework for LLM operations, enabling reproducible model optimization and rigorous performance verification.
 
-## 2. Architecture
+## Design Principles
 
-### Components
+- **Reproducibility**: Every model and evaluation should be tied to a specific dataset version.
+- **Provider Flexibility**: Support multiple LLM providers (OpenAI, Vertex AI, AWS Bedrock).
+- **Safety**: Built-in PII detection and data sanitization for datasets.
+- **Observability**: Complete audit trail of training parameters and results.
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `Dataset` | Class | A dataset for ML model operations. |
-| `DatasetSanitizer` | Class | Utilities for cleaning and filtering datasets. |
-| `FineTuningJob` | Class | Fine-tuning job management. |
-| `Evaluator` | Class | Model output evaluator with customizable metrics. |
-| `exact_match_metric()` | Function | Calculate exact match ratio (strips whitespace before comparison). |
-| `length_ratio_metric()` | Function | Calculate average length ratio. |
-| `validate()` | Function | Validate the dataset. |
-| `to_jsonl()` | Function | Export dataset to JSONL file. |
-| `from_file()` | Function | Load dataset from JSONL file. |
+## Architecture
 
-### Submodule Structure
-
-- `datasets/` — Dataset management submodule.
-- `evaluation/` — Model evaluation utilities for ML operations.
-- `fine_tuning/` — Fine-tuning submodule.
-- `training/` — Training utilities submodule.
-
-### Source Files
-
-- `evaluators.py`
-
-## 3. Dependencies
-
-See `src/codomyrmex/model_ops/__init__.py` for import dependencies.
-
-## 4. Public API
-
-```python
-from codomyrmex.model_ops import Dataset, DatasetSanitizer, FineTuningJob, Evaluator
+```mermaid
+graph TD
+    Data[Raw Data] --> DS[Dataset]
+    DS --> FS[Feature Store]
+    FS --> FT[FineTuningJob]
+    FT --> Mod[Fine-tuned Model]
+    Mod --> OPT[Inference Optimization]
+    OPT --> EV[Evaluation]
+    EV --> Reg[Model Registry]
 ```
 
-## 5. Testing
+## Functional Requirements
 
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k model_ops -v
-```
+- **Dataset Management**: Convert various data formats (JSON, CSV, MD) into LLM-ready training files with PII sanitization.
+- **Feature Store**: Centralized management of reusable features and embeddings for training and inference.
+- **Fine-Tuning**: Orchestrate fine-tuning on external providers (e.g., OpenAI API).
+- **Inference Optimization**: Techniques for reducing latency and cost (quantization, caching, batching).
+- **Evaluation**: Run comparison evaluations (A/B testing) between models using standardized metrics.
+- **Model Registry**: Versioned storage and lifecycle management for models and their metadata.
 
-## References
+## Interface Contracts
 
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/model_ops/)
+### `DatasetSanitizer`
+
+- `strip_keys(data: List[dict], keys: List[str]) -> List[dict]`
+- `filter_by_length(data: List[dict], key: str, max_len: int) -> List[dict]`
+
+### `Evaluator`
+
+- `evaluate(predictions: List[str], references: List[str]) -> dict`
+- Metrics: `exact_match_metric`, `length_ratio_metric`.
+
+### `ModelRegistry`
+
+- `register_model(name: str, model_path: str, version: str, metadata: dict)`
+- `get_model(name: str, version: str) -> str`
+- `list_versions(name: str) -> List[str]`
+
+### `FeatureStore`
+
+- `push_features(entity: str, features: dict)`
+- `get_features(entity: str) -> dict`
+
+### `InferenceOptimizer`
+
+- `optimize(model_id: str, target: str) -> str`
+- `benchmark(model_id: str) -> dict`
+
+## Technical Constraints
+
+- Dependent on external provider APIs.
+- Large datasets may require high-bandwidth networking or specialized storage integration.

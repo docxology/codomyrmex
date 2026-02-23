@@ -1,5 +1,7 @@
 # Personal AI Infrastructure - Environment Setup Context
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: environment_setup
 **Status**: Active
 

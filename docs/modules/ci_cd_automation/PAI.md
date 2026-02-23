@@ -1,30 +1,41 @@
-# Personal AI Infrastructure — Ci Cd Automation Module
+# Personal AI Infrastructure — CI/CD Automation Module
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-The Ci Cd Automation module contributes to Personal AI Infrastructure within the Codomyrmex ecosystem.
+The CI/CD Automation module provides multi-language build orchestration, automated testing pipelines, and deployment workflows. It enables PAI agents to build, test, and deploy code artifacts through programmable pipelines.
 
-## Detailed PAI Documentation
+## PAI Capabilities
 
-For comprehensive PAI integration details, see the source module's PAI documentation:
-- [src/codomyrmex/ci_cd_automation/PAI.md](../../../src/codomyrmex/ci_cd_automation/PAI.md)
+- Multi-language build orchestration (Python, JS, Go, Rust)
+- Automated test execution with coverage reporting
+- Deployment pipeline definition and execution
+- Artifact publishing and distribution
+- GitHub Actions / CI provider integration
 
-## Configuration
+## Key Exports
 
-See [README.md](README.md) for configuration options and environment variables.
+| Export | Type | Purpose |
+|--------|------|---------|
+| Build engines | Various | Multi-language build orchestration |
+| Pipeline runners | Various | Test and deployment pipeline execution |
 
-## Signposting
+## PAI Algorithm Phase Mapping
 
-### Navigation
+| Phase | CI/CD Contribution |
+|-------|---------------------|
+| **BUILD** | Compile, bundle, and package code artifacts |
+| **EXECUTE** | Run automated test suites and deployment pipelines |
+| **VERIFY** | Check build status, test coverage, and artifact integrity |
+
+## Architecture Role
+
+**Service Layer** — Consumes `containerization/` (Docker builds), `testing/` (test runners), `git_operations/` (VCS hooks). Consumed by `deployment/` for production releases.
+
+## Navigation
 
 - **Self**: [PAI.md](PAI.md)
-- **Parent**: [../PAI.md](../PAI.md) — Modules PAI documentation
-- **Project Root PAI**: [../../../PAI.md](../../../PAI.md) — Main PAI documentation
-
-### Related Documentation
-
-- [README.md](README.md) — Module overview
-- [AGENTS.md](AGENTS.md) — Agent coordination
-- [SPEC.md](SPEC.md) — Functional specification
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)

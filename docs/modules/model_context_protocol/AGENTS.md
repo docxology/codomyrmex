@@ -1,36 +1,70 @@
-# Model Context Protocol Module — Agent Coordination
+# Agent Guidelines - Model Context Protocol
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Model Context Protocol Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+MCP server/client implementation for AI agent tool access.
 
-- Model Context Protocol operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **MCPServer** — MCP server implementation
+- **MCPClient** — Client to connect to servers
+- **Tool** — Tool definition
+- **Resource** — Resource definition
+
+## Agent Instructions
+
+1. **Define tools clearly** — Schema and descriptions
+2. **Validate input** — Check tool parameters
+3. **Return structured** — Consistent response format
+4. **Handle errors** — Graceful error responses
+5. **Document capabilities** — List all available tools
+
+## Common Patterns
 
 ```python
-from codomyrmex.model_context_protocol import *
+from codomyrmex.model_context_protocol import (
+    MCPServer, Tool, Resource, run_server
+)
 
-# Agent uses model context protocol capabilities
+# Define tools
+@Tool(name="search", description="Search codebase")
+def search_code(query: str, limit: int = 10):
+    return find_matches(query, limit)
+
+# Create server
+server = MCPServer(name="codomyrmex")
+server.register_tool(search_code)
+
+# Add resources
+server.register_resource(Resource(
+    uri="file:///project",
+    name="Project Files",
+    mimeType="text/plain"
+))
+
+# Run server
+run_server(server, port=8080)
+
+# Client usage
+client = MCPClient("http://localhost:8080")
+result = client.call_tool("search", query="function")
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/model_context_protocol/](../../../src/codomyrmex/model_context_protocol/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify tool registration
+server = MCPServer("test")
+server.register_tool(search_code)
+assert "search" in server.list_tools()
 
-## Related Modules
-
-- [Exceptions](../exceptions/AGENTS.md)
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k model_context_protocol -v
+# Verify tool execution
+result = server.call_tool("search", query="test")
+assert result is not None
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -62,8 +62,12 @@ class Theme:
 
     def apply_to_axes(self, ax: Any) -> None:
         """Apply theme to matplotlib axes."""
-        # ax.set_facecolor(self.colors.background)
-        pass # Minimal implementation
+        if hasattr(ax, 'set_facecolor'):
+            ax.set_facecolor(self.colors.background)
+        if hasattr(ax, 'tick_params'):
+            ax.tick_params(colors=self.colors.text, labelsize=self.font.tick_size)
+        if hasattr(ax, 'set_title') and ax.get_title():
+            ax.set_title(ax.get_title(), color=self.colors.text, fontsize=self.font.title_size)
 
     def create_legend(self, ax: Any, handles: list[Any], labels: list[str], **kwargs) -> None:
         """Create styled legend."""

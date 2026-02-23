@@ -1,9 +1,8 @@
 # Spatial Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 3D/4D spatial modeling, coordinates, physics, and rendering.
-
 
 ## Installation
 
@@ -65,13 +64,11 @@ world.step(dt=0.016)
 | `physics` | Physics simulation and rigid bodies |
 | `world_models` | Spatial world representations |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k spatial -v
 ```
-
 
 ## Documentation
 

@@ -1,5 +1,7 @@
 # Google Mail Submodule Testing Rules
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Instructions
 
 1. This module connects directly to the authenticated Google Mail API.

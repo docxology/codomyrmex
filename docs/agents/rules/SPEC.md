@@ -1,9 +1,19 @@
-# Codomyrmex Root Specification
+# Agent Rules — Specification
+
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
-This specification formally defines the expected behavior, interfaces, and architecture for the `Codomyrmex Root` module.
+
+Defines the structure and format for agent behavioral rules within the Codomyrmex ecosystem.
 
 ## Architectural Constraints
-- **Modularity**: Components must maintain strict modular boundaries.
-- **Real Execution**: The design guarantees executable paths without reliance on stubbed or mocked data.
-- **Data Integrity**: All input and output signatures must be strictly validated.
+
+- **Modularity**: Each rule file addresses a specific concern or behavioral domain.
+- **Real Execution**: Rules must guarantee measurable, verifiable agent behavior.
+- **Data Integrity**: Rule definitions must be unambiguous and enforceable.
+
+## Navigation
+
+- **README**: [README.md](README.md)
+- **AGENTS**: [AGENTS.md](AGENTS.md)
+- **Parent**: [docs/agents/](../README.md)

@@ -371,8 +371,9 @@ class GraphQLAPI:
 
     def _register_builtin_resolvers(self) -> None:
         """Register built-in resolvers for common types."""
-        # This would register resolvers for built-in GraphQL types
-        pass
+        # Functional base implementation registering universal __typename
+        self.register_resolver("__Any", "__typename", 
+                               GraphQLResolver("__typename", lambda p, a, c: type(p).__name__))
 
     def get_schema_sdl(self) -> str:
         """

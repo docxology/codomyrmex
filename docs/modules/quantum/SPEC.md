@@ -1,48 +1,56 @@
-# Quantum — Functional Specification
+# Quantum - Functional Specification
 
-**Module**: `codomyrmex.quantum`  
-**Version**: v1.0.0  
-**Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-## 1. Overview
+## Purpose
 
-Quantum algorithm primitives, simulation, and circuit patterns.
+Quantum computing simulation module providing quantum gates, circuits, and algorithm implementations.
 
-## 2. Architecture
+## Functional Requirements
 
-### Components
+- Quantum circuit construction and manipulation
+- Single and multi-qubit gate operations
+- Statevector simulation
+- Measurement and probability calculation
+- Common quantum state preparation (Bell, GHZ, QFT)
 
-| Component | Type | Description |
-|-----------|------|-------------|
-| `GateType` | Class | Quantum gate types. |
-| `Gate` | Class | A quantum gate. |
-| `Qubit` | Class | A quantum bit state. |
-| `QuantumCircuit` | Class | A quantum circuit. |
-| `QuantumSimulator` | Class | Simple statevector quantum simulator. |
-| `bell_state()` | Function | Create Bell state circuit. |
-| `ghz_state()` | Function | Create GHZ state circuit. |
-| `qft()` | Function | Quantum Fourier Transform circuit. |
-| `zero()` | Function | zero |
-| `one()` | Function | one |
+## Core Classes
 
-## 3. Dependencies
+| Class | Description |
+|-------|-------------|
+| `QuantumCircuit` | Quantum circuit builder (fluent API) |
+| `Gate` | Gate dataclass (gate_type, target, control, parameter) |
+| `GateType` | Enum of supported gate types |
+| `QuantumSimulator` | Statevector simulator |
+| `Qubit` | Qubit state representation |
 
-See `src/codomyrmex/quantum/__init__.py` for import dependencies.
+## Key Functions
 
-## 4. Public API
+| Function | Description |
+|----------|-------------|
+| `bell_state()` | Create 2-qubit Bell pair circuit |
+| `ghz_state(n)` | Create n-qubit GHZ state circuit |
+| `qft(n)` | Create n-qubit QFT circuit |
+| `circuit_to_ascii(circuit)` | Render circuit as ASCII art |
+| `circuit_stats(circuit)` | Return circuit statistics dict |
 
-```python
-from codomyrmex.quantum import GateType, Gate, Qubit, QuantumCircuit, QuantumSimulator
-```
+## Supported Gates
 
-## 5. Testing
+- Single-qubit: H, X, Y, Z, S, T, Rx, Ry, Rz
+- Multi-qubit: CNOT, CZ, SWAP
+
+## Design Principles
+
+1. **Mathematical Accuracy**: Precise complex number operations
+2. **Educational**: Clear API for learning quantum computing
+3. **Scalability**: Efficient simulation for moderate qubit counts
+
+## Navigation
+
+- [README](README.md) | [AGENTS](AGENTS.md) | [PAI](PAI.md)
+
+## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k quantum -v
 ```
-
-## References
-
-- [README.md](README.md) — Human-readable documentation
-- [AGENTS.md](AGENTS.md) — Agent coordination guide
-- [Source Code](../../../src/codomyrmex/quantum/)

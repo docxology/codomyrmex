@@ -1,9 +1,8 @@
 # Compression Module
 
-**Version**: v0.1.7 | **Status**: Active
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 Data compression utilities with gzip, zlib, ZIP, and Zstandard support.
-
 
 ## Installation
 
@@ -82,13 +81,11 @@ result = parallel.compress_files(["file1.txt", "file2.txt"])
 | zip | .zip | Archives |
 | zstd | .zst | High performance |
 
-
 ## Testing
 
 ```bash
 uv run python -m pytest src/codomyrmex/tests/ -k compression -v
 ```
-
 
 ## Documentation
 

@@ -1,44 +1,53 @@
 # Personal AI Infrastructure — Config Management Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Configuration Management Module for Codomyrmex. This is an **Extended Layer** module.
+The Config Management module provides centralized configuration for all codomyrmex modules with deployment profiles, monitoring integration, and validation. It manages environment-specific settings, feature toggles, and runtime configuration with support for YAML, JSON, and environment variable sources.
 
 ## PAI Capabilities
 
+### Configuration Operations
+
 ```python
-from codomyrmex.config_management import ConfigurationManager, Configuration, ConfigSchema, load_configuration, validate_configuration, deploy_configuration
+from codomyrmex.config_management import core, deployment, monitoring
+
+# Core: get, set, validate configuration values
+# Deployment profiles: dev, staging, production environments
+# Monitoring: configuration change tracking and alerting
 ```
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `ConfigurationManager` | Class | Configurationmanager |
-| `load_configuration` | Function/Constant | Load configuration |
-| `validate_configuration` | Function/Constant | Validate configuration |
-| `Configuration` | Class | Configuration |
-| `ConfigSchema` | Class | Configschema |
-| `ConfigurationDeployer` | Class | Configurationdeployer |
-| `deploy_configuration` | Function/Constant | Deploy configuration |
-| `ConfigDeployment` | Class | Configdeployment |
-| `ConfigurationMonitor` | Class | Configurationmonitor |
-| `monitor_config_changes` | Function/Constant | Monitor config changes |
-| `ConfigAudit` | Class | Configaudit |
-| `ConfigWatcher` | Class | Configwatcher |
+| `core` | Module | Get/set/validate configuration values |
+| `deployment` | Module | Environment-specific deployment profiles |
+| `monitoring` | Module | Configuration change tracking |
 
 ## PAI Algorithm Phase Mapping
 
 | Phase | Config Management Contribution |
-|-------|------------------------------|
-| **EXECUTE** | Execution and deployment |
-| **VERIFY** | Validation and quality checks |
+|-------|--------------------------------|
+| **OBSERVE** | Read current configuration state for context |
+| **PLAN** | Select deployment profile for target environment |
+| **EXECUTE** | Apply configuration changes during deployment |
+| **VERIFY** | Validate configuration against schema constraints |
+
+## MCP Integration
+
+Three MCP tools available:
+
+| Tool | Description |
+|------|-------------|
+| `config_get` | Read a configuration value |
+| `config_set` | Write a configuration value |
+| `config_validate` | Validate configuration against schema |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Foundation Layer** — Cross-cutting configuration consumed by all modules. No upward dependencies.
 
 ## Navigation
 

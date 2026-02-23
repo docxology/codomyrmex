@@ -1,7 +1,8 @@
 # Technical Specification - Cost Tracking
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 **Module**: `codomyrmex.llm.cost_tracking`  
-**Version**: v0.1.7  
 **Last Updated**: 2026-01-29
 
 ## 1. Purpose

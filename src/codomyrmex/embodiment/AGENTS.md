@@ -1,5 +1,7 @@
 # Agent Guidelines - Embodiment
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Robotics integration with ROS2, sensors, actuators, and 3D coordinate transforms.

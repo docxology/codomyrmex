@@ -45,7 +45,32 @@ class GoogleCalendar(CalendarProvider):
             raise CalendarAuthError(f"Failed to initialize Google Calendar API service: {e}")
 
     def _event_to_gcal_dict(self, event: CalendarEvent) -> dict:
-        """Convert a CalendarEvent to the Google Calendar API format."""
+        """Serialize a ``CalendarEvent`` to the Google Calendar API request body.
+
+        Args:
+            event: The event to serialize.  ``start_time`` and ``end_time``
+                must be timezone-aware; their ``isoformat()`` is used verbatim
+                for the ``dateTime`` field.
+
+        Returns:
+            A dict suitable for the ``body`` argument of
+            ``service.events().insert()`` or ``service.events().update()``.
+            Shape::
+
+                {
+                    "summary": str,
+                    "start": {"dateTime": str},
+                    "end":   {"dateTime": str},
+                    # Optional fields — only present when non-None / non-empty:
+                    "description": str,
+                    "location":    str,
+                    "attendees":   [{"email": str}, ...],
+                }
+
+            Optional fields (``description``, ``location``, ``attendees``) are
+            omitted entirely when the corresponding attribute is ``None`` or an
+            empty list — they are **not** set to ``null`` or ``[]``.
+        """
         body = {
             'summary': event.summary,
             'start': {'dateTime': event.start_time.isoformat()},
@@ -60,7 +85,41 @@ class GoogleCalendar(CalendarProvider):
         return body
 
     def _gcal_dict_to_event(self, item: dict) -> CalendarEvent:
-        """Convert a Google Calendar API dictionary to a CalendarEvent."""
+        """Deserialize a Google Calendar API response dict into a ``CalendarEvent``.
+
+        Handles two datetime representations returned by the API:
+
+        * **Timed events** — ``item["start"]["dateTime"]`` is an ISO 8601
+          string with timezone offset (e.g. ``"2026-02-24T10:00:00-08:00"``).
+          The legacy ``Z`` suffix (UTC) is normalized to ``+00:00`` so
+          ``datetime.fromisoformat`` accepts it on Python < 3.11.
+        * **All-day events** — ``item["start"]["date"]`` is a plain date
+          string (``"2026-02-24"``); ``fromisoformat`` parses it without
+          timezone info.  Consumers should treat such events as full-day spans.
+
+        Special cases:
+
+        * **Missing title** — When ``item["summary"]`` is absent, the
+          ``CalendarEvent.summary`` field defaults to ``"(No title)"``.
+        * **Attendees** — Extracted from the ``"attendees"`` list of dicts;
+          only entries containing an ``"email"`` key are included.  Entries
+          without ``"email"`` are silently skipped.
+        * **``Z`` normalization** — ``"...Z"`` → ``"...+00:00"`` substitution
+          applied to both ``start`` and ``end`` strings before parsing.
+
+        Args:
+            item: A raw event dict from the Google Calendar API
+                (``events.list``, ``events.get``, ``events.insert``, etc.).
+
+        Returns:
+            A populated ``CalendarEvent`` with ``id``, ``summary``,
+            ``start_time``, ``end_time``, ``description``, ``location``,
+            ``attendees``, and ``html_link`` set from ``item``.
+
+        Raises:
+            InvalidEventError: If required keys (``start``, ``end``) are
+                missing or if the datetime strings cannot be parsed.
+        """
         try:
             # Handle start/end which can be either 'dateTime' or 'date' (all-day event)
             start_str = item['start'].get('dateTime', item['start'].get('date'))

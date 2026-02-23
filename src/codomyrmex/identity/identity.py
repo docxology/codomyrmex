@@ -10,6 +10,7 @@ Provides a configurable identity system supporting:
 from __future__ import annotations
 
 import hashlib
+from abc import ABC, abstractmethod
 import secrets
 import time
 from dataclasses import dataclass, field
@@ -49,9 +50,10 @@ class AuthEvent:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
-class AuthProvider:
+class AuthProvider(ABC):
     """Pluggable authentication backend."""
 
+    @abstractmethod
     def authenticate(self, credentials: dict[str, Any]) -> bool:
         """Return True if credentials are valid."""
         raise NotImplementedError

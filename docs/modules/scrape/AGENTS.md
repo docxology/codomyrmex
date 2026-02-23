@@ -1,48 +1,69 @@
-# Scrape Module — Agent Coordination
+# Agent Guidelines - Scrape
 
-## Purpose
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-Scrape Module for Codomyrmex.
+## Module Overview
 
-## Key Capabilities
+Web scraping with browser automation and DOM extraction.
 
-- Scrape operations and management
+## Key Classes
 
-## Agent Usage Patterns
+- **Scraper** — High-level scraping
+- **BrowserScraper** — Browser-based scraping
+- **DOMExtractor** — Extract from DOM
+- **RateLimiter** — Respect rate limits
+
+## Agent Instructions
+
+1. **Respect robots.txt** — Check before scraping
+2. **Rate limit** — Don't overwhelm servers
+3. **Handle failures** — Retry with backoff
+4. **Cache responses** — Avoid repeat requests
+5. **User-agent** — Set appropriate user agent
+
+## Common Patterns
 
 ```python
-from codomyrmex.scrape import *
+from codomyrmex.scrape import Scraper, BrowserScraper, DOMExtractor
 
-# Agent uses scrape capabilities
+# Simple scraping
+scraper = Scraper()
+html = scraper.get("https://example.com")
+links = scraper.extract_links(html)
+
+# Browser for JavaScript sites
+browser = BrowserScraper()
+await browser.navigate("https://spa.example.com")
+await browser.wait_for_selector(".data")
+content = await browser.get_content()
+
+# DOM extraction
+extractor = DOMExtractor(html)
+titles = extractor.select_all("h1")
+data = extractor.extract({
+    "title": "h1",
+    "price": ".price",
+    "description": ".desc"
+})
 ```
 
-## Integration Points
+## Testing Patterns
 
-- **Source**: [src/codomyrmex/scrape/](../../../src/codomyrmex/scrape/)
-- **Docs**: [Module Documentation](README.md)
-- **Spec**: [Technical Specification](SPEC.md)
+```python
+# Verify extraction
+extractor = DOMExtractor("<h1>Test</h1>")
+titles = extractor.select_all("h1")
+assert len(titles) == 1
+assert titles[0].text == "Test"
 
-
-## Key Components
-
-- **`ScrapeConfig`** — Configuration for scraping operations.
-- **`ScrapeFormat`** — Supported output formats for scraping operations.
-- **`ScrapeResult`** — Standard result structure for scraping operations.
-- **`ScrapeOptions`** — Configuration options for scraping operations.
-- **`CrawlResult`** — Result structure for crawl operations.
-- **`get_config()`** — Get the global configuration instance.
-- **`set_config()`** — Set the global configuration instance.
-- **`reset_config()`** — Reset the global configuration to None.
-
-### Submodules
-
-- `firecrawl` — Firecrawl
-
-## Testing Guidelines
-
-```bash
-uv run python -m pytest src/codomyrmex/tests/ -k scrape -v
+# Verify rate limiting
+scraper = Scraper(rate_limit=1.0)  # 1 req/sec
+start = time.time()
+scraper.get("url1")
+scraper.get("url2")
+assert time.time() - start >= 1.0
 ```
 
-- Run tests before and after making changes.
-- Ensure all existing tests pass before submitting.
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

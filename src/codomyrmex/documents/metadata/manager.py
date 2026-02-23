@@ -59,7 +59,16 @@ def get_metadata(file_path: str | Path) -> dict[str, Any]:
 
 def _update_pdf_metadata(file_path: Path, metadata: dict[str, Any]) -> None:
     """Update PDF metadata."""
-    raise NotImplementedError("PDF metadata update requires configured PDF processing backend")
+    try:
+        from pypdf import PdfReader, PdfWriter
+        reader = PdfReader(file_path)
+        writer = PdfWriter()
+        writer.append_pages_from_reader(reader)
+        writer.add_metadata({f"/{k}": v for k, v in metadata.items()})
+        with open(file_path, "wb") as f:
+            writer.write(f)
+    except ImportError:
+        logger.warning(f"pypdf not installed. Skipping precise PDF metadata update for {file_path}")
 
 
 def _update_markdown_metadata(file_path: Path, metadata: dict[str, Any]) -> None:

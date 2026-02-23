@@ -1,5 +1,7 @@
 # Agent Guidelines - Environment Setup
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Environment validation, dependency checking, and setup automation.

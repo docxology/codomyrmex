@@ -1,53 +1,37 @@
-# Personal AI Infrastructure — Api Module
+# Personal AI Infrastructure — API Module
 
-**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
-Unified API Module for Codomyrmex. This is an **Extended Layer** module.
+The API module provides REST API framework, endpoint routing, request/response handling, and API documentation generation for exposing codomyrmex capabilities as web services.
 
 ## PAI Capabilities
 
-```python
-from codomyrmex.api import APIDocumentationGenerator, APIDocumentation, DocumentationAPIEndpoint, generate_api_docs, extract_api_specs, generate_openapi_spec_from_docs
-```
+- REST API endpoint definition and routing
+- Request validation and response serialization
+- API documentation auto-generation (OpenAPI/Swagger)
+- Rate limiting and request throttling
+- Authentication middleware integration
 
 ## Key Exports
 
 | Export | Type | Purpose |
 |--------|------|---------|
-| `APIDocumentationGenerator` | Class | Apidocumentationgenerator |
-| `generate_api_docs` | Function/Constant | Generate api docs |
-| `extract_api_specs` | Function/Constant | Extract api specs |
-| `APIDocumentation` | Class | Apidocumentation |
-| `DocumentationAPIEndpoint` | Class | Documentationapiendpoint |
-| `DocumentationOpenAPIGenerator` | Class | Documentationopenapigenerator |
-| `generate_openapi_spec_from_docs` | Function/Constant | Generate openapi spec from docs |
-| `validate_openapi_spec` | Function/Constant | Validate openapi spec |
-| `APISchema` | Class | Apischema |
-| `RESTAPI` | Class | Restapi |
-| `StandardizationAPIEndpoint` | Class | Standardizationapiendpoint |
-| `APIResponse` | Class | Apiresponse |
-| `APIRouter` | Class | Apirouter |
-| `HTTPMethod` | Class | Httpmethod |
-| `HTTPStatus` | Class | Httpstatus |
-
-*Plus 93 additional exports.*
-
+| API framework | Various | Endpoint routing and middleware |
+| Documentation generators | Various | OpenAPI spec generation |
 
 ## PAI Algorithm Phase Mapping
 
-| Phase | Api Contribution |
-|-------|————————————————————|
-| **OBSERVE** | Data gathering and state inspection |
-| **THINK** | Analysis and reasoning |
-| **BUILD** | Artifact creation and code generation |
-| **VERIFY** | Validation and quality checks |
-| **LEARN** | Learning and knowledge capture |
+| Phase | API Contribution |
+|-------|-------------------|
+| **BUILD** | Generate API endpoints from specifications |
+| **EXECUTE** | Serve API requests for agent-consumed services |
+| **VERIFY** | Validate API contract compliance |
 
 ## Architecture Role
 
-**Extended Layer** — Part of the codomyrmex layered architecture.
+**Service Layer** — Consumes `auth/` (authentication), `serialization/` (request/response), `validation/` (input validation). Exposed by `model_context_protocol/` HTTP transport.
 
 ## Navigation
 

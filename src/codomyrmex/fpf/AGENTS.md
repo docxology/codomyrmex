@@ -1,5 +1,7 @@
 # Agent Guidelines - FPF
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Module Overview
 
 Firewall-Proxy-Format pattern for secure AI interactions.
