@@ -12,6 +12,7 @@ Extracted from data_provider.py for modularity. This mixin provides:
 from __future__ import annotations
 
 import json as _json
+import re
 from pathlib import Path
 from typing import Any
 

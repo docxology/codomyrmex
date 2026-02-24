@@ -1,0 +1,19 @@
+gitGraph
+    commit id: "Initial"
+    branch develop
+    checkout develop
+    commit id: "Feature start"
+
+    branch feature/auth
+    checkout feature/auth
+    commit id: "Add auth logic"
+    commit id: "Add tests"
+
+    checkout develop
+    merge feature/auth
+    commit id: "Merge feature"
+
+    checkout main
+    merge develop
+    commit id: "Release v1.0"
+    tag v1.0.0

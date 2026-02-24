@@ -219,16 +219,15 @@ pids/
 .yarn/install-state.gz
 .pnp.*
 
-# Project specific
-/rollback_plans
-/rollback_history
-/@output
-/git_analysis
-/pipeline_metrics
-/pipeline_reports
-/optimization_data
-~/
+# Project-specific generated artifacts (match anywhere in tree)
+**/rollback_plans/
+**/rollback_history/
+**/pipeline_metrics/
+**/pipeline_reports/
+**/optimization_data/
+**/plugins/
 
 .gemini/
 gha-creds-*.json
 .gitnexus
+pytest_output.txt

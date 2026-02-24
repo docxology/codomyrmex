@@ -30,7 +30,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │                                      │
 │  ┌───────────┐  ┌────────────────┐   │
 │  │ PAIBridge  │  │ MCP Bridge     │   │
-│  │ Discovery  │  │ 18 static +    │   │
+│  │ Discovery  │  │ 20 static +    │   │
 │  │ Validation │  │ auto-discovered│   │
 │  └───────────┘  └───────┬────────┘   │
 │                         │            │
@@ -64,12 +64,12 @@ The discovery and validation layer. Reads PAI's filesystem to enumerate all subs
 - **Zero-mock**: Uses real `pathlib.Path` and `json` — no test doubles
 - **Graceful fallback**: Returns `[]` or `{}` when PAI is absent
 
-### MCP Bridge (`mcp_bridge.py`, ~1,020 lines)
+### MCP Bridge (`mcp_bridge.py`, ~1,266 lines)
 
 Exposes all Codomyrmex capabilities as MCP tools for PAI consumption.
 
-**Static Tools (18):**
-- 15 core tools: file ops, code analysis, git, shell, data, discovery, PAI, testing
+**Static Tools (20):**
+- 17 core tools: file ops, code analysis, git, shell, data, discovery, PAI, testing
 - 3 universal proxy tools: `list_module_functions`, `call_module_function`, `get_module_readme`
 
 **Dynamic Discovery:**

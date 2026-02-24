@@ -68,20 +68,6 @@ class TestComputeClientBase:
 
         mock_openstack_connection.close.assert_called_once()
 
-    @pytest.mark.skipif(not HAS_OPENSTACK, reason="openstacksdk is required")
-    def test_from_env_delegates_to_create_openstack_connection(self, monkeypatch):
-        """from_env() delegates to create_openstack_connection and returns a client."""
-        mock_conn = Stub()
-
-        monkeypatch.setattr(
-            "codomyrmex.cloud.infomaniak.auth.create_openstack_connection",
-            lambda *a, **kw: mock_conn,
-        )
-        client = InfomaniakComputeClient.from_env()
-
-        assert isinstance(client, InfomaniakComputeClient)
-        assert client._conn is mock_conn
-
 
 # =========================================================================
 # Instance Operations

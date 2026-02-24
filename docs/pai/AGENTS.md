@@ -12,7 +12,7 @@ Documentation module for the PAI-Codomyrmex integration. Provides architecture r
 |------|-------------|
 | `README.md` | Index page with documentation hierarchy |
 | `architecture.md` | MCP bridge architecture and trust model |
-| `tools-reference.md` | Complete tool inventory (18 static + dynamic) |
+| `tools-reference.md` | Complete tool inventory (20 static + dynamic) |
 | `api-reference.md` | Python API reference (PAIBridge, TrustRegistry) |
 | `workflows.md` | Workflow documentation and Algorithm mapping |
 

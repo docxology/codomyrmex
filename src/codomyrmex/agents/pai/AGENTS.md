@@ -14,7 +14,7 @@ Full-featured PAI bridge module. Discovers, validates, and provides programmatic
 |------|-------|-------------|
 | `__init__.py` | ~110 | Public API exports (31 symbols) |
 | `pai_bridge.py` | ~680 | Bridge client with all subsystem operations |
-| `mcp_bridge.py` | ~1,020 | MCP bridge — 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools, 2 resources, 10 prompts |
+| `mcp_bridge.py` | ~1,266 | MCP bridge — 20 static tools (17 core + 3 universal proxy) + auto-discovered module tools, 2 resources, 10 prompts |
 | `trust_gateway.py` | ~405 | Trust gateway — UNTRUSTED/VERIFIED/TRUSTED tiers |
 
 ## Method Inventory

@@ -19,7 +19,7 @@ PAI.md (repo root)           → Bridge overview: what PAI is, how it connects
 | Document | Description |
 |----------|-------------|
 | [architecture.md](architecture.md) | MCP bridge architecture, trust model, data flow |
-| [tools-reference.md](tools-reference.md) | All 18 static tools + dynamic discovery mechanism |
+| [tools-reference.md](tools-reference.md) | All 20 static tools + dynamic discovery mechanism |
 | [api-reference.md](api-reference.md) | Python API: PAIBridge, TrustRegistry, dataclasses |
 | [workflows.md](workflows.md) | `/codomyrmexVerify`, `/codomyrmexTrust`, Algorithm mapping |
 

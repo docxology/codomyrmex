@@ -41,7 +41,7 @@ This module maps to The Algorithm phases:
 
 The `mcp_bridge.py` module exposes all Codomyrmex capabilities as MCP tools:
 
-- **18 Static MCP Tools** (15 core + 3 universal proxy) + auto-discovered module tools
+- **20 Static MCP Tools** (17 core + 3 universal proxy) + auto-discovered module tools
 - **2 Resources**: module inventory, system status
 - **10 Prompts** (3 dotted + 7 camelCase workflows)
 - **Algorithm Mapping**: Each tool maps to an Algorithm phase (OBSERVE → LEARN)

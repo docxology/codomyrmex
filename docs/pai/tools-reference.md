@@ -5,12 +5,12 @@
 ## Overview
 
 Codomyrmex exposes tools to PAI via two mechanisms:
-1. **Static tools** (18): Defined in `mcp_bridge.py`, always available
+1. **Static tools** (20): Defined in `mcp_bridge.py`, always available
 2. **Dynamic tools** (variable): Auto-discovered from module public functions at runtime
 
 The PAI Skill (`SKILL.md`) curates a subset for MCP consumption.
 
-## Static Tools (18)
+## Static Tools (20)
 
 ### File Operations
 
@@ -156,7 +156,7 @@ These tools provide generic access to **any** Codomyrmex module's public API:
 
 ## Dynamic Tool Discovery
 
-Beyond the 18 static tools, the MCP bridge auto-discovers additional tools at runtime:
+Beyond the 20 static tools, the MCP bridge auto-discovers additional tools at runtime:
 
 1. **Decorated tools**: Functions with `@mcp_tool` decorator in targeted modules
 2. **Public functions**: All public functions from every Codomyrmex module
@@ -197,10 +197,10 @@ See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 
 | Category | Count | Trust |
 |----------|-------|-------|
-| Static safe | 14 | Auto-VERIFIED |
+| Static safe | 16 | Auto-VERIFIED |
 | Static destructive | 4 | Requires TRUSTED |
 | Dynamic | Variable | Pattern-classified |
-| **Total static** | **18** | — |
+| **Total static** | **20** | — |
 
 ## Navigation
 
