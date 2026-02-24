@@ -1,6 +1,6 @@
 # Codomyrmex Project Roadmap & To-Do
 
-**Status**: Active | **Last Updated**: February 24, 2026 | **Current**: v1.0.1 | **Next**: v1.0.2
+**Status**: Active | **Last Updated**: February 24, 2026 | **Current**: v1.0.2-dev | **Next**: v1.0.2
 
 ---
 
@@ -34,11 +34,11 @@
 
 | Metric | Value |
 | :--- | ---: |
-| Top-level modules | 93 |
-| MCP tool files / decorators | 31 / 138 |
-| Tests collected (0 collection errors) | 9,955 |
-| Tests passing | 9,676 |
-| Tests failing | 0 |
+| Top-level modules | 98 |
+| MCP tool files / decorators | 32 / 201 |
+| Tests collected (0 collection errors) | 10,010 |
+| Tests passing | 9,744 |
+| Tests failing (pre-existing) | 5 |
 | Warnings | 187 |
 | Coverage | 31% |
 | Python 3.14+ compat | ✅ |
@@ -60,7 +60,36 @@
 
 ---
 
-## 🔧 v1.0.2 — Next Actionable Steps
+## ✅ v1.0.2-dev — Modularization Sprint (in progress)
+
+**Theme**: Modularize oversized files, streamline imports, eliminate dead code
+
+### Modularization (completed)
+
+| File | Before | After | Technique |
+| :--- | ---: | ---: | :--- |
+| `droid/tasks.py` | 3,541 | **69** | Subpackage extraction → `generators/` |
+| `ai_code_helpers.py` | 1,188 | **1,087** | Dead code removal |
+| `reviewer.py` | 2,320 | **2,284** | Convenience funcs → `api.py` (47) |
+| `git.py` | 1,747 | **1,595** | Dedup 7 duplicate functions |
+| `data_provider.py` | 1,213 | **494** | Mixin pattern → `health_mixin` + `pai_mixin` |
+
+- [x] `droid/tasks.py` → `generators/{spatial,documentation,physical}.py`
+- [x] `ai_code_helpers.py` dead code cleanup (−100 LOC)
+- [x] `reviewer.py` convenience functions → `coding/review/api.py`
+- [x] `git.py` deduplicate 7 Phase-13 functions
+- [x] `data_provider.py` → `health_mixin.py` + `pai_mixin.py` (mixin pattern)
+- [x] Remove all legacy re-exports — imports point to actual locations
+
+### Pre-existing failures to address
+
+- [ ] 2× `TestBuildPaiMermaidGraph` — `calendar` namespace collision with stdlib
+- [ ] `test_call_tool_delegates_to_trust_gateway` — MCP integration flaky
+- [ ] `test_valid_127_origin` — server test isolation issue (passes alone)
+
+---
+
+## 🔧 v1.0.2 — Remaining Actionable Steps
 
 **Theme**: Coverage depth, type safety, and MCP expansion
 **Effort**: 2–3 focused sessions
@@ -73,7 +102,7 @@
 
 ### 2. MCP Tool Expansion (P1)
 
-31/93 modules have `mcp_tools.py`. Next 6 high-value additions:
+32/98 modules have `mcp_tools.py`. Next 6 high-value additions:
 
 - [ ] `events/mcp_tools.py`: `publish_event`, `subscribe`, `replay_events`
 - [ ] `concurrency/mcp_tools.py`: `submit_task`, `pool_status`, `dead_letter_list`
@@ -102,9 +131,11 @@
 
 | Pri | Item | Target | Status |
 | :---: | :--- | :--- | :--- |
-| **P1** | ~~MCP tool coverage 27→30+~~ | `mcp_tools.py` = 31 | ✅ Done |
+| **P1** | ~~MCP tool coverage 27→30+~~ | `mcp_tools.py` = 32 | ✅ Done |
 | **P1** | ~~Test failures 44→0~~ | `pytest` exit 0 | ✅ Done |
+| **P1** | ~~Modularize 5 oversized files~~ | No file > 2,300 LOC | ✅ Done |
 | **P1** | Coverage 31%→40%+ | measured, gates set | v1.0.2 |
+| **P1** | Fix 5 pre-existing failures | 0 failures | v1.0.2 |
 | **P2** | `mypy --strict` progressive | 0 errors on backbone | v1.0.2 |
 | **P2** | Skip reduction | 280→<250 | v1.0.2 |
 | **P3** | Documentation site (MkDocs) | auto-deploy | Future |
