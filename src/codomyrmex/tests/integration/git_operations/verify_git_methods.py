@@ -169,25 +169,28 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Git Availability
         def test_git_availability():
+            """Test functionality: git availability."""
             return check_git_availability()
 
         self.test_method("Configuration", "check_git_availability", test_git_availability)
 
         # Test 2: Git Version Check
         def test_git_version():
+            """Test functionality: git version."""
             try:
                 result = subprocess.run(['git', '--version'],
                                       capture_output=True, text=True, check=True)
                 version = result.stdout.strip()
                 self.log(f"      Git Version: {version}")
                 return True
-            except:
+            except Exception:
                 return False
 
         self.test_method("Configuration", "git_version_check", test_git_version)
 
         # Test 3: Git Configuration
         def test_git_config():
+            """Test functionality: git config."""
             try:
                 # Check user name
                 result = subprocess.run(['git', 'config', 'user.name'],
@@ -201,7 +204,7 @@ class ComprehensiveGitVerifier:
 
                 self.log(f"      Git User: {name} <{email}>")
                 return True
-            except:
+            except Exception:
                 return False
 
         self.test_method("Configuration", "git_config_check", test_git_config)
@@ -213,6 +216,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Repository Detection
         def test_is_git_repository():
+            """Test functionality: is git repository."""
             # Test with current directory (should be a repo)
             current_is_repo = is_git_repository()
 
@@ -230,6 +234,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Repository Initialization
         def test_initialize_git_repository():
+            """Test functionality: initialize git repository."""
             temp_dir = tempfile.mkdtemp(prefix="init_test_")
             self.temp_dirs.append(temp_dir)
 
@@ -252,6 +257,7 @@ class ComprehensiveGitVerifier:
 
         # Test 3: Repository Cloning (using our own repo as test)
         def test_clone_repository():
+            """Test functionality: clone repository."""
             temp_dir = tempfile.mkdtemp(prefix="clone_test_")
             self.temp_dirs.append(temp_dir)
             clone_dest = os.path.join(temp_dir, "cloned_repo")
@@ -279,6 +285,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Get Status
         def test_get_status():
+            """Test functionality: get status."""
             status = get_status(test_repo)
             self.log(f"      Initial status: {status}")
             return isinstance(status, dict) and "clean" in status
@@ -287,6 +294,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Add Files
         def test_add_files():
+            """Test functionality: add files."""
             # Create test files
             test_files = ["test1.txt", "test2.txt", "subdir/test3.txt"]
             for file_path in test_files:
@@ -311,6 +319,7 @@ class ComprehensiveGitVerifier:
 
         # Test 3: Commit Changes
         def test_commit_changes():
+            """Test functionality: commit changes."""
             commit_msg = "Add test files for snapshotting verification"
             result = commit_changes(commit_msg, test_repo)
 
@@ -332,6 +341,7 @@ class ComprehensiveGitVerifier:
 
         # Test 4: Get Diff
         def test_get_diff():
+            """Test functionality: get diff."""
             # Create another file for diff testing
             diff_file = os.path.join(test_repo, "diff_test.txt")
             with open(diff_file, 'w') as f:
@@ -367,6 +377,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Get Current Branch
         def test_get_current_branch():
+            """Test functionality: get current branch."""
             branch = get_current_branch(test_repo)
             self.log(f"      Current branch: {branch}")
             return branch is not None
@@ -375,6 +386,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Create Branch
         def test_create_branch():
+            """Test functionality: create branch."""
             branch_name = "feature/test-branch"
             result = create_branch(branch_name, test_repo)
             current = get_current_branch(test_repo)
@@ -388,6 +400,7 @@ class ComprehensiveGitVerifier:
 
         # Test 3: Switch Branch
         def test_switch_branch():
+            """Test functionality: switch branch."""
             # Switch back to main
             result1 = switch_branch("main", test_repo)
             current1 = get_current_branch(test_repo)
@@ -405,6 +418,7 @@ class ComprehensiveGitVerifier:
 
         # Test 4: Merge Branch
         def test_merge_branch():
+            """Test functionality: merge branch."""
             # Add a file on the feature branch
             test_file = os.path.join(test_repo, "feature.txt")
             with open(test_file, 'w') as f:
@@ -430,6 +444,7 @@ class ComprehensiveGitVerifier:
 
         # Test 5: Rebase Branch (create new branch for testing)
         def test_rebase_branch():
+            """Test functionality: rebase branch."""
             # Create a new branch for rebase testing
             rebase_branch = "feature/rebase-test"
             create_branch(rebase_branch, test_repo)
@@ -463,6 +478,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Push Changes (will fail without remote, but tests function)
         def test_push_changes():
+            """Test functionality: push changes."""
             # This will fail because we don't have a real remote configured,
             # but it tests that the function works
             result = push_changes("origin", "main", test_repo)
@@ -476,6 +492,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Pull Changes (will fail without remote, but tests function)
         def test_pull_changes():
+            """Test functionality: pull changes."""
             result = pull_changes("origin", "main", test_repo)
 
             self.log(f"      Pull result: {result} (expected to fail without remote)")
@@ -504,6 +521,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Get Commit History
         def test_get_commit_history():
+            """Test functionality: get commit history."""
             # Test with default limit
             history1 = get_commit_history(repository_path=test_repo)
 
@@ -522,6 +540,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Additional Git Log Operations
         def test_git_log_operations():
+            """Test functionality: git log operations."""
             try:
                 # Test git log with different formats
                 result = subprocess.run(['git', 'log', '--oneline', '-n', '3'],
@@ -536,7 +555,7 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Stat log length: {len(stat_log)}")
 
                 return len(oneline_log) > 0 and len(stat_log) > 0
-            except:
+            except Exception:
                 return False
 
         self.test_method("History", "git_log_operations", test_git_log_operations)
@@ -553,6 +572,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Reset Changes
         def test_reset_changes():
+            """Test functionality: reset changes."""
             # Create and commit a file
             reset_file = os.path.join(test_repo, "reset_test.txt")
             with open(reset_file, 'w') as f:
@@ -576,6 +596,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: Additional Reset Operations
         def test_additional_reset_operations():
+            """Test functionality: additional reset operations."""
             try:
                 # Test git reset --mixed (default)
                 result1 = subprocess.run(['git', 'reset', 'HEAD'],
@@ -589,7 +610,7 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Git checkout file: {result2.returncode == 0}")
 
                 return True  # These operations work even if files don't need resetting
-            except:
+            except Exception:
                 return False
 
         self.test_method("Undoing", "additional_reset_operations", test_additional_reset_operations)
@@ -606,6 +627,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Stash Changes
         def test_stash_changes():
+            """Test functionality: stash changes."""
             # Create a file and make changes
             stash_file = os.path.join(test_repo, "stash_test.txt")
             with open(stash_file, 'w') as f:
@@ -625,6 +647,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: List Stashes
         def test_list_stashes():
+            """Test functionality: list stashes."""
             stashes = list_stashes(test_repo)
 
             self.log(f"      Stashes found: {len(stashes)}")
@@ -637,6 +660,7 @@ class ComprehensiveGitVerifier:
 
         # Test 3: Apply Stash
         def test_apply_stash():
+            """Test functionality: apply stash."""
             result = apply_stash(repository_path=test_repo)
 
             # Check if file is back after applying stash
@@ -662,6 +686,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Create Tag
         def test_create_tag():
+            """Test functionality: create tag."""
             tag_name = "v1.0.0"
             tag_message = "Version 1.0.0 release"
 
@@ -675,6 +700,7 @@ class ComprehensiveGitVerifier:
 
         # Test 2: List Tags
         def test_list_tags():
+            """Test functionality: list tags."""
             tags = list_tags(test_repo)
 
             self.log(f"      Tags found: {len(tags)}")
@@ -687,6 +713,7 @@ class ComprehensiveGitVerifier:
 
         # Test 3: Additional Tagging Operations
         def test_additional_tagging():
+            """Test functionality: additional tagging."""
             try:
                 # Create lightweight tag
                 result1 = subprocess.run(['git', 'tag', 'v1.0.1'],
@@ -701,7 +728,7 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Total tags: {len([t for t in tag_list if t])}")
 
                 return True
-            except:
+            except Exception:
                 return False
 
         self.test_method("Tagging", "additional_tagging", test_additional_tagging)
@@ -723,6 +750,7 @@ class ComprehensiveGitVerifier:
 
             for func in functions:
                 def test_func_exists(f=func):
+                    """Test functionality: func exists."""
                     return callable(f)
 
                 self.test_method("GitHub_API", func.__name__, test_func_exists)
@@ -733,6 +761,7 @@ class ComprehensiveGitVerifier:
 
         # Test GitHub API functions (these will work with valid token)
         def test_github_repository_creation():
+            """Test functionality: github repository creation."""
             try:
                 # This would work with valid token
                 test_name = f"api_test_{self.timestamp}"
@@ -767,6 +796,7 @@ class ComprehensiveGitVerifier:
 
         # Test 1: Git Reflog
         def test_git_reflog():
+            """Test functionality: git reflog."""
             try:
                 result = subprocess.run(['git', 'reflog', '--oneline', '-n', '5'],
                                       cwd=test_repo, capture_output=True, text=True, check=True)
@@ -775,13 +805,14 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Reflog entries: {len(reflog.split(chr(10))) if reflog else 0}")
 
                 return len(reflog) > 0
-            except:
+            except Exception:
                 return False
 
         self.test_method("Advanced", "git_reflog", test_git_reflog)
 
         # Test 2: Git Blame
         def test_git_blame():
+            """Test functionality: git blame."""
             try:
                 # Create a file to blame
                 blame_file = os.path.join(test_repo, "blame_test.txt")
@@ -798,13 +829,14 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Blame output length: {len(blame_output)}")
 
                 return len(blame_output) > 0
-            except:
+            except Exception:
                 return False
 
         self.test_method("Advanced", "git_blame", test_git_blame)
 
         # Test 3: Git Bisect (setup only, as full bisect needs multiple commits)
         def test_git_bisect():
+            """Test functionality: git bisect."""
             try:
                 result = subprocess.run(['git', 'bisect', 'start'],
                                       cwd=test_repo, capture_output=True, text=True, check=False)
@@ -816,7 +848,7 @@ class ComprehensiveGitVerifier:
                 self.log(f"      Bisect start: {result.returncode == 0}")
 
                 return result.returncode == 0
-            except:
+            except Exception:
                 return False
 
         self.test_method("Advanced", "git_bisect", test_git_bisect)

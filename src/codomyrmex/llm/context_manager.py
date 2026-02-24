@@ -75,6 +75,7 @@ class ContextMessage:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if self.token_count == 0:
             self.token_count = _estimate_tokens(self.content)
         if self.importance == MessageImportance.NORMAL:

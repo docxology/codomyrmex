@@ -87,6 +87,7 @@ class ScopeContext:
     """
 
     def __init__(self, container: "Container") -> None:
+        """Execute   Init   operations natively."""
         self._container = container
         self._instances: Dict[Type[Any], Any] = {}
         self._lock = threading.Lock()
@@ -104,11 +105,13 @@ class ScopeContext:
         return self._active
 
     def __enter__(self) -> "ScopeContext":
+        """Execute   Enter   operations natively."""
         self._active = True
         self._container._push_scope(self)
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Execute   Exit   operations natively."""
         self._active = False
         self._container._pop_scope(self)
         self._dispose()
@@ -166,6 +169,7 @@ class ScopeContext:
             self._instances.clear()
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         cached = len(self._instances)
         return (
             f"ScopeContext(id={self._scope_id[:8]}..., "

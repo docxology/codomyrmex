@@ -9,6 +9,7 @@ from codomyrmex.documents.models.document import DocumentFormat
 
 @pytest.mark.unit
 class TestDocumentParser:
+    """Test suite for DocumentParser."""
     def setup_method(self):
         self.parser = DocumentParser()
 
@@ -40,6 +41,7 @@ class TestDocumentParser:
 
 @pytest.mark.unit
 class TestParseDocumentConvenience:
+    """Test suite for ParseDocumentConvenience."""
     def test_parse_document_wrapper(self):
         """Test convenience wrapper calls real parser."""
         result = parse_document('{"a": 1}', DocumentFormat.JSON)

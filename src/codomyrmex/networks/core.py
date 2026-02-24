@@ -83,6 +83,7 @@ class Network:
             self._adj[nid] = [e for e in self._adj[nid] if e.target != node_id and e.source != node_id]
 
     def has_node(self, node_id: str) -> bool:
+        """Execute Has Node operations natively."""
         return node_id in self.nodes
 
     # ── Edge operations ─────────────────────────────────────────────
@@ -232,10 +233,12 @@ class Network:
 
     @property
     def node_count(self) -> int:
+        """Execute Node Count operations natively."""
         return len(self.nodes)
 
     @property
     def edge_count(self) -> int:
+        """Execute Edge Count operations natively."""
         return len(self.edges)
 
     @property
@@ -279,4 +282,5 @@ class Network:
         return net
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"Network(name='{self.name}', nodes={self.node_count}, edges={self.edge_count})"

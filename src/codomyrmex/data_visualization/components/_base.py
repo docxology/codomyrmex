@@ -25,7 +25,9 @@ class BaseComponent:
         return {"type": self.__class__.__name__}
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"{self.__class__.__name__}(css_class={self.css_class!r})"

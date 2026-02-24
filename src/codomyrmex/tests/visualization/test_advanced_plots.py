@@ -5,6 +5,7 @@ from codomyrmex.data_visualization.plots.box import BoxPlot
 from codomyrmex.data_visualization.plots.area import AreaPlot
 
 def test_histogram_render():
+    """Test functionality: histogram render."""
     data = [1, 2, 2, 3, 3, 3]
     plot = Histogram("Test Hist", data, bins=3)
     html = plot.to_html()
@@ -12,6 +13,7 @@ def test_histogram_render():
     assert 'alt="Test Hist"' in html
 
 def test_pie_chart_render():
+    """Test functionality: pie chart render."""
     labels = ['A', 'B']
     sizes = [30, 70]
     plot = PieChart("Test Pie", labels, sizes)
@@ -20,6 +22,7 @@ def test_pie_chart_render():
     assert 'alt="Test Pie"' in html
 
 def test_box_plot_render():
+    """Test functionality: box plot render."""
     data = [[1, 2, 3], [2, 3, 4]]
     plot = BoxPlot("Test Box", data, labels=['G1', 'G2'])
     html = plot.to_html()
@@ -27,6 +30,7 @@ def test_box_plot_render():
     assert 'alt="Test Box"' in html
 
 def test_area_plot_render():
+    """Test functionality: area plot render."""
     x = [1, 2, 3]
     y = [10, 20, 15]
     plot = AreaPlot("Test Area", x, y)

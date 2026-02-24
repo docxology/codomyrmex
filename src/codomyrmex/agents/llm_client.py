@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class AgentRequest:
+    """Functional component: AgentRequest."""
     prompt: str
     metadata: Optional[dict[str, Any]] = None
 
@@ -29,11 +30,13 @@ class OllamaClient:
     for use in ClaudeCodeEndpoint, using real LLM inference.
     """
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
+        """Execute   Init   operations natively."""
         self.model = model
         self.base_url = base_url
         self.session_manager = None # dummy for interface compatibility
 
     def create_session(self, session_id: str) -> None: 
+        """Execute Create Session operations natively."""
         # Ollama manages context internally via /api/chat if messages are sent
         # For this simple client, we rely on prompt context or stateless calls
         return None
@@ -92,6 +95,7 @@ class OllamaClient:
         elapsed = time.monotonic() - start_time
 
         class Response:
+            """Functional component: Response."""
             def is_success(self): return True
             pass
         

@@ -69,6 +69,7 @@ class DemandAggregator:
         default_threshold: int = 5,
         bulk_discount: float = 0.10,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.auction_system = auction_system
         self.default_threshold = default_threshold
         self.bulk_discount = bulk_discount

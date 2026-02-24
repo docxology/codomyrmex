@@ -50,6 +50,7 @@ class ToolEntry:
         )
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "description": self.description,
@@ -82,6 +83,7 @@ class ToolRegistry:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._tools: dict[str, ToolEntry] = {}
 
     # ------------------------------------------------------------------
@@ -249,12 +251,15 @@ class ToolRegistry:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self._tools)
 
     def __contains__(self, name: str) -> bool:
+        """Execute   Contains   operations natively."""
         return name in self._tools
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"ToolRegistry(tools={self.list_names()})"
 
 
@@ -298,6 +303,7 @@ def tool(
     """
 
     def decorator(fn: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         entry = ToolEntry(
             name=name,
             description=description or fn.__doc__ or "",
@@ -309,6 +315,7 @@ def tool(
 
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute Wrapper operations natively."""
             return fn(*args, **kwargs)
 
         wrapper.tool_entry = entry  # type: ignore[attr-defined]

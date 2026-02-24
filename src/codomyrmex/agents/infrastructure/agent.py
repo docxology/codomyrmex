@@ -41,6 +41,7 @@ class InfrastructureAgent(BaseAgent):
         security_pipeline: Any = None,
         config: dict[str, Any] | None = None,
     ):
+        """Execute   Init   operations natively."""
         capabilities = [AgentCapabilities.CLOUD_INFRASTRUCTURE]
         if clients and any(
             name in clients for name in ("s3", "object_storage")

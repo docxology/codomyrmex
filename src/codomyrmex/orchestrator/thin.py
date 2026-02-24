@@ -139,7 +139,7 @@ def shell(
     try:
         result = subprocess.run(
             command,
-            shell=True,
+            shell=True,  # SECURITY: Intentional — shell() is a named shell executor utility
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -425,6 +425,7 @@ def step(
         Decorator function
     """
     def decorator(func):
+        """Execute Decorator operations natively."""
         func._step_name = name
         func._step_timeout = timeout
         func._step_retry = retry
@@ -513,6 +514,7 @@ def timeout(seconds: float) -> Callable:
         Decorator function
     """
     def decorator(action):
+        """Execute Decorator operations natively."""
         async def wrapper(*args, **kwargs):
             if asyncio.iscoroutinefunction(action):
                 return await asyncio.wait_for(

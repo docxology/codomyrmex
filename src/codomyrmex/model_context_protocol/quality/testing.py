@@ -26,6 +26,7 @@ class TestResult:
     output: Optional[Any] = None
     
     def to_dict(self) -> Dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "passed": self.passed,
@@ -42,21 +43,26 @@ class TestSuite:
     
     @property
     def passed(self) -> int:
+        """Execute Passed operations natively."""
         return sum(1 for r in self.results if r.passed)
     
     @property
     def failed(self) -> int:
+        """Execute Failed operations natively."""
         return sum(1 for r in self.results if not r.passed)
     
     @property
     def total(self) -> int:
+        """Execute Total operations natively."""
         return len(self.results)
     
     @property
     def success_rate(self) -> float:
+        """Execute Success Rate operations natively."""
         return self.passed / self.total if self.total > 0 else 0.0
     
     def summary(self) -> str:
+        """Execute Summary operations natively."""
         return f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
 
 
@@ -308,6 +314,7 @@ class IntegrationTester:
     """
     
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.scenarios: List[Dict[str, Any]] = []
     
     def add_scenario(
@@ -407,10 +414,12 @@ class MockMCPClient:
     """
     
     def __init__(self, server):
+        """Execute   Init   operations natively."""
         self.server = server
         self._request_id = 0
     
     def _next_id(self) -> int:
+        """Execute  Next Id operations natively."""
         self._request_id += 1
         return self._request_id
     

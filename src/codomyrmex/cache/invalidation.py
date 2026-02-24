@@ -36,6 +36,7 @@ class CacheEntry:
 
     @property
     def is_expired(self) -> bool:
+        """Execute Is Expired operations natively."""
         if self.ttl_seconds is None:
             return False
         return (time.time() - self.created_at) > self.ttl_seconds
@@ -49,6 +50,7 @@ class InvalidationManager:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._entries: dict[str, CacheEntry] = {}
         self._tag_index: dict[str, set[str]] = {}
         self._event_handlers: dict[str, list[Callable[[str], None]]] = {}
@@ -121,4 +123,5 @@ class InvalidationManager:
 
     @property
     def tracked_count(self) -> int:
+        """Execute Tracked Count operations natively."""
         return len(self._entries)

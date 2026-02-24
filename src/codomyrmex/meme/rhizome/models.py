@@ -53,6 +53,7 @@ class Edge:
     id: str = field(default="")
     
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if not self.id:
             # Deterministic ID for undirected edge check
             s, t = sorted([self.source, self.target])
@@ -72,9 +73,11 @@ class Graph:
     topology: NetworkTopology = NetworkTopology.RANDOM
     
     def add_node(self, node: Node):
+        """Execute Add Node operations natively."""
         self.nodes[node.id] = node
         
     def add_edge(self, edge: Edge):
+        """Execute Add Edge operations natively."""
         self.edges.append(edge)
         if edge.source in self.nodes:
             self.nodes[edge.source].connections.add(edge.target)

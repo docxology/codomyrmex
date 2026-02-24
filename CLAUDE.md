@@ -49,7 +49,7 @@ codomyrmex skills list           # Skill management
 
 ## Architecture Overview
 
-Codomyrmex is a modular development platform with 78 specialized modules organized in a **layered architecture**:
+Codomyrmex is a modular development platform with 89 specialized modules organized in a **layered architecture**:
 
 ### Layer Hierarchy (dependencies flow upward only)
 
@@ -123,7 +123,7 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 20 static tools (17 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~130 tools across 32 modules, with 2 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 19 static tools (16 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~167 tools (163 safe + 4 destructive) across 32 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -167,6 +167,12 @@ This project follows a strict zero-mock/stub/fallback/hardcoded policy:
 - **No hardcoded values**: URLs, ports, and connection strings use `os.getenv()` with centralized defaults from `config_management.defaults`.
 - **No legacy aliases**: Backward compatibility layers must have documented deprecation timelines or be removed.
 
+### Test Skip Policy
+
+Use `@pytest.mark.skipif` for tests requiring: network access, API keys, or heavy SDKs not installed.
+Never skip tests for core codomyrmex modules — use `uv sync --extra <module>` instead.
+Pattern: skip at module level (not per-test) to keep collection fast.
+
 ## Dependency Management
 
 All dependencies are managed in `pyproject.toml`:
@@ -180,7 +186,7 @@ Module-specific `requirements.txt` files are **deprecated** - do not modify them
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (40117 symbols, 103215 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (40119 symbols, 103134 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

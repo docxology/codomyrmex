@@ -105,6 +105,7 @@ class RelationStrengthScorer:
     """
 
     def __init__(self, config: StrengthConfig | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._config = config or StrengthConfig()
         self._interactions: list[Interaction] = []
 

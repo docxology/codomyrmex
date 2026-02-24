@@ -35,6 +35,7 @@ class VideoError(CodomyrmexError):
         video_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if video_path:
             self.context["video_path"] = str(video_path)
@@ -70,6 +71,7 @@ class VideoWriteError(VideoError):
         output_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, video_path=video_path, **kwargs)
         if output_path:
             self.context["output_path"] = str(output_path)
@@ -94,6 +96,7 @@ class VideoProcessingError(VideoError):
         operation: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, video_path=video_path, **kwargs)
         if operation:
             self.context["operation"] = operation
@@ -116,6 +119,7 @@ class FrameExtractionError(VideoError):
         frame_number: int | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, video_path=video_path, **kwargs)
         if timestamp is not None:
             self.context["timestamp"] = timestamp
@@ -139,6 +143,7 @@ class AudioExtractionError(VideoError):
         audio_format: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, video_path=video_path, **kwargs)
         if audio_format:
             self.context["audio_format"] = audio_format
@@ -159,6 +164,7 @@ class UnsupportedFormatError(VideoError):
         supported_formats: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if format_type:
             self.context["format_type"] = format_type
@@ -183,6 +189,7 @@ class VideoAnalysisError(VideoError):
         analysis_type: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, video_path=video_path, **kwargs)
         if analysis_type:
             self.context["analysis_type"] = analysis_type

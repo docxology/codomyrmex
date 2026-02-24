@@ -121,6 +121,7 @@ class MCPDiscovery:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._registry: dict[str, DiscoveredTool] = {}
         self._failed_modules: list[FailedModule] = []
         self._metrics = DiscoveryMetrics()
@@ -246,6 +247,7 @@ class MCPDiscovery:
         tools = []
         
         def _add_if_tool(name: str, obj: Any) -> None:
+            """Execute  Add If Tool operations natively."""
             if hasattr(obj, "_mcp_tool_meta"):
                 meta = getattr(obj, "_mcp_tool_meta")
                 
@@ -303,6 +305,7 @@ class MCPDiscovery:
         self._registry[tool.name] = tool
 
     def get_tool(self, name: str) -> DiscoveredTool | None:
+        """Execute Get Tool operations natively."""
         return self._registry.get(name)
 
     def list_tools(self, tag: str | None = None) -> list[DiscoveredTool]:
@@ -313,6 +316,7 @@ class MCPDiscovery:
 
     @property
     def tool_count(self) -> int:
+        """Execute Tool Count operations natively."""
         return len(self._registry)
 
     def record_cache_hit(self) -> None:
@@ -349,6 +353,7 @@ def mcp_tool(
                   If any are missing, the tool will be registered as unavailable.
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+        """Execute Decorator operations natively."""
         # Extract parameters using pydantic or typed-dict generation logic if needed
         # For now, we rely on the bridge to inspect signatures at runtime
         # but here we just mark it.

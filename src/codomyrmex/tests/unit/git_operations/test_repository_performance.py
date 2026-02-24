@@ -58,6 +58,7 @@ class TestBulkClone:
     """Test bulk_clone with real concurrency."""
 
     def test_bulk_clone_returns_results(self, lib_env):
+        """Test functionality: bulk clone returns results."""
         manager, _ = lib_env
         results = manager.bulk_clone(max_workers=2)
         assert len(results) == 2
@@ -68,6 +69,7 @@ class TestBulkUpdate:
     """Test bulk_update with real concurrency."""
 
     def test_bulk_update_returns_results(self, lib_env):
+        """Test functionality: bulk update returns results."""
         manager, _ = lib_env
         # Clone first so update has something to update
         manager.bulk_clone(max_workers=2)

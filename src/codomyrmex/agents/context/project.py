@@ -33,10 +33,12 @@ class FileInfo:
     module: str = ""
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.extension and "." in self.path:
             self.extension = self.path.rsplit(".", 1)[-1]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "path": self.path,
             "extension": self.extension,
@@ -63,16 +65,20 @@ class ProjectContext:
 
     @property
     def file_count(self) -> int:
+        """Execute File Count operations natively."""
         return len(self.files)
 
     @property
     def module_count(self) -> int:
+        """Execute Module Count operations natively."""
         return len(self.modules)
 
     def files_by_extension(self, ext: str) -> list[FileInfo]:
+        """Execute Files By Extension operations natively."""
         return [f for f in self.files if f.extension == ext]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "root": self.root,
             "file_count": self.file_count,
@@ -97,6 +103,7 @@ class ProjectScanner:
         extensions: set[str] | None = None,
         exclude_dirs: set[str] | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._extensions = extensions or {"py", "md", "toml", "yaml", "yml"}
         self._exclude_dirs = exclude_dirs or {
             "__pycache__", ".git", ".venv", "node_modules", ".eggs", "*.egg-info",

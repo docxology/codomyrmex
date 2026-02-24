@@ -28,21 +28,26 @@ if not HAS_MODULE:
 
 @pytest.mark.unit
 class TestLocale:
+    """Test suite for Locale."""
     # --- original 4 tests ---
     def test_create_locale(self):
+        """Test functionality: create locale."""
         locale = Locale(language="en")
         assert locale.language == "en"
         assert locale.region == ""
 
     def test_locale_with_region(self):
+        """Test functionality: locale with region."""
         locale = Locale(language="en", region="US")
         assert locale.region == "US"
 
     def test_from_string(self):
+        """Test functionality: from string."""
         locale = Locale.from_string("en-US")
         assert locale.language == "en"
 
     def test_from_string_language_only(self):
+        """Test functionality: from string language only."""
         locale = Locale.from_string("fr")
         assert locale.language == "fr"
 
@@ -94,8 +99,10 @@ class TestLocale:
 
 @pytest.mark.unit
 class TestMessageBundle:
+    """Test suite for MessageBundle."""
     # --- original 1 test ---
     def test_create_bundle(self):
+        """Test functionality: create bundle."""
         locale = Locale(language="en")
         bundle = MessageBundle(locale=locale)
         assert bundle is not None
@@ -162,12 +169,15 @@ class TestMessageBundle:
 
 @pytest.mark.unit
 class TestTranslator:
+    """Test suite for Translator."""
     # --- original 2 tests ---
     def test_create_translator(self):
+        """Test functionality: create translator."""
         translator = Translator()
         assert translator is not None
 
     def test_create_with_default_locale(self):
+        """Test functionality: create with default locale."""
         locale = Locale(language="fr")
         translator = Translator(default_locale=locale)
         assert translator is not None
@@ -260,8 +270,10 @@ class TestTranslator:
 
 @pytest.mark.unit
 class TestPluralRules:
+    """Test suite for PluralRules."""
     # --- original 1 test ---
     def test_class_exists(self):
+        """Test functionality: class exists."""
         assert PluralRules is not None
 
     # --- new behavioral tests ---
@@ -323,8 +335,10 @@ class TestPluralRules:
 
 @pytest.mark.unit
 class TestNumberFormatter:
+    """Test suite for NumberFormatter."""
     # --- original 1 test ---
     def test_class_exists(self):
+        """Test functionality: class exists."""
         assert NumberFormatter is not None
 
     # --- new behavioral tests ---
@@ -370,6 +384,7 @@ class TestNumberFormatter:
 
 @pytest.mark.unit
 class TestDateFormatter:
+    """Test suite for DateFormatter."""
     def test_format_date_english(self):
         """English date: MM/DD/YYYY."""
         d = date(2025, 3, 15)
@@ -472,12 +487,15 @@ class TestDateFormatter:
 
 @pytest.mark.unit
 class TestInit:
+    """Test suite for Init."""
     # --- original 2 tests ---
     def test_init_returns_translator(self):
+        """Test functionality: init returns translator."""
         translator = init()
         assert isinstance(translator, Translator)
 
     def test_init_with_locale(self):
+        """Test functionality: init with locale."""
         translator = init(default_locale="fr")
         assert translator is not None
 
@@ -490,8 +508,10 @@ class TestInit:
 
 @pytest.mark.unit
 class TestTranslateFunction:
+    """Test suite for TranslateFunction."""
     # --- original 1 test ---
     def test_t_returns_string(self):
+        """Test functionality: t returns string."""
         init()
         result = t("hello")
         assert isinstance(result, str)

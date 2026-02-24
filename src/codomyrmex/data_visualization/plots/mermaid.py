@@ -13,4 +13,5 @@ class MermaidDiagram(BasePlot):
         return f'<div class="mermaid">{self.definition}</div>'
 
     def _render_figure(self, fig, ax):
+        """Execute  Render Figure operations natively."""
         ax.text(0.5, 0.5, "Mermaid diagram", ha="center", va="center")

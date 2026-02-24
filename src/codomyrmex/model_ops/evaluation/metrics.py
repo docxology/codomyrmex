@@ -30,6 +30,7 @@ class EvaluationResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "metrics": self.metrics,
             "task_type": self.task_type.value,
@@ -44,10 +45,12 @@ class Metric(ABC):
     @property
     @abstractmethod
     def name(self) -> str:
+        """Execute Name operations natively."""
         ...
 
     @abstractmethod
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         ...
 
 
@@ -56,9 +59,11 @@ class AccuracyMetric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "accuracy"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         if not y_true:
             return 0.0
         return sum(1 for t, p in zip(y_true, y_pred) if t == p) / len(y_true)
@@ -68,13 +73,16 @@ class PrecisionMetric(Metric):
     """Precision for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
+        """Execute   Init   operations natively."""
         self.positive_class = positive_class
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "precision"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         tp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t == self.positive_class)
         fp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t != self.positive_class)
         if tp + fp == 0:
@@ -86,13 +94,16 @@ class RecallMetric(Metric):
     """Recall for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
+        """Execute   Init   operations natively."""
         self.positive_class = positive_class
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "recall"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         tp = sum(1 for t, p in zip(y_true, y_pred) if p == self.positive_class and t == self.positive_class)
         fn = sum(1 for t, p in zip(y_true, y_pred) if p != self.positive_class and t == self.positive_class)
         if tp + fn == 0:
@@ -104,13 +115,16 @@ class F1Metric(Metric):
     """F1 score for a specific positive class."""
 
     def __init__(self, positive_class: Any = 1):
+        """Execute   Init   operations natively."""
         self.positive_class = positive_class
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "f1"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         p = PrecisionMetric(self.positive_class).compute(y_true, y_pred)
         r = RecallMetric(self.positive_class).compute(y_true, y_pred)
         if p + r == 0:
@@ -123,9 +137,11 @@ class MSEMetric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "mse"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         if not y_true:
             return 0.0
         return sum((t - p) ** 2 for t, p in zip(y_true, y_pred)) / len(y_true)
@@ -136,9 +152,11 @@ class MAEMetric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "mae"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         if not y_true:
             return 0.0
         return sum(abs(t - p) for t, p in zip(y_true, y_pred)) / len(y_true)
@@ -149,9 +167,11 @@ class RMSEMetric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "rmse"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         return math.sqrt(MSEMetric().compute(y_true, y_pred))
 
 
@@ -160,9 +180,11 @@ class R2Metric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "r2"
 
     def compute(self, y_true: list, y_pred: list) -> float:
+        """Execute Compute operations natively."""
         if not y_true:
             return 0.0
         mean_true = sum(y_true) / len(y_true)
@@ -178,9 +200,11 @@ class AUCROCMetric(Metric):
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return "auc_roc"
 
     def compute(self, y_true: list, y_scores: list) -> float:
+        """Execute Compute operations natively."""
         positives = [(s, t) for s, t in zip(y_scores, y_true) if t == 1]
         negatives = [(s, t) for s, t in zip(y_scores, y_true) if t == 0]
         if not positives or not negatives:
@@ -200,12 +224,14 @@ class ConfusionMatrix:
     """Confusion matrix for classification tasks."""
 
     def __init__(self, y_true: list, y_pred: list):
+        """Execute   Init   operations natively."""
         self.y_true = y_true
         self.y_pred = y_pred
         self.classes = sorted(set(y_true) | set(y_pred))
         self._matrix = self._build()
 
     def _build(self) -> dict[tuple, int]:
+        """Execute  Build operations natively."""
         matrix: dict[tuple, int] = {}
         for t, p in zip(self.y_true, self.y_pred):
             key = (t, p)
@@ -213,9 +239,11 @@ class ConfusionMatrix:
         return matrix
 
     def get_cell(self, true_label: Any, pred_label: Any) -> int:
+        """Execute Get Cell operations natively."""
         return self._matrix.get((true_label, pred_label), 0)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         matrix_rows = []
         for tc in self.classes:
             row = [self.get_cell(tc, pc) for pc in self.classes]
@@ -223,6 +251,7 @@ class ConfusionMatrix:
         return {"classes": self.classes, "matrix": matrix_rows}
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         lines = ["Confusion Matrix:"]
         header = "     " + " ".join(f"{c:>5}" for c in self.classes)
         lines.append(header)
@@ -236,10 +265,12 @@ class ModelEvaluator:
     """High-level evaluator that selects appropriate metrics by task type."""
 
     def __init__(self, task_type: TaskType):
+        """Execute   Init   operations natively."""
         self.task_type = task_type
         self.metrics: list[Metric] = self._default_metrics()
 
     def _default_metrics(self) -> list[Metric]:
+        """Execute  Default Metrics operations natively."""
         if self.task_type in (TaskType.BINARY_CLASSIFICATION, TaskType.MULTICLASS_CLASSIFICATION):
             return [AccuracyMetric(), PrecisionMetric(), RecallMetric(), F1Metric()]
         elif self.task_type == TaskType.REGRESSION:
@@ -247,9 +278,11 @@ class ModelEvaluator:
         return []
 
     def add_metric(self, metric: Metric) -> None:
+        """Execute Add Metric operations natively."""
         self.metrics.append(metric)
 
     def evaluate(self, y_true: list, y_pred: list) -> EvaluationResult:
+        """Execute Evaluate operations natively."""
         results = {}
         for metric in self.metrics:
             results[metric.name] = metric.compute(y_true, y_pred)

@@ -32,6 +32,7 @@ class KnowledgeGraph:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._entities: dict[str, Entity] = {}
         self._relationships: list[Relationship] = []
         self._adjacency: dict[str, list[str]] = {}  # source_id -> [target_ids]

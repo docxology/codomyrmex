@@ -2,6 +2,7 @@ import cmd
 import logging
 import os
 import random
+import shlex
 import subprocess
 from pathlib import Path
 
@@ -693,8 +694,15 @@ print("Sandbox execution complete! ✅")
             return
 
         try:
-
-            result = subprocess.run(arg, shell=True, capture_output=True, text=True)
+            # Use list form for safer execution; fall back to shell=True
+            # only for commands containing shell operators (pipes, redirects)
+            shell_operators = ('|', '>', '<', '&&', '||', ';', '`', '$')
+            if any(op in arg for op in shell_operators):
+                # SECURITY: shell=True is intentional here — this is an
+                # interactive shell command entered by the local user.
+                result = subprocess.run(arg, shell=True, capture_output=True, text=True)
+            else:
+                result = subprocess.run(shlex.split(arg), capture_output=True, text=True)
             if result.stdout:
                 print(result.stdout)
             if result.stderr:
@@ -728,7 +736,10 @@ print("Sandbox execution complete! ✅")
         Usage: clear
         """
         try:
-            os.system("clear" if os.name == "posix" else "cls")
+            subprocess.run(
+                ["clear"] if os.name == "posix" else ["cmd", "/c", "cls"],
+                check=False,
+            )
         except Exception as e:
             print(f"❌ Could not clear screen: {e}")
 

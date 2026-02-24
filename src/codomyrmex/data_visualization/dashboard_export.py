@@ -27,6 +27,7 @@ class Panel:
     thresholds: list[float] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "title": self.title,
             "type": self.panel_type,
@@ -59,6 +60,7 @@ class Dashboard:
     refresh: str = "30s"
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "dashboard": {
                 "title": self.title,
@@ -80,16 +82,20 @@ class DashboardExporter:
     """
 
     def __init__(self, title: str = "Codomyrmex Agent Dashboard") -> None:
+        """Execute   Init   operations natively."""
         self._dashboard = Dashboard(title=title)
 
     def add_panel(self, panel: Panel) -> None:
+        """Execute Add Panel operations natively."""
         self._dashboard.panels.append(panel)
 
     def export(self) -> dict[str, Any]:
+        """Execute Export operations natively."""
         return self._dashboard.to_dict()
 
     @property
     def panel_count(self) -> int:
+        """Execute Panel Count operations natively."""
         return len(self._dashboard.panels)
 
     @classmethod

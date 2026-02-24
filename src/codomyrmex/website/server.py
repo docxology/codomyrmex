@@ -55,6 +55,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     _dispatch_thread = None
 
     def __init__(self, *args, **kwargs):
+        """Execute   Init   operations natively."""
         super().__init__(*args, **kwargs)
 
     def _cors_origin(self) -> str:
@@ -743,6 +744,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                     )
 
                 def run_orch():
+                    """Execute Run Orch operations natively."""
                     try:
                         WebsiteServer._dispatch_orch.run(rounds=3)
                     except Exception as e:

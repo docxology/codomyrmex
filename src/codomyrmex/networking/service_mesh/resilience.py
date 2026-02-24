@@ -25,6 +25,7 @@ class CircuitBreaker:
     """Circuit breaker pattern implementation."""
 
     def __init__(self, name: str, config: CircuitBreakerConfig | None = None):
+        """Execute   Init   operations natively."""
         self.name = name
         self.config = config or CircuitBreakerConfig()
         self.state = CircuitState.CLOSED
@@ -95,6 +96,7 @@ class LoadBalancer:
     """Load balancer for service instances."""
 
     def __init__(self, strategy: LoadBalancerStrategy = LoadBalancerStrategy.ROUND_ROBIN):
+        """Execute   Init   operations natively."""
         self.strategy = strategy
         self._instances: dict[str, ServiceInstance] = {}
         self._round_robin_index = 0
@@ -153,6 +155,7 @@ class RetryPolicy:
         exponential_base: float = 2.0,
         jitter: bool = True,
     ):
+        """Execute   Init   operations natively."""
         self.max_retries = max_retries
         self.initial_delay = initial_delay
         self.max_delay = max_delay
@@ -190,6 +193,7 @@ class ServiceProxy:
         circuit_breaker: CircuitBreaker | None = None,
         retry_policy: RetryPolicy | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.service_name = service_name
         self.load_balancer = load_balancer or LoadBalancer()
         self.circuit_breaker = circuit_breaker or CircuitBreaker(service_name)
@@ -202,6 +206,7 @@ class ServiceProxy:
             raise NoHealthyInstanceError(f"No healthy instances for {self.service_name}")
 
         def wrapped():
+            """Execute Wrapped operations natively."""
             return self.circuit_breaker.execute(func, instance, *args, **kwargs)
 
         return self.retry_policy.execute(wrapped)
@@ -212,7 +217,9 @@ def with_circuit_breaker(name: str, config: CircuitBreakerConfig | None = None) 
     cb = CircuitBreaker(name, config)
 
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
             return cb.execute(func, *args, **kwargs)
         return wrapper
 
@@ -224,7 +231,9 @@ def with_retry(max_retries: int = 3, **kwargs) -> Callable:
     policy = RetryPolicy(max_retries=max_retries, **kwargs)
 
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
             return policy.execute(func, *args, **kwargs)
         return wrapper
 

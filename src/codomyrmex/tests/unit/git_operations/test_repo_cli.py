@@ -92,7 +92,9 @@ class StubRepositoryManager:
 # ---------------------------------------------------------------------------
 
 class TestCmdSync:
+    """Test suite for CmdSync."""
     def test_cmd_sync_calls_manager(self):
+        """Test functionality: cmd sync calls manager."""
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
         cmd_sync(manager, args)
@@ -102,7 +104,9 @@ class TestCmdSync:
 
 
 class TestCmdPrune:
+    """Test suite for CmdPrune."""
     def test_cmd_prune_calls_manager(self):
+        """Test functionality: cmd prune calls manager."""
         manager = StubRepositoryManager()
         args = StubArgs(repository="owner/repo")
         cmd_prune(manager, args)
@@ -110,6 +114,7 @@ class TestCmdPrune:
 
 
 class TestCmdClean:
+    """Test suite for CmdClean."""
     def test_cmd_clean_real_repo(self, tmp_path):
         """Test cmd_clean against a real git repo."""
         repo_dir = str(tmp_path / "repo")
@@ -136,6 +141,7 @@ class TestCmdClean:
 
 
 class TestCmdRemote:
+    """Test suite for CmdRemote."""
     def test_cmd_remote_list(self, tmp_path):
         """Test listing remotes on a real git repo."""
         repo_dir = str(tmp_path / "repo")

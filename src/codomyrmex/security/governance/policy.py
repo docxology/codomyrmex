@@ -31,6 +31,7 @@ class PolicyRule:
         action: str,
         priority: int = 0,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.name = name
         self.condition = condition
         self.action = action
@@ -49,6 +50,7 @@ class PolicyRule:
             return False
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"PolicyRule(name='{self.name}', priority={self.priority})"
 
 
@@ -62,6 +64,7 @@ class PolicyEngine:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._policies: dict[str, dict[str, Any]] = {}
 
     def create_policy(self, name: str, description: str = "") -> dict[str, Any]:

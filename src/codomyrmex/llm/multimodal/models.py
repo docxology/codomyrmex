@@ -104,6 +104,7 @@ class ImageContent(MediaContent):
     height: int = 0
 
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         self.media_type = MediaType.IMAGE
 
     @property
@@ -127,6 +128,7 @@ class AudioContent(MediaContent):
     channels: int = 2
 
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         self.media_type = MediaType.AUDIO
 
 

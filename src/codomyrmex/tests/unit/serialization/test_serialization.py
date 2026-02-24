@@ -630,32 +630,24 @@ class TestFileSerialization:
 # ==============================================================================
 
 class TestSerializationManager:
-    """Tests for SerializationManager.
-
-    Note: SerializationManager has a bug where it passes 'format' instead of
-    'default_format' to the Serializer constructor. These tests document
-    the expected behavior once fixed.
-    """
+    """Tests for SerializationManager."""
 
     @pytest.fixture
     def manager(self):
         """Create serialization manager."""
         return SerializationManager()
 
-    @pytest.mark.xfail(reason="SerializationManager passes wrong kwarg 'format' to Serializer")
     def test_get_serializer_json(self, manager):
         """Test getting JSON serializer."""
         serializer = manager.get_serializer("json")
         assert serializer is not None
 
-    @pytest.mark.xfail(reason="SerializationManager passes wrong kwarg 'format' to Serializer")
     def test_get_serializer_caches_instance(self, manager):
         """Test that serializer instances are cached."""
         serializer1 = manager.get_serializer("json")
         serializer2 = manager.get_serializer("json")
         assert serializer1 is serializer2
 
-    @pytest.mark.xfail(reason="SerializationManager passes wrong kwarg 'format' to Serializer")
     def test_serialize_via_manager(self, manager):
         """Test serialization via manager."""
         data = {"key": "value"}

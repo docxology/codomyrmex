@@ -624,18 +624,22 @@ class TestGetAgentType:
     """Tests for _get_agent_type() categorization."""
 
     def test_cli_agent(self, tmp_path):
+        """Test functionality: cli agent."""
         provider = DataProvider(tmp_path)
         assert provider._get_agent_type("jules") == "CLI Integration"
 
     def test_api_agent(self, tmp_path):
+        """Test functionality: api agent."""
         provider = DataProvider(tmp_path)
         assert provider._get_agent_type("claude") == "API Integration"
 
     def test_framework_agent(self, tmp_path):
+        """Test functionality: framework agent."""
         provider = DataProvider(tmp_path)
         assert provider._get_agent_type("generic") == "Framework"
 
     def test_default_agent(self, tmp_path):
+        """Test functionality: default agent."""
         provider = DataProvider(tmp_path)
         assert provider._get_agent_type("unknown_agent") == "Agent"
 

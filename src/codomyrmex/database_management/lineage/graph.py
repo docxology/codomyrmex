@@ -23,6 +23,7 @@ class LineageGraph:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._nodes: dict[str, LineageNode] = {}
         self._edges: list[LineageEdge] = []
         self._lock = threading.Lock()
@@ -62,6 +63,7 @@ class LineageGraph:
         result = []
 
         def dfs(current_id: str, depth: int):
+            """Execute Dfs operations natively."""
             if depth > max_depth or current_id in visited:
                 return
             visited.add(current_id)
@@ -81,6 +83,7 @@ class LineageGraph:
         result = []
 
         def dfs(current_id: str, depth: int):
+            """Execute Dfs operations natively."""
             if depth > max_depth or current_id in visited:
                 return
             visited.add(current_id)
@@ -99,6 +102,7 @@ class LineageGraph:
         visited: set[str] = set()
 
         def dfs(current: str, path: list[str]) -> list[str] | None:
+            """Execute Dfs operations natively."""
             if current == target_id:
                 return path + [current]
             if current in visited:

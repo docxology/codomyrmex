@@ -19,6 +19,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
+        """Functional component: _DummyPSUtil."""
         def cpu_percent(self, interval=None): return 0.0
         class NoSuchProcess(Exception): pass
     psutil = _DummyPSUtil()

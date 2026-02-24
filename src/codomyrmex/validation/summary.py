@@ -28,6 +28,7 @@ class ValidationSummary:
     """
 
     def __init__(self, issues: list[ValidationIssue] | None = None) -> None:
+        """Execute   Init   operations natively."""
         self.issues: list[ValidationIssue] = issues or []
 
     def add_issue(self, issue: ValidationIssue) -> None:
@@ -45,18 +46,22 @@ class ValidationSummary:
 
     @property
     def total(self) -> int:
+        """Execute Total operations natively."""
         return len(self.issues)
 
     @property
     def error_count(self) -> int:
+        """Execute Error Count operations natively."""
         return sum(1 for i in self.issues if i.severity == "error")
 
     @property
     def warning_count(self) -> int:
+        """Execute Warning Count operations natively."""
         return sum(1 for i in self.issues if i.severity == "warning")
 
     @property
     def info_count(self) -> int:
+        """Execute Info Count operations natively."""
         return sum(1 for i in self.issues if i.severity == "info")
 
     def by_severity(self) -> dict[str, list[ValidationIssue]]:

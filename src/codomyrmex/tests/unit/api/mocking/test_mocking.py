@@ -31,15 +31,19 @@ class TestMatchStrategy:
     """Verify MatchStrategy enum members and values."""
 
     def test_exact_member(self):
+        """Test functionality: exact member."""
         assert MatchStrategy.EXACT.value == "exact"
 
     def test_prefix_member(self):
+        """Test functionality: prefix member."""
         assert MatchStrategy.PREFIX.value == "prefix"
 
     def test_regex_member(self):
+        """Test functionality: regex member."""
         assert MatchStrategy.REGEX.value == "regex"
 
     def test_member_count(self):
+        """Test functionality: member count."""
         assert len(MatchStrategy) == 3
 
 
@@ -47,12 +51,15 @@ class TestMockResponseMode:
     """Verify MockResponseMode enum members."""
 
     def test_static_member(self):
+        """Test functionality: static member."""
         assert MockResponseMode.STATIC.value == "static"
 
     def test_sequence_member(self):
+        """Test functionality: sequence member."""
         assert MockResponseMode.SEQUENCE.value == "sequence"
 
     def test_random_member(self):
+        """Test functionality: random member."""
         assert MockResponseMode.RANDOM.value == "random"
 
 
@@ -65,6 +72,7 @@ class TestMockRequest:
     """Verify MockRequest default field values."""
 
     def test_defaults(self):
+        """Test functionality: defaults."""
         req = MockRequest()
         assert req.method == "GET"
         assert req.path == "/"
@@ -74,6 +82,7 @@ class TestMockRequest:
         assert req.match_strategy == MatchStrategy.EXACT
 
     def test_custom_values(self):
+        """Test functionality: custom values."""
         req = MockRequest(method="POST", path="/api/data", body_pattern=".*id.*")
         assert req.method == "POST"
         assert req.path == "/api/data"
@@ -84,6 +93,7 @@ class TestMockResponse:
     """Verify MockResponse default field values."""
 
     def test_defaults(self):
+        """Test functionality: defaults."""
         resp = MockResponse()
         assert resp.status_code == 200
         assert resp.headers == {}
@@ -92,6 +102,7 @@ class TestMockResponse:
         assert resp.error is None
 
     def test_custom_values(self):
+        """Test functionality: custom values."""
         resp = MockResponse(status_code=500, body="fail", error="boom")
         assert resp.status_code == 500
         assert resp.body == "fail"
@@ -102,6 +113,7 @@ class TestMockRoute:
     """Verify MockRoute defaults and serialization."""
 
     def test_defaults(self):
+        """Test functionality: defaults."""
         route = MockRoute()
         assert isinstance(route.request, MockRequest)
         assert route.responses == []
@@ -109,6 +121,7 @@ class TestMockRoute:
         assert route.call_count == 0
 
     def test_to_dict(self):
+        """Test functionality: to dict."""
         route = MockRoute(
             request=MockRequest(method="POST", path="/items"),
             responses=[MockResponse(status_code=201, body="created")],
@@ -127,6 +140,7 @@ class TestMockRoute:
         assert d["responses"][0]["body"] == "created"
 
     def test_to_dict_empty_responses(self):
+        """Test functionality: to dict empty responses."""
         d = MockRoute().to_dict()
         assert d["responses"] == []
 
@@ -146,11 +160,13 @@ class TestRequestMatcher:
     # -- Exact match -------------------------------------------------------
 
     def test_exact_match_success(self, matcher):
+        """Test functionality: exact match success."""
         incoming = {"method": "GET", "path": "/users"}
         spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
         assert matcher.match(incoming, spec) is True
 
     def test_exact_match_failure(self, matcher):
+        """Test functionality: exact match failure."""
         incoming = {"method": "GET", "path": "/users/1"}
         spec = MockRequest(method="GET", path="/users", match_strategy=MatchStrategy.EXACT)
         assert matcher.match(incoming, spec) is False
@@ -158,11 +174,13 @@ class TestRequestMatcher:
     # -- Prefix match ------------------------------------------------------
 
     def test_prefix_match_success(self, matcher):
+        """Test functionality: prefix match success."""
         incoming = {"method": "GET", "path": "/api/v1/users"}
         spec = MockRequest(method="GET", path="/api/v1", match_strategy=MatchStrategy.PREFIX)
         assert matcher.match(incoming, spec) is True
 
     def test_prefix_match_exact_path(self, matcher):
+        """Test functionality: prefix match exact path."""
         incoming = {"method": "GET", "path": "/api"}
         spec = MockRequest(method="GET", path="/api", match_strategy=MatchStrategy.PREFIX)
         assert matcher.match(incoming, spec) is True
@@ -170,6 +188,7 @@ class TestRequestMatcher:
     # -- Regex match -------------------------------------------------------
 
     def test_regex_match_success(self, matcher):
+        """Test functionality: regex match success."""
         incoming = {"method": "GET", "path": "/users/42"}
         spec = MockRequest(
             method="GET",
@@ -179,6 +198,7 @@ class TestRequestMatcher:
         assert matcher.match(incoming, spec) is True
 
     def test_regex_match_failure(self, matcher):
+        """Test functionality: regex match failure."""
         incoming = {"method": "GET", "path": "/users/abc"}
         spec = MockRequest(
             method="GET",
@@ -190,11 +210,13 @@ class TestRequestMatcher:
     # -- Method mismatch ---------------------------------------------------
 
     def test_method_mismatch(self, matcher):
+        """Test functionality: method mismatch."""
         incoming = {"method": "POST", "path": "/users"}
         spec = MockRequest(method="GET", path="/users")
         assert matcher.match(incoming, spec) is False
 
     def test_method_case_insensitive(self, matcher):
+        """Test functionality: method case insensitive."""
         incoming = {"method": "get", "path": "/"}
         spec = MockRequest(method="GET", path="/")
         assert matcher.match(incoming, spec) is True
@@ -202,16 +224,19 @@ class TestRequestMatcher:
     # -- Body pattern ------------------------------------------------------
 
     def test_body_pattern_match(self, matcher):
+        """Test functionality: body pattern match."""
         incoming = {"method": "POST", "path": "/data", "body": '{"id": 123}'}
         spec = MockRequest(method="POST", path="/data", body_pattern=r'"id":\s*\d+')
         assert matcher.match(incoming, spec) is True
 
     def test_body_pattern_mismatch(self, matcher):
+        """Test functionality: body pattern mismatch."""
         incoming = {"method": "POST", "path": "/data", "body": '{"name": "test"}'}
         spec = MockRequest(method="POST", path="/data", body_pattern=r'"id":\s*\d+')
         assert matcher.match(incoming, spec) is False
 
     def test_body_pattern_with_no_body(self, matcher):
+        """Test functionality: body pattern with no body."""
         incoming = {"method": "POST", "path": "/data"}
         spec = MockRequest(method="POST", path="/data", body_pattern=r"something")
         assert matcher.match(incoming, spec) is False
@@ -239,29 +264,34 @@ class TestMockAPIServer:
     # -- Route management --------------------------------------------------
 
     def test_add_route(self, server, route_200):
+        """Test functionality: add route."""
         server.add_route("ok_route", route_200)
         resp = server.handle_request("GET", "/ok")
         assert resp.status_code == 200
 
     def test_remove_route(self, server, route_200):
+        """Test functionality: remove route."""
         server.add_route("ok_route", route_200)
         server.remove_route("ok_route")
         resp = server.handle_request("GET", "/ok")
         assert resp.status_code == 404
 
     def test_remove_nonexistent_route_raises(self, server):
+        """Test functionality: remove nonexistent route raises."""
         with pytest.raises(KeyError, match="not found"):
             server.remove_route("ghost")
 
     # -- handle_request: match vs. no-match --------------------------------
 
     def test_handle_request_match(self, server, route_200):
+        """Test functionality: handle request match."""
         server.add_route("ok_route", route_200)
         resp = server.handle_request("GET", "/ok")
         assert resp.status_code == 200
         assert resp.body == "ok"
 
     def test_handle_request_no_match_returns_404(self, server):
+        """Test functionality: handle request no match returns 404."""
         resp = server.handle_request("GET", "/nope")
         assert resp.status_code == 404
         assert resp.body == {"error": "No matching mock route found"}
@@ -269,6 +299,7 @@ class TestMockAPIServer:
     # -- Response modes ----------------------------------------------------
 
     def test_static_mode_always_returns_first(self, server):
+        """Test functionality: static mode always returns first."""
         route = MockRoute(
             request=MockRequest(method="GET", path="/s"),
             responses=[
@@ -284,6 +315,7 @@ class TestMockAPIServer:
             assert resp.body == "first"
 
     def test_sequence_mode_round_robins(self, server):
+        """Test functionality: sequence mode round robins."""
         route = MockRoute(
             request=MockRequest(method="GET", path="/seq"),
             responses=[
@@ -298,6 +330,7 @@ class TestMockAPIServer:
         assert codes == [200, 201, 202, 200, 201, 202]
 
     def test_random_mode_returns_valid_responses(self, server):
+        """Test functionality: random mode returns valid responses."""
         responses = [
             MockResponse(status_code=200, body="x"),
             MockResponse(status_code=201, body="y"),
@@ -312,6 +345,7 @@ class TestMockAPIServer:
         assert seen_codes.issubset({200, 201})
 
     def test_no_responses_returns_204(self, server):
+        """Test functionality: no responses returns 204."""
         route = MockRoute(
             request=MockRequest(method="GET", path="/empty"),
             responses=[],
@@ -323,6 +357,7 @@ class TestMockAPIServer:
     # -- Request log -------------------------------------------------------
 
     def test_request_log_records_entries(self, server, route_200):
+        """Test functionality: request log records entries."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         server.handle_request("GET", "/missing")
@@ -335,6 +370,7 @@ class TestMockAPIServer:
         assert log[1].response_status == 404
 
     def test_clear_log(self, server, route_200):
+        """Test functionality: clear log."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         assert len(server.get_request_log()) == 1
@@ -345,6 +381,7 @@ class TestMockAPIServer:
     # -- Reset -------------------------------------------------------------
 
     def test_reset_clears_everything(self, server, route_200):
+        """Test functionality: reset clears everything."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         server.reset()
@@ -356,37 +393,44 @@ class TestMockAPIServer:
     # -- assert_called / assert_not_called ---------------------------------
 
     def test_assert_called_success(self, server, route_200):
+        """Test functionality: assert called success."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         server.assert_called("ok_route")
         server.assert_called("ok_route", times=1)
 
     def test_assert_called_failure_never_called(self, server, route_200):
+        """Test functionality: assert called failure never called."""
         server.add_route("ok_route", route_200)
         with pytest.raises(AssertionError, match="never called"):
             server.assert_called("ok_route")
 
     def test_assert_called_failure_wrong_count(self, server, route_200):
+        """Test functionality: assert called failure wrong count."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         with pytest.raises(AssertionError, match="1 time"):
             server.assert_called("ok_route", times=3)
 
     def test_assert_called_unknown_route_raises(self, server):
+        """Test functionality: assert called unknown route raises."""
         with pytest.raises(KeyError, match="not found"):
             server.assert_called("ghost")
 
     def test_assert_not_called_success(self, server, route_200):
+        """Test functionality: assert not called success."""
         server.add_route("ok_route", route_200)
         server.assert_not_called("ok_route")
 
     def test_assert_not_called_failure(self, server, route_200):
+        """Test functionality: assert not called failure."""
         server.add_route("ok_route", route_200)
         server.handle_request("GET", "/ok")
         with pytest.raises(AssertionError, match="was called"):
             server.assert_not_called("ok_route")
 
     def test_assert_not_called_unknown_route_raises(self, server):
+        """Test functionality: assert not called unknown route raises."""
         with pytest.raises(KeyError, match="not found"):
             server.assert_not_called("ghost")
 
@@ -404,36 +448,43 @@ class TestResponseFixture:
         return ResponseFixture()
 
     def test_success(self, fixture):
+        """Test functionality: success."""
         resp = fixture.success(body={"ok": True})
         assert resp.status_code == 200
         assert resp.body == {"ok": True}
 
     def test_not_found(self, fixture):
+        """Test functionality: not found."""
         resp = fixture.not_found()
         assert resp.status_code == 404
         assert resp.body == {"error": "Not Found"}
 
     def test_server_error(self, fixture):
+        """Test functionality: server error."""
         resp = fixture.server_error()
         assert resp.status_code == 500
         assert resp.body == {"error": "Internal Server Error"}
 
     def test_unauthorized(self, fixture):
+        """Test functionality: unauthorized."""
         resp = fixture.unauthorized()
         assert resp.status_code == 401
         assert resp.body == {"error": "Unauthorized"}
 
     def test_rate_limited_default(self, fixture):
+        """Test functionality: rate limited default."""
         resp = fixture.rate_limited()
         assert resp.status_code == 429
         assert resp.headers["Retry-After"] == "60"
         assert resp.body == {"error": "Too Many Requests"}
 
     def test_rate_limited_custom_retry(self, fixture):
+        """Test functionality: rate limited custom retry."""
         resp = fixture.rate_limited(retry_after=120)
         assert resp.headers["Retry-After"] == "120"
 
     def test_json_response(self, fixture):
+        """Test functionality: json response."""
         data = {"users": [1, 2, 3]}
         resp = fixture.json_response(data)
         assert resp.status_code == 200
@@ -441,6 +492,7 @@ class TestResponseFixture:
         assert json.loads(resp.body) == data
 
     def test_json_response_custom_status(self, fixture):
+        """Test functionality: json response custom status."""
         resp = fixture.json_response({"created": True}, status_code=201)
         assert resp.status_code == 201
         assert resp.headers["Content-Type"] == "application/json"
@@ -455,15 +507,18 @@ class TestFactories:
     """Verify module-level factory helpers."""
 
     def test_create_mock_server_returns_server(self):
+        """Test functionality: create mock server returns server."""
         server = create_mock_server()
         assert isinstance(server, MockAPIServer)
 
     def test_create_mock_server_independent_instances(self):
+        """Test functionality: create mock server independent instances."""
         s1 = create_mock_server()
         s2 = create_mock_server()
         s1.add_route("r", MockRoute())
         assert s2.get_request_log() == []
 
     def test_create_fixture_returns_fixture(self):
+        """Test functionality: create fixture returns fixture."""
         f = create_fixture()
         assert isinstance(f, ResponseFixture)

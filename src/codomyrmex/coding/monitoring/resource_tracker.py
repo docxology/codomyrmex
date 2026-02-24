@@ -14,6 +14,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
+        """Functional component: _DummyPSUtil."""
         Process = None
         cpu_percent = lambda *args, **kwargs: 0.0
         virtual_memory = lambda: type('obj', (object,), {'used': 0, 'total': 0})()

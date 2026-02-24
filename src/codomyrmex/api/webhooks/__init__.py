@@ -205,6 +205,7 @@ class HTTPWebhookTransport(WebhookTransport):
             [str, str, dict[str, str], float], tuple[int, str]
         ],
     ) -> None:
+        """Execute   Init   operations natively."""
         self._handler = handler
 
     def send(
@@ -295,6 +296,7 @@ class WebhookRegistry:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._webhooks: dict[str, WebhookConfig] = {}
 
     def register(self, webhook_id: str, config: WebhookConfig) -> None:
@@ -378,6 +380,7 @@ class WebhookDispatcher:
         registry: WebhookRegistry,
         transport: WebhookTransport,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._registry = registry
         self._transport = transport
 

@@ -198,6 +198,7 @@ class TestBaseAgent:
         AgentCapabilities = agent_modules['AgentCapabilities']
 
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return None
 
@@ -220,6 +221,7 @@ class TestBaseAgent:
         AgentCapabilities = agent_modules['AgentCapabilities']
 
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return None
 
@@ -244,6 +246,7 @@ class TestBaseAgent:
         AgentCapabilities = agent_modules['AgentCapabilities']
 
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return None
 
@@ -263,6 +266,7 @@ class TestBaseAgent:
         AgentRequest = agent_modules['AgentRequest']
 
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return None
 
@@ -298,6 +302,7 @@ class TestBaseAgent:
         BaseAgent = agent_modules['BaseAgent']
 
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return None
 

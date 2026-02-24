@@ -33,26 +33,32 @@ class BenchmarkResult:
 
     @property
     def average_time(self) -> float:
+        """Execute Average Time operations natively."""
         return sum(self.times) / max(len(self.times), 1)
 
     @property
     def min_time(self) -> float:
+        """Execute Min Time operations natively."""
         return min(self.times) if self.times else 0.0
 
     @property
     def max_time(self) -> float:
+        """Execute Max Time operations natively."""
         return max(self.times) if self.times else 0.0
 
     @property
     def total_time(self) -> float:
+        """Execute Total Time operations natively."""
         return sum(self.times)
 
     @property
     def stdev(self) -> float:
+        """Execute Stdev operations natively."""
         return statistics.stdev(self.times) if len(self.times) > 1 else 0.0
 
     @property
     def median(self) -> float:
+        """Execute Median operations natively."""
         return statistics.median(self.times) if self.times else 0.0
 
     def percentile(self, p: float) -> float:
@@ -67,6 +73,7 @@ class BenchmarkResult:
         return sorted_t[lo] + frac * (sorted_t[hi] - sorted_t[lo])
 
     def to_dict(self) -> Dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "iterations": self.iterations,
@@ -188,10 +195,12 @@ class BenchmarkSuite:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._benchmarks: dict[str, Callable[[], Any]] = {}
         self._results: dict[str, Dict[str, Any]] = {}
 
     def add(self, name: str, func: Callable[[], Any]) -> None:
+        """Execute Add operations natively."""
         self._benchmarks[name] = func
 
     def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, Dict[str, Any]]:
@@ -216,6 +225,7 @@ class BenchmarkSuite:
 
     @property
     def benchmark_count(self) -> int:
+        """Execute Benchmark Count operations natively."""
         return len(self._benchmarks)
 
 

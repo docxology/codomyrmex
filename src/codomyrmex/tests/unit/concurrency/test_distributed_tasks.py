@@ -17,8 +17,10 @@ from codomyrmex.concurrency.result_aggregator import ResultAggregator
 # ─── TaskQueue ────────────────────────────────────────────────────────
 
 class TestTaskQueue:
+    """Test suite for TaskQueue."""
 
     def test_priority_ordering(self):
+        """Test functionality: priority ordering."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="low", priority=TaskPriority.LOW))
         queue.enqueue(Task(task_id="high", priority=TaskPriority.HIGH))
@@ -29,12 +31,14 @@ class TestTaskQueue:
         assert queue.dequeue().task_id == "low"
 
     def test_deduplication(self):
+        """Test functionality: deduplication."""
         queue = TaskQueue()
         assert queue.enqueue(Task(task_id="a")) is True
         assert queue.enqueue(Task(task_id="a")) is False
         assert queue.pending_count == 1
 
     def test_ack_completes_task(self):
+        """Test functionality: ack completes task."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1"))
         task = queue.dequeue()
@@ -43,6 +47,7 @@ class TestTaskQueue:
         assert queue.in_flight_count == 0
 
     def test_nack_requeues(self):
+        """Test functionality: nack requeues."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=3))
         task = queue.dequeue()
@@ -51,6 +56,7 @@ class TestTaskQueue:
         assert queue.pending_count == 1
 
     def test_nack_dead_letters_after_max_retries(self):
+        """Test functionality: nack dead letters after max retries."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=1))
         queue.dequeue()
@@ -58,6 +64,7 @@ class TestTaskQueue:
         assert queue.dead_letter_count == 1
 
     def test_requeue_dead_letters(self):
+        """Test functionality: requeue dead letters."""
         queue = TaskQueue()
         queue.enqueue(Task(task_id="t1", max_retries=1))
         queue.dequeue()
@@ -70,8 +77,10 @@ class TestTaskQueue:
 # ─── TaskWorker ───────────────────────────────────────────────────────
 
 class TestTaskWorker:
+    """Test suite for TaskWorker."""
 
     def test_process_success(self):
+        """Test functionality: process success."""
         worker = TaskWorker(worker_id="w1")
         task = Task(task_id="t1")
         result = worker.process_one(task)
@@ -91,6 +100,7 @@ class TestTaskWorker:
         assert worker.tasks_failed == 1
 
     def test_lifecycle(self):
+        """Test functionality: lifecycle."""
         worker = TaskWorker()
         assert worker.is_running is False
         worker.start()
@@ -102,8 +112,10 @@ class TestTaskWorker:
 # ─── TaskScheduler ───────────────────────────────────────────────────
 
 class TestTaskScheduler:
+    """Test suite for TaskScheduler."""
 
     def test_round_robin(self):
+        """Test functionality: round robin."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.ROUND_ROBIN)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -114,6 +126,7 @@ class TestTaskScheduler:
         assert "w2" in assignments
 
     def test_least_loaded(self):
+        """Test functionality: least loaded."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.LEAST_LOADED)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -125,6 +138,7 @@ class TestTaskScheduler:
         assert assigned == "w2"
 
     def test_affinity_routing(self):
+        """Test functionality: affinity routing."""
         scheduler = TaskScheduler(strategy=SchedulingStrategy.AFFINITY)
         scheduler.register_worker("w1")
         scheduler.register_worker("w2")
@@ -134,6 +148,7 @@ class TestTaskScheduler:
         assert assigned == "w2"
 
     def test_capability_filter(self):
+        """Test functionality: capability filter."""
         scheduler = TaskScheduler()
         scheduler.register_worker("w1", capabilities=["analyze"])
         scheduler.register_worker("w2", capabilities=["deploy"])
@@ -145,8 +160,10 @@ class TestTaskScheduler:
 # ─── ResultAggregator ───────────────────────────────────────────────
 
 class TestResultAggregator:
+    """Test suite for ResultAggregator."""
 
     def test_aggregate_stats(self):
+        """Test functionality: aggregate stats."""
         agg = ResultAggregator()
         agg.add(TaskResult(task_id="t1", worker_id="w1", success=True, duration_ms=100))
         agg.add(TaskResult(task_id="t2", worker_id="w1", success=False, duration_ms=200))

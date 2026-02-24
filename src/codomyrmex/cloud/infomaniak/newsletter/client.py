@@ -32,6 +32,7 @@ class InfomaniakNewsletterClient(InfomaniakRESTBase):
     _service_name: str = "newsletter"
 
     def __init__(self, token: str, newsletter_id: str, base_url: str = BASE_URL):
+        """Execute   Init   operations natively."""
         super().__init__(token=token, base_url=base_url)
         self._newsletter_id = newsletter_id
 

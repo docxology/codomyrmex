@@ -185,6 +185,7 @@ def helper_function():
         test_core.write_text('''
 
 def test_core_function():
+    """Test functionality: core function."""
     result = core_function()
     assert result == "core result"
 ''')

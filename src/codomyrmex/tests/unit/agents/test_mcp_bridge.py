@@ -40,29 +40,35 @@ class TestCreateServer:
     """Test MCP server creation."""
 
     def test_returns_mcp_server(self):
+        """Test functionality: returns mcp server."""
         server = create_codomyrmex_mcp_server()
         assert isinstance(server, MCPServer)
 
     def test_all_tools_registered(self):
+        """Test functionality: all tools registered."""
         server = create_codomyrmex_mcp_server()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
         assert len(server._tool_registry.list_tools()) == get_total_tool_count()
 
     def test_resources_registered(self):
+        """Test functionality: resources registered."""
         server = create_codomyrmex_mcp_server()
         # 2 static + 1 discovery metrics = 3
         assert len(server._resources) >= RESOURCE_COUNT
 
     def test_prompts_registered(self):
+        """Test functionality: prompts registered."""
         server = create_codomyrmex_mcp_server()
         assert len(server._prompts) == PROMPT_COUNT
 
     def test_tool_names_prefixed(self):
+        """Test functionality: tool names prefixed."""
         server = create_codomyrmex_mcp_server()
         for name in server._tool_registry.list_tools():
             assert name.startswith("codomyrmex."), f"Tool {name} missing prefix"
 
     def test_custom_name(self):
+        """Test functionality: custom name."""
         server = create_codomyrmex_mcp_server(name="test-server")
         assert server.config.name == "test-server"
 
@@ -71,15 +77,18 @@ class TestToolRegistry:
     """Test MCPToolRegistry creation."""
 
     def test_returns_registry(self):
+        """Test functionality: returns registry."""
         reg = get_tool_registry()
         assert isinstance(reg, MCPToolRegistry)
 
     def test_registry_has_all_tools(self):
+        """Test functionality: registry has all tools."""
         reg = get_tool_registry()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
         assert len(reg.list_tools()) == get_total_tool_count()
 
     def test_registry_tools_have_handlers(self):
+        """Test functionality: registry tools have handlers."""
         reg = get_tool_registry()
         for name in reg.list_tools():
             tool = reg.get(name)
@@ -101,6 +110,7 @@ class TestCallToolDiscovery:
         reset_trust()
 
     def test_list_modules(self):
+        """Test functionality: list modules."""
         result = call_tool("codomyrmex.list_modules")
         if "error" in result and "TrustRegistry" in str(result["error"]):
             pytest.skip(f"TrustRegistry internal: {result['error']}")
@@ -111,16 +121,19 @@ class TestCallToolDiscovery:
         assert isinstance(result["count"], int)
 
     def test_module_info_valid(self):
+        """Test functionality: module info valid."""
         result = call_tool("codomyrmex.module_info", module_name="logging_monitoring")
         assert result["module"] == "logging_monitoring"
         assert result["docstring"] is not None or result["exports"]
         assert result["path"] is not None
 
     def test_module_info_invalid(self):
+        """Test functionality: module info invalid."""
         result = call_tool("codomyrmex.module_info", module_name="nonexistent_module_xyz")
         assert "error" in result
 
     def test_unknown_tool_raises(self):
+        """Test functionality: unknown tool raises."""
         with pytest.raises(KeyError, match="Unknown tool"):
             call_tool("codomyrmex.does_not_exist")
 
@@ -135,15 +148,18 @@ class TestCallToolFileOps:
         reset_trust()
 
     def test_read_file(self):
+        """Test functionality: read file."""
         result = call_tool("codomyrmex.read_file", path=str(PYPROJECT))
         assert "content" in result
         assert "codomyrmex" in result["content"].lower()
 
     def test_read_file_missing(self):
+        """Test functionality: read file missing."""
         result = call_tool("codomyrmex.read_file", path="/tmp/nonexistent_file_xyz_12345.txt")
         assert "error" in result
 
     def test_list_directory(self):
+        """Test functionality: list directory."""
         result = call_tool("codomyrmex.list_directory", path=str(PROJECT_ROOT / "src"))
         assert "items" in result
 
@@ -158,6 +174,7 @@ class TestCallToolCodeAnalysis:
         reset_trust()
 
     def test_analyze_python(self):
+        """Test functionality: analyze python."""
         bridge_path = str(
             PROJECT_ROOT / "src" / "codomyrmex" / "agents" / "pai" / "mcp_bridge.py"
         )
@@ -165,6 +182,7 @@ class TestCallToolCodeAnalysis:
         assert "functions" in result or "classes" in result or "error" not in result
 
     def test_search_codebase(self):
+        """Test functionality: search codebase."""
         result = call_tool(
             "codomyrmex.search_codebase",
             pattern="PAIBridge",
@@ -184,12 +202,14 @@ class TestCallToolGit:
         reset_trust()
 
     def test_git_status(self):
+        """Test functionality: git status."""
         result = call_tool("codomyrmex.git_status", path=str(PROJECT_ROOT))
         assert isinstance(result, dict)
         # Should have branch info or be a valid response
         assert "branch" in result or "error" not in result
 
     def test_git_diff(self):
+        """Test functionality: git diff."""
         result = call_tool("codomyrmex.git_diff", path=str(PROJECT_ROOT))
         assert isinstance(result, dict)
 
@@ -204,12 +224,14 @@ class TestCallToolPAI:
         reset_trust()
 
     def test_pai_status(self):
+        """Test functionality: pai status."""
         result = call_tool("codomyrmex.pai_status")
         assert isinstance(result, dict)
         # Should always have these keys even if PAI not installed
         assert "pai_installed" in result or "installed" in result or isinstance(result, dict)
 
     def test_pai_awareness(self):
+        """Test functionality: pai awareness."""
         result = call_tool("codomyrmex.pai_awareness")
         assert isinstance(result, dict)
 
@@ -224,10 +246,12 @@ class TestCallToolData:
         reset_trust()
 
     def test_checksum_file(self):
+        """Test functionality: checksum file."""
         result = call_tool("codomyrmex.checksum_file", path=str(PYPROJECT))
         assert "checksum" in result or "hash" in result or isinstance(result, dict)
 
     def test_json_query(self):
+        """Test functionality: json query."""
         # Find a JSON file to test with
         pkg_json = PROJECT_ROOT / "package.json"
         if pkg_json.exists():
@@ -243,6 +267,7 @@ class TestSkillManifest:
     """Test PAI skill manifest structure."""
 
     def test_manifest_structure(self):
+        """Test functionality: manifest structure."""
         manifest = get_skill_manifest()
         assert manifest["name"] == "Codomyrmex"
         assert "version" in manifest
@@ -250,23 +275,28 @@ class TestSkillManifest:
         assert "mcp_server" in manifest
 
     def test_manifest_has_all_tools(self):
+        """Test functionality: manifest has all tools."""
         manifest = get_skill_manifest()
         from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
         assert len(manifest["tools"]) >= get_total_tool_count()
 
     def test_manifest_has_resources(self):
+        """Test functionality: manifest has resources."""
         manifest = get_skill_manifest()
         assert len(manifest["resources"]) == RESOURCE_COUNT
 
     def test_manifest_has_prompts(self):
+        """Test functionality: manifest has prompts."""
         manifest = get_skill_manifest()
         assert len(manifest["prompts"]) == PROMPT_COUNT
 
     def test_manifest_has_workflows(self):
+        """Test functionality: manifest has workflows."""
         manifest = get_skill_manifest()
         assert len(manifest["workflows"]) >= 3
 
     def test_manifest_algorithm_mapping(self):
+        """Test functionality: manifest algorithm mapping."""
         manifest = get_skill_manifest()
         mapping = manifest["algorithm_mapping"]
         phases = ["OBSERVE", "THINK", "PLAN", "BUILD", "EXECUTE", "VERIFY", "LEARN"]
@@ -275,6 +305,7 @@ class TestSkillManifest:
             assert len(mapping[phase]) > 0
 
     def test_manifest_knowledge_scope(self):
+        """Test functionality: manifest knowledge scope."""
         manifest = get_skill_manifest()
         scope = manifest["knowledge_scope"]
         assert len(scope) >= 6
@@ -283,6 +314,7 @@ class TestSkillManifest:
             assert len(modules) > 0, f"Empty knowledge scope: {domain}"
 
     def test_manifest_tools_have_schemas(self):
+        """Test functionality: manifest tools have schemas."""
         manifest = get_skill_manifest()
         for tool in manifest["tools"]:
             assert "name" in tool
@@ -305,13 +337,16 @@ class TestConstants:
     """Test module-level constants."""
 
     def test_tool_count(self):
+        """Test functionality: tool count."""
         # TOOL_COUNT is the static base count; dynamic tools may add more
         assert TOOL_COUNT >= 18
 
     def test_resource_count(self):
+        """Test functionality: resource count."""
         assert RESOURCE_COUNT >= 2  # at least the 2 static resources
 
     def test_prompt_count(self):
+        """Test functionality: prompt count."""
         assert PROMPT_COUNT == 10  # 3 original + 7 expansion prompts
 
     def test_direct_call_matches_registry(self):

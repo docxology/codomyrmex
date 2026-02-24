@@ -16,12 +16,15 @@ class Vector3D:
     z: float = 0.0
 
     def __add__(self, other: "Vector3D") -> "Vector3D":
+        """Execute   Add   operations natively."""
         return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: "Vector3D") -> "Vector3D":
+        """Execute   Sub   operations natively."""
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> "Vector3D":
+        """Execute   Mul   operations natively."""
         return Vector3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def magnitude(self) -> float:

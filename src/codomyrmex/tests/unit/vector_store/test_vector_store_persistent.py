@@ -30,12 +30,15 @@ if not HAS_MODULE:
 
 @pytest.mark.unit
 class TestPersistentVectorStore:
+    """Test suite for PersistentVectorStore."""
     def test_create(self, tmp_path):
+        """Test functionality: create."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         assert store.count() == 0
 
     def test_add_and_get(self, tmp_path):
+        """Test functionality: add and get."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0, 0.0], {"label": "test"})
@@ -46,11 +49,13 @@ class TestPersistentVectorStore:
         assert entry.metadata["label"] == "test"
 
     def test_get_nonexistent(self, tmp_path):
+        """Test functionality: get nonexistent."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         assert store.get("nonexistent") is None
 
     def test_delete(self, tmp_path):
+        """Test functionality: delete."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0])
@@ -59,11 +64,13 @@ class TestPersistentVectorStore:
         assert store.count() == 0
 
     def test_delete_nonexistent(self, tmp_path):
+        """Test functionality: delete nonexistent."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         assert store.delete("nonexistent") is False
 
     def test_count(self, tmp_path):
+        """Test functionality: count."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0])
@@ -71,6 +78,7 @@ class TestPersistentVectorStore:
         assert store.count() == 2
 
     def test_clear(self, tmp_path):
+        """Test functionality: clear."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0])
@@ -79,6 +87,7 @@ class TestPersistentVectorStore:
         assert store.count() == 0
 
     def test_search_cosine(self, tmp_path):
+        """Test functionality: search cosine."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path, distance_metric="cosine")
         store.add("v1", [1.0, 0.0, 0.0])
@@ -92,6 +101,7 @@ class TestPersistentVectorStore:
         assert results[0].id == "v1"
 
     def test_search_euclidean(self, tmp_path):
+        """Test functionality: search euclidean."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path, distance_metric="euclidean")
         store.add("v1", [1.0, 0.0])
@@ -102,6 +112,7 @@ class TestPersistentVectorStore:
         assert results[0].id == "v1"
 
     def test_search_dot_product(self, tmp_path):
+        """Test functionality: search dot product."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path, distance_metric="dot_product")
         store.add("v1", [1.0, 0.0])
@@ -110,11 +121,13 @@ class TestPersistentVectorStore:
         assert len(results) >= 1
 
     def test_invalid_distance_metric(self, tmp_path):
+        """Test functionality: invalid distance metric."""
         path = str(tmp_path / "vectors.json")
         with pytest.raises(ValueError, match="Unknown distance metric"):
             PersistentVectorStore(path=path, distance_metric="invalid")
 
     def test_search_with_filter(self, tmp_path):
+        """Test functionality: search with filter."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0], {"category": "a"})
@@ -127,6 +140,7 @@ class TestPersistentVectorStore:
         assert results[0].id == "v1"
 
     def test_flush_saves_to_disk(self, tmp_path):
+        """Test functionality: flush saves to disk."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path, auto_save=False)
         store.add("v1", [1.0, 0.0])
@@ -137,6 +151,7 @@ class TestPersistentVectorStore:
         assert len(data["vectors"]) == 1
 
     def test_compact(self, tmp_path):
+        """Test functionality: compact."""
         path = str(tmp_path / "vectors.json")
         store = PersistentVectorStore(path=path)
         store.add("v1", [1.0, 0.0])
@@ -144,6 +159,7 @@ class TestPersistentVectorStore:
         assert os.path.exists(path)
 
     def test_persistence_across_instances(self, tmp_path):
+        """Test functionality: persistence across instances."""
         path = str(tmp_path / "vectors.json")
         store1 = PersistentVectorStore(path=path, auto_save=False)
         store1.add("v1", [1.0, 0.0], {"name": "first"})
@@ -155,11 +171,13 @@ class TestPersistentVectorStore:
         assert entry.metadata["name"] == "first"
 
     def test_load_nonexistent_file(self, tmp_path):
+        """Test functionality: load nonexistent file."""
         path = str(tmp_path / "nonexistent.json")
         store = PersistentVectorStore(path=path)
         assert store.count() == 0
 
     def test_load_corrupt_file(self, tmp_path):
+        """Test functionality: load corrupt file."""
         path = str(tmp_path / "corrupt.json")
         with open(path, "w") as f:
             f.write("not valid json {{{")
@@ -173,15 +191,18 @@ class TestPersistentVectorStore:
 
 @pytest.mark.unit
 class TestCachedVectorStore:
+    """Test suite for CachedVectorStore."""
     def _make_backend(self):
         return InMemoryVectorStore()
 
     def test_create(self):
+        """Test functionality: create."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend, cache_size=10)
         assert store._cache_size == 10
 
     def test_add_and_get(self):
+        """Test functionality: add and get."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0], {"label": "test"})
@@ -190,6 +211,7 @@ class TestCachedVectorStore:
         assert entry.id == "v1"
 
     def test_get_from_cache(self):
+        """Test functionality: get from cache."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0])
@@ -201,11 +223,13 @@ class TestCachedVectorStore:
         assert entry.id == "v1"
 
     def test_get_nonexistent(self):
+        """Test functionality: get nonexistent."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         assert store.get("nonexistent") is None
 
     def test_delete(self):
+        """Test functionality: delete."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0])
@@ -215,6 +239,7 @@ class TestCachedVectorStore:
         assert store.get("v1") is None
 
     def test_search_delegates_to_backend(self):
+        """Test functionality: search delegates to backend."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0])
@@ -223,6 +248,7 @@ class TestCachedVectorStore:
         assert len(results) == 2
 
     def test_count(self):
+        """Test functionality: count."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0])
@@ -230,6 +256,7 @@ class TestCachedVectorStore:
         assert store.count() == 2
 
     def test_clear(self):
+        """Test functionality: clear."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend)
         store.add("v1", [1.0, 0.0])
@@ -239,6 +266,7 @@ class TestCachedVectorStore:
         assert len(store._cache) == 0
 
     def test_cache_eviction(self):
+        """Test functionality: cache eviction."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend, cache_size=2)
         store.add("v1", [1.0, 0.0])
@@ -251,6 +279,7 @@ class TestCachedVectorStore:
         assert "v1" not in store._cache
 
     def test_cache_stats(self):
+        """Test functionality: cache stats."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend, cache_size=100)
         store.add("v1", [1.0, 0.0])
@@ -261,6 +290,7 @@ class TestCachedVectorStore:
         assert stats["max_size"] == 100
 
     def test_cache_update_on_repeated_get(self):
+        """Test functionality: cache update on repeated get."""
         backend = self._make_backend()
         store = CachedVectorStore(backend=backend, cache_size=3)
         store.add("v1", [1.0, 0.0])

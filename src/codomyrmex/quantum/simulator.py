@@ -12,6 +12,7 @@ class QuantumSimulator:
     """Simple statevector quantum simulator."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._state: list[complex] = []
 
     def _init_state(self, num_qubits: int):

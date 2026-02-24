@@ -122,6 +122,7 @@ class Pipeline:
     duration: float = 0.0
 
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 

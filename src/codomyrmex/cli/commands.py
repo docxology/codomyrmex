@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Command(Enum):
+    """Functional component: Command."""
     CHECK = "check"
     INFO = "info"
     MODULES = "modules"

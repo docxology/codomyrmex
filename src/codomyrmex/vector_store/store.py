@@ -55,6 +55,7 @@ class InMemoryVectorStore(VectorStore):
     """In-memory vector store implementation."""
 
     def __init__(self, distance_metric: str = "cosine"):
+        """Execute   Init   operations natively."""
         self._vectors: dict[str, VectorEntry] = {}
         self._lock = threading.Lock()
 
@@ -138,6 +139,7 @@ class NamespacedVectorStore(VectorStore):
     """Vector store with namespace support."""
 
     def __init__(self, base_store: VectorStore | None = None):
+        """Execute   Init   operations natively."""
         self._namespaces: dict[str, VectorStore] = {}
         self._default_store = base_store or InMemoryVectorStore()
         self._current_namespace: str | None = None

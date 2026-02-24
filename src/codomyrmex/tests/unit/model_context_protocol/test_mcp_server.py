@@ -121,6 +121,7 @@ class TestMCPProtocol:
     """Test core JSON-RPC MCP protocol handling."""
 
     def test_initialize_handshake(self, server):
+        """Test functionality: initialize handshake."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 1,
@@ -140,6 +141,7 @@ class TestMCPProtocol:
         assert result["serverInfo"]["name"] == "test-mcp"
 
     def test_notification_no_response(self, server):
+        """Test functionality: notification no response."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "method": "notifications/initialized",
@@ -148,6 +150,7 @@ class TestMCPProtocol:
         assert resp is None
 
     def test_unknown_method_returns_error(self, server):
+        """Test functionality: unknown method returns error."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 99,
@@ -158,6 +161,7 @@ class TestMCPProtocol:
         assert resp["error"]["code"] == -32603
 
     def test_tools_list(self, server):
+        """Test functionality: tools list."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 2,
@@ -173,6 +177,7 @@ class TestMCPProtocol:
         assert "analyze_python_file" in names
 
     def test_resources_list(self, server):
+        """Test functionality: resources list."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 3,
@@ -184,6 +189,7 @@ class TestMCPProtocol:
         assert resources[0]["uri"] == "test://readme"
 
     def test_resources_read(self, server):
+        """Test functionality: resources read."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 4,
@@ -194,6 +200,7 @@ class TestMCPProtocol:
         assert contents[0]["text"] == "Hello from test resource"
 
     def test_prompts_list(self, server):
+        """Test functionality: prompts list."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 5,
@@ -204,6 +211,7 @@ class TestMCPProtocol:
         assert any(p["name"] == "test_prompt" for p in prompts)
 
     def test_prompts_get(self, server):
+        """Test functionality: prompts get."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 6,
@@ -224,6 +232,7 @@ class TestToolExecution:
     """Test that built-in tools call tools.py and return structured results."""
 
     def test_read_file_success(self, server, tmp_path):
+        """Test functionality: read file success."""
         test_file = tmp_path / "test.txt"
         test_file.write_text("hello world")
 
@@ -243,6 +252,7 @@ class TestToolExecution:
         assert inner["lines"] == 1
 
     def test_read_file_not_found(self, server):
+        """Test functionality: read file not found."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 11,
@@ -256,6 +266,7 @@ class TestToolExecution:
         assert "error" in inner
 
     def test_git_status(self, server):
+        """Test functionality: git status."""
         # Run in the project root (which is a git repo)
         project_root = Path(__file__).resolve().parents[5]
         resp = _run(server.handle_request({
@@ -271,6 +282,7 @@ class TestToolExecution:
         assert "branch" in inner
 
     def test_checksum_file(self, server, tmp_path):
+        """Test functionality: checksum file."""
         test_file = tmp_path / "check.txt"
         test_file.write_text("checksum me")
 
@@ -288,6 +300,7 @@ class TestToolExecution:
         assert len(inner["checksum"]) == 64  # sha256 hex length
 
     def test_json_query(self, server, tmp_path):
+        """Test functionality: json query."""
         json_file = tmp_path / "data.json"
         json_file.write_text(json.dumps({"name": "test", "items": [1, 2, 3]}))
 
@@ -304,6 +317,7 @@ class TestToolExecution:
         assert inner["result"] == "test"
 
     def test_analyze_python_file(self, server):
+        """Test functionality: analyze python file."""
         # Analyze tools.py itself
         tools_py = Path(__file__).resolve().parents[3] / "model_context_protocol" / "tools.py"
         if not tools_py.exists():
@@ -322,6 +336,7 @@ class TestToolExecution:
         assert inner["metrics"]["function_count"] >= 5
 
     def test_unknown_tool_returns_error(self, server):
+        """Test functionality: unknown tool returns error."""
         resp = _run(server.handle_request({
             "jsonrpc": "2.0",
             "id": 20,
@@ -341,16 +356,19 @@ class TestMockClient:
     """Test the MockMCPClient from testing.py."""
 
     def test_client_initialize(self, mock_client):
+        """Test functionality: client initialize."""
         resp = _run(mock_client.initialize())
         assert "result" in resp
         assert resp["result"]["protocolVersion"] == "2025-06-18"
 
     def test_client_list_tools(self, mock_client):
+        """Test functionality: client list tools."""
         resp = _run(mock_client.list_tools())
         tools = resp["result"]["tools"]
         assert len(tools) >= 5
 
     def test_client_call_tool(self, mock_client, tmp_path):
+        """Test functionality: client call tool."""
         f = tmp_path / "hello.txt"
         f.write_text("hi")
         resp = _run(mock_client.call_tool("read_file", {"path": str(f)}))
@@ -358,6 +376,7 @@ class TestMockClient:
         assert "content" in resp["result"]
 
     def test_client_list_resources(self, mock_client):
+        """Test functionality: client list resources."""
         resp = _run(mock_client.list_resources())
         assert "result" in resp
         assert len(resp["result"]["resources"]) >= 1
@@ -372,6 +391,7 @@ class TestServerTester:
     """Test the ServerTester smoke test framework."""
 
     def test_smoke_tests_pass(self, server, code_dir):
+        """Test functionality: smoke tests pass."""
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
@@ -482,6 +502,7 @@ class TestHTTPTransport:
         return TestClient(http_app)
 
     def test_health_endpoint(self, client):
+        """Test functionality: health endpoint."""
         resp = client.get("/health")
         assert resp.status_code == 200
         data = resp.json()
@@ -490,12 +511,14 @@ class TestHTTPTransport:
         assert data["tool_count"] >= 5
 
     def test_web_ui_serves_html(self, client):
+        """Test functionality: web ui serves html."""
         resp = client.get("/")
         assert resp.status_code == 200
         assert "text/html" in resp.headers["content-type"]
         assert "Codomyrmex MCP Server" in resp.text
 
     def test_list_tools_endpoint(self, client):
+        """Test functionality: list tools endpoint."""
         resp = client.get("/tools")
         assert resp.status_code == 200
         data = resp.json()
@@ -504,16 +527,19 @@ class TestHTTPTransport:
         assert "read_file" in names
 
     def test_get_tool_endpoint(self, client):
+        """Test functionality: get tool endpoint."""
         resp = client.get("/tools/read_file")
         assert resp.status_code == 200
         data = resp.json()
         assert data["name"] == "read_file"
 
     def test_get_tool_not_found(self, client):
+        """Test functionality: get tool not found."""
         resp = client.get("/tools/no_such_tool")
         assert resp.status_code == 404
 
     def test_call_tool_endpoint(self, client, tmp_path):
+        """Test functionality: call tool endpoint."""
         f = tmp_path / "http_test.txt"
         f.write_text("http test content")
         resp = client.post(
@@ -525,6 +551,7 @@ class TestHTTPTransport:
         assert "content" in data
 
     def test_mcp_jsonrpc_endpoint(self, client):
+        """Test functionality: mcp jsonrpc endpoint."""
         resp = client.post("/mcp", json={
             "jsonrpc": "2.0",
             "id": 1,
@@ -538,6 +565,7 @@ class TestHTTPTransport:
         assert "tools" in data["result"]
 
     def test_mcp_notification_returns_202(self, client):
+        """Test functionality: mcp notification returns 202."""
         resp = client.post("/mcp", json={
             "jsonrpc": "2.0",
             "method": "notifications/initialized",
@@ -546,12 +574,14 @@ class TestHTTPTransport:
         assert resp.status_code == 202
 
     def test_resources_endpoint(self, client):
+        """Test functionality: resources endpoint."""
         resp = client.get("/resources")
         assert resp.status_code == 200
         data = resp.json()
         assert "resources" in data
 
     def test_prompts_endpoint(self, client):
+        """Test functionality: prompts endpoint."""
         resp = client.get("/prompts")
         assert resp.status_code == 200
         data = resp.json()

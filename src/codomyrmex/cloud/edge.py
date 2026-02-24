@@ -63,6 +63,7 @@ class EdgeClient(ABC):
     @property
     @abstractmethod
     def provider(self) -> EdgeProvider:
+        """Execute Provider operations natively."""
         pass
 
     @abstractmethod
@@ -90,6 +91,7 @@ class CloudflareWorkersClient(EdgeClient):
     """Cloudflare Workers client (in-memory implementation)."""
 
     def __init__(self, account_id: str, api_token: str):
+        """Execute   Init   operations natively."""
         self.account_id = account_id
         self.api_token = api_token
         self._deployments: dict[str, EdgeDeployment] = {}
@@ -97,6 +99,7 @@ class CloudflareWorkersClient(EdgeClient):
 
     @property
     def provider(self) -> EdgeProvider:
+        """Execute Provider operations natively."""
         return EdgeProvider.CLOUDFLARE_WORKERS
 
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
@@ -114,15 +117,18 @@ class CloudflareWorkersClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
+        """Execute List Deployments operations natively."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
+        """Execute Delete operations natively."""
         if deployment_id in self._deployments:
             del self._deployments[deployment_id]
             return True
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
+        """Execute Get Logs operations natively."""
         return []
 
 
@@ -130,6 +136,7 @@ class FastlyComputeClient(EdgeClient):
     """Fastly Compute@Edge client (in-memory implementation)."""
 
     def __init__(self, api_key: str, service_id: str = ""):
+        """Execute   Init   operations natively."""
         self.api_key = api_key
         self.service_id = service_id
         self._deployments: dict[str, EdgeDeployment] = {}
@@ -137,6 +144,7 @@ class FastlyComputeClient(EdgeClient):
 
     @property
     def provider(self) -> EdgeProvider:
+        """Execute Provider operations natively."""
         return EdgeProvider.FASTLY_COMPUTE
 
     def deploy(self, config: EdgeFunctionConfig, code: str) -> EdgeDeployment:
@@ -154,15 +162,18 @@ class FastlyComputeClient(EdgeClient):
         return deployment
 
     def list_deployments(self) -> list[EdgeDeployment]:
+        """Execute List Deployments operations natively."""
         return list(self._deployments.values())
 
     def delete(self, deployment_id: str) -> bool:
+        """Execute Delete operations natively."""
         if deployment_id in self._deployments:
             del self._deployments[deployment_id]
             return True
         return False
 
     def get_logs(self, deployment_id: str, limit: int = 100) -> list[dict[str, Any]]:
+        """Execute Get Logs operations natively."""
         return []
 
 
@@ -170,6 +181,7 @@ class EdgeManager:
     """Manage edge deployments across providers."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._clients: dict[EdgeProvider, EdgeClient] = {}
 
     def register_client(self, client: EdgeClient) -> None:

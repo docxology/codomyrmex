@@ -30,19 +30,24 @@ def _run(coro):
 
 @pytest.mark.unit
 class TestAsyncStream:
+    """Test suite for AsyncStream."""
     def test_create(self):
+        """Test functionality: create."""
         stream = AsyncStream(buffer_size=100)
         assert stream._running is False
 
     def test_create_with_backpressure(self):
+        """Test functionality: create with backpressure."""
         stream = AsyncStream(buffer_size=50, enable_backpressure=True)
         assert stream._buffer.maxsize == 50
 
     def test_create_without_backpressure(self):
+        """Test functionality: create without backpressure."""
         stream = AsyncStream(buffer_size=50, enable_backpressure=False)
         assert stream._buffer.maxsize == 0  # Unlimited
 
     def test_start_stop(self):
+        """Test functionality: start stop."""
         async def _test():
             stream = AsyncStream()
             await stream.start()
@@ -52,6 +57,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_subscribe(self):
+        """Test functionality: subscribe."""
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
@@ -61,6 +67,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_unsubscribe(self):
+        """Test functionality: unsubscribe."""
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
@@ -70,6 +77,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_unsubscribe_nonexistent(self):
+        """Test functionality: unsubscribe nonexistent."""
         async def _test():
             stream = AsyncStream()
             result = await stream.unsubscribe("nonexistent")
@@ -77,6 +85,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_publish(self):
+        """Test functionality: publish."""
         async def _test():
             stream = AsyncStream()
             event = Event(type=EventType.MESSAGE, data="hello")
@@ -85,6 +94,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_subscribe_custom_buffer(self):
+        """Test functionality: subscribe custom buffer."""
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe(buffer_size=50)
@@ -92,6 +102,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_multiple_subscribers(self):
+        """Test functionality: multiple subscribers."""
         async def _test():
             stream = AsyncStream()
             sub1 = await stream.subscribe()
@@ -101,6 +112,7 @@ class TestAsyncStream:
         _run(_test())
 
     def test_broadcast_to_subscribers(self):
+        """Test functionality: broadcast to subscribers."""
         async def _test():
             stream = AsyncStream()
             sub_id = await stream.subscribe()
@@ -119,11 +131,14 @@ class TestAsyncStream:
 
 @pytest.mark.unit
 class TestWebSocketStream:
+    """Test suite for WebSocketStream."""
     def test_create(self):
+        """Test functionality: create."""
         ws_stream = WebSocketStream()
         assert ws_stream._connections == {}
 
     def test_connect(self):
+        """Test functionality: connect."""
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -138,6 +153,7 @@ class TestWebSocketStream:
         _run(_test())
 
     def test_disconnect(self):
+        """Test functionality: disconnect."""
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -152,12 +168,14 @@ class TestWebSocketStream:
         _run(_test())
 
     def test_disconnect_nonexistent(self):
+        """Test functionality: disconnect nonexistent."""
         async def _test():
             ws_stream = WebSocketStream()
             await ws_stream.disconnect("nonexistent")
         _run(_test())
 
     def test_send_to_nonexistent(self):
+        """Test functionality: send to nonexistent."""
         async def _test():
             ws_stream = WebSocketStream()
             event = Event(type=EventType.MESSAGE, data="hello")
@@ -166,6 +184,7 @@ class TestWebSocketStream:
         _run(_test())
 
     def test_send_to_connected(self):
+        """Test functionality: send to connected."""
         async def _test():
             ws_stream = WebSocketStream()
             sent_data = []
@@ -183,6 +202,7 @@ class TestWebSocketStream:
         _run(_test())
 
     def test_send_to_failing_ws(self):
+        """Test functionality: send to failing ws."""
         async def _test():
             ws_stream = WebSocketStream()
 
@@ -204,13 +224,16 @@ class TestWebSocketStream:
 
 @pytest.mark.unit
 class TestBatchingStream:
+    """Test suite for BatchingStream."""
     def test_create(self):
+        """Test functionality: create."""
         stream = BatchingStream(batch_size=100, flush_interval=1.0)
         assert stream._batch_size == 100
         assert stream._flush_interval == 1.0
         assert stream._running is False
 
     def test_add_event(self):
+        """Test functionality: add event."""
         async def _test():
             stream = BatchingStream(batch_size=100)
             event = Event(type=EventType.MESSAGE, data="test")
@@ -219,6 +242,7 @@ class TestBatchingStream:
         _run(_test())
 
     def test_on_batch_handler(self):
+        """Test functionality: on batch handler."""
         async def _test():
             batches_received = []
             stream = BatchingStream(batch_size=2)
@@ -232,6 +256,7 @@ class TestBatchingStream:
         _run(_test())
 
     def test_flush_empties_batch(self):
+        """Test functionality: flush empties batch."""
         async def _test():
             stream = BatchingStream(batch_size=100)
             await stream.add(Event(type=EventType.MESSAGE, data="test"))
@@ -241,12 +266,14 @@ class TestBatchingStream:
         _run(_test())
 
     def test_flush_empty_batch_noop(self):
+        """Test functionality: flush empty batch noop."""
         async def _test():
             stream = BatchingStream()
             await stream._flush()
         _run(_test())
 
     def test_start_stop(self):
+        """Test functionality: start stop."""
         async def _test():
             stream = BatchingStream(flush_interval=0.05)
             await stream.start()
@@ -256,6 +283,7 @@ class TestBatchingStream:
         _run(_test())
 
     def test_stop_flushes_remaining(self):
+        """Test functionality: stop flushes remaining."""
         async def _test():
             flushed = []
             stream = BatchingStream(batch_size=100, flush_interval=10.0)
@@ -266,6 +294,7 @@ class TestBatchingStream:
         _run(_test())
 
     def test_multiple_handlers(self):
+        """Test functionality: multiple handlers."""
         async def _test():
             handler1_calls = []
             handler2_calls = []

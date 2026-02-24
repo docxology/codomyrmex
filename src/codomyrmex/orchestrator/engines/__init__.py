@@ -55,6 +55,7 @@ class TaskResult:
 
     @property
     def duration_ms(self) -> float:
+        """Execute Duration Ms operations natively."""
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
@@ -141,11 +142,13 @@ class WorkflowResult:
 
     @property
     def duration_ms(self) -> float:
+        """Execute Duration Ms operations natively."""
         if self.start_time and self.end_time:
             return (self.end_time - self.start_time).total_seconds() * 1000
         return 0.0
 
     def get_task_result(self, task_id: str) -> TaskResult | None:
+        """Execute Get Task Result operations natively."""
         return self.task_results.get(task_id)
 
 
@@ -175,6 +178,7 @@ class SequentialEngine(ExecutionEngine):
     """Executes tasks sequentially in dependency order."""
 
     def __init__(self, max_retries: int = 3):
+        """Execute   Init   operations natively."""
         self.max_retries = max_retries
 
     def execute(
@@ -182,6 +186,7 @@ class SequentialEngine(ExecutionEngine):
         workflow: WorkflowDefinition,
         initial_context: dict[str, Any] | None = None,
     ) -> WorkflowResult:
+        """Execute Execute operations natively."""
         context = initial_context or {}
         task_results: dict[str, TaskResult] = {}
         start_time = datetime.now()
@@ -231,6 +236,7 @@ class SequentialEngine(ExecutionEngine):
         context: dict[str, Any],
         previous_results: dict[str, TaskResult],
     ) -> TaskResult:
+        """Execute  Execute Task operations natively."""
         # Check condition
         if task.condition and not task.condition(context):
             return TaskResult(
@@ -297,6 +303,7 @@ class ParallelEngine(ExecutionEngine):
         max_workers: int = 4,
         max_retries: int = 3,
     ):
+        """Execute   Init   operations natively."""
         self.max_workers = max_workers
         self.max_retries = max_retries
 
@@ -305,6 +312,7 @@ class ParallelEngine(ExecutionEngine):
         workflow: WorkflowDefinition,
         initial_context: dict[str, Any] | None = None,
     ) -> WorkflowResult:
+        """Execute Execute operations natively."""
         context = initial_context or {}
         task_results: dict[str, TaskResult] = {}
         start_time = datetime.now()
@@ -381,6 +389,7 @@ class ParallelEngine(ExecutionEngine):
         context: dict[str, Any],
         previous_results: dict[str, TaskResult],
     ) -> TaskResult:
+        """Execute  Execute Task operations natively."""
         if task.condition and not task.condition(context):
             return TaskResult(task_id=task.id, state=TaskState.SKIPPED)
 

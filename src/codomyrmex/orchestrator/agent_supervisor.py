@@ -70,6 +70,7 @@ class AgentSupervisor:
         max_restarts: int = 3,
         restart_window: float = 60.0,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._strategy = strategy
         self._max_restarts = max_restarts
         self._restart_window = restart_window
@@ -78,10 +79,12 @@ class AgentSupervisor:
 
     @property
     def strategy(self) -> RestartStrategy:
+        """Execute Strategy operations natively."""
         return self._strategy
 
     @property
     def agent_count(self) -> int:
+        """Execute Agent Count operations natively."""
         return len(self._registered)
 
     def register(self, agent_id: str) -> None:

@@ -38,6 +38,7 @@ class ImageProcessor(MultimodalProcessor):
         max_size_bytes: int = 10 * 1024 * 1024,  # 10MB
         supported_formats: list[str] | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.max_size_bytes = max_size_bytes
         self.supported_formats = supported_formats or ['png', 'jpeg', 'gif', 'webp']
 
@@ -99,6 +100,7 @@ class AudioProcessor(MultimodalProcessor):
         max_duration_seconds: float = 300.0,  # 5 minutes
         supported_formats: list[str] | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.max_duration_seconds = max_duration_seconds
         self.supported_formats = supported_formats or ['wav', 'mp3', 'ogg', 'flac']
 

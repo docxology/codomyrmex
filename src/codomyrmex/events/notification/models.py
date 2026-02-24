@@ -74,4 +74,5 @@ class NotificationResult:
 
     @property
     def is_success(self) -> bool:
+        """Execute Is Success operations natively."""
         return self.status in [NotificationStatus.SENT, NotificationStatus.DELIVERED]

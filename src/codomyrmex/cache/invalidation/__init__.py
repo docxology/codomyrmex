@@ -71,12 +71,15 @@ class TTLPolicy(InvalidationPolicy):
     """Time-to-live based invalidation."""
 
     def __init__(self, default_ttl: float = 300.0):
+        """Execute   Init   operations natively."""
         self.default_ttl = default_ttl
 
     def should_evict(self, entry: CacheEntry) -> bool:
+        """Execute Should Evict operations natively."""
         return entry.is_expired
 
     def select_for_eviction(self, entries: dict[str, CacheEntry]) -> str | None:
+        """Execute Select For Eviction operations natively."""
         for key, entry in entries.items():
             if entry.is_expired:
                 return key
@@ -87,9 +90,11 @@ class LRUPolicy(InvalidationPolicy):
     """Least recently used invalidation."""
 
     def should_evict(self, entry: CacheEntry) -> bool:
+        """Execute Should Evict operations natively."""
         return False  # LRU doesn't auto-evict
 
     def select_for_eviction(self, entries: dict[str, CacheEntry]) -> str | None:
+        """Execute Select For Eviction operations natively."""
         if not entries:
             return None
         oldest = min(entries.items(), key=lambda x: x[1].last_accessed)
@@ -100,9 +105,11 @@ class LFUPolicy(InvalidationPolicy):
     """Least frequently used invalidation."""
 
     def should_evict(self, entry: CacheEntry) -> bool:
+        """Execute Should Evict operations natively."""
         return False
 
     def select_for_eviction(self, entries: dict[str, CacheEntry]) -> str | None:
+        """Execute Select For Eviction operations natively."""
         if not entries:
             return None
         least_used = min(entries.items(), key=lambda x: x[1].access_count)
@@ -113,9 +120,11 @@ class FIFOPolicy(InvalidationPolicy):
     """First in, first out invalidation."""
 
     def should_evict(self, entry: CacheEntry) -> bool:
+        """Execute Should Evict operations natively."""
         return False
 
     def select_for_eviction(self, entries: dict[str, CacheEntry]) -> str | None:
+        """Execute Select For Eviction operations natively."""
         if not entries:
             return None
         oldest = min(entries.items(), key=lambda x: x[1].created_at)
@@ -145,6 +154,7 @@ class InvalidationManager:
         policy: InvalidationPolicy | None = None,
         max_size: int = 1000,
     ):
+        """Execute   Init   operations natively."""
         self.policy = policy or TTLPolicy()
         self.max_size = max_size
         self._entries: dict[str, CacheEntry] = {}

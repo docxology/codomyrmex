@@ -8,6 +8,7 @@ via :func:`parser.parse_note`, and caches the results.  Excludes
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,7 @@ class ObsidianVault:
     """Load and navigate an Obsidian vault directory."""
 
     def __init__(self, path: str | Path) -> None:
+        """Execute   Init   operations natively."""
         path = Path(path)
         if not path.exists():
             raise FileNotFoundError(f"Vault path does not exist: {path}")
@@ -42,6 +44,7 @@ class ObsidianVault:
         self._notes = self._scan()
 
     def _scan(self) -> dict[str, Note]:
+        """Execute  Scan operations natively."""
         result: dict[str, Note] = {}
         for md in sorted(self.path.rglob("*.md")):
             rel = str(md.relative_to(self.path))
@@ -51,8 +54,9 @@ class ObsidianVault:
             try:
                 note = parse_note(md)
                 result[rel] = note
-            except Exception:
-                continue  # skip unparseable files
+            except Exception as e:
+                logging.getLogger(__name__).warning("Skipping unparseable vault file %s: %s", md, e)
+                continue
         return result
 
     # ── lookup ───────────────────────────────────────────────────
@@ -83,6 +87,7 @@ class ObsidianVault:
 
     @property
     def metadata(self) -> VaultMetadata:
+        """Execute Metadata operations natively."""
         total_links = sum(len(n.links) for n in self.notes.values())
         all_tags = self.get_all_tags()
         return VaultMetadata(

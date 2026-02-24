@@ -29,6 +29,7 @@ class ContractEvent:
     timestamp: datetime = field(default_factory=datetime.now)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "args": self.args,
@@ -44,6 +45,7 @@ class EventFilter:
     """Filter contract events with a fluent API."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._event_name: str | None = None
         self._from_block: int = 0
         self._to_block: int | None = None
@@ -51,18 +53,22 @@ class EventFilter:
         self._arg_filters: dict[str, Any] = {}
 
     def event(self, name: str) -> "EventFilter":
+        """Execute Event operations natively."""
         self._event_name = name
         return self
 
     def from_block(self, block: int) -> "EventFilter":
+        """Execute From Block operations natively."""
         self._from_block = block
         return self
 
     def to_block(self, block: int) -> "EventFilter":
+        """Execute To Block operations natively."""
         self._to_block = block
         return self
 
     def address(self, addr: Address) -> "EventFilter":
+        """Execute Address operations natively."""
         self._contract_address = addr
         return self
 
@@ -91,25 +97,31 @@ class EventLog:
     """Collect, query, and aggregate contract events."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._events: list[ContractEvent] = []
 
     def add(self, event: ContractEvent) -> None:
+        """Execute Add operations natively."""
         self._events.append(event)
 
     def add_many(self, events: list[ContractEvent]) -> None:
+        """Execute Add Many operations natively."""
         self._events.extend(events)
 
     def query(self, filter: EventFilter | None = None) -> list[ContractEvent]:
+        """Execute Query operations natively."""
         if filter is None:
             return list(self._events)
         return [e for e in self._events if filter.matches(e)]
 
     def count(self, event_name: str | None = None) -> int:
+        """Execute Count operations natively."""
         if event_name is None:
             return len(self._events)
         return sum(1 for e in self._events if e.name == event_name)
 
     def latest(self, n: int = 1) -> list[ContractEvent]:
+        """Execute Latest operations natively."""
         sorted_events = sorted(self._events, key=lambda e: e.block_number, reverse=True)
         return sorted_events[:n]
 
@@ -143,10 +155,12 @@ class EventLog:
         return [e.to_dict() for e in self._events]
 
     def clear(self) -> None:
+        """Execute Clear operations natively."""
         self._events.clear()
 
     @property
     def total(self) -> int:
+        """Execute Total operations natively."""
         return len(self._events)
 
     def summary(self) -> dict[str, Any]:

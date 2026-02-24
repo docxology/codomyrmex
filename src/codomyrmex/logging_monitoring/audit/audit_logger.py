@@ -31,6 +31,7 @@ class AuditRecord:
     category: str = "general"  # auth, access, admin, data, system
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "event_type": self.event_type,
             "user_id": self.user_id,
@@ -42,6 +43,7 @@ class AuditRecord:
         }
 
     def to_json(self) -> str:
+        """Execute To Json operations natively."""
         return json.dumps(self.to_dict())
 
 
@@ -61,6 +63,7 @@ class AuditLogger:
     """
 
     def __init__(self, name: str = "codomyrmex.audit", max_records: int = 10000) -> None:
+        """Execute   Init   operations natively."""
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
         self._records: list[AuditRecord] = []
@@ -159,6 +162,7 @@ class AuditLogger:
 
     @property
     def record_count(self) -> int:
+        """Execute Record Count operations natively."""
         return len(self._records)
 
     def export_jsonl(self) -> str:

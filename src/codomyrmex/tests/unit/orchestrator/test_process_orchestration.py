@@ -20,18 +20,22 @@ from codomyrmex.orchestrator.process_orchestrator import ProcessOrchestrator, Pr
 # ─── HeartbeatMonitor ────────────────────────────────────────────────
 
 class TestHeartbeatMonitor:
+    """Test suite for HeartbeatMonitor."""
 
     def test_healthy_after_beat(self):
+        """Test functionality: healthy after beat."""
         monitor = HeartbeatMonitor(timeout_seconds=10.0)
         monitor.register("a1")
         monitor.beat("a1")
         assert monitor.check("a1") == AgentStatus.HEALTHY
 
     def test_unknown_agent(self):
+        """Test functionality: unknown agent."""
         monitor = HeartbeatMonitor()
         assert monitor.check("nonexistent") == AgentStatus.UNKNOWN
 
     def test_check_all(self):
+        """Test functionality: check all."""
         monitor = HeartbeatMonitor(timeout_seconds=10.0)
         monitor.register("a1")
         monitor.register("a2")
@@ -41,6 +45,7 @@ class TestHeartbeatMonitor:
         assert all(s == AgentStatus.HEALTHY for s in statuses.values())
 
     def test_auto_register_on_beat(self):
+        """Test functionality: auto register on beat."""
         monitor = HeartbeatMonitor()
         monitor.beat("new-agent")
         assert monitor.agent_count == 1
@@ -49,14 +54,17 @@ class TestHeartbeatMonitor:
 # ─── AgentSupervisor ─────────────────────────────────────────────────
 
 class TestAgentSupervisor:
+    """Test suite for AgentSupervisor."""
 
     def test_restart_on_crash(self):
+        """Test functionality: restart on crash."""
         supervisor = AgentSupervisor(max_restarts=3)
         supervisor.register("a1")
         action = supervisor.on_agent_crash("a1", "OOM")
         assert action == SupervisorAction.RESTART
 
     def test_escalate_after_max_restarts(self):
+        """Test functionality: escalate after max restarts."""
         supervisor = AgentSupervisor(max_restarts=2, restart_window=60.0)
         supervisor.register("a1")
         supervisor.on_agent_crash("a1", "err1")
@@ -65,6 +73,7 @@ class TestAgentSupervisor:
         assert action == SupervisorAction.ESCALATE
 
     def test_one_for_one_strategy(self):
+        """Test functionality: one for one strategy."""
         supervisor = AgentSupervisor(strategy=RestartStrategy.ONE_FOR_ONE)
         supervisor.register("a1")
         supervisor.register("a2")
@@ -72,6 +81,7 @@ class TestAgentSupervisor:
         assert to_restart == ["a1"]
 
     def test_one_for_all_strategy(self):
+        """Test functionality: one for all strategy."""
         supervisor = AgentSupervisor(strategy=RestartStrategy.ONE_FOR_ALL)
         supervisor.register("a1")
         supervisor.register("a2")
@@ -79,6 +89,7 @@ class TestAgentSupervisor:
         assert set(to_restart) == {"a1", "a2"}
 
     def test_rest_for_one_strategy(self):
+        """Test functionality: rest for one strategy."""
         supervisor = AgentSupervisor(strategy=RestartStrategy.REST_FOR_ONE)
         supervisor.register("a1")
         supervisor.register("a2")
@@ -90,8 +101,10 @@ class TestAgentSupervisor:
 # ─── ProcessOrchestrator ─────────────────────────────────────────────
 
 class TestProcessOrchestrator:
+    """Test suite for ProcessOrchestrator."""
 
     def test_spawn_and_health(self):
+        """Test functionality: spawn and health."""
         orch = ProcessOrchestrator()
         agent_id = orch.spawn("ThinkingAgent", {"depth": 3})
         health = orch.health()
@@ -99,6 +112,7 @@ class TestProcessOrchestrator:
         assert health.running == 1
 
     def test_shutdown(self):
+        """Test functionality: shutdown."""
         orch = ProcessOrchestrator()
         aid = orch.spawn("Agent")
         orch.shutdown(aid)
@@ -106,6 +120,7 @@ class TestProcessOrchestrator:
         assert health.stopped == 1
 
     def test_crash_and_auto_restart(self):
+        """Test functionality: crash and auto restart."""
         orch = ProcessOrchestrator()
         aid = orch.spawn("Agent")
         action = orch.report_crash(aid, "segfault")

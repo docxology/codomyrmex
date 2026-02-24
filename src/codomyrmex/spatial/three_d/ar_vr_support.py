@@ -40,6 +40,7 @@ class HandPose:
 
     @property
     def is_pinching(self) -> bool:
+        """Execute Is Pinching operations natively."""
         return self.pinch_strength > 0.7
 
 
@@ -50,6 +51,7 @@ class ARSession:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self.is_active = False
         self.tracking_quality: str = "unknown"  # unknown, limited, normal, excessive
         self._anchors: dict[str, SpatialAnchor] = {}
@@ -82,19 +84,23 @@ class ARSession:
         return anchor
 
     def get_anchor(self, anchor_id: str) -> SpatialAnchor | None:
+        """Execute Get Anchor operations natively."""
         return self._anchors.get(anchor_id)
 
     def remove_anchor(self, anchor_id: str) -> bool:
+        """Execute Remove Anchor operations natively."""
         if anchor_id in self._anchors:
             del self._anchors[anchor_id]
             return True
         return False
 
     def list_anchors(self) -> list[SpatialAnchor]:
+        """Execute List Anchors operations natively."""
         return list(self._anchors.values())
 
     @property
     def anchor_count(self) -> int:
+        """Execute Anchor Count operations natively."""
         return len(self._anchors)
 
     # ── Plane Detection ─────────────────────────────────────────────
@@ -114,6 +120,7 @@ class VRRenderer:
     """
 
     def __init__(self, ipd_mm: float = 63.0) -> None:
+        """Execute   Init   operations natively."""
         self.ipd_mm = ipd_mm  # interpupillary distance
         self.left_eye_texture: str | None = None
         self.right_eye_texture: str | None = None
@@ -147,6 +154,7 @@ class VRRenderer:
 
     @property
     def frame_count(self) -> int:
+        """Execute Frame Count operations natively."""
         return self._frame_count
 
 
@@ -158,6 +166,7 @@ class XRInterface:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self.ar_session = ARSession()
         self.vr_renderer = VRRenderer()
         self._hand_poses: dict[str, HandPose] = {}
@@ -190,6 +199,7 @@ class XRInterface:
         return pose
 
     def get_hand_pose(self, hand: str) -> HandPose | None:
+        """Execute Get Hand Pose operations natively."""
         return self._hand_poses.get(hand)
 
     # ── Mixed Reality ───────────────────────────────────────────────
@@ -209,4 +219,5 @@ class XRInterface:
 
     @property
     def is_initialized(self) -> bool:
+        """Execute Is Initialized operations natively."""
         return self._initialized

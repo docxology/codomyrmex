@@ -26,8 +26,10 @@ from codomyrmex.orchestrator.workflow import Task, Workflow
 
 
 class TestEventBusTyped:
+    """Test suite for EventBusTyped."""
 
     def test_emit_typed_dispatches(self):
+        """Test functionality: emit typed dispatches."""
         bus = EventBus()
         received: list[Event] = []
         bus.subscribe_typed(EventType.TASK_STARTED, received.append)
@@ -38,6 +40,7 @@ class TestEventBusTyped:
         assert received[0].event_type is EventType.TASK_STARTED
 
     def test_emit_typed_rejects_invalid_type(self):
+        """Test functionality: emit typed rejects invalid type."""
         bus = EventBus()
         bad_event = Event.__new__(Event)
         bad_event.event_type = "not_an_enum"
@@ -47,6 +50,7 @@ class TestEventBusTyped:
             bus.emit_typed(bad_event)
 
     def test_subscribe_typed_single_event(self):
+        """Test functionality: subscribe typed single event."""
         bus = EventBus()
         received: list[Event] = []
         bus.subscribe_typed(EventType.TASK_COMPLETED, received.append)
@@ -57,11 +61,13 @@ class TestEventBusTyped:
         assert len(received) == 1
 
     def test_subscribe_typed_returns_subscriber_id(self):
+        """Test functionality: subscribe typed returns subscriber id."""
         bus = EventBus()
         sid = bus.subscribe_typed(EventType.TASK_FAILED, lambda e: None, subscriber_id="my_sub")
         assert sid == "my_sub"
 
     def test_emit_typed_multiple_subscribers(self):
+        """Test functionality: emit typed multiple subscribers."""
         bus = EventBus()
         a: list[Event] = []
         b: list[Event] = []
@@ -78,36 +84,44 @@ class TestEventBusTyped:
 
 
 class TestOrchestratorEventFactories:
+    """Test suite for OrchestratorEventFactories."""
 
     def test_workflow_started(self):
+        """Test functionality: workflow started."""
         e = workflow_started("build", 5)
         assert e.event_type is EventType.WORKFLOW_STARTED
         assert e.data["total_tasks"] == 5
 
     def test_workflow_completed(self):
+        """Test functionality: workflow completed."""
         e = workflow_completed("build", completed=4, failed=1, skipped=0, elapsed=2.5)
         assert e.event_type is EventType.WORKFLOW_COMPLETED
         assert e.data["success"] is False
 
     def test_workflow_failed(self):
+        """Test functionality: workflow failed."""
         e = workflow_failed("build", "kaboom")
         assert e.event_type is EventType.WORKFLOW_FAILED
         assert e.data["error_message"] == "kaboom"
 
     def test_task_started(self):
+        """Test functionality: task started."""
         e = task_started("build", "compile")
         assert e.data["task_name"] == "compile"
 
     def test_task_completed(self):
+        """Test functionality: task completed."""
         e = task_completed("build", "compile", execution_time=1.2, attempts=1)
         assert e.event_type is EventType.TASK_COMPLETED
         assert e.data["execution_time"] == 1.2
 
     def test_task_failed(self):
+        """Test functionality: task failed."""
         e = task_failed("build", "compile", "syntax error")
         assert e.data["error_message"] == "syntax error"
 
     def test_task_retrying(self):
+        """Test functionality: task retrying."""
         e = task_retrying("build", "compile", attempt=2, delay=1.0, error="timeout")
         assert e.event_type is EventType.TASK_RETRYING
         assert e.data["attempt"] == 2
@@ -117,6 +131,7 @@ class TestOrchestratorEventFactories:
 
 
 class TestWorkflowEventEmission:
+    """Test suite for WorkflowEventEmission."""
 
     @pytest.mark.asyncio
     async def test_workflow_emits_lifecycle_events(self):

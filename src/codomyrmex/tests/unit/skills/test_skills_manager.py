@@ -60,7 +60,6 @@ def _init_repo_with_skills(path: Path, skills: dict[str, dict]) -> None:
 # ---- Tests ----
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_initialize_clone(temp_dir):
     """Test initialization clones a real repo."""
     origin = temp_dir / "origin"
@@ -81,7 +80,6 @@ def test_initialize_clone(temp_dir):
     assert (skills_dir / "upstream").exists()
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_initialize_auto_sync(temp_dir):
     """Test initialization with auto-sync pulls updates."""
     origin = temp_dir / "origin"
@@ -102,7 +100,6 @@ def test_initialize_auto_sync(temp_dir):
     assert result2 is True
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_sync_upstream(temp_dir):
     """Test syncing upstream pulls from remote."""
     origin = temp_dir / "origin"

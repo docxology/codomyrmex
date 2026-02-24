@@ -21,10 +21,12 @@ class PluralRules:
 
     @classmethod
     def get_rule(cls, locale: Locale) -> Callable[[int], str]:
+        """Execute Get Rule operations natively."""
         return cls.RULES.get(locale.language, cls.RULES["en"])
 
     @classmethod
     def pluralize(cls, locale: Locale, count: int, forms: dict[str, str]) -> str:
+        """Execute Pluralize operations natively."""
         rule = cls.get_rule(locale)
         category = rule(count)
         return forms.get(category, forms.get("other", ""))
@@ -46,6 +48,7 @@ class NumberFormatter:
         number: float,
         decimals: int = 2,
     ) -> str:
+        """Execute Format operations natively."""
         fmt = cls.FORMATS.get(locale.language, cls.FORMATS["en"])
 
         if decimals == 0:

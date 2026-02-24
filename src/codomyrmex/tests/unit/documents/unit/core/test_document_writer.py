@@ -12,6 +12,7 @@ from codomyrmex.documents.models.document import Document, DocumentFormat
 
 @pytest.mark.unit
 class TestDocumentWriter:
+    """Test suite for DocumentWriter."""
     def setup_method(self):
         self.writer = DocumentWriter()
 
@@ -56,6 +57,7 @@ class TestDocumentWriter:
 
 @pytest.mark.unit
 class TestWriteDocumentConvenience:
+    """Test suite for WriteDocumentConvenience."""
     def test_write_document_wrapper(self, tmp_path):
         """Test the convenience wrapper writes a real file."""
         f = tmp_path / "wrap.txt"

@@ -41,10 +41,12 @@ class TestClaudePricing:
     """Verify that the pricing dictionary is well-formed."""
 
     def test_pricing_is_dict(self):
+        """Test functionality: pricing is dict."""
         assert isinstance(CLAUDE_PRICING, dict)
         assert len(CLAUDE_PRICING) > 0
 
     def test_pricing_has_expected_models(self):
+        """Test functionality: pricing has expected models."""
         expected_models = [
             "claude-sonnet-4-20250514",
             "claude-3-5-sonnet-20241022",
@@ -54,6 +56,7 @@ class TestClaudePricing:
             assert model in CLAUDE_PRICING, f"Missing model: {model}"
 
     def test_pricing_values_are_positive(self):
+        """Test functionality: pricing values are positive."""
         for model, prices in CLAUDE_PRICING.items():
             assert "input" in prices, f"{model} missing 'input' price"
             assert "output" in prices, f"{model} missing 'output' price"
@@ -77,18 +80,22 @@ class TestModuleExports:
     """Verify that the claude module exports the expected symbols."""
 
     def test_claude_client_exported(self):
+        """Test functionality: claude client exported."""
         from codomyrmex.agents.claude import ClaudeClient
         assert ClaudeClient is not None
 
     def test_integration_adapter_exported(self):
+        """Test functionality: integration adapter exported."""
         from codomyrmex.agents.claude import ClaudeIntegrationAdapter
         assert ClaudeIntegrationAdapter is not None
 
     def test_pricing_exported(self):
+        """Test functionality: pricing exported."""
         from codomyrmex.agents.claude import CLAUDE_PRICING
         assert CLAUDE_PRICING is not None
 
     def test_version_string(self):
+        """Test functionality: version string."""
         import codomyrmex.agents.claude as m
         assert hasattr(m, "__version__")
         assert isinstance(m.__version__, str)
@@ -109,12 +116,14 @@ class TestClaudeClientInstantiation:
         assert client.name == "claude"
 
     def test_default_capabilities(self):
+        """Test functionality: default capabilities."""
         client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
         caps = client.capabilities
         assert AgentCapabilities.CODE_GENERATION in caps
         assert AgentCapabilities.TEXT_COMPLETION in caps
 
     def test_custom_model_config(self):
+        """Test functionality: custom model config."""
         client = ClaudeClient(config={
             "claude_api_key": "sk-ant-test-key",
             "claude_model": "claude-3-5-haiku-20241022",
@@ -124,10 +133,12 @@ class TestClaudeClientInstantiation:
         assert client.temperature == 0.5
 
     def test_default_retry_settings(self):
+        """Test functionality: default retry settings."""
         client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
         assert client.initial_retry_delay == ClaudeClient.DEFAULT_INITIAL_DELAY
 
     def test_custom_retry_settings(self):
+        """Test functionality: custom retry settings."""
         client = ClaudeClient(config={
             "claude_api_key": "sk-ant-test-key",
             "initial_retry_delay": 2.0,
@@ -148,6 +159,7 @@ class TestClaudeToolRegistration:
         return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
 
     def test_register_tool(self, client):
+        """Test functionality: register tool."""
         client.register_tool(
             name="test_tool",
             description="A test tool",
@@ -157,6 +169,7 @@ class TestClaudeToolRegistration:
         assert any(t["name"] == "test_tool" for t in tools)
 
     def test_register_tool_with_handler(self, client):
+        """Test functionality: register tool with handler."""
         def handler(x: int) -> int:
             return x * 2
 
@@ -170,6 +183,7 @@ class TestClaudeToolRegistration:
         assert result == 10
 
     def test_register_multiple_tools(self, client):
+        """Test functionality: register multiple tools."""
         for i in range(3):
             client.register_tool(
                 name=f"tool_{i}",
@@ -181,6 +195,7 @@ class TestClaudeToolRegistration:
         assert {"tool_0", "tool_1", "tool_2"}.issubset(tool_names)
 
     def test_execute_unregistered_tool_raises(self, client):
+        """Test functionality: execute unregistered tool raises."""
         from codomyrmex.agents.core.exceptions import AgentError
         with pytest.raises((AgentError, Exception)):
             client.execute_tool_call("nonexistent_tool", {})
@@ -202,15 +217,18 @@ class TestClaudeSessionManagement:
         )
 
     def test_create_session(self, client):
+        """Test functionality: create session."""
         session = client.create_session()
         assert session is not None
         assert session.session_id is not None
 
     def test_create_session_with_id(self, client):
+        """Test functionality: create session with id."""
         session = client.create_session(session_id="my-session-id")
         assert session.session_id == "my-session-id"
 
     def test_multiple_sessions(self, client):
+        """Test functionality: multiple sessions."""
         s1 = client.create_session()
         s2 = client.create_session()
         assert s1.session_id != s2.session_id
@@ -229,14 +247,17 @@ class TestClaudeCostCalculation:
         return ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
 
     def test_cost_calculation_known_model(self, client):
+        """Test functionality: cost calculation known model."""
         cost = client._calculate_cost(1_000_000, 1_000_000)
         assert cost > 0
 
     def test_cost_calculation_zero_tokens(self, client):
+        """Test functionality: cost calculation zero tokens."""
         cost = client._calculate_cost(0, 0)
         assert cost == 0.0
 
     def test_cost_proportional_to_tokens(self, client):
+        """Test functionality: cost proportional to tokens."""
         cost_small = client._calculate_cost(100, 100)
         cost_large = client._calculate_cost(1000, 1000)
         assert cost_large > cost_small
@@ -251,11 +272,13 @@ class TestClaudeIntegrationAdapter:
     """Test adapter instantiation (no API call)."""
 
     def test_adapter_creation(self):
+        """Test functionality: adapter creation."""
         client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
         adapter = ClaudeIntegrationAdapter(client)
         assert adapter is not None
 
     def test_adapter_has_required_methods(self):
+        """Test functionality: adapter has required methods."""
         client = ClaudeClient(config={"claude_api_key": "sk-ant-test-key"})
         adapter = ClaudeIntegrationAdapter(client)
         assert hasattr(adapter, "adapt_for_ai_code_editing")
@@ -278,6 +301,7 @@ class TestClaudeLiveAPI:
         return ClaudeClient()
 
     def test_simple_execute(self, client):
+        """Test functionality: simple execute."""
         response = client.execute(AgentRequest(prompt="Say 'hello' and nothing else."))
         assert response.is_success()
         assert "hello" in response.content.lower()
@@ -285,6 +309,7 @@ class TestClaudeLiveAPI:
         assert response.tokens_used > 0
 
     def test_execute_returns_cost(self, client):
+        """Test functionality: execute returns cost."""
         response = client.execute(AgentRequest(prompt="Say 'hi'"))
         assert "cost_usd" in response.metadata
         assert response.metadata["cost_usd"] >= 0

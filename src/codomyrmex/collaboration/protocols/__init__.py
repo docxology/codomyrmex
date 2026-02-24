@@ -47,6 +47,7 @@ class AgentMessage:
     reply_to: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "id": self.id,
             "sender_id": self.sender_id,
@@ -79,6 +80,7 @@ class AgentCapability:
     output_schema: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "description": self.description,
@@ -110,6 +112,7 @@ class BaseAgent(ABC):
         name: str = "Agent",
         capabilities: list[AgentCapability] | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.agent_id = agent_id or str(uuid.uuid4())
         self.name = name
         self.capabilities = capabilities or []
@@ -144,6 +147,7 @@ class BaseAgent(ABC):
         return [c.name for c in self.capabilities]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "agent_id": self.agent_id,
             "name": self.name,
@@ -156,6 +160,7 @@ class AgentCoordinator:
     """Coordinates communication and task distribution between agents."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.agents: dict[str, BaseAgent] = {}
         self.message_log: list[AgentMessage] = []
         self.protocols: dict[str, AgentProtocol] = {}
@@ -211,9 +216,11 @@ class RoundRobinProtocol(AgentProtocol):
     """Distributes tasks to agents in round-robin fashion."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._current_index = 0
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Execute Select Agents operations natively."""
         if not available_agents:
             return []
 
@@ -238,6 +245,7 @@ class BroadcastProtocol(AgentProtocol):
     """Broadcasts task to all agents and collects results."""
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Execute Select Agents operations natively."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> list[Any]:
@@ -258,9 +266,11 @@ class CapabilityRoutingProtocol(AgentProtocol):
     """Routes tasks to agents based on required capabilities."""
 
     def __init__(self, required_capability: str):
+        """Execute   Init   operations natively."""
         self.required_capability = required_capability
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Execute Select Agents operations natively."""
         return [a for a in available_agents if a.has_capability(self.required_capability)]
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:
@@ -281,9 +291,11 @@ class ConsensusProtocol(AgentProtocol):
     """Requires consensus among agents for task completion."""
 
     def __init__(self, quorum: float = 0.5):
+        """Execute   Init   operations natively."""
         self.quorum = quorum  # Percentage of agents that must agree
 
     def select_agents(self, task: Any, available_agents: list[BaseAgent]) -> list[BaseAgent]:
+        """Execute Select Agents operations natively."""
         return available_agents
 
     async def execute(self, task: Any, agents: list[BaseAgent]) -> Any:

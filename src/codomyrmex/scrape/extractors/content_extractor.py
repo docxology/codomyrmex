@@ -54,6 +54,7 @@ class ContentExtractor:
     """
 
     def __init__(self, base_url: str = "") -> None:
+        """Execute   Init   operations natively."""
         self._base_url = base_url
 
     def extract(self, html: str, url: str = "") -> ExtractedContent:

@@ -537,8 +537,10 @@ def handle_common_exceptions(
         Decorator function
     """
     def decorator(func):
+        """Execute Decorator operations natively."""
 
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
 
             try:
                 return func(*args, **kwargs)

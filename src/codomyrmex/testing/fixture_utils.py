@@ -27,6 +27,7 @@ class FixtureManager:
     """Manage test fixtures."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._fixtures: dict[str, Fixture] = {}
         self._active: dict[str, Any] = {}
 
@@ -67,6 +68,7 @@ class FixtureManager:
 def fixture(name: str, scope: str = "function"):
     """Decorator to create fixtures."""
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         func._fixture_name = name
         func._fixture_scope = scope
         return func
@@ -78,16 +80,19 @@ class TestDataFactory:
 
     @staticmethod
     def email(domain: str = "test.com") -> str:
+        """Execute Email operations natively."""
         username = ''.join(random.choices(string.ascii_lowercase, k=8))
         return f"{username}@{domain}"
 
     @staticmethod
     def phone(country_code: str = "+1") -> str:
+        """Execute Phone operations natively."""
         number = ''.join(random.choices(string.digits, k=10))
         return f"{country_code}{number}"
 
     @staticmethod
     def uuid() -> str:
+        """Execute Uuid operations natively."""
         import uuid
         return str(uuid.uuid4())
 
@@ -96,6 +101,7 @@ class TestDataFactory:
         start: datetime = None,
         end: datetime = None,
     ) -> datetime:
+        """Execute Date operations natively."""
         start = start or datetime(2000, 1, 1)
         end = end or datetime.now()
         delta = (end - start).total_seconds()

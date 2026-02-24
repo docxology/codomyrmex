@@ -25,6 +25,7 @@ class CodeBlock:
     end_line: int = 0
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.code
 
 
@@ -38,6 +39,7 @@ class ParseResult:
     raw_text: str = ""
 
     def __bool__(self) -> bool:
+        """Execute   Bool   operations natively."""
         return self.success
 
 

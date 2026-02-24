@@ -192,6 +192,7 @@ class APIRouter:
                          tags: list[str] | None = None, **kwargs) -> Callable:
         """Create a decorator for the specified HTTP method."""
         def decorator(func: Callable[[APIRequest], APIResponse]) -> Callable[[APIRequest], APIResponse]:
+            """Execute Decorator operations natively."""
 
             endpoint = APIEndpoint(
                 path=self._normalize_path(path),

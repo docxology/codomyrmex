@@ -17,6 +17,7 @@ class QuotaManager:
     """Manage multiple rate limits per key."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._limiters: dict[str, RateLimiter] = {}
 
     def add_limiter(self, name: str, limiter: RateLimiter) -> None:

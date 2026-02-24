@@ -46,7 +46,9 @@ class BaseReport:
         return {"title": self.title, "section_count": len(self.sections)}
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"{self.__class__.__name__}(title={self.title!r}, sections={len(self.sections)})"

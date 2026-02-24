@@ -3,6 +3,7 @@ import pytest
 from codomyrmex.market import ReverseAuction, DemandAggregator
 
 def test_reverse_auction_lifecycle():
+    """Test functionality: reverse auction lifecycle."""
     auction = ReverseAuction()
     
     # Create
@@ -23,6 +24,7 @@ def test_reverse_auction_lifecycle():
     assert not auction.close_auction(aid, "requester_2") # Wrong owner
 
 def test_demand_aggregation():
+    """Test functionality: demand aggregation."""
     auction = ReverseAuction()
     agg = DemandAggregator(auction)
     cat = "Compute"

@@ -387,6 +387,7 @@ class KeysetPaginator(Paginator):
     """
 
     def __init__(self, sort_field: str = "id"):
+        """Execute   Init   operations natively."""
         self._sort_field = sort_field
 
     def _get_field_value(self, item: Any, field_name: str) -> Any:

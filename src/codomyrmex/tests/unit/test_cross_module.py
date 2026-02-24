@@ -7,6 +7,7 @@ from codomyrmex.wallet import WalletManager
 
 
 def test_identity_lifecycle():
+    """Test functionality: identity lifecycle."""
     id_mgr = IdentityManager()
     id_mgr.create_persona("p1", "Alice", VerificationLevel.KYC)
 
@@ -21,6 +22,7 @@ def test_identity_lifecycle():
     assert not id_mgr.revoke_persona("p1") # Already gone
 
 def test_wallet_ops():
+    """Test functionality: wallet ops."""
     wallet = WalletManager()
     uid = "u1"
     old_addr = wallet.create_wallet(uid)
@@ -36,6 +38,7 @@ def test_wallet_ops():
     assert wallet.get_wallet_address(uid) == new_addr
 
 def test_defense_ops():
+    """Test functionality: defense ops."""
     defense = ActiveDefense()
 
     # Update patterns
@@ -51,6 +54,7 @@ def test_defense_ops():
     assert report["active_patterns"] >= 5
 
 def test_market_ops():
+    """Test functionality: market ops."""
     market = ReverseAuction()
     aid = market.create_request("p1", "Item", 100)
 
@@ -63,6 +67,7 @@ def test_market_ops():
     assert market.get_history("p2") == []
 
 def test_privacy_config():
+    """Test functionality: privacy config."""
     privacy = CrumbCleaner()
     data = {"secret_key": "123", "normal": "val"}
 

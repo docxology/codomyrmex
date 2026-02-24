@@ -56,6 +56,7 @@ class TaskWorker:
         handler: Callable[[Task], Any] | None = None,
         timeout_ms: float = 30000.0,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._worker_id = worker_id or f"worker-{uuid.uuid4().hex[:8]}"
         self._handler = handler or self._default_handler
         self._timeout_ms = timeout_ms
@@ -65,18 +66,22 @@ class TaskWorker:
 
     @property
     def worker_id(self) -> str:
+        """Execute Worker Id operations natively."""
         return self._worker_id
 
     @property
     def is_running(self) -> bool:
+        """Execute Is Running operations natively."""
         return self._running
 
     @property
     def tasks_processed(self) -> int:
+        """Execute Tasks Processed operations natively."""
         return self._tasks_processed
 
     @property
     def tasks_failed(self) -> int:
+        """Execute Tasks Failed operations natively."""
         return self._tasks_failed
 
     @property

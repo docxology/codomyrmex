@@ -35,6 +35,7 @@ class ProbeResult:
 
     @property
     def is_operative(self) -> bool:
+        """Execute Is Operative operations natively."""
         return self.status == "operative"
 
 
@@ -90,6 +91,7 @@ def _probe_cli_binary(name: str, binary: str) -> ProbeResult:
 
 
 def _probe_ollama(base_url: str = "") -> ProbeResult:
+    """Execute  Probe Ollama operations natively."""
     base_url = base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
     """Check Ollama server reachability and list models."""
     import urllib.request
@@ -129,6 +131,7 @@ class AgentRegistry:
     """Central catalog of all known agents with live probing."""
 
     def __init__(self, ollama_base_url: str = ""):
+        """Execute   Init   operations natively."""
         ollama_base_url = ollama_base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
         self._ollama_base_url = ollama_base_url
         self._descriptors: list[AgentDescriptor] = self._build_catalog()
@@ -167,6 +170,7 @@ class AgentRegistry:
     # -- catalog construction -----------------------------------------------
 
     def _build_catalog(self) -> list[AgentDescriptor]:
+        """Execute  Build Catalog operations natively."""
         url = self._ollama_base_url
         return [
             # ── API agents ────────────────────────────────────────────

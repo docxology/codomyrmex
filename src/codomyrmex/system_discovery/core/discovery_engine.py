@@ -160,6 +160,7 @@ class SystemDiscovery:
 
             # Simple recursive helper to handle non-serializable objects if any slip through
             def default_serializer(obj):
+                """Execute Default Serializer operations natively."""
                 if isinstance(obj, (Path, set)):
                     return str(list(obj) if isinstance(obj, set) else obj)
                 return str(obj)

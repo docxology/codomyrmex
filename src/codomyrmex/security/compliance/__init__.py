@@ -148,6 +148,7 @@ class PolicyChecker(ControlChecker):
         fail_message: str = "Control failed",
         remediation: str = "",
     ):
+        """Execute   Init   operations natively."""
         self._control_id = control_id
         self._check_fn = check_fn
         self._pass_message = pass_message
@@ -156,9 +157,11 @@ class PolicyChecker(ControlChecker):
 
     @property
     def control_id(self) -> str:
+        """Execute Control Id operations natively."""
         return self._control_id
 
     def check(self, context: dict[str, Any]) -> ControlResult:
+        """Execute Check operations natively."""
         try:
             passed = self._check_fn(context)
             return ControlResult(
@@ -201,6 +204,7 @@ class ComplianceChecker:
     """
 
     def __init__(self, framework: ComplianceFramework):
+        """Execute   Init   operations natively."""
         self.framework = framework
         self._controls: dict[str, Control] = {}
         self._checkers: dict[str, ControlChecker] = {}

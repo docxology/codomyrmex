@@ -6,11 +6,13 @@ class FunnelChart(BasePlot):
     """Funnel chart visualization."""
 
     def __init__(self, title="", stages=None, values=None, **kwargs):
+        """Execute   Init   operations natively."""
         super().__init__(title=title, **kwargs)
         self.stages = stages or []
         self.funnel_values = values or []
 
     def _render_figure(self, fig, ax):
+        """Execute  Render Figure operations natively."""
         n = len(self.stages)
         for i in range(n):
             ax.barh(n - i - 1, self.funnel_values[i], align="center")

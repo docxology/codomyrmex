@@ -5,6 +5,7 @@ from codomyrmex.documentation.education.curriculum import Curriculum, Lesson, Di
 
 
 def test_relations_visualization():
+    """Test functionality: relations visualization."""
     cm = ContactManager()
     cm.add_contact("Alice", email="alice@example.com")
     diagram = render_social_graph(cm)
@@ -14,6 +15,7 @@ def test_relations_visualization():
 
 
 def test_education_curriculum_structure():
+    """Test functionality: education curriculum structure."""
     curr = Curriculum("Test", "beginner")
     lesson = curr.add_module("Intro", content="Introduction content", duration_minutes=10)
     assert lesson.title == "Intro"

@@ -37,11 +37,14 @@ def engine() -> MCPDiscovery:
 
 
 class TestMCPDiscoveryInstantiation:
+    """Test suite for MCPDiscoveryInstantiation."""
     def test_creates_with_empty_state(self, engine: MCPDiscovery) -> None:
+        """Test functionality: creates with empty state."""
         assert engine.tool_count == 0
         assert engine.list_tools() == []
 
     def test_get_tool_returns_none_for_unknown(self, engine: MCPDiscovery) -> None:
+        """Test functionality: get tool returns none for unknown."""
         assert engine.get_tool("nonexistent") is None
 
 
@@ -49,9 +52,11 @@ class TestMCPDiscoveryInstantiation:
 
 
 class TestErrorIsolatedScanning:
+    """Test suite for ErrorIsolatedScanning."""
     def test_scan_nonexistent_package_returns_failed_module(
         self, engine: MCPDiscovery
     ) -> None:
+        """Test functionality: scan nonexistent package returns failed module."""
         report = engine.scan_package("totally.nonexistent.package.xyz")
         assert isinstance(report, DiscoveryReport)
         assert len(report.failed_modules) == 1
@@ -64,6 +69,7 @@ class TestErrorIsolatedScanning:
     def test_scan_nonexistent_records_timing(
         self, engine: MCPDiscovery
     ) -> None:
+        """Test functionality: scan nonexistent records timing."""
         report = engine.scan_package("totally.nonexistent.package.xyz")
         assert report.scan_duration_ms >= 0
 
@@ -110,7 +116,9 @@ class TestErrorIsolatedScanning:
 
 
 class TestIncrementalScanning:
+    """Test suite for IncrementalScanning."""
     def test_scan_single_module(self, engine: MCPDiscovery) -> None:
+        """Test functionality: scan single module."""
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert isinstance(report, DiscoveryReport)
         assert report.modules_scanned == 1
@@ -136,6 +144,7 @@ class TestIncrementalScanning:
     def test_scan_module_records_timing(
         self, engine: MCPDiscovery
     ) -> None:
+        """Test functionality: scan module records timing."""
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert report.scan_duration_ms >= 0
 
@@ -144,7 +153,9 @@ class TestIncrementalScanning:
 
 
 class TestDiscoveryMetrics:
+    """Test suite for DiscoveryMetrics."""
     def test_initial_metrics_are_zeroed(self, engine: MCPDiscovery) -> None:
+        """Test functionality: initial metrics are zeroed."""
         m = engine.get_metrics()
         assert isinstance(m, DiscoveryMetrics)
         assert m.total_tools == 0
@@ -155,12 +166,14 @@ class TestDiscoveryMetrics:
         assert m.last_scan_time is None
 
     def test_metrics_update_after_scan(self, engine: MCPDiscovery) -> None:
+        """Test functionality: metrics update after scan."""
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
         assert m.scan_duration_ms > 0
         assert m.last_scan_time is not None
 
     def test_cache_hit_tracking(self, engine: MCPDiscovery) -> None:
+        """Test functionality: cache hit tracking."""
         engine.record_cache_hit()
         engine.record_cache_hit()
         engine.record_cache_hit()
@@ -168,6 +181,7 @@ class TestDiscoveryMetrics:
         assert m.cache_hits == 3
 
     def test_failed_modules_in_metrics(self, engine: MCPDiscovery) -> None:
+        """Test functionality: failed modules in metrics."""
         engine.scan_package("totally.nonexistent.package.xyz")
         m = engine.get_metrics()
         # Nonexistent package → no metrics update (early return), but let's check
@@ -180,7 +194,9 @@ class TestDiscoveryMetrics:
 
 
 class TestDiscoveryReportStructure:
+    """Test suite for DiscoveryReportStructure."""
     def test_default_factory(self) -> None:
+        """Test functionality: default factory."""
         report = DiscoveryReport()
         assert report.tools == []
         assert report.failed_modules == []
@@ -188,6 +204,7 @@ class TestDiscoveryReportStructure:
         assert report.modules_scanned == 0
 
     def test_failed_module_fields(self) -> None:
+        """Test functionality: failed module fields."""
         fm = FailedModule(module="foo.bar", error="boom", error_type="ImportError")
         assert fm.module == "foo.bar"
         assert fm.error == "boom"

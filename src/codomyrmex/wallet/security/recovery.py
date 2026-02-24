@@ -50,6 +50,7 @@ class NaturalRitualRecovery:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._rituals: dict[str, list[RitualStep]] = {}
         self._attempt_counts: dict[str, int] = {}
         self._max_attempts: int = 5
@@ -61,6 +62,7 @@ class NaturalRitualRecovery:
 
     @max_attempts.setter
     def max_attempts(self, value: int) -> None:
+        """Execute Max Attempts operations natively."""
         if value < 1:
             raise ValueError("max_attempts must be at least 1")
         self._max_attempts = value

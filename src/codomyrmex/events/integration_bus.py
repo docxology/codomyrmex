@@ -35,6 +35,7 @@ class IntegrationEvent:
     event_id: str = ""
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.timestamp:
             self.timestamp = time.time()
         if not self.event_id:
@@ -52,13 +53,16 @@ class IntegrationBus:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._handlers: dict[str, list[Callable[[IntegrationEvent], None]]] = defaultdict(list)
         self._history: list[IntegrationEvent] = []
 
     def subscribe(self, topic: str, handler: Callable[[IntegrationEvent], None]) -> None:
+        """Execute Subscribe operations natively."""
         self._handlers[topic].append(handler)
 
     def emit(self, topic: str, source: str = "", payload: dict[str, Any] | None = None) -> IntegrationEvent:
+        """Execute Emit operations natively."""
         event = IntegrationEvent(topic=topic, source=source, payload=payload or {})
         self._history.append(event)
 
@@ -79,16 +83,20 @@ class IntegrationBus:
 
     @property
     def topic_count(self) -> int:
+        """Execute Topic Count operations natively."""
         return len(self._handlers)
 
     @property
     def history_size(self) -> int:
+        """Execute History Size operations natively."""
         return len(self._history)
 
     def history_by_topic(self, topic: str) -> list[IntegrationEvent]:
+        """Execute History By Topic operations natively."""
         return [e for e in self._history if e.topic == topic]
 
     def clear_history(self) -> None:
+        """Execute Clear History operations natively."""
         self._history.clear()
 
 

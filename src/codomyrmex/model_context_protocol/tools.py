@@ -424,7 +424,7 @@ def run_shell_command(
         
         result = subprocess.run(
             command,
-            shell=True,
+            shell=True,  # SECURITY: Intentional — this MCP tool's purpose is shell execution
             cwd=Path(cwd).expanduser().resolve(),
             capture_output=True,
             text=True,

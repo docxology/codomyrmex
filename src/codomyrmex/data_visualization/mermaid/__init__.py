@@ -106,6 +106,7 @@ class MermaidDiagram:
     """Base class for Mermaid diagrams."""
 
     def __init__(self, diagram_type: DiagramType):
+        """Execute   Init   operations natively."""
         self.diagram_type = diagram_type
         self._content: list[str] = []
         self._config: dict[str, Any] = {}
@@ -141,6 +142,7 @@ class Flowchart(MermaidDiagram):
     """Flowchart diagram builder."""
 
     def __init__(self, direction: FlowDirection = FlowDirection.TOP_DOWN):
+        """Execute   Init   operations natively."""
         super().__init__(DiagramType.FLOWCHART)
         self.direction = direction
         self._nodes: dict[str, Node] = {}
@@ -215,6 +217,7 @@ class SequenceDiagram(MermaidDiagram):
     """Sequence diagram builder."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         super().__init__(DiagramType.SEQUENCE)
         self._participants: list[dict[str, str]] = []
         self._messages: list[str] = []
@@ -298,6 +301,7 @@ class ClassDiagram(MermaidDiagram):
     """Class diagram builder."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         super().__init__(DiagramType.CLASS)
         self._classes: dict[str, dict[str, Any]] = {}
         self._relationships: list[str] = []

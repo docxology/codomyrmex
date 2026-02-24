@@ -237,6 +237,7 @@ class PAIBridge:
     """
 
     def __init__(self, config: PAIConfig | None = None) -> None:
+        """Execute   Init   operations natively."""
         self.config = config or PAIConfig()
 
     # ==================================================================

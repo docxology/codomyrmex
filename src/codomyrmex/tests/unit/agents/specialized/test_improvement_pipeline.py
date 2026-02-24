@@ -25,8 +25,10 @@ from codomyrmex.agents.specialized.improvement_report import (
 # ─── Anti-Pattern Detector ────────────────────────────────────────────
 
 class TestAntiPatternDetector:
+    """Test suite for AntiPatternDetector."""
 
     def test_detects_bare_except(self):
+        """Test functionality: detects bare except."""
         source = "try:\n    pass\nexcept:\n    pass"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -34,6 +36,7 @@ class TestAntiPatternDetector:
         assert "bare_except" in names
 
     def test_detects_mutable_default(self):
+        """Test functionality: detects mutable default."""
         source = "def foo(x=[]):\n    return x"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -41,12 +44,14 @@ class TestAntiPatternDetector:
         assert "mutable_default" in names
 
     def test_detects_star_import(self):
+        """Test functionality: detects star import."""
         source = "from os import *"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
         assert any(p.name == "star_import" for p in patterns)
 
     def test_severity_threshold_filters(self):
+        """Test functionality: severity threshold filters."""
         source = "# TODO: fix this"
         detector = AntiPatternDetector(severity_threshold=0.5)
         patterns = detector.analyze(source)
@@ -54,6 +59,7 @@ class TestAntiPatternDetector:
         assert len(patterns) == 0
 
     def test_no_patterns_in_clean_code(self):
+        """Test functionality: no patterns in clean code."""
         source = "def foo(x: int) -> int:\n    return x + 1"
         detector = AntiPatternDetector()
         patterns = detector.analyze(source)
@@ -63,6 +69,7 @@ class TestAntiPatternDetector:
 # ─── ImprovementPipeline ──────────────────────────────────────────────
 
 class TestImprovementPipeline:
+    """Test suite for ImprovementPipeline."""
 
     def test_full_cycle(self):
         """Pipeline detects pattern → generates fix → review approves."""
@@ -112,8 +119,10 @@ class TestImprovementPipeline:
 # ─── ImprovementReport ───────────────────────────────────────────────
 
 class TestImprovementReport:
+    """Test suite for ImprovementReport."""
 
     def test_report_to_markdown(self):
+        """Test functionality: report to markdown."""
         report = ImprovementReport(
             source_file="app.py",
             anti_patterns=[AntiPattern(
@@ -135,10 +144,12 @@ class TestImprovementReport:
         assert "APPROVE" in md.lower() or "approve" in md
 
     def test_change_count(self):
+        """Test functionality: change count."""
         report = ImprovementReport(source_file="test.py")
         assert report.change_count == 0
 
     def test_approved_property(self):
+        """Test functionality: approved property."""
         report = ImprovementReport(
             source_file="test.py",
             review_verdict=ReviewVerdict.APPROVE,
@@ -146,5 +157,6 @@ class TestImprovementReport:
         assert report.approved is True
 
     def test_test_suite_success_rate(self):
+        """Test functionality: suite success rate."""
         result = TestSuiteResult(total=10, passed=8, failed=2)
         assert result.success_rate == pytest.approx(0.8)

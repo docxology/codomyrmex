@@ -11,6 +11,7 @@ class TTLManager:
     """Periodically cleans up expired keys from a cache."""
 
     def __init__(self, cleanup_interval: int = 60):
+        """Execute   Init   operations natively."""
         self.cleanup_interval = cleanup_interval
         self._cache_registry: set[Any] = set()
         self._stop_event = threading.Event()
@@ -38,6 +39,7 @@ class TTLManager:
             self._thread.join(timeout=5)
 
     def _run(self):
+        """Execute  Run operations natively."""
         while not self._stop_event.is_set():
             time.sleep(self.cleanup_interval)
             self.cleanup()

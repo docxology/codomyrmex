@@ -87,7 +87,6 @@ def test_check_upstream_status_not_exists(temp_dir):
     assert status["is_git_repo"] is False
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_clone_upstream(temp_dir):
     """Test cloning upstream repository from a local bare repo."""
     bare = temp_dir / "bare_origin.git"
@@ -101,7 +100,6 @@ def test_clone_upstream(temp_dir):
     assert upstream_dir.exists()
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_clone_upstream_force(temp_dir):
     """Test force-cloning upstream repository."""
     bare = temp_dir / "bare_origin.git"
@@ -118,7 +116,6 @@ def test_clone_upstream_force(temp_dir):
     assert upstream_dir.exists()
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_pull_upstream(temp_dir):
     """Test pulling upstream changes from a real cloned repo."""
     bare = temp_dir / "bare_origin.git"
@@ -132,7 +129,6 @@ def test_pull_upstream(temp_dir):
     assert result is True
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_pull_upstream_not_git(temp_dir):
     """Test pulling when directory exists but is not a git repo."""
     bare = temp_dir / "bare_origin.git"
@@ -147,7 +143,6 @@ def test_pull_upstream_not_git(temp_dir):
     assert result is True
 
 
-@pytest.mark.skipif(not _GIT_AVAILABLE, reason="git not installed")
 def test_get_upstream_version(temp_dir):
     """Test getting upstream version (commit hash)."""
     bare = temp_dir / "bare_origin.git"

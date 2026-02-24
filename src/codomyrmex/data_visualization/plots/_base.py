@@ -79,9 +79,11 @@ class BasePlot:
         return output_path
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.to_html()
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"{self.__class__.__name__}(title={self.title!r}, data_count={len(self.data)})"
 
     # ──────────────────────────────────────────────

@@ -42,6 +42,7 @@ class SerializationManager:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._serializers: dict[str, Serializer] = {}
         self._stats: list[SerializationResult] = []
 
@@ -115,11 +116,15 @@ class SerializationManager:
         """
         if format is None:
             serializer = Serializer()
-            format = serializer.detect_format(data)
-            if format is None:
+            fmt_enum = serializer.detect_format(data) if hasattr(serializer, 'detect_format') else None
+            if fmt_enum is None:
                 format = "json"
+            else:
+                format = fmt_enum.value if isinstance(fmt_enum, SerializationFormat) else str(fmt_enum)
         serializer = self.get_serializer(format)
-        return serializer.deserialize(data, format)
+        # Convert format string to SerializationFormat enum for the Serializer
+        fmt_enum = SerializationFormat(format) if format in [f.value for f in SerializationFormat] else SerializationFormat.JSON
+        return serializer.deserialize(data, fmt_enum)
 
     def serialize_batch(self, objects: list[Any], format: str = "json") -> list[str | bytes]:
         """Serialize multiple objects in sequence.
@@ -146,10 +151,12 @@ class SerializationManager:
 
     @property
     def operation_count(self) -> int:
+        """Execute Operation Count operations natively."""
         return len(self._stats)
 
     @property
     def error_count(self) -> int:
+        """Execute Error Count operations natively."""
         return sum(1 for s in self._stats if not s.success)
 
     def summary(self) -> dict[str, Any]:

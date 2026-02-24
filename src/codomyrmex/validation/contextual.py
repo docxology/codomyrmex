@@ -26,6 +26,7 @@ class ValidationIssue:
     context: dict[str, Any] = field(default_factory=dict)
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return f"[{self.severity.upper()}] {self.field}: {self.message}"
 
 
@@ -49,6 +50,7 @@ class ContextualValidator:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._rules: list[ValidationRule] = []
         self._rule_names: list[str] = []
 
@@ -92,6 +94,7 @@ class ContextualValidator:
 
     @property
     def rule_count(self) -> int:
+        """Execute Rule Count operations natively."""
         return len(self._rules)
 
     # ── Built-in Rule Factories ─────────────────────────────────────
@@ -100,6 +103,7 @@ class ContextualValidator:
     def required_fields(*fields: str) -> ValidationRule:
         """Rule: all listed fields must be present and non-empty."""
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             for f in fields:
                 val = data.get(f)
                 if val is None or (isinstance(val, str) and not val.strip()):
@@ -114,6 +118,7 @@ class ContextualValidator:
     def mutual_exclusion(field_a: str, field_b: str) -> ValidationRule:
         """Rule: at most one of two fields may be set."""
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             if data.get(field_a) and data.get(field_b):
                 return ValidationIssue(
                     field=f"{field_a}/{field_b}",
@@ -127,6 +132,7 @@ class ContextualValidator:
     def conditional_requirement(trigger_field: str, trigger_value: Any, required_field: str) -> ValidationRule:
         """Rule: if trigger_field == trigger_value then required_field must be set."""
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             if data.get(trigger_field) == trigger_value and not data.get(required_field):
                 return ValidationIssue(
                     field=required_field,
@@ -140,6 +146,7 @@ class ContextualValidator:
     def range_check(field_name: str, min_val: float | None = None, max_val: float | None = None) -> ValidationRule:
         """Rule: numeric field must be within [min_val, max_val]."""
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             val = data.get(field_name)
             if val is None:
                 return None
@@ -168,6 +175,7 @@ class ContextualValidator:
         """Rule: string field must match a regex pattern."""
         compiled = re.compile(pattern)
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             val = data.get(field_name)
             if val is None:
                 return None
@@ -184,6 +192,7 @@ class ContextualValidator:
     def type_check(field_name: str, expected_type: type) -> ValidationRule:
         """Rule: field value must be of the expected type."""
         def _check(data: dict[str, Any]) -> ValidationIssue | None:
+            """Execute  Check operations natively."""
             val = data.get(field_name)
             if val is not None and not isinstance(val, expected_type):
                 return ValidationIssue(

@@ -9,6 +9,7 @@ class Evaluator:
     """Orchestrates model evaluation against a set of benchmarks."""
 
     def __init__(self, metrics: dict[str, Callable[[str, str], float]]):
+        """Execute   Init   operations natively."""
         self.metrics = metrics
 
     def evaluate(self, predictions: list[str], references: list[str]) -> dict[str, float]:
@@ -24,8 +25,10 @@ class Evaluator:
         return results
 
 def exact_match_metric(pred: str, ref: str) -> float:
+    """Execute Exact Match Metric operations natively."""
     return 1.0 if pred.strip() == ref.strip() else 0.0
 
 def length_ratio_metric(pred: str, ref: str) -> float:
+    """Execute Length Ratio Metric operations natively."""
     if not ref: return 1.0
     return len(pred) / len(ref)

@@ -10,11 +10,13 @@ class LinePlot(BasePlot):
     """
 
     def __init__(self, title="", x=None, y=None, data=None, **kwargs):
+        """Execute   Init   operations natively."""
         super().__init__(title=title, data=data or [], **kwargs)
         self.x = x or []
         self.y = y or []
 
     def _render_figure(self, fig, ax):
+        """Execute  Render Figure operations natively."""
         if self.x and self.y:
             ax.plot(self.x, self.y)
         elif self.data:

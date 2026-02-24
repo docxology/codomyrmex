@@ -683,6 +683,7 @@ def run_script(
         Exit code
     """
     class SimpleScript(ScriptBase):
+        """Functional component: SimpleScript."""
         def add_arguments(self, parser):
             if add_args_func:
                 add_args_func(parser)

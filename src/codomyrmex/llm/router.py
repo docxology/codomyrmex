@@ -53,16 +53,19 @@ class ModelStats:
 
     @property
     def avg_latency_ms(self) -> float:
+        """Execute Avg Latency Ms operations natively."""
         total = self.success_count + self.failure_count
         return self.total_latency_ms / total if total > 0 else 0.0
 
     @property
     def success_rate(self) -> float:
+        """Execute Success Rate operations natively."""
         total = self.success_count + self.failure_count
         return self.success_count / total if total > 0 else 1.0
 
     @property
     def total_cost(self) -> float:
+        """Execute Total Cost operations natively."""
         # Simplified cost calculation
         return 0.0
 
@@ -90,6 +93,7 @@ class ModelRouter:
         fallback_enabled: bool = True,
         max_retries: int = 3,
     ):
+        """Execute   Init   operations natively."""
         self.strategy = strategy
         self.fallback_enabled = fallback_enabled
         self.max_retries = max_retries
@@ -150,6 +154,7 @@ class ModelRouter:
 
         elif strategy == RoutingStrategy.LATENCY_OPTIMIZED:
             def latency(m):
+                """Execute Latency operations natively."""
                 stats = self._stats.get(m.name)
                 return stats.avg_latency_ms if stats else float('inf')
             return min(candidates, key=latency)
@@ -157,6 +162,7 @@ class ModelRouter:
         elif strategy == RoutingStrategy.CAPABILITY_MATCH:
             if required_capabilities:
                 def capability_score(m):
+                    """Execute Capability Score operations natively."""
                     return len(set(required_capabilities) & set(m.capabilities))
                 return max(candidates, key=capability_score)
             return candidates[0]
@@ -244,6 +250,7 @@ class FallbackChain:
     """Chain of models with automatic fallback."""
 
     def __init__(self, models: list[str]):
+        """Execute   Init   operations natively."""
         self.models = models
         self._router: ModelRouter | None = None
 
@@ -272,6 +279,7 @@ class CostTracker:
     """Track LLM API costs."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._usage: dict[str, dict[str, float]] = {}
 
     def record(

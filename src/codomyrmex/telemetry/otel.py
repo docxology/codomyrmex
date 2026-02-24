@@ -42,6 +42,7 @@ class Span:
     status: str = "ok"
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.trace_id:
             self.trace_id = uuid.uuid4().hex[:16]
         if not self.span_id:
@@ -51,15 +52,18 @@ class Span:
 
     @property
     def duration_ms(self) -> float:
+        """Execute Duration Ms operations natively."""
         if self.end_time:
             return (self.end_time - self.start_time) * 1000
         return 0.0
 
     def finish(self, status: str = "ok") -> None:
+        """Execute Finish operations natively."""
         self.end_time = time.time()
         self.status = status
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "trace_id": self.trace_id,
@@ -84,6 +88,7 @@ class Tracer:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._spans: list[Span] = []
         self._active_trace: str = ""
 
@@ -93,6 +98,7 @@ class Tracer:
         parent: Span | None = None,
         attributes: dict[str, Any] | None = None,
     ) -> Span:
+        """Execute Start Span operations natively."""
         trace_id = parent.trace_id if parent else (self._active_trace or uuid.uuid4().hex[:16])
         span = Span(
             name=name,
@@ -105,13 +111,16 @@ class Tracer:
         return span
 
     def export(self) -> list[dict[str, Any]]:
+        """Execute Export operations natively."""
         return [s.to_dict() for s in self._spans]
 
     @property
     def span_count(self) -> int:
+        """Execute Span Count operations natively."""
         return len(self._spans)
 
     def clear(self) -> None:
+        """Execute Clear operations natively."""
         self._spans.clear()
 
 
@@ -128,22 +137,28 @@ class MetricCounter:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._counters: dict[str, float] = defaultdict(float)
         self._gauges: dict[str, float] = {}
 
     def increment(self, name: str, value: float = 1.0) -> None:
+        """Execute Increment operations natively."""
         self._counters[name] += value
 
     def gauge(self, name: str, value: float) -> None:
+        """Execute Gauge operations natively."""
         self._gauges[name] = value
 
     def get_counter(self, name: str) -> float:
+        """Execute Get Counter operations natively."""
         return self._counters.get(name, 0.0)
 
     def get_gauge(self, name: str) -> float | None:
+        """Execute Get Gauge operations natively."""
         return self._gauges.get(name)
 
     def export(self) -> dict[str, Any]:
+        """Execute Export operations natively."""
         return {
             "counters": dict(self._counters),
             "gauges": dict(self._gauges),

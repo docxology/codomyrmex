@@ -139,7 +139,7 @@ if __name__ == "__main__":
         try:
             shutil.rmtree(temp_dir)
             print("   🧹 Cleaned up test directory")
-        except:
+        except Exception:
             pass
 
 
@@ -184,7 +184,7 @@ def demonstrate_github_functionality():
                 try:
                     delete_github_repository(owner, repo_info["name"], github_token)
                     print("   🧹 Test repository cleaned up")
-                except:
+                except Exception:
                     print("   ⚠️ Please manually delete the test repository")
 
                 return True

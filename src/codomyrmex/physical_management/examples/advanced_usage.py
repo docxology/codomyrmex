@@ -136,6 +136,7 @@ def example_smart_factory_monitoring():
 
     # Set up event monitoring
     def factory_event_handler(event):
+        """Execute Factory Event Handler operations natively."""
         print(f"Factory Event: {event.event_type.value} for {event.object_id}")
 
     manager.registry.add_event_handler(EventType.CREATED, factory_event_handler)

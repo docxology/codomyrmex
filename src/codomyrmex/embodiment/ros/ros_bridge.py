@@ -70,6 +70,7 @@ class ROS2Bridge:
         node_name: str,
         history_depth: int = 100,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.node_name = node_name
         self._subscribers: dict[str, list[Callable[[Message], Any]]] = {}
         self._history: dict[str, deque[Message]] = {}
@@ -163,6 +164,7 @@ class ROS2Bridge:
                 logger.exception("Latched replay failed on '%s'", topic)
 
         def _unsubscribe() -> None:
+            """Execute  Unsubscribe operations natively."""
             try:
                 self._subscribers[topic].remove(callback)
                 self._topic_meta[topic].subscriber_count -= 1

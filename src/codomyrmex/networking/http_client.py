@@ -17,6 +17,7 @@ except ImportError:
     REQUESTS_AVAILABLE = False
     # Mocking for type checking or fallback
     class HTTPAdapter:
+        """Functional component: HTTPAdapter."""
         def __init__(self, **kwargs): pass
     class Retry:
         def __init__(self, **kwargs): pass

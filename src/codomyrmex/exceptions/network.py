@@ -20,6 +20,7 @@ class NetworkError(CodomyrmexError):
         status_code: int | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if url:
             self.context["url"] = url
@@ -42,6 +43,7 @@ class ValidationError(CodomyrmexError):
         validation_rule: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if field_name:
             self.context["field_name"] = field_name
@@ -60,6 +62,7 @@ class TimeoutError(CodomyrmexError):
     def __init__(
         self, message: str, timeout_seconds: float | None = None, **kwargs: Any
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if timeout_seconds is not None:
             self.context["timeout_seconds"] = timeout_seconds

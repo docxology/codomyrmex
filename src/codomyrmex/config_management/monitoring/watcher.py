@@ -12,6 +12,7 @@ class ConfigWatcher:
     """Watches a configuration file for changes and triggers a callback."""
 
     def __init__(self, file_path: str, callback: Callable[[], None], interval: int = 5):
+        """Execute   Init   operations natively."""
         self.file_path = file_path
         self.callback = callback
         self.interval = interval
@@ -34,6 +35,7 @@ class ConfigWatcher:
             self._thread.join(timeout=5)
 
     def _run(self):
+        """Execute  Run operations natively."""
         while not self._stop_event.is_set():
             try:
                 if os.path.exists(self.file_path):

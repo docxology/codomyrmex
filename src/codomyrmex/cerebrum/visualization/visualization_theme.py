@@ -30,6 +30,7 @@ class Theme:
     """Visualization theme manager."""
 
     def __init__(self, name: str = "default"):
+        """Execute   Init   operations natively."""
         self.name = name
         self.colors = ThemeColors()
         self.font = ThemeFont()

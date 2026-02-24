@@ -14,25 +14,31 @@ from codomyrmex.agentic_memory.obsidian.graph import (
 
 
 class TestBuildLinkGraph:
+    """Test suite for BuildLinkGraph."""
     def test_graph_has_nodes(self, tmp_vault):
+        """Test functionality: graph has nodes."""
         vault = ObsidianVault(tmp_vault)
         graph = build_link_graph(vault)
         # 4 real notes + link targets added as edge destinations
         assert graph.number_of_nodes() >= 4
 
     def test_graph_has_edges(self, tmp_vault):
+        """Test functionality: graph has edges."""
         vault = ObsidianVault(tmp_vault)
         graph = build_link_graph(vault)
         assert graph.number_of_edges() > 0
 
     def test_graph_is_directed(self, tmp_vault):
+        """Test functionality: graph is directed."""
         vault = ObsidianVault(tmp_vault)
         graph = build_link_graph(vault)
         assert graph.is_directed()
 
 
 class TestBacklinks:
+    """Test suite for Backlinks."""
     def test_backlinks_found(self, tmp_vault):
+        """Test functionality: backlinks found."""
         vault = ObsidianVault(tmp_vault)
         # Simple Note links to My Test Note
         backlinks = get_backlinks(vault, "My Test Note")
@@ -40,19 +46,23 @@ class TestBacklinks:
         assert "Simple Note" in titles
 
     def test_backlinks_none(self, tmp_vault):
+        """Test functionality: backlinks none."""
         vault = ObsidianVault(tmp_vault)
         backlinks = get_backlinks(vault, "Nested Note")
         # No notes link to Nested Note
         assert len(backlinks) == 0
 
     def test_backlinks_not_found(self, tmp_vault):
+        """Test functionality: backlinks not found."""
         vault = ObsidianVault(tmp_vault)
         backlinks = get_backlinks(vault, "Nonexistent")
         assert len(backlinks) == 0
 
 
 class TestForwardLinks:
+    """Test suite for ForwardLinks."""
     def test_forward_links(self, tmp_vault):
+        """Test functionality: forward links."""
         vault = ObsidianVault(tmp_vault)
         # Simple Note links to My Test Note
         forward = get_forward_links(vault, "Simple Note")
@@ -61,7 +71,9 @@ class TestForwardLinks:
 
 
 class TestOrphans:
+    """Test suite for Orphans."""
     def test_finds_orphans(self, tmp_vault):
+        """Test functionality: finds orphans."""
         vault = ObsidianVault(tmp_vault)
         orphans = find_orphans(vault)
         # Nested Note has no links in or out
@@ -70,7 +82,9 @@ class TestOrphans:
 
 
 class TestBrokenLinks:
+    """Test suite for BrokenLinks."""
     def test_finds_broken(self, tmp_vault):
+        """Test functionality: finds broken."""
         vault = ObsidianVault(tmp_vault)
         broken = find_broken_links(vault)
         # My Test Note links to "Another Note", "Target", "Some Note", "Other"
@@ -80,6 +94,7 @@ class TestBrokenLinks:
         assert "Another Note" in targets
 
     def test_valid_links_not_broken(self, tmp_vault):
+        """Test functionality: valid links not broken."""
         vault = ObsidianVault(tmp_vault)
         broken = find_broken_links(vault)
         # "My Test Note" is a valid target, should not appear as broken
@@ -88,7 +103,9 @@ class TestBrokenLinks:
 
 
 class TestLinkStats:
+    """Test suite for LinkStats."""
     def test_stats_structure(self, tmp_vault):
+        """Test functionality: stats structure."""
         vault = ObsidianVault(tmp_vault)
         stats = get_link_stats(vault)
         assert "node_count" in stats
@@ -99,6 +116,7 @@ class TestLinkStats:
         assert "top_linkers" in stats
 
     def test_stats_values(self, tmp_vault):
+        """Test functionality: stats values."""
         vault = ObsidianVault(tmp_vault)
         stats = get_link_stats(vault)
         assert stats["node_count"] >= 4  # Real notes + link targets

@@ -83,6 +83,7 @@ class Icon:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["Icon"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -103,6 +104,7 @@ class Image:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["Image"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -125,6 +127,7 @@ class WorkspaceReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["WorkspaceReference"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -147,6 +150,7 @@ class FolderReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["FolderReference"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -168,6 +172,7 @@ class DocSize:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["DocSize"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -190,6 +195,7 @@ class PageReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["PageReference"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -214,6 +220,7 @@ class TableReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["TableReference"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -236,6 +243,7 @@ class ColumnReference:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["ColumnReference"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -273,6 +281,7 @@ class Doc:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Doc":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -305,6 +314,7 @@ class DocList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "DocList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Doc.from_dict(item) for item in data.get("items", [])],
@@ -322,6 +332,7 @@ class PersonValue:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> Optional["PersonValue"]:
+        """Execute From Dict operations natively."""
 
         if not data:
             return None
@@ -355,6 +366,7 @@ class Page:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Page":
+        """Execute From Dict operations natively."""
 
         children_data = data.get("children", [])
         children = [PageReference.from_dict(c) for c in children_data if c]
@@ -394,6 +406,7 @@ class PageList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PageList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Page.from_dict(item) for item in data.get("items", [])],
@@ -412,6 +425,7 @@ class PageContentItem:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PageContentItem":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -428,6 +442,7 @@ class Sort:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Sort":
+        """Execute From Dict operations natively."""
 
         return cls(
             column=ColumnReference.from_dict(data.get("column")) or ColumnReference(id=""),
@@ -456,6 +471,7 @@ class Table:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Table":
+        """Execute From Dict operations natively."""
 
         sorts_data = data.get("sorts", [])
         sorts = [Sort.from_dict(s) for s in sorts_data] if sorts_data else None
@@ -489,6 +505,7 @@ class TableList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "TableList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Table.from_dict(item) for item in data.get("items", [])],
@@ -514,6 +531,7 @@ class Column:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Column":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -539,6 +557,7 @@ class ColumnList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ColumnList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Column.from_dict(item) for item in data.get("items", [])],
@@ -564,6 +583,7 @@ class Row:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Row":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -590,6 +610,7 @@ class RowList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "RowList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Row.from_dict(item) for item in data.get("items", [])],
@@ -607,6 +628,7 @@ class CellEdit:
     value: Any
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "column": self.column,
             "value": self.value,
@@ -619,6 +641,7 @@ class RowEdit:
     cells: list[CellEdit]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {"cells": [cell.to_dict() for cell in self.cells]}
 
 
@@ -634,6 +657,7 @@ class Formula:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Formula":
+        """Execute From Dict operations natively."""
         return cls(
             id=data.get("id", ""),
             type=data.get("type", "formula"),
@@ -654,6 +678,7 @@ class FormulaList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "FormulaList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Formula.from_dict(item) for item in data.get("items", [])],
@@ -676,6 +701,7 @@ class Control:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Control":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -698,6 +724,7 @@ class ControlList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ControlList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Control.from_dict(item) for item in data.get("items", [])],
@@ -719,6 +746,7 @@ class Principal:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Principal":
+        """Execute From Dict operations natively."""
 
         return cls(
             type=data.get("type", ""),
@@ -726,6 +754,7 @@ class Principal:
         )
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
 
         result = {"type": self.type}
         if self.email:
@@ -742,6 +771,7 @@ class Permission:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Permission":
+        """Execute From Dict operations natively."""
 
         return cls(
             id=data.get("id", ""),
@@ -760,6 +790,7 @@ class PermissionList:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PermissionList":
+        """Execute From Dict operations natively."""
 
         return cls(
             items=[Permission.from_dict(item) for item in data.get("items", [])],
@@ -779,6 +810,7 @@ class SharingMetadata:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SharingMetadata":
+        """Execute From Dict operations natively."""
 
         return cls(
             can_share=data.get("canShare", False),
@@ -797,6 +829,7 @@ class ACLSettings:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ACLSettings":
+        """Execute From Dict operations natively."""
 
         return cls(
             allow_editors_to_change_permissions=data.get("allowEditorsToChangePermissions", False),
@@ -823,6 +856,7 @@ class User:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "User":
+        """Execute From Dict operations natively."""
 
         return cls(
             name=data.get("name", ""),
@@ -848,6 +882,7 @@ class MutationStatus:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "MutationStatus":
+        """Execute From Dict operations natively."""
 
         return cls(
             completed=data.get("completed", False),
@@ -863,6 +898,7 @@ class InsertRowsResult:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "InsertRowsResult":
+        """Execute From Dict operations natively."""
         return cls(
             request_id=data.get("requestId", ""),
             added_row_ids=data.get("addedRowIds"),

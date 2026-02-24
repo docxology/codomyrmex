@@ -20,31 +20,40 @@ class _DiGraph:
     that the tests exercise."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._adj: dict[str, set[str]] = {}
 
     def add_node(self, n: str) -> None:
+        """Execute Add Node operations natively."""
         self._adj.setdefault(n, set())
 
     def add_edge(self, u: str, v: str) -> None:
+        """Execute Add Edge operations natively."""
         self._adj.setdefault(u, set()).add(v)
         self._adj.setdefault(v, set())
 
     def number_of_nodes(self) -> int:
+        """Execute Number Of Nodes operations natively."""
         return len(self._adj)
 
     def number_of_edges(self) -> int:
+        """Execute Number Of Edges operations natively."""
         return sum(len(v) for v in self._adj.values())
 
     def is_directed(self) -> bool:
+        """Execute Is Directed operations natively."""
         return True
 
     def successors(self, n: str) -> list[str]:
+        """Execute Successors operations natively."""
         return list(self._adj.get(n, set()))
 
     def predecessors(self, n: str) -> list[str]:
+        """Execute Predecessors operations natively."""
         return [u for u, vs in self._adj.items() if n in vs]
 
     def nodes(self) -> list[str]:
+        """Execute Nodes operations natively."""
         return list(self._adj.keys())
 
 

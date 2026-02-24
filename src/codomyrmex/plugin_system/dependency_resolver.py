@@ -75,6 +75,7 @@ class DependencyResolver:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._nodes: dict[str, DependencyNode] = {}
 
     def add(self, node: DependencyNode) -> None:

@@ -18,6 +18,7 @@ class InMemoryStore:
     """In-process, dict-backed memory store."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._data: dict[str, Memory] = {}
 
     def save(self, memory: Memory) -> None:
@@ -51,6 +52,7 @@ class JSONFileStore:
     """
 
     def __init__(self, path: str) -> None:
+        """Execute   Init   operations natively."""
         self._path = Path(path)
         self._lock = threading.Lock()
         self._data: dict[str, dict[str, Any]] = {}
@@ -66,6 +68,7 @@ class JSONFileStore:
     # ── internal ─────────────────────────────────────────────────
 
     def _flush(self) -> None:
+        """Execute  Flush operations natively."""
         self._path.parent.mkdir(parents=True, exist_ok=True)
         with open(self._path, "w") as fh:
             json.dump(list(self._data.values()), fh, indent=2)
@@ -73,11 +76,13 @@ class JSONFileStore:
     # ── public API ───────────────────────────────────────────────
 
     def save(self, memory: Memory) -> None:
+        """Execute Save operations natively."""
         with self._lock:
             self._data[memory.id] = memory.to_dict()
             self._flush()
 
     def get(self, memory_id: str) -> Memory | None:
+        """Execute Get operations natively."""
         with self._lock:
             raw = self._data.get(memory_id)
         if raw is None:
@@ -85,6 +90,7 @@ class JSONFileStore:
         return Memory.from_dict(raw)
 
     def delete(self, memory_id: str) -> bool:
+        """Execute Delete operations natively."""
         with self._lock:
             if memory_id in self._data:
                 del self._data[memory_id]
@@ -93,5 +99,6 @@ class JSONFileStore:
             return False
 
     def list_all(self) -> list[Memory]:
+        """Execute List All operations natively."""
         with self._lock:
             return [Memory.from_dict(v) for v in self._data.values()]

@@ -32,21 +32,25 @@ class TestAgentMessage:
     """AgentMessage creation, serialization, and factory methods."""
 
     def test_system_factory(self):
+        """Test functionality: system factory."""
         msg = AgentMessage.system("You are helpful.")
         assert msg.role is MessageRole.SYSTEM
         assert msg.content == "You are helpful."
         assert msg.message_id  # auto-generated
 
     def test_user_factory(self):
+        """Test functionality: user factory."""
         msg = AgentMessage.user("Hello!")
         assert msg.role is MessageRole.USER
         assert msg.content == "Hello!"
 
     def test_assistant_factory(self):
+        """Test functionality: assistant factory."""
         msg = AgentMessage.assistant("Sure.")
         assert msg.role is MessageRole.ASSISTANT
 
     def test_tool_factory_with_results(self):
+        """Test functionality: tool factory with results."""
         result = ToolResult(call_id="abc", output=42)
         msg = AgentMessage.tool("result", results=[result])
         assert msg.role is MessageRole.TOOL
@@ -54,6 +58,7 @@ class TestAgentMessage:
         assert msg.tool_results[0].output == 42
 
     def test_to_dict_round_trip(self):
+        """Test functionality: to dict round trip."""
         tc = ToolCall(name="greet", arguments={"name": "Ada"})
         original = AgentMessage(
             role=MessageRole.ASSISTANT,
@@ -68,11 +73,13 @@ class TestAgentMessage:
         assert restored.tool_calls[0].name == "greet"
 
     def test_to_llm_dict(self):
+        """Test functionality: to llm dict."""
         msg = AgentMessage.user("Test")
         d = msg.to_llm_dict()
         assert d == {"role": "user", "content": "Test"}
 
     def test_tool_result_is_success(self):
+        """Test functionality: tool result is success."""
         ok = ToolResult(call_id="1", output="ok")
         fail = ToolResult(call_id="2", error="boom")
         assert ok.is_success is True
@@ -86,6 +93,7 @@ class TestAgentProtocolDefaults:
     """BaseAgent surfaces plan, act, observe as methods."""
 
     def test_base_agent_has_protocol_methods(self):
+        """Test functionality: base agent has protocol methods."""
         assert hasattr(BaseAgent, "plan")
         assert hasattr(BaseAgent, "act")
         assert hasattr(BaseAgent, "observe")
@@ -113,26 +121,31 @@ class TestReActLifecycle:
         return ReActAgent(name="test", tool_registry=registry)
 
     def test_plan_direct_call(self, agent):
+        """Test functionality: plan direct call."""
         request = AgentRequest(prompt="call: double")
         actions = agent.plan(request)
         assert len(actions) == 1
         assert actions[0].startswith("call_tool:")
 
     def test_plan_llm_fallback(self, agent):
+        """Test functionality: plan llm fallback."""
         request = AgentRequest(prompt="What is 2+2?")
         actions = agent.plan(request)
         assert actions[0].startswith("llm_reason_with_tools:")
 
     def test_act_direct_tool(self, agent):
+        """Test functionality: act direct tool."""
         response = agent.act("call_tool:double", {"prompt": 'call: double {"x": 3}'})
         assert response.is_success()
         assert "6" in response.content
 
     def test_act_unknown_action(self, agent):
+        """Test functionality: act unknown action."""
         response = agent.act("unknown:foo")
         assert not response.is_success()
 
     def test_observe_extracts_structure(self, agent):
+        """Test functionality: observe extracts structure."""
         response = AgentResponse(content="result", metadata={"k": "v"})
         obs = agent.observe(response)
         assert obs["success"] is True
@@ -140,6 +153,7 @@ class TestReActLifecycle:
         assert obs["metadata"] == {"k": "v"}
 
     def test_execute_direct_call(self, agent):
+        """Test functionality: execute direct call."""
         request = AgentRequest(prompt='call: double {"x": 5}')
         response = agent.execute(request)
         assert response.is_success()
@@ -177,8 +191,10 @@ class _FakeMCPRegistry:
 
 
 class TestToolRegistryFromMCP:
+    """Test suite for ToolRegistryFromMCP."""
 
     def test_bridge_populates_tools(self):
+        """Test functionality: bridge populates tools."""
         mcp_tools = [
             _FakeMCPTool("greet", "Say hello", lambda: "hello"),
             _FakeMCPTool("add", "Add two numbers", lambda a, b: a + b),
@@ -189,20 +205,24 @@ class TestToolRegistryFromMCP:
         assert registry.get_tool("greet") is not None
 
     def test_bridge_with_prefix(self):
+        """Test functionality: bridge with prefix."""
         mcp_tools = [_FakeMCPTool("ping", "Ping", lambda: "pong")]
         registry = ToolRegistry.from_mcp(_FakeMCPRegistry(mcp_tools), prefix="mcp.")
         assert registry.get_tool("mcp.ping") is not None
 
     def test_bridge_skips_handler_none(self):
+        """Test functionality: bridge skips handler none."""
         mcp_tools = [_FakeMCPTool("broken", "No handler", None)]
         registry = ToolRegistry.from_mcp(_FakeMCPRegistry(mcp_tools))
         assert len(registry.list_tools()) == 0
 
     def test_bridge_invalid_registry_raises(self):
+        """Test functionality: bridge invalid registry raises."""
         with pytest.raises(TypeError, match="list_tools"):
             ToolRegistry.from_mcp(object())
 
     def test_bridged_tool_executes(self):
+        """Test functionality: bridged tool executes."""
         mcp_tools = [_FakeMCPTool("inc", "Increment", lambda n: n + 1)]
         registry = ToolRegistry.from_mcp(_FakeMCPRegistry(mcp_tools))
         assert registry.execute("inc", n=5) == 6

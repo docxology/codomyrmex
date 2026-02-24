@@ -38,7 +38,9 @@ def _make_complete_trace(
 
 
 class TestDistillationConfig:
+    """Test suite for DistillationConfig."""
     def test_defaults(self) -> None:
+        """Test functionality: defaults."""
         cfg = DistillationConfig()
         assert cfg.min_confidence == 0.5
         assert cfg.min_steps == 2
@@ -46,7 +48,9 @@ class TestDistillationConfig:
 
 
 class TestDistillationPipeline:
+    """Test suite for DistillationPipeline."""
     def test_distill_single_trace(self) -> None:
+        """Test functionality: distill single trace."""
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace()]
         cases = pipeline.distill(traces)
@@ -54,6 +58,7 @@ class TestDistillationPipeline:
         assert cases[0].case_id.startswith("distilled-")
 
     def test_distill_features(self) -> None:
+        """Test functionality: distill features."""
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace(prompt="analyze module")]
         cases = pipeline.distill(traces)
@@ -63,6 +68,7 @@ class TestDistillationPipeline:
         assert "step_types" in case.features
 
     def test_distill_outcome(self) -> None:
+        """Test functionality: distill outcome."""
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace()]
         cases = pipeline.distill(traces)
@@ -70,6 +76,7 @@ class TestDistillationPipeline:
         assert "justification" in cases[0].outcome
 
     def test_distill_context(self) -> None:
+        """Test functionality: distill context."""
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace()]
         cases = pipeline.distill(traces)
@@ -77,6 +84,7 @@ class TestDistillationPipeline:
         assert len(cases[0].context["thoughts"]) == 3
 
     def test_distill_skips_incomplete(self) -> None:
+        """Test functionality: distill skips incomplete."""
         pipeline = DistillationPipeline()
         trace = ReasoningTrace(prompt="incomplete")
         trace.add_step(ReasoningStep(thought="A", confidence=0.5))
@@ -85,6 +93,7 @@ class TestDistillationPipeline:
         assert len(cases) == 0
 
     def test_distill_skips_low_confidence(self) -> None:
+        """Test functionality: distill skips low confidence."""
         pipeline = DistillationPipeline(
             config=DistillationConfig(min_confidence=0.8)
         )
@@ -93,6 +102,7 @@ class TestDistillationPipeline:
         assert len(cases) == 0
 
     def test_distill_skips_few_steps(self) -> None:
+        """Test functionality: distill skips few steps."""
         pipeline = DistillationPipeline(
             config=DistillationConfig(min_steps=5)
         )
@@ -101,6 +111,7 @@ class TestDistillationPipeline:
         assert len(cases) == 0
 
     def test_deduplication(self) -> None:
+        """Test functionality: deduplication."""
         pipeline = DistillationPipeline()
         t1 = _make_complete_trace(prompt="same prompt")
         t2 = _make_complete_trace(prompt="same prompt")
@@ -108,6 +119,7 @@ class TestDistillationPipeline:
         assert len(cases) == 1  # Second deduplicated
 
     def test_dedup_disabled(self) -> None:
+        """Test functionality: dedup disabled."""
         pipeline = DistillationPipeline(
             config=DistillationConfig(dedup_by_prompt=False)
         )
@@ -117,6 +129,7 @@ class TestDistillationPipeline:
         assert len(cases) == 2
 
     def test_metadata_source(self) -> None:
+        """Test functionality: metadata source."""
         pipeline = DistillationPipeline()
         traces = [_make_complete_trace()]
         cases = pipeline.distill(traces)

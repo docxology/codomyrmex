@@ -34,6 +34,7 @@ class RolloutConfig:
     stage_delay_seconds: float = 3600.0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.stages:
             raise ValueError("stages must contain at least one percentage value")
         for pct in self.stages:
@@ -71,6 +72,7 @@ class RolloutManager:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._rollouts: dict[str, _RolloutEntry] = {}
 
     def create_rollout(self, flag_name: str, config: RolloutConfig) -> RolloutStatus:
@@ -167,6 +169,7 @@ class RolloutManager:
     # ------------------------------------------------------------------
 
     def _get_entry(self, flag_name: str) -> _RolloutEntry:
+        """Execute  Get Entry operations natively."""
         try:
             return self._rollouts[flag_name]
         except KeyError:
@@ -174,6 +177,7 @@ class RolloutManager:
 
     @staticmethod
     def _to_status(entry: _RolloutEntry) -> RolloutStatus:
+        """Execute  To Status operations natively."""
         pct = entry.config.stages[entry.current_stage_index]
         return RolloutStatus(
             flag_name=entry.flag_name,

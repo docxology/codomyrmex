@@ -112,6 +112,7 @@ class BarChart:
 
     @property
     def data(self) -> dict[str, list]:
+        """Execute Data operations natively."""
         return {"x": self.categories, "y": self.values}
 
     def render(self, output_path: str = None, show_plot: bool = False):

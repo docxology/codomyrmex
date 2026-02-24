@@ -20,6 +20,7 @@ def mock_root(tmp_path):
 
 @pytest.mark.unit
 def test_get_system_summary(mock_root):
+    """Test functionality: get system summary."""
     provider = DataProvider(mock_root)
     summary = provider.get_system_summary()
     assert summary["status"] == "Operational"
@@ -27,6 +28,7 @@ def test_get_system_summary(mock_root):
 
 @pytest.mark.unit
 def test_get_modules(mock_root):
+    """Test functionality: get modules."""
     provider = DataProvider(mock_root)
     modules = provider.get_modules()
 
@@ -37,6 +39,7 @@ def test_get_modules(mock_root):
 
 @pytest.mark.unit
 def test_get_description_fallback(mock_root):
+    """Test functionality: get description fallback."""
     # Create module without description
     agent_dir = mock_root / "src" / "codomyrmex" / "mystery_agent"
     agent_dir.mkdir()

@@ -40,6 +40,7 @@ class ChartExporter:
     """Export matplotlib figures and charts to multiple formats."""
 
     def __init__(self, output_dir: Path | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._output_dir = output_dir or Path(".")
 
     def export(self, fig: Any, filename: str,

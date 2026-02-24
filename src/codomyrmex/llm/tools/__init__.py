@@ -133,6 +133,7 @@ class ToolRegistry:
     """Registry for managing available tools."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.tools: dict[str, Tool] = {}
         self.categories: dict[str, list[str]] = {}
 
@@ -193,6 +194,7 @@ def tool(
 ):
     """Decorator to create a tool from a function."""
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         tool_name = name or func.__name__
         tool_description = description or func.__doc__ or f"Tool: {tool_name}"
 
@@ -238,6 +240,7 @@ def tool(
 
         @wraps(func)
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
             return func(*args, **kwargs)
 
         wrapper._tool = tool_obj
@@ -249,13 +252,35 @@ def tool(
 # Built-in tools
 def create_calculator_tool() -> Tool:
     """Create a calculator tool."""
+    import ast
+    import operator
+
+    _MATH_OPS = {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.USub: operator.neg,
+        ast.UAdd: operator.pos,
+    }
+
+    def _safe_eval(node: ast.AST) -> float:
+        """Recursively evaluate an AST node containing only arithmetic."""
+        if isinstance(node, ast.Expression):
+            return _safe_eval(node.body)
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return float(node.value)
+        if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
+            return _MATH_OPS[type(node.op)](_safe_eval(node.left), _safe_eval(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
+            return _MATH_OPS[type(node.op)](_safe_eval(node.operand))
+        raise ValueError(f"Unsupported expression: {ast.dump(node)}")
+
     def calculate(expression: str) -> float:
-        """Evaluate a mathematical expression."""
-        # Safe evaluation of mathematical expressions
-        allowed_chars = set('0123456789+-*/.() ')
-        if not all(c in allowed_chars for c in expression):
-            raise ValueError("Invalid characters in expression")
-        return eval(expression)
+        """Evaluate a mathematical expression safely using AST parsing."""
+        # SECURITY: Uses AST-based evaluator instead of eval() to prevent code injection
+        tree = ast.parse(expression, mode="eval")
+        return _safe_eval(tree)
 
     return Tool(
         name="calculator",

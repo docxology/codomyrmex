@@ -46,6 +46,7 @@ class TaskQueue:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._heap: list[PriorityTask] = []
         self._tasks: dict[str, Task] = {}
         self._counter = 0
@@ -88,9 +89,11 @@ class TaskQueue:
         return self._tasks.get(task_id)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self._tasks)
 
     def __bool__(self) -> bool:
+        """Execute   Bool   operations natively."""
         return bool(self._tasks)
 
 
@@ -102,6 +105,7 @@ class DependencyGraph:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._dependencies: dict[str, set[str]] = {}  # task_id -> set of dependency task_ids
         self._dependents: dict[str, set[str]] = {}    # task_id -> set of tasks depending on it
 
@@ -152,6 +156,7 @@ class DependencyGraph:
         rec_stack = set()
 
         def dfs(task_id: str) -> bool:
+            """Execute Dfs operations natively."""
             visited.add(task_id)
             rec_stack.add(task_id)
 
@@ -189,6 +194,7 @@ class TaskManager:
         strategy: SchedulingStrategy = SchedulingStrategy.PRIORITY,
         max_concurrent: int = 1,
     ):
+        """Execute   Init   operations natively."""
         self._strategy = strategy
         self._max_concurrent = max_concurrent
         self._queue = TaskQueue()

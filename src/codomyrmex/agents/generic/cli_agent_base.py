@@ -21,8 +21,10 @@ def retry_on_failure(max_retries: int = 3, backoff_factor: float = 1.0):
     import time as time_module
 
     def decorator(func):
+        """Execute Decorator operations natively."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
             last_exception = None
             for attempt in range(max_retries + 1):
                 try:

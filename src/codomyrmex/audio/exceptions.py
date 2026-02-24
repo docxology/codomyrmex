@@ -34,6 +34,7 @@ class AudioError(CodomyrmexError):
         audio_path: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if audio_path:
             self.context["audio_path"] = str(audio_path)
@@ -57,6 +58,7 @@ class TranscriptionError(AudioError):
         model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, audio_path=audio_path, **kwargs)
         if language:
             self.context["language"] = language
@@ -81,6 +83,7 @@ class SynthesisError(AudioError):
         voice_id: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if text:
             # Truncate long text for context
@@ -104,6 +107,7 @@ class AudioFormatError(AudioError):
         supported_formats: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if format_type:
             self.context["format_type"] = format_type
@@ -128,6 +132,7 @@ class ModelNotLoadedError(AudioError):
         model_size: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if model_name:
             self.context["model_name"] = model_name
@@ -149,6 +154,7 @@ class ProviderNotAvailableError(AudioError):
         missing_packages: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if provider_name:
             self.context["provider_name"] = provider_name
@@ -172,6 +178,7 @@ class VoiceNotFoundError(AudioError):
         available_voices: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if voice_id:
             self.context["voice_id"] = voice_id

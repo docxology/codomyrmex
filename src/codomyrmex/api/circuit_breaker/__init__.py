@@ -120,6 +120,7 @@ class CircuitBreaker:
         name: str = "default",
         config: CircuitBreakerConfig | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.name = name
         self.config = config or CircuitBreakerConfig()
         self._state = CircuitState.CLOSED
@@ -279,6 +280,7 @@ class RetryPolicy:
         jitter: bool = True,
         retryable_exceptions: tuple | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.max_retries = max_retries
         self.backoff_base = backoff_base
         self.backoff_multiplier = backoff_multiplier
@@ -330,6 +332,7 @@ class Bulkhead:
         max_queue: int = 0,  # 0 = no queue
         timeout_s: float = 0.0,  # 0 = no timeout
     ):
+        """Execute   Init   operations natively."""
         self.name = name
         self.max_concurrent = max_concurrent
         self.max_queue = max_queue
@@ -407,8 +410,10 @@ def circuit_breaker(
     breaker = CircuitBreaker(name=name, config=config)
 
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Execute Decorator operations natively."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
+            """Execute Wrapper operations natively."""
             with breaker:
                 return func(*args, **kwargs)
 
@@ -433,8 +438,10 @@ def retry(
             ...
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Execute Decorator operations natively."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
+            """Execute Wrapper operations natively."""
             policy = RetryPolicy(
                 max_retries=max_retries,
                 backoff_base=backoff_base,

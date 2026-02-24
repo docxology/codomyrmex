@@ -70,12 +70,14 @@ class SwarmMessage:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.message_id:
             self.message_id = str(uuid.uuid4())[:8]
         if not self.timestamp:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "message_type": self.message_type.value,
             "sender": self.sender,
@@ -106,13 +108,16 @@ class SwarmAgent:
 
     @property
     def available(self) -> bool:
+        """Execute Available operations natively."""
         return self.active_tasks < self.max_concurrent
 
     @property
     def load(self) -> float:
+        """Execute Load operations natively."""
         return self.active_tasks / self.max_concurrent if self.max_concurrent > 0 else 1.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "agent_id": self.agent_id,
             "role": self.role.value,
@@ -148,10 +153,12 @@ class TaskAssignment:
     result: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.task_id:
             self.task_id = str(uuid.uuid4())[:8]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "task_id": self.task_id,
             "description": self.description,

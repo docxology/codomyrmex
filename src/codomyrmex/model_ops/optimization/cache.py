@@ -20,6 +20,7 @@ class InferenceCache:
     """
 
     def __init__(self, max_size: int = 1000):
+        """Execute   Init   operations natively."""
         self.max_size = max_size
         self._cache: dict[str, Any] = {}
         self._access_order: list[str] = []

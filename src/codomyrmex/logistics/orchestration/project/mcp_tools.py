@@ -27,6 +27,7 @@ except ImportError:
     logger.error("CRITICAL: MCP core modules are not installed. Cannot instantiate MCP tools. Zero mock policy enforces crashing instead of mocking.")
 
     def __raise_mcp_error(*args, **kwargs):
+        """Execute   Raise Mcp Error operations natively."""
         raise RuntimeError("MCP tools cannot be utilized without the codomyrmex.model_context_protocol package installed.")
 
     MCPToolResult = __raise_mcp_error

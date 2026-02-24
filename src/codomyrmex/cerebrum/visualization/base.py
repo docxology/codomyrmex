@@ -35,8 +35,10 @@ else:
     if nx is None:
         # Create a dummy type for nx when not available
         class _DummyGraph:
+            """Functional component: _DummyGraph."""
             pass
         class _DummyNX:
+            """Functional component: _DummyNX."""
             Graph = _DummyGraph
             DiGraph = _DummyGraph
         nx = _DummyNX()

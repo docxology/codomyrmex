@@ -78,6 +78,7 @@ class AgentMailProvider(EmailProvider):
         api_key: str | None = None,
         default_inbox_id: str | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         if not AGENTMAIL_AVAILABLE:
             raise ImportError(
                 "AgentMail dependencies are not installed. "

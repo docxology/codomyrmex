@@ -83,6 +83,7 @@ class StreamBuffer:
     """
 
     def __init__(self, max_size: int = 100000):
+        """Execute   Init   operations natively."""
         self.max_size = max_size
         self._chunks: list[str] = []
         self._total_length = 0
@@ -132,6 +133,7 @@ class PassthroughProcessor(StreamProcessor):
     """Passes events through unchanged."""
 
     def process(self, event: StreamEvent) -> StreamEvent | None:
+        """Execute Process operations natively."""
         return event
 
 
@@ -139,9 +141,11 @@ class ContentFilterProcessor(StreamProcessor):
     """Filters content based on patterns."""
 
     def __init__(self, block_patterns: list[str] | None = None):
+        """Execute   Init   operations natively."""
         self.block_patterns = block_patterns or []
 
     def process(self, event: StreamEvent) -> StreamEvent | None:
+        """Execute Process operations natively."""
         if event.event_type == StreamEventType.DELTA:
             for pattern in self.block_patterns:
                 if pattern.lower() in event.delta.lower():
@@ -167,6 +171,7 @@ class JSONStreamParser:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._buffer = ""
         self._objects: list[Any] = []
         self._depth = 0
@@ -242,6 +247,7 @@ class StreamHandler:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._processors: list[StreamProcessor] = []
         self._callbacks: dict[StreamEventType, list[Callable]] = {}
         self._buffer = StreamBuffer()

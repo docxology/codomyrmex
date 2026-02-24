@@ -2,6 +2,7 @@ from codomyrmex.documentation.education.curriculum import Curriculum, Lesson, Di
 
 
 def test_curriculum_basics():
+    """Test functionality: curriculum basics."""
     curr = Curriculum("Python", "beginner")
     assert len(curr._modules) == 0
 
@@ -12,6 +13,7 @@ def test_curriculum_basics():
 
 
 def test_lesson_prerequisites():
+    """Test functionality: lesson prerequisites."""
     l1 = Lesson(
         title="A",
         objectives=["Learn A"],

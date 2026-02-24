@@ -14,6 +14,7 @@ class BioCognitiveVerifier:
     """Verifies identity based on behavioral biometrics."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         # keyed by user_id -> metric_name -> list of values
         self._baselines: dict[str, dict[str, list[float]]] = {}
         self._thresholds: dict[str, float] = {

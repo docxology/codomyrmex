@@ -59,6 +59,7 @@ class FeatureManager:
     """
 
     def __init__(self, config: dict[str, Any] | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._flags: dict[str, FlagDefinition] = {}
         self._overrides: dict[str, bool] = {}  # test overrides
 

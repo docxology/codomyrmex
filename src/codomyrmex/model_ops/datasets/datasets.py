@@ -10,6 +10,7 @@ class Dataset:
     """Represents a collection of training/eval data."""
 
     def __init__(self, data: list[dict[str, Any]]):
+        """Execute   Init   operations natively."""
         self.data = data
 
     @classmethod

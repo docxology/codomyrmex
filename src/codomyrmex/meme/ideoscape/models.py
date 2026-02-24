@@ -43,6 +43,7 @@ class MapFeature:
     metadata: Dict[str, str] = field(default_factory=dict)
     
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if isinstance(self.position, list):
             self.position = np.array(self.position)
 
@@ -76,5 +77,6 @@ class TerrainMap:
     timestamp: float = field(default_factory=time.time)
     
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if isinstance(self.height_map, list):
             self.height_map = np.array(self.height_map)

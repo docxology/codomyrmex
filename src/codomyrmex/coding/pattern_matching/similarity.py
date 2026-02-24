@@ -51,6 +51,7 @@ class CodeSimilarity:
     _WHITESPACE_RE = re.compile(r"\s+")
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         pass
 
     def compute_similarity(self, code_a: str, code_b: str) -> float:

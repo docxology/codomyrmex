@@ -708,6 +708,7 @@ class TestMessageBusCommands:
             # Test subscribe
             handler_called = []
             def test_handler(msg):
+                """Test functionality: handler."""
                 handler_called.append(msg)
 
             bus.subscribe("test_type", test_handler)

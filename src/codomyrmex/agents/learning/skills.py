@@ -18,15 +18,19 @@ class SkillLibrary:
     """Repository of agent skills."""
     
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._skills: Dict[str, Skill] = {}
 
     def add_skill(self, skill: Skill) -> None:
+        """Execute Add Skill operations natively."""
         if skill.name in self._skills:
             raise ValueError(f"Skill '{skill.name}' already exists.")
         self._skills[skill.name] = skill
 
     def get_skill(self, name: str) -> Optional[Skill]:
+        """Execute Get Skill operations natively."""
         return self._skills.get(name)
 
     def search(self, tag: str) -> List[Skill]:
+        """Execute Search operations natively."""
         return [s for s in self._skills.values() if tag in s.tags]

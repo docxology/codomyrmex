@@ -15,6 +15,7 @@ class TestRelationStrengthScorer:
     """Tests for RelationStrengthScorer."""
 
     def test_score_single_interaction(self):
+        """Test functionality: score single interaction."""
         from codomyrmex.relations.strength_scoring import (
             Interaction, RelationStrengthScorer, StrengthConfig, DecayFunction,
         )
@@ -26,6 +27,7 @@ class TestRelationStrengthScorer:
         assert score.interaction_count == 1
 
     def test_exponential_decay(self):
+        """Test functionality: exponential decay."""
         from codomyrmex.relations.strength_scoring import (
             Interaction, RelationStrengthScorer, StrengthConfig, DecayFunction,
         )
@@ -37,6 +39,7 @@ class TestRelationStrengthScorer:
         assert abs(score.raw_score - 0.5) < 0.01
 
     def test_type_weights(self):
+        """Test functionality: type weights."""
         from codomyrmex.relations.strength_scoring import (
             Interaction, RelationStrengthScorer, StrengthConfig, DecayFunction,
         )
@@ -51,6 +54,7 @@ class TestRelationStrengthScorer:
         assert score.raw_score == 3.0
 
     def test_score_all_normalized(self):
+        """Test functionality: score all normalized."""
         from codomyrmex.relations.strength_scoring import (
             Interaction, RelationStrengthScorer, StrengthConfig, DecayFunction,
         )
@@ -69,6 +73,7 @@ class TestRegressionDetector:
     """Tests for RegressionDetector."""
 
     def test_no_regression(self):
+        """Test functionality: no regression."""
         from codomyrmex.performance.regression_detector import (
             Baseline, BenchmarkResult, RegressionDetector,
         )
@@ -79,6 +84,7 @@ class TestRegressionDetector:
         assert report.severity.value == "info"
 
     def test_warning_regression(self):
+        """Test functionality: warning regression."""
         from codomyrmex.performance.regression_detector import (
             Baseline, BenchmarkResult, RegressionDetector,
         )
@@ -90,6 +96,7 @@ class TestRegressionDetector:
         assert report.is_regression is True
 
     def test_critical_regression(self):
+        """Test functionality: critical regression."""
         from codomyrmex.performance.regression_detector import (
             Baseline, BenchmarkResult, RegressionDetector,
         )
@@ -100,6 +107,7 @@ class TestRegressionDetector:
         assert report.severity.value == "critical"
 
     def test_missing_baseline_raises(self):
+        """Test functionality: missing baseline raises."""
         from codomyrmex.performance.regression_detector import (
             BenchmarkResult, RegressionDetector,
         )
@@ -114,6 +122,7 @@ class TestCrawler:
     """Tests for Crawler."""
 
     def test_add_seeds_dedup(self):
+        """Test functionality: add seeds dedup."""
         from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
         crawler = Crawler(config=CrawlConfig(max_pages=10))
         added = crawler.add_seeds(["https://example.com", "https://example.com"])
@@ -121,6 +130,7 @@ class TestCrawler:
         assert crawler.frontier_size == 1
 
     def test_has_next_respects_max(self):
+        """Test functionality: has next respects max."""
         from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig, CrawlResult, CrawlStatus
         crawler = Crawler(config=CrawlConfig(max_pages=1))
         crawler.add_seeds(["https://example.com", "https://example.com/page2"])
@@ -129,6 +139,7 @@ class TestCrawler:
         assert crawler.has_next() is False
 
     def test_domain_filtering(self):
+        """Test functionality: domain filtering."""
         from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
         crawler = Crawler(config=CrawlConfig(allowed_domains=["example.com"]))
         assert crawler.is_allowed("https://example.com/page") is True
@@ -141,6 +152,7 @@ class TestPluginDiscovery:
     """Tests for PluginDiscovery."""
 
     def test_scan_entry_points_runs(self):
+        """Test functionality: scan entry points runs."""
         from codomyrmex.plugin_system.discovery import PluginDiscovery
         discovery = PluginDiscovery(entry_point_group="codomyrmex.test.nonexistent")
         result = discovery.scan_entry_points()
@@ -148,6 +160,7 @@ class TestPluginDiscovery:
         assert len(result.scan_sources) == 1
 
     def test_scan_invalid_directory(self):
+        """Test functionality: scan invalid directory."""
         from codomyrmex.plugin_system.discovery import PluginDiscovery
         discovery = PluginDiscovery()
         result = discovery.scan_directory("/nonexistent/path")
@@ -160,6 +173,7 @@ class TestMaintenanceScheduler:
     """Tests for MaintenanceScheduler."""
 
     def test_register_and_execute(self):
+        """Test functionality: register and execute."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
         )
@@ -176,6 +190,7 @@ class TestMaintenanceScheduler:
         assert result.output == "done"
 
     def test_due_tasks(self):
+        """Test functionality: due tasks."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig,
         )
@@ -191,6 +206,7 @@ class TestMaintenanceScheduler:
         assert len(due) == 1
 
     def test_failed_task_retries(self):
+        """Test functionality: failed task retries."""
         from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
         )
@@ -219,6 +235,7 @@ class TestStructuredFormatter:
     """Tests for StructuredFormatter."""
 
     def test_format_basic(self):
+        """Test functionality: format basic."""
         import json
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
@@ -236,6 +253,7 @@ class TestStructuredFormatter:
         assert parsed["module"] == "test"
 
     def test_static_fields(self):
+        """Test functionality: static fields."""
         import json
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, FormatterConfig, StructuredLogEntry, LogLevel,
@@ -248,6 +266,7 @@ class TestStructuredFormatter:
         assert parsed["service"] == "codomyrmex"
 
     def test_correlation_id(self):
+        """Test functionality: correlation id."""
         import json
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,

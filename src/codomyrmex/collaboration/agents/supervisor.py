@@ -43,6 +43,7 @@ class SupervisorAgent(CollaborativeAgent):
         delegation_strategy: str = "capability",
         max_retries: int = 3,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(
             agent_id,
             name,

@@ -46,6 +46,7 @@ class ContractTerm:
     fulfilled: bool = False
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if self.type not in _VALID_TERM_TYPES:
             raise ContractError(
                 f"Invalid term type '{self.type}'. "
@@ -74,6 +75,7 @@ class Contract:
     """
 
     def __init__(self, title: str, parties: list[str]) -> None:
+        """Execute   Init   operations natively."""
         if len(parties) < 2:
             raise ContractError("Contract requires at least 2 parties")
         if len(parties) != len(set(parties)):
@@ -232,6 +234,7 @@ class Contract:
         }
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return (
             f"Contract(title='{self.title}', status='{self.status.value}', "
             f"parties={self.parties})"

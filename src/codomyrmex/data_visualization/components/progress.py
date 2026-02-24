@@ -12,6 +12,7 @@ class ProgressBar(BaseComponent):
     label: str = ""
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         pct = (self.value / self.max_value * 100) if self.max_value else 0
         lbl = f'<span>{self.label}</span>' if self.label else ''
         return (
@@ -22,4 +23,5 @@ class ProgressBar(BaseComponent):
         )
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()

@@ -7,6 +7,7 @@ from codomyrmex.documents.utils.encoding_detector import detect_encoding
 
 @pytest.mark.unit
 class TestEncodingDetector:
+    """Test suite for EncodingDetector."""
     def test_detect_encoding_utf8_bom(self, tmp_path):
         """Test detecting UTF-8 with BOM from a real file."""
         f = tmp_path / "bom.txt"

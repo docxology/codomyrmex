@@ -12,6 +12,7 @@ class BaseLock(ABC):
     """Abstract base class for all lock implementations."""
 
     def __init__(self, name: str):
+        """Execute   Init   operations natively."""
         self.name = name
         self.is_held = False
 
@@ -34,23 +35,27 @@ class BaseLock(ABC):
         pass
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         if not self.acquire():
             raise TimeoutError(f"Could not acquire lock: {self.name}")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         self.release()
 
 class LocalLock(BaseLock):
     """File-based lock for local multi-process synchronization."""
 
     def __init__(self, name: str, lock_dir: str = "/tmp/codomyrmex/locks"):
+        """Execute   Init   operations natively."""
         super().__init__(name)
         self.lock_path = os.path.join(lock_dir, f"{name}.lock")
         os.makedirs(lock_dir, exist_ok=True)
         self._lock_file = None
 
     def acquire(self, timeout: float = 10.0, retry_interval: float = 0.1) -> bool:
+        """Execute Acquire operations natively."""
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:
@@ -66,6 +71,7 @@ class LocalLock(BaseLock):
         return False
 
     def release(self) -> None:
+        """Execute Release operations natively."""
         if self.is_held and self._lock_file:
             fcntl.flock(self._lock_file, fcntl.LOCK_UN)
             self._lock_file.close()

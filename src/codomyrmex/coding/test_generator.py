@@ -46,9 +46,11 @@ class TestSuite:
 
     @property
     def test_count(self) -> int:
+        """Execute Test Count operations natively."""
         return len(self.tests)
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         lines = ['"""Auto-generated tests."""', "", "import pytest", ""]
         lines.extend(self.imports)
         lines.append("")
@@ -98,6 +100,7 @@ class TestGenerator:
         return suite
 
     def _generate_function_test(self, node: ast.FunctionDef) -> GeneratedTest:
+        """Execute  Generate Function Test operations natively."""
         args = [a.arg for a in node.args.args if a.arg != "self"]
         name = f"test_{node.name}"
 
@@ -109,6 +112,7 @@ class TestGenerator:
         return GeneratedTest(name=name, body=body, target=node.name)
 
     def _generate_class_tests(self, node: ast.ClassDef) -> list[GeneratedTest]:
+        """Execute  Generate Class Tests operations natively."""
         tests = []
         class_name = node.name
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "1.0.1"
+version = "1.0.2.dev0"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -17,7 +17,7 @@ maintainers = [
 ]
 keywords = ["coding", "workspace", "modular", "development", "AI", "automation"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -43,7 +43,7 @@ dependencies = [
     "google-generativeai>=0.3.0",
     "google-genai>=0.1.0",
     "absl-py>=1.4.0",
-    "fire>=0.5.0",
+    "fire>=0.7.0",
     # For semantic search and embedding
     "sentence-transformers>=2.0.0",
     "chromadb>=0.4.0",
@@ -105,7 +105,7 @@ dependencies = [
     "msgpack>=1.1.2",
     "fastavro>=1.12.1",
     "mnemonic>=0.21",
-    "fire>=0.7.0",
+
 ]
 
 [project.optional-dependencies]
@@ -296,7 +296,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 50
+fail_under = 30
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",

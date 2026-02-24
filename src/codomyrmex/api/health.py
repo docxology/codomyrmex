@@ -39,6 +39,7 @@ class ComponentHealth:
     message: str = ""
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -64,18 +65,22 @@ class HealthReport:
     timestamp: float = 0.0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.timestamp:
             self.timestamp = time.time()
 
     @property
     def is_healthy(self) -> bool:
+        """Execute Is Healthy operations natively."""
         return self.status == HealthStatus.HEALTHY
 
     @property
     def component_count(self) -> int:
+        """Execute Component Count operations natively."""
         return len(self.components)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "status": self.status.value,
             "is_healthy": self.is_healthy,
@@ -96,6 +101,7 @@ class HealthChecker:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._checks: dict[str, Any] = {}
         self._start_time = time.time()
 

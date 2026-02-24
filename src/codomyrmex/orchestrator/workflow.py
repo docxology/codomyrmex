@@ -94,6 +94,7 @@ class Task:
     execution_time: float = 0.0
 
     def __hash__(self):
+        """Execute   Hash   operations natively."""
         return hash(self.name)
 
     def should_run(self, results: dict[str, TaskResult]) -> bool:
@@ -261,6 +262,7 @@ class Workflow:
         path = set()
 
         def check_cycle(task_name):
+            """Execute Check Cycle operations natively."""
             visited.add(task_name)
             path.add(task_name)
 

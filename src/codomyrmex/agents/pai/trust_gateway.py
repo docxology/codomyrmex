@@ -88,6 +88,7 @@ _CONFIRMATION_TTL = 60.0  # seconds
 
 
 class AuditEntry(TypedDict):
+    """Functional component: AuditEntry."""
     timestamp: str
     tool_name: str
     args_hash: str
@@ -235,19 +236,25 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
         except Exception as e:
             logging.getLogger(__name__).error(f"Trust change callback failed: {e}")
 
-    # Try to emit via EventBus if available
+    # Emit trust level change via EventBus
     try:
         from codomyrmex.events import publish_event
-        # TODO(v0.2.0): Use strict EventType.TRUST_LEVEL_CHANGED when available
-        publish_event("TRUST_LEVEL_CHANGED", {
-            "old_level": old_level.name,
-            "new_level": new_level.name,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
+        from codomyrmex.events.core.event_schema import EventType, Event
+        event = Event(
+            event_type=EventType.TRUST_LEVEL_CHANGED,
+            source="trust_gateway",
+            data={
+                "old_level": old_level.name,
+                "new_level": new_level.name,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            },
+        )
+        publish_event(event)
+        logger.debug("Trust level change emitted: %s -> %s", old_level.name, new_level.name)
     except ImportError:
-        pass  # EventBus not available in this context
+        logger.warning("EventBus not available; trust level change event not emitted")
     except Exception as e:
-         logging.getLogger(__name__).warning(f"Failed to emit trust event: {e}")
+        logger.warning("Failed to emit trust level change event: %s", e)
 
 
 
@@ -287,10 +294,12 @@ class _LazyToolSets:
 
     @staticmethod
     def safe_tools() -> frozenset[str]:
+        """Execute Safe Tools operations natively."""
         return _get_safe_tools()
 
     @staticmethod
     def destructive_tools_set() -> frozenset[str]:
+        """Execute Destructive Tools Set operations natively."""
         return _get_destructive_tools()
 
 
@@ -311,6 +320,7 @@ class TrustRegistry:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._ledger_path = Path.home() / ".codomyrmex" / "trust_ledger.json"
 
         # Initialize default state with ALL known tools (static + dynamic)

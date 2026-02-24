@@ -36,22 +36,27 @@ def aes_key() -> bytes:
 @pytest.mark.crypto
 @pytest.mark.unit
 class TestHMACSHA256:
+    """Test suite for HMACSHA256."""
     def test_compute(self, hmac_key: bytes) -> None:
+        """Test functionality: compute."""
         mac = compute_hmac_sha256(DATA, hmac_key)
         assert isinstance(mac, bytes)
         assert len(mac) == 32
 
     def test_deterministic(self, hmac_key: bytes) -> None:
+        """Test functionality: deterministic."""
         mac1 = compute_hmac_sha256(DATA, hmac_key)
         mac2 = compute_hmac_sha256(DATA, hmac_key)
         assert mac1 == mac2
 
     def test_different_data_different_mac(self, hmac_key: bytes) -> None:
+        """Test functionality: different data different mac."""
         mac1 = compute_hmac_sha256(b"data1", hmac_key)
         mac2 = compute_hmac_sha256(b"data2", hmac_key)
         assert mac1 != mac2
 
     def test_different_keys_different_mac(self) -> None:
+        """Test functionality: different keys different mac."""
         k1 = os.urandom(32)
         k2 = os.urandom(32)
         mac1 = compute_hmac_sha256(DATA, k1)
@@ -59,25 +64,30 @@ class TestHMACSHA256:
         assert mac1 != mac2
 
     def test_verify_valid(self, hmac_key: bytes) -> None:
+        """Test functionality: verify valid."""
         mac = compute_hmac_sha256(DATA, hmac_key)
         assert verify_hmac_sha256(DATA, hmac_key, mac) is True
 
     def test_verify_tampered_data(self, hmac_key: bytes) -> None:
+        """Test functionality: verify tampered data."""
         mac = compute_hmac_sha256(DATA, hmac_key)
         assert verify_hmac_sha256(b"tampered", hmac_key, mac) is False
 
     def test_verify_tampered_mac(self, hmac_key: bytes) -> None:
+        """Test functionality: verify tampered mac."""
         mac = compute_hmac_sha256(DATA, hmac_key)
         tampered = bytearray(mac)
         tampered[0] ^= 0xFF
         assert verify_hmac_sha256(DATA, hmac_key, bytes(tampered)) is False
 
     def test_verify_wrong_key(self, hmac_key: bytes) -> None:
+        """Test functionality: verify wrong key."""
         mac = compute_hmac_sha256(DATA, hmac_key)
         wrong_key = os.urandom(32)
         assert verify_hmac_sha256(DATA, wrong_key, mac) is False
 
     def test_empty_data(self, hmac_key: bytes) -> None:
+        """Test functionality: empty data."""
         mac = compute_hmac_sha256(b"", hmac_key)
         assert verify_hmac_sha256(b"", hmac_key, mac) is True
 
@@ -85,16 +95,20 @@ class TestHMACSHA256:
 @pytest.mark.crypto
 @pytest.mark.unit
 class TestPoly1305:
+    """Test suite for Poly1305."""
     def test_compute(self, poly1305_key: bytes) -> None:
+        """Test functionality: compute."""
         tag = compute_poly1305(DATA, poly1305_key)
         assert isinstance(tag, bytes)
         assert len(tag) == 16
 
     def test_wrong_key_size(self) -> None:
+        """Test functionality: wrong key size."""
         with pytest.raises(CryptoError, match="exactly 32-byte key"):
             compute_poly1305(DATA, b"\x00" * 16)
 
     def test_different_data_different_tags(self, poly1305_key: bytes) -> None:
+        """Test functionality: different data different tags."""
         tag1 = compute_poly1305(b"msg1", poly1305_key)
         tag2 = compute_poly1305(b"msg2", poly1305_key)
         assert tag1 != tag2
@@ -103,26 +117,32 @@ class TestPoly1305:
 @pytest.mark.crypto
 @pytest.mark.unit
 class TestCMAC:
+    """Test suite for CMAC."""
     def test_compute_aes128(self, aes_key: bytes) -> None:
+        """Test functionality: compute aes128."""
         tag = compute_cmac(DATA, aes_key)
         assert isinstance(tag, bytes)
         assert len(tag) == 16
 
     def test_compute_aes256(self) -> None:
+        """Test functionality: compute aes256."""
         key = os.urandom(32)
         tag = compute_cmac(DATA, key)
         assert len(tag) == 16
 
     def test_deterministic(self, aes_key: bytes) -> None:
+        """Test functionality: deterministic."""
         tag1 = compute_cmac(DATA, aes_key)
         tag2 = compute_cmac(DATA, aes_key)
         assert tag1 == tag2
 
     def test_different_data(self, aes_key: bytes) -> None:
+        """Test functionality: different data."""
         tag1 = compute_cmac(b"data1", aes_key)
         tag2 = compute_cmac(b"data2", aes_key)
         assert tag1 != tag2
 
     def test_invalid_key_size(self) -> None:
+        """Test functionality: invalid key size."""
         with pytest.raises(CryptoError):
             compute_cmac(DATA, b"\x00" * 15)  # Invalid AES key size

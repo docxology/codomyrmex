@@ -97,7 +97,12 @@ class ScriptExecutor(StepExecutor):
             if callable(script_fn):
                 result = script_fn(context)
             else:
-                result = eval(step.config.get("expression", "True"), {"ctx": context})
+                # SECURITY: Restricted eval — only 'ctx' is accessible, builtins disabled
+                result = eval(  # noqa: S307 — intentional restricted eval
+                    step.config.get("expression", "True"),
+                    {"__builtins__": {}},
+                    {"ctx": context},
+                )
 
             duration = (time.time() - start) * 1000
 

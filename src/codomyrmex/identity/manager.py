@@ -14,6 +14,7 @@ class IdentityManager:
     """Manages user personas and identity switching."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._personas: dict[str, Persona] = {}
         self._active_persona_id: str | None = None
 
@@ -28,6 +29,7 @@ class IdentityManager:
         return persona
 
     def get_persona(self, id: str) -> Persona | None:
+        """Execute Get Persona operations natively."""
         return self._personas.get(id)
 
     def set_active_persona(self, id: str) -> None:
@@ -46,6 +48,7 @@ class IdentityManager:
         return None
 
     def list_personas(self) -> list[Persona]:
+        """Execute List Personas operations natively."""
         return list(self._personas.values())
 
     def revoke_persona(self, id: str) -> bool:

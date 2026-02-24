@@ -12,6 +12,7 @@ class S3Client:
     """Wrapper for AWS S3 operations."""
 
     def __init__(self, region_name: str | None = None):
+        """Execute   Init   operations natively."""
         self.client = boto3.client('s3', region_name=region_name)
 
     def upload_file(self, file_path: str, bucket: str, object_name: str | None = None) -> bool:

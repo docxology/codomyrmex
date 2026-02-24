@@ -19,8 +19,10 @@ from codomyrmex.release.distribution import (
 # ─── ReleaseValidator ────────────────────────────────────────────────
 
 class TestReleaseValidator:
+    """Test suite for ReleaseValidator."""
 
     def test_full_certification_pass(self):
+        """Test functionality: full certification pass."""
         v = ReleaseValidator(version="1.0.0")
         v.check_tests(failures=0, total=9000)
         v.check_coverage(overall=67, tier1=82)
@@ -32,6 +34,7 @@ class TestReleaseValidator:
         assert cert.pass_rate == pytest.approx(1.0)
 
     def test_certification_fail_on_tests(self):
+        """Test functionality: certification fail on tests."""
         v = ReleaseValidator()
         v.check_tests(failures=3, total=100)
         cert = v.certify()
@@ -39,12 +42,14 @@ class TestReleaseValidator:
         assert "Test Suite" in cert.blockers
 
     def test_certification_fail_on_coverage(self):
+        """Test functionality: certification fail on coverage."""
         v = ReleaseValidator()
         v.check_coverage(overall=50, tier1=60)
         cert = v.certify()
         assert not cert.certified
 
     def test_markdown_output(self):
+        """Test functionality: markdown output."""
         v = ReleaseValidator(version="1.0.0")
         v.check_tests(failures=0, total=100)
         cert = v.certify()
@@ -56,25 +61,30 @@ class TestReleaseValidator:
 # ─── PackageBuilder ──────────────────────────────────────────────────
 
 class TestPackageBuilder:
+    """Test suite for PackageBuilder."""
 
     def test_valid_build(self):
+        """Test functionality: valid build."""
         builder = PackageBuilder(PackageMetadata(name="mypackage", version="1.0.0"))
         report = builder.build()
         assert report.success
         assert len(report.artifacts) == 2
 
     def test_checksums(self):
+        """Test functionality: checksums."""
         builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
         report = builder.build()
         for artifact in report.artifacts:
             assert len(artifact.checksum) > 0
 
     def test_invalid_metadata(self):
+        """Test functionality: invalid metadata."""
         builder = PackageBuilder(PackageMetadata(name="", version=""))
         report = builder.build()
         assert not report.success
 
     def test_artifact_filenames(self):
+        """Test functionality: artifact filenames."""
         builder = PackageBuilder(PackageMetadata(name="mylib", version="2.0.0"))
         report = builder.build()
         formats = {a.format for a in report.artifacts}
@@ -85,8 +95,10 @@ class TestPackageBuilder:
 # ─── DistributionManager ─────────────────────────────────────────────
 
 class TestDistributionManager:
+    """Test suite for DistributionManager."""
 
     def test_preflight_pass(self):
+        """Test functionality: preflight pass."""
         builder = PackageBuilder(PackageMetadata(name="pkg", version="1.0"))
         report = builder.build()
         dm = DistributionManager(build=report)
@@ -94,11 +106,13 @@ class TestDistributionManager:
         assert pf.ready
 
     def test_preflight_fail_no_build(self):
+        """Test functionality: preflight fail no build."""
         dm = DistributionManager()
         pf = dm.preflight(DistributionTarget.PYPI)
         assert not pf.ready
 
     def test_publish_pypi(self):
+        """Test functionality: publish pypi."""
         builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
         report = builder.build()
         dm = DistributionManager(build=report)
@@ -107,6 +121,7 @@ class TestDistributionManager:
         assert "pypi.org" in result.url
 
     def test_publish_github(self):
+        """Test functionality: publish github."""
         builder = PackageBuilder(PackageMetadata(name="codomyrmex", version="1.0.0"))
         report = builder.build()
         dm = DistributionManager(build=report)

@@ -39,6 +39,7 @@ class Strategy:
         self.success_rate = self.success_rate * (1 - weight) + (1.0 if success else 0.0) * weight
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "prompt_template": self.prompt_template[:100],
@@ -60,6 +61,7 @@ class StrategyLibrary:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._strategies: dict[str, Strategy] = {}
 
     def add(self, strategy: Strategy) -> None:
@@ -67,9 +69,11 @@ class StrategyLibrary:
         self._strategies[strategy.name] = strategy
 
     def get(self, name: str) -> Strategy | None:
+        """Execute Get operations natively."""
         return self._strategies.get(name)
 
     def remove(self, name: str) -> bool:
+        """Execute Remove operations natively."""
         if name in self._strategies:
             del self._strategies[name]
             return True
@@ -90,9 +94,11 @@ class StrategyLibrary:
 
     @property
     def size(self) -> int:
+        """Execute Size operations natively."""
         return len(self._strategies)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "strategies": [s.to_dict() for s in self.list_strategies()],
             "total": self.size,

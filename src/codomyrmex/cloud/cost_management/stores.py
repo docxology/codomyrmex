@@ -34,6 +34,7 @@ class InMemoryCostStore(CostStore):
     """In-memory cost storage."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._entries: list[CostEntry] = []
         self._lock = threading.Lock()
 

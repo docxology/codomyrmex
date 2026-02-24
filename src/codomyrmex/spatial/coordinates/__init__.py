@@ -27,15 +27,19 @@ class Point3D:
     z: float = 0.0
 
     def __add__(self, other: 'Point3D') -> 'Point3D':
+        """Execute   Add   operations natively."""
         return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other: 'Point3D') -> 'Point3D':
+        """Execute   Sub   operations natively."""
         return Point3D(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, scalar: float) -> 'Point3D':
+        """Execute   Mul   operations natively."""
         return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
 
     def __truediv__(self, scalar: float) -> 'Point3D':
+        """Execute   Truediv   operations natively."""
         return Point3D(self.x / scalar, self.y / scalar, self.z / scalar)
 
     def magnitude(self) -> float:

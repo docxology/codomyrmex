@@ -8,6 +8,7 @@ from codomyrmex.documents.models.document import Document, DocumentFormat, Docum
 
 @pytest.mark.unit
 class TestDocument(unittest.TestCase):
+    """Test suite for Document."""
     def test_document_initialization(self):
         """Test basic document initialization."""
         content = "Test content"

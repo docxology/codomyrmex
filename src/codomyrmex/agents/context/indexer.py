@@ -36,6 +36,7 @@ class Symbol:
     docstring: str = ""
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "kind": self.kind,
@@ -76,18 +77,23 @@ class RepoIndex:
 
     @property
     def symbol_count(self) -> int:
+        """Execute Symbol Count operations natively."""
         return len(self.symbols)
 
     def symbols_in_file(self, file_path: str) -> list[Symbol]:
+        """Execute Symbols In File operations natively."""
         return [s for s in self.symbols if s.file == file_path]
 
     def functions(self) -> list[Symbol]:
+        """Execute Functions operations natively."""
         return [s for s in self.symbols if s.kind == "function"]
 
     def classes(self) -> list[Symbol]:
+        """Execute Classes operations natively."""
         return [s for s in self.symbols if s.kind == "class"]
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "files_indexed": self.files_indexed,
             "symbol_count": self.symbol_count,

@@ -20,6 +20,7 @@ class SkillTestResult:
     """Result of a single skill test case."""
 
     def __init__(self, name: str, passed: bool, expected: Any = None, actual: Any = None, error: str | None = None):
+        """Execute   Init   operations natively."""
         self.name = name
         self.passed = passed
         self.expected = expected
@@ -27,6 +28,7 @@ class SkillTestResult:
         self.error = error
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         result = {
             "name": self.name,
             "passed": self.passed,

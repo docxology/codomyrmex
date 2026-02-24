@@ -37,9 +37,11 @@ class CodeBundle:
 
     @property
     def line_count(self) -> int:
+        """Execute Line Count operations natively."""
         return len(self.source.strip().splitlines())
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "filename": self.filename,
             "language": self.language,
@@ -141,6 +143,7 @@ class CodeGenerator:
 
     @staticmethod
     def _extract_class_name(spec: str) -> str:
+        """Execute  Extract Class Name operations natively."""
         pattern = r'\b(?:create|build|make)\s+(?:a\s+)?(\w+)'
         match = re.search(pattern, spec, re.IGNORECASE)
         if match:
@@ -150,6 +153,7 @@ class CodeGenerator:
 
     @staticmethod
     def _to_snake_case(name: str) -> str:
+        """Execute  To Snake Case operations natively."""
         clean = re.sub(r'[^a-zA-Z0-9\s]', '', name)
         return "_".join(clean.lower().split())
 

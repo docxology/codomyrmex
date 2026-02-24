@@ -50,6 +50,7 @@ class AgentRegistry:
         health_check_interval: float = 30.0,
         heartbeat_timeout: float = 60.0,
     ):
+        """Execute   Init   operations natively."""
         if self._initialized:
             return
 

@@ -48,11 +48,13 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """Decorator for performance monitoring (fallback)."""
         def decorator(func):
+            """Execute Decorator operations natively."""
 
             return func
         return decorator
 
     class performance_context:
+        """Functional component: performance_context."""
 
         def __init__(self, context_name: str = "unknown_context", *args, **kwargs):
             """Initialize performance context (fallback)."""

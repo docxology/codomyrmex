@@ -23,6 +23,7 @@ class StoredEvent:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "event_type": self.event_type,
             "payload": self.payload,
@@ -33,6 +34,7 @@ class StoredEvent:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> StoredEvent:
+        """Execute From Dict operations natively."""
         return cls(**data)
 
 
@@ -44,11 +46,13 @@ class EventStore:
     """
 
     def __init__(self, store_path: Path) -> None:
+        """Execute   Init   operations natively."""
         self._path = store_path
         self._path.parent.mkdir(parents=True, exist_ok=True)
         self._sequence = self._load_last_sequence()
 
     def _load_last_sequence(self) -> int:
+        """Execute  Load Last Sequence operations natively."""
         if not self._path.exists():
             return 0
         last_seq = 0
@@ -125,4 +129,5 @@ class EventStore:
 
     @property
     def event_count(self) -> int:
+        """Execute Event Count operations natively."""
         return self._sequence

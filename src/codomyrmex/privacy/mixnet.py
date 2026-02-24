@@ -14,6 +14,7 @@ logger = get_logger(__name__)
 
 @dataclass
 class Packet:
+    """Functional component: Packet."""
     payload: bytes
     route_id: str
     hops_remaining: int
@@ -21,6 +22,7 @@ class Packet:
 class MixNode:
     """A single node in the mixnet overlay."""
     def __init__(self, node_id: str):
+        """Execute   Init   operations natively."""
         self.node_id = node_id
 
     def relay(self, packet: Packet) -> Packet | None:
@@ -41,6 +43,7 @@ class MixnetProxy:
     """Manages anonymous routing through the mixnet."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._nodes = [MixNode(f"node_{i}") for i in range(10)]
 
     def route_payload(self, payload: bytes, hops: int = 3) -> bytes:

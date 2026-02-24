@@ -96,6 +96,7 @@ def analyze_code_quality(path: str = None, **kwargs) -> dict:
 def cli_commands():
     """Return CLI commands for the static_analysis module."""
     def _analyze(path=None):
+        """Execute  Analyze operations natively."""
         import os
         target = path or os.getcwd()
         result = analyze_code_quality(target)
@@ -106,6 +107,7 @@ def cli_commands():
             print(f"Error: {result['error']}")
 
     def _list_tools():
+        """Execute  List Tools operations natively."""
         tools_list = get_available_tools()
         print("Available analysis tools:")
         for tool in tools_list:

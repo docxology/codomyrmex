@@ -30,6 +30,7 @@ class CodomyrmexError(Exception):
         error_code: str | None = None,
         **kwargs: Any,
     ):
+        """Execute   Init   operations natively."""
 
         super().__init__(message)
         self.message = message

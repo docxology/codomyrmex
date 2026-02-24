@@ -15,11 +15,13 @@ class A11yChecker:
     """Accessibility checker."""
 
     def __init__(self, level: WCAGLevel = WCAGLevel.AA):
+        """Execute   Init   operations natively."""
         self.level = level
         self._rules: list[WCAGRule] = []
         self._setup_default_rules()
 
     def _setup_default_rules(self):
+        """Execute  Setup Default Rules operations natively."""
         # Image alt text
         self._rules.append(WCAGRule(
             code="img-alt",
@@ -71,6 +73,7 @@ class A11yChecker:
         ))
 
     def add_rule(self, rule: WCAGRule) -> None:
+        """Execute Add Rule operations natively."""
         self._rules.append(rule)
 
     def check_elements(self, elements: list[dict[str, Any]]) -> AccessibilityReport:

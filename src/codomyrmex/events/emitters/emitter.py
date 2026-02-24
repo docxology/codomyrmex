@@ -11,6 +11,7 @@ class AsyncEventEmitter:
     """Emits events asynchronously to the event bus."""
 
     def __init__(self, bus: Any | None = None):
+        """Execute   Init   operations natively."""
         self.bus = bus or get_event_bus()
 
     async def emit(self, event_type: EventType, payload: Any, priority: int = 0):

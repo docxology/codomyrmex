@@ -45,14 +45,17 @@ class ProfileStats:
 
     @property
     def avg_seconds(self) -> float:
+        """Execute Avg Seconds operations natively."""
         return self.total_seconds / max(self.call_count, 1)
 
     @property
     def avg_ms(self) -> float:
+        """Execute Avg Ms operations natively."""
         return self.avg_seconds * 1000
 
     @property
     def max_ms(self) -> float:
+        """Execute Max Ms operations natively."""
         return self.max_seconds * 1000
 
 
@@ -75,6 +78,7 @@ class AsyncProfiler:
     """
 
     def __init__(self, slow_threshold: float = 1.0) -> None:
+        """Execute   Init   operations natively."""
         self.slow_threshold = slow_threshold
         self._entries: dict[str, list[ProfileEntry]] = defaultdict(list)
         self._slow_calls: list[ProfileEntry] = []
@@ -112,6 +116,7 @@ class AsyncProfiler:
         """Decorator to profile a synchronous function."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute Wrapper operations natively."""
             start = time.perf_counter()
             error_msg = ""
             try:
@@ -164,14 +169,17 @@ class AsyncProfiler:
 
     @property
     def slow_calls(self) -> list[ProfileEntry]:
+        """Execute Slow Calls operations natively."""
         return list(self._slow_calls)
 
     @property
     def total_calls(self) -> int:
+        """Execute Total Calls operations natively."""
         return sum(len(entries) for entries in self._entries.values())
 
     @property
     def profiled_functions(self) -> list[str]:
+        """Execute Profiled Functions operations natively."""
         return sorted(self._entries.keys())
 
     def clear(self) -> None:

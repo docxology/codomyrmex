@@ -22,7 +22,9 @@ from codomyrmex.model_context_protocol.discovery import (
 
 
 class TestDiscoveryMetricsDataclass:
+    """Test suite for DiscoveryMetricsDataclass."""
     def test_default_values(self) -> None:
+        """Test functionality: default values."""
         m = DiscoveryMetrics()
         assert m.total_tools == 0
         assert m.scan_duration_ms == 0.0
@@ -32,6 +34,7 @@ class TestDiscoveryMetricsDataclass:
         assert m.last_scan_time is None
 
     def test_custom_values(self) -> None:
+        """Test functionality: custom values."""
         from datetime import datetime, timezone
 
         now = datetime.now(timezone.utc)
@@ -55,13 +58,16 @@ class TestDiscoveryMetricsDataclass:
 
 
 class TestMetricsViaEngine:
+    """Test suite for MetricsViaEngine."""
     def test_fresh_engine_metrics(self) -> None:
+        """Test functionality: fresh engine metrics."""
         engine = MCPDiscovery()
         m = engine.get_metrics()
         assert m.total_tools == 0
         assert m.cache_hits == 0
 
     def test_scan_updates_metrics(self) -> None:
+        """Test functionality: scan updates metrics."""
         engine = MCPDiscovery()
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
@@ -69,6 +75,7 @@ class TestMetricsViaEngine:
         assert m.last_scan_time is not None
 
     def test_cache_hit_increments_in_metrics(self) -> None:
+        """Test functionality: cache hit increments in metrics."""
         engine = MCPDiscovery()
         engine.record_cache_hit()
         engine.record_cache_hit()
@@ -76,6 +83,7 @@ class TestMetricsViaEngine:
         assert m.cache_hits == 2
 
     def test_metrics_reflect_tool_count(self) -> None:
+        """Test functionality: metrics reflect tool count."""
         engine = MCPDiscovery()
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
@@ -86,7 +94,9 @@ class TestMetricsViaEngine:
 
 
 class TestMetricsSerialisation:
+    """Test suite for MetricsSerialisation."""
     def test_metrics_are_json_serialisable(self) -> None:
+        """Test functionality: metrics are json serialisable."""
         from datetime import datetime, timezone
 
         m = DiscoveryMetrics(
@@ -119,6 +129,7 @@ class TestStreamThreeExports:
     """Verify Stream 3 types are importable from top-level MCP package."""
 
     def test_import_from_mcp_package(self) -> None:
+        """Test functionality: import from mcp package."""
         from codomyrmex.model_context_protocol import (
             DiscoveryMetrics,
             DiscoveryReport,

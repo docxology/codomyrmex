@@ -39,6 +39,7 @@ class SpanData:
         return 0.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "trace_id": self.trace_id,
             "span_id": self.span_id,
@@ -72,9 +73,11 @@ class ConsoleExporter(SpanExporter):
     """Exports spans to the console for debugging."""
 
     def __init__(self, pretty: bool = True):
+        """Execute   Init   operations natively."""
         self.pretty = pretty
 
     def export(self, spans: list[SpanData]) -> bool:
+        """Execute Export operations natively."""
         for span in spans:
             data = span.to_dict()
             if self.pretty:
@@ -84,6 +87,7 @@ class ConsoleExporter(SpanExporter):
         return True
 
     def shutdown(self) -> None:
+        """Execute Shutdown operations natively."""
         pass
 
 
@@ -91,10 +95,12 @@ class FileExporter(SpanExporter):
     """Exports spans to a JSON file."""
 
     def __init__(self, filepath: str):
+        """Execute   Init   operations natively."""
         self.filepath = filepath
         self._lock = threading.Lock()
 
     def export(self, spans: list[SpanData]) -> bool:
+        """Execute Export operations natively."""
         try:
             with self._lock:
                 with open(self.filepath, 'a') as f:
@@ -105,6 +111,7 @@ class FileExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
+        """Execute Shutdown operations natively."""
         pass
 
 
@@ -118,6 +125,7 @@ class OTLPExporter(SpanExporter):
         timeout: float = 10.0,
         compression: str = "none",  # none, gzip
     ):
+        """Execute   Init   operations natively."""
         self.endpoint = endpoint.rstrip('/')
         self.headers = headers or {}
         self.timeout = timeout
@@ -199,6 +207,7 @@ class OTLPExporter(SpanExporter):
         return result
 
     def export(self, spans: list[SpanData]) -> bool:
+        """Execute Export operations natively."""
         try:
             import urllib.request
 
@@ -229,6 +238,7 @@ class OTLPExporter(SpanExporter):
             return False
 
     def shutdown(self) -> None:
+        """Execute Shutdown operations natively."""
         pass
 
 
@@ -242,6 +252,7 @@ class BatchExporter(SpanExporter):
         max_queue_size: int = 2048,
         scheduled_delay_ms: int = 5000,
     ):
+        """Execute   Init   operations natively."""
         self.exporter = exporter
         self.max_batch_size = max_batch_size
         self.max_queue_size = max_queue_size
@@ -273,6 +284,7 @@ class BatchExporter(SpanExporter):
                 self.exporter.export(batch)
 
     def export(self, spans: list[SpanData]) -> bool:
+        """Execute Export operations natively."""
         for span in spans:
             try:
                 self._queue.put_nowait(span)
@@ -281,6 +293,7 @@ class BatchExporter(SpanExporter):
         return True
 
     def shutdown(self) -> None:
+        """Execute Shutdown operations natively."""
         self._shutdown.set()
         self._worker_thread.join(timeout=5.0)
 
@@ -302,9 +315,11 @@ class MultiExporter(SpanExporter):
     """Exports to multiple backends simultaneously."""
 
     def __init__(self, exporters: list[SpanExporter]):
+        """Execute   Init   operations natively."""
         self.exporters = exporters
 
     def export(self, spans: list[SpanData]) -> bool:
+        """Execute Export operations natively."""
         results = []
         for exporter in self.exporters:
             try:
@@ -314,6 +329,7 @@ class MultiExporter(SpanExporter):
         return any(results)
 
     def shutdown(self) -> None:
+        """Execute Shutdown operations natively."""
         for exporter in self.exporters:
             try:
                 exporter.shutdown()

@@ -119,6 +119,7 @@ class AreaChart:
         figure_size: tuple = None,
         theme=None,
     ):
+        """Execute   Init   operations natively."""
         self.x_data = x_data or []
         self.y_data = y_data or []
         self.title = title

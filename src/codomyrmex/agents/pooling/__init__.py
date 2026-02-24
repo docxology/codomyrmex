@@ -118,6 +118,7 @@ class CircuitBreaker:
         failure_threshold: int = 5,
         reset_timeout_s: float = 30.0,
     ):
+        """Execute   Init   operations natively."""
         self.failure_threshold = failure_threshold
         self.reset_timeout_s = reset_timeout_s
         self._failures = 0
@@ -187,6 +188,7 @@ class AgentPool(Generic[T]):
         strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
         config: PoolConfig | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.strategy = strategy
         self.config = config or PoolConfig()
         self._agents: dict[str, PooledAgent[T]] = {}
@@ -415,6 +417,7 @@ class FallbackChain(Generic[T]):
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._agents: list[tuple[str, T]] = []
 
     def add(self, name: str, agent: T) -> "FallbackChain[T]":

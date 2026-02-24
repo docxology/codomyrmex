@@ -72,6 +72,7 @@ class PipelineRetryExecutor:
     """Execute pipeline steps with configurable retry policies."""
 
     def __init__(self, default_policy: RetryPolicy | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._default_policy = default_policy or RetryPolicy()
         self._step_policies: dict[str, RetryPolicy] = {}
 
@@ -245,6 +246,7 @@ def with_retry(
 
             @functools.wraps(func)
             def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
+                """Execute Sync Wrapper operations natively."""
                 last_exc: Exception | None = None
                 for attempt in range(1, policy.max_attempts + 1):
                     try:

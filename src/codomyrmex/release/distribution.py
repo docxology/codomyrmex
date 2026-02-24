@@ -73,11 +73,13 @@ class DistributionManager:
     """
 
     def __init__(self, build: BuildReport | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._build = build
         self._published: list[PublishResult] = []
 
     @property
     def has_build(self) -> bool:
+        """Execute Has Build operations natively."""
         return self._build is not None and self._build.success
 
     def preflight(self, target: DistributionTarget) -> PreflightResult:

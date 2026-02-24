@@ -64,6 +64,7 @@ class PrismEngine:
     BYTE_CYCLE = 256
 
     def __init__(self, quantum: int = 0) -> None:
+        """Execute   Init   operations natively."""
         if quantum < 0:
             raise ValueError("Quantum must be non-negative")
         self.quantum = quantum
@@ -404,13 +405,16 @@ class PrismEngine:
         return self._coherent
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         status = "verified" if self._coherent else "unverified"
         return f"PrismEngine(quantum={self.quantum}, bits={self.bits}, {status})"
 
     def __eq__(self, other: object) -> bool:
+        """Execute   Eq   operations natively."""
         if not isinstance(other, PrismEngine):
             return NotImplemented
         return self.quantum == other.quantum
 
     def __hash__(self) -> int:
+        """Execute   Hash   operations natively."""
         return hash(self.quantum)

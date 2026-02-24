@@ -67,6 +67,7 @@ class RateLimiter:
     """
 
     def __init__(self, max_requests: int = 60, window_seconds: float = 60.0) -> None:
+        """Execute   Init   operations natively."""
         self.max_requests = max_requests
         self.window_seconds = window_seconds
         self._buckets: dict[str, deque[float]] = defaultdict(deque)
@@ -138,6 +139,7 @@ class ThreatDetector:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._rules: list[DetectionRule] = []
 
     def add_rule(self, rule: DetectionRule) -> None:
@@ -186,6 +188,7 @@ class Defense:
     """
 
     def __init__(self, config: dict[str, Any] | None = None) -> None:
+        """Execute   Init   operations natively."""
         self.config = config or {}
         self.limiter = RateLimiter(
             max_requests=self.config.get("max_requests", 60),
@@ -256,10 +259,12 @@ class Defense:
 
     @property
     def event_log(self) -> list[ThreatEvent]:
+        """Execute Event Log operations natively."""
         return list(self._event_log)
 
     @property
     def blocked_count(self) -> int:
+        """Execute Blocked Count operations natively."""
         return len(self._blocked_sources)
 
 

@@ -3,6 +3,7 @@ from codomyrmex.security.governance.contracts import Contract, ContractStatus, C
 
 
 def test_contract_lifecycle():
+    """Test functionality: contract lifecycle."""
     contract = Contract("Service Agreement", ["Agent A", "Agent B"])
 
     assert contract.status == ContractStatus.DRAFT
@@ -17,12 +18,14 @@ def test_contract_lifecycle():
 
 
 def test_invalid_signer():
+    """Test functionality: invalid signer."""
     contract = Contract("Test", ["A", "B"])
     with pytest.raises(ContractError):
         contract.sign("outsider")
 
 
 def test_duplicate_signature():
+    """Test functionality: duplicate signature."""
     contract = Contract("Test", ["A", "B"])
     contract.sign("A")
     with pytest.raises(ContractError):

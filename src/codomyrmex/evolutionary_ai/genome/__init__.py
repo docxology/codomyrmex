@@ -51,12 +51,15 @@ class BinaryGenome(Genome):
         return cls(bits=[random.randint(0, 1) for _ in range(length)])
 
     def copy(self) -> BinaryGenome:
+        """Execute Copy operations natively."""
         return BinaryGenome(bits=list(self.bits))
 
     def to_list(self) -> list[int]:
+        """Execute To List operations natively."""
         return list(self.bits)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self.bits)
 
     def flip(self, index: int) -> None:
@@ -101,6 +104,7 @@ class RealValuedGenome(Genome):
         )
 
     def copy(self) -> RealValuedGenome:
+        """Execute Copy operations natively."""
         return RealValuedGenome(
             values=list(self.values),
             lower_bounds=list(self.lower_bounds) if self.lower_bounds else None,
@@ -108,9 +112,11 @@ class RealValuedGenome(Genome):
         )
 
     def to_list(self) -> list[float]:
+        """Execute To List operations natively."""
         return list(self.values)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self.values)
 
     def clip(self) -> None:
@@ -160,12 +166,15 @@ class PermutationGenome(Genome):
         return cls(elements=list(elements))
 
     def copy(self) -> PermutationGenome:
+        """Execute Copy operations natively."""
         return PermutationGenome(elements=copy.deepcopy(self.elements))
 
     def to_list(self) -> list[Any]:
+        """Execute To List operations natively."""
         return list(self.elements)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self.elements)
 
     def swap(self, i: int, j: int) -> None:

@@ -307,6 +307,7 @@ class TestJulesOrchestration:
 
         # Create a test agent that implements BaseAgent (not a mock)
         class TestAgent(BaseAgent):
+            """Test suite for Agent."""
             def _execute_impl(self, request):
                 return AgentResponse(content="Test response")
             def _stream_impl(self, request):

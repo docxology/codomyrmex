@@ -264,6 +264,7 @@ class TestRESTAPI:
 
         @api.router.get("/test")
         def test_handler(request: APIRequest) -> APIResponse:
+            """Test functionality: handler."""
             return APIResponse.success({"message": "OK"})
 
         response = api.handle_request("GET", "/test")
@@ -292,6 +293,7 @@ class TestRESTAPI:
 
         @api.router.get("/test")
         def test_handler(request: APIRequest) -> APIResponse:
+            """Test functionality: handler."""
             return APIResponse.success({})
 
         # Make some requests
@@ -1213,6 +1215,7 @@ class TestAPIRouterEdgeCases:
         middleware_called = []
 
         def test_middleware(request: APIRequest):
+            """Test functionality: middleware."""
             middleware_called.append(True)
             return None
 
@@ -1632,6 +1635,7 @@ class TestOpenAPIGeneratorFromAPIs:
         api = RESTAPI(title="Test REST API", version="1.0.0")
 
         def test_handler(request):
+            """Test functionality: handler."""
             return APIResponse.success({})
 
         endpoint = APIEndpoint(

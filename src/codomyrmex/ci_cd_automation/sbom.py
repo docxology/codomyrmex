@@ -38,11 +38,13 @@ class SBOMComponent:
     scope: str = "required"
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.purl and self.name:
             version_part = f"@{self.version}" if self.version else ""
             self.purl = f"pkg:pypi/{self.name.lower()}{version_part}"
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "type": self.component_type,
             "name": self.name,
@@ -69,6 +71,7 @@ class SBOMDocument:
     timestamp: str = ""
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.serial_number:
             self.serial_number = f"urn:uuid:{uuid.uuid4()}"
         if not self.timestamp:
@@ -76,6 +79,7 @@ class SBOMDocument:
 
     @property
     def component_count(self) -> int:
+        """Execute Component Count operations natively."""
         return len(self.components)
 
     def to_cyclonedx(self) -> dict[str, Any]:

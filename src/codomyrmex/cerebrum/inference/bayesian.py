@@ -147,6 +147,7 @@ class BayesianNetwork:
         order = []
 
         def visit(node: str):
+            """Execute Visit operations natively."""
 
 
             if node in visited:

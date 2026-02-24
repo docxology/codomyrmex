@@ -42,6 +42,7 @@ class Experiment:
 
     @property
     def is_active(self) -> bool:
+        """Execute Is Active operations natively."""
         now = datetime.now()
         if not self.enabled:
             return False
@@ -77,6 +78,7 @@ class ExperimentManager:
     """Manage A/B test experiments."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._experiments: dict[str, Experiment] = {}
         self._assignments: dict[str, dict[str, Assignment]] = {}
         self._events: list[ExperimentEvent] = []

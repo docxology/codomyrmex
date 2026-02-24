@@ -71,8 +71,10 @@ def retry(
     )
 
     def decorator(func: F) -> F:
+        """Execute Decorator operations natively."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute Wrapper operations natively."""
             last_exception: Exception | None = None
             for attempt in range(config.max_attempts):
                 try:
@@ -111,6 +113,7 @@ def async_retry(
     )
 
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         @functools.wraps(func)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
             last_exception: Exception | None = None

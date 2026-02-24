@@ -33,15 +33,18 @@ class DeploymentState:
 
     @property
     def duration_seconds(self) -> float:
+        """Execute Duration Seconds operations natively."""
         end = self.completed_at or time.time()
         return end - self.started_at
 
     def complete(self) -> None:
+        """Execute Complete operations natively."""
         self.status = "completed"
         self.completed_at = time.time()
         self.traffic_percentage = 100.0
 
     def fail(self, reason: str = "") -> None:
+        """Execute Fail operations natively."""
         self.status = "failed"
         self.completed_at = time.time()
         self.metadata["failure_reason"] = reason
@@ -74,11 +77,13 @@ class RollingStrategy(DeploymentStrategy):
         batch_count: int = 4,
         pause_seconds: float = 0.0,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.batch_size = batch_size
         self.batch_count = batch_count
         self.pause_seconds = pause_seconds
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
+        """Execute Execute operations natively."""
         state = DeploymentState(service=service_name, version=version, strategy="rolling")
         state.status = "in_progress"
 
@@ -96,6 +101,7 @@ class RollingStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
+        """Execute Rollback operations natively."""
         state.status = "rolled_back"
         state.traffic_percentage = 0.0
         state.completed_at = time.time()
@@ -118,11 +124,13 @@ class CanaryStrategy(DeploymentStrategy):
         step: int = 20,
         max_steps: int = 5,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.initial_percentage = initial_percentage
         self.step = step
         self.max_steps = max_steps
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
+        """Execute Execute operations natively."""
         state = DeploymentState(service=service_name, version=version, strategy="canary")
         state.status = "in_progress"
         pct = self.initial_percentage
@@ -141,6 +149,7 @@ class CanaryStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
+        """Execute Rollback operations natively."""
         state.status = "rolled_back"
         state.traffic_percentage = 0.0
         state.completed_at = time.time()
@@ -156,6 +165,7 @@ class BlueGreenStrategy(DeploymentStrategy):
     """
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
+        """Execute Execute operations natively."""
         state = DeploymentState(service=service_name, version=version, strategy="blue_green")
         state.status = "in_progress"
 
@@ -171,6 +181,7 @@ class BlueGreenStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
+        """Execute Rollback operations natively."""
         state.status = "rolled_back"
         state.metadata["active_slot"] = "blue"
         state.traffic_percentage = 100.0  # back on blue
@@ -188,10 +199,12 @@ class FeatureFlagStrategy(DeploymentStrategy):
     """
 
     def __init__(self, flag_name: str = "", initial_rollout: float = 0.0) -> None:
+        """Execute   Init   operations natively."""
         self.flag_name = flag_name
         self.initial_rollout = initial_rollout
 
     def execute(self, service_name: str, version: str) -> DeploymentState:
+        """Execute Execute operations natively."""
         state = DeploymentState(service=service_name, version=version, strategy="feature_flag")
         state.metadata["flag_name"] = self.flag_name or f"ff_{service_name}_{version}"
         state.traffic_percentage = self.initial_rollout
@@ -203,6 +216,7 @@ class FeatureFlagStrategy(DeploymentStrategy):
         return state
 
     def rollback(self, state: DeploymentState) -> DeploymentState:
+        """Execute Rollback operations natively."""
         state.traffic_percentage = 0.0
         state.status = "rolled_back"
         state.completed_at = time.time()

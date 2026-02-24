@@ -88,12 +88,15 @@ class Genome:
         return cls(length=length)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self.genes)
 
     def __getitem__(self, key):
+        """Execute   Getitem   operations natively."""
         return self.genes[key]
 
     def __iter__(self):
+        """Execute   Iter   operations natively."""
         return iter(self.genes)
 
     def copy(self) -> 'Genome':

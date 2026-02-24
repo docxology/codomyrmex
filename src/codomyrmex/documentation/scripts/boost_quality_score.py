@@ -53,6 +53,7 @@ The codebase utilizes modern Python features (version 3.10+) to provide a clean,
 """
 
 def boost_file(path: Path):
+    """Execute Boost File operations natively."""
     try:
         content = path.read_text(encoding="utf-8", errors="ignore")
         original_content = content
@@ -95,6 +96,7 @@ def boost_file(path: Path):
         return False
 
 def main():
+    """Execute Main operations natively."""
     repo_root = Path.cwd()
     md_files = []
     for pattern in ['**/*.md', '**/*.MD']:

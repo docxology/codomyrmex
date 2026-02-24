@@ -22,11 +22,13 @@ class LockManager:
     """Orchestrates multiple locks and provides multi-resource acquisition."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._locks: dict[str, BaseLock] = {}
         self._total_acquisitions = 0
         self._total_releases = 0
 
     def register_lock(self, name: str, lock: BaseLock):
+        """Execute Register Lock operations natively."""
         self._locks[name] = lock
 
     @property
@@ -72,29 +74,34 @@ class ReadWriteLock:
     """In-process Read-Write lock (shared/exclusive)."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._read_ready = threading.Condition(threading.Lock())
         self._readers = 0
         self._writers = 0
 
     def acquire_read(self):
+        """Execute Acquire Read operations natively."""
         with self._read_ready:
             while self._writers > 0:
                 self._read_ready.wait()
             self._readers += 1
 
     def release_read(self):
+        """Execute Release Read operations natively."""
         with self._read_ready:
             self._readers -= 1
             if self._readers == 0:
                 self._read_ready.notify_all()
 
     def acquire_write(self):
+        """Execute Acquire Write operations natively."""
         with self._read_ready:
             while self._readers > 0 or self._writers > 0:
                 self._read_ready.wait()
             self._writers += 1
 
     def release_write(self):
+        """Execute Release Write operations natively."""
         with self._read_ready:
             self._writers -= 1
             self._read_ready.notify_all()

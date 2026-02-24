@@ -27,6 +27,7 @@ def is_relevant_dir(path: Path) -> bool:
     return True
 
 def audit_directory(root_path: Path) -> tuple[int, int, list[str]]:
+    """Execute Audit Directory operations natively."""
     total_dirs = 0
     compliant_dirs = 0
     issues = []

@@ -25,14 +25,17 @@ class TestInitialization:
     """Verify handler setup."""
 
     def test_handler_default_queue_size(self) -> None:
+        """Test functionality: handler default queue size."""
         handler = WebSocketLogHandler()
         assert handler._max_queue_size == 1000
 
     def test_handler_custom_queue_size(self) -> None:
+        """Test functionality: handler custom queue size."""
         handler = WebSocketLogHandler(max_queue_size=50)
         assert handler._max_queue_size == 50
 
     def test_handler_is_logging_handler(self) -> None:
+        """Test functionality: handler is logging handler."""
         handler = WebSocketLogHandler()
         assert isinstance(handler, logging.Handler)
 
@@ -44,6 +47,7 @@ class TestRecordFormatting:
     """Verify log records are formatted as dicts."""
 
     def test_basic_record_format(self) -> None:
+        """Test functionality: basic record format."""
         handler = WebSocketLogHandler()
         logger = logging.getLogger("test.ws_handler")
         logger.setLevel(logging.DEBUG)
@@ -60,6 +64,7 @@ class TestRecordFormatting:
         assert entry["line"] == 42
 
     def test_correlation_id_included(self) -> None:
+        """Test functionality: correlation id included."""
         handler = WebSocketLogHandler()
         logger = logging.getLogger("test.ws_handler.corr")
         record = logger.makeRecord(
@@ -71,6 +76,7 @@ class TestRecordFormatting:
         assert entry["correlation_id"] == "abc-123"
 
     def test_exception_info_included(self) -> None:
+        """Test functionality: exception info included."""
         handler = WebSocketLogHandler()
         logger = logging.getLogger("test.ws_handler.exc")
         try:
@@ -94,6 +100,7 @@ class TestBackpressure:
     """Verify oldest entries are dropped when queue is full."""
 
     def test_drop_oldest_on_overflow(self) -> None:
+        """Test functionality: drop oldest on overflow."""
         handler = WebSocketLogHandler(max_queue_size=3)
         logger = logging.getLogger("test.ws_handler.bp")
 
@@ -108,6 +115,7 @@ class TestBackpressure:
         assert handler.dropped_count >= 2
 
     def test_no_drops_within_limit(self) -> None:
+        """Test functionality: no drops within limit."""
         handler = WebSocketLogHandler(max_queue_size=10)
         logger = logging.getLogger("test.ws_handler.nodrops")
 
@@ -128,6 +136,7 @@ class TestClientManagement:
     """Verify client add/remove and broadcast."""
 
     def test_add_and_remove_client(self) -> None:
+        """Test functionality: add and remove client."""
         handler = WebSocketLogHandler()
         q = handler.add_client()
         assert handler.client_count == 1
@@ -135,12 +144,14 @@ class TestClientManagement:
         assert handler.client_count == 0
 
     def test_remove_nonexistent_client(self) -> None:
+        """Test functionality: remove nonexistent client."""
         handler = WebSocketLogHandler()
         fake_queue: asyncio.Queue = asyncio.Queue()
         handler.remove_client(fake_queue)  # No error
         assert handler.client_count == 0
 
     def test_broadcast_to_all_clients(self) -> None:
+        """Test functionality: broadcast to all clients."""
         handler = WebSocketLogHandler()
         q1 = handler.add_client()
         q2 = handler.add_client()
@@ -155,6 +166,7 @@ class TestClientManagement:
         assert q2.qsize() == 1
 
     def test_client_backpressure(self) -> None:
+        """Test functionality: client backpressure."""
         handler = WebSocketLogHandler(max_queue_size=2)
         q = handler.add_client()
 

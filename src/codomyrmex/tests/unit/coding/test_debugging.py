@@ -17,10 +17,12 @@ from codomyrmex.coding.debugging import (
 
 @pytest.mark.unit
 class TestErrorAnalyzer:
+    """Test suite for ErrorAnalyzer."""
     def setup_method(self):
         self.analyzer = ErrorAnalyzer()
 
     def test_parse_python_syntax_error(self):
+        """Test functionality: parse python syntax error."""
         stderr = 'File "test.py", line 1\n    if True\n          ^\nSyntaxError: invalid syntax'
         diagnosis = self.analyzer.analyze("", stderr, 1)
         assert diagnosis is not None
@@ -29,6 +31,7 @@ class TestErrorAnalyzer:
         assert diagnosis.file_path == "test.py"
 
     def test_parse_python_runtime_error(self):
+        """Test functionality: parse python runtime error."""
         stderr = 'Traceback (most recent call last):\n  File "main.py", line 10, in <module>\n    print(1/0)\nZeroDivisionError: division by zero'
         diagnosis = self.analyzer.analyze("", stderr, 1)
         assert diagnosis is not None
@@ -37,6 +40,7 @@ class TestErrorAnalyzer:
         assert diagnosis.message == "division by zero"
 
     def test_timeout_error(self):
+        """Test functionality: timeout error."""
         diagnosis = self.analyzer.analyze("", "Terminated", 124)
         assert diagnosis is not None
         assert diagnosis.error_type == "TimeoutError"
@@ -45,15 +49,18 @@ class TestErrorAnalyzer:
 
 @pytest.mark.unit
 class TestPatchGenerator:
+    """Test suite for PatchGenerator."""
     def setup_method(self):
         self.generator = PatchGenerator(llm_client=None)
 
     def test_generate_no_file_path(self):
+        """Test functionality: generate no file path."""
         diagnosis = ErrorDiagnosis("Error", "msg")
         patches = self.generator.generate("code", diagnosis)
         assert patches == []
 
     def test_generate_returns_list(self):
+        """Test functionality: generate returns list."""
         diagnosis = ErrorDiagnosis("Error", "msg", "file.py", 10, "trace")
         patches = self.generator.generate("code", diagnosis)
         assert isinstance(patches, list)
@@ -61,6 +68,7 @@ class TestPatchGenerator:
 
 @pytest.mark.unit
 class TestDebugger:
+    """Test suite for Debugger."""
     def setup_method(self):
         self.debugger = Debugger()
 

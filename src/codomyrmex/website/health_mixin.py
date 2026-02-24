@@ -399,5 +399,5 @@ class HealthProviderMixin:
             if os.path.exists(xml_path):
                 try:
                     os.unlink(xml_path)
-                except:
+                except OSError:
                     pass

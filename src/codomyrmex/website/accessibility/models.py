@@ -42,6 +42,7 @@ class AccessibilityReport:
 
     @property
     def score(self) -> float:
+        """Execute Score operations natively."""
         total = self.passed + self.errors
         if total == 0:
             return 100.0
@@ -60,6 +61,7 @@ class WCAGRule:
         message: str,
         suggestion: str = "",
     ):
+        """Execute   Init   operations natively."""
         self.code = code
         self.criterion = criterion
         self.level = level
@@ -68,6 +70,7 @@ class WCAGRule:
         self.suggestion = suggestion
 
     def check(self, element: dict[str, Any]) -> AccessibilityIssue | None:
+        """Execute Check operations natively."""
         if not self.check_fn(element):
             return AccessibilityIssue(
                 code=self.code,

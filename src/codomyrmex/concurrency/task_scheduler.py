@@ -50,6 +50,7 @@ class TaskScheduler:
     """
 
     def __init__(self, strategy: SchedulingStrategy = SchedulingStrategy.ROUND_ROBIN) -> None:
+        """Execute   Init   operations natively."""
         self._strategy = strategy
         self._workers: dict[str, WorkerInfo] = {}
         self._round_robin_index = 0
@@ -57,10 +58,12 @@ class TaskScheduler:
 
     @property
     def worker_count(self) -> int:
+        """Execute Worker Count operations natively."""
         return len(self._workers)
 
     @property
     def strategy(self) -> SchedulingStrategy:
+        """Execute Strategy operations natively."""
         return self._strategy
 
     def register_worker(
@@ -161,6 +164,7 @@ class TaskScheduler:
         return eligible
 
     def _round_robin(self, workers: list[WorkerInfo]) -> str:
+        """Execute  Round Robin operations natively."""
         idx = self._round_robin_index % len(workers)
         self._round_robin_index += 1
         selected = workers[idx]
@@ -168,11 +172,13 @@ class TaskScheduler:
         return selected.worker_id
 
     def _least_loaded(self, workers: list[WorkerInfo]) -> str:
+        """Execute  Least Loaded operations natively."""
         selected = min(workers, key=lambda w: w.current_load)
         selected.current_load += 1
         return selected.worker_id
 
     def _affinity(self, task: Task, workers: list[WorkerInfo]) -> str:
+        """Execute  Affinity operations natively."""
         preferred = self._affinity_map.get(task.task_type)
         if preferred:
             for w in workers:

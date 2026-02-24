@@ -43,29 +43,34 @@ class TestEnums:
     """Test all 6 enum classes."""
 
     def test_vault_space_values(self):
+        """Test functionality: vault space values."""
         assert VaultSpace.SELF.value == "self"
         assert VaultSpace.NOTES.value == "notes"
         assert VaultSpace.OPS.value == "ops"
         assert len(VaultSpace) == 3
 
     def test_kernel_layer_values(self):
+        """Test functionality: kernel layer values."""
         assert KernelLayer.FOUNDATION.value == "foundation"
         assert KernelLayer.CONVENTION.value == "convention"
         assert KernelLayer.AUTOMATION.value == "automation"
         assert len(KernelLayer) == 3
 
     def test_pipeline_stage_values(self):
+        """Test functionality: pipeline stage values."""
         stages = [s.value for s in PipelineStage]
         assert stages == ["record", "reduce", "reflect", "reweave", "verify", "rethink"]
         assert len(PipelineStage) == 6
 
     def test_config_dimension_values(self):
+        """Test functionality: config dimension values."""
         assert ConfigDimension.DOMAIN.value == "domain"
         assert ConfigDimension.TOOLCHAIN.value == "toolchain"
         assert ConfigDimension.LEARNING_STYLE.value == "learning_style"
         assert len(ConfigDimension) == 8
 
     def test_health_and_skill_type_values(self):
+        """Test functionality: health and skill type values."""
         assert HealthStatus.HEALTHY.value == "healthy"
         assert HealthStatus.ERROR.value == "error"
         assert SkillType.PLUGIN.value == "plugin"
@@ -83,6 +88,7 @@ class TestDataclasses:
     """Test to_dict() for all serializable dataclasses."""
 
     def test_kernel_primitive_to_dict(self):
+        """Test functionality: kernel primitive to dict."""
         p = KernelPrimitive(
             name="atomic-note",
             layer=KernelLayer.FOUNDATION,
@@ -96,6 +102,7 @@ class TestDataclasses:
         assert d["enabled"] is True
 
     def test_research_claim_to_dict(self):
+        """Test functionality: research claim to dict."""
         c = ResearchClaim(
             claim_id="RC-001",
             statement="Spaced repetition improves retention",
@@ -110,6 +117,7 @@ class TestDataclasses:
         assert "timestamping" in d["connected_primitives"]
 
     def test_dimension_signal_to_dict(self):
+        """Test functionality: dimension signal to dict."""
         s = DimensionSignal(
             dimension=ConfigDimension.DOMAIN,
             value="software-engineering",
@@ -122,6 +130,7 @@ class TestDataclasses:
         assert "timestamp" in d
 
     def test_stage_result_to_dict(self):
+        """Test functionality: stage result to dict."""
         r = StageResult(
             stage=PipelineStage.RECORD,
             input_content="raw",
@@ -134,6 +143,7 @@ class TestDataclasses:
         assert d["duration_ms"] == 12.5
 
     def test_vault_health_report_to_dict(self):
+        """Test functionality: vault health report to dict."""
         rpt = VaultHealthReport(
             status=HealthStatus.WARNING,
             spaces_present=["self", "notes"],
@@ -155,10 +165,12 @@ class TestKernelPrimitiveRegistry:
     """Test the kernel primitive registry."""
 
     def test_default_primitives_loaded(self):
+        """Test functionality: default primitives loaded."""
         reg = KernelPrimitiveRegistry()
         assert len(reg.list_all()) == 15
 
     def test_get_by_name(self):
+        """Test functionality: get by name."""
         reg = KernelPrimitiveRegistry()
         p = reg.get("atomic-note")
         assert p is not None
@@ -166,6 +178,7 @@ class TestKernelPrimitiveRegistry:
         assert reg.get("nonexistent") is None
 
     def test_list_by_layer(self):
+        """Test functionality: list by layer."""
         reg = KernelPrimitiveRegistry()
         foundation = reg.list_by_layer(KernelLayer.FOUNDATION)
         assert len(foundation) == 5
@@ -175,6 +188,7 @@ class TestKernelPrimitiveRegistry:
         assert len(automation) == 5
 
     def test_to_kernel_config(self):
+        """Test functionality: to kernel config."""
         reg = KernelPrimitiveRegistry()
         cfg = reg.to_kernel_config()
         assert isinstance(cfg, KernelConfig)
@@ -182,6 +196,7 @@ class TestKernelPrimitiveRegistry:
         assert cfg.get_by_name("link-syntax") is not None
 
     def test_validate_dependencies(self):
+        """Test functionality: validate dependencies."""
         reg = KernelPrimitiveRegistry()
         cfg = reg.to_kernel_config()
         missing = cfg.validate_dependencies()
@@ -198,6 +213,7 @@ class TestProcessingPipeline:
     """Test the 6R processing pipeline."""
 
     def test_passthrough_no_handlers(self):
+        """Test functionality: passthrough no handlers."""
         pipe = ProcessingPipeline()
         results = pipe.process("hello world")
         assert len(results) == 6
@@ -207,6 +223,7 @@ class TestProcessingPipeline:
         assert results[-1].output_content == "hello world"
 
     def test_handler_registration_and_execution(self):
+        """Test functionality: handler registration and execution."""
         pipe = ProcessingPipeline()
 
         def upper_handler(content: str, ctx: dict) -> str:
@@ -220,6 +237,7 @@ class TestProcessingPipeline:
         assert results[-1].output_content == "HELLO"
 
     def test_error_handling(self):
+        """Test functionality: error handling."""
         pipe = ProcessingPipeline()
 
         def bad_handler(content: str, ctx: dict) -> str:
@@ -235,6 +253,7 @@ class TestProcessingPipeline:
         assert len(results) == 2
 
     def test_single_stage_processing(self):
+        """Test functionality: single stage processing."""
         pipe = ProcessingPipeline()
 
         def exclaim(content: str, ctx: dict) -> str:
@@ -257,6 +276,7 @@ class TestDerivationEngine:
     """Test the derivation engine."""
 
     def test_signal_ingestion(self):
+        """Test functionality: signal ingestion."""
         engine = DerivationEngine()
         sig = DimensionSignal(
             dimension=ConfigDimension.DOMAIN,
@@ -269,6 +289,7 @@ class TestDerivationEngine:
         assert len(summary["domain"]) == 1
 
     def test_text_keyword_extraction(self):
+        """Test functionality: text keyword extraction."""
         engine = DerivationEngine()
         signals = engine.ingest_from_text("I use obsidian for zettelkasten research notes")
         # Should match: obsidian (toolchain), zettelkasten (methodology), research (domain)
@@ -278,6 +299,7 @@ class TestDerivationEngine:
         assert ConfigDimension.DOMAIN in dimensions_found
 
     def test_dimension_summary(self):
+        """Test functionality: dimension summary."""
         engine = DerivationEngine()
         engine.ingest_from_text("software design overview")
         summary = engine.get_dimension_summary()
@@ -285,6 +307,7 @@ class TestDerivationEngine:
         assert len(summary) >= 1
 
     def test_overall_confidence_and_reset(self):
+        """Test functionality: overall confidence and reset."""
         engine = DerivationEngine()
         assert engine.get_overall_confidence() == 0.0
         engine.ingest_from_text("obsidian zettelkasten")
@@ -304,6 +327,7 @@ class TestMethodologyGraph:
     """Test the methodology graph."""
 
     def test_add_and_retrieve_claims(self):
+        """Test functionality: add and retrieve claims."""
         graph = MethodologyGraph()
         c1 = ResearchClaim(
             claim_id="RC-001",
@@ -324,6 +348,7 @@ class TestMethodologyGraph:
         assert graph.get_claim("nonexistent") is None
 
     def test_edges_and_related(self):
+        """Test functionality: edges and related."""
         graph = MethodologyGraph()
         c1 = ResearchClaim(claim_id="A", statement="A", source="x", domain="d")
         c2 = ResearchClaim(claim_id="B", statement="B", source="x", domain="d")
@@ -341,6 +366,7 @@ class TestMethodologyGraph:
         assert graph.get_related("B")[0].claim_id == "A"
 
     def test_get_by_primitive_and_statistics(self):
+        """Test functionality: get by primitive and statistics."""
         graph = MethodologyGraph()
         c1 = ResearchClaim(
             claim_id="RC-1",
@@ -380,12 +406,14 @@ class TestVaultHealthChecker:
     """Test vault health diagnostics."""
 
     def test_missing_vault_returns_error(self):
+        """Test functionality: missing vault returns error."""
         checker = VaultHealthChecker()
         report = checker.check(Path("/nonexistent/vault/path"))
         assert report.status == HealthStatus.ERROR
         assert len(report.errors) >= 1
 
     def test_empty_vault_returns_warning(self):
+        """Test functionality: empty vault returns warning."""
         checker = VaultHealthChecker()
         tmp = Path(tempfile.mkdtemp())
         try:
@@ -408,6 +436,7 @@ class TestArsContextaManager:
     """Test the orchestrator."""
 
     def test_setup_creates_config(self):
+        """Test functionality: setup creates config."""
         tmp = Path(tempfile.mkdtemp())
         try:
             mgr = ArsContextaManager()
@@ -421,6 +450,7 @@ class TestArsContextaManager:
             shutil.rmtree(tmp)
 
     def test_health_on_temp_vault(self):
+        """Test functionality: health on temp vault."""
         tmp = Path(tempfile.mkdtemp())
         try:
             mgr = ArsContextaManager()
@@ -432,6 +462,7 @@ class TestArsContextaManager:
             shutil.rmtree(tmp)
 
     def test_derive_config(self):
+        """Test functionality: derive config."""
         mgr = ArsContextaManager()
         result = mgr.derive_config("I use obsidian for zettelkasten research")
         assert "signals" in result

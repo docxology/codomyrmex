@@ -31,10 +31,12 @@ class Address:
     network: Network = Network.ETHEREUM
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.value
 
     @property
     def is_valid(self) -> bool:
+        """Execute Is Valid operations natively."""
         if self.network in [Network.ETHEREUM, Network.POLYGON, Network.ARBITRUM, Network.OPTIMISM, Network.BASE]:
             return len(self.value) == 42 and self.value.startswith("0x")
         return len(self.value) > 0

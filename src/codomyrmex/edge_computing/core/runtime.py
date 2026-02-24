@@ -44,6 +44,7 @@ class EdgeRuntime:
     """
 
     def __init__(self, node: EdgeNode) -> None:
+        """Execute   Init   operations natively."""
         self.node = node
         self._functions: dict[str, EdgeFunction] = {}
         self._metrics: list[InvocationMetrics] = []
@@ -131,21 +132,26 @@ class EdgeRuntime:
         return True
 
     def list_functions(self) -> list[EdgeFunction]:
+        """Execute List Functions operations natively."""
         return list(self._functions.values())
 
     def is_warm(self, function_id: str) -> bool:
+        """Execute Is Warm operations natively."""
         return function_id in self._warm_functions
 
     @property
     def function_count(self) -> int:
+        """Execute Function Count operations natively."""
         return len(self._functions)
 
     @property
     def total_invocations(self) -> int:
+        """Execute Total Invocations operations natively."""
         return sum(self._call_counts.values())
 
     @property
     def cold_start_count(self) -> int:
+        """Execute Cold Start Count operations natively."""
         return sum(1 for m in self._metrics if m.cold_start)
 
     def get_function_stats(self, function_id: str) -> dict[str, Any]:

@@ -40,6 +40,7 @@ class Genome:
         fitness: float | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.genes = genes
         self.fitness = fitness
         self.metadata: dict[str, Any] = metadata or {}
@@ -126,15 +127,19 @@ class Genome:
     # ── Dunder methods ──────────────────────────────────────────────
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self.genes)
 
     def __getitem__(self, index: int) -> float:
+        """Execute   Getitem   operations natively."""
         return self.genes[index]
 
     def __eq__(self, other: object) -> bool:
+        """Execute   Eq   operations natively."""
         if not isinstance(other, Genome):
             return NotImplemented
         return self.genes == other.genes
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"Genome(fitness={self.fitness}, length={len(self)})"

@@ -38,6 +38,7 @@ class Vulnerability:
     fixed_in: str = ""
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "package": self.package,
             "version": self.version,
@@ -64,20 +65,24 @@ class ScanReport:
 
     @property
     def has_critical(self) -> bool:
+        """Execute Has Critical operations natively."""
         return any(v.severity == "critical" for v in self.vulnerabilities)
 
     @property
     def is_clean(self) -> bool:
+        """Execute Is Clean operations natively."""
         return len(self.vulnerabilities) == 0
 
     @property
     def count_by_severity(self) -> dict[str, int]:
+        """Execute Count By Severity operations natively."""
         counts: dict[str, int] = {}
         for v in self.vulnerabilities:
             counts[v.severity] = counts.get(v.severity, 0) + 1
         return counts
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "packages_scanned": self.packages_scanned,
             "vulnerabilities": [v.to_dict() for v in self.vulnerabilities],

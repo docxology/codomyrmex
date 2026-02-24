@@ -114,6 +114,7 @@ class BoxPlot:
         figure_size: tuple = None,
         theme=None,
     ):
+        """Execute   Init   operations natively."""
         self.data = data or []
         self.labels = labels
         self.title = title

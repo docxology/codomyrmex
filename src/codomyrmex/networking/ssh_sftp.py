@@ -10,6 +10,7 @@ class SSHClient:
     """Wrapper for SSH operations using Paramiko."""
 
     def __init__(self, hostname: str, username: str, password: str | None = None, key_filename: str | None = None, port: int = 22):
+        """Execute   Init   operations natively."""
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -45,8 +46,10 @@ class SSHClient:
         logger.info(f"Closed connection to {self.hostname}")
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         self.connect()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         self.close()

@@ -53,6 +53,7 @@ class EdgeSynchronizer:
         conflict_strategy: ConflictStrategy = ConflictStrategy.REMOTE_WINS,
         max_pending: int = 100,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._local_state: SyncState | None = None
         self._remote_version = 0
         self._pending_changes: list[dict[str, Any]] = []
@@ -63,21 +64,26 @@ class EdgeSynchronizer:
 
     @property
     def local_version(self) -> int:
+        """Execute Local Version operations natively."""
         return self._local_state.version if self._local_state else 0
 
     @property
     def remote_version(self) -> int:
+        """Execute Remote Version operations natively."""
         return self._remote_version
 
     @property
     def pending_count(self) -> int:
+        """Execute Pending Count operations natively."""
         return len(self._pending_changes)
 
     @property
     def is_synced(self) -> bool:
+        """Execute Is Synced operations natively."""
         return self.pending_count == 0 and self.local_version == self._remote_version
 
     def get_local_state(self) -> SyncState | None:
+        """Execute Get Local State operations natively."""
         return self._local_state
 
     def update_local(self, data: dict[str, Any]) -> SyncState:
@@ -124,6 +130,7 @@ class EdgeSynchronizer:
             return False
 
     def get_pending_changes(self) -> list[dict[str, Any]]:
+        """Execute Get Pending Changes operations natively."""
         with self._lock:
             return self._pending_changes.copy()
 
@@ -142,9 +149,11 @@ class EdgeSynchronizer:
             return removed
 
     def sync_history(self, limit: int = 20) -> list[SyncEvent]:
+        """Execute Sync History operations natively."""
         return self._history[-limit:]
 
     def summary(self) -> dict[str, Any]:
+        """Execute Summary operations natively."""
         return {
             "local_version": self.local_version,
             "remote_version": self._remote_version,

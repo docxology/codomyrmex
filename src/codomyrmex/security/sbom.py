@@ -43,6 +43,7 @@ class Component:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "version": self.version,
@@ -66,6 +67,7 @@ class SBOM:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "version": self.version,
@@ -76,9 +78,11 @@ class SBOM:
         }
 
     def to_json(self, indent: int = 2) -> str:
+        """Execute To Json operations natively."""
         return json.dumps(self.to_dict(), indent=indent)
 
     def save(self, path: str) -> None:
+        """Execute Save operations natively."""
         with open(path, 'w') as f:
             f.write(self.to_json())
 
@@ -87,6 +91,7 @@ class SBOMGenerator:
     """Generate SBOMs from various sources."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._components: list[Component] = []
 
     def from_requirements(self, requirements_path: str) -> list[Component]:
@@ -196,6 +201,7 @@ class VulnerabilityScanner:
     """Scan components for known vulnerabilities."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._known_vulns: dict[str, list[str]] = {}
 
     def add_vulnerability_db(self, vulns: dict[str, list[str]]) -> None:

@@ -126,6 +126,7 @@ class FieldRenameTransformer(DataTransformer):
     """Renames fields in dictionaries."""
 
     def __init__(self, mapping: dict[str, str]):
+        """Execute   Init   operations natively."""
         self.mapping = mapping
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -141,6 +142,7 @@ class FieldTypeTransformer(DataTransformer):
     """Converts field types."""
 
     def __init__(self, conversions: dict[str, type]):
+        """Execute   Init   operations natively."""
         self.conversions = conversions
 
     def transform(self, data: dict[str, Any]) -> dict[str, Any]:
@@ -159,6 +161,7 @@ class CompositeTransformer(DataTransformer):
     """Combines multiple transformers."""
 
     def __init__(self, transformers: list[DataTransformer]):
+        """Execute   Init   operations natively."""
         self.transformers = transformers
 
     def transform(self, data: Any) -> Any:

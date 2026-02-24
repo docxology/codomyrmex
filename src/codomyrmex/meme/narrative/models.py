@@ -77,5 +77,6 @@ class Narrative:
     created_at: float = field(default_factory=time.time)
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.id:
             self.id = str(uuid.uuid4())

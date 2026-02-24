@@ -3,7 +3,6 @@ File-based cache backend.
 """
 
 import json
-import pickle
 import tempfile
 import time
 from pathlib import Path
@@ -69,8 +68,8 @@ class FileBasedCache(Cache):
                     return None
 
             # Read value
-            with open(file_path, "rb") as f:
-                value = pickle.load(f)
+            with open(file_path, "r", encoding="utf-8") as f:
+                value = json.load(f)  # SECURITY: JSON instead of pickle to prevent code injection
 
             self._stats.hits += 1
             return value
@@ -86,8 +85,8 @@ class FileBasedCache(Cache):
 
         try:
             # Write value
-            with open(file_path, "wb") as f:
-                pickle.dump(value, f)
+            with open(file_path, "w", encoding="utf-8") as f:
+                json.dump(value, f, default=str)  # SECURITY: JSON instead of pickle
 
             # Write metadata
             ttl = ttl or self.default_ttl

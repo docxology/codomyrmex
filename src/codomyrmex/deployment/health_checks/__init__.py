@@ -36,6 +36,7 @@ class HealthCheckResult:
     details: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -55,13 +56,16 @@ class AggregatedHealth:
 
     @property
     def healthy_count(self) -> int:
+        """Execute Healthy Count operations natively."""
         return sum(1 for c in self.checks if c.status == HealthStatus.HEALTHY)
 
     @property
     def unhealthy_count(self) -> int:
+        """Execute Unhealthy Count operations natively."""
         return sum(1 for c in self.checks if c.status == HealthStatus.UNHEALTHY)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "overall_status": self.overall_status.value,
             "healthy_count": self.healthy_count,
@@ -81,6 +85,7 @@ class HealthCheck(ABC):
         timeout: float = 5.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         self.name = name
         self.timeout = timeout
         self.critical = critical
@@ -110,6 +115,7 @@ class HTTPHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(name, timeout, critical)
         self.url = url
         self.method = method
@@ -118,6 +124,7 @@ class HTTPHealthCheck(HealthCheck):
         self.headers = headers or {}
 
     def check(self) -> HealthCheckResult:
+        """Execute Check operations natively."""
         start_time = time.time()
 
         try:
@@ -178,11 +185,13 @@ class TCPHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(name, timeout, critical)
         self.host = host
         self.port = port
 
     def check(self) -> HealthCheckResult:
+        """Execute Check operations natively."""
         start_time = time.time()
 
         try:
@@ -232,12 +241,14 @@ class CommandHealthCheck(HealthCheck):
         timeout: float = 10.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(name, timeout, critical)
         self.command = command
         self.expected_exit_code = expected_exit_code
         self.expected_output = expected_output
 
     def check(self) -> HealthCheckResult:
+        """Execute Check operations natively."""
         import subprocess
 
         start_time = time.time()
@@ -305,11 +316,13 @@ class MemoryHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(name, timeout, critical)
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
 
     def check(self) -> HealthCheckResult:
+        """Execute Check operations natively."""
         start_time = time.time()
 
         try:
@@ -375,12 +388,14 @@ class DiskHealthCheck(HealthCheck):
         timeout: float = 5.0,
         critical: bool = True,
     ):
+        """Execute   Init   operations natively."""
         super().__init__(name, timeout, critical)
         self.path = path
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
 
     def check(self) -> HealthCheckResult:
+        """Execute Check operations natively."""
         start_time = time.time()
 
         try:
@@ -433,6 +448,7 @@ class HealthChecker:
     """Manages multiple health checks."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.checks: list[HealthCheck] = []
 
     def add_check(self, check: HealthCheck) -> 'HealthChecker':

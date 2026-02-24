@@ -22,6 +22,7 @@ class TestTTLCacheGlobals:
     """Verify the module-level TTL cache globals exist and have correct types."""
 
     def test_cache_starts_none(self) -> None:
+        """Test functionality: cache starts none."""
         from codomyrmex.agents.pai import mcp_bridge
 
         # The cache is module-level; it may be set by previous tests,
@@ -31,11 +32,13 @@ class TestTTLCacheGlobals:
         )
 
     def test_cache_lock_is_threading_lock(self) -> None:
+        """Test functionality: cache lock is threading lock."""
         from codomyrmex.agents.pai import mcp_bridge
 
         assert isinstance(mcp_bridge._DYNAMIC_TOOLS_CACHE_LOCK, type(threading.Lock()))
 
     def test_default_ttl_is_positive(self) -> None:
+        """Test functionality: default ttl is positive."""
         from codomyrmex.agents.pai import mcp_bridge
 
         assert isinstance(mcp_bridge._DEFAULT_CACHE_TTL, float)
@@ -46,6 +49,7 @@ class TestInvalidateToolCache:
     """Verify invalidate_tool_cache resets both cache and TTL."""
 
     def test_invalidate_clears_cache(self) -> None:
+        """Test functionality: invalidate clears cache."""
         from codomyrmex.agents.pai import mcp_bridge
 
         # Force-set the cache to something
@@ -58,6 +62,7 @@ class TestInvalidateToolCache:
         assert mcp_bridge._CACHE_EXPIRY is None
 
     def test_invalidate_is_idempotent(self) -> None:
+        """Test functionality: invalidate is idempotent."""
         from codomyrmex.agents.pai import mcp_bridge
 
         mcp_bridge.invalidate_tool_cache()
@@ -112,12 +117,14 @@ class TestWarmUpConfig:
     """Verify MCPServerConfig has warm_up field."""
 
     def test_warm_up_default_true(self) -> None:
+        """Test functionality: warm up default true."""
         from codomyrmex.model_context_protocol.transport.server import MCPServerConfig
 
         config = MCPServerConfig()
         assert config.warm_up is True
 
     def test_warm_up_can_be_disabled(self) -> None:
+        """Test functionality: warm up can be disabled."""
         from codomyrmex.model_context_protocol.transport.server import MCPServerConfig
 
         config = MCPServerConfig(warm_up=False)

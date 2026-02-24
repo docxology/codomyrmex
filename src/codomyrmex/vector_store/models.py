@@ -26,9 +26,11 @@ class SearchResult:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __lt__(self, other: "SearchResult") -> bool:
+        """Execute   Lt   operations natively."""
         return self.score < other.score
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"SearchResult(id={self.id!r}, score={self.score:.4f}, dim={len(self.embedding)})"
 
 
@@ -44,10 +46,12 @@ class VectorEntry:
 
     @property
     def dimension(self) -> int:
+        """Execute Dimension operations natively."""
         return len(self.embedding)
 
     @property
     def magnitude(self) -> float:
+        """Execute Magnitude operations natively."""
         return math.sqrt(sum(x * x for x in self.embedding))
 
     def update_embedding(self, new_embedding: list[float]) -> None:

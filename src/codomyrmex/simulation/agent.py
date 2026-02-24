@@ -31,6 +31,7 @@ class Agent(abc.ABC):
     """Abstract base class for all simulation agents."""
 
     def __init__(self, agent_id: str, name: str = "") -> None:
+        """Execute   Init   operations natively."""
         self.id = agent_id
         self.name = name or agent_id
         self.step_count: int = 0
@@ -89,10 +90,12 @@ class RandomAgent(Agent):
         action_types: list[str] | None = None,
         name: str = "",
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(agent_id, name)
         self.action_types = action_types or ["move", "wait", "observe"]
 
     def act(self, observation: dict[str, Any]) -> Action:
+        """Execute Act operations natively."""
         return Action(type=random.choice(self.action_types))
 
 
@@ -110,6 +113,7 @@ class RuleBasedAgent(Agent):
     """
 
     def __init__(self, agent_id: str, name: str = "") -> None:
+        """Execute   Init   operations natively."""
         super().__init__(agent_id, name)
         self._rules: list[tuple[Any, str]] = []
 
@@ -126,6 +130,7 @@ class RuleBasedAgent(Agent):
         self._rules.append((condition, action_type, params or {}))  # type: ignore[arg-type]
 
     def act(self, observation: dict[str, Any]) -> Action:
+        """Execute Act operations natively."""
         for condition, action_type, params in self._rules:  # type: ignore[misc]
             try:
                 if condition(observation):
@@ -162,6 +167,7 @@ class QLearningAgent(Agent):
         epsilon_min: float = 0.01,
         name: str = "",
     ) -> None:
+        """Execute   Init   operations natively."""
         super().__init__(agent_id, name)
         self.action_types = action_types
         self.alpha = alpha
@@ -183,6 +189,7 @@ class QLearningAgent(Agent):
         return str(items)
 
     def act(self, observation: dict[str, Any]) -> Action:
+        """Execute Act operations natively."""
         state = self._state_key(observation)
         self._last_state = state
 

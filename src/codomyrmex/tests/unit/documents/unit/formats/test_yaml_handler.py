@@ -8,6 +8,7 @@ from codomyrmex.documents.formats.yaml_handler import read_yaml, write_yaml
 
 @pytest.mark.unit
 class TestYamlHandler:
+    """Test suite for YamlHandler."""
     def test_read_yaml(self, tmp_path):
         """Test reading YAML from a real file."""
         f = tmp_path / "test.yaml"

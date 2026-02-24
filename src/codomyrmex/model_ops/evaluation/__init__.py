@@ -60,6 +60,7 @@ except ImportError as _exc:
     _import_error = str(_exc)
 
     def _not_available(*args, **kwargs):
+        """Execute  Not Available operations natively."""
         raise ImportError(
             f"model_evaluation module is not available: {_import_error}"
         )

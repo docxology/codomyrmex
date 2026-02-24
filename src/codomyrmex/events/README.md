@@ -49,13 +49,21 @@ uv sync
 
 ## Directory Contents
 
-- `event_schema.py` -- Event, EventType, EventPriority, and EventSchema definitions
-- `event_bus.py` -- EventBus implementation with publish/subscribe, singleton access, and global convenience functions
-- `emitter.py` -- AsyncEventEmitter for async event dispatch
-- `event_emitter.py` -- Additional event emitter implementations
-- `event_listener.py` -- Event listener base classes and utilities
-- `event_logger.py` -- EventLogger for audit trails and statistics
-- `exceptions.py` -- Full exception hierarchy for event system errors
+Root-level files:
+- `mcp_tools.py` -- MCP tool definitions (emit, history, type registry)
+- `event_store.py` -- Persistent event storage
+- `dead_letter.py` -- Dead-letter queue for undeliverable events
+- `integration_bus.py` -- Cross-module integration bus
+- `projections.py` -- Event projection utilities
+- `replay.py` -- Event replay primitives
+- `replayer.py` -- High-level event replayer
+
+Sub-packages:
+- `core/` -- `event_bus.py`, `event_schema.py`, `exceptions.py`, `mixins.py` — Core bus, schema, and exception hierarchy
+- `emitters/` -- `emitter.py`, `event_emitter.py` — AsyncEventEmitter and additional emitter implementations
+- `handlers/` -- `event_listener.py`, `event_logger.py` — Listener base classes and audit logger
+- `notification/` -- `service.py`, `providers.py`, `models.py`, `templates.py` — Multi-channel notification dispatch (SMTP, webhooks, Slack)
+- `streaming/` -- `stream.py`, `async_stream.py`, `processors.py`, `models.py` — Real-time data streaming via SSE/WebSocket
 
 ## Quick Start
 

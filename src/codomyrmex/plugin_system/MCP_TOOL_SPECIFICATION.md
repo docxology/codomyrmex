@@ -1,225 +1,156 @@
 # Plugin System - MCP Tool Specification
 
-This document outlines the specification for tools within the Plugin System module that are intended to be integrated with the Model Context Protocol (MCP).
-
-## General Considerations
-
-- **Tool Integration**: This module provides plugin architecture for extending Codomyrmex functionality.
-- **Configuration**: Plugins are discovered from configured directories and can have their own configurations.
+This document outlines the specification for tools within the Plugin System module that are integrated with the Model Context Protocol (MCP).
 
 ---
 
-## Tool: `list_plugins`
+## Tool: `plugin_scan_entry_points`
 
 ### 1. Tool Purpose and Description
 
-Lists all available plugins with their metadata, status, and capabilities.
+Scans installed Python packages for plugins registered under a given `importlib.metadata` entry point group. Returns the list of discovered plugins with their name, module path, and state.
 
 ### 2. Invocation Name
 
-`list_plugins`
+`plugin_scan_entry_points`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `plugin_type` | `string` | No | Filter by plugin type | `"analyzer"` |
-| `status` | `string` | No | Filter by status ("active", "disabled", "error") | `"active"` |
-| `include_disabled` | `boolean` | No | Include disabled plugins (default: true) | `true` |
+| `entry_point_group` | `string` | No | Entry point group name to scan (default: `"codomyrmex.plugins"`) | `"codomyrmex.plugins"` |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `plugins` | `array[object]` | List of plugin information | See below |
-| `total_count` | `integer` | Total number of plugins | `12` |
-| `active_count` | `integer` | Number of active plugins | `10` |
+| `status` | `string` | `"ok"` on success, `"error"` on failure | `"ok"` |
+| `plugin_count` | `integer` | Total number of discovered plugins | `3` |
+| `plugins` | `array[object]` | List of plugin descriptors | See below |
+| `errors` | `array[object]` | List of `{"source": str, "error": str}` scan errors | `[]` |
+| `error` | `string` | Top-level error message (only when `status == "error"`) | `"..."` |
 
 **Plugin object structure:**
 
 | Field Name | Type | Description |
 |:-----------|:-----|:------------|
-| `name` | `string` | Plugin identifier |
-| `version` | `string` | Plugin version |
-| `description` | `string` | Plugin description |
-| `plugin_type` | `string` | Type (analyzer, formatter, exporter, etc.) |
-| `status` | `string` | Current status |
-| `dependencies` | `array[string]` | Required dependencies |
-| `author` | `string` | Plugin author |
+| `name` | `string` | Plugin name from entry point metadata |
+| `module` | `string` | Importable module path (e.g. `"mypkg.plugin"`) |
+| `state` | `string` | Discovery state value (e.g. `"discovered"`, `"error"`) |
 
 ### 5. Error Handling
 
-- Returns empty list if no plugins are available
+- Returns `{"status": "error", "error": "<message>"}` if the scan itself fails
+- Individual plugin load errors are collected in `errors` — scan continues
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes
+- **Idempotent**: Yes — reads installed package metadata, no side effects
 
 ### 7. Usage Examples
 
 ```json
 {
-  "tool_name": "list_plugins",
+  "tool_name": "plugin_scan_entry_points",
   "arguments": {
-    "plugin_type": "analyzer",
-    "status": "active"
+    "entry_point_group": "codomyrmex.plugins"
   }
+}
+```
+
+**Example response:**
+```json
+{
+  "status": "ok",
+  "plugin_count": 2,
+  "plugins": [
+    {"name": "my-analyzer", "module": "mypkg.analyzer", "state": "discovered"},
+    {"name": "my-formatter", "module": "mypkg.formatter", "state": "discovered"}
+  ],
+  "errors": []
 }
 ```
 
 ### 8. Security Considerations
 
-- **Plugin Verification**: Plugins should be verified before installation
-- **Sandbox Execution**: Consider sandboxing plugin code execution
+- **Read-Only**: Scans installed metadata, does not import or execute plugin code
+- **Scope**: Only discovers plugins registered under the specified entry point group
 
 ---
 
-## Tool: `load_plugin`
+## Tool: `plugin_resolve_dependencies`
 
 ### 1. Tool Purpose and Description
 
-Loads and activates a plugin by name or path.
+Resolves plugin dependencies using a topological sort and produces a valid load order. Detects missing dependencies and circular dependency cycles.
 
 ### 2. Invocation Name
 
-`load_plugin`
+`plugin_resolve_dependencies`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `plugin_name` | `string` | Yes | Name or path of the plugin | `"my-analyzer"` |
-| `config` | `object` | No | Configuration to pass to the plugin | `{"verbose": true}` |
-| `validate_only` | `boolean` | No | Validate without loading | `false` |
+| `plugins` | `array[object]` | Yes | List of plugin descriptor objects | See below |
+
+**Plugin descriptor object:**
+
+| Field Name | Type | Required | Description |
+|:-----------|:-----|:---------|:------------|
+| `name` | `string` | Yes | Unique plugin identifier |
+| `dependencies` | `array[string]` | No | List of plugin names this plugin depends on (default: `[]`) |
 
 ### 4. Output Schema (Return Value)
 
 | Field Name | Type | Description | Example Value |
 |:-----------|:-----|:------------|:--------------|
-| `status` | `string` | "loaded", "validated", or "error" | `"loaded"` |
-| `plugin_info` | `object` | Plugin metadata after loading | See plugin object |
-| `validation_errors` | `array[string]` | Validation issues if any | `[]` |
-| `warning_messages` | `array[string]` | Non-critical warnings | `["Deprecated API used"]` |
+| `status` | `string` | `"ok"` on success, `"error"` on failure | `"ok"` |
+| `resolution_status` | `string` | Dependency resolution result (e.g. `"resolved"`, `"missing"`, `"circular"`) | `"resolved"` |
+| `load_order` | `array[string]` | Plugin names in dependency-safe load order | `["base", "plugin-a", "plugin-b"]` |
+| `missing` | `array[string]` | Plugin names referenced as dependencies but not in the input list | `[]` |
+| `circular` | `array[string]` | Plugin names involved in circular dependency cycles | `[]` |
+| `error` | `string` | Error message (only present when `status == "error"`) | `"..."` |
 
 ### 5. Error Handling
 
-- **Plugin Not Found**: Returns error if plugin cannot be located
-- **Dependency Missing**: Returns error with missing dependencies list
-- **Security Violation**: Returns error if plugin fails security scan
-- **Load Error**: Returns error with details if plugin fails to initialize
+- Returns `{"status": "error", "error": "<message>"}` if resolution fails unexpectedly
+- Missing and circular dependency issues are reported in `missing` / `circular` fields, not as errors
 
 ### 6. Idempotency
 
-- **Idempotent**: Yes, loading an already-loaded plugin returns success
+- **Idempotent**: Yes — pure computation over the input graph
 
----
+### 7. Usage Examples
 
-## Tool: `unload_plugin`
+```json
+{
+  "tool_name": "plugin_resolve_dependencies",
+  "arguments": {
+    "plugins": [
+      {"name": "plugin-b", "dependencies": ["plugin-a"]},
+      {"name": "plugin-a", "dependencies": []},
+      {"name": "plugin-c", "dependencies": ["plugin-a", "plugin-b"]}
+    ]
+  }
+}
+```
 
-### 1. Tool Purpose and Description
+**Example response:**
+```json
+{
+  "status": "ok",
+  "resolution_status": "resolved",
+  "load_order": ["plugin-a", "plugin-b", "plugin-c"],
+  "missing": [],
+  "circular": []
+}
+```
 
-Unloads and deactivates a currently loaded plugin.
+### 8. Security Considerations
 
-### 2. Invocation Name
-
-`unload_plugin`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `plugin_name` | `string` | Yes | Name of the plugin to unload | `"my-analyzer"` |
-| `force` | `boolean` | No | Force unload even if in use | `false` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "unloaded" or "error" |
-| `cleanup_performed` | `boolean` | Whether cleanup hooks were called |
-
-### 5. Error Handling
-
-- **Plugin Not Loaded**: Returns error if plugin is not currently loaded
-- **In Use**: Returns error if plugin is in use and force is false
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-
----
-
-## Tool: `execute_plugin_hook`
-
-### 1. Tool Purpose and Description
-
-Executes a registered hook across all plugins that implement it.
-
-### 2. Invocation Name
-
-`execute_plugin_hook`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `hook_name` | `string` | Yes | Name of the hook to execute | `"pre_analysis"` |
-| `arguments` | `object` | No | Arguments to pass to hook handlers | `{"file_path": "..."}` |
-| `plugin_filter` | `array[string]` | No | Only execute for specific plugins | `["plugin-a"]` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "success", "partial", or "error" |
-| `results` | `array[object]` | Results from each plugin |
-| `errors` | `array[object]` | Errors from failed handlers |
-
-### 5. Error Handling
-
-- **Hook Not Found**: Returns info if no plugins implement the hook
-- **Handler Errors**: Continues execution, collects all errors
-
-### 6. Idempotency
-
-- **Idempotent**: Depends on hook implementation
-
----
-
-## Tool: `get_plugin_status`
-
-### 1. Tool Purpose and Description
-
-Gets detailed status information for a specific plugin.
-
-### 2. Invocation Name
-
-`get_plugin_status`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `plugin_name` | `string` | Yes | Name of the plugin | `"my-analyzer"` |
-| `include_metrics` | `boolean` | No | Include usage metrics | `true` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `plugin_info` | `object` | Full plugin metadata |
-| `state` | `string` | Current state (loaded, active, disabled, error) |
-| `config` | `object` | Current configuration |
-| `metrics` | `object` | Usage metrics (if requested) |
-| `last_error` | `string` | Last error message if any |
-
-### 5. Error Handling
-
-- **Plugin Not Found**: Returns error if plugin doesn't exist
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
+- **No Code Execution**: Performs graph analysis only — no plugin code is imported or run
+- **Input Validation**: Malformed plugin names or dependency lists return structured errors
 
 ---
 

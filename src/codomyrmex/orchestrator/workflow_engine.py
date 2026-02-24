@@ -52,6 +52,7 @@ class WorkflowStep:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "status": self.status.value,
@@ -78,18 +79,22 @@ class WorkflowResult:
     total_duration_ms: float = 0.0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.workflow_id:
             self.workflow_id = f"wf-{uuid.uuid4().hex[:8]}"
 
     @property
     def completed_count(self) -> int:
+        """Execute Completed Count operations natively."""
         return sum(1 for s in self.steps if s.status == StepStatus.COMPLETED)
 
     @property
     def failed_count(self) -> int:
+        """Execute Failed Count operations natively."""
         return sum(1 for s in self.steps if s.status == StepStatus.FAILED)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "workflow_id": self.workflow_id,
             "success": self.success,
@@ -111,9 +116,11 @@ class WorkflowRunner:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._steps: dict[str, WorkflowStep] = {}
 
     def add_step(self, step: WorkflowStep) -> None:
+        """Execute Add Step operations natively."""
         self._steps[step.name] = step
 
     def run(self, context: dict[str, Any] | None = None) -> WorkflowResult:
@@ -196,9 +203,11 @@ class WorkflowRunner:
 
     @property
     def step_count(self) -> int:
+        """Execute Step Count operations natively."""
         return len(self._steps)
 
     def step_names(self) -> list[str]:
+        """Execute Step Names operations natively."""
         return list(self._steps.keys())
 
 

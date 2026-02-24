@@ -73,6 +73,7 @@ class Curriculum:
     """
 
     def __init__(self, name: str, level: str | Difficulty = Difficulty.BEGINNER):
+        """Execute   Init   operations natively."""
         self.name = name
         if isinstance(level, Difficulty):
             self.level = level.value
@@ -245,9 +246,11 @@ class Curriculum:
     # ------------------------------------------------------------------
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self._modules)
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return (
             f"Curriculum(name='{self.name}', "
             f"level='{self.level}', "

@@ -205,4 +205,5 @@ class ContactManager:
         return list(self._contacts.values())
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         return len(self._contacts)

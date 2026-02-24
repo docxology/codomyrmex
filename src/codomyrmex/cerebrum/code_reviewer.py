@@ -49,6 +49,7 @@ class ReviewFinding:
     suggestion: str = ""
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "category": self.category,
             "message": self.message,
@@ -75,17 +76,21 @@ class CodeReviewReport:
 
     @property
     def error_count(self) -> int:
+        """Execute Error Count operations natively."""
         return sum(1 for f in self.findings if f.severity == "error")
 
     @property
     def warning_count(self) -> int:
+        """Execute Warning Count operations natively."""
         return sum(1 for f in self.findings if f.severity == "warning")
 
     @property
     def is_clean(self) -> bool:
+        """Execute Is Clean operations natively."""
         return len(self.findings) == 0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "findings": [f.to_dict() for f in self.findings],
             "files_reviewed": self.files_reviewed,
@@ -116,6 +121,7 @@ class CodeReviewer:
         drift_tracker: ConceptDriftTracker | None = None,
         prompt_selector: AgentPromptSelector | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._detector = detector or AntiPatternDetector()
         self._drift_tracker = drift_tracker or ConceptDriftTracker()
         self._prompt_selector = prompt_selector or AgentPromptSelector()

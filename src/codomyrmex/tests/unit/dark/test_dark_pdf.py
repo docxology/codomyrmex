@@ -56,6 +56,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_default_values(self) -> None:
+        """Test functionality: default values."""
         f = DarkPDFFilter()
         assert f.inversion == 0.90
         assert f.brightness == 0.90
@@ -65,6 +66,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_custom_values(self) -> None:
+        """Test functionality: custom values."""
         f = DarkPDFFilter(inversion=0.5, brightness=1.5, contrast=2.0, sepia=0.3)
         assert f.inversion == 0.5
         assert f.brightness == 1.5
@@ -73,6 +75,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_inversion_out_of_range(self) -> None:
+        """Test functionality: inversion out of range."""
         with pytest.raises(ValueError, match="inversion"):
             DarkPDFFilter(inversion=1.5)
         with pytest.raises(ValueError, match="inversion"):
@@ -80,6 +83,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_brightness_out_of_range(self) -> None:
+        """Test functionality: brightness out of range."""
         with pytest.raises(ValueError, match="brightness"):
             DarkPDFFilter(brightness=0.05)
         with pytest.raises(ValueError, match="brightness"):
@@ -87,6 +91,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_contrast_out_of_range(self) -> None:
+        """Test functionality: contrast out of range."""
         with pytest.raises(ValueError, match="contrast"):
             DarkPDFFilter(contrast=0.05)
         with pytest.raises(ValueError, match="contrast"):
@@ -94,6 +99,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_sepia_out_of_range(self) -> None:
+        """Test functionality: sepia out of range."""
         with pytest.raises(ValueError, match="sepia"):
             DarkPDFFilter(sepia=-0.1)
         with pytest.raises(ValueError, match="sepia"):
@@ -101,6 +107,7 @@ class TestDarkPDFFilterInit:
 
     @pytest.mark.unit
     def test_dpi_out_of_range(self) -> None:
+        """Test functionality: dpi out of range."""
         with pytest.raises(ValueError, match="dpi"):
             DarkPDFFilter(dpi=10)
 
@@ -110,6 +117,7 @@ class TestApplyInversion:
 
     @pytest.mark.unit
     def test_full_inversion(self) -> None:
+        """Test functionality: full inversion."""
         f = DarkPDFFilter(inversion=1.0, brightness=1.0, contrast=1.0, sepia=0.0)
         img = _make_test_image(color=(200, 200, 200))
         result = f.apply_to_image(img)
@@ -119,6 +127,7 @@ class TestApplyInversion:
 
     @pytest.mark.unit
     def test_no_inversion(self) -> None:
+        """Test functionality: no inversion."""
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=1.0, sepia=0.0)
         img = _make_test_image(color=(100, 150, 200))
         result = f.apply_to_image(img)
@@ -133,6 +142,7 @@ class TestApplyInversion:
 
     @pytest.mark.unit
     def test_half_inversion(self) -> None:
+        """Test functionality: half inversion."""
         f = DarkPDFFilter(inversion=0.5, brightness=1.0, contrast=0.5, sepia=0.0)
         img = _make_test_image(color=(200, 200, 200))
         result = f.apply_to_image(img)
@@ -147,6 +157,7 @@ class TestApplyBrightness:
 
     @pytest.mark.unit
     def test_increased_brightness(self) -> None:
+        """Test functionality: increased brightness."""
         f = DarkPDFFilter(inversion=0.0, brightness=2.0, contrast=0.5, sepia=0.0)
         img = _make_test_image(color=(100, 100, 100))
         result = f.apply_to_image(img)
@@ -157,6 +168,7 @@ class TestApplyBrightness:
 
     @pytest.mark.unit
     def test_decreased_brightness(self) -> None:
+        """Test functionality: decreased brightness."""
         f = DarkPDFFilter(inversion=0.0, brightness=0.5, contrast=0.5, sepia=0.0)
         img = _make_test_image(color=(200, 200, 200))
         result = f.apply_to_image(img)
@@ -171,6 +183,7 @@ class TestApplyContrast:
 
     @pytest.mark.unit
     def test_high_contrast(self) -> None:
+        """Test functionality: high contrast."""
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=2.0, sepia=0.0)
         img = _make_test_image(color=(200, 200, 200))
         result = f.apply_to_image(img)
@@ -194,6 +207,7 @@ class TestApplySepia:
 
     @pytest.mark.unit
     def test_full_sepia(self) -> None:
+        """Test functionality: full sepia."""
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=0.5, sepia=1.0)
         img = _make_test_image(color=(100, 100, 100))
         result = f.apply_to_image(img)
@@ -208,6 +222,7 @@ class TestApplySepia:
 
     @pytest.mark.unit
     def test_no_sepia(self) -> None:
+        """Test functionality: no sepia."""
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=0.5, sepia=0.0)
         img = _make_test_image(color=(100, 150, 200))
         result = f.apply_to_image(img)
@@ -223,6 +238,7 @@ class TestApplyToImage:
 
     @pytest.mark.unit
     def test_rgba_preserves_alpha(self) -> None:
+        """Test functionality: rgba preserves alpha."""
         f = DarkPDFFilter(inversion=1.0, brightness=1.0, contrast=0.5, sepia=0.0)
         img = Image.new("RGBA", (10, 10), (200, 200, 200, 128))
         result = f.apply_to_image(img)
@@ -232,6 +248,7 @@ class TestApplyToImage:
 
     @pytest.mark.unit
     def test_grayscale_input(self) -> None:
+        """Test functionality: grayscale input."""
         f = DarkPDFFilter(inversion=0.0, brightness=1.0, contrast=0.5, sepia=0.0)
         img = Image.new("L", (10, 10), 100)
         result = f.apply_to_image(img)
@@ -244,6 +261,7 @@ class TestApplyToPdf:
 
     @pytest.mark.unit
     def test_pdf_round_trip(self) -> None:
+        """Test functionality: pdf round trip."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "output.pdf"
@@ -260,12 +278,14 @@ class TestApplyToPdf:
 
     @pytest.mark.unit
     def test_pdf_not_found(self) -> None:
+        """Test functionality: pdf not found."""
         f = DarkPDFFilter()
         with pytest.raises(FileNotFoundError):
             f.apply_to_pdf("/nonexistent/path.pdf", "/tmp/out.pdf")
 
     @pytest.mark.unit
     def test_apply_dark_mode_function(self) -> None:
+        """Test functionality: apply dark mode function."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "output.pdf"
@@ -277,6 +297,7 @@ class TestApplyToPdf:
 
     @pytest.mark.unit
     def test_creates_output_directory(self) -> None:
+        """Test functionality: creates output directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "subdir" / "output.pdf"
@@ -294,6 +315,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_default_preset(self) -> None:
+        """Test functionality: default preset."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             _make_test_pdf(input_pdf)
@@ -304,6 +326,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_sepia_preset(self) -> None:
+        """Test functionality: sepia preset."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             _make_test_pdf(input_pdf)
@@ -314,6 +337,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_high_contrast_preset(self) -> None:
+        """Test functionality: high contrast preset."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             _make_test_pdf(input_pdf)
@@ -325,6 +349,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_unknown_preset(self) -> None:
+        """Test functionality: unknown preset."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             _make_test_pdf(input_pdf)
@@ -334,6 +359,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_preset_with_overrides(self) -> None:
+        """Test functionality: preset with overrides."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             _make_test_pdf(input_pdf)
@@ -344,6 +370,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_save(self) -> None:
+        """Test functionality: save."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "output.pdf"
@@ -355,6 +382,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_dark_classmethod(self) -> None:
+        """Test functionality: dark classmethod."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "output.pdf"
@@ -366,6 +394,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_sepia_classmethod(self) -> None:
+        """Test functionality: sepia classmethod."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input_pdf = Path(tmpdir) / "input.pdf"
             output_pdf = Path(tmpdir) / "output.pdf"
@@ -377,6 +406,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_batch(self) -> None:
+        """Test functionality: batch."""
         with tempfile.TemporaryDirectory() as tmpdir:
             input1 = Path(tmpdir) / "a.pdf"
             input2 = Path(tmpdir) / "b.pdf"
@@ -394,6 +424,7 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_available_presets(self) -> None:
+        """Test functionality: available presets."""
         presets = DarkPDF.available_presets()
         assert "dark" in presets
         assert "sepia" in presets
@@ -405,5 +436,6 @@ class TestDarkPDFPresets:
 
     @pytest.mark.unit
     def test_file_not_found(self) -> None:
+        """Test functionality: file not found."""
         with pytest.raises(FileNotFoundError):
             DarkPDF("/nonexistent/path.pdf")

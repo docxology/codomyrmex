@@ -52,6 +52,7 @@ class ReviewLoopResult:
     reviews: list[ReviewResult] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "converged": self.converged,
             "iterations": self.iterations,
@@ -75,6 +76,7 @@ class ReviewLoop:
         max_iterations: int = 5,
         approval_threshold: float = 0.7,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._max_iterations = max_iterations
         self._approval_threshold = approval_threshold
         self._generator = CodeGenerator()

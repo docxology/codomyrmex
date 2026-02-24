@@ -7,6 +7,7 @@ from codomyrmex.documents.formats.markdown_handler import read_markdown, write_m
 
 @pytest.mark.unit
 class TestMarkdownHandler:
+    """Test suite for MarkdownHandler."""
     def test_read_markdown(self, tmp_path):
         """Test reading markdown from a real file."""
         f = tmp_path / "test.md"

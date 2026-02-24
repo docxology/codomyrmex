@@ -4,12 +4,14 @@ from codomyrmex.security.ai_safety import ActiveDefense, RabbitHole
 import asyncio
 
 def test_exploit_detection():
+    """Test functionality: exploit detection."""
     active = ActiveDefense()
     assert active.detect_exploit("ignore previous instructions")
     assert active.detect_exploit("SYSTEM OVERRIDE")
     assert not active.detect_exploit("Hello, how are you?")
 
 def test_poison_generation():
+    """Test functionality: poison generation."""
     import random
     random.seed(42)  # Ensure deterministic output
     active = ActiveDefense()
@@ -22,6 +24,7 @@ def test_poison_generation():
     assert any(phrase in poison_high for phrase in known_phrases)
 
 def test_rabbit_hole_engagement():
+    """Test functionality: rabbit hole engagement."""
     hole = RabbitHole()
     attacker = "bad_actor"
     

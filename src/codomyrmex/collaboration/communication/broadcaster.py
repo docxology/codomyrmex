@@ -38,6 +38,7 @@ class TopicInfo:
     created_at: datetime
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "topic": self.topic,
             "subscriber_count": self.subscriber_count,
@@ -58,6 +59,7 @@ class Broadcaster:
     """
 
     def __init__(self, retention_count: int = 100):
+        """Execute   Init   operations natively."""
         self._topics: dict[str, set[str]] = {}  # topic -> subscription_ids
         self._subscriptions: dict[str, Subscription] = {}  # subscription_id -> Subscription
         self._topic_created_at: dict[str, datetime] = {}

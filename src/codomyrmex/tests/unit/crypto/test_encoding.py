@@ -35,18 +35,22 @@ class TestBase64:
     """Base64 encode/decode tests."""
 
     def test_roundtrip(self) -> None:
+        """Test functionality: roundtrip."""
         data = b"Hello, World!"
         assert decode_base64(encode_base64(data)) == data
 
     def test_empty(self) -> None:
+        """Test functionality: empty."""
         assert encode_base64(b"") == ""
         assert decode_base64("") == b""
 
     def test_binary_data(self) -> None:
+        """Test functionality: binary data."""
         data = bytes(range(256))
         assert decode_base64(encode_base64(data)) == data
 
     def test_known_vector(self) -> None:
+        """Test functionality: known vector."""
         # RFC 4648 test vectors
         assert encode_base64(b"f") == "Zg=="
         assert encode_base64(b"fo") == "Zm8="
@@ -56,6 +60,7 @@ class TestBase64:
         assert encode_base64(b"foobar") == "Zm9vYmFy"
 
     def test_decode_invalid_raises(self) -> None:
+        """Test functionality: decode invalid raises."""
         with pytest.raises(EncodingError):
             decode_base64("!!!invalid!!!")
 
@@ -70,33 +75,40 @@ class TestBase58:
     """Base58 encode/decode tests."""
 
     def test_empty_bytes(self) -> None:
+        """Test functionality: empty bytes."""
         assert encode_base58(b"") == ""
         assert decode_base58("") == b""
 
     def test_single_zero_byte(self) -> None:
+        """Test functionality: single zero byte."""
         # A leading 0x00 byte encodes as '1'
         assert encode_base58(b"\x00") == "1"
         assert decode_base58("1") == b"\x00"
 
     def test_multiple_leading_zeros(self) -> None:
+        """Test functionality: multiple leading zeros."""
         assert encode_base58(b"\x00\x00\x00") == "111"
         assert decode_base58("111") == b"\x00\x00\x00"
 
     def test_known_vector_hello(self) -> None:
+        """Test functionality: known vector hello."""
         # "Hello World" in Base58 is "JxF12TrwUP45BMd"
         encoded = encode_base58(b"Hello World")
         assert encoded == "JxF12TrwUP45BMd"
         assert decode_base58(encoded) == b"Hello World"
 
     def test_roundtrip_binary(self) -> None:
+        """Test functionality: roundtrip binary."""
         data = bytes(range(1, 256))
         assert decode_base58(encode_base58(data)) == data
 
     def test_roundtrip_with_leading_zeros(self) -> None:
+        """Test functionality: roundtrip with leading zeros."""
         data = b"\x00\x00" + b"test data"
         assert decode_base58(encode_base58(data)) == data
 
     def test_decode_invalid_char_raises(self) -> None:
+        """Test functionality: decode invalid char raises."""
         with pytest.raises(EncodingError, match="Invalid Base58 character"):
             decode_base58("0OIl")  # These chars are not in the Bitcoin alphabet
 
@@ -111,14 +123,17 @@ class TestBase32:
     """Base32 encode/decode tests."""
 
     def test_roundtrip(self) -> None:
+        """Test functionality: roundtrip."""
         data = b"Hello, World!"
         assert decode_base32(encode_base32(data)) == data
 
     def test_empty(self) -> None:
+        """Test functionality: empty."""
         assert encode_base32(b"") == ""
         assert decode_base32("") == b""
 
     def test_known_vector(self) -> None:
+        """Test functionality: known vector."""
         # RFC 4648 test vectors
         assert encode_base32(b"f") == "MY======"
         assert encode_base32(b"fo") == "MZXQ===="
@@ -128,6 +143,7 @@ class TestBase32:
         assert encode_base32(b"foobar") == "MZXW6YTBOI======"
 
     def test_decode_invalid_raises(self) -> None:
+        """Test functionality: decode invalid raises."""
         with pytest.raises(EncodingError):
             decode_base32("!!!invalid!!!")
 
@@ -142,29 +158,36 @@ class TestHex:
     """Hexadecimal encode/decode tests."""
 
     def test_roundtrip(self) -> None:
+        """Test functionality: roundtrip."""
         data = b"\xde\xad\xbe\xef"
         assert decode_hex(encode_hex(data)) == data
 
     def test_empty(self) -> None:
+        """Test functionality: empty."""
         assert encode_hex(b"") == ""
         assert decode_hex("") == b""
 
     def test_known_vector(self) -> None:
+        """Test functionality: known vector."""
         assert encode_hex(b"\x00\xff") == "00ff"
 
     def test_decode_uppercase(self) -> None:
+        """Test functionality: decode uppercase."""
         assert decode_hex("DEADBEEF") == b"\xde\xad\xbe\xef"
 
     def test_decode_invalid_raises(self) -> None:
+        """Test functionality: decode invalid raises."""
         with pytest.raises(EncodingError):
             decode_hex("xyz")
 
     def test_is_valid_hex_true(self) -> None:
+        """Test functionality: is valid hex true."""
         assert is_valid_hex("deadbeef") is True
         assert is_valid_hex("ABCDEF0123456789") is True
         assert is_valid_hex("") is True  # empty is technically valid hex
 
     def test_is_valid_hex_false(self) -> None:
+        """Test functionality: is valid hex false."""
         assert is_valid_hex("xyz") is False
         assert is_valid_hex("0xdead") is False  # prefix not valid for fromhex
         assert is_valid_hex("deadbee") is False  # odd length
@@ -180,18 +203,21 @@ class TestPEM:
     """PEM encode/decode/identify tests."""
 
     def test_roundtrip(self) -> None:
+        """Test functionality: roundtrip."""
         data = b"This is test key material"
         label = "RSA PRIVATE KEY"
         pem = encode_pem(data, label)
         assert decode_pem(pem) == data
 
     def test_encode_format(self) -> None:
+        """Test functionality: encode format."""
         data = b"short"
         pem = encode_pem(data, "CERTIFICATE")
         assert pem.startswith("-----BEGIN CERTIFICATE-----\n")
         assert pem.endswith("-----END CERTIFICATE-----\n")
 
     def test_line_wrapping(self) -> None:
+        """Test functionality: line wrapping."""
         # Use data that produces > 64 chars of Base64
         data = b"A" * 100
         pem = encode_pem(data, "TEST")
@@ -201,22 +227,27 @@ class TestPEM:
             assert len(line) <= 64
 
     def test_identify_pem_type(self) -> None:
+        """Test functionality: identify pem type."""
         pem = encode_pem(b"data", "EC PRIVATE KEY")
         assert identify_pem_type(pem) == "EC PRIVATE KEY"
 
     def test_identify_certificate(self) -> None:
+        """Test functionality: identify certificate."""
         pem = encode_pem(b"cert data", "CERTIFICATE")
         assert identify_pem_type(pem) == "CERTIFICATE"
 
     def test_decode_no_markers_raises(self) -> None:
+        """Test functionality: decode no markers raises."""
         with pytest.raises(EncodingError, match="missing BEGIN or END"):
             decode_pem("not a PEM string")
 
     def test_identify_no_header_raises(self) -> None:
+        """Test functionality: identify no header raises."""
         with pytest.raises(EncodingError, match="No PEM header"):
             identify_pem_type("just some text")
 
     def test_roundtrip_binary(self) -> None:
+        """Test functionality: roundtrip binary."""
         data = bytes(range(256))
         pem = encode_pem(data, "BINARY DATA")
         assert decode_pem(pem) == data

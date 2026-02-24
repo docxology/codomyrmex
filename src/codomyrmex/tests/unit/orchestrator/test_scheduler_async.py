@@ -178,6 +178,7 @@ class TestMetrics:
         assert m.total_execution_time > 0
 
     def test_metrics_to_dict(self) -> None:
+        """Test functionality: metrics to dict."""
         m = SchedulerMetrics(jobs_scheduled=5, jobs_completed=3, jobs_failed=2)
         d = m.to_dict()
         assert d["jobs_scheduled"] == 5
@@ -204,6 +205,7 @@ class TestJobManagement:
     """Verify job listing, retrieval, and cancellation."""
 
     def test_list_jobs(self) -> None:
+        """Test functionality: list jobs."""
         scheduler = AsyncScheduler()
         scheduler.schedule(_double, args=(1,), name="a")
         scheduler.schedule(_double, args=(2,), name="b")
@@ -212,6 +214,7 @@ class TestJobManagement:
         assert len(jobs) == 2
 
     def test_list_jobs_by_status(self) -> None:
+        """Test functionality: list jobs by status."""
         scheduler = AsyncScheduler()
         scheduler.schedule(_double, args=(1,), name="a")
         jid = scheduler.schedule(_double, args=(2,), name="b")
@@ -223,6 +226,7 @@ class TestJobManagement:
         assert len(cancelled) == 1
 
     def test_cancel_pending_job(self) -> None:
+        """Test functionality: cancel pending job."""
         scheduler = AsyncScheduler()
         jid = scheduler.schedule(_double, args=(1,), name="cancel_me")
         assert scheduler.cancel(jid) is True
@@ -232,6 +236,7 @@ class TestJobManagement:
         assert job.status == AsyncJobStatus.CANCELLED
 
     def test_cancel_nonexistent_job(self) -> None:
+        """Test functionality: cancel nonexistent job."""
         scheduler = AsyncScheduler()
         assert scheduler.cancel("nonexistent") is False
 
@@ -295,6 +300,7 @@ class TestExports:
     """Verify Stream 5 scheduler types are exported."""
 
     def test_async_scheduler_exports(self) -> None:
+        """Test functionality: async scheduler exports."""
         from codomyrmex.orchestrator import (
             AsyncScheduler as _AS,
             AsyncJob as _AJ,

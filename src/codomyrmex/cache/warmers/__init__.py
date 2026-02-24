@@ -72,9 +72,11 @@ class StaticKeyProvider(KeyProvider[K]):
     """Provide a static list of keys."""
 
     def __init__(self, keys: list[K]):
+        """Execute   Init   operations natively."""
         self._keys = keys
 
     def get_keys(self) -> list[K]:
+        """Execute Get Keys operations natively."""
         return self._keys.copy()
 
 
@@ -82,9 +84,11 @@ class CallableKeyProvider(KeyProvider[K]):
     """Provide keys from a callable."""
 
     def __init__(self, func: Callable[[], list[K]]):
+        """Execute   Init   operations natively."""
         self._func = func
 
     def get_keys(self) -> list[K]:
+        """Execute Get Keys operations natively."""
         return self._func()
 
 
@@ -101,9 +105,11 @@ class CallableValueLoader(ValueLoader[K, V]):
     """Load values using a callable."""
 
     def __init__(self, func: Callable[[K], V]):
+        """Execute   Init   operations natively."""
         self._func = func
 
     def load(self, key: K) -> V:
+        """Execute Load operations natively."""
         return self._func(key)
 
 
@@ -116,6 +122,7 @@ class BatchValueLoader(ValueLoader[K, V]):
     """
 
     def __init__(self, batch_func: Callable[[list[K]], dict[K, V]]):
+        """Execute   Init   operations natively."""
         self._batch_func = batch_func
         self._cache: dict[K, V] = {}
 
@@ -164,6 +171,7 @@ class CacheWarmer(Generic[K, V]):
         value_loader: ValueLoader[K, V],
         config: WarmingConfig | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.cache = cache
         self.key_provider = key_provider
         self.value_loader = value_loader
@@ -248,6 +256,7 @@ class CacheWarmer(Generic[K, V]):
         stats = WarmingStats()
 
         def load_key(key: K) -> tuple:
+            """Execute Load Key operations natively."""
             for attempt in range(self.config.max_retries + 1):
                 try:
                     value = self.value_loader.load(key)
@@ -309,6 +318,7 @@ class CacheWarmer(Generic[K, V]):
         self._stop_scheduler.clear()
 
         def scheduler_loop():
+            """Execute Scheduler Loop operations natively."""
             while not self._stop_scheduler.wait(self.config.refresh_interval_s):
                 self.warm()
 
@@ -339,6 +349,7 @@ class AccessTracker(Generic[K]):
     """
 
     def __init__(self, max_keys: int = 10000):
+        """Execute   Init   operations natively."""
         self.max_keys = max_keys
         self._access_counts: dict[K, int] = {}
         self._last_access: dict[K, float] = {}
@@ -420,11 +431,13 @@ class AdaptiveKeyProvider(KeyProvider[K]):
         threshold: int = 5,
         limit: int = 1000,
     ):
+        """Execute   Init   operations natively."""
         self.tracker = tracker
         self.threshold = threshold
         self.limit = limit
 
     def get_keys(self) -> list[K]:
+        """Execute Get Keys operations natively."""
         return self.tracker.get_hot_keys(
             threshold=self.threshold,
             limit=self.limit,

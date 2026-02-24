@@ -125,6 +125,7 @@ class FPFAnalyzer:
         depths = {}
 
         def calculate_depth(node: str, visited: set) -> int:
+            """Execute Calculate Depth operations natively."""
 
 
             if node in visited:

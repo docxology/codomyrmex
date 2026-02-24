@@ -96,75 +96,93 @@ class TestClassifyOpenstackError:
         return classify_openstack_error(Exception(msg), **kwargs)
 
     def test_401_returns_auth_error(self):
+        """Test functionality: 401 returns auth error."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
         assert isinstance(self._classify("HTTP 401 Unauthorized"), InfomaniakAuthError)
 
     def test_403_returns_auth_error(self):
+        """Test functionality: 403 returns auth error."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
         assert isinstance(self._classify("403 Forbidden"), InfomaniakAuthError)
 
     def test_authentication_keyword_returns_auth_error(self):
+        """Test functionality: authentication keyword returns auth error."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
         assert isinstance(self._classify("Authentication required"), InfomaniakAuthError)
 
     def test_404_returns_not_found(self):
+        """Test functionality: 404 returns not found."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
         assert isinstance(self._classify("HTTP 404"), InfomaniakNotFoundError)
 
     def test_not_found_keyword(self):
+        """Test functionality: not found keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakNotFoundError
         assert isinstance(self._classify("Resource not found"), InfomaniakNotFoundError)
 
     def test_409_returns_conflict(self):
+        """Test functionality: 409 returns conflict."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
         assert isinstance(self._classify("HTTP 409"), InfomaniakConflictError)
 
     def test_conflict_keyword(self):
+        """Test functionality: conflict keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConflictError
         assert isinstance(self._classify("State conflict detected"), InfomaniakConflictError)
 
     def test_413_returns_quota(self):
+        """Test functionality: 413 returns quota."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
         assert isinstance(self._classify("HTTP 413 Request Entity Too Large"), InfomaniakQuotaExceededError)
 
     def test_quota_keyword(self):
+        """Test functionality: quota keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
         assert isinstance(self._classify("Quota exceeded"), InfomaniakQuotaExceededError)
 
     def test_limit_keyword(self):
+        """Test functionality: limit keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakQuotaExceededError
         assert isinstance(self._classify("Rate limit hit"), InfomaniakQuotaExceededError)
 
     def test_timeout_keyword(self):
+        """Test functionality: timeout keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
         assert isinstance(self._classify("Request timeout"), InfomaniakTimeoutError)
 
     def test_timed_out_keyword(self):
+        """Test functionality: timed out keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakTimeoutError
         assert isinstance(self._classify("Connection timed out"), InfomaniakTimeoutError)
 
     def test_connection_keyword(self):
+        """Test functionality: connection keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
         assert isinstance(self._classify("Connection refused"), InfomaniakConnectionError)
 
     def test_refused_keyword(self):
+        """Test functionality: refused keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
         assert isinstance(self._classify("refused by server"), InfomaniakConnectionError)
 
     def test_unreachable_keyword(self):
+        """Test functionality: unreachable keyword."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakConnectionError
         assert isinstance(self._classify("Host unreachable"), InfomaniakConnectionError)
 
     def test_generic_error_fallback(self):
+        """Test functionality: generic error fallback."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakCloudError
         result = self._classify("Something unknown went wrong")
         assert type(result) is InfomaniakCloudError
 
     def test_case_insensitive(self):
+        """Test functionality: case insensitive."""
         from codomyrmex.cloud.infomaniak.exceptions import InfomaniakAuthError
         assert isinstance(self._classify("AUTHENTICATION FAILED"), InfomaniakAuthError)
 
     def test_kwargs_propagated(self):
+        """Test functionality: kwargs propagated."""
         result = self._classify(
             "HTTP 404", service="dns", operation="get_zone", resource_id="z-1"
         )
@@ -173,6 +191,7 @@ class TestClassifyOpenstackError:
         assert result.resource_id == "z-1"
 
     def test_preserves_original_message(self):
+        """Test functionality: preserves original message."""
         result = self._classify("HTTP 404 zone missing")
         assert "HTTP 404 zone missing" in str(result)
 
@@ -223,6 +242,7 @@ class TestClassifyHttpError:
         assert result.operation == "GET credits"
 
     def test_401_response(self):
+        """Test functionality: 401 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakAuthError,
             classify_http_error,
@@ -231,6 +251,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakAuthError)
 
     def test_403_response(self):
+        """Test functionality: 403 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakAuthError,
             classify_http_error,
@@ -239,6 +260,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakAuthError)
 
     def test_404_response(self):
+        """Test functionality: 404 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakNotFoundError,
             classify_http_error,
@@ -247,6 +269,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakNotFoundError)
 
     def test_409_response(self):
+        """Test functionality: 409 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakConflictError,
             classify_http_error,
@@ -255,6 +278,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakConflictError)
 
     def test_413_response(self):
+        """Test functionality: 413 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakQuotaExceededError,
             classify_http_error,
@@ -263,6 +287,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakQuotaExceededError)
 
     def test_429_response(self):
+        """Test functionality: 429 response."""
         from codomyrmex.cloud.infomaniak.exceptions import (
             InfomaniakQuotaExceededError,
             classify_http_error,
@@ -298,6 +323,7 @@ class TestClassifyHttpError:
         assert isinstance(result, InfomaniakCloudError)
 
     def test_kwargs_propagated(self):
+        """Test functionality: kwargs propagated."""
         from codomyrmex.cloud.infomaniak.exceptions import classify_http_error
         result = classify_http_error(
             self._make_http_error(404),

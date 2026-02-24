@@ -9,6 +9,7 @@ from codomyrmex.documents.formats.json_handler import read_json, write_json
 
 @pytest.mark.unit
 class TestJsonHandler:
+    """Test suite for JsonHandler."""
     def test_read_json(self, tmp_path):
         """Test reading JSON from a real file."""
         f = tmp_path / "test.json"

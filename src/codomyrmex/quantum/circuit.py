@@ -7,6 +7,7 @@ class QuantumCircuit:
     """A quantum circuit."""
 
     def __init__(self, num_qubits: int, num_classical_bits: int = 0):
+        """Execute   Init   operations natively."""
         self.num_qubits = num_qubits
         self.num_classical_bits = num_classical_bits or num_qubits
         self.gates: list[Gate] = []

@@ -81,6 +81,7 @@ class CollaborativeAgent(AbstractAgent):
         name: str = "Agent",
         capabilities: list[AgentCapability] | None = None,
     ):
+        """Execute   Init   operations natively."""
         self._agent_id = agent_id or str(uuid.uuid4())
         self._name = name
         self._capabilities = capabilities or []
@@ -95,18 +96,22 @@ class CollaborativeAgent(AbstractAgent):
 
     @property
     def agent_id(self) -> str:
+        """Execute Agent Id operations natively."""
         return self._agent_id
 
     @property
     def name(self) -> str:
+        """Execute Name operations natively."""
         return self._name
 
     @property
     def state(self) -> AgentState:
+        """Execute State operations natively."""
         return self._state
 
     @state.setter
     def state(self, value: AgentState):
+        """Execute State operations natively."""
         self._state = value
 
     def get_capabilities(self) -> list[str]:

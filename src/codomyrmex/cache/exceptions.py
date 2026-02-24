@@ -26,6 +26,7 @@ class CacheError(CodomyrmexError):
         backend: str | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if cache_name:
             self.context["cache_name"] = cache_name
@@ -51,6 +52,7 @@ class CacheExpiredError(CacheError):
         ttl: float | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if key:
             self.context["key"] = key
@@ -78,6 +80,7 @@ class CacheFullError(CacheError):
         required_space: int | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if max_size is not None:
             self.context["max_size"] = max_size
@@ -105,6 +108,7 @@ class CacheConnectionError(CacheError):
         connection_timeout: float | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if host:
             self.context["host"] = host
@@ -130,6 +134,7 @@ class CacheKeyError(CacheError):
         reason: str | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if key:
             self.context["key"] = key
@@ -153,6 +158,7 @@ class CacheSerializationError(CacheError):
         value_type: str | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if key:
             self.context["key"] = key
@@ -176,6 +182,7 @@ class CacheInvalidationError(CacheError):
         keys_affected: int | None = None,
         **kwargs: Any
     ):
+        """Execute   Init   operations natively."""
         super().__init__(message, **kwargs)
         if pattern:
             self.context["pattern"] = pattern

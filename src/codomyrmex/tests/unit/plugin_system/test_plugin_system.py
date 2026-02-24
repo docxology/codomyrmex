@@ -363,6 +363,7 @@ class TestPluginRegistry:
         # Register handler
         results = []
         def test_handler(data):
+            """Test functionality: handler."""
             results.append(f"processed_{data}")
             return f"result_{data}"
 
@@ -755,6 +756,7 @@ from codomyrmex.plugin_system import Plugin
 
 @pytest.mark.unit
 class TestPlugin(Plugin):
+    '''Test suite for Plugin.'''
     def initialize(self, config): return True
     def shutdown(self): pass
 """)
@@ -1050,6 +1052,7 @@ class TestPlugin:
 
         # Register handler and emit
         def test_handler():
+            """Test functionality: handler."""
             return "handled"
 
         hook.register(test_handler)
@@ -1240,6 +1243,7 @@ class TestPluginBaseClass:
 
         # Register hook
         def test_handler():
+            """Test functionality: handler."""
             return "handled"
 
         plugin.register_hook("test_hook", test_handler)

@@ -26,6 +26,7 @@ class Ledger:
     """Double-entry bookkeeping engine."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._accounts: Dict[str, Account] = {}
         self._transactions: List[Transaction] = []
 

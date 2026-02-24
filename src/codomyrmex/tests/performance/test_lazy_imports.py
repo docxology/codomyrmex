@@ -95,7 +95,7 @@ class TestBenchmarkStartupUtilities:
 
     def test_measure_import_time_returns_dict(self) -> None:
         """measure_import_time should return a proper dict."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts")
+        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
         try:
             from benchmark_startup import measure_import_time
 
@@ -109,7 +109,7 @@ class TestBenchmarkStartupUtilities:
 
     def test_measure_import_time_nonexistent_module(self) -> None:
         """Nonexistent module should return negative time."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts")
+        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
         try:
             from benchmark_startup import measure_import_time
 
@@ -120,7 +120,7 @@ class TestBenchmarkStartupUtilities:
 
     def test_benchmark_cli_startup_returns_dict(self) -> None:
         """benchmark_cli_startup should return timing data."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts")
+        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
         try:
             from benchmark_startup import benchmark_cli_startup
 
@@ -138,7 +138,7 @@ class TestBenchmarkStartupUtilities:
 
     def test_analyse_import_weights(self) -> None:
         """analyse_import_weights should return sorted list."""
-        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts")
+        sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/scripts/performance")
         try:
             from benchmark_startup import analyse_import_weights
 

@@ -39,10 +39,12 @@ class Qubit:
 
     @classmethod
     def zero(cls) -> "Qubit":
+        """Execute Zero operations natively."""
         return cls(1.0 + 0j, 0.0 + 0j)
 
     @classmethod
     def one(cls) -> "Qubit":
+        """Execute One operations natively."""
         return cls(0.0 + 0j, 1.0 + 0j)
 
     @classmethod
@@ -59,10 +61,12 @@ class Qubit:
 
     @property
     def prob_0(self) -> float:
+        """Execute Prob 0 operations natively."""
         return abs(self.alpha) ** 2
 
     @property
     def prob_1(self) -> float:
+        """Execute Prob 1 operations natively."""
         return abs(self.beta) ** 2
 
     def measure(self) -> int:

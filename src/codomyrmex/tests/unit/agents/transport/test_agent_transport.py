@@ -22,6 +22,7 @@ from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapsho
 # ─── AgentSerializer ──────────────────────────────────────────────────
 
 class TestAgentSerializer:
+    """Test suite for AgentSerializer."""
 
     def test_round_trip(self):
         """serialize → deserialize preserves state."""
@@ -51,6 +52,7 @@ class TestAgentSerializer:
         assert "  " not in text  # No indentation
 
     def test_empty_snapshot(self):
+        """Test functionality: empty snapshot."""
         serializer = AgentSerializer()
         snapshot = serializer.snapshot(agent_id="empty")
         data = serializer.serialize(snapshot)
@@ -62,6 +64,7 @@ class TestAgentSerializer:
 # ─── AgentDeserializer + HMAC ─────────────────────────────────────────
 
 class TestAgentDeserializer:
+    """Test suite for AgentDeserializer."""
 
     def test_sign_and_verify(self):
         """HMAC signing and verification succeeds."""
@@ -101,6 +104,7 @@ class TestAgentDeserializer:
 # ─── TransportMessage ────────────────────────────────────────────────
 
 class TestTransportMessage:
+    """Test suite for TransportMessage."""
 
     def test_round_trip(self):
         """to_bytes → from_bytes preserves message."""
@@ -118,18 +122,21 @@ class TestTransportMessage:
         assert restored.payload["task"] == "analyze"
 
     def test_sign_verify(self):
+        """Test functionality: sign verify."""
         msg = TransportMessage(payload={"data": "sensitive"})
         msg.sign("secret-key")
         assert msg.signature != ""
         assert msg.verify("secret-key") is True
 
     def test_tampered_verify_fails(self):
+        """Test functionality: tampered verify fails."""
         msg = TransportMessage(payload={"data": "original"})
         msg.sign("secret-key")
         msg.payload["data"] = "tampered"
         assert msg.verify("secret-key") is False
 
     def test_message_types(self):
+        """Test functionality: message types."""
         for mt in MessageType:
             msg = TransportMessage(header=MessageHeader(message_type=mt))
             data = msg.to_bytes()
@@ -140,6 +147,7 @@ class TestTransportMessage:
 # ─── Checkpoint ───────────────────────────────────────────────────────
 
 class TestCheckpoint:
+    """Test suite for Checkpoint."""
 
     def test_save_and_load(self, tmp_path):
         """Checkpoint save → load preserves state."""
@@ -158,6 +166,7 @@ class TestCheckpoint:
         assert loaded.snapshot.memory["fact"] == "earth is round"
 
     def test_diff_no_changes(self):
+        """Test functionality: diff no changes."""
         snap = AgentSnapshot(agent_id="a", config={"x": 1}, memory={"k": "v"})
         ckpt1 = Checkpoint(snapshot=snap)
         ckpt2 = Checkpoint(snapshot=snap)
@@ -165,6 +174,7 @@ class TestCheckpoint:
         assert delta.has_changes is False
 
     def test_diff_detects_changes(self):
+        """Test functionality: diff detects changes."""
         snap1 = AgentSnapshot(agent_id="a", config={"x": 1}, memory={"k": "v1"})
         snap2 = AgentSnapshot(
             agent_id="a",
@@ -183,6 +193,7 @@ class TestCheckpoint:
         assert "k" in delta.memory_keys_modified
 
     def test_checkpoint_id_auto_generated(self):
+        """Test functionality: checkpoint id auto generated."""
         snap = AgentSnapshot(agent_id="test-agent")
         ckpt = Checkpoint(snapshot=snap)
         assert "test-agent" in ckpt.checkpoint_id

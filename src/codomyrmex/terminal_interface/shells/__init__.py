@@ -70,9 +70,11 @@ class CommandResult:
 
     @property
     def success(self) -> bool:
+        """Execute Success operations natively."""
         return self.exit_code == 0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "command": self.command,
             "exit_code": self.exit_code,
@@ -87,6 +89,7 @@ class Shell:
     """A shell for executing commands."""
 
     def __init__(self, config: ShellConfig | None = None):
+        """Execute   Init   operations natively."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._history: list[CommandResult] = []
@@ -185,6 +188,7 @@ class InteractiveShell:
     """An interactive shell session."""
 
     def __init__(self, config: ShellConfig | None = None):
+        """Execute   Init   operations natively."""
         self.config = config or ShellConfig.detect()
         self._process: subprocess.Popen | None = None
         self._output_queue: queue.Queue = queue.Queue()
@@ -280,6 +284,7 @@ class InteractiveShell:
 
     @property
     def is_running(self) -> bool:
+        """Execute Is Running operations natively."""
         return self._running and self._process is not None
 
 
@@ -287,6 +292,7 @@ class CommandBuilder:
     """Builder for constructing shell commands."""
 
     def __init__(self, base_command: str = ""):
+        """Execute   Init   operations natively."""
         self._parts: list[str] = []
         if base_command:
             self._parts.append(base_command)

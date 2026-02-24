@@ -13,6 +13,7 @@ class NeurolinguisticEngine:
     """Engine for analyzing and checking text against linguistic models."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.known_frames: List[CognitiveFrame] = []
 
     def register_frame(self, frame: CognitiveFrame) -> None:

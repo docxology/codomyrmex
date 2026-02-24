@@ -9,6 +9,7 @@ class MarketingReport(BaseReport):
     """Marketing report with Brand Awareness and User Acquisition metrics."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         super().__init__(title="Marketing Analysis")
         self.dashboard = Dashboard(title="Marketing Analysis")
         self._generated = False

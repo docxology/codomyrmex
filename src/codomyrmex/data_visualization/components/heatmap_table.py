@@ -12,6 +12,7 @@ class HeatmapTable(BaseComponent):
     title: str = ""
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         # Find min/max for colour scaling
         all_vals = [v for row in self.rows for v in row if isinstance(v, (int, float))]
         min_v = min(all_vals) if all_vals else 0
@@ -43,4 +44,5 @@ class HeatmapTable(BaseComponent):
         )
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()

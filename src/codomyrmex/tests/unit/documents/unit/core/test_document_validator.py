@@ -11,6 +11,7 @@ from codomyrmex.documents.models.document import Document, DocumentFormat
 
 @pytest.mark.unit
 class TestDocumentValidator:
+    """Test suite for DocumentValidator."""
     def setup_method(self):
         self.validator = DocumentValidator()
 
@@ -43,6 +44,7 @@ class TestDocumentValidator:
 
 @pytest.mark.unit
 class TestValidateDocumentConvenience:
+    """Test suite for ValidateDocumentConvenience."""
     def test_validate_document_wrapper(self):
         """Test convenience wrapper calls real validation."""
         doc = Document("content", DocumentFormat.TEXT)

@@ -12,6 +12,7 @@ class ChatBubble(BaseComponent):
     timestamp: str = ""
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         align = "right" if self.role == "user" else "left"
         label = self.role.capitalize()
         return (
@@ -23,4 +24,5 @@ class ChatBubble(BaseComponent):
         )
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()

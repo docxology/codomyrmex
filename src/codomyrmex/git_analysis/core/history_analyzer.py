@@ -30,6 +30,7 @@ class GitHistoryAnalyzer:
     """
 
     def __init__(self, repo_path: str) -> None:
+        """Execute   Init   operations natively."""
         self._path = str(Path(repo_path).resolve())
         self._repo = git.Repo(self._path, search_parent_directories=True)
 

@@ -65,6 +65,7 @@ class WorkflowJournal:
     """
 
     def __init__(self, memory: MemoryStore | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._entries: list[JournalEntry] = []
         self._memory = memory
 

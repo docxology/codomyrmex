@@ -76,6 +76,7 @@ class GmailProvider(EmailProvider):
             body_html = ""
 
             def extract_parts(parts):
+                """Execute Extract Parts operations natively."""
                 nonlocal body_text, body_html
                 for part in parts:
                     mime_type = part.get('mimeType')

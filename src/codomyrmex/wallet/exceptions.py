@@ -21,12 +21,14 @@ class WalletError(CodomyrmexError):
     """Base exception for wallet operations."""
 
     def __init__(self, message: str = "", code: str = "", details: dict[str, Any] | None = None) -> None:
+        """Execute   Init   operations natively."""
         self.code = code
         self.details = details or {}
         super().__init__(message)
 
     @property
     def error_dict(self) -> dict[str, Any]:
+        """Execute Error Dict operations natively."""
         return {
             "error_type": self.__class__.__name__,
             "code": self.code,
@@ -39,6 +41,7 @@ class WalletNotFoundError(WalletError):
     """Raised when a wallet does not exist for the given user."""
 
     def __init__(self, user_id: str = "", message: str = "Wallet not found") -> None:
+        """Execute   Init   operations natively."""
         self.user_id = user_id
         final_msg = f"{message}: {user_id}" if user_id else message
         super().__init__(final_msg, code="WALLET_NOT_FOUND", details={"user_id": user_id})
@@ -48,6 +51,7 @@ class WalletKeyError(WalletError):
     """Raised when key storage or retrieval fails."""
 
     def __init__(self, message: str = "Key operation failed", key_type: str = "") -> None:
+        """Execute   Init   operations natively."""
         self.key_type = key_type
         super().__init__(message, code="KEY_ERROR", details={"key_type": key_type})
 
@@ -56,6 +60,7 @@ class RitualError(WalletError):
     """Raised when a recovery ritual operation fails."""
 
     def __init__(self, message: str = "Ritual failed", ritual_step: str = "") -> None:
+        """Execute   Init   operations natively."""
         self.ritual_step = ritual_step
         super().__init__(message, code="RITUAL_ERROR", details={"ritual_step": ritual_step})
 
@@ -69,6 +74,7 @@ class InsufficientFundsError(WalletError):
         available: float = 0,
         currency: str = "ETH",
     ) -> None:
+        """Execute   Init   operations natively."""
         self.required = required
         self.available = available
         self.currency = currency
@@ -88,6 +94,7 @@ class TransactionError(WalletError):
         tx_hash: str = "",
         reason: str = "",
     ) -> None:
+        """Execute   Init   operations natively."""
         self.tx_hash = tx_hash
         self.reason = reason
         super().__init__(message, code="TX_ERROR", details={"tx_hash": tx_hash, "reason": reason})
@@ -102,6 +109,7 @@ class ContractError(WalletError):
         contract_address: str = "",
         function_name: str = "",
     ) -> None:
+        """Execute   Init   operations natively."""
         self.contract_address = contract_address
         self.function_name = function_name
         super().__init__(message, code="CONTRACT_ERROR", details={
@@ -114,4 +122,5 @@ class GasEstimationError(WalletError):
     """Raised when gas estimation fails."""
 
     def __init__(self, message: str = "Gas estimation failed") -> None:
+        """Execute   Init   operations natively."""
         super().__init__(message, code="GAS_ESTIMATION_ERROR")

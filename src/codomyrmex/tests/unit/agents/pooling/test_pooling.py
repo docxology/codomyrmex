@@ -177,7 +177,7 @@ class TestAgentPool:
         for _ in range(5):
             try:
                 pool.execute(lambda agent: agent.execute("test"))
-            except:
+            except Exception:
                 pass
 
         # Verify failures are tracked

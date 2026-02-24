@@ -249,16 +249,17 @@ class PyscnAnalyzer:
                         f.write(file_path + '\n')
                     file_list_path = f.name
 
-                cmd = [
-                    "pyscn", "analyze", "--select", "clones",
-                    "--json", f"--clone-threshold={threshold}",
-                    f"@{file_list_path}"
-                ]
+                try:
+                    cmd = [
+                        "pyscn", "analyze", "--select", "clones",
+                        "--json", f"--clone-threshold={threshold}",
+                        f"@{file_list_path}"
+                    ]
 
-                subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-
-                # Clean up temporary file
-                os.unlink(file_list_path)
+                    subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+                finally:
+                    # Clean up temporary file even if subprocess fails
+                    os.unlink(file_list_path)
 
             # Read from the generated JSON file
             reports_dir = ".pyscn/reports"

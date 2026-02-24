@@ -33,30 +33,35 @@ class TestWalletManager:
     """Tests for WalletManager core operations."""
 
     def test_create_wallet(self):
+        """Test functionality: create wallet."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
         assert address.startswith("0x")
         assert len(address) > 10
 
     def test_get_wallet_address(self):
+        """Test functionality: get wallet address."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
         assert wallet_mgr.get_wallet_address("u1") == address
         assert wallet_mgr.get_wallet_address("nonexistent") is None
 
     def test_has_wallet(self):
+        """Test functionality: has wallet."""
         wallet_mgr = WalletManager()
         assert not wallet_mgr.has_wallet("u1")
         wallet_mgr.create_wallet("u1")
         assert wallet_mgr.has_wallet("u1")
 
     def test_create_wallet_duplicate_raises(self):
+        """Test functionality: create wallet duplicate raises."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         with pytest.raises(WalletError, match="already has a wallet"):
             wallet_mgr.create_wallet("u1")
 
     def test_sign_message(self):
+        """Test functionality: sign message."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         sig = wallet_mgr.sign_message("u1", b"message")
@@ -64,11 +69,13 @@ class TestWalletManager:
         assert len(sig) == 32  # HMAC-SHA256 produces 32 bytes
 
     def test_sign_message_no_wallet_raises(self):
+        """Test functionality: sign message no wallet raises."""
         wallet_mgr = WalletManager()
         with pytest.raises(WalletNotFoundError):
             wallet_mgr.sign_message("u2", b"message")
 
     def test_sign_message_deterministic(self):
+        """Test functionality: sign message deterministic."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         sig1 = wallet_mgr.sign_message("u1", b"same message")
@@ -76,6 +83,7 @@ class TestWalletManager:
         assert sig1 == sig2
 
     def test_sign_message_different_messages(self):
+        """Test functionality: sign message different messages."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         sig1 = wallet_mgr.sign_message("u1", b"message A")
@@ -83,6 +91,7 @@ class TestWalletManager:
         assert sig1 != sig2
 
     def test_verify_signature(self):
+        """Test functionality: verify signature."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         msg = b"test message"
@@ -90,6 +99,7 @@ class TestWalletManager:
         assert wallet_mgr.verify_signature("u1", msg, sig)
 
     def test_verify_signature_invalid(self):
+        """Test functionality: verify signature invalid."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         msg = b"test message"
@@ -97,11 +107,13 @@ class TestWalletManager:
         assert not wallet_mgr.verify_signature("u1", b"different message", sig)
 
     def test_verify_signature_wrong_bytes(self):
+        """Test functionality: verify signature wrong bytes."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         assert not wallet_mgr.verify_signature("u1", b"msg", b"invalid_sig")
 
     def test_rotate_keys(self):
+        """Test functionality: rotate keys."""
         wallet_mgr = WalletManager()
         old_address = wallet_mgr.create_wallet("u1")
         new_address = wallet_mgr.rotate_keys("u1")
@@ -110,6 +122,7 @@ class TestWalletManager:
         assert wallet_mgr.get_wallet_address("u1") == new_address
 
     def test_rotate_keys_changes_signatures(self):
+        """Test functionality: rotate keys changes signatures."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         sig_before = wallet_mgr.sign_message("u1", b"test")
@@ -118,11 +131,13 @@ class TestWalletManager:
         assert sig_before != sig_after
 
     def test_rotate_keys_no_wallet_raises(self):
+        """Test functionality: rotate keys no wallet raises."""
         wallet_mgr = WalletManager()
         with pytest.raises(WalletNotFoundError):
             wallet_mgr.rotate_keys("u2")
 
     def test_backup_wallet(self):
+        """Test functionality: backup wallet."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         backup = wallet_mgr.backup_wallet("u1")
@@ -133,11 +148,13 @@ class TestWalletManager:
         assert backup["created_at"] is not None
 
     def test_backup_wallet_no_wallet_raises(self):
+        """Test functionality: backup wallet no wallet raises."""
         wallet_mgr = WalletManager()
         with pytest.raises(WalletNotFoundError):
             wallet_mgr.backup_wallet("u2")
 
     def test_delete_wallet(self):
+        """Test functionality: delete wallet."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         assert wallet_mgr.has_wallet("u1")
@@ -147,11 +164,13 @@ class TestWalletManager:
         assert wallet_mgr.get_wallet_address("u1") is None
 
     def test_delete_wallet_no_wallet_raises(self):
+        """Test functionality: delete wallet no wallet raises."""
         wallet_mgr = WalletManager()
         with pytest.raises(WalletNotFoundError):
             wallet_mgr.delete_wallet("u2")
 
     def test_list_wallets(self):
+        """Test functionality: list wallets."""
         wallet_mgr = WalletManager()
         assert wallet_mgr.list_wallets() == {}
         addr1 = wallet_mgr.create_wallet("u1")
@@ -160,6 +179,7 @@ class TestWalletManager:
         assert wallets == {"u1": addr1, "u2": addr2}
 
     def test_list_wallets_is_copy(self):
+        """Test functionality: list wallets is copy."""
         wallet_mgr = WalletManager()
         wallet_mgr.create_wallet("u1")
         wallets = wallet_mgr.list_wallets()
@@ -167,6 +187,7 @@ class TestWalletManager:
         assert wallet_mgr.get_wallet_address("u1") != "tampered"
 
     def test_custom_storage_path(self):
+        """Test functionality: custom storage path."""
         with tempfile.TemporaryDirectory() as tmpdir:
             wallet_mgr = WalletManager(storage_path=Path(tmpdir))
             address = wallet_mgr.create_wallet("u1")
@@ -190,50 +211,59 @@ class TestNaturalRitualRecovery:
         ]
 
     def test_register_and_recover_success(self):
+        """Test functionality: register and recover success."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert recovery.initiate_recovery("u1", ["Red", "Cat"])
 
     def test_recovery_failure_wrong_answer(self):
+        """Test functionality: recovery failure wrong answer."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert not recovery.initiate_recovery("u1", ["Blue", "Cat"])
         assert not recovery.initiate_recovery("u1", ["Red", "Dog"])
 
     def test_recovery_failure_wrong_count(self):
+        """Test functionality: recovery failure wrong count."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert not recovery.initiate_recovery("u1", ["Red"])
         assert not recovery.initiate_recovery("u1", ["Red", "Cat", "Extra"])
 
     def test_recovery_invalid_user(self):
+        """Test functionality: recovery invalid user."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert not recovery.initiate_recovery("u2", ["Red", "Cat"])
 
     def test_has_ritual(self):
+        """Test functionality: has ritual."""
         recovery = NaturalRitualRecovery()
         assert not recovery.has_ritual("u1")
         recovery.register_ritual("u1", self._make_steps())
         assert recovery.has_ritual("u1")
 
     def test_get_prompts(self):
+        """Test functionality: get prompts."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         prompts = recovery.get_prompts("u1")
         assert prompts == ["Color?", "Animal?"]
 
     def test_get_prompts_no_ritual_raises(self):
+        """Test functionality: get prompts no ritual raises."""
         recovery = NaturalRitualRecovery()
         with pytest.raises(RitualError):
             recovery.get_prompts("u1")
 
     def test_register_empty_steps_raises(self):
+        """Test functionality: register empty steps raises."""
         recovery = NaturalRitualRecovery()
         with pytest.raises(RitualError, match="at least one step"):
             recovery.register_ritual("u1", [])
 
     def test_attempt_tracking(self):
+        """Test functionality: attempt tracking."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert recovery.get_remaining_attempts("u1") == 5
@@ -241,6 +271,7 @@ class TestNaturalRitualRecovery:
         assert recovery.get_remaining_attempts("u1") == 4
 
     def test_lockout_after_max_attempts(self):
+        """Test functionality: lockout after max attempts."""
         recovery = NaturalRitualRecovery()
         recovery.max_attempts = 2
         recovery.register_ritual("u1", self._make_steps())
@@ -251,6 +282,7 @@ class TestNaturalRitualRecovery:
             recovery.initiate_recovery("u1", ["Red", "Cat"])
 
     def test_reset_attempts(self):
+        """Test functionality: reset attempts."""
         recovery = NaturalRitualRecovery()
         recovery.max_attempts = 2
         recovery.register_ritual("u1", self._make_steps())
@@ -262,6 +294,7 @@ class TestNaturalRitualRecovery:
         assert recovery.get_remaining_attempts("u1") == 2
 
     def test_success_resets_attempts(self):
+        """Test functionality: success resets attempts."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         recovery.initiate_recovery("u1", ["Wrong", "Wrong"])
@@ -270,17 +303,20 @@ class TestNaturalRitualRecovery:
         assert recovery.get_remaining_attempts("u1") == 5
 
     def test_max_attempts_property(self):
+        """Test functionality: max attempts property."""
         recovery = NaturalRitualRecovery()
         assert recovery.max_attempts == 5
         recovery.max_attempts = 10
         assert recovery.max_attempts == 10
 
     def test_max_attempts_invalid_raises(self):
+        """Test functionality: max attempts invalid raises."""
         recovery = NaturalRitualRecovery()
         with pytest.raises(ValueError):
             recovery.max_attempts = 0
 
     def test_unregister_ritual(self):
+        """Test functionality: unregister ritual."""
         recovery = NaturalRitualRecovery()
         recovery.register_ritual("u1", self._make_steps())
         assert recovery.has_ritual("u1")
@@ -288,6 +324,7 @@ class TestNaturalRitualRecovery:
         assert not recovery.has_ritual("u1")
 
     def test_unregister_ritual_nonexistent(self):
+        """Test functionality: unregister ritual nonexistent."""
         recovery = NaturalRitualRecovery()
         assert not recovery.unregister_ritual("u1")
 
@@ -301,17 +338,21 @@ class TestHashResponse:
     """Tests for the hash_response convenience function."""
 
     def test_returns_sha256(self):
+        """Test functionality: returns sha256."""
         result = hash_response("test")
         expected = hashlib.sha256(b"test").hexdigest()
         assert result == expected
 
     def test_deterministic(self):
+        """Test functionality: deterministic."""
         assert hash_response("hello") == hash_response("hello")
 
     def test_different_inputs(self):
+        """Test functionality: different inputs."""
         assert hash_response("a") != hash_response("b")
 
     def test_case_sensitive(self):
+        """Test functionality: case sensitive."""
         assert hash_response("Red") != hash_response("red")
 
 
@@ -324,6 +365,7 @@ class TestBackupManager:
     """Tests for BackupManager."""
 
     def test_create_and_list_backup(self):
+        """Test functionality: create and list backup."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -343,6 +385,7 @@ class TestBackupManager:
             assert backups[0]["backup_id"] == record["backup_id"]
 
     def test_create_backup_no_key_raises(self):
+        """Test functionality: create backup no key raises."""
         with tempfile.TemporaryDirectory() as tmpdir:
             from codomyrmex.encryption.keys.key_manager import KeyManager
 
@@ -354,6 +397,7 @@ class TestBackupManager:
                 backup_mgr.create_backup("nonexistent_user", "0xfake")
 
     def test_verify_backup_valid(self):
+        """Test functionality: verify backup valid."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -365,6 +409,7 @@ class TestBackupManager:
             assert backup_mgr.verify_backup("u1", record["backup_id"])
 
     def test_verify_backup_stale_after_rotation(self):
+        """Test functionality: verify backup stale after rotation."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -377,12 +422,14 @@ class TestBackupManager:
             assert not backup_mgr.verify_backup("u1", record["backup_id"])
 
     def test_verify_backup_not_found_raises(self):
+        """Test functionality: verify backup not found raises."""
         with tempfile.TemporaryDirectory() as tmpdir:
             backup_mgr = BackupManager(backup_dir=Path(tmpdir))
             with pytest.raises(WalletNotFoundError):
                 backup_mgr.verify_backup("u1", "nonexistent")
 
     def test_delete_backup(self):
+        """Test functionality: delete backup."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -395,16 +442,19 @@ class TestBackupManager:
             assert len(backup_mgr.list_backups("u1")) == 0
 
     def test_delete_backup_nonexistent(self):
+        """Test functionality: delete backup nonexistent."""
         with tempfile.TemporaryDirectory() as tmpdir:
             backup_mgr = BackupManager(backup_dir=Path(tmpdir))
             assert not backup_mgr.delete_backup("u1", "nonexistent")
 
     def test_list_backups_empty(self):
+        """Test functionality: list backups empty."""
         with tempfile.TemporaryDirectory() as tmpdir:
             backup_mgr = BackupManager(backup_dir=Path(tmpdir))
             assert backup_mgr.list_backups("u1") == []
 
     def test_multiple_backups_sorted(self):
+        """Test functionality: multiple backups sorted."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -420,6 +470,7 @@ class TestBackupManager:
             assert backups[0]["timestamp"] >= backups[1]["timestamp"]
 
     def test_backup_with_metadata(self):
+        """Test functionality: backup with metadata."""
         wallet_mgr = WalletManager()
         address = wallet_mgr.create_wallet("u1")
 
@@ -442,11 +493,13 @@ class TestKeyRotation:
     """Tests for KeyRotation."""
 
     def test_register_and_needs_rotation_false(self):
+        """Test functionality: register and needs rotation false."""
         rotation = KeyRotation()
         rotation.register_wallet("u1", "0xabc")
         assert not rotation.needs_rotation("u1")
 
     def test_needs_rotation_by_signatures(self):
+        """Test functionality: needs rotation by signatures."""
         policy = RotationPolicy(max_signatures=3)
         rotation = KeyRotation(policy=policy)
         rotation.register_wallet("u1", "0xabc")
@@ -455,6 +508,7 @@ class TestKeyRotation:
         assert rotation.needs_rotation("u1")
 
     def test_record_rotation(self):
+        """Test functionality: record rotation."""
         rotation = KeyRotation()
         rotation.register_wallet("u1", "0xold")
         record = rotation.record_rotation("u1", "0xold", "0xnew", "test")
@@ -466,6 +520,7 @@ class TestKeyRotation:
         assert record.timestamp is not None
 
     def test_rotation_resets_counters(self):
+        """Test functionality: rotation resets counters."""
         policy = RotationPolicy(max_signatures=3)
         rotation = KeyRotation(policy=policy)
         rotation.register_wallet("u1", "0xold")
@@ -476,6 +531,7 @@ class TestKeyRotation:
         assert not rotation.needs_rotation("u1")
 
     def test_get_rotation_history(self):
+        """Test functionality: get rotation history."""
         rotation = KeyRotation()
         rotation.register_wallet("u1", "0xold")
         rotation.record_rotation("u1", "0xold", "0xnew1")
@@ -484,11 +540,13 @@ class TestKeyRotation:
         assert len(history) == 2
 
     def test_get_rotation_history_no_user_raises(self):
+        """Test functionality: get rotation history no user raises."""
         rotation = KeyRotation()
         with pytest.raises(WalletNotFoundError):
             rotation.get_rotation_history("nonexistent")
 
     def test_post_rotate_hook(self):
+        """Test functionality: post rotate hook."""
         rotation = KeyRotation()
         rotation.register_wallet("u1", "0xold")
         hook_calls = []
@@ -498,12 +556,14 @@ class TestKeyRotation:
         assert hook_calls[0].new_wallet_id == "0xnew"
 
     def test_rotation_policy_defaults(self):
+        """Test functionality: rotation policy defaults."""
         policy = RotationPolicy()
         assert policy.max_age_days == 90
         assert policy.max_signatures == 10000
         assert policy.auto_rotate is False
 
     def test_rotation_policy_custom(self):
+        """Test functionality: rotation policy custom."""
         policy = RotationPolicy(max_age_days=7, max_signatures=100, auto_rotate=True)
         assert policy.max_age_days == 7
         assert policy.max_signatures == 100
@@ -519,6 +579,7 @@ class TestWalletFacade:
     """Tests for the Wallet facade class."""
 
     def test_create_and_properties(self):
+        """Test functionality: create and properties."""
         w = Wallet("u1")
         assert not w.is_active
         assert w.address is None
@@ -528,6 +589,7 @@ class TestWalletFacade:
         assert address.startswith("0x")
 
     def test_sign_and_verify(self):
+        """Test functionality: sign and verify."""
         w = Wallet("u1")
         w.create()
         sig = w.sign(b"hello")
@@ -535,6 +597,7 @@ class TestWalletFacade:
         assert not w.verify(b"world", sig)
 
     def test_rotate(self):
+        """Test functionality: rotate."""
         w = Wallet("u1")
         old = w.create()
         new = w.rotate(reason="test")
@@ -542,6 +605,7 @@ class TestWalletFacade:
         assert w.address == new
 
     def test_setup_recovery_and_recover(self):
+        """Test functionality: setup recovery and recover."""
         w = Wallet("u1")
         w.create()
         w.setup_recovery(
@@ -553,6 +617,7 @@ class TestWalletFacade:
         assert not w.recover(["B"])
 
     def test_backup(self):
+        """Test functionality: backup."""
         w = Wallet("u1")
         w.create()
         backup = w.backup()
@@ -560,6 +625,7 @@ class TestWalletFacade:
         assert "key_hash" in backup
 
     def test_delete(self):
+        """Test functionality: delete."""
         w = Wallet("u1")
         w.create()
         assert w.is_active
@@ -578,14 +644,17 @@ class TestConvenienceFunctions:
     """Tests for module-level convenience functions."""
 
     def test_create_wallet_function(self):
+        """Test functionality: create wallet function."""
         address = create_wallet("conv_user")
         assert address.startswith("0x")
 
     def test_get_wallet_manager_function(self):
+        """Test functionality: get wallet manager function."""
         mgr = get_wallet_manager()
         assert isinstance(mgr, WalletManager)
 
     def test_get_wallet_manager_with_path(self):
+        """Test functionality: get wallet manager with path."""
         with tempfile.TemporaryDirectory() as tmpdir:
             mgr = get_wallet_manager(storage_path=Path(tmpdir))
             assert isinstance(mgr, WalletManager)
@@ -600,18 +669,22 @@ class TestExceptions:
     """Tests for the exception hierarchy."""
 
     def test_wallet_error_is_base(self):
+        """Test functionality: wallet error is base."""
         with pytest.raises(WalletError):
             raise WalletNotFoundError("test")
 
     def test_wallet_key_error_inherits(self):
+        """Test functionality: wallet key error inherits."""
         with pytest.raises(WalletError):
             raise WalletKeyError("test")
 
     def test_ritual_error_inherits(self):
+        """Test functionality: ritual error inherits."""
         with pytest.raises(WalletError):
             raise RitualError("test")
 
     def test_exception_messages(self):
+        """Test functionality: exception messages."""
         e = WalletNotFoundError("user xyz not found")
         assert "xyz" in str(e)
 
@@ -625,11 +698,13 @@ class TestModuleMetadata:
     """Tests for module-level attributes."""
 
     def test_version(self):
+        """Test functionality: version."""
         import codomyrmex.wallet as wallet_module
 
         assert wallet_module.__version__ == "0.1.0"
 
     def test_all_exports(self):
+        """Test functionality: all exports."""
         import codomyrmex.wallet as wallet_module
 
         assert "WalletManager" in wallet_module.__all__

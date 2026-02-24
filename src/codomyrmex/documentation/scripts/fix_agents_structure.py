@@ -20,6 +20,7 @@ If sections are missing, it adds them with intelligent default content.
 logger = get_logger(__name__)
 
 def get_default_contracts():
+    """Execute Get Default Contracts operations natively."""
     return """
 ## Operating Contracts
 - Maintain alignment between code, documentation, and configured workflows.
@@ -49,6 +50,7 @@ def get_active_components(dir_path):
     return "\n## Active Components\n" + "\n".join(sorted(components)) + "\n"
 
 def fix_agents_file(file_path):
+    """Execute Fix Agents File operations natively."""
     try:
         content = file_path.read_text(encoding='utf-8')
         modified = False
@@ -85,6 +87,7 @@ def fix_agents_file(file_path):
     return False
 
 def main():
+    """Execute Main operations natively."""
     root = Path(__file__).parent.parent.parent
     print(f"Scanning {root} for AGENTS.md files...")
 

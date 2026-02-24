@@ -47,6 +47,7 @@ class FaultInjector:
     """Inject faults into system components."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._active_faults: dict[str, FaultConfig] = {}
         self._lock = threading.Lock()
 
@@ -127,6 +128,7 @@ class ChaosExperiment:
         action: Callable[[], None],
         rollback: Callable[[], None] | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.name = name
         self.hypothesis = hypothesis
         self.action = action
@@ -194,6 +196,7 @@ class ChaosMonkey:
     """Automated chaos testing."""
 
     def __init__(self, injector: FaultInjector | None = None):
+        """Execute   Init   operations natively."""
         self.injector = injector or FaultInjector()
         self._experiments: list[ChaosExperiment] = []
         self._results: list[ExperimentResult] = []
@@ -221,6 +224,7 @@ class ChaosMonkey:
 
     @property
     def results(self) -> list[ExperimentResult]:
+        """Execute Results operations natively."""
         return self._results
 
 
@@ -231,7 +235,9 @@ def with_chaos(
 ) -> Callable:
     """Decorator to inject chaos into a function."""
     def decorator(func: Callable) -> Callable:
+        """Execute Decorator operations natively."""
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
             injector.maybe_inject(fault_name)
             return func(*args, **kwargs)
         return wrapper

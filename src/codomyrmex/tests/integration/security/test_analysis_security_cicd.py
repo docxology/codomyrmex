@@ -92,6 +92,7 @@ def unused_function():
 API_KEY = "sk-1234567890abcdef1234567890abcdef12345678"
 
 class TestClass:
+    """Test suite for Class."""
     def __init__(self):
         self.value = 42
 

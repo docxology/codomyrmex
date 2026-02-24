@@ -63,6 +63,7 @@ class InMemoryFeatureStore(FeatureStore):
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._definitions: dict[str, FeatureDefinition] = {}
         self._values: dict[str, dict[str, FeatureValue]] = {}  # feature_name -> entity_id -> value
         self._lock = threading.Lock()

@@ -63,6 +63,7 @@ class Connection(ABC, Generic[T]):
     """Base class for database connections."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.created_at: datetime = datetime.now()
         self.last_used_at: datetime = datetime.now()
         self.state: ConnectionState = ConnectionState.IDLE
@@ -113,6 +114,7 @@ class InMemoryConnection(Connection[dict]):
     """In-memory connection for lightweight or test usage."""
 
     def __init__(self, connection_id: int = 0):
+        """Execute   Init   operations natively."""
         super().__init__()
         self.connection_id = connection_id
         self._closed = False
@@ -148,6 +150,7 @@ class InMemoryConnectionFactory(ConnectionFactory[dict]):
     """Factory for in-memory connections."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._counter = 0
         self._lock = threading.Lock()
 
@@ -183,6 +186,7 @@ class ConnectionPool(Generic[T]):
         factory: ConnectionFactory[T],
         config: PoolConfig | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.factory = factory
         self.config = config or PoolConfig()
         self._pool: queue.Queue = queue.Queue()
@@ -381,6 +385,7 @@ class HealthChecker:
         check_interval: float = 60.0,
         health_query: str = "SELECT 1",
     ):
+        """Execute   Init   operations natively."""
         self.pool = pool
         self.check_interval = check_interval
         self.health_query = health_query
@@ -409,6 +414,7 @@ class HealthChecker:
         self._running = True
 
         def check_loop():
+            """Execute Check Loop operations natively."""
             while self._running:
                 self.check_health()
                 time.sleep(self.check_interval)

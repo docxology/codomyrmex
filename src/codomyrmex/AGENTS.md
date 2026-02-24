@@ -1,6 +1,6 @@
 # Codomyrmex Agents — src/codomyrmex
 
-**Version**: v0.1.8 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 

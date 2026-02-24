@@ -76,9 +76,11 @@ class InfomaniakOpenStackBase:
         return cls(conn)
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         self.close()
         return False
 
@@ -157,9 +159,11 @@ class InfomaniakS3Base:
         return cls(client)
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         self.close()
         return False
 
@@ -223,9 +227,11 @@ class InfomaniakRESTBase:
         )
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         self.close()
         return False
 

@@ -24,6 +24,7 @@ class FeatureTransform:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._transforms: dict[str, Callable[[Any], Any]] = {}
 
     def add(self, feature_name: str, func: Callable[[Any], Any]) -> "FeatureTransform":
@@ -77,6 +78,7 @@ class FeatureService:
         store: FeatureStore | None = None,
         transform: FeatureTransform | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.store = store or InMemoryFeatureStore()
         self.transform = transform
         self._groups: dict[str, FeatureGroup] = {}

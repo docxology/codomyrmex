@@ -12,6 +12,7 @@ class AESGCMEncryptor:
     """Encryptor using AES-GCM for authenticated encryption."""
 
     def __init__(self, key: bytes | None = None):
+        """Execute   Init   operations natively."""
         if key and len(key) not in {16, 24, 32}:
             raise ValueError("Key must be 16, 24, or 32 bytes.")
         self.key = key or os.urandom(32)

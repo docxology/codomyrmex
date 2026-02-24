@@ -44,6 +44,7 @@ class ConstraintSolver:
 
     @staticmethod
     def _create_backend(name: str) -> SolverBackend:
+        """Execute  Create Backend operations natively."""
         if name == "z3":
             try:
                 from .backends.z3_backend import Z3Backend
@@ -56,6 +57,7 @@ class ConstraintSolver:
 
     @property
     def backend_name(self) -> str:
+        """Execute Backend Name operations natively."""
         return self._backend.backend_name()
 
     # --- mcp-solver 6-tool interface ---

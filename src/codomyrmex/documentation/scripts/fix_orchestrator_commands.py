@@ -20,6 +20,7 @@ class OrchestratorCommandFixer:
     """Fix orchestrator commands in AGENTS.md files."""
 
     def __init__(self, repo_root: Path):
+        """Execute   Init   operations natively."""
         self.repo_root = repo_root
         self.fixed_count = 0
 

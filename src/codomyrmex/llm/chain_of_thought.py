@@ -171,6 +171,7 @@ class ChainOfThought:
         synthesizer: ConclusionSynthesizer | None = None,
         depth: ThinkingDepth = ThinkingDepth.NORMAL,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._generator = step_generator or StructuralStepGenerator()
         self._synthesizer = synthesizer or StructuralConclusionSynthesizer()
         self._depth = depth

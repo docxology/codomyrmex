@@ -63,11 +63,13 @@ class MemoryProfiler:
     """
 
     def __init__(self, leak_threshold: int = 1000) -> None:
+        """Execute   Init   operations natively."""
         self._snapshots: dict[str, MemorySnapshot] = {}
         self._leak_threshold = leak_threshold
 
     @property
     def snapshot_count(self) -> int:
+        """Execute Snapshot Count operations natively."""
         return len(self._snapshots)
 
     def snapshot(self, label: str) -> MemorySnapshot:
@@ -148,6 +150,7 @@ class MemoryProfiler:
         )
 
     def get_snapshot(self, label: str) -> MemorySnapshot | None:
+        """Execute Get Snapshot operations natively."""
         return self._snapshots.get(label)
 
 

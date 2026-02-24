@@ -39,6 +39,7 @@ class ElectionResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "leader_id": self.leader_id,
             "success": self.success,
@@ -57,6 +58,7 @@ class LeaderElection(ABC):
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._state = ElectionState.IDLE
         self._current_leader: str | None = None
         self._participants: set[str] = set()
@@ -64,10 +66,12 @@ class LeaderElection(ABC):
 
     @property
     def state(self) -> ElectionState:
+        """Execute State operations natively."""
         return self._state
 
     @property
     def current_leader(self) -> str | None:
+        """Execute Current Leader operations natively."""
         return self._current_leader
 
     def get_history(self) -> list[ElectionResult]:
@@ -109,6 +113,7 @@ class BullyElection(LeaderElection):
         priority_fn: Callable[[CollaborativeAgent], float] | None = None,
         timeout: float = 5.0,
     ):
+        """Execute   Init   operations natively."""
         super().__init__()
         self._priority_fn = priority_fn or self._default_priority
         self._timeout = timeout
@@ -190,6 +195,7 @@ class RingElection(LeaderElection):
         self,
         priority_fn: Callable[[CollaborativeAgent], float] | None = None,
     ):
+        """Execute   Init   operations natively."""
         super().__init__()
         self._priority_fn = priority_fn or (lambda a: hash(a.agent_id))
 
@@ -317,6 +323,7 @@ class RotatingLeadership:
     """
 
     def __init__(self, agents: list[CollaborativeAgent] | None = None):
+        """Execute   Init   operations natively."""
         self._agents: list[CollaborativeAgent] = agents or []
         self._current_index = 0
         self._term_count = 0

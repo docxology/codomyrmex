@@ -1051,14 +1051,17 @@ Structure your response with:
         exclude = (exclude_patterns or []) + default_exclude
 
         def should_exclude(name: str) -> bool:
+            """Execute Should Exclude operations natively."""
             return any(fnmatch.fnmatch(name, pat) for pat in exclude)
 
         def should_include(name: str) -> bool:
+            """Execute Should Include operations natively."""
             if not include_patterns:
                 return True
             return any(fnmatch.fnmatch(name, pat) for pat in include_patterns)
 
         def scan_dir(dir_path: str, depth: int) -> dict:
+            """Execute Scan Dir operations natively."""
             if depth > max_depth:
                 return {"type": "directory", "truncated": True}
 
@@ -1087,6 +1090,7 @@ Structure your response with:
         files: list[str] = []
 
         def collect_files(node: dict, current_path: str) -> None:
+            """Execute Collect Files operations natively."""
             for name, child in node.get("children", {}).items():
                 child_path = os.path.join(current_path, name)
                 if child.get("type") == "file":
@@ -1255,7 +1259,7 @@ Structure your response with:
         try:
             result = subprocess.run(
                 command,
-                shell=True,
+                shell=True,  # SECURITY: Intentional — run_command is an agent shell executor
                 cwd=cwd,
                 capture_output=capture_output,
                 text=True,

@@ -177,6 +177,7 @@ class AgentSession:
         return len(self.messages)
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"AgentSession(id={self.session_id[:8]}..., messages={len(self.messages)})"
 
 

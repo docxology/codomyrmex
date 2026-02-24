@@ -77,14 +77,17 @@ class PluginInfo:
 class Hook:
     """Represents a plugin hook."""
     def __init__(self, name: str, description: str = ""):
+        """Execute   Init   operations natively."""
         self.name = name
         self.description = description
         self.handlers: list[Callable] = []
 
     def register(self, handler: Callable):
+        """Execute Register operations natively."""
         self.handlers.append(handler)
 
     def emit(self, *args, **kwargs) -> list[Any]:
+        """Execute Emit operations natively."""
         results = []
         for handler in self.handlers:
             try:

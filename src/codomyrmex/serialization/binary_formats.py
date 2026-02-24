@@ -15,10 +15,12 @@ class MsgpackSerializer:
 
     @staticmethod
     def serialize(data: Any) -> bytes:
+        """Execute Serialize operations natively."""
         return msgpack.packb(data, use_bin_type=True)
 
     @staticmethod
     def deserialize(data: bytes) -> Any:
+        """Execute Deserialize operations natively."""
         return msgpack.unpackb(data, raw=False)
 
 class AvroSerializer:
@@ -26,12 +28,14 @@ class AvroSerializer:
 
     @staticmethod
     def serialize(data: list[dict[str, Any]], schema: dict[str, Any]) -> bytes:
+        """Execute Serialize operations natively."""
         out = io.BytesIO()
         fastavro.writer(out, schema, data)
         return out.getvalue()
 
     @staticmethod
     def deserialize(data: bytes) -> list[dict[str, Any]]:
+        """Execute Deserialize operations natively."""
         inp = io.BytesIO(data)
         reader = fastavro.reader(inp)
         return [record for record in reader]
@@ -41,6 +45,7 @@ class ParquetSerializer:
 
     @staticmethod
     def serialize(data: list[dict[str, Any]]) -> bytes:
+        """Execute Serialize operations natively."""
         df = pd.DataFrame(data)
         out = io.BytesIO()
         df.to_parquet(out, engine='pyarrow')
@@ -48,6 +53,7 @@ class ParquetSerializer:
 
     @staticmethod
     def deserialize(data: bytes) -> list[dict[str, Any]]:
+        """Execute Deserialize operations natively."""
         inp = io.BytesIO(data)
         df = pd.read_parquet(inp, engine='pyarrow')
         return df.to_dict('records')

@@ -141,9 +141,11 @@ class ExactMatchScorer(Scorer):
     """Score based on exact match."""
 
     def __init__(self, case_sensitive: bool = False):
+        """Execute   Init   operations natively."""
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
+        """Execute Score operations natively."""
         if expected is None:
             return 1.0
 
@@ -156,9 +158,11 @@ class ContainsScorer(Scorer):
     """Score based on whether output contains expected text."""
 
     def __init__(self, case_sensitive: bool = False):
+        """Execute   Init   operations natively."""
         self.case_sensitive = case_sensitive
 
     def score(self, output: str, expected: str | None = None) -> float:
+        """Execute Score operations natively."""
         if expected is None:
             return 1.0
 
@@ -171,10 +175,12 @@ class LengthScorer(Scorer):
     """Score based on output length relative to target."""
 
     def __init__(self, target_length: int, tolerance: float = 0.3):
+        """Execute   Init   operations natively."""
         self.target_length = target_length
         self.tolerance = tolerance
 
     def score(self, output: str, expected: str | None = None) -> float:
+        """Execute Score operations natively."""
         length = len(output)
         diff = abs(length - self.target_length) / self.target_length
 
@@ -196,6 +202,7 @@ class CompositeScorer(Scorer):
         self.normalized_scorers = [(s, w / total_weight) for s, w in scorers]
 
     def score(self, output: str, expected: str | None = None) -> float:
+        """Execute Score operations natively."""
         total = 0.0
         for scorer, weight in self.normalized_scorers:
             total += scorer.score(output, expected) * weight
@@ -231,6 +238,7 @@ class AgentBenchmark(Generic[T]):
         scorer: Scorer | None = None,
         include_cost: bool = True,
     ):
+        """Execute   Init   operations natively."""
         self.test_cases: list[TestCase] = []
         self.scorer = scorer or ContainsScorer()
         self.include_cost = include_cost

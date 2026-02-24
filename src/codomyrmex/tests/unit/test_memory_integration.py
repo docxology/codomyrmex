@@ -23,8 +23,10 @@ def _make_memory(content: str = "test", importance: MemoryImportance = MemoryImp
 
 
 class TestJSONFileStore:
+    """Test suite for JSONFileStore."""
 
     def test_save_load_round_trip(self, tmp_path):
+        """Test functionality: save load round trip."""
         path = str(tmp_path / "memories.json")
         store = JSONFileStore(path)
         mem = _make_memory("Hello world", MemoryImportance.HIGH)
@@ -38,6 +40,7 @@ class TestJSONFileStore:
         assert loaded.importance is MemoryImportance.HIGH
 
     def test_list_all(self, tmp_path):
+        """Test functionality: list all."""
         path = str(tmp_path / "memories.json")
         store = JSONFileStore(path)
         for i in range(5):
@@ -45,6 +48,7 @@ class TestJSONFileStore:
         assert len(store.list_all()) == 5
 
     def test_delete(self, tmp_path):
+        """Test functionality: delete."""
         path = str(tmp_path / "memories.json")
         store = JSONFileStore(path)
         mem = _make_memory("to delete")
@@ -80,8 +84,10 @@ class TestJSONFileStore:
 
 
 class TestInMemoryStore:
+    """Test suite for InMemoryStore."""
 
     def test_basic_crud(self):
+        """Test functionality: basic crud."""
         store = InMemoryStore()
         mem = _make_memory("test")
         store.save(mem)
@@ -95,8 +101,10 @@ class TestInMemoryStore:
 
 
 class TestAgentMemory:
+    """Test suite for AgentMemory."""
 
     def test_add_and_search(self):
+        """Test functionality: add and search."""
         agent_mem = AgentMemory()
         agent_mem.add(content="Paris is the capital of France", importance=MemoryImportance.HIGH)
         results = agent_mem.search("Paris")
@@ -104,6 +112,7 @@ class TestAgentMemory:
         assert any("Paris" in r.memory.content for r in results)
 
     def test_add_returns_memory(self):
+        """Test functionality: add returns memory."""
         agent_mem = AgentMemory()
         mem = agent_mem.add(content="test content")
         assert isinstance(mem, Memory)
@@ -114,6 +123,7 @@ class TestAgentMemory:
 
 
 class TestVectorStoreMemory:
+    """Test suite for VectorStoreMemory."""
 
     def test_auto_creates_store(self):
         """VectorStoreMemory with no store creates InMemoryStore internally."""
@@ -121,6 +131,7 @@ class TestVectorStoreMemory:
         assert vsm.store is not None
 
     def test_add_and_recall(self):
+        """Test functionality: add and recall."""
         vsm = VectorStoreMemory()
         vsm.add(content="Python is a programming language", importance=MemoryImportance.HIGH)
         vsm.add(content="JavaScript runs in browsers", importance=MemoryImportance.MEDIUM)
@@ -132,14 +143,17 @@ class TestVectorStoreMemory:
 
 
 class TestUserProfile:
+    """Test suite for UserProfile."""
 
     def test_create_and_save(self, tmp_path):
+        """Test functionality: create and save."""
         path = tmp_path / "profile.json"
         profile = UserProfile(preferences={"theme": "dark"})
         profile.save(path)
         assert path.exists()
 
     def test_load_round_trip(self, tmp_path):
+        """Test functionality: load round trip."""
         path = tmp_path / "profile.json"
         original = UserProfile(preferences={"lang": "en"}, history_summary="test session")
         original.save(path)
@@ -156,12 +170,14 @@ class TestUserProfile:
         assert profile.preferences == {}
 
     def test_set_and_get_preference(self):
+        """Test functionality: set and get preference."""
         profile = UserProfile()
         profile.set_preference("theme", "dark")
         assert profile.get_preference("theme") == "dark"
         assert profile.get_preference("missing", "default") == "default"
 
     def test_to_context_string(self):
+        """Test functionality: to context string."""
         profile = UserProfile(preferences={"lang": "en"})
         ctx = profile.to_context_string()
         assert "lang=en" in ctx

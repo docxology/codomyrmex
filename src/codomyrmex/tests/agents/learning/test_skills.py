@@ -2,6 +2,7 @@ import pytest
 from codomyrmex.agents.learning.skills import Skill, SkillLibrary
 
 def test_skill_management():
+    """Test functionality: skill management."""
     lib = SkillLibrary()
     s1 = Skill("Python", "Coding", "print('Hello')", tags=["code"])
     
@@ -12,6 +13,7 @@ def test_skill_management():
     assert len(lib.search("music")) == 0
 
 def test_duplicate_skill():
+    """Test functionality: duplicate skill."""
     lib = SkillLibrary()
     lib.add_skill(Skill("A", "", ""))
     with pytest.raises(ValueError):

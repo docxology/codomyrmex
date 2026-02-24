@@ -42,6 +42,7 @@ class Scheduler:
     """
 
     def __init__(self, max_workers: int = 4):
+        """Execute   Init   operations natively."""
         self._jobs: dict[str, Job] = {}
         self._job_queue: list[Job] = []
         self._lock = threading.Lock()

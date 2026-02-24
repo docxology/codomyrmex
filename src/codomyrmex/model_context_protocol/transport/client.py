@@ -60,6 +60,7 @@ class MCPClient:
     """
 
     def __init__(self, config: MCPClientConfig | None = None) -> None:
+        """Execute   Init   operations natively."""
         self.config = config or MCPClientConfig()
         self._request_id = 0
         self._initialized = False
@@ -111,6 +112,7 @@ class MCPClient:
     # ------------------------------------------------------------------
 
     def _next_id(self) -> int:
+        """Execute  Next Id operations natively."""
         self._request_id += 1
         return self._request_id
 
@@ -332,6 +334,7 @@ class _StdioTransport(_Transport):
     """Stdio transport — launches a subprocess and speaks JSON-RPC over stdin/stdout."""
 
     def __init__(self, process: asyncio.subprocess.Process) -> None:
+        """Execute   Init   operations natively."""
         self._process = process
 
     async def send(self, message: dict[str, Any], *, timeout: float = 30.0) -> dict[str, Any]:
@@ -362,6 +365,7 @@ class _HTTPTransport(_Transport):
     """
 
     def __init__(self, base_url: str, *, pool_size: int = 10) -> None:
+        """Execute   Init   operations natively."""
         self._base_url = base_url.rstrip("/")
         self._pool_size = pool_size
         self._session: Any = None
@@ -419,6 +423,7 @@ class _StdioContextManager:
     """Async context manager for stdio connections."""
 
     def __init__(self, command: list[str], config: MCPClientConfig | None) -> None:
+        """Execute   Init   operations natively."""
         self._command = command
         self._config = config
         self._client: MCPClient | None = None
@@ -445,6 +450,7 @@ class _HTTPContextManager:
     """Async context manager for HTTP connections."""
 
     def __init__(self, base_url: str, config: MCPClientConfig | None) -> None:
+        """Execute   Init   operations natively."""
         self._base_url = base_url
         self._config = config
         self._client: MCPClient | None = None

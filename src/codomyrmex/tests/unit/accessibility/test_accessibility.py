@@ -32,36 +32,47 @@ if not HAS_MODULE:
 
 @pytest.mark.unit
 class TestWCAGLevel:
+    """Test suite for WCAGLevel."""
     def test_level_a(self):
+        """Test functionality: level a."""
         assert WCAGLevel.A is not None
 
     def test_level_aa(self):
+        """Test functionality: level aa."""
         assert WCAGLevel.AA is not None
 
     def test_level_aaa(self):
+        """Test functionality: level aaa."""
         assert WCAGLevel.AAA is not None
 
 
 @pytest.mark.unit
 class TestIssueType:
+    """Test suite for IssueType."""
     def test_error_type(self):
+        """Test functionality: error type."""
         assert IssueType.ERROR is not None
 
     def test_warning_type(self):
+        """Test functionality: warning type."""
         assert IssueType.WARNING is not None
 
     def test_notice_type(self):
+        """Test functionality: notice type."""
         assert IssueType.NOTICE is not None
 
 
 @pytest.mark.unit
 class TestAccessibilityIssue:
+    """Test suite for AccessibilityIssue."""
     def test_create_issue(self):
+        """Test functionality: create issue."""
         issue = AccessibilityIssue(code="img-alt", message="Missing alt text")
         assert issue.code == "img-alt"
         assert issue.message == "Missing alt text"
 
     def test_issue_defaults(self):
+        """Test functionality: issue defaults."""
         issue = AccessibilityIssue(code="test", message="test")
         assert issue.selector == ""
         assert issue.issue_type == IssueType.ERROR
@@ -70,6 +81,7 @@ class TestAccessibilityIssue:
         assert issue.suggestion == ""
 
     def test_issue_with_all_fields(self):
+        """Test functionality: issue with all fields."""
         issue = AccessibilityIssue(
             code="color-contrast",
             message="Low contrast",
@@ -85,7 +97,9 @@ class TestAccessibilityIssue:
 
 @pytest.mark.unit
 class TestAccessibilityReport:
+    """Test suite for AccessibilityReport."""
     def test_create_report(self):
+        """Test functionality: create report."""
         report = AccessibilityReport()
         assert report.url == ""
         assert report.issues == []
@@ -96,7 +110,9 @@ class TestAccessibilityReport:
 
 @pytest.mark.unit
 class TestWCAGRule:
+    """Test suite for WCAGRule."""
     def test_create_rule(self):
+        """Test functionality: create rule."""
         rule = WCAGRule(
             code="img-alt",
             criterion="1.1.1",
@@ -108,6 +124,7 @@ class TestWCAGRule:
         assert rule.level == WCAGLevel.A
 
     def test_rule_with_suggestion(self):
+        """Test functionality: rule with suggestion."""
         rule = WCAGRule(
             code="test",
             criterion="1.1.1",
@@ -121,26 +138,33 @@ class TestWCAGRule:
 
 @pytest.mark.unit
 class TestA11yChecker:
+    """Test suite for A11yChecker."""
     def test_create_checker(self):
+        """Test functionality: create checker."""
         checker = A11yChecker()
         assert checker is not None
 
     def test_create_checker_with_level(self):
+        """Test functionality: create checker with level."""
         checker = A11yChecker(level=WCAGLevel.AAA)
         assert checker is not None
 
 
 @pytest.mark.unit
 class TestCalculateContrastRatio:
+    """Test suite for CalculateContrastRatio."""
     def test_black_white_contrast(self):
+        """Test functionality: black white contrast."""
         ratio = calculate_contrast_ratio("#000000", "#ffffff")
         assert ratio >= 21.0
 
     def test_same_color_contrast(self):
+        """Test functionality: same color contrast."""
         ratio = calculate_contrast_ratio("#000000", "#000000")
         assert ratio == 1.0
 
     def test_returns_float(self):
+        """Test functionality: returns float."""
         ratio = calculate_contrast_ratio("#333333", "#cccccc")
         assert isinstance(ratio, float)
         assert ratio > 1.0
@@ -148,15 +172,19 @@ class TestCalculateContrastRatio:
 
 @pytest.mark.unit
 class TestCheckHeadingHierarchy:
+    """Test suite for CheckHeadingHierarchy."""
     def test_valid_hierarchy(self):
+        """Test functionality: valid hierarchy."""
         issues = check_heading_hierarchy([1, 2, 3])
         assert isinstance(issues, list)
 
     def test_skipped_level(self):
+        """Test functionality: skipped level."""
         issues = check_heading_hierarchy([1, 3])
         assert len(issues) > 0
 
     def test_empty_headings(self):
+        """Test functionality: empty headings."""
         issues = check_heading_hierarchy([])
         assert isinstance(issues, list)
 

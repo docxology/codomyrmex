@@ -19,6 +19,7 @@ class AsyncStream:
         buffer_size: int = 1000,
         enable_backpressure: bool = True,
     ):
+        """Execute   Init   operations natively."""
         self._buffer: asyncio.Queue = asyncio.Queue(maxsize=buffer_size if enable_backpressure else 0)
         self._subscribers: dict[str, asyncio.Queue] = {}
         self._running = False
@@ -100,6 +101,7 @@ class WebSocketStream:
     """WebSocket-compatible stream."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._connections: dict[str, Any] = {}
         self._base_stream = AsyncStream()
 
@@ -144,6 +146,7 @@ class BatchingStream:
         batch_size: int = 100,
         flush_interval: float = 1.0,
     ):
+        """Execute   Init   operations natively."""
         self._batch: list[Event] = []
         self._batch_size = batch_size
         self._flush_interval = flush_interval

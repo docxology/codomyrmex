@@ -12,25 +12,32 @@ from codomyrmex.llm.context_manager import (
 
 
 class TestContextMessage:
+    """Test suite for ContextMessage."""
     def test_auto_token_count(self) -> None:
+        """Test functionality: auto token count."""
         msg = ContextMessage(role="user", content="Hello world testing")
         assert msg.token_count > 0
 
     def test_auto_importance_system(self) -> None:
+        """Test functionality: auto importance system."""
         msg = ContextMessage(role="system", content="You are an assistant")
         assert msg.importance == MessageImportance.CRITICAL
 
     def test_auto_importance_tool(self) -> None:
+        """Test functionality: auto importance tool."""
         msg = ContextMessage(role="tool", content="Output: 42")
         assert msg.importance == MessageImportance.HIGH
 
     def test_auto_importance_user(self) -> None:
+        """Test functionality: auto importance user."""
         msg = ContextMessage(role="user", content="Hi")
         assert msg.importance == MessageImportance.NORMAL
 
 
 class TestContextManager:
+    """Test suite for ContextManager."""
     def test_add_message(self) -> None:
+        """Test functionality: add message."""
         ctx = ContextManager(max_tokens=4096)
         msg = ctx.add_message("user", "Hello")
         assert ctx.message_count == 1
@@ -38,6 +45,7 @@ class TestContextManager:
         assert msg.role == "user"
 
     def test_get_context(self) -> None:
+        """Test functionality: get context."""
         ctx = ContextManager(max_tokens=4096)
         ctx.add_message("system", "You are helpful")
         ctx.add_message("user", "Explain Python")
@@ -47,6 +55,7 @@ class TestContextManager:
         assert messages[1]["role"] == "user"
 
     def test_token_budget_respected(self) -> None:
+        """Test functionality: token budget respected."""
         ctx = ContextManager(max_tokens=50, reserve_tokens=10)
         # Add messages until over budget
         for i in range(20):
@@ -54,6 +63,7 @@ class TestContextManager:
         assert ctx.current_tokens <= ctx.max_tokens
 
     def test_system_messages_not_evicted(self) -> None:
+        """Test functionality: system messages not evicted."""
         ctx = ContextManager(max_tokens=100, reserve_tokens=10)
         ctx.add_message("system", "System prompt " * 3)
         for i in range(10):
@@ -63,6 +73,7 @@ class TestContextManager:
         assert "system" in roles  # System message survives
 
     def test_low_importance_evicted_first(self) -> None:
+        """Test functionality: low importance evicted first."""
         ctx = ContextManager(max_tokens=100, reserve_tokens=10)
         ctx.add_message("user", "Low importance " * 3, importance=MessageImportance.LOW)
         ctx.add_message("tool", "High importance " * 3, importance=MessageImportance.HIGH)
@@ -78,12 +89,14 @@ class TestContextManager:
             pass
 
     def test_available_tokens(self) -> None:
+        """Test functionality: available tokens."""
         ctx = ContextManager(max_tokens=4096, reserve_tokens=256)
         assert ctx.available_tokens == 4096 - 256
         ctx.add_message("user", "Hello world")
         assert ctx.available_tokens < 4096 - 256
 
     def test_clear(self) -> None:
+        """Test functionality: clear."""
         ctx = ContextManager()
         ctx.add_message("user", "Hello")
         ctx.clear()
@@ -91,6 +104,7 @@ class TestContextManager:
         assert ctx.current_tokens == 0
 
     def test_summary(self) -> None:
+        """Test functionality: summary."""
         ctx = ContextManager(max_tokens=1000)
         ctx.add_message("user", "Test message")
         s = ctx.summary()
@@ -101,6 +115,7 @@ class TestContextManager:
         assert 0 < s["utilization"] < 1.0
 
     def test_trim_returns_evicted_count(self) -> None:
+        """Test functionality: trim returns evicted count."""
         ctx = ContextManager(max_tokens=50, reserve_tokens=0)
         for i in range(20):
             ctx.add_message("user", f"Msg {i} " * 3)

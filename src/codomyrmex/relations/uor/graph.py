@@ -25,6 +25,7 @@ class UORGraph:
     """
 
     def __init__(self, quantum: int = 0) -> None:
+        """Execute   Init   operations natively."""
         self._manager = EntityManager(quantum=quantum)
         self._relationships: dict[str, UORRelationship] = {}
 
@@ -252,6 +253,7 @@ class UORGraph:
         }
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return (
             f"UORGraph(entities={self.entity_count}, "
             f"relationships={self.relationship_count})"

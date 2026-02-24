@@ -18,6 +18,7 @@ from .contract import Contract
 
 
 class ContractStatus(Enum):
+    """Functional component: ContractStatus."""
     DRAFT = auto()
     DEPLOYED = auto()
     ACTIVE = auto()
@@ -49,6 +50,7 @@ class ContractRegistry:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._contracts: dict[str, ContractVersion] = {}
         self._history: dict[str, list[ContractVersion]] = {}
 
@@ -135,6 +137,7 @@ class ContractRegistry:
 
     @property
     def count(self) -> int:
+        """Execute Count operations natively."""
         return len(self._contracts)
 
     def summary(self) -> dict[str, Any]:

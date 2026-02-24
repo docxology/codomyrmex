@@ -87,6 +87,7 @@ class ConcordanceVisualizer:
 
         # Normalize scores to [0, 1]
         def normalize(scores: dict[str, float]) -> dict[str, float]:
+            """Execute Normalize operations natively."""
 
             if not scores:
                 return {}

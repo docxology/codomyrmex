@@ -46,6 +46,7 @@ def cmd_start(args: argparse.Namespace) -> None:
 
     # Graceful shutdown
     def _shutdown(sig: int, frame: Any) -> None:
+        """Execute  Shutdown operations natively."""
         print("\nShutting down...")
         endpoint.stop()
         sys.exit(0)

@@ -57,6 +57,7 @@ class PlanEvaluator:
     """
 
     def __init__(self, config: FeedbackConfig | None = None) -> None:
+        """Execute   Init   operations natively."""
         self._config = config or FeedbackConfig()
 
     @property

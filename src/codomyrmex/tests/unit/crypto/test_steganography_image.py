@@ -39,11 +39,13 @@ class TestCalculateCapacity:
     """Tests for calculate_capacity function."""
 
     def test_100x100_capacity(self, red_image):
+        """Test functionality: 100x100 capacity."""
         capacity = calculate_capacity(red_image)
         # 100 * 100 * 3 / 8 - 4 = 3746
         assert capacity == 3746
 
     def test_small_image_capacity(self, small_image):
+        """Test functionality: small image capacity."""
         capacity = calculate_capacity(small_image)
         # 2 * 2 * 3 / 8 - 4 = -2.5 -> max(0, -2) = 0... actually:
         # 2*2*3 = 12 bits total / 8 = 1 byte - 4 = -3 -> 0
@@ -51,10 +53,12 @@ class TestCalculateCapacity:
         assert capacity >= 0
 
     def test_nonexistent_image_raises(self):
+        """Test functionality: nonexistent image raises."""
         with pytest.raises(SteganographyError):
             calculate_capacity("/nonexistent/path/image.png")
 
     def test_positive_for_reasonable_image(self, red_image):
+        """Test functionality: positive for reasonable image."""
         assert calculate_capacity(red_image) > 0
 
 
@@ -64,6 +68,7 @@ class TestEmbedAndExtract:
     """Tests for embed_in_image and extract_from_image roundtrip."""
 
     def test_roundtrip_simple_message(self, red_image, tmp_path):
+        """Test functionality: roundtrip simple message."""
         output_path = str(tmp_path / "stego.png")
         message = "Hello, World!"
 
@@ -75,6 +80,7 @@ class TestEmbedAndExtract:
         assert extracted == message
 
     def test_roundtrip_empty_message(self, red_image, tmp_path):
+        """Test functionality: roundtrip empty message."""
         output_path = str(tmp_path / "stego_empty.png")
         message = ""
 
@@ -83,6 +89,7 @@ class TestEmbedAndExtract:
         assert extracted == ""
 
     def test_roundtrip_unicode_message(self, red_image, tmp_path):
+        """Test functionality: roundtrip unicode message."""
         output_path = str(tmp_path / "stego_unicode.png")
         message = "Unicode test: cafe"
 
@@ -91,6 +98,7 @@ class TestEmbedAndExtract:
         assert extracted == message
 
     def test_roundtrip_long_message(self, red_image, tmp_path):
+        """Test functionality: roundtrip long message."""
         output_path = str(tmp_path / "stego_long.png")
         capacity = calculate_capacity(red_image)
         # Use ASCII message that fits within capacity
@@ -101,6 +109,7 @@ class TestEmbedAndExtract:
         assert extracted == message
 
     def test_message_too_large_raises(self, small_image, tmp_path):
+        """Test functionality: message too large raises."""
         output_path = str(tmp_path / "stego_fail.png")
         message = "This message is way too long for a 2x2 image"
 
@@ -108,6 +117,7 @@ class TestEmbedAndExtract:
             embed_in_image(small_image, message, output_path)
 
     def test_output_is_valid_png(self, red_image, tmp_path):
+        """Test functionality: output is valid png."""
         output_path = str(tmp_path / "stego.png")
         embed_in_image(red_image, "test", output_path)
 
@@ -117,6 +127,7 @@ class TestEmbedAndExtract:
         assert img.size == (100, 100)
 
     def test_extract_from_nonexistent_raises(self):
+        """Test functionality: extract from nonexistent raises."""
         with pytest.raises(SteganographyError):
             extract_from_image("/nonexistent/path/image.png")
 
@@ -127,6 +138,7 @@ class TestRGBAImage:
     """Tests for images with alpha channels."""
 
     def test_rgba_image_roundtrip(self, tmp_path):
+        """Test functionality: rgba image roundtrip."""
         # Create RGBA image
         img = Image.new("RGBA", (50, 50), color=(255, 0, 0, 128))
         input_path = str(tmp_path / "rgba.png")

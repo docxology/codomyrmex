@@ -48,6 +48,7 @@ class TestDetectLsbSteganography:
     """Tests for detect_lsb_steganography function."""
 
     def test_returns_detection_result(self, clean_image):
+        """Test functionality: returns detection result."""
         result = detect_lsb_steganography(clean_image)
         assert isinstance(result, DetectionResult)
         assert hasattr(result, "detected")
@@ -56,20 +57,24 @@ class TestDetectLsbSteganography:
         assert hasattr(result, "details")
 
     def test_confidence_range(self, clean_image):
+        """Test functionality: confidence range."""
         result = detect_lsb_steganography(clean_image)
         assert 0.0 <= result.confidence <= 1.0
 
     def test_method_is_lsb_analysis(self, clean_image):
+        """Test functionality: method is lsb analysis."""
         result = detect_lsb_steganography(clean_image)
         assert result.method == "lsb_analysis"
 
     def test_clean_image_lower_confidence(self, clean_image):
+        """Test functionality: clean image lower confidence."""
         result = detect_lsb_steganography(clean_image)
         # Clean image should generally have lower confidence
         # (Not guaranteed to be < 0.5 since gradient data can look uniform)
         assert result.confidence < 1.0
 
     def test_stego_image_higher_confidence(self, stego_image, clean_image):
+        """Test functionality: stego image higher confidence."""
         clean_result = detect_lsb_steganography(clean_image)
         stego_result = detect_lsb_steganography(stego_image)
         # Stego image should generally have higher confidence than clean
@@ -77,18 +82,21 @@ class TestDetectLsbSteganography:
         assert stego_result.confidence >= clean_result.confidence or stego_result.has_length_header if hasattr(stego_result, 'has_length_header') else True
 
     def test_details_contains_expected_keys(self, clean_image):
+        """Test functionality: details contains expected keys."""
         result = detect_lsb_steganography(clean_image)
         assert "lsb_ratio" in result.details
         assert "image_size" in result.details
         assert "total_lsbs" in result.details
 
     def test_nonexistent_image_raises(self):
+        """Test functionality: nonexistent image raises."""
         from codomyrmex.crypto.exceptions import SteganographyError
 
         with pytest.raises(SteganographyError):
             detect_lsb_steganography("/nonexistent/path.png")
 
     def test_stego_image_has_length_header(self, stego_image):
+        """Test functionality: stego image has length header."""
         result = detect_lsb_steganography(stego_image)
         # Embedded image should have a detectable length header
         assert result.details.get("has_length_header") is True
@@ -100,27 +108,32 @@ class TestAnalyzeStatisticalAnomalies:
     """Tests for analyze_statistical_anomalies function."""
 
     def test_empty_data(self):
+        """Test functionality: empty data."""
         result = analyze_statistical_anomalies(b"")
         assert result.detected is False
         assert result.confidence == 0.0
 
     def test_returns_detection_result(self):
+        """Test functionality: returns detection result."""
         result = analyze_statistical_anomalies(b"\x00" * 100)
         assert isinstance(result, DetectionResult)
         assert result.method == "statistical_anomaly"
 
     def test_confidence_range(self):
+        """Test functionality: confidence range."""
         data = os.urandom(1000)
         result = analyze_statistical_anomalies(data)
         assert 0.0 <= result.confidence <= 1.0
 
     def test_low_entropy_data(self):
+        """Test functionality: low entropy data."""
         # Repeated pattern -- low entropy, probably not stego
         data = b"\xAB" * 1000
         result = analyze_statistical_anomalies(data)
         assert result.confidence < 0.8
 
     def test_high_entropy_random_data(self):
+        """Test functionality: high entropy random data."""
         # Random data has high entropy, somewhat suspicious
         data = os.urandom(10000)
         result = analyze_statistical_anomalies(data)
@@ -128,6 +141,7 @@ class TestAnalyzeStatisticalAnomalies:
         assert result.details.get("byte_entropy", 0) > 7.0
 
     def test_data_with_length_header(self):
+        """Test functionality: data with length header."""
         import struct
 
         # Craft data that looks like it has a stego length header
@@ -138,6 +152,7 @@ class TestAnalyzeStatisticalAnomalies:
         assert result.details.get("has_plausible_header") is True
 
     def test_details_contains_expected_keys(self):
+        """Test functionality: details contains expected keys."""
         data = os.urandom(500)
         result = analyze_statistical_anomalies(data)
         assert "byte_entropy" in result.details

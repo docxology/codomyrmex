@@ -38,12 +38,14 @@ class HealingEvent:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.event_id:
             self.event_id = f"heal-{int(time.time() * 1000) % 100000}"
         if not self.timestamp:
             self.timestamp = time.time()
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "event_id": self.event_id,
             "error_category": self.error_category,
@@ -55,6 +57,7 @@ class HealingEvent:
         }
 
     def to_jsonl(self) -> str:
+        """Execute To Jsonl operations natively."""
         return json.dumps(self.to_dict())
 
 
@@ -76,6 +79,7 @@ class HealingLog:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._events: list[HealingEvent] = []
 
     def record(self, event: HealingEvent) -> None:
@@ -88,6 +92,7 @@ class HealingLog:
 
     @property
     def size(self) -> int:
+        """Execute Size operations natively."""
         return len(self._events)
 
     @property

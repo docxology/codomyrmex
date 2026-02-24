@@ -3,6 +3,7 @@ from pathlib import Path
 from codomyrmex.data_visualization.reports.general import GeneralSystemReport
 
 def test_general_report_generation(tmp_path):
+    """Test functionality: general report generation."""
     report = GeneralSystemReport()
     out_file = tmp_path / "system_report.html"
     

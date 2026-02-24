@@ -94,12 +94,14 @@ class TestMCPClientLifecycle:
     """Test client initialization and lifecycle."""
 
     def test_initialize(self, client):
+        """Test functionality: initialize."""
         result = asyncio.run(client.initialize())
         assert "protocolVersion" in result
         assert client._initialized is True
         assert client.server_info.get("serverInfo", {}).get("name") == "test-server"
 
     def test_close(self, client):
+        """Test functionality: close."""
         asyncio.run(client.initialize())
         asyncio.run(client.close())
         assert client._transport is None
@@ -111,6 +113,7 @@ class TestMCPClientTools:
     """Test tool listing and invocation."""
 
     def test_list_tools(self, client):
+        """Test functionality: list tools."""
         async def _test():
             await client.initialize()
             tools = await client.list_tools()
@@ -123,6 +126,7 @@ class TestMCPClientTools:
         assert len(tools) >= 2
 
     def test_call_tool_echo(self, client):
+        """Test functionality: call tool echo."""
         async def _test():
             await client.initialize()
             result = await client.call_tool("echo", {"text": "world"})
@@ -135,6 +139,7 @@ class TestMCPClientTools:
         assert inner["echo"] == "world"
 
     def test_call_tool_add(self, client):
+        """Test functionality: call tool add."""
         async def _test():
             await client.initialize()
             result = await client.call_tool("add", {"a": 3, "b": 4})
@@ -152,6 +157,7 @@ class TestMCPClientResources:
     """Test resource listing and reading."""
 
     def test_list_resources(self, client):
+        """Test functionality: list resources."""
         async def _test():
             await client.initialize()
             resources = await client.list_resources()
@@ -162,6 +168,7 @@ class TestMCPClientResources:
         assert resources[0]["uri"] == "test://greeting"
 
     def test_read_resource(self, client):
+        """Test functionality: read resource."""
         async def _test():
             await client.initialize()
             result = await client.read_resource("test://greeting")
@@ -177,6 +184,7 @@ class TestMCPClientPrompts:
     """Test prompt listing and rendering."""
 
     def test_list_prompts(self, client):
+        """Test functionality: list prompts."""
         async def _test():
             await client.initialize()
             prompts = await client.list_prompts()
@@ -186,6 +194,7 @@ class TestMCPClientPrompts:
         assert any(p["name"] == "greet" for p in prompts)
 
     def test_get_prompt(self, client):
+        """Test functionality: get prompt."""
         async def _test():
             await client.initialize()
             result = await client.get_prompt("greet", {"greeting": "hi", "name": "Alice"})

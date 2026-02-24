@@ -40,6 +40,7 @@ class InMemoryStream(Stream):
     """In-memory stream implementation."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._subscriptions: dict[str, Subscription] = {}
         self._event_buffer: list[Event] = []
         self._buffer_size = 1000
@@ -87,6 +88,7 @@ class SSEStream(Stream):
     """Server-Sent Events stream implementation."""
 
     def __init__(self, buffer_size: int = 100):
+        """Execute   Init   operations natively."""
         self._subscriptions: dict[str, Subscription] = {}
         self._event_queues: dict[str, asyncio.Queue] = {}
         self._buffer_size = buffer_size
@@ -145,6 +147,7 @@ class TopicStream:
     """Stream with topic-based routing."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._topics: dict[str, InMemoryStream] = {}
         self._default = InMemoryStream()
 

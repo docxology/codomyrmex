@@ -58,6 +58,7 @@ class MetaAgent:
         scorer: OutcomeScorer | None = None,
         ab_engine: ABTestEngine | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.library = library or StrategyLibrary()
         self._scorer = scorer or OutcomeScorer()
         self._ab_engine = ab_engine or ABTestEngine()
@@ -65,6 +66,7 @@ class MetaAgent:
 
     @property
     def history(self) -> list[EvolutionRecord]:
+        """Execute History operations natively."""
         return list(self._history)
 
     @property

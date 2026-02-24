@@ -18,37 +18,44 @@ class TestCharacterFrequency:
     """Tests for character_frequency function."""
 
     def test_empty_string(self):
+        """Test functionality: empty string."""
         result = character_frequency("")
         assert result == {}
 
     def test_no_alpha_chars(self):
+        """Test functionality: no alpha chars."""
         result = character_frequency("12345!@#$%")
         assert result == {}
 
     def test_single_char(self):
+        """Test functionality: single char."""
         result = character_frequency("aaaa")
         assert len(result) == 1
         assert abs(result["a"] - 100.0) < 0.01
 
     def test_equal_distribution(self):
+        """Test functionality: equal distribution."""
         result = character_frequency("abcabc")
         assert len(result) == 3
         for char in "abc":
             assert abs(result[char] - 33.33) < 0.1
 
     def test_case_insensitive(self):
+        """Test functionality: case insensitive."""
         result = character_frequency("AaBb")
         assert "a" in result
         assert "b" in result
         assert abs(result["a"] - 50.0) < 0.01
 
     def test_ignores_non_alpha(self):
+        """Test functionality: ignores non alpha."""
         result = character_frequency("a1b2c3")
         assert len(result) == 3
         for char in "abc":
             assert abs(result[char] - 33.33) < 0.1
 
     def test_known_text(self):
+        """Test functionality: known text."""
         text = "etaoins"
         result = character_frequency(text)
         assert abs(result["e"] - (1 / 7) * 100) < 0.1
@@ -60,19 +67,23 @@ class TestBigramFrequency:
     """Tests for bigram_frequency function."""
 
     def test_empty_string(self):
+        """Test functionality: empty string."""
         result = bigram_frequency("")
         assert result == {}
 
     def test_single_char(self):
+        """Test functionality: single char."""
         result = bigram_frequency("a")
         assert result == {}
 
     def test_two_chars(self):
+        """Test functionality: two chars."""
         result = bigram_frequency("ab")
         assert len(result) == 1
         assert abs(result["ab"] - 100.0) < 0.01
 
     def test_repeated_text(self):
+        """Test functionality: repeated text."""
         result = bigram_frequency("ababab")
         # Bigrams: ab, ba, ab, ba, ab -> ab=3, ba=2 out of 5
         assert "ab" in result
@@ -81,6 +92,7 @@ class TestBigramFrequency:
         assert abs(result["ba"] - 40.0) < 0.1
 
     def test_case_insensitive(self):
+        """Test functionality: case insensitive."""
         result = bigram_frequency("AB")
         assert "ab" in result
 
@@ -91,17 +103,21 @@ class TestIndexOfCoincidence:
     """Tests for index_of_coincidence function."""
 
     def test_empty_string(self):
+        """Test functionality: empty string."""
         assert index_of_coincidence("") == 0.0
 
     def test_single_char(self):
+        """Test functionality: single char."""
         assert index_of_coincidence("a") == 0.0
 
     def test_all_same_chars(self):
+        """Test functionality: all same chars."""
         # IC for all same chars = 1.0
         result = index_of_coincidence("aaaaaaaaaa")
         assert abs(result - 1.0) < 0.01
 
     def test_english_text_approximate(self):
+        """Test functionality: english text approximate."""
         # A reasonably long English sample
         text = (
             "The quick brown fox jumps over the lazy dog. "
@@ -116,6 +132,7 @@ class TestIndexOfCoincidence:
         assert 0.055 < result < 0.080
 
     def test_random_text_lower_ic(self):
+        """Test functionality: random text lower ic."""
         # Uniformly distributed letters should have lower IC (~0.0385)
         import string
 
@@ -132,10 +149,12 @@ class TestExpectedEnglishFrequency:
     """Tests for expected_english_frequency function."""
 
     def test_returns_26_letters(self):
+        """Test functionality: returns 26 letters."""
         freq = expected_english_frequency()
         assert len(freq) == 26
 
     def test_all_lowercase_letters_present(self):
+        """Test functionality: all lowercase letters present."""
         import string
 
         freq = expected_english_frequency()
@@ -143,16 +162,19 @@ class TestExpectedEnglishFrequency:
             assert letter in freq
 
     def test_frequencies_sum_near_100(self):
+        """Test functionality: frequencies sum near 100."""
         freq = expected_english_frequency()
         total = sum(freq.values())
         assert abs(total - 100.0) < 1.0
 
     def test_e_is_most_frequent(self):
+        """Test functionality: e is most frequent."""
         freq = expected_english_frequency()
         assert freq["e"] > freq["t"]
         assert freq["e"] > 12.0
 
     def test_z_is_least_frequent(self):
+        """Test functionality: z is least frequent."""
         freq = expected_english_frequency()
         assert freq["z"] < freq["q"]
         assert freq["z"] < 0.1

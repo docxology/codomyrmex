@@ -132,6 +132,7 @@ class KernelPrimitive:
     enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "layer": self.layer.value,
@@ -154,6 +155,7 @@ class ResearchClaim:
     confidence: float = 0.8
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "claim_id": self.claim_id,
             "statement": self.statement,
@@ -175,6 +177,7 @@ class DimensionSignal:
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "dimension": self.dimension.value,
             "value": self.value,
@@ -197,6 +200,7 @@ class StageResult:
     error: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "stage": self.stage.value,
             "input_content": self.input_content,
@@ -222,6 +226,7 @@ class VaultHealthReport:
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "status": self.status.value,
             "spaces_present": self.spaces_present,
@@ -241,12 +246,14 @@ class KernelConfig:
     primitives: list[KernelPrimitive] = field(default_factory=list)
 
     def get_by_name(self, name: str) -> KernelPrimitive | None:
+        """Execute Get By Name operations natively."""
         for p in self.primitives:
             if p.name == name:
                 return p
         return None
 
     def get_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
+        """Execute Get By Layer operations natively."""
         return [p for p in self.primitives if p.layer == layer]
 
     def validate_dependencies(self) -> list[str]:
@@ -274,6 +281,7 @@ class VaultConfig:
     created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "vault_path": str(self.vault_path),
             "kernel": {
@@ -360,17 +368,21 @@ class KernelPrimitiveRegistry:
     """Registry holding the 15 default kernel primitives."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._primitives: dict[str, KernelPrimitive] = {}
         for p in _build_default_primitives():
             self._primitives[p.name] = p
 
     def get(self, name: str) -> KernelPrimitive | None:
+        """Execute Get operations natively."""
         return self._primitives.get(name)
 
     def list_all(self) -> list[KernelPrimitive]:
+        """Execute List All operations natively."""
         return list(self._primitives.values())
 
     def list_by_layer(self, layer: KernelLayer) -> list[KernelPrimitive]:
+        """Execute List By Layer operations natively."""
         return [p for p in self._primitives.values() if p.layer == layer]
 
     def validate_primitive(self, name: str, vault_path: Path) -> bool:
@@ -387,6 +399,7 @@ class KernelPrimitiveRegistry:
         return prim.enabled
 
     def to_kernel_config(self) -> KernelConfig:
+        """Execute To Kernel Config operations natively."""
         return KernelConfig(primitives=list(self._primitives.values()))
 
 
@@ -399,6 +412,7 @@ class ProcessingPipeline:
     """Implements the 6R Processing Pipeline with pluggable stage handlers."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._handlers: dict[PipelineStage, list[Callable[[str, dict], str]]] = {
             stage: [] for stage in PipelineStage
         }
@@ -454,6 +468,7 @@ class ProcessingPipeline:
             )
 
     def get_results(self) -> list[StageResult]:
+        """Execute Get Results operations natively."""
         return list(self._results)
 
 
@@ -522,9 +537,11 @@ class DerivationEngine:
     """Maps user text to 8 configuration dimensions with confidence scoring."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._signals: list[DimensionSignal] = []
 
     def ingest_signal(self, signal: DimensionSignal) -> None:
+        """Execute Ingest Signal operations natively."""
         self._signals.append(signal)
 
     def ingest_from_text(self, text: str, source: str = "user") -> list[DimensionSignal]:
@@ -562,6 +579,7 @@ class DerivationEngine:
         return sum(s.confidence for s in self._signals) / len(self._signals)
 
     def reset(self) -> None:
+        """Execute Reset operations natively."""
         self._signals.clear()
 
 
@@ -574,15 +592,18 @@ class MethodologyGraph:
     """Adjacency-list graph of research claims grounding Ars Contexta decisions."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._claims: dict[str, ResearchClaim] = {}
         self._edges: dict[str, list[str]] = {}  # claim_id -> [related_ids]
 
     def add_claim(self, claim: ResearchClaim) -> None:
+        """Execute Add Claim operations natively."""
         self._claims[claim.claim_id] = claim
         if claim.claim_id not in self._edges:
             self._edges[claim.claim_id] = []
 
     def add_edge(self, from_id: str, to_id: str) -> None:
+        """Execute Add Edge operations natively."""
         if from_id not in self._edges:
             self._edges[from_id] = []
         if to_id not in self._edges[from_id]:
@@ -594,27 +615,34 @@ class MethodologyGraph:
             self._edges[to_id].append(from_id)
 
     def get_claim(self, claim_id: str) -> ResearchClaim | None:
+        """Execute Get Claim operations natively."""
         return self._claims.get(claim_id)
 
     def get_related(self, claim_id: str) -> list[ResearchClaim]:
+        """Execute Get Related operations natively."""
         related_ids = self._edges.get(claim_id, [])
         return [self._claims[rid] for rid in related_ids if rid in self._claims]
 
     def get_by_primitive(self, primitive_name: str) -> list[ResearchClaim]:
+        """Execute Get By Primitive operations natively."""
         return [
             c for c in self._claims.values() if primitive_name in c.connected_primitives
         ]
 
     def get_by_domain(self, domain: str) -> list[ResearchClaim]:
+        """Execute Get By Domain operations natively."""
         return [c for c in self._claims.values() if c.domain == domain]
 
     def list_all(self) -> list[ResearchClaim]:
+        """Execute List All operations natively."""
         return list(self._claims.values())
 
     def count(self) -> int:
+        """Execute Count operations natively."""
         return len(self._claims)
 
     def get_statistics(self) -> dict[str, Any]:
+        """Execute Get Statistics operations natively."""
         domains: dict[str, int] = {}
         for c in self._claims.values():
             domains[c.domain] = domains.get(c.domain, 0) + 1
@@ -689,6 +717,7 @@ class ArsContextaManager:
     """Main entry point composing all Ars Contexta services."""
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self.registry = KernelPrimitiveRegistry()
         self.pipeline = ProcessingPipeline()
         self.derivation = DerivationEngine()
@@ -748,9 +777,11 @@ class ArsContextaManager:
         return [p.to_dict() for p in prims]
 
     def get_methodology_stats(self) -> dict[str, Any]:
+        """Execute Get Methodology Stats operations natively."""
         return self.methodology.get_statistics()
 
     def get_config(self) -> VaultConfig | None:
+        """Execute Get Config operations natively."""
         return self._config
 
 

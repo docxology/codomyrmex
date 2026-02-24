@@ -51,6 +51,7 @@ class DeploymentManager:
     """Manage function deployments across an edge cluster."""
 
     def __init__(self, cluster: EdgeCluster):
+        """Execute   Init   operations natively."""
         self._cluster = cluster
         self._deployments: list[DeploymentPlan] = []
 
@@ -100,6 +101,7 @@ class DeploymentManager:
         return count
 
     def list_deployments(self) -> list[DeploymentPlan]:
+        """Execute List Deployments operations natively."""
         return list(self._deployments)
 
     # --- Strategy implementations ---

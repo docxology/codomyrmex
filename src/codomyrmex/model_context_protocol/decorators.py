@@ -20,35 +20,41 @@ def mcp_tool(
     description: Optional[str] = None,
     schema: Optional[Dict[str, Any]] = None,
     category: str = "general",
+    version: Optional[str] = None,
+    deprecated_in: Optional[str] = None,
 ) -> Callable[..., Any]:
     """
     Decorator to mark a function as an MCP tool.
-    
+
     Args:
         name: Tool name (default: function name)
         description: Tool description (default: docstring)
         schema: JSON Schema for arguments (default: auto-generated from type hints)
         category: Tool category for organization
-    
+        version: Tool version string (e.g., "1.0", "2.0"). Defaults to "1.0".
+        deprecated_in: Version in which this tool was deprecated (e.g., "1.5").
+                       If set, calling the tool emits a DeprecationWarning.
+
     Usage:
-        @mcp_tool(category="math")
+        @mcp_tool(category="math", version="2.0")
         def add(a: int, b: int) -> int:
             '''Add two numbers.'''
             return a + b
     """
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
+        """Execute Decorator operations natively."""
         # Get metadata
         base_name = name or func.__name__
         if not base_name.startswith("codomyrmex."):
             tool_name = f"codomyrmex.{base_name}"
         else:
             tool_name = base_name
-            
+
         tool_desc = description or (func.__doc__ or "").strip()
-        
+
         # Auto-generate schema if not provided
         tool_schema = schema or _generate_schema_from_signature(func)
-        
+
         # Attach metadata to the function object
         # This allows scanners to find it without importing everything at once
         tool_meta = {
@@ -57,20 +63,30 @@ def mcp_tool(
             "schema": tool_schema,
             "category": category,
             "module": func.__module__,
+            "version": version or "1.0",
+            "deprecated_in": deprecated_in,
         }
         setattr(func, "_mcp_tool", tool_meta)
         setattr(func, "_mcp_tool_meta", tool_meta)
-        
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            """Execute Wrapper operations natively."""
+            if deprecated_in:
+                import warnings
+                warnings.warn(
+                    f"MCP tool {tool_name!r} deprecated since v{deprecated_in}.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
             return func(*args, **kwargs)
-        
+
         # Copy metadata onto wrapper so scanners find it via dir()
         wrapper._mcp_tool = tool_meta  # type: ignore[attr-defined]
         wrapper._mcp_tool_meta = tool_meta  # type: ignore[attr-defined]
-            
+
         return wrapper
-    
+
     return decorator
 
 

@@ -7,6 +7,7 @@ from codomyrmex.agents.agent_setup.setup_wizard import run_setup_wizard
 
 
 def main():
+    """Execute Main operations natively."""
     parser = argparse.ArgumentParser(
         description="Codomyrmex Agent Setup — configure and verify agents",
     )

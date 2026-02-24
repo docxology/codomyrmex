@@ -35,11 +35,13 @@ class MemoryEntry:
     access_count: int = 0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.created_at:
             self.created_at = time.time()
 
     @property
     def is_expired(self) -> bool:
+        """Execute Is Expired operations natively."""
         if self.expires_at == 0:
             return False
         return time.time() > self.expires_at
@@ -56,6 +58,7 @@ class MemoryStore:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._entries: dict[str, MemoryEntry] = {}
 
     def put(self, key: str, value: Any, ttl: float = 0, tags: list[str] | None = None) -> None:
@@ -75,9 +78,11 @@ class MemoryStore:
         return entry.value
 
     def delete(self, key: str) -> bool:
+        """Execute Delete operations natively."""
         return self._entries.pop(key, None) is not None
 
     def has(self, key: str) -> bool:
+        """Execute Has operations natively."""
         entry = self._entries.get(key)
         if entry and entry.is_expired:
             del self._entries[key]
@@ -85,19 +90,23 @@ class MemoryStore:
         return entry is not None
 
     def search_by_tag(self, tag: str) -> list[MemoryEntry]:
+        """Execute Search By Tag operations natively."""
         self._clean_expired()
         return [e for e in self._entries.values() if tag in e.tags]
 
     @property
     def size(self) -> int:
+        """Execute Size operations natively."""
         self._clean_expired()
         return len(self._entries)
 
     def keys(self) -> list[str]:
+        """Execute Keys operations natively."""
         self._clean_expired()
         return list(self._entries.keys())
 
     def _clean_expired(self) -> None:
+        """Execute  Clean Expired operations natively."""
         expired = [k for k, v in self._entries.items() if v.is_expired]
         for k in expired:
             del self._entries[k]

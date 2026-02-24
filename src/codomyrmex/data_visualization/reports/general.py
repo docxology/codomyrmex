@@ -7,6 +7,7 @@ class GeneralSystemReport(BaseReport):
     """General system report."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         super().__init__(title="Codomyrmex Executive Dashboard")
         self.dashboard = Dashboard(title="Codomyrmex Executive Dashboard")
         self._generated = False

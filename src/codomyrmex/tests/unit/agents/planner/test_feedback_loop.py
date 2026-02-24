@@ -26,6 +26,7 @@ class TestFeedbackConfig:
     """Tests for FeedbackConfig defaults."""
 
     def test_defaults(self):
+        """Test functionality: defaults."""
         cfg = FeedbackConfig()
         assert cfg.max_iterations == 3
         assert cfg.quality_floor == 0.6
@@ -34,6 +35,7 @@ class TestFeedbackConfig:
                     + cfg.weight_retry_ratio + cfg.weight_memory_hits - 1.0) < 0.001
 
     def test_custom_config(self):
+        """Test functionality: custom config."""
         cfg = FeedbackConfig(max_iterations=5, quality_floor=0.9)
         assert cfg.max_iterations == 5
         assert cfg.quality_floor == 0.9
@@ -87,17 +89,20 @@ class TestPlanEvaluator:
         assert score_iter1.overall > score_iter3.overall
 
     def test_compare_scores(self):
+        """Test functionality: compare scores."""
         evaluator = PlanEvaluator()
         a = PlanScore(overall=0.6)
         b = PlanScore(overall=0.8)
         assert evaluator.compare(a, b) == pytest.approx(0.2)
 
     def test_convergence_detection(self):
+        """Test functionality: convergence detection."""
         evaluator = PlanEvaluator(config=FeedbackConfig(convergence_threshold=0.05))
         scores = [PlanScore(overall=0.75), PlanScore(overall=0.76)]
         assert evaluator.is_converging(scores) is True
 
     def test_not_converging(self):
+        """Test functionality: not converging."""
         evaluator = PlanEvaluator(config=FeedbackConfig(convergence_threshold=0.05))
         scores = [PlanScore(overall=0.5), PlanScore(overall=0.8)]
         assert evaluator.is_converging(scores) is False

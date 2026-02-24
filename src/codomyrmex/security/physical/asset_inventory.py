@@ -49,6 +49,7 @@ class AssetInventory:
     """Manages physical asset inventory."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
 
         self.assets: dict[str, PhysicalAsset] = {}
         logger.info("AssetInventory initialized")

@@ -60,10 +60,12 @@ class ComplianceReport:
 
     @property
     def total_checks(self) -> int:
+        """Execute Total Checks operations natively."""
         return len(self.checks)
 
     @property
     def pass_rate(self) -> float:
+        """Execute Pass Rate operations natively."""
         if not self.checks:
             return 0.0
         passed = sum(1 for c in self.checks if c.status == ComplianceStatus.PASS)
@@ -135,6 +137,7 @@ class ComplianceGenerator:
     ]
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._checks: list[ComplianceCheck] = []
 
     def add_owasp_checks(self, default_status: ComplianceStatus = ComplianceStatus.PASS) -> None:

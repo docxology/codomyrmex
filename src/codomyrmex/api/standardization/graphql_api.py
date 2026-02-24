@@ -432,6 +432,7 @@ def resolver(field_name: str, complexity: int = 1):
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLResolver:
+        """Execute Decorator operations natively."""
 
         return GraphQLResolver(
             field_name=field_name,
@@ -456,6 +457,7 @@ def mutation(name: str, input_type: GraphQLObjectType,
         Decorated function
     """
     def decorator(func: Callable) -> GraphQLMutation:
+        """Execute Decorator operations natively."""
 
         return GraphQLMutation(
             name=name,

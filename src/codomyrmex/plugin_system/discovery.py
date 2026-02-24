@@ -107,6 +107,7 @@ class PluginDiscovery:
         entry_point_group: str = "codomyrmex.plugins",
         plugin_dirs: list[str] | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._entry_point_group = entry_point_group
         self._plugin_dirs = plugin_dirs or []
 

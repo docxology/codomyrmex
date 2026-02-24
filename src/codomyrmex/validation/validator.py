@@ -32,6 +32,7 @@ class ValidationError(CodomyrmexError):
     """
 
     def __init__(self, message: str, field: str | None = None, code: str | None = None, path: list[str] | None = None):
+        """Execute   Init   operations natively."""
 
         super().__init__(message)
         self.field = field

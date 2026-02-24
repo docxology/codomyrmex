@@ -17,11 +17,13 @@ class TestCrumbCleaner:
         self.cleaner = CrumbCleaner()
 
     def test_init_has_default_blacklist(self):
+        """Test functionality: init has default blacklist."""
         assert "ip_address" in self.cleaner._blacklist
         assert "cookie_id" in self.cleaner._blacklist
         assert "timestamp" in self.cleaner._blacklist
 
     def test_scrub_dict_removes_blacklisted(self):
+        """Test functionality: scrub dict removes blacklisted."""
         data = {"name": "Alice", "ip_address": "1.2.3.4", "value": 42}
         result = self.cleaner.scrub(data)
         assert "name" in result
@@ -29,11 +31,13 @@ class TestCrumbCleaner:
         assert "ip_address" not in result
 
     def test_scrub_preserves_non_blacklisted(self):
+        """Test functionality: scrub preserves non blacklisted."""
         data = {"name": "Bob", "role": "admin"}
         result = self.cleaner.scrub(data)
         assert result == data
 
     def test_scrub_nested_dict(self):
+        """Test functionality: scrub nested dict."""
         data = {
             "user": {
                 "name": "Alice",
@@ -48,6 +52,7 @@ class TestCrumbCleaner:
         assert "session_id" not in result["user"]["prefs"]
 
     def test_scrub_list(self):
+        """Test functionality: scrub list."""
         data = [
             {"name": "Alice", "ip_address": "1.2.3.4"},
             {"name": "Bob", "user_agent": "Chrome"},
@@ -58,26 +63,31 @@ class TestCrumbCleaner:
         assert "user_agent" not in result[1]
 
     def test_scrub_non_dict_passthrough(self):
+        """Test functionality: scrub non dict passthrough."""
         assert self.cleaner.scrub("hello") == "hello"
         assert self.cleaner.scrub(42) == 42
         assert self.cleaner.scrub(None) is None
 
     def test_scrub_case_insensitive(self):
+        """Test functionality: scrub case insensitive."""
         data = {"IP_ADDRESS": "1.2.3.4", "name": "test"}
         result = self.cleaner.scrub(data)
         assert "IP_ADDRESS" not in result
         assert "name" in result
 
     def test_generate_noise(self):
+        """Test functionality: generate noise."""
         noise = self.cleaner.generate_noise(64)
         assert isinstance(noise, bytes)
         assert len(noise) == 64
 
     def test_generate_noise_custom_size(self):
+        """Test functionality: generate noise custom size."""
         noise = self.cleaner.generate_noise(128)
         assert len(noise) == 128
 
     def test_configure_blacklist_add(self):
+        """Test functionality: configure blacklist add."""
         self.cleaner.configure_blacklist(add=["custom_field"])
         assert "custom_field" in self.cleaner._blacklist
         data = {"custom_field": "secret", "name": "test"}
@@ -85,6 +95,7 @@ class TestCrumbCleaner:
         assert "custom_field" not in result
 
     def test_configure_blacklist_remove(self):
+        """Test functionality: configure blacklist remove."""
         assert "timestamp" in self.cleaner._blacklist
         self.cleaner.configure_blacklist(remove=["timestamp"])
         assert "timestamp" not in self.cleaner._blacklist
@@ -98,6 +109,7 @@ class TestPacket:
     """Tests for the Packet dataclass."""
 
     def test_packet_creation(self):
+        """Test functionality: packet creation."""
         pkt = Packet(payload=b"hello", route_id="r1", hops_remaining=3)
         assert pkt.payload == b"hello"
         assert pkt.route_id == "r1"
@@ -109,10 +121,12 @@ class TestMixNode:
     """Tests for the MixNode class — uses real time.sleep."""
 
     def test_mix_node_creation(self):
+        """Test functionality: mix node creation."""
         node = MixNode("node_0")
         assert node.node_id == "node_0"
 
     def test_mix_node_relay_decrements_hops(self):
+        """Test functionality: mix node relay decrements hops."""
         node = MixNode("node_0")
         pkt = Packet(payload=b"data", route_id="r1", hops_remaining=3)
         result = node.relay(pkt)
@@ -120,6 +134,7 @@ class TestMixNode:
         assert result.payload == b"data"
 
     def test_mix_node_relay_zero_hops(self):
+        """Test functionality: mix node relay zero hops."""
         node = MixNode("node_0")
         pkt = Packet(payload=b"data", route_id="r1", hops_remaining=0)
         result = node.relay(pkt)
@@ -132,16 +147,19 @@ class TestMixnetProxy:
     """Tests for the MixnetProxy class — uses real time.sleep."""
 
     def test_mixnet_init(self):
+        """Test functionality: mixnet init."""
         proxy = MixnetProxy()
         assert len(proxy._nodes) == 10
 
     def test_route_payload(self):
+        """Test functionality: route payload."""
         proxy = MixnetProxy()
         payload = b"secret message"
         result = proxy.route_payload(payload, hops=3)
         assert result == payload
 
     def test_route_payload_single_hop(self):
+        """Test functionality: route payload single hop."""
         proxy = MixnetProxy()
         payload = b"data"
         result = proxy.route_payload(payload, hops=1)

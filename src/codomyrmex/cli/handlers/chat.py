@@ -41,6 +41,7 @@ def handle_chat_session(
         print(f"⚡ Executing {'Infinite' if rounds == 0 else rounds} rounds...")
         
         def on_turn_callback(turn: Any) -> None:
+            """Execute On Turn Callback operations natively."""
             if stream:
                 print(f"\n🤖 [{turn.speaker}] ({turn.elapsed_seconds}s):\n{turn.content}\n" + "-"*40)
         

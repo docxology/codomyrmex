@@ -4,12 +4,14 @@ from codomyrmex.finance.ledger import Ledger, LedgerError
 
 
 def test_ledger_initialization():
+    """Test functionality: ledger initialization."""
     ledger = Ledger()
     assert ledger.accounts == {}
     assert ledger.transactions == []
 
 
 def test_create_account():
+    """Test functionality: create account."""
     ledger = Ledger()
     acc = ledger.create_account("Cash", AccountType.ASSET)
     assert acc.name == "Cash"
@@ -21,6 +23,7 @@ def test_create_account():
 
 
 def test_record_transaction():
+    """Test functionality: record transaction."""
     ledger = Ledger()
     cash = ledger.create_account("Cash", AccountType.ASSET)
     revenue = ledger.create_account("Revenue", AccountType.REVENUE)
@@ -38,6 +41,7 @@ def test_record_transaction():
 
 
 def test_invalid_transaction():
+    """Test functionality: invalid transaction."""
     ledger = Ledger()
     cash = ledger.create_account("Cash", AccountType.ASSET)
 
@@ -53,6 +57,7 @@ def test_invalid_transaction():
 
 
 def test_trial_balance():
+    """Test functionality: trial balance."""
     ledger = Ledger()
     bank = ledger.create_account("Bank", AccountType.ASSET)
     equity = ledger.create_account("Equity", AccountType.EQUITY)

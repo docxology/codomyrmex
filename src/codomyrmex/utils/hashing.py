@@ -52,6 +52,7 @@ class ConsistentHash:
     """
 
     def __init__(self, nodes: list[str] | None = None, replicas: int = 100) -> None:
+        """Execute   Init   operations natively."""
         self._replicas = replicas
         self._ring: list[int] = []
         self._node_map: dict[int, str] = {}
@@ -59,6 +60,7 @@ class ConsistentHash:
             self.add_node(node)
 
     def _hash(self, key: str) -> int:
+        """Execute  Hash operations natively."""
         return int(hashlib.md5(key.encode()).hexdigest(), 16)
 
     def add_node(self, node: str) -> None:
@@ -88,6 +90,7 @@ class ConsistentHash:
 
     @property
     def nodes(self) -> set[str]:
+        """Execute Nodes operations natively."""
         return set(self._node_map.values())
 
 

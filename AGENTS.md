@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
@@ -453,7 +453,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (40117 symbols, 103215 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (40119 symbols, 103134 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

@@ -69,6 +69,7 @@ class Document:
     modified_at: datetime | None = field(default_factory=datetime.now)
 
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if self.document_type is None:
             self.document_type = _FORMAT_TYPE_MAP.get(self.format, DocumentType.TEXT)
 

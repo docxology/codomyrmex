@@ -25,6 +25,7 @@ class StreamProjection:
     """
 
     def __init__(self, store: EventStore) -> None:
+        """Execute   Init   operations natively."""
         self._store = store
 
     def counter(self, topic: str = "") -> int:

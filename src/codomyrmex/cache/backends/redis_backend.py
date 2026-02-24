@@ -2,6 +2,7 @@
 Redis cache backend (optional).
 """
 
+import json
 import os
 from typing import Any
 
@@ -46,14 +47,13 @@ class RedisCache(Cache):
         self._stats.total_requests += 1
 
         try:
-            import pickle
             value = self.client.get(key)
             if value is None:
                 self._stats.misses += 1
                 return None
 
             self._stats.hits += 1
-            return pickle.loads(value)
+            return json.loads(value.decode("utf-8"))  # SECURITY: JSON instead of pickle
         except Exception as e:
             logger.error(f"Error reading from Redis: {e}")
             self._stats.misses += 1
@@ -62,9 +62,8 @@ class RedisCache(Cache):
     def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """Set a value in the cache."""
         try:
-            import pickle
             ttl = ttl or self.default_ttl
-            serialized = pickle.dumps(value)
+            serialized = json.dumps(value, default=str).encode("utf-8")  # SECURITY: JSON instead of pickle
             if ttl:
                 self.client.setex(key, ttl, serialized)
             else:

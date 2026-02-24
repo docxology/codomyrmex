@@ -40,8 +40,10 @@ def _make_result(success: bool = True, step_count: int = 2, wf_id: str = "wf-1")
 # ─── WorkflowJournal ────────────────────────────────────────────────
 
 class TestWorkflowJournal:
+    """Test suite for WorkflowJournal."""
 
     def test_record_start(self):
+        """Test functionality: record start."""
         journal = WorkflowJournal()
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a"))
@@ -51,6 +53,7 @@ class TestWorkflowJournal:
         assert len(entries) == 1
 
     def test_record_step(self):
+        """Test functionality: record step."""
         journal = WorkflowJournal()
         step = WorkflowStep(name="build", status=StepStatus.COMPLETED, duration_ms=100.0)
         journal.on_step_complete("wf-1", step)
@@ -60,6 +63,7 @@ class TestWorkflowJournal:
         assert entries[0].status == "completed"
 
     def test_record_complete(self):
+        """Test functionality: record complete."""
         journal = WorkflowJournal()
         result = _make_result(success=True)
         journal.on_workflow_complete(result)
@@ -68,6 +72,7 @@ class TestWorkflowJournal:
         assert entries[0].status == "success"
 
     def test_record_full_workflow(self):
+        """Test functionality: record full workflow."""
         journal = WorkflowJournal()
         runner = WorkflowRunner()
         runner.add_step(WorkflowStep("a"))
@@ -78,6 +83,7 @@ class TestWorkflowJournal:
         assert journal.entry_count == 4
 
     def test_by_workflow_id(self):
+        """Test functionality: by workflow id."""
         journal = WorkflowJournal()
         result1 = _make_result(wf_id="wf-1")
         result2 = _make_result(wf_id="wf-2")
@@ -86,6 +92,7 @@ class TestWorkflowJournal:
         assert len(journal.by_workflow_id("wf-1")) == 1
 
     def test_memory_persistence(self):
+        """Test functionality: memory persistence."""
         memory = MemoryStore()
         journal = WorkflowJournal(memory=memory)
         result = _make_result()
@@ -97,6 +104,7 @@ class TestWorkflowJournal:
 # ─── WorkflowAnalytics ───────────────────────────────────────────────
 
 class TestWorkflowAnalytics:
+    """Test suite for WorkflowAnalytics."""
 
     def _populated_journal(self) -> WorkflowJournal:
         journal = WorkflowJournal()
@@ -113,6 +121,7 @@ class TestWorkflowAnalytics:
         return journal
 
     def test_failure_hotspots(self):
+        """Test functionality: failure hotspots."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         hotspots = analytics.failure_hotspots(n=3)
@@ -120,18 +129,21 @@ class TestWorkflowAnalytics:
         assert len(hotspots) >= 1
 
     def test_duration_trend(self):
+        """Test functionality: duration trend."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         trend = analytics.duration_trend(window=2)
         assert len(trend) == 3  # 3 workflows
 
     def test_success_rate(self):
+        """Test functionality: success rate."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         rate = analytics.success_rate("step_0")
         assert rate == 1.0  # step_0 always succeeds
 
     def test_generate_insight(self):
+        """Test functionality: generate insight."""
         journal = self._populated_journal()
         analytics = WorkflowAnalytics(journal)
         insight = analytics.generate_insight()
@@ -140,6 +152,7 @@ class TestWorkflowAnalytics:
         assert insight.overall_success_rate == pytest.approx(2 / 3, abs=0.01)
 
     def test_empty_journal(self):
+        """Test functionality: empty journal."""
         journal = WorkflowJournal()
         analytics = WorkflowAnalytics(journal)
         insight = analytics.generate_insight()

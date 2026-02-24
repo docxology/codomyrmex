@@ -62,10 +62,12 @@ class ClassifiedError:
     confidence: float = 1.0
 
     def __post_init__(self) -> None:
+        """Execute   Post Init   operations natively."""
         if not self.suggested_strategies:
             self.suggested_strategies = list(RECOVERY_MAP.get(self.category, []))
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "category": self.category.value,
             "original_error": self.original_error,

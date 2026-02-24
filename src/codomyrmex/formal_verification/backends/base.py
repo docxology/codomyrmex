@@ -34,10 +34,12 @@ class SolverResult:
 
     @property
     def is_sat(self) -> bool:
+        """Execute Is Sat operations natively."""
         return self.status == SolverStatus.SAT
 
     @property
     def is_unsat(self) -> bool:
+        """Execute Is Unsat operations natively."""
         return self.status == SolverStatus.UNSAT
 
 

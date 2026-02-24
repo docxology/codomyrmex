@@ -71,6 +71,7 @@ class RelayEndpoint:
         model: str | None = None,
         scheduler_config: Any | None = None,
     ) -> None:
+        """Execute   Init   operations natively."""
         self.relay = AgentRelay(channel_id)
         self.identity = identity
         self.poll_interval = poll_interval

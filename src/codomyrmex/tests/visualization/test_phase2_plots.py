@@ -5,6 +5,7 @@ from codomyrmex.data_visualization.plots.candlestick import CandlestickChart
 from codomyrmex.data_visualization.plots.gantt import GanttChart
 
 def test_violin_plot_render():
+    """Test functionality: violin plot render."""
     data = [[1, 2, 3], [2, 3, 4]]
     plot = ViolinPlot("Test Violin", data, labels=['G1', 'G2'])
     html = plot.to_html()
@@ -12,6 +13,7 @@ def test_violin_plot_render():
     assert 'alt="Test Violin"' in html
 
 def test_radar_chart_render():
+    """Test functionality: radar chart render."""
     categories = ['A', 'B', 'C']
     values = [4, 5, 3]
     plot = RadarChart("Test Radar", categories, values)
@@ -20,6 +22,7 @@ def test_radar_chart_render():
     assert 'alt="Test Radar"' in html
 
 def test_candlestick_chart_render():
+    """Test functionality: candlestick chart render."""
     dates = ["2023-01-01", "2023-01-02"]
     opens = [10, 11]
     highs = [12, 13]
@@ -31,6 +34,7 @@ def test_candlestick_chart_render():
     assert 'alt="Test Candle"' in html
 
 def test_gantt_chart_render():
+    """Test functionality: gantt chart render."""
     tasks = ["Task 1", "Task 2"]
     starts = [1, 2]
     durations = [3, 2]

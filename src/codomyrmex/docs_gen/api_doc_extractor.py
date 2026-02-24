@@ -162,6 +162,7 @@ class APIDocExtractor:
 
     @staticmethod
     def _name_str(node: ast.expr) -> str:
+        """Execute  Name Str operations natively."""
         if isinstance(node, ast.Name):
             return node.id
         if isinstance(node, ast.Attribute):

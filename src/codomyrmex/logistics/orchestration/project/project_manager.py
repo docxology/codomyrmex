@@ -66,6 +66,7 @@ class Project:
     version: str = "0.1.0"
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "name": self.name,
             "path": str(self.path),

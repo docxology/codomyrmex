@@ -37,6 +37,7 @@ class MigrationRunner:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._completed: list[str] = []
         self._lock = threading.Lock()
 
@@ -104,6 +105,7 @@ class DataMigrator:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._transformers: list[DataTransformer] = []
 
     def add_transformer(self, transformer: DataTransformer) -> "DataMigrator":

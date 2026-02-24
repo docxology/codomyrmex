@@ -38,6 +38,7 @@ class Position:
     column: int
 
     def __lt__(self, other: 'Position') -> bool:
+        """Execute   Lt   operations natively."""
         if self.line != other.line:
             return self.line < other.line
         return self.column < other.column
@@ -51,9 +52,11 @@ class Range:
 
     @property
     def line_count(self) -> int:
+        """Execute Line Count operations natively."""
         return self.end.line - self.start.line + 1
 
     def contains(self, pos: Position) -> bool:
+        """Execute Contains operations natively."""
         return self.start <= pos <= self.end
 
 
@@ -76,6 +79,7 @@ class ASTNode:
         result = []
 
         def search(node: ASTNode):
+            """Execute Search operations natively."""
             if node.type == node_type:
                 result.append(node)
             for child in node.children:
@@ -93,6 +97,7 @@ class ASTNode:
             yield from child.walk()
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "type": self.type,
             "text": self.text[:100] if len(self.text) > 100 else self.text,
@@ -139,6 +144,7 @@ class PythonParser(Parser):
 
     @property
     def language(self) -> str:
+        """Execute Language operations natively."""
         return "python"
 
     def parse(self, source: str) -> ASTNode:
@@ -283,12 +289,15 @@ class PythonParser(Parser):
         return end_line
 
     def get_functions(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Functions operations natively."""
         return root.find_children("function_definition")
 
     def get_classes(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Classes operations natively."""
         return root.find_children("class_definition")
 
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Imports operations natively."""
         imports = root.find_children("import_statement")
         imports.extend(root.find_children("import_from_statement"))
         return imports
@@ -299,9 +308,11 @@ class JavaScriptParser(Parser):
 
     @property
     def language(self) -> str:
+        """Execute Language operations natively."""
         return "javascript"
 
     def parse(self, source: str) -> ASTNode:
+        """Execute Parse operations natively."""
         lines = source.split('\n')
         root = ASTNode(
             type="program",
@@ -319,6 +330,7 @@ class JavaScriptParser(Parser):
         return root
 
     def _parse_functions(self, source: str, lines: list[str]) -> list[ASTNode]:
+        """Execute  Parse Functions operations natively."""
         functions = []
 
         # function name() {}
@@ -350,6 +362,7 @@ class JavaScriptParser(Parser):
         return functions
 
     def _parse_classes(self, source: str, lines: list[str]) -> list[ASTNode]:
+        """Execute  Parse Classes operations natively."""
         classes = []
         pattern = re.compile(r'class\s+(\w+)(?:\s+extends\s+(\w+))?\s*\{')
 
@@ -374,6 +387,7 @@ class JavaScriptParser(Parser):
         return classes
 
     def _parse_imports(self, source: str, lines: list[str]) -> list[ASTNode]:
+        """Execute  Parse Imports operations natively."""
         imports = []
         pattern = re.compile(r'import\s+(?:\{([^}]+)\}|(\w+))?\s*(?:,\s*(?:\{([^}]+)\}|(\w+)))?\s*from\s+[\'"]([^\'"]+)[\'"]')
 
@@ -395,12 +409,15 @@ class JavaScriptParser(Parser):
         return imports
 
     def get_functions(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Functions operations natively."""
         return root.find_children("function_declaration")
 
     def get_classes(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Classes operations natively."""
         return root.find_children("class_declaration")
 
     def get_imports(self, root: ASTNode) -> list[ASTNode]:
+        """Execute Get Imports operations natively."""
         return root.find_children("import_declaration")
 
 

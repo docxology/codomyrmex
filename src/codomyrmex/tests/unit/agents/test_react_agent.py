@@ -19,6 +19,7 @@ def dummy_tool(x: int) -> int:
 
 @pytest.mark.unit
 def test_react_agent_initialization():
+    """Test functionality: react agent initialization."""
     registry = ToolRegistry()
     registry.register_function(dummy_tool)
 
@@ -28,6 +29,7 @@ def test_react_agent_initialization():
 
 @pytest.mark.unit
 def test_react_system_prompt():
+    """Test functionality: react system prompt."""
     registry = ToolRegistry()
     registry.register_function(dummy_tool)
 
@@ -55,6 +57,7 @@ def test_react_execution_mock():
 
 @pytest.mark.unit
 def test_react_execution_invalid_format():
+    """Test functionality: react execution invalid format."""
     registry = ToolRegistry()
     agent = ReActAgent("TestAgent", registry)
 

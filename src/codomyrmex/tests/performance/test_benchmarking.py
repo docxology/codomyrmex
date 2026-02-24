@@ -30,8 +30,6 @@ except ImportError:
 class TestBenchmarkingUtilities:
     """Test benchmarking and performance measurement utilities."""
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_run_benchmark_basic(self):
         """Test basic benchmark functionality."""
         from codomyrmex.performance import run_benchmark
@@ -59,13 +57,12 @@ class TestBenchmarkingUtilities:
         # Min should be <= average <= max
         assert result["min_time"] <= result["average_time"] <= result["max_time"]
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_run_benchmark_with_different_iterations(self):
         """Test benchmark with different iteration counts."""
         from codomyrmex.performance import run_benchmark
 
         def test_function():
+            """Test functionality: function."""
             time.sleep(0.001)  # Small delay
 
         # Test with different iteration counts
@@ -74,8 +71,6 @@ class TestBenchmarkingUtilities:
             assert result["iterations"] == iterations
             assert result["average_time"] > 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_run_benchmark_error_handling(self):
         """Test benchmark error handling."""
         from codomyrmex.performance import run_benchmark
@@ -91,13 +86,12 @@ class TestBenchmarkingUtilities:
         assert "iterations" in result
         # May have partial results or error indicators
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_profile_function_basic(self):
         """Test basic function profiling."""
         from codomyrmex.performance import profile_function
 
         def test_function():
+            """Test functionality: function."""
             result = []
             for i in range(100):
                 result.append(i * i)
@@ -114,8 +108,6 @@ class TestBenchmarkingUtilities:
         assert result["execution_time"] > 0
         assert result["memory_usage"] >= 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_profile_function_with_arguments(self):
         """Test profiling function with arguments."""
         from codomyrmex.performance import profile_function
@@ -128,8 +120,6 @@ class TestBenchmarkingUtilities:
         assert result["execution_time"] > 0
         assert result["memory_usage"] >= 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_performance_profiler_class(self):
         """Test the PerformanceProfiler class."""
         from codomyrmex.performance import PerformanceProfiler
@@ -147,8 +137,6 @@ class TestBenchmarkingUtilities:
         assert "memory_usage" in result
         assert result["execution_time"] > 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_benchmark_vs_profile_consistency(self):
         """Test consistency between benchmark and profile results."""
         from codomyrmex.performance import profile_function, run_benchmark
@@ -200,8 +188,6 @@ class TestBenchmarkingUtilities:
 class TestBenchmarkingScenarios:
     """Test benchmarking in different scenarios."""
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_algorithm_comparison_benchmark(self):
         """Test benchmarking different algorithms."""
         from codomyrmex.performance import run_benchmark
@@ -238,8 +224,6 @@ class TestBenchmarkingScenarios:
         assert bubble_sorted == python_sorted == sorted(test_data)
 
     @pytest.mark.performance
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_memory_intensive_benchmark(self):
         """Test benchmarking memory-intensive operations."""
         from codomyrmex.performance import profile_function
@@ -256,8 +240,6 @@ class TestBenchmarkingScenarios:
         assert result["execution_time"] > 0
         assert result["memory_usage"] >= 0  # May be 0.0 if psutil unavailable
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_io_bound_benchmark(self):
         """Test benchmarking I/O bound operations."""
         import os
@@ -285,8 +267,6 @@ class TestBenchmarkingScenarios:
         # I/O operations may not use much memory
         assert result["memory_usage"] >= 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_concurrent_benchmark(self):
         """Test benchmarking with concurrent operations."""
         import threading
@@ -321,8 +301,6 @@ class TestBenchmarkingScenarios:
 class TestBenchmarkingEdgeCases:
     """Test benchmarking edge cases and error conditions."""
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_empty_function_benchmark(self):
         """Test benchmarking an empty function."""
         from codomyrmex.performance import profile_function
@@ -335,8 +313,6 @@ class TestBenchmarkingEdgeCases:
         assert result["execution_time"] >= 0  # Should be very small but >= 0
         assert result["memory_usage"] >= 0
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_very_fast_function_benchmark(self):
         """Test benchmarking extremely fast functions."""
         from codomyrmex.performance import run_benchmark
@@ -351,8 +327,6 @@ class TestBenchmarkingEdgeCases:
         # Very fast functions should have very small execution times
         assert result["average_time"] < 1.0  # Less than 1 second on average
 
-    @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
-                       reason="Performance module not available")
     def test_high_variance_benchmark(self):
         """Test benchmarking functions with high timing variance."""
         import random
@@ -459,6 +433,7 @@ class TestBenchmarkingIntegration:
         perf_logger = PerformanceLogger("benchmark_integration")
 
         def test_function():
+            """Test functionality: function."""
             return sum(range(500))
 
         # Benchmark with logging

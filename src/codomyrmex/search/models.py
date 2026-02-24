@@ -29,6 +29,7 @@ class SearchResult:
     highlights: list[str] = field(default_factory=list)
 
     def __lt__(self, other: "SearchResult") -> bool:
+        """Execute   Lt   operations natively."""
         return self.score < other.score
 
 
@@ -37,6 +38,7 @@ class Tokenizer(ABC):
 
     @abstractmethod
     def tokenize(self, text: str) -> list[str]:
+        """Execute Tokenize operations natively."""
         pass
 
 
@@ -44,10 +46,12 @@ class SimpleTokenizer(Tokenizer):
     """Simple whitespace and punctuation tokenizer."""
 
     def __init__(self, lowercase: bool = True, min_length: int = 2):
+        """Execute   Init   operations natively."""
         self.lowercase = lowercase
         self.min_length = min_length
 
     def tokenize(self, text: str) -> list[str]:
+        """Execute Tokenize operations natively."""
         if self.lowercase:
             text = text.lower()
         tokens = re.findall(r'\b\w+\b', text)
@@ -102,6 +106,7 @@ class QueryParser:
     """Parse search queries with operators."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._operators = {
             '+': 'must',
             '-': 'must_not',

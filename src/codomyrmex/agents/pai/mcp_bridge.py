@@ -63,6 +63,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parents[4]  # src/codomyrmex/agents/pai
 
 
 def _get_package_version() -> str:
+    """Execute  Get Package Version operations natively."""
     try:
         from importlib.metadata import version
         return version("codomyrmex")
@@ -936,11 +937,13 @@ def create_codomyrmex_mcp_server(
     for uri, res_name, res_desc, mime in _RESOURCE_DEFINITIONS:
         if uri == "codomyrmex://modules":
             def _modules_provider() -> str:
+                """Execute  Modules Provider operations natively."""
                 import codomyrmex
                 return json.dumps({"modules": codomyrmex.list_modules()})
             provider = _modules_provider
         elif uri == "codomyrmex://status":
             def _status_provider() -> str:
+                """Execute  Status Provider operations natively."""
                 return json.dumps(_tool_pai_status())
             provider = _status_provider
         else:
@@ -965,6 +968,7 @@ def create_codomyrmex_mcp_server(
 
     # ── Register discovery metrics resource ────────────────────────
     def _discovery_metrics_provider() -> str:
+        """Execute  Discovery Metrics Provider operations natively."""
         from codomyrmex.model_context_protocol.discovery import MCPDiscovery as _Disc
         disc = _Disc()
         m = disc.get_metrics()

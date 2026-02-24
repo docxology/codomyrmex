@@ -111,14 +111,17 @@ class Span:
 
     @property
     def trace_id(self) -> str:
+        """Execute Trace Id operations natively."""
         return self.context.trace_id
 
     @property
     def span_id(self) -> str:
+        """Execute Span Id operations natively."""
         return self.context.span_id
 
     @property
     def parent_span_id(self) -> str | None:
+        """Execute Parent Span Id operations natively."""
         return self.context.parent_span_id
 
     @property
@@ -130,6 +133,7 @@ class Span:
 
     @property
     def is_finished(self) -> bool:
+        """Execute Is Finished operations natively."""
         return self.end_time is not None
 
     def set_attribute(self, key: str, value: Any) -> "Span":
@@ -221,9 +225,11 @@ class ConsoleExporter(SpanExporter):
     """Export spans to console."""
 
     def __init__(self, pretty: bool = True):
+        """Execute   Init   operations natively."""
         self.pretty = pretty
 
     def export(self, spans: list[Span]) -> None:
+        """Execute Export operations natively."""
         for span in spans:
             data = span.to_dict()
             if self.pretty:
@@ -240,11 +246,13 @@ class InMemoryExporter(SpanExporter):
     """Store spans in memory (useful for testing)."""
 
     def __init__(self, max_spans: int = 1000):
+        """Execute   Init   operations natively."""
         self.max_spans = max_spans
         self.spans: list[Span] = []
         self._lock = threading.Lock()
 
     def export(self, spans: list[Span]) -> None:
+        """Execute Export operations natively."""
         with self._lock:
             self.spans.extend(spans)
             # Trim if over limit
@@ -301,6 +309,7 @@ class Tracer:
         service_name: str = "default",
         exporter: SpanExporter | None = None,
     ):
+        """Execute   Init   operations natively."""
         self.service_name = service_name
         self.exporter = exporter or ConsoleExporter()
         self._pending_spans: list[Span] = []
@@ -444,10 +453,12 @@ def trace(
             ...
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Execute Decorator operations natively."""
         span_name = name or func.__name__
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> T:
+            """Execute Wrapper operations natively."""
             tracer = get_tracer(tracer_name)
             with tracer.span(span_name, kind=kind) as span:
                 span.set_attribute("function.name", func.__name__)

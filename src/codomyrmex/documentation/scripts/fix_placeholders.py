@@ -53,6 +53,7 @@ This directory contains **{doc_type}** documentation. It serves to educate users
 """
 
 def fix_placeholders(root_dir):
+    """Execute Fix Placeholders operations natively."""
     root = Path(root_dir)
     count = 0
 

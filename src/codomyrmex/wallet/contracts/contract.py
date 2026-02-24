@@ -9,6 +9,7 @@ class Contract:
     """A smart contract."""
 
     def __init__(self, address: Address, abi: list[dict[str, Any]] = None, name: str = ""):
+        """Execute   Init   operations natively."""
         self.address = address
         self.abi = abi or []
         self.name = name
@@ -25,13 +26,16 @@ class Contract:
                 self._functions[item["name"]] = func
 
     def get_function(self, name: str) -> ContractFunction | None:
+        """Execute Get Function operations natively."""
         return self._functions.get(name)
 
     def list_functions(self) -> list[str]:
+        """Execute List Functions operations natively."""
         return list(self._functions.keys())
 
     @property
     def function_count(self) -> int:
+        """Execute Function Count operations natively."""
         return len(self._functions)
 
     def view_functions(self) -> list[str]:
@@ -52,6 +56,7 @@ class Contract:
         return issues
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "address": self.address,
             "name": self.name,
@@ -65,6 +70,7 @@ class ContractCall:
     """Build and execute contract calls."""
 
     def __init__(self, contract: Contract, function_name: str):
+        """Execute   Init   operations natively."""
         self.contract = contract
         self.function_name = function_name
         self._args: list[Any] = []
@@ -72,14 +78,17 @@ class ContractCall:
         self._gas_limit: int = 100000
 
     def with_args(self, *args) -> "ContractCall":
+        """Execute With Args operations natively."""
         self._args = list(args)
         return self
 
     def with_value(self, value: int) -> "ContractCall":
+        """Execute With Value operations natively."""
         self._value = value
         return self
 
     def with_gas_limit(self, limit: int) -> "ContractCall":
+        """Execute With Gas Limit operations natively."""
         self._gas_limit = limit
         return self
 

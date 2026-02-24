@@ -134,6 +134,7 @@ class KnowledgeBase:
     """Simple Knowledge Base for deliberative agents."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.facts: dict[str, Any] = {}
         self.rules: list[callable] = []
 

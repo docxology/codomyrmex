@@ -96,6 +96,7 @@ class Container:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._registry: Dict[Type[Any], ServiceDescriptor] = {}
         self._lock = threading.RLock()
         self._scope_stack: List[ScopeContext] = []
@@ -455,13 +456,16 @@ class Container:
     # ──────────────────────────────────────────────
 
     def __contains__(self, interface: Type[Any]) -> bool:
+        """Execute   Contains   operations natively."""
         return self.has(interface)
 
     def __len__(self) -> int:
+        """Execute   Len   operations natively."""
         with self._lock:
             return len(self._registry)
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         with self._lock:
             count = len(self._registry)
         return f"Container(registrations={count})"

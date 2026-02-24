@@ -17,6 +17,7 @@ class Card:
     css_class: str = "card"
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         parts = [f"<h3>{self.title}</h3>"]
         if self.value is not None:
              parts.append(f"<div class='value'>{self.value}</div>")
@@ -29,6 +30,7 @@ class Card:
         return f"<div class='{self.css_class}'>{inner}</div>"
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()
 
 
@@ -36,10 +38,12 @@ class Table:
     """Table component for data display."""
 
     def __init__(self, headers: list[str] | None = None, rows: list[list] | None = None, **kwargs):
+        """Execute   Init   operations natively."""
         self.headers = headers or []
         self.rows = rows or []
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         header = "".join(f"<th>{h}</th>" for h in self.headers)
         body = "".join(
             "<tr>" + "".join(f"<td>{c}</td>" for c in row) + "</tr>"
@@ -48,6 +52,7 @@ class Table:
         return f"<table><thead><tr>{header}</tr></thead><tbody>{body}</tbody></table>"
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()
 
 
@@ -55,12 +60,14 @@ class Dashboard:
     """Dashboard container."""
 
     def __init__(self, title: str = "Dashboard", theme: Theme | None = None):
+        """Execute   Init   operations natively."""
         self.title = title
         self.theme = theme or DEFAULT_THEME
         self.grid = Grid()
         self.sections: list[Any] = self.grid.sections
 
     def add_section(self, title: str, content: Any = None, **kwargs: Any) -> None:
+        """Execute Add Section operations natively."""
         self.grid.add_section(title, content, **kwargs)
 
     def render(self, output_path: str | None = None) -> str:
@@ -81,7 +88,9 @@ class Dashboard:
         return html
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()
 
     def __repr__(self) -> str:
+        """Execute   Repr   operations natively."""
         return f"Dashboard(title={self.title!r}, sections={len(self.sections)})"

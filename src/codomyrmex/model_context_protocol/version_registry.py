@@ -49,12 +49,14 @@ class VersionRegistry:
     """
 
     def __init__(self) -> None:
+        """Execute   Init   operations natively."""
         self._tools: dict[str, VersionedTool] = {}
         self._history: dict[str, list[VersionedTool]] = {}
         self._migrations: list[MigrationStep] = []
 
     @property
     def tool_count(self) -> int:
+        """Execute Tool Count operations natively."""
         return len(self._tools)
 
     def register(

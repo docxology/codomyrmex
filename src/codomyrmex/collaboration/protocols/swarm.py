@@ -8,10 +8,12 @@ class AgentProxy:
     """Mock-friendly proxy for a Codomyrmex agent."""
 
     def __init__(self, name: str, role: str):
+        """Execute   Init   operations natively."""
         self.name = name
         self.role = role
 
     def send_task(self, task: str) -> str:
+        """Execute Send Task operations natively."""
         logger.info(f"Agent {self.name} received task: {task}")
         return f"Result from {self.name}"
 
@@ -19,9 +21,11 @@ class SwarmManager:
     """Orchestrates multiple agents working together."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self.agents: list[AgentProxy] = []
 
     def add_agent(self, agent: AgentProxy):
+        """Execute Add Agent operations natively."""
         self.agents.append(agent)
         logger.info(f"Agent {agent.name} ({agent.role}) joined the swarm")
 

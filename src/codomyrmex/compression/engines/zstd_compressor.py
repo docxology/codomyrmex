@@ -14,6 +14,7 @@ class ZstdCompressor:
     """Compressor using the Zstandard algorithm."""
 
     def __init__(self, level: int = 3):
+        """Execute   Init   operations natively."""
         if not ZSTD_AVAILABLE:
             raise ImportError("zstandard package not available. Install with: pip install zstandard")
         self.level = level

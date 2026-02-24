@@ -47,10 +47,12 @@ class AgentHealth:
 
     @property
     def failure_rate(self) -> float:
+        """Execute Failure Rate operations natively."""
         total = self.total_successes + self.total_failures
         return self.total_failures / total if total > 0 else 0.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "agent_id": self.agent_id,
             "state": self.state.value,
@@ -85,6 +87,7 @@ class CircuitBreaker:
         failure_threshold: int = 3,
         cooldown_seconds: float = 30.0,
     ) -> None:
+        """Execute   Init   operations natively."""
         self._threshold = failure_threshold
         self._cooldown = cooldown_seconds
         self._agents: dict[str, AgentHealth] = {}

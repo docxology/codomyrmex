@@ -7,6 +7,7 @@ from codomyrmex.documents.formats.text_handler import read_text, write_text
 
 @pytest.mark.unit
 class TestTextHandler:
+    """Test suite for TextHandler."""
     def test_read_text(self, tmp_path):
         """Test reading plain text from a real file."""
         f = tmp_path / "test.txt"

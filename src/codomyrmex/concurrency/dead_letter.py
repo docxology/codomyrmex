@@ -33,6 +33,7 @@ class DeadLetterQueue:
     """
 
     def __init__(self, path: str | Path = "/tmp/codomyrmex-dlq.jsonl"):
+        """Execute   Init   operations natively."""
         self._path = Path(path)
         self._lock = threading.Lock()
         self._path.parent.mkdir(parents=True, exist_ok=True)

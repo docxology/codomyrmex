@@ -48,6 +48,7 @@ class Metric(ABC):
     """Base class for metrics."""
 
     def __init__(self, name: str, description: str = "", labels: list[str] | None = None):
+        """Execute   Init   operations natively."""
         self.name = name
         self.description = description
         self.allowed_labels = labels or []
@@ -69,6 +70,7 @@ class Counter(Metric):
     """Counter metric (only increases)."""
 
     def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+        """Execute   Init   operations natively."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -82,9 +84,11 @@ class Counter(Metric):
 
     @property
     def metric_type(self) -> MetricType:
+        """Execute Metric Type operations natively."""
         return MetricType.COUNTER
 
     def _key(self, labels: dict[str, str] | None) -> str:
+        """Execute  Key operations natively."""
         if not labels:
             return ""
         return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
@@ -106,12 +110,14 @@ class Counter(Metric):
 
     @property
     def value(self) -> float:
+        """Execute Value operations natively."""
         return self.get_value()
 
 class Gauge(Metric):
     """Gauge metric (can go up and down)."""
 
     def __init__(self, name: str, description: str = "", labels: dict[str, str] | list[str] | None = None, value: float = 0.0):
+        """Execute   Init   operations natively."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -125,9 +131,11 @@ class Gauge(Metric):
 
     @property
     def metric_type(self) -> MetricType:
+        """Execute Metric Type operations natively."""
         return MetricType.GAUGE
 
     def _key(self, labels: dict[str, str] | None) -> str:
+        """Execute  Key operations natively."""
         if not labels:
             return ""
         return "|".join(f"{k}={v}" for k, v in sorted(labels.items()))
@@ -159,6 +167,7 @@ class Gauge(Metric):
 
     @property
     def value(self) -> float:
+        """Execute Value operations natively."""
         return self.get_value()
 
 class Histogram(Metric):
@@ -173,6 +182,7 @@ class Histogram(Metric):
         labels: dict[str, str] | list[str] | None = None,
         buckets: list[float] | None = None,
     ):
+        """Execute   Init   operations natively."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -184,6 +194,7 @@ class Histogram(Metric):
 
     @property
     def metric_type(self) -> MetricType:
+        """Execute Metric Type operations natively."""
         return MetricType.HISTOGRAM
 
     def observe(self, value: float) -> None:
@@ -226,6 +237,7 @@ class Summary(Metric):
         labels: dict[str, str] | list[str] | None = None,
         quantiles: list[float] | None = None,
     ):
+        """Execute   Init   operations natively."""
         allowed = labels
         if isinstance(labels, dict):
             allowed = list(labels.keys())
@@ -238,6 +250,7 @@ class Summary(Metric):
 
     @property
     def metric_type(self) -> MetricType:
+        """Execute Metric Type operations natively."""
         return MetricType.SUMMARY
 
     def observe(self, value: float) -> None:
@@ -277,14 +290,17 @@ class Timer:
     """Context manager for timing operations."""
 
     def __init__(self, histogram: Histogram):
+        """Execute   Init   operations natively."""
         self.histogram = histogram
         self._start: float = 0
 
     def __enter__(self):
+        """Execute   Enter   operations natively."""
         self._start = time.time()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Execute   Exit   operations natively."""
         duration = time.time() - self._start
         self.histogram.observe(duration)
 
@@ -310,6 +326,7 @@ class MetricsRegistry:
     """
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         self._metrics: dict[str, Metric] = {}
         self._lock = threading.Lock()
 
@@ -390,6 +407,7 @@ class MetricsError(CodomyrmexError):
 class Metrics(MetricsRegistry):
     """Alias for MetricsRegistry for compatibility."""
     def __init__(self, backend="in_memory"):
+        """Execute   Init   operations natively."""
         super().__init__()
         self.backend = backend
         self._counters: dict[str, Counter] = {}
@@ -405,24 +423,28 @@ class Metrics(MetricsRegistry):
         return name
 
     def counter(self, name: str, labels: dict | None = None, description: str = "") -> Counter:
+        """Execute Counter operations natively."""
         key = self._make_key(name, labels)
         if key not in self._counters:
             self._counters[key] = Counter(name=name, labels=labels, description=description)
         return self._counters[key]
 
     def gauge(self, name: str, labels: dict | None = None, description: str = "") -> Gauge:
+        """Execute Gauge operations natively."""
         key = self._make_key(name, labels)
         if key not in self._gauges:
             self._gauges[key] = Gauge(name=name, labels=labels, description=description)
         return self._gauges[key]
 
     def histogram(self, name: str, labels: dict | None = None, description: str = "") -> Histogram:
+        """Execute Histogram operations natively."""
         key = self._make_key(name, labels)
         if key not in self._histograms:
             self._histograms[key] = Histogram(name=name, labels=labels, description=description)
         return self._histograms[key]
 
     def summary(self, name: str, labels: dict | None = None, description: str = "") -> Summary:
+        """Execute Summary operations natively."""
         key = self._make_key(name, labels)
         if key not in self._summaries:
             self._summaries[key] = Summary(name=name, labels=labels, description=description)

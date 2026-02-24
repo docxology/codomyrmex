@@ -104,6 +104,7 @@ class Deployment:
     metrics: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
+        """Execute   Post Init   operations natively."""
         if self.created_at is None:
             self.created_at = datetime.now(timezone.utc)
 
@@ -455,19 +456,20 @@ class DeploymentOrchestrator:
                 f.write(manifest)
                 temp_manifest = f.name
 
-            result = subprocess.run(
-                ["kubectl", "apply", "-f", temp_manifest],
-                capture_output=True,
-                text=True,
-            )
+            try:
+                result = subprocess.run(
+                    ["kubectl", "apply", "-f", temp_manifest],
+                    capture_output=True,
+                    text=True,
+                )
 
-            if result.returncode != 0:
-                raise Exception(f"Kubernetes deployment failed: {result.stderr}")
+                if result.returncode != 0:
+                    raise Exception(f"Kubernetes deployment failed: {result.stderr}")
 
-            logger.info("Kubernetes deployment completed")
-
-            # Clean up temp file
-            os.unlink(temp_manifest)
+                logger.info("Kubernetes deployment completed")
+            finally:
+                # Clean up temp file even if kubectl fails
+                os.unlink(temp_manifest)
 
         except Exception as e:
             logger.error(f"Kubernetes deployment failed: {e}")
@@ -514,7 +516,7 @@ class DeploymentOrchestrator:
             try:
                 logger.info(f"Executing {hook_type} hook: {hook}")
                 result = subprocess.run(
-                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd()
+                    hook, shell=True, capture_output=True, text=True, cwd=os.getcwd()  # SECURITY: Intentional — deploy hooks from config
                 )
 
                 if result.returncode != 0:

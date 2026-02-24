@@ -29,15 +29,20 @@ except ImportError:
     def monitor_performance(*args, **kwargs):
         """No-op decorator."""
         def decorator(func):
+            """Execute Decorator operations natively."""
             return func
         return decorator
 
     class performance_context:
+        """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
+            """Execute   Init   operations natively."""
             pass
         def __enter__(self):
+            """Execute   Enter   operations natively."""
             return self
         def __exit__(self, *args):
+            """Execute   Exit   operations natively."""
             pass
 
 

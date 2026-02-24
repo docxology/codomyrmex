@@ -46,10 +46,12 @@ class SecurityScanResult:
 
     @property
     def critical_count(self) -> int:
+        """Execute Critical Count operations natively."""
         return len([v for v in self.vulnerabilities if v.severity == VulnerabilitySeverity.CRITICAL])
 
     @property
     def high_count(self) -> int:
+        """Execute High Count operations natively."""
         return len([v for v in self.vulnerabilities if v.severity == VulnerabilitySeverity.HIGH])
 
     def summary(self) -> dict[str, int]:
@@ -64,6 +66,7 @@ class SecurityScanner:
     """Security scanner (not yet implemented)."""
 
     def __init__(self):
+        """Execute   Init   operations natively."""
         pass
 
     def scan(self, image: str) -> dict:

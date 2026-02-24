@@ -18,6 +18,7 @@ class Alert(BaseComponent):
     }
 
     def render(self) -> str:
+        """Execute Render operations natively."""
         bg = self._BG_MAP.get(self.level, "#d9edf7")
         return (
             f'<div class="alert alert-{self.level}" '
@@ -26,4 +27,5 @@ class Alert(BaseComponent):
         )
 
     def __str__(self) -> str:
+        """Execute   Str   operations natively."""
         return self.render()

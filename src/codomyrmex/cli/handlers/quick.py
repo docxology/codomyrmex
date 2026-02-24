@@ -47,6 +47,7 @@ def handle_quick_run(
 
     # Progress callback for verbose mode
     def progress(name: str, status: str, details: dict[str, Any]):
+        """Execute Progress operations natively."""
         if verbose:
             print(f"  [{status.upper()}] {name}", end="")
             if "execution_time" in details:
@@ -136,7 +137,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
         import subprocess
         result = subprocess.run(
             cmd,
-            shell=True,
+            shell=True,  # SECURITY: Intentional — pipe executor runs CLI command strings
             capture_output=True,
             text=True
         )
@@ -158,6 +159,7 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
 
         # Create closure to capture cmd
         def make_action(command):
+            """Execute Make Action operations natively."""
             async def action(_task_results=None):
                 return await run_command(command, _task_results)
             return action
@@ -229,6 +231,7 @@ def handle_quick_batch(
     print(f"Running {len(all_scripts)} scripts with {workers} workers")
 
     def progress(name: str, status: str, details: dict[str, Any]):
+        """Execute Progress operations natively."""
         if verbose:
             print(f"  [{status}] {name}")
 

@@ -38,6 +38,7 @@ class Fuzzer:
         strategy: FuzzingStrategy = FuzzingStrategy.RANDOM,
         max_iterations: int = 1000,
     ):
+        """Execute   Init   operations natively."""
         self.strategy = strategy
         self.max_iterations = max_iterations
         self._results: list[FuzzResult] = []

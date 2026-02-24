@@ -95,6 +95,9 @@ class EventType(Enum):
     SECURITY_SCAN_COMPLETE = "security.scan_complete"
     SECURITY_ALERT = "security.alert"
 
+    # Trust / access control events
+    TRUST_LEVEL_CHANGED = "trust.level_changed"
+
     # Orchestrator / Workflow events
     WORKFLOW_STARTED = "workflow.started"
     WORKFLOW_COMPLETED = "workflow.completed"

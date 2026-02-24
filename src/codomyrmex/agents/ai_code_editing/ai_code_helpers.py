@@ -52,7 +52,9 @@ try:
     from codomyrmex.performance import monitor_performance
 except ImportError:
     def monitor_performance(*args, **kwargs):
+        """Execute Monitor Performance operations natively."""
         def decorator(func):
+            """Execute Decorator operations natively."""
             return func
         return decorator
 
@@ -1063,6 +1065,7 @@ def validate_api_keys() -> dict[str, bool]:
 
 
 def setup_environment() -> bool:
+    """Execute Setup Environment operations natively."""
     # Setup environment variables and check dependencies.
     try:
         # Check and setup environment variables if available

@@ -34,6 +34,7 @@ class ExecutionResult:
     duration_ms: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Execute To Dict operations natively."""
         return {
             "success": self.success,
             "completed": self.completed_tasks,
@@ -53,6 +54,7 @@ class PlanExecutor:
     """
 
     def __init__(self, max_retries: int = 1) -> None:
+        """Execute   Init   operations natively."""
         self._max_retries = max_retries
 
     def execute(

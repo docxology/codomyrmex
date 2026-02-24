@@ -14,12 +14,14 @@ class ValidationResult:
     """Result of document validation."""
 
     def __init__(self, is_valid: bool, errors: list[str] = None, warnings: list[str] = None):
+        """Execute   Init   operations natively."""
 
         self.is_valid = is_valid
         self.errors = errors or []
         self.warnings = warnings or []
 
     def __bool__(self) -> bool:
+        """Execute   Bool   operations natively."""
 
         return self.is_valid
 

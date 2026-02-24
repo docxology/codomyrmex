@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2-dev] - 2026-02-24 — "Documentation Accuracy & Syntax Hardening"
+
+### Fixed
+
+- **validation/PAI.md**: Replaced fabricated MCP tool names (`validate_pai_integration`, `validate_module_interface`) with the actual tools (`validate_schema`, `validate_config`, `validation_summary`) — live doc-to-implementation mismatch that would cause agent tool call failures
+- **7 Python syntax errors** (pre-existing, undetected by full test suite): `events/core/mixins.py`, `events/handlers/event_logger.py`, `fpf/io/exporter.py`, `orchestrator/resilience/retry_policy.py`, `performance/caching/cache_manager.py`, `tests/unit/plugin_system/test_plugin_system.py` — all caused by erroneous `"""docstrings"""` inserted inside existing docstrings or with wrong indentation
+
+### Added
+
+- **INDEX.md redesign**: Added Quick Access table, System Status Snapshot table, and Module Layer Browser table; file expanded from 73 → 110 lines with actionable navigation for both human operators and PAI agents
+- **docs_gen/PAI.md**: Expanded from 10-line stub to 117-line full spec (APIDocExtractor, SearchIndex, SiteGenerator, phase mapping)
+- **release/PAI.md**: Expanded from 10-line stub to 122-line full spec (ReleaseValidator, PackageBuilder, DistributionManager, phase mapping)
+- **cli/PAI.md**: Expanded from 39-line thin to 168-line full spec (all command groups, Quick Run patterns, PAI subprocess usage, phase mapping)
+- **serialization/PAI.md**: Expanded from 40-line thin to 122-line full spec (all formats, key exports, phase mapping)
+
+---
+
+## [1.0.2-dev] - 2026-02-24 — "Technical Debt Audit & Cleanup"
+
+### Changed
+
+- **Version bumped** to `1.0.2.dev0` in `__init__.py` and `pyproject.toml`
+- **9 root/src docs** updated from stale `v1.0.0`/`v1.0.1` → `v1.0.2-dev`
+- **Module count corrected** from inflated 98 → verified **87** real modules
+
+### Fixed
+
+- **~209 MB root-level generated bloat** deleted (`output/`, `htmlcov/`, `rollback_plans/`, `coverage.json`, `codomyrmex.log`)
+- **10 junk directories** removed from `src/codomyrmex/` (htmlcov, src, rollback_plans, config, output, pipeline_reports, pipeline_metrics, rollback_history, optimization_data, plugins)
+- **12 bare `except:` clauses** → specific exception types (`OSError`, `Exception`)
+- **1 SyntaxWarning** (invalid escape sequence `\.`) in `test_cross_module_workflows.py`
+- **calendar/ namespace collision** resolved by renaming to `calendar_integration/`
+- **Duplicate `generate_quality_tests`** in `documentation.py` removed
+
+### Added
+
+- **Comprehensive TO-DO.md overhaul** with deep audit data:
+  - Codebase snapshot: 2,046 files, 414K LOC, 23K functions, 5K classes
+  - 30 tracked debt items with severity, targets, and status
+  - New sections: Security patterns, Broad exception handling, Oversized `__init__.py`, Circular imports, Deprecated typing, Wildcard imports, Stale documentation, Skip reduction breakdown
+
+### Metrics
+
+- Stubs: 292 → **88** pass-only functions
+- Bare excepts: 12 → **0**
+- Modules with RASP docs: **100%** (87/87)
+- Assertion-free test functions: **0**
+- Modules without tests: **0/87**
+
+---
+
 ## [1.0.1] - 2026-02-24 — "Depth & Hardening"
 
 ### Added

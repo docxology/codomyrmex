@@ -5,6 +5,7 @@ from codomyrmex.data_visualization.components.timeline import Timeline, Timeline
 from codomyrmex.data_visualization.components.statbox import StatBox
 
 def test_funnel_chart_render():
+    """Test functionality: funnel chart render."""
     stages = ["Leads", "Sales"]
     values = [100, 50]
     plot = FunnelChart("Test Funnel", stages, values)
@@ -13,6 +14,7 @@ def test_funnel_chart_render():
     assert 'alt="Test Funnel"' in html
 
 def test_sankey_diagram_render():
+    """Test functionality: sankey diagram render."""
     links = [("A", "B", 10), ("B", "C", 5)]
     plot = SankeyDiagram(title="Test Sankey", links=links)
     html = plot.to_html()
@@ -21,6 +23,7 @@ def test_sankey_diagram_render():
     assert "A, B, 10" in html
 
 def test_timeline_component():
+    """Test functionality: timeline component."""
     events = [
         TimelineEvent(timestamp="2023-01-01", label="Start", description="Description")
     ]
@@ -31,6 +34,7 @@ def test_timeline_component():
     assert "Description" in html
 
 def test_statbox_component():
+    """Test functionality: statbox component."""
     stat = StatBox(label="Revenue", value="$10k", delta="+5%", direction="up")
     html = str(stat)
     assert "Revenue" in html
