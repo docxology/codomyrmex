@@ -183,16 +183,55 @@ def _perform_docstring_indexing(path: str) -> None:
     logger.info(f"Indexing docstrings for {path}")
 
 def _perform_symbol_extraction(path: str) -> list[str]:
-    """Extract symbols."""
-    raise NotImplementedError(
-        "_perform_symbol_extraction is not yet implemented."
-    )
+    """Extract top-level symbol names (classes and functions) from a Python file."""
+    import ast
+
+    file_path = Path(path)
+    if not file_path.exists() or file_path.suffix != ".py":
+        return []
+
+    try:
+        source = file_path.read_text(encoding="utf-8", errors="ignore")
+        tree = ast.parse(source, filename=str(file_path))
+    except SyntaxError:
+        return []
+
+    symbols = []
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, ast.ClassDef):
+            symbols.append(node.name)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            symbols.append(node.name)
+    return symbols
+
 
 def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
-    """Analyze symbol usage."""
-    raise NotImplementedError(
-        "_perform_symbol_usage_analysis is not yet implemented."
-    )
+    """Count occurrences of each top-level symbol name within the same file."""
+    import ast
+
+    file_path = Path(path)
+    if not file_path.exists() or file_path.suffix != ".py":
+        return {}
+
+    try:
+        source = file_path.read_text(encoding="utf-8", errors="ignore")
+        tree = ast.parse(source, filename=str(file_path))
+    except SyntaxError:
+        return {}
+
+    # First extract top-level symbol names
+    symbols = set()
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            symbols.add(node.name)
+
+    # Count Name references in the AST
+    usage: dict[str, int] = {s: 0 for s in symbols}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name) and node.id in usage:
+            usage[node.id] += 1
+
+    return usage
 
 def _perform_text_search_context_extraction(query: str, path: str) -> str:
     """Extract context surrounding search matches in a file.

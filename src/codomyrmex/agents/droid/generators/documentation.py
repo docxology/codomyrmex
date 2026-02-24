@@ -796,3 +796,7 @@ class DocumentationConsistencyChecker:
 
         return "\\n".join(report_lines)
 
+
+
+__all__ = ["DocumentationConsistencyChecker"]
+'''
