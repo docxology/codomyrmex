@@ -233,6 +233,28 @@ def switch_branch(branch_name: str, repository_path: str = None) -> bool:
         logger.error(f"Unexpected error switching branch: {e}")
         return False
 
+def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
+    """Delete a local git branch.
+
+    Args:
+        branch_name: Name of the branch to delete.
+        repository_path: Path to git repository (defaults to cwd).
+        force: If True, use -D (force delete even if unmerged). Default False uses -d.
+    """
+    if repository_path is None:
+        repository_path = os.getcwd()
+
+    flag = "-D" if force else "-d"
+    result = subprocess.run(
+        ["git", "branch", flag, branch_name],
+        capture_output=True, text=True, cwd=repository_path
+    )
+    if result.returncode != 0:
+        logger.error("Failed to delete branch %s: %s", branch_name, result.stderr.strip())
+        return False
+    logger.info("Deleted branch %s (force=%s)", branch_name, force)
+    return True
+
 @mcp_tool()
 def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""
@@ -844,70 +866,6 @@ def list_stashes(repository_path: str = None) -> list[dict[str, str]]:
 
 # --- Remote Management ---
 
-def add_remote(name: str, url: str, repository_path: str = None) -> bool:
-    """Add a new remote to the repository."""
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        logger.info(f"Adding remote '{name}' ({url}) in {repository_path}")
-        subprocess.run(
-            ["git", "remote", "add", name, url],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to add remote '{name}': {e}")
-        return False
-
-def remove_remote(name: str, repository_path: str = None) -> bool:
-    """Remove a remote from the repository."""
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        logger.info(f"Removing remote '{name}' in {repository_path}")
-        subprocess.run(
-            ["git", "remote", "remove", name],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to remove remote '{name}': {e}")
-        return False
-
-def list_remotes(repository_path: str = None) -> list[dict[str, str]]:
-    """List all remotes in the repository."""
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        result = subprocess.run(
-            ["git", "remote", "-v"],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        remotes = []
-        for line in result.stdout.strip().split("\n"):
-            if line:
-                parts = line.split()
-                if len(parts) >= 2:
-                    remotes.append({"name": parts[0], "url": parts[1]})
-        # Deduplicate by name (git remote -v shows fetch and push separately)
-        unique_remotes = {r["name"]: r["url"] for r in remotes}
-        return [{"name": k, "url": v} for k, v in unique_remotes.items()]
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to list remotes: {e}")
-        return []
-
 def fetch_remote(remote: str = "origin", repository_path: str = None) -> bool:
     """Fetch changes from a remote."""
     if repository_path is None:
@@ -947,27 +905,6 @@ def prune_remote(remote: str = "origin", repository_path: str = None) -> bool:
         return False
 
 # --- State Management ---
-
-def reset_changes(mode: str = "mixed", commit: str = "HEAD", repository_path: str = None) -> bool:
-    """Reset current HEAD to the specified state."""
-    # modes: soft, mixed, hard
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        logger.info(f"Resetting ({mode}) to '{commit}' in {repository_path}")
-        cmd = ["git", "reset", f"--{mode}", commit]
-        subprocess.run(
-            cmd,
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to reset changes: {e}")
-        return False
 
 def revert_commit(commit_sha: str, repository_path: str = None) -> bool:
     """Revert a specific commit."""
@@ -1107,72 +1044,7 @@ def get_commit_details(commit_sha: str, repository_path: str = None) -> dict:
 
 # --- Configuration Management ---
 
-def get_config(key: str, repository_path: str = None) -> str | None:
-    """Get a git configuration value."""
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        result = subprocess.run(
-            ["git", "config", "--get", key],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=False, # Don't error if key not found, just return empty/None
-        )
-        if result.returncode == 0:
-            return result.stdout.strip()
-        return None
-    except Exception as e:
-        logger.error(f"Error getting config {key}: {e}")
-        return None
-
-def set_config(key: str, value: str, scope: str = "local", repository_path: str = None) -> bool:
-    """Set a git configuration value."""
-    # scope: local, global, system
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        cmd = ["git", "config", f"--{scope}", key, value]
-        subprocess.run(
-            cmd,
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to set config {key}: {e}")
-        return False
-
 # --- Advanced Workflows ---
-
-def cherry_pick(commit_sha: str, repository_path: str = None) -> bool:
-    """Cherry-pick a commit."""
-    if repository_path is None:
-        repository_path = os.getcwd()
-
-    try:
-        logger.info(f"Cherry-picking {commit_sha} in {repository_path}")
-        subprocess.run(
-            ["git", "cherry-pick", commit_sha],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to cherry-pick {commit_sha}: {e}")
-        # Abort cherry-pick if failed to avoid leaving repo in bad state?
-        # Or let user handle conflict? Simple wrapper implies return False.
-        try:
-             subprocess.run(["git", "cherry-pick", "--abort"], cwd=repository_path, capture_output=True)
-        except Exception as e:
-            logger.debug(f"Cherry-pick abort cleanup failed: {e}")
-        return False
 
 def init_submodules(repository_path: str = None) -> bool:
     """Initialize and update submodules."""
