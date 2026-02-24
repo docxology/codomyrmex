@@ -37,35 +37,64 @@
 | Top-level modules | 93 |
 | MCP tool files / decorators | 31 / 138 |
 | Tests collected (0 collection errors) | 9,955 |
-| Tests passing | 9,675 |
-| Tests failing | 1 (flaky) |
+| Tests passing | 9,676 |
+| Tests failing | 0 |
 | Warnings | 187 |
 | Coverage | 31% |
 | Python 3.14+ compat | ✅ |
 
 > [!NOTE]
-> Full release history (v0.1.3 → v1.0.0, Sprints 1–41) is archived in [CHANGELOG.md](CHANGELOG.md).
+> Full release history (v0.1.3 → v1.0.1, Sprints 1–41) is archived in [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## 🔧 v1.0.1 — Next Actionable Steps
+## ✅ v1.0.1 — Completed
 
 **Theme**: Depth, coverage, and hardening
-**Effort**: 1–2 focused sessions
 
-### 1. MCP Tool Coverage (P1)
+- [x] MCP tools: 27 → 31 (`agentic_memory`, `collaboration`, `validation`)
+- [x] Test failures: 44 → 0 (trust_gateway, auth, stale paths, secrets namespace, deprecation warnings)
+- [x] Flaky `test_save_plot_pdf_format` replaced with robust `test_save_plot_svg_format`
+- [x] 4 xfail → pass (`generate_secret` stdlib namespace collision fixed)
+- [x] Warning filters for `google.generativeai`, `PytestCollectionWarning`
 
-31/93 modules have `mcp_tools.py`. Recent additions:
+---
 
-- [x] `agentic_memory/mcp_tools.py`: `memory_put`, `memory_get`, `memory_search`
-- [x] `collaboration/mcp_tools.py`: `swarm_submit_task`, `pool_status`, `list_agents`
-- [x] `validation/mcp_tools.py`: `validate_schema`, `validate_config`, `validation_summary`
+## 🔧 v1.0.2 — Next Actionable Steps
 
-### 2. Test Suite Health (P2)
+**Theme**: Coverage depth, type safety, and MCP expansion
+**Effort**: 2–3 focused sessions
 
-- [ ] Investigate ~170 skipped tests — reduce env-specific skips where possible
-- [ ] Re-audit coverage per Tier-1 module, set `fail_under` gates
-- [ ] Clean up any remaining deprecation warnings from `filterwarnings`
+### 1. Coverage 31% → 40%+ (P1)
+
+- [ ] Audit the 10 largest modules by LOC and identify untested code paths
+- [ ] Add targeted tests for un-covered branches in `orchestrator`, `agents`, `events`
+- [ ] Set `--cov-fail-under=35` after first pass, ratchet to 40
+
+### 2. MCP Tool Expansion (P1)
+
+31/93 modules have `mcp_tools.py`. Next 6 high-value additions:
+
+- [ ] `events/mcp_tools.py`: `publish_event`, `subscribe`, `replay_events`
+- [ ] `concurrency/mcp_tools.py`: `submit_task`, `pool_status`, `dead_letter_list`
+- [ ] `system_discovery/mcp_tools.py`: `discover_modules`, `health_check`, `capability_scan`
+- [ ] `networking/mcp_tools.py`: `http_get`, `http_post`, `dns_lookup`
+- [ ] `containerization/mcp_tools.py`: `build_image`, `run_container`, `list_containers`
+- [ ] `templating/mcp_tools.py`: `render_template`, `list_templates`, `validate_template`
+
+### 3. Type Safety (P2)
+
+- [ ] Run `mypy --strict` on `agents/`, `orchestrator/`, `events/` backbone
+- [ ] Fix highest-impact type errors (missing annotations, `Any` escape hatches)
+- [ ] Add `py.typed` marker to backbone modules
+
+### 4. Skip Reduction (P2)
+
+280 skipped tests — most are genuine env-specific. Candidates for reduction:
+
+- [ ] Review 9 "Required modules not available" skips — may be stale guards
+- [ ] Check 8 "git not installed" skips — git is always available in CI
+- [ ] Verify 7 "Search indexer not available" skips
 
 ---
 
@@ -74,7 +103,9 @@
 | Pri | Item | Target | Status |
 | :---: | :--- | :--- | :--- |
 | **P1** | ~~MCP tool coverage 27→30+~~ | `mcp_tools.py` = 31 | ✅ Done |
-| **P2** | `mypy --strict` progressive | 0 errors on backbone | Ongoing |
-| **P2** | Coverage 31%→40%+ | measured, gates set | v1.0.1 |
+| **P1** | ~~Test failures 44→0~~ | `pytest` exit 0 | ✅ Done |
+| **P1** | Coverage 31%→40%+ | measured, gates set | v1.0.2 |
+| **P2** | `mypy --strict` progressive | 0 errors on backbone | v1.0.2 |
+| **P2** | Skip reduction | 280→<250 | v1.0.2 |
 | **P3** | Documentation site (MkDocs) | auto-deploy | Future |
 | **P3** | Event store compaction | JSONL size | Future |
