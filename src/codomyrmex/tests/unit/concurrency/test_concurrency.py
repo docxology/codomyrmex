@@ -126,7 +126,7 @@ def test_rw_lock():
 
 def test_lock_manager_stats(tmp_path):
     """Test LockManager.stats property for Unified Streamline compliance."""
-    from codomyrmex.concurrency.lock_manager import LockStats
+    from codomyrmex.concurrency.locks.lock_manager import LockStats
 
     lock_dir = str(tmp_path / "stats_locks")
     manager = LockManager()
@@ -158,7 +158,7 @@ class TestAsyncSemaphore:
     """Async tests for AsyncLocalSemaphore."""
 
     async def test_async_semaphore_acquire_release(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         sem = AsyncLocalSemaphore(value=2)
         await sem.acquire_async()
@@ -167,7 +167,7 @@ class TestAsyncSemaphore:
         sem.release()
 
     async def test_async_semaphore_blocking(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         sem = AsyncLocalSemaphore(value=1)
         await sem.acquire_async()
@@ -184,7 +184,7 @@ class TestAsyncSemaphore:
         await asyncio.wait_for(sem.acquire_async(), timeout=0.5)
 
     async def test_async_semaphore_concurrent_access(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         sem = AsyncLocalSemaphore(value=3)
         counter = 0
@@ -203,7 +203,7 @@ class TestAsyncSemaphore:
         assert max_concurrent <= 3
 
     async def test_async_semaphore_sync_acquire_raises(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         sem = AsyncLocalSemaphore(value=1)
         result = sem.acquire()
@@ -215,7 +215,7 @@ class TestAsyncLockPatterns:
     """Async tests for common locking patterns."""
 
     async def test_async_resource_access(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         connection_pool = AsyncLocalSemaphore(value=2)
         results = []
@@ -234,7 +234,7 @@ class TestAsyncLockPatterns:
         assert len([r for r in results if r.startswith("end")]) == 5
 
     async def test_async_producer_consumer(self):
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         buffer_size = 3
         available_slots = AsyncLocalSemaphore(buffer_size)
@@ -267,7 +267,7 @@ class TestAsyncLockPatterns:
     async def test_async_rate_limiter(self):
         import time
 
-        from codomyrmex.concurrency.semaphore import AsyncLocalSemaphore
+        from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 
         rate_limiter = AsyncLocalSemaphore(value=3)
 

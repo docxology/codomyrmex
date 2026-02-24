@@ -9,26 +9,26 @@ import time
 import pytest
 
 try:
-    from codomyrmex.performance.async_profiler import AsyncProfiler
-    from codomyrmex.performance.performance_monitor import (
+    from codomyrmex.performance.profiling.async_profiler import AsyncProfiler
+    from codomyrmex.performance.monitoring.performance_monitor import (
         HAS_PSUTIL,
         SystemMonitor,
         get_system_metrics,
     )
-    from codomyrmex.performance.resource_tracker import (
+    from codomyrmex.performance.monitoring.resource_tracker import (
         HAS_PSUTIL as RT_HAS_PSUTIL,
     )
-    from codomyrmex.performance.resource_tracker import (
+    from codomyrmex.performance.monitoring.resource_tracker import (
         ResourceTracker,
         ResourceTrackingResult,
         create_resource_report,
     )
-    from codomyrmex.system_discovery.health_checker import (
+    from codomyrmex.system_discovery.health.health_checker import (
         HealthChecker,
         HealthCheckResult,
         HealthStatus,
     )
-    from codomyrmex.system_discovery.health_reporter import (
+    from codomyrmex.system_discovery.health.health_reporter import (
         HealthReport,
         HealthReporter,
         export_health_report,
@@ -258,7 +258,7 @@ class TestHealthChecker:
         """Test convenience functions with real implementations."""
         # perform_health_check does not exist as a standalone function
         try:
-            from codomyrmex.system_discovery.health_checker import (
+            from codomyrmex.system_discovery.health.health_checker import (
                 check_module_availability,
                 perform_health_check,
             )

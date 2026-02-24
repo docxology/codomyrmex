@@ -13,7 +13,7 @@ Example:
 import os
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 from ..sandbox.container import check_docker_available, run_code_in_docker

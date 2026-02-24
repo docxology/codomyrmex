@@ -181,7 +181,7 @@ class TestClaudeToolRegistration:
         assert {"tool_0", "tool_1", "tool_2"}.issubset(tool_names)
 
     def test_execute_unregistered_tool_raises(self, client):
-        from codomyrmex.agents.exceptions import AgentError
+        from codomyrmex.agents.core.exceptions import AgentError
         with pytest.raises((AgentError, Exception)):
             client.execute_tool_call("nonexistent_tool", {})
 

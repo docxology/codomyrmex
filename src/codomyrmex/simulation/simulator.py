@@ -7,7 +7,7 @@ agent-based modeling and system dynamics simulations.
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.simulation.agent import Agent, Action
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

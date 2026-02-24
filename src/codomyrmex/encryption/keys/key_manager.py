@@ -5,7 +5,7 @@ Key management for encryption keys.
 import tempfile
 from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

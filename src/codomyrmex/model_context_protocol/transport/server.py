@@ -16,7 +16,7 @@ from ..schemas.mcp_schemas import (
     MCPToolCall,
     MCPToolRegistry,
 )
-from codomyrmex.logging_monitoring.correlation import with_correlation
+from codomyrmex.logging_monitoring.core.correlation import with_correlation
 
 
 @dataclass
@@ -404,7 +404,7 @@ class MCPServer:
 
             return response
         else:
-            # DEPRECATED(v0.2.0): Legacy MCPToolResult error wrapping. Will be removed in v0.3.0.
+            # MCPToolResult error wrapping.
             err_msg = result.error.error_message if result.error else "Unknown error"
             err_type = result.error.error_type if result.error else "Unknown"
             return MCPToolError(

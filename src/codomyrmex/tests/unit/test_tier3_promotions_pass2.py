@@ -43,13 +43,13 @@ class TestContentExtractor:
     """Tests for ContentExtractor."""
 
     def test_extract_title(self):
-        from codomyrmex.scrape.content_extractor import ContentExtractor
+        from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
         result = ext.extract("<html><title>Hello World</title></html>")
         assert result.title == "Hello World"
 
     def test_extract_headings(self):
-        from codomyrmex.scrape.content_extractor import ContentExtractor
+        from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor()
         html = "<h1>Main</h1><h2>Sub</h2>"
         result = ext.extract(html)
@@ -57,7 +57,7 @@ class TestContentExtractor:
         assert result.headings[0] == (1, "Main")
 
     def test_extract_links(self):
-        from codomyrmex.scrape.content_extractor import ContentExtractor
+        from codomyrmex.scrape.extractors.content_extractor import ContentExtractor
         ext = ContentExtractor(base_url="https://example.com")
         html = '<a href="/page">Link</a>'
         result = ext.extract(html)
@@ -65,7 +65,7 @@ class TestContentExtractor:
         assert result.links[0][0] == "https://example.com/page"
 
     def test_text_similarity(self):
-        from codomyrmex.scrape.content_extractor import text_similarity
+        from codomyrmex.scrape.extractors.content_extractor import text_similarity
         assert text_similarity("hello world", "hello world") == 1.0
         assert text_similarity("hello", "goodbye") == 0.0
 
@@ -113,7 +113,7 @@ class TestHealthChecker:
     """Tests for HealthChecker."""
 
     def test_healthy_check(self):
-        from codomyrmex.maintenance.health_check import (
+        from codomyrmex.maintenance.health.health_check import (
             HealthChecker, HealthCheck, HealthStatus,
         )
         checker = HealthChecker()
@@ -127,7 +127,7 @@ class TestHealthChecker:
         assert report.healthy_count == 1
 
     def test_unhealthy_check(self):
-        from codomyrmex.maintenance.health_check import (
+        from codomyrmex.maintenance.health.health_check import (
             HealthChecker, HealthCheck, HealthStatus,
         )
         checker = HealthChecker()
@@ -141,7 +141,7 @@ class TestHealthChecker:
         assert report.overall_status == HealthStatus.UNHEALTHY
 
     def test_exception_handling(self):
-        from codomyrmex.maintenance.health_check import (
+        from codomyrmex.maintenance.health.health_check import (
             HealthChecker, HealthCheck, HealthStatus,
         )
         def exploding():
@@ -164,13 +164,13 @@ class TestLogAggregator:
     """Tests for LogAggregator."""
 
     def test_add_and_count(self):
-        from codomyrmex.logging_monitoring.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="test"))
         assert agg.count == 1
 
     def test_search_by_level(self):
-        from codomyrmex.logging_monitoring.log_aggregator import (
+        from codomyrmex.logging_monitoring.core.log_aggregator import (
             LogAggregator, LogRecord, LogQuery,
         )
         agg = LogAggregator()
@@ -181,7 +181,7 @@ class TestLogAggregator:
         assert results[0].level == "error"
 
     def test_stats(self):
-        from codomyrmex.logging_monitoring.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="ok", module="main"))
         agg.add(LogRecord(level="error", message="fail", module="db"))
@@ -190,7 +190,7 @@ class TestLogAggregator:
         assert stats.error_rate == pytest.approx(0.5)
 
     def test_max_records_eviction(self):
-        from codomyrmex.logging_monitoring.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
         agg = LogAggregator(max_records=5)
         for i in range(10):
             agg.add(LogRecord(level="info", message=f"msg {i}"))

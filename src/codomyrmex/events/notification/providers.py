@@ -93,7 +93,7 @@ class FileProvider(NotificationProvider):
 
 
 class WebhookProvider(NotificationProvider):
-    """Send notifications via webhook (mock for testing)."""
+    """Send notifications via webhook."""
 
     def __init__(self, url: str, headers: dict[str, str] | None = None):
         self.url = url
@@ -105,7 +105,7 @@ class WebhookProvider(NotificationProvider):
         return NotificationChannel.WEBHOOK
 
     def send(self, notification: Notification) -> NotificationResult:
-        """Send notification via webhook (mock)."""
+        """Send notification via webhook."""
         self._sent.append(notification)
 
         # In real implementation, would use requests.post(self.url, ...)

@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 # Lazy imports — all cross-module dependencies are optional
 try:
-    from codomyrmex.defense import ActiveDefense
+    from codomyrmex.security.ai_safety import ActiveDefense
 except ImportError:
     ActiveDefense = None
 

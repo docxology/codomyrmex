@@ -21,7 +21,7 @@ except ImportError:
     PERFORMANCE_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+    from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
     PERFORMANCE_LOGGING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
@@ -175,7 +175,7 @@ class TestBenchmarkingUtilities:
         if not PERFORMANCE_LOGGING_AVAILABLE:
             pytest.skip("Performance logging not available")
 
-        from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
         from codomyrmex.performance import run_benchmark
 
         perf_logger = PerformanceLogger("benchmark_test")
@@ -453,7 +453,7 @@ class TestBenchmarkingIntegration:
         if not PERFORMANCE_AVAILABLE:
             pytest.skip("Performance module not available")
 
-        from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
         from codomyrmex.performance import run_benchmark
 
         perf_logger = PerformanceLogger("benchmark_integration")

@@ -32,7 +32,7 @@ def maintenance_health_check(
         check_fn_source: Source of the check function (default runs a basic system check).
     """
     try:
-        from codomyrmex.maintenance.health_check import (
+        from codomyrmex.maintenance.health.health_check import (
             HealthChecker, HealthCheck, HealthStatus,
         )
         checker = HealthChecker()
@@ -60,7 +60,7 @@ def maintenance_health_check(
 def maintenance_list_tasks() -> dict[str, Any]:
     """List maintenance tasks with their current status."""
     try:
-        from codomyrmex.maintenance.scheduler import MaintenanceScheduler
+        from codomyrmex.maintenance.health.scheduler import MaintenanceScheduler
         scheduler = MaintenanceScheduler()
         return {
             "status": "ok",

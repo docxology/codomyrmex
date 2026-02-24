@@ -9,7 +9,7 @@ from typing import Any
 import yaml
 
 from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """API Documentation Generator for Codomyrmex API Documentation Module.
 

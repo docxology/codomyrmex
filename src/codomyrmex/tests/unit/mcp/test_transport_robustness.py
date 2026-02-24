@@ -12,7 +12,7 @@ import time
 
 import pytest
 
-from codomyrmex.model_context_protocol.client import (
+from codomyrmex.model_context_protocol.transport.client import (
     MCPClient,
     MCPClientConfig,
     MCPClientError,
@@ -20,7 +20,7 @@ from codomyrmex.model_context_protocol.client import (
     _HTTPTransport,
     _Transport,
 )
-from codomyrmex.model_context_protocol.server import (
+from codomyrmex.model_context_protocol.transport.server import (
     MCPServer,
     MCPServerConfig,
 )

@@ -57,7 +57,7 @@ except ImportError:
         return decorator
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
 except ImportError:
     def get_logger(name):
         """Fallback logger if codomyrmex logging not available."""

@@ -15,7 +15,7 @@ try:
 except ImportError:
     yaml = None
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.utils.cli_helpers import (
     ensure_output_directory,
     print_section,

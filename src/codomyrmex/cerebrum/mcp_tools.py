@@ -21,7 +21,7 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
         base = CaseBase()
         retriever = CaseRetriever(base)
         
-        # Searching by conceptual similarity (using query as a feature mock here)
+        # Searching by conceptual similarity (using query as a feature filter)
         results = retriever.retrieve({"concept": query}, k=limit)
         
         formatted_results = []

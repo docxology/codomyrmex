@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 
 try:
     setup_logging()

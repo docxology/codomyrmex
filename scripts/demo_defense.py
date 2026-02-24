@@ -15,7 +15,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.defense import ActiveDefense, RabbitHole
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger("demo_defense")
 

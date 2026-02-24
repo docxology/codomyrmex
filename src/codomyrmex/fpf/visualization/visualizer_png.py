@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-from codomyrmex.cerebrum.visualization_base import BaseNetworkVisualizer
-from codomyrmex.cerebrum.visualization_theme import get_default_theme
+from codomyrmex.cerebrum.visualization.visualization_base import BaseNetworkVisualizer
+from codomyrmex.cerebrum.visualization.visualization_theme import get_default_theme
 
 from ..core.models import FPFSpec
 from .graph_generator import GraphGenerator
@@ -348,7 +348,7 @@ class FPFVisualizerPNG:
             raise ValueError("No patterns found for visualization")
 
         # Create figure with theme
-        from codomyrmex.cerebrum.visualization_base import BaseChartVisualizer
+        from codomyrmex.cerebrum.visualization.visualization_base import BaseChartVisualizer
         chart_viz = BaseChartVisualizer(figure_size=self.figsize, dpi=self.dpi)
 
         statuses = list(status_counts.keys())

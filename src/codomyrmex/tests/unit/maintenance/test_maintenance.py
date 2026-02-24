@@ -16,8 +16,8 @@ from codomyrmex.maintenance.analyze_project import (
 )
 
 # Test with real implementations
-from codomyrmex.maintenance.dependency_analyzer import DependencyAnalyzer
-from codomyrmex.maintenance.dependency_checker import check_dependencies, check_python_version
+from codomyrmex.maintenance.deps.dependency_analyzer import DependencyAnalyzer
+from codomyrmex.maintenance.deps.dependency_checker import check_dependencies, check_python_version
 
 # ==================== Module Import Tests ====================
 
@@ -146,7 +146,7 @@ from pathlib import Path
     def test_extract_imports_import_from_statement(self, tmp_path):
         """Test extracting 'from X import Y' statements."""
         test_file = tmp_path / "test.py"
-        test_file.write_text("from codomyrmex.encryption.encryptor import Encryptor")
+        test_file.write_text("from codomyrmex.encryption.core.encryptor import Encryptor")
 
         analyzer = DependencyAnalyzer(tmp_path)
         imports = analyzer.extract_imports(test_file)
@@ -695,7 +695,7 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_empty(self, tmp_path):
         """Test parsing empty requirements file."""
-        from codomyrmex.maintenance.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("")
@@ -706,7 +706,7 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_nonexistent(self, tmp_path):
         """Test parsing nonexistent requirements file."""
-        from codomyrmex.maintenance.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
 
         req_file = tmp_path / "nonexistent.txt"
 
@@ -716,7 +716,7 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_with_packages(self, tmp_path):
         """Test parsing requirements file with packages."""
-        from codomyrmex.maintenance.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("""pytest==7.0.0
@@ -734,7 +734,7 @@ click
 
     def test_parse_requirements_file_with_comments(self, tmp_path):
         """Test parsing requirements file skips comments."""
-        from codomyrmex.maintenance.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("""# Comment line
@@ -748,7 +748,7 @@ pytest==7.0.0  # inline comment
 
     def test_find_all_requirements_files(self, tmp_path):
         """Test finding requirements files."""
-        from codomyrmex.maintenance.dependency_consolidator import find_all_requirements_files
+        from codomyrmex.maintenance.deps.dependency_consolidator import find_all_requirements_files
 
         # Create directory structure
         src_dir = tmp_path / "src" / "codomyrmex"
@@ -768,7 +768,7 @@ pytest==7.0.0  # inline comment
 
     def test_generate_deprecation_notice(self):
         """Test generating deprecation notice."""
-        from codomyrmex.maintenance.dependency_consolidator import generate_deprecation_notice
+        from codomyrmex.maintenance.deps.dependency_consolidator import generate_deprecation_notice
 
         notice = generate_deprecation_notice("auth", "pyproject.toml")
 

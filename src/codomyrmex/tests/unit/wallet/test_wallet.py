@@ -10,8 +10,8 @@ from codomyrmex.wallet.exceptions import (
     WalletKeyError,
     WalletNotFoundError,
 )
-from codomyrmex.wallet.key_rotation import KeyRotation, RotationPolicy, RotationRecord
-from codomyrmex.wallet.recovery import NaturalRitualRecovery, RitualStep, hash_response
+from codomyrmex.wallet.security.key_rotation import KeyRotation, RotationPolicy, RotationRecord
+from codomyrmex.wallet.security.recovery import NaturalRitualRecovery, RitualStep, hash_response
 
 
 @pytest.mark.unit

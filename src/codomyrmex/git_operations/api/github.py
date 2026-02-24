@@ -6,7 +6,7 @@ from datetime import datetime
 import aiohttp
 import requests
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """GitHub API Operations for Codomyrmex Git Operations Module.
 

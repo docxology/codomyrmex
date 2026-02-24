@@ -296,7 +296,7 @@ class Workflow:
 
         # Emit typed event
         try:
-            from .orchestrator_events import workflow_started as _ws
+            from .observability.orchestrator_events import workflow_started as _ws
             self._publish_event(_ws(self.name, len(self.tasks)))
         except ImportError:
             pass
@@ -369,7 +369,7 @@ class Workflow:
                 task.status = TaskStatus.RUNNING
                 self._emit_progress(task.name, "running", {})
                 try:
-                    from .orchestrator_events import task_started as _ts
+                    from .observability.orchestrator_events import task_started as _ts
                     self._publish_event(_ts(self.name, task.name))
                 except ImportError:
                     pass
@@ -386,7 +386,7 @@ class Workflow:
                     self.logger.error(f"Task '{task.name}' failed: {result}")
                     self._emit_progress(task.name, "failed", {"error": str(result)})
                     try:
-                        from .orchestrator_events import task_failed as _tf
+                        from .observability.orchestrator_events import task_failed as _tf
                         self._publish_event(_tf(self.name, task.name, str(result)))
                     except ImportError:
                         pass
@@ -412,7 +412,7 @@ class Workflow:
                         "attempts": task.attempts
                     })
                     try:
-                        from .orchestrator_events import task_completed as _tc
+                        from .observability.orchestrator_events import task_completed as _tc
                         self._publish_event(_tc(
                             self.name, task.name,
                             execution_time=task.execution_time,
@@ -432,7 +432,7 @@ class Workflow:
 
         # Emit typed workflow completed/failed event
         try:
-            from .orchestrator_events import workflow_completed as _wc, workflow_failed as _wf
+            from .observability.orchestrator_events import workflow_completed as _wc, workflow_failed as _wf
             if failed_tasks:
                 self._publish_event(_wf(self.name, f"{len(failed_tasks)} tasks failed"))
             else:

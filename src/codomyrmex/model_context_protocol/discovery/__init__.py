@@ -359,7 +359,7 @@ def mcp_tool(
         # But wait, DiscoveredTool needs parameters.
         # Let's extract them here.
         
-        from codomyrmex.model_context_protocol.validation import (
+        from codomyrmex.model_context_protocol.quality.validation import (
              # We might not want to couple tightly here if validation module is heavy
              # But validation.py is lightweight.
              _generate_schema_from_func
@@ -382,5 +382,3 @@ def mcp_tool(
     return decorator
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use MCPDiscovery. Will be removed in v0.3.0.
-MCPDiscoveryEngine = MCPDiscovery

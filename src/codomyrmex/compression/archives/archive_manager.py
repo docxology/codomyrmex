@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Archive management for creating and extracting archives."""
 

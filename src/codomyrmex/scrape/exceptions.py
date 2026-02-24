@@ -161,9 +161,9 @@ def classify_http_error(status_code: int, url: str = "", body: str = "") -> Scra
     )
 
 
-# ── Backward-compatible aliases (imported by __init__.py) ───────────
+# ── Aliases (imported by __init__.py) ───────────
 
-# Legacy base class name
+# Base class name alias
 ScrapeError = ScrapingError
 
 

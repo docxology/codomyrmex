@@ -4,7 +4,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 
 #!/usr/bin/env python3
 """Main entry point and utility functions

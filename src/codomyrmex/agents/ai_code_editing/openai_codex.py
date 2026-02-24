@@ -6,7 +6,7 @@ from typing import Any
 
 from openai import OpenAI
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """OpenAI Codex Integration Module.
 

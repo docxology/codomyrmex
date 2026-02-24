@@ -411,14 +411,25 @@ def mask_secret(value: str, show_chars: int = 4) -> str:
 
 def generate_secret(length: int = 32, include_special: bool = True) -> str:
     """Generate a random secret."""
-    import secrets
     import string
+    import sys
+
+    # The stdlib 'secrets' module is shadowed by this package
+    # (codomyrmex.security.secrets). Temporarily remove our package from
+    # sys.modules so importlib resolves to the stdlib module.
+    our_module = sys.modules.pop("secrets", None)
+    try:
+        import secrets as _stdlib_secrets
+    finally:
+        # Restore our package in sys.modules
+        if our_module is not None:
+            sys.modules["secrets"] = our_module
 
     chars = string.ascii_letters + string.digits
     if include_special:
         chars += "!@#$%^&*"
 
-    return ''.join(secrets.choice(chars) for _ in range(length))
+    return ''.join(_stdlib_secrets.choice(chars) for _ in range(length))
 
 
 __all__ = [

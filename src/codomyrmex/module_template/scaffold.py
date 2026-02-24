@@ -7,7 +7,7 @@ import re
 import shutil
 from pathlib import Path
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -141,7 +141,7 @@ def _create_core_module(path: Path, module_name: str, description: str) -> None:
 
 from typing import Any, Dict, Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

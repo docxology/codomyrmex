@@ -15,7 +15,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -95,7 +95,6 @@ class APIKeyManager:
         logger.info("Generated API key for %s (label=%s, ttl=%s)", user_id, label, ttl_seconds)
         return key_str
 
-    # Backward compatibility alias
     def generate_api_key(self, user_id: str, permissions: list[str] | None = None) -> str:
         return self.generate(user_id, permissions=permissions)
 
@@ -113,7 +112,6 @@ class APIKeyManager:
         api_key.request_count += 1
         return api_key
 
-    # Backward compatibility alias
     def validate_api_key(self, api_key: str) -> dict | None:
         info = self.validate(api_key)
         if info is None:
@@ -129,7 +127,6 @@ class APIKeyManager:
         logger.info("Revoked API key: %s...", key_str[:20])
         return True
 
-    # Backward compatibility alias
     def revoke_api_key(self, api_key: str) -> bool:
         return self.revoke(api_key)
 

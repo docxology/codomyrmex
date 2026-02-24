@@ -16,14 +16,14 @@ from collections.abc import Callable
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
 from .event_schema import Event, EventSchema, EventType
-from codomyrmex.logging_monitoring.correlation import get_correlation_id
+from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
 
 
 @dataclass

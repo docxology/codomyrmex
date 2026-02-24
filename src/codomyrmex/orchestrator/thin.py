@@ -32,8 +32,8 @@ from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
-from .parallel_runner import ExecutionResult, run_parallel
-from .runner import run_function, run_script
+from .execution.parallel_runner import ExecutionResult, run_parallel
+from .execution.runner import run_function, run_script
 from .workflow import (
     RetryPolicy,
     Workflow,

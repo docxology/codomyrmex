@@ -1,6 +1,6 @@
 """Comprehensive examples for the Physical Management module."""
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.physical_management import (
     ForceField,
     ObjectType,

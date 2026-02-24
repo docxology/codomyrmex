@@ -10,7 +10,7 @@ from typing import Any
 
 import aiohttp
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .manager import PipelineManager
 from .models import Pipeline, PipelineStatus

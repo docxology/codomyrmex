@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Try to import from codomyrmex logging, fallback to standard logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
     def get_codomyrmex_logger(name: str):
         """Get a configured logger for the given name."""
@@ -227,14 +227,11 @@ def apply_style(ax, style_name: str = None):
     return ax
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use save_plot() instead. Will be removed in v0.3.0.
-save_figure = save_plot
 
 
 __all__ = [
     "get_codomyrmex_logger",
     "save_plot",
-    "save_figure",
     "apply_common_aesthetics",
     "apply_codomyrmex_style",
     "get_color_palette",

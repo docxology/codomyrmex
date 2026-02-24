@@ -13,7 +13,7 @@ from typing import Any, Optional
 
 import pytest
 
-from codomyrmex.model_context_protocol.validation import (
+from codomyrmex.model_context_protocol.quality.validation import (
     ValidationResult,
     _coerce_types,
     _extract_input_schema,

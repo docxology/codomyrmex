@@ -3,7 +3,7 @@
 import re
 from collections import Counter
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..models.document import Document
 from .indexer import InMemoryIndex

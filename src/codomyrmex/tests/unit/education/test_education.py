@@ -2,7 +2,7 @@
 
 Tests cover:
 - Module import
-- DifficultyLevel enum values
+- Difficulty enum values
 - Lesson creation and defaults
 - Lesson to_dict serialization
 - Lesson prerequisites
@@ -22,11 +22,11 @@ import json
 
 import pytest
 
-from codomyrmex.documentation.education.curriculum import Curriculum, DifficultyLevel, Lesson
+from codomyrmex.documentation.education.curriculum import Curriculum, Difficulty, Lesson
 
 
 # ======================================================================
-# Module & DifficultyLevel tests
+# Module & Difficulty tests
 # ======================================================================
 
 @pytest.mark.unit
@@ -38,24 +38,24 @@ def test_module_import():
 
 @pytest.mark.unit
 def test_difficulty_level_enum_values():
-    """DifficultyLevel enum has four levels with string values."""
-    assert DifficultyLevel.BEGINNER.value == "beginner"
-    assert DifficultyLevel.INTERMEDIATE.value == "intermediate"
-    assert DifficultyLevel.ADVANCED.value == "advanced"
-    assert DifficultyLevel.EXPERT.value == "expert"
+    """Difficulty enum has four levels with string values."""
+    assert Difficulty.BEGINNER.value == "beginner"
+    assert Difficulty.INTERMEDIATE.value == "intermediate"
+    assert Difficulty.ADVANCED.value == "advanced"
+    assert Difficulty.EXPERT.value == "expert"
 
 
 @pytest.mark.unit
 def test_difficulty_level_enum_member_count():
-    """DifficultyLevel enum has exactly four members."""
-    members = list(DifficultyLevel)
+    """Difficulty enum has exactly four members."""
+    members = list(Difficulty)
     assert len(members) == 4
 
 
 @pytest.mark.unit
 def test_difficulty_level_distinct_values():
-    """Each DifficultyLevel member has a distinct value."""
-    values = [d.value for d in DifficultyLevel]
+    """Each Difficulty member has a distinct value."""
+    values = [d.value for d in Difficulty]
     assert len(values) == len(set(values))
 
 

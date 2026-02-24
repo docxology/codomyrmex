@@ -32,6 +32,12 @@ except ImportError:
     EMAIL_AVAILABLE = False
     GmailProvider = None  # type: ignore
 
+try:
+    from .agentmail import AGENTMAIL_AVAILABLE, AgentMailProvider
+except ImportError:
+    AGENTMAIL_AVAILABLE = False
+    AgentMailProvider = None  # type: ignore
+
 def cli_commands():
     """Return CLI commands for the email module."""
     return {
@@ -40,7 +46,8 @@ def cli_commands():
             "handler": lambda **kwargs: print(
                 f"Email Module v{__version__}\n"
                 f"  Available: {EMAIL_AVAILABLE}\n"
-                f"  Gmail: {GMAIL_AVAILABLE}"
+                f"  Gmail: {GMAIL_AVAILABLE}\n"
+                f"  AgentMail: {AGENTMAIL_AVAILABLE}"
             ),
         }
     }
@@ -52,9 +59,11 @@ __all__ = [
     "EmailDraft",
     "EmailAddress",
     "GmailProvider",
+    "AgentMailProvider",
     # Status flags
     "EMAIL_AVAILABLE",
     "GMAIL_AVAILABLE",
+    "AGENTMAIL_AVAILABLE",
     # Exceptions
     "EmailError",
     "EmailAuthError",

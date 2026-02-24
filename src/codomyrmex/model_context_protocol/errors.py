@@ -132,7 +132,7 @@ class MCPToolError:
         try:
             return cls.from_json(text)
         except (json.JSONDecodeError, KeyError, ValueError):
-            # DEPRECATED(v0.2.0): Legacy unstructured error wrapping. Will be removed in v0.3.0.
+            # Unstructured error wrapping.
             return cls(
                 code=MCPErrorCode.INTERNAL,
                 message=text,

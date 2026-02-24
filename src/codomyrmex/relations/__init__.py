@@ -4,7 +4,7 @@ Provides CRM contact management, social network analysis,
 graph metrics, and UOR (Universal Object Reference) integration.
 """
 
-from .crm import Contact, ContactManager, Interaction
+from .crm.crm import Contact, ContactManager, Interaction
 from .network_analysis import SocialGraph, GraphMetrics
 from .uor import (
     DerivationRecord,

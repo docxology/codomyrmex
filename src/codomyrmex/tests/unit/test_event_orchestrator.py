@@ -10,7 +10,7 @@ import pytest
 
 from codomyrmex.events.core.event_bus import EventBus
 from codomyrmex.events.core.event_schema import Event, EventType
-from codomyrmex.orchestrator.orchestrator_events import (
+from codomyrmex.orchestrator.observability.orchestrator_events import (
     task_completed,
     task_failed,
     task_retrying,

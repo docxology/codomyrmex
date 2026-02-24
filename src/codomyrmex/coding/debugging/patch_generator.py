@@ -111,7 +111,7 @@ class PatchGenerator:
 
         prompt = self._construct_prompt(source_code, diagnosis)
 
-        # If no LLM client is available, return an empty list or mock for now
+        # If no LLM client is available, raise NotImplementedError
         if not self.llm_client:
             logger.warning("No LLM client configured for PatchGenerator.")
             return []

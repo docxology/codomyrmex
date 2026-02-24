@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)

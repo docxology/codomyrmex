@@ -6,7 +6,7 @@ import threading
 import time
 from collections.abc import Callable
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .cron import CronExpression, CronScheduler
 from .recurring import RecurringSchedule, RecurringScheduler

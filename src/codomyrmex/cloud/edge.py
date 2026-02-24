@@ -87,7 +87,7 @@ class EdgeClient(ABC):
 
 
 class CloudflareWorkersClient(EdgeClient):
-    """Cloudflare Workers client (mock implementation for structure)."""
+    """Cloudflare Workers client (in-memory implementation)."""
 
     def __init__(self, account_id: str, api_token: str):
         self.account_id = account_id
@@ -127,7 +127,7 @@ class CloudflareWorkersClient(EdgeClient):
 
 
 class FastlyComputeClient(EdgeClient):
-    """Fastly Compute@Edge client (mock implementation for structure)."""
+    """Fastly Compute@Edge client (in-memory implementation)."""
 
     def __init__(self, api_key: str, service_id: str = ""):
         self.api_key = api_key

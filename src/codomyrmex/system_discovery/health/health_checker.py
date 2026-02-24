@@ -18,7 +18,7 @@ except ImportError:
 from codomyrmex.coding.execution.executor import execute_code
 from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 from codomyrmex.git_operations.core.git import check_git_availability
-from codomyrmex.logging_monitoring.logger_config import (
+from codomyrmex.logging_monitoring.core.logger_config import (
     get_logger,
     log_with_context,
 )

@@ -306,32 +306,17 @@ class TestHelperFunctions:
         masked = mask_secret("short")
         assert masked == "*" * 5
 
-    @pytest.mark.xfail(
-        reason="generate_secret() uses 'import secrets' which may resolve to the "
-               "codomyrmex.security.secrets package instead of stdlib under pytest",
-        raises=AttributeError,
-    )
     def test_generate_secret(self):
         """Should generate secret of specified length."""
         secret = generate_secret(length=32)
         assert len(secret) == 32
 
-    @pytest.mark.xfail(
-        reason="generate_secret() uses 'import secrets' which may resolve to the "
-               "codomyrmex.security.secrets package instead of stdlib under pytest",
-        raises=AttributeError,
-    )
     def test_generate_secret_no_special(self):
         """Should generate secret without special characters."""
         secret = generate_secret(length=100, include_special=False)
         special_chars = "!@#$%^&*"
         assert not any(c in secret for c in special_chars)
 
-    @pytest.mark.xfail(
-        reason="generate_secret() uses 'import secrets' which may resolve to the "
-               "codomyrmex.security.secrets package instead of stdlib under pytest",
-        raises=AttributeError,
-    )
     def test_generate_secret_with_special(self):
         """Should include special characters when requested."""
         # Generate a long secret to increase chance of special chars
@@ -339,11 +324,6 @@ class TestHelperFunctions:
         special_chars = "!@#$%^&*"
         assert any(c in secret for c in special_chars)
 
-    @pytest.mark.xfail(
-        reason="generate_secret() uses 'import secrets' which may resolve to the "
-               "codomyrmex.security.secrets package instead of stdlib under pytest",
-        raises=AttributeError,
-    )
     def test_generate_secret_uniqueness(self):
         """Should generate unique secrets."""
         s1 = generate_secret(length=32)

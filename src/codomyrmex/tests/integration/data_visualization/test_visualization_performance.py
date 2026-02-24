@@ -36,13 +36,13 @@ except ImportError:
     PERFORMANCE_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+    from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
     PERFORMANCE_LOGGING_AVAILABLE = True
 except ImportError:
     PERFORMANCE_LOGGING_AVAILABLE = False
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False

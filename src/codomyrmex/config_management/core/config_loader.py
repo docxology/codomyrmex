@@ -16,12 +16,12 @@ import yaml
 
 # Use proper relative imports
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
     logger = get_logger(__name__)
 except ImportError:
     # Fallback - should use get_logger from logging_monitoring
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 
 # Import exceptions

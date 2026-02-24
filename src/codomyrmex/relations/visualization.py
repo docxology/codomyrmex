@@ -13,7 +13,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any
 
-from .crm import Contact, ContactManager
+from .crm.crm import Contact, ContactManager
 
 
 def render_social_graph(cm: ContactManager) -> dict[str, Any]:

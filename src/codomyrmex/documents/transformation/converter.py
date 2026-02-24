@@ -1,6 +1,6 @@
 """Document format conversion."""
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..exceptions import DocumentConversionError, UnsupportedFormatError
 from ..models.document import Document, DocumentFormat

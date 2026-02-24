@@ -7,7 +7,7 @@ from collections.abc import Generator
 
 import pytest
 
-from codomyrmex.logging_monitoring.logger_config import setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import setup_logging
 
 """
 Shared fixtures and configuration for performance tests.

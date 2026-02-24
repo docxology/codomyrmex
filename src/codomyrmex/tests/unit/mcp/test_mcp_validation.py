@@ -6,7 +6,7 @@ and error reporting.
 
 import pytest
 
-from codomyrmex.model_context_protocol.validation import (
+from codomyrmex.model_context_protocol.quality.validation import (
     ValidationResult,
     validate_tool_arguments,
 )

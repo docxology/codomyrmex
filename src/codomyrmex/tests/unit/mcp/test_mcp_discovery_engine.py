@@ -1,7 +1,7 @@
 """Tests for MCP Discovery Engine (Stream 3: error-isolated scanning).
 
 Verifies:
-- MCPDiscoveryEngine instantiation and API surface
+- MCPDiscovery instantiation and API surface
 - Error-isolated package scanning (broken modules don't crash the scan)
 - DiscoveryReport structure with tools and failed_modules
 - Incremental single-module scanning
@@ -20,7 +20,7 @@ from codomyrmex.model_context_protocol.discovery import (
     DiscoveryMetrics,
     DiscoveryReport,
     FailedModule,
-    MCPDiscoveryEngine,
+    MCPDiscovery,
 )
 
 
@@ -28,20 +28,20 @@ from codomyrmex.model_context_protocol.discovery import (
 
 
 @pytest.fixture()
-def engine() -> MCPDiscoveryEngine:
+def engine() -> MCPDiscovery:
     """Fresh discovery engine instance."""
-    return MCPDiscoveryEngine()
+    return MCPDiscovery()
 
 
 # ── Instantiation ─────────────────────────────────────────────────────
 
 
-class TestMCPDiscoveryEngineInstantiation:
-    def test_creates_with_empty_state(self, engine: MCPDiscoveryEngine) -> None:
+class TestMCPDiscoveryInstantiation:
+    def test_creates_with_empty_state(self, engine: MCPDiscovery) -> None:
         assert engine.tool_count == 0
         assert engine.list_tools() == []
 
-    def test_get_tool_returns_none_for_unknown(self, engine: MCPDiscoveryEngine) -> None:
+    def test_get_tool_returns_none_for_unknown(self, engine: MCPDiscovery) -> None:
         assert engine.get_tool("nonexistent") is None
 
 
@@ -50,7 +50,7 @@ class TestMCPDiscoveryEngineInstantiation:
 
 class TestErrorIsolatedScanning:
     def test_scan_nonexistent_package_returns_failed_module(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         report = engine.scan_package("totally.nonexistent.package.xyz")
         assert isinstance(report, DiscoveryReport)
@@ -62,13 +62,13 @@ class TestErrorIsolatedScanning:
         assert fm.error_type in ("ModuleNotFoundError", "ImportError")
 
     def test_scan_nonexistent_records_timing(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         report = engine.scan_package("totally.nonexistent.package.xyz")
         assert report.scan_duration_ms >= 0
 
     def test_scan_real_package_returns_report(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         """Scan the discovery package itself — it is always importable."""
         report = engine.scan_package("codomyrmex.model_context_protocol.discovery")
@@ -78,14 +78,14 @@ class TestErrorIsolatedScanning:
         assert report.scan_duration_ms >= 0
 
     def test_scan_package_populates_engine(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         """After scanning a package, engine.tool_count should reflect found tools."""
         report = engine.scan_package("codomyrmex.model_context_protocol.discovery")
         assert engine.tool_count == len(report.tools)
 
     def test_broken_submodule_does_not_crash_scan(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         """Inject a broken module into sys.modules and verify scan survives."""
         # Create a fake package with a broken sub-module
@@ -110,12 +110,12 @@ class TestErrorIsolatedScanning:
 
 
 class TestIncrementalScanning:
-    def test_scan_single_module(self, engine: MCPDiscoveryEngine) -> None:
+    def test_scan_single_module(self, engine: MCPDiscovery) -> None:
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert isinstance(report, DiscoveryReport)
         assert report.modules_scanned == 1
 
-    def test_scan_nonexistent_module(self, engine: MCPDiscoveryEngine) -> None:
+    def test_scan_nonexistent_module(self, engine: MCPDiscovery) -> None:
         """ModuleScanner catches ImportError internally, so we get an empty report."""
         report = engine.scan_module("nonexistent_module_xyz_123")
         # ModuleScanner.scan_module handles the ImportError gracefully
@@ -124,7 +124,7 @@ class TestIncrementalScanning:
         assert report.modules_scanned == 1
 
     def test_incremental_scan_merges_tools(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         """Scanning two different modules should accumulate tools."""
         r1 = engine.scan_module("codomyrmex.model_context_protocol.discovery")
@@ -134,7 +134,7 @@ class TestIncrementalScanning:
         assert engine.tool_count >= 0
 
     def test_scan_module_records_timing(
-        self, engine: MCPDiscoveryEngine
+        self, engine: MCPDiscovery
     ) -> None:
         report = engine.scan_module("codomyrmex.model_context_protocol.discovery")
         assert report.scan_duration_ms >= 0
@@ -144,7 +144,7 @@ class TestIncrementalScanning:
 
 
 class TestDiscoveryMetrics:
-    def test_initial_metrics_are_zeroed(self, engine: MCPDiscoveryEngine) -> None:
+    def test_initial_metrics_are_zeroed(self, engine: MCPDiscovery) -> None:
         m = engine.get_metrics()
         assert isinstance(m, DiscoveryMetrics)
         assert m.total_tools == 0
@@ -154,20 +154,20 @@ class TestDiscoveryMetrics:
         assert m.cache_hits == 0
         assert m.last_scan_time is None
 
-    def test_metrics_update_after_scan(self, engine: MCPDiscoveryEngine) -> None:
+    def test_metrics_update_after_scan(self, engine: MCPDiscovery) -> None:
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
         assert m.scan_duration_ms > 0
         assert m.last_scan_time is not None
 
-    def test_cache_hit_tracking(self, engine: MCPDiscoveryEngine) -> None:
+    def test_cache_hit_tracking(self, engine: MCPDiscovery) -> None:
         engine.record_cache_hit()
         engine.record_cache_hit()
         engine.record_cache_hit()
         m = engine.get_metrics()
         assert m.cache_hits == 3
 
-    def test_failed_modules_in_metrics(self, engine: MCPDiscoveryEngine) -> None:
+    def test_failed_modules_in_metrics(self, engine: MCPDiscovery) -> None:
         engine.scan_package("totally.nonexistent.package.xyz")
         m = engine.get_metrics()
         # Nonexistent package → no metrics update (early return), but let's check

@@ -154,8 +154,6 @@ class OpenClawError(AgentError):
             self.context["exit_code"] = exit_code
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use AgentConfigurationError. Will be removed in v0.3.0.
-ConfigError = AgentConfigurationError
 
 
 class SessionError(AgentError):

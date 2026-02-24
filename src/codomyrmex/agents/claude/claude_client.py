@@ -443,19 +443,6 @@ class ClaudeClient(APIAgentBase):
             )
             yield f"Error: {str(e)}"
 
-    # DEPRECATED(v0.2.0): Use _build_messages_with_system() instead. Will be removed in v0.3.0.
-    def _build_messages(self, request: AgentRequest) -> list[dict[str, str]]:
-        """Build Claude messages from request.
-
-        Args:
-            request: Agent request
-
-        Returns:
-            List of message dictionaries
-        """
-        messages, _ = self._build_messages_with_system(request)
-        return messages
-
     def _build_messages_with_system(
         self, request: AgentRequest
     ) -> tuple[list[dict[str, Any]], str | None]:

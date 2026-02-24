@@ -14,7 +14,7 @@ from codomyrmex.scrape.exceptions import (
     ScrapeError,
     ScrapeValidationError,
 )
-from codomyrmex.scrape.scraper import Scraper
+from codomyrmex.scrape.extractors.scraper import Scraper
 
 
 @pytest.mark.unit

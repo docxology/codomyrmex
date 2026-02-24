@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..engines.template_engine import Template, TemplateEngine
 
@@ -52,9 +52,8 @@ class TemplateManager:
             self._parents[name] = parent
         logger.info("Registered template: %s", name)
 
-    # Alias for backward compatibility
     def add_template(self, name: str, template: str | Template) -> None:
-        """Add a template (backward-compatible)."""
+        """Add a template."""
         if isinstance(template, Template):
             self._templates[name] = template.source if hasattr(template, "source") else str(template)
         else:

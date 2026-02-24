@@ -6,7 +6,7 @@ from typing import Any
 from cryptography.fernet import Fernet
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Secret Management Module for Codomyrmex Configuration Management."""
 

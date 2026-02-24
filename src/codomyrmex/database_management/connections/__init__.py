@@ -109,8 +109,8 @@ class Connection(ABC, Generic[T]):
         pass
 
 
-class MockConnection(Connection[dict]):
-    """Mock connection for testing."""
+class InMemoryConnection(Connection[dict]):
+    """In-memory connection for lightweight or test usage."""
 
     def __init__(self, connection_id: int = 0):
         super().__init__()
@@ -123,7 +123,7 @@ class MockConnection(Connection[dict]):
         if self._closed:
             raise RuntimeError("Connection is closed")
         self._queries.append(query)
-        return {"result": "mock", "query": query}
+        return {"result": "in_memory", "query": query}
 
     def is_valid(self) -> bool:
         """Check if connection is valid."""
@@ -144,18 +144,18 @@ class ConnectionFactory(ABC, Generic[T]):
         pass
 
 
-class MockConnectionFactory(ConnectionFactory[dict]):
-    """Factory for mock connections."""
+class InMemoryConnectionFactory(ConnectionFactory[dict]):
+    """Factory for in-memory connections."""
 
     def __init__(self):
         self._counter = 0
         self._lock = threading.Lock()
 
-    def create(self) -> MockConnection:
-        """Create a new mock connection."""
+    def create(self) -> InMemoryConnection:
+        """Create a new in-memory connection."""
         with self._lock:
             self._counter += 1
-            return MockConnection(self._counter)
+            return InMemoryConnection(self._counter)
 
 
 class ConnectionPool(Generic[T]):
@@ -437,9 +437,9 @@ __all__ = [
     # Base classes
     "Connection",
     "ConnectionFactory",
-    # Mock implementations
-    "MockConnection",
-    "MockConnectionFactory",
+    # In-memory implementations
+    "InMemoryConnection",
+    "InMemoryConnectionFactory",
     # Pool
     "ConnectionPool",
     # Health

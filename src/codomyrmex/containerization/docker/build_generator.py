@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Build Generator for Codomyrmex Containerization."""
 

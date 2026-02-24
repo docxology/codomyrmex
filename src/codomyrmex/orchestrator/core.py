@@ -8,7 +8,7 @@ This module provides:
 """
 
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.logger_config import LogContext, PerformanceLogger
+from codomyrmex.logging_monitoring.core.logger_config import LogContext, PerformanceLogger
 
 logger = get_logger(__name__)
 
@@ -30,8 +30,8 @@ from codomyrmex.utils.cli_helpers import (
 
 from .config import get_script_config, load_config
 from .discovery import discover_scripts
-from .reporting import generate_report, generate_script_documentation, save_log
-from .runner import run_script
+from .observability.reporting import generate_report, generate_script_documentation, save_log
+from .execution.runner import run_script
 
 
 def main(argv=None):

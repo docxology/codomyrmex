@@ -32,7 +32,6 @@ from codomyrmex.exceptions import CodomyrmexError
 from .documentation_generator import DocumentationGenerator
 from .mcp_tools import execute_mcp_tool, get_mcp_tool_definitions, get_mcp_tools
 from .orchestration_engine import (
-    OrchestrationContext,
     OrchestrationEngine,
     OrchestrationSession,
     SessionStatus,
@@ -100,7 +99,6 @@ __all__ = [
     # Sessions & engine
     "OrchestrationSession",
     "SessionStatus",
-    "OrchestrationContext",
     # MCP tools
     "get_mcp_tools",
     "get_mcp_tool_definitions",

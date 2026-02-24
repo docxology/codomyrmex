@@ -2,7 +2,7 @@
 
 Verifies:
 - DiscoveryMetrics dataclass fields
-- Metrics integration via MCPDiscoveryEngine
+- Metrics integration via MCPDiscovery
 - Discovery metrics resource endpoint structure
 """
 
@@ -14,7 +14,7 @@ import pytest
 
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveryMetrics,
-    MCPDiscoveryEngine,
+    MCPDiscovery,
 )
 
 
@@ -56,27 +56,27 @@ class TestDiscoveryMetricsDataclass:
 
 class TestMetricsViaEngine:
     def test_fresh_engine_metrics(self) -> None:
-        engine = MCPDiscoveryEngine()
+        engine = MCPDiscovery()
         m = engine.get_metrics()
         assert m.total_tools == 0
         assert m.cache_hits == 0
 
     def test_scan_updates_metrics(self) -> None:
-        engine = MCPDiscoveryEngine()
+        engine = MCPDiscovery()
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
         assert m.scan_duration_ms > 0
         assert m.last_scan_time is not None
 
     def test_cache_hit_increments_in_metrics(self) -> None:
-        engine = MCPDiscoveryEngine()
+        engine = MCPDiscovery()
         engine.record_cache_hit()
         engine.record_cache_hit()
         m = engine.get_metrics()
         assert m.cache_hits == 2
 
     def test_metrics_reflect_tool_count(self) -> None:
-        engine = MCPDiscoveryEngine()
+        engine = MCPDiscovery()
         engine.scan_package("codomyrmex.model_context_protocol.discovery")
         m = engine.get_metrics()
         assert m.total_tools == engine.tool_count
@@ -123,9 +123,9 @@ class TestStreamThreeExports:
             DiscoveryMetrics,
             DiscoveryReport,
             FailedModule,
-            MCPDiscoveryEngine,
+            MCPDiscovery,
         )
         assert DiscoveryMetrics is not None
         assert DiscoveryReport is not None
         assert FailedModule is not None
-        assert MCPDiscoveryEngine is not None
+        assert MCPDiscovery is not None

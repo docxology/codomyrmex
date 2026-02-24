@@ -12,7 +12,7 @@ class TestConfigValidator:
     def test_config_validator_creation(self):
         """Test creating a ConfigValidator."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigSchema,
                 ConfigValidator,
             )
@@ -27,7 +27,7 @@ class TestConfigValidator:
     def test_config_schema_creation(self):
         """Test creating configuration schemas."""
         try:
-            from codomyrmex.config_management.config_validator import ConfigSchema
+            from codomyrmex.config_management.validation.config_validator import ConfigSchema
         except ImportError:
             pytest.skip("ConfigSchema not available")
 
@@ -48,7 +48,7 @@ class TestConfigValidator:
     def test_validate_simple_config(self):
         """Test validating a simple configuration."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigSchema,
                 ConfigValidator,
             )
@@ -83,7 +83,7 @@ class TestConfigValidator:
     def test_validate_constraints(self):
         """Test constraint validation."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigSchema,
                 ConfigValidator,
             )
@@ -126,7 +126,7 @@ class TestConfigValidator:
     def test_custom_validator(self):
         """Test custom validator functionality."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigValidator,
                 ValidationIssue,
                 ValidationSeverity,
@@ -163,7 +163,7 @@ class TestConfigValidator:
     def test_premade_schemas(self):
         """Test premade schema functions."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 get_ai_model_config_schema,
                 get_database_config_schema,
                 get_logging_config_schema,
@@ -191,7 +191,7 @@ class TestConfigValidator:
     def test_convenience_functions(self):
         """Test convenience validation functions with real ConfigSchema."""
         try:
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigSchema,
                 validate_config_schema,
             )
@@ -220,7 +220,7 @@ class TestConfigMigrator:
     def test_config_migrator_creation(self):
         """Test creating a ConfigMigrator."""
         try:
-            from codomyrmex.config_management.config_migrator import ConfigMigrator
+            from codomyrmex.config_management.migration.config_migrator import ConfigMigrator
         except ImportError:
             pytest.skip("ConfigMigrator not available")
 
@@ -232,7 +232,7 @@ class TestConfigMigrator:
     def test_add_migration_rule(self):
         """Test adding migration rules."""
         try:
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 ConfigMigrator,
                 MigrationAction,
                 MigrationRule,
@@ -259,7 +259,7 @@ class TestConfigMigrator:
     def test_migrate_config_simple(self):
         """Test simple configuration migration."""
         try:
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 ConfigMigrator,
                 MigrationAction,
                 MigrationRule,
@@ -295,7 +295,7 @@ class TestConfigMigrator:
     def test_migration_with_transform(self):
         """Test migration with value transformation."""
         try:
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 ConfigMigrator,
                 MigrationAction,
                 MigrationRule,
@@ -326,7 +326,7 @@ class TestConfigMigrator:
     def test_migration_path_finding(self):
         """Test finding migration paths."""
         try:
-            from codomyrmex.config_management.config_migrator import ConfigMigrator
+            from codomyrmex.config_management.migration.config_migrator import ConfigMigrator
         except ImportError:
             pytest.skip("ConfigMigrator not available")
 
@@ -350,7 +350,7 @@ class TestConfigMigrator:
     def test_migration_error_handling(self):
         """Test migration error handling."""
         try:
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 ConfigMigrator,
                 MigrationAction,
                 MigrationRule,
@@ -382,7 +382,7 @@ class TestConfigMigrator:
     def test_premade_migration_rules(self):
         """Test premade migration rule functions."""
         try:
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 create_database_migration_rules,
                 create_logging_migration_rules,
             )
@@ -400,7 +400,7 @@ class TestConfigMigrator:
     def test_convenience_migration(self):
         """Test convenience migration function with real ConfigMigrator."""
         try:
-            from codomyrmex.config_management.config_migrator import migrate_config
+            from codomyrmex.config_management.migration.config_migrator import migrate_config
         except ImportError:
             pytest.skip("Convenience migration function not available")
 
@@ -423,11 +423,11 @@ class TestConfigurationManagerEnhanced:
     def test_load_config_with_validation(self, tmp_path):
         """Test loading configuration with validation using real implementations."""
         try:
-            from codomyrmex.config_management.config_loader import (
+            from codomyrmex.config_management.core.config_loader import (
                 Configuration,
                 ConfigurationManager,
             )
-            from codomyrmex.config_management.config_validator import (
+            from codomyrmex.config_management.validation.config_validator import (
                 ConfigSchema,
                 ConfigValidator,
             )
@@ -459,11 +459,11 @@ class TestConfigurationManagerEnhanced:
     def test_migrate_configuration(self):
         """Test configuration migration with real ConfigMigrator."""
         try:
-            from codomyrmex.config_management.config_loader import (
+            from codomyrmex.config_management.core.config_loader import (
                 Configuration,
                 ConfigurationManager,
             )
-            from codomyrmex.config_management.config_migrator import (
+            from codomyrmex.config_management.migration.config_migrator import (
                 ConfigMigrator,
                 MigrationAction,
                 MigrationRule,
@@ -489,8 +489,8 @@ class TestConfigurationManagerEnhanced:
     def test_validate_config_schema(self):
         """Test configuration schema validation with real validator."""
         try:
-            from codomyrmex.config_management.config_loader import ConfigurationManager
-            from codomyrmex.config_management.config_validator import ConfigSchema
+            from codomyrmex.config_management.core.config_loader import ConfigurationManager
+            from codomyrmex.config_management.validation.config_validator import ConfigSchema
         except ImportError:
             pytest.skip("ConfigurationManager not available")
 
@@ -508,7 +508,7 @@ class TestConfigurationManagerEnhanced:
     def test_get_validation_report(self):
         """Test getting validation reports."""
         try:
-            from codomyrmex.config_management.config_loader import (
+            from codomyrmex.config_management.core.config_loader import (
                 Configuration,
                 ConfigurationManager,
             )
@@ -537,7 +537,7 @@ class TestConfigurationManagerEnhanced:
     def test_create_migration_backup(self):
         """Test creating migration backups with real datetime."""
         try:
-            from codomyrmex.config_management.config_loader import (
+            from codomyrmex.config_management.core.config_loader import (
                 Configuration,
                 ConfigurationManager,
             )
@@ -564,7 +564,7 @@ class TestConfigurationManagerEnhanced:
     def test_migration_error_handling(self):
         """Test migration error handling."""
         try:
-            from codomyrmex.config_management.config_loader import ConfigurationManager
+            from codomyrmex.config_management.core.config_loader import ConfigurationManager
         except ImportError:
             pytest.skip("ConfigurationManager not available")
 

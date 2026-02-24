@@ -92,7 +92,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 27 modules are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 28 modules are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -112,13 +112,14 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 - `plugin_system` - Plugin discovery and dependency resolution
 - `relations` - Relationship strength scoring
 - `agents/core` - ThinkingAgent reasoning traces and depth control
+- `email` - AgentMail inbox/message/thread management and webhook registration
 
 ## PAI Integration
 
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces 115 tools across 27 modules, with 2 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 18 static tools (15 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces 123 tools across 28 modules, with 2 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers

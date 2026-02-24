@@ -1,6 +1,6 @@
 """Education curriculum module.
 
-Provides Difficulty/DifficultyLevel enum, Lesson, and Curriculum
+Provides Difficulty enum, Lesson, and Curriculum
 for building structured learning paths.
 """
 
@@ -19,8 +19,10 @@ class Difficulty(Enum):
     EXPERT = "expert"
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use Difficulty. Will be removed in v0.3.0.
+# Backward-compatible alias used by tests and external consumers
 DifficultyLevel = Difficulty
+
+
 
 # Ordered difficulty levels for comparison
 _DIFFICULTY_ORDER = [Difficulty.BEGINNER, Difficulty.INTERMEDIATE, Difficulty.ADVANCED, Difficulty.EXPERT]

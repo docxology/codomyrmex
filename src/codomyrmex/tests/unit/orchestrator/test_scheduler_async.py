@@ -15,7 +15,7 @@ import asyncio
 
 import pytest
 
-from codomyrmex.orchestrator.async_scheduler import (
+from codomyrmex.orchestrator.execution.async_scheduler import (
     AsyncJob,
     AsyncJobStatus,
     AsyncScheduler,

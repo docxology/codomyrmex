@@ -27,6 +27,22 @@ wheels = [
 ]
 
 [[package]]
+name = "agentmail"
+version = "0.2.17"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "pydantic-core" },
+    { name = "typing-extensions" },
+    { name = "websockets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/ce/b5d6bf99ed7b2e6f7ad5d4e05b593bd5de6304bcc047935f555a87d51758/agentmail-0.2.17.tar.gz", hash = "sha256:400d4c800eaaf33ab435616a3e687876ab118a92cf786f606cf5801f4b6871a4", size = 88291, upload-time = "2026-02-17T19:11:14.325Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/72/6440fd842ef591cec7506b47058c549b8a1ce4963e914a8de1debcb01e83/agentmail-0.2.17-py3-none-any.whl", hash = "sha256:091d47e34d45c4fbadb19ca96cc71af97b3622900921660ec56907b999f218ba", size = 196770, upload-time = "2026-02-17T19:11:12.802Z" },
+]
+
+[[package]]
 name = "aiohappyeyeballs"
 version = "2.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1018,6 +1034,7 @@ documents = [
     { name = "pypdf" },
 ]
 email = [
+    { name = "agentmail" },
     { name = "google-api-python-client" },
     { name = "google-auth-httplib2" },
     { name = "google-auth-oauthlib" },
@@ -1115,6 +1132,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "absl-py", specifier = ">=1.4.0" },
+    { name = "agentmail", marker = "extra == 'email'", specifier = ">=0.2.17" },
     { name = "aiohttp", specifier = ">=3.13.3" },
     { name = "alembic", marker = "extra == 'physical-management'", specifier = ">=1.7.0" },
     { name = "anthropic", specifier = ">=0.64.0" },

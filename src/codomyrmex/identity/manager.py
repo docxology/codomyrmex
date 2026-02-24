@@ -4,7 +4,7 @@ Orchestrates multiple personas and manages the active identity context.
 """
 
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .persona import Persona, VerificationLevel
 

@@ -6,7 +6,7 @@ import heapq
 import time
 from datetime import datetime
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..job import Job, JobStatus
 

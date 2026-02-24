@@ -112,13 +112,13 @@ class TestWarmUpConfig:
     """Verify MCPServerConfig has warm_up field."""
 
     def test_warm_up_default_true(self) -> None:
-        from codomyrmex.model_context_protocol.server import MCPServerConfig
+        from codomyrmex.model_context_protocol.transport.server import MCPServerConfig
 
         config = MCPServerConfig()
         assert config.warm_up is True
 
     def test_warm_up_can_be_disabled(self) -> None:
-        from codomyrmex.model_context_protocol.server import MCPServerConfig
+        from codomyrmex.model_context_protocol.transport.server import MCPServerConfig
 
         config = MCPServerConfig(warm_up=False)
         assert config.warm_up is False

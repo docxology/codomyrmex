@@ -21,7 +21,7 @@ import numpy as np
 from codomyrmex.coding import execute_code
 from codomyrmex.data_visualization import create_line_plot
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 
 try:
 

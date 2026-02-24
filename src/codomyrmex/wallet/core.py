@@ -9,8 +9,8 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-from codomyrmex.encryption.key_manager import KeyManager
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.encryption.keys.key_manager import KeyManager
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .exceptions import WalletError, WalletKeyError, WalletNotFoundError
 

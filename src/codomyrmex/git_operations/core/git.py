@@ -2,7 +2,7 @@ import os
 import subprocess
 import time
 
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 from codomyrmex.performance import monitor_performance, performance_context
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

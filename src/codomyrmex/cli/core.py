@@ -65,7 +65,7 @@ class Cli:
             logger.setLevel(10)  # DEBUG level
             logger.debug("Verbose mode enabled")
         if performance and PERFORMANCE_MONITORING_AVAILABLE:
-            from codomyrmex.performance.performance_monitor import PerformanceMonitor
+            from codomyrmex.performance.monitoring.performance_monitor import PerformanceMonitor
             monitor = PerformanceMonitor()
             logger.info("Performance monitoring enabled")
             codomyrmex.performance._performance_monitor = monitor

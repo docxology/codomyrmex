@@ -7,7 +7,7 @@ from jinja2 import Template as Jinja2Template
 from mako.template import Template as MakoTemplate
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Template engine implementations.
 """

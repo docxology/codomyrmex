@@ -13,7 +13,7 @@ from typing import Any
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     import logging

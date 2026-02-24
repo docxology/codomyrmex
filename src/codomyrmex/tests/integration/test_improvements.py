@@ -14,7 +14,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
 
 
 class TestComprehensiveImprovements:
@@ -49,7 +49,7 @@ class TestComprehensiveImprovements:
         """Test that key modules can be imported without errors."""
         import_tests = [
             "codomyrmex.exceptions",
-            "codomyrmex.logging_monitoring.logger_config",
+            "codomyrmex.logging_monitoring.core.logger_config",
         ]
 
         for module_name in import_tests:

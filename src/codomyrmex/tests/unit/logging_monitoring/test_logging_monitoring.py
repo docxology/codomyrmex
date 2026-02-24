@@ -19,7 +19,7 @@ class TestLoggingMonitoring:
             sys.path.insert(0, str(code_dir))
 
         try:
-            from codomyrmex.logging_monitoring import logger_config
+            from codomyrmex.logging_monitoring.core import logger_config
             assert logger_config is not None
         except ImportError as e:
             pytest.fail(f"Failed to import logger_config: {e}")
@@ -69,7 +69,7 @@ class TestLoggingMonitoring:
 
     def test_json_logging_format(self):
         """Test JSON logging format capabilities."""
-        from codomyrmex.logging_monitoring.logger_config import JSONFormatter
+        from codomyrmex.logging_monitoring.core.logger_config import JSONFormatter
 
         # Test that JSONFormatter exists and can be instantiated
         formatter = JSONFormatter()
@@ -96,7 +96,7 @@ class TestLoggingMonitoring:
 
     def test_environment_variable_configuration(self):
         """Test that environment variables are properly read."""
-        from codomyrmex.logging_monitoring.logger_config import (
+        from codomyrmex.logging_monitoring.core.logger_config import (
             DEFAULT_LOG_FORMAT,
             DETAILED_LOG_FORMAT,
         )
@@ -154,7 +154,7 @@ class TestLoggingMonitoring:
 
     def test_log_with_context(self, caplog):
         """Test logging with structured context."""
-        from codomyrmex.logging_monitoring.logger_config import log_with_context
+        from codomyrmex.logging_monitoring.core.logger_config import log_with_context
 
         with caplog.at_level(logging.INFO):
             context = {"user_id": "12345", "operation": "test_op"}
@@ -170,7 +170,7 @@ class TestLoggingMonitoring:
 
     def test_create_correlation_id(self):
         """Test correlation ID generation."""
-        from codomyrmex.logging_monitoring.logger_config import create_correlation_id
+        from codomyrmex.logging_monitoring.core.logger_config import create_correlation_id
 
         correlation_id = create_correlation_id()
         assert isinstance(correlation_id, str)
@@ -187,7 +187,7 @@ class TestLoggingMonitoring:
 
     def test_log_context_manager(self, caplog):
         """Test LogContext context manager."""
-        from codomyrmex.logging_monitoring.logger_config import (
+        from codomyrmex.logging_monitoring.core.logger_config import (
             LogContext,
             log_with_context,
         )
@@ -206,7 +206,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_basic(self, caplog):
         """Test basic PerformanceLogger functionality."""
-        from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 
@@ -223,7 +223,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_context_manager(self, caplog):
         """Test PerformanceLogger context manager."""
-        from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 
@@ -238,7 +238,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_metrics(self, caplog):
         """Test PerformanceLogger metric logging."""
-        from codomyrmex.logging_monitoring.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 
@@ -258,7 +258,7 @@ class TestLogRotationManager:
 
     def test_log_rotation_manager_init(self, tmp_path):
         """Test that LogRotationManager creates the log directory and sets log_dir."""
-        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from codomyrmex.logging_monitoring.handlers.rotation import LogRotationManager
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)
@@ -270,7 +270,7 @@ class TestLogRotationManager:
         """Test attaching a rotating handler returns a RotatingFileHandler on the logger."""
         from logging.handlers import RotatingFileHandler
 
-        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from codomyrmex.logging_monitoring.handlers.rotation import LogRotationManager
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)
@@ -289,7 +289,7 @@ class TestLogRotationManager:
     def test_rotation_parameters(self, tmp_path):
         """Test that max_bytes and backup_count are correctly set on the handler."""
 
-        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from codomyrmex.logging_monitoring.handlers.rotation import LogRotationManager
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)
@@ -308,7 +308,7 @@ class TestLogRotationManager:
 
     def test_rotation_creates_file(self, tmp_path):
         """Test that logging through the handler creates the log file on disk."""
-        from codomyrmex.logging_monitoring.rotation import LogRotationManager
+        from codomyrmex.logging_monitoring.handlers.rotation import LogRotationManager
 
         log_dir = str(tmp_path / "rotation_logs")
         manager = LogRotationManager(log_dir=log_dir)
@@ -336,7 +336,7 @@ class TestStandaloneJSONFormatter:
 
     def test_standalone_json_formatter(self):
         """Test formatting a LogRecord produces valid JSON with expected fields."""
-        from codomyrmex.logging_monitoring.json_formatter import JSONFormatter
+        from codomyrmex.logging_monitoring.formatters.json_formatter import JSONFormatter
 
         formatter = JSONFormatter()
 
@@ -357,7 +357,7 @@ class TestStandaloneJSONFormatter:
 
     def test_json_formatter_with_exception(self):
         """Test formatting a LogRecord with exception info includes the exception key."""
-        from codomyrmex.logging_monitoring.json_formatter import JSONFormatter
+        from codomyrmex.logging_monitoring.formatters.json_formatter import JSONFormatter
 
         formatter = JSONFormatter()
 

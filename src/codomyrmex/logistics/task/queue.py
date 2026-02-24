@@ -5,7 +5,7 @@ Queue implementation for task management.
 from datetime import datetime
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .backends.in_memory_queue import InMemoryQueue
 from .job import Job, JobStatus

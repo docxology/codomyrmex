@@ -16,7 +16,7 @@ from typing import Any
 
 
 # Import logger setup
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # Import analyzer
 from .analyzer import PyscnAnalyzer

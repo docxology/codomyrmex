@@ -761,6 +761,7 @@ _FALLBACK_SCAN_TARGETS = [
     "codomyrmex.git_operations",
     "codomyrmex.coding",
     "codomyrmex.documentation",
+    "codomyrmex.email",
 ]
 
 
@@ -1016,7 +1017,7 @@ def call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
         MCPErrorCode,
         execution_error,
     )
-    from codomyrmex.logging_monitoring.correlation import with_correlation
+    from codomyrmex.logging_monitoring.core.correlation import with_correlation
     
     # Check if tool is known first to match original behavior's KeyError
     # (trusted_call_tool will also check, but let's be explicit about "registration" vs "trust")
@@ -1237,10 +1238,6 @@ def get_total_tool_count() -> int:
     return len(get_tool_registry().list_tools())
 
 
-# DEPRECATED(v0.2.0): Legacy constants for backward compatibility. Will be removed in v0.3.0.
-TOOL_COUNT = len(_TOOL_DEFINITIONS)  # Static base count (18)
-RESOURCE_COUNT = len(_RESOURCE_DEFINITIONS)
-PROMPT_COUNT = len(_PROMPT_DEFINITIONS)
 
 
 __all__ = [
@@ -1253,3 +1250,10 @@ __all__ = [
     "RESOURCE_COUNT",
     "PROMPT_COUNT",
 ]
+
+# Static counts for the core (non-dynamic) definitions.
+# These are consumed by the PAI __init__.py and trust_gateway for reporting.
+TOOL_COUNT: int = len(_TOOL_DEFINITIONS)
+RESOURCE_COUNT: int = len(_RESOURCE_DEFINITIONS)
+PROMPT_COUNT: int = len(_PROMPT_DEFINITIONS)
+

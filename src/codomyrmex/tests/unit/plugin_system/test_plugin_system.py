@@ -21,16 +21,16 @@ from typing import Any
 
 import pytest
 
-from codomyrmex.plugin_system.enforcer import InterfaceEnforcer
-from codomyrmex.plugin_system.plugin_loader import LoadResult, PluginLoader
-from codomyrmex.plugin_system.plugin_manager import (
+from codomyrmex.plugin_system.validation.enforcer import InterfaceEnforcer
+from codomyrmex.plugin_system.core.plugin_loader import LoadResult, PluginLoader
+from codomyrmex.plugin_system.core.plugin_manager import (
     PluginManager,
     discover_plugins,
     get_plugin_manager,
     load_plugin,
     unload_plugin,
 )
-from codomyrmex.plugin_system.plugin_registry import (
+from codomyrmex.plugin_system.core.plugin_registry import (
     Hook,
     Plugin,
     PluginInfo,
@@ -40,7 +40,7 @@ from codomyrmex.plugin_system.plugin_registry import (
     create_plugin_info,
     get_registry,
 )
-from codomyrmex.plugin_system.plugin_validator import PluginValidator, validate_plugin
+from codomyrmex.plugin_system.validation.plugin_validator import PluginValidator, validate_plugin
 
 # ============================================================================
 # Mock Plugin Classes for Testing

@@ -1,7 +1,7 @@
 """3D Rendering Pipeline."""
 
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .engine_3d import Camera3D, Light3D, Object3D, Scene3D
 

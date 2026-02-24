@@ -6,7 +6,7 @@ import threading
 import time
 from typing import Optional
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .job import JobStatus
 from .queue import Queue

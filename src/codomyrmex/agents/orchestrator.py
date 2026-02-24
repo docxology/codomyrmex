@@ -43,7 +43,7 @@ from typing import Any, Callable
 
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 from codomyrmex.agents.llm_client import OllamaClient, AgentRequest
-from codomyrmex.logging_monitoring.correlation import (
+from codomyrmex.logging_monitoring.core.correlation import (
     with_correlation,
     get_correlation_id,
 )

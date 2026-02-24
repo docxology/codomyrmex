@@ -39,7 +39,7 @@ def logging_format_structured(
     """
     try:
         import json
-        from codomyrmex.logging_monitoring.structured_formatter import (
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
         )
         entry = StructuredLogEntry(

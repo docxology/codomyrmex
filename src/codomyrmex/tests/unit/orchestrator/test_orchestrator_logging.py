@@ -10,9 +10,9 @@ import logging
 
 import pytest
 
-from codomyrmex.logging_monitoring.logger_config import LogContext
-from codomyrmex.orchestrator.reporting import generate_report
-from codomyrmex.orchestrator.runner import run_script
+from codomyrmex.logging_monitoring.core.logger_config import LogContext
+from codomyrmex.orchestrator.observability.reporting import generate_report
+from codomyrmex.orchestrator.execution.runner import run_script
 
 
 @pytest.mark.unit
@@ -26,7 +26,7 @@ class TestOrchestratorLogging:
         test_script.write_text("print('Hello, World!')")
 
         # Capture logs
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.runner"):
+        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
             result = run_script(test_script, timeout=10)
 
         # Verify SCRIPT_START event by checking log messages
@@ -52,7 +52,7 @@ class TestOrchestratorLogging:
         test_script = tmp_path / "failing_script.py"
         test_script.write_text("import sys; sys.exit(1)")
 
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.runner"):
+        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.execution.runner"):
             result = run_script(test_script, timeout=10)
 
         # Verify SCRIPT_END event shows failure
@@ -87,7 +87,7 @@ class TestOrchestratorLogging:
             },
         ]
 
-        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.reporting"):
+        with caplog.at_level(logging.INFO, logger="codomyrmex.orchestrator.observability.reporting"):
             summary = generate_report(results, tmp_path, "test_run_123")
 
         # Verify RUN_SUMMARY event
@@ -114,7 +114,7 @@ class TestQuietReconfigMode:
 
     def test_quiet_reconfig_suppresses_logging_message(self, monkeypatch):
         """Test that CODOMYRMEX_LOG_QUIET_RECONFIG=1 suppresses config message."""
-        from codomyrmex.logging_monitoring import logger_config
+        from codomyrmex.logging_monitoring.core import logger_config
 
         # Reset the configured flag for testing
         original_flag = logger_config._logging_configured

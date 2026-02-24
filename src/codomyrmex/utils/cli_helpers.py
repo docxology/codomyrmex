@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import (
+from codomyrmex.logging_monitoring.core.logger_config import (
     LogContext,
     get_logger,
 )

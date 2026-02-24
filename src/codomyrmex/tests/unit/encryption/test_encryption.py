@@ -41,13 +41,13 @@ from codomyrmex.encryption import (
     hash_data,
     verify_hmac,
 )
-from codomyrmex.encryption.aes_gcm import AESGCMEncryptor
-from codomyrmex.encryption.encryptor import (
+from codomyrmex.encryption.algorithms.aes_gcm import AESGCMEncryptor
+from codomyrmex.encryption.core.encryptor import (
     Encryptor,
     decrypt_data,
     encrypt_data,
 )
-from codomyrmex.encryption.key_manager import KeyManager
+from codomyrmex.encryption.keys.key_manager import KeyManager
 from codomyrmex.exceptions import EncryptionError as ExceptionsEncryptionError
 
 # ==============================================================================
@@ -809,7 +809,7 @@ class TestErrorHandling:
     def test_encryption_error_identity(self):
         """Verify package-level EncryptionError catches encryptor.py raises."""
         from codomyrmex.encryption import EncryptionError as PkgError
-        from codomyrmex.encryption.encryptor import EncryptionError as EncError
+        from codomyrmex.encryption.core.encryptor import EncryptionError as EncError
 
         # Both should be the same class (from codomyrmex.exceptions)
         assert PkgError is ExceptionsEncryptionError

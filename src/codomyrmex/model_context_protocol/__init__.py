@@ -92,7 +92,7 @@ from .discovery import (
     FailedModule,
     DiscoveryReport,
     DiscoveryMetrics,
-    MCPDiscoveryEngine,
+    MCPDiscovery,
 )
 
 # MCP Tool Taxonomy (v0.2.0 Stream 1)
@@ -137,7 +137,7 @@ __all__ = [
     "FailedModule",
     "DiscoveryReport",
     "DiscoveryMetrics",
-    "MCPDiscoveryEngine",
+    "MCPDiscovery",
     # v0.2.0 taxonomy
     "ToolCategory",
     "categorize_tool",

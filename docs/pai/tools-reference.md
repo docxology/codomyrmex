@@ -161,7 +161,7 @@ Beyond the 18 static tools, the MCP bridge auto-discovers additional tools at ru
 1. **Decorated tools**: Functions with `@mcp_tool` decorator in targeted modules
 2. **Public functions**: All public functions from every Codomyrmex module
 
-Targeted scan modules include: `data_visualization`, `llm`, `agentic_memory`, `security`, `git_operations`, `coding`, `documentation`, `terminal_interface`.
+Targeted scan modules include: `data_visualization`, `llm`, `agentic_memory`, `security`, `git_operations`, `coding`, `documentation`, `terminal_interface`, `email`.
 
 ### Trust Classification for Dynamic Tools
 
@@ -170,6 +170,28 @@ Dynamic tools are classified using pattern matching on function names:
 - All others → **Safe**
 
 See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
+
+### Email / AgentMail (8 tools)
+
+**Module**: `codomyrmex.email.mcp_tools`
+**Auth**: Requires `AGENTMAIL_API_KEY` environment variable
+**Category**: `email`
+
+| Tool | Trust | Description |
+|------|-------|-------------|
+| `agentmail_list_inboxes` | Safe | List AgentMail inboxes |
+| `agentmail_create_inbox` | **Destructive** | Create a new AgentMail inbox |
+| `agentmail_send_message` | **Destructive** | Send an email from an AgentMail inbox |
+| `agentmail_list_messages` | Safe | List messages in an AgentMail inbox |
+| `agentmail_get_message` | Safe | Fetch a specific message by ID |
+| `agentmail_reply_to_message` | **Destructive** | Reply to an existing message |
+| `agentmail_list_threads` | Safe | List conversation threads in an inbox |
+| `agentmail_create_webhook` | **Destructive** | Register a webhook for inbox events |
+
+**Notes:**
+- All tools require `agentmail>=0.2.17` (`uv sync --extra email`)
+- Inbox defaults to `AGENTMAIL_DEFAULT_INBOX` env var when `inbox_id` is omitted
+- Full provider API: `src/codomyrmex/email/agentmail/API_SPECIFICATION.md`
 
 ## Tool Count Summary
 

@@ -14,7 +14,7 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.relations.crm import Contact, ContactManager, Interaction
+from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 
 
 # ======================================================================

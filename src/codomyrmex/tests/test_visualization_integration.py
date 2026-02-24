@@ -1,6 +1,6 @@
 import pytest
 from codomyrmex.relations.visualization import render_social_graph
-from codomyrmex.relations.crm import ContactManager
+from codomyrmex.relations.crm.crm import ContactManager
 from codomyrmex.documentation.education.curriculum import Curriculum, Lesson, DifficultyLevel
 
 

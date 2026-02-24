@@ -7,7 +7,7 @@ import time
 
 import pytest
 
-from codomyrmex.model_context_protocol.rate_limiter import (
+from codomyrmex.model_context_protocol.reliability.rate_limiter import (
     RateLimiter,
     RateLimiterConfig,
     _TokenBucket,

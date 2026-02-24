@@ -6,7 +6,7 @@ from typing import Any
 
 import docker
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """Docker Manager for Codomyrmex Containerization Module."""
 

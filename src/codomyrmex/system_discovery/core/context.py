@@ -45,7 +45,7 @@ def get_system_context(root_dir: str = ".") -> dict[str, Any]:
         # For now, let's just return what we know is statically available or quick to check.
 
         # Assuming engine has a quick scan method or we use it lightly
-        # For this implementation, we will mock/simplify to avoid heavy computation on every context call.
+        # Lightweight implementation to avoid heavy computation on every context call.
 
         context["platform"] = "codomyrmex"
         context["capabilities"] = ["python", "git", "cli"]

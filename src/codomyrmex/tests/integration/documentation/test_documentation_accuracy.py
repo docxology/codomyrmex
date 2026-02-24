@@ -30,31 +30,32 @@ class TestDocumentationAccuracy:
     def test_data_visualization_api_exists(self):
         """Test that all documented data visualization functions exist."""
         # Test line_plot module and function
-        from codomyrmex.data_visualization.line_plot import create_line_plot
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         # Verify function signature matches implementation
         sig = inspect.signature(create_line_plot)
         params = list(sig.parameters.keys())
 
         # Check actual parameters exist
-        expected_params = ['data', 'x', 'y', 'title', 'output_path']
+        expected_params = ['x_data', 'y_data', 'title', 'output_path']
         for param in expected_params:
             assert param in params, f"Parameter '{param}' missing from create_line_plot"
 
     def test_data_visualization_functionality(self):
         """Test that data visualization actually works."""
-        from codomyrmex.data_visualization.line_plot import create_line_plot
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         # Test with actual API
         result = create_line_plot(
-            data=[{"x": 1, "y": 2}, {"x": 2, "y": 4}],
+            x_data=[1, 2, 3],
+            y_data=[2, 4, 6],
             title="Documentation Test Plot",
         )
 
         # Verify return structure
-        assert result is not None, "Function should return a dict"
-        assert isinstance(result, dict)
-        assert result["type"] == "line_plot"
+        assert result is not None, "Function should return a Figure"
+        from matplotlib.figure import Figure
+        assert isinstance(result, Figure)
 
     def test_static_analysis_api_exists(self):
         """Test that documented static analysis functions exist."""
@@ -188,7 +189,7 @@ class TestDocumentationAccuracy:
 
     def test_logging_api_exists(self):
         """Test that documented logging functions exist."""
-        from codomyrmex.logging_monitoring.logger_config import (
+        from codomyrmex.logging_monitoring.core.logger_config import (
             get_logger,
             setup_logging,
         )
@@ -221,25 +222,14 @@ class TestDocumentationAccuracy:
 
     def test_all_visualization_modules_exist(self):
         """Test that all documented visualization modules exist."""
-        # Top-level modules
-        top_level_modules = {
-            'line_plot': 'create_line_plot',
-            'bar_chart': 'create_bar_chart',
-        }
         # Modules in charts/ subdirectory
         chart_modules = {
+            'line_plot': 'create_line_plot',
+            'bar_chart': 'create_bar_chart',
             'scatter_plot': 'create_scatter_plot',
             'pie_chart': 'create_pie_chart',
             'histogram': 'create_histogram',
         }
-
-        for module_name, create_fn in top_level_modules.items():
-            try:
-                module = importlib.import_module(f'codomyrmex.data_visualization.{module_name}')
-                assert module is not None
-                assert hasattr(module, create_fn), f"Missing {create_fn} in {module_name}"
-            except ImportError as e:
-                pytest.fail(f"Documented module {module_name} cannot be imported: {e}")
 
         for module_name, create_fn in chart_modules.items():
             try:
@@ -292,7 +282,7 @@ class TestDocumentationAccuracy:
 
     def test_comprehensive_workflow_functions_work_together(self):
         """Test that documented workflow actually works end-to-end."""
-        from codomyrmex.data_visualization.line_plot import create_line_plot
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         from codomyrmex.coding.execution.executor import execute_code
         from codomyrmex.coding.static_analysis.pyrefly_runner import (
@@ -327,12 +317,12 @@ class TestDocumentationAccuracy:
 
             # 3. Test visualization
             viz_result = create_line_plot(
-                data=[{"x": i, "y": i**2} for i in range(1, 5)],
+                x_data=list(range(1, 5)),
+                y_data=[i**2 for i in range(1, 5)],
                 title="Workflow Test",
                 output_path=str(project_path / "workflow_test.png")
             )
             assert viz_result is not None
-            assert isinstance(viz_result, dict)
 
     def test_no_documented_functions_are_missing(self):
         """Meta-test: Ensure we're testing all documented functions."""
@@ -340,12 +330,12 @@ class TestDocumentationAccuracy:
         # documented APIs when adding new functionality
 
         documented_modules = [
-            'codomyrmex.data_visualization.line_plot',
+            'codomyrmex.data_visualization.charts.line_plot',
             'codomyrmex.coding.static_analysis.pyrefly_runner',
             'codomyrmex.coding.execution.executor',
             'codomyrmex.git_operations.core.git',
             'codomyrmex.environment_setup.env_checker',
-            'codomyrmex.logging_monitoring.logger_config',
+            'codomyrmex.logging_monitoring.core.logger_config',
             'codomyrmex.model_context_protocol.schemas.mcp_schemas',
         ]
 
@@ -373,47 +363,50 @@ class TestRealMethodsInDocumentation:
         import time
 
         import numpy as np
-        from codomyrmex.data_visualization.line_plot import create_line_plot
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         # Test actual benchmark code
         x_vals = list(np.linspace(0, 10, 100))
         y_vals = list(np.sin(np.array(x_vals)))
-        data = [{"x": x, "y": y} for x, y in zip(x_vals, y_vals)]
 
         start_time = time.time()
         with tempfile.TemporaryDirectory() as temp_dir:
             result = create_line_plot(
-                data=data,
+                x_data=x_vals,
+                y_data=y_vals,
                 title="Benchmark Test",
                 output_path=f"{temp_dir}/benchmark.png"
             )
             duration = time.time() - start_time
 
         assert result is not None
-        assert isinstance(result, dict)
+        from matplotlib.figure import Figure
+        assert isinstance(result, Figure)
         assert duration > 0
         assert duration < 10  # Should be reasonably fast for small dataset
 
     def test_testing_strategy_examples_work(self):
         """Test that testing strategy documentation examples work."""
-        from codomyrmex.data_visualization.line_plot import create_line_plot
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         # Example from testing strategy
-        data = [{"x": i, "y": i * 2} for i in range(1, 6)]
+        x_data = list(range(1, 6))
+        y_data = [i * 2 for i in range(1, 6)]
 
         with tempfile.TemporaryDirectory() as temp_dir:
             output_path = Path(temp_dir) / "test_plot.png"
 
             result = create_line_plot(
-                data=data,
+                x_data=x_data,
+                y_data=y_data,
                 title="Real Test Plot",
                 output_path=str(output_path),
             )
 
             # Verify result
             assert result is not None
-            assert isinstance(result, dict)
-            assert result["type"] == "line_plot"
+            from matplotlib.figure import Figure
+            assert isinstance(result, Figure)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from codomyrmex.model_context_protocol.circuit_breaker import (
+from codomyrmex.model_context_protocol.reliability.circuit_breaker import (
     CircuitBreaker,
     CircuitBreakerConfig,
     CircuitOpenError,

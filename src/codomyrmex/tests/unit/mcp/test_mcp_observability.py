@@ -15,7 +15,7 @@ import logging
 
 import pytest
 
-from codomyrmex.model_context_protocol.observability import (
+from codomyrmex.model_context_protocol.reliability.observability import (
     MCPObservabilityHooks,
     ToolMetrics,
     get_mcp_observability_hooks,

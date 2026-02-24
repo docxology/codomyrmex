@@ -202,26 +202,26 @@ class TestRetryPolicy:
     """Test RetryPolicy from retry_policy module."""
 
     def test_compute_delay_exponential(self):
-        from codomyrmex.orchestrator.retry_policy import RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import RetryPolicy
         policy = RetryPolicy(base_delay=1.0, exponential_base=2.0, jitter=False)
         d1 = policy.compute_delay(1)
         d2 = policy.compute_delay(2)
         assert d2 > d1
 
     def test_compute_delay_capped(self):
-        from codomyrmex.orchestrator.retry_policy import RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import RetryPolicy
         policy = RetryPolicy(base_delay=1.0, max_delay=10.0, exponential_base=2.0, jitter=False)
         delay = policy.compute_delay(100)
         assert delay <= 10.0
 
     def test_should_retry_within_attempts(self):
-        from codomyrmex.orchestrator.retry_policy import RetryOutcome, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import RetryOutcome, RetryPolicy
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=1)
         assert result == RetryOutcome.RETRY
 
     def test_should_retry_exceeded(self):
-        from codomyrmex.orchestrator.retry_policy import RetryOutcome, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import RetryOutcome, RetryPolicy
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=3)
         assert result in (RetryOutcome.ABORT, RetryOutcome.DEAD_LETTER)
@@ -232,14 +232,14 @@ class TestPipelineRetryExecutor:
     """Test PipelineRetryExecutor."""
 
     def test_execute_success(self):
-        from codomyrmex.orchestrator.retry_policy import PipelineRetryExecutor, RetryOutcome
+        from codomyrmex.orchestrator.resilience.retry_policy import PipelineRetryExecutor, RetryOutcome
         executor = PipelineRetryExecutor()
         result = executor.execute("test_step", lambda: 42)
         assert result.outcome == RetryOutcome.SUCCESS
         assert result.result == 42
 
     def test_execute_failure_retried(self):
-        from codomyrmex.orchestrator.retry_policy import (
+        from codomyrmex.orchestrator.resilience.retry_policy import (
             PipelineRetryExecutor, RetryOutcome, RetryPolicy,
         )
         call_count = 0
@@ -257,7 +257,7 @@ class TestPipelineRetryExecutor:
         assert call_count == 3
 
     def test_execute_exhausted(self):
-        from codomyrmex.orchestrator.retry_policy import (
+        from codomyrmex.orchestrator.resilience.retry_policy import (
             PipelineRetryExecutor, RetryOutcome, RetryPolicy,
         )
         executor = PipelineRetryExecutor(
@@ -269,7 +269,7 @@ class TestPipelineRetryExecutor:
         assert result.outcome in (RetryOutcome.ABORT, RetryOutcome.DEAD_LETTER)
 
     def test_set_custom_policy(self):
-        from codomyrmex.orchestrator.retry_policy import PipelineRetryExecutor, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import PipelineRetryExecutor, RetryPolicy
         executor = PipelineRetryExecutor()
         custom = RetryPolicy(max_attempts=10)
         executor.set_policy("special_step", custom)
@@ -286,14 +286,14 @@ class TestWithRetryDecorator:
     """Test the @with_retry decorator."""
 
     def test_successful_function(self):
-        from codomyrmex.orchestrator.retry_policy import with_retry
+        from codomyrmex.orchestrator.resilience.retry_policy import with_retry
         @with_retry(max_attempts=3)
         def succeed():
             return 42
         assert succeed() == 42
 
     def test_retries_on_failure(self):
-        from codomyrmex.orchestrator.retry_policy import with_retry
+        from codomyrmex.orchestrator.resilience.retry_policy import with_retry
         counter = {"n": 0}
         @with_retry(max_attempts=5, base_delay=0.01)
         def flaky():
@@ -305,7 +305,7 @@ class TestWithRetryDecorator:
         assert counter["n"] == 3
 
     def test_exhausts_retries(self):
-        from codomyrmex.orchestrator.retry_policy import with_retry
+        from codomyrmex.orchestrator.resilience.retry_policy import with_retry
         @with_retry(max_attempts=2, base_delay=0.01)
         def always_fail():
             raise RuntimeError("nope")

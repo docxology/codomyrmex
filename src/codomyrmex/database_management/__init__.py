@@ -57,7 +57,7 @@ from .migration_manager import (
 )
 from .performance_monitor import (
     DatabaseMetrics,
-    DatabaseMonitor,
+    DatabasePerformanceMonitor,
     monitor_database,
     optimize_database,
 )
@@ -118,7 +118,7 @@ __all__ = [
     "backup_database",
     "Backup",
     # Performance monitoring
-    "DatabaseMonitor",
+    "DatabasePerformanceMonitor",
     "monitor_database",
     "optimize_database",
     "DatabaseMetrics",

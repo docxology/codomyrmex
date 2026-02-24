@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -458,8 +458,6 @@ class DatabasePerformanceMonitor:
 
         return history
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use DatabasePerformanceMonitor. Will be removed in v0.3.0.
-DatabaseMonitor = DatabasePerformanceMonitor
 
 def monitor_database(database_name: str, workspace_dir: str | None = None) -> dict[str, Any]:
     """Monitor database performance.

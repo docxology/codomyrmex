@@ -14,7 +14,7 @@ import time
 import pytest
 
 try:
-    from codomyrmex.concurrency.semaphore import (
+    from codomyrmex.concurrency.semaphores.semaphore import (
         AsyncLocalSemaphore,
         LocalSemaphore,
     )

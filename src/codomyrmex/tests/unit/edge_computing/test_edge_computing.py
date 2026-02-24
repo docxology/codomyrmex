@@ -15,7 +15,7 @@ try:
         EdgeSynchronizer,
         SyncState,
     )
-    from codomyrmex.edge_computing.metrics import EdgeMetrics, InvocationRecord
+    from codomyrmex.edge_computing.infrastructure.metrics import EdgeMetrics, InvocationRecord
 
     HAS_MODULE = True
 except ImportError:

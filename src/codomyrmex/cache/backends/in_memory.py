@@ -5,7 +5,7 @@ In-memory cache backend.
 import time
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..cache import Cache
 from ..stats import CacheStats

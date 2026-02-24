@@ -10,7 +10,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .engine_3d import Quaternion, Vector3D
 

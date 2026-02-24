@@ -12,7 +12,7 @@ import tempfile
 
 import pytest
 
-from codomyrmex.wallet.encrypted_storage import (
+from codomyrmex.wallet.security.encrypted_storage import (
     EncryptedEntry,
     EncryptedStore,
 )

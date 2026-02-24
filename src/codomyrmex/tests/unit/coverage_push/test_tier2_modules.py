@@ -185,19 +185,19 @@ class TestDocumentationQualityAnalyzer:
     """Test DocumentationQualityAnalyzer."""
 
     def test_creation(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         assert analyzer.quality_metrics is not None
         assert "completeness" in analyzer.quality_metrics
 
     def test_analyze_file_not_found(self, tmp_path):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         result = analyzer.analyze_file(tmp_path / "nonexistent.md")
         assert "error" in result
 
     def test_analyze_file_real(self, tmp_path):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         # Create a documentation file with standard sections
         doc = tmp_path / "README.md"
         doc.write_text("""# Overview
@@ -236,48 +236,48 @@ Please submit a PR.
         assert result["overall_score"] > 0
 
     def test_assess_completeness_high(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         content = "overview installation usage api examples ```code``` http://link"
         score = analyzer._assess_completeness(content)
         assert score >= 80.0
 
     def test_assess_completeness_low(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         score = analyzer._assess_completeness("just some text")
         assert score < 50.0
 
     def test_assess_consistency_good(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         content = "# H1\n## H2\n### H3\n```python\ncode\n```"
         score = analyzer._assess_consistency(content)
         assert score >= 80.0
 
     def test_assess_consistency_unclosed_code_block(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         content = "# Title\n```python\ncode\n"  # odd number of ```
         score = analyzer._assess_consistency(content)
         assert score < 100.0
 
     def test_assess_readability(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         # Short, clear text
         score = analyzer._assess_readability("Simple clear text.")
         assert score >= 80.0
 
     def test_assess_structure_good(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         content = "# Title\n## Installation\n## Usage\n## API\n## Examples\n## Contributing"
         score = analyzer._assess_structure(content)
         assert score >= 50.0
 
     def test_assess_technical_accuracy(self):
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
         analyzer = DocumentationQualityAnalyzer()
         content = "def foo(): pass\nclass Bar:\nimport os\nversion 1.0\nerror handling"
         score = analyzer._assess_technical_accuracy(content)
@@ -289,7 +289,7 @@ class TestGenerateQualityReport:
     """Test generate_quality_report function."""
 
     def test_report_with_readme(self, tmp_path):
-        from codomyrmex.documentation.quality_assessment import generate_quality_report
+        from codomyrmex.documentation.quality.quality_assessment import generate_quality_report
         readme = tmp_path / "README.md"
         readme.write_text("# Project\n\n## Installation\n\npip install it\n")
         report = generate_quality_report(tmp_path)
@@ -297,7 +297,7 @@ class TestGenerateQualityReport:
         assert "README.md" in report
 
     def test_report_empty_project(self, tmp_path):
-        from codomyrmex.documentation.quality_assessment import generate_quality_report
+        from codomyrmex.documentation.quality.quality_assessment import generate_quality_report
         report = generate_quality_report(tmp_path)
         assert "Documentation Quality Report" in report
 

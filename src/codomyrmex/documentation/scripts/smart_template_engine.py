@@ -19,7 +19,7 @@ import importlib
 
 # Try to import Codomyrmex logger, fall back to standard logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
     setup_logging()
     logger = get_logger(__name__)
 except ImportError:

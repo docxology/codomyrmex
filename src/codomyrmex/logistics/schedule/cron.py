@@ -5,7 +5,7 @@ Cron-like scheduling with pattern parsing.
 from dataclasses import dataclass
 from datetime import datetime
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .timezone import TimezoneManager
 

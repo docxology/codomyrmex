@@ -6,7 +6,7 @@ Collects and aggregates execution metrics for analysis and reporting.
 
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 

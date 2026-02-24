@@ -344,7 +344,7 @@ class TestBackupManager:
 
     def test_create_backup_no_key_raises(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            from codomyrmex.encryption.key_manager import KeyManager
+            from codomyrmex.encryption.keys.key_manager import KeyManager
 
             isolated_km = KeyManager(key_dir=Path(tmpdir) / "keys")
             backup_mgr = BackupManager(

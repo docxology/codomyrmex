@@ -8,7 +8,7 @@ from typing import Any
 from collections.abc import Callable
 from urllib.parse import parse_qs, urlparse
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """REST API Implementation for Codomyrmex
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 from importlib import import_module
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from . import controller as controller_module
 
@@ -1004,7 +1004,7 @@ class TestDocumentationQualityAnalyzer:
 
     def test_analyzer_creation(self):
         """Test creating a quality analyzer."""
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
 
         analyzer = DocumentationQualityAnalyzer()
         assert analyzer is not None
@@ -1012,7 +1012,7 @@ class TestDocumentationQualityAnalyzer:
 
     def test_file_analysis(self):
         """Test analyzing a documentation file."""
-        from codomyrmex.documentation.quality_assessment import DocumentationQualityAnalyzer
+        from codomyrmex.documentation.quality.quality_assessment import DocumentationQualityAnalyzer
 
         analyzer = DocumentationQualityAnalyzer()
 
@@ -1035,7 +1035,7 @@ class TestDocumentationConsistencyChecker:
 
     def test_checker_creation(self):
         """Test creating a consistency checker."""
-        from codomyrmex.documentation.consistency_checker import DocumentationConsistencyChecker
+        from codomyrmex.documentation.quality.consistency_checker import DocumentationConsistencyChecker
 
         checker = DocumentationConsistencyChecker()
         assert checker is not None
@@ -1043,7 +1043,7 @@ class TestDocumentationConsistencyChecker:
 
     def test_consistency_check(self):
         """Test checking project consistency."""
-        from codomyrmex.documentation.consistency_checker import DocumentationConsistencyChecker
+        from codomyrmex.documentation.quality.consistency_checker import DocumentationConsistencyChecker
 
         checker = DocumentationConsistencyChecker()
 
@@ -1701,7 +1701,7 @@ class TestDocumentationQualityAnalyzer:
 
     def test_analyzer_creation(self):
         """Test creating a quality analyzer."""
-        from codomyrmex.documentation.quality_assessment import (
+        from codomyrmex.documentation.quality.quality_assessment import (
             DocumentationQualityAnalyzer,
         )
 
@@ -1711,7 +1711,7 @@ class TestDocumentationQualityAnalyzer:
 
     def test_file_analysis(self):
         """Test analyzing a documentation file."""
-        from codomyrmex.documentation.quality_assessment import (
+        from codomyrmex.documentation.quality.quality_assessment import (
             DocumentationQualityAnalyzer,
         )
 
@@ -1736,7 +1736,7 @@ class TestDocumentationConsistencyChecker:
 
     def test_checker_creation(self):
         """Test creating a consistency checker."""
-        from codomyrmex.documentation.consistency_checker import (
+        from codomyrmex.documentation.quality.consistency_checker import (
             DocumentationConsistencyChecker,
         )
 
@@ -1746,7 +1746,7 @@ class TestDocumentationConsistencyChecker:
 
     def test_consistency_check(self):
         """Test checking project consistency."""
-        from codomyrmex.documentation.consistency_checker import (
+        from codomyrmex.documentation.quality.consistency_checker import (
             DocumentationConsistencyChecker,
         )
 

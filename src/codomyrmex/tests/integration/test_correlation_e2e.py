@@ -12,11 +12,11 @@ from fastapi.testclient import TestClient
 
 from codomyrmex.agents.pai.mcp_bridge import call_tool
 from codomyrmex.events.core.event_bus import get_event_bus
-from codomyrmex.logging_monitoring.correlation import (
+from codomyrmex.logging_monitoring.core.correlation import (
     get_correlation_id,
     with_correlation,
 )
-from codomyrmex.model_context_protocol.server import MCPServer
+from codomyrmex.model_context_protocol.transport.server import MCPServer
 
 
 @pytest.fixture

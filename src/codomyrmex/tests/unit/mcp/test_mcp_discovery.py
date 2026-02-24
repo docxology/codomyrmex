@@ -20,6 +20,7 @@ class TestMCPToolDiscovery:
         "codomyrmex.coding.mcp_tools",
         "codomyrmex.search.mcp_tools",
         "codomyrmex.formal_verification.mcp_tools",
+        "codomyrmex.email.mcp_tools",
     ]
 
     def test_all_mcp_modules_importable(self):
@@ -48,6 +49,7 @@ class TestMCPToolDiscovery:
             "codomyrmex.coding.mcp_tools": 5,
             "codomyrmex.search.mcp_tools": 3,
             "codomyrmex.formal_verification.mcp_tools": 6,
+            "codomyrmex.email.mcp_tools": 8,
         }
         for mod_name, min_count in expected_min.items():
             mod = importlib.import_module(mod_name)

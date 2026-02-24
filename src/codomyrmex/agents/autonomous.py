@@ -24,7 +24,7 @@ def _make_endpoint(
     """Create the best available relay endpoint.
 
     Prefers :class:`RelayEndpoint` (provider-agnostic); falls back to
-    the legacy :class:`ClaudeCodeEndpoint` for backward compatibility.
+    the :class:`ClaudeCodeEndpoint` interface.
     """
     try:
         from codomyrmex.ide.antigravity.relay_endpoint import RelayEndpoint

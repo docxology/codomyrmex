@@ -8,27 +8,27 @@ from __future__ import annotations
 
 import pytest
 
-from codomyrmex.orchestrator.failure_taxonomy import (
+from codomyrmex.orchestrator.resilience.failure_taxonomy import (
     ClassifiedError,
     FailureCategory,
     RecoveryStrategy,
     classify_error,
 )
-from codomyrmex.orchestrator.self_healing import (
+from codomyrmex.orchestrator.resilience.self_healing import (
     Diagnoser,
     Diagnosis,
     RecoveryStep,
 )
-from codomyrmex.orchestrator.retry_engine import (
+from codomyrmex.orchestrator.resilience.retry_engine import (
     RetryEngine,
     RetryResult,
 )
-from codomyrmex.orchestrator.agent_circuit_breaker import (
+from codomyrmex.orchestrator.resilience.agent_circuit_breaker import (
     AgentHealth,
     CircuitBreaker,
     CircuitState,
 )
-from codomyrmex.orchestrator.healing_log import (
+from codomyrmex.orchestrator.resilience.healing_log import (
     HealingEvent,
     HealingLog,
 )

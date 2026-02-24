@@ -114,14 +114,14 @@ class TestCrawler:
     """Tests for Crawler."""
 
     def test_add_seeds_dedup(self):
-        from codomyrmex.scrape.crawler import Crawler, CrawlConfig
+        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
         crawler = Crawler(config=CrawlConfig(max_pages=10))
         added = crawler.add_seeds(["https://example.com", "https://example.com"])
         assert added == 1
         assert crawler.frontier_size == 1
 
     def test_has_next_respects_max(self):
-        from codomyrmex.scrape.crawler import Crawler, CrawlConfig, CrawlResult, CrawlStatus
+        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig, CrawlResult, CrawlStatus
         crawler = Crawler(config=CrawlConfig(max_pages=1))
         crawler.add_seeds(["https://example.com", "https://example.com/page2"])
         url, depth = crawler.next_url()
@@ -129,7 +129,7 @@ class TestCrawler:
         assert crawler.has_next() is False
 
     def test_domain_filtering(self):
-        from codomyrmex.scrape.crawler import Crawler, CrawlConfig
+        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
         crawler = Crawler(config=CrawlConfig(allowed_domains=["example.com"]))
         assert crawler.is_allowed("https://example.com/page") is True
         assert crawler.is_allowed("https://other.com/page") is False
@@ -160,7 +160,7 @@ class TestMaintenanceScheduler:
     """Tests for MaintenanceScheduler."""
 
     def test_register_and_execute(self):
-        from codomyrmex.maintenance.scheduler import (
+        from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
         )
         scheduler = MaintenanceScheduler()
@@ -176,7 +176,7 @@ class TestMaintenanceScheduler:
         assert result.output == "done"
 
     def test_due_tasks(self):
-        from codomyrmex.maintenance.scheduler import (
+        from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig,
         )
         scheduler = MaintenanceScheduler()
@@ -191,7 +191,7 @@ class TestMaintenanceScheduler:
         assert len(due) == 1
 
     def test_failed_task_retries(self):
-        from codomyrmex.maintenance.scheduler import (
+        from codomyrmex.maintenance.health.scheduler import (
             MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
         )
         call_count = 0
@@ -220,7 +220,7 @@ class TestStructuredFormatter:
 
     def test_format_basic(self):
         import json
-        from codomyrmex.logging_monitoring.structured_formatter import (
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
         )
         formatter = StructuredFormatter()
@@ -237,7 +237,7 @@ class TestStructuredFormatter:
 
     def test_static_fields(self):
         import json
-        from codomyrmex.logging_monitoring.structured_formatter import (
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, FormatterConfig, StructuredLogEntry, LogLevel,
         )
         config = FormatterConfig(static_fields={"service": "codomyrmex"})
@@ -249,7 +249,7 @@ class TestStructuredFormatter:
 
     def test_correlation_id(self):
         import json
-        from codomyrmex.logging_monitoring.structured_formatter import (
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
             StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
         )
         formatter = StructuredFormatter()

@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..cache import Cache
 from ..stats import CacheStats
@@ -164,9 +164,5 @@ class FileBasedCache(Cache):
         self._stats.size = len(list(self.cache_dir.glob("*.cache")))
         return self._stats
 
-    # DEPRECATED(v0.2.0): Use get_statistics() instead. Will be removed in v0.3.0.
-    def get_stats(self) -> CacheStats:
-        """Get cache statistics."""
-        return self.stats
 
 

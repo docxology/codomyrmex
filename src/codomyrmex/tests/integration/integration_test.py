@@ -10,7 +10,7 @@ from codomyrmex.logistics.orchestration.project import (
     get_task_orchestrator,
     get_workflow_manager,
 )
-from codomyrmex.performance.performance_monitor import PerformanceMonitor
+from codomyrmex.performance.monitoring.performance_monitor import PerformanceMonitor
 
 try:
     ORCHESTRATION_AVAILABLE = True

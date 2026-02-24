@@ -15,7 +15,7 @@ def inspect_server(server_name: str = "default") -> dict:
     Returns:
         Server info including name, version, tool count, resource count.
     """
-    from codomyrmex.model_context_protocol.server import MCPServer
+    from codomyrmex.model_context_protocol.transport.server import MCPServer
 
     try:
         # Return static info for introspection

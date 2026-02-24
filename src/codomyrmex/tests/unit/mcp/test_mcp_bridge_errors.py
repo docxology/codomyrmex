@@ -99,7 +99,7 @@ def test_structured_error_envelope_has_required_fields():
 @pytest.mark.asyncio
 async def test_server_call_tool_validation_error():
     """MCPServer._call_tool returns structured error for invalid args."""
-    from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
+    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
 
     server = MCPServer(config=MCPServerConfig())
 
@@ -135,7 +135,7 @@ async def test_server_call_tool_validation_error():
 @pytest.mark.asyncio
 async def test_server_call_tool_not_found():
     """MCPServer._call_tool returns NOT_FOUND for unknown tool."""
-    from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
+    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
     import json
 
     server = MCPServer(config=MCPServerConfig())
@@ -148,7 +148,7 @@ async def test_server_call_tool_not_found():
 @pytest.mark.asyncio
 async def test_server_call_tool_success():
     """MCPServer._call_tool succeeds with valid args and returns content."""
-    from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
+    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
 
     server = MCPServer(config=MCPServerConfig())
 
@@ -183,7 +183,7 @@ async def test_server_call_tool_success():
 @pytest.mark.asyncio
 async def test_server_coerces_str_to_int():
     """Server validates and coerces '3' -> 3 before calling handler."""
-    from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
+    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
     import json
 
     server = MCPServer(config=MCPServerConfig())

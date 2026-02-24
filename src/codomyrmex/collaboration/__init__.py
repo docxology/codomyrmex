@@ -116,7 +116,7 @@ __all__ = [
     "BroadcastProtocol",
     "CapabilityRoutingProtocol",
     "ConsensusProtocol",
-    # DEPRECATED(v0.2.0): Legacy swarm exports. Will be removed in v0.3.0.
+    # Swarm exports
     "SwarmManager",
     "AgentProxy",
     "TaskDecomposer",

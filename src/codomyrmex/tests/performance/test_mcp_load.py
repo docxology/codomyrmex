@@ -16,7 +16,7 @@ from typing import Any
 
 import pytest
 
-from codomyrmex.model_context_protocol.server import MCPServer, MCPServerConfig
+from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import MCPToolRegistry
 
 

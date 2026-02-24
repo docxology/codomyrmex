@@ -162,8 +162,6 @@ class OrchestrationSession:
         return sess
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use OrchestrationSession. Will be removed in v0.3.0.
-OrchestrationContext = OrchestrationSession
 
 
 class OrchestrationEngine:
@@ -194,7 +192,7 @@ class OrchestrationEngine:
         )
 
         # Active sessions
-        self.active_sessions: dict[str, OrchestrationContext] = {}
+        self.active_sessions: dict[str, OrchestrationSession] = {}
         self.session_lock = threading.RLock()
 
         # Event handlers
@@ -222,7 +220,7 @@ class OrchestrationEngine:
 
     def create_session(self, user_id: str = "system", **kwargs) -> str:
         """Create a new orchestration session."""
-        context = OrchestrationContext(
+        context = OrchestrationSession(
             user_id=user_id,
             mode=OrchestrationMode(kwargs.get("mode", "resource_aware")),
             max_parallel_tasks=kwargs.get("max_parallel_tasks", 4),
@@ -242,7 +240,7 @@ class OrchestrationEngine:
 
         return context.session_id
 
-    def get_session(self, session_id: str) -> OrchestrationContext | None:
+    def get_session(self, session_id: str) -> OrchestrationSession | None:
         """Get a session by ID."""
         with self.session_lock:
             return self.active_sessions.get(session_id)

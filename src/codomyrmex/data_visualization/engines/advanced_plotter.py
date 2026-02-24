@@ -16,7 +16,7 @@ import pandas as pd
 import seaborn as sns
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
 except ImportError:
     from logging import getLogger as get_logger
 

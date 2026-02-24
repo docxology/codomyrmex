@@ -27,7 +27,7 @@ from codomyrmex.compression import (
 )
 
 # Import CompressionError from the actual source to match the raised exception class
-from codomyrmex.compression.compressor import CompressionError
+from codomyrmex.compression.core.compressor import CompressionError
 
 
 @pytest.mark.unit
@@ -724,7 +724,7 @@ class TestCompareFormats:
 
     def test_compare_formats(self):
         """Test compare_formats function."""
-        from codomyrmex.compression.compressor import compare_formats
+        from codomyrmex.compression.core.compressor import compare_formats
 
         data = b"test data " * 1000
         results = compare_formats(data)
@@ -735,7 +735,7 @@ class TestCompareFormats:
 
     def test_compare_formats_contains_metrics(self):
         """Test compare_formats contains expected metrics."""
-        from codomyrmex.compression.compressor import compare_formats
+        from codomyrmex.compression.core.compressor import compare_formats
 
         data = b"test data " * 1000
         results = compare_formats(data)
@@ -745,7 +745,7 @@ class TestCompareFormats:
 
     def test_compare_formats_with_level(self):
         """Test compare_formats with custom level."""
-        from codomyrmex.compression.compressor import compare_formats
+        from codomyrmex.compression.core.compressor import compare_formats
 
         data = b"test data " * 1000
         results = compare_formats(data, level=9)

@@ -17,14 +17,14 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+from .exceptions import InfomaniakAuthError
+
 # Default Infomaniak endpoints
 DEFAULT_AUTH_URL = "https://api.pub1.infomaniak.cloud/identity/v3/"
 DEFAULT_S3_ENDPOINT = "https://s3.pub1.infomaniak.cloud/"
 DEFAULT_S3_REGION = "us-east-1"  # S3-compatible default region
 
 
-# DEPRECATED(v0.2.0): Re-export for backward compatibility. Import from .exceptions instead. Will be removed in v0.3.0.
-from .exceptions import InfomaniakAuthError  # noqa: F401
 
 
 @dataclass

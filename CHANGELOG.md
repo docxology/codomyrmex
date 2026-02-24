@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-02-24 — "Depth & Hardening"
+
+### Added
+
+- **collaboration/mcp_tools.py**: `swarm_submit_task`, `pool_status`, `list_agents` MCP tools
+- **validation/mcp_tools.py**: `validate_schema`, `validate_config`, `validation_summary` MCP tools
+
+### Fixed
+
+- **44 → 1 test failures** across Rounds 2–3:
+  - `trust_gateway.py`: `SAFE_TOOL_COUNT`/`DESTRUCTIVE_TOOL_COUNT` changed from lambdas to eagerly-evaluated `int` constants; `SAFE_TOOLS` from function ref to `frozenset`
+  - `auth.py`: Added missing `from .exceptions import InfomaniakAuthError` import
+  - Stale `logging_monitoring.logger_config` → `logging_monitoring.core.logger_config` paths in `test_improvements.py` and `demo_defense.py`
+  - `audit_documentation.py`: `documentation.audit` → `documentation.quality.audit` module path
+  - `security/secrets/__init__.py`: `generate_secret()` stdlib `secrets` namespace collision resolved via `sys.modules` pop/restore (4 xfail tests now pass)
+  - `infomaniak/security.py`: Updated deprecated `codomyrmex.defense` → `codomyrmex.security.ai_safety` import
+  - `test_github_functionality_demo.py`: Fixed `return True` → `return` (PytestReturnNotNoneWarning)
+- Added `filterwarnings` for `google.generativeai` FutureWarning and PytestCollectionWarning
+
+### Metrics
+
+- MCP tool files: 27 → **31**
+- Tests passing: 9,628 → **9,675** (+47)
+- Tests failing: 44 → **1** (flaky `test_save_plot_pdf_format` — passes in isolation)
+- Warnings: 189 → **187**
+- xfail tests: 4 → **0** (secrets namespace collision fixed)
+
+---
+
 ## [1.0.0] - 2026-02-21 — "General Availability"
 
 ### Added

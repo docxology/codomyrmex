@@ -54,10 +54,6 @@ from .static_analyzer import (
 )
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use analyze_project() instead. Will be removed in v0.3.0.
-def analyze_codebase(*args, **kwargs):
-    """Alias for analyze_project."""
-    return analyze_project(*args, **kwargs)
 
 
 def analyze_code_quality(path: str = None, **kwargs) -> dict:
@@ -131,7 +127,6 @@ __all__ = [
     "StaticAnalyzer",
     "analyze_file",
     "analyze_project",
-    "analyze_codebase",  # Alias for backward compatibility
     "analyze_code_quality",  # For workflow integration
     "get_available_tools",
     "AnalysisResult",

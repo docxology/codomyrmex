@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Any, Union
 from collections.abc import Callable
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """GraphQL API Implementation for Codomyrmex
 

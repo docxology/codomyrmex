@@ -15,7 +15,7 @@ from ..charts.histogram import create_histogram
 from ..charts.line_plot import create_line_plot
 from ..charts.pie_chart import create_pie_chart
 from ..charts.scatter_plot import create_scatter_plot
-from .plot_utils import (
+from ..charts.plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
     save_plot,
@@ -23,7 +23,7 @@ from .plot_utils import (
 
 # Attempt to import Codomyrmex logging utilities
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     logger = logging.getLogger(__name__)

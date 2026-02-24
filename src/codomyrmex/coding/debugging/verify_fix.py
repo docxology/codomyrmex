@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from codomyrmex.coding.debugging.patch_generator import Patch
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 # In a real scenario, this would import the Execution module
 # from codomyrmex.coding.execution import execute_code
@@ -95,13 +95,13 @@ class FixVerifier:
         # 1. Apply patch to source (simplistic string replacement or patching lib needed)
         # For this prototype, we'll assume the patch might contain the full replaced content
         # or we would need a proper `patch` utility.
-        # Here we mock the application logic.
+        # Apply patch to source using string-based replacement.
         patched_source = self._apply_patch(original_source, patch)
 
         # 2. Execute patched code
         # result = execute_code("python", patched_source, stdin=test_input)
 
-        # Mock result for now
+        # Verification requires active code execution module — returns unverified result
         return VerificationResult(
             success=False,
             stdout="",

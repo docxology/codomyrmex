@@ -8,7 +8,7 @@ from collections.abc import Callable
 
 import psutil
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 """
 # Resource Tracker for Codomyrmex Performance Monitoring

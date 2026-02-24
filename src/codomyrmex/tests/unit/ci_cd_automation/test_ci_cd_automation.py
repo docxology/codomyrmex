@@ -37,7 +37,7 @@ from codomyrmex.ci_cd_automation.deployment_orchestrator import (
 from codomyrmex.ci_cd_automation.performance_optimizer import (
     PipelineOptimizer,
 )
-from codomyrmex.ci_cd_automation.pipeline_manager import (
+from codomyrmex.ci_cd_automation.pipeline import (
     AsyncPipelineManager,
     AsyncPipelineResult,
     JobStatus,

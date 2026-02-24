@@ -12,7 +12,7 @@ from typing import Any
 
 # Import logging
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)
 except ImportError:
     import logging
@@ -154,7 +154,7 @@ class HealthReporter:
         # Collect system metrics if requested
         if include_system_metrics:
             try:
-                from codomyrmex.performance.performance_monitor import (
+                from codomyrmex.performance.monitoring.performance_monitor import (
                     get_system_metrics,
                 )
                 report.system_metrics = get_system_metrics()

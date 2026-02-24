@@ -9,32 +9,32 @@ from codomyrmex.database_management.connections import (
     ConnectionState,
     ConnectionStats,
     HealthChecker,
-    MockConnection,
-    MockConnectionFactory,
+    InMemoryConnection,
+    InMemoryConnectionFactory,
     PoolConfig,
 )
 
 
-class TestMockConnection:
-    """Tests for MockConnection."""
+class TestInMemoryConnection:
+    """Tests for InMemoryConnection."""
 
     def test_create(self):
         """Should create connection."""
-        conn = MockConnection(1)
+        conn = InMemoryConnection(1)
         assert conn.connection_id == 1
         assert conn.state == ConnectionState.IDLE
 
     def test_execute(self):
         """Should execute query."""
-        conn = MockConnection()
+        conn = InMemoryConnection()
         result = conn.execute("SELECT 1")
 
-        assert result["result"] == "mock"
+        assert result["result"] == "in_memory"
         assert "SELECT 1" in conn._queries
 
     def test_is_valid(self):
         """Should report validity."""
-        conn = MockConnection()
+        conn = InMemoryConnection()
         assert conn.is_valid() is True
 
         conn.close()
@@ -42,7 +42,7 @@ class TestMockConnection:
 
     def test_close(self):
         """Should close connection."""
-        conn = MockConnection()
+        conn = InMemoryConnection()
         conn.close()
 
         assert conn.state == ConnectionState.CLOSED
@@ -52,7 +52,7 @@ class TestMockConnection:
 
     def test_mark_used(self):
         """Should track usage."""
-        conn = MockConnection()
+        conn = InMemoryConnection()
         assert conn.use_count == 0
 
         conn.mark_used()
@@ -65,7 +65,7 @@ class TestConnectionPool:
 
     def test_create_pool(self):
         """Should create pool with min connections."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory, config=PoolConfig(min_connections=3))
 
         stats = pool.stats
@@ -75,7 +75,7 @@ class TestConnectionPool:
 
     def test_acquire_release(self):
         """Should acquire and release connections."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory, config=PoolConfig(min_connections=2))
 
         conn = pool.acquire(timeout=1.0)
@@ -89,7 +89,7 @@ class TestConnectionPool:
 
     def test_connection_context_manager(self):
         """Context manager should work."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory)
 
         with pool.connection() as conn:
@@ -100,7 +100,7 @@ class TestConnectionPool:
 
     def test_max_connections_timeout(self):
         """Should timeout when max connections reached."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory, config=PoolConfig(min_connections=1, max_connections=1))
 
         # Acquire the only connection
@@ -116,7 +116,7 @@ class TestConnectionPool:
 
     def test_stats(self):
         """Should track stats."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory, config=PoolConfig(min_connections=2))
 
         stats = pool.stats
@@ -135,7 +135,7 @@ class TestHealthChecker:
 
     def test_check_health(self):
         """Should check health."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory)
         checker = HealthChecker(pool)
 
@@ -147,7 +147,7 @@ class TestHealthChecker:
 
     def test_last_check_updated(self):
         """Should update last check time."""
-        factory = MockConnectionFactory()
+        factory = InMemoryConnectionFactory()
         pool = ConnectionPool(factory)
         checker = HealthChecker(pool)
 

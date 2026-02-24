@@ -16,7 +16,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 try:
-    from codomyrmex.documentation.audit import audit_documentation
+    from codomyrmex.documentation.quality.audit import audit_documentation
 except ImportError as e:
     print(f"Error importing codomyrmex module: {e}")
     print("Ensure you are running from the project root or have set PYTHONPATH.")

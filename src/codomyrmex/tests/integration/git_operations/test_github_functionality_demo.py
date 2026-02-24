@@ -50,7 +50,7 @@ def test_all_git_operations():
 
     if not git_available:
         print("   ❌ Git not available - cannot continue")
-        return False
+        return
 
     # Test 2: Create temporary repository
     temp_dir = tempfile.mkdtemp(prefix="git_test_")
@@ -62,14 +62,14 @@ def test_all_git_operations():
             print("   ✅ Repository initialized")
         else:
             print("   ❌ Failed to initialize repository")
-            return False
+            return
 
         # Test repository detection
         if is_git_repository(temp_dir):
             print("   ✅ Repository detected correctly")
         else:
             print("   ❌ Repository not detected")
-            return False
+            return
 
         # Test branch operations
         print("\n3. Testing branch operations...")
@@ -85,7 +85,7 @@ def test_all_git_operations():
             print(f"   ✅ Now on branch: {new_current}")
         else:
             print("   ❌ Failed to create branch")
-            return False
+            return
 
         # Test file operations
         print("\n4. Testing file operations...")
@@ -110,13 +110,13 @@ if __name__ == "__main__":
             print("   ✅ File added to staging")
         else:
             print("   ❌ Failed to add file")
-            return False
+            return
 
         if commit_changes("Add test file for validation", temp_dir):
             print("   ✅ Changes committed")
         else:
             print("   ❌ Failed to commit")
-            return False
+            return
 
         # Test status and history
         print("\n5. Testing status and history...")
@@ -132,7 +132,7 @@ if __name__ == "__main__":
             print(f"   📋 Latest commit: {history[0]['message']}")
 
         print("\n✅ ALL LOCAL GIT OPERATIONS WORKING PERFECTLY!")
-        return True
+        return
 
     finally:
         # Clean up

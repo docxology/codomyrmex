@@ -44,7 +44,7 @@ class ContainerMetrics:
 
 
 class PerformanceOptimizer:
-    """Legacy alias for ContainerOptimizer."""
+    """Alias for ContainerOptimizer."""
 
     def __init__(self):
         pass

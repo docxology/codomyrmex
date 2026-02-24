@@ -170,7 +170,7 @@ except ImportError:
     AgentRegistry = None
 
 try:
-    from .exceptions import (
+    from .core.exceptions import (
         AgentConfigurationError,
         AgentError,
         AgentTimeoutError,

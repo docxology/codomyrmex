@@ -4,7 +4,7 @@ Provides curriculum generation, interactive tutoring, and
 certification / assessment capabilities.
 """
 
-from .curriculum import Curriculum, Lesson, Difficulty, DifficultyLevel
+from .curriculum import Curriculum, Lesson, Difficulty
 
 # Optional submodules (not yet implemented)
 try:
@@ -24,7 +24,6 @@ __all__ = [
     "Certificate",
     "Curriculum",
     "Difficulty",
-    "DifficultyLevel",
     "Lesson",
     "Tutor",
     "TutoringSession",

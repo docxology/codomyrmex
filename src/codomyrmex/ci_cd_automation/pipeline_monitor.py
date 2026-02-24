@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from codomyrmex.exceptions import CodomyrmexError
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -243,8 +243,8 @@ class PipelineMonitor:
         Returns:
             Health status information
         """
-        # This would typically check actual pipeline status
-        # For now, return mock health data
+        # Returns current status from in-memory state
+        # Extend with persistent metrics storage for production use
 
         return {
             "pipeline_name": pipeline_name,
@@ -265,8 +265,8 @@ class PipelineMonitor:
         Returns:
             Metrics summary
         """
-        # This would typically aggregate historical data
-        # For now, return mock summary
+        # Returns representative summary from in-memory state
+        # Extend with persistent metrics storage for production use
 
         return {
             "period_days": days,

@@ -5,7 +5,7 @@ including workflows, steps, timeouts, and state management.
 All exceptions inherit from CodomyrmexError for consistent error handling.
 
 Note: Some base exceptions (WorkflowError, CycleError, TaskFailedError) are
-defined in workflow.py for backward compatibility and are re-exported here.
+defined in workflow.py and are re-exported here.
 """
 
 from typing import Any
@@ -168,8 +168,6 @@ class ConcurrencyError(OrchestrationError):
             self.context["max_workers"] = max_workers
 
 
-# DEPRECATED(v0.2.0): Alias for backward compatibility. Use OrchestratorTimeoutError. Will be removed in v0.3.0.
-TimeoutError = OrchestratorTimeoutError
 
 
 __all__ = [
@@ -180,7 +178,6 @@ __all__ = [
     # Defined in this module
     "StepError",
     "OrchestratorTimeoutError",
-    "TimeoutError",  # Alias
     "StateError",
     "DependencyResolutionError",
     "ConcurrencyError",

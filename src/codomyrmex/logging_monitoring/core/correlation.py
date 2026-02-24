@@ -6,7 +6,7 @@ identifier through MCP tool invocations → EventBus events → log records
 
 Usage::
 
-    from codomyrmex.logging_monitoring.correlation import (
+    from codomyrmex.logging_monitoring.core.correlation import (
         new_correlation_id,
         get_correlation_id,
         with_correlation,

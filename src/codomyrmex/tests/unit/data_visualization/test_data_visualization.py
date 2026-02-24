@@ -84,37 +84,7 @@ class TestImports:
             Heatmap, BoxPlot, AreaChart,
         ])
 
-    def test_backward_compat_line_plot_import(self):
-        from codomyrmex.data_visualization.line_plot import create_line_plot
-        assert callable(create_line_plot)
 
-    def test_backward_compat_bar_chart_import(self):
-        from codomyrmex.data_visualization.bar_chart import create_bar_chart
-        assert callable(create_bar_chart)
-
-    def test_backward_compat_scatter_plot_import(self):
-        from codomyrmex.data_visualization.scatter_plot import create_scatter_plot
-        assert callable(create_scatter_plot)
-
-    def test_backward_compat_histogram_import(self):
-        from codomyrmex.data_visualization.histogram import create_histogram
-        assert callable(create_histogram)
-
-    def test_backward_compat_pie_chart_import(self):
-        from codomyrmex.data_visualization.pie_chart import create_pie_chart
-        assert callable(create_pie_chart)
-
-    def test_backward_compat_plotter_import(self):
-        from codomyrmex.data_visualization.plotter import create_heatmap
-        assert callable(create_heatmap)
-
-    def test_backward_compat_plot_utils_import(self):
-        from codomyrmex.data_visualization.plot_utils import (
-            get_codomyrmex_logger,
-            save_plot,
-        )
-        assert callable(save_plot)
-        assert callable(get_codomyrmex_logger)
 
     def test_engines_plotter_class(self):
         from codomyrmex.data_visualization.engines import Plotter
@@ -236,12 +206,7 @@ class TestPlotUtils:
         assert result is ax
         plt.close(fig)
 
-    def test_save_figure_alias(self):
-        from codomyrmex.data_visualization.charts.plot_utils import (
-            save_figure,
-            save_plot,
-        )
-        assert save_figure is save_plot
+
 
     def test_default_figure_size(self):
         from codomyrmex.data_visualization.charts.plot_utils import DEFAULT_FIGURE_SIZE

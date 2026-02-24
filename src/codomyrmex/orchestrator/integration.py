@@ -163,7 +163,7 @@ class CICDBridge:
         """Get or create pipeline manager."""
         if self._manager is None:
             try:
-                from codomyrmex.ci_cd_automation.pipeline_manager import PipelineManager
+                from codomyrmex.ci_cd_automation.pipeline import PipelineManager
                 self._manager = PipelineManager(workspace_dir=self._workspace_dir)
             except ImportError:
                 logger.warning("CI/CD automation not available")

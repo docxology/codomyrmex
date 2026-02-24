@@ -145,11 +145,11 @@ class TestDiscoveryEngine:
     """Test SystemDiscovery."""
 
     def test_import(self):
-        from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
+        from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
         assert SystemDiscovery is not None
 
     def test_init(self):
-        from codomyrmex.system_discovery.discovery_engine import SystemDiscovery
+        from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
         engine = SystemDiscovery()
         assert engine is not None
 
@@ -163,11 +163,11 @@ class TestCapabilityScanner:
     """Test CapabilityScanner."""
 
     def test_import(self):
-        from codomyrmex.system_discovery.capability_scanner import CapabilityScanner
+        from codomyrmex.system_discovery.core.capability_scanner import CapabilityScanner
         assert CapabilityScanner is not None
 
     def test_init(self):
-        from codomyrmex.system_discovery.capability_scanner import CapabilityScanner
+        from codomyrmex.system_discovery.core.capability_scanner import CapabilityScanner
         scanner = CapabilityScanner()
         assert scanner is not None
 
@@ -181,10 +181,10 @@ class TestDiscoveryContext:
     """Test discovery context."""
 
     def test_import(self):
-        from codomyrmex.system_discovery.context import get_system_context
+        from codomyrmex.system_discovery.core.context import get_system_context
         assert get_system_context is not None
 
     def test_call(self):
-        from codomyrmex.system_discovery.context import get_system_context
+        from codomyrmex.system_discovery.core.context import get_system_context
         ctx = get_system_context()
         assert ctx is not None

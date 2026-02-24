@@ -16,12 +16,12 @@ import time
 
 import pytest
 
-from codomyrmex.orchestrator.async_runner import (
+from codomyrmex.orchestrator.execution.async_runner import (
     AsyncExecutionResult,
     AsyncParallelRunner,
     AsyncTaskResult,
 )
-from codomyrmex.orchestrator.retry_policy import with_retry
+from codomyrmex.orchestrator.resilience.retry_policy import with_retry
 
 
 # ── Helpers ───────────────────────────────────────────────────────────

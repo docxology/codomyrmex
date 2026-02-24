@@ -2,7 +2,7 @@ import logging
 from typing import Any
 
 try:
-    from codomyrmex.logging_monitoring.logger_config import get_logger
+    from codomyrmex.logging_monitoring.core.logger_config import get_logger
 except ImportError:
     def get_logger(name: str) -> logging.Logger:
         return logging.getLogger(name)
@@ -19,7 +19,7 @@ except ImportError:
     CommandRunner = None
 
 try:
-    from codomyrmex.performance.performance_monitor import (
+    from codomyrmex.performance.monitoring.performance_monitor import (
         PerformanceMonitor,
         monitor_performance,
     )

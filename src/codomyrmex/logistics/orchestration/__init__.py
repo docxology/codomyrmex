@@ -7,7 +7,6 @@ Re-exports all functionality from the project submodule.
 
 from .project import (
     DocumentationGenerator,
-    OrchestrationContext,
     OrchestrationEngine,
     OrchestrationSession,
     Project,
@@ -76,7 +75,6 @@ __all__ = [
     # Sessions & engine
     "OrchestrationSession",
     "SessionStatus",
-    "OrchestrationContext",
     # MCP tools
     "get_mcp_tools",
     "get_mcp_tool_definitions",

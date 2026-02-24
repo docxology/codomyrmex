@@ -21,13 +21,13 @@ import pytest
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from codomyrmex.performance.cache_manager import (
+from codomyrmex.performance.caching.cache_manager import (
     CacheManager,
     cached_function,
     clear_cache,
     get_cache_stats,
 )
-from codomyrmex.performance.lazy_loader import (
+from codomyrmex.performance.optimization.lazy_loader import (
     LazyLoader,
     get_lazy_loader,
     lazy_function,
@@ -36,7 +36,7 @@ from codomyrmex.performance.lazy_loader import (
 
 # Import PerformanceMonitor with fallback
 try:
-    from codomyrmex.performance.performance_monitor import (
+    from codomyrmex.performance.monitoring.performance_monitor import (
         PerformanceMetrics,
         PerformanceMonitor,
         clear_performance_metrics,
@@ -131,7 +131,7 @@ class TestLazyLoader:
 
     def test_pre_configured_lazy_loaders(self):
         """Test pre-configured lazy loaders for common modules."""
-        from codomyrmex.performance.lazy_loader import matplotlib, numpy, pandas
+        from codomyrmex.performance.optimization.lazy_loader import matplotlib, numpy, pandas
 
         # These should be LazyLoader instances
         assert isinstance(matplotlib, LazyLoader)
@@ -430,7 +430,7 @@ class TestPerformanceMonitor:
         clear_performance_metrics()
 
         # Record a metric using the global monitor
-        from codomyrmex.performance.performance_monitor import _performance_monitor
+        from codomyrmex.performance.monitoring.performance_monitor import _performance_monitor
         _performance_monitor.record_metrics('global_test', 1.0, 10.0, 20.0)
 
         # Get stats via global function

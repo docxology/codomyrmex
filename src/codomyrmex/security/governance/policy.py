@@ -52,8 +52,6 @@ class PolicyRule:
         return f"PolicyRule(name='{self.name}', priority={self.priority})"
 
 
-# DEPRECATED(v0.2.0): Backward-compatible alias. Use PolicyRule directly. Will be removed in v0.3.0.
-Policy = PolicyRule
 
 
 class PolicyEngine:
@@ -192,7 +190,6 @@ class PolicyEngine:
         """Return names of all registered policies."""
         return list(self._policies.keys())
 
-    # DEPRECATED(v0.2.0): Legacy API compatibility wrapper. Will be removed in v0.3.0.
     def add_policy(self, policy: PolicyRule) -> None:
         """Add a policy rule directly (wraps in unnamed policy)."""
         self._policies.setdefault("_default", {

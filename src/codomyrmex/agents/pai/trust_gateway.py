@@ -42,7 +42,7 @@ from codomyrmex.agents.pai.mcp_bridge import (
     _discover_dynamic_tools,
 )
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.model_context_protocol.validation import validate_tool_arguments
+from codomyrmex.model_context_protocol.quality.validation import validate_tool_arguments
 
 logger = get_logger(__name__)
 
@@ -294,92 +294,13 @@ class _LazyToolSets:
         return _get_destructive_tools()
 
 
-# DEPRECATED(v0.2.0): Module-level names for backward compatibility -- computed lazily. Will be removed in v0.3.0.
-class _FrozenSetProxy:
-    """Proxy that behaves like a frozenset but delegates to lazy computation."""
-
-    def __init__(self, accessor):
-        self._accessor = accessor
-
-    def __contains__(self, item):
-        return item in self._accessor()
-
-    def __iter__(self):
-        return iter(self._accessor())
-
-    def __len__(self):
-        return len(self._accessor())
-
-    def __or__(self, other):
-        return self._accessor() | other
-
-    def __ror__(self, other):
-        return other | self._accessor()
-
-    def __and__(self, other):
-        return self._accessor() & other
-
-    def __sub__(self, other):
-        return self._accessor() - other
-
-    def __repr__(self):
-        return repr(self._accessor())
-
-
-SAFE_TOOLS = _FrozenSetProxy(_LazyToolSets.safe_tools)
-
-
-class _LazyInt:
-    """Integer proxy that always evaluates fresh from a callable."""
-
-    def __init__(self, fn):
-        self._fn = fn
-
-    def _get(self):
-        return self._fn()
-
-    def __eq__(self, other):
-        return self._get() == other
-
-    def __ne__(self, other):
-        return self._get() != other
-
-    def __lt__(self, other):
-        return self._get() < other
-
-    def __gt__(self, other):
-        return self._get() > other
-
-    def __le__(self, other):
-        return self._get() <= other
-
-    def __ge__(self, other):
-        return self._get() >= other
-
-    def __add__(self, other):
-        return self._get() + (other._get() if isinstance(other, _LazyInt) else other)
-
-    def __radd__(self, other):
-        return other + self._get()
-
-    def __sub__(self, other):
-        return self._get() - (other._get() if isinstance(other, _LazyInt) else other)
-
-    def __rsub__(self, other):
-        return other - self._get()
-
-    def __int__(self):
-        return self._get()
-
-    def __repr__(self):
-        return repr(self._get())
-
-    def __hash__(self):
-        return hash(self._get())
-
-
-SAFE_TOOL_COUNT = _LazyInt(lambda: len(_get_safe_tools()))
-DESTRUCTIVE_TOOL_COUNT = _LazyInt(lambda: len(_get_destructive_tools()))
+# Module-level convenience accessors — eagerly evaluated.
+# These are safe to compute at module load because TrustRegistry.__init__
+# (line ~476) calls get_tool_registry() anyway, which fully populates the
+# static + dynamic tool lists before any test imports these symbols.
+SAFE_TOOLS: frozenset[str] = _get_safe_tools()
+SAFE_TOOL_COUNT: int = len(SAFE_TOOLS)
+DESTRUCTIVE_TOOL_COUNT: int = len(_get_destructive_tools())
 
 
 
@@ -645,7 +566,7 @@ def verify_capabilities() -> dict[str, Any]:
     # ── Validation ────────────────────────────────────────────────
     
     report = {
-        "status": "verified", # Keep for backwards compatibility, though less meaningful now
+        "status": "verified",
         "tools": {
             "safe": sorted(list(safe_tools)),
             "destructive": sorted(list(destructive_tools)),
@@ -658,7 +579,7 @@ def verify_capabilities() -> dict[str, Any]:
             "total": len(modules) + len(failed_modules),
         },
         "trust": {
-            "promoted_to_verified": promoted, # Keep for backwards compatibility
+            "promoted_to_verified": promoted,
             "level": _registry.get_aggregate_level(),
             "audit_entries": _registry.get_audit_count(),
             "gateway_healthy": True,

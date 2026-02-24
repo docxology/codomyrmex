@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from .models import (
     JobStatus,
