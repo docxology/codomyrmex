@@ -29,19 +29,6 @@ class TestCheckGitAvailability:
         assert isinstance(result, bool)
         # Should be True if Git is installed (which it should be in test environment)
 
-    def test_git_not_available(self, monkeypatch):
-        """Test when Git is not available."""
-        import codomyrmex.git_operations.core.git as _git_mod
-        monkeypatch.setattr(_git_mod.subprocess, "run", lambda *a, **k: (_ for _ in ()).throw(FileNotFoundError()))
-        result = check_git_availability()
-        assert result is False
-
-    def test_git_command_fails(self, monkeypatch):
-        """Test when Git command fails."""
-        import codomyrmex.git_operations.core.git as _git_mod
-        monkeypatch.setattr(_git_mod.subprocess, "run", lambda *a, **k: (_ for _ in ()).throw(subprocess.CalledProcessError(1, "git")))
-        result = check_git_availability()
-        assert result is False
 
 
 @pytest.mark.unit

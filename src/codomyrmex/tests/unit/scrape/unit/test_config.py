@@ -1,5 +1,6 @@
 """Unit tests for configuration management."""
 
+import os
 
 import pytest
 
@@ -33,34 +34,67 @@ class TestScrapeConfig:
         assert config.default_timeout == 60.0
         assert config.max_retries == 5
 
-    def test_from_env(self, monkeypatch):
+    def test_from_env(self):
         """Test creating config from environment variables."""
-        monkeypatch.setenv("FIRECRAWL_API_KEY", "env-key")
-        monkeypatch.setenv("SCRAPE_TIMEOUT", "45.0")
-        monkeypatch.setenv("SCRAPE_MAX_RETRIES", "5")
+        orig_api = os.environ.get("FIRECRAWL_API_KEY")
+        orig_timeout = os.environ.get("SCRAPE_TIMEOUT")
+        orig_retries = os.environ.get("SCRAPE_MAX_RETRIES")
+        try:
+            os.environ["FIRECRAWL_API_KEY"] = "env-key"
+            os.environ["SCRAPE_TIMEOUT"] = "45.0"
+            os.environ["SCRAPE_MAX_RETRIES"] = "5"
 
-        config = ScrapeConfig.from_env()
-        assert config.api_key == "env-key"
-        assert config.default_timeout == 45.0
-        assert config.max_retries == 5
+            config = ScrapeConfig.from_env()
+            assert config.api_key == "env-key"
+            assert config.default_timeout == 45.0
+            assert config.max_retries == 5
+        finally:
+            for key, orig in [
+                ("FIRECRAWL_API_KEY", orig_api),
+                ("SCRAPE_TIMEOUT", orig_timeout),
+                ("SCRAPE_MAX_RETRIES", orig_retries),
+            ]:
+                if orig is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = orig
 
-    def test_from_env_fc_api_key(self, monkeypatch):
+    def test_from_env_fc_api_key(self):
         """Test creating config from FC_API_KEY environment variable."""
-        monkeypatch.setenv("FC_API_KEY", "fc-key")
-        monkeypatch.delenv("FIRECRAWL_API_KEY", raising=False)
+        orig_fc = os.environ.get("FC_API_KEY")
+        orig_firecrawl = os.environ.get("FIRECRAWL_API_KEY")
+        try:
+            os.environ["FC_API_KEY"] = "fc-key"
+            os.environ.pop("FIRECRAWL_API_KEY", None)
 
-        config = ScrapeConfig.from_env()
-        assert config.api_key == "fc-key"
+            config = ScrapeConfig.from_env()
+            assert config.api_key == "fc-key"
+        finally:
+            if orig_fc is None:
+                os.environ.pop("FC_API_KEY", None)
+            else:
+                os.environ["FC_API_KEY"] = orig_fc
+            if orig_firecrawl is None:
+                os.environ.pop("FIRECRAWL_API_KEY", None)
+            else:
+                os.environ["FIRECRAWL_API_KEY"] = orig_firecrawl
 
-    def test_from_env_respect_robots_txt(self, monkeypatch):
+    def test_from_env_respect_robots_txt(self):
         """Test respect_robots_txt from environment."""
-        monkeypatch.setenv("SCRAPE_RESPECT_ROBOTS_TXT", "false")
-        config = ScrapeConfig.from_env()
-        assert config.respect_robots_txt is False
+        orig = os.environ.get("SCRAPE_RESPECT_ROBOTS_TXT")
+        try:
+            os.environ["SCRAPE_RESPECT_ROBOTS_TXT"] = "false"
+            config = ScrapeConfig.from_env()
+            assert config.respect_robots_txt is False
 
-        monkeypatch.setenv("SCRAPE_RESPECT_ROBOTS_TXT", "true")
-        config = ScrapeConfig.from_env()
-        assert config.respect_robots_txt is True
+            os.environ["SCRAPE_RESPECT_ROBOTS_TXT"] = "true"
+            config = ScrapeConfig.from_env()
+            assert config.respect_robots_txt is True
+        finally:
+            if orig is None:
+                os.environ.pop("SCRAPE_RESPECT_ROBOTS_TXT", None)
+            else:
+                os.environ["SCRAPE_RESPECT_ROBOTS_TXT"] = orig
 
     def test_validate_without_api_key(self):
         """Test validation without API key."""

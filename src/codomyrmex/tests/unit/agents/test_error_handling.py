@@ -150,10 +150,8 @@ class TestInvalidConfigurationHandling:
         assert any("claude_timeout" in e for e in errors)
         assert any("gemini_timeout" in e for e in errors)
 
-    def test_missing_api_key_handling(self, monkeypatch):
+    def test_missing_api_key_handling(self):
         """Test handling of missing API keys."""
-        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
         config = AgentConfig(
             claude_api_key=None,
             codex_api_key=None

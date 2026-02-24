@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import time
 from importlib import import_module
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -14,7 +13,6 @@ logger = get_logger(__name__)
 
 def ensure_documentation_exists(*, prompt: str, description: str) -> str:
     """Validate that the controller module exposes documented interfaces."""
-
     if "documentation" not in prompt.lower():
         raise ValueError("Shared prompt must mention documentation")
     if not controller_module.DroidController.__doc__:
@@ -63,57 +61,9 @@ def verify_readiness(*, prompt: str, description: str) -> str:
     return "Autonomous readiness verified"
 
 
-# Generator functions extracted to generators/ subpackage for modularity.
-# Re-exported here for backward compatibility.
-from .generators.spatial import (  # noqa: E402,F401
-    create_3d_module_documentation,
-    generate_3d_api_spec,
-    generate_3d_docs_content,
-    generate_3d_engine_content,
-    generate_3d_examples,
-    generate_3d_init_content,
-    generate_3d_readme_content,
-    generate_3d_requirements,
-    generate_3d_tests,
-    generate_ar_vr_content,
-    generate_rendering_content,
-)
-from .generators.documentation import (  # noqa: E402,F401
-    add_documentation_quality_methods,
-    assess_agents_quality,
-    assess_documentation_coverage,
-    assess_readme_quality,
-    assess_technical_accuracy,
-    generate_consistency_checker_module,
-    generate_documentation_quality_module,
-    generate_quality_tests,
-)
-from .generators.physical import (  # noqa: E402,F401
-    create_physical_management_module,
-    generate_physical_api_spec,
-    generate_physical_docs_content,
-    generate_physical_examples,
-    generate_physical_init_content,
-    generate_physical_manager_content,
-    generate_physical_readme_content,
-    generate_physical_requirements,
-    generate_physical_simulation_content,
-    generate_physical_tests,
-    generate_sensor_integration_content,
-    ollama_module,
-    prompt_engineering,
-    refactor_todo_processing,
-    test_statistics_display,
-    testing_and_docs,
-)
-
 __all__ = [
     "ensure_documentation_exists",
     "confirm_logging_integrations",
     "verify_real_methods",
     "verify_readiness",
-    "assess_documentation_coverage",
-    "add_documentation_quality_methods",
-    "create_physical_management_module",
-    "test_statistics_display",
 ]

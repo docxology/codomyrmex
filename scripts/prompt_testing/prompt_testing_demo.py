@@ -12,15 +12,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-def main():
-    """Main demonstration."""
-    print("=== Prompt Testing Demo ===")
-    print("Description: Prompt evaluation, A/B testing, and quality assurance at scale")
-    print()
-    
-    # TODO: Add actual demonstrations
-    print("✅ Demo completed successfully")
-    return 0
+def main() -> int:
+    raise NotImplementedError(
+        "Module 'codomyrmex.prompt_testing' is not yet implemented. "
+        "Create src/codomyrmex/prompt_testing/ with real functionality "
+        "before adding demonstrations here."
+    )
 
 if __name__ == "__main__":
     sys.exit(main())

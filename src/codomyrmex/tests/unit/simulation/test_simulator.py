@@ -1,7 +1,6 @@
 """Unit tests for the simulation module."""
 
 import pytest
-from unittest.mock import MagicMock
 from codomyrmex.simulation.agent import Agent, Action
 from codomyrmex.simulation.simulator import Simulator, SimulationConfig
 

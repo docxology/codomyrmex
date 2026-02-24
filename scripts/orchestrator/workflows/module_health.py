@@ -22,9 +22,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, parallel
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 def get_all_modules() -> List[Path]:
@@ -119,8 +117,9 @@ async def check_module_health(module_path: Path, _task_results: dict = None) -> 
     }
 
 
-async def main():
+async def main() -> int:
     """Run module health workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Check module health")
     parser.add_argument("--module", "-m", help="Specific module to check")
     parser.add_argument("--fix", action="store_true", help="Attempt to fix issues")
@@ -130,12 +129,12 @@ async def main():
     if args.module:
         modules = [project_root / "src" / "codomyrmex" / args.module]
         if not modules[0].exists():
-            print(f"Module not found: {args.module}")
+            print_error(f"Module not found: {args.module}")
             return 1
     else:
         modules = get_all_modules()
 
-    print(f"🏥 Checking health of {len(modules)} modules...")
+    print_info(f"Checking health of {len(modules)} modules...")
     print()
 
     results = []

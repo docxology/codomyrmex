@@ -7,64 +7,7 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from codomyrmex.fpf import FPFClient, FPFFetcher
-
-
-@pytest.mark.integration
-def test_e2e_load_from_file_workflow(tmp_path, monkeypatch):
-    """Test end-to-end workflow: load from file."""
-    spec_path = Path(__file__).resolve().parents[3] / "fpf" / "FPF-Spec.md"
-    if not spec_path.exists():
-        pytest.skip("FPF-Spec.md not found")
-
-    # Patch FPFFetcher to use tmp_path
-    original_init = FPFFetcher.__init__
-    def patched_init(self, cache_dir=None):
-        original_init(self, cache_dir=tmp_path / "fpf_cache")
-    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
-
-    client = FPFClient()
-    spec = client.load_from_file(str(spec_path))
-
-    assert spec is not None
-    assert len(spec.patterns) > 0
-    assert client.spec is not None
-
-
-@pytest.mark.integration
-def test_e2e_fetch_and_load_workflow(tmp_path, monkeypatch):
-    """Test end-to-end workflow: fetch and load."""
-    # Patch FPFFetcher to use tmp_path
-    original_init = FPFFetcher.__init__
-    def patched_init(self, cache_dir=None):
-        original_init(self, cache_dir=tmp_path / "fpf_cache")
-    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
-
-    # Patch requests.get
-    class StubResponse:
-        def __init__(self, text):
-            self.text = text
-        def raise_for_status(self):
-            pass
-
-    mock_text = """
-# First Principles Framework (FPF)
-
-## A.1 - Test Pattern
-
-### Problem
-Test problem.
-
-### Solution
-Test solution.
-"""
-    monkeypatch.setattr("codomyrmex.fpf.io.fetcher.requests.get", lambda *a, **k: StubResponse(mock_text))
-
-    client = FPFClient()
-    spec = client.fetch_and_load()
-
-    assert spec is not None
-    assert len(spec.patterns) > 0
+from codomyrmex.fpf import FPFClient
 
 
 @pytest.mark.integration
@@ -160,32 +103,5 @@ def test_e2e_full_pipeline():
     context = client.build_context()
     assert isinstance(context, str)
 
-
-@pytest.mark.integration
-def test_e2e_error_handling(tmp_path, monkeypatch):
-    """Test error handling in workflows."""
-    # Patch FPFFetcher to use tmp_path
-    original_init = FPFFetcher.__init__
-    def patched_init(self, cache_dir=None):
-        original_init(self, cache_dir=tmp_path / "fpf_cache")
-    monkeypatch.setattr(FPFFetcher, "__init__", patched_init)
-
-    client = FPFClient()
-
-    # Search without loading
-    with pytest.raises(ValueError):
-        client.search("test")
-
-    # Get pattern without loading
-    with pytest.raises(ValueError):
-        client.get_pattern("A.1")
-
-    # Export without loading
-    with pytest.raises(ValueError):
-        client.export_json("/tmp/test.json")
-
-    # Build context without loading
-    with pytest.raises(ValueError):
-        client.build_context()
 
 

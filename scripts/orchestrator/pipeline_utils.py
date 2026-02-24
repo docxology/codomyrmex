@@ -72,7 +72,7 @@ def validate_pipeline(pipeline: dict) -> list:
     return errors
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(description="Pipeline utilities")
     subparsers = parser.add_subparsers(dest="command")
     

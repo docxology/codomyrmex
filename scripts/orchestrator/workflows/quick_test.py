@@ -16,13 +16,12 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import run_parallel, discover_scripts
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
-def main():
+def main() -> int:
     """Run quick test workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Quick parallel test runner")
     parser.add_argument("--modules", "-m", nargs="+", help="Specific modules to test")
     parser.add_argument("--workers", "-w", type=int, default=4, help="Parallel workers")
@@ -48,10 +47,10 @@ def main():
         test_files = list(test_dir.glob("**/test_*.py"))
 
     if not test_files:
-        print("ℹ️  No test files found - passing with success.")
+        print_info("No test files found - passing with success.")
         return 0
 
-    print(f"🧪 Running {len(test_files)} test files with {args.workers} workers")
+    print_info(f"Running {len(test_files)} test files with {args.workers} workers")
     print()
 
     def on_progress(name: str, status: str, details: dict):

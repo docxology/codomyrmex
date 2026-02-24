@@ -184,11 +184,15 @@ def _perform_docstring_indexing(path: str) -> None:
 
 def _perform_symbol_extraction(path: str) -> list[str]:
     """Extract symbols."""
-    return []
+    raise NotImplementedError(
+        "_perform_symbol_extraction is not yet implemented."
+    )
 
 def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
     """Analyze symbol usage."""
-    return {}
+    raise NotImplementedError(
+        "_perform_symbol_usage_analysis is not yet implemented."
+    )
 
 def _perform_text_search_context_extraction(query: str, path: str) -> str:
     """Extract context surrounding search matches in a file.

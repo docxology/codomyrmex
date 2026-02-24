@@ -33,8 +33,9 @@ async_ops/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.cache.async_ops
+# __all__ is empty — no public interface exported yet.
+Not yet implemented.
 ```
 
 ### 3.2 Configuration
@@ -46,7 +47,7 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Deferred implementation**: Core async ops logic is not yet exported; `__all__` is empty and imports are commented out pending design finalization.
 
 ### 4.2 Limitations
 
@@ -57,10 +58,10 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-pytest tests/cache_async_ops/
+uv run pytest src/codomyrmex/tests/unit/cache/async_ops/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Implement asyncio-native cache get/set/delete operations
+- Add non-blocking batch operations with configurable concurrency limits

@@ -82,7 +82,7 @@ def check_dependencies(repo_root: Path) -> int:
         return 0
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(description="Check dependency health")
     parser.add_argument(
         "--repo-root",

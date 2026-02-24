@@ -7,6 +7,7 @@ Restores the descriptive text for modules in README.md that was overwritten.
 
 import argparse
 from pathlib import Path
+from codomyrmex.utils.cli_helpers import print_success, print_error
 
 DESCRIPTIONS = {
     "agentic_memory": "Memory systems for AI agents",
@@ -93,7 +94,7 @@ def main():
     readme_path = root_dir / "src" / "codomyrmex" / "README.md"
     
     if not readme_path.exists():
-        print(f"Error: README.md not found at {readme_path}")
+        print_error(f"README.md not found at {readme_path}")
         return
 
     content = readme_path.read_text()
@@ -106,7 +107,7 @@ def main():
         content = content.replace(target, replacement)
         
     readme_path.write_text(content)
-    print("Restored descriptions in README.md")
+    print_success("Restored descriptions in README.md")
 
 if __name__ == "__main__":
     main()

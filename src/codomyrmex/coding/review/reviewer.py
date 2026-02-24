@@ -2282,12 +2282,3 @@ def complex_function(data):
             return "#fd7e14"  # Orange
         else:
             return "#dc3545"  # Red
-
-
-# Backward-compatible re-exports of convenience functions (moved to api.py)
-from .api import (  # noqa: E402,F401
-    analyze_file,
-    analyze_project,
-    check_quality_gates,
-    generate_report,
-)

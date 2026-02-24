@@ -23,9 +23,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, parallel
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 async def list_outdated_packages(_task_results: dict = None) -> Dict[str, Any]:
@@ -206,15 +204,16 @@ async def generate_dependency_report(task_results: dict = None, _task_results: d
     }
 
 
-async def main():
+async def main() -> int:
     """Run dependency check workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Check project dependencies")
     parser.add_argument("--update", action="store_true", help="Update outdated packages")
     parser.add_argument("--security-only", action="store_true", help="Only run security checks")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
-    print("Checking project dependencies...")
+    print_info("Checking project dependencies...")
     print()
 
     workflow = Workflow(
@@ -282,7 +281,7 @@ async def main():
         return 0 if summary["success"] else 1
 
     except Exception as e:
-        print(f" Dependency check failed: {e}")
+        print_error(f"Dependency check failed: {e}")
         return 1
 
 

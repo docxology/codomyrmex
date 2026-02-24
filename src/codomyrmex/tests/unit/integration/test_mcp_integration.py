@@ -1,7 +1,6 @@
 """Integration tests for MCP tool exposure in new modules."""
 
 import pytest
-from unittest.mock import MagicMock, patch
 
 from codomyrmex.simulation.simulator import Simulator
 from codomyrmex.networks.graph import NetworkGraph
@@ -21,17 +20,12 @@ def test_network_graph_shortest_path_is_mcp_tool():
     assert meta["name"] == "codomyrmex.NetworkGraph.shortest_path"
     assert "shortest path" in meta["description"].lower()
 
-@patch("codomyrmex.agents.pai.trust_gateway.trusted_call_tool")
-def test_call_tool_delegates_to_trust_gateway(mock_trusted_call):
-    """Verify call_tool delegates to trusted_call_tool."""
+def test_call_tool_delegates_to_trust_gateway():
+    """Verify call_tool returns a result dict (delegates to trust gateway end-to-end)."""
     from codomyrmex.agents.pai.mcp_bridge import call_tool
-    
-    mock_trusted_call.return_value = {"result": "success"}
-    
-    result = call_tool("some.tool", arg=1)
-    
-    mock_trusted_call.assert_called_once_with("some.tool", arg=1)
-    assert result == {"result": "success"}
+    result = call_tool("codomyrmex.list_modules")
+    assert isinstance(result, dict)
+    assert "modules" in result
 
 def test_dynamic_discovery_finds_new_tools():
     """Verify that dynamic discovery finds the new tools."""

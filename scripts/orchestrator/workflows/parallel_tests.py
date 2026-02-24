@@ -244,7 +244,7 @@ async def generate_test_report(
     }
 
 
-async def main():
+async def main() -> int:
     """Run parallel test workflow."""
     parser = argparse.ArgumentParser(description="Run tests in parallel")
     parser.add_argument("--workers", "-w", type=int, default=4, help="Number of parallel workers")

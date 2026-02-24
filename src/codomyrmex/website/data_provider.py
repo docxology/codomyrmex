@@ -6,21 +6,13 @@ documentation trees, CI/CD pipeline status, and system health metrics.
 """
 
 import importlib.util
-import json as _json
 import os
-import platform
-import re
 import subprocess
-import sys
 import time
 from pathlib import Path
 from typing import Any
 
-import yaml
-
-from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.llm.ollama.config_manager import ConfigManager
 
 logger = get_logger(__name__)
 

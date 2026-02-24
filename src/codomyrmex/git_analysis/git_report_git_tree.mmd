@@ -1,19 +1,106 @@
-gitGraph
-    commit id: "Initial"
-    branch develop
-    checkout develop
-    commit id: "Feature start"
+flowchart TD
+    subgraph Foundation["Foundation Layer (all modules depend on these)"]
+        LOG[logging_monitoring]
+        ENV[environment_setup]
+        MCP[model_context_protocol]
+        TERM[terminal_interface]
+    end
 
-    branch feature/auth
-    checkout feature/auth
-    commit id: "Add auth logic"
-    commit id: "Add tests"
+    subgraph Core["Core Layer"]
+        AGENTS[agents]
+        GIT_OPS[git_operations]
+        GIT_ANAL[git_analysis]
+        CODING[coding]
+        LLM[llm]
+        STATIC[static_analysis]
+        PATTERN[pattern_matching]
+    end
 
-    checkout develop
-    merge feature/auth
-    commit id: "Merge feature"
+    subgraph Service["Service Layer"]
+        CICD[ci_cd_automation]
+        DOC[documentation]
+        CONTAINER[containerization]
+        ORCH[orchestrator]
+    end
 
-    checkout main
-    merge develop
-    commit id: "Release v1.0"
-    tag v1.0.0
+    subgraph Application["Application Layer"]
+        CLI[cli]
+        SYSDISC[system_discovery]
+    end
+
+    subgraph Extended["Extended / MCP-exposed Modules"]
+        FORMAL[formal_verification]
+        CRYPTO[crypto]
+        EVENTS[events]
+        SEARCH[search]
+        CFG[config_management]
+        CLOUD[cloud]
+        CEREBRUM[cerebrum]
+        PERF[performance]
+        SCRAPE[scrape]
+        MAINT[maintenance]
+        PLUGIN[plugin_system]
+        RELATIONS[relations]
+        EMAIL[email]
+    end
+
+    %% Foundation dependencies (all core modules use these)
+    AGENTS --> LOG
+    AGENTS --> ENV
+    GIT_OPS --> LOG
+    GIT_ANAL --> LOG
+    CODING --> LOG
+    LLM --> LOG
+    LLM --> MCP
+
+    %% Core inter-dependencies
+    GIT_ANAL --> GIT_OPS
+    STATIC --> CODING
+    PATTERN --> CODING
+    AGENTS --> LLM
+    AGENTS --> MCP
+
+    %% Service dependencies
+    CICD --> GIT_OPS
+    CICD --> CONTAINER
+    ORCH --> AGENTS
+    ORCH --> CICD
+    DOC --> CODING
+    DOC --> STATIC
+
+    %% Application dependencies
+    CLI --> ORCH
+    CLI --> GIT_OPS
+    CLI --> GIT_ANAL
+    CLI --> AGENTS
+    CLI --> LOG
+    CLI --> TERM
+    SYSDISC --> MCP
+
+    %% Extended modules
+    FORMAL --> LOG
+    CRYPTO --> LOG
+    EVENTS --> LOG
+    SEARCH --> LOG
+    CFG --> LOG
+    CLOUD --> LOG
+    CEREBRUM --> LLM
+    PERF --> LOG
+    SCRAPE --> LOG
+    MAINT --> LOG
+    PLUGIN --> LOG
+    RELATIONS --> LOG
+    EMAIL --> LOG
+
+    %% Styling
+    classDef foundation fill:#1e3a5f,color:#fff,stroke:#3b82f6
+    classDef core fill:#1e4d2b,color:#fff,stroke:#22c55e
+    classDef service fill:#4a1942,color:#fff,stroke:#a855f7
+    classDef app fill:#4a2e00,color:#fff,stroke:#f59e0b
+    classDef extended fill:#2d2d2d,color:#ccc,stroke:#6b7280
+
+    class LOG,ENV,MCP,TERM foundation
+    class AGENTS,GIT_OPS,GIT_ANAL,CODING,LLM,STATIC,PATTERN core
+    class CICD,DOC,CONTAINER,ORCH service
+    class CLI,SYSDISC app
+    class FORMAL,CRYPTO,EVENTS,SEARCH,CFG,CLOUD,CEREBRUM,PERF,SCRAPE,MAINT,PLUGIN,RELATIONS,EMAIL extended

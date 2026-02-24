@@ -59,8 +59,10 @@ from .models import (
 )
 
 # Import reviewer
-from .reviewer import (
-    CodeReviewer,
+from .reviewer import CodeReviewer
+
+# Import convenience functions
+from .api import (
     analyze_file,
     analyze_project,
     check_quality_gates,

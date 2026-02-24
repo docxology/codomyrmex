@@ -33,8 +33,20 @@ permissions/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.skills.permissions
+from codomyrmex.skills.permissions import (
+    SkillPermissionManager,  # Manages per-skill action permissions
+)
+
+# Key class signature:
+class SkillPermissionManager:
+    def __init__(self) -> None: ...
+    def check_permission(self, skill_id: str, action: str) -> bool: ...
+    def grant(self, skill_id: str, permission: str) -> None: ...
+    def revoke(self, skill_id: str, permission: str) -> bool: ...
+    def list_permissions(self, skill_id: str) -> list[str]: ...
+    def grant_all(self, skill_id: str, permissions: list[str]) -> None: ...
+    def revoke_all(self, skill_id: str) -> None: ...
 ```
 
 ### 3.2 Configuration
@@ -46,21 +58,23 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **In-memory permission store**: Permissions are held in a `dict[str, set[str]]` keyed by `skill_id`. This keeps the implementation dependency-free and fast for the current single-process use case.
+2. **Structured logging via `logging_monitoring`**: All grant/revoke operations are logged through the centralized logger with a graceful fallback to stdlib `logging` if the dependency is unavailable.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No persistence: permissions are lost on process restart
+- No role-based or hierarchical permission model; flat action strings only
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/skills_permissions/
+uv run pytest src/codomyrmex/tests/unit/skills/permissions/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Add persistent storage backend (file or database)
+- Support wildcard or role-based permission grants
+- Add permission inheritance between skills

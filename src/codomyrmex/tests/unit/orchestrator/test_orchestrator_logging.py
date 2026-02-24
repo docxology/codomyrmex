@@ -7,6 +7,7 @@ This module verifies that the orchestrator properly logs structured events:
 """
 
 import logging
+import os
 
 import pytest
 
@@ -112,16 +113,17 @@ class TestOrchestratorLogging:
 class TestQuietReconfigMode:
     """Tests for quiet reconfig mode to reduce log noise."""
 
-    def test_quiet_reconfig_suppresses_logging_message(self, monkeypatch):
+    def test_quiet_reconfig_suppresses_logging_message(self):
         """Test that CODOMYRMEX_LOG_QUIET_RECONFIG=1 suppresses config message."""
         from codomyrmex.logging_monitoring.core import logger_config
 
         # Reset the configured flag for testing
         original_flag = logger_config._logging_configured
+        original_env = os.environ.get("CODOMYRMEX_LOG_QUIET_RECONFIG")
 
         try:
             logger_config._logging_configured = False
-            monkeypatch.setenv("CODOMYRMEX_LOG_QUIET_RECONFIG", "1")
+            os.environ["CODOMYRMEX_LOG_QUIET_RECONFIG"] = "1"
 
             # This should not log the "Logging configured" message
             # We're just verifying it doesn't crash
@@ -129,4 +131,8 @@ class TestQuietReconfigMode:
 
         finally:
             logger_config._logging_configured = original_flag
+            if original_env is None:
+                os.environ.pop("CODOMYRMEX_LOG_QUIET_RECONFIG", None)
+            else:
+                os.environ["CODOMYRMEX_LOG_QUIET_RECONFIG"] = original_env
 

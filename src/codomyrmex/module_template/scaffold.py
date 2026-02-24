@@ -170,8 +170,7 @@ class {class_name}:
             Processed data
         """
         logger.debug(f"Processing data: {{type(data).__name__}}")
-        # TODO: Implement processing logic
-        return data
+        raise NotImplementedError("scaffold.process() requires implementation by consuming module")
 
 
 # Convenience function

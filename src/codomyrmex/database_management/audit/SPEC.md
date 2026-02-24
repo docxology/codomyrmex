@@ -33,8 +33,8 @@ audit/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.database_management.audit
+# Not yet implemented. __all__ is empty; no public API is exported.
 ```
 
 ### 3.2 Configuration
@@ -46,21 +46,20 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Lazy-import stub**: Module is declared with an empty `__all__` and a commented-out `from .core import *` to support future lazy loading without startup cost.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No query logging or slow-query detection is implemented yet
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/database_management_audit/
+uv run pytest src/codomyrmex/tests/unit/database_management/audit/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Implement query logging with configurable verbosity levels
+- Add slow-query detection with threshold-based alerting

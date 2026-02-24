@@ -231,3 +231,4 @@ pids/
 
 .gemini/
 gha-creds-*.json
+.gitnexus

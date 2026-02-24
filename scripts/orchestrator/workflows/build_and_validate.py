@@ -23,9 +23,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 async def clean_build(_task_results: dict = None) -> dict:
@@ -45,8 +43,8 @@ async def clean_build(_task_results: dict = None) -> dict:
             try:
                 shutil.rmtree(d)
                 cleaned += 1
-            except Exception as e:
-                logger.warning(f"Failed to clean {d}: {e}")
+            except Exception:
+                pass  # best-effort cleanup
 
     return {"success": True, "directories_cleaned": cleaned}
 
@@ -185,8 +183,9 @@ async def validate_build(_task_results: dict = None) -> dict:
     }
 
 
-async def main():
+async def main() -> int:
     """Run the build workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Build and validate package")
     parser.add_argument("--skip-tests", action="store_true", help="Skip tests")
     parser.add_argument("--skip-lint", action="store_true", help="Skip linting")
@@ -257,7 +256,7 @@ async def main():
         timeout=30
     )
 
-    print("🔨 Running build workflow...")
+    print_info("Running build workflow...")
     print()
 
     try:
@@ -280,7 +279,7 @@ async def main():
         return 0 if summary["success"] else 1
 
     except Exception as e:
-        print(f"❌ Build failed: {e}")
+        print_error(f"Build failed: {e}")
         return 1
 
 

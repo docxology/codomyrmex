@@ -934,7 +934,7 @@ visualization_task = orchestrator.create_task(
     "data_visualization",
     "create_bar_chart",
     parameters={
-        "data": "placeholder",  # In practice, pass actual data or reference
+        "data": {"metric": "complexity", "values": [3, 7, 2, 5]},
         "title": "Code Quality Metrics"
     },
     dependencies=[analysis_task.id],

@@ -23,9 +23,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 def run_ruff_lint(_task_results: dict = None, fix: bool = False) -> Dict[str, Any]:
@@ -325,15 +323,16 @@ def generate_quality_report(_task_results: dict = None) -> Dict[str, Any]:
     }
 
 
-async def main():
+async def main() -> int:
     """Run code quality workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Run code quality checks")
     parser.add_argument("--fix", action="store_true", help="Auto-fix issues where possible")
     parser.add_argument("--strict", action="store_true", help="Use strict mode for type checking")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
-    print("Running code quality checks...")
+    print_info("Running code quality checks...")
     print()
 
     workflow = Workflow(
@@ -436,7 +435,7 @@ async def main():
         return 0 if summary["success"] else 1
 
     except Exception as e:
-        print(f" Code quality check failed: {e}")
+        print_error(f"Code quality check failed: {e}")
         return 1
 
 

@@ -26,7 +26,7 @@ sys.path.insert(0, str(project_root))  # Add for scripts package imports
 from scripts.orchestrator.workflows import WORKFLOWS, list_workflows, get_workflow
 
 
-def main():
+def main() -> int:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="Run orchestration workflows",

@@ -203,7 +203,7 @@ async def generate_report(output_path: Path = None, _task_results: dict = None) 
     }
 
 
-async def main():
+async def main() -> int:
     """Run the analysis workflow."""
     parser = argparse.ArgumentParser(description="Analyze codebase and generate report")
     parser.add_argument("--path", type=Path, help="Path to analyze")

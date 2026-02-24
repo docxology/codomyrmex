@@ -1,17 +1,30 @@
 """Git analysis module for Codomyrmex.
 
-This module is an **architecture documentation placeholder**. It contains
-diagrams and visualizations of the Codomyrmex module dependency graph
-generated from git history analysis.
+Provides two complementary capabilities:
 
-Contents:
-    - git_report_git_tree.mmd: Mermaid diagram of module dependency tree
-    - git_report_git_tree.png: Rendered dependency tree image
-    - git_report_summary_dashboard.png: Summary dashboard visualization
+  - **GitNexus bridge**: structural code analysis via knowledge graph
+    (requires Node.js/npx; vendored at vendor/gitnexus/)
+    → symbol dependencies, call chains, blast-radius assessment
 
-No executable Python code exists in this module currently. The diagrams
-are generated externally and committed as static assets for reference
-in architecture documentation.
+  - **Git history analysis**: commit history, contributors, code churn,
+    branch topology (via GitPython — a core dependency)
+    → commit frequency, contributor stats, high-churn file detection
+
+Both capabilities are exposed as MCP tools in mcp_tools.py (16 total).
 """
 
-__all__: list = []
+from __future__ import annotations
+
+from .core.history_analyzer import GitHistoryAnalyzer
+
+try:
+    from .core.gitnexus_bridge import GitNexusBridge, GitNexusNotAvailableError
+    GITNEXUS_AVAILABLE = True
+except ImportError:
+    GITNEXUS_AVAILABLE = False
+
+__all__ = ["GitHistoryAnalyzer", "GITNEXUS_AVAILABLE"]
+if GITNEXUS_AVAILABLE:
+    __all__ += ["GitNexusBridge", "GitNexusNotAvailableError"]
+
+__version__ = "1.0.0"

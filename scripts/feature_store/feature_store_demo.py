@@ -12,15 +12,12 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-def main():
-    """Main demonstration."""
-    print("=== Feature Store Demo ===")
-    print("Description: ML feature management, versioning, and serving")
-    print()
-    
-    # TODO: Add actual demonstrations
-    print("✅ Demo completed successfully")
-    return 0
+def main() -> int:
+    raise NotImplementedError(
+        "Module 'codomyrmex.feature_store' is not yet implemented. "
+        "Create src/codomyrmex/feature_store/ with real functionality "
+        "before adding demonstrations here."
+    )
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -8,8 +8,12 @@ class TermAnalyzer:
 
     def build_term_cooccurrence_matrix(self, spec: Any) -> dict:
         """Build co-occurrence matrix."""
-        return {}
+        raise NotImplementedError(
+            "TermAnalyzer.build_term_cooccurrence_matrix is not yet implemented."
+        )
 
     def get_important_terms(self, spec: Any, top_n: int = 100) -> list[tuple[str, int, float]]:
         """Get important terms."""
-        return []
+        raise NotImplementedError(
+            "TermAnalyzer.get_important_terms is not yet implemented."
+        )

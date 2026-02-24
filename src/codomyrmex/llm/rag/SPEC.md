@@ -33,8 +33,43 @@ rag/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.llm.rag
+from codomyrmex.llm.rag import (
+    DocumentType,             # Enum: TEXT, MARKDOWN, HTML, PDF, CODE
+    Document,                 # Dataclass: id + content + doc_type + source + metadata; from_text(), from_file()
+    Chunk,                    # Dataclass: id + content + document_id + sequence + char offsets + optional embedding
+    RetrievalResult,          # Dataclass: chunk + score + optional parent document
+    GenerationContext,        # Dataclass: query + retrieved results + formatted_context string
+    TextSplitter,             # ABC for text splitting strategies
+    RecursiveTextSplitter,    # Split by separators ("\n\n", "\n", ". ", " ", "") with configurable chunk_size/overlap
+    SentenceSplitter,         # Split by sentence boundaries with configurable sentences_per_chunk/overlap
+    VectorStore,              # ABC for vector storage (add, search, delete)
+    InMemoryVectorStore,      # Simple in-memory cosine-similarity vector store
+    ContextFormatter,         # Format retrieval results into LLM-ready context strings
+    RAGPipeline,              # End-to-end pipeline: index documents -> retrieve -> build context
+    RAG_PROMPT_TEMPLATE,      # Default RAG prompt template string
+    create_rag_prompt,        # Helper to render RAG_PROMPT_TEMPLATE from a GenerationContext
+)
+
+# Key class signatures:
+class RAGPipeline:
+    def __init__(self, embedding_fn: Callable[[list[str]], list[list[float]]], vector_store: VectorStore | None = None,
+                 text_splitter: TextSplitter | None = None, context_formatter: ContextFormatter | None = None): ...
+    def index_document(self, document: Document) -> int: ...
+    def index_documents(self, documents: list[Document]) -> int: ...
+    def retrieve(self, query: str, k: int = 5) -> list[RetrievalResult]: ...
+    def build_context(self, query: str, k: int = 5) -> GenerationContext: ...
+    def delete_document(self, document_id: str) -> bool: ...
+
+class Document:
+    @classmethod
+    def from_text(cls, text: str, doc_id: str | None = None, **metadata) -> Document: ...
+    @classmethod
+    def from_file(cls, path: str, encoding: str = "utf-8") -> Document: ...
+
+class RecursiveTextSplitter(TextSplitter):
+    def __init__(self, chunk_size: int = 1000, chunk_overlap: int = 200, separators: list[str] | None = None): ...
+    def split(self, document: Document) -> list[Chunk]: ...
 ```
 
 ### 3.2 Configuration
@@ -46,21 +81,25 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Embedding function injected as a callable**: `RAGPipeline` accepts `embedding_fn: Callable[[list[str]], list[list[float]]]` rather than coupling to a specific provider, keeping the pipeline agnostic.
+2. **Recursive text splitting with separator fallback**: `RecursiveTextSplitter` tries `["\n\n", "\n", ". ", " ", ""]` in order, falling back to finer-grained separators only when chunks exceed `chunk_size`.
+3. **Context length budget in formatter**: `ContextFormatter.max_context_length` truncates retrieved content to fit within the LLM's context window.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- `InMemoryVectorStore` performs brute-force cosine similarity; not suitable for large corpora.
+- PDF document type is declared in `DocumentType` but `Document.from_file` does not parse PDF content -- only text-based formats are read.
+- No de-duplication of overlapping chunks across multiple `index_document` calls for the same document.
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/llm_rag/
+uv run pytest src/codomyrmex/tests/unit/llm/rag/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Add hybrid retrieval combining keyword (BM25) and vector search
+- Support PDF parsing via `Document.from_file` for the `PDF` document type
+- Add metadata-filtered retrieval (e.g., filter by document source or date)

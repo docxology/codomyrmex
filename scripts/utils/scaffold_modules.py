@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 from typing import Tuple
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_warning
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -132,8 +133,9 @@ pip install codomyrmex
 ```python
 from codomyrmex.{full_name.replace("/", ".")} import *
 
-# Example usage
-# TODO: Add practical examples
+# Minimal usage example (update after implementation):
+# obj = SomeClass()
+# result = obj.some_method()
 ```
 
 ## Features
@@ -243,8 +245,8 @@ def generate_spec(name: str, description: str, parent: str = None) -> str:
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports — fill in after implementing src/codomyrmex/{full_name}/core.py:
+# from .core import MainClass
 ```
 
 ### 3.2 Configuration
@@ -417,13 +419,11 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 def main():
     """Main demonstration."""
-    print("=== {title} Demo ===")
-    print("Description: {description}")
-    print()
-    
-    # TODO: Add actual demonstrations
-    print("✅ Demo completed successfully")
-    return 0
+    raise NotImplementedError(
+        "Demo for '{name}' is not yet implemented. "
+        "Implement src/codomyrmex/{name}/ first, "
+        "then replace this with real demonstrations."
+    )
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -440,8 +440,9 @@ if __name__ == "__main__":
     return created_files
 
 
-def main():
+def main() -> int:
     """Main execution."""
+    setup_logging()
     dry_run = "--dry-run" in sys.argv
     
     src_base = PROJECT_ROOT / "src" / "codomyrmex"
@@ -450,17 +451,17 @@ def main():
     all_created = []
     
     print("=" * 60)
-    print("CODOMYRMEX MODULE SCAFFOLDING")
+    print_info("CODOMYRMEX MODULE SCAFFOLDING")
     print("=" * 60)
     if dry_run:
-        print("🔍 DRY RUN MODE - No files will be created\n")
+        print_info("DRY RUN MODE - No files will be created")
     
     # Phase 1: Create submodules
-    print("\n📁 Phase 1: Creating Submodules\n")
+    print_info("Phase 1: Creating Submodules")
     for parent, submodules in SUBMODULES.items():
         parent_path = src_base / parent
         if not parent_path.exists():
-            print(f"⚠️  Parent module not found: {parent}")
+            print_warning(f"Parent module not found: {parent}")
             continue
             
         print(f"\n  {parent}/")
@@ -469,26 +470,26 @@ def main():
             all_created.extend(files)
             script_files = create_script_structure(scripts_base, name, description, parent, dry_run)
             all_created.extend(script_files)
-            print(f"    ✓ {name}")
+            print_success(f"  {name}")
     
     # Phase 2: Create new modules
-    print("\n📁 Phase 2: Creating New Modules\n")
+    print_info("Phase 2: Creating New Modules")
     for name, description in NEW_MODULES:
         files = create_module_structure(src_base, name, description, None, dry_run)
         all_created.extend(files)
         script_files = create_script_structure(scripts_base, name, description, None, dry_run)
         all_created.extend(script_files)
-        print(f"  ✓ {name}")
+        print_success(f"  {name}")
     
     # Summary
     print("\n" + "=" * 60)
-    print(f"SUMMARY: {'Would create' if dry_run else 'Created'} {len(all_created)} files")
+    print_info(f"{'Would create' if dry_run else 'Created'} {len(all_created)} files")
     print("=" * 60)
     
     if dry_run:
-        print("\n🔍 Run without --dry-run to create files")
+        print_info("Run without --dry-run to create files")
     else:
-        print("\n✅ All modules scaffolded successfully!")
+        print_success("All modules scaffolded successfully")
     
     return 0
 

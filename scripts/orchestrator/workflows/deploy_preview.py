@@ -25,9 +25,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.logging_monitoring import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
 
 async def build_application(_task_results: dict = None) -> Dict[str, Any]:
@@ -254,8 +252,9 @@ def _summarize_result(result: Dict[str, Any]) -> str:
     return "Failed"
 
 
-async def main():
+async def main() -> int:
     """Run deployment workflow."""
+    setup_logging()
     parser = argparse.ArgumentParser(description="Deploy to preview environment")
     parser.add_argument("--env", default="preview", help="Target environment")
     parser.add_argument("--skip-tests", action="store_true", help="Skip smoke tests")
@@ -263,9 +262,9 @@ async def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     args = parser.parse_args()
 
-    print(f"Deploying to {args.env} environment...")
+    print_info(f"Deploying to {args.env} environment...")
     if args.dry_run:
-        print("(DRY RUN - no actual deployment)")
+        print_info("(DRY RUN - no actual deployment)")
     print()
 
     workflow = Workflow(
@@ -368,7 +367,7 @@ async def main():
         return 0 if summary["success"] else 1
 
     except Exception as e:
-        print(f" Deployment failed: {e}")
+        print_error(f"Deployment failed: {e}")
         return 1
 
 

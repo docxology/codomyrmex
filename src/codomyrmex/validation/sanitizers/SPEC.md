@@ -33,8 +33,8 @@ sanitizers/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.validation.sanitizers
+# Not yet implemented. __all__ is empty; no public API is exported.
 ```
 
 ### 3.2 Configuration
@@ -46,21 +46,20 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Lazy-import stub**: Module is declared with an empty `__all__` and a commented-out `from .core import *` to support future lazy loading without startup cost.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No sanitization functions are implemented yet
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/validation_sanitizers/
+uv run pytest src/codomyrmex/tests/unit/validation/sanitizers/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Implement HTML/SQL/shell input sanitizers
+- Add normalization utilities (whitespace, unicode, path canonicalization)

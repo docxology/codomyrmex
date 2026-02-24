@@ -42,14 +42,18 @@ from .core.git import (
     check_git_availability,
     # Advanced operations
     cherry_pick,
+    clean_repository,
     clone_repository,
     commit_changes,
     # Branch operations
     create_branch,
+    delete_branch,
     # Tag operations
     create_tag,
     fetch_changes,
     # History & information
+    get_blame,
+    get_commit_details,
     get_commit_history,
     # Config operations
     get_config,
@@ -67,6 +71,7 @@ from .core.git import (
     rebase_branch,
     remove_remote,
     reset_changes,
+    revert_commit,
     set_config,
     # Stash operations
     stash_changes,
@@ -148,6 +153,7 @@ __all__ = [
     "clone_repository",
     # Branch operations
     "create_branch",
+    "delete_branch",
     "switch_branch",
     "get_current_branch",
     "merge_branch",
@@ -173,6 +179,10 @@ __all__ = [
     "set_config",
     # Advanced operations
     "cherry_pick",
+    "revert_commit",
+    "clean_repository",
+    "get_blame",
+    "get_commit_details",
     # Tag operations
     "create_tag",
     "list_tags",

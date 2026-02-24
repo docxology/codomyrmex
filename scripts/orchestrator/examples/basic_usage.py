@@ -19,7 +19,7 @@ from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_inf
 import asyncio
 from codomyrmex.orchestrator import Workflow, Task, TaskStatus
 
-async def main():
+async def main() -> int:
     setup_logging()
     print_info(f"Running Basic orchestrator Usage...")
 
@@ -65,4 +65,4 @@ async def main():
     return 0
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    sys.exit(asyncio.run(main()))

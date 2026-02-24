@@ -3,7 +3,7 @@ import pytest
 import sys
 import subprocess
 from pathlib import Path
-from unittest.mock import patch
+
 
 # Verify we can import the scripts
 # Since scripts are not a package, we might need to assume details about their location

@@ -16,68 +16,68 @@ import hashlib
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.wallet import WalletManager, NaturalRitualRecovery, RitualStep
-from codomyrmex.logging_monitoring.logger_config import get_logger
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
 
-logger = get_logger("demo_wallet")
 
 def demo_self_custody():
-    print("\n--- 1. Self-Custody Wallet ---")
+    print_info("--- 1. Self-Custody Wallet ---")
     wallet_mgr = WalletManager()
     user_id = "user_main"
 
     # Create Wallet
     address = wallet_mgr.create_wallet(user_id)
-    print(f"Wallet Created: {address}")
-    
+    print_info(f"Wallet Created: {address}")
+
     # Sign Transaction
     msg = b"Transfer 100 units"
     sig = wallet_mgr.sign_message(user_id, msg)
-    print(f"Signed Message: '{msg.decode()}'")
-    print(f"Signature: {sig.hex()[:16]}...")
+    print_info(f"Signed Message: '{msg.decode()}'")
+    print_info(f"Signature: {sig.hex()[:16]}...")
 
     # Key Rotation
-    print("\nExecuting Key Rotation...")
+    print_info("Executing Key Rotation...")
     new_address = wallet_mgr.rotate_keys(user_id)
-    print(f"New Wallet Address: {new_address}")
+    print_info(f"New Wallet Address: {new_address}")
+
 
 def demo_recovery():
-    print("\n--- 2. Natural Ritual Recovery ---")
+    print_info("--- 2. Natural Ritual Recovery ---")
     recovery = NaturalRitualRecovery()
     user_id = "user_main"
 
-    print("Setting up 'Natural Ritual' (Secret Experience)...")
+    print_info("Setting up 'Natural Ritual' (Secret Experience)...")
     # The ritual is a sequence of answers known only to the user
-    # "Where did it rain on our wedding?" -> Paris
-    # "What was the name of the stray dog?" -> Barnaby
-    
     rituals = [
         RitualStep("Location?", hashlib.sha256(b"Paris").hexdigest()),
         RitualStep("Dog Name?", hashlib.sha256(b"Barnaby").hexdigest())
     ]
     recovery.register_ritual(user_id, rituals)
-    print("Ritual registered encrypted on-chain (simulated).")
+    print_info("Ritual registered encrypted on-chain (simulated).")
 
     # Attempt Recovery - Success
-    print("\nAttempting Recovery (Correct Answers)...")
+    print_info("Attempting Recovery (Correct Answers)...")
     proofs = ["Paris", "Barnaby"]
     if recovery.initiate_recovery(user_id, proofs):
-        print("✅ RECOVERY SUCCESSFUL: Wallet access restored.")
+        print_success("RECOVERY SUCCESSFUL: Wallet access restored.")
     else:
-        print("❌ RECOVERY FAILED.")
+        print_error("RECOVERY FAILED.")
 
     # Attempt Recovery - Failure
-    print("\nAttempting Recovery (Wrong Answers)...")
+    print_info("Attempting Recovery (Wrong Answers)...")
     bad_proofs = ["London", "Barnaby"]
     if recovery.initiate_recovery(user_id, bad_proofs):
-        print("✅ RECOVERY SUCCESSFUL.")
+        print_success("RECOVERY SUCCESSFUL.")
     else:
-        print("❌ RECOVERY FAILED: Ritual mismatch. Access denied.")
+        print_error("RECOVERY FAILED: Ritual mismatch. Access denied.")
+
 
 def main():
-    print("=== Secure Cognitive Agent: Wallet Demo ===")
+    setup_logging()
+    print_info("=== Secure Cognitive Agent: Wallet Demo ===")
     demo_self_custody()
     demo_recovery()
-    print("\n[SUCCESS] Wallet Demo Complete")
+    print_success("Wallet Demo Complete")
+
 
 if __name__ == "__main__":
     main()

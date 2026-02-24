@@ -33,8 +33,9 @@ replication/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.cache.replication
+# __all__ is empty — no public interface exported yet.
+Not yet implemented.
 ```
 
 ### 3.2 Configuration
@@ -46,7 +47,7 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Deferred implementation**: Core replication logic is not yet exported; `__all__` is empty and imports are commented out pending design finalization.
 
 ### 4.2 Limitations
 
@@ -57,10 +58,10 @@ Environment variables:
 
 ```bash
 # Run tests for this module
-pytest tests/cache_replication/
+uv run pytest src/codomyrmex/tests/unit/cache/replication/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Implement cross-region cache synchronization with configurable consistency models
+- Add conflict resolution strategies for concurrent writes across replicas

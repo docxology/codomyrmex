@@ -17,7 +17,7 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 
-def main():
+def main() -> int:
     setup_logging()
     print_info(f"Running Advanced orchestrator Workflow...")
 

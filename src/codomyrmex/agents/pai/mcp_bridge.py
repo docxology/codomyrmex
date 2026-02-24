@@ -281,12 +281,17 @@ def _tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict
         return {"error": str(exc)}
 
 
-def _tool_list_workflows(**_kwargs: Any) -> dict[str, Any]:
+def _tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
     """List available Claude Code workflows from .agent/workflows.
-    
+
     Parses YAML frontmatter to extract descriptions.
+
+    Args:
+        project_root: Optional override for the project root directory.
+            Falls back to the module-level ``_PROJECT_ROOT`` when *None*.
     """
-    workflows_dir = _PROJECT_ROOT / ".agent" / "workflows"
+    root = Path(project_root) if project_root is not None else _PROJECT_ROOT
+    workflows_dir = root / ".agent" / "workflows"
     if not workflows_dir.exists():
         return {"workflows": [], "count": 0, "error": "No workflow directory found"}
         

@@ -463,20 +463,40 @@ def get_repository_metadata(repository_path: str) -> dict[str, Any]:
 
 
 def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any]:
-    """Analyze directory structure up to max_depth."""
-    path_obj = Path(path)
-
-    def scan_directory(current_path: Path, current_depth: int = 0) -> dict[str, Any]:
-
-        for _name, content in items.items():
-            if isinstance(content, dict):
-                stats["directories"] += 1
-                count_items(content)
+    """Build a recursive file-tree dict up to max_depth levels."""
+    result: dict[str, Any] = {
+        "name": os.path.basename(path) or path,
+        "type": "directory",
+        "children": [],
+    }
+    if max_depth <= 0:
+        return result
+    try:
+        entries = sorted(os.scandir(path), key=lambda e: (not e.is_dir(), e.name))
+        for entry in entries:
+            if entry.name.startswith("."):
+                continue
+            if entry.is_dir():
+                result["children"].append(
+                    _analyze_directory_structure(entry.path, max_depth - 1)
+                )
             else:
-                stats["files"] += 1
+                result["children"].append({"name": entry.name, "type": "file"})
+    except PermissionError:
+        pass
+    return result
 
-    count_items(structure)
-    return stats
+
+def _get_structure_stats(structure: dict[str, Any]) -> dict[str, int]:
+    """Recursively count files and directories in a structure dict."""
+    files = sum(1 for c in structure.get("children", []) if c.get("type") == "file")
+    dirs = sum(1 for c in structure.get("children", []) if c.get("type") == "directory")
+    for child in structure.get("children", []):
+        if child.get("type") == "directory":
+            child_stats = _get_structure_stats(child)
+            files += child_stats["files"]
+            dirs += child_stats["directories"]
+    return {"files": files, "directories": dirs}
 
 
 def _get_created_files(

@@ -33,8 +33,8 @@ triggers/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+# Primary exports from codomyrmex.orchestrator.triggers
+# Not yet implemented.
 ```
 
 ### 3.2 Configuration
@@ -46,21 +46,22 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Deferred implementation**: `__all__` is empty; the core trigger logic is commented out pending event system integration.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No trigger types are currently implemented
+- Depends on event bus integration (see `events` module) to become functional
 
 ## 5. Testing
 
 ```bash
 # Run tests for this module
-pytest tests/orchestrator_triggers/
+uv run pytest src/codomyrmex/tests/unit/orchestrator/triggers/
 ```
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Cron-based time triggers (schedule workflows at intervals)
+- Event-bus triggers that fire on named events from the `events` module
+- Webhook triggers for HTTP-based pipeline activation

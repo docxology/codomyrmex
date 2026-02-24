@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import Any
 
 from .reviewer import CodeReviewer
+from .models import AnalysisResult, AnalysisSummary, QualityGateResult
 
 
 # Convenience functions

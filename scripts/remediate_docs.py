@@ -1,40 +1,66 @@
-import os
-import subprocess
+#!/usr/bin/env python3
+"""
+scripts/remediate_docs.py
 
-def get_target_directories(root_dir):
-    # Use fd to get all directories, respecting .gitignore, but excluding specific ones
-    cmd = [
-        "fd", "-t", "d", 
-        "-E", ".git", 
-        "-E", "__pycache__", 
-        "-E", ".venv", 
-        "-E", "*.egg-info", 
-        "-E", ".pytest_cache", 
-        "-E", ".mypy_cache", 
-        "-E", ".gemini", 
-        "-E", "tmp", 
-        "-E", "vendor", 
-        ".", 
-        root_dir
-    ]
-    
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    dirs = result.stdout.splitlines()
-    # Also add the root directory itself
-    dirs.append(root_dir)
-    return [d for d in dirs if d.strip()]
+Walks the project directory tree and creates missing documentation files
+(README.md, SPEC.md, AGENTS.md) in every subdirectory that doesn't already
+have them.  Uses only stdlib ``pathlib`` — no external tools required.
 
-def generate_docs(root_dir):
+Usage:
+    python remediate_docs.py [--root ROOT]
+
+    --root  Project root directory (default: parent of the scripts/ directory)
+"""
+
+import argparse
+from pathlib import Path
+
+from codomyrmex.utils.cli_helpers import print_error, print_info, print_success
+
+_EXCLUDE_DIRS = {".git", "__pycache__", ".venv", ".gemini", "tmp", "vendor"}
+_EXCLUDE_PATTERNS = {"*.egg-info", ".pytest_cache", ".mypy_cache"}
+
+
+def get_target_directories(root_dir: Path) -> list:
+    """Return all subdirectories under *root_dir* suitable for doc generation.
+
+    Excludes hidden/cache/vendor directories and their descendants.
+
+    Args:
+        root_dir: Project root to walk.
+
+    Returns:
+        Sorted list of ``Path`` objects for qualifying directories,
+        with *root_dir* itself as the first entry.
+    """
+    results = [root_dir]
+    for dirpath in sorted(root_dir.rglob("*")):
+        if not dirpath.is_dir():
+            continue
+        # Skip if any path component is in the exclude set
+        parts = dirpath.relative_to(root_dir).parts
+        if any(p in _EXCLUDE_DIRS for p in parts):
+            continue
+        # Skip directories whose name matches an exclude pattern
+        if any(dirpath.match(pat) for pat in _EXCLUDE_PATTERNS):
+            continue
+        results.append(dirpath)
+    return results
+
+
+def generate_docs(root_dir: Path) -> None:
+    """Create missing README.md, SPEC.md, and AGENTS.md in qualifying directories.
+
+    Args:
+        root_dir: Project root directory.
+    """
     target_dirs = get_target_directories(root_dir)
     missing_count = 0
     created_count = 0
-    
+
     for dirpath in target_dirs:
-        dir_name = os.path.basename(dirpath)
-        if not dir_name or dirpath == root_dir:
-            dir_name = 'Codomyrmex Root'
-            
-        # Define content templates
+        dir_name = dirpath.name if dirpath != root_dir else "Codomyrmex Root"
+
         readme_content = f"""# {dir_name}
 
 ## Overview
@@ -66,28 +92,45 @@ This file provides context for autonomous agents operating within the `{dir_name
 2. **Functional Enforcement**: Agents must ensure any generated code remains fully functional and real.
 3. **Documentation Sync**: Agents must keep this `AGENTS.md`, `README.md`, and `SPEC.md` synchronized with actual code capabilities.
 """
-        
+
         docs = {
-            'README.md': readme_content,
-            'SPEC.md': spec_content,
-            'AGENTS.md': agents_content
+            "README.md": readme_content,
+            "SPEC.md": spec_content,
+            "AGENTS.md": agents_content,
         }
-        
+
         for doc_name, content in docs.items():
-            doc_path = os.path.join(dirpath, doc_name)
-            if not os.path.exists(doc_path):
+            doc_path = dirpath / doc_name
+            if not doc_path.exists():
                 missing_count += 1
                 try:
-                    with open(doc_path, 'w', encoding='utf-8') as f:
-                        f.write(content)
+                    doc_path.write_text(content, encoding="utf-8")
                     created_count += 1
                 except Exception as e:
-                    print(f"Error creating {doc_path}: {e}")
+                    print_error(f"Error creating {doc_path}: {e}")
 
-    print(f"Identified {missing_count} missing documentation files.")
-    print(f"Successfully created {created_count} documentation files.")
+    print_info(f"Identified {missing_count} missing documentation files.")
+    print_success(f"Successfully created {created_count} documentation files.")
 
-if __name__ == '__main__':
-    project_root = '/Users/mini/Documents/GitHub/codomyrmex'
-    print(f"Starting documentation generation in {project_root} using fd traversal...")
-    generate_docs(project_root)
+
+def main() -> int:
+    """Parse arguments and run documentation generation."""
+    default_root = str(Path(__file__).resolve().parent.parent)
+    parser = argparse.ArgumentParser(
+        description="Create missing README/SPEC/AGENTS documentation in project directories."
+    )
+    parser.add_argument(
+        "--root",
+        default=default_root,
+        help=f"Project root directory (default: {default_root})",
+    )
+    args = parser.parse_args()
+
+    root_dir = Path(args.root).resolve()
+    print_info(f"Starting documentation generation in {root_dir}...")
+    generate_docs(root_dir)
+    return 0
+
+
+if __name__ == "__main__":
+    main()

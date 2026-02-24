@@ -54,11 +54,18 @@ class TestAgentConfiguration:
         assert config.enable_logging is True
         assert config.claude_model == "claude-3-opus-20240229"
 
-    def test_agent_config_from_environment(self, monkeypatch):
+    def test_agent_config_from_environment(self):
         """Test AgentConfig reads from environment variables."""
-        monkeypatch.setenv("CLAUDE_MODEL", "claude-3-sonnet")
-        config = AgentConfig()
-        assert config.claude_model == "claude-3-sonnet"
+        original = os.environ.get("CLAUDE_MODEL")
+        try:
+            os.environ["CLAUDE_MODEL"] = "claude-3-sonnet"
+            config = AgentConfig()
+            assert config.claude_model == "claude-3-sonnet"
+        finally:
+            if original is None:
+                os.environ.pop("CLAUDE_MODEL", None)
+            else:
+                os.environ["CLAUDE_MODEL"] = original
 
     def test_agent_config_to_dict(self):
         """Test AgentConfig serialization to dict."""

@@ -104,37 +104,54 @@ class TestComplexConfigurationScenarios:
         assert config_dict["opencode_command"] == "opencode-cmd"
         assert config_dict["opencode_timeout"] == 150
 
-    def test_environment_variable_handling(self, monkeypatch):
+    def test_environment_variable_handling(self):
         """Test environment variable configuration handling."""
-        monkeypatch.setenv("JULES_COMMAND", "env-jules")
-        monkeypatch.setenv("JULES_TIMEOUT", "45")
-        monkeypatch.setenv("CLAUDE_MODEL", "env-claude")
-        monkeypatch.setenv("OPENCODE_COMMAND", "env-opencode")
-        monkeypatch.setenv("OPENCODE_TIMEOUT", "90")
-        monkeypatch.setenv("AGENT_DEFAULT_TIMEOUT", "120")
-        monkeypatch.setenv("AGENT_LOG_LEVEL", "DEBUG")
+        env_vars = {
+            "JULES_COMMAND": "env-jules",
+            "JULES_TIMEOUT": "45",
+            "CLAUDE_MODEL": "env-claude",
+            "OPENCODE_COMMAND": "env-opencode",
+            "OPENCODE_TIMEOUT": "90",
+            "AGENT_DEFAULT_TIMEOUT": "120",
+            "AGENT_LOG_LEVEL": "DEBUG",
+        }
+        original = {k: os.environ.get(k) for k in env_vars}
+        try:
+            os.environ.update(env_vars)
+            config = AgentConfig()
 
-        config = AgentConfig()
+            assert config.jules_command == "env-jules"
+            assert config.jules_timeout == 45
+            assert config.claude_model == "env-claude"
+            assert config.opencode_command == "env-opencode"
+            assert config.opencode_timeout == 90
+            assert config.default_timeout == 120
+            assert config.log_level == "DEBUG"
+        finally:
+            for k, v in original.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
-        assert config.jules_command == "env-jules"
-        assert config.jules_timeout == 45
-        assert config.claude_model == "env-claude"
-        assert config.opencode_command == "env-opencode"
-        assert config.opencode_timeout == 90
-        assert config.default_timeout == 120
-        assert config.log_level == "DEBUG"
-
-    def test_configuration_precedence(self, monkeypatch):
+    def test_configuration_precedence(self):
         """Test configuration precedence (explicit > env > default)."""
-        monkeypatch.setenv("JULES_TIMEOUT", "100")  # Environment variable
+        original = os.environ.get("JULES_TIMEOUT")
+        try:
+            os.environ["JULES_TIMEOUT"] = "100"  # Environment variable
 
-        # Explicit value should override environment
-        config = AgentConfig(jules_timeout=50)
+            # Explicit value should override environment
+            config = AgentConfig(jules_timeout=50)
 
-        # In AgentConfig, explicit constructor values are set first,
-        # then __post_init__ applies env vars. So env var takes precedence
-        # unless we check the actual behavior
-        assert config.jules_timeout in [50, 100]  # Depends on implementation
+            # In AgentConfig, explicit constructor values are set first,
+            # then __post_init__ applies env vars. So env var takes precedence
+            # unless we check the actual behavior
+            assert config.jules_timeout in [50, 100]  # Depends on implementation
+        finally:
+            if original is None:
+                os.environ.pop("JULES_TIMEOUT", None)
+            else:
+                os.environ["JULES_TIMEOUT"] = original
 
     def test_configuration_validation(self):
         """Test configuration validation."""

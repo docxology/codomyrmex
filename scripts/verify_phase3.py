@@ -7,12 +7,16 @@ Verifies Privacy module functionality:
 2. Mixnet routing simulation.
 """
 
+import sys
+
 from codomyrmex.privacy import CrumbCleaner, MixnetProxy
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
+
 
 def verify_privacy():
-    print("\n--- Verifying Privacy ---")
+    print_info("--- Verifying Privacy ---")
     cleaner = CrumbCleaner()
-    
+
     # 1. Crumb Scrubbing
     data = {
         "user_id": "u123",
@@ -24,38 +28,32 @@ def verify_privacy():
              "valid": True
         }
     }
-    
+
     clean = cleaner.scrub(data)
-    
+
     assert "timestamp" not in clean
-    assert "location" in clean # The key 'location' isn't blackened, but its content might need check if recursive
-    # Wait, 'location' key itself isn't blacklisted in my code, but inner keys might be?
-    # Let's check my implementation of blacklist. Blacklist had "geo_lat", "geo_lon".
-    # But "location" wasn't in the blacklist set.
-    # Recursing: clean['location'] should be {'lat': 10, 'lon': 20} IF keys are allowed.
-    # Ah, I blacklisted "geo_lat", not "lat". 
-    # Let's verify strict behavior based on code implementation.
-    
-    # Let's stick to what I implemented in crumbs.py:
-    # "timestamp", "ip_address", "device_id" are blacklisted.
-    
+    assert "location" in clean
     assert "payload" in clean
     assert "user_id" in clean
     assert "device_id" not in clean["meta"]
-    print("✓ Crumb cleaner removes blacklisted metadata")
+    print_success("Crumb cleaner removes blacklisted metadata")
 
     # 2. Mixnet Proxy
     proxy = MixnetProxy()
     msg = b"Hello Anonymity"
-    
+
     # Route with 3 hops
     received = proxy.route_payload(msg, hops=3)
     assert received == msg
-    print("✓ Mixnet routing successful (simulation)")
+    print_success("Mixnet routing successful (simulation)")
 
-def main():
+
+def main() -> int:
+    setup_logging()
     verify_privacy()
-    print("\n[SUCCESS] Phase 3 Verification Complete")
+    print_success("Phase 3 Verification Complete")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

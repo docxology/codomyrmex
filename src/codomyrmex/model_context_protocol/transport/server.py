@@ -56,13 +56,23 @@ class MCPServer:
     - JSON-RPC over stdio or HTTP
     """
 
-    def __init__(self, config: MCPServerConfig | None = None):
+    def __init__(
+        self,
+        config: MCPServerConfig | None = None,
+        call_tool_fn: Callable[..., Any] | None = None,
+    ):
         self.config = config or MCPServerConfig()
         self._tool_registry: MCPToolRegistry = MCPToolRegistry()
         self._resources: dict[str, dict[str, Any]] = {}
         self._prompts: dict[str, dict[str, Any]] = {}
         self._initialized = False
         self._request_id = 0
+
+        # Allow injection of a custom call_tool handler for testing.
+        # When provided, _call_tool dispatches to the injected function
+        # instead of the default registry-based execution path.
+        if call_tool_fn is not None:
+            self._call_tool = call_tool_fn  # type: ignore[assignment]
 
         # Rate limiter
         from ..reliability.rate_limiter import RateLimiter, RateLimiterConfig

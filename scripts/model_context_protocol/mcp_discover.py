@@ -29,9 +29,7 @@ from codomyrmex.model_context_protocol.discovery import (
     ToolCatalog,
     discover_tools,
 )
-from codomyrmex.logging_monitoring.logger_config import get_logger
-
-logger = get_logger(__name__)
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def find_spec_files(base_path: Path) -> list:
@@ -63,7 +61,7 @@ def print_catalog(catalog: ToolCatalog) -> None:
     """Print catalog in readable format."""
     tools = catalog.list_all()
     
-    print(f"🔍 Discovered {len(tools)} MCP tools\n")
+    print_info(f"Discovered {len(tools)} MCP tools")
     
     # Group by source
     by_source = {}
@@ -81,7 +79,8 @@ def print_catalog(catalog: ToolCatalog) -> None:
         print()
 
 
-def main():
+def main() -> int:
+    setup_logging()
     parser = argparse.ArgumentParser(
         description="MCP Tool Discovery",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -111,7 +110,7 @@ def main():
     project_root = Path(__file__).resolve().parent.parent.parent
     
     if args.list_specs:
-        print("📋 MCP Tool Specification Files\n")
+        print_info("MCP Tool Specification Files")
         for spec in find_spec_files(project_root / "src"):
             rel_path = spec.relative_to(project_root)
             print(f"   {rel_path}")
@@ -123,7 +122,7 @@ def main():
     if args.export:
         output_path = Path(args.export)
         output_path.write_text(catalog.to_json())
-        print(f"✅ Exported {len(catalog.list_all())} tools to {args.export}")
+        print_success(f"Exported {len(catalog.list_all())} tools to {args.export}")
     else:
         print_catalog(catalog)
     
