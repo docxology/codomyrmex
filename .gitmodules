@@ -4,3 +4,6 @@
 [submodule "src/codomyrmex/formal_verification/vendor/z3"]
 	path = src/codomyrmex/formal_verification/vendor/z3
 	url = https://github.com/Z3Prover/z3.git
+[submodule "src/codomyrmex/git_analysis/vendor/gitnexus"]
+	path = src/codomyrmex/git_analysis/vendor/gitnexus
+	url = https://github.com/abhigyanpatwari/GitNexus
