@@ -1,7 +1,7 @@
 """Logistics report."""
 from pathlib import Path
 
-from ..core.ui import Dashboard, Card
+from ..core.ui import Card, Dashboard
 from ..plots.sankey import SankeyDiagram
 from ._base import BaseReport
 

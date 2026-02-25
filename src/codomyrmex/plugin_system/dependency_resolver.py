@@ -9,7 +9,6 @@ from __future__ import annotations
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
 
 
 class ResolutionStatus(Enum):
@@ -133,7 +132,7 @@ class DependencyResolver:
             )
 
         # Build adjacency and in-degree maps
-        in_degree: dict[str, int] = {name: 0 for name in self._nodes}
+        in_degree: dict[str, int] = dict.fromkeys(self._nodes, 0)
         adjacency: dict[str, list[str]] = defaultdict(list)
 
         for node in self._nodes.values():

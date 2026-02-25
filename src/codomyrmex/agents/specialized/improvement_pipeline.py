@@ -7,9 +7,8 @@ fix → generate test → review. Enforces safety limits throughout.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from codomyrmex.agents.specialized.improvement_config import ImprovementConfig
 from codomyrmex.agents.specialized.improvement_report import (
@@ -20,7 +19,6 @@ from codomyrmex.agents.specialized.improvement_report import (
     RiskLevel,
     TestSuiteResult,
 )
-
 
 # ─── Built-in anti-pattern detectors ─────────────────────────────────
 

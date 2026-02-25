@@ -1,8 +1,8 @@
-import pytest
-from codomyrmex.data_visualization.plots.wordcloud import WordCloud
-from codomyrmex.data_visualization.plots.confusion_matrix import ConfusionMatrix
 from codomyrmex.data_visualization.components.chat_bubble import ChatBubble
 from codomyrmex.data_visualization.components.json_view import JsonView
+from codomyrmex.data_visualization.plots.confusion_matrix import ConfusionMatrix
+from codomyrmex.data_visualization.plots.wordcloud import WordCloud
+
 
 def test_word_cloud_render():
     """Test functionality: word cloud render."""

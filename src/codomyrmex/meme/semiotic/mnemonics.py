@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List
 
 
 @dataclass
@@ -18,12 +17,12 @@ class MnemonicDevice:
     """
 
     name: str
-    anchors: List[str] = field(default_factory=list)
-    associations: List[str] = field(default_factory=list)
+    anchors: list[str] = field(default_factory=list)
+    associations: list[str] = field(default_factory=list)
     encoding_strength: float = 0.5
 
 
-def build_memory_palace(items: List[str], locations: List[str]) -> MnemonicDevice:
+def build_memory_palace(items: list[str], locations: list[str]) -> MnemonicDevice:
     """Construct a 'Memory Palace' (Method of Loci) device.
 
     Associates a list of items to be remembered with a list of

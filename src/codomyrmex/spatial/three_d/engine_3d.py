@@ -93,17 +93,17 @@ class Camera3D:
         dx = target.x - self.position.x
         dy = target.y - self.position.y
         dz = target.z - self.position.z
-        
+
         # Pitch and yaw calculation as functional fallback
         yaw = math.atan2(dx, dz)
         pitch = math.atan2(-dy, math.sqrt(dx*dx + dz*dz))
-        
+
         # Approximate quaternion rotation from euler (yaw, pitch, roll=0)
         cy = math.cos(yaw * 0.5)
         sy = math.sin(yaw * 0.5)
         cp = math.cos(pitch * 0.5)
         sp = math.sin(pitch * 0.5)
-        
+
         self.rotation.w = cy * cp
         self.rotation.x = cy * sp
         self.rotation.y = sy * cp

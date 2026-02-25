@@ -5,17 +5,16 @@ and CompatShimGenerator.
 """
 
 import warnings
-import pytest
 
+from codomyrmex.model_context_protocol.compat import CompatShimGenerator, ShimMapping
 from codomyrmex.model_context_protocol.versioning import (
     APIVersion,
-    CompatibilityMatrix,
     deprecated,
     versioned,
 )
-from codomyrmex.model_context_protocol.version_registry import VersionRegistry
-from codomyrmex.model_context_protocol.compat import CompatShimGenerator, ShimMapping
-
+from codomyrmex.model_context_protocol.versioning.version_registry import (
+    VersionRegistry,
+)
 
 # ─── APIVersion ──────────────────────────────────────────────────────
 

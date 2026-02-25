@@ -12,8 +12,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from codomyrmex.agentic_memory.obsidian.models import Note, Tag, VaultMetadata
-from codomyrmex.agentic_memory.obsidian.parser import parse_note, extract_tags, parse_frontmatter
+from codomyrmex.agentic_memory.obsidian.models import Note, VaultMetadata
+from codomyrmex.agentic_memory.obsidian.parser import (
+    parse_note,
+)
 
 
 class ObsidianVault:

@@ -115,7 +115,7 @@ class UOREntity:
             self.recompute_hash()
         return value
 
-    def merge_attributes(self, other: "UOREntity", overwrite: bool = False) -> None:
+    def merge_attributes(self, other: UOREntity, overwrite: bool = False) -> None:
         """Merge attributes from another entity.
 
         Args:
@@ -127,7 +127,7 @@ class UOREntity:
                 self.attributes[k] = v
         self.recompute_hash()
 
-    def similarity_score(self, other: "UOREntity") -> float:
+    def similarity_score(self, other: UOREntity) -> float:
         """Compute a simple attribute overlap score between [0, 1]."""
         if not self.attributes and not other.attributes:
             return 1.0 if self.entity_type == other.entity_type else 0.0
@@ -187,7 +187,7 @@ class UORRelationship:
             "attributes": self.attributes,
         })
 
-    def inverse(self) -> "UORRelationship":
+    def inverse(self) -> UORRelationship:
         """Create the inverse relationship (swap source and target)."""
         return UORRelationship(
             source_id=self.target_id,

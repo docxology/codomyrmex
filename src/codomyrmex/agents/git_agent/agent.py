@@ -1,7 +1,7 @@
 
 import json
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,

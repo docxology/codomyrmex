@@ -6,7 +6,6 @@ import json
 import os
 from typing import Any
 
-from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
 from ..cache import Cache

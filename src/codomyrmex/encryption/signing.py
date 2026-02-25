@@ -6,7 +6,6 @@ complementing the existing encryption and HMAC modules.
 
 from __future__ import annotations
 
-import hashlib
 import hmac
 import json
 import logging

@@ -8,11 +8,11 @@ interface for complex multi-module workflows.
 
 import threading
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 # Import Codomyrmex modules
 try:

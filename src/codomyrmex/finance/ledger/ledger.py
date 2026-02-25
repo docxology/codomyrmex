@@ -13,7 +13,6 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -266,8 +265,8 @@ class Ledger:
 
     def get_income_statement(
         self,
-        start: Optional[datetime] = None,
-        end: Optional[datetime] = None,
+        start: datetime | None = None,
+        end: datetime | None = None,
     ) -> dict:
         """Generate an income statement (profit & loss) for a date range.
 

@@ -7,7 +7,6 @@ Step executors for workflow assertions, waits, and scripts.
 import time
 from abc import ABC, abstractmethod
 from typing import Any
-from collections.abc import Callable
 
 from .models import StepResult, StepStatus, WorkflowStep
 

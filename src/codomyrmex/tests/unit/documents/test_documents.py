@@ -1377,7 +1377,11 @@ class TestDocumentChunkerFixed:
     """Tests for fixed-size chunking strategy."""
 
     def test_short_text_single_chunk(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         chunker = DocumentChunker(ChunkConfig(
             strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,
@@ -1387,7 +1391,11 @@ class TestDocumentChunkerFixed:
         assert chunks[0].text == "short text"
 
     def test_long_text_multiple_chunks(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         text = "a" * 500
         chunker = DocumentChunker(ChunkConfig(
@@ -1405,7 +1413,11 @@ class TestDocumentChunkerSentence:
     """Tests for sentence-based chunking."""
 
     def test_sentences_grouped(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         text = "First sentence. Second sentence. Third sentence. Fourth sentence."
         chunker = DocumentChunker(ChunkConfig(
@@ -1423,7 +1435,11 @@ class TestDocumentChunkerParagraph:
     """Tests for paragraph-based chunking."""
 
     def test_paragraphs_split(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         text = "Paragraph one content here.\n\nParagraph two content here.\n\nParagraph three content."
         chunker = DocumentChunker(ChunkConfig(
@@ -1438,7 +1454,11 @@ class TestDocumentChunkerRecursive:
     """Tests for recursive chunking (default)."""
 
     def test_recursive_splits(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         text = ("Paragraph one.\n\nParagraph two.\n\n" +
                 "A longer section. " * 100)
@@ -1454,7 +1474,11 @@ class TestDocumentChunkerSemantic:
     """Tests for semantic fallback (falls back to fixed-size)."""
 
     def test_semantic_falls_back(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         chunker = DocumentChunker(ChunkConfig(
             strategy=ChunkStrategy.SEMANTIC, chunk_size=100, min_chunk_size=1,
@@ -1468,7 +1492,11 @@ class TestDocumentChunkerMetadata:
     """Tests for metadata pass-through."""
 
     def test_metadata_preserved(self):
-        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+        from codomyrmex.documents.chunking import (
+            ChunkConfig,
+            ChunkStrategy,
+            DocumentChunker,
+        )
 
         chunker = DocumentChunker(ChunkConfig(
             strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,

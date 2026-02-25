@@ -5,6 +5,7 @@ import pytest
 try:
     from opentelemetry import trace
     from opentelemetry.trace import StatusCode
+
     from codomyrmex.telemetry import TraceContext, start_span, traced
     _HAS_OTEL = True
 except ImportError:

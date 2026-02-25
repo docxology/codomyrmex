@@ -5,8 +5,8 @@ Follows the GitAgent pattern — BaseAgent subclass with JSON command dispatch.
 
 import json
 import logging
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,

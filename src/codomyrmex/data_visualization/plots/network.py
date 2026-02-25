@@ -1,6 +1,7 @@
 """Network graph visualization."""
-from ._base import BasePlot
 import numpy as np
+
+from ._base import BasePlot
 
 
 class NetworkGraph(BasePlot):

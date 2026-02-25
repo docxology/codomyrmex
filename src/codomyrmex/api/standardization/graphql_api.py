@@ -1,8 +1,8 @@
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Union
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -372,7 +372,7 @@ class GraphQLAPI:
     def _register_builtin_resolvers(self) -> None:
         """Register built-in resolvers for common types."""
         # Functional base implementation registering universal __typename
-        self.register_resolver("__Any", "__typename", 
+        self.register_resolver("__Any", "__typename",
                                GraphQLResolver("__typename", lambda p, a, c: type(p).__name__))
 
     def get_schema_sdl(self) -> str:

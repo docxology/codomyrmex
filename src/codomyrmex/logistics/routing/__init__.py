@@ -287,7 +287,7 @@ class DijkstraRouting:
 
         distances = {node: float('inf') for node in self.graph}
         distances[start_id] = 0
-        previous = {node: None for node in self.graph}
+        previous = dict.fromkeys(self.graph)
         visited = set()
 
         heap = [(0, start_id)]

@@ -8,9 +8,9 @@ streaming support, and integration options.
 import asyncio
 import json
 import time
+from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
 from typing import Any
-from collections.abc import AsyncIterator, Callable
 
 import aiohttp
 

@@ -9,8 +9,7 @@ from __future__ import annotations
 import hashlib
 import re
 from dataclasses import dataclass, field
-from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 
 
 @dataclass

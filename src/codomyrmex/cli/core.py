@@ -1,10 +1,9 @@
-import fire
 import json
 import sys
-from pathlib import Path
+
+import fire
 
 import codomyrmex.performance
-from .commands import Command
 
 # Import all handlers
 from .handlers import (
@@ -49,8 +48,6 @@ from .handlers import (
 )
 from .utils import (
     PERFORMANCE_MONITORING_AVAILABLE,
-    TERMINAL_INTERFACE_AVAILABLE,
-    TerminalFormatter,
     get_logger,
 )
 
@@ -66,7 +63,9 @@ class Cli:
             logger.setLevel(10)  # DEBUG level
             logger.debug("Verbose mode enabled")
         if performance and PERFORMANCE_MONITORING_AVAILABLE:
-            from codomyrmex.performance.monitoring.performance_monitor import PerformanceMonitor
+            from codomyrmex.performance.monitoring.performance_monitor import (
+                PerformanceMonitor,
+            )
             monitor = PerformanceMonitor()
             logger.info("Performance monitoring enabled")
             codomyrmex.performance._performance_monitor = monitor
@@ -86,6 +85,26 @@ class Cli:
     def status(self):
         """Show comprehensive system status"""
         return show_system_status()
+
+    def dashboard(self, port=8787, host="0.0.0.0", open=True):
+        """Launch the Codomyrmex web dashboard"""
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        script = Path(__file__).resolve().parent.parent.parent.parent / "scripts" / "website" / "launch_dashboard.py"
+        if not script.exists():
+            print(f"❌ Dashboard script not found: {script}")
+            return 1
+
+        cmd = [sys.executable, str(script), f"--port={port}", f"--host={host}"]
+        if open:
+            cmd.append("--open")
+        try:
+            subprocess.run(cmd, check=False)
+        except KeyboardInterrupt:
+            pass
+        return 0
 
     def shell(self):
         """Launch interactive shell"""

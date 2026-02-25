@@ -9,9 +9,9 @@ historical baselines.
 
 import statistics
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
-from collections.abc import Callable
 
 import pytest
 
@@ -72,7 +72,10 @@ except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        get_logger,
+        setup_logging,
+    )
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False
@@ -205,7 +208,7 @@ class PerformanceTestSuite:
             try:
                 test_function()
                 status = "success"
-            except Exception as e:
+            except Exception:
                 status = "failed"
 
             end_time = time.time()
@@ -395,8 +398,8 @@ PASSWORD = "admin123"
         def visualize_test():
             from codomyrmex.data_visualization import create_bar_chart
             return create_bar_chart(
-                test_data["categories"], 
-                test_data["values"], 
+                test_data["categories"],
+                test_data["values"],
                 "Performance Test Chart"
             )
 

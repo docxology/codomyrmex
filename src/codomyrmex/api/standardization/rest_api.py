@@ -2,10 +2,10 @@ import json
 import logging
 import re
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 from urllib.parse import parse_qs, urlparse
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -136,7 +136,7 @@ class APIRouter:
         """
         self.prefix = prefix.rstrip('/')
         self.endpoints: dict[str, APIEndpoint] = {}
-        self.sub_routers: list['APIRouter'] = []
+        self.sub_routers: list[APIRouter] = []
         self.middleware: list[Callable[[APIRequest], APIResponse | None]] = []
 
     def add_endpoint(self, endpoint: APIEndpoint) -> None:

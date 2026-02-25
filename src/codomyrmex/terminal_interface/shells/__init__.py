@@ -12,10 +12,10 @@ import subprocess
 import threading
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable, Iterator
 
 
 class ShellType(Enum):

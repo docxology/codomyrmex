@@ -4,6 +4,7 @@ Data Lineage Module
 Track data lineage through transformations with graph-based analysis.
 """
 
+from .graph import LineageGraph
 from .models import (
     DataAsset,
     EdgeType,
@@ -11,7 +12,6 @@ from .models import (
     LineageNode,
     NodeType,
 )
-from .graph import LineageGraph
 from .tracker import ImpactAnalyzer, LineageTracker
 
 # Shared schemas for cross-module interop

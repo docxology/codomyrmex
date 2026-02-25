@@ -1,6 +1,5 @@
 """Zero-Mock tests for DocumentReader — uses real file I/O via tmp_path."""
 
-import json
 
 import pytest
 

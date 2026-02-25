@@ -16,11 +16,12 @@ Function exports.
     print_once, and _perform_* helpers.
 """
 
+from .ast_matcher import ASTMatcher, ASTMatchResult
+from .code_patterns import PATTERNS, PatternDefinition, PatternDetector
 from .run_codomyrmex_analysis import (
+    AnalysisResult,
     PatternAnalyzer,
     PatternMatch,
-    AnalysisResult,
-    run_codomyrmex_analysis,
     _perform_chunking_examples,
     _perform_code_summarization,
     _perform_dependency_analysis,
@@ -33,11 +34,9 @@ from .run_codomyrmex_analysis import (
     analyze_repository_path,
     get_embedding_function,
     print_once,
+    run_codomyrmex_analysis,
     run_full_analysis,
 )
-
-from .ast_matcher import ASTMatcher, ASTMatchResult
-from .code_patterns import PatternDetector, PatternDefinition, PATTERNS
 from .similarity import CodeSimilarity, DuplicateResult
 
 # Shared schemas for cross-module interop

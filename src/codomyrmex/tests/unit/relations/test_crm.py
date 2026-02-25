@@ -1,4 +1,4 @@
-from codomyrmex.relations.crm.crm import ContactManager, Contact, Interaction
+from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 
 
 def test_contact_management():

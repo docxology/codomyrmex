@@ -1,6 +1,6 @@
-import pytest
 from codomyrmex.data_visualization.components.media import Image, Video
-from codomyrmex.data_visualization.components.text import TextBlock, CodeBlock
+from codomyrmex.data_visualization.components.text import CodeBlock, TextBlock
+
 
 def test_image_component():
     """Test functionality: image component."""

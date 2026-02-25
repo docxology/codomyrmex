@@ -11,10 +11,8 @@ Covers:
 
 import asyncio
 import json
-import uuid
 
 import pytest
-
 
 # ===================================================================
 # Streaming Models
@@ -494,7 +492,10 @@ class TestEventCreators:
 
     def test_create_system_startup_event(self):
         """Test functionality: create system startup event."""
-        from codomyrmex.events.core.event_schema import EventType, create_system_startup_event
+        from codomyrmex.events.core.event_schema import (
+            EventType,
+            create_system_startup_event,
+        )
         e = create_system_startup_event("1.0", ["a", "b"])
         assert e.event_type == EventType.SYSTEM_STARTUP
         assert e.data["version"] == "1.0"
@@ -502,20 +503,29 @@ class TestEventCreators:
 
     def test_create_module_load_event(self):
         """Test functionality: create module load event."""
-        from codomyrmex.events.core.event_schema import EventType, create_module_load_event
+        from codomyrmex.events.core.event_schema import (
+            EventType,
+            create_module_load_event,
+        )
         e = create_module_load_event("agents", "0.1.0", 0.5)
         assert e.event_type == EventType.MODULE_LOAD
         assert e.data["module_name"] == "agents"
 
     def test_create_analysis_start_event(self):
         """Test functionality: create analysis start event."""
-        from codomyrmex.events.core.event_schema import EventType, create_analysis_start_event
+        from codomyrmex.events.core.event_schema import (
+            EventType,
+            create_analysis_start_event,
+        )
         e = create_analysis_start_event("coverage", "/src")
         assert e.event_type == EventType.ANALYSIS_START
 
     def test_create_analysis_complete_event(self):
         """Test functionality: create analysis complete event."""
-        from codomyrmex.events.core.event_schema import EventType, create_analysis_complete_event
+        from codomyrmex.events.core.event_schema import (
+            EventType,
+            create_analysis_complete_event,
+        )
         e = create_analysis_complete_event("lint", "/src", {"issues": 0}, 1.5, True)
         assert e.event_type == EventType.ANALYSIS_COMPLETE
         assert e.data["success"] is True
@@ -551,7 +561,10 @@ class TestNotificationRouter:
 
     def test_default_route(self):
         """Test functionality: default route."""
-        from codomyrmex.events.notification.models import Notification, NotificationChannel
+        from codomyrmex.events.notification.models import (
+            Notification,
+            NotificationChannel,
+        )
         from codomyrmex.events.notification.service import NotificationRouter
         router = NotificationRouter()
         n = Notification(id="1", subject="Test", body="Hello")
@@ -559,7 +572,10 @@ class TestNotificationRouter:
 
     def test_add_default(self):
         """Test functionality: add default."""
-        from codomyrmex.events.notification.models import Notification, NotificationChannel
+        from codomyrmex.events.notification.models import (
+            Notification,
+            NotificationChannel,
+        )
         from codomyrmex.events.notification.service import NotificationRouter
         router = NotificationRouter()
         router.add_default(NotificationChannel.SLACK)
@@ -569,7 +585,9 @@ class TestNotificationRouter:
     def test_rule_matching(self):
         """Test functionality: rule matching."""
         from codomyrmex.events.notification.models import (
-            Notification, NotificationChannel, NotificationPriority,
+            Notification,
+            NotificationChannel,
+            NotificationPriority,
         )
         from codomyrmex.events.notification.service import NotificationRouter
         router = NotificationRouter()
@@ -589,7 +607,10 @@ class TestNotificationService:
 
     def test_send_without_provider_fails(self):
         """Test functionality: send without provider fails."""
-        from codomyrmex.events.notification.models import Notification, NotificationStatus
+        from codomyrmex.events.notification.models import (
+            Notification,
+            NotificationStatus,
+        )
         from codomyrmex.events.notification.service import NotificationService
         svc = NotificationService()
         result = svc.send(Notification(id="1", subject="Test", body="Hello"))
@@ -613,7 +634,10 @@ class TestNotificationService:
 
     def test_broadcast_multiple_channels(self):
         """Test functionality: broadcast multiple channels."""
-        from codomyrmex.events.notification.models import Notification, NotificationChannel
+        from codomyrmex.events.notification.models import (
+            Notification,
+            NotificationChannel,
+        )
         from codomyrmex.events.notification.service import NotificationService
         svc = NotificationService()
         n = Notification(id="1", subject="Test", body="Hello")

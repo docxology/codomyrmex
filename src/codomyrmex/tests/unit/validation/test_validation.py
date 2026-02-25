@@ -1076,12 +1076,17 @@ class TestExamplesValidator:
         assert len(list(ValidationType)) > 0
 
     def test_validation_issue(self):
-        from codomyrmex.validation.examples_validator import ValidationIssue, ValidationSeverity, ValidationType
+        from codomyrmex.validation.examples_validator import (
+            ValidationIssue,
+            ValidationSeverity,
+            ValidationType,
+        )
         issue = ValidationIssue(module="test", validation_type=list(ValidationType)[0], severity=list(ValidationSeverity)[0], message="test issue", file_path="test.py")
         assert issue.message == "test issue"
 
     def test_examples_validator(self):
         from pathlib import Path
+
         from codomyrmex.validation.examples_validator import ExamplesValidator
         v = ExamplesValidator(root_dir=Path("."), output_dir=Path("/tmp/ev_test"))
         assert v is not None
@@ -1101,7 +1106,9 @@ class TestValidationDataclasses:
 
     def test_validation_issue(self):
         from codomyrmex.validation.examples_validator import (
-            ValidationIssue, ValidationType, ValidationSeverity,
+            ValidationIssue,
+            ValidationSeverity,
+            ValidationType,
         )
         issue = ValidationIssue(
             module="test",
@@ -1122,7 +1129,10 @@ class TestValidationDataclasses:
 
     def test_module_validation_result_with_issues(self):
         from codomyrmex.validation.examples_validator import (
-            ModuleValidationResult, ValidationIssue, ValidationType, ValidationSeverity,
+            ModuleValidationResult,
+            ValidationIssue,
+            ValidationSeverity,
+            ValidationType,
         )
         issue = ValidationIssue(
             module="utils", validation_type=list(ValidationType)[0],

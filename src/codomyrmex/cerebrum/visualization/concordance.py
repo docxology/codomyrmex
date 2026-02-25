@@ -94,7 +94,7 @@ class ConcordanceVisualizer:
             min_val = min(scores.values())
             max_val = max(scores.values())
             if max_val == min_val:
-                return {k: 0.5 for k in scores}
+                return dict.fromkeys(scores, 0.5)
             return {k: (v - min_val) / (max_val - min_val) for k, v in scores.items()}
 
         cbr_norm = normalize({pid: cbr_results.get(pid, 0.0) for pid in pattern_ids})
@@ -283,16 +283,16 @@ class ConcordanceVisualizer:
                     min_val = min(values)
                     max_val = max(values)
                     if max_val == min_val:
-                        normalized_results[analysis_name] = {pid: 0.5 for pid in pattern_ids}
+                        normalized_results[analysis_name] = dict.fromkeys(pattern_ids, 0.5)
                     else:
                         normalized_results[analysis_name] = {
                             pid: (results.get(pid, 0.0) - min_val) / (max_val - min_val)
                             for pid in pattern_ids
                         }
                 else:
-                    normalized_results[analysis_name] = {pid: 0.0 for pid in pattern_ids}
+                    normalized_results[analysis_name] = dict.fromkeys(pattern_ids, 0.0)
             else:
-                normalized_results[analysis_name] = {pid: 0.0 for pid in pattern_ids}
+                normalized_results[analysis_name] = dict.fromkeys(pattern_ids, 0.0)
 
         # Calculate agreement scores (1 = agreement, 0 = disagreement)
         agreement_matrix = np.zeros((n_patterns, n_analyses))

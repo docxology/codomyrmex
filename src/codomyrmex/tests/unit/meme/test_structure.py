@@ -7,47 +7,45 @@ contagion models, cultural dynamics, and swarm intelligence.
 """
 
 import importlib
-import math
 import random
 
 import pytest
 
 from codomyrmex.meme import (
+    Archetype,
+    Cascade,
+    CascadeType,
+    ContagionModel,
+    CulturalDynamicsEngine,
+    CulturalState,
+    DriftReport,
+    FitnessMap,
     Meme,
     Memeplex,
     MemeticCode,
-    FitnessMap,
     MemeticEngine,
-    Sign,
-    SignType,
-    DriftReport,
-    SemioticAnalyzer,
     Narrative,
     NarrativeArc,
-    Archetype,
     NarrativeEngine,
-    ContagionModel,
-    CascadeType,
-    Cascade,
+    PowerMap,
     PropagationTrace,
     ResonanceMap,
-    CulturalState,
-    CulturalDynamicsEngine,
-    PowerMap,
+    SemioticAnalyzer,
+    Sign,
+    SignType,
 )
-from codomyrmex.meme.memetics.mutation import semantic_drift, recombine, splice
 from codomyrmex.meme.memetics.fitness import (
-    virality_score,
-    robustness_score,
     decay_rate,
     population_fitness_stats,
+    robustness_score,
+    virality_score,
 )
+from codomyrmex.meme.memetics.mutation import recombine, semantic_drift, splice
 from codomyrmex.meme.narrative.structure import (
-    heros_journey_arc,
-    freytag_pyramid_arc,
     fichtean_curve_arc,
+    freytag_pyramid_arc,
+    heros_journey_arc,
 )
-
 
 # ---------------------------------------------------------------------------
 # Module imports

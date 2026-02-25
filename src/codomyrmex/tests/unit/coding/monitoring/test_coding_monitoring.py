@@ -8,7 +8,11 @@ import time
 
 import pytest
 
-from codomyrmex.coding.monitoring import ExecutionMonitor, MetricsCollector, ResourceMonitor
+from codomyrmex.coding.monitoring import (
+    ExecutionMonitor,
+    MetricsCollector,
+    ResourceMonitor,
+)
 
 
 @pytest.mark.unit

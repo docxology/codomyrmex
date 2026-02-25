@@ -21,7 +21,7 @@ from __future__ import annotations
 import asyncio
 import enum
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
@@ -184,7 +184,7 @@ class CircuitBreaker:
 
     # ── Async context manager ─────────────────────────────────────
 
-    async def __aenter__(self) -> "CircuitBreaker":
+    async def __aenter__(self) -> CircuitBreaker:
         async with self._lock:
             self._check_state()
         return self

@@ -5,13 +5,10 @@ Tests use real Jinja2 templates and a real DataProvider against
 temporary project structures. No unittest.mock is used.
 """
 
-import shutil
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.website.generator import WebsiteGenerator
-
 
 # ── Fixtures ────────────────────────────────────────────────────────
 
@@ -279,7 +276,6 @@ class TestGeneratorErrorHandling:
         broken.write_text("{{ undefined_var.method() }}")
 
         # Monkey-patch the pages list to include the broken template
-        import codomyrmex.website.generator as gen_mod
         original_generate = gen.generate
 
         def patched_generate():

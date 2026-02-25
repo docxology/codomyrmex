@@ -3,15 +3,19 @@
 import base64
 from datetime import datetime
 from email.message import EmailMessage as PyEmailMessage
-from typing import List, Optional
 
-from ..exceptions import EmailAPIError, EmailAuthError, InvalidMessageError, MessageNotFoundError
+from ..exceptions import (
+    EmailAPIError,
+    EmailAuthError,
+    InvalidMessageError,
+    MessageNotFoundError,
+)
 from ..generics import EmailAddress, EmailDraft, EmailMessage, EmailProvider
 
 try:
-    from googleapiclient.discovery import build, Resource
-    from googleapiclient.errors import HttpError
     from google.oauth2.credentials import Credentials
+    from googleapiclient.discovery import Resource, build
+    from googleapiclient.errors import HttpError
     GMAIL_AVAILABLE = True
 except ImportError:
     Credentials = None
@@ -24,7 +28,7 @@ except ImportError:
 class GmailProvider(EmailProvider):
     """Google Mail provider implementation."""
 
-    def __init__(self, credentials: Optional[Credentials] = None, service: Optional[Resource] = None):
+    def __init__(self, credentials: Credentials | None = None, service: Resource | None = None):
         """
         Initialize the Gmail provider.
 
@@ -46,7 +50,7 @@ class GmailProvider(EmailProvider):
         except Exception as e:
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}")
 
-    def _parse_email_address(self, raw_header: str) -> List[EmailAddress]:
+    def _parse_email_address(self, raw_header: str) -> list[EmailAddress]:
         """Parse a raw 'To' or 'From' header into a list of EmailAddress objects."""
         # This is a very simplistic parser. In a real scenario, use `email.utils.getaddresses`.
         addresses = []
@@ -89,7 +93,7 @@ class GmailProvider(EmailProvider):
                             body_html += decoded_data
                     if 'parts' in part:
                         extract_parts(part['parts'])
-            
+
             payload_part = payload.get('payload', {})
             if payload_part.get('mimeType') == 'text/plain':
                  body_data = payload_part.get('body', {}).get('data', '')
@@ -137,7 +141,7 @@ class GmailProvider(EmailProvider):
         raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
         return {'raw': raw}
 
-    def list_messages(self, query: str = "", max_results: int = 100, user_id: str = 'me') -> List[EmailMessage]:
+    def list_messages(self, query: str = "", max_results: int = 100, user_id: str = 'me') -> list[EmailMessage]:
         """List messages matching the generic query."""
         try:
             results = self.service.users().messages().list(
@@ -146,7 +150,7 @@ class GmailProvider(EmailProvider):
                 maxResults=max_results
             ).execute()
             messages_meta = results.get('messages', [])
-            
+
             # Note: The list API only returns IDs. We have to batch get them or get them individually
             # we do individually for simplicity here, but batching is better for prod
             full_messages = []
@@ -206,7 +210,7 @@ class GmailProvider(EmailProvider):
                 raise MessageNotFoundError(f"Message with ID {message_id} not found for deletion.")
             raise EmailAPIError(f"Failed to delete message: {e}")
 
-    def modify_labels(self, message_id: str, add_labels: List[str], remove_labels: List[str], user_id: str = 'me') -> None:
+    def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str], user_id: str = 'me') -> None:
         """Add or remove labels from a message."""
         try:
             body = {

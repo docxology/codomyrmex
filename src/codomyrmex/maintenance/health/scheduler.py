@@ -7,9 +7,10 @@ such as dependency audits, stale file cleanup, and health checks.
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 
 
 class TaskPriority(Enum):

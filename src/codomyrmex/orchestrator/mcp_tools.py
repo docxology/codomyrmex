@@ -11,13 +11,13 @@ def get_scheduler_metrics() -> dict:
         A dictionary containing scheduler metrics like active jobs and completion rates.
     """
     from codomyrmex.orchestrator import AsyncScheduler
-    
+
     try:
         # We instantiate a scheduler to get its metrics layout
         # In a real environment, this might connect to a running daemon
         scheduler = AsyncScheduler()
         metrics = scheduler.metrics
-        
+
         return {
             "status": "success",
             "metrics": {
@@ -42,8 +42,8 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
     Returns:
         Validation result indicating if the workflow is a valid DAG.
     """
-    from codomyrmex.orchestrator import Workflow, Task, CycleError
-    
+    from codomyrmex.orchestrator import CycleError, Task, Workflow
+
     try:
         workflow = Workflow(name="analysis_workflow")
         for t in tasks:
@@ -52,7 +52,7 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
                 continue
             task = Task(id=task_id, func=lambda: None)
             workflow.add_task(task)
-            
+
         # Add dependencies in a second pass
         for t in tasks:
             task_id = t.get("id")
@@ -62,14 +62,14 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
                     workflow.add_dependency(task_id, dep)
                 except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                     pass
-                    
+
         # Verification happens implicitly or through a topological sort check
         # This will raise CycleError if a cycle exists
         execution_order = workflow._get_execution_order()
-        
+
         return {
-            "status": "success", 
-            "valid_dag": True, 
+            "status": "success",
+            "valid_dag": True,
             "execution_order": execution_order
         }
     except CycleError as e:

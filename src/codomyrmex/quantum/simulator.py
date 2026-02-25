@@ -4,8 +4,8 @@ import cmath
 import math
 import random
 
-from .models import GateType
 from .circuit import QuantumCircuit
+from .models import GateType
 
 
 class QuantumSimulator:

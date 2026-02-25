@@ -18,19 +18,17 @@ Tests cover:
 import pytest
 
 from codomyrmex.data_visualization import (
-    Dashboard,
-    Grid,
-    Theme,
-    Card,
-    Table,
     BarPlot,
-    ScatterPlot,
-    Report,
+    Card,
+    Dashboard,
     GeneralSystemReport,
+    Grid,
+    ScatterPlot,
+    Table,
+    Theme,
 )
+from codomyrmex.data_visualization.components.text import CodeBlock, TextBlock
 from codomyrmex.data_visualization.core.theme import DEFAULT_THEME
-from codomyrmex.data_visualization.core.layout import Section
-from codomyrmex.data_visualization.components.text import TextBlock, CodeBlock
 
 
 @pytest.mark.unit

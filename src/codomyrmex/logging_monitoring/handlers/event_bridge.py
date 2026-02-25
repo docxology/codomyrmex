@@ -8,12 +8,10 @@ from __future__ import annotations
 
 import json
 import logging
-import time
 from typing import Any
 
 from codomyrmex.events.core.event_bus import EventBus
 from codomyrmex.events.core.event_schema import Event, EventType
-
 
 logger = logging.getLogger("codomyrmex.observability.event_bridge")
 

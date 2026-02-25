@@ -36,7 +36,7 @@ from codomyrmex.orchestrator.thin import (
     shell,
     timeout,
 )
-from codomyrmex.orchestrator.workflow import (
+from codomyrmex.orchestrator.workflows.workflow import (
     CycleError,
     RetryPolicy,
     TaskResult,

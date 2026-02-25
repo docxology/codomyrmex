@@ -13,17 +13,18 @@ def generate_module_docs(module_name: str) -> dict:
     Returns:
         Status and paths of generated documentation.
     """
-    from codomyrmex.documentation import generate_pai_md
     from pathlib import Path
-    
+
+    from codomyrmex.documentation import generate_pai_md
+
     module_path = Path(f"src/codomyrmex/{module_name}")
     if not module_path.exists():
         return {"status": "error", "message": f"Module {module_name} not found."}
-        
+
     try:
         generate_pai_md(str(module_path))
         return {
-            "status": "success", 
+            "status": "success",
             "message": f"Documentation generated for {module_name}",
             "paths": [
                 f"{module_path}/PAI.md"
@@ -43,17 +44,18 @@ def audit_rasp_compliance(module_name: str | None = None) -> dict:
     Returns:
         Audit report detailing missing files.
     """
-    from codomyrmex.documentation import audit_rasp
     from pathlib import Path
-    
+
+    from codomyrmex.documentation import audit_rasp
+
     try:
         if module_name:
             missing_count = audit_rasp(Path(f"src/codomyrmex/{module_name}"))
         else:
             missing_count = audit_rasp(Path("src/codomyrmex"))
-            
+
         success = missing_count == 0
-                
+
         return {
             "status": "success",
             "compliant": success,

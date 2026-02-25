@@ -14,13 +14,9 @@ Uses mock_openstack_connection fixture and make_stub_stack factory from conftest
 Total: ~26 tests in TestInfomaniakOrchestration class.
 """
 
-import os
-from _stubs import Stub
-
+from _stubs import Stub, make_stub_stack
 
 from codomyrmex.cloud.infomaniak.orchestration.client import InfomaniakHeatClient
-
-from _stubs import make_stub_stack
 
 
 class TestInfomaniakOrchestration:

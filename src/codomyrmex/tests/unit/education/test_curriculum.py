@@ -1,4 +1,4 @@
-from codomyrmex.documentation.education.curriculum import Curriculum, Lesson, DifficultyLevel
+from codomyrmex.documentation.education.curriculum import Curriculum, Lesson
 
 
 def test_curriculum_basics():

@@ -24,7 +24,6 @@ from codomyrmex.crypto.encoding import (
 )
 from codomyrmex.crypto.exceptions import EncodingError
 
-
 # -------------------------------------------------------------------------
 # Base64
 # -------------------------------------------------------------------------

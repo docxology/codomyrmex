@@ -126,7 +126,7 @@ def resolve_path(base_path: Path, relative_path: str, repo_root: Path) -> tuple[
 
         exists = target.exists()
         return (exists, target)
-    except Exception as e:
+    except Exception:
         return (False, None)
 
 def audit_agents_file(file_path: Path, repo_root: Path) -> dict:

@@ -15,7 +15,7 @@ from __future__ import annotations
 import hashlib
 import re
 
-from codomyrmex.crypto.encoding.base import encode_base58, decode_base58
+from codomyrmex.crypto.encoding.base import decode_base58, encode_base58
 from codomyrmex.crypto.exceptions import WalletError
 from codomyrmex.logging_monitoring import get_logger
 

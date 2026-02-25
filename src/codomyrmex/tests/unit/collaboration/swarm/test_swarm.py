@@ -7,6 +7,24 @@ from __future__ import annotations
 
 import pytest
 
+from codomyrmex.collaboration.swarm.consensus import (
+    ConsensusEngine,
+    ConsensusResult,
+    Decision,
+    Vote,
+)
+from codomyrmex.collaboration.swarm.decomposer import (
+    CyclicDependencyError,
+    SubTask,
+    TaskDecomposer,
+)
+from codomyrmex.collaboration.swarm.message_bus import (
+    MessageBus,
+)
+from codomyrmex.collaboration.swarm.pool import (
+    AgentPool,
+    AssignmentError,
+)
 from codomyrmex.collaboration.swarm.protocol import (
     AgentRole,
     MessageType,
@@ -15,26 +33,6 @@ from codomyrmex.collaboration.swarm.protocol import (
     TaskAssignment,
     TaskStatus,
 )
-from codomyrmex.collaboration.swarm.pool import (
-    AgentPool,
-    AssignmentError,
-)
-from codomyrmex.collaboration.swarm.decomposer import (
-    CyclicDependencyError,
-    SubTask,
-    TaskDecomposer,
-)
-from codomyrmex.collaboration.swarm.consensus import (
-    ConsensusEngine,
-    ConsensusResult,
-    Decision,
-    Vote,
-)
-from codomyrmex.collaboration.swarm.message_bus import (
-    MessageBus,
-    Subscription,
-)
-
 
 # ── Protocol ─────────────────────────────────────────────────────
 

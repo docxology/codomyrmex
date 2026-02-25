@@ -596,6 +596,7 @@ class TestGitOperations:
 
 import subprocess
 
+
 class TestGitCoreDeep:
     """Deep tests for git_operations/core/git.py — 823 stmts."""
 

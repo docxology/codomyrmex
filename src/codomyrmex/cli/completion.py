@@ -22,7 +22,7 @@ def generate_bash_completion(commands: dict[str, dict[str, Any]],
         '    prev="${COMP_WORDS[COMP_CWORD-1]}"',
         f'    opts="{cmd_names}"',
         '',
-        f'    if [[ ${{COMP_CWORD}} -eq 1 ]]; then',
+        '    if [[ ${COMP_CWORD} -eq 1 ]]; then',
         '        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )',
         '        return 0',
         '    fi',
@@ -35,7 +35,7 @@ def generate_bash_completion(commands: dict[str, dict[str, Any]],
             opts_str = " ".join(subopts)
             lines.append(f'        {cmd})')
             lines.append(f'            COMPREPLY=( $(compgen -W "{opts_str}" -- ${{cur}}) )')
-            lines.append(f'            return 0 ;;')
+            lines.append('            return 0 ;;')
     lines.extend([
         '        *) ;;',
         '    esac',

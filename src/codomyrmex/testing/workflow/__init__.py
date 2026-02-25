@@ -4,6 +4,12 @@ Workflow Testing Module
 Test workflows with step-based assertions, waits, and scripts.
 """
 
+from .executors import (
+    AssertionExecutor,
+    ScriptExecutor,
+    StepExecutor,
+    WaitExecutor,
+)
 from .models import (
     StepResult,
     StepStatus,
@@ -11,12 +17,6 @@ from .models import (
     WorkflowResult,
     WorkflowStep,
     WorkflowStepType,
-)
-from .executors import (
-    AssertionExecutor,
-    ScriptExecutor,
-    StepExecutor,
-    WaitExecutor,
 )
 from .runner import WorkflowRunner
 

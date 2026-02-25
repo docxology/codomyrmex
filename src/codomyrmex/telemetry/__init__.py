@@ -55,6 +55,7 @@ except ImportError:
 
 from . import alerting, sampling, tracing
 
+
 def cli_commands():
     """Return CLI commands for the telemetry module."""
     def _status(**kwargs):
@@ -63,8 +64,8 @@ def cli_commands():
         print(f"  Trace context: {'available' if HAS_TRACE_CONTEXT else 'not available'}")
         print(f"  Span processor: {'available' if HAS_SPAN_PROCESSOR else 'not available'}")
         print(f"  OTLP exporter: {'available' if HAS_OTLP_EXPORTER else 'not available'}")
-        print(f"  Alerting module: loaded")
-        print(f"  Sampling module: loaded")
+        print("  Alerting module: loaded")
+        print("  Sampling module: loaded")
 
     def _export(**kwargs):
         """Export telemetry data."""
@@ -86,8 +87,6 @@ def cli_commands():
 
 
 from . import dashboard
-
-from . import metrics
 
 __all__ = [
     "dashboard",

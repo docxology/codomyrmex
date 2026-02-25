@@ -10,11 +10,8 @@ Covers:
 """
 
 import asyncio
-import time
-from datetime import datetime, timedelta
 
 import pytest
-
 
 # ===================================================================
 # Scheduler
@@ -130,14 +127,14 @@ class TestWorkflow:
 
     def test_add_task(self):
         """Test functionality: add task."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "done")
         assert len(wf.tasks) >= 1
 
     def test_simple_run(self):
         """Test functionality: simple run."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "done")
         results = asyncio.run(wf.run())
@@ -151,7 +148,7 @@ class TestWorkflow:
 
     def test_dependency_chain(self):
         """Test functionality: dependency chain."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         order = []
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: order.append("a") or "a")
@@ -162,7 +159,7 @@ class TestWorkflow:
 
     def test_validate_detects_missing_dep(self):
         """Test functionality: validate detects missing dep."""
-        from codomyrmex.orchestrator.workflow import Workflow, WorkflowError
+        from codomyrmex.orchestrator.workflows.workflow import Workflow, WorkflowError
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: None, dependencies=["nonexistent"])
         with pytest.raises(WorkflowError):
@@ -170,7 +167,7 @@ class TestWorkflow:
 
     def test_validate_detects_cycle(self):
         """Test functionality: validate detects cycle."""
-        from codomyrmex.orchestrator.workflow import CycleError, Workflow
+        from codomyrmex.orchestrator.workflows.workflow import CycleError, Workflow
         wf = Workflow("test_wf")
         wf.add_task("a", action=lambda: None, dependencies=["b"])
         wf.add_task("b", action=lambda: None, dependencies=["a"])
@@ -179,7 +176,7 @@ class TestWorkflow:
 
     def test_task_failure(self):
         """Test functionality: task failure."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         def failing():
             raise RuntimeError("boom")
         wf = Workflow("test_wf", fail_fast=False)
@@ -195,7 +192,7 @@ class TestWorkflow:
 
     def test_get_summary(self):
         """Test functionality: get summary."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: "ok")
         asyncio.run(wf.run())
@@ -204,7 +201,7 @@ class TestWorkflow:
 
     def test_get_task_result(self):
         """Test functionality: get task result."""
-        from codomyrmex.orchestrator.workflow import Workflow
+        from codomyrmex.orchestrator.workflows.workflow import Workflow
         wf = Workflow("test_wf")
         wf.add_task("step1", action=lambda: 42)
         asyncio.run(wf.run())
@@ -237,14 +234,20 @@ class TestRetryPolicy:
 
     def test_should_retry_within_attempts(self):
         """Test functionality: should retry within attempts."""
-        from codomyrmex.orchestrator.resilience.retry_policy import RetryOutcome, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import (
+            RetryOutcome,
+            RetryPolicy,
+        )
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=1)
         assert result == RetryOutcome.RETRY
 
     def test_should_retry_exceeded(self):
         """Test functionality: should retry exceeded."""
-        from codomyrmex.orchestrator.resilience.retry_policy import RetryOutcome, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import (
+            RetryOutcome,
+            RetryPolicy,
+        )
         policy = RetryPolicy(max_attempts=3)
         result = policy.should_retry(ValueError("test"), attempt=3)
         assert result in (RetryOutcome.ABORT, RetryOutcome.DEAD_LETTER)
@@ -256,7 +259,10 @@ class TestPipelineRetryExecutor:
 
     def test_execute_success(self):
         """Test functionality: execute success."""
-        from codomyrmex.orchestrator.resilience.retry_policy import PipelineRetryExecutor, RetryOutcome
+        from codomyrmex.orchestrator.resilience.retry_policy import (
+            PipelineRetryExecutor,
+            RetryOutcome,
+        )
         executor = PipelineRetryExecutor()
         result = executor.execute("test_step", lambda: 42)
         assert result.outcome == RetryOutcome.SUCCESS
@@ -265,7 +271,9 @@ class TestPipelineRetryExecutor:
     def test_execute_failure_retried(self):
         """Test functionality: execute failure retried."""
         from codomyrmex.orchestrator.resilience.retry_policy import (
-            PipelineRetryExecutor, RetryOutcome, RetryPolicy,
+            PipelineRetryExecutor,
+            RetryOutcome,
+            RetryPolicy,
         )
         call_count = 0
         def flaky():
@@ -284,7 +292,9 @@ class TestPipelineRetryExecutor:
     def test_execute_exhausted(self):
         """Test functionality: execute exhausted."""
         from codomyrmex.orchestrator.resilience.retry_policy import (
-            PipelineRetryExecutor, RetryOutcome, RetryPolicy,
+            PipelineRetryExecutor,
+            RetryOutcome,
+            RetryPolicy,
         )
         executor = PipelineRetryExecutor(
             default_policy=RetryPolicy(max_attempts=2, base_delay=0.01, jitter=False)
@@ -296,7 +306,10 @@ class TestPipelineRetryExecutor:
 
     def test_set_custom_policy(self):
         """Test functionality: set custom policy."""
-        from codomyrmex.orchestrator.resilience.retry_policy import PipelineRetryExecutor, RetryPolicy
+        from codomyrmex.orchestrator.resilience.retry_policy import (
+            PipelineRetryExecutor,
+            RetryPolicy,
+        )
         executor = PipelineRetryExecutor()
         custom = RetryPolicy(max_attempts=10)
         executor.set_policy("special_step", custom)

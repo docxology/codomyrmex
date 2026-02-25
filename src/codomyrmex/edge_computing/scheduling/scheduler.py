@@ -6,13 +6,10 @@ Provides periodic and one-shot scheduling of edge function invocations.
 from __future__ import annotations
 
 import threading
-import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-
-from ..core.models import EdgeFunction
 
 
 class ScheduleType(Enum):

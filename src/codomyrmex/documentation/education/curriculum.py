@@ -4,11 +4,11 @@ Provides Difficulty enum, Lesson, and Curriculum
 for building structured learning paths.
 """
 
+import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
-from uuid import uuid4, UUID
-import json
+from typing import Any
+from uuid import UUID, uuid4
 
 
 class Difficulty(Enum):
@@ -130,7 +130,7 @@ class Curriculum:
         self._modules[name] = lesson
         return lesson
 
-    def get_module(self, name: str) -> Optional[Lesson]:
+    def get_module(self, name: str) -> Lesson | None:
         """Retrieve a module by name.
 
         Returns:
@@ -167,7 +167,7 @@ class Curriculum:
         """
         # Build adjacency / in-degree for topological sort
         modules = dict(self._modules)
-        in_degree: dict[str, int] = {name: 0 for name in modules}
+        in_degree: dict[str, int] = dict.fromkeys(modules, 0)
         dependents: dict[str, list[str]] = {name: [] for name in modules}
 
         for name, lesson in modules.items():

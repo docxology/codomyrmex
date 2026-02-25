@@ -4,7 +4,6 @@ RedisLock tests use pytest.mark.skipif when redis is unavailable.
 """
 
 import asyncio
-import os
 import threading
 
 import pytest
@@ -265,7 +264,6 @@ class TestAsyncLockPatterns:
         assert len(buffer) == 0
 
     async def test_async_rate_limiter(self):
-        import time
 
         from codomyrmex.concurrency.semaphores.semaphore import AsyncLocalSemaphore
 

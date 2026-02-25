@@ -1,8 +1,9 @@
-import pytest
 from pathlib import Path
-from codomyrmex.data_visualization.core.theme import Theme
-from codomyrmex.data_visualization.core.layout import Grid, Section
+
 from codomyrmex.data_visualization.core.export import render_html
+from codomyrmex.data_visualization.core.layout import Grid
+from codomyrmex.data_visualization.core.theme import Theme
+
 
 def test_theme_generation():
     """Test functionality: theme generation."""

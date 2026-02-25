@@ -6,9 +6,7 @@ site configuration generation.
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 from codomyrmex.docs_gen.api_doc_extractor import APIDocExtractor, ModuleDoc

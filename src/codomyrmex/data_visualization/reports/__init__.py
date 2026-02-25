@@ -4,10 +4,10 @@ Provides report types: GeneralSystemReport, FinanceReport,
 MarketingReport, LogisticsReport.
 """
 from ._base import BaseReport
-from .general import GeneralSystemReport
 from .finance import FinanceReport
-from .marketing import MarketingReport
+from .general import GeneralSystemReport
 from .logistics import LogisticsReport
+from .marketing import MarketingReport
 
 __all__ = [
     "BaseReport",

@@ -8,13 +8,12 @@ from __future__ import annotations
 import json
 import os
 import time
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from pathlib import Path
 from threading import RLock
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 from codomyrmex.performance import monitor_performance, performance_context

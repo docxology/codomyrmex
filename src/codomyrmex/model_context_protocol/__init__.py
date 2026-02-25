@@ -19,6 +19,9 @@ from codomyrmex.exceptions import CodomyrmexError
 
 # Submodule exports
 from . import adapters, discovery, quality, reliability, schemas, transport, validators
+
+# MCP Decorators
+from .decorators import mcp_tool
 from .schemas.mcp_schemas import (
     MCPErrorDetail,
     MCPMessage,
@@ -27,15 +30,12 @@ from .schemas.mcp_schemas import (
     MCPToolResult,
 )
 
-# MCP Server
-from .transport.server import MCPServer, MCPServerConfig
-from .transport.main import main, run_server
-
-# MCP Decorators
-from .decorators import mcp_tool
-
 # MCP Client
 from .transport.client import MCPClient, MCPClientConfig, MCPClientError
+from .transport.main import main, run_server
+
+# MCP Server
+from .transport.server import MCPServer, MCPServerConfig
 
 # Shared schemas for cross-module interop
 try:
@@ -74,7 +74,22 @@ def cli_commands():
 
 
 # MCP Errors and Validation (v0.1.8 Stream 1)
-from .errors import MCPErrorCode, MCPToolError, FieldError
+from .discovery import (
+    DiscoveryMetrics,
+    DiscoveryReport,
+    FailedModule,
+    MCPDiscovery,
+)
+from .errors import FieldError, MCPErrorCode, MCPToolError
+
+# MCP Tool Taxonomy (v0.2.0 Stream 1)
+from .quality.taxonomy import (
+    TaxonomyReport,
+    ToolCategory,
+    categorize_all_tools,
+    categorize_tool,
+    generate_taxonomy_report,
+)
 from .quality.validation import ValidationResult, validate_tool_arguments
 
 # MCP Transport Robustness (v0.1.8 Stream 2)
@@ -83,27 +98,11 @@ from .reliability.circuit_breaker import (
     CircuitBreakerConfig,
     CircuitOpenError,
     CircuitState,
-    get_circuit_breaker,
     get_all_circuit_metrics,
+    get_circuit_breaker,
     reset_all_circuits,
 )
 from .reliability.rate_limiter import RateLimiter, RateLimiterConfig
-from .discovery import (
-    FailedModule,
-    DiscoveryReport,
-    DiscoveryMetrics,
-    MCPDiscovery,
-)
-
-# MCP Tool Taxonomy (v0.2.0 Stream 1)
-from .quality.taxonomy import (
-    ToolCategory,
-    categorize_tool,
-    categorize_all_tools,
-    generate_taxonomy_report,
-    TaxonomyReport,
-)
-
 
 __all__ = [
     "MCPErrorDetail",
@@ -155,5 +154,7 @@ __all__ = [
     "main",
     "run_server",
 ]
+
+from . import versioning as versioning_module  # noqa: E402, F401
 
 

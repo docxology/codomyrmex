@@ -7,10 +7,11 @@ dispatch, preventing invalid data from reaching handlers.
 
 from __future__ import annotations
 
-import logging
-from dataclasses import dataclass, field
-from typing import Any, Callable
 import inspect
+import logging
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -254,13 +255,13 @@ def _generate_schema_from_func(func: Callable[..., Any]) -> dict[str, Any]:
     sig = inspect.signature(func)
     properties = {}
     required = []
-    
+
     for name, param in sig.parameters.items():
         if name in ("self", "cls"):
             continue
-            
+
         param_schema: dict[str, Any] = {}
-        
+
         # Type inference
         if param.annotation != inspect.Parameter.empty:
             if param.annotation is str:
@@ -280,12 +281,12 @@ def _generate_schema_from_func(func: Callable[..., Any]) -> dict[str, Any]:
                 param_schema["type"] = "string" # simplified
         else:
             param_schema["type"] = "string" # default
-            
+
         properties[name] = param_schema
-        
+
         if param.default == inspect.Parameter.empty:
             required.append(name)
-            
+
     return {
         "type": "object",
         "properties": properties,

@@ -5,9 +5,9 @@ Test suite, tester, and A/B testing for prompts.
 """
 
 import time
+from collections.abc import Callable
 from datetime import datetime
 from typing import Any
-from collections.abc import Callable
 
 from .evaluators import ContainsEvaluator, Evaluator, ExactMatchEvaluator
 from .models import (

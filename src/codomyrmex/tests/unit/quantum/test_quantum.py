@@ -12,10 +12,10 @@ try:
         QuantumSimulator,
         Qubit,
         bell_state,
+        circuit_stats,
+        circuit_to_ascii,
         ghz_state,
         qft,
-        circuit_to_ascii,
-        circuit_stats,
     )
     HAS_MODULE = True
 except ImportError:

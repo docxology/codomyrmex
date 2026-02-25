@@ -7,7 +7,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class MemeType(str, Enum):
@@ -44,8 +44,8 @@ class Meme:
     fidelity: float = 0.8
     fecundity: float = 0.5
     longevity: float = 0.5
-    lineage: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    lineage: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     id: str = field(default="")
     created_at: float = field(default_factory=time.time)
 
@@ -64,7 +64,7 @@ class Meme:
         """Composite fitness = geometric mean of fidelity, fecundity, longevity."""
         return (self.fidelity * self.fecundity * self.longevity) ** (1 / 3)
 
-    def descend(self, new_content: str, **overrides: Any) -> "Meme":
+    def descend(self, new_content: str, **overrides: Any) -> Meme:
         """Create a mutated descendant, preserving lineage."""
         child_lineage = self.lineage + [self.id]
         return Meme(
@@ -86,7 +86,7 @@ class MemeticCode:
     the sequence matters for the phenotypic expression of the idea.
     """
 
-    sequence: List[Meme] = field(default_factory=list)
+    sequence: list[Meme] = field(default_factory=list)
 
     def append(self, meme: Meme) -> None:
         """Append a meme to the code sequence."""
@@ -128,7 +128,7 @@ class Memeplex:
     """
 
     name: str
-    memes: List[Meme] = field(default_factory=list)
+    memes: list[Meme] = field(default_factory=list)
     synergy: float = 0.5
     id: str = field(default="")
 
@@ -169,7 +169,7 @@ class Memeplex:
         gini = numerator / denominator
         return 1.0 - gini  # Invert: 1 = perfectly uniform = most robust
 
-    def mutate(self, mutation_rate: float = 0.1) -> "Memeplex":
+    def mutate(self, mutation_rate: float = 0.1) -> Memeplex:
         """Create a mutated copy of this memeplex."""
         import random
 
@@ -191,7 +191,7 @@ class Memeplex:
             synergy=max(0.0, min(1.0, self.synergy + random.gauss(0, 0.02))),
         )
 
-    def recombine(self, other: "Memeplex") -> "Memeplex":
+    def recombine(self, other: Memeplex) -> Memeplex:
         """Sexual recombination — crossover at random point."""
         import random
 
@@ -214,7 +214,7 @@ class FitnessMap:
     Represents a snapshot of the fitness landscape for a population.
     """
 
-    entries: Dict[str, float] = field(default_factory=dict)
+    entries: dict[str, float] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
 
     def add(self, entity_id: str, fitness: float) -> None:
@@ -242,6 +242,6 @@ class FitnessMap:
             return 0.0
         return min(self.entries.values())
 
-    def top_n(self, n: int = 10) -> List[tuple[str, float]]:
+    def top_n(self, n: int = 10) -> list[tuple[str, float]]:
         """Return top-N entities by fitness."""
         return sorted(self.entries.items(), key=lambda x: x[1], reverse=True)[:n]

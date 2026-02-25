@@ -4,7 +4,7 @@ Provides curriculum generation, interactive tutoring, and
 certification / assessment capabilities.
 """
 
-from .curriculum import Curriculum, Lesson, Difficulty
+from .curriculum import Curriculum, Difficulty, Lesson
 
 # Optional submodules (not yet implemented)
 try:

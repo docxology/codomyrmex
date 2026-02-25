@@ -6,11 +6,11 @@ backward compatibility, and migration support.
 
 import logging
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

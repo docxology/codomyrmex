@@ -6,15 +6,14 @@ SecretScanner (regex + entropy), and SecurityDashboard.
 
 import pytest
 
-from codomyrmex.security.permissions import Grant, Permission, PermissionModel, Role
 from codomyrmex.security.compliance_report import (
     ComplianceCheck,
     ComplianceGenerator,
     ComplianceStatus,
 )
-from codomyrmex.security.secret_scanner import SecretScanner
 from codomyrmex.security.dashboard import SecurityDashboard
-
+from codomyrmex.security.permissions import Permission, PermissionModel, Role
+from codomyrmex.security.secrets.secret_scanner import SecretScanner
 
 # ─── PermissionModel ──────────────────────────────────────────────────
 
@@ -132,7 +131,7 @@ class TestSecurityDashboard:
 
     def test_posture_with_secrets(self):
         """Test functionality: posture with secrets."""
-        from codomyrmex.security.secret_scanner import SecretFinding
+        from codomyrmex.security.secrets.secret_scanner import SecretFinding
         findings = [SecretFinding(file_path="a", line_number=1, secret_type="api_key")]
         dashboard = SecurityDashboard(secrets=findings)
         posture = dashboard.posture()

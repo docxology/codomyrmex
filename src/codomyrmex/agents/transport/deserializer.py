@@ -8,8 +8,6 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-import json
-from typing import Any
 
 from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapshot
 

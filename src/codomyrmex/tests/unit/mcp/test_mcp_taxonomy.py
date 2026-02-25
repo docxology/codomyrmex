@@ -7,11 +7,11 @@ every tool to one of {analysis, generation, execution, query, mutation}.
 import pytest
 
 from codomyrmex.model_context_protocol.quality.taxonomy import (
-    ToolCategory,
-    categorize_tool,
-    categorize_all_tools,
-    generate_taxonomy_report,
     TaxonomyReport,
+    ToolCategory,
+    categorize_all_tools,
+    categorize_tool,
+    generate_taxonomy_report,
 )
 
 

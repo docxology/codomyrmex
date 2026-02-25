@@ -160,7 +160,7 @@ class FileFlagStore(FlagStore):
     def _read(self) -> dict[str, Any]:
         """Load the JSON file; return empty dict on any read error."""
         try:
-            with open(self._path, "r", encoding="utf-8") as fh:
+            with open(self._path, encoding="utf-8") as fh:
                 return json.load(fh)
         except (FileNotFoundError, json.JSONDecodeError):
             return {}

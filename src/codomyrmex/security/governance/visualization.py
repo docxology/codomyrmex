@@ -1,5 +1,7 @@
-from .policy import PolicyEngine
 from codomyrmex.data_visualization.charts.pie_chart import PieChart
+
+from .policy import PolicyEngine
+
 
 def plot_policy_compliance(engine: PolicyEngine) -> str:
     """
@@ -7,8 +9,8 @@ def plot_policy_compliance(engine: PolicyEngine) -> str:
     """
     labels = ["Pass", "Fail"]
     # Mock data for demonstration as we don't have historical logs in the basic engine yet
-    data = [85, 15] 
-    
+    data = [85, 15]
+
     chart = PieChart(
         title="Policy Compliance Rate",
         labels=labels,

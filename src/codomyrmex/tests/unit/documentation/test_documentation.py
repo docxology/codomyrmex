@@ -170,14 +170,18 @@ class TestTripleCheck:
     """Tests for triple_check documentation verification."""
 
     def test_check_file_completeness(self):
-        from codomyrmex.documentation.scripts.triple_check import check_file_completeness
         from pathlib import Path
+
+        from codomyrmex.documentation.scripts.triple_check import (
+            check_file_completeness,
+        )
         issues = check_file_completeness("# Title\n\nSome content here.", Path("test.md"))
         assert isinstance(issues, list)
 
     def test_find_placeholders(self):
-        from codomyrmex.documentation.scripts.triple_check import find_placeholders
         from pathlib import Path
+
+        from codomyrmex.documentation.scripts.triple_check import find_placeholders
         phs = find_placeholders("TODO: fix this\nXXX placeholder", Path("test.py"))
         assert isinstance(phs, list)
 
@@ -198,7 +202,9 @@ class TestTripleCheckDeep:
         assert isinstance(phs, list)
 
     def test_check_completeness_full(self, tmp_path):
-        from codomyrmex.documentation.scripts.triple_check import check_file_completeness
+        from codomyrmex.documentation.scripts.triple_check import (
+            check_file_completeness,
+        )
         content = "# Title\n\nThis is a complete document with real content.\n## Features\n- Feature 1\n- Feature 2"
         issues = check_file_completeness(content, tmp_path / "full.md")
         assert isinstance(issues, list)

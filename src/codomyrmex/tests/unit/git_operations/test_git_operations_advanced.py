@@ -93,12 +93,12 @@ class TestAdvancedGitOperations(unittest.TestCase):
 
         # Initialize repository for most tests
         self.assertTrue(initialize_git_repository(self.repo_dir))
-        
+
         # Ensure we are on 'main' regardless of system default (master vs main)
         subprocess.run(
-            ["git", "branch", "-m", "main"], 
-            cwd=self.repo_dir, 
-            capture_output=True, 
+            ["git", "branch", "-m", "main"],
+            cwd=self.repo_dir,
+            capture_output=True,
             check=False
         )
 
@@ -471,7 +471,7 @@ class TestAdvancedGitOperations(unittest.TestCase):
         if not tags:
              # If tags are empty, print for debugging (though capture_output usually hides this)
              print(f"DEBUG: No tags found in {self.repo_dir}")
-        
+
         for i in range(branch_count):
             tag_name = f"branch-{i}-v1.0"
             self.assertIn(tag_name, tags, f"Tag {tag_name} not found in {tags}")

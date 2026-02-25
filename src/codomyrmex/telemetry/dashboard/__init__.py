@@ -13,7 +13,6 @@ from enum import Enum
 from typing import Any, Optional
 from uuid import uuid4
 
-
 # ------------------------------------------------------------------
 # Enums
 # ------------------------------------------------------------------
@@ -77,7 +76,7 @@ class Alert:
     severity: AlertSeverity = AlertSeverity.WARNING
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.now)
-    resolved_at: Optional[datetime] = None
+    resolved_at: datetime | None = None
 
     def resolve(self) -> None:
         """Resolve this alert."""
@@ -141,12 +140,12 @@ class Dashboard:
         self.panels: list[Panel] = []
         self.created_at = datetime.now()
 
-    def add_panel(self, panel: Panel) -> "Dashboard":
+    def add_panel(self, panel: Panel) -> Dashboard:
         """Add a panel. Returns self for chaining."""
         self.panels.append(panel)
         return self
 
-    def get_panel(self, panel_id: str) -> Optional[Panel]:
+    def get_panel(self, panel_id: str) -> Panel | None:
         """Get a panel by ID."""
         for p in self.panels:
             if p.id == panel_id:
@@ -207,7 +206,7 @@ class MetricCollector:
             metrics = [m for m in metrics if m.timestamp <= end]
         return metrics
 
-    def get_latest(self, name: str) -> Optional[MetricValue]:
+    def get_latest(self, name: str) -> MetricValue | None:
         """Get the most recent value for a metric."""
         metrics = self._metrics.get(name, [])
         return metrics[-1] if metrics else None
@@ -334,7 +333,7 @@ class DashboardManager:
         self._dashboards[dashboard_id] = dashboard
         return dashboard
 
-    def get(self, dashboard_id: str) -> Optional[Dashboard]:
+    def get(self, dashboard_id: str) -> Dashboard | None:
         """Get a dashboard by ID."""
         return self._dashboards.get(dashboard_id)
 

@@ -10,11 +10,11 @@ import math
 import threading
 import time
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 

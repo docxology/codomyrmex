@@ -15,7 +15,6 @@ from codomyrmex.git_operations.cli.repo import (
     cmd_remote,
     cmd_sync,
 )
-from codomyrmex.git_operations.core.repository import RepositoryManager
 
 
 def _git_available():

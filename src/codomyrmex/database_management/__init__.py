@@ -40,7 +40,7 @@ except ImportError:
     ResultStatus = None
 
 from . import audit, connections, replication, sharding
-from .backup_manager import (
+from .backup.backup_manager import (
     Backup,
     BackupManager,
     backup_database,
@@ -50,7 +50,7 @@ from .db_manager import (
     DatabaseManager,
     manage_databases,
 )
-from .migration_manager import (
+from .migration.migration_manager import (
     Migration,
     MigrationManager,
     run_migrations,
@@ -66,6 +66,7 @@ from .schema_generator import (
     SchemaGenerator,
     generate_schema,
 )
+
 
 def cli_commands():
     """Return CLI commands for the database_management module."""
@@ -92,9 +93,11 @@ def cli_commands():
     }
 
 
-from . import migration
-
-from . import lineage
+from . import (
+    backup,  # noqa: F401
+    lineage,
+    migration,
+)
 
 __all__ = [
     "lineage",

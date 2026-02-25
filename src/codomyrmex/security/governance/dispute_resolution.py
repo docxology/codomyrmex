@@ -1,7 +1,7 @@
-from enum import Enum, auto
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Optional
+from enum import Enum, auto
+
 
 class DisputeStatus(Enum):
     """Functional component: DisputeStatus."""
@@ -23,11 +23,11 @@ class Dispute:
     description: str
     status: DisputeStatus = DisputeStatus.OPEN
     created_at: datetime = field(default_factory=datetime.now)
-    resolution: Optional[str] = None
+    resolution: str | None = None
 
 class DisputeResolver:
     """Handles and resolves disputes between parties."""
-    
+
     def __init__(self):
         """Execute   Init   operations natively."""
         self._disputes: dict[str, Dispute] = {}
@@ -42,11 +42,11 @@ class DisputeResolver:
         """Execute Resolve Dispute operations natively."""
         if dispute_id not in self._disputes:
             raise DisputeError(f"Dispute {dispute_id} not found.")
-        
+
         dispute = self._disputes[dispute_id]
         dispute.resolution = resolution
         dispute.status = DisputeStatus.RESOLVED
 
-    def get_dispute(self, dispute_id: str) -> Optional[Dispute]:
+    def get_dispute(self, dispute_id: str) -> Dispute | None:
         """Execute Get Dispute operations natively."""
         return self._disputes.get(dispute_id)

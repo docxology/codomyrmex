@@ -11,23 +11,22 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from .builder import MultimodalMessageBuilder
 from .models import (
-    MediaType,
-    ImageFormat,
-    AudioFormat,
-    MediaContent,
-    ImageContent,
     AudioContent,
+    AudioFormat,
+    ImageContent,
+    ImageFormat,
+    MediaContent,
+    MediaType,
     MultimodalMessage,
 )
-
 from .processors import (
-    MultimodalProcessor,
-    ImageProcessor,
     AudioProcessor,
+    ImageProcessor,
+    MultimodalProcessor,
 )
 
-from .builder import MultimodalMessageBuilder
 
 def cli_commands():
     """Return CLI commands for the multimodal module."""

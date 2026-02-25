@@ -8,14 +8,19 @@ rates, insight generation).
 import pytest
 
 from codomyrmex.agents.memory.store import MemoryStore
-from codomyrmex.orchestrator.workflow_engine import (
+from codomyrmex.orchestrator.workflows.workflow_analytics import (
+    WorkflowAnalytics,
+    WorkflowInsight,
+)
+from codomyrmex.orchestrator.workflows.workflow_engine import (
     StepStatus,
     WorkflowResult,
     WorkflowRunner,
     WorkflowStep,
 )
-from codomyrmex.orchestrator.workflow_journal import JournalEntry, WorkflowJournal
-from codomyrmex.orchestrator.workflow_analytics import WorkflowAnalytics, WorkflowInsight
+from codomyrmex.orchestrator.workflows.workflow_journal import (
+    WorkflowJournal,
+)
 
 
 def _make_result(success: bool = True, step_count: int = 2, wf_id: str = "wf-1") -> WorkflowResult:

@@ -7,10 +7,10 @@ Provides request-response patterns and direct agent-to-agent messaging.
 import asyncio
 import logging
 import uuid
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-from collections.abc import Awaitable, Callable
 
 from ..exceptions import MessageDeliveryError
 from ..protocols import AgentMessage, MessageType

@@ -20,14 +20,20 @@ from .models import (
     NotificationResult,
     NotificationStatus,
 )
-from .providers import ConsoleProvider, FileProvider, NotificationProvider, WebhookProvider
+from .providers import (
+    ConsoleProvider,
+    FileProvider,
+    NotificationProvider,
+    WebhookProvider,
+)
+from .service import NotificationRouter, NotificationService
 from .templates import (
     ALERT_TEMPLATE,
     ERROR_TEMPLATE,
     INFO_TEMPLATE,
     NotificationTemplate,
 )
-from .service import NotificationRouter, NotificationService
+
 
 def cli_commands():
     """Return CLI commands for the notification module."""

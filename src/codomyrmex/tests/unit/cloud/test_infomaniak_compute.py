@@ -15,16 +15,12 @@ Tests cover:
 Total: ~24 tests across 7 test classes.
 """
 
-import os
-from _stubs import Stub
-
+from _stubs import Stub, make_stub_image, make_stub_server
 
 from codomyrmex.cloud.common import ComputeClient
 from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 from codomyrmex.cloud.infomaniak.compute import InfomaniakComputeClient
-from _stubs import make_stub_image, make_stub_server
 
-import pytest
 try:
     import openstack
     HAS_OPENSTACK = True

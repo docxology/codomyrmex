@@ -22,13 +22,10 @@ import logging
 import os
 import sys
 import threading
-import time
 import uuid
-from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from collections.abc import Iterator
 
 # Default log format
 DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -315,12 +312,13 @@ class LogContext:
 
 
 # Re-exports for convenience.
-from ..handlers.performance import PerformanceLogger  # noqa: E402
-from ..audit.audit_logger import AuditLogger as _StandaloneAuditLogger  # noqa: E402, F401
-
 # AuditLogger re-export.
 import uuid as _uuid
 from datetime import datetime as _datetime
+
+from ..audit.audit_logger import (
+    AuditLogger as _StandaloneAuditLogger,  # noqa: E402, F401
+)
 
 
 class AuditLogger:

@@ -231,11 +231,11 @@ class ConfigValidator:
         """Attempt to automatically fix common issues."""
         if file_type != "json":
             return  # Auto-fix only implemented for JSON currently
-            
+
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 data = json.load(f)
-                
+
             fixed = False
             for error in result["errors"]:
                 if "Missing required sections" in error:
@@ -245,7 +245,7 @@ class ConfigValidator:
                     if "logging" not in data:
                         data["logging"] = {"level": "INFO"}
                         fixed = True
-                        
+
             if fixed:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     json.dump(data, f, indent=2)

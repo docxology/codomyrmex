@@ -7,9 +7,9 @@ Circuit breaker, load balancer, retry policy, and service proxy.
 import random
 import threading
 import time
+from collections.abc import Callable
 from datetime import datetime
 from typing import Any
-from collections.abc import Callable
 
 from .models import (
     CircuitBreakerConfig,

@@ -1,5 +1,6 @@
 """Mermaid diagram wrapper."""
 from dataclasses import dataclass
+
 from ._base import BasePlot
 
 

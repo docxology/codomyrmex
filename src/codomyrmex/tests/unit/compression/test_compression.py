@@ -797,7 +797,7 @@ class TestEdgeCases:
 
     def test_unicode_like_bytes(self):
         """Test compressing unicode-like byte sequences."""
-        data = "Hello World!".encode("utf-8")
+        data = b"Hello World!"
         compressor = Compressor("gzip")
         compressed = compressor.compress(data)
         decompressed = compressor.decompress(compressed)

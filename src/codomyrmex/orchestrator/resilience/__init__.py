@@ -1,16 +1,16 @@
 """Resilience submodule — fault classification, retry, self-healing, circuit breaking."""
+from .agent_circuit_breaker import AgentHealth, CircuitBreaker, CircuitState
 from .failure_taxonomy import (
+    RECOVERY_MAP,
     ClassifiedError,
     FailureCategory,
-    RECOVERY_MAP,
     RecoveryStrategy,
     classify_error,
 )
-from .retry_policy import *  # noqa: F401,F403
-from .retry_engine import RetryEngine, RetryResult
-from .self_healing import Diagnoser, Diagnosis, RecoveryStep
-from .agent_circuit_breaker import AgentHealth, CircuitBreaker, CircuitState
 from .healing_log import HealingEvent, HealingLog
+from .retry_engine import RetryEngine, RetryResult
+from .retry_policy import *  # noqa: F401,F403
+from .self_healing import Diagnoser, Diagnosis, RecoveryStep
 
 __all__ = [
     "ClassifiedError",

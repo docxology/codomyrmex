@@ -166,7 +166,11 @@ class TestLineageGraph:
 
     def test_graph_add_node(self):
         """Verify nodes can be added to graph."""
-        from codomyrmex.database_management.lineage import LineageGraph, LineageNode, NodeType
+        from codomyrmex.database_management.lineage import (
+            LineageGraph,
+            LineageNode,
+            NodeType,
+        )
 
         graph = LineageGraph()
         node = LineageNode(id="data1", name="Data 1", node_type=NodeType.DATASET)

@@ -21,7 +21,6 @@ from .deployment import (
     DeploymentState,
     DeploymentStrategy,
 )
-from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
 from .infrastructure import (
     CacheEntry,
     EdgeCache,
@@ -31,6 +30,7 @@ from .infrastructure import (
     HealthMonitor,
     InvocationRecord,
 )
+from .scheduling import EdgeScheduler, ScheduledJob, ScheduleType
 
 # Shared schemas for cross-module interop
 try:

@@ -9,7 +9,6 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
 
 
 class RestartStrategy(Enum):
@@ -173,7 +172,7 @@ class AgentSupervisor:
             if p_id != crashed_id and p_id in self._agents:
                 self._agents[p_id].append(
                     CrashRecord(
-                        agent_id=p_id, 
+                        agent_id=p_id,
                         error=f"Cascaded restart due to {crashed_id}",
                         action_taken=SupervisorAction.RESTART
                     )

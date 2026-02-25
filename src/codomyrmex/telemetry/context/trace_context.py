@@ -86,7 +86,7 @@ def traced(name: str | None = None, attributes: dict[str, Any] | None = None):
 
 def link_span(span: Span, target: Span) -> None:
     """Link two spans together (e.g. for async producer/consumer)."""
-    # OpenTelemetry prefers links at creation, but we can emit a linked event 
+    # OpenTelemetry prefers links at creation, but we can emit a linked event
     # as a functional fallback to support post-creation linkage semantics.
     if hasattr(target, "get_span_context"):
         ctx = target.get_span_context()

@@ -39,6 +39,7 @@ from .namespaced import NamespacedCache
 from .stats import CacheStats
 from .ttl_manager import TTLManager
 
+
 def cli_commands():
     """Return CLI commands for the cache module."""
     return {

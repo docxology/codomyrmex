@@ -4,9 +4,9 @@ Provides automated and manual key rotation for wallet keys with
 audit trail and configurable rotation policies.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

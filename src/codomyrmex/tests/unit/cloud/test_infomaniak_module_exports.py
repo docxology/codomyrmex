@@ -14,7 +14,6 @@ Total: ~11 tests in a single TestInfomaniakModuleExports class.
 from _stubs import Stub
 
 
-
 class TestInfomaniakModuleExports:
     """Comprehensive tests for the infomaniak package public API surface."""
 
@@ -175,7 +174,7 @@ class TestInfomaniakModuleExports:
         from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 
         assert hasattr(InfomaniakOpenStackBase, "validate_connection")
-        assert callable(getattr(InfomaniakOpenStackBase, "validate_connection"))
+        assert callable(InfomaniakOpenStackBase.validate_connection)
 
     # -----------------------------------------------------------------
     # 6. ComputeClient implements ABC: has terminate_instance
@@ -188,7 +187,7 @@ class TestInfomaniakModuleExports:
 
         assert issubclass(InfomaniakComputeClient, ComputeClient)
         assert hasattr(InfomaniakComputeClient, "terminate_instance")
-        assert callable(getattr(InfomaniakComputeClient, "terminate_instance"))
+        assert callable(InfomaniakComputeClient.terminate_instance)
 
     # -----------------------------------------------------------------
     # 7. S3Client implements ABC: has delete_file
@@ -201,7 +200,7 @@ class TestInfomaniakModuleExports:
 
         assert issubclass(InfomaniakS3Client, StorageClient)
         assert hasattr(InfomaniakS3Client, "delete_file")
-        assert callable(getattr(InfomaniakS3Client, "delete_file"))
+        assert callable(InfomaniakS3Client.delete_file)
 
     # -----------------------------------------------------------------
     # 8. OpenStackBase from_env and from_credentials classmethods

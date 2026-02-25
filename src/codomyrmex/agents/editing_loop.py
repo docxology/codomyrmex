@@ -20,11 +20,9 @@ Example::
 
 from __future__ import annotations
 
-import json
 import logging
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -35,13 +33,12 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-from codomyrmex.agents.llm_client import OllamaClient, AgentRequest, get_llm_client
+from codomyrmex.agents.llm_client import AgentRequest, OllamaClient, get_llm_client
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
 from codomyrmex.ide.antigravity.message_scheduler import (
     MessageScheduler,
     SchedulerConfig,
 )
-
 
 # =====================================================================
 # Data Structures

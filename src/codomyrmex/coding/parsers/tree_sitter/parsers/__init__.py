@@ -6,10 +6,10 @@ Provides utilities for parsing and analyzing source code using tree-sitter patte
 
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from collections.abc import Iterator
 
 
 class NodeType(Enum):

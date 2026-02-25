@@ -12,9 +12,8 @@ Tests cover all identity operations:
 Total: ~22 tests in a single TestInfomaniakIdentity class.
 """
 
-from _stubs import Stub
-
 import pytest
+from _stubs import Stub
 
 
 class TestInfomaniakIdentity:

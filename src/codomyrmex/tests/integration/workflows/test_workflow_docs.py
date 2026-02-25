@@ -6,7 +6,6 @@ and returns well-formed markdown content.
 
 import pytest
 
-
 CORE_MODULES = [
     "orchestrator",
     "events",

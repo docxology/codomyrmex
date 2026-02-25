@@ -54,8 +54,6 @@ from .static_analyzer import (
 )
 
 
-
-
 def analyze_code_quality(path: str = None, **kwargs) -> dict:
     """
     Analyze code quality for workflow integration.

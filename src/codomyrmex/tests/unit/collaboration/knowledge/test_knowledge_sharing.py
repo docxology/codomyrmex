@@ -5,9 +5,8 @@ global search, conflict resolution), and KnowledgeRouter (routing,
 expertise matching).
 """
 
-import time
-import pytest
 
+from codomyrmex.collaboration.knowledge.knowledge_router import KnowledgeRouter
 from codomyrmex.collaboration.knowledge.models import (
     AccessLevel,
     ConflictStrategy,
@@ -17,8 +16,6 @@ from codomyrmex.collaboration.knowledge.models import (
     QueryResult,
 )
 from codomyrmex.collaboration.knowledge.shared_pool import SharedMemoryPool
-from codomyrmex.collaboration.knowledge.knowledge_router import KnowledgeRouter
-
 
 # ─── Models ───────────────────────────────────────────────────────────
 

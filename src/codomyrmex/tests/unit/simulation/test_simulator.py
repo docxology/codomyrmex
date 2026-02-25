@@ -1,8 +1,9 @@
 """Unit tests for the simulation module."""
 
 import pytest
-from codomyrmex.simulation.agent import Agent, Action
-from codomyrmex.simulation.simulator import Simulator, SimulationConfig
+
+from codomyrmex.simulation.agent import Action, Agent
+from codomyrmex.simulation.simulator import SimulationConfig, Simulator
 
 
 class MockAgent(Agent):

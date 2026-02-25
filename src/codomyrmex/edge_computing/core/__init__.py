@@ -5,6 +5,7 @@ the EdgeRuntime for executing functions on a single node, and EdgeCluster
 for managing groups of nodes.
 """
 
+from .cluster import EdgeCluster
 from .models import (
     EdgeExecutionError,
     EdgeFunction,
@@ -13,7 +14,6 @@ from .models import (
     SyncState,
 )
 from .runtime import EdgeRuntime
-from .cluster import EdgeCluster
 
 __all__ = [
     "EdgeExecutionError",

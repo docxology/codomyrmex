@@ -5,6 +5,7 @@ Event streaming with in-memory, SSE, and topic-based backends.
 """
 
 from .models import Event, EventType, Subscription, create_event
+from .processors import StreamProcessor
 from .stream import (
     InMemoryStream,
     SSEStream,
@@ -12,7 +13,6 @@ from .stream import (
     TopicStream,
     broadcast,
 )
-from .processors import StreamProcessor
 
 # Shared schemas for cross-module interop
 try:

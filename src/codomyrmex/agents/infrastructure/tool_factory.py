@@ -5,9 +5,9 @@ Auto-generates Tool objects from Infomaniak client methods via introspection.
 
 import inspect
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 

@@ -7,9 +7,9 @@ module imports until they are actually needed.
 
 from .lazy_loader import (
     LazyLoader,
-    lazy_import,
     get_lazy_loader,
     lazy_function,
+    lazy_import,
 )
 
 __all__ = [

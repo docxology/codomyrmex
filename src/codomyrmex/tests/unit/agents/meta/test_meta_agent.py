@@ -5,13 +5,10 @@ Tests for scoring, strategies, ab_testing, meta_agent.
 
 from __future__ import annotations
 
-import pytest
-
+from codomyrmex.agents.meta.ab_testing import ABTestEngine, ABTestResult
+from codomyrmex.agents.meta.meta_agent import MetaAgent
 from codomyrmex.agents.meta.scoring import OutcomeScore, OutcomeScorer
 from codomyrmex.agents.meta.strategies import Strategy, StrategyLibrary
-from codomyrmex.agents.meta.ab_testing import ABTestEngine, ABTestResult
-from codomyrmex.agents.meta.meta_agent import EvolutionRecord, MetaAgent
-
 
 # ── OutcomeScorer ────────────────────────────────────────────────
 

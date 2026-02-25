@@ -1,7 +1,5 @@
 """Tests for Obsidian markdown parser."""
 
-import pytest
-from pathlib import Path
 
 from codomyrmex.agentic_memory.obsidian.parser import (
     extract_callouts,

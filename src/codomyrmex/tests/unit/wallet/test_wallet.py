@@ -10,8 +10,16 @@ from codomyrmex.wallet.exceptions import (
     WalletKeyError,
     WalletNotFoundError,
 )
-from codomyrmex.wallet.security.key_rotation import KeyRotation, RotationPolicy, RotationRecord
-from codomyrmex.wallet.security.recovery import NaturalRitualRecovery, RitualStep, hash_response
+from codomyrmex.wallet.security.key_rotation import (
+    KeyRotation,
+    RotationPolicy,
+    RotationRecord,
+)
+from codomyrmex.wallet.security.recovery import (
+    NaturalRitualRecovery,
+    RitualStep,
+    hash_response,
+)
 
 
 @pytest.mark.unit
@@ -48,7 +56,7 @@ class TestHashResponse:
     def test_hash_response(self):
         """Test functionality: hash response."""
         result = hash_response("my secret answer")
-        expected = hashlib.sha256("my secret answer".encode()).hexdigest()
+        expected = hashlib.sha256(b"my secret answer").hexdigest()
         assert result == expected
 
     def test_hash_response_deterministic(self):

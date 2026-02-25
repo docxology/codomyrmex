@@ -6,10 +6,10 @@ Translation, localization, and message bundle management.
 
 __version__ = "0.1.0"
 
+from .date_formatter import DateFormatter
+from .formatters import NumberFormatter, PluralRules
 from .models import Locale
 from .translator import MessageBundle, Translator
-from .formatters import NumberFormatter, PluralRules
-from .date_formatter import DateFormatter
 
 # Shared schemas for cross-module interop
 try:
@@ -43,9 +43,9 @@ def cli_commands():
     def _locales():
         """List supported locales."""
         print("i18n Supported Locales")
-        print(f"  Default: en")
-        print(f"  Available formatters: NumberFormatter, DateFormatter")
-        print(f"  Plural rules engine: PluralRules")
+        print("  Default: en")
+        print("  Available formatters: NumberFormatter, DateFormatter")
+        print("  Plural rules engine: PluralRules")
 
     def _translate(text: str = "", target: str = ""):
         """Translate text with --text and --target args."""

@@ -4,12 +4,12 @@ Migration Models
 Data classes, enums, and transformers for data migration.
 """
 
+from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from abc import ABC, abstractmethod
-from collections.abc import Callable
 
 
 class MigrationStatus(Enum):

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import math
-from typing import List
 
 from codomyrmex.meme.memetics.models import Meme, Memeplex
 
@@ -82,7 +81,7 @@ def decay_rate(meme: Meme, half_life_days: float = 7.0) -> float:
     return math.log(2) / adjusted_half_life
 
 
-def population_fitness_stats(population: List[Meme]) -> dict:
+def population_fitness_stats(population: list[Meme]) -> dict:
     """Compute summary statistics for a meme population.
 
     Args:

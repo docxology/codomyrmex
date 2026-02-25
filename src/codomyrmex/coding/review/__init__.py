@@ -40,6 +40,14 @@ Example:
 # Import models
 # Import analyzer
 from .analyzer import PyscnAnalyzer
+
+# Import convenience functions
+from .api import (
+    analyze_file,
+    analyze_project,
+    check_quality_gates,
+    generate_report,
+)
 from .models import (
     AnalysisResult,
     AnalysisSummary,
@@ -60,14 +68,6 @@ from .models import (
 
 # Import reviewer
 from .reviewer import CodeReviewer
-
-# Import convenience functions
-from .api import (
-    analyze_file,
-    analyze_project,
-    check_quality_gates,
-    generate_report,
-)
 
 __all__ = [
     # Models

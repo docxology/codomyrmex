@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
 
 
 class EvidenceType(str, Enum):
@@ -67,7 +65,7 @@ class Belief:
     adherent: str
     certainty: float = 0.5
     emotional_investment: float = 0.5
-    supporting_evidence: List[Evidence] = field(default_factory=list)
+    supporting_evidence: list[Evidence] = field(default_factory=list)
 
 
 @dataclass
@@ -80,6 +78,6 @@ class EpistemicState:
         entropy: Measure of confusion/uncertainty.
     """
 
-    facts: List[Fact] = field(default_factory=list)
-    beliefs: List[Belief] = field(default_factory=list)
+    facts: list[Fact] = field(default_factory=list)
+    beliefs: list[Belief] = field(default_factory=list)
     entropy: float = 0.0

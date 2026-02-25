@@ -139,7 +139,10 @@ class TestConstraintSolver:
 
     def test_unknown_backend_raises(self):
         """Unknown backend raises BackendNotAvailableError."""
-        from codomyrmex.formal_verification import ConstraintSolver, BackendNotAvailableError
+        from codomyrmex.formal_verification import (
+            BackendNotAvailableError,
+            ConstraintSolver,
+        )
         with pytest.raises(BackendNotAvailableError):
             ConstraintSolver(backend="nonexistent")
 
@@ -263,8 +266,11 @@ class TestSolverBackendBase:
     def test_exceptions_hierarchy(self):
         """All exceptions inherit from SolverError."""
         from codomyrmex.formal_verification import (
-            SolverError, SolverTimeoutError, ModelBuildError,
-            BackendNotAvailableError, InvalidConstraintError,
+            BackendNotAvailableError,
+            InvalidConstraintError,
+            ModelBuildError,
+            SolverError,
+            SolverTimeoutError,
         )
         assert issubclass(SolverTimeoutError, SolverError)
         assert issubclass(ModelBuildError, SolverError)
@@ -362,7 +368,9 @@ class TestRegexPatterns:
     """Isolation tests for _extract_numeric_constraint patterns."""
 
     def _extract(self, cid, desc):
-        from codomyrmex.formal_verification.verify_isc import _extract_numeric_constraint
+        from codomyrmex.formal_verification.verify_isc import (
+            _extract_numeric_constraint,
+        )
         return _extract_numeric_constraint(cid, desc)
 
     def test_under_pattern(self):

@@ -15,11 +15,11 @@ import os
 import shutil
 import subprocess
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 try:
     from codomyrmex.ide import (
@@ -796,10 +796,16 @@ class AntigravityClient(IDEClient):
 # ── Bridge Imports (lazy, optional dependencies) ──────────────────────
 try:
     from codomyrmex.ide.antigravity.tool_provider import (
-        AntigravityToolProvider,
-        SAFE_TOOLS as AG_SAFE_TOOLS,
-        DESTRUCTIVE_TOOLS as AG_DESTRUCTIVE_TOOLS,
         CONTROL_TOOLS as AG_CONTROL_TOOLS,
+    )
+    from codomyrmex.ide.antigravity.tool_provider import (
+        DESTRUCTIVE_TOOLS as AG_DESTRUCTIVE_TOOLS,
+    )
+    from codomyrmex.ide.antigravity.tool_provider import (
+        SAFE_TOOLS as AG_SAFE_TOOLS,
+    )
+    from codomyrmex.ide.antigravity.tool_provider import (
+        AntigravityToolProvider,
     )
 except ImportError:
     AntigravityToolProvider = None
@@ -814,8 +820,8 @@ except ImportError:
 
 try:
     from codomyrmex.ide.antigravity.skill_adapter import (
-        AntigravityToolSkill,
         AntigravitySkillFactory,
+        AntigravityToolSkill,
     )
 except ImportError:
     AntigravityToolSkill = None
@@ -834,8 +840,8 @@ except ImportError:
 
 try:
     from codomyrmex.ide.antigravity.live_bridge import (
-        LiveAgentBridge,
         ClaudeCodeEndpoint,
+        LiveAgentBridge,
     )
 except ImportError:
     LiveAgentBridge = None

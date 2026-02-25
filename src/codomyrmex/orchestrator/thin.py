@@ -25,16 +25,16 @@ import asyncio
 import os
 import subprocess
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .execution.parallel_runner import ExecutionResult, run_parallel
 from .execution.runner import run_function, run_script
-from .workflow import (
+from .workflows.workflow import (
     RetryPolicy,
     Workflow,
 )

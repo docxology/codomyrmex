@@ -1,8 +1,6 @@
 """Tests for Obsidian link graph analysis."""
 
-import pytest
 
-from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 from codomyrmex.agentic_memory.obsidian.graph import (
     build_link_graph,
     find_broken_links,
@@ -11,6 +9,7 @@ from codomyrmex.agentic_memory.obsidian.graph import (
     get_forward_links,
     get_link_stats,
 )
+from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 
 class TestBuildLinkGraph:

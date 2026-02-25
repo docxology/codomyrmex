@@ -1,7 +1,6 @@
 """Unit tests for the networks module."""
 
-import pytest
-from codomyrmex.networks.graph import NetworkGraph, Node, Edge
+from codomyrmex.networks.graph import NetworkGraph
 
 
 def test_graph_add_node():
@@ -25,7 +24,7 @@ def test_graph_add_edge():
     assert edge.weight == 2.5
     assert edge.data["type"] == "directed"
     assert graph.edge_count == 1
-    
+
     # Check neighbors
     neighbors = graph.get_neighbors("A")
     assert len(neighbors) == 1
@@ -39,7 +38,7 @@ def test_shortest_path():
     # |         ^
     # v         |
     # D -> E ---+
-    
+
     graph.add_edge("A", "B", weight=1.0)
     graph.add_edge("B", "C", weight=1.0)
     graph.add_edge("A", "D", weight=1.0)

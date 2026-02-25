@@ -6,7 +6,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class Archetype(str, Enum):
@@ -33,8 +33,8 @@ class NarrativeTemplate:
     """
 
     name: str
-    stages: List[str]
-    roles: List[Archetype]
+    stages: list[str]
+    roles: list[Archetype]
 
 
 @dataclass
@@ -48,8 +48,8 @@ class NarrativeArc:
     """
 
     name: str
-    tension_curve: List[float] = field(default_factory=list)
-    emotional_valence: List[float] = field(default_factory=list)
+    tension_curve: list[float] = field(default_factory=list)
+    emotional_valence: list[float] = field(default_factory=list)
 
 
 @dataclass
@@ -69,10 +69,10 @@ class Narrative:
     title: str
     theme: str
     arc: NarrativeArc
-    characters: Dict[str, Archetype] = field(default_factory=dict)
+    characters: dict[str, Archetype] = field(default_factory=dict)
     cultural_resonance: float = 0.5
-    content_segments: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    content_segments: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     id: str = field(default="")
     created_at: float = field(default_factory=time.time)
 

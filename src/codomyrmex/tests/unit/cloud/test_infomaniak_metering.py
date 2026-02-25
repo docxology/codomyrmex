@@ -15,8 +15,8 @@ Total: ~19 tests in a single TestInfomaniakMetering class.
 """
 
 from datetime import datetime, timezone
-from _stubs import Stub
 
+from _stubs import Stub
 
 from codomyrmex.cloud.infomaniak.base import InfomaniakOpenStackBase
 from codomyrmex.cloud.infomaniak.metering.client import InfomaniakMeteringClient

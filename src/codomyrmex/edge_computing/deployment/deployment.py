@@ -5,13 +5,12 @@ Supports blue-green, canary, and rolling deployment patterns.
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
 from ..core.cluster import EdgeCluster
-from ..core.models import EdgeFunction, EdgeNode, EdgeNodeStatus
+from ..core.models import EdgeFunction, EdgeNodeStatus
 
 
 class DeploymentStrategy(Enum):

@@ -1,7 +1,6 @@
 """Entry point: ``python -m codomyrmex.agents.agent_setup``."""
 
 import argparse
-import sys
 
 from codomyrmex.agents.agent_setup.setup_wizard import run_setup_wizard
 

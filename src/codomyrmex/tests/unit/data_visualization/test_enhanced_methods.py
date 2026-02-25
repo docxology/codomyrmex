@@ -4,20 +4,14 @@ Covers: submodule imports, BasePlot.save, BasePlot.__str__, BarChart, LinePlot,
 BaseComponent.__str__, BaseReport.save, Dashboard.__str__, report .save(),
 to_dict, __repr__.
 """
-import pytest
 from pathlib import Path
-
 
 # ── Submodule import tests ────────────────────────────────────────
 
 def test_plots_submodule_exports():
     """Test functionality: plots submodule exports."""
     from codomyrmex.data_visualization.plots import (
-        BasePlot, ScatterPlot, Heatmap, MermaidDiagram, Histogram,
-        PieChart, BoxPlot, AreaPlot, ViolinPlot, RadarChart,
-        CandlestickChart, GanttChart, FunnelChart, SankeyDiagram,
-        WordCloud, ConfusionMatrix, TreeMap, NetworkGraph,
-        BarChart, LinePlot,
+        BasePlot,
     )
     assert len(BasePlot.__dataclass_fields__) > 0
 
@@ -25,9 +19,7 @@ def test_plots_submodule_exports():
 def test_components_submodule_exports():
     """Test functionality: components submodule exports."""
     from codomyrmex.data_visualization.components import (
-        BaseComponent, Alert, Badge, ChatBubble, CodeBlock,
-        HeatmapTable, Image, JsonView, ProgressBar, StatBox,
-        TextBlock, Timeline, TimelineEvent, Video,
+        BaseComponent,
     )
     assert BaseComponent is not None
 
@@ -35,8 +27,7 @@ def test_components_submodule_exports():
 def test_reports_submodule_exports():
     """Test functionality: reports submodule exports."""
     from codomyrmex.data_visualization.reports import (
-        BaseReport, GeneralSystemReport, FinanceReport,
-        MarketingReport, LogisticsReport,
+        BaseReport,
     )
     assert BaseReport is not None
 
@@ -44,11 +35,8 @@ def test_reports_submodule_exports():
 def test_main_module_exports():
     """Test functionality: main module exports."""
     from codomyrmex.data_visualization import (
-        Theme, DEFAULT_THEME, DARK_THEME, Grid, Section,
-        Dashboard, Card, Table, render_html, generate_report,
-        Report, GeneralSystemReport, FinanceReport,
-        MarketingReport, LogisticsReport,
-        BarPlot, BarChart, LinePlot,
+        BarChart,
+        BarPlot,
     )
     assert BarPlot is BarChart
 

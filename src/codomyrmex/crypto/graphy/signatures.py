@@ -6,7 +6,7 @@ from typing import Any
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import ec, ed25519, padding, utils
+from cryptography.hazmat.primitives.asymmetric import ec, padding
 
 from codomyrmex.crypto.exceptions import SignatureError
 from codomyrmex.logging_monitoring import get_logger

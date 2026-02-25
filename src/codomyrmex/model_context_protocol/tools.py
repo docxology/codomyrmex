@@ -5,15 +5,15 @@ Real, production-ready MCP tools for common development tasks.
 These tools are designed to work with Claude Desktop and other MCP clients.
 """
 
+import ast
+import hashlib
+import json
 import os
 import re
-import ast
-import json
-import hashlib
 import subprocess
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -24,7 +24,7 @@ logger = get_logger(__name__)
 # FILE OPERATIONS
 # ============================================================================
 
-def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> Dict[str, Any]:
+def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> dict[str, Any]:
     """
     Read file contents with metadata.
     
@@ -38,19 +38,19 @@ def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> 
     """
     try:
         file_path = Path(path).expanduser().resolve()
-        
+
         if not file_path.exists():
             return {"error": f"File not found: {path}", "success": False}
-        
+
         stats = file_path.stat()
         if stats.st_size > max_size:
             return {
                 "error": f"File too large ({stats.st_size} bytes, max {max_size})",
                 "success": False
             }
-        
+
         content = file_path.read_text(encoding=encoding)
-        
+
         return {
             "success": True,
             "content": content,
@@ -64,7 +64,7 @@ def read_file(path: str, encoding: str = "utf-8", max_size: int = 1_000_000) -> 
         return {"error": str(e), "success": False}
 
 
-def write_file(path: str, content: str, create_dirs: bool = True) -> Dict[str, Any]:
+def write_file(path: str, content: str, create_dirs: bool = True) -> dict[str, Any]:
     """
     Write content to a file.
     
@@ -78,12 +78,12 @@ def write_file(path: str, content: str, create_dirs: bool = True) -> Dict[str, A
     """
     try:
         file_path = Path(path).expanduser().resolve()
-        
+
         if create_dirs:
             file_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         file_path.write_text(content)
-        
+
         return {
             "success": True,
             "path": str(file_path),
@@ -99,7 +99,7 @@ def list_directory(
     pattern: str = "*",
     recursive: bool = False,
     max_items: int = 200,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     List directory contents with filtering.
     
@@ -114,20 +114,20 @@ def list_directory(
     """
     try:
         dir_path = Path(path).expanduser().resolve()
-        
+
         if not dir_path.exists():
             return {"error": f"Directory not found: {path}", "success": False}
-        
+
         if not dir_path.is_dir():
             return {"error": f"Not a directory: {path}", "success": False}
-        
+
         glob_method = dir_path.rglob if recursive else dir_path.glob
         items: list[dict[str, Any]] = []
-        
+
         for item in glob_method(pattern):
             if len(items) >= max_items:
                 break
-            
+
             try:
                 stats = item.stat()
                 items.append({
@@ -139,7 +139,7 @@ def list_directory(
                 })
             except Exception:
                 continue
-        
+
         return {
             "success": True,
             "path": str(dir_path),
@@ -155,7 +155,7 @@ def list_directory(
 # CODE ANALYSIS
 # ============================================================================
 
-def analyze_python_file(path: str) -> Dict[str, Any]:
+def analyze_python_file(path: str) -> dict[str, Any]:
     """
     Analyze a Python file for structure and metrics.
     
@@ -168,15 +168,15 @@ def analyze_python_file(path: str) -> Dict[str, Any]:
     try:
         content = Path(path).expanduser().read_text()
         tree = ast.parse(content)
-        
+
         classes = []
         functions = []
         imports = []
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
                 methods = [
-                    n.name for n in node.body 
+                    n.name for n in node.body
                     if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
                 ]
                 classes.append({
@@ -185,7 +185,7 @@ def analyze_python_file(path: str) -> Dict[str, Any]:
                     "methods": methods,
                     "bases": [ast.unparse(b) for b in node.bases],
                 })
-            
+
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 if node.col_offset == 0:  # Top-level function
                     args = [a.arg for a in node.args.args]
@@ -195,19 +195,19 @@ def analyze_python_file(path: str) -> Dict[str, Any]:
                         "args": args,
                         "is_async": isinstance(node, ast.AsyncFunctionDef),
                     })
-            
+
             elif isinstance(node, ast.Import):
                 for alias in node.names:
                     imports.append(alias.name)
-            
+
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 for alias in node.names:
                     imports.append(f"{module}.{alias.name}")
-        
+
         lines = content.split("\n")
         code_lines = sum(1 for l in lines if l.strip() and not l.strip().startswith("#"))
-        
+
         return {
             "success": True,
             "path": path,
@@ -229,10 +229,10 @@ def analyze_python_file(path: str) -> Dict[str, Any]:
 def search_codebase(
     pattern: str,
     path: str = ".",
-    file_types: List[str] | None = None,
+    file_types: list[str] | None = None,
     case_sensitive: bool = False,
     max_results: int = 100,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Search for patterns in code files.
     
@@ -249,26 +249,26 @@ def search_codebase(
     try:
         base_path = Path(path).expanduser().resolve()
         file_types = file_types or [".py", ".js", ".ts", ".md", ".json"]
-        
+
         flags = 0 if case_sensitive else re.IGNORECASE
         regex = re.compile(pattern, flags)
-        
+
         matches = []
         files_searched = 0
-        
+
         for filepath in base_path.rglob("*"):
             if not filepath.is_file():
                 continue
-            
+
             if not any(filepath.suffix == ext for ext in file_types):
                 continue
-            
+
             # Skip common non-code directories
             if any(p in filepath.parts for p in [".git", "node_modules", "__pycache__", ".venv"]):
                 continue
-            
+
             files_searched += 1
-            
+
             try:
                 content = filepath.read_text(errors="ignore")
                 for i, line in enumerate(content.split("\n"), 1):
@@ -278,15 +278,15 @@ def search_codebase(
                             "line": i,
                             "content": line.strip()[:200],
                         })
-                        
+
                         if len(matches) >= max_results:
                             break
             except Exception:
                 continue
-            
+
             if len(matches) >= max_results:
                 break
-        
+
         return {
             "success": True,
             "pattern": pattern,
@@ -303,7 +303,7 @@ def search_codebase(
 # GIT OPERATIONS
 # ============================================================================
 
-def git_status(path: str = ".") -> Dict[str, Any]:
+def git_status(path: str = ".") -> dict[str, Any]:
     """
     Get git repository status.
     
@@ -315,19 +315,19 @@ def git_status(path: str = ".") -> Dict[str, Any]:
     """
     try:
         cwd = Path(path).expanduser().resolve()
-        
+
         # Get current branch
         branch = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
             cwd=cwd, capture_output=True, text=True
         ).stdout.strip()
-        
+
         # Get status
         status = subprocess.run(
             ["git", "status", "--porcelain"],
             cwd=cwd, capture_output=True, text=True
         ).stdout.strip()
-        
+
         changes = []
         for line in status.split("\n"):
             if line:
@@ -337,13 +337,13 @@ def git_status(path: str = ".") -> Dict[str, Any]:
                     "status": status_code.strip(),
                     "file": file_path,
                 })
-        
+
         # Get recent commits
         log = subprocess.run(
             ["git", "log", "--oneline", "-5"],
             cwd=cwd, capture_output=True, text=True
         ).stdout.strip()
-        
+
         commits = []
         for line in log.split("\n"):
             if line:
@@ -352,7 +352,7 @@ def git_status(path: str = ".") -> Dict[str, Any]:
                     "hash": parts[0],
                     "message": parts[1] if len(parts) > 1 else "",
                 })
-        
+
         return {
             "success": True,
             "branch": branch,
@@ -364,7 +364,7 @@ def git_status(path: str = ".") -> Dict[str, Any]:
         return {"error": str(e), "success": False}
 
 
-def git_diff(path: str = ".", staged: bool = False) -> Dict[str, Any]:
+def git_diff(path: str = ".", staged: bool = False) -> dict[str, Any]:
     """
     Get git diff for changes.
     
@@ -377,15 +377,15 @@ def git_diff(path: str = ".", staged: bool = False) -> Dict[str, Any]:
     """
     try:
         cwd = Path(path).expanduser().resolve()
-        
+
         args = ["git", "diff"]
         if staged:
             args.append("--staged")
-        
+
         result = subprocess.run(
             args, cwd=cwd, capture_output=True, text=True
         )
-        
+
         return {
             "success": True,
             "diff": result.stdout,
@@ -403,8 +403,8 @@ def run_shell_command(
     command: str,
     cwd: str = ".",
     timeout: int = 30,
-    env: Dict[str, str] | None = None,
-) -> Dict[str, Any]:
+    env: dict[str, str] | None = None,
+) -> dict[str, Any]:
     """
     Execute a shell command safely.
     
@@ -421,7 +421,7 @@ def run_shell_command(
         cmd_env = os.environ.copy()
         if env:
             cmd_env.update(env)
-        
+
         result = subprocess.run(
             command,
             shell=True,  # SECURITY: Intentional — this MCP tool's purpose is shell execution
@@ -431,7 +431,7 @@ def run_shell_command(
             timeout=timeout,
             env=cmd_env,
         )
-        
+
         return {
             "success": result.returncode == 0,
             "exit_code": result.returncode,
@@ -449,7 +449,7 @@ def run_shell_command(
 # DATA UTILITIES
 # ============================================================================
 
-def json_query(path: str, query: str | None = None) -> Dict[str, Any]:
+def json_query(path: str, query: str | None = None) -> dict[str, Any]:
     """
     Read and optionally query a JSON file.
     
@@ -463,7 +463,7 @@ def json_query(path: str, query: str | None = None) -> Dict[str, Any]:
     try:
         content = Path(path).expanduser().read_text()
         data = json.loads(content)
-        
+
         if query:
             # Simple dot-notation query
             parts = query.replace("[", ".").replace("]", "").split(".")
@@ -474,13 +474,13 @@ def json_query(path: str, query: str | None = None) -> Dict[str, Any]:
                 else:
                     result = result[part]
             return {"success": True, "result": result, "query": query}
-        
+
         return {"success": True, "data": data}
     except Exception as e:
         return {"error": str(e), "success": False}
 
 
-def checksum_file(path: str, algorithm: str = "sha256") -> Dict[str, Any]:
+def checksum_file(path: str, algorithm: str = "sha256") -> dict[str, Any]:
     """
     Calculate file checksum.
     
@@ -494,14 +494,14 @@ def checksum_file(path: str, algorithm: str = "sha256") -> Dict[str, Any]:
     try:
         file_path = Path(path).expanduser().resolve()
         content = file_path.read_bytes()
-        
+
         if algorithm == "md5":
             hash_val = hashlib.md5(content).hexdigest()
         elif algorithm == "sha1":
             hash_val = hashlib.sha1(content).hexdigest()
         else:
             hash_val = hashlib.sha256(content).hexdigest()
-        
+
         return {
             "success": True,
             "path": str(file_path),

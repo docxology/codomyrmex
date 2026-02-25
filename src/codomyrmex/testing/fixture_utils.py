@@ -6,10 +6,10 @@ Fixture management and test data factory.
 
 import random
 import string
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
-from collections.abc import Callable
 
 from .strategies import FloatGenerator, IntGenerator, StringGenerator
 

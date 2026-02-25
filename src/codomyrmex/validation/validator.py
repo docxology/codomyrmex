@@ -11,9 +11,9 @@ Example:
     >>> result.is_valid
     True
 """
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 import jsonschema
 from pydantic import ValidationError as PydanticValidationError

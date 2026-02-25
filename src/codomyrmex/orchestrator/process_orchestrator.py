@@ -14,10 +14,9 @@ from typing import Any
 
 from codomyrmex.orchestrator.agent_supervisor import (
     AgentSupervisor,
-    RestartStrategy,
     SupervisorAction,
 )
-from codomyrmex.orchestrator.heartbeat import AgentStatus, HeartbeatMonitor
+from codomyrmex.orchestrator.heartbeat import HeartbeatMonitor
 
 
 class ProcessState(Enum):

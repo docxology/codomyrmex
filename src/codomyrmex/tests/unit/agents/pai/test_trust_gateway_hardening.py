@@ -17,18 +17,14 @@ Strategy
 """
 
 import json
-import time
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.agents.pai import trust_gateway
+from codomyrmex.agents.pai.mcp_bridge import get_tool_registry
 from codomyrmex.agents.pai.trust_gateway import (
-    AuditEntry,
     DESTRUCTIVE_TOOLS,
     TrustLevel,
-    TrustRegistry,
     _registry,
     clear_audit_log,
     export_audit_log,
@@ -42,8 +38,6 @@ from codomyrmex.agents.pai.trust_gateway import (
     trust_tool,
     trusted_call_tool,
 )
-from codomyrmex.agents.pai.mcp_bridge import get_tool_registry
-
 
 # ---------------------------------------------------------------------------
 # Helpers

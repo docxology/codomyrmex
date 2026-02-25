@@ -19,15 +19,16 @@ Tests cover:
 
 import pytest
 
-from codomyrmex.bio_simulation.colony import Ant, AntState, Colony
 from codomyrmex.bio_simulation.ant_colony.ant import (
     Ant as DetailedAnt,
+)
+from codomyrmex.bio_simulation.ant_colony.ant import (
     AntState as DetailedAntState,
 )
-from codomyrmex.bio_simulation.ant_colony.environment import Environment, FoodSource
 from codomyrmex.bio_simulation.ant_colony.colony import Colony as DetailedColony
+from codomyrmex.bio_simulation.ant_colony.environment import Environment
+from codomyrmex.bio_simulation.colony import Ant, AntState, Colony
 from codomyrmex.bio_simulation.genomics.genome import Genome, Population
-
 
 # ======================================================================
 # Original tests (colony.py simple Ant/Colony)

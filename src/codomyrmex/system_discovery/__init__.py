@@ -35,10 +35,10 @@ def cli_commands():
             "help": "Show system health status across all modules",
             "handler": lambda **kwargs: print(
                 "System Health Check:\n"
-                f"  Discovery engine: available\n"
-                f"  Capability scanner: available\n"
-                f"  Status reporter: available\n"
-                f"  System context: available"
+                "  Discovery engine: available\n"
+                "  Capability scanner: available\n"
+                "  Status reporter: available\n"
+                "  System context: available"
             ),
         },
     }

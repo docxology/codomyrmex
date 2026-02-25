@@ -13,7 +13,7 @@ from typing import Any
 from codomyrmex.exceptions import OrchestrationError
 
 # Re-export workflow exceptions for centralized access
-from .workflow import CycleError, TaskFailedError, WorkflowError
+from .workflows.workflow import CycleError, TaskFailedError, WorkflowError
 
 
 class StepError(OrchestrationError):

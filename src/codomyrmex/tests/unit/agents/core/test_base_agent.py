@@ -14,12 +14,10 @@ import pytest
 
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
-    AgentInterface,
     AgentRequest,
     AgentResponse,
     BaseAgent,
 )
-
 
 # ---------------------------------------------------------------------------
 # Concrete BaseAgent subclass for testing

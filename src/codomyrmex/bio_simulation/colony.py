@@ -11,7 +11,7 @@ from __future__ import annotations
 import math
 import random
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any
 
@@ -182,7 +182,7 @@ class Colony:
 
     def get_census(self) -> dict[AntState, int]:
         """Count ants by state."""
-        counts: dict[AntState, int] = {state: 0 for state in AntState}
+        counts: dict[AntState, int] = dict.fromkeys(AntState, 0)
         for ant in self.ants:
             if ant.is_alive:
                 counts[ant.state] += 1

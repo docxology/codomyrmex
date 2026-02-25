@@ -7,19 +7,19 @@ deployments using pluggable strategies and health checks.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
+from ..health_checks import HealthChecker, HealthStatus
 from ..strategies import (
     DeploymentResult,
     DeploymentState,
     DeploymentStrategy,
     DeploymentTarget,
 )
-from ..health_checks import HealthChecker, HealthStatus
 
 
 class PlanState(Enum):

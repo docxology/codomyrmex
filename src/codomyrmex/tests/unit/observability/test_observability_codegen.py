@@ -2,21 +2,22 @@
 
 from __future__ import annotations
 
-import pytest
-
-from codomyrmex.telemetry.otel import MetricCounter, Span, Tracer
-from codomyrmex.telemetry.alerts import (
-    Alert, AlertEngine, AlertRule, AlertSeverity, AlertState,
-)
-from codomyrmex.security.audit_trail import AuditEntry, AuditTrail
-from codomyrmex.data_visualization.dashboard_export import (
-    Dashboard, DashboardExporter, Panel,
-)
+from codomyrmex.agents.specialized.review_loop import ReviewLoop
 from codomyrmex.coding.generator import CodeBundle, CodeGenerator
-from codomyrmex.coding.test_generator import TestGenerator, TestSuite
-from codomyrmex.git_operations.pr_builder import FileChange, PRBuilder, PRSpec
-from codomyrmex.agents.specialized.review_loop import ReviewLoop, ReviewResult
-
+from codomyrmex.coding.test_generator import TestGenerator
+from codomyrmex.data_visualization.dashboard_export import (
+    DashboardExporter,
+    Panel,
+)
+from codomyrmex.git_operations.pr_builder import FileChange, PRBuilder
+from codomyrmex.security.audit.audit_trail import AuditTrail
+from codomyrmex.telemetry.alerting.alerts import (
+    Alert,
+    AlertEngine,
+    AlertRule,
+    AlertSeverity,
+)
+from codomyrmex.telemetry.otel import MetricCounter, Span, Tracer
 
 # ── Tracer / MetricCounter ───────────────────────────────────────
 

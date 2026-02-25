@@ -134,8 +134,8 @@ class ContainerSecurityScanner:
             SecurityScanResult with compliance status
         """
         result = SecurityScanResult(
-            image=image, 
-            scan_time=datetime.now(), 
+            image=image,
+            scan_time=datetime.now(),
             passed=True,
             metadata={"policy": policy}
         )

@@ -6,17 +6,17 @@ from the various sub-modules.
 
 import asyncio
 import logging
-from typing import Any
+
+from codomyrmex.logging_monitoring import get_logger
 
 from .server import MCPServer, MCPServerConfig
-from codomyrmex.logging_monitoring import get_logger
 
 # Import tool modules to register them
 try:
-    import codomyrmex.git_operations.mcp_tools
-    import codomyrmex.search.mcp_tools
     import codomyrmex.coding.mcp_tools
     import codomyrmex.containerization.mcp_tools
+    import codomyrmex.git_operations.mcp_tools
+    import codomyrmex.search.mcp_tools
 except ImportError as e:
     logging.warning(f"Some MCP tools could not be imported: {e}")
 
@@ -27,7 +27,7 @@ async def run_server() -> None:
     """Run the MCP server."""
     # Configure logging for the MCP server specifically if needed
     logging.basicConfig(level=logging.INFO)
-    
+
     config = MCPServerConfig(
         name="codomyrmex-mcp",
         version="0.1.2",
@@ -48,26 +48,26 @@ async def run_server() -> None:
             obj = getattr(module, name)
             # Check if the object has the MCP tool metadata attached by the decorator
             if callable(obj) and hasattr(obj, "_mcp_tool_meta"):
-                meta = getattr(obj, "_mcp_tool_meta")
+                meta = obj._mcp_tool_meta
                 # Register the tool with the server
                 # Assuming the server has an `add_tool` method or we use `tool_registry.register`
                 # Let's check `server.py` again. It has `_tool_registry`.
                 # We need to see if `MCPServer` exposes a public method to add tools.
                 # If not, we might need to use `server._tool_registry.register(tool_def)`.
                 # The `_tool_registry` likely has a `register` method.
-                
+
                 # Construct the tool definition/schema from the function and metadata
                 # The `server.py` we read seems to expect schemas.
                 # We might need a helper to convert function -> JSON schema.
                 # The `codomyrmex.model_context_protocol.tools` module likely has this helper.
-                
-                # Let's import the helper if available, or invoke `server._tool_registry` directly 
+
+                # Let's import the helper if available, or invoke `server._tool_registry` directly
                 # if it handles functions.
                 # Assuming for now we can just register it.
-                
+
                 # Ideally, we should use a public API. If `MCPServer` doesn't have `add_tool`,
                 # we should add it or use the registry directly.
-                
+
                 # Based on standard MCP implementations, we usually register the function directly.
                 try:
                     tool_name = meta.get("name", name)

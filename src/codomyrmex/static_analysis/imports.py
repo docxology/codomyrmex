@@ -4,14 +4,14 @@ Static analysis for imports and dependency graph.
 
 import ast
 import os
-import json
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
 # Layer sets aligned with src/codomyrmex/SPEC.md architecture
+# exceptions and validation are cross-cutting foundation concerns used by all layers
 FOUNDATION = {
-    "config_management", "environment_setup", "logging_monitoring",
-    "model_context_protocol", "telemetry", "terminal_interface",
+    "config_management", "environment_setup", "exceptions", "logging_monitoring",
+    "model_context_protocol", "telemetry", "terminal_interface", "validation",
 }
 CORE = {
     "cache", "coding", "compression", "data_visualization", "documents",
@@ -27,13 +27,13 @@ SPECIALIZED = {
     "agentic_memory", "agents", "audio", "bio_simulation", "cerebrum",
     "cli", "collaboration", "concurrency", "crypto", "dark", "defense",
     "dependency_injection", "edge_computing", "embodiment", "events",
-    "evolutionary_ai", "examples", "exceptions", "feature_flags",
+    "evolutionary_ai", "examples", "feature_flags",
     "finance", "formal_verification", "fpf", "graph_rag", "ide",
     "identity", "maintenance", "market", "meme", "model_ops",
     "module_template", "networks", "physical_management", "plugin_system",
     "privacy", "prompt_engineering", "quantum", "relations", "simulation",
     "skills", "spatial", "system_discovery", "templating", "testing",
-    "tests", "tool_use", "utils", "validation", "vector_store", "video",
+    "tests", "tool_use", "utils", "vector_store", "video",
     "wallet", "website",
 }
 
@@ -55,7 +55,7 @@ def get_layer(module: str) -> str:
     return "other"
 
 
-def extract_imports_ast(filepath: Path) -> List[str]:
+def extract_imports_ast(filepath: Path) -> list[str]:
     """Extract imported codomyrmex module names using AST."""
     try:
         source = filepath.read_text(encoding="utf-8", errors="replace")
@@ -79,7 +79,7 @@ def extract_imports_ast(filepath: Path) -> List[str]:
     return modules
 
 
-def scan_imports(src_dir: Path) -> List[Dict[str, Any]]:
+def scan_imports(src_dir: Path) -> list[dict[str, Any]]:
     """Scan all .py files and extract cross-module imports via AST."""
     edges = []
     for root, _dirs, files in os.walk(src_dir):
@@ -92,7 +92,7 @@ def scan_imports(src_dir: Path) -> List[Dict[str, Any]]:
                 rel = fpath.relative_to(src_dir)
             except ValueError:
                 continue
-                
+
             parts = rel.parts
             if len(parts) < 2:
                 continue
@@ -113,7 +113,7 @@ def scan_imports(src_dir: Path) -> List[Dict[str, Any]]:
     return edges
 
 
-def check_layer_violations(edges: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def check_layer_violations(edges: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Apply layer-boundary rules and return violations.
 
     Rules (from SPEC.md):

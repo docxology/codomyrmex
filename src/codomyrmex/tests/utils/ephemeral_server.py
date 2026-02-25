@@ -1,8 +1,8 @@
-import threading
-import time
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
-from typing import Optional, Dict, Any
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from typing import Any
+
 
 class EchoHandler(BaseHTTPRequestHandler):
     """
@@ -11,7 +11,7 @@ class EchoHandler(BaseHTTPRequestHandler):
     Mimics httpbin.org functionality locally.
     """
 
-    def _send_response_json(self, data: Dict[str, Any], status_code: int = 200):
+    def _send_response_json(self, data: dict[str, Any], status_code: int = 200):
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
@@ -27,7 +27,7 @@ class EchoHandler(BaseHTTPRequestHandler):
                 return
             except ValueError:
                 pass
-        
+
         # Echo request details
         data = {
             "url": f"http://{self.headers.get('Host')}{self.path}",
@@ -40,7 +40,7 @@ class EchoHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers.get('Content-Length', 0))
         post_data = self.rfile.read(content_length)
-        
+
         try:
             json_data = json.loads(post_data.decode('utf-8'))
         except json.JSONDecodeError:

@@ -1,14 +1,13 @@
 """Tests for Obsidian vault search and filtering."""
 
-import pytest
 
-from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 from codomyrmex.agentic_memory.obsidian.search import (
     filter_by_date,
     filter_by_frontmatter,
     filter_by_tag,
     search_vault,
 )
+from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 
 class TestSearchVault:

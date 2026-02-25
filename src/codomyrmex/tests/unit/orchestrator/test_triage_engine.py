@@ -2,17 +2,14 @@
 
 from __future__ import annotations
 
-import os
 import tempfile
 from pathlib import Path
-
-import pytest
 
 from codomyrmex.orchestrator.triage_engine import (
     ARCHIVE_SET,
     MERGE_MAP,
-    ModuleProfile,
     PROMOTE_SET,
+    ModuleProfile,
     TriageDecision,
     TriageEngine,
     TriageReport,

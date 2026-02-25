@@ -22,7 +22,8 @@ from __future__ import annotations
 
 import functools
 import inspect
-from typing import Any, Callable, Dict, Optional, Type, TypeVar, get_type_hints
+from collections.abc import Callable
+from typing import Any, TypeVar, get_type_hints
 
 T = TypeVar("T")
 
@@ -47,7 +48,7 @@ class InjectableMetadata:
         self,
         scope: str = "singleton",
         auto_register: bool = True,
-        tags: Optional[tuple] = None,
+        tags: tuple | None = None,
     ) -> None:
         """Execute   Init   operations natively."""
         self.scope = scope
@@ -77,7 +78,7 @@ class InjectMetadata:
 
     def __init__(
         self,
-        params: Optional[Dict[str, Any]] = None,
+        params: dict[str, Any] | None = None,
         resolve_all: bool = True,
     ) -> None:
         """Execute   Init   operations natively."""
@@ -95,8 +96,8 @@ class InjectMetadata:
 def injectable(
     scope: str = "singleton",
     auto_register: bool = True,
-    tags: Optional[tuple] = None,
-) -> Callable[[Type[T]], Type[T]]:
+    tags: tuple | None = None,
+) -> Callable[[type[T]], type[T]]:
     """Decorator that marks a class as injectable with a given scope.
 
     This stores an InjectableMetadata instance on the class under the
@@ -120,7 +121,7 @@ def injectable(
         assert RequestHandler.__injectable__.scope == "transient"
     """
 
-    def decorator(cls: Type[T]) -> Type[T]:
+    def decorator(cls: type[T]) -> type[T]:
         """Execute Decorator operations natively."""
         metadata = InjectableMetadata(
             scope=scope,
@@ -168,7 +169,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
         hints = getattr(fn, "__annotations__", {})
 
     sig = inspect.signature(fn)
-    injectable_params: Dict[str, type] = {}
+    injectable_params: dict[str, type] = {}
 
     for name, param in sig.parameters.items():
         if name == "self":
@@ -193,7 +194,7 @@ def inject(fn: Callable[..., Any]) -> Callable[..., Any]:
     return wrapper
 
 
-def get_injectable_metadata(cls: Type[Any]) -> Optional[InjectableMetadata]:
+def get_injectable_metadata(cls: type[Any]) -> InjectableMetadata | None:
     """Retrieve the InjectableMetadata from a class, if present.
 
     Args:
@@ -206,7 +207,7 @@ def get_injectable_metadata(cls: Type[Any]) -> Optional[InjectableMetadata]:
     return getattr(cls, INJECTABLE_ATTR, None)
 
 
-def get_inject_metadata(fn: Callable[..., Any]) -> Optional[InjectMetadata]:
+def get_inject_metadata(fn: Callable[..., Any]) -> InjectMetadata | None:
     """Retrieve the InjectMetadata from a function, if present.
 
     Args:
@@ -219,7 +220,7 @@ def get_inject_metadata(fn: Callable[..., Any]) -> Optional[InjectMetadata]:
     return getattr(fn, INJECT_ATTR, None)
 
 
-def get_injectable_params(fn: Callable[..., Any]) -> Dict[str, type]:
+def get_injectable_params(fn: Callable[..., Any]) -> dict[str, type]:
     """Retrieve the pre-computed injectable parameter hints from a function.
 
     Args:
@@ -232,7 +233,7 @@ def get_injectable_params(fn: Callable[..., Any]) -> Dict[str, type]:
     return getattr(fn, INJECT_PARAMS_ATTR, {})
 
 
-def is_injectable(cls: Type[Any]) -> bool:
+def is_injectable(cls: type[Any]) -> bool:
     """Check whether a class has been marked with @injectable.
 
     Args:

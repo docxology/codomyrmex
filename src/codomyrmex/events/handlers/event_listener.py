@@ -5,8 +5,8 @@ This module provides components with the ability to listen to events from the ev
 with filtering, prioritization, and lifecycle management.
 """
 
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 # Import logging
 try:

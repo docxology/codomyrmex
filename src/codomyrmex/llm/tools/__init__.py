@@ -7,11 +7,11 @@ Provides utilities for defining, registering, and executing tools with LLMs.
 import inspect
 import json
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import wraps
 from typing import Any, Dict, List, Optional, Type, get_type_hints
-from collections.abc import Callable
 
 
 class ParameterType(Enum):

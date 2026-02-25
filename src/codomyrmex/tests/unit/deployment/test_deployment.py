@@ -23,12 +23,10 @@ from codomyrmex.deployment.health_checks import (
     AggregatedHealth,
     CommandHealthCheck,
     DiskHealthCheck,
-    HealthCheck,
-    HealthCheckResult,
     HealthChecker,
+    HealthCheckResult,
     HealthStatus,
 )
-
 
 # ---------------------------------------------------------------------------
 # DeploymentTarget

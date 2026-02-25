@@ -8,7 +8,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from codomyrmex.model_context_protocol.decorators import mcp_tool
@@ -44,6 +44,7 @@ def _get_provider() -> Any:
     """
     try:
         from google.oauth2.credentials import Credentials
+
         from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
     except ImportError:
         raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`")
@@ -53,7 +54,7 @@ def _get_provider() -> Any:
         raise RuntimeError("Google Calendar not authenticated. Please connect via PAI dashboard.")
 
     try:
-        with open(token_path, "r") as f:
+        with open(token_path) as f:
             token_data = json.load(f)
     except Exception as e:
         raise RuntimeError(f"Failed to read calendar token: {e}")
@@ -86,7 +87,7 @@ def _get_provider() -> Any:
     category="calendar",
     description="List upcoming events from the calendar.",
 )
-def calendar_list_events(days_ahead: int = 7) -> Dict[str, Any]:
+def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
     """List calendar events for the next given number of days.
 
     Args:
@@ -103,10 +104,10 @@ def calendar_list_events(days_ahead: int = 7) -> Dict[str, Any]:
         provider = _get_provider()
         now = datetime.now(timezone.utc)
         future = now + timedelta(days=days_ahead)
-        
+
         events = provider.list_events(time_min=now, time_max=future)
         return {
-            "status": "ok", 
+            "status": "ok",
             "events": [
                 {
                     "id": e.id,
@@ -138,8 +139,8 @@ def calendar_create_event(
     end_time: str,
     description: str = "",
     location: str = "",
-    attendees: Optional[List[str]] = None
-) -> Dict[str, Any]:
+    attendees: list[str] | None = None
+) -> dict[str, Any]:
     """Create a new event in the Google Calendar.
 
     ``danielarifriedman@gmail.com`` is always added to ``attendees`` before the
@@ -160,13 +161,13 @@ def calendar_create_event(
     """
     try:
         provider = _get_provider()
-        
+
         # Ensure Daniel is included if attendees is empty
         if attendees is None:
             attendees = ["danielarifriedman@gmail.com"]
         elif "danielarifriedman@gmail.com" not in attendees:
             attendees.append("danielarifriedman@gmail.com")
-            
+
         evt = CalendarEvent(
             summary=summary,
             description=description,
@@ -177,7 +178,7 @@ def calendar_create_event(
         )
         created = provider.create_event(evt)
         return {
-            "status": "ok", 
+            "status": "ok",
             "event_id": created.id,
             "link": created.html_link
         }
@@ -189,7 +190,7 @@ def calendar_create_event(
     category="calendar",
     description="Get details of a specific calendar event by ID.",
 )
-def calendar_get_event(event_id: str) -> Dict[str, Any]:
+def calendar_get_event(event_id: str) -> dict[str, Any]:
     """Fetch details of a single calendar event by its provider ID.
 
     Args:
@@ -207,7 +208,7 @@ def calendar_get_event(event_id: str) -> Dict[str, Any]:
         provider = _get_provider()
         e = provider.get_event(event_id)
         return {
-            "status": "ok", 
+            "status": "ok",
             "event": {
                 "id": e.id,
                 "summary": e.summary,
@@ -227,7 +228,7 @@ def calendar_get_event(event_id: str) -> Dict[str, Any]:
     category="calendar",
     description="Delete a calendar event by ID.",
 )
-def calendar_delete_event(event_id: str) -> Dict[str, Any]:
+def calendar_delete_event(event_id: str) -> dict[str, Any]:
     """Permanently delete an event from the calendar.
 
     Args:
@@ -261,8 +262,8 @@ def calendar_update_event(
     end_time: str,
     description: str = "",
     location: str = "",
-    attendees: Optional[List[str]] = None
-) -> Dict[str, Any]:
+    attendees: list[str] | None = None
+) -> dict[str, Any]:
     """Replace all fields of an existing calendar event (PUT semantics).
 
     All fields are overwritten on the server; fields not supplied here are not
@@ -286,13 +287,13 @@ def calendar_update_event(
     """
     try:
         provider = _get_provider()
-        
+
         # Ensure Daniel is included if attendees is empty
         if attendees is None:
             attendees = ["danielarifriedman@gmail.com"]
         elif "danielarifriedman@gmail.com" not in attendees:
             attendees.append("danielarifriedman@gmail.com")
-            
+
         evt = CalendarEvent(
             summary=summary,
             description=description,
@@ -303,7 +304,7 @@ def calendar_update_event(
         )
         updated_event = provider.update_event(event_id, evt)
         return {
-            "status": "ok", 
+            "status": "ok",
             "event_id": updated_event.id,
             "link": updated_event.html_link
         }

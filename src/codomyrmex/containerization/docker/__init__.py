@@ -8,10 +8,10 @@ import json
 import os
 import subprocess
 import tempfile
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections.abc import Iterator
 
 
 @dataclass

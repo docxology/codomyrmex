@@ -129,8 +129,8 @@ class ValidationSummary:
             return "✅ **Validation passed** — no issues found.\n"
         status = "❌ **FAILED**" if not self.is_valid else "⚠️ **PASSED** (with warnings)"
         lines = [f"## Validation: {status}", ""]
-        lines.append(f"| Severity | Count |")
-        lines.append(f"|----------|------:|")
+        lines.append("| Severity | Count |")
+        lines.append("|----------|------:|")
         for sev in ("error", "warning", "info"):
             count = sum(1 for i in self.issues if i.severity == sev)
             if count:
@@ -143,7 +143,7 @@ class ValidationSummary:
         return "\n".join(lines)
 
     @classmethod
-    def merge(cls, *summaries: "ValidationSummary") -> "ValidationSummary":
+    def merge(cls, *summaries: ValidationSummary) -> ValidationSummary:
         """Merge multiple summaries into one."""
         combined: list[ValidationIssue] = []
         for s in summaries:

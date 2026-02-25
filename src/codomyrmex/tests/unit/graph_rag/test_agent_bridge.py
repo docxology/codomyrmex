@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from codomyrmex.graph_rag.agent_bridge import (
     GraphRetriever,
     LinkedEntity,

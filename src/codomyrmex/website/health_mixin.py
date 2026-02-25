@@ -21,8 +21,8 @@ from typing import Any
 import yaml
 
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
-from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.llm.ollama.config_manager import ConfigManager
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 
@@ -90,7 +90,6 @@ class HealthProviderMixin:
 
     def _parse_workflow_fallback(self, content: str, filename: str) -> dict | None:
         """Fallback parser for workflows with embedded heredocs that break yaml.safe_load()."""
-        import re
 
         name_match = re.search(r'^name:\s*(.+)$', content, re.MULTILINE)
         name = name_match.group(1).strip().strip("'\"") if name_match else filename
@@ -328,7 +327,7 @@ class HealthProviderMixin:
 
         try:
             cmd = [sys.executable, "-m", "pytest", f"--junitxml={xml_path}", "-q", "--no-header"]
-            
+
             if module and module != "all":
                 test_path = self.root_dir / "src" / "codomyrmex" / "tests" / "unit" / module
                 if test_path.exists():
@@ -336,7 +335,7 @@ class HealthProviderMixin:
                 else:
                     os.unlink(xml_path)
                     return {"error": f"No tests found for module: {module}"}
-            
+
             # Inject PYTHONPATH to include src/
             env = os.environ.copy()
             src_path = self.root_dir / "src"
@@ -349,16 +348,16 @@ class HealthProviderMixin:
 
             # Parse XML
             passed = failed = skipped = errors = 0
-            
+
             if os.path.exists(xml_path) and os.path.getsize(xml_path) > 0:
                 try:
                     tree = ET.parse(xml_path)
                     root = tree.getroot()
-                    
+
                     # JUnit XML format: <testsuites> or <testsuite>
                     # Attributes: tests, failures, errors, skipped
                     # But individual test cases are more reliable to iterate
-                    
+
                     for testcase in root.iter("testcase"):
                         # Check for failure, error, skipped elements inside testcase
                         if testcase.find("failure") is not None:
@@ -369,7 +368,7 @@ class HealthProviderMixin:
                             skipped += 1
                         else:
                             passed += 1
-                            
+
                 except ET.ParseError:
                     # XML might be malformed if pytest crashed early
                     errors += 1
@@ -390,7 +389,7 @@ class HealthProviderMixin:
                 "output": (result.stdout + result.stderr)[-5000:], # Cap output
                 "module": module or "all",
             }
-            
+
         except subprocess.TimeoutExpired:
             return {"error": "Test run timed out after 600 seconds"}
         except Exception as e:

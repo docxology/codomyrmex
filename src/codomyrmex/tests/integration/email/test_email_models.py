@@ -24,10 +24,10 @@ pytestmark = pytest.mark.skipif(
 def test_email_models():
     """Test that the generic Email models instantiate correctly."""
     now = datetime.now(timezone.utc)
-    
+
     sender = EmailAddress(name="Alice", email="alice@example.com")
     recipient = EmailAddress(name="Bob", email="bob@example.com")
-    
+
     message = EmailMessage(
         id="msg-123",
         thread_id="thread-abc",
@@ -38,7 +38,7 @@ def test_email_models():
         date=now,
         labels=["INBOX", "UNREAD"]
     )
-    
+
     assert message.id == "msg-123"
     assert message.subject == "Hello World"
     assert message.sender.email == "alice@example.com"
@@ -85,14 +85,14 @@ def test_gmail_live_integration():
         creds, _ = default()
     except Exception as e:
         pytest.skip(f"Could not load default Google credentials: {e}")
-        
+
     provider = GmailProvider(credentials=creds)
-    
+
     # 1. List messages (make sure it doesn't crash)
     # We query for something unlikely to return huge sets immediately
     messages = provider.list_messages(query="is:unread", max_results=5)
     assert isinstance(messages, list)
-    
+
     # Further actions (like sending an email to oneself) are possible here
     # but kept intentionally omitted for base safety unless explicitly required.
     pass

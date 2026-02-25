@@ -119,7 +119,7 @@ class QualityReport:
             "metadata": self.metadata,
         }
 
-    def to_result(self) -> "Result | None":
+    def to_result(self) -> Result | None:
         """Convert to a codomyrmex Result if schemas are available."""
         if Result is None or ResultStatus is None:
             return None

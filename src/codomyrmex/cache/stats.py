@@ -124,7 +124,7 @@ class CacheStats:
         self._timestamps.clear()
         self._key_hits.clear()
 
-    def snapshot(self) -> "CacheStats":
+    def snapshot(self) -> CacheStats:
         """Create a frozen copy of current stats."""
         return CacheStats(
             hits=self.hits, misses=self.misses, total_requests=self.total_requests,

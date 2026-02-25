@@ -10,10 +10,9 @@ Provides:
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime
 from typing import Any
 
-from .crm.crm import Contact, ContactManager
+from .crm.crm import ContactManager
 
 
 def render_social_graph(cm: ContactManager) -> dict[str, Any]:
@@ -116,7 +115,7 @@ def network_summary_text(cm: ContactManager) -> str:
     top_tags = sorted(tag_counts.items(), key=lambda x: x[1], reverse=True)[:5]
 
     lines = [
-        f"CRM Network Summary",
+        "CRM Network Summary",
         f"  Contacts: {total_contacts}",
         f"  Total interactions: {total_interactions}",
         f"  Avg interactions/contact: {total_interactions / max(total_contacts, 1):.1f}",

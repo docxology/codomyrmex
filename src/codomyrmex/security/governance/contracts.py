@@ -4,10 +4,10 @@ Provides ContractStatus, ContractTerm, Contract, and ContractError
 for modeling inter-agent governance contracts.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 from uuid import uuid4
 
 
@@ -42,7 +42,7 @@ class ContractTerm:
     description: str
     type: str
     party: str
-    deadline: Optional[datetime] = None
+    deadline: datetime | None = None
     fulfilled: bool = False
 
     def __post_init__(self) -> None:
@@ -88,7 +88,7 @@ class Contract:
         self.terms: list[ContractTerm] = []
         self.signatures: dict[str, dict[str, Any]] = {}
         self.created_at = datetime.now()
-        self.expired_at: Optional[datetime] = None
+        self.expired_at: datetime | None = None
 
     # ------------------------------------------------------------------
     # Terms

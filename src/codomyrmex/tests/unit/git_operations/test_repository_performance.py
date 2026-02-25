@@ -4,15 +4,12 @@ Zero-Mock compliant — uses real RepositoryManager with temporary
 library files and real git repos. The ThreadPoolExecutor runs in process.
 """
 
-import os
 import subprocess
 
 import pytest
 
 from codomyrmex.git_operations.core.repository import (
-    Repository,
     RepositoryManager,
-    RepositoryType,
 )
 
 

@@ -31,8 +31,8 @@ def cli_commands():
     def _backends():
         """List available vector store backends."""
         print("Vector Store Backends")
-        print(f"  InMemoryVectorStore - In-process memory store")
-        print(f"  NamespacedVectorStore - Namespace-partitioned store")
+        print("  InMemoryVectorStore - In-process memory store")
+        print("  NamespacedVectorStore - Namespace-partitioned store")
         print(f"  Distance Metrics: {[dm.value for dm in DistanceMetric]}")
 
     def _stats():

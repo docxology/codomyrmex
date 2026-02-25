@@ -94,6 +94,7 @@ from .sandbox import (
     sandbox_process_isolation,
 )
 
+
 def cli_commands():
     """Return CLI commands for the coding module."""
     def _list_languages():
@@ -118,9 +119,7 @@ def cli_commands():
     }
 
 
-from . import static_analysis
-
-from . import pattern_matching
+from . import pattern_matching, static_analysis
 
 __all__ = [
     "pattern_matching",

@@ -14,13 +14,12 @@ from __future__ import annotations
 import hashlib
 import hmac
 import struct
-from dataclasses import dataclass, field
 
-from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec
 from mnemonic import Mnemonic
 
-from codomyrmex.crypto.encoding.base import encode_base58, decode_base58
+from codomyrmex.crypto.encoding.base import encode_base58
 from codomyrmex.crypto.exceptions import WalletError
 from codomyrmex.logging_monitoring import get_logger
 

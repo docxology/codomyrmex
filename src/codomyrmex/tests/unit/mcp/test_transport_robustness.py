@@ -8,7 +8,6 @@ Zero-mock: real objects, real state.
 """
 
 import asyncio
-import time
 
 import pytest
 
@@ -16,7 +15,6 @@ from codomyrmex.model_context_protocol.transport.client import (
     MCPClient,
     MCPClientConfig,
     MCPClientError,
-    _StdioTransport,
     _HTTPTransport,
     _Transport,
 )
@@ -24,8 +22,6 @@ from codomyrmex.model_context_protocol.transport.server import (
     MCPServer,
     MCPServerConfig,
 )
-from codomyrmex.model_context_protocol.errors import MCPErrorCode
-
 
 # ======================================================================
 # MCPClientConfig new fields
@@ -322,8 +318,8 @@ def test_per_tool_timeout_config():
 @pytest.mark.asyncio
 async def test_client_call_tool_parses_error():
     """When server returns isError, client attaches _error."""
-    import json
-    from codomyrmex.model_context_protocol.errors import MCPToolError, MCPErrorCode as EC
+    from codomyrmex.model_context_protocol.errors import MCPErrorCode as EC
+    from codomyrmex.model_context_protocol.errors import MCPToolError
 
     err = MCPToolError(code=EC.EXECUTION_ERROR, message="oops", tool_name="t")
     resp_payload = err.to_mcp_response()

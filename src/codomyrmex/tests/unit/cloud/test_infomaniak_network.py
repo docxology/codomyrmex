@@ -17,11 +17,8 @@ Tests cover:
 Total: ~25 tests in one TestInfomaniakNetwork class.
 """
 
-from _stubs import Stub
-
 import pytest
-
-from _stubs import make_stub_floating_ip, make_stub_network
+from _stubs import Stub, make_stub_floating_ip, make_stub_network
 
 
 class TestInfomaniakNetwork:

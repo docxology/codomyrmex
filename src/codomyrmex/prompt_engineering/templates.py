@@ -87,7 +87,7 @@ class PromptTemplate:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PromptTemplate":
+    def from_dict(cls, data: dict[str, Any]) -> PromptTemplate:
         """Create a PromptTemplate from a dictionary."""
         return cls(
             name=data["name"],

@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 import uuid
 from dataclasses import dataclass, field
-from typing import List, Tuple, Optional
+
 import numpy as np
 
 
@@ -49,7 +49,7 @@ class FlockingParams:
 @dataclass
 class SwarmState:
     """Snapshot of the entire swarm."""
-    agents: List[SwarmAgent] = field(default_factory=list)
+    agents: list[SwarmAgent] = field(default_factory=list)
     centroid: np.ndarray = field(default_factory=lambda: np.zeros(3))
     avg_velocity: np.ndarray = field(default_factory=lambda: np.zeros(3))
     coherence: float = 0.0  # Measure of order (0-1)
@@ -68,7 +68,7 @@ class EmergentPattern:
     pattern_type: str
     strength: float = 0.0
     duration: float = 0.0
-    involved_agents: List[str] = field(default_factory=list)
+    involved_agents: list[str] = field(default_factory=list)
 
 
 @dataclass

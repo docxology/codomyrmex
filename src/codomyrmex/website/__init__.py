@@ -33,11 +33,10 @@ Public API:
 Submodules:
     accessibility: Consolidated accessibility capabilities."""
 
+from . import accessibility
 from .data_provider import DataProvider
 from .generator import WebsiteGenerator
 from .server import WebsiteServer
-
-from . import accessibility
 
 __all__ = [
     "accessibility",

@@ -5,7 +5,6 @@ Uses real project structures and real Jinja2 templates via the
 default module template directory. No unittest.mock is used.
 """
 
-from pathlib import Path
 
 import pytest
 
@@ -37,16 +36,17 @@ def test_generate_flow(tmp_path):
 
 
 @pytest.mark.unit
-def test_all_ten_pages_generated(tmp_path):
-    """Test that all 10 expected pages are generated."""
+def test_all_pages_generated(tmp_path):
+    """Test that all 14 expected pages are generated."""
     output_dir = tmp_path / "output"
     gen = WebsiteGenerator(output_dir=str(output_dir))
     gen.generate()
 
     expected = [
-        "index.html", "health.html", "modules.html", "scripts.html",
-        "chat.html", "agents.html", "config.html", "docs.html",
-        "pipelines.html", "awareness.html",
+        "index.html", "health.html", "modules.html", "tools.html",
+        "scripts.html", "chat.html", "agents.html", "config.html",
+        "docs.html", "pipelines.html", "awareness.html",
+        "pai_control.html", "dispatch.html", "telemetry.html",
     ]
     for page in expected:
         assert (output_dir / page).exists(), f"Missing page: {page}"

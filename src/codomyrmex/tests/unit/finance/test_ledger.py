@@ -1,4 +1,5 @@
 import pytest
+
 from codomyrmex.finance.account import AccountType
 from codomyrmex.finance.ledger import Ledger, LedgerError
 

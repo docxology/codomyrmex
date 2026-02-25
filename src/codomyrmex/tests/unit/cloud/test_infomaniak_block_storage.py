@@ -12,14 +12,12 @@ Tests cover:
 Total: 23 tests in one TestInfomaniakBlockStorage class.
 """
 
-from _stubs import Stub
-
 import pytest
 
-from codomyrmex.cloud.infomaniak.block_storage.client import InfomaniakVolumeClient
-
 # Import the shared factory from conftest (available as module-level function)
-from _stubs import make_stub_volume
+from _stubs import Stub, make_stub_volume
+
+from codomyrmex.cloud.infomaniak.block_storage.client import InfomaniakVolumeClient
 
 
 class TestInfomaniakBlockStorage:

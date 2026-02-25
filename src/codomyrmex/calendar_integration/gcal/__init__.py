@@ -3,6 +3,6 @@
 This submodule provides the `GoogleCalendar` class.
 """
 
-from .provider import GoogleCalendar, GCAL_AVAILABLE
+from .provider import GCAL_AVAILABLE, GoogleCalendar
 
 __all__ = ["GoogleCalendar", "GCAL_AVAILABLE"]

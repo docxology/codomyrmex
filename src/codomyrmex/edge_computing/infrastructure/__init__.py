@@ -5,9 +5,9 @@ and invocation metrics for edge nodes.
 """
 
 from .cache import CacheEntry, EdgeCache
-from .sync import EdgeSynchronizer
 from .health import HealthCheck, HealthMonitor
 from .metrics import EdgeMetrics, InvocationRecord
+from .sync import EdgeSynchronizer
 
 __all__ = [
     "CacheEntry",

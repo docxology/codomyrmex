@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 """
 TEST_SPEC_TEMPLATE =
 """

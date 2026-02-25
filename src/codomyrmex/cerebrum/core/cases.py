@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-
 from codomyrmex.cerebrum.core.exceptions import CaseNotFoundError, InvalidCaseError
 from codomyrmex.cerebrum.core.utils import (
     compute_cosine_similarity,

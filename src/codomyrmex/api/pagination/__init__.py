@@ -282,7 +282,7 @@ class CursorPaginator(Paginator):
         Returns:
             A URL-safe base64 encoded string representing the index.
         """
-        raw = f"cursor:{index}".encode("utf-8")
+        raw = f"cursor:{index}".encode()
         return base64.urlsafe_b64encode(raw).decode("ascii")
 
     @staticmethod
@@ -473,10 +473,10 @@ class KeysetPaginator(Paginator):
                 first_value = self._get_field_value(page_items[0], sort_field)
                 last_value = self._get_field_value(page_items[-1], sort_field)
                 start_cursor = base64.urlsafe_b64encode(
-                    f"keyset:{first_value}".encode("utf-8")
+                    f"keyset:{first_value}".encode()
                 ).decode("ascii")
                 end_cursor = base64.urlsafe_b64encode(
-                    f"keyset:{last_value}".encode("utf-8")
+                    f"keyset:{last_value}".encode()
                 ).decode("ascii")
             except (KeyError, AttributeError):
                 pass

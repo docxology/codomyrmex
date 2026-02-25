@@ -1,6 +1,8 @@
 
 import pytest
+
 from codomyrmex.agents.core import Tool, ToolRegistry
+
 
 class TestToolRegistry:
     """Test tool registration and execution."""

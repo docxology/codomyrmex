@@ -248,7 +248,9 @@ def show_system_status():
     # Performance monitoring
     if PERFORMANCE_MONITORING_AVAILABLE:
         try:
-            from codomyrmex.performance.monitoring.performance_monitor import PerformanceMonitor
+            from codomyrmex.performance.monitoring.performance_monitor import (
+                PerformanceMonitor,
+            )
             monitor = PerformanceMonitor()
             stats = monitor.get_stats()
             print("\n⚡ Performance Stats:")

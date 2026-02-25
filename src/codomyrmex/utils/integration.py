@@ -8,11 +8,11 @@ import asyncio
 import functools
 import logging
 import time
+from collections.abc import Callable
 from contextlib import asynccontextmanager, contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 

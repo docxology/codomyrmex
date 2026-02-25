@@ -1,6 +1,7 @@
 """Shared fixtures for crypto module tests."""
 
 import os
+
 import pytest
 
 

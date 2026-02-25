@@ -10,13 +10,13 @@ import hashlib
 import json
 import os
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections.abc import Iterator
 
 
 class MessageRole(Enum):

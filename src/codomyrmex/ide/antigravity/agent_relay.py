@@ -349,7 +349,7 @@ class AgentRelay:
         if not self.messages_path.exists():
             return messages
 
-        with open(self.messages_path, "r", encoding="utf-8") as f:
+        with open(self.messages_path, encoding="utf-8") as f:
             for line_num, line in enumerate(f):
                 if line_num < since_cursor:
                     continue
@@ -497,7 +497,7 @@ class AgentRelay:
         """Count lines in the messages file."""
         if not self.messages_path.exists():
             return 0
-        with open(self.messages_path, "r", encoding="utf-8") as f:
+        with open(self.messages_path, encoding="utf-8") as f:
             return sum(1 for _ in f)
 
 

@@ -2,16 +2,16 @@
 
 import pytest
 
-from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 from codomyrmex.agentic_memory.obsidian.crud import (
     create_note,
-    read_note,
-    update_note,
     delete_note,
     get_frontmatter,
-    set_frontmatter,
+    read_note,
     rename_note,
+    set_frontmatter,
+    update_note,
 )
+from codomyrmex.agentic_memory.obsidian.vault import ObsidianVault
 
 
 class TestCreateNote:

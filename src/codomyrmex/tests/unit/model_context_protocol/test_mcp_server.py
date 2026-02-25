@@ -3,7 +3,6 @@
 import asyncio
 import json
 import sys
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -41,7 +40,10 @@ def _import_create_server(code_dir):
         sys.path.insert(0, str(scripts_dir))
 
     # We can also just import directly through the source
-    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
+    from codomyrmex.model_context_protocol.transport.server import (
+        MCPServer,
+        MCPServerConfig,
+    )
     return MCPServer, MCPServerConfig
 
 
@@ -55,8 +57,11 @@ def server(code_dir):
     if str(code_dir) not in sys.path:
         sys.path.insert(0, str(code_dir))
 
-    from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
     from codomyrmex.model_context_protocol import tools as mcp_tools
+    from codomyrmex.model_context_protocol.transport.server import (
+        MCPServer,
+        MCPServerConfig,
+    )
 
     config = MCPServerConfig(name="test-mcp", version="0.1.0")
     srv = MCPServer(config)
@@ -421,7 +426,9 @@ class TestHTTPTransport:
             pytest.skip("fastapi not installed")
 
         try:
-            from codomyrmex.model_context_protocol.transport.web_ui import get_web_ui_html
+            from codomyrmex.model_context_protocol.transport.web_ui import (
+                get_web_ui_html,
+            )
         except ImportError:
             pytest.skip("web_ui module not available")
 

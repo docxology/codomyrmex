@@ -456,7 +456,6 @@ class TestGetPipelineStatus:
 
     def test_all_real_workflows_parsed(self):
         """Test that all real .github/workflows/ files are parsed (no silent drops)."""
-        import glob
         root = Path(__file__).resolve().parents[6]  # Navigate to project root
         workflows_dir = root / ".github" / "workflows"
         if not workflows_dir.exists():

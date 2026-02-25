@@ -22,7 +22,7 @@ from __future__ import annotations
 import enum
 import threading
 import uuid
-from typing import TYPE_CHECKING, Any, Dict, Type, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:
     from .container import Container
@@ -38,7 +38,7 @@ class Scope(enum.Enum):
     SCOPED = "scoped"
 
     @classmethod
-    def from_string(cls, value: str) -> "Scope":
+    def from_string(cls, value: str) -> Scope:
         """Convert a string to a Scope enum member.
 
         Args:
@@ -86,10 +86,10 @@ class ScopeContext:
             assert session_c is not session_a  # different scope, different instance
     """
 
-    def __init__(self, container: "Container") -> None:
+    def __init__(self, container: Container) -> None:
         """Execute   Init   operations natively."""
         self._container = container
-        self._instances: Dict[Type[Any], Any] = {}
+        self._instances: dict[type[Any], Any] = {}
         self._lock = threading.Lock()
         self._scope_id = str(uuid.uuid4())
         self._active = False
@@ -104,7 +104,7 @@ class ScopeContext:
         """Whether this scope context is currently active."""
         return self._active
 
-    def __enter__(self) -> "ScopeContext":
+    def __enter__(self) -> ScopeContext:
         """Execute   Enter   operations natively."""
         self._active = True
         self._container._push_scope(self)
@@ -116,7 +116,7 @@ class ScopeContext:
         self._container._pop_scope(self)
         self._dispose()
 
-    def resolve(self, interface: Type[T]) -> T:
+    def resolve(self, interface: type[T]) -> T:
         """Resolve a service within this scope context.
 
         For SCOPED registrations, a single instance is created per
@@ -140,12 +140,12 @@ class ScopeContext:
             )
         return self._container._resolve_with_scope(interface, self)
 
-    def get_scoped_instance(self, interface: Type[T]) -> T | None:
+    def get_scoped_instance(self, interface: type[T]) -> T | None:
         """Return the cached scoped instance for an interface, or None."""
         with self._lock:
             return self._instances.get(interface)
 
-    def cache_scoped_instance(self, interface: Type[T], instance: T) -> None:
+    def cache_scoped_instance(self, interface: type[T], instance: T) -> None:
         """Cache a scoped instance for the duration of this context."""
         with self._lock:
             self._instances[interface] = instance

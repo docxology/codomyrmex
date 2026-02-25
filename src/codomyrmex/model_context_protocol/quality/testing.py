@@ -4,12 +4,10 @@ MCP Testing Framework
 Provides utilities for testing MCP tools, servers, and integrations.
 """
 
-from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple
 import asyncio
-import json
 import time
-from contextlib import contextmanager
+from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -22,10 +20,10 @@ class TestResult:
     name: str
     passed: bool
     duration_ms: float
-    error: Optional[str] = None
-    output: Optional[Any] = None
-    
-    def to_dict(self) -> Dict[str, Any]:
+    error: str | None = None
+    output: Any | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         """Execute To Dict operations natively."""
         return {
             "name": self.name,
@@ -35,32 +33,32 @@ class TestResult:
         }
 
 
-@dataclass  
+@dataclass
 class TestSuite:
     """Collection of test results."""
     name: str
-    results: List[TestResult] = field(default_factory=list)
-    
+    results: list[TestResult] = field(default_factory=list)
+
     @property
     def passed(self) -> int:
         """Execute Passed operations natively."""
         return sum(1 for r in self.results if r.passed)
-    
+
     @property
     def failed(self) -> int:
         """Execute Failed operations natively."""
         return sum(1 for r in self.results if not r.passed)
-    
+
     @property
     def total(self) -> int:
         """Execute Total operations natively."""
         return len(self.results)
-    
+
     @property
     def success_rate(self) -> float:
         """Execute Success Rate operations natively."""
         return self.passed / self.total if self.total > 0 else 0.0
-    
+
     def summary(self) -> str:
         """Execute Summary operations natively."""
         return f"{self.name}: {self.passed}/{self.total} passed ({self.success_rate:.1%})"
@@ -70,19 +68,19 @@ class ToolTester:
     """
     Tests individual MCP tools.
     """
-    
+
     def __init__(self, tool_registry):
         """
         Args:
             tool_registry: MCPToolRegistry or similar containing tools
         """
         self.registry = tool_registry
-        self.results: List[TestResult] = []
-    
+        self.results: list[TestResult] = []
+
     def test_tool(
         self,
         tool_name: str,
-        test_cases: List[Dict[str, Any]],
+        test_cases: list[dict[str, Any]],
     ) -> TestSuite:
         """
         Run test cases against a tool.
@@ -95,12 +93,12 @@ class ToolTester:
             TestSuite with results
         """
         suite = TestSuite(name=f"Tool: {tool_name}")
-        
+
         for i, case in enumerate(test_cases):
             case_name = case.get("name", f"case_{i}")
             arguments = case.get("arguments", {})
             expected = case.get("expected")
-            
+
             start = time.perf_counter()
             try:
                 # Get tool and execute
@@ -113,15 +111,15 @@ class ToolTester:
                         error=f"Tool not found: {tool_name}",
                     ))
                     continue
-                
+
                 handler = tool.get("handler")
                 if handler:
                     result = handler(**arguments)
                 else:
                     result = None
-                
+
                 duration = (time.perf_counter() - start) * 1000
-                
+
                 # Check expected if provided
                 if expected is not None:
                     if result == expected:
@@ -147,7 +145,7 @@ class ToolTester:
                         duration_ms=duration,
                         output=result,
                     ))
-                    
+
             except Exception as e:
                 duration = (time.perf_counter() - start) * 1000
                 suite.results.append(TestResult(
@@ -156,7 +154,7 @@ class ToolTester:
                     duration_ms=duration,
                     error=str(e),
                 ))
-        
+
         return suite
 
 
@@ -164,14 +162,14 @@ class ServerTester:
     """
     Tests MCP server implementations.
     """
-    
+
     def __init__(self, server: Any) -> None:
         """
         Args:
             server: MCPServer instance
         """
         self.server = server
-    
+
     async def test_initialize(self) -> TestResult:
         """Test the initialize handshake."""
         start = time.perf_counter()
@@ -185,10 +183,10 @@ class ServerTester:
                     "clientInfo": {"name": "test-client", "version": "1.0.0"},
                 }
             }
-            
+
             response = await self.server.handle_request(request)
             duration = (time.perf_counter() - start) * 1000
-            
+
             if "result" in response:
                 result = response["result"]
                 if "protocolVersion" in result and "capabilities" in result:
@@ -198,14 +196,14 @@ class ServerTester:
                         duration_ms=duration,
                         output=result,
                     )
-            
+
             return TestResult(
                 name="initialize",
                 passed=False,
                 duration_ms=duration,
                 error="Invalid initialize response",
             )
-            
+
         except Exception as e:
             return TestResult(
                 name="initialize",
@@ -213,7 +211,7 @@ class ServerTester:
                 duration_ms=(time.perf_counter() - start) * 1000,
                 error=str(e),
             )
-    
+
     async def test_tools_list(self) -> TestResult:
         """Test tools/list endpoint."""
         start = time.perf_counter()
@@ -224,10 +222,10 @@ class ServerTester:
                 "method": "tools/list",
                 "params": {}
             }
-            
+
             response = await self.server.handle_request(request)
             duration = (time.perf_counter() - start) * 1000
-            
+
             if "result" in response and "tools" in response["result"]:
                 return TestResult(
                     name="tools/list",
@@ -235,14 +233,14 @@ class ServerTester:
                     duration_ms=duration,
                     output=response["result"],
                 )
-            
+
             return TestResult(
                 name="tools/list",
                 passed=False,
                 duration_ms=duration,
                 error="Invalid tools/list response",
             )
-            
+
         except Exception as e:
             return TestResult(
                 name="tools/list",
@@ -250,11 +248,11 @@ class ServerTester:
                 duration_ms=(time.perf_counter() - start) * 1000,
                 error=str(e),
             )
-    
+
     async def test_tool_call(
         self,
         tool_name: str,
-        arguments: Dict[str, Any],
+        arguments: dict[str, Any],
     ) -> TestResult:
         """Test calling a specific tool."""
         start = time.perf_counter()
@@ -268,10 +266,10 @@ class ServerTester:
                     "arguments": arguments,
                 }
             }
-            
+
             response = await self.server.handle_request(request)
             duration = (time.perf_counter() - start) * 1000
-            
+
             if "result" in response and "content" in response["result"]:
                 return TestResult(
                     name=f"tools/call:{tool_name}",
@@ -279,14 +277,14 @@ class ServerTester:
                     duration_ms=duration,
                     output=response["result"],
                 )
-            
+
             return TestResult(
                 name=f"tools/call:{tool_name}",
                 passed=False,
                 duration_ms=duration,
                 error="Invalid tool call response",
             )
-            
+
         except Exception as e:
             return TestResult(
                 name=f"tools/call:{tool_name}",
@@ -294,17 +292,17 @@ class ServerTester:
                 duration_ms=(time.perf_counter() - start) * 1000,
                 error=str(e),
             )
-    
+
     async def run_smoke_tests(self) -> TestSuite:
         """Run basic smoke tests against the server."""
         suite = TestSuite(name="MCP Server Smoke Tests")
-        
+
         # Test initialize
         suite.results.append(await self.test_initialize())
-        
+
         # Test tools/list
         suite.results.append(await self.test_tools_list())
-        
+
         return suite
 
 
@@ -312,15 +310,15 @@ class IntegrationTester:
     """
     Tests end-to-end MCP workflows.
     """
-    
+
     def __init__(self):
         """Execute   Init   operations natively."""
-        self.scenarios: List[Dict[str, Any]] = []
-    
+        self.scenarios: list[dict[str, Any]] = []
+
     def add_scenario(
         self,
         name: str,
-        steps: List[Dict[str, Any]],
+        steps: list[dict[str, Any]],
         description: str = "",
     ) -> None:
         """Add a test scenario."""
@@ -329,29 +327,29 @@ class IntegrationTester:
             "description": description,
             "steps": steps,
         })
-    
+
     async def run_scenario(
         self,
-        scenario: Dict[str, Any],
+        scenario: dict[str, Any],
         server: Any,
     ) -> TestSuite:
         """Run a single scenario."""
         suite = TestSuite(name=scenario["name"])
-        
-        context: Dict[str, Any] = {}  # Shared context between steps
-        
+
+        context: dict[str, Any] = {}  # Shared context between steps
+
         for i, step in enumerate(scenario["steps"]):
             step_name = step.get("name", f"step_{i}")
             method = step["method"]
             params = step.get("params", {})
-            
+
             # Template params from context
             for key, value in params.items():
                 if isinstance(value, str) and value.startswith("$"):
                     context_key = value[1:]
                     if context_key in context:
                         params[key] = context[context_key]
-            
+
             start = time.perf_counter()
             try:
                 request = {
@@ -360,20 +358,20 @@ class IntegrationTester:
                     "method": method,
                     "params": params,
                 }
-                
+
                 response = await server.handle_request(request)
                 duration = (time.perf_counter() - start) * 1000
-                
+
                 # Store result in context if specified
                 if "store_as" in step and "result" in response:
                     context[step["store_as"]] = response["result"]
-                
+
                 # Check assertions
                 if "assertions" in step:
                     for assertion in step["assertions"]:
                         # Simple assertion checking
                         pass
-                
+
                 if "error" in response:
                     suite.results.append(TestResult(
                         name=step_name,
@@ -388,7 +386,7 @@ class IntegrationTester:
                         duration_ms=duration,
                         output=response.get("result"),
                     ))
-                    
+
             except Exception as e:
                 suite.results.append(TestResult(
                     name=step_name,
@@ -396,10 +394,10 @@ class IntegrationTester:
                     duration_ms=(time.perf_counter() - start) * 1000,
                     error=str(e),
                 ))
-        
+
         return suite
-    
-    async def run_all(self, server: Any) -> List[TestSuite]:
+
+    async def run_all(self, server: Any) -> list[TestSuite]:
         """Run all registered scenarios."""
         suites = []
         for scenario in self.scenarios:
@@ -412,18 +410,18 @@ class MockMCPClient:
     """
     Mock MCP client for testing servers.
     """
-    
+
     def __init__(self, server):
         """Execute   Init   operations natively."""
         self.server = server
         self._request_id = 0
-    
+
     def _next_id(self) -> int:
         """Execute  Next Id operations natively."""
         self._request_id += 1
         return self._request_id
-    
-    async def initialize(self) -> Dict[str, Any]:
+
+    async def initialize(self) -> dict[str, Any]:
         """Send initialize request."""
         return await self.server.handle_request({
             "jsonrpc": "2.0",
@@ -434,8 +432,8 @@ class MockMCPClient:
                 "clientInfo": {"name": "mock-client", "version": "1.0.0"},
             }
         })
-    
-    async def list_tools(self) -> Dict[str, Any]:
+
+    async def list_tools(self) -> dict[str, Any]:
         """List available tools."""
         return await self.server.handle_request({
             "jsonrpc": "2.0",
@@ -443,12 +441,12 @@ class MockMCPClient:
             "method": "tools/list",
             "params": {}
         })
-    
+
     async def call_tool(
         self,
         name: str,
-        arguments: Dict[str, Any],
-    ) -> Dict[str, Any]:
+        arguments: dict[str, Any],
+    ) -> dict[str, Any]:
         """Call a tool."""
         return await self.server.handle_request({
             "jsonrpc": "2.0",
@@ -456,8 +454,8 @@ class MockMCPClient:
             "method": "tools/call",
             "params": {"name": name, "arguments": arguments}
         })
-    
-    async def list_resources(self) -> Dict[str, Any]:
+
+    async def list_resources(self) -> dict[str, Any]:
         """List available resources."""
         return await self.server.handle_request({
             "jsonrpc": "2.0",

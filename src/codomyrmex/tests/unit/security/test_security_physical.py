@@ -252,7 +252,10 @@ class TestSecurityMonitor:
         assert len(list(SecurityEventType)) > 0
 
     def test_security_event(self):
-        from codomyrmex.security.digital.security_monitor import AlertLevel, SecurityEvent, SecurityEventType
+        from codomyrmex.security.digital.security_monitor import (
+            SecurityEvent,
+            SecurityEventType,
+        )
         evt = SecurityEvent(
             event_id="e1", event_type=list(SecurityEventType)[0],
             timestamp=datetime.now(), resource="test",
@@ -265,7 +268,11 @@ class TestSecurityMonitor:
         assert mon is not None
 
     def test_alert_rule(self):
-        from codomyrmex.security.digital.security_monitor import AlertLevel, AlertRule, SecurityEventType
+        from codomyrmex.security.digital.security_monitor import (
+            AlertLevel,
+            AlertRule,
+            SecurityEventType,
+        )
         rule = AlertRule(
             rule_id="r1", name="test", description="test rule",
             event_type=list(SecurityEventType)[0],

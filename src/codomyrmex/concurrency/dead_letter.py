@@ -18,11 +18,11 @@ from __future__ import annotations
 
 import json
 import threading
-import time
 import uuid
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 
 class DeadLetterQueue:

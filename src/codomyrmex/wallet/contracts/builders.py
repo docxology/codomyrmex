@@ -10,11 +10,9 @@ Provides:
 from __future__ import annotations
 
 import hashlib
-from dataclasses import dataclass
 from typing import Any
 
 from .models import Address, Transaction
-
 
 # ── Gas estimation constants ────────────────────────────────────────
 
@@ -69,47 +67,47 @@ class TransactionBuilder:
         self._chain_id: int = 1
         self._memo: str = ""
 
-    def to(self, address: Address) -> "TransactionBuilder":
+    def to(self, address: Address) -> TransactionBuilder:
         """Execute To operations natively."""
         self._to = address
         return self
 
-    def value(self, amount: int) -> "TransactionBuilder":
+    def value(self, amount: int) -> TransactionBuilder:
         """Execute Value operations natively."""
         self._value = amount
         return self
 
-    def data(self, data: str) -> "TransactionBuilder":
+    def data(self, data: str) -> TransactionBuilder:
         """Execute Data operations natively."""
         self._data = data
         return self
 
-    def gas_limit(self, limit: int) -> "TransactionBuilder":
+    def gas_limit(self, limit: int) -> TransactionBuilder:
         """Execute Gas Limit operations natively."""
         self._gas_limit = limit
         return self
 
-    def gas_price(self, price: int) -> "TransactionBuilder":
+    def gas_price(self, price: int) -> TransactionBuilder:
         """Execute Gas Price operations natively."""
         self._gas_price = price
         return self
 
-    def nonce(self, nonce: int) -> "TransactionBuilder":
+    def nonce(self, nonce: int) -> TransactionBuilder:
         """Execute Nonce operations natively."""
         self._nonce = nonce
         return self
 
-    def chain_id(self, cid: int) -> "TransactionBuilder":
+    def chain_id(self, cid: int) -> TransactionBuilder:
         """Execute Chain Id operations natively."""
         self._chain_id = cid
         return self
 
-    def memo(self, memo: str) -> "TransactionBuilder":
+    def memo(self, memo: str) -> TransactionBuilder:
         """Execute Memo operations natively."""
         self._memo = memo
         return self
 
-    def auto_gas(self) -> "TransactionBuilder":
+    def auto_gas(self) -> TransactionBuilder:
         """Auto-estimate gas from calldata."""
         self._gas_limit = estimate_gas(self._data, is_contract_creation=(self._to is None))
         return self

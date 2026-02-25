@@ -30,11 +30,13 @@ from .exceptions import (
 )
 from .http_client import HTTPClient, Response
 from .raw_sockets import PortScanner, TCPClient, TCPServer, UDPClient
+
 try:
     from .ssh_sftp import SSHClient
 except ImportError:
     SSHClient = None
 from .websocket_client import WebSocketClient
+
 
 def cli_commands():
     """Return CLI commands for the networking module."""
@@ -65,7 +67,7 @@ def cli_commands():
                 sock = socket.create_connection((host, port), timeout=3)
                 sock.close()
                 print(f"  {host}:{port} - OK")
-            except (socket.timeout, OSError):
+            except (TimeoutError, OSError):
                 print(f"  {host}:{port} - UNREACHABLE")
 
     return {

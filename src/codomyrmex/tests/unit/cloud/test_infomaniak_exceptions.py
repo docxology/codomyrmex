@@ -4,12 +4,9 @@ Unit tests for Infomaniak exceptions.
 Zero ``unittest.mock`` — uses ``Stub`` from ``conftest.py``.
 """
 
-import os
 
-import pytest
 
 from _stubs import Stub
-
 
 # =========================================================================
 

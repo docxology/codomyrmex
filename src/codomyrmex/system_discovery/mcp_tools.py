@@ -1,12 +1,11 @@
 """MCP tools for the system_discovery module."""
 
-from typing import Any, Dict, List, Optional
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="system_discovery")
-def health_check(module: Optional[str] = None) -> dict:
+def health_check(module: str | None = None) -> dict:
     """Run a health check on the system or a specific module.
 
     Args:
@@ -73,7 +72,7 @@ def dependency_tree(module: str) -> dict:
     try:
         import importlib
         mod = importlib.import_module(f"codomyrmex.{module}")
-        deps: List[str] = []
+        deps: list[str] = []
         if hasattr(mod, "__all__"):
             deps = list(mod.__all__)
         return {

@@ -9,10 +9,8 @@ Covers:
 - CapabilityScanner
 """
 
-import time
 
 import pytest
-
 
 # ===================================================================
 # HealthStatus & HealthCheckResult
@@ -25,7 +23,8 @@ class TestHealthCheckResult:
     def test_creation_defaults(self):
         """Test functionality: creation defaults."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         assert r.module_name == "test"
@@ -36,7 +35,8 @@ class TestHealthCheckResult:
     def test_to_dict(self):
         """Test functionality: to dict."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         d = r.to_dict()
@@ -48,7 +48,8 @@ class TestHealthCheckResult:
     def test_add_issue(self):
         """Test functionality: add issue."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_issue("something broke", recommendation="fix it")
@@ -59,7 +60,8 @@ class TestHealthCheckResult:
     def test_add_issue_without_recommendation(self):
         """Test functionality: add issue without recommendation."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_issue("minor issue")
@@ -68,7 +70,8 @@ class TestHealthCheckResult:
     def test_add_metric(self):
         """Test functionality: add metric."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_metric("latency_ms", 42)
@@ -77,7 +80,8 @@ class TestHealthCheckResult:
     def test_multiple_metrics(self):
         """Test functionality: multiple metrics."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthCheckResult, HealthStatus,
+            HealthCheckResult,
+            HealthStatus,
         )
         r = HealthCheckResult(module_name="test", status=HealthStatus.HEALTHY)
         r.add_metric("cpu", 50)
@@ -115,7 +119,8 @@ class TestHealthChecker:
     def test_check_known_module(self):
         """Test functionality: check known module."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthChecker, HealthCheckResult,
+            HealthChecker,
+            HealthCheckResult,
         )
         checker = HealthChecker()
         result = checker.perform_health_check("logging_monitoring")
@@ -125,7 +130,8 @@ class TestHealthChecker:
     def test_check_unknown_module(self):
         """Test functionality: check unknown module."""
         from codomyrmex.system_discovery.health.health_checker import (
-            HealthChecker, HealthCheckResult,
+            HealthChecker,
+            HealthCheckResult,
         )
         checker = HealthChecker()
         result = checker.perform_health_check("nonexistent_module_xyz")
@@ -178,12 +184,16 @@ class TestCapabilityScanner:
 
     def test_import(self):
         """Test functionality: import."""
-        from codomyrmex.system_discovery.core.capability_scanner import CapabilityScanner
+        from codomyrmex.system_discovery.core.capability_scanner import (
+            CapabilityScanner,
+        )
         assert CapabilityScanner is not None
 
     def test_init(self):
         """Test functionality: init."""
-        from codomyrmex.system_discovery.core.capability_scanner import CapabilityScanner
+        from codomyrmex.system_discovery.core.capability_scanner import (
+            CapabilityScanner,
+        )
         scanner = CapabilityScanner()
         assert scanner is not None
 

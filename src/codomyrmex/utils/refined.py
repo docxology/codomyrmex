@@ -3,9 +3,9 @@
 import logging
 import random
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 

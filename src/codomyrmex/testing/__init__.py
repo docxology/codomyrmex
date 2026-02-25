@@ -15,33 +15,31 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .strategies import (
-    GeneratorStrategy,
-    IntGenerator,
-    FloatGenerator,
-    StringGenerator,
-    ListGenerator,
-    DictGenerator,
-    OneOfGenerator,
+from .fixture_utils import (
+    Fixture,
+    FixtureManager,
+    TestDataFactory,
+    fixture,
 )
-
+from .fuzzing import (
+    Fuzzer,
+    FuzzingStrategy,
+    FuzzResult,
+)
 from .property_testing import (
     PropertyTestResult,
     property_test,
 )
-
-from .fuzzing import (
-    FuzzingStrategy,
-    FuzzResult,
-    Fuzzer,
+from .strategies import (
+    DictGenerator,
+    FloatGenerator,
+    GeneratorStrategy,
+    IntGenerator,
+    ListGenerator,
+    OneOfGenerator,
+    StringGenerator,
 )
 
-from .fixture_utils import (
-    Fixture,
-    FixtureManager,
-    fixture,
-    TestDataFactory,
-)
 
 def cli_commands():
     """Return CLI commands for the testing module."""
@@ -66,9 +64,7 @@ def cli_commands():
     }
 
 
-from . import workflow
-
-from . import chaos
+from . import chaos, workflow
 
 __all__ = [
     "chaos",

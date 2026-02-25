@@ -1,6 +1,6 @@
 """MCP tools for the events module."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -8,7 +8,7 @@ from codomyrmex.model_context_protocol.decorators import mcp_tool
 @mcp_tool(category="events")
 def emit_event(
     event_type: str,
-    payload: Dict[str, Any],
+    payload: dict[str, Any],
     source: str = "mcp",
     priority: str = "normal",
 ) -> dict:
@@ -23,7 +23,7 @@ def emit_event(
     Returns:
         Status dict with event_id and timestamp.
     """
-    from codomyrmex.events import EventBus, Event
+    from codomyrmex.events import Event, EventBus
 
     try:
         bus = EventBus()
@@ -62,7 +62,7 @@ def list_event_types() -> dict:
 
 @mcp_tool(category="events")
 def get_event_history(
-    event_type: Optional[str] = None,
+    event_type: str | None = None,
     limit: int = 50,
 ) -> dict:
     """Retrieve recent event history from the event bus.

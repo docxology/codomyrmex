@@ -5,16 +5,14 @@ Covers ReleaseValidator, PackageBuilder, and DistributionManager.
 
 import pytest
 
-from codomyrmex.release.release_validator import (
-    CertificationStatus,
-    ReleaseValidator,
-)
-from codomyrmex.release.package_builder import PackageBuilder, PackageMetadata
 from codomyrmex.release.distribution import (
     DistributionManager,
     DistributionTarget,
 )
-
+from codomyrmex.release.package_builder import PackageBuilder, PackageMetadata
+from codomyrmex.release.release_validator import (
+    ReleaseValidator,
+)
 
 # ─── ReleaseValidator ────────────────────────────────────────────────
 

@@ -5,14 +5,11 @@ from __future__ import annotations
 import pytest
 
 from codomyrmex.crypto.currency.tokens import (
-    ERC20Token,
-    TransferEvent,
     create_erc20_interface,
-    encode_transfer,
     decode_transfer_event,
+    encode_transfer,
 )
 from codomyrmex.crypto.exceptions import WalletError
-
 
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 

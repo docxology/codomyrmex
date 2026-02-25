@@ -5,10 +5,9 @@ Covers BenchmarkRunner, LoadTester, and MemoryProfiler.
 
 import pytest
 
-from codomyrmex.performance.benchmark_runner import BenchmarkRunner
+from codomyrmex.performance.analysis.memory_profiler import MemoryProfiler
+from codomyrmex.performance.benchmarking.benchmark_runner import BenchmarkRunner
 from codomyrmex.performance.load_tester import LoadTester
-from codomyrmex.performance.memory_profiler import MemoryProfiler
-
 
 # ─── BenchmarkRunner ──────────────────────────────────────────────────
 

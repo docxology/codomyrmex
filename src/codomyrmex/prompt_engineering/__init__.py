@@ -14,25 +14,6 @@ from __future__ import annotations
 __version__ = "0.1.0"
 
 # Core template management
-from .templates import (
-    PromptTemplate,
-    TemplateRegistry,
-    get_default_registry,
-)
-
-# Version tracking
-from .versioning import (
-    PromptVersion,
-    VersionManager,
-)
-
-# Optimization
-from .optimization import (
-    OptimizationResult,
-    OptimizationStrategy,
-    PromptOptimizer,
-)
-
 # Evaluation
 from .evaluation import (
     EvaluationCriteria,
@@ -45,9 +26,27 @@ from .evaluation import (
     score_structure,
 )
 
+# Optimization
+from .optimization import (
+    OptimizationResult,
+    OptimizationStrategy,
+    PromptOptimizer,
+)
+from .templates import (
+    PromptTemplate,
+    TemplateRegistry,
+    get_default_registry,
+)
+
+# Version tracking
+from .versioning import (
+    PromptVersion,
+    VersionManager,
+)
+
 # Try to import shared types for interop
 try:
-    from codomyrmex.validation.schemas import Result, ResultStatus, Config
+    from codomyrmex.validation.schemas import Config, Result, ResultStatus
 except ImportError:
     Result = None
     ResultStatus = None

@@ -25,7 +25,7 @@ import random
 import threading
 import time
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay, RelayMessage

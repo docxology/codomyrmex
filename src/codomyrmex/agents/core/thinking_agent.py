@@ -15,24 +15,23 @@ All traces are stored for later retrieval, distillation, or debugging.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.logging_monitoring import get_logger
-
-from ..core.base import (
-    AgentCapabilities,
-    AgentInterface,
-    AgentProtocol,
-    AgentRequest,
-    AgentResponse,
-)
 from codomyrmex.llm.chain_of_thought import ChainOfThought
 from codomyrmex.llm.context_manager import ContextManager
 from codomyrmex.llm.models.reasoning import (
     ReasoningStep,
     ReasoningTrace,
     ThinkingDepth,
+)
+from codomyrmex.logging_monitoring import get_logger
+
+from ..core.base import (
+    AgentCapabilities,
+    AgentInterface,
+    AgentRequest,
+    AgentResponse,
 )
 
 logger = get_logger(__name__)

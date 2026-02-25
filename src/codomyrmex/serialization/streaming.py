@@ -7,10 +7,10 @@ large datasets without loading everything into memory.
 from __future__ import annotations
 
 import csv
-import io
 import json
+from collections.abc import Generator, Iterator
 from pathlib import Path
-from typing import Any, Generator, Iterator
+from typing import Any
 
 
 def stream_jsonl_write(path: Path, items: Iterator[dict[str, Any]],

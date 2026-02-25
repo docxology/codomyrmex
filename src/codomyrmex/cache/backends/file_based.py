@@ -68,7 +68,7 @@ class FileBasedCache(Cache):
                     return None
 
             # Read value
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 value = json.load(f)  # SECURITY: JSON instead of pickle to prevent code injection
 
             self._stats.hits += 1

@@ -7,8 +7,6 @@ interface modeled after szeider/mcp-solver's interaction pattern.
 
 from __future__ import annotations
 
-from typing import Any
-
 from .backends.base import SolverBackend, SolverResult, SolverStatus
 from .exceptions import BackendNotAvailableError
 

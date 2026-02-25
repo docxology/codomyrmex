@@ -5,14 +5,15 @@ TaskWorker (error isolation), TaskScheduler (strategies),
 and ResultAggregator.
 """
 
-import time
 import pytest
 
-from codomyrmex.concurrency.task_queue import Task, TaskPriority, TaskQueue, TaskStatus
-from codomyrmex.concurrency.task_worker import TaskResult, TaskWorker
-from codomyrmex.concurrency.task_scheduler import SchedulingStrategy, TaskScheduler
 from codomyrmex.concurrency.result_aggregator import ResultAggregator
-
+from codomyrmex.concurrency.tasks.task_queue import Task, TaskPriority, TaskQueue
+from codomyrmex.concurrency.tasks.task_scheduler import (
+    SchedulingStrategy,
+    TaskScheduler,
+)
+from codomyrmex.concurrency.tasks.task_worker import TaskResult, TaskWorker
 
 # ─── TaskQueue ────────────────────────────────────────────────────────
 

@@ -1,6 +1,5 @@
 """Tests for email module."""
 
-import pytest
 
 
 # Coverage push — email/agentmail

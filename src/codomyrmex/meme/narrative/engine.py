@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional
 from codomyrmex.meme.narrative.models import Narrative, NarrativeArc, NarrativeTemplate
+
 
 class NarrativeEngine:
     """Engine for analyzing, generating, and transforming narratives."""
@@ -45,7 +45,7 @@ class NarrativeEngine:
             "guardian": Archetype.THRESHOLD_GUARDIAN,
             "ally": Archetype.ALLY,
         }
-        characters: Dict[str, "Archetype"] = {}
+        characters: dict[str, Archetype] = {}
         text_lower = text.lower()
         for keyword, archetype in archetype_keywords.items():
             if keyword in text_lower:
@@ -70,7 +70,7 @@ class NarrativeEngine:
             content_segments=sentences,
         )
 
-    def generate(self, template: NarrativeTemplate, params: Dict[str, str]) -> str:
+    def generate(self, template: NarrativeTemplate, params: dict[str, str]) -> str:
         """Generate a story from a template and parameters."""
         story = []
         for stage in template.stages:

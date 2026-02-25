@@ -119,14 +119,6 @@ def list_agents() -> dict[str, Any]:
     Returns:
         Dictionary with agent types, protocol classes, and capability info.
     """
-    from codomyrmex.collaboration import (
-        BaseAgent,
-        AgentCoordinator,
-        BroadcastProtocol,
-        CapabilityRoutingProtocol,
-        ConsensusProtocol,
-        RoundRobinProtocol,
-    )
 
     return {
         "agent_classes": ["BaseAgent", "AgentProxy"],

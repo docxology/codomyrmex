@@ -7,8 +7,7 @@ context generation for LLM consumption.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 from codomyrmex.graph_rag.graph import KnowledgeGraph
 from codomyrmex.graph_rag.models import (
@@ -16,7 +15,6 @@ from codomyrmex.graph_rag.models import (
     EntityType,
     GraphContext,
     Relationship,
-    RelationType,
 )
 from codomyrmex.logging_monitoring import get_logger
 

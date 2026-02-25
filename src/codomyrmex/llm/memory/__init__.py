@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 
 class MemoryType(Enum):
@@ -178,7 +178,7 @@ class SummaryMemory(Memory):
     def __init__(
         self,
         session_id: str | None = None,
-        summarizer: Optional[callable] = None,
+        summarizer: Callable | None = None,
         summary_threshold: int = 10
     ):
         """Execute   Init   operations natively."""

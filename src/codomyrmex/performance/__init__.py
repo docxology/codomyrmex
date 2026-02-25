@@ -80,9 +80,9 @@ def cli_commands():
         """Show performance report."""
         print(f"Performance module v{__version__}")
         print("Components:")
-        print(f"  LazyLoader: available")
-        print(f"  CacheManager: available")
-        print(f"  PerformanceProfiler: available")
+        print("  LazyLoader: available")
+        print("  CacheManager: available")
+        print("  PerformanceProfiler: available")
         print(f"  PerformanceMonitor: {'available' if PERFORMANCE_MONITOR_AVAILABLE else 'unavailable'}")
 
     return {
@@ -113,3 +113,5 @@ else:
     __all__.append("get_system_metrics")
 
 __version__ = "0.1.0"
+
+from . import analysis, benchmarking  # noqa: E402, F401

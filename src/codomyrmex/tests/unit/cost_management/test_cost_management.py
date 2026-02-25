@@ -325,7 +325,11 @@ class TestBudgetManager:
 
     def test_manager_list_budgets(self):
         """Verify listing all budgets."""
-        from codomyrmex.cloud.cost_management import BudgetManager, BudgetPeriod, CostTracker
+        from codomyrmex.cloud.cost_management import (
+            BudgetManager,
+            BudgetPeriod,
+            CostTracker,
+        )
 
         tracker = CostTracker()
         manager = BudgetManager(tracker)

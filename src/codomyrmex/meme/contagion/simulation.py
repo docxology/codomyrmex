@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import random
-from typing import Dict, List, Optional
-
 from codomyrmex.meme.contagion.epidemic import SIRModel
 from codomyrmex.meme.contagion.models import ContagionModel, PropagationTrace
 

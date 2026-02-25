@@ -36,7 +36,7 @@ from codomyrmex.database_management.db_manager import (
     DatabaseType,
     QueryResult,
 )
-from codomyrmex.database_management.migration_manager import (
+from codomyrmex.database_management.migration.migration_manager import (
     DatabaseConnector,
 )
 from codomyrmex.database_management.performance_monitor import (
@@ -1565,7 +1565,7 @@ class TestDatabaseBackup:
     """Tests for DatabaseBackup manager."""
 
     def test_backup_and_restore_sqlite(self, tmp_path):
-        from codomyrmex.database_management.backup import DatabaseBackup
+        from codomyrmex.database_management.backup.backup import DatabaseBackup
 
         # Create a real SQLite DB
         db_path = tmp_path / "test.db"
@@ -1590,7 +1590,7 @@ class TestDatabaseBackup:
         assert rows == [(42,)]
 
     def test_list_backups(self, tmp_path):
-        from codomyrmex.database_management.backup import DatabaseBackup
+        from codomyrmex.database_management.backup.backup import DatabaseBackup
 
         db_path = tmp_path / "test.db"
         db_path.write_bytes(b"fake-sqlite")
@@ -1601,7 +1601,7 @@ class TestDatabaseBackup:
         assert len(mgr.list_backups()) == 2
 
     def test_prune(self, tmp_path):
-        from codomyrmex.database_management.backup import DatabaseBackup
+        from codomyrmex.database_management.backup.backup import DatabaseBackup
 
         db_path = tmp_path / "test.db"
         db_path.write_bytes(b"data")
@@ -1614,13 +1614,16 @@ class TestDatabaseBackup:
         assert len(mgr.list_backups()) == 2
 
     def test_restore_nonexistent(self, tmp_path):
-        from codomyrmex.database_management.backup import DatabaseBackup
+        from codomyrmex.database_management.backup.backup import DatabaseBackup
 
         mgr = DatabaseBackup(tmp_path / "backups")
         assert not mgr.restore_sqlite("nope", tmp_path / "out.db")
 
     def test_backup_metadata_to_dict(self):
-        from codomyrmex.database_management.backup import BackupFormat, BackupMetadata
+        from codomyrmex.database_management.backup.backup import (
+            BackupFormat,
+            BackupMetadata,
+        )
 
         meta = BackupMetadata(
             backup_id="b1", source="/db", destination="/backup/b1.db",
@@ -1742,7 +1745,9 @@ class TestSchemaDefinition:
 
     def test_to_sql(self):
         from codomyrmex.database_management.schema_generator import (
-            Column, SchemaDefinition, SchemaTable,
+            Column,
+            SchemaDefinition,
+            SchemaTable,
         )
 
         schema = SchemaDefinition(
@@ -1760,7 +1765,7 @@ class TestSchemaDefinition:
 
     def test_to_dict(self):
         from codomyrmex.database_management.schema_generator import (
-            Column, SchemaDefinition, SchemaTable,
+            SchemaDefinition,
         )
 
         schema = SchemaDefinition(name="db", version="2.0", tables=[])
@@ -1774,7 +1779,9 @@ class TestMigrationResult:
     """Tests for MigrationResult."""
 
     def test_success_result(self):
-        from codomyrmex.database_management.migration_manager import MigrationResult
+        from codomyrmex.database_management.migration.migration_manager import (
+            MigrationResult,
+        )
 
         r = MigrationResult(
             migration_id="001", success=True,
@@ -1789,13 +1796,17 @@ class TestMigrationManager:
     """Tests for MigrationManager."""
 
     def test_init(self, tmp_path):
-        from codomyrmex.database_management.migration_manager import MigrationManager
+        from codomyrmex.database_management.migration.migration_manager import (
+            MigrationManager,
+        )
 
         mgr = MigrationManager(workspace_dir=str(tmp_path))
         assert mgr is not None
 
     def test_create_and_list(self, tmp_path):
-        from codomyrmex.database_management.migration_manager import MigrationManager
+        from codomyrmex.database_management.migration.migration_manager import (
+            MigrationManager,
+        )
 
         mgr = MigrationManager(workspace_dir=str(tmp_path))
         m = mgr.create_migration(
@@ -1807,7 +1818,9 @@ class TestMigrationManager:
         assert isinstance(migrations, list)
 
     def test_with_sqlite(self, tmp_path):
-        from codomyrmex.database_management.migration_manager import MigrationManager
+        from codomyrmex.database_management.migration.migration_manager import (
+            MigrationManager,
+        )
 
         db = tmp_path / "migrations.db"
         mgr = MigrationManager(
@@ -1834,7 +1847,10 @@ class TestDatabaseManager:
         assert r.success
 
     def test_database_connection(self):
-        from codomyrmex.database_management.db_manager import DatabaseConnection, DatabaseType
+        from codomyrmex.database_management.db_manager import (
+            DatabaseConnection,
+            DatabaseType,
+        )
         conn = DatabaseConnection(name="test", db_type=DatabaseType.SQLITE, database="test.db")
         assert conn.database == "test.db"
 

@@ -10,13 +10,10 @@ from __future__ import annotations
 
 import json
 
-import pytest
-
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveryMetrics,
     MCPDiscovery,
 )
-
 
 # ── DiscoveryMetrics dataclass ────────────────────────────────────────
 

@@ -12,8 +12,8 @@ from codomyrmex.crypto.graphy.hashing import (
     hash_blake2b,
     hash_data,
     hash_md5,
-    hash_sha256,
     hash_sha3_256,
+    hash_sha256,
     hash_sha512,
     verify_hash,
 )

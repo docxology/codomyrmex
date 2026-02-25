@@ -9,7 +9,7 @@ import threading
 from datetime import datetime, timedelta
 
 from .collector import MetricCollector
-from .models import Dashboard, MetricValue, Panel, PanelType
+from .models import Dashboard, MetricValue
 
 
 class DashboardManager:

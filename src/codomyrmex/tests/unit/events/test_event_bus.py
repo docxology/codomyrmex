@@ -20,7 +20,6 @@ from codomyrmex.events.core.event_bus import (
 )
 from codomyrmex.events.core.event_schema import Event, EventType
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

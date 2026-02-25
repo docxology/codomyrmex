@@ -2,20 +2,16 @@
 
 from __future__ import annotations
 
-import random
-from typing import Dict, List, Optional
-
 from codomyrmex.meme.narrative.models import (
-    Narrative,
     Archetype,
-    NarrativeArc,
+    Narrative,
 )
 from codomyrmex.meme.narrative.structure import heros_journey_arc
 
 
 def synthesize_myth(
     domain: str,
-    archetypes: Dict[str, Archetype],
+    archetypes: dict[str, Archetype],
     theme: str = "redemption",
 ) -> Narrative:
     """Construct a synthetic myth for a given domain.
@@ -33,12 +29,12 @@ def synthesize_myth(
     """
     # Simply use Hero's Journey as default mythic structure
     arc = heros_journey_arc()
-    
+
     # Construct skeleton content based on arc stages
     segments = []
     hero_name = next((k for k, v in archetypes.items() if v == Archetype.HERO), "The Hero")
     shadow_name = next((k for k, v in archetypes.items() if v == Archetype.SHADOW), "The Shadow")
-    
+
     # Very basic template logic
     segments.append(f"{hero_name} lives in the ordinary world of {domain}.")
     segments.append(f"{hero_name} receives a call regarding {theme}.")

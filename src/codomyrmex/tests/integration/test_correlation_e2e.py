@@ -47,7 +47,6 @@ def _trust_safe_tools():
     """
     from codomyrmex.agents.pai.trust_gateway import (
         _registry,
-        TrustLevel,
     )
 
     # Snapshot current levels so we can restore them.

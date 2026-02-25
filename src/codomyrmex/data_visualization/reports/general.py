@@ -1,5 +1,5 @@
 """General system report."""
-from ..core.ui import Dashboard, Card
+from ..core.ui import Card, Dashboard
 from ._base import BaseReport
 
 

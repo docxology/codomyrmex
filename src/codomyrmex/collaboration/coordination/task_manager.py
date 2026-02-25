@@ -8,9 +8,9 @@ and load balancing across agents.
 import asyncio
 import heapq
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from collections.abc import Callable
 
 from ..agents.base import CollaborativeAgent
 from ..exceptions import (

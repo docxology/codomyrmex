@@ -9,11 +9,11 @@ __version__ = "0.1.0"
 import hashlib
 import json
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
-from collections.abc import Callable
 
 
 class PromptRole(Enum):

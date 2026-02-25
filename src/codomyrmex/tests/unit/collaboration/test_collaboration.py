@@ -100,7 +100,9 @@ class TestTaskManagerDeep:
         assert tm is not None
 
     def test_scheduling_strategy_enum(self):
-        from codomyrmex.collaboration.coordination.task_manager import SchedulingStrategy
+        from codomyrmex.collaboration.coordination.task_manager import (
+            SchedulingStrategy,
+        )
         assert len(list(SchedulingStrategy)) > 0
 
 

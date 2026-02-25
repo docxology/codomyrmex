@@ -4,7 +4,6 @@ Validates that multiple workflow functions can run concurrently
 without deadlocks, race conditions, or corrupted state.
 """
 
-import asyncio
 import concurrent.futures
 
 import pytest
@@ -58,7 +57,10 @@ class TestWorkflowConcurrent:
 
     def test_concurrent_results_independent(self):
         """Concurrent calls produce independent results (no cross-contamination)."""
-        from codomyrmex.agents.pai.mcp_bridge import _tool_list_modules, _tool_pai_status
+        from codomyrmex.agents.pai.mcp_bridge import (
+            _tool_list_modules,
+            _tool_pai_status,
+        )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
             f_mod = pool.submit(_tool_list_modules)

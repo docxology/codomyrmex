@@ -27,7 +27,6 @@ from codomyrmex.security.governance.contracts import (
 )
 from codomyrmex.security.governance.policy import PolicyEngine, PolicyError, PolicyRule
 
-
 # ======================================================================
 # Module & Enum tests
 # ======================================================================

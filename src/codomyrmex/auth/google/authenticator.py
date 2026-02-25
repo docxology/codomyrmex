@@ -5,7 +5,6 @@ Requires `google-auth-oauthlib`, `google-auth-httplib2`, and `google-api-python-
 """
 
 import os
-from typing import Optional
 
 try:
     from google.auth.transport.requests import Request
@@ -28,7 +27,7 @@ DEFAULT_SCOPES = [
 class GoogleAuthenticator:
     """Handles Google OAuth2 authentication and token management."""
 
-    def __init__(self, client_secrets_file: str, token_cache_file: Optional[str] = None, scopes: Optional[list] = None):
+    def __init__(self, client_secrets_file: str, token_cache_file: str | None = None, scopes: list | None = None):
         """
         Initialize the authenticator.
 
@@ -45,12 +44,12 @@ class GoogleAuthenticator:
 
         self.client_secrets_file = client_secrets_file
         self.scopes = scopes or DEFAULT_SCOPES
-        
+
         if token_cache_file:
             self.token_file = os.path.expanduser(token_cache_file)
         else:
             self.token_file = os.path.expanduser("~/.codomyrmex/auth/google/token.json")
-            
+
         os.makedirs(os.path.dirname(self.token_file), exist_ok=True)
 
     def get_credentials(self) -> "Credentials": # type: ignore
@@ -62,12 +61,12 @@ class GoogleAuthenticator:
             google.oauth2.credentials.Credentials: The valid credentials object.
         """
         creds = None
-        
+
         # Load existing token if available
         if os.path.exists(self.token_file):
             try:
                 creds = Credentials.from_authorized_user_file(self.token_file, self.scopes)
-            except Exception as e:
+            except Exception:
                 # If the cache file is malformed, simply ignore it and re-auth
                 pass
 
@@ -76,7 +75,7 @@ class GoogleAuthenticator:
             if creds and creds.expired and creds.refresh_token:
                 try:
                     creds.refresh(Request())
-                except Exception as e:
+                except Exception:
                     # If refresh fails, we must force a new full flow
                     creds = self._run_interactive_flow()
             else:
@@ -92,7 +91,7 @@ class GoogleAuthenticator:
         """Run the local server flow to get user authorization."""
         if not os.path.exists(self.client_secrets_file):
             raise FileNotFoundError(f"Client secrets file not found at {self.client_secrets_file}")
-            
+
         flow = InstalledAppFlow.from_client_secrets_file(
             self.client_secrets_file, self.scopes
         )

@@ -560,7 +560,9 @@ class ConfigurationManager:
 
             # Validate against schema if provided
             if schema:
-                from codomyrmex.config_management.validation.config_validator import ConfigValidator
+                from codomyrmex.config_management.validation.config_validator import (
+                    ConfigValidator,
+                )
                 validator = ConfigValidator(schema)
                 result = validator.validate(config.data)
 
@@ -599,7 +601,9 @@ class ConfigurationManager:
         config = self.configurations[name]
 
         try:
-            from codomyrmex.config_management.migration.config_migrator import migrate_config
+            from codomyrmex.config_management.migration.config_migrator import (
+                migrate_config,
+            )
 
             # Assume current version is stored in config
             current_version = config.data.get("version", "1.0.0")
@@ -642,7 +646,9 @@ class ConfigurationManager:
             Tuple of (is_valid, list_of_error_messages)
         """
         try:
-            from codomyrmex.config_management.validation.config_validator import validate_config_schema
+            from codomyrmex.config_management.validation.config_validator import (
+                validate_config_schema,
+            )
             return validate_config_schema(config_data, schema)
         except ImportError:
             logger.warning("ConfigValidator not available, skipping schema validation")

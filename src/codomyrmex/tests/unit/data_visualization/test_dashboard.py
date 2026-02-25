@@ -1,5 +1,7 @@
-from codomyrmex.data_visualization import generate_report
 from pathlib import Path
+
+from codomyrmex.data_visualization import generate_report
+
 
 def test_report_generation(tmp_path):
     """Test functionality: report generation."""

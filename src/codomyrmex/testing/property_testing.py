@@ -5,10 +5,10 @@ Property testing decorator and result types.
 """
 
 import functools
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-from collections.abc import Callable
 
 from .strategies import GeneratorStrategy
 

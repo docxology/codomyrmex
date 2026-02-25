@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
 from codomyrmex.agents.pai.trust_gateway import (
     DESTRUCTIVE_TOOL_COUNT,
     DESTRUCTIVE_TOOLS,
@@ -26,8 +27,6 @@ from codomyrmex.agents.pai.trust_gateway import (
     trusted_call_tool,
     verify_capabilities,
 )
-from codomyrmex.agents.pai.mcp_bridge import TOOL_COUNT, get_total_tool_count
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[5]
 

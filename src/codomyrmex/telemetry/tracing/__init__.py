@@ -11,12 +11,12 @@ import json
 import threading
 import time
 import uuid
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, ContextManager, Dict, List, Optional, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 
@@ -206,6 +206,7 @@ class Span:
 
 
 from abc import ABC, abstractmethod
+
 
 class SpanExporter(ABC):
     """Base class for span exporters."""

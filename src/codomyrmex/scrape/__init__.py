@@ -14,6 +14,7 @@ Example:
     ```
 """
 
+from . import extractors
 from .config import ScrapeConfig, get_config, reset_config, set_config
 from .core import (
     BaseScraper,
@@ -32,7 +33,6 @@ from .exceptions import (
     ScrapeTimeoutError,
     ScrapeValidationError,
 )
-from . import extractors
 from .extractors.scraper import Scraper
 
 # Shared schemas for cross-module interop

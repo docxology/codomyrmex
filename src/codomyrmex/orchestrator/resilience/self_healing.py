@@ -9,13 +9,14 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from codomyrmex.logging_monitoring import get_logger
+
 from .failure_taxonomy import (
     ClassifiedError,
     FailureCategory,
     RecoveryStrategy,
     classify_error,
 )
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

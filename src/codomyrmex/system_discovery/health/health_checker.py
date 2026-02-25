@@ -16,6 +16,7 @@ except ImportError:
     docker = None
 
 from codomyrmex.coding.execution.executor import execute_code
+from codomyrmex.coding.static_analysis import analyze_file
 from codomyrmex.environment_setup.env_checker import validate_environment_completeness
 from codomyrmex.git_operations.core.git import check_git_availability
 from codomyrmex.logging_monitoring.core.logger_config import (
@@ -25,7 +26,6 @@ from codomyrmex.logging_monitoring.core.logger_config import (
 from codomyrmex.logistics.orchestration.project.workflow_dag import WorkflowDAG
 from codomyrmex.performance import get_system_metrics, profile_function
 from codomyrmex.security.digital import analyze_file_security
-from codomyrmex.coding.static_analysis import analyze_file
 
 """
 Health Checker for Codomyrmex System Discovery

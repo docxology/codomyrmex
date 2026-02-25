@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import functools
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 from codomyrmex.validation.schemas import Result, ResultStatus, ToolDefinition
 
-from .validation import ValidationResult, validate_input, validate_output
+from .validation import validate_input, validate_output
 
 
 @dataclass

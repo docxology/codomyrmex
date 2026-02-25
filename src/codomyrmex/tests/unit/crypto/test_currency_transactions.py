@@ -6,15 +6,13 @@ import pytest
 from cryptography.hazmat.primitives.asymmetric import ec
 
 from codomyrmex.crypto.currency.transactions import (
-    Transaction,
     create_transaction,
+    deserialize_transaction,
+    serialize_transaction,
     sign_transaction,
     verify_transaction,
-    serialize_transaction,
-    deserialize_transaction,
 )
 from codomyrmex.crypto.exceptions import WalletError
-
 
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 

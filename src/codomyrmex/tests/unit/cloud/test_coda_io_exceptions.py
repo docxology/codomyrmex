@@ -365,7 +365,7 @@ class TestExceptionHierarchy:
         # Can catch specific
         try:
             raise CodaNotFoundError("Not found")
-        except CodaNotFoundError as e:
+        except CodaNotFoundError:
             caught_specific = True
 
         assert caught_specific
@@ -373,7 +373,7 @@ class TestExceptionHierarchy:
         # Can catch via base
         try:
             raise CodaNotFoundError("Not found")
-        except CodaAPIError as e:
+        except CodaAPIError:
             caught_base = True
 
         assert caught_base

@@ -19,7 +19,7 @@ class Column:
     key: str
     width: int | None = None
     align: str = "left"  # left, right, center
-    formatter: Optional[callable] = None
+    formatter: callable | None = None
 
     def format_value(self, value: Any) -> str:
         """Format a value for this column."""

@@ -6,8 +6,8 @@ message handling, and error recovery.
 
 import asyncio
 import json
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 try:
     import websockets

@@ -3,11 +3,9 @@ PAI validation utilities.
 """
 
 from pathlib import Path
-import sys
-from typing import List
 
-errors: List[str] = []
-warnings: List[str] = []
+errors: list[str] = []
+warnings: list[str] = []
 
 
 def check(condition: bool, msg: str, *, warn: bool = False) -> None:
@@ -27,7 +25,7 @@ def validate_pai_integration(src_dir: Path) -> int:
     global errors, warnings
     errors = []
     warnings = []
-    
+
     print("=" * 60)
     print("PAI ↔ Codomyrmex Integration Validation")
     print("=" * 60)
@@ -109,7 +107,7 @@ def validate_pai_integration(src_dir: Path) -> int:
     # Original script used: SRC / "tests" / "unit" where SRC was root/src/codomyrmex
     # So it was looking in src/codomyrmex/tests/unit
     test_base = src_dir / "tests" / "unit"
-    
+
     for mod in critical_modules:
         test_dir = test_base / mod
         has_tests = test_dir.exists() and any(test_dir.rglob("test_*.py"))

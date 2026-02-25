@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Dict
-
 from codomyrmex.meme.neurolinguistic.models import LinguisticPattern, PatternType
 
 
-def milton_model_patterns() -> List[LinguisticPattern]:
+def milton_model_patterns() -> list[LinguisticPattern]:
     """Return a library of Milton Model (hypnotic) patterns."""
     return [
         LinguisticPattern(
@@ -31,7 +29,7 @@ def milton_model_patterns() -> List[LinguisticPattern]:
     ]
 
 
-def meta_model_patterns() -> List[LinguisticPattern]:
+def meta_model_patterns() -> list[LinguisticPattern]:
     """Return a library of Meta Model (clarifying) patterns."""
     return [
         LinguisticPattern(
@@ -49,7 +47,7 @@ def meta_model_patterns() -> List[LinguisticPattern]:
     ]
 
 
-def detect_patterns(text: str) -> List[LinguisticPattern]:
+def detect_patterns(text: str) -> list[LinguisticPattern]:
     """Detect linguistic patterns in text.
 
     (Placeholder for regex/LLM based detection).

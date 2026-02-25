@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 """
 WRAPPER_TEMPLATE =
 """

@@ -66,7 +66,7 @@ from .pipeline import (
     create_pipeline,
     run_pipeline,
 )
-from .pipeline_monitor import (
+from .pipeline.pipeline_monitor import (
     PipelineMonitor,
     PipelineReport,
     generate_pipeline_reports,
@@ -77,6 +77,7 @@ from .rollback_manager import (
     RollbackStrategy,
     handle_rollback,
 )
+
 
 def cli_commands():
     """Return CLI commands for the ci_cd_automation module."""
@@ -103,8 +104,7 @@ def cli_commands():
     }
 
 
-from . import build
-from . import pipeline
+from . import build, pipeline
 
 __all__ = [
     # CLI integration

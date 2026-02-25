@@ -4,12 +4,12 @@ This module provides the core simulation capabilities, allowing for
 agent-based modeling and system dynamics simulations.
 """
 
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-from codomyrmex.simulation.agent import Agent, Action
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+from codomyrmex.simulation.agent import Action, Agent
 
 logger = get_logger(__name__)
 
@@ -30,13 +30,13 @@ class SimulationResult:
     config_name: str
     status: str
     agent_count: int
-    history: List[Dict[str, Any]] = field(default_factory=list)
+    history: list[dict[str, Any]] = field(default_factory=list)
 
 
 class Simulator:
     """Core simulator engine."""
 
-    def __init__(self, config: SimulationConfig | None = None, agents: List[Agent] | None = None):
+    def __init__(self, config: SimulationConfig | None = None, agents: list[Agent] | None = None):
         """Initialize the simulator.
 
         Args:
@@ -44,10 +44,10 @@ class Simulator:
             agents: Initial list of agents.
         """
         self.config = config or SimulationConfig()
-        self.agents: Dict[str, Agent] = {a.id: a for a in agents or []}
+        self.agents: dict[str, Agent] = {a.id: a for a in agents or []}
         self.step_count = 0
         self._running = False
-        self._environment_state: Dict[str, Any] = {}
+        self._environment_state: dict[str, Any] = {}
         logger.info(f"Simulator initialized: {self.config.name} with {len(self.agents)} agents")
 
     def add_agent(self, agent: Agent) -> None:
@@ -108,11 +108,11 @@ class Simulator:
             except Exception as e:
                 logger.error(f"Agent {agent.id} failed to learn: {e}")
 
-    def _get_observation(self, agent: Agent) -> Dict[str, Any]:
+    def _get_observation(self, agent: Agent) -> dict[str, Any]:
         """Get observation for a specific agent."""
         return self._environment_state.copy()
 
-    def _update_environment(self, actions: List[tuple[str, Action]]) -> None:
+    def _update_environment(self, actions: list[tuple[str, Action]]) -> None:
         """Update environment state based on agent actions."""
         for agent_id, action in actions:
             # Simple default logic: record action in environment state

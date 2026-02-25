@@ -7,14 +7,14 @@ management.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
+from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.prompt_engineering.templates import (
     PromptTemplate,
     TemplateRegistry,
 )
-from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

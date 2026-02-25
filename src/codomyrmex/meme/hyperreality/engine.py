@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import List, Dict, Optional
-
 from codomyrmex.meme.hyperreality.models import (
-    Simulacrum,
     RealityTunnel,
+    Simulacrum,
     SimulationLevel,
 )
-from codomyrmex.meme.hyperreality.simulation import assess_reality_level, generate_simulacrum
+from codomyrmex.meme.hyperreality.simulation import (
+    generate_simulacrum,
+)
 
 
 class HyperrealityEngine:
@@ -17,15 +17,15 @@ class HyperrealityEngine:
 
     def __init__(self) -> None:
         """Execute   Init   operations natively."""
-        self.tunnels: Dict[str, RealityTunnel] = {}
+        self.tunnels: dict[str, RealityTunnel] = {}
 
-    def create_tunnel(self, name: str, filters: List[str]) -> RealityTunnel:
+    def create_tunnel(self, name: str, filters: list[str]) -> RealityTunnel:
         """Construct a new reality tunnel."""
         tunnel = RealityTunnel(name=name, filters=filters)
         self.tunnels[name] = tunnel
         return tunnel
 
-    def get_tunnel(self, name: str) -> Optional[RealityTunnel]:
+    def get_tunnel(self, name: str) -> RealityTunnel | None:
         """Retrieve a reality tunnel by name."""
         return self.tunnels.get(name)
 
@@ -36,12 +36,12 @@ class HyperrealityEngine:
         if tunnel_name not in self.tunnels:
             # Auto-create if not exists for convenience
             self.create_tunnel(tunnel_name, filters=["default"])
-            
+
         sim = generate_simulacrum(referent, level)
         tunnel = self.tunnels[tunnel_name]
         tunnel.active_simulacra.append(sim)
-        
+
         # Increase distortion of the tunnel
         tunnel.distortion = min(1.0, tunnel.distortion + (0.1 * level))
-        
+
         return sim

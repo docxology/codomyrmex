@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from ..strategies.strategies import DeploymentStrategy, DeploymentState
+from ..strategies.strategies import DeploymentState, DeploymentStrategy
 
 logger = logging.getLogger(__name__)
 

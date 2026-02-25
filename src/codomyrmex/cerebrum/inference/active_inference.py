@@ -241,7 +241,7 @@ class ActiveInferenceAgent:
 
         # Initialize uniform beliefs
         uniform_prob = 1.0 / len(states) if states else 1.0
-        self.beliefs.states = {state: uniform_prob for state in states}
+        self.beliefs.states = dict.fromkeys(states, uniform_prob)
 
     def set_transition_model(
         self, model: dict[str, dict[str, float]]
@@ -399,7 +399,7 @@ class ActiveInferenceAgent:
         """Reset agent to initial state."""
         uniform_prob = 1.0 / len(self.states) if self.states else 1.0
         self.beliefs = BeliefState()
-        self.beliefs.states = {state: uniform_prob for state in self.states}
+        self.beliefs.states = dict.fromkeys(self.states, uniform_prob)
         self.beliefs.observations = {}
         self.logger.debug("Reset agent")
 

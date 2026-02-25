@@ -5,12 +5,12 @@ Persistent scheduling and job dependencies.
 """
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from . import JobStatus, Scheduler
 

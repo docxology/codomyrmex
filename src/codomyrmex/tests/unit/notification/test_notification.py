@@ -277,7 +277,10 @@ class TestNotificationTemplate:
 
     def test_template_creation(self):
         """Verify template creation."""
-        from codomyrmex.events.notification import NotificationPriority, NotificationTemplate
+        from codomyrmex.events.notification import (
+            NotificationPriority,
+            NotificationTemplate,
+        )
 
         template = NotificationTemplate(
             name="test_template",
@@ -438,7 +441,10 @@ class TestNotificationService:
 
     def test_service_send_from_missing_template(self):
         """Verify failure when template not found."""
-        from codomyrmex.events.notification import NotificationService, NotificationStatus
+        from codomyrmex.events.notification import (
+            NotificationService,
+            NotificationStatus,
+        )
 
         service = NotificationService()
         result = service.send_from_template("nonexistent", id="test")

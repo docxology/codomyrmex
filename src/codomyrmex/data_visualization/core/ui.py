@@ -1,10 +1,10 @@
 """UI components for data visualization."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from .theme import Theme, DEFAULT_THEME
 from .layout import Grid
+from .theme import DEFAULT_THEME, Theme
 
 
 @dataclass

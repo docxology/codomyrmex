@@ -105,7 +105,7 @@ class ReasoningEngine:
             case_base, weighting_strategy=self.config.case_weighting_strategy
         )
 
-        self.inference_engine: "InferenceEngine" | None = None
+        self.inference_engine: InferenceEngine | None = None
         if bayesian_network:
             from codomyrmex.cerebrum.inference.bayesian import InferenceEngine
             self.inference_engine = InferenceEngine(
@@ -222,8 +222,8 @@ class CerebrumEngine:
         )
 
         # Optional components
-        self.bayesian_network: "BayesianNetwork" | None = None
-        self.active_inference_agent: "ActiveInferenceAgent" | None = None
+        self.bayesian_network: BayesianNetwork | None = None
+        self.active_inference_agent: ActiveInferenceAgent | None = None
         self.reasoning_engine: ReasoningEngine | None = None
 
         self.logger.info("Initialized CEREBRUM engine")

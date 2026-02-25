@@ -1,6 +1,6 @@
 """Code Editor Agent Implementation."""
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from codomyrmex.agents.ai_code_editing import ai_code_helpers
 from codomyrmex.agents.core import (

@@ -10,11 +10,10 @@ Provides:
 from __future__ import annotations
 
 import abc
-import math
 import random
 from collections import defaultdict
-from datetime import datetime
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any
 
 
@@ -177,7 +176,7 @@ class QLearningAgent(Agent):
         self.epsilon_min = epsilon_min
 
         self._q_table: dict[str, dict[str, float]] = defaultdict(
-            lambda: {a: 0.0 for a in self.action_types}
+            lambda: dict.fromkeys(self.action_types, 0.0)
         )
         self._last_state: str | None = None
         self._last_action_type: str | None = None

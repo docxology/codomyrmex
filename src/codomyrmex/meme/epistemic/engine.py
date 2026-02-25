@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List
-
-from codomyrmex.meme.epistemic.models import Fact, Belief, Evidence, EpistemicState
+from codomyrmex.meme.epistemic.models import EpistemicState, Evidence, Fact
 from codomyrmex.meme.epistemic.truth import verify_claim
 
 
@@ -19,15 +17,15 @@ class EpistemicEngine:
         """Register a new fact."""
         self.state.facts.append(fact)
 
-    def assess_claim(self, statement: str, evidence: List[Evidence]) -> Fact:
+    def assess_claim(self, statement: str, evidence: list[Evidence]) -> Fact:
         """Verify a statement against provided evidence and update state."""
         fact = verify_claim(statement, evidence)
         # If high confidence, accept as fact
         if fact.confidence > 0.8:
             self.add_fact(fact)
         return fact
-        
-    def detect_contradictions(self) -> List[str]:
+
+    def detect_contradictions(self) -> list[str]:
         """Identify contradictions between facts and beliefs."""
         conflicts = []
         # Simple string-negation heuristic — upgrade to semantic analysis when NLP backend available

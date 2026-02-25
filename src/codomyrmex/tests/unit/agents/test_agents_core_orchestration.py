@@ -1,8 +1,10 @@
 
 import pytest
+
 from codomyrmex.agents.core import AgentCapabilities, AgentError
 from codomyrmex.agents.generic.agent_orchestrator import AgentOrchestrator
 from codomyrmex.tests.unit.agents.conftest import ConcreteAgent, FailingAgent
+
 
 class TestAgentOrchestrator:
     """Test multi-agent orchestration."""

@@ -1,14 +1,15 @@
-from codomyrmex.bio_simulation.colony import Colony, AntState
+from codomyrmex.bio_simulation.colony import AntState, Colony
+
 
 def test_colony_simulation():
     """Test functionality: colony simulation."""
     colony = Colony(population_size=10)
     assert len(colony.ants) == 10
     assert colony.tick == 0
-    
+
     colony.step()
     assert colony.tick == 1
-    
+
     # Check energy drain
     assert colony.ants[0].energy < 100.0
 

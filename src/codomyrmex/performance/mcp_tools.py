@@ -43,8 +43,10 @@ def performance_check_regression(
         higher_is_better: If True, decrease = regression.
     """
     try:
-        from codomyrmex.performance.regression_detector import (
-            Baseline, BenchmarkResult, RegressionDetector,
+        from codomyrmex.performance.analysis.regression_detector import (
+            Baseline,
+            BenchmarkResult,
+            RegressionDetector,
         )
         detector = RegressionDetector()
         detector.set_baseline(Baseline(
@@ -84,7 +86,9 @@ def performance_compare_benchmarks(
         higher_is_better: If True, increase = improvement.
     """
     try:
-        from codomyrmex.performance.benchmark_comparison import compute_delta
+        from codomyrmex.performance.benchmarking.benchmark_comparison import (
+            compute_delta,
+        )
         delta = compute_delta(name, before, after, higher_is_better)
         return {
             "status": "ok",

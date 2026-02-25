@@ -7,7 +7,6 @@ Uses the smallest available Ollama model to keep tests fast.
 """
 
 import subprocess
-import json
 
 import pytest
 

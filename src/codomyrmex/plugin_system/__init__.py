@@ -5,6 +5,15 @@ This module provides a plugin architecture that allows
 extending Codomyrmex functionality through third-party plugins.
 """
 
+from .core.plugin_loader import PluginLoader
+from .core.plugin_manager import PluginManager
+from .core.plugin_registry import (
+    Plugin,
+    PluginInfo,
+    PluginRegistry,
+    PluginState,
+    PluginType,
+)
 from .exceptions import (
     DependencyError,
     HookError,
@@ -14,9 +23,6 @@ from .exceptions import (
     PluginStateError,
     PluginValidationError,
 )
-from .core.plugin_loader import PluginLoader
-from .core.plugin_manager import PluginManager
-from .core.plugin_registry import Plugin, PluginInfo, PluginRegistry, PluginState, PluginType
 from .validation.plugin_validator import PluginValidator
 
 # Shared schemas for cross-module interop

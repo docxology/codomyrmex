@@ -18,15 +18,13 @@ import hashlib
 import json
 import os
 import time
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, TypeVar, Union
-from collections.abc import Callable
-
-from .refined import RefinedUtilities
 
 # Import subprocess utilities
-from .subprocess import (
+from .process.subprocess import (
     CommandError,
     CommandErrorType,
     SubprocessResult,
@@ -39,6 +37,7 @@ from .subprocess import (
     split_command,
     stream_command,
 )
+from .refined import RefinedUtilities
 
 T = TypeVar("T")
 
@@ -121,7 +120,7 @@ def hash_file(path: str | Path, algorithm: str = "sha256") -> str | None:
     try:
         with open(path, "rb") as f:
             return hash_content(f.read(), algorithm)
-    except (OSError, IOError):
+    except OSError:
         return None
 
 
@@ -291,15 +290,17 @@ except ImportError:
     pass
 
 # Script base utilities
-from .script_base import (
+from . import (
+    i18n,
+    process,  # noqa: F401
+)
+from .process.script_base import (
     ConfigurableScript,
     ScriptBase,
     ScriptConfig,
     ScriptResult,
     run_script,
 )
-
-from . import i18n
 
 __all__ = [
     "i18n",

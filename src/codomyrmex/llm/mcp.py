@@ -7,10 +7,10 @@ Provides a bridge between the LLM tool calling framework and the Model Context P
 import asyncio
 import json
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 
 class MCPCapability(Enum):

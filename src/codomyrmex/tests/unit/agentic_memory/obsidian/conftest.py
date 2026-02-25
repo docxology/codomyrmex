@@ -7,8 +7,6 @@ Provides temporary vault directories with sample notes for testing.
 import json
 
 import pytest
-from pathlib import Path
-
 
 SAMPLE_NOTE_WITH_FRONTMATTER = """---
 title: My Test Note

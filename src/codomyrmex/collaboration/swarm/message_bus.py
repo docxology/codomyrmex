@@ -6,11 +6,8 @@ communication within a swarm.
 
 from __future__ import annotations
 
-import time
-from collections import defaultdict
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 from codomyrmex.collaboration.swarm.protocol import SwarmMessage
 from codomyrmex.logging_monitoring import get_logger

@@ -11,7 +11,6 @@ from typing import Any
 
 from codomyrmex.agentic_memory.obsidian.models import Note
 from codomyrmex.agentic_memory.obsidian.parser import (
-    parse_frontmatter,
     parse_note,
     serialize_note,
 )

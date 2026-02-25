@@ -1,7 +1,6 @@
 import subprocess
 import sys
 
-import pytest
 
 def test_check_command():
     """Tests that the check command runs successfully."""

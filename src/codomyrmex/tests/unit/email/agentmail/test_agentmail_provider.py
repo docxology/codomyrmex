@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import os
 import time
-from typing import Optional
 
 import pytest
 
@@ -31,7 +30,7 @@ DEFAULT_INBOX = os.getenv("AGENTMAIL_DEFAULT_INBOX", "fristonblanket@agentmail.t
 @pytest.mark.unit
 def test_provider_init_from_env() -> None:
     """Provider initialises successfully using the AGENTMAIL_API_KEY env var."""
-    from codomyrmex.email.agentmail import AgentMailProvider, AGENTMAIL_AVAILABLE
+    from codomyrmex.email.agentmail import AGENTMAIL_AVAILABLE, AgentMailProvider
 
     assert AGENTMAIL_AVAILABLE, "AgentMail SDK not installed"
     provider = AgentMailProvider(default_inbox_id=DEFAULT_INBOX)
@@ -237,7 +236,6 @@ def test_create_and_delete_webhook() -> None:
 def test_modify_labels() -> None:
     """modify_labels adds and removes labels from a message without error."""
     from codomyrmex.email.agentmail import AgentMailProvider
-    from codomyrmex.email.generics import EmailDraft
 
     provider = AgentMailProvider(default_inbox_id=DEFAULT_INBOX)
     messages = provider.list_messages(max_results=1)
@@ -267,14 +265,14 @@ def test_modify_labels() -> None:
 def test_mcp_tools_load() -> None:
     """MCP tools are importable and have correct metadata."""
     from codomyrmex.email.mcp_tools import (
-        agentmail_send_message,
-        agentmail_list_messages,
-        agentmail_get_message,
-        agentmail_reply_to_message,
-        agentmail_list_inboxes,
         agentmail_create_inbox,
-        agentmail_list_threads,
         agentmail_create_webhook,
+        agentmail_get_message,
+        agentmail_list_inboxes,
+        agentmail_list_messages,
+        agentmail_list_threads,
+        agentmail_reply_to_message,
+        agentmail_send_message,
     )
 
     tools = [

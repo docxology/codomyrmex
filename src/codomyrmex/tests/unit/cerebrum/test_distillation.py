@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from codomyrmex.cerebrum.distillation import (
     DistillationConfig,
     DistillationPipeline,
@@ -142,7 +140,10 @@ class TestBayesianInference:
         assert bn is not None
 
     def test_inference_engine(self):
-        from codomyrmex.cerebrum.inference.bayesian import BayesianNetwork, InferenceEngine
+        from codomyrmex.cerebrum.inference.bayesian import (
+            BayesianNetwork,
+            InferenceEngine,
+        )
         bn = BayesianNetwork()
         engine = InferenceEngine(network=bn)
         assert engine is not None

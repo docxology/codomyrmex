@@ -4,16 +4,14 @@ Graph RAG
 Knowledge graph-enhanced retrieval-augmented generation.
 """
 
-from .models import (
-    EntityType,
-    RelationType,
-    Entity,
-    Relationship,
-    GraphContext,
-)
-
 from .graph import KnowledgeGraph
-
+from .models import (
+    Entity,
+    EntityType,
+    GraphContext,
+    Relationship,
+    RelationType,
+)
 from .pipeline import GraphRAGPipeline
 
 # Shared schemas for cross-module interop

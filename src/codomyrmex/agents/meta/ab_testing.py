@@ -5,10 +5,9 @@ Compares two strategies over n trials and determines a winner.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.agents.meta.strategies import Strategy
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)

@@ -7,7 +7,6 @@ trails, and returns food to the colony nest.
 from __future__ import annotations
 
 import math
-import random
 from dataclasses import dataclass, field
 from enum import Enum, auto
 

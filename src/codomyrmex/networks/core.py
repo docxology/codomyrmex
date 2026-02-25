@@ -226,7 +226,7 @@ class Network:
         """
         n = len(self.nodes)
         if n <= 1:
-            return {nid: 0.0 for nid in self.nodes}
+            return dict.fromkeys(self.nodes, 0.0)
         return {nid: self.degree(nid) / (n - 1) for nid in self.nodes}
 
     # ── Properties ──────────────────────────────────────────────────

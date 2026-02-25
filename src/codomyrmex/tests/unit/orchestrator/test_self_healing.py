@@ -6,33 +6,26 @@ agent_circuit_breaker, healing_log.
 
 from __future__ import annotations
 
-import pytest
-
-from codomyrmex.orchestrator.resilience.failure_taxonomy import (
-    ClassifiedError,
-    FailureCategory,
-    RecoveryStrategy,
-    classify_error,
-)
-from codomyrmex.orchestrator.resilience.self_healing import (
-    Diagnoser,
-    Diagnosis,
-    RecoveryStep,
-)
-from codomyrmex.orchestrator.resilience.retry_engine import (
-    RetryEngine,
-    RetryResult,
-)
 from codomyrmex.orchestrator.resilience.agent_circuit_breaker import (
     AgentHealth,
     CircuitBreaker,
     CircuitState,
 )
+from codomyrmex.orchestrator.resilience.failure_taxonomy import (
+    FailureCategory,
+    classify_error,
+)
 from codomyrmex.orchestrator.resilience.healing_log import (
     HealingEvent,
     HealingLog,
 )
-
+from codomyrmex.orchestrator.resilience.retry_engine import (
+    RetryEngine,
+    RetryResult,
+)
+from codomyrmex.orchestrator.resilience.self_healing import (
+    Diagnoser,
+)
 
 # ── FailureTaxonomy ──────────────────────────────────────────────
 
@@ -144,7 +137,7 @@ class TestRetryEngine:
             if call_count["n"] < 3:
                 raise RuntimeError("Temporary failure")
             return "ok"
-        
+
         engine = RetryEngine(max_retries=5, base_delay=0.001)
         result = engine.execute(flaky)
         assert result.success

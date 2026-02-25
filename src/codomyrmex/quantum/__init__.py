@@ -6,11 +6,11 @@ Quantum algorithm primitives, simulation, and circuit patterns.
 
 __version__ = "0.1.0"
 
-from .models import Gate, GateType, Qubit
-from .circuit import QuantumCircuit
-from .simulator import QuantumSimulator
 from .algorithms import bell_state, ghz_state, qft
-from .visualization import circuit_to_ascii, circuit_stats
+from .circuit import QuantumCircuit
+from .models import Gate, GateType, Qubit
+from .simulator import QuantumSimulator
+from .visualization import circuit_stats, circuit_to_ascii
 
 # Shared schemas for cross-module interop
 try:
@@ -27,7 +27,7 @@ def cli_commands():
         """List available simulator backends."""
         print("Quantum Simulator Backends")
         print(f"  Gate Types: {[gt.value for gt in GateType]}")
-        print(f"  Available Algorithms: bell_state, ghz_state, qft")
+        print("  Available Algorithms: bell_state, ghz_state, qft")
         sim = QuantumSimulator()
         print(f"  Simulator: {sim.__class__.__name__}")
 

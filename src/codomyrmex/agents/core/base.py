@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Protocol, runtime_checkable
-from collections.abc import Iterator
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -256,7 +256,7 @@ class BaseAgent(AgentInterface):
         try:
             self._validate_request(request)
             return self._execute_impl(request)
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             self.logger.exception(f"Error executing {self.name} request")
             return AgentResponse(
                 content="",
@@ -278,7 +278,7 @@ class BaseAgent(AgentInterface):
         try:
             self._validate_request(request)
             yield from self._stream_impl(request)
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             self.logger.exception(f"Error streaming {self.name} response")
             yield f"Error: {str(e)}"
 

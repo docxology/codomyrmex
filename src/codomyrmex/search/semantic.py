@@ -5,9 +5,9 @@ Vector-based semantic search and hybrid retrieval.
 """
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 from . import Document, InMemoryIndex, SearchResult
 

@@ -6,7 +6,6 @@ based on LOC, test coverage, and activity signals.
 
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path

@@ -40,7 +40,7 @@ class Grid:
         description = kwargs.get("description", "")
         full_width = kwargs.get("full_width", False)
         width = "100%" if full_width else f"{100/self.columns}%" # Simplistic width
-        
+
         section = Section(title=title, description=description, width=width)
         if content:
             section.add(content)

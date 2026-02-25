@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import random
-from typing import List, Optional
 
-from codomyrmex.meme.memetics.models import Meme, Memeplex
+from codomyrmex.meme.memetics.models import Meme
 
 
 def semantic_drift(meme: Meme, intensity: float = 0.1) -> Meme:
@@ -38,7 +37,7 @@ def semantic_drift(meme: Meme, intensity: float = 0.1) -> Meme:
     )
 
 
-def recombine(meme_a: Meme, meme_b: Meme, crossover_point: Optional[float] = None) -> Meme:
+def recombine(meme_a: Meme, meme_b: Meme, crossover_point: float | None = None) -> Meme:
     """Recombine two memes via content crossover.
 
     Splits each meme's content and joins halves to produce
@@ -74,7 +73,7 @@ def recombine(meme_a: Meme, meme_b: Meme, crossover_point: Optional[float] = Non
     )
 
 
-def splice(host: Meme, insert: Meme, position: Optional[float] = None) -> Meme:
+def splice(host: Meme, insert: Meme, position: float | None = None) -> Meme:
     """Splice one meme's content into another at a given position.
 
     Analogous to horizontal gene transfer — inject foreign memetic
@@ -103,8 +102,8 @@ def splice(host: Meme, insert: Meme, position: Optional[float] = None) -> Meme:
 
 
 def batch_mutate(
-    population: List[Meme], mutation_rate: float = 0.1, intensity: float = 0.1
-) -> List[Meme]:
+    population: list[Meme], mutation_rate: float = 0.1, intensity: float = 0.1
+) -> list[Meme]:
     """Apply mutations to a population of memes.
 
     Each meme has a `mutation_rate` probability of being drifted

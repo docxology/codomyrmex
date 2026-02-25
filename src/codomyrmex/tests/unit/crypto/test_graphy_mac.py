@@ -14,7 +14,6 @@ from codomyrmex.crypto.graphy.mac import (
     verify_hmac_sha256,
 )
 
-
 DATA = b"The quick brown fox jumps over the lazy dog"
 
 

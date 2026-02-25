@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-
 import pytest
 
 from codomyrmex.fpf import FPFClient

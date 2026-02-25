@@ -7,8 +7,6 @@ portions of income are taxed at increasing rates.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
-
 
 # Default US-style federal brackets (simplified, 2024-era rates)
 DEFAULT_BRACKETS: list[dict] = [
@@ -57,7 +55,7 @@ class TaxCalculator:
         print(result.total_tax, result.effective_rate)
     """
 
-    def __init__(self, brackets: Optional[list[dict]] = None) -> None:
+    def __init__(self, brackets: list[dict] | None = None) -> None:
         """Initialise with optional custom tax brackets.
 
         Each bracket dict must have ``min`` (float), ``max`` (float), and

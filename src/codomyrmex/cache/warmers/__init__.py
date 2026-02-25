@@ -10,11 +10,11 @@ import concurrent.futures
 import threading
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Set, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 K = TypeVar('K')

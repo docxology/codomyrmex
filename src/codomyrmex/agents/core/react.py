@@ -8,9 +8,8 @@ lifecycle.
 from __future__ import annotations
 
 import json
-
-from typing import Any, TYPE_CHECKING
 from collections.abc import Iterator
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from codomyrmex.llm import BaseLLMClient
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
 from codomyrmex.logging_monitoring import get_logger
 
 from .base import AgentCapabilities, AgentRequest, AgentResponse, BaseAgent
-from .messages import AgentMessage, MessageRole, ToolCall, ToolResult
+from .messages import AgentMessage
 from .registry import ToolRegistry
 
 logger = get_logger(__name__)

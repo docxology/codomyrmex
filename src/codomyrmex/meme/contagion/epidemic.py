@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import random
-from typing import List
-
 from codomyrmex.meme.contagion.models import PropagationTrace
 
 

@@ -7,19 +7,19 @@ Zero-mock policy: no MagicMock or monkeypatch.
 Live Google Calendar API tests are guarded by pytest.mark.skipif.
 """
 
+from datetime import datetime, timedelta, timezone
+
 import pytest
-from datetime import datetime, timezone, timedelta
 
 import codomyrmex.calendar_integration as cal_module
-from codomyrmex.calendar_integration.generics import CalendarEvent, CalendarProvider
 from codomyrmex.calendar_integration.exceptions import (
-    CalendarError,
-    CalendarAuthError,
     CalendarAPIError,
+    CalendarAuthError,
+    CalendarError,
     EventNotFoundError,
     InvalidEventError,
 )
-
+from codomyrmex.calendar_integration.generics import CalendarEvent, CalendarProvider
 
 # ── CalendarEvent ─────────────────────────────────────────────────────
 

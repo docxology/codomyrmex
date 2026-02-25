@@ -2,30 +2,28 @@
 
 from __future__ import annotations
 
-import pytest
 import textwrap
 
-from codomyrmex.cerebrum.anti_patterns import (
-    AntiPattern,
-    AntiPatternDetector,
-    AnalysisReport,
-    Severity,
-)
-from codomyrmex.cerebrum.drift_tracker import (
-    ConceptDriftTracker,
-    DriftEvent,
-    DriftSnapshot,
-)
 from codomyrmex.cerebrum.agent_prompts import (
     AgentPromptSelector,
     PromptSelection,
+)
+from codomyrmex.cerebrum.anti_patterns import (
+    AnalysisReport,
+    AntiPattern,
+    AntiPatternDetector,
+    Severity,
 )
 from codomyrmex.cerebrum.code_reviewer import (
     CodeReviewer,
     CodeReviewReport,
     ReviewFinding,
 )
-
+from codomyrmex.cerebrum.drift_tracker import (
+    ConceptDriftTracker,
+    DriftEvent,
+    DriftSnapshot,
+)
 
 # ── AntiPatternDetector ──────────────────────────────────────────
 

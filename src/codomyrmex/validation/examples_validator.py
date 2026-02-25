@@ -257,18 +257,18 @@ class ExamplesValidator:
     def _validate_test_references(self, module: str, path: Path) -> list[ValidationIssue]:
         """Validate references to tests."""
         issues = []
-        
+
         # Rigorously scan python files for 'test_' implementations or test directory structure
         has_tests = False
-        
-        # Check standard Pytest locations 
+
+        # Check standard Pytest locations
         if (path.parent.parent / "tests").exists() or (path / "tests").exists():
             has_tests = True
-        
+
         # Check inline test imports
         for py_file in path.glob("**/*.py"):
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
+                with open(py_file, encoding='utf-8') as f:
                     content = f.read()
                     if 'import pytest' in content or 'from pytest ' in content:
                         has_tests = True
@@ -282,7 +282,7 @@ class ExamplesValidator:
                 continue
             if has_tests:
                 break
-                
+
         if not has_tests:
             issues.append(ValidationIssue(
                 module=module,
@@ -290,7 +290,7 @@ class ExamplesValidator:
                 severity=ValidationSeverity.WARNING,
                 message="No test references or Pytest signatures found for module."
             ))
-            
+
         return issues
 
     def _validate_execution(self, module: str, path: Path) -> list[ValidationIssue]:

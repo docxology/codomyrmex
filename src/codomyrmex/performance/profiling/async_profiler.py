@@ -9,14 +9,13 @@ Provides:
 
 from __future__ import annotations
 
-import asyncio
 import functools
 import logging
 import time
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 

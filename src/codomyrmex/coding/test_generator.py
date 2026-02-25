@@ -6,9 +6,7 @@ Produces test suites from function signatures and class structures.
 from __future__ import annotations
 
 import ast
-import re
 from dataclasses import dataclass, field
-from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger
 

@@ -11,8 +11,8 @@ using CTranslate2 for efficient inference. It provides:
 
 import asyncio
 import time
-from pathlib import Path
 from collections.abc import AsyncIterator
+from pathlib import Path
 
 from codomyrmex.audio.exceptions import (
     AudioFormatError,

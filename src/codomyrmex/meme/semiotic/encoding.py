@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
-
 
 class SemioticEncoder:
     """Encode and decode meaning within meaning.
@@ -13,7 +11,7 @@ class SemioticEncoder:
     a form of linguistic steganography.
     """
 
-    _SYNONYM_MAP: Dict[str, List[str]] = {
+    _SYNONYM_MAP: dict[str, list[str]] = {
         "good": ["fine", "great", "excellent", "superb"],
         "bad": ["poor", "terrible", "awful", "dreadful"],
         "big": ["large", "huge", "enormous", "vast"],
@@ -40,7 +38,7 @@ class SemioticEncoder:
         payload_bits = self._to_bits(payload)
         words = carrier.split()
         bit_idx = 0
-        result: List[str] = []
+        result: list[str] = []
 
         for word in words:
             clean = word.lower().strip(".,!?")
@@ -58,7 +56,7 @@ class SemioticEncoder:
 
         return " ".join(result)
 
-    def decode(self, encoded: str) -> List[int]:
+    def decode(self, encoded: str) -> list[int]:
         """Extract embedded bit pattern from encoded text.
 
         Args:
@@ -68,7 +66,7 @@ class SemioticEncoder:
             List of integers representing payload bits.
         """
         words = encoded.split()
-        bits: List[int] = []
+        bits: list[int] = []
 
         for word in words:
             clean = word.lower().strip(".,!?")
@@ -78,7 +76,7 @@ class SemioticEncoder:
                     break
         return bits
 
-    def _to_bits(self, text: str) -> List[int]:
+    def _to_bits(self, text: str) -> list[int]:
         """Convert text to a list of small integers for encoding."""
         # Simple transform for demo purposes
         return [b % 4 for b in text.encode("utf-8")]

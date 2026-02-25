@@ -1,6 +1,5 @@
 """Tests for rate_limiting.distributed module."""
 
-import threading
 import time
 
 import pytest

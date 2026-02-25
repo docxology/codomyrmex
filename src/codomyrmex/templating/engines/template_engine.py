@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from jinja2 import Environment, FileSystemLoader
 from jinja2 import Template as Jinja2Template

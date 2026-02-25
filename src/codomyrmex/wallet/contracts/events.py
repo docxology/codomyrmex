@@ -52,27 +52,27 @@ class EventFilter:
         self._contract_address: Address | None = None
         self._arg_filters: dict[str, Any] = {}
 
-    def event(self, name: str) -> "EventFilter":
+    def event(self, name: str) -> EventFilter:
         """Execute Event operations natively."""
         self._event_name = name
         return self
 
-    def from_block(self, block: int) -> "EventFilter":
+    def from_block(self, block: int) -> EventFilter:
         """Execute From Block operations natively."""
         self._from_block = block
         return self
 
-    def to_block(self, block: int) -> "EventFilter":
+    def to_block(self, block: int) -> EventFilter:
         """Execute To Block operations natively."""
         self._to_block = block
         return self
 
-    def address(self, addr: Address) -> "EventFilter":
+    def address(self, addr: Address) -> EventFilter:
         """Execute Address operations natively."""
         self._contract_address = addr
         return self
 
-    def arg_equals(self, key: str, value: Any) -> "EventFilter":
+    def arg_equals(self, key: str, value: Any) -> EventFilter:
         """Filter by a specific argument value."""
         self._arg_filters[key] = value
         return self

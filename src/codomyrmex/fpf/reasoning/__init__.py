@@ -6,10 +6,10 @@ Provides tools for first principles reasoning and problem decomposition.
 
 import json
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 class ReasoningStep(Enum):
@@ -306,10 +306,10 @@ class FirstPrinciplesReasoner:
         """Decompose a problem into sub-problems."""
         # Perform rigorous sentence-level tokenization or structural splitting
         parts = [p.strip() for p in problem.replace(';', '.').replace('\n', '.').split('.') if p.strip()]
-        
+
         if not parts:
             return [problem]
-            
+
         components = []
         for part in parts:
             if len(part.split()) > 10:
@@ -318,7 +318,7 @@ class FirstPrinciplesReasoner:
                 components.extend(sub_parts)
             else:
                 components.append(part)
-                
+
         return components if components else [problem]
 
     def identify_assumptions(self, statement: str) -> list[str]:

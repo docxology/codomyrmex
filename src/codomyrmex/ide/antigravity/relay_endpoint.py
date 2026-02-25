@@ -29,14 +29,12 @@ except ImportError:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+from codomyrmex.agents.llm_client import AgentRequest, get_llm_client
 from codomyrmex.ide.antigravity.agent_relay import (
+    MSG_SYSTEM,
     AgentRelay,
     RelayMessage,
-    MSG_CHAT,
-    MSG_TOOL_REQUEST,
-    MSG_SYSTEM,
 )
-from codomyrmex.agents.llm_client import get_llm_client, AgentRequest
 
 # Optional scheduler support -- not yet available in all installations.
 try:

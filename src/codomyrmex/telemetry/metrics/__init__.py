@@ -10,11 +10,11 @@ import statistics
 import threading
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 class MetricType(Enum):
@@ -190,7 +190,7 @@ class Histogram(Metric):
         self.buckets = sorted(buckets or self.DEFAULT_BUCKETS)
         self.labels = labels if isinstance(labels, dict) else {}
         self.values: list[float] = []
-        self._bucket_counts: dict[float, int] = {b: 0 for b in self.buckets}
+        self._bucket_counts: dict[float, int] = dict.fromkeys(self.buckets, 0)
 
     @property
     def metric_type(self) -> MetricType:
@@ -500,7 +500,6 @@ def get_metrics(backend="in_memory") -> Metrics:
     """Helper to get a metrics instance."""
     return Metrics(backend=backend)
 
-from .aggregator import MetricAggregator
 
 __all__ = [
     # Enums

@@ -11,9 +11,9 @@ Exposes a ``codomyrmex://mcp/metrics`` resource with current counters.
 from __future__ import annotations
 
 import json
-import time
 import threading
-from dataclasses import dataclass, field
+import time
+from dataclasses import dataclass
 from typing import Any
 
 

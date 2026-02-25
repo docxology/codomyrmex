@@ -34,7 +34,6 @@ from codomyrmex.model_ops import (
     length_ratio_metric,
 )
 
-
 # ---------------------------------------------------------------------------
 # Dataset
 # ---------------------------------------------------------------------------
@@ -521,7 +520,10 @@ class TestQualityEvaluation:
         assert len(list(QualityDimension)) > 0
 
     def test_dimension_score(self):
-        from codomyrmex.model_ops.evaluation.quality import DimensionScore, QualityDimension
+        from codomyrmex.model_ops.evaluation.quality import (
+            DimensionScore,
+            QualityDimension,
+        )
         dim = list(QualityDimension)[0]
         s = DimensionScore(dimension=dim, score=0.95)
         assert s.score == 0.95

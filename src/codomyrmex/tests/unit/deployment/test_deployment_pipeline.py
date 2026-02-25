@@ -7,20 +7,24 @@ from __future__ import annotations
 
 import os
 import tempfile
-from pathlib import Path
 
-import pytest
-
-from codomyrmex.containerization.auto_build import (
-    AutoBuilder, DockerStage, DockerfileSpec,
-)
 from codomyrmex.api.health import (
-    ComponentHealth, HealthChecker, HealthReport, HealthStatus,
+    ComponentHealth,
+    HealthChecker,
+    HealthReport,
+    HealthStatus,
+)
+from codomyrmex.containerization.auto_build import (
+    AutoBuilder,
+    DockerfileSpec,
+    DockerStage,
 )
 from codomyrmex.deployment.canary import (
-    CanaryAnalyzer, CanaryDecision, CanaryReport, MetricComparison,
+    CanaryAnalyzer,
+    CanaryDecision,
+    CanaryReport,
+    MetricComparison,
 )
-
 
 # ── AutoBuilder ──────────────────────────────────────────────────
 

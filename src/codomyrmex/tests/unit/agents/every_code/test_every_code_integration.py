@@ -9,7 +9,10 @@ conversion logic is tested with real data structures.
 import pytest
 
 try:
-    from codomyrmex.agents.every_code import EveryCodeClient, EveryCodeIntegrationAdapter
+    from codomyrmex.agents.every_code import (
+        EveryCodeClient,
+        EveryCodeIntegrationAdapter,
+    )
     from codomyrmex.tests.unit.agents.helpers import EVERY_CODE_AVAILABLE
     _HAS_AGENTS = True
 except ImportError:

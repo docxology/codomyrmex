@@ -11,7 +11,6 @@ Provides shared utility functions for chart generation including:
 import logging
 from pathlib import Path
 
-
 # Try to import from codomyrmex logging, fallback to standard logging
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger

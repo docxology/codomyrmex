@@ -24,89 +24,88 @@ cybernetic      Cybernetic control theory & feedback engineering.
 __version__ = "0.1.0"
 
 # Phase 1 — Core Engine
-from codomyrmex.meme.memetics import (
-    Meme,
-    Memeplex,
-    MemeticCode,
-    FitnessMap,
-    MemeticEngine,
-)
-from codomyrmex.meme.semiotic import (
-    Sign,
-    SignType,
-    DriftReport,
-    SemioticAnalyzer,
-)
-
 # Phase 2 — Propagation
 from codomyrmex.meme.contagion import (
-    ContagionModel,
-    CascadeDetector,
-    PropagationTrace,
     Cascade,
+    CascadeDetector,
     CascadeType,
+    ContagionModel,
+    PropagationTrace,
     ResonanceMap,
-)
-from codomyrmex.meme.narrative import (
-    Narrative,
-    NarrativeArc,
-    Archetype,
-    NarrativeEngine,
 )
 
 # Phase 3 — Dynamics
 from codomyrmex.meme.cultural_dynamics import (
-    CulturalState,
     CulturalDynamicsEngine,
+    CulturalState,
     PowerMap,
-)
-from codomyrmex.meme.swarm import (
-    SwarmAgent,
-    SwarmEngine,
-    EmergentPattern,
-    ConsensusState,
-    SwarmState,
-)
-from codomyrmex.meme.neurolinguistic import (
-    CognitiveFrame,
-    BiasInstance,
-    NeurolinguisticEngine,
-)
-
-# Phase 4 — Higher-Order
-from codomyrmex.meme.hyperreality import (
-    Simulacrum,
-    HyperrealityEngine,
-    SimulationLevel,
-    RealityTunnel,
-)
-from codomyrmex.meme.ideoscape import (
-    IdeoscapeLayer,
-    IdeoscapeEngine,
-    MapFeature,
-    TerrainMap,
-)
-from codomyrmex.meme.rhizome import (
-    RhizomeEngine,
-    Graph,
-    Node,
-    Edge,
-    NetworkTopology,
-)
-from codomyrmex.meme.epistemic import (
-    EpistemicEngine,
-    EpistemicState,
-    Fact,
-    Belief,
-    Evidence,
 )
 
 # Phase 5 — Control
 from codomyrmex.meme.cybernetic import (
-    CyberneticEngine,
     ControlSystem,
+    CyberneticEngine,
     FeedbackLoop,
     SystemState,
+)
+from codomyrmex.meme.epistemic import (
+    Belief,
+    EpistemicEngine,
+    EpistemicState,
+    Evidence,
+    Fact,
+)
+
+# Phase 4 — Higher-Order
+from codomyrmex.meme.hyperreality import (
+    HyperrealityEngine,
+    RealityTunnel,
+    Simulacrum,
+    SimulationLevel,
+)
+from codomyrmex.meme.ideoscape import (
+    IdeoscapeEngine,
+    IdeoscapeLayer,
+    MapFeature,
+    TerrainMap,
+)
+from codomyrmex.meme.memetics import (
+    FitnessMap,
+    Meme,
+    Memeplex,
+    MemeticCode,
+    MemeticEngine,
+)
+from codomyrmex.meme.narrative import (
+    Archetype,
+    Narrative,
+    NarrativeArc,
+    NarrativeEngine,
+)
+from codomyrmex.meme.neurolinguistic import (
+    BiasInstance,
+    CognitiveFrame,
+    NeurolinguisticEngine,
+)
+from codomyrmex.meme.rhizome import (
+    Edge,
+    Graph,
+    NetworkTopology,
+    Node,
+    RhizomeEngine,
+)
+from codomyrmex.meme.semiotic import (
+    DriftReport,
+    SemioticAnalyzer,
+    Sign,
+    SignType,
+)
+from codomyrmex.meme.swarm import (
+    ConsensusState,
+    EmergentPattern,
+    SwarmAgent,
+    SwarmEngine,
+    SwarmState,
 )
 
 __all__ = [

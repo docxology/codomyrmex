@@ -6,9 +6,9 @@ File-backed vector storage for persistence across restarts.
 
 import json
 import threading
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from . import (
     DistanceMetric,

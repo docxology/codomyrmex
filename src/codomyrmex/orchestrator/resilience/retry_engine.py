@@ -11,8 +11,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, TypeVar
 
-from .failure_taxonomy import classify_error, FailureCategory
 from codomyrmex.logging_monitoring import get_logger
+
+from .failure_taxonomy import classify_error
 
 logger = get_logger(__name__)
 

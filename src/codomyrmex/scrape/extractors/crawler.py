@@ -6,8 +6,8 @@ follows links within a domain scope, and extracts text content.
 
 from __future__ import annotations
 
-import time
 import hashlib
+import time
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum

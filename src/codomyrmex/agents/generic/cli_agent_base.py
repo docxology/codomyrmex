@@ -1,9 +1,9 @@
 import os
 import subprocess
 import time
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
-from collections.abc import Iterator
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
@@ -183,7 +183,7 @@ class CLIAgentBase(BaseAgent):
                 extra={"command": cmd, "error": str(e)},
             )
             return False
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             self._command_available = False
             self.logger.warning(
                 f"Error checking command '{cmd}' availability: {e}",
@@ -308,7 +308,7 @@ class CLIAgentBase(BaseAgent):
                 f"Command not found: {self.command}",
                 command=self.command,
             )
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             execution_time = time.time() - start_time
             self.logger.error(
                 f"Command execution failed: {e}",
@@ -402,7 +402,7 @@ class CLIAgentBase(BaseAgent):
                 },
             )
 
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except Exception as e:
             self.logger.error(
                 f"Error streaming command output: {e}",
                 exc_info=True,

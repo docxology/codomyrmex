@@ -1,7 +1,10 @@
 
-import pytest
 import json
-from codomyrmex.networking.http_client import Response, NetworkingError
+
+import pytest
+
+from codomyrmex.networking.http_client import NetworkingError, Response
+
 
 def test_response_json_wrapping():
     """Verify Response.json() raises NetworkingError on invalid JSON."""
@@ -12,7 +15,7 @@ def test_response_json_wrapping():
         text="invalid json",
         json_data=None
     )
-    
+
     with pytest.raises(NetworkingError, match="Failed to decode JSON"):
         response.json()
 
@@ -26,5 +29,5 @@ def test_response_json_success():
         text=json.dumps(data),
         json_data=None
     )
-    
+
     assert response.json() == data

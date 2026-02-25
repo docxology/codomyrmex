@@ -13,7 +13,10 @@ import pytest
 try:
     from codomyrmex.agents.ai_code_editing import generate_code_snippet
     from codomyrmex.coding import ExecutionLimits, execute_code, execute_with_limits
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        get_logger,
+        setup_logging,
+    )
     AI_CODE_EDITING_AVAILABLE = True
 except ImportError:
     setup_logging = None

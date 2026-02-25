@@ -1,5 +1,5 @@
-from typing import Any
 from collections.abc import Callable, Iterator
+from typing import Any
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.config import AgentConfig, get_config

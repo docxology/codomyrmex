@@ -1,16 +1,18 @@
 
-import pytest
-import time
 import asyncio
-from typing import Any, Iterator
+import time
+from collections.abc import Iterator
+from typing import Any
+
+import pytest
+
 from codomyrmex.agents.core import (
     AgentCapabilities,
+    AgentError,
     AgentRequest,
     AgentResponse,
     BaseAgent,
-    Tool,
     ToolRegistry,
-    AgentError,
 )
 
 # =============================================================================
@@ -19,7 +21,7 @@ from codomyrmex.agents.core import (
 
 class FakeLLMClient:
     """A concrete fake for LLM clients, replacing MagicMock."""
-    
+
     def __init__(self):
         self.chat_calls = []
         self.complete_calls = []

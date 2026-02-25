@@ -3,10 +3,10 @@
 Defines the core plugin interfaces and registry for managing plugins.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

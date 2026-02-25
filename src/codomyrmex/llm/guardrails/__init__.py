@@ -9,10 +9,10 @@ __version__ = "0.1.0"
 
 import json
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from collections.abc import Callable
 
 
 class ThreatLevel(Enum):

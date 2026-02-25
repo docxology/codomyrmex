@@ -454,3 +454,5 @@ __all__ = [
     "mask_secret",
     "generate_secret",
 ]
+
+from .secret_scanner import *  # noqa: E402, F401, F403

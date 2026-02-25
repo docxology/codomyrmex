@@ -8,9 +8,9 @@ import concurrent.futures
 import heapq
 import threading
 import time
+from collections.abc import Callable
 from datetime import datetime, timedelta
 from typing import Any
-from collections.abc import Callable
 
 from .models import Job, JobStatus
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger

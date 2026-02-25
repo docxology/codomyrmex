@@ -37,14 +37,10 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 from codomyrmex.ide.antigravity.agent_relay import (
-    AgentRelay,
-    MSG_CHAT,
-    MSG_TOOL_REQUEST,
-    MSG_TOOL_RESULT,
     MSG_SYSTEM,
+    AgentRelay,
     RelayMessage,
 )
-
 
 # =====================================================================
 # Antigravity Side
@@ -254,7 +250,6 @@ class LiveAgentBridge:
         """Auto-execute a tool request using AntigravityToolProvider."""
         try:
             from codomyrmex.ide.antigravity.tool_provider import (
-                AntigravityToolProvider,
                 SAFE_TOOLS,
             )
 

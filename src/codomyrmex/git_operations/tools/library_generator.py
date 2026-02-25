@@ -1,60 +1,15 @@
-from datetime import datetime
-from typing import Optional
 import argparse
 import os
 import sys
+from datetime import datetime
 
 import requests
-
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class GitHubLibraryGenerator:
     """Generator for repository library from GitHub API."""
 
-    def __init__(self, username: str, token: Optional[str] = None):
+    def __init__(self, username: str, token: str | None = None):
         """
         Initialize the generator.
 
@@ -292,7 +247,7 @@ USE|vinta|awesome-python|https://github.com/vinta/awesome-python.git|Awesome Pyt
 
         return content
 
-    def generate_library(self, output_file: Optional[str] = None) -> str:
+    def generate_library(self, output_file: str | None = None) -> str:
         """
         Generate the complete repository library.
 

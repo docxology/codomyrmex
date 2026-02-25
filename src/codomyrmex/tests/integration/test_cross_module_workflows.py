@@ -68,7 +68,10 @@ except ImportError:
     MODULE_AVAILABILITY["performance_logging"] = False
 
 try:
-    from codomyrmex.logging_monitoring.core.logger_config import get_logger, setup_logging
+    from codomyrmex.logging_monitoring.core.logger_config import (
+        get_logger,
+        setup_logging,
+    )
     LOGGING_AVAILABLE = True
 except ImportError:
     LOGGING_AVAILABLE = False

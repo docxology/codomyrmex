@@ -5,8 +5,8 @@ health reporting with trend tracking.
 """
 
 from .health_checker import (
-    HealthCheckResult,
     HealthChecker,
+    HealthCheckResult,
     HealthStatus,
     check_module_availability,
 )

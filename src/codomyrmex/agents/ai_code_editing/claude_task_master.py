@@ -19,10 +19,10 @@ import os
 import random
 import re
 import time
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
-from collections.abc import Iterator
 
 from anthropic import Anthropic
 

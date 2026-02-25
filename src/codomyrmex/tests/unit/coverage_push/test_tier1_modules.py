@@ -5,7 +5,6 @@ Coverage push: targeting the 4 highest-gap Tier-1/2 modules.
 
 import pytest
 
-
 # ===================================================================
 # Cerebrum Core Models
 # ===================================================================
@@ -120,7 +119,8 @@ class TestTransformations:
     def test_transformation_manager_register(self):
         """Test functionality: transformation manager register."""
         from codomyrmex.cerebrum.core.transformations import (
-            AdaptationTransformer, TransformationManager,
+            AdaptationTransformer,
+            TransformationManager,
         )
         mgr = TransformationManager()
         mgr.register_transformer("basic", AdaptationTransformer())

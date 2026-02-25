@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import matplotlib
+
 matplotlib.use("Agg")          # non-interactive backend
 import matplotlib.pyplot as plt  # noqa: E402
 

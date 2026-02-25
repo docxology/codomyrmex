@@ -21,7 +21,6 @@ from typing import Any
 
 import pytest
 
-from codomyrmex.plugin_system.validation.enforcer import InterfaceEnforcer
 from codomyrmex.plugin_system.core.plugin_loader import LoadResult, PluginLoader
 from codomyrmex.plugin_system.core.plugin_manager import (
     PluginManager,
@@ -40,7 +39,11 @@ from codomyrmex.plugin_system.core.plugin_registry import (
     create_plugin_info,
     get_registry,
 )
-from codomyrmex.plugin_system.validation.plugin_validator import PluginValidator, validate_plugin
+from codomyrmex.plugin_system.validation.enforcer import InterfaceEnforcer
+from codomyrmex.plugin_system.validation.plugin_validator import (
+    PluginValidator,
+    validate_plugin,
+)
 
 # ============================================================================
 # Mock Plugin Classes for Testing
@@ -1696,7 +1699,9 @@ class TestDependencyResolver:
     def test_simple_resolution(self):
         """Test functionality: simple resolution."""
         from codomyrmex.plugin_system.dependency_resolver import (
-            DependencyResolver, DependencyNode, ResolutionStatus,
+            DependencyNode,
+            DependencyResolver,
+            ResolutionStatus,
         )
         resolver = DependencyResolver()
         resolver.add(DependencyNode("auth", dependencies=["db"]))
@@ -1708,7 +1713,9 @@ class TestDependencyResolver:
     def test_missing_dependency(self):
         """Test functionality: missing dependency."""
         from codomyrmex.plugin_system.dependency_resolver import (
-            DependencyResolver, DependencyNode, ResolutionStatus,
+            DependencyNode,
+            DependencyResolver,
+            ResolutionStatus,
         )
         resolver = DependencyResolver()
         resolver.add(DependencyNode("auth", dependencies=["nonexistent"]))
@@ -1719,7 +1726,9 @@ class TestDependencyResolver:
     def test_circular_dependency(self):
         """Test functionality: circular dependency."""
         from codomyrmex.plugin_system.dependency_resolver import (
-            DependencyResolver, DependencyNode, ResolutionStatus,
+            DependencyNode,
+            DependencyResolver,
+            ResolutionStatus,
         )
         resolver = DependencyResolver()
         resolver.add(DependencyNode("a", dependencies=["b"]))

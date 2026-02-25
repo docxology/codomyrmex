@@ -25,7 +25,6 @@ from codomyrmex.relations.uor import (
     UORRelationship,
 )
 
-
 # ======================================================================
 # Module import
 # ======================================================================
@@ -44,9 +43,17 @@ def test_uor_parent_reexports():
     """Key UOR classes are re-exported from the relations module."""
     from codomyrmex.relations import (
         EntityManager as EM,
+    )
+    from codomyrmex.relations import (
         PrismEngine as PE,
+    )
+    from codomyrmex.relations import (
         UOREntity as UE,
+    )
+    from codomyrmex.relations import (
         UORGraph as UG,
+    )
+    from codomyrmex.relations import (
         UORRelationship as UR,
     )
 

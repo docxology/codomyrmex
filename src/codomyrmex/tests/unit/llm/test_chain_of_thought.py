@@ -2,24 +2,20 @@
 
 from __future__ import annotations
 
-import json
-import time
-
 import pytest
 
-from codomyrmex.llm.models.reasoning import (
-    Conclusion,
-    DEPTH_TO_STEPS,
-    ReasoningStep,
-    ReasoningTrace,
-    ThinkingDepth,
-)
 from codomyrmex.llm.chain_of_thought import (
     ChainOfThought,
     StructuralConclusionSynthesizer,
     StructuralStepGenerator,
 )
-
+from codomyrmex.llm.models.reasoning import (
+    DEPTH_TO_STEPS,
+    Conclusion,
+    ReasoningStep,
+    ReasoningTrace,
+    ThinkingDepth,
+)
 
 # ── ReasoningStep ─────────────────────────────────────────────────
 

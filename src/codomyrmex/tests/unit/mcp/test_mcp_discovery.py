@@ -5,7 +5,6 @@ and that the auto-discovery mechanism finds them.
 """
 
 import importlib
-import pkgutil
 
 import pytest
 

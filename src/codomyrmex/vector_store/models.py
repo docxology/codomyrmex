@@ -25,7 +25,7 @@ class SearchResult:
     embedding: list[float]
     metadata: dict[str, Any] = field(default_factory=dict)
 
-    def __lt__(self, other: "SearchResult") -> bool:
+    def __lt__(self, other: SearchResult) -> bool:
         """Execute   Lt   operations natively."""
         return self.score < other.score
 
@@ -71,7 +71,7 @@ class VectorEntry:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "VectorEntry":
+    def from_dict(cls, data: dict[str, Any]) -> VectorEntry:
         """Deserialize from a dictionary."""
         return cls(
             id=data["id"],

@@ -26,11 +26,11 @@ try:
 except ImportError:
     Result = None
     ResultStatus = None
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 class IDEStatus(Enum):
@@ -272,6 +272,7 @@ from codomyrmex.exceptions import (
 # Import submodule clients
 from codomyrmex.ide.cursor import CursorClient
 
+
 def cli_commands():
     """Return CLI commands for the IDE module."""
     def _list_extensions():
@@ -284,7 +285,7 @@ def cli_commands():
     def _ide_status():
         """Show IDE integration status."""
         print("IDE Module Status:")
-        print(f"  IDEClient: available (abstract base)")
+        print("  IDEClient: available (abstract base)")
         print(f"  CursorClient: {'available' if CursorClient else 'unavailable'}")
         print(f"  Statuses: {', '.join(s.value for s in IDEStatus)}")
 

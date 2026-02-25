@@ -7,7 +7,7 @@ Graph data structure for tracking data lineage relationships.
 import threading
 from typing import Any
 
-from .models import EdgeType, LineageEdge, LineageNode, NodeType
+from .models import LineageEdge, LineageNode
 
 
 class LineageGraph:

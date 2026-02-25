@@ -13,10 +13,10 @@ import asyncio
 import concurrent.futures
 import os
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 

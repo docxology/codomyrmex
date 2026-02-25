@@ -16,8 +16,10 @@ from codomyrmex.model_context_protocol.transport.client import (
     MCPClientConfig,
     MCPClientError,
 )
-from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
-
+from codomyrmex.model_context_protocol.transport.server import (
+    MCPServer,
+    MCPServerConfig,
+)
 
 # ======================================================================
 # Shared server fixture

@@ -10,9 +10,8 @@ from __future__ import annotations
 import os
 import shutil
 import time
-from dataclasses import dataclass, field
-from typing import Any
 from collections.abc import Callable
+from dataclasses import dataclass, field
 
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 from codomyrmex.logging_monitoring import get_logger
@@ -94,9 +93,9 @@ def _probe_ollama(base_url: str = "") -> ProbeResult:
     """Execute  Probe Ollama operations natively."""
     base_url = base_url or os.getenv("OLLAMA_BASE_URL", DEFAULT_OLLAMA_URL)
     """Check Ollama server reachability and list models."""
-    import urllib.request
-    import urllib.error
     import json as _json
+    import urllib.error
+    import urllib.request
 
     start = time.time()
     try:

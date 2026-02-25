@@ -1,8 +1,8 @@
 """OpenAI o1/o3 reasoning model client for Codomyrmex agents."""
 
 import time
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

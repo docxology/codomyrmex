@@ -8,7 +8,7 @@ Provides:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -53,7 +53,7 @@ class VideoConfig:
         return d
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "VideoConfig":
+    def from_dict(cls, data: dict[str, Any]) -> VideoConfig:
         """Deserialize config from a dictionary."""
         d = dict(data)
         if d.get("temp_directory"):
@@ -77,7 +77,7 @@ class VideoConfig:
             issues.append(f"Unknown quality_preset: {self.quality_preset}")
         return issues
 
-    def diff(self, other: "VideoConfig") -> dict[str, tuple[Any, Any]]:
+    def diff(self, other: VideoConfig) -> dict[str, tuple[Any, Any]]:
         """Compare two configs and return fields that differ."""
         d1, d2 = self.to_dict(), other.to_dict()
         return {k: (d1[k], d2[k]) for k in d1 if d1.get(k) != d2.get(k)}

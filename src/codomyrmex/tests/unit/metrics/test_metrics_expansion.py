@@ -16,6 +16,7 @@ except ImportError:
 
 try:
     import statsd  # noqa: F401
+
     from codomyrmex.telemetry.metrics import StatsDClient
     HAS_STATSD = StatsDClient is not None
 except (ImportError, ModuleNotFoundError):

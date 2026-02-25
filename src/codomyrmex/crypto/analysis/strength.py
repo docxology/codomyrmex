@@ -8,7 +8,6 @@ common password checking.
 from __future__ import annotations
 
 import math
-import re
 import string
 from dataclasses import dataclass, field
 

@@ -99,7 +99,7 @@ class DashboardExporter:
         return len(self._dashboard.panels)
 
     @classmethod
-    def agent_dashboard(cls) -> "DashboardExporter":
+    def agent_dashboard(cls) -> DashboardExporter:
         """Pre-configured dashboard for agent monitoring."""
         exp = cls("Agent Operations")
         exp.add_panel(Panel("Task Success Rate", "stat", "agent_task_success_rate", [0.9]))

@@ -7,11 +7,9 @@ with metadata for diff-based state comparison.
 from __future__ import annotations
 
 import json
-import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapshot
 

@@ -9,8 +9,6 @@ lifecycle transitions.  Subscribe via:
 
 from __future__ import annotations
 
-from typing import Any
-
 from codomyrmex.events.core.event_schema import Event, EventType
 
 

@@ -220,7 +220,7 @@ class TestAsyncSemaphoreConcurrency:
     async def test_fairness_under_load(self):
         """Test that all tasks eventually complete under load."""
         sem = AsyncLocalSemaphore(value=2)
-        completions = {i: False for i in range(20)}
+        completions = dict.fromkeys(range(20), False)
 
         async def task(task_id: int):
             await sem.acquire_async()

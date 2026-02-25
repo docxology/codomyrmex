@@ -68,7 +68,11 @@ class TestFeatureDefinition:
 
     def test_feature_definition_creation(self):
         """Verify FeatureDefinition can be created."""
-        from codomyrmex.model_ops.feature_store import FeatureDefinition, FeatureType, ValueType
+        from codomyrmex.model_ops.feature_store import (
+            FeatureDefinition,
+            FeatureType,
+            ValueType,
+        )
 
         feature = FeatureDefinition(
             name="user_age",
@@ -83,7 +87,11 @@ class TestFeatureDefinition:
 
     def test_feature_definition_to_dict(self):
         """Verify feature definition serialization."""
-        from codomyrmex.model_ops.feature_store import FeatureDefinition, FeatureType, ValueType
+        from codomyrmex.model_ops.feature_store import (
+            FeatureDefinition,
+            FeatureType,
+            ValueType,
+        )
 
         feature = FeatureDefinition(
             name="city",

@@ -8,14 +8,13 @@ import pytest
 
 from codomyrmex.crypto.currency.blockchain import (
     Block,
-    create_block,
-    calculate_block_hash,
     build_merkle_tree,
+    calculate_block_hash,
+    create_block,
     get_merkle_proof,
     verify_merkle_proof,
 )
 from codomyrmex.crypto.exceptions import BlockchainError
-
 
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 

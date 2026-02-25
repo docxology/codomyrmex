@@ -5,10 +5,10 @@ Fuzz testing strategies and execution.
 """
 
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from .strategies import GeneratorStrategy
 

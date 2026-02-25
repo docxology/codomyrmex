@@ -5,12 +5,11 @@ from __future__ import annotations
 import pytest
 
 from codomyrmex.crypto.currency.wallet import (
-    generate_mnemonic,
-    mnemonic_to_seed,
     HDWallet,
     create_hd_wallet,
+    generate_mnemonic,
+    mnemonic_to_seed,
 )
-
 
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 

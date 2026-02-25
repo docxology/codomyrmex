@@ -6,6 +6,9 @@ Web3 and blockchain smart contract interfaces.
 
 __version__ = "0.1.0"
 
+from .builders import TransactionBuilder
+from .contract import Contract, ContractCall
+from .events import ContractEvent, EventFilter, EventLog
 from .models import (
     Address,
     ContractFunction,
@@ -13,10 +16,7 @@ from .models import (
     Transaction,
     TransactionStatus,
 )
-from .contract import Contract, ContractCall
-from .builders import TransactionBuilder
 from .registry import ContractRegistry
-from .events import ContractEvent, EventFilter, EventLog
 from .utils import ether_to_wei, gwei_to_wei, wei_to_ether
 
 # Shared schemas for cross-module interop

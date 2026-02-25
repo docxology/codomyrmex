@@ -5,10 +5,8 @@ These wrap the CodeReviewer class for simple one-call usage.
 
 from __future__ import annotations
 
-from typing import Any
-
-from .reviewer import CodeReviewer
 from .models import AnalysisResult, AnalysisSummary, QualityGateResult
+from .reviewer import CodeReviewer
 
 
 # Convenience functions

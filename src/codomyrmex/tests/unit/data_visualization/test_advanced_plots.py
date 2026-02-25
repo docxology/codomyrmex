@@ -1,8 +1,8 @@
-import pytest
+from codomyrmex.data_visualization.plots.area import AreaPlot
+from codomyrmex.data_visualization.plots.box import BoxPlot
 from codomyrmex.data_visualization.plots.histogram import Histogram
 from codomyrmex.data_visualization.plots.pie import PieChart
-from codomyrmex.data_visualization.plots.box import BoxPlot
-from codomyrmex.data_visualization.plots.area import AreaPlot
+
 
 def test_histogram_render():
     """Test functionality: histogram render."""

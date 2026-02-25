@@ -4,8 +4,6 @@ Zero-Mock compliant — uses a StubRepositoryManager and real function
 calls where possible, with skip markers for external dependencies.
 """
 
-import os
-import tempfile
 
 import pytest
 

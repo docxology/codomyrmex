@@ -14,16 +14,16 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
     Returns:
         Structured retrieval results containing matching cases.
     """
-    from codomyrmex.cerebrum import CaseRetriever, CaseBase
-    
+    from codomyrmex.cerebrum import CaseBase, CaseRetriever
+
     try:
         # Assuming a default initialization path
         base = CaseBase()
         retriever = CaseRetriever(base)
-        
+
         # Searching by conceptual similarity (using query as a feature filter)
         results = retriever.retrieve({"concept": query}, k=limit)
-        
+
         formatted_results = []
         for case, score in results:
             formatted_results.append({
@@ -32,7 +32,7 @@ def query_knowledge_base(query: str, limit: int = 5) -> dict:
                 "solution": case.solution,
                 "similarity_score": score
             })
-            
+
         return {"status": "success", "results": formatted_results, "count": len(formatted_results)}
     except Exception as e:
         return {"status": "error", "message": f"Knowledge base query failed: {e}"}
@@ -49,15 +49,15 @@ def add_case_reference(concept: str, solution: str) -> dict:
     Returns:
         Confirmation of case storage.
     """
-    from codomyrmex.cerebrum import CaseBase, Case
-    
+    from codomyrmex.cerebrum import Case, CaseBase
+
     try:
         base = CaseBase()
         case = Case(features={"concept": concept}, solution=solution)
         base.add_case(case)
-        
+
         return {
-            "status": "success", 
+            "status": "success",
             "message": "Case stored successfully",
             "case_id": case.id
         }

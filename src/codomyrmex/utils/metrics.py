@@ -6,12 +6,12 @@ Metrics collection and monitoring for all modules.
 
 import threading
 import time
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 
 class MetricType(Enum):

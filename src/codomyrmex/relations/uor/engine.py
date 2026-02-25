@@ -14,7 +14,7 @@ References:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Union
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -87,7 +87,7 @@ class PrismEngine:
         """Convert byte tuple to integer (big-endian)."""
         return int.from_bytes(b, byteorder="big")
 
-    def _normalize(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def _normalize(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Normalize input to validated byte tuple."""
         if isinstance(n, int):
             return self._to_bytes(n)
@@ -103,7 +103,7 @@ class PrismEngine:
     # PRIMITIVE OPERATIONS
     # ═══════════════════════════════════════════════════════════════════════
 
-    def neg(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def neg(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Additive inverse (two's complement). Primitive involution.
 
         neg(neg(x)) = x for all x.
@@ -112,7 +112,7 @@ class PrismEngine:
         val = self._from_bytes(b)
         return self._to_bytes((-val) & self._mask)
 
-    def bnot(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def bnot(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise complement (per byte). Primitive involution.
 
         bnot(bnot(x)) = x for all x.
@@ -120,19 +120,19 @@ class PrismEngine:
         b = self._normalize(n)
         return tuple(byte ^ 0xFF for byte in b)
 
-    def xor(self, a: Union[int, tuple[int, ...]], b: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def xor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise XOR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x ^ y for x, y in zip(ba, bb))
 
-    def band(self, a: Union[int, tuple[int, ...]], b: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def band(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise AND (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
         return tuple(x & y for x, y in zip(ba, bb))
 
-    def bor(self, a: Union[int, tuple[int, ...]], b: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def bor(self, a: int | tuple[int, ...], b: int | tuple[int, ...]) -> tuple[int, ...]:
         """Bitwise OR (per byte). Commutative, associative."""
         ba = self._normalize(a)
         bb = self._normalize(b)
@@ -142,11 +142,11 @@ class PrismEngine:
     # DERIVED OPERATIONS
     # ═══════════════════════════════════════════════════════════════════════
 
-    def succ(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def succ(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Increment. Derived: succ = neg ∘ bnot (CRITICAL IDENTITY)."""
         return self.neg(self.bnot(n))
 
-    def pred(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def pred(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Decrement. Derived: pred = bnot ∘ neg."""
         return self.bnot(self.neg(n))
 
@@ -164,17 +164,17 @@ class PrismEngine:
         """Active bit positions in a single byte."""
         return tuple(i for i in range(8) if n & (1 << i))
 
-    def stratum(self, n: Union[int, tuple[int, ...]]) -> tuple[int, ...]:
+    def stratum(self, n: int | tuple[int, ...]) -> tuple[int, ...]:
         """Compute stratum vector (popcount per byte)."""
         b = self._normalize(n)
         return tuple(self._byte_popcnt(byte) for byte in b)
 
-    def spectrum(self, n: Union[int, tuple[int, ...]]) -> tuple[tuple[int, ...], ...]:
+    def spectrum(self, n: int | tuple[int, ...]) -> tuple[tuple[int, ...], ...]:
         """Compute spectrum (active bit positions per byte)."""
         b = self._normalize(n)
         return tuple(self._byte_basis(byte) for byte in b)
 
-    def triad(self, n: Union[int, tuple[int, ...]]) -> TriadicCoordinate:
+    def triad(self, n: int | tuple[int, ...]) -> TriadicCoordinate:
         """Compute complete triadic coordinates for a value.
 
         Args:
@@ -196,8 +196,8 @@ class PrismEngine:
 
     def correlate(
         self,
-        a: Union[int, tuple[int, ...]],
-        b: Union[int, tuple[int, ...]],
+        a: int | tuple[int, ...],
+        b: int | tuple[int, ...],
     ) -> dict[str, Any]:
         """Measure correlation between two values via XOR-stratum (Hamming distance).
 
@@ -235,8 +235,8 @@ class PrismEngine:
 
     def fidelity(
         self,
-        a: Union[int, tuple[int, ...]],
-        b: Union[int, tuple[int, ...]],
+        a: int | tuple[int, ...],
+        b: int | tuple[int, ...],
     ) -> float:
         """Shorthand: return just the fidelity score between two values.
 

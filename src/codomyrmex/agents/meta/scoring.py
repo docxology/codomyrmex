@@ -5,7 +5,7 @@ Scores agent outcomes on correctness, efficiency, quality, and speed.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from codomyrmex.logging_monitoring import get_logger

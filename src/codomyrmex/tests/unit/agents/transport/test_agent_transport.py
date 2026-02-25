@@ -4,12 +4,9 @@ Covers AgentSerializer round-trips, HMAC verification, Checkpoint
 save/load/diff, and TransportMessage wire format.
 """
 
-import json
-import os
 import pytest
-import tempfile
 
-from codomyrmex.agents.transport.checkpoint import Checkpoint, StateDelta
+from codomyrmex.agents.transport.checkpoint import Checkpoint
 from codomyrmex.agents.transport.deserializer import AgentDeserializer, IntegrityError
 from codomyrmex.agents.transport.protocol import (
     MessageHeader,
@@ -17,7 +14,6 @@ from codomyrmex.agents.transport.protocol import (
     TransportMessage,
 )
 from codomyrmex.agents.transport.serializer import AgentSerializer, AgentSnapshot
-
 
 # ─── AgentSerializer ──────────────────────────────────────────────────
 

@@ -45,7 +45,7 @@ class GeminiCLIWrapper(BaseAgent):
         model = context.get("model", self.default_model)
 
         cmd = [self.cli_path]
-        
+
         # Add basic prompt
         if prompt:
             cmd.append(prompt)
@@ -59,14 +59,14 @@ class GeminiCLIWrapper(BaseAgent):
         # Additional options from context
         if "sandbox" in context and context["sandbox"]:
             cmd.append("--sandbox")
-            
+
         if "yolo" in context and context["yolo"]:
             cmd.append("--yolo")
-            
+
         if "extensions" in context:
             cmd.append("--extensions")
             cmd.extend(context["extensions"])
-            
+
         if "include_directories" in context:
             cmd.append("--include-directories")
             cmd.extend(context["include_directories"])

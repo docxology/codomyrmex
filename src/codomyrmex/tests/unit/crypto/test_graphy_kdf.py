@@ -12,7 +12,6 @@ from codomyrmex.crypto.graphy.kdf import (
     derive_scrypt,
 )
 
-
 FIXED_SALT = b"\x00" * 16
 PASSWORD = b"correct horse battery staple"
 

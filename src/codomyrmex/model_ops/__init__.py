@@ -14,8 +14,8 @@ Submodules:
 
 import json
 import uuid
-from typing import Any, Dict, List, Optional
 from collections.abc import Callable
+from typing import Any, Dict, List, Optional
 
 # Shared schemas for cross-module interop
 try:
@@ -337,11 +337,7 @@ def cli_commands():
     }
 
 
-from . import registry
-
-from . import optimization
-
-from . import feature_store
+from . import feature_store, optimization, registry
 
 __all__ = [
     "feature_store",

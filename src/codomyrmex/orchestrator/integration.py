@@ -4,15 +4,15 @@ This module provides integration between the thin orchestrator and
 other Codomyrmex modules like CI/CD, logistics, and agents.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .thin import Steps, run, shell, workflow
-from .workflow import RetryPolicy, Workflow
+from .workflows.workflow import RetryPolicy, Workflow
 
 logger = get_logger(__name__)
 

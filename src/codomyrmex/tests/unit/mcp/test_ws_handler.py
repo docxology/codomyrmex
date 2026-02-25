@@ -17,7 +17,6 @@ import pytest
 
 from codomyrmex.logging_monitoring.handlers.ws_handler import WebSocketLogHandler
 
-
 # ── Initialization ────────────────────────────────────────────────────
 
 

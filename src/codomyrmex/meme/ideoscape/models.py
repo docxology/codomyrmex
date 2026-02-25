@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
+
 import numpy as np
 
 
@@ -22,7 +22,7 @@ class ProjectionType(str, Enum):
 class CoordinateSystem:
     """Definition of the mapping space."""
     dimensions: int = 2
-    bounds: List[float] = field(default_factory=lambda: [-100.0, 100.0, -100.0, 100.0])
+    bounds: list[float] = field(default_factory=lambda: [-100.0, 100.0, -100.0, 100.0])
     projection: ProjectionType = ProjectionType.MERCATOR
 
 
@@ -40,8 +40,8 @@ class MapFeature:
     position: np.ndarray = field(default_factory=lambda: np.zeros(2))
     feature_type: str = "point"
     magnitude: float = 1.0
-    metadata: Dict[str, str] = field(default_factory=dict)
-    
+    metadata: dict[str, str] = field(default_factory=dict)
+
     def __post_init__(self):
         """Execute   Post Init   operations natively."""
         if isinstance(self.position, list):
@@ -58,7 +58,7 @@ class IdeoscapeLayer:
         opacity: Visual weight.
     """
     name: str
-    data_points: List[MapFeature] = field(default_factory=list)
+    data_points: list[MapFeature] = field(default_factory=list)
     opacity: float = 1.0
 
 
@@ -73,9 +73,9 @@ class TerrainMap:
     """
     height_map: np.ndarray = field(default_factory=lambda: np.zeros((100, 100)))
     resolution: int = 100
-    features: List[MapFeature] = field(default_factory=list)
+    features: list[MapFeature] = field(default_factory=list)
     timestamp: float = field(default_factory=time.time)
-    
+
     def __post_init__(self):
         """Execute   Post Init   operations natively."""
         if isinstance(self.height_map, list):

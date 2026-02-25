@@ -1,8 +1,8 @@
 """Component module."""
 from dataclasses import dataclass, field
-from typing import Any
 
 from ._base import BaseComponent
+
 
 @dataclass
 class TimelineEvent(BaseComponent):

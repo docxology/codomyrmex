@@ -6,12 +6,12 @@ for SQLite, PostgreSQL, and MySQL databases.
 
 import os
 import sqlite3
+from collections.abc import Generator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Generator
 
 from codomyrmex.config_management.defaults import (
     DEFAULT_POSTGRES_HOST,

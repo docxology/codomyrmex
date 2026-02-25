@@ -1,11 +1,8 @@
 """Radar chart visualization."""
 from __future__ import annotations
 
-import io
-import base64
-from typing import Any
-
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np

@@ -4,7 +4,6 @@ Rate Limiting Module
 Rate limiting with fixed window, sliding window, and token bucket algorithms.
 """
 
-from .models import RateLimitExceeded, RateLimitResult
 from .limiters import (
     CompositeRateLimiter,
     FixedWindowLimiter,
@@ -14,6 +13,7 @@ from .limiters import (
     TokenBucketLimiter,
     create_rate_limiter,
 )
+from .models import RateLimitExceeded, RateLimitResult
 from .strategies import QuotaManager, create_limiter
 
 # Shared schemas for cross-module interop

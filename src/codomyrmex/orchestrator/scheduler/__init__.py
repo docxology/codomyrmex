@@ -14,12 +14,17 @@ except ImportError:
     ResultStatus = None
 
 from .models import Job, JobStatus
-from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger, TriggerType
 from .scheduler import Scheduler, at, cron, every
+from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger, TriggerType
 
 # Advanced scheduler extensions
 try:
-    from .advanced import DependencyScheduler, JobPipeline, PersistentScheduler, ScheduledRecurrence
+    from .advanced import (
+        DependencyScheduler,
+        JobPipeline,
+        PersistentScheduler,
+        ScheduledRecurrence,
+    )
 except ImportError:
     pass
 
@@ -41,7 +46,7 @@ def cli_commands():
     def _scheduler_status():
         """Show scheduler status."""
         print(f"Scheduler module v{__version__}")
-        print(f"Trigger types: cron, interval, once")
+        print("Trigger types: cron, interval, once")
         print(f"Job statuses: {', '.join(s.value for s in JobStatus)}")
 
     return {

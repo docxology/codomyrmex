@@ -270,6 +270,8 @@ class TestWebsiteServerIntegration:
         assert hasattr(WebsiteServer, 'handle_awareness')
         assert hasattr(WebsiteServer, 'handle_awareness_summary')
         assert hasattr(WebsiteServer, 'send_json_response')
+        assert hasattr(WebsiteServer, 'handle_telemetry')
+        assert hasattr(WebsiteServer, 'handle_security_posture')
 
     def test_deprecated_methods_removed(self):
         """Test that deprecated methods have been removed."""

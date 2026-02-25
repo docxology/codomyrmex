@@ -123,7 +123,10 @@ class TestMigrationResult:
 
     def test_result_creation(self):
         """Verify MigrationResult can be created."""
-        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import (
+            MigrationResult,
+            MigrationStatus,
+        )
 
         result = MigrationResult(
             migration_id="v1_to_v2",
@@ -137,7 +140,10 @@ class TestMigrationResult:
 
     def test_result_progress(self):
         """Verify progress calculation."""
-        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import (
+            MigrationResult,
+            MigrationStatus,
+        )
 
         result = MigrationResult(
             migration_id="test",
@@ -150,7 +156,10 @@ class TestMigrationResult:
 
     def test_result_to_dict(self):
         """Verify result serialization."""
-        from codomyrmex.database_management.migration import MigrationResult, MigrationStatus
+        from codomyrmex.database_management.migration import (
+            MigrationResult,
+            MigrationStatus,
+        )
 
         result = MigrationResult(
             migration_id="test",
@@ -312,7 +321,11 @@ class TestMigrationRunner:
 
     def test_runner_run_migration(self):
         """Verify migration execution."""
-        from codomyrmex.database_management.migration import Migration, MigrationRunner, MigrationStatus
+        from codomyrmex.database_management.migration import (
+            Migration,
+            MigrationRunner,
+            MigrationStatus,
+        )
 
         runner = MigrationRunner()
 
@@ -338,7 +351,11 @@ class TestMigrationRunner:
 
     def test_runner_handles_failure(self):
         """Verify failure handling."""
-        from codomyrmex.database_management.migration import Migration, MigrationRunner, MigrationStatus
+        from codomyrmex.database_management.migration import (
+            Migration,
+            MigrationRunner,
+            MigrationStatus,
+        )
 
         runner = MigrationRunner()
 
@@ -406,7 +423,10 @@ class TestDataMigrator:
 
     def test_migrator_migrate(self):
         """Verify data migration."""
-        from codomyrmex.database_management.migration import DataMigrator, FieldRenameTransformer
+        from codomyrmex.database_management.migration import (
+            DataMigrator,
+            FieldRenameTransformer,
+        )
 
         migrator = DataMigrator()
         migrator.add_transformer(FieldRenameTransformer({"old": "new"}))
@@ -424,7 +444,10 @@ class TestDataMigrator:
 
     def test_migrator_migrate_single(self):
         """Verify single record migration."""
-        from codomyrmex.database_management.migration import DataMigrator, FieldTypeTransformer
+        from codomyrmex.database_management.migration import (
+            DataMigrator,
+            FieldTypeTransformer,
+        )
 
         migrator = DataMigrator()
         migrator.add_transformer(FieldTypeTransformer({"count": int}))

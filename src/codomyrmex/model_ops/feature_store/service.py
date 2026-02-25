@@ -4,8 +4,8 @@ Feature Service
 High-level feature service including transforms and batch operations.
 """
 
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from .models import FeatureDefinition, FeatureGroup, FeatureVector
 from .store import FeatureStore, InMemoryFeatureStore

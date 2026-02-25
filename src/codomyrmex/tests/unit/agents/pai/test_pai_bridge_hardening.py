@@ -6,35 +6,34 @@ project's zero-mock policy.
 """
 
 import sys
-import pytest
 from pathlib import Path
 
-from codomyrmex.agents.pai.trust_gateway import (
-    verify_capabilities,
-    trusted_call_tool,
-    TrustLevel,
-    TrustRegistry,
-    _registry as global_trust_registry,
-    SAFE_TOOLS,
-    DESTRUCTIVE_TOOLS,
-    SecurityError,
+import pytest
+
+from codomyrmex.agents.pai.mcp.discovery import (
+    _tool_invalidate_cache,
+)
+from codomyrmex.agents.pai.mcp.proxy_tools import (
+    _PROJECT_ROOT,
+    _tool_list_workflows,
 )
 from codomyrmex.agents.pai.mcp_bridge import (
-    _tool_list_workflows,
-    _tool_invalidate_cache,
-    call_tool,
     get_tool_registry,
-    invalidate_tool_cache,
-    _PROJECT_ROOT,
-    _DISCOVERY_ENGINE,
-    _DYNAMIC_TOOLS_CACHE,
+)
+from codomyrmex.agents.pai.trust_gateway import (
+    SecurityError,
+    TrustLevel,
+    trusted_call_tool,
+    verify_capabilities,
+)
+from codomyrmex.agents.pai.trust_gateway import (
+    _registry as global_trust_registry,
 )
 from codomyrmex.model_context_protocol.discovery import (
-    mcp_tool,
     DiscoveredTool,
     MCPDiscovery,
+    mcp_tool,
 )
-
 
 # ── Fixtures ──────────────────────────────────────────────────────────
 
@@ -280,7 +279,7 @@ def test_mcp_tool_decorator_metadata():
         """Docstring."""
         pass
 
-    meta = getattr(my_tool, "_mcp_tool_meta")
+    meta = my_tool._mcp_tool_meta
     assert meta["version"] == "1.2.3"
     assert meta["requires"] == ["numpy", "pandas"]
     assert meta["name"] is None  # Default

@@ -4,12 +4,10 @@ Provides a long-lived, autonomous agent class that can execute in a loop,
 respond to messages on a relay channel, and maintain a persona.
 """
 
-import time
 import logging
-import threading
-from typing import Optional, Callable
+import time
 
-from codomyrmex.agents.llm_client import get_llm_client, AgentRequest
+from codomyrmex.agents.llm_client import AgentRequest, get_llm_client
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +96,7 @@ class AutonomousAgent:
         logger.info(f"[{self.identity}] Starting Autonomous Agent ({self.persona})")
         self.running = True
         self.endpoint.start()
-        
+
         if not background:
             try:
                 while self.running:

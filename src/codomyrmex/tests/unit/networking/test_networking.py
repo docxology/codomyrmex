@@ -17,7 +17,7 @@ try:
         from codomyrmex.tests.utils.ephemeral_server import EphemeralServer
     except ImportError:
         EphemeralServer = None
-    
+
     from codomyrmex.networking import (
         HTTPClient,
         PortScanner,
@@ -163,7 +163,7 @@ class TestHTTPClient:
         """Test functionality: get request."""
         if not EphemeralServer:
             pytest.skip("EphemeralServer not available")
-            
+
         with EphemeralServer() as server:
             client = HTTPClient()
             response = client.get(f"{server.url}/get")
@@ -265,7 +265,7 @@ class TestHTTPClient:
         """Test functionality: response 5xx error."""
         if not EphemeralServer:
              pytest.skip("EphemeralServer not available")
-        
+
         with EphemeralServer() as server:
             client = HTTPClient(max_retries=0)
             with pytest.raises(NetworkingError):

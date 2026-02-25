@@ -4,13 +4,10 @@ All zero-mock — validates real JSON Schema checking, type coercion,
 and error reporting.
 """
 
-import pytest
 
 from codomyrmex.model_context_protocol.quality.validation import (
-    ValidationResult,
     validate_tool_arguments,
 )
-
 
 # ── Helpers ──────────────────────────────────────────────────────────
 

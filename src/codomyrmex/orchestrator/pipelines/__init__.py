@@ -11,11 +11,11 @@ import threading
 import time
 import uuid
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-from collections.abc import Callable
 
 T = TypeVar('T')
 
@@ -190,7 +190,7 @@ class ParallelStage(Stage):
                 stage_id = futures[future]
                 try:
                     results[stage_id] = future.result()
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                except Exception as e:
                     results[stage_id] = {"error": str(e)}
 
         return results
@@ -278,7 +278,7 @@ class Pipeline:
                 stage.on_success(result, context)
                 return result
 
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            except Exception as e:
                 result.error = str(e)
                 result.status = StageStatus.FAILED
                 result.end_time = datetime.now()

@@ -13,8 +13,8 @@ import time
 import pytest
 
 from codomyrmex import auth
-from codomyrmex.auth.providers.api_key_manager import APIKeyManager
 from codomyrmex.auth.core.authenticator import Authenticator
+from codomyrmex.auth.providers.api_key_manager import APIKeyManager
 from codomyrmex.auth.rbac.permissions import PermissionRegistry
 from codomyrmex.auth.tokens.token import Token, TokenManager
 from codomyrmex.auth.tokens.validator import TokenValidator

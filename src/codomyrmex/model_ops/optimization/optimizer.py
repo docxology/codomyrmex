@@ -6,8 +6,8 @@ Main inference optimization engine with caching and batching.
 
 import threading
 import time
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from .batcher import RequestBatcher
 from .cache import InferenceCache

@@ -573,7 +573,7 @@ class DeploymentOrchestrator:
             sock = socket.create_connection((host, int(port)), timeout=timeout)
             sock.close()
             return True
-        except (socket.error, OSError, ValueError, TimeoutError) as e:
+        except (OSError, ValueError, TimeoutError) as e:
             logger.debug(f"TCP health check failed for {endpoint}: {e}")
             return False
 

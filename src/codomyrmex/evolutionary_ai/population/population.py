@@ -8,17 +8,16 @@ configurable selection/crossover/mutation strategies.
 from __future__ import annotations
 
 import logging
-import math
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 from ..genome.genome import Genome
 from ..operators.operators import (
+    _fitness_key,
     crossover,
     mutate,
     tournament_selection,
-    _fitness_key,
 )
 
 logger = logging.getLogger(__name__)

@@ -12,9 +12,8 @@ from codomyrmex.api.api_contract import (
     BreakingChangeKind,
     ContractValidator,
 )
-from codomyrmex.api.migration_engine import MigrationEngine, MigrationPlan
 from codomyrmex.api.api_surface import APISurface
-
+from codomyrmex.api.migration_engine import MigrationEngine
 
 # ─── APIContract ──────────────────────────────────────────────────────
 

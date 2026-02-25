@@ -10,9 +10,9 @@ Provides a configurable identity system supporting:
 from __future__ import annotations
 
 import hashlib
-from abc import ABC, abstractmethod
 import secrets
 import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 

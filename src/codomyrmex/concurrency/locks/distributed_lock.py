@@ -63,7 +63,7 @@ class LocalLock(BaseLock):
                 fcntl.flock(self._lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 self.is_held = True
                 return True
-            except (IOError, OSError):
+            except OSError:
                 if self._lock_file:
                     self._lock_file.close()
                     self._lock_file = None

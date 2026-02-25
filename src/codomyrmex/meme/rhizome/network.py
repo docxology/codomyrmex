@@ -3,22 +3,21 @@
 from __future__ import annotations
 
 import random
-from typing import Dict, List, Set
 
-from codomyrmex.meme.rhizome.models import Graph, Node, Edge, NetworkTopology
+from codomyrmex.meme.rhizome.models import Edge, Graph, NetworkTopology, Node
 
 
 def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
     """Construct a graph with specific topology."""
     g = Graph(topology=topology)
     node_ids = []
-    
+
     # Create nodes
     for i in range(num_nodes):
         nid = f"n{i}"
         g.nodes[nid] = Node(id=nid, content=f"Node {i}")
         node_ids.append(nid)
-    
+
     if topology == NetworkTopology.RANDOM:
         # Erdős–Rényi style
         p = 0.1
@@ -43,7 +42,7 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
                 g.edges.append(edge)
                 g.nodes[src].connections.add(tgt)
                 g.nodes[tgt].connections.add(src)
-                
+
         # Add remaining nodes
         for i in range(initial_count, num_nodes):
             targets = set()
@@ -56,7 +55,7 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
             # Sort by degree
             candidates.sort(key=lambda nid: len(g.nodes[nid].connections), reverse=True)
             targets = set(candidates[:m])
-            
+
             for t in targets:
                 src, tgt = node_ids[i], t
                 edge = Edge(source=src, target=tgt)
@@ -67,15 +66,15 @@ def build_graph(num_nodes: int, topology: NetworkTopology) -> Graph:
     return g
 
 
-def calculate_centrality(graph: Graph) -> Dict[str, float]:
+def calculate_centrality(graph: Graph) -> dict[str, float]:
     """Calculate degree centrality for all nodes."""
     centrality = {}
     n = len(graph.nodes)
     if n <= 1:
-        return {nid: 0.0 for nid in graph.nodes}
-        
+        return dict.fromkeys(graph.nodes, 0.0)
+
     for nid, node in graph.nodes.items():
         degree = len(node.connections)
         centrality[nid] = degree / (n - 1)
-        
+
     return centrality

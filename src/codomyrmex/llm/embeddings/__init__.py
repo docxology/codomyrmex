@@ -11,11 +11,11 @@ import json
 import math
 import threading
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-from collections.abc import Callable
 
 
 class EmbeddingModel(Enum):

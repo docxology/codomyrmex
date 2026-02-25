@@ -1,5 +1,6 @@
 """Sankey diagram (Mermaid-based)."""
 from dataclasses import dataclass, field
+
 from ._base import BasePlot
 
 

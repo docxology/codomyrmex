@@ -1,15 +1,19 @@
 """Google Calendar implementation of the CalendarProvider interface."""
 
 from datetime import datetime
-from typing import List, Optional
 
-from ..exceptions import CalendarAPIError, CalendarAuthError, EventNotFoundError, InvalidEventError
+from ..exceptions import (
+    CalendarAPIError,
+    CalendarAuthError,
+    EventNotFoundError,
+    InvalidEventError,
+)
 from ..generics import CalendarEvent, CalendarProvider
 
 try:
-    from googleapiclient.discovery import build, Resource
-    from googleapiclient.errors import HttpError
     from google.oauth2.credentials import Credentials
+    from googleapiclient.discovery import Resource, build
+    from googleapiclient.errors import HttpError
     GCAL_AVAILABLE = True
 except ImportError:
     Credentials = None
@@ -22,7 +26,7 @@ except ImportError:
 class GoogleCalendar(CalendarProvider):
     """Google Calendar provider implementation."""
 
-    def __init__(self, credentials: Optional[Credentials] = None, service: Optional[Resource] = None):
+    def __init__(self, credentials: Credentials | None = None, service: Resource | None = None):
         """
         Initialize the Google Calendar provider.
 
@@ -143,7 +147,7 @@ class GoogleCalendar(CalendarProvider):
         except (KeyError, ValueError) as e:
             raise InvalidEventError(f"Failed to parse Google Calendar event data: {e}")
 
-    def list_events(self, time_min: datetime, time_max: datetime, calendar_id: str = 'primary') -> List[CalendarEvent]:
+    def list_events(self, time_min: datetime, time_max: datetime, calendar_id: str = 'primary') -> list[CalendarEvent]:
         """List events between the given start and end times."""
         try:
             events_result = self.service.events().list(

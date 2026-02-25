@@ -23,8 +23,7 @@ from codomyrmex.agents.pai.trust_gateway import (
     reset_trust,
     trust_all,
 )
-from codomyrmex.model_context_protocol import MCPServer, MCPToolRegistry
-
+from codomyrmex.model_context_protocol.transport.server import MCPServer
 
 # ── Project root (for file-based tests) ──────────────────────────────
 
@@ -79,7 +78,8 @@ class TestToolRegistry:
     def test_returns_registry(self):
         """Test functionality: returns registry."""
         reg = get_tool_registry()
-        assert isinstance(reg, MCPToolRegistry)
+        from codomyrmex.agents.pai.mcp.server import _ToolRegistry
+        assert isinstance(reg, _ToolRegistry)
 
     def test_registry_has_all_tools(self):
         """Test functionality: registry has all tools."""
@@ -114,7 +114,7 @@ class TestCallToolDiscovery:
         result = call_tool("codomyrmex.list_modules")
         if "error" in result and "TrustRegistry" in str(result["error"]):
             pytest.skip(f"TrustRegistry internal: {result['error']}")
-            
+
         assert "modules" in result
         assert "count" in result
         assert isinstance(result["modules"], list)
@@ -365,14 +365,14 @@ class TestDynamicDiscovery:
 
     def test_dynamic_discovery_returns_tools(self):
         """Dynamic discovery finds at least some tools from modules."""
-        from codomyrmex.agents.pai.mcp_bridge import _discover_dynamic_tools
+        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
         tools = _discover_dynamic_tools()
         assert isinstance(tools, list)
         assert len(tools) > 0, "Dynamic discovery should find at least 1 tool"
 
     def test_dynamic_tool_structure(self):
         """Each discovered tool has correct tuple structure."""
-        from codomyrmex.agents.pai.mcp_bridge import _discover_dynamic_tools
+        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
         tools = _discover_dynamic_tools()
         for name, desc, handler, schema in tools:
             assert isinstance(name, str), f"Tool name should be str, got {type(name)}"
@@ -382,7 +382,7 @@ class TestDynamicDiscovery:
 
     def test_dynamic_tools_included_in_registry(self):
         """Dynamic tools should be in the full tool registry."""
-        from codomyrmex.agents.pai.mcp_bridge import _discover_dynamic_tools
+        from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
         reg = get_tool_registry()
         reg_names = set(reg.list_tools())
         dynamic = _discover_dynamic_tools()

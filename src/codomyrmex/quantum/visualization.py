@@ -1,8 +1,7 @@
 """Quantum circuit visualization and statistics."""
 
-from .models import Gate, GateType
 from .circuit import QuantumCircuit
-
+from .models import GateType
 
 # Gate symbol mapping for ASCII rendering
 _GATE_SYMBOLS: dict[GateType, str] = {

@@ -7,7 +7,7 @@ Data classes and enums for inference optimization.
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Generic, TypeVar
+from typing import Generic, TypeVar
 
 T = TypeVar('T')
 

@@ -9,10 +9,10 @@ import asyncio
 import fnmatch
 import inspect
 import threading
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any
-from collections.abc import Callable
 
 # Import logging
 try:
@@ -22,8 +22,9 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-from .event_schema import Event, EventSchema, EventType
 from codomyrmex.logging_monitoring.core.correlation import get_correlation_id
+
+from .event_schema import Event, EventSchema, EventType
 
 
 @dataclass

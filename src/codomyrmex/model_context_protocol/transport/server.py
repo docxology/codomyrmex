@@ -7,16 +7,17 @@ Supports both stdio and HTTP (Streamable HTTP + REST) transports.
 
 import asyncio
 import json
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
+
+from codomyrmex.logging_monitoring.core.correlation import with_correlation
 
 from ..schemas.mcp_schemas import (
     MCPToolCall,
     MCPToolRegistry,
 )
-from codomyrmex.logging_monitoring.core.correlation import with_correlation
 
 
 @dataclass
@@ -336,15 +337,15 @@ class MCPServer:
         includes a 'structuredContent' field with the typed return value
         alongside the standard 'content' array.
         """
-        from ..quality.validation import validate_tool_arguments
         from ..errors import (
-            MCPToolError,
-            MCPErrorCode,
             FieldError,
+            MCPErrorCode,
+            MCPToolError,
+            execution_error,
             not_found_error,
             validation_error,
-            execution_error,
         )
+        from ..quality.validation import validate_tool_arguments
 
         tool_name = params.get("name", "")
         arguments = params.get("arguments", {})
@@ -511,7 +512,7 @@ class MCPServer:
                     break
 
                 message = json.loads(line.strip())
-                
+
                 # stdio transport does not have HTTP headers, but we could parse top-level if we wanted
                 response = await self.handle_request(message)
 
@@ -533,10 +534,10 @@ class MCPServer:
             host: Bind address.
             port: Port number.
         """
+        import uvicorn
         from fastapi import FastAPI, Request
         from fastapi.middleware.cors import CORSMiddleware
         from fastapi.responses import HTMLResponse, JSONResponse
-        import uvicorn
 
         from .web_ui import get_web_ui_html
 
@@ -582,11 +583,11 @@ class MCPServer:
             body = await request.json()
             cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
             response = await server.handle_request(body, correlation_id=cid)
-            
+
             headers = {}
             if cid:
                 headers["X-Correlation-ID"] = cid
-                
+
             if response is None:
                 return JSONResponse(content={"status": "accepted"}, status_code=202, headers=headers)
             return JSONResponse(content=response, headers=headers)
@@ -613,13 +614,13 @@ class MCPServer:
                 body = await request.json()
             except Exception:
                 body = {}
-            
-            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")    
+
+            cid = request.headers.get("x-correlation-id") or request.headers.get("X-Correlation-ID")
             result = await server._call_tool({
                 "name": tool_name,
                 "arguments": body,
             })
-            
+
             headers = {}
             if cid:
                 headers["X-Correlation-ID"] = cid

@@ -7,9 +7,9 @@ verifying that handler outputs are deterministic.
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.events.event_store import EventStore, StreamEvent
 

@@ -5,13 +5,10 @@ EventReplayer (deterministic replay, diff), and StreamProjection
 (counter, latest-per-key, fold, running aggregate).
 """
 
-import time
-import pytest
 
 from codomyrmex.events.event_store import EventStore, StreamEvent
-from codomyrmex.events.replayer import EventReplayer, ReplayResult
 from codomyrmex.events.projections import StreamProjection
-
+from codomyrmex.events.replayer import EventReplayer
 
 # ─── EventStore ───────────────────────────────────────────────────────
 

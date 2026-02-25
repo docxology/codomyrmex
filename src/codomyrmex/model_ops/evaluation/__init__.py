@@ -30,16 +30,6 @@ Quality analysis:
 """
 
 try:
-    from .scorers import (
-        CompositeScorer,
-        ContainsScorer,
-        ExactMatchScorer,
-        LengthScorer,
-        RegexScorer,
-        Scorer,
-        WeightedScorer,
-        create_default_scorer,
-    )
     from .benchmarks import (
         BenchmarkCase,
         BenchmarkResult,
@@ -52,6 +42,16 @@ try:
         QualityDimension,
         QualityReport,
         analyze_quality,
+    )
+    from .scorers import (
+        CompositeScorer,
+        ContainsScorer,
+        ExactMatchScorer,
+        LengthScorer,
+        RegexScorer,
+        Scorer,
+        WeightedScorer,
+        create_default_scorer,
     )
 
     _AVAILABLE = True
@@ -103,7 +103,6 @@ from .metrics import (
     TaskType,
     create_evaluator,
 )
-
 
 __all__ = [
     # Scorers

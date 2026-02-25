@@ -7,9 +7,7 @@ food collection.
 
 from __future__ import annotations
 
-import math
 import random
-from dataclasses import dataclass, field
 
 from .ant import Ant, AntState
 from .environment import Environment

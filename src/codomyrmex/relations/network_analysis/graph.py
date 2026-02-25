@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import random
 from collections import defaultdict, deque
-from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -118,7 +117,7 @@ class SocialGraph:
         """
         n = len(self._nodes)
         if n <= 1:
-            return {nid: 0.0 for nid in self._nodes}
+            return dict.fromkeys(self._nodes, 0.0)
 
         return {
             nid: len(self._edges.get(nid, {})) / (n - 1)

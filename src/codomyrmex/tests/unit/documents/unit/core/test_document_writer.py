@@ -1,7 +1,6 @@
 """Zero-Mock tests for DocumentWriter — uses real file I/O via tmp_path."""
 
 import json
-from pathlib import Path
 
 import pytest
 

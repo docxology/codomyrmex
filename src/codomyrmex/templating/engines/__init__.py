@@ -7,10 +7,10 @@ Provides different template rendering engines.
 import html
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 @dataclass

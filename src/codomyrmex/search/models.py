@@ -4,7 +4,6 @@ Search Models
 Data classes, tokenizers, and utilities for search.
 """
 
-import math
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

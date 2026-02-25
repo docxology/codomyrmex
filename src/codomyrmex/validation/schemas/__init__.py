@@ -5,16 +5,6 @@ Provides standardized types used across modules to enable interoperability.
 This is the Foundation layer type library that replaces per-module type definitions.
 """
 
-from .core import (
-    Config,
-    ModuleInfo,
-    Notification,
-    Result,
-    ResultStatus,
-    Task,
-    TaskStatus,
-    ToolDefinition,
-)
 from .code import (
     AnalysisResult,
     AnalysisSeverity,
@@ -24,6 +14,16 @@ from .code import (
     SecuritySeverity,
     TestResult,
     TestStatus,
+)
+from .core import (
+    Config,
+    ModuleInfo,
+    Notification,
+    Result,
+    ResultStatus,
+    Task,
+    TaskStatus,
+    ToolDefinition,
 )
 from .infra import (
     BuildArtifact,

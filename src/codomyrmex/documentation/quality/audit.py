@@ -6,7 +6,6 @@ import ast
 import os
 import sys
 from pathlib import Path
-from typing import List, Dict, Optional
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 PLACEHOLDER_TEXTS = ["Placeholder", "TODO: Add documentation", "# New Module"]
@@ -14,14 +13,14 @@ PLACEHOLDER_TEXTS = ["Placeholder", "TODO: Add documentation", "# New Module"]
 
 class ModuleAudit:
     """Audits a single module for documentation completeness."""
-    
+
     def __init__(self, path: Path, src_root: Path):
         """Execute   Init   operations natively."""
         self.path = path
         self.name = path.name
         self.relative_path = path.relative_to(src_root)
-        self.missing_docs: List[str] = []
-        self.placeholder_docs: List[str] = []
+        self.missing_docs: list[str] = []
+        self.placeholder_docs: list[str] = []
         self.has_py_typed = False
         self.init_has_docstring = False
         self.files_count = 0
@@ -64,14 +63,14 @@ def is_package(path: Path) -> bool:
     return path.is_dir() and (path / "__init__.py").exists()
 
 
-def generate_report(audits: List[ModuleAudit], report_file: Path) -> None:
+def generate_report(audits: list[ModuleAudit], report_file: Path) -> None:
     """Generate a markdown report from the audit results."""
     total_modules = len(audits)
     perfect_modules = 0
     modules_missing_rasp = 0
     modules_with_placeholders = 0
     modules_missing_typed = 0
-    
+
     report_lines = [
         "# Documentation Audit Report",
         "",
@@ -84,14 +83,14 @@ def generate_report(audits: List[ModuleAudit], report_file: Path) -> None:
 
     for audit in audits:
         is_perfect = (
-            not audit.missing_docs and 
-            not audit.placeholder_docs and 
-            audit.has_py_typed and 
+            not audit.missing_docs and
+            not audit.placeholder_docs and
+            audit.has_py_typed and
             audit.init_has_docstring
         )
         if is_perfect:
             perfect_modules += 1
-        
+
         if audit.missing_docs:
             modules_missing_rasp += 1
         if audit.placeholder_docs:
@@ -117,7 +116,7 @@ def generate_report(audits: List[ModuleAudit], report_file: Path) -> None:
         placeholder_str = ", ".join(audit.placeholder_docs) if audit.placeholder_docs else "✅"
         typed_str = "✅" if audit.has_py_typed else "❌"
         init_doc_str = "✅" if audit.init_has_docstring else "❌"
-        
+
         # Highlight checking row if it has issues
         if missing_str != "✅" or placeholder_str != "✅" or typed_str == "❌" or init_doc_str == "❌":
             report_lines.append(f"| `{audit.relative_path}` | {missing_str} | {placeholder_str} | {typed_str} | {init_doc_str} |")
@@ -136,7 +135,7 @@ def audit_documentation(src_dir: Path, report_file: Path) -> None:
         return
 
     audits = []
-    
+
     for root, dirs, files in os.walk(src_dir):
         root_path = Path(root)
         if is_package(root_path):
@@ -144,7 +143,7 @@ def audit_documentation(src_dir: Path, report_file: Path) -> None:
             rel_parts = root_path.relative_to(src_dir).parts
             if any(part.startswith('.') or part == "__pycache__" for part in rel_parts):
                 continue
-                
+
             audit = ModuleAudit(root_path, src_dir)
             audit.audit()
             audits.append(audit)
@@ -162,10 +161,10 @@ def audit_rasp(base_dir: Path) -> int:
     Returns exit code (0 for success, 1 for failure).
     """
     print(f"Auditing RASP documentation in {base_dir}...\n")
-    
+
     # Simple check for RASP files in all submodules
-    missing_report: Dict[str, List[str]] = {}
-    
+    missing_report: dict[str, list[str]] = {}
+
     # Walk to find packages
     packages = []
     for root, dirs, files in os.walk(base_dir):
@@ -181,7 +180,7 @@ def audit_rasp(base_dir: Path) -> int:
         for rasp_file in REQUIRED_DOCS:
             if not (pkg / rasp_file).exists():
                 missing.append(rasp_file)
-        
+
         if missing:
             rel_path = pkg.relative_to(base_dir.parent)
             missing_report[str(rel_path)] = missing
@@ -189,16 +188,16 @@ def audit_rasp(base_dir: Path) -> int:
     if not missing_report:
         print("✅ SUCCESS: All modules have complete RASP documentation!")
         return 0
-        
+
     print(f"❌ FOUND ISSUES: {len(missing_report)} modules are missing RASP files.")
     print("-" * 60)
     print(f"{'Module':<40} | {'Missing Files'}")
     print("-" * 60)
-    
+
     for mod in sorted(missing_report.keys()):
         missing_str = ", ".join(sorted(missing_report[mod]))
         print(f"{mod:<40} | {missing_str}")
-    
+
     print("-" * 60)
     print(f"\nTotal modules audited: {len(packages)}")
     return 1

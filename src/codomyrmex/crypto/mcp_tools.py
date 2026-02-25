@@ -1,6 +1,5 @@
 """MCP tools for the crypto module."""
 
-from typing import Any, Dict, Optional
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

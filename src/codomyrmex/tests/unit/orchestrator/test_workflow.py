@@ -3,7 +3,7 @@ import asyncio
 
 import pytest
 
-from codomyrmex.orchestrator.workflow import (
+from codomyrmex.orchestrator.workflows.workflow import (
     CycleError,
     TaskStatus,
     Workflow,
@@ -141,7 +141,7 @@ class TestRetryPolicy:
 
     def test_retry_policy_defaults(self):
         """Test RetryPolicy default values."""
-        from codomyrmex.orchestrator.workflow import RetryPolicy
+        from codomyrmex.orchestrator.workflows.workflow import RetryPolicy
 
         policy = RetryPolicy()
 
@@ -152,7 +152,7 @@ class TestRetryPolicy:
 
     def test_retry_policy_custom_values(self):
         """Test RetryPolicy with custom values."""
-        from codomyrmex.orchestrator.workflow import RetryPolicy
+        from codomyrmex.orchestrator.workflows.workflow import RetryPolicy
 
         policy = RetryPolicy(
             max_attempts=5,
@@ -166,7 +166,7 @@ class TestRetryPolicy:
 
     def test_get_delay_exponential(self):
         """Test delay calculation with exponential backoff."""
-        from codomyrmex.orchestrator.workflow import RetryPolicy
+        from codomyrmex.orchestrator.workflows.workflow import RetryPolicy
 
         policy = RetryPolicy(initial_delay=1.0, exponential_base=2.0)
 
@@ -176,7 +176,7 @@ class TestRetryPolicy:
 
     def test_get_delay_max_cap(self):
         """Test delay is capped at max_delay."""
-        from codomyrmex.orchestrator.workflow import RetryPolicy
+        from codomyrmex.orchestrator.workflows.workflow import RetryPolicy
 
         policy = RetryPolicy(initial_delay=10.0, max_delay=20.0, exponential_base=2.0)
 
@@ -189,7 +189,7 @@ class TestTaskResult:
 
     def test_task_result_defaults(self):
         """Test TaskResult default values."""
-        from codomyrmex.orchestrator.workflow import TaskResult
+        from codomyrmex.orchestrator.workflows.workflow import TaskResult
 
         result = TaskResult(success=True)
 
@@ -201,7 +201,7 @@ class TestTaskResult:
 
     def test_task_result_with_values(self):
         """Test TaskResult with all values."""
-        from codomyrmex.orchestrator.workflow import TaskResult
+        from codomyrmex.orchestrator.workflows.workflow import TaskResult
 
         result = TaskResult(
             success=True,
@@ -221,7 +221,7 @@ class TestWorkflowHelpers:
 
     def test_chain_helper(self):
         """Test chain helper function."""
-        from codomyrmex.orchestrator.workflow import chain
+        from codomyrmex.orchestrator.workflows.workflow import chain
 
         def action1(): return "1"
         def action2(): return "2"
@@ -234,7 +234,7 @@ class TestWorkflowHelpers:
 
     def test_parallel_helper(self):
         """Test parallel helper function."""
-        from codomyrmex.orchestrator.workflow import parallel
+        from codomyrmex.orchestrator.workflows.workflow import parallel
 
         def action1(): return "1"
         def action2(): return "2"
@@ -249,7 +249,7 @@ class TestWorkflowHelpers:
 
     def test_fan_out_fan_in_helper(self):
         """Test fan_out_fan_in helper function."""
-        from codomyrmex.orchestrator.workflow import fan_out_fan_in
+        from codomyrmex.orchestrator.workflows.workflow import fan_out_fan_in
 
         def initial(): return "start"
         def parallel1(): return "p1"
@@ -269,7 +269,7 @@ class TestWorkflowHelpers:
 @pytest.mark.asyncio
 async def test_workflow_with_timeout():
     """Test workflow task timeout."""
-    from codomyrmex.orchestrator.workflow import Workflow
+    from codomyrmex.orchestrator.workflows.workflow import Workflow
 
     async def slow_task():
         await asyncio.sleep(10)

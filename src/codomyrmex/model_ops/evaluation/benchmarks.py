@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -18,7 +19,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
-from .scorers import Scorer, ExactMatchScorer
+from .scorers import ExactMatchScorer, Scorer
 
 
 @dataclass
@@ -148,7 +149,7 @@ class SuiteResult:
             "metadata": self.metadata,
         }
 
-    def to_result(self) -> "Result | None":
+    def to_result(self) -> Result | None:
         """Convert to a codomyrmex Result if schemas are available."""
         if Result is None or ResultStatus is None:
             return None

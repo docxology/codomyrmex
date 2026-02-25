@@ -9,8 +9,8 @@ Provides genetic algorithm components:
 """
 
 import random
-from typing import Any, Dict, List, Optional, Tuple
 from collections.abc import Callable
+from typing import Any, Dict, List, Optional, Tuple
 
 # Shared schemas for cross-module interop
 try:

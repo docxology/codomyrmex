@@ -1,15 +1,14 @@
 
 import os
 
-import pytest
 from codomyrmex.agents.core import (
     AgentConfig,
-    base,
     get_config,
     reset_config,
     set_config,
 )
 from codomyrmex.tests.unit.agents.conftest import ConcreteAgent
+
 
 class TestBaseAgentInitialization:
     """Test BaseAgent initialization and lifecycle."""
@@ -19,7 +18,7 @@ class TestBaseAgentInitialization:
         agent = ConcreteAgent()
         assert agent.name == "test_agent"
         assert agent.config == {}
-        
+
     def test_agent_initialization_with_config(self):
         """Test agent initialization with custom config."""
         config = {"timeout": 60, "model": "test-model"}

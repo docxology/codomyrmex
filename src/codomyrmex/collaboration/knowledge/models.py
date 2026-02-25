@@ -6,8 +6,6 @@ query results used by the shared memory pool and router.
 
 from __future__ import annotations
 
-from codomyrmex.agents.memory.store import MemoryEntry
-
 import time
 from dataclasses import dataclass, field
 from enum import Enum

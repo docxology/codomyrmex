@@ -7,12 +7,12 @@ among a group of agents.
 
 import logging
 import random
+from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from ..agents.base import CollaborativeAgent
 from ..protocols import AgentState

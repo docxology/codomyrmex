@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from codomyrmex.agents.planner.feedback_config import FeedbackConfig
-from codomyrmex.orchestrator.workflow_engine import StepStatus, WorkflowResult
+from codomyrmex.orchestrator.workflows.workflow_engine import StepStatus, WorkflowResult
 
 
 @dataclass

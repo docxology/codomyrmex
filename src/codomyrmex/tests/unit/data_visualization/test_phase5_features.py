@@ -1,7 +1,7 @@
-import pytest
-from codomyrmex.data_visualization.plots.treemap import TreeMap
-from codomyrmex.data_visualization.plots.network import NetworkGraph
 from codomyrmex.data_visualization.components.heatmap_table import HeatmapTable
+from codomyrmex.data_visualization.plots.network import NetworkGraph
+from codomyrmex.data_visualization.plots.treemap import TreeMap
+
 
 def test_treemap_render():
     """Test functionality: treemap render."""

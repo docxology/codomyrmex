@@ -10,7 +10,6 @@ from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
-
 # Module-level singleton — avoids re-creating on every call
 _agent_instance: Any = None
 

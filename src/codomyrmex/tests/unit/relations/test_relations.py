@@ -16,7 +16,6 @@ import pytest
 
 from codomyrmex.relations.crm.crm import Contact, ContactManager, Interaction
 
-
 # ======================================================================
 # Module import
 # ======================================================================

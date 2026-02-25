@@ -170,7 +170,9 @@ class TestLoggingMonitoring:
 
     def test_create_correlation_id(self):
         """Test correlation ID generation."""
-        from codomyrmex.logging_monitoring.core.logger_config import create_correlation_id
+        from codomyrmex.logging_monitoring.core.logger_config import (
+            create_correlation_id,
+        )
 
         correlation_id = create_correlation_id()
         assert isinstance(correlation_id, str)
@@ -336,7 +338,9 @@ class TestStandaloneJSONFormatter:
 
     def test_standalone_json_formatter(self):
         """Test formatting a LogRecord produces valid JSON with expected fields."""
-        from codomyrmex.logging_monitoring.formatters.json_formatter import JSONFormatter
+        from codomyrmex.logging_monitoring.formatters.json_formatter import (
+            JSONFormatter,
+        )
 
         formatter = JSONFormatter()
 
@@ -357,7 +361,9 @@ class TestStandaloneJSONFormatter:
 
     def test_json_formatter_with_exception(self):
         """Test formatting a LogRecord with exception info includes the exception key."""
-        from codomyrmex.logging_monitoring.formatters.json_formatter import JSONFormatter
+        from codomyrmex.logging_monitoring.formatters.json_formatter import (
+            JSONFormatter,
+        )
 
         formatter = JSONFormatter()
 
@@ -435,8 +441,12 @@ class TestStructuredFormatter:
     def test_format_basic(self):
         """Test functionality: format basic."""
         import json
+
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
-            StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
+            LogContext,
+            LogLevel,
+            StructuredFormatter,
+            StructuredLogEntry,
         )
         formatter = StructuredFormatter()
         entry = StructuredLogEntry(
@@ -453,8 +463,12 @@ class TestStructuredFormatter:
     def test_static_fields(self):
         """Test functionality: static fields."""
         import json
+
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
-            StructuredFormatter, FormatterConfig, StructuredLogEntry, LogLevel,
+            FormatterConfig,
+            LogLevel,
+            StructuredFormatter,
+            StructuredLogEntry,
         )
         config = FormatterConfig(static_fields={"service": "codomyrmex"})
         formatter = StructuredFormatter(config=config)
@@ -466,8 +480,12 @@ class TestStructuredFormatter:
     def test_correlation_id(self):
         """Test functionality: correlation id."""
         import json
+
         from codomyrmex.logging_monitoring.formatters.structured_formatter import (
-            StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
+            LogContext,
+            LogLevel,
+            StructuredFormatter,
+            StructuredLogEntry,
         )
         formatter = StructuredFormatter()
         entry = StructuredLogEntry(
@@ -486,7 +504,10 @@ class TestLogAggregator:
 
     def test_add_and_count(self):
         """Test functionality: add and count."""
-        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import (
+            LogAggregator,
+            LogRecord,
+        )
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="test"))
         assert agg.count == 1
@@ -494,7 +515,9 @@ class TestLogAggregator:
     def test_search_by_level(self):
         """Test functionality: search by level."""
         from codomyrmex.logging_monitoring.core.log_aggregator import (
-            LogAggregator, LogRecord, LogQuery,
+            LogAggregator,
+            LogQuery,
+            LogRecord,
         )
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="ok"))
@@ -505,7 +528,10 @@ class TestLogAggregator:
 
     def test_stats(self):
         """Test functionality: stats."""
-        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import (
+            LogAggregator,
+            LogRecord,
+        )
         agg = LogAggregator()
         agg.add(LogRecord(level="info", message="ok", module="main"))
         agg.add(LogRecord(level="error", message="fail", module="db"))
@@ -515,7 +541,10 @@ class TestLogAggregator:
 
     def test_max_records_eviction(self):
         """Test functionality: max records eviction."""
-        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        from codomyrmex.logging_monitoring.core.log_aggregator import (
+            LogAggregator,
+            LogRecord,
+        )
         agg = LogAggregator(max_records=5)
         for i in range(10):
             agg.add(LogRecord(level="info", message=f"msg {i}"))

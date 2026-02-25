@@ -6,12 +6,10 @@ and date-based filters.
 
 from __future__ import annotations
 
-from datetime import datetime, date
+from datetime import date, datetime
 from typing import Any
 
 from codomyrmex.agentic_memory.obsidian.models import Note, SearchResult
-from codomyrmex.agentic_memory.obsidian.parser import extract_tags
-
 
 # ── full-text search ─────────────────────────────────────────────────
 

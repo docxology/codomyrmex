@@ -12,8 +12,8 @@ import os
 import pytest
 
 from codomyrmex.logging_monitoring.core.logger_config import LogContext
-from codomyrmex.orchestrator.observability.reporting import generate_report
 from codomyrmex.orchestrator.execution.runner import run_script
+from codomyrmex.orchestrator.observability.reporting import generate_report
 
 
 @pytest.mark.unit

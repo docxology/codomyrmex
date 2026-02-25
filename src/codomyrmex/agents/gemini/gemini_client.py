@@ -1,6 +1,6 @@
 import os
-from typing import Any
 from collections.abc import Iterator
+from typing import Any
 
 from google import genai
 from google.genai import types
@@ -141,10 +141,10 @@ class GeminiClient(BaseAgent):
         """Execute Start Chat operations natively."""
         if not self.client:
             raise GeminiError("Gemini Client not initialized")
-        
+
         model_name = model or self.default_model
         model_client = self.client.generative_model(model_name)
-        
+
         return model_client.start_chat(
             history=history,
             enable_automatic_function_calling=enable_automatic_function_calling,
@@ -161,7 +161,7 @@ class GeminiClient(BaseAgent):
                  try:
                      img = Image.open(img_path)
                      parts.append(img)
-                 except (OSError, IOError, AttributeError) as e:
+                 except (OSError, AttributeError) as e:
                      logger.warning(f"Failed to load image: {e}")
         return [parts]
 

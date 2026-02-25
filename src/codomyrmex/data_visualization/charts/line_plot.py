@@ -8,6 +8,8 @@ import os
 
 import matplotlib.pyplot as plt
 
+from codomyrmex.model_context_protocol.decorators import mcp_tool
+
 from .plot_utils import (
     DEFAULT_FIGURE_SIZE,
     apply_common_aesthetics,
@@ -15,7 +17,6 @@ from .plot_utils import (
     get_codomyrmex_logger,
     save_plot,
 )
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 logger = get_codomyrmex_logger(__name__)
 

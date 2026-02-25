@@ -13,7 +13,7 @@ from .json_view import JsonView
 from .media import Image, Video
 from .progress import ProgressBar
 from .statbox import StatBox
-from .text import TextBlock, CodeBlock
+from .text import CodeBlock, TextBlock
 from .timeline import Timeline, TimelineEvent
 
 __all__ = [

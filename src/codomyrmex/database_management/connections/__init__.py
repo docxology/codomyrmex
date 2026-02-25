@@ -10,12 +10,12 @@ import queue
 import threading
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, Generic, Iterator, List, Optional, TypeVar
-from collections.abc import Callable
+from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 T = TypeVar('T')
 

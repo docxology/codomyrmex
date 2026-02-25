@@ -12,7 +12,6 @@ import random
 
 from ..genome.genome import Genome
 
-
 # ─── Crossover Operators ────────────────────────────────────────────────
 
 

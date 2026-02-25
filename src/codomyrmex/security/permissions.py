@@ -6,9 +6,8 @@ inheritance and grant-based permission checks.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 
 class Permission(Enum):

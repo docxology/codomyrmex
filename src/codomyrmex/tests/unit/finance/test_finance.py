@@ -20,6 +20,7 @@ Tests cover:
 
 import pytest
 
+from codomyrmex.finance.forecasting.forecast import Forecaster, ForecastError
 from codomyrmex.finance.ledger import (
     Account,
     AccountType,
@@ -28,9 +29,7 @@ from codomyrmex.finance.ledger import (
     Transaction,
     TransactionEntry,
 )
-from codomyrmex.finance.forecasting.forecast import Forecaster, ForecastError
 from codomyrmex.finance.taxes.calculator import TaxCalculator, TaxError, TaxResult
-
 
 # ======================================================================
 # Module & AccountType tests

@@ -348,7 +348,9 @@ class FPFVisualizerPNG:
             raise ValueError("No patterns found for visualization")
 
         # Create figure with theme
-        from codomyrmex.cerebrum.visualization.visualization_base import BaseChartVisualizer
+        from codomyrmex.cerebrum.visualization.visualization_base import (
+            BaseChartVisualizer,
+        )
         chart_viz = BaseChartVisualizer(figure_size=self.figsize, dpi=self.dpi)
 
         statuses = list(status_counts.keys())

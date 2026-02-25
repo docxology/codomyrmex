@@ -6,10 +6,10 @@ Provides a common interface for interacting with different LLM providers.
 
 import json
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator, Iterator
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from collections.abc import AsyncIterator, Iterator
 
 
 class ProviderType(Enum):

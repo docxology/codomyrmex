@@ -8,11 +8,9 @@ employee-specific deductions.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from typing import Optional
+from datetime import datetime
 
 from ..taxes.calculator import TaxCalculator, TaxResult
-
 
 # Standard FICA rates (2024)
 SOCIAL_SECURITY_RATE = 0.062
@@ -77,7 +75,7 @@ class PayrollProcessor:
         "annual": 1,
     }
 
-    def __init__(self, tax_calculator: Optional[TaxCalculator] = None) -> None:
+    def __init__(self, tax_calculator: TaxCalculator | None = None) -> None:
         """Initialise with an optional tax calculator.
 
         Args:

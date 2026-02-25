@@ -10,8 +10,8 @@ Quick start::
     python -m codomyrmex.agents.agent_setup
 """
 
+from .config_file import load_config, merge_with_env, save_config
 from .registry import AgentDescriptor, AgentRegistry, ProbeResult
-from .config_file import load_config, save_config, merge_with_env
 
 __all__ = [
     "AgentDescriptor",

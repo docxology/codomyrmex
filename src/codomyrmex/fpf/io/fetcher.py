@@ -14,7 +14,6 @@ from pathlib import Path
 import requests
 
 
-
 class FPFFetcher:
     """Fetcher for FPF specification from GitHub."""
 

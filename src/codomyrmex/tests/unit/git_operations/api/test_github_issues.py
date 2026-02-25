@@ -9,8 +9,6 @@ import os
 import pytest
 
 from codomyrmex.git_operations.api.github import (
-    add_comment,
-    close_issue,
     create_issue,
     list_issues,
 )

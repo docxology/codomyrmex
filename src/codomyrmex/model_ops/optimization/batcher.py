@@ -7,9 +7,9 @@ Batches inference requests for efficient processing.
 import queue
 import threading
 import time
+from collections.abc import Callable
 from concurrent.futures import Future
 from typing import Any, Generic, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 

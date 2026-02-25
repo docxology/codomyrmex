@@ -5,23 +5,20 @@ and DashboardBuilder.
 """
 
 import json
-import pytest
 
-from codomyrmex.telemetry.pipeline import EventKind, ObservabilityPipeline
-from codomyrmex.telemetry.metric_aggregator import MetricAggregator
-from codomyrmex.telemetry.alert_evaluator import (
-    AlertEvaluator,
-    AlertRule,
-    AlertSeverity,
-    AlertState,
-)
 from codomyrmex.data_visualization.dashboard_builder import (
     DashboardBuilder,
     Panel,
     PanelTarget,
     ThresholdConfig,
 )
-
+from codomyrmex.telemetry.alerting.alert_evaluator import (
+    AlertEvaluator,
+    AlertRule,
+    AlertSeverity,
+)
+from codomyrmex.telemetry.metric_aggregator import MetricAggregator
+from codomyrmex.telemetry.pipeline import EventKind, ObservabilityPipeline
 
 # ─── ObservabilityPipeline ────────────────────────────────────────────
 

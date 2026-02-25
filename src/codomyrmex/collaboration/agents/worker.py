@@ -7,8 +7,8 @@ with capability-based routing and configurable execution handlers.
 
 import asyncio
 import logging
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from ..exceptions import CapabilityMismatchError
 from ..models import Task, TaskResult

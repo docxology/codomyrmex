@@ -4,14 +4,14 @@ Provides a factory to get a real LLM client (Claude or Ollama) for use in
 autonomous agents, CLI tools, and skills.
 """
 
-import os
 import json
-import time
 import logging
-import urllib.request
+import os
+import time
 import urllib.error
-from typing import Any, Optional
+import urllib.request
 from dataclasses import dataclass
+from typing import Any
 
 from codomyrmex.config_management.defaults import DEFAULT_OLLAMA_URL
 
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class AgentRequest:
     """Functional component: AgentRequest."""
     prompt: str
-    metadata: Optional[dict[str, Any]] = None
+    metadata: dict[str, Any] | None = None
 
 class OllamaClient:
     """Client for local Ollama instance (REST API).
@@ -35,7 +35,7 @@ class OllamaClient:
         self.base_url = base_url
         self.session_manager = None # dummy for interface compatibility
 
-    def create_session(self, session_id: str) -> None: 
+    def create_session(self, session_id: str) -> None:
         """Execute Create Session operations natively."""
         # Ollama manages context internally via /api/chat if messages are sent
         # For this simple client, we rely on prompt context or stateless calls
@@ -44,10 +44,10 @@ class OllamaClient:
     def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
         """Execute request using Ollama /api/chat for real conversation."""
         url = f"{self.base_url}/api/chat"
-        
+
         # Construct chat messages
         messages = [{"role": "user", "content": request.prompt}]
-        
+
         # Check if system prompt is embedded in context or prompt
         if "System:" in request.prompt:
             parts = request.prompt.split("System:", 1)
@@ -63,12 +63,12 @@ class OllamaClient:
             "messages": messages,
             "stream": False
         }
-        
+
         start_time = time.monotonic()
         content = ""
         try:
             req = urllib.request.Request(
-                url, 
+                url,
                 data=json.dumps(payload).encode("utf-8"),
                 headers={"Content-Type": "application/json"}
             )
@@ -98,10 +98,10 @@ class OllamaClient:
             """Functional component: Response."""
             def is_success(self): return True
             pass
-        
+
         resp = Response()
         resp.content = content
-        resp.tokens_used = 0 
+        resp.tokens_used = 0
         resp.execution_time = elapsed
         return resp
 
@@ -122,7 +122,7 @@ def get_llm_client(identity: str = "agent") -> Any:
             return ClaudeClient()
     except ImportError:
         pass
-    
+
     # 2. Check Ollama
     try:
         # Quick health check
@@ -131,10 +131,10 @@ def get_llm_client(identity: str = "agent") -> Any:
                 # Use configured model or default
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 logger.info(f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})")
-                return OllamaClient(model=model) 
+                return OllamaClient(model=model)
     except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
         pass
-        
+
     raise RuntimeError(
         f"[{identity}] CRITICAL: No Real LLM Available.\n"
         "Please set ANTHROPIC_API_KEY for Claude,\n"

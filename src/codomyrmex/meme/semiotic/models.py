@@ -6,7 +6,6 @@ import hashlib
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
 
 
 class SignType(str, Enum):
@@ -57,8 +56,8 @@ class SemanticTerritory:
     """
 
     domain: str
-    signs: List[Sign] = field(default_factory=list)
-    boundaries: Dict[str, float] = field(default_factory=dict)
+    signs: list[Sign] = field(default_factory=list)
+    boundaries: dict[str, float] = field(default_factory=dict)
     contested: bool = False
 
     @property
@@ -82,10 +81,10 @@ class DriftReport:
         timestamp: Time of analysis.
     """
 
-    shifted_signs: List[Sign] = field(default_factory=list)
-    stable_signs: List[Sign] = field(default_factory=list)
-    new_signs: List[Sign] = field(default_factory=list)
-    lost_signs: List[Sign] = field(default_factory=list)
+    shifted_signs: list[Sign] = field(default_factory=list)
+    stable_signs: list[Sign] = field(default_factory=list)
+    new_signs: list[Sign] = field(default_factory=list)
+    lost_signs: list[Sign] = field(default_factory=list)
     drift_magnitude: float = 0.0
     timestamp: float = field(default_factory=time.time)
 

@@ -6,7 +6,6 @@ CacheStats, CacheManager, TTLManager, TTL handling, eviction, and cache operatio
 
 import time
 
-
 import pytest
 
 from codomyrmex.cache.backends.in_memory import InMemoryCache

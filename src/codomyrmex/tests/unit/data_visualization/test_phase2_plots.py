@@ -1,8 +1,8 @@
-import pytest
-from codomyrmex.data_visualization.plots.violin import ViolinPlot
-from codomyrmex.data_visualization.plots.radar import RadarChart
 from codomyrmex.data_visualization.plots.candlestick import CandlestickChart
 from codomyrmex.data_visualization.plots.gantt import GanttChart
+from codomyrmex.data_visualization.plots.radar import RadarChart
+from codomyrmex.data_visualization.plots.violin import ViolinPlot
+
 
 def test_violin_plot_render():
     """Test functionality: violin plot render."""

@@ -39,7 +39,9 @@ from .deps.dependency_analyzer import DependencyAnalyzer
 from .deps.dependency_analyzer import main as dependency_analyzer_main
 from .deps.dependency_checker import check_dependencies
 from .deps.dependency_checker import main as dependency_checker_main
-from .deps.dependency_consolidator import analyze_dependencies as consolidate_dependencies
+from .deps.dependency_consolidator import (
+    analyze_dependencies as consolidate_dependencies,
+)
 from .deps.dependency_consolidator import main as dependency_consolidator_main
 from .deps.validate_dependencies import main as validate_dependencies_main
 

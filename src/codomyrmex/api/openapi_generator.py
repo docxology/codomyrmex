@@ -17,7 +17,6 @@ from typing import Any
 
 from codomyrmex.config_management.defaults import DEFAULT_API_BASE_URL
 
-
 try:
     from codomyrmex.logging_monitoring.core.logger_config import get_logger
     logger = get_logger(__name__)

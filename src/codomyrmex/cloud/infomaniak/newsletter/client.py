@@ -13,7 +13,6 @@ import logging
 import os
 from typing import Any
 
-
 from ..base import InfomaniakRESTBase
 from ..exceptions import classify_http_error
 

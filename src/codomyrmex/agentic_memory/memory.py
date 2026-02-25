@@ -8,8 +8,8 @@ for turn-based dialogue and factual knowledge respectively.
 
 from __future__ import annotations
 
-import uuid
 import time
+import uuid
 from typing import Any
 
 from codomyrmex.agentic_memory.models import (
@@ -19,7 +19,6 @@ from codomyrmex.agentic_memory.models import (
     RetrievalResult,
 )
 from codomyrmex.agentic_memory.stores import InMemoryStore
-
 
 # ── helpers ──────────────────────────────────────────────────────────
 

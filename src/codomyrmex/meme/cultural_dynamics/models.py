@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
-import numpy as np
 
 
 @dataclass
@@ -20,8 +18,8 @@ class CulturalState:
         timestamp: Time of snapshot.
     """
 
-    dimensions: Dict[str, float] = field(default_factory=dict)
-    momentum: Dict[str, float] = field(default_factory=dict)
+    dimensions: dict[str, float] = field(default_factory=dict)
+    momentum: dict[str, float] = field(default_factory=dict)
     energy: float = 0.0
     timestamp: float = field(default_factory=time.time)
 
@@ -40,8 +38,8 @@ class Signal:
 @dataclass
 class Trajectory:
     """A temporal sequence of cultural states."""
-    states: List[CulturalState] = field(default_factory=list)
-    trend_vector: Optional[Dict[str, float]] = None
+    states: list[CulturalState] = field(default_factory=list)
+    trend_vector: dict[str, float] | None = None
 
 
 @dataclass
@@ -53,9 +51,9 @@ class PowerMap:
         influence_matrix: Directed influence weights.
         capital_flows: Flow of capital (symbolic/material) between nodes.
     """
-    nodes: List[str] = field(default_factory=list)
+    nodes: list[str] = field(default_factory=list)
     # Simplified representation for now
-    centrality_scores: Dict[str, float] = field(default_factory=dict)
+    centrality_scores: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass

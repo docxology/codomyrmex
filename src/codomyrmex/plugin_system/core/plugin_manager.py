@@ -5,8 +5,8 @@ This module provides the main plugin management interface, coordinating
 plugin discovery, validation, loading, and lifecycle management.
 """
 
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 # Import logging
 try:
@@ -17,6 +17,7 @@ except ImportError:
     logger = logging.getLogger(__name__)
 
 # Import plugin system components
+from ..validation.plugin_validator import PluginValidator, ValidationResult
 from .plugin_loader import LoadResult, PluginLoader
 from .plugin_registry import (
     Hook,
@@ -26,7 +27,6 @@ from .plugin_registry import (
     PluginState,
     PluginType,
 )
-from ..validation.plugin_validator import PluginValidator, ValidationResult
 
 
 class PluginManager:

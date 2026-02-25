@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Verification script for the new meme module."""
 import sys
-import os
 
 # Ensure src is in path
 sys.path.insert(0, "/Users/mini/Documents/GitHub/codomyrmex/src")
@@ -20,9 +19,8 @@ def fail(msg):
 
 try:
     info("Attempting to import codomyrmex.meme package...")
-    import codomyrmex.meme as meme
     success("Imported codomyrmex.meme")
-    
+
     # 1. Memetics
     info("Testing memetics...")
     from codomyrmex.meme.memetics.models import Meme
@@ -47,8 +45,8 @@ try:
 
     # 4. Narrative
     info("Testing narrative...")
-    from codomyrmex.meme.narrative.myth import synthesize_myth
     from codomyrmex.meme.narrative.models import Archetype
+    from codomyrmex.meme.narrative.myth import synthesize_myth
     myth = synthesize_myth("Testing", {"Hero": Archetype.HERO})
     assert myth.title
     success("Narrative: Myth synthesis valid")
@@ -77,8 +75,8 @@ try:
 
     # 8. Ideoscape
     info("Testing ideoscape...")
-    from codomyrmex.meme.ideoscape.models import MapFeature
     from codomyrmex.meme.ideoscape.cartography import generate_terrain
+    from codomyrmex.meme.ideoscape.models import MapFeature
     f = MapFeature(name="Peak", position=[0.0, 0.0])
     t = generate_terrain([f], resolution=10)
     assert t.height_map.shape == (10, 10)
@@ -86,8 +84,8 @@ try:
 
     # 9. Rhizome
     info("Testing rhizome...")
-    from codomyrmex.meme.rhizome.network import build_graph
     from codomyrmex.meme.rhizome.models import NetworkTopology
+    from codomyrmex.meme.rhizome.network import build_graph
     g = build_graph(10, NetworkTopology.RANDOM)
     assert len(g.nodes) == 10
     success("Rhizome: Graph construction valid")
@@ -101,7 +99,10 @@ try:
 
     # 11. Hyperreality
     info("Testing hyperreality...")
-    from codomyrmex.meme.hyperreality.simulation import generate_simulacrum, SimulationLevel
+    from codomyrmex.meme.hyperreality.simulation import (
+        SimulationLevel,
+        generate_simulacrum,
+    )
     sim = generate_simulacrum("Original", SimulationLevel.PURE)
     assert sim.fidelity == 1.0
     success("Hyperreality: Simulacrum generation valid")

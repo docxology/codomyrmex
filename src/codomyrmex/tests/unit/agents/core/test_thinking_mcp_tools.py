@@ -6,8 +6,6 @@ produce correct responses, and handle edge cases.
 
 from __future__ import annotations
 
-import pytest
-
 from codomyrmex.agents.core.mcp_tools import (
     get_last_trace,
     get_thinking_depth,
@@ -114,8 +112,8 @@ class TestThinkingAgentKnowledgeWiring:
 
     def test_agent_without_retriever(self) -> None:
         """Test functionality: agent without retriever."""
-        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
         from codomyrmex.agents.core.base import AgentRequest
+        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
 
         agent = ThinkingAgent()
         assert agent.knowledge_retriever is None
@@ -147,9 +145,10 @@ class TestThinkingAgentKnowledgeWiring:
 
     def test_agent_executes_with_retriever(self) -> None:
         """Test functionality: agent executes with retriever."""
-        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
-        from codomyrmex.agents.core.base import AgentRequest
         from types import SimpleNamespace
+
+        from codomyrmex.agents.core.base import AgentRequest
+        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
 
         class FakeRetriever:
             called_with: str | None = None
@@ -171,8 +170,8 @@ class TestThinkingAgentKnowledgeWiring:
 
     def test_agent_survives_retriever_failure(self) -> None:
         """Test functionality: agent survives retriever failure."""
-        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
         from codomyrmex.agents.core.base import AgentRequest
+        from codomyrmex.agents.core.thinking_agent import ThinkingAgent
 
         class FailingRetriever:
             def retrieve(self, query: str):

@@ -61,12 +61,12 @@ def cli_commands():
         """Show logistics status."""
         print(f"Logistics module v{__version__}")
         print("Components:")
-        print(f"  WorkflowManager: available")
-        print(f"  TaskOrchestrator: available")
-        print(f"  ProjectManager: available")
-        print(f"  ScheduleManager: available")
-        print(f"  CronScheduler: available")
-        print(f"  JobScheduler: available")
+        print("  WorkflowManager: available")
+        print("  TaskOrchestrator: available")
+        print("  ProjectManager: available")
+        print("  ScheduleManager: available")
+        print("  CronScheduler: available")
+        print("  JobScheduler: available")
 
     return {
         "routes": _list_routes,

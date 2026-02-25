@@ -6,9 +6,10 @@ directly within their defining modules. This enables "Module-Native"
 MCP exposure without centralized registry files.
 """
 
-import inspect
 import functools
-from typing import Any, Callable, Dict, Optional, Type, get_type_hints
+import inspect
+from collections.abc import Callable
+from typing import Any, get_type_hints
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -16,12 +17,12 @@ logger = get_logger(__name__)
 
 
 def mcp_tool(
-    name: Optional[str] = None,
-    description: Optional[str] = None,
-    schema: Optional[Dict[str, Any]] = None,
+    name: str | None = None,
+    description: str | None = None,
+    schema: dict[str, Any] | None = None,
     category: str = "general",
-    version: Optional[str] = None,
-    deprecated_in: Optional[str] = None,
+    version: str | None = None,
+    deprecated_in: str | None = None,
 ) -> Callable[..., Any]:
     """
     Decorator to mark a function as an MCP tool.
@@ -66,8 +67,8 @@ def mcp_tool(
             "version": version or "1.0",
             "deprecated_in": deprecated_in,
         }
-        setattr(func, "_mcp_tool", tool_meta)
-        setattr(func, "_mcp_tool_meta", tool_meta)
+        func._mcp_tool = tool_meta
+        func._mcp_tool_meta = tool_meta
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -111,32 +112,32 @@ def _safe_default(value: Any) -> Any:
     return str(value)
 
 
-def _generate_schema_from_signature(func: Callable[..., Any]) -> Dict[str, Any]:
+def _generate_schema_from_signature(func: Callable[..., Any]) -> dict[str, Any]:
     """Generate JSON Schema from function signature and type hints."""
     try:
         sig = inspect.signature(func)
         type_hints = get_type_hints(func)
-        
+
         properties = {}
         required = []
-        
+
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
-            
+
             # Handle **kwargs and *args gracefully
             if param.kind in (
                 inspect.Parameter.VAR_POSITIONAL,
                 inspect.Parameter.VAR_KEYWORD,
             ):
                 continue
-                
+
             # Determine type
             param_type = type_hints.get(param_name, Any)
             json_type = _map_python_type_to_json(param_type)
-            
+
             prop_schema = {"type": json_type}
-            
+
             # Default value? (JSON-safe conversion)
             if param.default is not inspect.Parameter.empty:
                 safe_val = _safe_default(param.default)
@@ -144,9 +145,9 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> Dict[str, Any]:
                     prop_schema["default"] = safe_val
             else:
                 required.append(param_name)
-                
+
             properties[param_name] = prop_schema
-            
+
         return {
             "type": "object",
             "properties": properties,
@@ -157,7 +158,7 @@ def _generate_schema_from_signature(func: Callable[..., Any]) -> Dict[str, Any]:
         return {"type": "object", "properties": {}}  # Fallback
 
 
-def _map_python_type_to_json(py_type: Type[Any]) -> str:
+def _map_python_type_to_json(py_type: type[Any]) -> str:
     """Map Python types to JSON Schema types."""
     if py_type == str:
         return "string"

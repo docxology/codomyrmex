@@ -5,10 +5,10 @@ Provides a mixin class that modules can use to easily emit and subscribe to even
 without directly managing the event bus.
 """
 
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
-from .event_bus import get_event_bus, EventBus
+from .event_bus import EventBus, get_event_bus
 from .event_schema import Event, EventType
 
 

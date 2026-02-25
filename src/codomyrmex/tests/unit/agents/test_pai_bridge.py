@@ -9,7 +9,6 @@ Upstream reference: https://github.com/danielmiessler/Personal_AI_Infrastructure
 
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -27,7 +26,6 @@ from codomyrmex.agents.pai import (
     PAISkillInfo,
     PAIToolInfo,
 )
-
 
 # =====================================================================
 # Fixtures

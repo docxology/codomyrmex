@@ -15,16 +15,14 @@ from __future__ import annotations
 
 import getpass
 import os
-import sys
 from pathlib import Path
 
-from codomyrmex.agents.agent_setup.registry import AgentRegistry, ProbeResult
 from codomyrmex.agents.agent_setup.config_file import (
     DEFAULT_CONFIG_PATH,
     load_config,
     save_config,
 )
-
+from codomyrmex.agents.agent_setup.registry import AgentRegistry, ProbeResult
 
 # ── ANSI helpers ──────────────────────────────────────────────────────────
 
@@ -94,14 +92,14 @@ def print_status_table(results: list[ProbeResult]):
 def _prompt_api_key(agent_name: str, env_var: str) -> str | None:
     """Prompt for an API key (hidden input)."""
     print(f"\n  {_CYAN}{agent_name}{_RESET} requires {_BOLD}{env_var}{_RESET}")
-    key = getpass.getpass(f"  Enter API key (or press Enter to skip): ")
+    key = getpass.getpass("  Enter API key (or press Enter to skip): ")
     return key.strip() or None
 
 
 def _prompt_binary_path(agent_name: str, binary: str) -> str | None:
     """Prompt for a CLI binary path."""
     print(f"\n  {_CYAN}{agent_name}{_RESET} binary '{binary}' not found")
-    path = input(f"  Enter absolute path (or press Enter to skip): ").strip()
+    path = input("  Enter absolute path (or press Enter to skip): ").strip()
     return path or None
 
 
@@ -169,7 +167,7 @@ def run_setup_wizard(
 
         elif desc.agent_type == "local":
             print(f"\n  {_CYAN}{desc.display_name}{_RESET}: {probe.detail}")
-            url = input(f"  Enter Ollama URL (default http://localhost:11434, Enter to skip): ").strip()
+            url = input("  Enter Ollama URL (default http://localhost:11434, Enter to skip): ").strip()
             if url:
                 os.environ["OLLAMA_BASE_URL"] = url
                 if "ollama" not in agents_config:

@@ -7,10 +7,10 @@ Provides topic-based pub/sub patterns for agent swarms.
 import asyncio
 import logging
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
-from collections.abc import Callable
 
 from ..exceptions import ChannelError
 from ..protocols import AgentMessage, MessageType

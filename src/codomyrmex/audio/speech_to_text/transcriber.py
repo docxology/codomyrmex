@@ -5,9 +5,8 @@ using various STT providers.
 """
 
 import asyncio
-from pathlib import Path
 from collections.abc import AsyncIterator
-
+from pathlib import Path
 
 from .models import (
     TranscriptionConfig,

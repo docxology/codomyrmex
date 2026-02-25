@@ -3,7 +3,6 @@
 import json
 
 import pytest
-from pathlib import Path
 
 from codomyrmex.agentic_memory.obsidian.canvas import (
     add_canvas_edge,

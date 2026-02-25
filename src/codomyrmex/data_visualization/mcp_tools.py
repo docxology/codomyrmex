@@ -1,15 +1,16 @@
 """MCP tools for the data_visualization module."""
 
-from typing import Any, Dict, Optional
+from typing import Any
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @mcp_tool(category="data_visualization")
 def generate_chart(
-    chart_type: str, 
-    data: Dict[str, Any], 
+    chart_type: str,
+    data: dict[str, Any],
     title: str = "Chart",
-    output_path: Optional[str] = None
+    output_path: str | None = None
 ) -> dict:
     """Generate a visualization chart and optionally save it.
     
@@ -23,7 +24,7 @@ def generate_chart(
         A dictionary containing the chart schema or generation status.
     """
     import codomyrmex.data_visualization as dv
-    
+
     chart_factories = {
         "bar": dv.create_bar_chart,
         "pie": dv.create_pie_chart,
@@ -32,22 +33,22 @@ def generate_chart(
         "area": dv.create_area_chart,
         "histogram": dv.create_histogram
     }
-    
+
     if chart_type not in chart_factories:
         return {"status": "error", "message": f"Unsupported chart type: {chart_type}"}
-        
+
     try:
         factory = chart_factories[chart_type]
-        
+
         # Some factories might have different signatures, mapping basic ones
         if chart_type == "bar":
             result = factory(data, title=title)
         else:
             # Fallback for dynamic unpacking based on the provided dictionary
             result = factory(**data)
-            
+
         return {
-            "status": "success", 
+            "status": "success",
             "rendered": True,
             "chart_type": chart_type
         }
@@ -67,11 +68,11 @@ def export_dashboard(report_type: str = "general", output_dir: str = ".") -> dic
         A dictionary containing the export status and file path.
     """
     from codomyrmex.data_visualization import generate_report
-    
+
     try:
         file_path = generate_report(output_dir=output_dir, report_type=report_type)
         return {
-            "status": "success", 
+            "status": "success",
             "message": "Dashboard exported successfully",
             "file_path": file_path
         }

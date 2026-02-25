@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import sys
-import tempfile
 from pathlib import Path
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -14,7 +13,6 @@ logger = get_logger(__name__)
 
 def assess_documentation_coverage(*, prompt: str, description: str) -> str:
     """Assess documentation coverage for README, AGENTS.md, and technical accuracy."""
-    import sys
     from pathlib import Path
 
     # Add the current directory to Python path for direct imports
@@ -179,7 +177,6 @@ if __name__ == "__main__":
 
 def add_documentation_quality_methods(*, prompt: str, description: str) -> str:
     """Add methods for documentation consistency and quality assessment."""
-    import sys
     from pathlib import Path
 
     # Add the current directory to Python path for direct imports

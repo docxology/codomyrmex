@@ -8,16 +8,12 @@ is offline or no models are available.
 """
 
 import json
-import os
-import shutil
-import tempfile
-import time
 import threading
-import urllib.request
+import time
 import urllib.error
+import urllib.request
 
 import pytest
-
 
 # ── Skip entire module if Ollama is unreachable ─────────────────────
 
@@ -257,6 +253,7 @@ class TestInfiniteConversation:
     def test_conversation_export_to_jsonl(self, relay_dir, model_name, tmp_path):
         """Conversation can be exported to JSONL and imported back."""
         import json
+
         from codomyrmex.agents.orchestrator import ConversationOrchestrator
 
         orch = ConversationOrchestrator(

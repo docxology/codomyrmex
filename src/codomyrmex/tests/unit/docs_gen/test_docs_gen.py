@@ -3,12 +3,10 @@
 Covers APIDocExtractor, SearchIndex, and SiteGenerator.
 """
 
-import pytest
 
 from codomyrmex.docs_gen.api_doc_extractor import APIDocExtractor
 from codomyrmex.docs_gen.search_index import SearchIndex
 from codomyrmex.docs_gen.site_generator import SiteGenerator
-
 
 SAMPLE_SOURCE = '''
 """Sample module docstring."""

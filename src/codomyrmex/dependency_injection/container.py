@@ -20,25 +20,16 @@ from __future__ import annotations
 
 import inspect
 import threading
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass
 from typing import (
     Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Type,
     TypeVar,
     get_type_hints,
 )
 
 from .decorators import (
-    INJECT_ATTR,
     INJECT_PARAMS_ATTR,
-    INJECTABLE_ATTR,
-    get_injectable_metadata,
-    get_injectable_params,
-    get_inject_metadata,
 )
 from .scopes import Scope, ScopeContext
 
@@ -57,11 +48,11 @@ class ServiceDescriptor:
         factory: Optional factory callable instead of a class constructor.
     """
 
-    interface: Type[Any]
-    implementation: Optional[Type[Any]] = None
+    interface: type[Any]
+    implementation: type[Any] | None = None
     scope: Scope = Scope.SINGLETON
-    instance: Optional[Any] = None
-    factory: Optional[Callable[..., Any]] = None
+    instance: Any | None = None
+    factory: Callable[..., Any] | None = None
 
     def is_instance_registration(self) -> bool:
         """Return True if this descriptor was created via register_instance."""
@@ -97,9 +88,9 @@ class Container:
 
     def __init__(self) -> None:
         """Execute   Init   operations natively."""
-        self._registry: Dict[Type[Any], ServiceDescriptor] = {}
+        self._registry: dict[type[Any], ServiceDescriptor] = {}
         self._lock = threading.RLock()
-        self._scope_stack: List[ScopeContext] = []
+        self._scope_stack: list[ScopeContext] = []
         self._resolving: threading.local = threading.local()
 
     # ──────────────────────────────────────────────
@@ -108,10 +99,10 @@ class Container:
 
     def register(
         self,
-        interface: Type[T],
-        implementation: Type[T],
+        interface: type[T],
+        implementation: type[T],
         scope: str = "singleton",
-    ) -> "Container":
+    ) -> Container:
         """Register a concrete implementation for an interface.
 
         Args:
@@ -147,9 +138,9 @@ class Container:
 
     def register_instance(
         self,
-        interface: Type[T],
+        interface: type[T],
         instance: T,
-    ) -> "Container":
+    ) -> Container:
         """Register a pre-built instance as a singleton.
 
         The provided instance will be returned on every resolve() call.
@@ -182,10 +173,10 @@ class Container:
 
     def register_factory(
         self,
-        interface: Type[T],
+        interface: type[T],
         factory: Callable[..., T],
         scope: str = "singleton",
-    ) -> "Container":
+    ) -> Container:
         """Register a factory callable for an interface.
 
         The factory will be called (with no arguments) to create instances.
@@ -218,7 +209,7 @@ class Container:
     # Resolution
     # ──────────────────────────────────────────────
 
-    def resolve(self, interface: Type[T]) -> T:
+    def resolve(self, interface: type[T]) -> T:
         """Resolve an instance of the requested type.
 
         Behavior depends on the registered scope:
@@ -245,7 +236,7 @@ class Container:
         return self._resolve_internal(interface, scope_context=None)
 
     def _resolve_with_scope(
-        self, interface: Type[T], scope_context: ScopeContext
+        self, interface: type[T], scope_context: ScopeContext
     ) -> T:
         """Resolve with an explicit scope context.
 
@@ -256,8 +247,8 @@ class Container:
 
     def _resolve_internal(
         self,
-        interface: Type[T],
-        scope_context: Optional[ScopeContext],
+        interface: type[T],
+        scope_context: ScopeContext | None,
     ) -> T:
         """Core resolution logic with circular dependency detection."""
         with self._lock:
@@ -320,7 +311,7 @@ class Container:
     def _create_instance(
         self,
         descriptor: ServiceDescriptor,
-        scope_context: Optional[ScopeContext],
+        scope_context: ScopeContext | None,
     ) -> Any:
         """Instantiate a service, resolving constructor dependencies."""
         # Factory-based creation
@@ -375,7 +366,7 @@ class Container:
     # Query
     # ──────────────────────────────────────────────
 
-    def has(self, interface: Type[Any]) -> bool:
+    def has(self, interface: type[Any]) -> bool:
         """Check whether a type is registered in this container.
 
         Args:
@@ -387,7 +378,7 @@ class Container:
         with self._lock:
             return interface in self._registry
 
-    def get_descriptor(self, interface: Type[Any]) -> Optional[ServiceDescriptor]:
+    def get_descriptor(self, interface: type[Any]) -> ServiceDescriptor | None:
         """Retrieve the ServiceDescriptor for a registration, if it exists.
 
         Args:
@@ -400,7 +391,7 @@ class Container:
             return self._registry.get(interface)
 
     @property
-    def registrations(self) -> Dict[Type[Any], ServiceDescriptor]:
+    def registrations(self) -> dict[type[Any], ServiceDescriptor]:
         """Return a shallow copy of all current registrations."""
         with self._lock:
             return dict(self._registry)
@@ -434,7 +425,7 @@ class Container:
             if self._scope_stack and self._scope_stack[-1] is scope_context:
                 self._scope_stack.pop()
 
-    def _current_scope(self) -> Optional[ScopeContext]:
+    def _current_scope(self) -> ScopeContext | None:
         """Return the currently active scope context, or None."""
         with self._lock:
             if self._scope_stack:
@@ -455,7 +446,7 @@ class Container:
     # Dunder
     # ──────────────────────────────────────────────
 
-    def __contains__(self, interface: Type[Any]) -> bool:
+    def __contains__(self, interface: type[Any]) -> bool:
         """Execute   Contains   operations natively."""
         return self.has(interface)
 

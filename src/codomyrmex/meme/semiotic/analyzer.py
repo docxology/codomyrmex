@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-from typing import Dict, List, Set
 
-from codomyrmex.meme.semiotic.models import Sign, SignType, DriftReport, SemanticTerritory
+from codomyrmex.meme.semiotic.models import (
+    DriftReport,
+    SemanticTerritory,
+    Sign,
+    SignType,
+)
 
 
 class SemioticAnalyzer:
@@ -21,7 +25,7 @@ class SemioticAnalyzer:
         r"[\U0001F300-\U0001F9FF]|[\u2600-\u26FF]", re.UNICODE
     )
 
-    def decode(self, text: str) -> List[Sign]:
+    def decode(self, text: str) -> list[Sign]:
         """Extract signs from text via keyword and pattern heuristics.
 
         Args:
@@ -30,9 +34,9 @@ class SemioticAnalyzer:
         Returns:
             List of Sign objects found in the text.
         """
-        signs: List[Sign] = []
+        signs: list[Sign] = []
         words = text.split()
-        seen: Set[str] = set()
+        seen: set[str] = set()
 
         for i, word in enumerate(words):
             clean = word.strip(".,!?;:\"'()[]{}").lower()
@@ -70,7 +74,7 @@ class SemioticAnalyzer:
         # Default to Symbol for arbitrary linguistic signs
         return SignType.SYMBOL
 
-    def drift(self, corpus_a: List[str], corpus_b: List[str]) -> DriftReport:
+    def drift(self, corpus_a: list[str], corpus_b: list[str]) -> DriftReport:
         """Measure semiotic drift between two corpora.
 
         Compare how signs are used (their 'signified' context) in corpus A vs B.
@@ -130,8 +134,8 @@ class SemioticAnalyzer:
         )
 
     def territory_map(
-        self, corpus: List[str], n_domains: int = 5
-    ) -> List[SemanticTerritory]:
+        self, corpus: list[str], n_domains: int = 5
+    ) -> list[SemanticTerritory]:
         """Map semantic territories from a corpus.
 
         Identifies key semantic domains via frequent terms and clusters

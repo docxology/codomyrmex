@@ -1,5 +1,16 @@
 """Cryptanalysis: entropy, frequency analysis, strength assessment, classical cipher breaking."""
 
+from codomyrmex.crypto.analysis.classical import (
+    CaesarResult,
+    VigenereResult,
+    break_caesar,
+    break_vigenere,
+    caesar_decrypt,
+    caesar_encrypt,
+    detect_cipher_type,
+    vigenere_decrypt,
+    vigenere_encrypt,
+)
 from codomyrmex.crypto.analysis.entropy import (
     ChiSquaredResult,
     byte_entropy,
@@ -19,17 +30,6 @@ from codomyrmex.crypto.analysis.strength import (
     assess_password_strength,
     check_common_passwords,
     estimate_crack_time,
-)
-from codomyrmex.crypto.analysis.classical import (
-    CaesarResult,
-    VigenereResult,
-    break_caesar,
-    break_vigenere,
-    caesar_decrypt,
-    caesar_encrypt,
-    detect_cipher_type,
-    vigenere_decrypt,
-    vigenere_encrypt,
 )
 
 __all__ = [

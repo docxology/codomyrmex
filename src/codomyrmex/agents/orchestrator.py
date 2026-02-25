@@ -33,19 +33,18 @@ from __future__ import annotations
 import json
 import logging
 import os
-import re
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
+from codomyrmex.agents.llm_client import AgentRequest, OllamaClient
 from codomyrmex.ide.antigravity.agent_relay import AgentRelay
-from codomyrmex.agents.llm_client import OllamaClient, AgentRequest
 from codomyrmex.logging_monitoring.core.correlation import (
     with_correlation,
-    get_correlation_id,
 )
 
 logger = logging.getLogger(__name__)
@@ -196,20 +195,22 @@ def _create_llm_client(spec: AgentSpec) -> Any:
             try:
                 from codomyrmex.agents.llm_client import get_llm_client
                 client = get_llm_client(identity=spec.identity)
-                
+
                 if spec.provider == "antigravity":
                     from codomyrmex.ide.antigravity import AntigravityClient
-                    from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
-                    
+                    from codomyrmex.ide.antigravity.tool_provider import (
+                        AntigravityToolProvider,
+                    )
+
                     ag_client = AntigravityClient()
                     try:
                         ag_client.connect()
                     except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                         pass
-                        
+
                     provider = AntigravityToolProvider(ag_client)
                     registry = provider.get_tool_registry()
-                    
+
                     for tool in registry.list_tools():
                         client.register_tool(
                             name=tool.name,
@@ -217,31 +218,31 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                             input_schema=tool.args_schema,
                             handler=tool.func
                         )
-                        
+
                     # Wrap the client so execute_with_session calls execute_with_tools
                     class AntigravityCodeImplementerWrapper:
                         """Functional component: AntigravityCodeImplementerWrapper."""
                         def __init__(self, base_client):
                             """Execute   Init   operations natively."""
                             self.client = base_client
-                            
+
                         def execute_with_session(self, request, session=None, session_id=None):
                             """Execute Execute With Session operations natively."""
                             if hasattr(self.client, 'execute_with_tools'):
                                 logger.info(f"[{spec.identity}] Executing with full Antigravity tool loop...")
                                 return self.client.execute_with_tools(request, auto_execute=True, max_tool_rounds=15)
                             return self.client.execute_with_session(request, session, session_id)
-                            
+
                     return AntigravityCodeImplementerWrapper(client)
                 return client
             except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.error(f"Failed to create Claude client: {e}")
-        
+
         # Fallback: same Ollama path, overriding the user's model choice for valid local inference if they selected Claude but don't have a key.
         fallback_model = spec.model
         if spec.provider != "ollama":
             fallback_model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
-            
+
         base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
         logger.info(
             f"[{spec.identity}] Provider '{spec.provider}' → "
@@ -409,7 +410,7 @@ class ConversationOrchestrator:
                 )
                 self.log.turns.append(turn)
                 context = turn.content  # next agent responds to this
-                
+
                 if on_turn:
                     on_turn(turn)
 
@@ -443,17 +444,17 @@ class ConversationOrchestrator:
         p = Path(path)
         if not p.exists():
             raise FileNotFoundError(f"Export not found: {p}")
-            
+
         with p.open("r", encoding="utf-8") as f:
             lines = f.read().splitlines()
-            
+
         if not lines:
             return
-            
+
         metadata = json.loads(lines[0])
         self.channel_id = metadata.get("channel_id", self.channel_id)
         self.log.channel_id = self.channel_id
-        
+
         # We start from 1 since 0 is metadata
         self.log.turns.clear()
         for line in lines[1:]:
@@ -464,7 +465,7 @@ class ConversationOrchestrator:
             self.log.turns.append(turn)
             # Re-seed into the relay so agents can read it natively if needed
             self.relay.post_message(turn.speaker, turn.content)
-            
+
         logger.info(f"[Orchestrator] Loaded {len(self.log.turns)} turns from {p}")
 
     @classmethod
@@ -476,7 +477,7 @@ class ConversationOrchestrator:
         agents: list[dict[str, str]] | None = None,
         channel: str = "",
         relay_dir: str | None = None,
-    ) -> "ConversationOrchestrator":
+    ) -> ConversationOrchestrator:
         """Convenience constructor for TO-DO-scaffolded infinite dev loops.
 
         Creates an orchestrator pre-loaded with project files and TO-DO

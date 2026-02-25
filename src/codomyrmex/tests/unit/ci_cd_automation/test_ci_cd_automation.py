@@ -50,7 +50,7 @@ from codomyrmex.ci_cd_automation.pipeline import (
     create_pipeline,
     run_pipeline,
 )
-from codomyrmex.ci_cd_automation.pipeline_monitor import (
+from codomyrmex.ci_cd_automation.pipeline.pipeline_monitor import (
     PipelineMonitor,
     PipelineReport,
     ReportType,
@@ -1951,7 +1951,8 @@ class TestDeploymentEnvironment:
 
     def test_environment_creation(self):
         from codomyrmex.ci_cd_automation.deployment_orchestrator import (
-            Environment, EnvironmentType,
+            Environment,
+            EnvironmentType,
         )
 
         env = Environment(name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost")
@@ -1960,7 +1961,8 @@ class TestDeploymentEnvironment:
 
     def test_environment_to_dict(self):
         from codomyrmex.ci_cd_automation.deployment_orchestrator import (
-            Environment, EnvironmentType,
+            Environment,
+            EnvironmentType,
         )
 
         env = Environment(
@@ -1988,7 +1990,9 @@ class TestPipelineModels:
 
     def test_pipeline_stage(self):
         from codomyrmex.ci_cd_automation.pipeline.models import (
-            PipelineJob, PipelineStage, StageStatus,
+            PipelineJob,
+            PipelineStage,
+            StageStatus,
         )
 
         stage = PipelineStage(
@@ -2001,7 +2005,10 @@ class TestPipelineModels:
 
     def test_pipeline(self):
         from codomyrmex.ci_cd_automation.pipeline.models import (
-            Pipeline, PipelineJob, PipelineStage, PipelineStatus,
+            Pipeline,
+            PipelineJob,
+            PipelineStage,
+            PipelineStatus,
         )
 
         pipeline = Pipeline(

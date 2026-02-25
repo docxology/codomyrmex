@@ -348,3 +348,5 @@ __all__ = [
     # Core
     "AuditLogger",
 ]
+
+from .audit_trail import *  # noqa: E402, F401, F403

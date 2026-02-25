@@ -5,14 +5,12 @@ Tests use a real TCPServer + DataProvider and make real HTTP requests.
 Ollama-dependent tests use real Ollama calls and skip when unavailable.
 """
 
+import http.client
 import importlib.util
 import json
 import socketserver
-import sys
 import threading
-from io import BytesIO
 from pathlib import Path
-import http.client
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
@@ -927,3 +925,81 @@ class TestAgentDispatchStopEndpoint:
         status, data = live_server.post("/api/agent/dispatch/stop", {})
         assert status == 200
         assert "message" in data
+
+
+# ── Telemetry Endpoint Tests ──────────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestTelemetryEndpoint:
+    """Tests for GET /api/telemetry."""
+
+    def test_returns_200(self, live_server):
+        """GET /api/telemetry returns HTTP 200."""
+        status, data = live_server.get("/api/telemetry")
+        assert status == 200
+
+    def test_response_has_status_field(self, live_server):
+        """Response is a dict with a status field."""
+        status, data = live_server.get("/api/telemetry")
+        assert status == 200
+        assert isinstance(data, dict)
+        assert "status" in data
+
+    def test_response_has_metric_names_list(self, live_server):
+        """Response includes metric_names as a list."""
+        status, data = live_server.get("/api/telemetry")
+        assert status == 200
+        assert "metric_names" in data
+        assert isinstance(data["metric_names"], list)
+
+    def test_response_has_dashboards_list(self, live_server):
+        """Response includes dashboards as a list."""
+        status, data = live_server.get("/api/telemetry")
+        assert status == 200
+        assert "dashboards" in data
+        assert isinstance(data["dashboards"], list)
+
+    def test_response_has_total_metrics_int(self, live_server):
+        """Response includes total_metrics as a non-negative integer."""
+        status, data = live_server.get("/api/telemetry")
+        assert status == 200
+        assert "total_metrics" in data
+        assert isinstance(data["total_metrics"], int)
+        assert data["total_metrics"] >= 0
+
+
+# ── Security Posture Endpoint Tests ──────────────────────────────────
+
+
+@pytest.mark.unit
+class TestSecurityPostureEndpoint:
+    """Tests for GET /api/security/posture."""
+
+    def test_returns_200(self, live_server):
+        """GET /api/security/posture returns HTTP 200."""
+        status, data = live_server.get("/api/security/posture")
+        assert status == 200
+
+    def test_response_has_status_field(self, live_server):
+        """Response is a dict with a status field."""
+        status, data = live_server.get("/api/security/posture")
+        assert status == 200
+        assert isinstance(data, dict)
+        assert "status" in data
+
+    def test_risk_score_in_range_when_ok(self, live_server):
+        """risk_score is 0–100 when status is ok."""
+        status, data = live_server.get("/api/security/posture")
+        assert status == 200
+        if data.get("status") == "ok":
+            assert "risk_score" in data
+            assert isinstance(data["risk_score"], (int, float))
+            assert 0 <= data["risk_score"] <= 100
+
+    def test_compliance_rate_present_when_ok(self, live_server):
+        """compliance_rate present when status is ok."""
+        status, data = live_server.get("/api/security/posture")
+        assert status == 200
+        if data.get("status") == "ok":
+            assert "compliance_rate" in data

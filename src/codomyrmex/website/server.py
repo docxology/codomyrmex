@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 # Configuration from environment variables
 _CORS_ORIGINS = os.getenv(
     "CODOMYRMEX_CORS_ORIGINS",
-    DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888",
+    DEFAULT_CORS_ORIGINS + ",http://127.0.0.1:8787,http://localhost:8888,http://127.0.0.1:8888,http://localhost:8889,http://127.0.0.1:8889",
 )
 _OLLAMA_URL = os.getenv("CODOMYRMEX_OLLAMA_URL", DEFAULT_OLLAMA_URL)
 _DEFAULT_MODEL = os.getenv("CODOMYRMEX_DEFAULT_MODEL", DEFAULT_OLLAMA_MODEL)
@@ -155,6 +155,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_tools_list()
         elif parsed_path.path == "/api/trust/status":
             self.handle_trust_status()
+        elif parsed_path.path == "/api/telemetry":
+            self.handle_telemetry()
+        elif parsed_path.path == "/api/security/posture":
+            self.handle_security_posture()
         else:
             super().do_GET()
 
@@ -696,7 +700,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             content_length = int(self.headers.get('Content-Length', 0))
         except (TypeError, ValueError):
             content_length = 0
-            
+
         data = {}
         if content_length > 0:
             try:
@@ -716,16 +720,17 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         seed_prompt = data.get("prompt", "Analyze the current context.")
         todo_path = data.get("todo", "")
         agents = data.get("agents")
-        
+
         with self._dispatch_lock:
             if WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive():
                 self.send_json_response({"error": "A dispatch run is already in progress"}, status=429)
                 return
-            
+
             try:
                 import time
+
                 from codomyrmex.agents.orchestrator import ConversationOrchestrator
-                
+
                 if todo_path:
                     WebsiteServer._dispatch_orch = ConversationOrchestrator.dev_loop(
                         todo_path=todo_path,
@@ -752,10 +757,10 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
                 WebsiteServer._dispatch_thread = threading.Thread(target=run_orch, daemon=True)
                 WebsiteServer._dispatch_thread.start()
-                
+
                 self.send_json_response({
-                    "success": True, 
-                    "message": "Dispatch started", 
+                    "success": True,
+                    "message": "Dispatch started",
                     "channel": WebsiteServer._dispatch_orch.channel_id
                 })
             except Exception as e:
@@ -775,14 +780,14 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             if not WebsiteServer._dispatch_orch:
                 self.send_json_response({"active": False, "turns": []})
                 return
-            
+
             try:
                 from dataclasses import asdict
                 log = WebsiteServer._dispatch_orch.get_log()
                 turns = [asdict(t) for t in log.turns]
-                
+
                 is_active = WebsiteServer._dispatch_thread and WebsiteServer._dispatch_thread.is_alive()
-                
+
                 self.send_json_response({
                     "active": is_active,
                     "summary": log.summary(),
@@ -790,6 +795,40 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 })
             except Exception as e:
                 self.send_json_response({"error": str(e)}, status=500)
+
+    def handle_telemetry(self) -> None:
+        """Handle GET /api/telemetry — metric series and dashboard registry."""
+        try:
+            from codomyrmex.telemetry.dashboard import MetricCollector, DashboardManager
+            collector = MetricCollector()
+            dm = DashboardManager(collector)
+            data = {
+                "status": "ok",
+                "dashboards": [d.to_dict() for d in dm.list()],
+                "metric_names": list(collector._metrics.keys()),
+                "total_metrics": sum(len(v) for v in collector._metrics.values()),
+            }
+        except Exception as exc:
+            data = {"status": "error", "error": str(exc)}
+        self.send_json_response(data)
+
+    def handle_security_posture(self) -> None:
+        """Handle GET /api/security/posture — aggregate security posture."""
+        try:
+            from codomyrmex.security.dashboard import SecurityDashboard
+            sd = SecurityDashboard()
+            posture = sd.posture()
+            data = {
+                "status": "ok",
+                "risk_score": posture.risk_score,
+                "compliance_rate": posture.compliance_pass_rate,
+                "secret_findings_count": posture.secret_findings_count,
+                "total_checks": posture.total_checks,
+                "markdown": sd.to_markdown(),
+            }
+        except Exception as exc:
+            data = {"status": "error", "error": str(exc)}
+        self.send_json_response(data)
 
     def send_json_response(self, data: dict | list, status: int = 200) -> None:
         """Send a JSON response with the given data and HTTP status code."""

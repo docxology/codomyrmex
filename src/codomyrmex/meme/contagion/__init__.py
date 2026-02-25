@@ -1,14 +1,14 @@
 """codomyrmex.meme.contagion — Information Cascade & Contagion Dynamics."""
 
+from codomyrmex.meme.contagion.cascade import CascadeDetector, detect_cascades
+from codomyrmex.meme.contagion.epidemic import SEIRModel, SIRModel, SISModel
 from codomyrmex.meme.contagion.models import (
-    ContagionModel,
-    PropagationTrace,
     Cascade,
     CascadeType,
+    ContagionModel,
+    PropagationTrace,
     ResonanceMap,
 )
-from codomyrmex.meme.contagion.epidemic import SIRModel, SISModel, SEIRModel
-from codomyrmex.meme.contagion.cascade import detect_cascades, CascadeDetector
 from codomyrmex.meme.contagion.simulation import run_simulation
 
 __all__ = [

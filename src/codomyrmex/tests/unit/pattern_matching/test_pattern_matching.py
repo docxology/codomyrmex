@@ -48,7 +48,9 @@ class TestPatternMatching:
         """Test get_embedding_function returns a callable."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import get_embedding_function
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+                get_embedding_function,
+            )
 
             func = get_embedding_function()
             assert callable(func)
@@ -66,7 +68,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import print_once
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            print_once,
+        )
 
         print_once("Test message")
 
@@ -150,7 +154,9 @@ class TestPatternMatching:
         """Test _perform_text_search_context_extraction returns context around matches."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import _perform_text_search_context_extraction
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+                _perform_text_search_context_extraction,
+            )
 
             # It should return a string (either with match info or a 'not found' message)
             result = _perform_text_search_context_extraction("query", "/nonexistent/path")
@@ -191,7 +197,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         # Create test file with a known pattern
         test_file = tmp_path / "test.py"
@@ -252,7 +260,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternMatch
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternMatch,
+        )
 
         pm = PatternMatch(
             pattern_name="todo",
@@ -271,7 +281,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternMatch
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternMatch,
+        )
 
         pm = PatternMatch(
             pattern_name="test",
@@ -291,7 +303,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import AnalysisResult
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            AnalysisResult,
+        )
 
         ar = AnalysisResult(total_files=5, files_analyzed=5)
         assert ar.total_files == 5
@@ -308,7 +322,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         test_file = tmp_path / "test.py"
         test_file.write_text("# TODO: important\n")
@@ -322,7 +338,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         test_file = tmp_path / "clean.py"
         test_file.write_text("def clean():\n    return True\n")
@@ -336,7 +354,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         test_file = tmp_path / "multi.py"
         test_file.write_text("# TODO FIXME: urgent\n")
@@ -352,7 +372,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         test_file = tmp_path / "many_todos.py"
         test_file.write_text("# TODO: first\nprint('ok')\n# TODO: second\n")
@@ -368,7 +390,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         analyzer = PatternAnalyzer({"todo": "TODO"})
         matches = analyzer.analyze_file("/nonexistent/path/file.py")
@@ -379,7 +403,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         test_file = tmp_path / "empty.py"
         test_file.write_text("")
@@ -393,7 +419,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         long_line = "# TODO: " + "x" * 200 + "\n"
         test_file = tmp_path / "long.py"
@@ -409,7 +437,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         (tmp_path / "code.py").write_text("# TODO: python\n")
         (tmp_path / "code.js").write_text("// TODO: javascript\n")
@@ -429,7 +459,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         analyzer = PatternAnalyzer({"todo": "TODO"})
         result = analyzer.analyze_directory(str(tmp_path), extensions=[".py"])
@@ -442,7 +474,9 @@ class TestPatternMatching:
         if str(code_dir) not in sys.path:
             sys.path.insert(0, str(code_dir))
 
-        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import PatternAnalyzer
+        from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+            PatternAnalyzer,
+        )
 
         subdir = tmp_path / "sub"
         subdir.mkdir()
@@ -461,7 +495,9 @@ class TestPatternMatching:
         """Test _perform_code_summarization returns a summary string."""
         sys.path.insert(0, str(code_dir))
         try:
-            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import _perform_code_summarization
+            from codomyrmex.coding.pattern_matching.run_codomyrmex_analysis import (
+                _perform_code_summarization,
+            )
 
             result = _perform_code_summarization(str(code_dir / "codomyrmex" / "coding" / "pattern_matching" / "run_codomyrmex_analysis.py"))
             assert isinstance(result, str)

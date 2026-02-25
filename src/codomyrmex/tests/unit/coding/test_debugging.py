@@ -13,7 +13,6 @@ from codomyrmex.coding.debugging import (
     Debugger,
     ErrorAnalyzer,
     ErrorDiagnosis,
-    Patch,
     PatchGenerator,
 )
 
@@ -123,7 +122,8 @@ class TestAnalysisResult:
 
     def test_creation(self):
         from codomyrmex.coding.static_analysis.static_analyzer import (
-            AnalysisResult, SeverityLevel,
+            AnalysisResult,
+            SeverityLevel,
         )
 
         r = AnalysisResult(

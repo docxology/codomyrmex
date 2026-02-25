@@ -163,7 +163,11 @@ class TestTestSuiteResult:
 
     def test_suite_result_metrics(self):
         """Verify suite result metrics."""
-        from codomyrmex.prompt_engineering.testing import TestResult, TestStatus, TestSuiteResult
+        from codomyrmex.prompt_engineering.testing import (
+            TestResult,
+            TestStatus,
+            TestSuiteResult,
+        )
 
         result = TestSuiteResult(suite_id="test", prompt_version="v1")
         result.results = [
@@ -196,7 +200,10 @@ class TestExactMatchEvaluator:
 
     def test_exact_match_pass(self):
         """Verify exact match passes."""
-        from codomyrmex.prompt_engineering.testing import ExactMatchEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ExactMatchEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ExactMatchEvaluator()
         test_case = PromptTestCase(
@@ -210,7 +217,10 @@ class TestExactMatchEvaluator:
 
     def test_exact_match_fail(self):
         """Verify exact match fails on mismatch."""
-        from codomyrmex.prompt_engineering.testing import ExactMatchEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ExactMatchEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ExactMatchEvaluator()
         test_case = PromptTestCase(
@@ -224,7 +234,10 @@ class TestExactMatchEvaluator:
 
     def test_exact_match_case_insensitive(self):
         """Verify case-insensitive matching."""
-        from codomyrmex.prompt_engineering.testing import ExactMatchEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ExactMatchEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ExactMatchEvaluator(case_sensitive=False)
         test_case = PromptTestCase(
@@ -243,7 +256,10 @@ class TestContainsEvaluator:
 
     def test_contains_all_present(self):
         """Verify contains evaluator with all terms present."""
-        from codomyrmex.prompt_engineering.testing import ContainsEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ContainsEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ContainsEvaluator()
         test_case = PromptTestCase(
@@ -257,7 +273,10 @@ class TestContainsEvaluator:
 
     def test_contains_partial_match(self):
         """Verify partial match scoring."""
-        from codomyrmex.prompt_engineering.testing import ContainsEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ContainsEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ContainsEvaluator()
         test_case = PromptTestCase(
@@ -271,7 +290,10 @@ class TestContainsEvaluator:
 
     def test_not_contains(self):
         """Verify not_contains evaluation."""
-        from codomyrmex.prompt_engineering.testing import ContainsEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ContainsEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ContainsEvaluator()
         test_case = PromptTestCase(
@@ -285,7 +307,10 @@ class TestContainsEvaluator:
 
     def test_mixed_contains_and_not_contains(self):
         """Verify mixed contains/not_contains."""
-        from codomyrmex.prompt_engineering.testing import ContainsEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            ContainsEvaluator,
+            PromptTestCase,
+        )
 
         evaluator = ContainsEvaluator()
         test_case = PromptTestCase(
@@ -306,7 +331,10 @@ class TestCustomEvaluator:
 
     def test_custom_function(self):
         """Verify custom evaluation function."""
-        from codomyrmex.prompt_engineering.testing import CustomEvaluator, PromptTestCase
+        from codomyrmex.prompt_engineering.testing import (
+            CustomEvaluator,
+            PromptTestCase,
+        )
 
         def length_evaluator(tc, output):
             return min(len(output) / 100, 1.0)
@@ -336,7 +364,10 @@ class TestPromptTestSuite:
 
     def test_suite_add_test(self):
         """Verify test addition."""
-        from codomyrmex.prompt_engineering.testing import PromptTestCase, PromptTestSuite
+        from codomyrmex.prompt_engineering.testing import (
+            PromptTestCase,
+            PromptTestSuite,
+        )
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(id="t1", prompt="Test 1"))
@@ -346,7 +377,10 @@ class TestPromptTestSuite:
 
     def test_suite_add_tests_batch(self):
         """Verify batch test addition."""
-        from codomyrmex.prompt_engineering.testing import PromptTestCase, PromptTestSuite
+        from codomyrmex.prompt_engineering.testing import (
+            PromptTestCase,
+            PromptTestSuite,
+        )
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_tests([
@@ -359,7 +393,10 @@ class TestPromptTestSuite:
 
     def test_suite_get_test(self):
         """Verify test retrieval."""
-        from codomyrmex.prompt_engineering.testing import PromptTestCase, PromptTestSuite
+        from codomyrmex.prompt_engineering.testing import (
+            PromptTestCase,
+            PromptTestSuite,
+        )
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(id="target", prompt="Find me"))
@@ -373,7 +410,10 @@ class TestPromptTestSuite:
 
     def test_suite_chaining(self):
         """Verify method chaining."""
-        from codomyrmex.prompt_engineering.testing import PromptTestCase, PromptTestSuite
+        from codomyrmex.prompt_engineering.testing import (
+            PromptTestCase,
+            PromptTestSuite,
+        )
 
         suite = (
             PromptTestSuite(suite_id="test")
@@ -501,7 +541,11 @@ class TestABTest:
 
     def test_ab_test_run(self):
         """Verify A/B test execution."""
-        from codomyrmex.prompt_engineering.testing import ABTest, PromptTestCase, PromptTestSuite
+        from codomyrmex.prompt_engineering.testing import (
+            ABTest,
+            PromptTestCase,
+            PromptTestSuite,
+        )
 
         suite = PromptTestSuite(suite_id="test")
         suite.add_test(PromptTestCase(

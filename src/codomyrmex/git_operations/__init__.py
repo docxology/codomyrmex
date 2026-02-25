@@ -47,9 +47,9 @@ from .core.git import (
     commit_changes,
     # Branch operations
     create_branch,
-    delete_branch,
     # Tag operations
     create_tag,
+    delete_branch,
     fetch_changes,
     # History & information
     get_blame,

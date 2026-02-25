@@ -23,6 +23,8 @@ References:
 
 __version__ = "0.1.0"
 
+# Lazy imports for optional backends
+from .backends.base import SolverBackend, SolverResult, SolverStatus
 from .exceptions import (
     BackendNotAvailableError,
     InvalidConstraintError,
@@ -33,9 +35,6 @@ from .exceptions import (
 )
 from .solver import ConstraintSolver
 from .verify_isc import ISCVerificationResult, verify_criteria_consistency
-
-# Lazy imports for optional backends
-from .backends.base import SolverBackend, SolverResult, SolverStatus
 
 __all__ = [
     "__version__",

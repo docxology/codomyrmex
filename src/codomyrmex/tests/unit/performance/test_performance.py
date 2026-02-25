@@ -131,7 +131,11 @@ class TestLazyLoader:
 
     def test_pre_configured_lazy_loaders(self):
         """Test pre-configured lazy loaders for common modules."""
-        from codomyrmex.performance.optimization.lazy_loader import matplotlib, numpy, pandas
+        from codomyrmex.performance.optimization.lazy_loader import (
+            matplotlib,
+            numpy,
+            pandas,
+        )
 
         # These should be LazyLoader instances
         assert isinstance(matplotlib, LazyLoader)
@@ -431,7 +435,9 @@ class TestPerformanceMonitor:
         clear_performance_metrics()
 
         # Record a metric using the global monitor
-        from codomyrmex.performance.monitoring.performance_monitor import _performance_monitor
+        from codomyrmex.performance.monitoring.performance_monitor import (
+            _performance_monitor,
+        )
         _performance_monitor.record_metrics('global_test', 1.0, 10.0, 20.0)
 
         # Get stats via global function

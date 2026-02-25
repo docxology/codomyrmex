@@ -49,7 +49,7 @@ class PromptVersion:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PromptVersion":
+    def from_dict(cls, data: dict[str, Any]) -> PromptVersion:
         """Create a PromptVersion from a dictionary."""
         return cls(
             version=data["version"],

@@ -27,7 +27,10 @@ class TestWorkflowStatus:
 
     def test_combined_status_report(self):
         """Combined status + awareness produces a valid report."""
-        from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status, _tool_pai_awareness
+        from codomyrmex.agents.pai.mcp_bridge import (
+            _tool_pai_awareness,
+            _tool_pai_status,
+        )
 
         status = _tool_pai_status()
         awareness = _tool_pai_awareness()

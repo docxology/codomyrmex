@@ -3,7 +3,6 @@
 from typing import Any
 
 from .models import (
-    AccessibilityIssue,
     AccessibilityReport,
     IssueType,
     WCAGLevel,

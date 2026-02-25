@@ -6,16 +6,18 @@ import time
 
 import pytest
 
-from codomyrmex.orchestrator.workflow_engine import (
-    StepStatus, WorkflowResult, WorkflowRunner, WorkflowStep,
+from codomyrmex.agents.memory.conversation import ConversationHistory
+from codomyrmex.agents.memory.journal import LearningJournal
+from codomyrmex.agents.memory.store import MemoryStore
+from codomyrmex.orchestrator.workflows.workflow_engine import (
+    WorkflowRunner,
+    WorkflowStep,
 )
-from codomyrmex.orchestrator.workflow_templates import (
-    WorkflowTemplate, ci_cd_template, code_review_template, data_pipeline_template,
+from codomyrmex.orchestrator.workflows.workflow_templates import (
+    ci_cd_template,
+    code_review_template,
+    data_pipeline_template,
 )
-from codomyrmex.agents.memory.store import MemoryEntry, MemoryStore
-from codomyrmex.agents.memory.conversation import ConversationHistory, Turn
-from codomyrmex.agents.memory.journal import JournalEntry, LearningJournal
-
 
 # ── WorkflowEngine ───────────────────────────────────────────────
 

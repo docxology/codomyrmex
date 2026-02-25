@@ -7,10 +7,10 @@ Provides mutation, crossover, and selection operators for genetic algorithms.
 import math
 import random
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 

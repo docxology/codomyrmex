@@ -15,17 +15,15 @@ import pytest
 
 from codomyrmex import fpf
 from codomyrmex.fpf import (
-    FPFParser,
-    FPFExtractor,
+    ConceptType,
     ContextBuilder,
     FPFClient,
+    FPFExtractor,
+    FPFParser,
     FPFSpec,
     Pattern,
-    Concept,
-    Relationship,
-    FPFIndex,
     PatternStatus,
-    ConceptType,
+    Relationship,
     RelationshipType,
 )
 

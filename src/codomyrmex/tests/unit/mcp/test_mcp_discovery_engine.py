@@ -16,13 +16,11 @@ import types
 import pytest
 
 from codomyrmex.model_context_protocol.discovery import (
-    DiscoveredTool,
     DiscoveryMetrics,
     DiscoveryReport,
     FailedModule,
     MCPDiscovery,
 )
-
 
 # ── Fixtures ──────────────────────────────────────────────────────────
 

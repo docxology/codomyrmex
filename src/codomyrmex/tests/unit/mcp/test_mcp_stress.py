@@ -9,20 +9,19 @@ Verifies:
 
 from __future__ import annotations
 
-import json
 import time
 import tracemalloc
 
 import pytest
 
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
-    MCPMessage,
     MCPToolCall,
     MCPToolRegistry,
-    MCPToolResult,
 )
-from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
-
+from codomyrmex.model_context_protocol.transport.server import (
+    MCPServer,
+    MCPServerConfig,
+)
 
 # ── Helpers ───────────────────────────────────────────────────────────
 

@@ -12,20 +12,19 @@ except ImportError:
     ResultStatus = None
 
 from .models import (
-    ModelStage,
     ModelFramework,
     ModelMetrics,
+    ModelStage,
     ModelVersion,
     RegisteredModel,
 )
-
+from .registry import ModelRegistry
 from .stores import (
-    ModelStore,
     FileModelStore,
     InMemoryModelStore,
+    ModelStore,
 )
 
-from .registry import ModelRegistry
 
 def cli_commands():
     """Return CLI commands for the model_registry module."""

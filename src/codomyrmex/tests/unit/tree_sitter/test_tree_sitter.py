@@ -53,7 +53,12 @@ def test_module_importable():
 @pytest.mark.unit
 def test_submodules_importable():
     """Test that submodule namespaces exist."""
-    from codomyrmex.coding.parsers.tree_sitter import languages, parsers, queries, transformers
+    from codomyrmex.coding.parsers.tree_sitter import (
+        languages,
+        parsers,
+        queries,
+        transformers,
+    )
     assert languages is not None
     assert parsers is not None
     assert queries is not None

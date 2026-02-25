@@ -12,6 +12,7 @@ Submodules:
 # Re-export base EventError from main exceptions module
 from codomyrmex.exceptions import EventError
 
+from . import notification, streaming
 from .core.event_bus import (
     EventBus,
     get_event_bus,
@@ -32,10 +33,6 @@ from .core.exceptions import (
 from .core.mixins import EventMixin
 from .emitters.emitter import AsyncEventEmitter
 from .handlers.event_logger import EventLogger, get_event_logger, get_event_stats
-
-from . import streaming
-
-from . import notification
 
 __all__ = [
     "notification",

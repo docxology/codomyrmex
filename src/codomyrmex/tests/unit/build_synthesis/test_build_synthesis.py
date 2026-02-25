@@ -173,7 +173,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_create_build_manifest(self):
         """Test build manifest creation."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import create_build_manifest
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            create_build_manifest,
+        )
 
         build_config = {
             "name": "test_build",
@@ -193,7 +195,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_optimize_build_config(self):
         """Test build configuration optimization."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import optimize_build_config
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            optimize_build_config,
+        )
 
         config = {
             "parallel_jobs": 1,
@@ -300,7 +304,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_get_build_metrics(self):
         """Test build metrics collection."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import get_build_metrics
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            get_build_metrics,
+        )
 
         # Mock build results
         build_results = {
@@ -321,7 +327,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_export_build_report(self):
         """Test build report export."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import export_build_report
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            export_build_report,
+        )
 
         build_data = {
             "build_id": "test_build_123",
@@ -341,7 +349,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_import_build_config(self):
         """Test build configuration import."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import import_build_config
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            import_build_config,
+        )
 
         # Create a test config file
         config_file = os.path.join(self.test_dir, "build_config.json")
@@ -362,7 +372,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_validate_build_config(self):
         """Test build configuration validation."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import validate_build_config
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            validate_build_config,
+        )
 
         # Valid config
         valid_config = {
@@ -388,7 +400,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_get_build_history(self):
         """Test build history retrieval."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import get_build_history
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            get_build_history,
+        )
 
         history = get_build_history(limit=10)
 
@@ -411,7 +425,9 @@ if __name__ == "__main__":
     @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
     def test_monitor_build_progress(self):
         """Test build progress monitoring."""
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import monitor_build_progress
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            monitor_build_progress,
+        )
 
         # Mock build ID
         build_id = "test_build_123"
@@ -560,7 +576,9 @@ if __name__ == "__main__":
         if not FULL_BUILD_AVAILABLE:
             self.skipTest("Full build synthesis not available")
 
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import get_build_metrics
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            get_build_metrics,
+        )
 
         # Test with various build result scenarios
         test_results = [
@@ -580,7 +598,9 @@ if __name__ == "__main__":
         if not FULL_BUILD_AVAILABLE:
             self.skipTest("Full build synthesis not available")
 
-        from codomyrmex.ci_cd_automation.build.build_orchestrator import export_build_report
+        from codomyrmex.ci_cd_automation.build.build_orchestrator import (
+            export_build_report,
+        )
 
         test_data = {
             "build_id": "test_123",

@@ -1,6 +1,5 @@
 """Tests for agents module."""
 
-import pytest
 
 
 class TestConversationOrchestrator:

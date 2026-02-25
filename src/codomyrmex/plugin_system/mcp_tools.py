@@ -61,7 +61,8 @@ def plugin_resolve_dependencies(
     """
     try:
         from codomyrmex.plugin_system.dependency_resolver import (
-            DependencyResolver, DependencyNode,
+            DependencyNode,
+            DependencyResolver,
         )
         resolver = DependencyResolver()
         for p in plugins:

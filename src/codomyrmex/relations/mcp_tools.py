@@ -41,8 +41,12 @@ def relations_score_strength(
     """
     try:
         import time
+
         from codomyrmex.relations.strength_scoring import (
-            Interaction, RelationStrengthScorer, StrengthConfig, DecayFunction,
+            DecayFunction,
+            Interaction,
+            RelationStrengthScorer,
+            StrengthConfig,
         )
         decay = DecayFunction(decay_function)
         config = StrengthConfig(decay_function=decay, half_life=half_life_days * 86400)

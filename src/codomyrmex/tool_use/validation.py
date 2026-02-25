@@ -9,7 +9,6 @@ and after tool execution.
 from dataclasses import dataclass, field
 from typing import Any
 
-
 # JSON-schema type name -> Python types mapping
 _TYPE_MAP: dict[str, tuple[type, ...]] = {
     "string": (str,),

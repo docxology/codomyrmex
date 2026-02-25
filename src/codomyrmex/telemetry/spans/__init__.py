@@ -7,11 +7,11 @@ Provides utilities for creating and managing distributed trace spans.
 import threading
 import time
 import uuid
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 @dataclass

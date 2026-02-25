@@ -16,22 +16,19 @@ import pytest
 
 from codomyrmex import scrape
 from codomyrmex.scrape import (
-    ScrapeFormat,
-    ScrapeResult,
-    ScrapeOptions,
-    ScrapeConfig,
     CrawlResult,
-    MapResult,
-    SearchResult,
     ExtractResult,
-    ScrapeError,
+    FirecrawlError,
+    MapResult,
+    ScrapeConfig,
     ScrapeConnectionError,
+    ScrapeError,
+    ScrapeFormat,
+    ScrapeOptions,
+    ScrapeResult,
     ScrapeTimeoutError,
     ScrapeValidationError,
-    FirecrawlError,
-    get_config,
-    reset_config,
-    set_config,
+    SearchResult,
 )
 
 
@@ -232,7 +229,7 @@ class TestCrawler:
 
     def test_add_seeds_dedup(self):
         """Test functionality: add seeds dedup."""
-        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
+        from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(max_pages=10))
         added = crawler.add_seeds(["https://example.com", "https://example.com"])
         assert added == 1
@@ -240,7 +237,12 @@ class TestCrawler:
 
     def test_has_next_respects_max(self):
         """Test functionality: has next respects max."""
-        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig, CrawlResult, CrawlStatus
+        from codomyrmex.scrape.extractors.crawler import (
+            CrawlConfig,
+            Crawler,
+            CrawlResult,
+            CrawlStatus,
+        )
         crawler = Crawler(config=CrawlConfig(max_pages=1))
         crawler.add_seeds(["https://example.com", "https://example.com/page2"])
         url, depth = crawler.next_url()
@@ -249,7 +251,7 @@ class TestCrawler:
 
     def test_domain_filtering(self):
         """Test functionality: domain filtering."""
-        from codomyrmex.scrape.extractors.crawler import Crawler, CrawlConfig
+        from codomyrmex.scrape.extractors.crawler import CrawlConfig, Crawler
         crawler = Crawler(config=CrawlConfig(allowed_domains=["example.com"]))
         assert crawler.is_allowed("https://example.com/page") is True
         assert crawler.is_allowed("https://other.com/page") is False
@@ -306,7 +308,7 @@ class TestScrapeDataclasses:
         assert opts.respect_robots_txt is True
 
     def test_scrape_options_to_dict(self):
-        from codomyrmex.scrape.core import ScrapeOptions, ScrapeFormat
+        from codomyrmex.scrape.core import ScrapeFormat, ScrapeOptions
         opts = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN], timeout=30.0)
         d = opts.to_dict()
         assert isinstance(d, dict)

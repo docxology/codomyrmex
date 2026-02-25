@@ -6,18 +6,15 @@ format, error code coverage, and backward compatibility.
 
 import json
 
-import pytest
-
 from codomyrmex.model_context_protocol.errors import (
+    FieldError,
     MCPErrorCode,
     MCPToolError,
-    FieldError,
-    validation_error,
+    execution_error,
     not_found_error,
     timeout_error,
-    execution_error,
+    validation_error,
 )
-
 
 # ── MCPToolError basics ──────────────────────────────────────────────
 

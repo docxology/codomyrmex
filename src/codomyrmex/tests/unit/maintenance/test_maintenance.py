@@ -1,4 +1,5 @@
 import time
+
 """Unit tests for tools module - comprehensive testing with real implementations.
 
 Tests for DependencyAnalyzer, DependencyChecker, project analysis functions,
@@ -18,7 +19,10 @@ from codomyrmex.maintenance.analyze_project import (
 
 # Test with real implementations
 from codomyrmex.maintenance.deps.dependency_analyzer import DependencyAnalyzer
-from codomyrmex.maintenance.deps.dependency_checker import check_dependencies, check_python_version
+from codomyrmex.maintenance.deps.dependency_checker import (
+    check_dependencies,
+    check_python_version,
+)
 
 # ==================== Module Import Tests ====================
 
@@ -696,7 +700,9 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_empty(self, tmp_path):
         """Test parsing empty requirements file."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            parse_requirements_file,
+        )
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("")
@@ -707,7 +713,9 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_nonexistent(self, tmp_path):
         """Test parsing nonexistent requirements file."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            parse_requirements_file,
+        )
 
         req_file = tmp_path / "nonexistent.txt"
 
@@ -717,7 +725,9 @@ class TestDependencyConsolidator:
 
     def test_parse_requirements_file_with_packages(self, tmp_path):
         """Test parsing requirements file with packages."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            parse_requirements_file,
+        )
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("""pytest==7.0.0
@@ -735,7 +745,9 @@ click
 
     def test_parse_requirements_file_with_comments(self, tmp_path):
         """Test parsing requirements file skips comments."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import parse_requirements_file
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            parse_requirements_file,
+        )
 
         req_file = tmp_path / "requirements.txt"
         req_file.write_text("""# Comment line
@@ -749,7 +761,9 @@ pytest==7.0.0  # inline comment
 
     def test_find_all_requirements_files(self, tmp_path):
         """Test finding requirements files."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import find_all_requirements_files
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            find_all_requirements_files,
+        )
 
         # Create directory structure
         src_dir = tmp_path / "src" / "codomyrmex"
@@ -769,7 +783,9 @@ pytest==7.0.0  # inline comment
 
     def test_generate_deprecation_notice(self):
         """Test generating deprecation notice."""
-        from codomyrmex.maintenance.deps.dependency_consolidator import generate_deprecation_notice
+        from codomyrmex.maintenance.deps.dependency_consolidator import (
+            generate_deprecation_notice,
+        )
 
         notice = generate_deprecation_notice("auth", "pyproject.toml")
 
@@ -805,7 +821,9 @@ class TestDeprecationNotice:
 
     def test_get_dependency_location_optional(self):
         """Test get_dependency_location for optional modules."""
-        from codomyrmex.maintenance.add_deprecation_notices import get_dependency_location
+        from codomyrmex.maintenance.add_deprecation_notices import (
+            get_dependency_location,
+        )
 
         result = get_dependency_location("code_review")
 
@@ -813,7 +831,9 @@ class TestDeprecationNotice:
 
     def test_get_dependency_location_main(self):
         """Test get_dependency_location for main modules."""
-        from codomyrmex.maintenance.add_deprecation_notices import get_dependency_location
+        from codomyrmex.maintenance.add_deprecation_notices import (
+            get_dependency_location,
+        )
 
         result = get_dependency_location("some_other_module")
 
@@ -972,7 +992,10 @@ class TestMaintenanceScheduler:
     def test_register_and_execute(self):
         """Test functionality: register and execute."""
         from codomyrmex.maintenance.health.scheduler import (
-            MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
+            MaintenanceScheduler,
+            MaintenanceTask,
+            ScheduleConfig,
+            TaskStatus,
         )
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
@@ -989,7 +1012,9 @@ class TestMaintenanceScheduler:
     def test_due_tasks(self):
         """Test functionality: due tasks."""
         from codomyrmex.maintenance.health.scheduler import (
-            MaintenanceScheduler, MaintenanceTask, ScheduleConfig,
+            MaintenanceScheduler,
+            MaintenanceTask,
+            ScheduleConfig,
         )
         scheduler = MaintenanceScheduler()
         task = MaintenanceTask(
@@ -1005,7 +1030,10 @@ class TestMaintenanceScheduler:
     def test_failed_task_retries(self):
         """Test functionality: failed task retries."""
         from codomyrmex.maintenance.health.scheduler import (
-            MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
+            MaintenanceScheduler,
+            MaintenanceTask,
+            ScheduleConfig,
+            TaskStatus,
         )
         call_count = 0
         def failing_action():
@@ -1033,7 +1061,9 @@ class TestHealthChecker:
     def test_healthy_check(self):
         """Test functionality: healthy check."""
         from codomyrmex.maintenance.health.health_check import (
-            HealthChecker, HealthCheck, HealthStatus,
+            HealthCheck,
+            HealthChecker,
+            HealthStatus,
         )
         checker = HealthChecker()
         checker.register(HealthCheck(
@@ -1048,7 +1078,9 @@ class TestHealthChecker:
     def test_unhealthy_check(self):
         """Test functionality: unhealthy check."""
         from codomyrmex.maintenance.health.health_check import (
-            HealthChecker, HealthCheck, HealthStatus,
+            HealthCheck,
+            HealthChecker,
+            HealthStatus,
         )
         checker = HealthChecker()
         checker.register(HealthCheck(
@@ -1063,7 +1095,9 @@ class TestHealthChecker:
     def test_exception_handling(self):
         """Test functionality: exception handling."""
         from codomyrmex.maintenance.health.health_check import (
-            HealthChecker, HealthCheck, HealthStatus,
+            HealthCheck,
+            HealthChecker,
+            HealthStatus,
         )
         def exploding():
             raise RuntimeError("boom")

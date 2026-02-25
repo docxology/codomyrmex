@@ -4,11 +4,9 @@ Provides common fixtures used across per-module unit test directories.
 Module-specific fixtures should live in their own conftest.py files.
 """
 
-import os
 from pathlib import Path
 
 import pytest
-
 
 # ═══════════════════════════════════════════════════════════════
 # Project paths

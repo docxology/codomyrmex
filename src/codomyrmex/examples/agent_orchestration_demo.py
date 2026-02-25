@@ -14,16 +14,16 @@ Run with:
     uv run python src/codomyrmex/examples/agent_orchestration_demo.py
 """
 
-import time
 import random
-from typing import Iterator
+import time
+from collections.abc import Iterator
 
 from codomyrmex.agents import (
+    AgentCapabilities,
     AgentInterface,
+    AgentOrchestrator,
     AgentRequest,
     AgentResponse,
-    AgentCapabilities,
-    AgentOrchestrator,
 )
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 
@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 
 class SimulatedAgent(AgentInterface):
     """A simulated agent with configurable delay and failure rate."""
-    
+
     def __init__(self, name: str, delay: float = 0.5, failure_rate: float = 0.0):
         """Execute   Init   operations natively."""
         super().__init__()
@@ -43,19 +43,19 @@ class SimulatedAgent(AgentInterface):
     def execute(self, request: AgentRequest) -> AgentResponse:
         """Execute Execute operations natively."""
         logger.info(f"[{self.name}] Received request: {request.prompt[:20]}...")
-        
+
         # Simulate work
         time.sleep(self.delay)
-        
+
         # Simulate failure
         if random.random() < self.failure_rate:
             error_msg = f"[{self.name}] Simulated failure!"
             logger.error(error_msg)
             raise RuntimeError(error_msg)
-            
+
         response_content = f"[{self.name}] Processed: {request.prompt}"
         logger.info(f"[{self.name}] Finished processing")
-        
+
         return AgentResponse(
             content=response_content,
             metadata={"agent": self.name, "latency": self.delay}
@@ -86,59 +86,59 @@ class SimulatedAgent(AgentInterface):
 def main():
     """Execute Main operations natively."""
     setup_logging()
-    
+
     logger.info("Initializing agents...")
-    
+
     # 1. Fast agents (for parallel demo)
     agent_a = SimulatedAgent("Agent A (Fast)", delay=1.0)
     agent_b = SimulatedAgent("Agent B (Fast)", delay=1.0)
     agent_c = SimulatedAgent("Agent C (Fast)", delay=1.0)
-    
+
     # 2. Slow/Failing agents (for fallback demo)
     agent_unreliable = SimulatedAgent("Agent D (Unreliable)", delay=0.5, failure_rate=1.0)
     agent_reliable = SimulatedAgent("Agent E (Reliable)", delay=0.5, failure_rate=0.0)
-    
+
     orchestrator = AgentOrchestrator([agent_a, agent_b, agent_c])
-    
+
     req = AgentRequest(prompt="Analyze this code block.")
-    
+
     # --- Parallel Execution Demo ---
     print("\n" + "="*50)
     print("DEMO 1: Parallel Execution")
     print("Expected: All 3 agents finish in ~1.0s (not 3.0s)")
     print("="*50)
-    
+
     start_time = time.perf_counter()
     responses = orchestrator.execute_parallel(req, agents=[agent_a, agent_b, agent_c])
     duration = time.perf_counter() - start_time
-    
+
     print(f"\nParallel execution took: {duration:.2f}s")
     for r in responses:
         if r:
             print(f"Result: {r.content}")
-            
+
     # --- Sequential Execution Demo ---
     print("\n" + "="*50)
     print("DEMO 2: Sequential Execution")
     print("Expected: Agents finish one by one ~2.0s total")
     print("="*50)
-    
+
     start_time = time.perf_counter()
     responses = orchestrator.execute_sequential(req, agents=[agent_a, agent_b])
     duration = time.perf_counter() - start_time
-    
+
     print(f"\nSequential execution took: {duration:.2f}s")
-    
+
     # --- Fallback Demo ---
     print("\n" + "="*50)
     print("DEMO 3: Fallback Strategy")
     print("Expected: First agent fails, second agent succeeds")
     print("="*50)
-    
+
     orchestrator_fallback = AgentOrchestrator([agent_unreliable, agent_reliable])
-    
+
     response = orchestrator_fallback.execute_with_fallback(req)
-    
+
     if response.is_success():
         print(f"\nFallback success! Result from: {response.content}")
     else:

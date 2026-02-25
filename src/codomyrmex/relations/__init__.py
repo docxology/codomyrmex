@@ -5,7 +5,7 @@ graph metrics, and UOR (Universal Object Reference) integration.
 """
 
 from .crm.crm import Contact, ContactManager, Interaction
-from .network_analysis import SocialGraph, GraphMetrics
+from .network_analysis import GraphMetrics, SocialGraph
 from .uor import (
     DerivationRecord,
     DerivationTracker,

@@ -7,7 +7,6 @@ coverage, and generates summary reports.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from codomyrmex.api.api_contract import APIContract, APIEndpoint
 

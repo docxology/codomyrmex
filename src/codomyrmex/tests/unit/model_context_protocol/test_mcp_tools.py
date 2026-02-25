@@ -5,13 +5,13 @@ All tests use real filesystem operations - no mocks.
 
 import pytest
 
+from codomyrmex.model_context_protocol.decorators import mcp_tool
 from codomyrmex.model_context_protocol.tools import (
+    analyze_python_file,
+    list_directory,
     read_file,
     write_file,
-    list_directory,
-    analyze_python_file,
 )
-from codomyrmex.model_context_protocol.decorators import mcp_tool
 
 
 @pytest.mark.unit

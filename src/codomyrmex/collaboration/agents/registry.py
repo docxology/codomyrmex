@@ -8,9 +8,9 @@ and health monitoring functionality.
 import asyncio
 import logging
 import threading
+from collections.abc import Callable
 from datetime import datetime, timedelta
 from typing import Optional
-from collections.abc import Callable
 
 from ..exceptions import AgentNotFoundError
 from ..models import AgentStatus, SwarmStatus

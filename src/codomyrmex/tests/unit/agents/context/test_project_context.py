@@ -9,21 +9,17 @@ import os
 import tempfile
 from pathlib import Path
 
-import pytest
-
+from codomyrmex.agents.context.indexer import (
+    RepoIndex,
+    RepoIndexer,
+    Symbol,
+)
 from codomyrmex.agents.context.project import (
     FileInfo,
     ProjectContext,
     ProjectScanner,
     ToolSelector,
 )
-from codomyrmex.agents.context.indexer import (
-    ImportEdge,
-    RepoIndex,
-    RepoIndexer,
-    Symbol,
-)
-
 
 # ── FileInfo / ProjectContext ────────────────────────────────────
 

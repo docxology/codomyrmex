@@ -19,7 +19,6 @@ from codomyrmex.crypto.protocols.key_exchange import (
     ecdh_generate_keypair,
 )
 
-
 # ---------------------------------------------------------------------------
 # Diffie-Hellman
 # ---------------------------------------------------------------------------

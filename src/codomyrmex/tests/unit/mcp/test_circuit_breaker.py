@@ -3,7 +3,6 @@
 Zero-mock: real CircuitBreaker instances with real state transitions.
 """
 
-import asyncio
 import time
 
 import pytest
@@ -13,11 +12,10 @@ from codomyrmex.model_context_protocol.reliability.circuit_breaker import (
     CircuitBreakerConfig,
     CircuitOpenError,
     CircuitState,
-    get_circuit_breaker,
     get_all_circuit_metrics,
+    get_circuit_breaker,
     reset_all_circuits,
 )
-
 
 # ── State transitions ────────────────────────────────────────────────
 

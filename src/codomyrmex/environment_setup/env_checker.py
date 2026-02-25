@@ -18,7 +18,6 @@ Example:
 
 import os
 import shutil
-import subprocess
 import sys
 
 import dotenv
@@ -163,18 +162,18 @@ def generate_environment_report() -> str:
         f"UV Available: {'Yes' if is_uv_available() else 'No'}",
         f"UV Environment: {'Yes' if is_uv_environment() else 'No'}"
     ]
-    
+
     deps_ok = True
     try:
         import cased
     except ImportError:
         deps_ok = False
-        
+
     try:
         import dotenv
     except ImportError:
         deps_ok = False
-        
+
     report.append(f"Dependencies OK: {'Yes' if deps_ok else 'No'}")
     return "\n".join(report)
 

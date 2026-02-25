@@ -11,7 +11,6 @@ from typing import Any
 
 from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
 
-
 # ── lightweight directed graph ───────────────────────────────────────
 
 

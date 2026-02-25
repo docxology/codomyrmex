@@ -17,12 +17,10 @@ import time
 import pytest
 
 from codomyrmex.orchestrator.execution.async_runner import (
-    AsyncExecutionResult,
     AsyncParallelRunner,
     AsyncTaskResult,
 )
 from codomyrmex.orchestrator.resilience.retry_policy import with_retry
-
 
 # ── Helpers ───────────────────────────────────────────────────────────
 
@@ -264,9 +262,13 @@ class TestExports:
     def test_async_runner_exports(self) -> None:
         """Test functionality: async runner exports."""
         from codomyrmex.orchestrator import (
-            AsyncParallelRunner as _APR,
-            AsyncTaskResult as _ATR,
             AsyncExecutionResult as _AER,
+        )
+        from codomyrmex.orchestrator import (
+            AsyncParallelRunner as _APR,
+        )
+        from codomyrmex.orchestrator import (
+            AsyncTaskResult as _ATR,
         )
         assert _APR is not None
         assert _ATR is not None

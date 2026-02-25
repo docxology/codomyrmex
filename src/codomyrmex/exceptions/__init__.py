@@ -1,5 +1,6 @@
 """Module for exceptions."""
 from __future__ import annotations
+
 """Codomyrmex Exception Classes
 
 This package provides all exception classes used throughout the Codomyrmex
@@ -21,25 +22,6 @@ Exception Categories:
 """
 
 # Base
-from .base import (
-    CodomyrmexError,
-    create_error_context,
-    format_exception_chain,
-)
-
-# Configuration and Setup
-from .config import (
-    ConfigurationError,
-    DependencyError,
-    EnvironmentError,
-)
-
-# File and I/O
-from .io import (
-    DirectoryError,
-    FileOperationError,
-)
-
 # AI and Code Generation
 from .ai import (
     AIProviderError,
@@ -53,6 +35,32 @@ from .analysis import (
     PatternMatchingError,
     SecurityAuditError,
     StaticAnalysisError,
+)
+from .base import (
+    CodomyrmexError,
+    create_error_context,
+    format_exception_chain,
+)
+
+# CEREBRUM
+from .cerebrum import (
+    ActiveInferenceError,
+    BayesianInferenceError,
+    CaseError,
+    CaseNotFoundError,
+    CerebrumError,
+    InferenceError,
+    InvalidCaseError,
+    ModelError,
+    NetworkStructureError,
+    TransformationError,
+)
+
+# Configuration and Setup
+from .config import (
+    ConfigurationError,
+    DependencyError,
+    EnvironmentError,
 )
 
 # Execution and Build
@@ -70,20 +78,10 @@ from .git import (
     RepositoryError,
 )
 
-# Visualization and Documentation
-from .viz import (
-    APIDocumentationError,
-    DocumentationError,
-    PlottingError,
-    VisualizationError,
-)
-
-# Orchestration
-from .orchestration import (
-    OrchestrationError,
-    ProjectManagementError,
-    TaskExecutionError,
-    WorkflowError,
+# File and I/O
+from .io import (
+    DirectoryError,
+    FileOperationError,
 )
 
 # Network, API, Validation
@@ -95,18 +93,12 @@ from .network import (
     ValidationError,
 )
 
-# CEREBRUM
-from .cerebrum import (
-    ActiveInferenceError,
-    BayesianInferenceError,
-    CaseError,
-    CaseNotFoundError,
-    CerebrumError,
-    InferenceError,
-    InvalidCaseError,
-    ModelError,
-    NetworkStructureError,
-    TransformationError,
+# Orchestration
+from .orchestration import (
+    OrchestrationError,
+    ProjectManagementError,
+    TaskExecutionError,
+    WorkflowError,
 )
 
 # Specialized Domain Exceptions
@@ -142,6 +134,14 @@ from .specialized import (
     SystemDiscoveryError,
     TemplateError,
     TerminalError,
+)
+
+# Visualization and Documentation
+from .viz import (
+    APIDocumentationError,
+    DocumentationError,
+    PlottingError,
+    VisualizationError,
 )
 
 __all__ = [

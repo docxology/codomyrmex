@@ -7,6 +7,12 @@ Orchestrates workflow test execution.
 from datetime import datetime
 from typing import Any
 
+from .executors import (
+    AssertionExecutor,
+    ScriptExecutor,
+    StepExecutor,
+    WaitExecutor,
+)
 from .models import (
     StepResult,
     StepStatus,
@@ -14,12 +20,6 @@ from .models import (
     WorkflowResult,
     WorkflowStep,
     WorkflowStepType,
-)
-from .executors import (
-    AssertionExecutor,
-    ScriptExecutor,
-    StepExecutor,
-    WaitExecutor,
 )
 
 

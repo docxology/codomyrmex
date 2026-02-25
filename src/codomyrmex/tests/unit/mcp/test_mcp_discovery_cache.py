@@ -9,11 +9,8 @@ Verifies:
 
 from __future__ import annotations
 
-import time
 import threading
-
-import pytest
-
+import time
 
 # ── TTL cache mechanics ───────────────────────────────────────────────
 
@@ -23,7 +20,7 @@ class TestTTLCacheGlobals:
 
     def test_cache_starts_none(self) -> None:
         """Test functionality: cache starts none."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         # The cache is module-level; it may be set by previous tests,
         # so we just verify the *type* when it's populated or None.
@@ -33,13 +30,13 @@ class TestTTLCacheGlobals:
 
     def test_cache_lock_is_threading_lock(self) -> None:
         """Test functionality: cache lock is threading lock."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         assert isinstance(mcp_bridge._DYNAMIC_TOOLS_CACHE_LOCK, type(threading.Lock()))
 
     def test_default_ttl_is_positive(self) -> None:
         """Test functionality: default ttl is positive."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         assert isinstance(mcp_bridge._DEFAULT_CACHE_TTL, float)
         assert mcp_bridge._DEFAULT_CACHE_TTL > 0
@@ -50,7 +47,7 @@ class TestInvalidateToolCache:
 
     def test_invalidate_clears_cache(self) -> None:
         """Test functionality: invalidate clears cache."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         # Force-set the cache to something
         mcp_bridge._DYNAMIC_TOOLS_CACHE = [("x", "y", None, {})]
@@ -63,7 +60,7 @@ class TestInvalidateToolCache:
 
     def test_invalidate_is_idempotent(self) -> None:
         """Test functionality: invalidate is idempotent."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         mcp_bridge.invalidate_tool_cache()
         mcp_bridge.invalidate_tool_cache()
@@ -76,7 +73,7 @@ class TestCacheTTLBehavior:
 
     def test_expired_cache_is_rebuilt(self) -> None:
         """Set cache with an expiry in the past → next access should rebuild."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         # Place a sentinel value into the cache with an already-expired TTL
         sentinel = [("sentinel", "desc", None, {})]
@@ -98,7 +95,7 @@ class TestCacheTTLBehavior:
 
     def test_active_cache_is_not_expired(self) -> None:
         """Set cache with a future expiry → should be considered valid."""
-        from codomyrmex.agents.pai import mcp_bridge
+        from codomyrmex.agents.pai.mcp import discovery as mcp_bridge
 
         sentinel = [("sentinel", "desc", None, {})]
         mcp_bridge._DYNAMIC_TOOLS_CACHE = sentinel

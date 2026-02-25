@@ -24,7 +24,6 @@ import pytest
 
 from codomyrmex.documentation.education.curriculum import Curriculum, Difficulty, Lesson
 
-
 # ======================================================================
 # Module & Difficulty tests
 # ======================================================================

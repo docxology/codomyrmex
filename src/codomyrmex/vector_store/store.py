@@ -6,8 +6,8 @@ Storage backends for vector similarity search.
 
 import threading
 from abc import ABC, abstractmethod
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from .models import DistanceMetric, SearchResult, VectorEntry
 

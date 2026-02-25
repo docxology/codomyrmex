@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from codomyrmex.validation.schemas import Result, ResultStatus
+from codomyrmex.validation.schemas import Result
 
 from .registry import ToolRegistry
 from .validation import ValidationResult
@@ -134,7 +134,7 @@ class ToolChain:
     # Building the chain
     # ------------------------------------------------------------------
 
-    def add_step(self, step: ChainStep) -> "ToolChain":
+    def add_step(self, step: ChainStep) -> ToolChain:
         """
         Append a step to the chain.
 

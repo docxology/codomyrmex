@@ -13,7 +13,6 @@ import pytest
 
 from codomyrmex.git_analysis.core.gitnexus_bridge import (
     GitNexusBridge,
-    GitNexusNotAvailableError,
 )
 
 PROJECT_ROOT = str(Path(__file__).parents[5])

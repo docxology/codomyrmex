@@ -14,7 +14,7 @@ def scan_vulnerabilities(path: str = ".") -> dict:
         Structured security report of identified vulnerabilities.
     """
     from codomyrmex.security import scan_vulnerabilities as _scan
-    
+
     try:
         results = _scan(path)
         # Convert response objects to dicts if necessary
@@ -36,7 +36,7 @@ def scan_secrets(file_path: str) -> dict:
         A dictionary containing identified secrets or confirmation of validation.
     """
     from codomyrmex.security import scan_file_for_secrets as _scan_secrets
-    
+
     try:
         results = _scan_secrets(file_path)
         if hasattr(results, "to_dict"):
@@ -57,7 +57,7 @@ def audit_code_security(path: str) -> dict:
         Audit results and security grade.
     """
     from codomyrmex.security import security_audit_code as _audit
-    
+
     try:
         results = _audit(path)
         if hasattr(results, "to_dict"):

@@ -3,8 +3,6 @@ Unit tests for git_manager.py core functions.
 """
 
 import os
-import subprocess
-
 
 import pytest
 

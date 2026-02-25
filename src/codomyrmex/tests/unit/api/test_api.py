@@ -1924,7 +1924,10 @@ class TestAPIVersioningBoost:
         assert v is not None
 
     def test_api_version(self):
-        from codomyrmex.api.standardization.api_versioning import APIVersion, VersionFormat
+        from codomyrmex.api.standardization.api_versioning import (
+            APIVersion,
+            VersionFormat,
+        )
         v = APIVersion(version="1.0.0", format=VersionFormat.SEMVER, release_date=datetime.now())
         assert v.version == "1.0.0"
 

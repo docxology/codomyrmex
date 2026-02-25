@@ -10,11 +10,11 @@ from __future__ import annotations
 import string
 from dataclasses import dataclass
 
-from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.crypto.analysis.frequency import (
     expected_english_frequency,
     index_of_coincidence,
 )
+from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)
 

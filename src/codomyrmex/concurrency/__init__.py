@@ -18,18 +18,20 @@ from .locks.lock_manager import (
     LockManager,
     ReadWriteLock,
 )
+
 try:
     from .locks.redis_lock import (
         RedisLock,
     )
 except ImportError:
     RedisLock = None
+from .dead_letter import DeadLetterQueue
 from .semaphores.semaphore import (
     BaseSemaphore,
     LocalSemaphore,
 )
-from .pool import AsyncWorkerPool, PoolStats, TaskResult
-from .dead_letter import DeadLetterQueue
+from .workers.pool import AsyncWorkerPool, PoolStats, TaskResult
+
 
 def cli_commands():
     """Return CLI commands for the concurrency module."""
@@ -37,9 +39,9 @@ def cli_commands():
         """List thread/process pools."""
         mgr = LockManager()
         print("=== Concurrency Pools ===")
-        print(f"  Lock types available: LocalLock, ReadWriteLock" +
+        print("  Lock types available: LocalLock, ReadWriteLock" +
               (", RedisLock" if RedisLock is not None else ""))
-        print(f"  Semaphore types: LocalSemaphore")
+        print("  Semaphore types: LocalSemaphore")
         active = mgr.list_locks() if hasattr(mgr, "list_locks") else []
         print(f"  Active locks: {len(active)}")
 
@@ -74,3 +76,5 @@ __all__ = [
     "DeadLetterQueue",
     "cli_commands",
 ]
+
+from . import tasks, workers  # noqa: E402, F401

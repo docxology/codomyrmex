@@ -9,38 +9,41 @@ computed properties, and Config get/set methods.
 import pytest
 
 from codomyrmex.validation.schemas import (
-    # Core types
-    Result,
-    ResultStatus,
-    Task,
-    TaskStatus,
-    Config,
-    ModuleInfo,
-    ToolDefinition,
-    Notification,
+    AnalysisResult,
+    AnalysisSeverity,
+    BuildArtifact,
     # Code types
     CodeEntity,
     CodeEntityType,
-    AnalysisResult,
-    AnalysisSeverity,
-    SecurityFinding,
-    SecuritySeverity,
-    TestResult as SchemaTestResult,
-    TestStatus as SchemaTestStatus,
+    Config,
+    Credential,
     # Infrastructure types
     Deployment,
     DeploymentStatus,
+    Metric,
+    MetricType,
+    ModuleInfo,
+    Notification,
+    Permission,
     Pipeline,
     PipelineStatus,
     Resource,
-    BuildArtifact,
-    Metric,
-    MetricType,
-    Credential,
-    Permission,
+    # Core types
+    Result,
+    ResultStatus,
+    SecurityFinding,
+    SecuritySeverity,
+    Task,
+    TaskStatus,
+    ToolDefinition,
     WorkflowStep,
 )
-
+from codomyrmex.validation.schemas import (
+    TestResult as SchemaTestResult,
+)
+from codomyrmex.validation.schemas import (
+    TestStatus as SchemaTestStatus,
+)
 
 # ---------------------------------------------------------------------------
 # Module-level import tests

@@ -1,6 +1,5 @@
 """Tests for model_evaluation module."""
 
-import re
 
 import pytest
 

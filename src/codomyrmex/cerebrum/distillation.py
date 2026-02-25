@@ -9,16 +9,12 @@ solutions to new problems.
 from __future__ import annotations
 
 import hashlib
-import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.cerebrum.core.cases import Case, CaseBase
+from codomyrmex.cerebrum.core.cases import Case
 from codomyrmex.llm.models.reasoning import (
-    Conclusion,
-    ReasoningStep,
     ReasoningTrace,
-    ThinkingDepth,
 )
 from codomyrmex.logging_monitoring import get_logger
 

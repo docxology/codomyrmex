@@ -24,7 +24,7 @@ def generate_text(prompt: str, provider: str = "openrouter", model: str = "openr
             return {"status": "success", "content": response}
         except Exception as e:
             return {"status": "error", "message": str(e)}
-            
+
     elif provider == "ollama":
         try:
             from codomyrmex.llm import OllamaManager
@@ -33,7 +33,7 @@ def generate_text(prompt: str, provider: str = "openrouter", model: str = "openr
             return {"status": "success", "content": result.get("response", "")}
         except Exception as e:
             return {"status": "error", "message": f"Ollama generation failed: {e}"}
-            
+
     return {"status": "error", "message": f"Unsupported provider: {provider}"}
 
 
@@ -45,7 +45,7 @@ def list_local_models() -> dict:
         List of local LLM models installed.
     """
     from codomyrmex.llm import OllamaManager
-    
+
     try:
         manager = OllamaManager()
         models = manager.list_models()
@@ -62,16 +62,16 @@ def query_fabric_metadata() -> dict:
         Fabric connection configuration metadata.
     """
     from codomyrmex.llm import FabricManager
-    
+
     try:
         manager = FabricManager()
         if not manager.is_configured():
             return {"status": "success", "configured": False, "message": "Fabric is not configured currently."}
-            
+
         settings = manager.get_current_settings()
         return {
-            "status": "success", 
-            "configured": True, 
+            "status": "success",
+            "configured": True,
             "workspace": settings.get("workspace_id"),
             "tenant": settings.get("tenant_id")
         }

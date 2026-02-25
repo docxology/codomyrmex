@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 AI and Code Generation Exceptions
 

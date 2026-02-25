@@ -3,18 +3,17 @@
 from __future__ import annotations
 
 import pytest
-from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec
 
 from codomyrmex.crypto.currency.addresses import (
-    generate_bitcoin_address,
-    validate_bitcoin_address,
-    generate_ethereum_address,
-    validate_ethereum_address,
     checksum_ethereum_address,
+    generate_bitcoin_address,
+    generate_ethereum_address,
+    validate_bitcoin_address,
+    validate_ethereum_address,
 )
 from codomyrmex.crypto.exceptions import WalletError
-
 
 pytestmark = [pytest.mark.crypto, pytest.mark.unit]
 

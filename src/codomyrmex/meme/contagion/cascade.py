@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Dict, List
-
 from codomyrmex.meme.contagion.models import Cascade, CascadeType
 
 
 class CascadeDetector:
     """Detect and classify information cascades from event streams."""
 
-    def detect(self, events: List[Dict]) -> List[Cascade]:
+    def detect(self, events: list[dict]) -> list[Cascade]:
         """Detect cascades from a list of propagation events.
 
         Events should be dicts with at least:
@@ -23,7 +21,7 @@ class CascadeDetector:
             List of detected Cascades.
         """
         # Group by meme_id
-        grouped: Dict[str, List[Dict]] = {}
+        grouped: dict[str, list[dict]] = {}
         for ev in events:
             mid = ev.get("meme_id")
             if mid:
@@ -65,6 +63,6 @@ class CascadeDetector:
         return cascades
 
 
-def detect_cascades(events: List[Dict]) -> List[Cascade]:
+def detect_cascades(events: list[dict]) -> list[Cascade]:
     """Convenience wrapper for CascadeDetector."""
     return CascadeDetector().detect(events)

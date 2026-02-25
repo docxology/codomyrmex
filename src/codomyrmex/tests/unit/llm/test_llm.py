@@ -20,7 +20,6 @@ import json
 import os
 import shutil
 import tempfile
-import time
 from pathlib import Path
 from unittest import TestCase
 
@@ -287,8 +286,8 @@ class TestModelRunner(TestCase):
         if not _OLLAMA_AVAILABLE:
             self.skipTest("Ollama server not reachable")
 
-        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
         from codomyrmex.llm.ollama.model_runner import ModelRunner
+        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         self.manager = OllamaManager(auto_start_server=False)
         self.runner = ModelRunner(self.manager)
@@ -928,8 +927,8 @@ class TestAsyncModelRunner(TestCase):
         if not _OLLAMA_AVAILABLE:
             self.skipTest("Ollama server not reachable")
 
-        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
         from codomyrmex.llm.ollama.model_runner import ModelRunner
+        from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         self.manager = OllamaManager(auto_start_server=False)
         self.runner = ModelRunner(self.manager)

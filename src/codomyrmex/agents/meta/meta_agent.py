@@ -7,12 +7,12 @@ selection over time.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
-from codomyrmex.agents.meta.scoring import OutcomeScore, OutcomeScorer
-from codomyrmex.agents.meta.strategies import Strategy, StrategyLibrary
 from codomyrmex.agents.meta.ab_testing import ABTestEngine
+from codomyrmex.agents.meta.scoring import OutcomeScorer
+from codomyrmex.agents.meta.strategies import StrategyLibrary
 from codomyrmex.logging_monitoring import get_logger
 
 logger = get_logger(__name__)

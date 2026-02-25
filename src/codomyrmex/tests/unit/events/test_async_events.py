@@ -17,8 +17,8 @@ import pytest
 from codomyrmex.events.core.event_bus import (
     EventBus,
 )
-from codomyrmex.events.emitters.event_emitter import EventEmitter
 from codomyrmex.events.core.event_schema import Event, EventSchema, EventType
+from codomyrmex.events.emitters.event_emitter import EventEmitter
 
 # ==================== ASYNC EVENT PUBLISHING TESTS ====================
 

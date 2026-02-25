@@ -98,7 +98,11 @@ class TestModelVersion:
 
     def test_version_creation(self):
         """Verify ModelVersion can be created."""
-        from codomyrmex.model_ops.registry import ModelFramework, ModelStage, ModelVersion
+        from codomyrmex.model_ops.registry import (
+            ModelFramework,
+            ModelStage,
+            ModelVersion,
+        )
 
         version = ModelVersion(
             version="1.0.0",
@@ -121,7 +125,11 @@ class TestModelVersion:
 
     def test_version_to_dict(self):
         """Verify version serialization."""
-        from codomyrmex.model_ops.registry import ModelFramework, ModelMetrics, ModelVersion
+        from codomyrmex.model_ops.registry import (
+            ModelFramework,
+            ModelMetrics,
+            ModelVersion,
+        )
 
         version = ModelVersion(
             version="1.0",
@@ -173,7 +181,11 @@ class TestRegisteredModel:
 
     def test_model_production_version(self):
         """Verify production version retrieval."""
-        from codomyrmex.model_ops.registry import ModelStage, ModelVersion, RegisteredModel
+        from codomyrmex.model_ops.registry import (
+            ModelStage,
+            ModelVersion,
+            RegisteredModel,
+        )
 
         model = RegisteredModel(name="test")
 

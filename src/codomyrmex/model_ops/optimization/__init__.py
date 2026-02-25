@@ -13,6 +13,8 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from .batcher import RequestBatcher
+from .cache import InferenceCache
 from .models import (
     BatchingStrategy,
     InferenceRequest,
@@ -21,9 +23,8 @@ from .models import (
     OptimizationConfig,
     QuantizationType,
 )
-from .cache import InferenceCache
-from .batcher import RequestBatcher
 from .optimizer import InferenceOptimizer
+
 
 def cli_commands():
     """Return CLI commands for the inference_optimization module."""

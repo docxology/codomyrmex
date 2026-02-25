@@ -13,11 +13,12 @@ import inspect
 import logging
 import pkgutil
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -212,11 +213,11 @@ class MCPDiscovery:
         try:
             module = importlib.import_module(module_name)
             tools = self._scan_module(module)
-            
+
             # Update registry
             for tool in tools:
                 self._registry[tool.name] = tool
-                
+
             duration = (time.perf_counter() - start_time) * 1000.0
             report = DiscoveryReport(
                 tools=tools,
@@ -225,7 +226,7 @@ class MCPDiscovery:
             )
             self._update_metrics(report)
             return report
-            
+
         except Exception as e:
             duration = (time.perf_counter() - start_time) * 1000.0
             fail = FailedModule(module_name, str(e), type(e).__name__)
@@ -233,7 +234,7 @@ class MCPDiscovery:
             # Update metrics even on failure
             self._metrics.scan_duration_ms += duration
             self._metrics.failed_modules.append(module_name)
-            
+
             return DiscoveryReport(
                 failed_modules=[fail],
                 scan_duration_ms=duration,
@@ -245,12 +246,12 @@ class MCPDiscovery:
     def _scan_module(self, module: Any) -> list[DiscoveredTool]:
         """Scan a single already-imported module for MCP tool markers."""
         tools = []
-        
+
         def _add_if_tool(name: str, obj: Any) -> None:
             """Execute  Add If Tool operations natively."""
             if hasattr(obj, "_mcp_tool_meta"):
-                meta = getattr(obj, "_mcp_tool_meta")
-                
+                meta = obj._mcp_tool_meta
+
                 # Check requirements
                 available = True
                 unavailable_reason = None
@@ -259,7 +260,7 @@ class MCPDiscovery:
                     for req in meta["requires"]:
                         if not importlib.util.find_spec(req):
                             missing.append(req)
-                    
+
                     if missing:
                         available = False
                         unavailable_reason = (
@@ -287,7 +288,7 @@ class MCPDiscovery:
             if inspect.isclass(obj) and getattr(obj, "__module__", None) == module.__name__:
                 for method_name, method_obj in inspect.getmembers(obj):
                     _add_if_tool(method_name, method_obj)
-                    
+
         return tools
 
     def _update_metrics(self, report: DiscoveryReport) -> None:
@@ -358,31 +359,24 @@ def mcp_tool(
         # For now, we rely on the bridge to inspect signatures at runtime
         # but here we just mark it.
         # Ideally we should generate the JSON schema here to avoid repeated inspection.
-        
+
         # We assume parameters will be extracted/validated by the bridge/server logic
         # Here we just store metadata.
         # But wait, DiscoveredTool needs parameters.
         # Let's extract them here.
-        
+
         from codomyrmex.model_context_protocol.quality.validation import (
-             # We might not want to couple tightly here if validation module is heavy
-             # But validation.py is lightweight.
-             _generate_schema_from_func
+            # We might not want to couple tightly here if validation module is heavy
+            # But validation.py is lightweight.
+            _generate_schema_from_func,
         )
-        
+
         try:
             params = _generate_schema_from_func(func)
         except Exception:
             params = {}
 
-        setattr(func, "_mcp_tool_meta", {
-            "name": name,
-            "description": description,
-            "tags": tags or [],
-            "parameters": params,
-            "version": version,
-            "requires": requires or [],
-        })
+        func._mcp_tool_meta = {"name": name, "description": description, "tags": tags or [], "parameters": params, "version": version, "requires": requires or []}
         return func
     return decorator
 

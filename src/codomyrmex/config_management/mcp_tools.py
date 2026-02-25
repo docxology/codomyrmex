@@ -1,6 +1,6 @@
 """MCP tools for the config_management module."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 

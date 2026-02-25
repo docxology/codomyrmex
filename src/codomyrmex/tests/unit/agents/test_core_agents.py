@@ -8,9 +8,6 @@ Tests cover:
 5. ToolRegistry integration
 """
 
-import importlib.util
-import os
-import sys
 
 
 import pytest

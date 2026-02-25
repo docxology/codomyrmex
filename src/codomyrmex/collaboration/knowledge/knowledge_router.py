@@ -7,12 +7,9 @@ expertise, using tag overlap scoring and recency weighting.
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass, field
-from typing import Any
 
 from codomyrmex.collaboration.knowledge.models import (
     ExpertiseProfile,
-    KnowledgeEntry,
     QueryResult,
 )
 from codomyrmex.collaboration.knowledge.shared_pool import SharedMemoryPool

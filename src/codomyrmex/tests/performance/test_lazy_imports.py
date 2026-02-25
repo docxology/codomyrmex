@@ -12,10 +12,6 @@ from __future__ import annotations
 import importlib
 import sys
 import time
-from typing import Any
-
-import pytest
-
 
 # ── Core import time ──────────────────────────────────────────────────
 
@@ -51,10 +47,11 @@ class TestLazyDependencies:
         """matplotlib should not be loaded by importing codomyrmex."""
         # If matplotlib is already loaded, we can't test this,
         # but we can verify the themes module uses lazy import
-        from codomyrmex.data_visualization.themes import apply_theme
         # apply_theme uses `import matplotlib.pyplot as plt` inside the function
         # The fact that we can import apply_theme doesn't mean matplotlib is loaded
         import inspect
+
+        from codomyrmex.data_visualization.themes import apply_theme
         source = inspect.getsource(apply_theme)
         assert "import matplotlib" in source, "apply_theme should lazily import matplotlib"
 

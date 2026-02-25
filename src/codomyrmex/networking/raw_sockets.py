@@ -87,7 +87,7 @@ class PortScanner:
             try:
                 sock.connect((host, port))
                 return True
-            except (socket.timeout, ConnectionRefusedError, socket.error):
+            except (TimeoutError, OSError, ConnectionRefusedError):
                 return False
 
     @staticmethod

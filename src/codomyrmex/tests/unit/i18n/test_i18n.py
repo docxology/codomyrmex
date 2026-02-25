@@ -1,16 +1,17 @@
 """Tests for i18n module."""
 
+from datetime import date, datetime
+
 import pytest
-from datetime import datetime, date, timedelta
 
 try:
     from codomyrmex.utils.i18n import (
+        DateFormatter,
         Locale,
         MessageBundle,
         NumberFormatter,
         PluralRules,
         Translator,
-        DateFormatter,
         init,
         t,
     )

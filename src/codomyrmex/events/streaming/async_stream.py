@@ -5,8 +5,8 @@ Async-first streaming implementations.
 """
 
 import asyncio
-from typing import Any
 from collections.abc import AsyncIterator, Callable
+from typing import Any
 
 from . import Event, EventType
 

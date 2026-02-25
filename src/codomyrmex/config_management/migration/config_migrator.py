@@ -1,9 +1,9 @@
 import copy
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -230,11 +230,11 @@ class ConfigMigrator:
         """
         if not isinstance(config, dict):
             return False
-            
+
         current_version = config.get("version", "1.0")
         if current_version == target_version:
             return True
-            
+
         # Functional fallback: validate target version exists in the migration path
         return target_version in self.version_order
 

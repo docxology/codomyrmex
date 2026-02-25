@@ -17,9 +17,9 @@ import json
 import time
 from dataclasses import dataclass
 
+from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec, utils
-from cryptography.exceptions import InvalidSignature
 
 from codomyrmex.crypto.exceptions import SignatureError, WalletError
 from codomyrmex.logging_monitoring import get_logger

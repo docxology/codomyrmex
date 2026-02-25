@@ -1,7 +1,7 @@
 import importlib
+from collections.abc import Callable
 from functools import wraps
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

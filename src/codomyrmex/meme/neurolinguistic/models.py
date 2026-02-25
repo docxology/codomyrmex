@@ -5,7 +5,6 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
 
 
 class PatternType(str, Enum):
@@ -29,8 +28,8 @@ class CognitiveFrame:
     """
 
     name: str
-    keywords: List[str] = field(default_factory=list)
-    roles: Dict[str, str] = field(default_factory=dict)
+    keywords: list[str] = field(default_factory=list)
+    roles: dict[str, str] = field(default_factory=dict)
     logic: str = ""
     strength: float = 0.5
 

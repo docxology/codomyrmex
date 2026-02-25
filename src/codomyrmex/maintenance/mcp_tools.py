@@ -34,7 +34,9 @@ def maintenance_health_check(
     """
     try:
         from codomyrmex.maintenance.health.health_check import (
-            HealthChecker, HealthCheck, HealthStatus,
+            HealthCheck,
+            HealthChecker,
+            HealthStatus,
         )
         checker = HealthChecker()
         checker.register(HealthCheck(

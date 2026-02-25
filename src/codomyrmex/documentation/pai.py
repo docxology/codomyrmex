@@ -5,7 +5,7 @@ PAI documentation generation and updates.
 import ast
 import re
 from pathlib import Path
-from typing import Dict, List, Set, Any
+from typing import Any
 
 MAX_STUB_LINES = 55
 
@@ -35,7 +35,7 @@ def get_layer(module_name: str) -> str:
     return "Extended"
 
 
-def extract_exports(init_path: Path) -> Dict[str, Any]:
+def extract_exports(init_path: Path) -> dict[str, Any]:
     """Extract exports from __init__.py by parsing __all__ and import statements."""
     if not init_path.exists():
         return {"all": [], "classes": [], "functions": [], "docstring": ""}
@@ -103,7 +103,7 @@ def humanize_name(module_name: str) -> str:
     return module_name.replace("_", " ").title()
 
 
-def infer_pai_phase(module_name: str, functions: List[str], classes: List[str]) -> Dict[str, str]:
+def infer_pai_phase(module_name: str, functions: list[str], classes: list[str]) -> dict[str, str]:
     """Infer PAI Algorithm phase mapping from module content."""
     phases = {}
     all_names = " ".join(functions + classes).lower()
@@ -150,15 +150,15 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
 
     # Header
     sections.append(f"# Personal AI Infrastructure — {human_name} Module\n")
-    sections.append(f"**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026\n")
+    sections.append("**Version**: v0.2.0 | **Status**: Active | **Last Updated**: February 2026\n")
 
     # Overview
-    sections.append(f"## Overview\n")
+    sections.append("## Overview\n")
     article = "an" if layer[0] in "AEIOU" else "a"
     sections.append(f"{overview} This is {article} **{layer} Layer** module.\n")
 
     # PAI Capabilities with real code examples
-    sections.append(f"## PAI Capabilities\n")
+    sections.append("## PAI Capabilities\n")
 
     if exports["classes"] or exports["functions"]:
         # Code example
@@ -174,9 +174,9 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
 
     # Key Exports table
     if exports["all"]:
-        sections.append(f"## Key Exports\n")
-        sections.append(f"| Export | Type | Purpose |")
-        sections.append(f"|--------|------|---------|")
+        sections.append("## Key Exports\n")
+        sections.append("| Export | Type | Purpose |")
+        sections.append("|--------|------|---------|")
         for name in exports["all"][:15]:  # Limit to 15 to keep reasonable
             if name == "cli_commands":
                 continue
@@ -188,7 +188,7 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
         sections.append("")
 
     # PAI Algorithm Phase Mapping
-    sections.append(f"## PAI Algorithm Phase Mapping\n")
+    sections.append("## PAI Algorithm Phase Mapping\n")
     sections.append(f"| Phase | {human_name} Contribution |")
     sections.append(f"|-------|{'-' * 30}|")
     for phase, desc in phases.items():
@@ -196,15 +196,15 @@ def generate_pai_md(module_name: str, module_dir: Path) -> str:
     sections.append("")
 
     # Architecture Role
-    sections.append(f"## Architecture Role\n")
+    sections.append("## Architecture Role\n")
     sections.append(f"**{layer} Layer** — Part of the codomyrmex layered architecture.\n")
 
     # Navigation
-    sections.append(f"## Navigation\n")
-    sections.append(f"- **Self**: [PAI.md](PAI.md)")
-    sections.append(f"- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map")
-    sections.append(f"- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc")
-    sections.append(f"- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)")
+    sections.append("## Navigation\n")
+    sections.append("- **Self**: [PAI.md](PAI.md)")
+    sections.append("- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map")
+    sections.append("- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc")
+    sections.append("- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)")
 
     return "\n".join(sections) + "\n"
 

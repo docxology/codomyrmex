@@ -1,7 +1,7 @@
-import pytest
-from codomyrmex.data_visualization.components.badge import Badge
 from codomyrmex.data_visualization.components.alert import Alert
+from codomyrmex.data_visualization.components.badge import Badge
 from codomyrmex.data_visualization.components.progress import ProgressBar
+
 
 def test_badge_component():
     """Test functionality: badge component."""

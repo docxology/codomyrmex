@@ -8,13 +8,11 @@ because _generate_schema_from_func uses `param.annotation is int` identity
 checks that only work with real type objects, not stringified annotations.
 """
 
-import inspect
-from typing import Any, Optional
+from typing import Any
 
 import pytest
 
 from codomyrmex.model_context_protocol.quality.validation import (
-    ValidationResult,
     _coerce_types,
     _extract_input_schema,
     _generate_schema_from_func,
@@ -22,11 +20,10 @@ from codomyrmex.model_context_protocol.quality.validation import (
     validate_tool_arguments,
 )
 from codomyrmex.model_context_protocol.schemas.mcp_schemas import (
-    MCPToolRegistry,
     MCPToolCall,
+    MCPToolRegistry,
     MCPToolResult,
 )
-
 
 # ── validate_tool_arguments boundary tests ────────────────────────
 

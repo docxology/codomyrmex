@@ -1,9 +1,10 @@
-import pytest
 import os
+
 from codomyrmex.data_visualization import generate_report
 from codomyrmex.data_visualization.reports.finance import FinanceReport
-from codomyrmex.data_visualization.reports.marketing import MarketingReport
 from codomyrmex.data_visualization.reports.logistics import LogisticsReport
+from codomyrmex.data_visualization.reports.marketing import MarketingReport
+
 
 def test_finance_report_generation(tmp_path):
     """Test functionality: finance report generation."""

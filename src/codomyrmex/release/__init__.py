@@ -9,11 +9,11 @@ Components:
     - DistributionManager: Manage publishing to PyPI, TestPyPI, GitHub, and local targets
 """
 
-from codomyrmex.release.release_validator import (
-    CertificationCheck,
-    CertificationStatus,
-    ReleaseCertification,
-    ReleaseValidator,
+from codomyrmex.release.distribution import (
+    DistributionManager,
+    DistributionTarget,
+    PreflightResult,
+    PublishResult,
 )
 from codomyrmex.release.package_builder import (
     BuildArtifact,
@@ -21,11 +21,11 @@ from codomyrmex.release.package_builder import (
     PackageBuilder,
     PackageMetadata,
 )
-from codomyrmex.release.distribution import (
-    DistributionManager,
-    DistributionTarget,
-    PreflightResult,
-    PublishResult,
+from codomyrmex.release.release_validator import (
+    CertificationCheck,
+    CertificationStatus,
+    ReleaseCertification,
+    ReleaseValidator,
 )
 
 __all__ = [

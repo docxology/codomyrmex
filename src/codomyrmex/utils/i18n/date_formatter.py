@@ -1,6 +1,6 @@
 """Locale-aware date and time formatting."""
 
-from datetime import datetime, date
+from datetime import date, datetime
 
 from .models import Locale
 

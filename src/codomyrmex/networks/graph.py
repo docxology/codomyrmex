@@ -3,9 +3,9 @@
 This module provides the core graph data structures for network analysis.
 """
 
-from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar, Generic
-from dataclasses import dataclass, field
 import heapq
+from dataclasses import dataclass, field
+from typing import Any, Generic, TypeVar
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -16,7 +16,7 @@ T = TypeVar("T")
 class Node(Generic[T]):
     """Represents a node in the graph."""
     id: str
-    data: Optional[T] = None
+    data: T | None = None
 
     def __hash__(self):
         """Execute   Hash   operations natively."""
@@ -35,7 +35,7 @@ class Edge:
     source: Node
     target: Node
     weight: float = 1.0
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
 
 
 class NetworkGraph(Generic[T]):
@@ -43,10 +43,10 @@ class NetworkGraph(Generic[T]):
 
     def __init__(self):
         """Initialize an empty graph."""
-        self._nodes: Dict[str, Node[T]] = {}
-        self._adj: Dict[str, List[Edge]] = {}
+        self._nodes: dict[str, Node[T]] = {}
+        self._adj: dict[str, list[Edge]] = {}
 
-    def add_node(self, node_id: str, data: Optional[T] = None) -> Node[T]:
+    def add_node(self, node_id: str, data: T | None = None) -> Node[T]:
         """Add a node to the graph.
 
         Args:
@@ -78,12 +78,12 @@ class NetworkGraph(Generic[T]):
         """
         source = self.add_node(source_id)
         target = self.add_node(target_id)
-        
+
         edge = Edge(source=source, target=target, weight=weight, data=kwargs)
         self._adj[source_id].append(edge)
         return edge
 
-    def get_neighbors(self, node_id: str) -> List[Node[T]]:
+    def get_neighbors(self, node_id: str) -> list[Node[T]]:
         """Get neighbors of a node.
 
         Args:
@@ -97,7 +97,7 @@ class NetworkGraph(Generic[T]):
         return [edge.target for edge in self._adj[node_id]]
 
     @mcp_tool(name="NetworkGraph.shortest_path", description="Find the shortest path between two nodes using Dijkstra's algorithm")
-    def shortest_path(self, start_id: str, end_id: str) -> Optional[List[Node[T]]]:
+    def shortest_path(self, start_id: str, end_id: str) -> list[Node[T]] | None:
         """Find the shortest path between two nodes using Dijkstra's algorithm.
 
         Args:
@@ -114,7 +114,7 @@ class NetworkGraph(Generic[T]):
         queue = [(0.0, start_id)]
         distances = {node_id: float('inf') for node_id in self._nodes}
         distances[start_id] = 0.0
-        previous = {node_id: None for node_id in self._nodes}
+        previous = dict.fromkeys(self._nodes)
 
         while queue:
             current_dist, current_id = heapq.heappop(queue)
@@ -140,10 +140,10 @@ class NetworkGraph(Generic[T]):
         while current is not None:
             path.append(self._nodes[current])
             current = previous[current]
-        
+
         if path[-1].id != start_id:
             return None
-            
+
         return list(reversed(path))
 
     @property

@@ -9,13 +9,13 @@ __version__ = "0.1.0"
 import json
 import threading
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 

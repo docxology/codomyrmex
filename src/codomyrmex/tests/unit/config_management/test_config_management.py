@@ -27,7 +27,9 @@ class TestConfigValidator:
     def test_config_schema_creation(self):
         """Test creating configuration schemas."""
         try:
-            from codomyrmex.config_management.validation.config_validator import ConfigSchema
+            from codomyrmex.config_management.validation.config_validator import (
+                ConfigSchema,
+            )
         except ImportError:
             pytest.skip("ConfigSchema not available")
 
@@ -220,7 +222,9 @@ class TestConfigMigrator:
     def test_config_migrator_creation(self):
         """Test creating a ConfigMigrator."""
         try:
-            from codomyrmex.config_management.migration.config_migrator import ConfigMigrator
+            from codomyrmex.config_management.migration.config_migrator import (
+                ConfigMigrator,
+            )
         except ImportError:
             pytest.skip("ConfigMigrator not available")
 
@@ -326,7 +330,9 @@ class TestConfigMigrator:
     def test_migration_path_finding(self):
         """Test finding migration paths."""
         try:
-            from codomyrmex.config_management.migration.config_migrator import ConfigMigrator
+            from codomyrmex.config_management.migration.config_migrator import (
+                ConfigMigrator,
+            )
         except ImportError:
             pytest.skip("ConfigMigrator not available")
 
@@ -400,7 +406,9 @@ class TestConfigMigrator:
     def test_convenience_migration(self):
         """Test convenience migration function with real ConfigMigrator."""
         try:
-            from codomyrmex.config_management.migration.config_migrator import migrate_config
+            from codomyrmex.config_management.migration.config_migrator import (
+                migrate_config,
+            )
         except ImportError:
             pytest.skip("Convenience migration function not available")
 
@@ -489,8 +497,12 @@ class TestConfigurationManagerEnhanced:
     def test_validate_config_schema(self):
         """Test configuration schema validation with real validator."""
         try:
-            from codomyrmex.config_management.core.config_loader import ConfigurationManager
-            from codomyrmex.config_management.validation.config_validator import ConfigSchema
+            from codomyrmex.config_management.core.config_loader import (
+                ConfigurationManager,
+            )
+            from codomyrmex.config_management.validation.config_validator import (
+                ConfigSchema,
+            )
         except ImportError:
             pytest.skip("ConfigurationManager not available")
 
@@ -564,7 +576,9 @@ class TestConfigurationManagerEnhanced:
     def test_migration_error_handling(self):
         """Test migration error handling."""
         try:
-            from codomyrmex.config_management.core.config_loader import ConfigurationManager
+            from codomyrmex.config_management.core.config_loader import (
+                ConfigurationManager,
+            )
         except ImportError:
             pytest.skip("ConfigurationManager not available")
 
@@ -612,7 +626,9 @@ class TestMigrationAction:
     """Tests for MigrationAction enum."""
 
     def test_enum_values(self):
-        from codomyrmex.config_management.migration.config_migrator import MigrationAction
+        from codomyrmex.config_management.migration.config_migrator import (
+            MigrationAction,
+        )
 
         assert MigrationAction.RENAME_FIELD.value == "rename_field"
         assert MigrationAction.ADD_FIELD.value == "add_field"
@@ -625,7 +641,8 @@ class TestMigrationRule:
 
     def test_creation(self):
         from codomyrmex.config_management.migration.config_migrator import (
-            MigrationAction, MigrationRule,
+            MigrationAction,
+            MigrationRule,
         )
 
         rule = MigrationRule(
@@ -641,7 +658,8 @@ class TestMigrationRule:
 
     def test_to_dict(self):
         from codomyrmex.config_management.migration.config_migrator import (
-            MigrationAction, MigrationRule,
+            MigrationAction,
+            MigrationRule,
         )
 
         rule = MigrationRule(
@@ -662,7 +680,9 @@ class TestMigrationResult:
     """Tests for MigrationResult."""
 
     def test_success(self):
-        from codomyrmex.config_management.migration.config_migrator import MigrationResult
+        from codomyrmex.config_management.migration.config_migrator import (
+            MigrationResult,
+        )
 
         r = MigrationResult(
             success=True,

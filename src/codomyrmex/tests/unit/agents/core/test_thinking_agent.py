@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from codomyrmex.agents.core.base import (
     AgentCapabilities,
     AgentRequest,

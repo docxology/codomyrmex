@@ -4,7 +4,6 @@ Provides counter-measures against cognitive exploits, including adversarial
 embedding generation (poisoning), exploit detection, and honeytoken traps.
 """
 
-import os
 import random
 import threading
 import uuid

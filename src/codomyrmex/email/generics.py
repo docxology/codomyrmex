@@ -2,7 +2,6 @@
 
 import abc
 from datetime import datetime
-from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -10,39 +9,39 @@ from pydantic import BaseModel, Field
 class EmailAddress(BaseModel):
     """Represents a single email address (e.g. 'John Doe <john@example.com>')."""
     email: str
-    name: Optional[str] = None
+    name: str | None = None
 
 
 class EmailMessage(BaseModel):
     """A generic representation of an email message."""
-    id: Optional[str] = None
-    thread_id: Optional[str] = None
+    id: str | None = None
+    thread_id: str | None = None
     subject: str
     sender: EmailAddress
-    to: List[EmailAddress] = Field(default_factory=list)
-    cc: List[EmailAddress] = Field(default_factory=list)
-    bcc: List[EmailAddress] = Field(default_factory=list)
-    body_text: Optional[str] = None
-    body_html: Optional[str] = None
+    to: list[EmailAddress] = Field(default_factory=list)
+    cc: list[EmailAddress] = Field(default_factory=list)
+    bcc: list[EmailAddress] = Field(default_factory=list)
+    body_text: str | None = None
+    body_html: str | None = None
     date: datetime
-    labels: List[str] = Field(default_factory=list)
+    labels: list[str] = Field(default_factory=list)
 
 
 class EmailDraft(BaseModel):
     """A generic representation of an email draft."""
     subject: str
-    to: List[str] = Field(default_factory=list)
-    cc: List[str] = Field(default_factory=list)
-    bcc: List[str] = Field(default_factory=list)
+    to: list[str] = Field(default_factory=list)
+    cc: list[str] = Field(default_factory=list)
+    bcc: list[str] = Field(default_factory=list)
     body_text: str
-    body_html: Optional[str] = None
+    body_html: str | None = None
 
 
 class EmailProvider(abc.ABC):
     """Abstract base class for all email providers."""
 
     @abc.abstractmethod
-    def list_messages(self, query: str = "", max_results: int = 100) -> List[EmailMessage]:
+    def list_messages(self, query: str = "", max_results: int = 100) -> list[EmailMessage]:
         """List messages matching the generic query."""
         pass
 
@@ -67,6 +66,6 @@ class EmailProvider(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def modify_labels(self, message_id: str, add_labels: List[str], remove_labels: List[str]) -> None:
+    def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str]) -> None:
         """Add or remove labels from a message."""
         pass

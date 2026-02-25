@@ -4,6 +4,7 @@ Provides namespace-isolated knowledge pools with expertise-based
 query routing for multi-agent collaboration.
 """
 
+from codomyrmex.collaboration.knowledge.knowledge_router import KnowledgeRouter
 from codomyrmex.collaboration.knowledge.models import (
     AccessLevel,
     ConflictStrategy,
@@ -13,7 +14,6 @@ from codomyrmex.collaboration.knowledge.models import (
     QueryResult,
 )
 from codomyrmex.collaboration.knowledge.shared_pool import SharedMemoryPool
-from codomyrmex.collaboration.knowledge.knowledge_router import KnowledgeRouter
 
 __all__ = [
     "AccessLevel",

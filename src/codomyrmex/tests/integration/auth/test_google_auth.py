@@ -1,6 +1,5 @@
 """Tests for the auth module."""
 
-import os
 
 import pytest
 
@@ -19,7 +18,7 @@ def test_google_authenticator_init():
         token_cache_file="/tmp/dummy_token.json",
         scopes=["https://www.googleapis.com/auth/calendar.readonly"]
     )
-    
+
     assert auth.client_secrets_file == "/tmp/dummy_client_secrets.json"
     assert auth.token_file == "/tmp/dummy_token.json"
     assert len(auth.scopes) == 1
@@ -31,7 +30,7 @@ def test_google_authenticator_missing_secrets():
         client_secrets_file="/tmp/this_file_does_not_exist.json",
         token_cache_file="/tmp/no_token_here.json",
     )
-    
+
     # We expect a FileNotFoundError because the interactive flow falls back to reading the client_secrets
     with pytest.raises(FileNotFoundError):
         # Prevent actual browser pop-ups just in case something acts unexpected during Zero-Mock tests

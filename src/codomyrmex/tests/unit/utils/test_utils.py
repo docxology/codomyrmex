@@ -1,5 +1,6 @@
-import tempfile
 import hashlib
+import tempfile
+
 """Unit tests for the Codomyrmex utilities module.
 
 Tests for ensure_directory, safe_json_loads, safe_json_dumps, hash_content,
@@ -928,7 +929,7 @@ class TestScriptBase:
 
     def test_script_config_defaults(self):
         """Test ScriptConfig default values."""
-        from codomyrmex.utils.script_base import ScriptConfig
+        from codomyrmex.utils.process.script_base import ScriptConfig
 
         config = ScriptConfig()
 
@@ -942,7 +943,7 @@ class TestScriptBase:
 
     def test_script_config_from_dict(self):
         """Test ScriptConfig.from_dict."""
-        from codomyrmex.utils.script_base import ScriptConfig
+        from codomyrmex.utils.process.script_base import ScriptConfig
 
         data = {"dry_run": True, "verbose": True, "custom_key": "value"}
         config = ScriptConfig.from_dict(data)
@@ -953,7 +954,7 @@ class TestScriptBase:
 
     def test_script_config_to_dict(self):
         """Test ScriptConfig.to_dict."""
-        from codomyrmex.utils.script_base import ScriptConfig
+        from codomyrmex.utils.process.script_base import ScriptConfig
 
         config = ScriptConfig(dry_run=True, verbose=True)
         result = config.to_dict()
@@ -963,7 +964,7 @@ class TestScriptBase:
 
     def test_script_result_to_dict(self):
         """Test ScriptResult.to_dict."""
-        from codomyrmex.utils.script_base import ScriptResult
+        from codomyrmex.utils.process.script_base import ScriptResult
 
         result = ScriptResult(
             script_name="test",
@@ -982,7 +983,7 @@ class TestScriptBase:
 
     def test_script_result_to_json(self):
         """Test ScriptResult.to_json."""
-        from codomyrmex.utils.script_base import ScriptResult
+        from codomyrmex.utils.process.script_base import ScriptResult
 
         result = ScriptResult(
             script_name="test",
@@ -1190,7 +1191,7 @@ class TestAsyncRetry:
             nonlocal call_count
             call_count += 1
             if call_count < 2:
-                raise IOError("retry me")
+                raise OSError("retry me")
             return "recovered"
 
         result = asyncio.new_event_loop().run_until_complete(flaky())

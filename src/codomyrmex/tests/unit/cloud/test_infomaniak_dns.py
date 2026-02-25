@@ -12,9 +12,7 @@ Tests cover:
 Total: 24 tests in a single TestInfomaniakDNS class.
 """
 
-from _stubs import Stub
-
-from _stubs import make_stub_zone
+from _stubs import Stub, make_stub_zone
 
 
 class TestInfomaniakDNS:

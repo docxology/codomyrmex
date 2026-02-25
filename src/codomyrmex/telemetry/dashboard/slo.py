@@ -5,11 +5,11 @@ Service Level Objectives and Indicators for observability.
 """
 
 import threading
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 
 class SLIType(Enum):

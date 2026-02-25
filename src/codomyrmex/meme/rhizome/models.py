@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set
 
 
 class NetworkTopology(str, Enum):
@@ -32,8 +30,8 @@ class Node:
     content: str = ""
     node_type: str = "generic"
     capacity: float = 1.0
-    connections: Set[str] = field(default_factory=set)
-    metadata: Dict[str, str] = field(default_factory=dict)
+    connections: set[str] = field(default_factory=set)
+    metadata: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -51,7 +49,7 @@ class Edge:
     weight: float = 1.0
     edge_type: str = "undirected"
     id: str = field(default="")
-    
+
     def __post_init__(self):
         """Execute   Post Init   operations natively."""
         if not self.id:
@@ -68,14 +66,14 @@ class Graph:
         nodes: Map of ID to Node.
         edges: List of Edges.
     """
-    nodes: Dict[str, Node] = field(default_factory=dict)
-    edges: List[Edge] = field(default_factory=list)
+    nodes: dict[str, Node] = field(default_factory=dict)
+    edges: list[Edge] = field(default_factory=list)
     topology: NetworkTopology = NetworkTopology.RANDOM
-    
+
     def add_node(self, node: Node):
         """Execute Add Node operations natively."""
         self.nodes[node.id] = node
-        
+
     def add_edge(self, edge: Edge):
         """Execute Add Edge operations natively."""
         self.edges.append(edge)

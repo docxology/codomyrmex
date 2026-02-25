@@ -59,6 +59,7 @@ from .mcp import (
 )
 from .ollama import ConfigManager, ModelRunner, OllamaManager, OutputManager
 
+
 def cli_commands():
     """Return CLI commands for the llm module."""
     def _show_config():
@@ -85,9 +86,7 @@ def cli_commands():
     }
 
 
-from . import multimodal
-
-from . import safety
+from . import multimodal, safety
 
 __all__ = [
     "safety",
@@ -136,6 +135,7 @@ __all__ = [
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
+
 @mcp_tool(category="llm")
 def ask(question: str, model: str = "openrouter/free") -> str:
     """
@@ -148,14 +148,15 @@ def ask(question: str, model: str = "openrouter/free") -> str:
     Returns:
         The text response from the LLM.
     """
-    from .providers import get_provider, ProviderType, ProviderConfig, Message
     import os
-    
+
+    from .providers import Message, ProviderConfig, ProviderType, get_provider
+
     # Use OpenRouter by default as it has free models
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         return "Error: OPENROUTER_API_KEY not set in environment."
-        
+
     try:
         config = ProviderConfig(api_key=api_key)
         with get_provider(ProviderType.OPENROUTER, config) as provider:

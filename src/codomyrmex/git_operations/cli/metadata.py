@@ -1,38 +1,15 @@
-from datetime import datetime
-from pathlib import Path
 import argparse
 import json
 import traceback
+from datetime import datetime
+from pathlib import Path
 
-from codomyrmex.git_operations.core.repository import RepositoryManager
 from codomyrmex.git_operations.core.metadata import (
     CloneStatus,
     RepositoryMetadataManager,
 )
+from codomyrmex.git_operations.core.repository import RepositoryManager
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Add src to path for imports
 current_dir = Path(__file__).parent

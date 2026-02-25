@@ -4,8 +4,8 @@ This module defines the interface that all STT providers must implement.
 """
 
 from abc import ABC, abstractmethod
-from pathlib import Path
 from collections.abc import AsyncIterator
+from pathlib import Path
 
 from ..models import TranscriptionConfig, TranscriptionResult, WhisperModelSize
 

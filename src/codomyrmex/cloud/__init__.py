@@ -129,6 +129,7 @@ except ImportError:
 # New submodule exports
 from . import common
 
+
 def cli_commands():
     """Return CLI commands for the cloud module."""
     def _list_providers():

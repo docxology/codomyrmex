@@ -10,14 +10,9 @@ Verifies:
 
 from __future__ import annotations
 
-import logging
-
-import pytest
-
 from codomyrmex.events.core.event_bus import EventBus
 from codomyrmex.events.core.event_schema import Event, EventType
 from codomyrmex.logging_monitoring.handlers.event_bridge import EventLoggingBridge
-
 
 # ── Helpers ───────────────────────────────────────────────────────────
 

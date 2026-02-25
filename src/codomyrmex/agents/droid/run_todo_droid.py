@@ -3,8 +3,7 @@ from __future__ import annotations
 import argparse
 import sys
 import time
-from collections.abc import Iterable
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 from codomyrmex.logging_monitoring import get_logger, setup_logging
 

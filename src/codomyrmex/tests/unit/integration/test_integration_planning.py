@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from codomyrmex.events.integration_bus import IntegrationBus, IntegrationEvent
-from codomyrmex.orchestrator.module_connector import ModuleConnector, ServiceBinding
+from codomyrmex.agents.planner.executor import PlanExecutor
 from codomyrmex.agents.planner.plan_engine import (
-    Plan, PlanEngine, PlanTask, TaskPriority, TaskState,
+    Plan,
+    PlanEngine,
+    PlanTask,
 )
-from codomyrmex.agents.planner.executor import ExecutionResult, PlanExecutor
-
+from codomyrmex.events.integration_bus import IntegrationBus, IntegrationEvent
+from codomyrmex.orchestrator.module_connector import ModuleConnector
 
 # ── IntegrationBus ───────────────────────────────────────────────
 

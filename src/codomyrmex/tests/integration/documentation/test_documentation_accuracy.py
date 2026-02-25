@@ -282,13 +282,12 @@ class TestDocumentationAccuracy:
 
     def test_comprehensive_workflow_functions_work_together(self):
         """Test that documented workflow actually works end-to-end."""
-        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
-
         from codomyrmex.coding.execution.executor import execute_code
         from codomyrmex.coding.static_analysis.pyrefly_runner import (
             PyreflyResult,
             check_pyrefly_available,
         )
+        from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         with tempfile.TemporaryDirectory() as temp_dir:
             project_path = Path(temp_dir)
@@ -363,6 +362,7 @@ class TestRealMethodsInDocumentation:
         import time
 
         import numpy as np
+
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
 
         # Test actual benchmark code

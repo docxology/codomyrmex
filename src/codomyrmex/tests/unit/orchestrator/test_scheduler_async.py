@@ -22,7 +22,6 @@ from codomyrmex.orchestrator.execution.async_scheduler import (
     SchedulerMetrics,
 )
 
-
 # ── Helpers ───────────────────────────────────────────────────────────
 
 
@@ -302,9 +301,15 @@ class TestExports:
     def test_async_scheduler_exports(self) -> None:
         """Test functionality: async scheduler exports."""
         from codomyrmex.orchestrator import (
-            AsyncScheduler as _AS,
             AsyncJob as _AJ,
+        )
+        from codomyrmex.orchestrator import (
             AsyncJobStatus as _AJS,
+        )
+        from codomyrmex.orchestrator import (
+            AsyncScheduler as _AS,
+        )
+        from codomyrmex.orchestrator import (
             SchedulerMetrics as _SM,
         )
         assert _AS is not None

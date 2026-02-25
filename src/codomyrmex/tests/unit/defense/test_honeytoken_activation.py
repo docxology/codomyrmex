@@ -3,7 +3,6 @@
 Validates the full honeytoken lifecycle: create → embed → detect → report.
 """
 
-import pytest
 
 
 class TestHoneytokenActivation:

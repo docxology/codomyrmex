@@ -255,7 +255,7 @@ class BuildGenerator:
                 has_from = True
 
                 # Check for latest tag
-                if ':latest' in line or not ':' in line:
+                if ':latest' in line or ':' not in line:
                     issues.append(f"Line {line_num}: Avoid using 'latest' tag for reproducible builds")
 
             # Check for root user

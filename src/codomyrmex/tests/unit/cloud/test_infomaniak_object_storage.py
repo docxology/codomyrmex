@@ -12,13 +12,9 @@ bucket policies, and error paths.
 Total: ~28 tests across 2 test classes.
 """
 
-import io
-import os
 
-import pytest
 
 from _stubs import Stub
-
 
 from codomyrmex.cloud.infomaniak.object_storage.client import (
     InfomaniakObjectStorageClient,

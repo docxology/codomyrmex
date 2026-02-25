@@ -4,8 +4,8 @@ Engines submodule for data_visualization.
 Provides core plotting engines and utilities.
 """
 
-from .advanced_plotter import AdvancedPlotter
 from ..charts.plot_utils import apply_style, configure_plot, save_plot
+from .advanced_plotter import AdvancedPlotter
 from .plotter import Plotter
 
 __all__ = [

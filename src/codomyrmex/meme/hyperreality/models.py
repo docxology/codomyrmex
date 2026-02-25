@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
 
 
 class SimulationLevel(int, Enum):
@@ -43,7 +41,7 @@ class Simulacrum:
     fidelity: float = 1.0
     autonomy: float = 0.0
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
-    metadata: Dict[str, str] = field(default_factory=dict)
+    metadata: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -57,6 +55,6 @@ class RealityTunnel:
     """
 
     name: str
-    filters: List[str] = field(default_factory=list)
+    filters: list[str] = field(default_factory=list)
     distortion: float = 0.0
-    active_simulacra: List[Simulacrum] = field(default_factory=list)
+    active_simulacra: list[Simulacrum] = field(default_factory=list)

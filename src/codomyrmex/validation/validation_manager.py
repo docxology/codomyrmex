@@ -7,9 +7,9 @@ validation profiles, and aggregate reporting.
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass, field
-from typing import Any
 from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

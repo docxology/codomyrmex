@@ -813,7 +813,10 @@ class TestStreamJSONL:
     """Tests for JSONL streaming read/write."""
 
     def test_roundtrip(self, tmp_path):
-        from codomyrmex.serialization.streaming import stream_jsonl_read, stream_jsonl_write
+        from codomyrmex.serialization.streaming import (
+            stream_jsonl_read,
+            stream_jsonl_write,
+        )
 
         items = [{"id": i, "name": f"item-{i}"} for i in range(10)]
         path = tmp_path / "test.jsonl"

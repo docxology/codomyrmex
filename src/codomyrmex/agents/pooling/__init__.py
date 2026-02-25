@@ -11,10 +11,10 @@ import threading
 import time
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, TypeVar
-from collections.abc import Callable
 
 T = TypeVar('T')
 

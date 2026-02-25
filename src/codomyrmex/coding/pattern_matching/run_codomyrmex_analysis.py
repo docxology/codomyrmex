@@ -227,7 +227,7 @@ def _perform_symbol_usage_analysis(path: str) -> dict[str, int]:
             symbols.add(node.name)
 
     # Count Name references in the AST
-    usage: dict[str, int] = {s: 0 for s in symbols}
+    usage: dict[str, int] = dict.fromkeys(symbols, 0)
     for node in ast.walk(tree):
         if isinstance(node, ast.Name) and node.id in usage:
             usage[node.id] += 1

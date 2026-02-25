@@ -7,9 +7,8 @@ an AggregateResult with statistics.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
-from codomyrmex.concurrency.task_worker import TaskResult
+from .tasks.task_worker import TaskResult
 
 
 @dataclass

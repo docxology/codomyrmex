@@ -2,11 +2,11 @@
 import functools
 import json
 import time
+from collections.abc import Callable
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from collections.abc import Callable
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 
@@ -58,12 +58,12 @@ class SystemMonitor:
         """Start continuous background monitoring loop."""
         if not HAS_PSUTIL or self._monitoring:
             return
-            
+
         self._monitoring = True
         import threading
         self._monitor_thread = threading.Thread(target=self._monitor_loop, daemon=True)
         self._monitor_thread.start()
-        
+
     def _monitor_loop(self):
         """Continuously poll resources."""
         while self._monitoring:
@@ -181,7 +181,7 @@ class PerformanceMonitor:
                     f,
                 )
                 f.write("\n")
-        except (OSError, json.JSONEncodeError):
+        except (OSError, ValueError):
             # If we can't write to the log file, that's okay
             pass
 

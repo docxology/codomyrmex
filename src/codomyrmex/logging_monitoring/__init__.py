@@ -39,19 +39,19 @@ except ImportError:
     Result = None  # type: ignore[assignment,misc]
     ResultStatus = None  # type: ignore[assignment,misc]
 
-from .core.logger_config import get_logger, setup_logging
-
 # Correlation ID propagation (v0.2.0 Stream 3)
 from .core.correlation import (
-    new_correlation_id,
-    get_correlation_id,
-    set_correlation_id,
-    clear_correlation_id,
-    with_correlation,
     CorrelationFilter,
-    enrich_event_data,
+    clear_correlation_id,
     create_mcp_correlation_header,
+    enrich_event_data,
+    get_correlation_id,
+    new_correlation_id,
+    set_correlation_id,
+    with_correlation,
 )
+from .core.logger_config import get_logger, setup_logging
+
 
 def cli_commands() -> dict[str, object]:
     """Return CLI commands for the logging_monitoring module."""

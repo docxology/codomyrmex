@@ -3,6 +3,6 @@
 Exposes the core Simulator class and configuration.
 """
 
-from .simulator import Simulator, SimulationConfig
+from .simulator import SimulationConfig, Simulator
 
 __all__ = ["Simulator", "SimulationConfig"]

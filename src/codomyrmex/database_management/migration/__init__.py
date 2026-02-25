@@ -4,6 +4,7 @@ Migration Module
 Data migration with versioned steps, rollbacks, and transformers.
 """
 
+from .executor import DataMigrator, MigrationRunner
 from .models import (
     CompositeTransformer,
     DataTransformer,
@@ -15,7 +16,6 @@ from .models import (
     MigrationStatus,
     MigrationStep,
 )
-from .executor import DataMigrator, MigrationRunner
 
 # Shared schemas for cross-module interop
 try:
@@ -58,3 +58,5 @@ __all__ = [
     # CLI
     "cli_commands",
 ]
+
+from .migration_manager import *  # noqa: E402, F401, F403

@@ -25,21 +25,17 @@ import enum
 import hashlib
 import json
 import logging
+import threading
 import time
+from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable, TypedDict
+from typing import Any, TypedDict
 
-import threading
-
+from codomyrmex.agents.pai.mcp.discovery import _discover_dynamic_tools
 from codomyrmex.agents.pai.mcp_bridge import (
-    _PROMPT_DEFINITIONS,
-    _RESOURCE_DEFINITIONS,
-    call_tool,
     create_codomyrmex_mcp_server,
     get_tool_registry,
-    invalidate_tool_cache,
-    _discover_dynamic_tools,
 )
 from codomyrmex.logging_monitoring import get_logger
 from codomyrmex.model_context_protocol.quality.validation import validate_tool_arguments
@@ -155,7 +151,7 @@ def get_audit_log(
         # fast path if no filters
         if not any((since, tool_name, status)):
             return list(_audit_log)
-        
+
         results = []
         for entry in _audit_log:
             if tool_name and entry["tool_name"] != tool_name:
@@ -174,7 +170,7 @@ def export_audit_log(path: str | Path, format: str = "jsonl") -> None:
     """Export audit log to file."""
     path = Path(path)
     entries = get_audit_log()
-    
+
     if format == "jsonl":
         with open(path, "w") as f:
             for entry in entries:
@@ -190,8 +186,8 @@ def clear_audit_log(before: datetime | None = None) -> int:
             count = len(_audit_log)
             _audit_log.clear()
             return count
-        
-        # Deque doesn't support efficient middle removal, 
+
+        # Deque doesn't support efficient middle removal,
         # so we rebuild it.
         retained = []
         removed = 0
@@ -202,7 +198,7 @@ def clear_audit_log(before: datetime | None = None) -> int:
                 removed += 1
             else:
                 retained.append(entry)
-        
+
         _audit_log.extend(retained)
         return removed
 
@@ -239,7 +235,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
     # Emit trust level change via EventBus
     try:
         from codomyrmex.events import publish_event
-        from codomyrmex.events.core.event_schema import EventType, Event
+        from codomyrmex.events.core.event_schema import Event, EventType
         event = Event(
             event_type=EventType.TRUST_LEVEL_CHANGED,
             source="trust_gateway",
@@ -513,10 +509,10 @@ def verify_capabilities() -> dict[str, Any]:
     # Ensures detailed tool stats, including versions and availability
     # Refresh discovery first just in case
     _discover_dynamic_tools()
-    
+
     registry = get_tool_registry()
     tool_names = sorted(registry.list_tools())
-    
+
     # Calculate tool categorization stats
     safe_tools = _get_safe_tools()
     destructive_tools = _get_destructive_tools()
@@ -528,15 +524,14 @@ def verify_capabilities() -> dict[str, Any]:
 
     # ── Module Stats ──────────────────────────────────────────────
     # We check discovery metrics for failed modules
-    from codomyrmex.model_context_protocol.discovery import MCPDiscovery
     # We need to access the singleton-ish discovery metrics from mcp_bridge's discovery engine
-    # but mcp_bridge hides the engine instance. 
+    # but mcp_bridge hides the engine instance.
     # Actually create_codomyrmex_mcp_server._discovery_metrics_provider() gives us metrics.
     # Or better, we expose a getter in mcp_bridge.
     # For now, we reuse the pattern from mcp_bridge or just re-read the attribute if we can.
     # Actually, mcp_bridge._DISCOVERY_ENGINE is private but we can access it for now or rely on
     # invalidate_tool_cache().
-    
+
     # Let's use the provider if available or a direct access pattern
     failed_modules = []
     discovery_cache_age = -1.0
@@ -549,7 +544,7 @@ def verify_capabilities() -> dict[str, Any]:
             for m in discovery_metrics.failed_modules
         ]
         discovery_cache_age = (
-            (datetime.now(timezone.utc) - discovery_metrics.last_scan_time).total_seconds() 
+            (datetime.now(timezone.utc) - discovery_metrics.last_scan_time).total_seconds()
             if discovery_metrics.last_scan_time else -1.0
         )
         discovery_last_duration = discovery_metrics.scan_duration_ms
@@ -574,12 +569,12 @@ def verify_capabilities() -> dict[str, Any]:
         mcp_prompts = 0
 
     # ── Validation ────────────────────────────────────────────────
-    
+
     report = {
         "status": "verified",
         "tools": {
-            "safe": sorted(list(safe_tools)),
-            "destructive": sorted(list(destructive_tools)),
+            "safe": sorted(safe_tools),
+            "destructive": sorted(destructive_tools),
             "total": len(tool_names),
             "by_category": by_category,
         },
@@ -627,7 +622,7 @@ def trust_tool(tool_name: str) -> dict[str, Any]:
     Returns:
         Trust state after promotion.
     """
-    # Note: We don't trigger global trust change for single tool, 
+    # Note: We don't trigger global trust change for single tool,
     # but we could if we tracked per-tool granularity in events.
     new_level = _registry.trust_tool(tool_name)
     return {
@@ -644,14 +639,14 @@ def trust_all() -> dict[str, Any]:
         Trust state after promotion.
     """
     promoted = _registry.trust_all()
-    
+
     # Update global level if it wasn't already TRUSTED
     # Note: _registry.trust_all() trusts individual tools, but we also track global level
     global _trust_level
     old_level = _trust_level
     _trust_level = TrustLevel.TRUSTED
     _trigger_trust_change(old_level, TrustLevel.TRUSTED)
-    
+
     return {
         "promoted": promoted,
         "count": len(promoted),
@@ -695,14 +690,14 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
             f"Unknown tool: {name!r}. "
             f"Available: {sorted(known_tools)}"
         )
-        
+
     # Validation Step (Secure by default)
     # We must validate before we even check trust, to catch malformed attacks early.
     tool_entry = registry.get(name)
     if tool_entry and "schema" in tool_entry:
         val_result = validate_tool_arguments(
-            name, 
-            kwargs, 
+            name,
+            kwargs,
             tool_entry["schema"]
         )
         if not val_result.valid:
@@ -728,26 +723,26 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
     # Destructive Tool Confirmation
     if _REQUIRE_CONFIRMATION and name in DESTRUCTIVE_TOOLS:
         _cleanup_expired_confirmations()
-        
+
         # Check for token
         token = kwargs.pop("confirmation_token", None)
-        
+
         if token:
             # Validate token
             if token not in _pending_confirmations:
-                _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0, 
+                _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
                                error=SecurityError("Invalid or expired confirmation token"))
                 raise SecurityError("Invalid or expired confirmation token")
-            
+
             saved = _pending_confirmations[token]
             if saved["tool_name"] != name:
-                 _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0, 
+                 _log_audit_entry(name, kwargs, "blocked", _registry.level(name).name, 0.0,
                                error=SecurityError("Token mismatch"))
                  raise SecurityError("Confirmation token does not match tool")
-                 
+
             # Token valid, proceed. Remove used token.
             del _pending_confirmations[token]
-            
+
         else:
             # Require confirmation
             import uuid
@@ -757,9 +752,9 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
                 "tool_name": name,
                 "args": kwargs
             }
-            
+
             _log_audit_entry(name, kwargs, "pending_confirmation", _registry.level(name).name, 0.0)
-            
+
             return {
                 "confirmation_required": True,
                 "tool_name": name,

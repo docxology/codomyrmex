@@ -231,9 +231,9 @@ class SupplyChainVerifier:
     def verify_signature(self, path: str, signature_path: str) -> bool:
         """Verify file signature using simple hash comparison for now."""
         try:
-            with open(signature_path, 'r') as f:
+            with open(signature_path) as f:
                 expected = f.read().strip()
-                
+
             actual = self.compute_file_hash(path)
             # A true signature verification would use public keys, but as a Zero-Mock implementation
             # we do a secure hash comparison fallback.

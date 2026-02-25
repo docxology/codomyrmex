@@ -1,6 +1,6 @@
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
-from collections.abc import Iterator
 
 from codomyrmex.agents.core import (
     AgentCapabilities,

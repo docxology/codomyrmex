@@ -1,4 +1,5 @@
 import time
+
 """Unit tests for physical_management module."""
 
 import sys
@@ -227,7 +228,9 @@ class TestAnalyticsWindow:
 
     def test_add_and_metrics(self):
         from codomyrmex.physical_management.analytics import (
-            AnalyticsMetric, AnalyticsWindow, DataPoint,
+            AnalyticsMetric,
+            AnalyticsWindow,
+            DataPoint,
         )
 
         now = time.time()
@@ -375,7 +378,10 @@ class TestSimulationEngine:
         assert v.x == 1.0
 
     def test_force_field(self):
-        from codomyrmex.physical_management.simulation_engine import ForceField, Vector3D
+        from codomyrmex.physical_management.simulation_engine import (
+            ForceField,
+            Vector3D,
+        )
         ff = ForceField(position=Vector3D(0, -9.81, 0), strength=9.81)
         assert ff.strength == 9.81
 

@@ -14,11 +14,11 @@ Tests cover:
 Total: ~16 tests in 1 test class.
 """
 
-import sys
 import os
-from _stubs import Stub
+import sys
 
 import pytest
+from _stubs import Stub
 
 
 class TestInfomaniakAuthModule:
@@ -191,7 +191,6 @@ class TestAuthFunctions:
 
     def test_create_openstack_connection_import_error(self):
         """create_openstack_connection raises ImportError when openstacksdk missing."""
-        import sys
 
         from codomyrmex.cloud.infomaniak.auth import create_openstack_connection
 
@@ -211,7 +210,6 @@ class TestAuthFunctions:
 
     def test_create_openstack_connection_auth_failure(self):
         """create_openstack_connection raises InfomaniakAuthError on connection failure."""
-        import sys
 
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakAuthError,
@@ -234,7 +232,6 @@ class TestAuthFunctions:
 
     def test_create_openstack_connection_success(self):
         """create_openstack_connection returns Connection on success."""
-        import sys
 
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakCredentials,
@@ -258,7 +255,6 @@ class TestAuthFunctions:
 
     def test_create_s3_client_import_error(self):
         """create_s3_client raises ImportError when boto3 missing."""
-        import sys
 
         from codomyrmex.cloud.infomaniak.auth import create_s3_client
 
@@ -275,7 +271,6 @@ class TestAuthFunctions:
 
     def test_create_s3_client_success(self):
         """create_s3_client returns boto3 client on success."""
-        import sys
 
         from codomyrmex.cloud.infomaniak.auth import (
             InfomaniakS3Credentials,

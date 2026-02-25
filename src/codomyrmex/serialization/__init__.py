@@ -28,6 +28,7 @@ from .exceptions import (
 from .serialization_manager import SerializationManager
 from .serializer import SerializationFormat, Serializer
 
+
 def cli_commands():
     """Return CLI commands for the serialization module."""
     def _formats(**kwargs):

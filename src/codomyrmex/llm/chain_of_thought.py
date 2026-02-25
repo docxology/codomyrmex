@@ -14,13 +14,13 @@ an LLM provider for richer analysis.
 from __future__ import annotations
 
 import time
-from typing import Any, Callable, Protocol
+from typing import Any, Protocol
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .models.reasoning import (
-    Conclusion,
     DEPTH_TO_STEPS,
+    Conclusion,
     ReasoningStep,
     ReasoningTrace,
     ThinkingDepth,

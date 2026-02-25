@@ -7,9 +7,9 @@ to their renamed or reorganized replacements.
 from __future__ import annotations
 
 import functools
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
-from collections.abc import Callable
 
 
 @dataclass

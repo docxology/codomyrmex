@@ -13,7 +13,6 @@ from codomyrmex.utils.metrics import (
     ModuleHealth,
     count_calls,
     export_prometheus,
-    health,
     metrics,
     timed_metric,
 )

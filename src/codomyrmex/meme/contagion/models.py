@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
 
 
 class CascadeType(str, Enum):
@@ -36,7 +34,7 @@ class Cascade:
     duration: float = 0.0
     velocity: float = 0.0
     cascade_type: CascadeType = CascadeType.ORGANIC
-    participants: List[str] = field(default_factory=list)
+    participants: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -51,10 +49,10 @@ class PropagationTrace:
         seed_meme: The meme being propagated.
     """
 
-    time_steps: List[int] = field(default_factory=list)
-    infected_counts: List[int] = field(default_factory=list)
-    susceptible_counts: List[int] = field(default_factory=list)
-    recovered_counts: List[int] = field(default_factory=list)
+    time_steps: list[int] = field(default_factory=list)
+    infected_counts: list[int] = field(default_factory=list)
+    susceptible_counts: list[int] = field(default_factory=list)
+    recovered_counts: list[int] = field(default_factory=list)
     seed_meme_id: str = ""
 
     def peak_infected(self) -> int:
@@ -77,8 +75,8 @@ class ResonanceMap:
         clusters: Identified high-resonance clusters.
     """
 
-    nodes: Dict[str, float] = field(default_factory=dict)
-    clusters: List[List[str]] = field(default_factory=list)
+    nodes: dict[str, float] = field(default_factory=dict)
+    clusters: list[list[str]] = field(default_factory=list)
 
 
 @dataclass

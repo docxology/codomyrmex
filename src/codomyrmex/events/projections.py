@@ -7,9 +7,8 @@ latest-per-key views.
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass, field
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 
 from codomyrmex.events.event_store import EventStore, StreamEvent
 

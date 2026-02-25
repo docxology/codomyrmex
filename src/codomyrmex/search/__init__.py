@@ -11,6 +11,7 @@ except ImportError:
     Result = None
     ResultStatus = None
 
+from .engine import InMemoryIndex, SearchIndex, create_index, quick_search
 from .models import (
     Document,
     FuzzyMatcher,
@@ -19,7 +20,7 @@ from .models import (
     SimpleTokenizer,
     Tokenizer,
 )
-from .engine import InMemoryIndex, SearchIndex, create_index, quick_search
+
 
 def cli_commands():
     """Return CLI commands for the search module."""

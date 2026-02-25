@@ -7,9 +7,6 @@ observations (e.g. monthly revenue).
 
 from __future__ import annotations
 
-import math
-from typing import Optional
-
 
 class ForecastError(Exception):
     """Raised when forecasting cannot proceed."""
@@ -25,7 +22,7 @@ class Forecaster:
         print(fc.forecast(periods=3, method="exponential_smoothing"))
     """
 
-    def __init__(self, data: Optional[list[float]] = None) -> None:
+    def __init__(self, data: list[float] | None = None) -> None:
         """Initialise with an optional list of historical values.
 
         Args:

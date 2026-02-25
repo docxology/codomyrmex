@@ -17,10 +17,8 @@ from codomyrmex.agents.specialized.improvement_report import (
     ImprovementReport,
     ProposedChange,
     ReviewVerdict,
-    RiskLevel,
     TestSuiteResult,
 )
-
 
 # ─── Anti-Pattern Detector ────────────────────────────────────────────
 
@@ -83,7 +81,7 @@ class TestImprovementPipeline:
 
     def test_max_changes_limit(self):
         """Pipeline respects max_changes_per_run."""
-        source = "\n".join([f"except:" for _ in range(20)])
+        source = "\n".join(["except:" for _ in range(20)])
         config = ImprovementConfig(max_changes_per_run=3)
         pipeline = ImprovementPipeline(config=config)
         report = pipeline.improve(source)

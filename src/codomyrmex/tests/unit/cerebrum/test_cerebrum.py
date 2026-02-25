@@ -16,28 +16,26 @@ import pytest
 
 from codomyrmex import cerebrum
 from codomyrmex.cerebrum import (
+    AdaptationTransformer,
     Case,
     CaseBase,
-    CaseRetriever,
     CerebrumConfig,
     CerebrumEngine,
+    LearningTransformer,
     Model,
     ModelManager,
     ReasoningResult,
     TransformationManager,
-    AdaptationTransformer,
-    LearningTransformer,
+    compute_cosine_similarity,
+    compute_euclidean_distance,
     compute_hash,
     normalize_features,
-    compute_euclidean_distance,
-    compute_cosine_similarity,
     softmax,
 )
 from codomyrmex.cerebrum.core.exceptions import (
     CaseNotFoundError,
     InvalidCaseError,
     ModelError,
-    TransformationError,
 )
 
 

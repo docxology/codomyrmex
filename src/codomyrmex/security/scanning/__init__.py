@@ -409,3 +409,5 @@ __all__ = [
     # Core
     "SecurityScanner",
 ]
+
+from .vulnerability_scanner import *  # noqa: E402, F401, F403

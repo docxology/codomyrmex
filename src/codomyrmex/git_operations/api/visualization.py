@@ -10,7 +10,6 @@ with data_visualization capabilities, specifically for Git-related visualization
 """
 
 import os
-from pathlib import Path
 from typing import Any
 
 from codomyrmex.git_operations.core.git import (

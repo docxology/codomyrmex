@@ -1,7 +1,6 @@
 
-import pytest
 from codomyrmex.security.ai_safety import ActiveDefense, RabbitHole
-import asyncio
+
 
 def test_exploit_detection():
     """Test functionality: exploit detection."""
@@ -27,12 +26,12 @@ def test_rabbit_hole_engagement():
     """Test functionality: rabbit hole engagement."""
     hole = RabbitHole()
     attacker = "bad_actor"
-    
+
     msg = hole.engage(attacker)
     assert "Access Granted" in msg
-    
+
     resp = hole.generate_response(attacker, "input")
     assert len(resp) > 0
-    
+
     # Test blocking unengaged
     assert hole.generate_response("random", "input") == "Connection refused."

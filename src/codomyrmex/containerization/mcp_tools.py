@@ -25,7 +25,7 @@ except ImportError:
 )
 def container_runtime_status() -> dict[str, Any]:
     """Report which container runtimes are available."""
-    from . import HAS_DOCKER_MANAGER, HAS_K8S, HAS_REGISTRY, HAS_SCANNER, HAS_OPTIMIZER
+    from . import HAS_DOCKER_MANAGER, HAS_K8S, HAS_OPTIMIZER, HAS_REGISTRY, HAS_SCANNER
 
     return {
         "status": "ok",
@@ -86,7 +86,7 @@ def container_list() -> dict[str, Any]:
 def container_security_scan(image: str) -> dict[str, Any]:
     """Run security scan on a container image."""
     try:
-        from . import ContainerSecurityScanner, HAS_SCANNER
+        from . import HAS_SCANNER, ContainerSecurityScanner
 
         if not HAS_SCANNER or ContainerSecurityScanner is None:
             return {"status": "error", "error": "Security scanner not available"}

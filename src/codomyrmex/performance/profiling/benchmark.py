@@ -10,11 +10,11 @@ Provides:
 
 from __future__ import annotations
 
-import functools
 import statistics
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict
+from typing import Any
 
 try:
     import psutil
@@ -72,7 +72,7 @@ class BenchmarkResult:
         frac = idx - lo
         return sorted_t[lo] + frac * (sorted_t[hi] - sorted_t[lo])
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Execute To Dict operations natively."""
         return {
             "name": self.name,
@@ -93,7 +93,7 @@ def run_benchmark(
     iterations: int = 5,
     warmup: int = 0,
     name: str = "",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run a benchmark on a function.
 
     Args:
@@ -124,7 +124,7 @@ def run_benchmark(
     return result.to_dict()
 
 
-def profile_function(func: Callable, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any]:
     """Profile a single function call for time and memory.
 
     Args:
@@ -163,7 +163,7 @@ def compare_benchmarks(
     iterations: int = 10,
     name_a: str = "A",
     name_b: str = "B",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Compare two functions side-by-side.
 
     Returns:
@@ -197,13 +197,13 @@ class BenchmarkSuite:
     def __init__(self) -> None:
         """Execute   Init   operations natively."""
         self._benchmarks: dict[str, Callable[[], Any]] = {}
-        self._results: dict[str, Dict[str, Any]] = {}
+        self._results: dict[str, dict[str, Any]] = {}
 
     def add(self, name: str, func: Callable[[], Any]) -> None:
         """Execute Add operations natively."""
         self._benchmarks[name] = func
 
-    def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, Dict[str, Any]]:
+    def run_all(self, iterations: int = 5, warmup: int = 1) -> dict[str, dict[str, Any]]:
         """Run all registered benchmarks."""
         self._results = {}
         for name, func in self._benchmarks.items():
@@ -232,10 +232,10 @@ class BenchmarkSuite:
 class PerformanceProfiler:
     """Class-based profiler for consistency with tests."""
 
-    def profile_function(self, func: Callable, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def profile_function(self, func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any]:
         """Profile a function."""
         return profile_function(func, *args, **kwargs)
 
-    def benchmark(self, func: Callable[[], Any], iterations: int = 5) -> Dict[str, Any]:
+    def benchmark(self, func: Callable[[], Any], iterations: int = 5) -> dict[str, Any]:
         """Run a benchmark."""
         return run_benchmark(func, iterations=iterations)

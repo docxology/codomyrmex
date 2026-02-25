@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -136,7 +135,7 @@ class SyncState:
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     @classmethod
-    def from_data(cls, data: dict[str, Any], version: int) -> "SyncState":
+    def from_data(cls, data: dict[str, Any], version: int) -> SyncState:
         """Execute From Data operations natively."""
         checksum = hashlib.md5(json.dumps(data, sort_keys=True).encode()).hexdigest()
         return cls(version=version, data=data, checksum=checksum)

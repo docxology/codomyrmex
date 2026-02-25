@@ -9,7 +9,6 @@ import time
 import pytest
 
 try:
-    from codomyrmex.performance.profiling.async_profiler import AsyncProfiler
     from codomyrmex.performance.monitoring.performance_monitor import (
         HAS_PSUTIL,
         SystemMonitor,
@@ -23,6 +22,7 @@ try:
         ResourceTrackingResult,
         create_resource_report,
     )
+    from codomyrmex.performance.profiling.async_profiler import AsyncProfiler
     from codomyrmex.system_discovery.health.health_checker import (
         HealthChecker,
         HealthCheckResult,
@@ -558,8 +558,10 @@ class TestRegressionDetector:
 
     def test_no_regression(self):
         """Test functionality: no regression."""
-        from codomyrmex.performance.regression_detector import (
-            Baseline, BenchmarkResult, RegressionDetector,
+        from codomyrmex.performance.analysis.regression_detector import (
+            Baseline,
+            BenchmarkResult,
+            RegressionDetector,
         )
         detector = RegressionDetector()
         detector.set_baseline(Baseline("import_time", mean=100.0))
@@ -569,8 +571,10 @@ class TestRegressionDetector:
 
     def test_warning_regression(self):
         """Test functionality: warning regression."""
-        from codomyrmex.performance.regression_detector import (
-            Baseline, BenchmarkResult, RegressionDetector,
+        from codomyrmex.performance.analysis.regression_detector import (
+            Baseline,
+            BenchmarkResult,
+            RegressionDetector,
         )
         detector = RegressionDetector()
         detector.set_baseline(Baseline("import_time", mean=100.0, warning_threshold=0.10))
@@ -581,8 +585,10 @@ class TestRegressionDetector:
 
     def test_critical_regression(self):
         """Test functionality: critical regression."""
-        from codomyrmex.performance.regression_detector import (
-            Baseline, BenchmarkResult, RegressionDetector,
+        from codomyrmex.performance.analysis.regression_detector import (
+            Baseline,
+            BenchmarkResult,
+            RegressionDetector,
         )
         detector = RegressionDetector()
         detector.set_baseline(Baseline("import_time", mean=100.0, critical_threshold=0.25))
@@ -592,8 +598,9 @@ class TestRegressionDetector:
 
     def test_missing_baseline_raises(self):
         """Test functionality: missing baseline raises."""
-        from codomyrmex.performance.regression_detector import (
-            BenchmarkResult, RegressionDetector,
+        from codomyrmex.performance.analysis.regression_detector import (
+            BenchmarkResult,
+            RegressionDetector,
         )
         detector = RegressionDetector()
         with pytest.raises(KeyError):
@@ -606,27 +613,36 @@ class TestBenchmarkComparison:
 
     def test_compute_delta_improvement(self):
         """Test functionality: compute delta improvement."""
-        from codomyrmex.performance.benchmark_comparison import compute_delta
+        from codomyrmex.performance.benchmarking.benchmark_comparison import (
+            compute_delta,
+        )
         delta = compute_delta("latency", before=100.0, after=80.0, higher_is_better=False)
         assert delta.improved is True
         assert delta.absolute_delta == -20.0
 
     def test_compute_delta_regression(self):
         """Test functionality: compute delta regression."""
-        from codomyrmex.performance.benchmark_comparison import compute_delta
+        from codomyrmex.performance.benchmarking.benchmark_comparison import (
+            compute_delta,
+        )
         delta = compute_delta("latency", before=100.0, after=120.0, higher_is_better=False)
         assert delta.improved is False
         assert delta.relative_delta == pytest.approx(20.0)
 
     def test_mean_and_stddev(self):
         """Test functionality: mean and stddev."""
-        from codomyrmex.performance.benchmark_comparison import mean, stddev
+        from codomyrmex.performance.benchmarking.benchmark_comparison import (
+            mean,
+            stddev,
+        )
         vals = [10.0, 20.0, 30.0]
         assert mean(vals) == pytest.approx(20.0)
         assert stddev(vals) > 0
 
     def test_cv(self):
         """Test functionality: cv."""
-        from codomyrmex.performance.benchmark_comparison import coefficient_of_variation
+        from codomyrmex.performance.benchmarking.benchmark_comparison import (
+            coefficient_of_variation,
+        )
         # Identical values → CV = 0
         assert coefficient_of_variation([5.0, 5.0, 5.0]) == pytest.approx(0.0)

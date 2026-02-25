@@ -1,9 +1,11 @@
 
 import importlib
-import time
+
 import pytest
+
 from codomyrmex.coding.parsers.tree_sitter import TreeSitterParser
 from codomyrmex.coding.parsers.tree_sitter.languages.languages import LanguageManager
+
 
 @pytest.mark.benchmark
 def test_module_import_time(benchmark):
@@ -11,7 +13,7 @@ def test_module_import_time(benchmark):
     def import_codomyrmex():
         import codomyrmex
         importlib.reload(codomyrmex)
-        
+
     benchmark(import_codomyrmex)
 
 @pytest.mark.benchmark
@@ -21,7 +23,7 @@ def test_ast_parsing_speed(benchmark):
     # Assuming LanguageManager has discovered languages or we can try to find them
     # If not found, we skip
     python_lang = LanguageManager.get_language("python")
-    
+
     if not python_lang:
         # Try to discover in standard locations?
         # For now, just skip if not loaded
@@ -44,8 +46,8 @@ def test_ast_parsing_speed(benchmark):
             for i in range(100):
                 self.compute(i)
     """ * 10
-    
+
     def parse_code():
         parser.parse(code)
-        
+
     benchmark(parse_code)

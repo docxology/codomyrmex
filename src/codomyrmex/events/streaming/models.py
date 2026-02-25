@@ -6,11 +6,11 @@ Data classes and enums for event streaming.
 
 import json
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 
 class EventType(Enum):

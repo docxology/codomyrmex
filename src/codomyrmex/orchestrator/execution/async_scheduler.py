@@ -10,11 +10,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import uuid
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable, Coroutine
 
 logger = logging.getLogger(__name__)
 

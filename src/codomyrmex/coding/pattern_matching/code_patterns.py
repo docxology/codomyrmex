@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import ast
 import logging
-from dataclasses import dataclass, field
-from typing import Any, Optional
+from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +112,7 @@ class PatternDetector:
             print(r["pattern"], r["location"])
     """
 
-    def __init__(self, patterns: Optional[dict[str, dict]] = None) -> None:
+    def __init__(self, patterns: dict[str, dict] | None = None) -> None:
         """Initialise with an optional custom pattern catalogue.
 
         Args:

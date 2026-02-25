@@ -6,14 +6,17 @@ analysis parsing — all without requiring API keys or network access.
 
 from __future__ import annotations
 
-from typing import Any
 from collections.abc import Iterator
 
 import pytest
 
-from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent, AgentCapabilities
 from codomyrmex.agents.claude import ClaudeIntegrationAdapter
-
+from codomyrmex.agents.core import (
+    AgentCapabilities,
+    AgentRequest,
+    AgentResponse,
+    BaseAgent,
+)
 
 # =====================================================================
 # Stub agent (no API key required)

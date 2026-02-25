@@ -252,21 +252,21 @@ if BaseAgent is not None:
         def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
             """Adapter for ConversationOrchestrator's expected LLM client interface."""
             response = self.execute(request)
-            
+
             # ConversationOrchestrator expects an object with `is_success()`, `content`, `tokens_used`, etc.
             class AdapterResponse:
                 """Functional component: AdapterResponse."""
                 def __init__(self, resp):
                     """Execute   Init   operations natively."""
                     self.content = resp.content
-                    self.tokens_used = 0 
+                    self.tokens_used = 0
                     self.execution_time = resp.execution_time
                     self.error = getattr(resp, "error", None)
-                    
+
                 def is_success(self):
                     """Execute Is Success operations natively."""
                     return not bool(self.error)
-            
+
             return AdapterResponse(response)
 
         def _stream_impl(self, request: AgentRequest) -> Iterator[str]:
@@ -303,7 +303,9 @@ if BaseAgent is not None:
                 ``ToolRegistry`` with bridged tools.
             """
             if self._tool_registry is None:
-                from codomyrmex.ide.antigravity.tool_provider import AntigravityToolProvider
+                from codomyrmex.ide.antigravity.tool_provider import (
+                    AntigravityToolProvider,
+                )
                 provider = AntigravityToolProvider(self.client)
                 self._tool_registry = provider.get_tool_registry()
             return self._tool_registry

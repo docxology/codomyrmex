@@ -30,7 +30,7 @@ def test_calendar_event_model():
         location="Virtual",
         attendees=["test@example.com"]
     )
-    
+
     assert event.summary == "Test Meeting"
     assert event.description == "A test description"
     assert event.location == "Virtual"
@@ -67,14 +67,14 @@ def test_google_calendar_live_integration():
         creds, _ = default()
     except Exception as e:
         pytest.skip(f"Could not load default Google credentials: {e}")
-        
+
     provider = GoogleCalendar(credentials=creds)
-    
+
     # 1. List events (make sure it doesn't crash)
     now = datetime.now(timezone.utc)
     events = provider.list_events(now, now + timedelta(days=7))
     assert isinstance(events, list)
-    
+
     # We could theoretically create an event, assert it's returned by get_event,
     # and then delete it. However, we'll keep this simple for safety unless more
     # explicit setup/teardown is implemented.

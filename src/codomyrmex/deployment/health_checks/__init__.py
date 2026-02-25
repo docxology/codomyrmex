@@ -10,11 +10,11 @@ import socket
 import time
 import urllib.request
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from collections.abc import Callable
 
 
 class HealthStatus(Enum):

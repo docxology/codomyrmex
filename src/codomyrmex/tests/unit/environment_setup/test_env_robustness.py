@@ -1,9 +1,10 @@
 
 import os
-import stat
-import pytest
 
-from codomyrmex.environment_setup.env_checker import check_and_setup_env_vars, validate_environment_completeness
+from codomyrmex.environment_setup.env_checker import (
+    check_and_setup_env_vars,
+)
+
 
 class TestEnvironmentRobustness:
     """Robustness tests for environment setup."""
@@ -16,19 +17,19 @@ class TestEnvironmentRobustness:
         """Verify check_and_setup_env_vars handles malformed .env files."""
         env_file = tmp_path / ".env"
         env_file.write_text("INVALID_SYNTAX_WITHOUT_EQUALS")
-        
+
         # python-dotenv typically warns but doesn't crash on many malformed lines
         # But if it loads, it returns True. We verify it doesn't crash.
         assert check_and_setup_env_vars(str(tmp_path)) is True
-        
+
     def test_permission_error(self, tmp_path):
         """Verify behavior when .env is not readable."""
         env_file = tmp_path / ".env"
         env_file.write_text("FOO=BAR")
-        
+
         # Remove read permissions
         os.chmod(env_file, 0o000)
-        
+
         try:
             # Depending on implementation, this might raise or return False
             # check_and_setup_env_vars uses os.path.exists then load_dotenv

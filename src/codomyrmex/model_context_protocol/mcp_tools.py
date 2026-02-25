@@ -1,6 +1,5 @@
 """MCP tools for the model_context_protocol module itself — MCP introspection."""
 
-from typing import Any, Dict, List, Optional
 
 from codomyrmex.model_context_protocol.decorators import mcp_tool
 
@@ -15,7 +14,6 @@ def inspect_server(server_name: str = "default") -> dict:
     Returns:
         Server info including name, version, tool count, resource count.
     """
-    from codomyrmex.model_context_protocol.transport.server import MCPServer
 
     try:
         # Return static info for introspection
@@ -40,7 +38,7 @@ def list_registered_tools() -> dict:
     import pkgutil
 
     try:
-        tools: List[Dict[str, str]] = []
+        tools: list[dict[str, str]] = []
         import codomyrmex
         pkg_path = codomyrmex.__path__
 
@@ -79,12 +77,15 @@ def get_tool_schema(tool_name: str) -> dict:
         JSON schema for the tool's input parameters.
     """
     try:
-        from codomyrmex.model_context_protocol.decorators import _generate_schema_from_signature
         import importlib
 
         # Search through all mcp_tools modules
         import pkgutil
+
         import codomyrmex
+        from codomyrmex.model_context_protocol.decorators import (
+            _generate_schema_from_signature,
+        )
         for _importer, modname, _ispkg in pkgutil.walk_packages(
             codomyrmex.__path__, prefix="codomyrmex."
         ):

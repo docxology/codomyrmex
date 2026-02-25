@@ -13,19 +13,15 @@ from __future__ import annotations
 import json
 import logging
 
-import pytest
-
-from codomyrmex.model_context_protocol.reliability.observability import (
-    MCPObservabilityHooks,
-    ToolMetrics,
-    get_mcp_observability_hooks,
-)
 from codomyrmex.logging_monitoring.core.logger_config import (
     JSONFormatter,
-    enable_structured_json,
     configure_all_structured,
+    enable_structured_json,
 )
-
+from codomyrmex.model_context_protocol.reliability.observability import (
+    MCPObservabilityHooks,
+    get_mcp_observability_hooks,
+)
 
 # ── Basic counters ────────────────────────────────────────────────────
 

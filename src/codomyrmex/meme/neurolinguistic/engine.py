@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from typing import List
-
-from codomyrmex.meme.neurolinguistic.models import CognitiveFrame, LinguisticPattern
-from codomyrmex.meme.neurolinguistic.framing import analyze_frames, reframe
+from codomyrmex.meme.neurolinguistic.framing import analyze_frames
+from codomyrmex.meme.neurolinguistic.models import CognitiveFrame
 from codomyrmex.meme.neurolinguistic.patterns import detect_patterns
 
 
@@ -14,7 +12,7 @@ class NeurolinguisticEngine:
 
     def __init__(self):
         """Execute   Init   operations natively."""
-        self.known_frames: List[CognitiveFrame] = []
+        self.known_frames: list[CognitiveFrame] = []
 
     def register_frame(self, frame: CognitiveFrame) -> None:
         """Add a frame to the engine's registry."""
@@ -28,7 +26,7 @@ class NeurolinguisticEngine:
         """
         frames = analyze_frames(text, self.known_frames)
         patterns = detect_patterns(text)
-        
+
         return {
             "frames": frames,
             "patterns": patterns,
@@ -41,6 +39,6 @@ class NeurolinguisticEngine:
         tgt = next((f for f in self.known_frames if f.name == target_frame), None)
         if not tgt:
             return text
-            
+
         # Naive approach: just inject frame keywords
         return f"{text} ... which clearly involves {tgt.keywords[0]}."

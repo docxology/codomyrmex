@@ -10,12 +10,6 @@ import json
 import os
 import tempfile
 
-import pytest
-
-from codomyrmex.wallet.security.encrypted_storage import (
-    EncryptedEntry,
-    EncryptedStore,
-)
 from codomyrmex.ci_cd_automation.dependency_scan import (
     DependencyScanner,
     ScanReport,
@@ -26,7 +20,10 @@ from codomyrmex.ci_cd_automation.sbom import (
     SBOMDocument,
     SBOMGenerator,
 )
-
+from codomyrmex.wallet.security.encrypted_storage import (
+    EncryptedEntry,
+    EncryptedStore,
+)
 
 # ── EncryptedStore ───────────────────────────────────────────────
 

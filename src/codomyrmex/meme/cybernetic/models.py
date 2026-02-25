@@ -5,7 +5,6 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
 
 
 class FeedbackType(str, Enum):
@@ -23,7 +22,7 @@ class SystemState:
         variables: Map of variable names to values.
         timestamp: Time of measurement.
     """
-    variables: Dict[str, float] = field(default_factory=dict)
+    variables: dict[str, float] = field(default_factory=dict)
     timestamp: float = field(default_factory=time.time)
 
 
@@ -54,10 +53,10 @@ class Homeostat:
         bounds: Map of var -> (min, max).
         adaptation_rate: How fast it reconfigures when out of bounds.
     """
-    essential_vars: List[str]
-    bounds: Dict[str, tuple] = field(default_factory=dict)
+    essential_vars: list[str]
+    bounds: dict[str, tuple] = field(default_factory=dict)
     adaptation_rate: float = 0.1
-    current_config: Dict[str, float] = field(default_factory=dict)
+    current_config: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
@@ -70,5 +69,5 @@ class ControlSystem:
         controllers: Active controllers (e.g. PIDs).
     """
     name: str
-    setpoints: Dict[str, float] = field(default_factory=dict)
+    setpoints: dict[str, float] = field(default_factory=dict)
     active: bool = True

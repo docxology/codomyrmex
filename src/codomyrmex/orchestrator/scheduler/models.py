@@ -4,11 +4,11 @@ Scheduler Models
 Data classes and enums for the scheduling system.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from collections.abc import Callable
 
 from .triggers import OnceTrigger, Trigger
 

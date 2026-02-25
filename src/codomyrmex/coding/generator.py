@@ -113,7 +113,7 @@ class CodeGenerator:
         if not ops:
             functions.append("main")
             lines.append("def main():")
-            lines.append(f'    """Entry point."""')
+            lines.append('    """Entry point."""')
             lines.append("    pass")
             lines.append("")
 

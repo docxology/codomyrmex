@@ -7,11 +7,10 @@ and secret scan findings into a unified security view.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from codomyrmex.security.compliance_report import ComplianceReport
 from codomyrmex.security.permissions import PermissionModel
-from codomyrmex.security.secret_scanner import SecretFinding
+from codomyrmex.security.secrets.secret_scanner import SecretFinding
 
 
 @dataclass

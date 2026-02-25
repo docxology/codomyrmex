@@ -8,9 +8,8 @@ Tests cover:
 Total: ~25 tests across 3 test classes.
 """
 
-from _stubs import Stub
-
 import pytest
+from _stubs import Stub
 
 # =========================================================================
 # Test Operation Risk Classification

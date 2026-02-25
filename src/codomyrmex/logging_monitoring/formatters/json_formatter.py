@@ -13,7 +13,6 @@ import logging
 import re
 from typing import Any
 
-
 # Sensitive field patterns for automatic redaction
 _SENSITIVE_PATTERNS = re.compile(
     r"(password|secret|token|api_key|auth|credential|ssn|credit_card)",

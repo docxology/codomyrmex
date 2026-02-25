@@ -1,11 +1,11 @@
 
-import pytest
 from codomyrmex.networking.http_client import HTTPClient
 from codomyrmex.testing import (
-    property_test,
-    IntGenerator,
     FloatGenerator,
+    IntGenerator,
+    property_test,
 )
+
 
 class TestNetworkingReliability:
     """Property-based tests for networking components."""
@@ -20,18 +20,18 @@ class TestNetworkingReliability:
         timeout = kwargs['timeout']
         max_retries = kwargs['max_retries']
         retry_backoff = kwargs['retry_backoff']
-        
+
         client = HTTPClient(
             timeout=timeout,
             max_retries=max_retries,
             retry_backoff=retry_backoff
         )
-        
+
         # Verify public attributes
         assert client.timeout == timeout
         assert client.max_retries == max_retries
         assert client.retry_backoff == retry_backoff
-        
+
         # Verify internal session adapter configuration
         adapter = client.session.get_adapter("https://")
         assert adapter.max_retries.total == max_retries
@@ -49,22 +49,22 @@ class TestNetworkingReliability:
         initial = kwargs['initial']
         max_delay = kwargs['max_delay']
         loop_count = kwargs['loop_count']
-        
+
         # This mirrors the logic in WebSocketClient.connect
         delay = initial
         delays = []
-        
+
         for _ in range(loop_count):
             delays.append(delay)
             # Logic from WebSocketClient: delay = min(delay * 1.5, max_reconnect_delay)
             # We assume the implementation uses 1.5 multiplier
             delay = min(delay * 1.5, max_delay)
-            
+
         # Refute assertions
         for d in delays:
             assert d <= max_delay
             assert d >= initial
-            
+
         # Verify growth
         if loop_count > 1 and initial < max_delay:
             assert delays[1] > delays[0]

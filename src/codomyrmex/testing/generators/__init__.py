@@ -10,11 +10,11 @@ import hashlib
 import random
 import string
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, TypeVar, Union
-from collections.abc import Callable
 
 T = TypeVar('T')
 

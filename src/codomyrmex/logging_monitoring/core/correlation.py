@@ -24,8 +24,9 @@ from __future__ import annotations
 import contextvars
 import logging
 import uuid
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Generator
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

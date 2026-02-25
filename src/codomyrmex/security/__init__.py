@@ -268,11 +268,13 @@ if AI_SAFETY_AVAILABLE:
 # MCP Tools
 # =============================================================================
 
+from typing import Any, Dict, List
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
-from typing import Dict, Any, List
+
 
 @mcp_tool(category="security")
-def scan_project_security(path: str = ".") -> Dict[str, Any]:
+def scan_project_security(path: str = ".") -> dict[str, Any]:
     """
     Run a full security scan on the project (vulnerabilities + secrets).
     
@@ -283,7 +285,7 @@ def scan_project_security(path: str = ".") -> Dict[str, Any]:
         Structured security report.
     """
     results = {}
-    
+
     if DIGITAL_AVAILABLE:
         # 1. Vulnerabilities
         try:
@@ -294,7 +296,7 @@ def scan_project_security(path: str = ".") -> Dict[str, Any]:
             }
         except Exception as e:
             results["vulnerabilities"] = {"error": str(e)}
-            
+
         # 2. Secrets
         try:
             secrets = scan_directory_for_secrets(path)
@@ -304,14 +306,14 @@ def scan_project_security(path: str = ".") -> Dict[str, Any]:
             }
         except Exception as e:
             results["secrets"] = {"error": str(e)}
-            
+
     else:
         return {"error": "Digital security module not available."}
-        
+
     return results
 
 @mcp_tool(category="security")
-def security_audit_code(path: str) -> Dict[str, Any]:
+def security_audit_code(path: str) -> dict[str, Any]:
     """
     Audit code quality and security for a specific file or directory.
     
@@ -323,7 +325,7 @@ def security_audit_code(path: str) -> Dict[str, Any]:
     """
     if not DIGITAL_AVAILABLE:
         return {"error": "Digital security module not available."}
-        
+
     try:
         return audit_code_security(path)
     except Exception as e:

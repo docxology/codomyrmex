@@ -12,10 +12,11 @@ import pytest
 from codomyrmex.model_context_protocol.transport.client import (
     MCPClient,
     MCPClientConfig,
-    MCPClientError,
 )
-from codomyrmex.model_context_protocol.transport.server import MCPServer, MCPServerConfig
-
+from codomyrmex.model_context_protocol.transport.server import (
+    MCPServer,
+    MCPServerConfig,
+)
 
 # ---------------------------------------------------------------------------
 # In-memory transport for testing (bridges client → server without I/O)

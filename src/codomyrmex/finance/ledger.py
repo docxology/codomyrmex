@@ -1,8 +1,7 @@
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Dict
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
 
 from .account import Account, AccountType
 
@@ -27,8 +26,8 @@ class Ledger:
 
     def __init__(self):
         """Execute   Init   operations natively."""
-        self._accounts: Dict[str, Account] = {}
-        self._transactions: List[Transaction] = []
+        self._accounts: dict[str, Account] = {}
+        self._transactions: list[Transaction] = []
 
     def create_account(self, name: str, account_type: AccountType) -> Account:
         """Register a new account in the ledger."""
@@ -52,14 +51,14 @@ class Ledger:
         """
         if transaction.amount < 0:
             raise LedgerError("Transaction amount cannot be negative.")
-        
+
         debit_acc = self.get_account(transaction.debit_account)
         credit_acc = self.get_account(transaction.credit_account)
 
         # Apply transaction logic based on account type normal balances
         # Asset/Expense: Debit increases, Credit decreases
         # Liability/Equity/Revenue: Credit increases, Debit decreases
-        
+
         self._apply_entry(debit_acc, transaction.amount, is_debit=True)
         self._apply_entry(credit_acc, transaction.amount, is_debit=False)
 
@@ -69,7 +68,7 @@ class Ledger:
     def _apply_entry(self, account: Account, amount: float, is_debit: bool) -> None:
         """Update account balance based on normal balance rules."""
         normal_debit = account.account_type in (AccountType.ASSET, AccountType.EXPENSE)
-        
+
         if normal_debit:
             if is_debit:
                 account.balance += amount

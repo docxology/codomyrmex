@@ -1,7 +1,7 @@
-import pytest
-from codomyrmex.data_visualization.plots.scatter import ScatterPlot
 from codomyrmex.data_visualization.plots.heatmap import Heatmap
 from codomyrmex.data_visualization.plots.mermaid import MermaidDiagram
+from codomyrmex.data_visualization.plots.scatter import ScatterPlot
+
 
 def test_scatterplot_render():
     """Test functionality: scatterplot render."""
