@@ -1,0 +1,112 @@
+{
+  "name": "codomyrmex",
+  "displayName": "Codomyrmex",
+  "version": "1.0.3",
+  "type": "infrastructure-skill",
+  "mcp_server": "codomyrmex-mcp-server",
+  "tools": 208,
+  "skills": 15,
+  "modules": 33,
+  "triggers": [
+    "codomyrmex",
+    "verify codomyrmex",
+    "trust codomyrmex",
+    "audit tools",
+    "analyze project",
+    "code analysis",
+    "code review",
+    "search codebase",
+    "add to memory",
+    "store memory",
+    "module documentation",
+    "system status",
+    "health check",
+    "git analysis",
+    "commit timeline",
+    "security scan",
+    "scan secrets",
+    "reasoning trace",
+    "thinking agent",
+    "execute code",
+    "sandbox code",
+    "full text search",
+    "fuzzy search",
+    "docker build",
+    "container scan",
+    "run tests",
+    "benchmark"
+  ],
+  "skill_domains": [
+    {
+      "name": "codomyrmexVerify",
+      "description": "Verify all Codomyrmex capabilities via MCP",
+      "trigger": "/codomyrmexVerify"
+    },
+    {
+      "name": "codomyrmexTrust",
+      "description": "Enable destructive tool execution",
+      "trigger": "/codomyrmexTrust"
+    },
+    {
+      "name": "codomyrmexAnalyze",
+      "description": "Deep code analysis and quality metrics",
+      "trigger": "/codomyrmexAnalyze"
+    },
+    {
+      "name": "codomyrmexMemory",
+      "description": "Agentic long-term memory storage and retrieval",
+      "trigger": "/codomyrmexMemory"
+    },
+    {
+      "name": "codomyrmexSearch",
+      "description": "High-performance codebase and document search",
+      "trigger": "/codomyrmexSearch"
+    },
+    {
+      "name": "codomyrmexDocs",
+      "description": "Module documentation retrieval and generation",
+      "trigger": "/codomyrmexDocs"
+    },
+    {
+      "name": "codomyrmexStatus",
+      "description": "System health and PAI awareness dashboard",
+      "trigger": "/codomyrmexStatus"
+    },
+    {
+      "name": "CodomyrmexGit",
+      "description": "Git operations and history analysis",
+      "trigger": "git analysis"
+    },
+    {
+      "name": "CodomyrmexSecurity",
+      "description": "Security scanning, crypto, and formal verification",
+      "trigger": "security scan"
+    },
+    {
+      "name": "CodomyrmexAI",
+      "description": "AI agents, reasoning, orchestration, and LLM",
+      "trigger": "reasoning trace"
+    },
+    {
+      "name": "CodomyrmexCode",
+      "description": "Code execution, analysis, and static analysis",
+      "trigger": "execute code"
+    },
+    {
+      "name": "CodomyrmexData",
+      "description": "Data search, scraping, and visualization",
+      "trigger": "full text search"
+    },
+    {
+      "name": "CodomyrmexDeploy",
+      "description": "Infrastructure and deployment operations",
+      "trigger": "docker build"
+    },
+    {
+      "name": "CodomyrmexTest",
+      "description": "Testing and performance benchmarking",
+      "trigger": "run tests"
+    }
+  ],
+  "repository": "https://github.com/danielmiessler/codomyrmex"
+}
