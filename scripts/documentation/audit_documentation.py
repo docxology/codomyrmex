@@ -121,15 +121,31 @@ class DocumentationAudit(ScriptBase):
         
         results = []
         
+        # Directories that are not our code — skip entire subtrees
+        SKIP_DIRS = {"__pycache__", ".mypy_cache", ".git", "gitnexus", "node_modules"}
+
         # Walk through directories
         # We only care about modules (directories with __init__.py) or top-level dirs
         for root, dirs, files in os.walk(self.target_dir):
             path = Path(root)
-            
-            # Skip hidden dirs and pycache
-            if path.name.startswith(".") or path.name == "__pycache__":
+
+            # Skip hidden dirs, pycache, and external tool caches
+            if path.name.startswith(".") or path.name in SKIP_DIRS:
+                dirs.clear()  # prune subtree — don't recurse further
                 continue
-            
+
+            # Skip vendor/gitnexus subtree (git submodule — not our code)
+            path_parts = list(path.parts)
+            if "vendor" in path_parts:
+                vendor_idx = path_parts.index("vendor")
+                parts_after_vendor = path_parts[vendor_idx + 1 :]
+                if parts_after_vendor and parts_after_vendor[0] == "gitnexus":
+                    dirs.clear()
+                    continue
+
+            # Prune SKIP_DIRS from dirs so os.walk won't recurse into them
+            dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")]
+
             # Check if it's a python module or has significant content
             if "__init__.py" in files or any(p.suffix == ".py" for p in path.iterdir()):
                 stats = self.scan_directory(path)
