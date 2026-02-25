@@ -1,12 +1,12 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
 This is the root coordination document for all AI agents operating within the Codomyrmex repository. It defines the top-level structure, surfaces, and operating contracts that govern agent interactions across the entire project.
 
-Codomyrmex is a modular coding workspace enabling AI development workflows with 89 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
+Codomyrmex is a modular coding workspace enabling AI development workflows with 86 specialized modules. This document serves as the central navigation hub for agents working with any part of the system.
 
 ## Repository Structure
 
@@ -454,7 +454,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (40482 symbols, 104088 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (41174 symbols, 105778 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

@@ -1,6 +1,6 @@
 # Codomyrmex — TO-DO
 
-**Current**: v1.0.2-dev | **Next**: v1.0.2 | **Updated**: Feb 25, 2026
+**Current**: v1.0.3-dev | **Next**: v1.0.3 | **Updated**: Feb 25, 2026
 
 ---
 
@@ -28,19 +28,32 @@
 | :--- | ---: |
 | Python files | 2,046 |
 | Total LOC | 414,862 |
-| Modules | 88 |
+| Modules | 86 |
 | Functions / Classes | 23,208 / 5,210 |
-| Tests collected | 9,977 |
+| Tests collected | 11,065 |
 | Tests passing / failing / skipped | 9,724 / 0 / 253 |
-| Coverage | 31% |
+| Coverage | 30% |
 | RASP coverage | 100% ✅ |
-| MCP tool files | 32 / 87 |
+| MCP tool files | 33 / 87 |
+
+---
+
+## v1.0.3-dev — Skills Release (in progress)
+
+- [x] `skills/mcp_tools.py` — 7 MCP tools wrapping SkillsManager
+- [x] `skills/skill_runner.py` — execution bridge (run_skill, run_skill_by_name)
+- [x] `skills/skills/templates/` — 3 starter YAML templates (code_review, testing, documentation)
+- [x] Modularize `arscontexta/__init__.py` (928 → 63 LOC)
+- [x] Version bump to 1.0.3.dev0
+- [x] CHANGELOG v1.0.3-dev entry
+- [x] Clean TO-DO.md scope
+- [ ] Update root docs version strings (README, SPEC, AGENTS, PAI, INDEX, CLAUDE)
 
 ---
 
 ## Next Sprint — High-Impact Work (pick 3)
 
-### NS-1  Coverage 31% → 40%
+### NS-1  Coverage 30% → 40%
 
 Current coverage is the weakest release gate metric. Target backbone modules first.
 
@@ -71,18 +84,14 @@ The single largest chunk of dead weight in the repo.
 
 ### Architecture (P2)
 
-#### Modularize 8 large source files (>1,000 LOC)
+#### Modularize remaining large source files (>1,000 LOC)
 
-| File | LOC | Split strategy |
-| :--- | ---: | :--- |
-| `coding/review/reviewer.py` | 2,284 | analysis/dashboard/report mixins |
-| `agents/droid/generators/physical.py` | 1,776 | Split by concern |
-| `git_operations/core/git.py` | 1,595 | remote/state/analysis/config |
-| `agents/claude/claude_client.py` | 1,582 | auth/chat/streaming/tools |
-| `cloud/coda_io/client.py` | 1,386 | docs/pages/tables/formulas |
-| `agents/pai/mcp_bridge.py` | 1,264 | tools/resources/prompts |
-| `git_operations/api/github.py` | 1,186 | repos/prs/issues/actions |
-| `agents/ai_code_editing/ai_code_helpers.py` | 1,087 | further split |
+| File | LOC | Split strategy | Status |
+| :--- | ---: | :--- | :--- |
+| `email/agentmail/provider.py` | 1,114 | Split by protocol | Open |
+| `coding/static_analysis/static_analyzer.py` | 1,091 | Split by analysis type | Open |
+| `utils/process/subprocess.py` | 1,035 | Split by concern | Open |
+| `data_visualization/engines/advanced_plotter.py` | 1,024 | Split by chart type | Open |
 
 #### Refactor top-10 oversized `__init__.py` files
 
@@ -91,7 +100,6 @@ The single largest chunk of dead weight in the repo.
 | File | LOC |
 | :--- | ---: |
 | `ide/antigravity/__init__.py` | 709 |
-| `skills/arscontexta/__init__.py` | 677 |
 | `llm/providers/__init__.py` | 558 |
 | `api/webhooks/__init__.py` | 466 |
 | `agents/history/__init__.py` | 459 |
@@ -112,24 +120,19 @@ The single largest chunk of dead weight in the repo.
 
 ### Tooling & Type Safety (P2)
 
-#### MCP tool expansion (32 → 38+)
+#### MCP tool expansion (33 → 38+)
 
 - [ ] `events/mcp_tools.py` — `publish_event`, `subscribe`, `replay_events`
 - [ ] `concurrency/mcp_tools.py` — `submit_task`, `pool_status`, `dead_letter_list`
 - [ ] `system_discovery/mcp_tools.py` — `discover_modules`, `health_check`, `capability_scan`
 - [ ] `networking/mcp_tools.py` — `http_get`, `http_post`, `dns_lookup`
 - [ ] `containerization/mcp_tools.py` — `build_image`, `run_container`, `list_containers`
-- [ ] `templating/mcp_tools.py` — `render_template`, `list_templates`, `validate_template`
 
 #### Type safety (`mypy --strict` progressive)
 
 - [ ] Run `mypy --strict` on backbone: `agents/`, `orchestrator/`, `events/`
 - [ ] Fix highest-impact type errors
 - [ ] Add `py.typed` marker to backbone modules
-
-#### Type hint coverage
-
-- [ ] Add type hints to backbone functions (target: <30% missing in `agents/`, `orchestrator/`, `events/`)
 
 ### Future (P3)
 
@@ -139,7 +142,6 @@ The single largest chunk of dead weight in the repo.
 - [ ] Remove 19 commented-out code blocks
 - [ ] Documentation site (MkDocs) with auto-deploy
 - [ ] Event store JSONL compaction
-- [ ] `tests/visualization/test_dashboard.py` is empty — implement or remove
 
 ---
 
@@ -148,48 +150,42 @@ The single largest chunk of dead weight in the repo.
 <details>
 <summary>Click to expand completed items</summary>
 
+### v1.0.2
+
+- [x] Module count fixed: 89/88 → 86 (14 files)
+- [x] Test count fixed: 9,977/10,022 → 11,065
+- [x] SPEC.md architecture debt table updated
+- [x] Ruff auto-fixed 3,639 lint issues
+- [x] 3 orphan directories deleted
+- [x] .gitignore updated for generated artifacts
+- [x] TO-DO.md modularization table updated
+- [x] Modularized `reviewer.py` (2,286→388 LOC) and `physical.py` (1,787→43 LOC)
+- [x] Fixed circular import in `versioning/version_registry.py`
+- [x] Fixed `callable | None` type error in `llm/memory/__init__.py`
+- [x] Fixed `PerformanceLogger` import in `orchestrator/core.py`
+- [x] Modularized 5 oversized files (tasks.py 3541→69, git.py 1747→1595, etc.)
+- [x] Deleted 10 junk dirs from `src/codomyrmex/`
+- [x] Cleaned ~209 MB root-level generated artifacts
+- [x] Fixed 12 bare `except:` → specific types
+- [x] Resolved 3 duplicate function defs
+- [x] Updated 9 doc files to v1.0.2-dev
+- [x] Renamed `calendar/` → `calendar_integration/` (namespace collision fix)
+- [x] RASP coverage verified at 100%
+- [x] Fixed 7 Python syntax errors
+- [x] INDEX.md redesign with Quick Access + Module Layer Browser
+
 ### v1.0.1
 
 - [x] MCP tools: 27 → 31
 - [x] Test failures: 44 → 0
 - [x] 4 xfail → pass (secrets namespace)
-- [x] Warning filters added
 
-### v1.0.2-dev
+### Pre-v1.0
 
-- [x] Modularized 5 oversized files (tasks.py 3541→69, git.py 1747→1595, etc.)
-- [x] Deleted 10 junk dirs from `src/codomyrmex/`
-- [x] Cleaned ~209 MB root-level generated artifacts
-- [x] Fixed 12 bare `except:` → specific types
-- [x] Fixed 1 SyntaxWarning (escape sequence)
-- [x] Replaced `os.system("clear")` → `subprocess.run`
-- [x] Resolved 3 duplicate function defs (1 real + 2 false positives)
-- [x] Updated 9 doc files to v1.0.2-dev
-- [x] Added CHANGELOG v1.0.2-dev entry
-- [x] Version bumped to 1.0.2.dev0
-- [x] Renamed `calendar/` → `calendar_integration/` (namespace collision fix)
-- [x] RASP coverage verified at 100%
-- [x] Fixed 7 Python syntax errors (erroneous docstrings in mixins, handlers, etc.)
-- [x] INDEX.md redesign with Quick Access + Module Layer Browser
-- [x] Expanded 4 thin PAI.md files to full specs
-
-### Sprint 1 — Critical Fixes (P0)
-
-- [x] Reclassified 53 source stubs: 49 legitimate ABCs/no-ops, 4 intentional no-ops, 0 dead
-- [x] Fixed `test_scripts_integration.py` — corrected 10 script paths to subdirectories
-- [x] Fixed `test_bare_except` — corrected test input to use actual bare except
-- [x] Full suite: 10,022 passed, 0 failed, ~269 skipped
-
-### Sprint 2 — Code Quality (partial)
-
-- [x] Security audit: 5 eval/exec (3 false positives, 2 fixed), 6 pickle→JSON, 7 shell=True hardened, 2 tempfile cleanup
-- [x] SerializationManager `format` kwarg bug fixed + 3 xfail removed
+- [x] Reclassified 53 source stubs: 49 legitimate ABCs/no-ops
+- [x] Security audit: 5 eval/exec, 6 pickle→JSON, 7 shell=True hardened
 - [x] Docstrings added to backbone functions (100% programmatic remediation)
-
-### Sprint 4 — Tooling (partial)
-
 - [x] Fixed 20 stale "Performance module" skips
 - [x] Removed 8 "git not installed" skips
-- [x] Audited remaining 16 potentially stale skips (verified valid)
 
 </details>

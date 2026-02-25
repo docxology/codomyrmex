@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "1.0.2.dev0"
+version = "1.0.3.dev0"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -287,6 +287,9 @@ dev = [
 [project.scripts]
 codomyrmex = "codomyrmex.cli:main"
 
+[project.entry-points."claude.skills"]
+codomyrmex = "codomyrmex.agents.pai:mcp_bridge"
+
 [tool.coverage.run]
 source = ["src/codomyrmex"]
 omit = [
@@ -343,6 +346,7 @@ select = [
     "B",  # flake8-bugbear
     "C4", # flake8-comprehensions
     "UP", # pyupgrade
+    "TID", # flake8-tidy-imports (for banning mocks)
 ]
 ignore = [
     "E501", # line too long, handled by black
@@ -353,6 +357,12 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/**/*" = ["B011"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"unittest.mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
+"mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
+"pytest_mock" = { msg = "Zero-Mock Policy: Use real functional implementations and authentic fixtures instead of mocks." }
+"monkeypatch" = { msg = "Zero-Mock Policy: Do not patch internals. Use real implementations." }
 
 # MyPy configuration
 [tool.mypy]

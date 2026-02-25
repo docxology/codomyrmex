@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3-dev] - 2026-02-25 — "Skills Module Hardening"
+
+### Added
+
+- **skills/mcp_tools.py**: 7 MCP tools (`skills_list`, `skills_get`, `skills_search`, `skills_sync`, `skills_add_custom`, `skills_get_categories`, `skills_get_upstream_status`) via `@mcp_tool` decorator
+- **skills/skill_runner.py**: Execution bridge (`run_skill`, `run_skill_by_name`, `list_runnable_skills`) connecting discovery registry to skill execution
+- **skills/skills/templates/**: 3 starter YAML skill templates (`code_review`, `testing`, `documentation`) with patterns, anti-patterns, validations, and sharp edges
+
+### Changed
+
+- **arscontexta/**init**.py**: Modularized from 928 → 63 LOC; extracted `types.py`, `exceptions.py`, `services.py` as submodules (re-exporting from canonical `models.py`)
+- **Version bumped** to `1.0.3.dev0`
+
+### Fixed
+
+- **versioning/version_registry.py**: Circular import → relative sibling import (`from .versioning import`)
+- **llm/memory/**init**.py**: `callable | None` → `Callable | None` (Python 3.13 compat)
+- **orchestrator/core.py**: `PerformanceLogger` import from correct module
+
+### Metrics
+
+- Skill tests: **102 passed**, 3 skipped, 0 failed
+- MCP tool files: 32 → **33** (`skills/mcp_tools.py` added)
+- Tests collected: **11,065** (0 collection errors)
+
+---
+
 ## [1.0.2-dev] - 2026-02-24 — "Documentation Accuracy & Syntax Hardening"
 
 ### Fixed

@@ -1,6 +1,6 @@
 # Codomyrmex Functional Specification
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## System Concept
 
@@ -32,7 +32,7 @@ It functions as a cohesive "colony" of specialized modules where each component 
 
 ### Internal Coherence
 
-- Consistent directory structure and naming conventions across all 89 modules.
+- Consistent directory structure and naming conventions across all 86 modules.
 - Unified documentation patterns: every module carries the same set of specification files.
 - Shared configuration idioms via standardized `Config` objects and `pyproject.toml` extras.
 
@@ -184,11 +184,11 @@ Tracked items by sprint target. Resolved items are kept for historical reference
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
 | Circular imports: ~35 pairs across modules | Open | Sprint 3 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 8 files >1K LOC | Open | Sprint 3 | `mcp_bridge.py` (1,266 lines) is largest |
+| Oversized files: 6 non-test files >1K LOC | Open | Sprint 3 | `reviewer.py` (2,286 lines) is largest; 5 of original 8 modularized in v1.0.2 |
 | EventBus trust events wrong signature | **Resolved v1.0.2** | — | `EventType.TRUST_LEVEL_CHANGED` added; `publish_event` call fixed in `trust_gateway.py` |
 | PAI.md thin files (5 modules at <52 lines) | **Resolved v1.0.2** | — | All 5 expanded to ≥100 lines with MCP tool docs and phase mapping |
 | Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
-| Stale module/tool counts in docs | **Resolved v1.0.2** | — | Updated: 89 modules, 167 tools (163 safe + 4 destructive), 3 resources |
+| Stale module/tool counts in docs | **Resolved v1.0.2** | — | Updated: 86 modules, 167 tools (163 safe + 4 destructive), 3 resources |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
 | Bidirectional PAI↔codomyrmex comms | Open | Sprint 4 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
 | Tool versioning: no deprecation timeline UI | Open | Sprint 4 | `deprecated_in` metadata added but not surfaced in MCP tool list |

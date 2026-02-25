@@ -1,10 +1,10 @@
 # Codomyrmex
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-1.0.2--dev-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-10,022%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-11,065%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
 [![Coverage](https://img.shields.io/badge/coverage-~31%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
@@ -13,7 +13,7 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 89 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 86 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
@@ -842,7 +842,7 @@ Advanced capabilities for specific domains:
 
 ## Explore Modules
 
-Codomyrmex includes **89 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
+Codomyrmex includes **86 modules** organized in a layered architecture. Each module is self-contained with comprehensive documentation, API specifications, usage examples, and security considerations.
 
 Browse all available modules organized by layer and category:
 
@@ -999,7 +999,7 @@ codomyrmex/
 │   ├── /src/codomyrmex/coding/              # Code interaction and sandboxing
 │   ├── /src/codomyrmex/coding/static_analysis/ # Code quality analysis
 │   ├── /src/codomyrmex/logging_monitoring/  # Centralized logging
-│   └── ...                  # 89 modules total
+│   └── ...                  # 86 modules total
 ├── /scripts/                 # Maintenance and automation utilities
 │   ├── /scripts/documentation/       # Documentation maintenance scripts
 │   ├── /scripts/development/         # Development utilities
@@ -1479,9 +1479,9 @@ pie title Module Development Status (February 2026)
 
 ## Key Metrics
 
-- **Lines of Code**: ~100K+ across 89 modules
+- **Lines of Code**: ~100K+ across 86 modules
 - **Test Coverage**: ~28% (measured)
-- **Module Count**: 89 modules (89 load successfully; 6 additional require optional SDKs)
+- **Module Count**: 86 modules (89 load successfully; 6 additional require optional SDKs)
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

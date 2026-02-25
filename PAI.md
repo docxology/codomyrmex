@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## What Is PAI?
 
@@ -23,7 +23,7 @@ Codomyrmex is an **89-module Python development platform**. PAI agents consume c
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              89 modules of dev-platform tools
+     Algorithm + Skills + Hooks              86 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["89 Module Tools"]
+        Modules["86 Module Tools"]
     end
 
     Algo --> Agents
@@ -122,7 +122,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 89 Python modules
+├── src/codomyrmex/                 # 86 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation

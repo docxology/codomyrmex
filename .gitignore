@@ -232,3 +232,11 @@ gha-creds-*.json
 .gitnexus
 pytest_output.txt
 /@output
+
+# Stale analysis/test artifacts
+missing_docs*.txt
+pytest_failures.log
+test_fails.log
+coverage.txt
+.benchmarks/
+fix_*.py
