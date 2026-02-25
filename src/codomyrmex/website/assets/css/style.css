@@ -962,3 +962,90 @@ textarea:focus-visible {
     .health-grid { grid-template-columns: 1fr; }
     .test-runner-header { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
 }
+/* ===== Telemetry Page ===== */
+
+.dash-card {
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.dash-card-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.dash-card-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.dash-card-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-family: 'Fira Code', monospace;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.tag-chip {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-family: 'Fira Code', monospace;
+    color: var(--accent-color);
+}
+
+.metric-chip {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--accent-color);
+}
+
+/* ===== Security Posture ===== */
+
+.risk-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.risk-low {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--success-color);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.risk-medium {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.risk-high {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--error-color);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.risk-critical {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--error-color);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    font-weight: 700;
+}

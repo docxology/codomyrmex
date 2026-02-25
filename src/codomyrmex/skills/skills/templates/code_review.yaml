@@ -1,0 +1,66 @@
+# Code Review Skill Template
+# Use this as a starting point for authoring custom code-review skills.
+
+description: >
+  Automated code review patterns: style enforcement, complexity thresholds,
+  naming conventions, and security anti-patterns.
+
+patterns:
+  - name: consistent_naming
+    description: Enforce PEP 8 naming conventions for functions and variables.
+    example: |
+      # Good
+      def calculate_total_price(unit_price, quantity):
+          return unit_price * quantity
+
+      # Bad
+      def CalcTP(up, q):
+          return up * q
+
+  - name: small_functions
+    description: Functions should do one thing and be under 30 lines.
+    threshold: 30
+
+  - name: type_annotations
+    description: All public functions must have type annotations.
+
+anti_patterns:
+  - name: bare_except
+    why_bad: Catches SystemExit, KeyboardInterrupt — use specific exceptions.
+    example: |
+      # Bad
+      try:
+          risky()
+      except:
+          pass
+
+      # Good
+      try:
+          risky()
+      except ValueError:
+          handle()
+
+  - name: mutable_default
+    why_bad: Shared mutable default argument causes subtle bugs.
+    example: |
+      # Bad
+      def append_to(item, target=[]):
+          target.append(item)
+          return target
+
+      # Good
+      def append_to(item, target=None):
+          if target is None:
+              target = []
+          target.append(item)
+          return target
+
+validations:
+  - "All public functions have docstrings"
+  - "No function exceeds 30 lines"
+  - "No bare except clauses"
+
+sharp_edges:
+  - "eval() and exec() usage"
+  - "pickle deserialization of untrusted data"
+  - "shell=True in subprocess calls"

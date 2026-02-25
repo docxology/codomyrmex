@@ -120,6 +120,14 @@
         </div>
     </div>
 
+    <!-- Security Posture -->
+    <div class="card health-card" id="security-posture-card">
+        <h2 class="card-title">Security Posture</h2>
+        <div id="security-posture-content">
+            <p style="color: var(--text-secondary);">Loading security posture…</p>
+        </div>
+    </div>
+
     <!-- Test Runner (Fix #12: controls moved out of h2) -->
     <div class="card health-card" style="grid-column: 1 / -1;">
         <div class="test-runner-header">
@@ -375,6 +383,48 @@
 </style>
 
 <script>
+    // Load security posture on page load
+    (async function loadSecurityPosture() {
+        const container = document.getElementById('security-posture-content');
+        try {
+            const resp = await fetch('/api/security/posture');
+            const data = await resp.json();
+            if (data.status === 'error') {
+                container.innerHTML = `<p style="color: var(--text-secondary);">Security posture unavailable: ${data.error}</p>`;
+                return;
+            }
+            const risk = data.risk_score ?? 0;
+            const riskClass = risk < 30 ? 'risk-low' : risk < 70 ? 'risk-medium' : 'risk-high';
+            const compliance = ((data.compliance_rate ?? 0) * 100).toFixed(0);
+            const secrets = data.secret_findings_count ?? 0;
+            container.innerHTML = `
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value risk-badge ${riskClass}" title="Lower is better (0–100)">${risk.toFixed(0)}<span style="font-size: 0.9rem; font-weight: 400;">/100</span></span>
+                        <span class="metric-label">Risk Score</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value ${compliance >= 80 ? 'status-ok' : compliance >= 50 ? 'status-warn' : 'status-err'}">${compliance}%</span>
+                        <span class="metric-label">Compliance</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value ${secrets === 0 ? 'status-ok' : 'status-err'}">${secrets}</span>
+                        <span class="metric-label">Secret Findings</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">${data.total_checks ?? 0}</span>
+                        <span class="metric-label">Checks Run</span>
+                    </div>
+                </div>
+                <details style="margin-top: 1rem;">
+                    <summary style="cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">Raw markdown report</summary>
+                    <pre style="margin-top: 0.5rem; font-size: 0.8rem; white-space: pre-wrap; color: var(--text-secondary);">${data.markdown || ''}</pre>
+                </details>`;
+        } catch (err) {
+            container.innerHTML = `<p style="color: var(--text-secondary);">Could not load security posture: ${err.message}</p>`;
+        }
+    })();
+
     document.getElementById('run-tests-btn').addEventListener('click', async () => {
         const btn = document.getElementById('run-tests-btn');
         const moduleSelect = document.getElementById('test-module');

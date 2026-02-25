@@ -1,0 +1,45 @@
+"""Generator content."""
+
+def generate_physical_requirements() -> str:
+    """Generate requirements.txt for the physical management module."""
+    return """# Physical Management Module Requirements
+
+# Core dependencies
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Data processing and serialization
+pydantic>=1.8.0
+marshmallow>=3.0.0
+
+# Async and networking (for device communication)
+aiohttp>=3.8.0
+websockets>=10.0
+
+# Hardware interfaces (optional, for real devices)
+pyserial>=3.5
+smbus2>=0.4.0  # For I2C devices
+
+# Database for object persistence
+sqlalchemy>=1.4.0
+alembic>=1.7.0
+
+# Configuration management
+dynaconf>=3.1.0
+
+# Testing
+pytest>=6.0.0
+pytest-asyncio>=0.15.0
+pytest-cov>=2.10.0
+
+# Development and linting
+black>=21.0.0
+isort>=5.9.0
+mypy>=0.910
+flake8>=3.9.0
+
+# Documentation
+mkdocs>=1.2.0
+mkdocs-material>=7.3.0
+"""
+

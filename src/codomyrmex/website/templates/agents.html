@@ -9,9 +9,21 @@
     {{ agents|length }} agent frameworks and integrations available in the Codomyrmex agents module.
 </p>
 
-<div class="grid">
+<div style="margin-bottom: 1.5rem;">
+    <input
+        id="agent-search"
+        type="search"
+        placeholder="Search agents…"
+        aria-label="Search agent integrations"
+        style="width: 100%; max-width: 400px; padding: 0.5rem 0.75rem;
+               background: var(--bg-secondary); border: 1px solid var(--border-color);
+               border-radius: 6px; color: var(--text-primary); font-size: 0.9rem;"
+    >
+</div>
+
+<div class="grid" id="agents-grid">
     {% for agent in agents %}
-    <div class="card">
+    <div class="card" data-name="{{ agent.name|lower }}" data-type="{{ agent.type|lower }}">
         <h2 class="card-title">
             {{ agent.name }}
             <span
@@ -35,4 +47,16 @@
     <p>No agent integrations found in <code>src/codomyrmex/agents/</code></p>
 </div>
 {% endif %}
+
+<script>
+    document.getElementById('agent-search').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#agents-grid .card').forEach(function (card) {
+            const name = card.dataset.name || '';
+            const type = card.dataset.type || '';
+            const desc = card.querySelector('p') ? card.querySelector('p').textContent.toLowerCase() : '';
+            card.style.display = (name.includes(q) || type.includes(q) || desc.includes(q)) ? '' : 'none';
+        });
+    });
+</script>
 {% endblock %}

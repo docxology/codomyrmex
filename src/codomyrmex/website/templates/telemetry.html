@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Telemetry - Codomyrmex{% endblock %}
+
+{% block content %}
+<h1>Telemetry</h1>
+
+<div id="telemetry-overview" class="health-grid" style="margin-bottom: 1.5rem;">
+    <div class="card health-card">
+        <h2 class="card-title">Overview</h2>
+        <div class="metric-grid">
+            <div class="metric">
+                <span class="metric-value" id="total-metrics">—</span>
+                <span class="metric-label">Data Points</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value" id="metric-series-count">—</span>
+                <span class="metric-label">Metric Series</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value" id="dashboard-count">—</span>
+                <span class="metric-label">Dashboards</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value status-ok" id="telemetry-status">—</span>
+                <span class="metric-label">Status</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card health-card">
+        <h2 class="card-title">Metric Series</h2>
+        <div id="metric-names-list">
+            <p style="color: var(--text-secondary);">Loading…</p>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboards Registry -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="card-title" style="margin-bottom: 0;">Registered Dashboards</h2>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);" id="last-refresh-time">—</span>
+    </div>
+    <div id="dashboards-list">
+        <p style="color: var(--text-secondary);">Loading…</p>
+    </div>
+</div>
+
+<!-- Error display -->
+<div id="telemetry-error" class="card"
+    style="margin-bottom: 1.5rem; display: none; border: 1px solid var(--error-color);">
+    <h2 class="card-title" style="color: var(--error-color);">Telemetry Unavailable</h2>
+    <p id="telemetry-error-msg" style="color: var(--text-secondary);"></p>
+</div>
+
+<script>
+    async function loadTelemetry() {
+        try {
+            const resp = await fetch('/api/telemetry');
+            const data = await resp.json();
+
+            // Hide error
+            document.getElementById('telemetry-error').style.display = 'none';
+
+            if (data.status === 'error') {
+                showError(data.error);
+                return;
+            }
+
+            // Overview metrics
+            document.getElementById('total-metrics').textContent = data.total_metrics ?? 0;
+            document.getElementById('metric-series-count').textContent = (data.metric_names ?? []).length;
+            document.getElementById('dashboard-count').textContent = (data.dashboards ?? []).length;
+            document.getElementById('telemetry-status').textContent = 'OK';
+
+            // Last refresh time
+            document.getElementById('last-refresh-time').textContent =
+                'Refreshed ' + new Date().toLocaleTimeString();
+
+            // Metric names
+            const namesList = document.getElementById('metric-names-list');
+            const names = data.metric_names ?? [];
+            if (names.length === 0) {
+                namesList.innerHTML =
+                    '<p style="color: var(--text-secondary); font-size: 0.85rem;">No metric series recorded yet. ' +
+                    'Metrics accumulate as the system runs and modules emit telemetry data.</p>';
+            } else {
+                namesList.innerHTML =
+                    '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">' +
+                    names.map(function(n) {
+                        return '<span class="metric-chip">' + n + '</span>';
+                    }).join('') +
+                    '</div>';
+            }
+
+            // Dashboards
+            const dashList = document.getElementById('dashboards-list');
+            const dashes = data.dashboards ?? [];
+            if (dashes.length === 0) {
+                dashList.innerHTML =
+                    '<p style="color: var(--text-secondary); font-size: 0.85rem;">No dashboards registered. ' +
+                    'Dashboards are created programmatically via <code>DashboardManager</code> from ' +
+                    '<code>codomyrmex.telemetry.dashboard</code>.</p>';
+            } else {
+                dashList.innerHTML =
+                    '<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">' +
+                    dashes.map(function(d) {
+                        var tags = (d.tags || []).map(function(t) {
+                            return '<span class="tag-chip">' + t + '</span>';
+                        }).join(' ');
+                        return '<div class="dash-card">' +
+                            '<div class="dash-card-name">' + (d.name || d.id) + '</div>' +
+                            (d.description ? '<div class="dash-card-desc">' + d.description + '</div>' : '') +
+                            '<div class="dash-card-meta">' +
+                            '<span>' + (d.panels ? d.panels.length : 0) + ' panels</span>' +
+                            (d.created_at ? '<span>' + new Date(d.created_at).toLocaleDateString() + '</span>' : '') +
+                            '</div>' +
+                            (tags ? '<div style="margin-top: 0.5rem;">' + tags + '</div>' : '') +
+                            '</div>';
+                    }).join('') +
+                    '</div>';
+            }
+
+        } catch (err) {
+            showError(err.message);
+        }
+    }
+
+    function showError(msg) {
+        var errDiv = document.getElementById('telemetry-error');
+        errDiv.style.display = 'block';
+        document.getElementById('telemetry-error-msg').textContent = msg;
+        document.getElementById('telemetry-status').textContent = 'Error';
+        document.getElementById('telemetry-status').className = 'metric-value status-err';
+    }
+
+    // Initial load
+    loadTelemetry();
+
+    // Auto-refresh every 30s
+    setInterval(loadTelemetry, 30000);
+</script>
+{% endblock %}

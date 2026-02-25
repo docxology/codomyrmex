@@ -1,0 +1,59 @@
+# Documentation Skill Template
+# Use this as a starting point for authoring custom documentation skills.
+
+description: >
+  Documentation generation patterns: RASP compliance, API specs,
+  docstring standards, and architecture decision records.
+
+patterns:
+  - name: rasp_coverage
+    description: >
+      Every module must have README.md, AGENTS.md, SPEC.md, and PAI.md
+      at its root directory level.
+    files:
+      - README.md
+      - AGENTS.md
+      - SPEC.md
+      - PAI.md
+
+  - name: docstring_format
+    description: Use Google-style docstrings with Args, Returns, and Raises.
+    example: |
+      def fetch_data(url: str, timeout: int = 30) -> dict:
+          """Fetch JSON data from a remote endpoint.
+
+          Args:
+              url: The endpoint URL to fetch from.
+              timeout: Request timeout in seconds.
+
+          Returns:
+              Parsed JSON response as a dictionary.
+
+          Raises:
+              ConnectionError: If the endpoint is unreachable.
+              ValueError: If the response is not valid JSON.
+          """
+
+  - name: changelog_entry
+    description: Every version bump must have a CHANGELOG.md entry.
+
+anti_patterns:
+  - name: stale_docs
+    why_bad: Documentation that doesn't match code is worse than no docs.
+    example: |
+      # Bad — docstring says 2 params, function has 3
+      def process(a, b, c):
+          """Process two values."""
+
+  - name: placeholder_docs
+    why_bad: TODO and FIXME in shipped docs confuse users.
+
+validations:
+  - "All public classes and functions have docstrings"
+  - "README.md exists at module root"
+  - "API_SPECIFICATION.md matches actual function signatures"
+
+sharp_edges:
+  - "Auto-generated docs that aren't reviewed"
+  - "Version numbers in docs that drift from pyproject.toml"
+  - "Links to internal paths that break on GitHub"

@@ -1,0 +1,63 @@
+# Testing Skill Template
+# Use this as a starting point for authoring custom testing skills.
+
+description: >
+  Test generation patterns: unit test structure, fixture design,
+  parameterisation, and zero-mock verification strategies.
+
+patterns:
+  - name: arrange_act_assert
+    description: Structure tests with clear Arrange/Act/Assert sections.
+    example: |
+      def test_calculate_discount():
+          # Arrange
+          price = 100.0
+          discount_rate = 0.15
+
+          # Act
+          result = calculate_discount(price, discount_rate)
+
+          # Assert
+          assert result == 85.0
+
+  - name: parametrize
+    description: Use pytest.mark.parametrize for data-driven tests.
+    example: |
+      @pytest.mark.parametrize("input_val,expected", [
+          (0, "zero"),
+          (1, "one"),
+          (-1, "negative"),
+      ])
+      def test_classify_number(input_val, expected):
+          assert classify_number(input_val) == expected
+
+  - name: descriptive_names
+    description: Test names should describe the scenario and expected outcome.
+
+anti_patterns:
+  - name: mock_overuse
+    why_bad: >
+      Mocking hides integration bugs. Prefer real implementations
+      with lightweight fakes or in-memory backends.
+    example: |
+      # Bad — tests pass but code is broken in production
+      mock_db = Mock()
+      mock_db.query.return_value = [{"id": 1}]
+
+      # Good — use a real in-memory database
+      db = create_test_database()
+      db.insert({"id": 1, "name": "test"})
+      result = db.query("SELECT * FROM items")
+
+  - name: shared_mutable_state
+    why_bad: Tests that share state create ordering dependencies.
+
+validations:
+  - "Every test function starts with test_"
+  - "No mocks in non-vendored test code"
+  - "Tests are independent and can run in any order"
+
+sharp_edges:
+  - "Flaky tests due to timing or network dependencies"
+  - "Tests that modify the filesystem without cleanup"
+  - "Assertions on internal implementation details"
