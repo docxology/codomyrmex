@@ -1,3 +1,4 @@
+import time
 """Unit tests for tools module - comprehensive testing with real implementations.
 
 Tests for DependencyAnalyzer, DependencyChecker, project analysis functions,
@@ -962,3 +963,117 @@ else:
         report = generate_report({}, {}, {})
 
         assert isinstance(report, str)
+
+
+# From test_tier3_promotions.py
+class TestMaintenanceScheduler:
+    """Tests for MaintenanceScheduler."""
+
+    def test_register_and_execute(self):
+        """Test functionality: register and execute."""
+        from codomyrmex.maintenance.health.scheduler import (
+            MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
+        )
+        scheduler = MaintenanceScheduler()
+        task = MaintenanceTask(
+            name="test_task",
+            description="Test task",
+            action=lambda: "done",
+            schedule=ScheduleConfig(max_retries=0),
+        )
+        scheduler.register(task)
+        result = scheduler.execute("test_task")
+        assert result.status == TaskStatus.COMPLETED
+        assert result.output == "done"
+
+    def test_due_tasks(self):
+        """Test functionality: due tasks."""
+        from codomyrmex.maintenance.health.scheduler import (
+            MaintenanceScheduler, MaintenanceTask, ScheduleConfig,
+        )
+        scheduler = MaintenanceScheduler()
+        task = MaintenanceTask(
+            name="due_task",
+            description="Due task",
+            action=lambda: None,
+            schedule=ScheduleConfig(interval_seconds=10, run_on_startup=True),
+        )
+        scheduler.register(task)
+        due = scheduler.get_due_tasks(time.time())
+        assert len(due) == 1
+
+    def test_failed_task_retries(self):
+        """Test functionality: failed task retries."""
+        from codomyrmex.maintenance.health.scheduler import (
+            MaintenanceScheduler, MaintenanceTask, ScheduleConfig, TaskStatus,
+        )
+        call_count = 0
+        def failing_action():
+            nonlocal call_count
+            call_count += 1
+            raise RuntimeError("fail")
+
+        scheduler = MaintenanceScheduler()
+        task = MaintenanceTask(
+            name="fail_task",
+            description="Failing task",
+            action=failing_action,
+            schedule=ScheduleConfig(max_retries=2, retry_delay_seconds=0.001),
+        )
+        scheduler.register(task)
+        result = scheduler.execute("fail_task")
+        assert result.status == TaskStatus.FAILED
+        assert call_count == 3  # initial + 2 retries
+
+
+# From test_tier3_promotions_pass2.py
+class TestHealthChecker:
+    """Tests for HealthChecker."""
+
+    def test_healthy_check(self):
+        """Test functionality: healthy check."""
+        from codomyrmex.maintenance.health.health_check import (
+            HealthChecker, HealthCheck, HealthStatus,
+        )
+        checker = HealthChecker()
+        checker.register(HealthCheck(
+            name="test",
+            description="Always healthy",
+            check_fn=lambda: (HealthStatus.HEALTHY, "OK", {}),
+        ))
+        report = checker.run_all()
+        assert report.overall_status == HealthStatus.HEALTHY
+        assert report.healthy_count == 1
+
+    def test_unhealthy_check(self):
+        """Test functionality: unhealthy check."""
+        from codomyrmex.maintenance.health.health_check import (
+            HealthChecker, HealthCheck, HealthStatus,
+        )
+        checker = HealthChecker()
+        checker.register(HealthCheck(
+            name="bad",
+            description="Always fails",
+            check_fn=lambda: (HealthStatus.UNHEALTHY, "Down", {}),
+            critical=True,
+        ))
+        report = checker.run_all()
+        assert report.overall_status == HealthStatus.UNHEALTHY
+
+    def test_exception_handling(self):
+        """Test functionality: exception handling."""
+        from codomyrmex.maintenance.health.health_check import (
+            HealthChecker, HealthCheck, HealthStatus,
+        )
+        def exploding():
+            raise RuntimeError("boom")
+
+        checker = HealthChecker()
+        checker.register(HealthCheck(
+            name="explode",
+            description="Raises",
+            check_fn=exploding,
+        ))
+        result = checker.run("explode")
+        assert result.status == HealthStatus.UNHEALTHY
+        assert "boom" in result.message

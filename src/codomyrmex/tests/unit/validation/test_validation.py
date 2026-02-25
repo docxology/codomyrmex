@@ -1063,3 +1063,70 @@ class TestValidationSummary:
         assert summary.is_valid is True
         assert summary.error_count == 0
         assert summary.warning_count == 0
+
+
+# From test_coverage_boost_r7.py
+class TestExamplesValidator:
+    def test_validation_severity(self):
+        from codomyrmex.validation.examples_validator import ValidationSeverity
+        assert len(list(ValidationSeverity)) > 0
+
+    def test_validation_type(self):
+        from codomyrmex.validation.examples_validator import ValidationType
+        assert len(list(ValidationType)) > 0
+
+    def test_validation_issue(self):
+        from codomyrmex.validation.examples_validator import ValidationIssue, ValidationSeverity, ValidationType
+        issue = ValidationIssue(module="test", validation_type=list(ValidationType)[0], severity=list(ValidationSeverity)[0], message="test issue", file_path="test.py")
+        assert issue.message == "test issue"
+
+    def test_examples_validator(self):
+        from pathlib import Path
+        from codomyrmex.validation.examples_validator import ExamplesValidator
+        v = ExamplesValidator(root_dir=Path("."), output_dir=Path("/tmp/ev_test"))
+        assert v is not None
+
+
+# Phase 2b — validation/examples_validator
+class TestValidationDataclasses:
+    """Tests for validation dataclasses and enums."""
+
+    def test_validation_type_enum(self):
+        from codomyrmex.validation.examples_validator import ValidationType
+        assert len(list(ValidationType)) > 0
+
+    def test_validation_severity_enum(self):
+        from codomyrmex.validation.examples_validator import ValidationSeverity
+        assert len(list(ValidationSeverity)) > 0
+
+    def test_validation_issue(self):
+        from codomyrmex.validation.examples_validator import (
+            ValidationIssue, ValidationType, ValidationSeverity,
+        )
+        issue = ValidationIssue(
+            module="test",
+            validation_type=list(ValidationType)[0],
+            severity=list(ValidationSeverity)[0],
+            message="Test issue",
+            file_path="test.py",
+            line_number=42,
+        )
+        assert issue.module == "test"
+        assert issue.line_number == 42
+
+    def test_module_validation_result(self):
+        from codomyrmex.validation.examples_validator import ModuleValidationResult
+        result = ModuleValidationResult(module="utils", success=True, duration=1.5)
+        assert result.success is True
+        assert result.duration == 1.5
+
+    def test_module_validation_result_with_issues(self):
+        from codomyrmex.validation.examples_validator import (
+            ModuleValidationResult, ValidationIssue, ValidationType, ValidationSeverity,
+        )
+        issue = ValidationIssue(
+            module="utils", validation_type=list(ValidationType)[0],
+            severity=list(ValidationSeverity)[0], message="warning",
+        )
+        result = ModuleValidationResult(module="utils", success=False, issues=[issue])
+        assert len(result.issues) == 1

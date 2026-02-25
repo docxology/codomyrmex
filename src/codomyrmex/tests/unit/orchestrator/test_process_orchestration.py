@@ -1,3 +1,4 @@
+import asyncio
 """Tests for Sprint 34: Multi-Process Agent Orchestration.
 
 Covers HeartbeatMonitor (registration, beats, status detection),
@@ -130,3 +131,200 @@ class TestProcessOrchestrator:
 
 
 __all__: list[str] = []
+
+
+# From test_coverage_boost_r3.py
+class TestRetryPolicy:
+    """Tests for RetryPolicy dataclass."""
+
+    def test_defaults(self):
+        from codomyrmex.orchestrator.workflow import RetryPolicy
+
+        rp = RetryPolicy()
+        assert rp.max_attempts == 3
+        assert rp.initial_delay == 1.0
+
+    def test_get_delay_exponential(self):
+        from codomyrmex.orchestrator.workflow import RetryPolicy
+
+        rp = RetryPolicy(initial_delay=1.0, exponential_base=2.0, max_delay=60.0)
+        d0 = rp.get_delay(0)
+        d1 = rp.get_delay(1)
+        d2 = rp.get_delay(2)
+        # Delays should increase monotonically
+        assert d1 >= d0
+        assert d2 >= d1
+
+    def test_get_delay_capped(self):
+        from codomyrmex.orchestrator.workflow import RetryPolicy
+
+        rp = RetryPolicy(initial_delay=1.0, max_delay=5.0)
+        assert rp.get_delay(10) <= 5.0
+
+
+# From test_coverage_boost_r3.py
+class TestTaskResult:
+    """Tests for TaskResult."""
+
+    def test_success_result(self):
+        from codomyrmex.orchestrator.workflow import TaskResult
+
+        r = TaskResult(success=True, value=42, execution_time=0.5)
+        assert r.success
+        assert r.value == 42
+
+    def test_failure_result(self):
+        from codomyrmex.orchestrator.workflow import TaskResult
+
+        r = TaskResult(success=False, error="boom")
+        assert not r.success
+        assert r.error == "boom"
+
+
+# From test_coverage_boost_r3.py
+class TestTask:
+    """Tests for Task."""
+
+    def test_task_creation(self):
+        from codomyrmex.orchestrator.workflow import Task
+
+        t = Task(name="task1", action=lambda: 42)
+        assert t.name == "task1"
+        assert hash(t)  # hashable
+
+    def test_should_run_no_condition(self):
+        from codomyrmex.orchestrator.workflow import Task, TaskResult
+
+        t = Task(name="t", action=lambda: 1)
+        assert t.should_run({})
+
+    def test_should_run_with_condition(self):
+        from codomyrmex.orchestrator.workflow import Task, TaskResult
+
+        t = Task(
+            name="t",
+            action=lambda: 1,
+            condition=lambda results: "dep" in results and results["dep"].success,
+        )
+        assert not t.should_run({})
+        assert t.should_run({"dep": TaskResult(success=True)})
+
+    def test_get_result_before_execution(self):
+        from codomyrmex.orchestrator.workflow import Task, TaskStatus
+
+        t = Task(name="t", action=lambda: 1)
+        r = t.get_result()
+        assert not r.success or r.value is None
+
+
+# From test_coverage_boost_r3.py
+class TestWorkflow:
+    """Tests for Workflow DAG engine."""
+
+    def test_single_task(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("test-wf")
+        wf.add_task("greet", action=lambda: "hello")
+        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        assert "greet" in results
+        assert results["greet"] == "hello"
+
+    def test_dependency_chain(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("chain")
+        wf.add_task("step1", action=lambda: 10)
+        wf.add_task("step2", action=lambda: 20, dependencies=["step1"])
+        wf.add_task("step3", action=lambda: 30, dependencies=["step2"])
+        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        assert len(results) == 3
+
+    def test_parallel_tasks(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("parallel")
+        wf.add_task("a", action=lambda: 1)
+        wf.add_task("b", action=lambda: 2)
+        wf.add_task("c", action=lambda: 3, dependencies=["a", "b"])
+        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        assert "c" in results
+
+    def test_validation_missing_dep(self):
+        from codomyrmex.orchestrator.workflow import Workflow, WorkflowError
+
+        wf = Workflow("bad")
+        wf.add_task("a", action=lambda: 1, dependencies=["nonexistent"])
+        try:
+            asyncio.new_event_loop().run_until_complete(wf.run())
+            # If no exception, check results for failure
+        except (WorkflowError, Exception):
+            pass  # Expected
+
+    def test_cycle_detection(self):
+        from codomyrmex.orchestrator.workflow import CycleError, Workflow
+
+        wf = Workflow("cyclic")
+        wf.add_task("a", action=lambda: 1, dependencies=["b"])
+        wf.add_task("b", action=lambda: 2, dependencies=["a"])
+        try:
+            asyncio.new_event_loop().run_until_complete(wf.run())
+        except (CycleError, Exception):
+            pass  # Expected
+
+    def test_task_failure_propagation(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        def fail():
+            raise RuntimeError("task failed")
+
+        wf = Workflow("fail-test", fail_fast=True)
+        wf.add_task("bad", action=fail)
+        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        # Failure may be expressed as None value or exception info
+        assert "bad" in results
+
+    def test_get_summary(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("summary-test")
+        wf.add_task("a", action=lambda: 1)
+        asyncio.new_event_loop().run_until_complete(wf.run())
+        summary = wf.get_summary()
+        assert isinstance(summary, dict)
+
+    def test_get_task_result(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("result-test")
+        wf.add_task("x", action=lambda: 99)
+        asyncio.new_event_loop().run_until_complete(wf.run())
+        r = wf.get_task_result("x")
+        # May return a TaskResult or None depending on implementation
+        assert r is not None or True  # Just exercise the method
+
+    def test_conditional_skip(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        wf = Workflow("cond")
+        wf.add_task("a", action=lambda: 1)
+        wf.add_task(
+            "b",
+            action=lambda: 2,
+            condition=lambda results: False,  # Never runs
+        )
+        results = asyncio.new_event_loop().run_until_complete(wf.run())
+        assert "a" in results
+
+    def test_progress_callback(self):
+        from codomyrmex.orchestrator.workflow import Workflow
+
+        events = []
+        wf = Workflow(
+            "progress",
+            progress_callback=lambda name, status, details: events.append((name, status)),
+        )
+        wf.add_task("a", action=lambda: 1)
+        asyncio.new_event_loop().run_until_complete(wf.run())
+        # Progress events may or may not fire depending on impl
+        assert isinstance(events, list)

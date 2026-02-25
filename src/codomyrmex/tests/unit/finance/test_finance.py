@@ -553,3 +553,180 @@ def test_tax_calculator_bracket_breakdown_amounts_sum_to_total():
     result = calc.calculate_tax(75000.0)
     bracket_sum = sum(b["tax"] for b in result.bracket_breakdown)
     assert bracket_sum == pytest.approx(result.total_tax, abs=0.01)
+
+
+# From test_coverage_boost_r2.py
+class TestAccount:
+    """Tests for Account and AccountChart."""
+
+    def test_debit_normal_asset(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Cash", AccountType.ASSET)
+        acct.debit(100.0)
+        assert acct.balance == 100.0
+        acct.credit(30.0)
+        assert acct.balance == 70.0
+
+    def test_credit_normal_liability(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Loans", AccountType.LIABILITY)
+        acct.credit(500.0)
+        assert acct.balance == 500.0
+        acct.debit(200.0)
+        assert acct.balance == 300.0
+
+    def test_freeze(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Frozen", AccountType.ASSET)
+        acct.freeze()
+        with pytest.raises(ValueError, match="frozen"):
+            acct.debit(10.0)
+        with pytest.raises(ValueError, match="frozen"):
+            acct.credit(10.0)
+        acct.unfreeze()
+        acct.debit(10.0)
+        assert acct.balance == 10.0
+
+    def test_negative_amount_raises(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Cash", AccountType.ASSET)
+        with pytest.raises(ValueError, match="non-negative"):
+            acct.debit(-10.0)
+        with pytest.raises(ValueError, match="non-negative"):
+            acct.credit(-10.0)
+
+    def test_to_dict(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Revenue", AccountType.REVENUE, code="4000")
+        d = acct.to_dict()
+        assert d["name"] == "Revenue"
+        assert d["code"] == "4000"
+        assert d["type"] == "REVENUE"
+
+    def test_repr(self):
+        from codomyrmex.finance.account import Account, AccountType
+
+        acct = Account("Cash", AccountType.ASSET)
+        assert "Cash" in repr(acct)
+
+
+# From test_coverage_boost_r2.py
+class TestAccountChart:
+    """Tests for AccountChart."""
+
+    def test_create_and_lookup(self):
+        from codomyrmex.finance.account import AccountChart, AccountType
+
+        chart = AccountChart()
+        cash = chart.create("Cash", AccountType.ASSET, code="1000")
+        assert chart.account_count == 1
+        assert chart.find_by_name("Cash") is cash
+        assert chart.find_by_code("1000") is cash
+        assert chart.get(cash.id) is cash
+
+    def test_by_type(self):
+        from codomyrmex.finance.account import AccountChart, AccountType
+
+        chart = AccountChart()
+        chart.create("Cash", AccountType.ASSET)
+        chart.create("Equipment", AccountType.ASSET)
+        chart.create("Loans", AccountType.LIABILITY)
+        assert len(chart.by_type(AccountType.ASSET)) == 2
+
+    def test_totals_and_income(self):
+        from codomyrmex.finance.account import AccountChart, AccountType
+
+        chart = AccountChart()
+        cash = chart.create("Cash", AccountType.ASSET)
+        cash.debit(1000)
+        revenue = chart.create("Sales", AccountType.REVENUE)
+        revenue.credit(500)
+        expense = chart.create("Rent", AccountType.EXPENSE)
+        expense.debit(200)
+        assert chart.total_assets() == 1000
+        assert chart.net_income() == 500 - 200
+
+    def test_summary(self):
+        from codomyrmex.finance.account import AccountChart, AccountType
+
+        chart = AccountChart()
+        chart.create("Cash", AccountType.ASSET)
+        s = chart.summary()
+        assert "total_accounts" in s
+        assert "net_income" in s
+
+    def test_all_accounts(self):
+        from codomyrmex.finance.account import AccountChart, AccountType
+
+        chart = AccountChart()
+        chart.create("A", AccountType.ASSET)
+        chart.create("B", AccountType.LIABILITY)
+        assert len(chart.all_accounts()) == 2
+
+    def test_find_nonexistent(self):
+        from codomyrmex.finance.account import AccountChart
+
+        chart = AccountChart()
+        assert chart.find_by_name("nope") is None
+        assert chart.find_by_code("9999") is None
+
+
+# From test_coverage_boost_r2.py
+class TestLedger:
+    """Tests for double-entry Ledger (actual API: post_transaction with TransactionEntry)."""
+
+    def test_create_account(self):
+        from codomyrmex.finance.account import AccountType
+        from codomyrmex.finance.ledger import Ledger
+
+        ledger = Ledger()
+        acct = ledger.create_account("Cash", AccountType.ASSET)
+        assert acct.name == "Cash"
+
+    def test_duplicate_account_raises(self):
+        from codomyrmex.finance.account import AccountType
+        from codomyrmex.finance.ledger import Ledger, LedgerError
+
+        ledger = Ledger()
+        ledger.create_account("Cash", AccountType.ASSET)
+        with pytest.raises(LedgerError, match="already exists"):
+            ledger.create_account("Cash", AccountType.ASSET)
+
+    def test_post_transaction(self):
+        from codomyrmex.finance.account import AccountType
+        from codomyrmex.finance.ledger import Ledger
+
+        ledger = Ledger()
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        rev = ledger.create_account("Revenue", AccountType.REVENUE)
+        ledger.post_transaction(
+            entries=[
+                {"account_id": cash.id, "amount": 100.0},
+                {"account_id": rev.id, "amount": -100.0},
+            ],
+            description="Sale",
+        )
+        assert ledger.get_balance(cash.id) != 0.0
+
+    def test_trial_balance(self):
+        from codomyrmex.finance.account import AccountType
+        from codomyrmex.finance.ledger import Ledger
+
+        ledger = Ledger()
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        rev = ledger.create_account("Revenue", AccountType.REVENUE)
+        ledger.post_transaction(
+            entries=[
+                {"account_id": cash.id, "amount": 500.0},
+                {"account_id": rev.id, "amount": -500.0},
+            ],
+            description="Sale",
+        )
+        result = ledger.trial_balance()
+        assert isinstance(result, dict)
+        assert result["balanced"] is True

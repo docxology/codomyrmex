@@ -1943,3 +1943,80 @@ class TestAsyncPipelineResult:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+# From test_coverage_boost_r4.py
+class TestDeploymentEnvironment:
+    """Tests for Environment dataclass."""
+
+    def test_environment_creation(self):
+        from codomyrmex.ci_cd_automation.deployment_orchestrator import (
+            Environment, EnvironmentType,
+        )
+
+        env = Environment(name="dev", type=EnvironmentType.DEVELOPMENT, host="localhost")
+        assert env.name == "dev"
+        assert env.type == EnvironmentType.DEVELOPMENT
+
+    def test_environment_to_dict(self):
+        from codomyrmex.ci_cd_automation.deployment_orchestrator import (
+            Environment, EnvironmentType,
+        )
+
+        env = Environment(
+            name="staging", type=EnvironmentType.STAGING,
+            host="staging.example.com", port=22,
+        )
+        d = env.to_dict()
+        assert d["name"] == "staging"
+        assert d["host"] == "staging.example.com"
+
+
+# From test_coverage_boost_r5.py
+class TestPipelineModels:
+    """Tests for pipeline data models."""
+
+    def test_pipeline_job(self):
+        from codomyrmex.ci_cd_automation.pipeline.models import JobStatus, PipelineJob
+
+        job = PipelineJob(name="lint", commands=["flake8 ."])
+        assert job.name == "lint"
+        assert job.status == JobStatus.PENDING
+        d = job.to_dict()
+        assert d["name"] == "lint"
+        assert d["status"] == "pending"
+
+    def test_pipeline_stage(self):
+        from codomyrmex.ci_cd_automation.pipeline.models import (
+            PipelineJob, PipelineStage, StageStatus,
+        )
+
+        stage = PipelineStage(
+            name="test",
+            jobs=[PipelineJob(name="unit", commands=["pytest"])],
+        )
+        assert stage.status == StageStatus.PENDING
+        d = stage.to_dict()
+        assert len(d["jobs"]) == 1
+
+    def test_pipeline(self):
+        from codomyrmex.ci_cd_automation.pipeline.models import (
+            Pipeline, PipelineJob, PipelineStage, PipelineStatus,
+        )
+
+        pipeline = Pipeline(
+            name="ci",
+            description="CI pipeline",
+            stages=[
+                PipelineStage(name="build", jobs=[
+                    PipelineJob(name="compile", commands=["make build"]),
+                ]),
+                PipelineStage(name="test", jobs=[
+                    PipelineJob(name="unit", commands=["pytest"]),
+                ], dependencies=["build"]),
+            ],
+        )
+        assert pipeline.status == PipelineStatus.PENDING
+        d = pipeline.to_dict()
+        assert d["name"] == "ci"
+        assert len(d["stages"]) == 2

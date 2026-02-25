@@ -978,3 +978,82 @@ class TestCacheBasicOps:
             assert cache.exists(f"key{i}") is False
         for i in range(5, 10):
             assert cache.exists(f"key{i}") is True
+
+
+# From test_coverage_boost_r2.py
+class TestCacheInvalidationManager:
+    """Tests for InvalidationManager (actual API: set/get/invalidate)."""
+
+    def test_set_and_get(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("key1", "value1")
+        assert mgr.get("key1") == "value1"
+
+    def test_set_with_ttl(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("key1", "val", ttl=3600)
+        assert mgr.get("key1") == "val"
+
+    def test_set_with_tags(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("a", 1, tags={"user"})
+        mgr.set("b", 2, tags={"user"})
+        mgr.set("c", 3, tags={"system"})
+        removed = mgr.invalidate_by_tag("user")
+        assert removed == 2
+        assert mgr.get("a") is None
+        assert mgr.get("c") == 3
+
+    def test_invalidate_key(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("key1", "val")
+        assert mgr.invalidate("key1")
+        assert mgr.get("key1") is None
+        assert not mgr.invalidate("nonexistent")
+
+    def test_invalidate_all(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("a", 1)
+        mgr.set("b", 2)
+        removed = mgr.invalidate_all()
+        assert removed == 2
+        assert mgr.size == 0
+
+    def test_size(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        assert mgr.size == 0
+        mgr.set("a", 1)
+        mgr.set("b", 2)
+        assert mgr.size == 2
+
+    def test_versioning(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        v = mgr.get_version("ns1")
+        assert isinstance(v, int)
+        new_v = mgr.increment_version("ns1")
+        assert new_v == v + 1
+        mgr.set_version("ns1", 99)
+        assert mgr.get_version("ns1") == 99
+
+    def test_stats(self):
+        from codomyrmex.cache.invalidation import InvalidationManager
+
+        mgr = InvalidationManager()
+        mgr.set("a", 1)
+        mgr.get("a")
+        s = mgr.stats()
+        assert isinstance(s, dict)

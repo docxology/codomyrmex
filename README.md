@@ -13,12 +13,12 @@ Codomyrmex integrates tools for building, documenting, analyzing, executing, and
 
 ## What is Codomyrmex?
 
-Codomyrmex is a **modular development platform** that brings together 78 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, well-tested, and can be used independently or composed together for complex workflows.
+Codomyrmex is a **modular development platform** that brings together 89 specialized modules for code analysis, AI-assisted development, build automation, documentation, and more. Each module is self-contained, tested, and can be used independently or composed together for complex workflows.
 
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 78 independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 89 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -32,9 +32,9 @@ Codomyrmex is a **modular development platform** that brings together 78 special
 
 - **Modularity First**: Self-contained modules with clear boundaries - use what you need, when you need it
 - **AI Integration**: Seamless integration with LLMs through standardized Model Context Protocol
-- **Professional Quality**: Comprehensive testing (≥80% coverage), documentation, and security practices
-- **Easy to Extend**: Well-documented module system makes it simple to add new capabilities
-- **Production Ready**: Battle-tested modules with stable APIs and comprehensive error handling
+- **Tested**: Over ten thousand unit, integration, and workflow tests exercise core functionality across modules
+- **Well-Documented**: RASP documentation (README, AGENTS, SPEC, PAI) and API references for modules and tools
+- **Robust Interfaces**: Stable public APIs with structured error handling and telemetry
 
 ## Quick Start
 

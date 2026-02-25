@@ -1914,3 +1914,44 @@ class TestAPIPerformance:
 
         metrics = api.get_metrics()
         assert metrics["total_requests"] == 50
+
+
+# From test_coverage_boost_r6.py
+class TestAPIVersioningBoost:
+    def test_simple_version(self):
+        from codomyrmex.api.standardization.api_versioning import SimpleVersion
+        v = SimpleVersion("1.2.3")
+        assert v is not None
+
+    def test_api_version(self):
+        from codomyrmex.api.standardization.api_versioning import APIVersion, VersionFormat
+        v = APIVersion(version="1.0.0", format=VersionFormat.SEMVER, release_date=datetime.now())
+        assert v.version == "1.0.0"
+
+    def test_versioned_endpoint(self):
+        from codomyrmex.api.standardization.api_versioning import VersionedEndpoint
+        ep = VersionedEndpoint(path="/users", versions={"1.0": lambda: None}, default_version="1.0")
+        assert ep.path == "/users"
+
+    def test_api_version_manager(self):
+        from codomyrmex.api.standardization.api_versioning import APIVersionManager
+        mgr = APIVersionManager()
+        assert mgr is not None
+
+
+# From test_coverage_boost_r7.py
+class TestDocGeneratorBoost:
+    def test_api_documentation(self):
+        from codomyrmex.api.documentation.doc_generator import APIDocumentation
+        doc = APIDocumentation(title="Test API", version="1.0", description="A test", base_url="/api")
+        assert doc.title == "Test API"
+
+    def test_api_endpoint(self):
+        from codomyrmex.api.documentation.doc_generator import APIEndpoint
+        ep = APIEndpoint(path="/users", method="GET", summary="List users")
+        assert ep.method == "GET"
+
+    def test_doc_generator_init(self):
+        from codomyrmex.api.documentation.doc_generator import APIDocumentationGenerator
+        gen = APIDocumentationGenerator()
+        assert gen is not None

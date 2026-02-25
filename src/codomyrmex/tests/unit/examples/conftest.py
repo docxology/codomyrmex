@@ -18,8 +18,8 @@ Provides shared fixtures and configuration for testing Codomyrmex examples.
 @pytest.fixture(scope="session")
 def project_root() -> Path:
     """Get the project root directory."""
-    # From src/codomyrmex/tests/examples/conftest.py, go up 5 levels to reach project root
-    return Path(__file__).parent.parent.parent.parent.parent
+    # From src/codomyrmex/tests/unit/examples/conftest.py, go up 6 levels to reach project root
+    return Path(__file__).parent.parent.parent.parent.parent.parent
 
 
 @pytest.fixture(scope="session")

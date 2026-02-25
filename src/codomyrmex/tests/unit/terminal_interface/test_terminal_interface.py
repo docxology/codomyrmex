@@ -446,3 +446,40 @@ class TestShellStateManagement:
 
 if __name__ == '__main__':
     pytest.main([__file__])
+
+
+# Coverage push — terminal_interface/utils
+class TestTerminalUtils:
+    """Tests for terminal utility functions."""
+
+    def test_create_ascii_art(self):
+        from codomyrmex.terminal_interface.utils.terminal_utils import create_ascii_art
+        result = create_ascii_art("Hello")
+        assert isinstance(result, str)
+        assert len(result) > 0
+
+    def test_command_runner_init(self):
+        from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+        runner = CommandRunner()
+        assert runner is not None
+
+
+class TestCommandRunnerDeep:
+    """Deep tests for CommandRunner execution paths."""
+
+    def test_run_simple_command(self):
+        from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+        runner = CommandRunner()
+        result = runner.run("echo hello")
+        assert result is not None
+
+    def test_run_command_with_timeout(self):
+        from codomyrmex.terminal_interface.utils.terminal_utils import CommandRunner
+        runner = CommandRunner()
+        result = runner.run("echo test", timeout=10)
+        assert result is not None
+
+    def test_ascii_art_styles(self):
+        from codomyrmex.terminal_interface.utils.terminal_utils import create_ascii_art
+        simple = create_ascii_art("Hi", style="simple")
+        assert isinstance(simple, str)

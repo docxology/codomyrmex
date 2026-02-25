@@ -51,3 +51,30 @@ def test_get_description_fallback(mock_root):
     # Sort to find the mystery one or check by name
     mystery = next(a for a in modules if a["name"] == "mystery_agent")
     assert mystery["description"] == "No description available"
+
+
+# Phase 2b — website/data_provider
+class TestDataProviderDeep:
+    """Deep tests for website DataProvider."""
+
+    def test_init(self, tmp_path):
+        from codomyrmex.website.data_provider import DataProvider
+        dp = DataProvider(root_dir=tmp_path)
+        assert dp is not None
+
+    def test_get_doc_tree(self, tmp_path):
+        from codomyrmex.website.data_provider import DataProvider
+        # Create minimal doc structure
+        (tmp_path / "README.md").write_text("# Project")
+        (tmp_path / "docs").mkdir(exist_ok=True)
+        (tmp_path / "docs" / "ARCHITECTURE.md").write_text("# Architecture")
+        dp = DataProvider(root_dir=tmp_path)
+        tree = dp.get_doc_tree()
+        assert isinstance(tree, (list, dict))
+
+    def test_get_config_files(self, tmp_path):
+        from codomyrmex.website.data_provider import DataProvider
+        (tmp_path / "pyproject.toml").write_text("[project]\nname=\"test\"")
+        dp = DataProvider(root_dir=tmp_path)
+        configs = dp.get_config_files()
+        assert isinstance(configs, (list, dict))

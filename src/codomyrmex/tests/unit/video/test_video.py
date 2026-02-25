@@ -398,3 +398,12 @@ class TestErrorHandling:
 
         assert error.context.get("video_path") == "/input.mp4"
         assert error.context.get("output_path") == "/output.mp4"
+
+
+# Coverage push — video/analysis
+class TestVideoAnalyzerCoverage:
+    """Coverage tests for VideoAnalyzer."""
+
+    def test_import(self):
+        from codomyrmex.video.analysis.video_analyzer import VideoAnalyzer
+        assert VideoAnalyzer is not None

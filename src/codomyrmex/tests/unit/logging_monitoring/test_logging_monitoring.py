@@ -426,3 +426,97 @@ class TestAuditLogger:
                 audit.logger.removeHandler(h)
                 h.close()
 
+
+
+# From test_tier3_promotions.py
+class TestStructuredFormatter:
+    """Tests for StructuredFormatter."""
+
+    def test_format_basic(self):
+        """Test functionality: format basic."""
+        import json
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
+            StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
+        )
+        formatter = StructuredFormatter()
+        entry = StructuredLogEntry(
+            level=LogLevel.INFO,
+            message="test message",
+            context=LogContext(module="test"),
+        )
+        line = formatter.format(entry)
+        parsed = json.loads(line)
+        assert parsed["message"] == "test message"
+        assert parsed["level"] == "info"
+        assert parsed["module"] == "test"
+
+    def test_static_fields(self):
+        """Test functionality: static fields."""
+        import json
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
+            StructuredFormatter, FormatterConfig, StructuredLogEntry, LogLevel,
+        )
+        config = FormatterConfig(static_fields={"service": "codomyrmex"})
+        formatter = StructuredFormatter(config=config)
+        entry = StructuredLogEntry(level=LogLevel.INFO, message="hi")
+        line = formatter.format(entry)
+        parsed = json.loads(line)
+        assert parsed["service"] == "codomyrmex"
+
+    def test_correlation_id(self):
+        """Test functionality: correlation id."""
+        import json
+        from codomyrmex.logging_monitoring.formatters.structured_formatter import (
+            StructuredFormatter, StructuredLogEntry, LogLevel, LogContext,
+        )
+        formatter = StructuredFormatter()
+        entry = StructuredLogEntry(
+            level=LogLevel.INFO,
+            message="traced",
+            context=LogContext(correlation_id="req-abc"),
+        )
+        line = formatter.format(entry)
+        parsed = json.loads(line)
+        assert parsed["correlation_id"] == "req-abc"
+
+
+# From test_tier3_promotions_pass2.py
+class TestLogAggregator:
+    """Tests for LogAggregator."""
+
+    def test_add_and_count(self):
+        """Test functionality: add and count."""
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        agg = LogAggregator()
+        agg.add(LogRecord(level="info", message="test"))
+        assert agg.count == 1
+
+    def test_search_by_level(self):
+        """Test functionality: search by level."""
+        from codomyrmex.logging_monitoring.core.log_aggregator import (
+            LogAggregator, LogRecord, LogQuery,
+        )
+        agg = LogAggregator()
+        agg.add(LogRecord(level="info", message="ok"))
+        agg.add(LogRecord(level="error", message="bad"))
+        results = agg.search(LogQuery(levels=["error"]))
+        assert len(results) == 1
+        assert results[0].level == "error"
+
+    def test_stats(self):
+        """Test functionality: stats."""
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        agg = LogAggregator()
+        agg.add(LogRecord(level="info", message="ok", module="main"))
+        agg.add(LogRecord(level="error", message="fail", module="db"))
+        stats = agg.stats()
+        assert stats.total_count == 2
+        assert stats.error_rate == pytest.approx(0.5)
+
+    def test_max_records_eviction(self):
+        """Test functionality: max records eviction."""
+        from codomyrmex.logging_monitoring.core.log_aggregator import LogAggregator, LogRecord
+        agg = LogAggregator(max_records=5)
+        for i in range(10):
+            agg.add(LogRecord(level="info", message=f"msg {i}"))
+        assert agg.count == 5

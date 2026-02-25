@@ -1,3 +1,5 @@
+import tempfile
+import hashlib
 """Unit tests for the Codomyrmex utilities module.
 
 Tests for ensure_directory, safe_json_loads, safe_json_dumps, hash_content,
@@ -6,6 +8,7 @@ flatten_dict, deep_merge, RefinedUtilities, CLI helpers, and script base classes
 """
 
 import argparse
+import asyncio
 import os
 import time
 import unittest
@@ -1114,3 +1117,207 @@ class TestPrintFunctions:
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# From test_coverage_boost.py
+class TestRetryConfig:
+    """Tests for RetryConfig dataclass."""
+
+    def test_defaults(self):
+        from codomyrmex.utils.retry import RetryConfig
+
+        cfg = RetryConfig()
+        assert cfg.max_attempts == 3
+        assert cfg.base_delay == 1.0
+        assert cfg.max_delay == 60.0
+        assert cfg.jitter is True
+
+    def test_custom_values(self):
+        from codomyrmex.utils.retry import RetryConfig
+
+        cfg = RetryConfig(max_attempts=5, base_delay=0.1, jitter=False)
+        assert cfg.max_attempts == 5
+        assert cfg.jitter is False
+
+
+# From test_coverage_boost.py
+class TestComputeDelay:
+    """Tests for _compute_delay helper."""
+
+    def test_exponential_growth(self):
+        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+
+        cfg = RetryConfig(base_delay=1.0, exponential_base=2.0, jitter=False)
+        assert _compute_delay(0, cfg) == 1.0
+        assert _compute_delay(1, cfg) == 2.0
+        assert _compute_delay(2, cfg) == 4.0
+
+    def test_max_delay_cap(self):
+        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+
+        cfg = RetryConfig(base_delay=1.0, max_delay=5.0, jitter=False)
+        assert _compute_delay(10, cfg) == 5.0  # Capped at max_delay
+
+    def test_jitter_varies_output(self):
+        from codomyrmex.utils.retry import RetryConfig, _compute_delay
+
+        cfg = RetryConfig(base_delay=1.0, jitter=True)
+        delays = {_compute_delay(1, cfg) for _ in range(20)}
+        assert len(delays) > 1  # Jitter should produce different values
+
+
+# From test_coverage_boost.py
+class TestAsyncRetry:
+    """Tests for the async retry decorator."""
+
+    def test_async_succeeds(self):
+        from codomyrmex.utils.retry import async_retry
+
+        @async_retry(max_attempts=2, base_delay=0.001)
+        async def succeed():
+            return "async_ok"
+
+        result = asyncio.new_event_loop().run_until_complete(succeed())
+        assert result == "async_ok"
+
+    def test_async_retries_then_succeeds(self):
+        from codomyrmex.utils.retry import async_retry
+
+        call_count = 0
+
+        @async_retry(max_attempts=3, base_delay=0.001, jitter=False)
+        async def flaky():
+            nonlocal call_count
+            call_count += 1
+            if call_count < 2:
+                raise IOError("retry me")
+            return "recovered"
+
+        result = asyncio.new_event_loop().run_until_complete(flaky())
+        assert result == "recovered"
+        assert call_count == 2
+
+    def test_async_raises_after_exhaustion(self):
+        from codomyrmex.utils.retry import async_retry
+
+        @async_retry(max_attempts=2, base_delay=0.001, jitter=False)
+        async def always_fail():
+            raise OSError("async boom")
+
+        with pytest.raises(OSError, match="async boom"):
+            asyncio.new_event_loop().run_until_complete(always_fail())
+
+
+# From test_coverage_boost.py
+class TestContentHash:
+    """Tests for content_hash function."""
+
+    def test_sha256_default(self):
+        from codomyrmex.utils.hashing import content_hash
+
+        expected = hashlib.sha256(b"hello").hexdigest()
+        assert content_hash("hello") == expected
+
+    def test_md5_algorithm(self):
+        from codomyrmex.utils.hashing import content_hash
+
+        expected = hashlib.md5(b"hello").hexdigest()
+        assert content_hash("hello", "md5") == expected
+
+    def test_bytes_input(self):
+        from codomyrmex.utils.hashing import content_hash
+
+        expected = hashlib.sha256(b"\x00\x01\x02").hexdigest()
+        assert content_hash(b"\x00\x01\x02") == expected
+
+
+# From test_coverage_boost.py
+class TestFileHash:
+    """Tests for file_hash function."""
+
+    def test_file_hash_matches_content_hash(self):
+        from codomyrmex.utils.hashing import content_hash, file_hash
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write("test content")
+            f.flush()
+            path = Path(f.name)
+
+        expected = content_hash("test content")
+        assert file_hash(path) == expected
+        path.unlink()
+
+
+# From test_coverage_boost.py
+class TestDictHash:
+    """Tests for dict_hash function."""
+
+    def test_deterministic(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        d = {"b": 2, "a": 1}
+        assert dict_hash(d) == dict_hash({"a": 1, "b": 2})
+
+    def test_different_dicts_differ(self):
+        from codomyrmex.utils.hashing import dict_hash
+
+        assert dict_hash({"a": 1}) != dict_hash({"a": 2})
+
+
+# From test_coverage_boost.py
+class TestConsistentHash:
+    """Tests for ConsistentHash ring."""
+
+    def test_single_node(self):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash(["node-a"])
+        assert ring.get_node("any-key") == "node-a"
+
+    def test_multiple_nodes(self):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash(["a", "b", "c"])
+        assert ring.nodes == {"a", "b", "c"}
+        node = ring.get_node("test-key")
+        assert node in {"a", "b", "c"}
+
+    def test_consistency(self):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash(["a", "b", "c"])
+        results = [ring.get_node("stable-key") for _ in range(100)]
+        assert len(set(results)) == 1  # Same key → same node
+
+    def test_add_remove_node(self):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash(["a", "b"])
+        ring.add_node("c")
+        assert "c" in ring.nodes
+        ring.remove_node("a")
+        assert "a" not in ring.nodes
+
+    def test_empty_ring_raises(self):
+        from codomyrmex.utils.hashing import ConsistentHash
+
+        ring = ConsistentHash()
+        with pytest.raises(ValueError, match="No nodes"):
+            ring.get_node("key")
+
+
+# From test_coverage_boost.py
+class TestFingerprint:
+    """Tests for fingerprint function."""
+
+    def test_stable(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        fp1 = fingerprint("a", 1, True)
+        fp2 = fingerprint("a", 1, True)
+        assert fp1 == fp2
+
+    def test_different_args_differ(self):
+        from codomyrmex.utils.hashing import fingerprint
+
+        assert fingerprint("a", 1) != fingerprint("a", 2)

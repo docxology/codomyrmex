@@ -482,3 +482,291 @@ def test_create_selection_unknown_raises():
     """Test create_selection raises on unknown type."""
     with pytest.raises(ValueError):
         create_selection(SelectionType.TRUNCATION)
+
+
+# From test_coverage_boost_r2.py
+class TestGenome:
+    """Tests for Genome class."""
+
+    def test_init_and_len(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([1.0, 2.0, 3.0])
+        assert len(g) == 3
+        assert g[0] == 1.0
+
+    def test_random_factory(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome.random(10, low=0.0, high=1.0)
+        assert len(g) == 10
+        assert all(0.0 <= gene <= 1.0 for gene in g.genes)
+
+    def test_zeros_factory(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome.zeros(5)
+        assert all(gene == 0.0 for gene in g.genes)
+
+    def test_clone(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([1.0, 2.0], fitness=0.5, metadata={"tag": "x"})
+        c = g.clone()
+        assert c == g
+        assert c is not g
+        assert c.fitness == 0.5
+
+    def test_distance(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g1 = Genome([0.0, 0.0])
+        g2 = Genome([3.0, 4.0])
+        assert abs(g1.distance(g2) - 5.0) < 1e-9
+
+    def test_distance_length_mismatch(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        with pytest.raises(ValueError, match="Cannot compute distance"):
+            Genome([1.0]).distance(Genome([1.0, 2.0]))
+
+    def test_clamp(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([-1.0, 0.5, 2.0])
+        clamped = g.clamp(0.0, 1.0)
+        assert clamped.genes == [0.0, 0.5, 1.0]
+
+    def test_stats(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([2.0, 4.0, 6.0])
+        s = g.stats()
+        assert abs(s.mean - 4.0) < 1e-9
+        assert s.min_val == 2.0
+        assert s.max_val == 6.0
+        assert s.length == 3
+
+    def test_stats_empty(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        s = Genome([]).stats()
+        assert s.length == 0
+
+    def test_serialization_roundtrip(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([1.0, 2.0], fitness=0.9, metadata={"gen": 1})
+        d = g.to_dict()
+        g2 = Genome.from_dict(d)
+        assert g2 == g
+        assert g2.fitness == 0.9
+
+    def test_eq_and_repr(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+
+        g = Genome([1.0], fitness=0.5)
+        assert g != "not a genome"
+        assert "fitness=0.5" in repr(g)
+
+
+# From test_coverage_boost_r2.py
+class TestCrossover:
+    """Tests for crossover operators."""
+
+    def test_single_point_crossover(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import crossover
+
+        p1 = Genome([1.0, 1.0, 1.0, 1.0])
+        p2 = Genome([2.0, 2.0, 2.0, 2.0])
+        c1, c2 = crossover(p1, p2)
+        assert len(c1) == 4
+        assert len(c2) == 4
+
+    def test_crossover_short_genome(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import crossover
+
+        p1 = Genome([1.0])
+        p2 = Genome([2.0])
+        c1, c2 = crossover(p1, p2)
+        assert c1.genes == [1.0]
+        assert c2.genes == [2.0]
+
+    def test_two_point_crossover(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import two_point_crossover
+
+        p1 = Genome([1.0] * 6)
+        p2 = Genome([2.0] * 6)
+        c1, c2 = two_point_crossover(p1, p2)
+        assert len(c1) == 6
+
+    def test_uniform_crossover(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import uniform_crossover
+
+        p1 = Genome([0.0] * 10)
+        p2 = Genome([1.0] * 10)
+        c1, c2 = uniform_crossover(p1, p2, swap_prob=0.5)
+        assert len(c1) == 10
+        # At least some genes should come from each parent
+        combined = set(c1.genes) | set(c2.genes)
+        assert 0.0 in combined or 1.0 in combined
+
+
+# From test_coverage_boost_r2.py
+class TestMutation:
+    """Tests for mutation operators."""
+
+    def test_gaussian_mutate(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import mutate
+
+        g = Genome([0.5] * 20)
+        m = mutate(g, rate=1.0, amount=0.1)
+        assert len(m) == 20
+        # With rate=1.0, all genes should be mutated
+        assert m.genes != g.genes
+
+    def test_uniform_mutate(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import uniform_mutate
+
+        g = Genome([0.5] * 10)
+        m = uniform_mutate(g, rate=1.0, low=0.0, high=1.0)
+        assert len(m) == 10
+
+    def test_swap_mutate(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import swap_mutate
+
+        g = Genome([1.0, 2.0, 3.0, 4.0])
+        m = swap_mutate(g)
+        assert sorted(m.genes) == sorted(g.genes)  # Same elements, different order
+
+    def test_swap_mutate_short(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import swap_mutate
+
+        g = Genome([1.0])
+        m = swap_mutate(g)
+        assert m.genes == [1.0]
+
+
+# From test_coverage_boost_r2.py
+class TestSelection:
+    """Tests for selection operators."""
+
+    def test_tournament_selection(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import tournament_selection
+
+        pop = [Genome([float(i)], fitness=float(i)) for i in range(10)]
+        selected = tournament_selection(pop, size=3)
+        assert isinstance(selected, Genome)
+        assert selected.fitness is not None
+
+    def test_roulette_selection(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import roulette_selection
+
+        pop = [Genome([float(i)], fitness=float(i) + 1) for i in range(10)]
+        selected = roulette_selection(pop)
+        assert isinstance(selected, Genome)
+
+    def test_roulette_empty_raises(self):
+        from codomyrmex.evolutionary_ai.operators.operators import roulette_selection
+
+        with pytest.raises(ValueError, match="empty"):
+            roulette_selection([])
+
+    def test_roulette_zero_fitness(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import roulette_selection
+
+        pop = [Genome([0.0], fitness=0.0) for _ in range(5)]
+        selected = roulette_selection(pop)
+        assert isinstance(selected, Genome)
+
+    def test_rank_selection(self):
+        from codomyrmex.evolutionary_ai.genome.genome import Genome
+        from codomyrmex.evolutionary_ai.operators.operators import rank_selection
+
+        pop = [Genome([float(i)], fitness=float(i)) for i in range(10)]
+        selected = rank_selection(pop)
+        assert isinstance(selected, Genome)
+
+    def test_rank_empty_raises(self):
+        from codomyrmex.evolutionary_ai.operators.operators import rank_selection
+
+        with pytest.raises(ValueError, match="empty"):
+            rank_selection([])
+
+
+# From test_coverage_boost_r2.py
+class TestPopulation:
+    """Tests for Population class."""
+
+    def test_init(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=20, genome_length=5)
+        assert len(pop.individuals) == 20
+        assert pop.generation == 0
+
+    def test_evaluate(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=10, genome_length=3)
+        pop.evaluate(lambda g: sum(g.genes))
+        assert all(ind.fitness is not None for ind in pop.individuals)
+
+    def test_evolve(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=20, genome_length=5)
+        pop.evaluate(lambda g: sum(g.genes))
+        pop.evolve(mutation_rate=0.1, elitism=2)
+        assert pop.generation == 1
+        assert len(pop.individuals) == 20
+
+    def test_get_best_worst(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=10, genome_length=3)
+        pop.evaluate(lambda g: sum(g.genes))
+        best = pop.get_best()
+        worst = pop.get_worst()
+        assert best.fitness >= worst.fitness
+
+    def test_mean_fitness(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=10, genome_length=3)
+        pop.evaluate(lambda g: sum(g.genes))
+        mean = pop.mean_fitness()
+        assert isinstance(mean, float)
+
+    def test_convergence_detection(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=20, genome_length=5)
+        # Run several generations
+        for _ in range(10):
+            pop.evaluate(lambda g: sum(g.genes))
+            pop.evolve(mutation_rate=0.01, elitism=2)
+        # Should not crash
+        result = pop.is_converged(threshold=1e-6, window=5)
+        assert isinstance(result, bool)
+
+    def test_to_dict(self):
+        from codomyrmex.evolutionary_ai.population.population import Population
+
+        pop = Population(size=5, genome_length=3)
+        pop.evaluate(lambda g: sum(g.genes))
+        d = pop.to_dict()
+        assert "generation" in d
+        assert "individuals" in d
+        assert "history" in d

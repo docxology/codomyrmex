@@ -1667,3 +1667,62 @@ class TestHookClass:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+# From test_tier3_promotions.py
+class TestPluginDiscovery:
+    """Tests for PluginDiscovery."""
+
+    def test_scan_entry_points_runs(self):
+        """Test functionality: scan entry points runs."""
+        from codomyrmex.plugin_system.discovery import PluginDiscovery
+        discovery = PluginDiscovery(entry_point_group="codomyrmex.test.nonexistent")
+        result = discovery.scan_entry_points()
+        assert isinstance(result.plugins, list)  # may be empty
+        assert len(result.scan_sources) == 1
+
+    def test_scan_invalid_directory(self):
+        """Test functionality: scan invalid directory."""
+        from codomyrmex.plugin_system.discovery import PluginDiscovery
+        discovery = PluginDiscovery()
+        result = discovery.scan_directory("/nonexistent/path")
+        assert len(result.errors) == 1
+
+
+# From test_tier3_promotions_pass2.py
+class TestDependencyResolver:
+    """Tests for DependencyResolver."""
+
+    def test_simple_resolution(self):
+        """Test functionality: simple resolution."""
+        from codomyrmex.plugin_system.dependency_resolver import (
+            DependencyResolver, DependencyNode, ResolutionStatus,
+        )
+        resolver = DependencyResolver()
+        resolver.add(DependencyNode("auth", dependencies=["db"]))
+        resolver.add(DependencyNode("db"))
+        result = resolver.resolve()
+        assert result.status == ResolutionStatus.RESOLVED
+        assert result.load_order.index("db") < result.load_order.index("auth")
+
+    def test_missing_dependency(self):
+        """Test functionality: missing dependency."""
+        from codomyrmex.plugin_system.dependency_resolver import (
+            DependencyResolver, DependencyNode, ResolutionStatus,
+        )
+        resolver = DependencyResolver()
+        resolver.add(DependencyNode("auth", dependencies=["nonexistent"]))
+        result = resolver.resolve()
+        assert result.status == ResolutionStatus.MISSING
+        assert "nonexistent" in result.missing
+
+    def test_circular_dependency(self):
+        """Test functionality: circular dependency."""
+        from codomyrmex.plugin_system.dependency_resolver import (
+            DependencyResolver, DependencyNode, ResolutionStatus,
+        )
+        resolver = DependencyResolver()
+        resolver.add(DependencyNode("a", dependencies=["b"]))
+        resolver.add(DependencyNode("b", dependencies=["a"]))
+        result = resolver.resolve()
+        assert result.status == ResolutionStatus.CIRCULAR

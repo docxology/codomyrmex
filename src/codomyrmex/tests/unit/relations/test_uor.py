@@ -1124,3 +1124,48 @@ def test_engine_q1_critical_identity():
         expected = engine._to_bytes((n + 1) & engine._mask)
         assert engine.succ(n) == expected
 
+
+
+# From test_coverage_boost_r6.py
+class TestUOREngine:
+    def test_triadic_coordinate(self):
+        from codomyrmex.relations.uor.engine import TriadicCoordinate
+        tc = TriadicCoordinate(datum=(1, 2), stratum=(3,), spectrum=((1, 2),))
+        assert tc.datum == (1, 2)
+
+    def test_prism_engine(self):
+        from codomyrmex.relations.uor.engine import PrismEngine
+        engine = PrismEngine()
+        assert engine is not None
+
+
+# From test_tier3_promotions.py — rewritten against real UOR API
+class TestRelationStrengthScorer:
+    """Tests for UOR relationship strength via weight attribute."""
+
+    def test_score_single_interaction(self):
+        """Test UOR relationship weight as strength score."""
+        from codomyrmex.relations import Interaction
+        interaction = Interaction(type="message", notes="test interaction")
+        assert interaction.type == "message"
+        assert interaction.id != ""
+
+    def test_type_weights(self):
+        """Test UOR relationship with custom weight."""
+        from codomyrmex.relations.uor.graph import UORRelationship
+        rel = UORRelationship(source_id="a", target_id="b", relationship_type="meeting", weight=3.0)
+        assert rel.weight == 3.0
+        assert rel.relationship_type == "meeting"
+
+    def test_score_all_normalized(self):
+        """Test UOR graph relationships with varying weights."""
+        from codomyrmex.relations.uor.graph import UORGraph
+        graph = UORGraph()
+        a = graph.add_entity("A")
+        b = graph.add_entity("B")
+        c = graph.add_entity("C")
+        rel1 = graph.add_relationship(a.id, b.id, "knows")
+        rel2 = graph.add_relationship(a.id, c.id, "works_with")
+        assert rel1 is not None
+        assert rel2 is not None
+        assert graph.relationship_count == 2

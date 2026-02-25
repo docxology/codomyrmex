@@ -1558,3 +1558,287 @@ class TestIntegration:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+# From test_coverage_boost_r2.py
+class TestDatabaseBackup:
+    """Tests for DatabaseBackup manager."""
+
+    def test_backup_and_restore_sqlite(self, tmp_path):
+        from codomyrmex.database_management.backup import DatabaseBackup
+
+        # Create a real SQLite DB
+        db_path = tmp_path / "test.db"
+        conn = sqlite3.connect(str(db_path))
+        conn.execute("CREATE TABLE t (id INTEGER)")
+        conn.execute("INSERT INTO t VALUES (42)")
+        conn.commit()
+        conn.close()
+
+        backup_dir = tmp_path / "backups"
+        mgr = DatabaseBackup(backup_dir)
+        meta = mgr.backup_sqlite(db_path, backup_name="test_backup")
+        assert meta.success
+        assert meta.size_bytes > 0
+
+        # Restore
+        restore_path = tmp_path / "restored.db"
+        assert mgr.restore_sqlite("test_backup", restore_path)
+        conn2 = sqlite3.connect(str(restore_path))
+        rows = conn2.execute("SELECT id FROM t").fetchall()
+        conn2.close()
+        assert rows == [(42,)]
+
+    def test_list_backups(self, tmp_path):
+        from codomyrmex.database_management.backup import DatabaseBackup
+
+        db_path = tmp_path / "test.db"
+        db_path.write_bytes(b"fake-sqlite")
+
+        mgr = DatabaseBackup(tmp_path / "backups")
+        mgr.backup_sqlite(db_path, backup_name="b1")
+        mgr.backup_sqlite(db_path, backup_name="b2")
+        assert len(mgr.list_backups()) == 2
+
+    def test_prune(self, tmp_path):
+        from codomyrmex.database_management.backup import DatabaseBackup
+
+        db_path = tmp_path / "test.db"
+        db_path.write_bytes(b"data")
+
+        mgr = DatabaseBackup(tmp_path / "backups")
+        for i in range(5):
+            mgr.backup_sqlite(db_path, backup_name=f"b{i}")
+        removed = mgr.prune(keep_last=2)
+        assert removed == 3
+        assert len(mgr.list_backups()) == 2
+
+    def test_restore_nonexistent(self, tmp_path):
+        from codomyrmex.database_management.backup import DatabaseBackup
+
+        mgr = DatabaseBackup(tmp_path / "backups")
+        assert not mgr.restore_sqlite("nope", tmp_path / "out.db")
+
+    def test_backup_metadata_to_dict(self):
+        from codomyrmex.database_management.backup import BackupFormat, BackupMetadata
+
+        meta = BackupMetadata(
+            backup_id="b1", source="/db", destination="/backup/b1.db",
+            format=BackupFormat.FILE_COPY, size_bytes=1024,
+        )
+        d = meta.to_dict()
+        assert d["backup_id"] == "b1"
+        assert d["format"] == "file_copy"
+        assert d["size_bytes"] == 1024
+
+
+# From test_coverage_boost_r3.py
+class TestColumn:
+    """Tests for Column dataclass."""
+
+    def test_basic_column_sql(self):
+        from codomyrmex.database_management.schema_generator import Column
+
+        col = Column(name="id", data_type="integer", primary_key=True, auto_increment=True)
+        sql = col.to_sql("sqlite")
+        assert "id" in sql
+        assert "INTEGER" in sql
+
+    def test_nullable_column(self):
+        from codomyrmex.database_management.schema_generator import Column
+
+        col = Column(name="email", data_type="string", nullable=False, unique=True)
+        sql = col.to_sql("sqlite")
+        assert "NOT NULL" in sql
+        assert "UNIQUE" in sql
+
+    def test_default_value(self):
+        from codomyrmex.database_management.schema_generator import Column
+
+        col = Column(name="status", data_type="string", default="'active'")
+        sql = col.to_sql("sqlite")
+        assert "DEFAULT" in sql
+
+    def test_postgresql_dialect(self):
+        from codomyrmex.database_management.schema_generator import Column
+
+        col = Column(name="data", data_type="json")
+        sql = col.to_sql("postgresql")
+        assert "JSONB" in sql or "JSON" in sql
+
+
+# From test_coverage_boost_r3.py
+class TestIndex:
+    """Tests for Index dataclass."""
+
+    def test_basic_index(self):
+        from codomyrmex.database_management.schema_generator import Index
+
+        idx = Index(name="idx_email", columns=["email"])
+        sql = idx.to_sql("users")
+        assert "idx_email" in sql
+        assert "email" in sql
+
+    def test_unique_index(self):
+        from codomyrmex.database_management.schema_generator import Index
+
+        idx = Index(name="idx_unique", columns=["code"], unique=True)
+        sql = idx.to_sql("items")
+        assert "UNIQUE" in sql
+
+
+# From test_coverage_boost_r3.py
+class TestSchemaTable:
+    """Tests for SchemaTable."""
+
+    def test_table_to_sql(self):
+        from codomyrmex.database_management.schema_generator import Column, SchemaTable
+
+        table = SchemaTable(
+            name="users",
+            columns=[
+                Column(name="id", data_type="integer", primary_key=True),
+                Column(name="name", data_type="string", nullable=False),
+                Column(name="email", data_type="string", unique=True),
+            ],
+        )
+        sql = table.to_sql("sqlite")
+        assert "CREATE TABLE" in sql
+        assert "users" in sql
+
+    def test_table_to_dict(self):
+        from codomyrmex.database_management.schema_generator import Column, SchemaTable
+
+        table = SchemaTable(
+            name="products",
+            columns=[Column(name="id", data_type="integer")],
+            description="Product catalog",
+        )
+        d = table.to_dict()
+        assert d["name"] == "products"
+        assert len(d["columns"]) == 1
+
+
+# From test_coverage_boost_r3.py
+class TestSchemaMigration:
+    """Tests for SchemaMigration."""
+
+    def test_checksum_generated(self):
+        from codomyrmex.database_management.schema_generator import SchemaMigration
+
+        m = SchemaMigration(
+            migration_id="001",
+            name="add_users",
+            description="Add users table",
+            up_sql="CREATE TABLE users (id INT);",
+            down_sql="DROP TABLE users;",
+        )
+        assert m.checksum  # Auto-generated in __post_init__
+
+
+# From test_coverage_boost_r3.py
+class TestSchemaDefinition:
+    """Tests for SchemaDefinition."""
+
+    def test_to_sql(self):
+        from codomyrmex.database_management.schema_generator import (
+            Column, SchemaDefinition, SchemaTable,
+        )
+
+        schema = SchemaDefinition(
+            name="mydb",
+            version="1.0",
+            tables=[
+                SchemaTable(
+                    name="t1",
+                    columns=[Column(name="id", data_type="integer", primary_key=True)],
+                ),
+            ],
+        )
+        sql = schema.to_sql("sqlite")
+        assert "CREATE TABLE" in sql
+
+    def test_to_dict(self):
+        from codomyrmex.database_management.schema_generator import (
+            Column, SchemaDefinition, SchemaTable,
+        )
+
+        schema = SchemaDefinition(name="db", version="2.0", tables=[])
+        d = schema.to_dict()
+        assert d["name"] == "db"
+        assert d["version"] == "2.0"
+
+
+# From test_coverage_boost_r4.py
+class TestMigrationResult:
+    """Tests for MigrationResult."""
+
+    def test_success_result(self):
+        from codomyrmex.database_management.migration_manager import MigrationResult
+
+        r = MigrationResult(
+            migration_id="001", success=True,
+            execution_time=0.5, rows_affected=10,
+        )
+        assert r.success
+        assert r.rows_affected == 10
+
+
+# From test_coverage_boost_r4.py
+class TestMigrationManager:
+    """Tests for MigrationManager."""
+
+    def test_init(self, tmp_path):
+        from codomyrmex.database_management.migration_manager import MigrationManager
+
+        mgr = MigrationManager(workspace_dir=str(tmp_path))
+        assert mgr is not None
+
+    def test_create_and_list(self, tmp_path):
+        from codomyrmex.database_management.migration_manager import MigrationManager
+
+        mgr = MigrationManager(workspace_dir=str(tmp_path))
+        m = mgr.create_migration(
+            name="init", description="Initial",
+            sql="CREATE TABLE t (id INT);",
+        )
+        assert m.name == "init"
+        migrations = mgr.list_migrations()
+        assert isinstance(migrations, list)
+
+    def test_with_sqlite(self, tmp_path):
+        from codomyrmex.database_management.migration_manager import MigrationManager
+
+        db = tmp_path / "migrations.db"
+        mgr = MigrationManager(
+            workspace_dir=str(tmp_path),
+            database_url=f"sqlite:///{db}",
+        )
+        mgr.create_migration(
+            name="init", description="Initial",
+            sql="CREATE TABLE t (id INT);",
+        )
+        pending = mgr.get_pending_migrations()
+        assert isinstance(pending, list)
+
+
+# From test_coverage_boost_r7.py
+class TestDatabaseManager:
+    def test_database_type_enum(self):
+        from codomyrmex.database_management.db_manager import DatabaseType
+        assert DatabaseType.SQLITE.value == "sqlite" or hasattr(DatabaseType, "SQLITE")
+
+    def test_query_result(self):
+        from codomyrmex.database_management.db_manager import QueryResult
+        r = QueryResult(success=True, rows=[], columns=[], row_count=0, execution_time=0.01)
+        assert r.success
+
+    def test_database_connection(self):
+        from codomyrmex.database_management.db_manager import DatabaseConnection, DatabaseType
+        conn = DatabaseConnection(name="test", db_type=DatabaseType.SQLITE, database="test.db")
+        assert conn.database == "test.db"
+
+    def test_db_manager_init(self, tmp_path):
+        from codomyrmex.database_management.db_manager import DatabaseManager
+        mgr = DatabaseManager()
+        assert mgr is not None

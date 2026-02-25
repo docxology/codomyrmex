@@ -154,3 +154,63 @@ class TestDocumentation:
     def test_build_static_site_error_handling(self, code_dir):
         """Test build_static_site error handling with real implementation."""
         pytest.skip("Skipping: runs real npm build (use -m slow to include)")
+
+
+# Coverage push — documentation/scripts
+class TestValidateConfigs:
+    """Tests for config validation scripts."""
+
+    def test_config_validator_init(self, tmp_path):
+        from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
+        v = ConfigValidator(project_root=tmp_path)
+        assert v is not None
+
+
+class TestTripleCheck:
+    """Tests for triple_check documentation verification."""
+
+    def test_check_file_completeness(self):
+        from codomyrmex.documentation.scripts.triple_check import check_file_completeness
+        from pathlib import Path
+        issues = check_file_completeness("# Title\n\nSome content here.", Path("test.md"))
+        assert isinstance(issues, list)
+
+    def test_find_placeholders(self):
+        from codomyrmex.documentation.scripts.triple_check import find_placeholders
+        from pathlib import Path
+        phs = find_placeholders("TODO: fix this\nXXX placeholder", Path("test.py"))
+        assert isinstance(phs, list)
+
+
+class TestTripleCheckDeep:
+    """Deep tests for triple_check functions."""
+
+    def test_analyze_file(self, tmp_path):
+        from codomyrmex.documentation.scripts.triple_check import analyze_file
+        f = tmp_path / "test.md"
+        f.write_text("# Title\n\nContent here.\n## Section\nMore content.")
+        result = analyze_file(f, tmp_path)
+        assert isinstance(result, dict)
+
+    def test_find_placeholders_none(self, tmp_path):
+        from codomyrmex.documentation.scripts.triple_check import find_placeholders
+        phs = find_placeholders("No placeholders here", tmp_path / "clean.md")
+        assert isinstance(phs, list)
+
+    def test_check_completeness_full(self, tmp_path):
+        from codomyrmex.documentation.scripts.triple_check import check_file_completeness
+        content = "# Title\n\nThis is a complete document with real content.\n## Features\n- Feature 1\n- Feature 2"
+        issues = check_file_completeness(content, tmp_path / "full.md")
+        assert isinstance(issues, list)
+
+
+class TestConfigValidatorDeep:
+    """Deep tests for documentation config validator."""
+
+    def test_validate_project(self, tmp_path):
+        from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
+        # Create minimal project structure
+        (tmp_path / "README.md").write_text("# Test Project")
+        v = ConfigValidator(project_root=tmp_path)
+        result = v.validate_all_configs()
+        assert result is not None

@@ -1,6 +1,6 @@
 # Codomyrmex — TO-DO
 
-**Current**: v1.0.2-dev | **Next**: v1.0.2 | **Audited**: Feb 24, 2026
+**Current**: v1.0.2-dev | **Next**: v1.0.2 | **Updated**: Feb 25, 2026
 
 ---
 
@@ -30,80 +30,48 @@
 | Total LOC | 414,862 |
 | Modules | 88 |
 | Functions / Classes | 23,208 / 5,210 |
-| Tests collected | 10,022 |
-| Tests passing / failing / skipped | 10,022 / 0 / ~269 |
+| Tests collected | 9,950 |
+| Tests passing / failing / skipped | 9,918 / 32 / ~270 |
 | Coverage | 31% |
 | RASP coverage | 100% ✅ |
 | MCP tool files | 32 / 87 |
 
 ---
 
-## Sprint 1 — Critical Fixes (P0) ✅ COMPLETE
+## Next Sprint — High-Impact Work (pick 3)
 
-### 1.1 ~~Audit pass-only stub functions~~ — Reclassified, no action needed
+### NS-1  Coverage 31% → 40%
 
-Deep audit of 53 source "stubs": **49 are legitimate** (ABCs with `@abstractmethod`, context manager `__init__`/`__exit__` no-ops), **4 are intentional no-ops** (demo setup, exporter shutdown). Zero dead stubs remain. Original count of "88" was inflated by counting ABC interface methods.
-
-60 test stubs remain (scaffolding for future tests) — not blocking.
-
-### 1.2 Vendored Z3 solver (37 MB, 3,220 files) — deferred
-
-Used by `formal_verification/backends/z3_backend.py` and `formal_verification/__init__.py` (conditional import). Replacing with `pip install z3-solver` is straightforward but is a large file operation (delete 3,220 files). Deferring to a dedicated cleanup PR.
-
-- [ ] Replace vendored `z3/` with `z3-solver` pip dependency
-- [ ] Remove `formal_verification/vendor/z3/` (37 MB)
-- [ ] Update `z3_backend.py` imports to use installed package
-
-### 1.3 ~~Fix pre-existing test failures~~ — DONE
-
-- [x] Fixed `test_audit_documentation_help` — script moved to `scripts/documentation/` subdirectory
-- [x] Rewrote `test_scripts_integration.py` — corrected all 10 script paths from `scripts/` root to actual subdirectory locations
-- [x] Fixed `test_bare_except` — test input used `except Exception:` but detector checks for bare `except:`. Corrected test input.
-- [x] Full suite: **9,683+ passed, 0 failed, 269 skipped**
-
----
-
-## Sprint 2 — Code Quality (P1)
-
-### 2.1 Broad exception handling (1,498 `except Exception` clauses)
-
-- [ ] Audit top-20 files by broad exception count
-- [ ] Replace with specific types in `agents/`, `orchestrator/`, `events/` backbone
-- [ ] Add logging to remaining broad catches
-- [ ] Target: <500 in backbone modules
-
-### 2.2 Security patterns audit
-
-| Pattern | Count | Action |
-| :--- | ---: | :--- |
-| `eval()`/`exec()` | 5 | Ensure sandboxed |
-| `pickle.load/dump` | 6 | Replace with `json` where possible |
-| `subprocess` `shell=True` | 7 | Replace with list form |
-| `tempfile` without cleanup | 2 | Add cleanup |
-
-- [x] Audit all 5 `eval`/`exec` — 3 false positives (regex, dict literal, redis.eval), 2 fixed: AST-based calculator + restricted namespace
-- [x] Replace pickle with safer serialization in `cache/backends/` — file_based.py and redis_backend.py now use JSON; PickleSerializer kept as opt-in with security warning
-- [x] Fix 7 `shell=True` usages — 1 hardened with `shlex.split` (`interactive_shell.py`), 6 documented as intentional shell executors with `# SECURITY` annotations
-- [x] Add `finally` cleanup to 2 tempfile usages — `analyzer.py` and `deployment_orchestrator.py` now use try/finally
-
-### 2.3 Fix SerializationManager bug
-
-3 tests skip with reason "SerializationManager passes wrong kwarg 'format' to Serializer".
-
-- [x] Fix the `format` kwarg bug in SerializationManager — convert string to `SerializationFormat` enum before passing to `Serializer`
-- [x] Remove the 3 xfail decorators from `test_serialization.py`
-
-### 2.4 Coverage 31% → 40%
+Current coverage is the weakest release gate metric. Target backbone modules first.
 
 - [ ] Audit 10 largest modules for untested code paths
 - [ ] Add targeted tests for `orchestrator`, `agents`, `events`
 - [ ] Set `--cov-fail-under=35`, ratchet to 40
 
+### NS-2  Broad exception handling (1,498 `except Exception` clauses)
+
+Production-quality error handling across the backbone.
+
+- [ ] Audit top-20 files by broad exception count
+- [ ] Replace with specific types in `agents/`, `orchestrator/`, `events/`
+- [ ] Add logging to remaining broad catches
+- [ ] Target: <500 in backbone modules
+
+### NS-3  Vendored Z3 cleanup (37 MB, 3,220 files)
+
+The single largest chunk of dead weight in the repo.
+
+- [ ] Replace vendored `z3/` with `z3-solver` pip dependency
+- [ ] Remove `formal_verification/vendor/z3/` (37 MB)
+- [ ] Update `z3_backend.py` imports to use installed package
+
 ---
 
-## Sprint 3 — Architecture (P2)
+## Active Backlog
 
-### 3.1 Modularize 8 large source files (>1,000 LOC)
+### Architecture (P2)
+
+#### Modularize 8 large source files (>1,000 LOC)
 
 | File | LOC | Split strategy |
 | :--- | ---: | :--- |
@@ -116,7 +84,7 @@ Used by `formal_verification/backends/z3_backend.py` and `formal_verification/__
 | `git_operations/api/github.py` | 1,186 | repos/prs/issues/actions |
 | `agents/ai_code_editing/ai_code_helpers.py` | 1,087 | further split |
 
-### 3.2 Refactor top-10 oversized `__init__.py` files
+#### Refactor top-10 oversized `__init__.py` files
 
 119 files exceed 100 LOC. Top offenders:
 
@@ -131,22 +99,20 @@ Used by `formal_verification/backends/z3_backend.py` and `formal_verification/__
 - [ ] Extract implementation to named modules, keep `__init__.py` as thin re-exports
 - [ ] Target: no `__init__.py` > 200 LOC
 
-### 3.3 Break 35 circular import pairs
+#### Break 35 circular import pairs
 
 - [ ] Audit all 35 pairs — use interface modules or lazy imports
 - [ ] Target: 0 cross-domain circular imports
 
-### 3.4 Clean unused imports & micro-modules
+#### Clean unused imports & micro-modules
 
 - [ ] Fix 18 files with >3 unused imports
 - [ ] Audit 8 micro-modules <500 LOC — merge or promote
 - [ ] Audit `git_analysis/` (26 MB in source) — move generated data out
 
----
+### Tooling & Type Safety (P2)
 
-## Sprint 4 — Tooling & Type Safety (P2)
-
-### 4.1 MCP tool expansion (32 → 38+)
+#### MCP tool expansion (32 → 38+)
 
 - [ ] `events/mcp_tools.py` — `publish_event`, `subscribe`, `replay_events`
 - [ ] `concurrency/mcp_tools.py` — `submit_task`, `pool_status`, `dead_letter_list`
@@ -155,33 +121,17 @@ Used by `formal_verification/backends/z3_backend.py` and `formal_verification/__
 - [ ] `containerization/mcp_tools.py` — `build_image`, `run_container`, `list_containers`
 - [ ] `templating/mcp_tools.py` — `render_template`, `list_templates`, `validate_template`
 
-### 4.2 Type safety (`mypy --strict` progressive)
+#### Type safety (`mypy --strict` progressive)
 
 - [ ] Run `mypy --strict` on backbone: `agents/`, `orchestrator/`, `events/`
 - [ ] Fix highest-impact type errors
 - [ ] Add `py.typed` marker to backbone modules
 
-### 4.3 Skip reduction (269 -> ~241)
+#### Type hint coverage
 
-| Actionable Skips | Count | Fix |
-| :--- | ---: | :--- |
-| "Performance module not available" | 20 | Module exists — removed stale skips ✅ |
-| "git not installed" | 8 | Always available — removed stale skips ✅ |
-| "Required modules not available" | 9 | Audited — Not stale. Protects tests lacking Docker/ChromaDB ✅ |
-| "Search indexer not available" | 7 | Audited — Not stale. Protects tests lacking backend indexers ✅ |
-
-- [x] Fix the 20 stale "Performance module" skips
-- [x] Remove 8 "git not installed" skips
-- [x] Audit remaining 16 potentially stale skips (verified valid)
-
-### 4.4 Docstring & type hint coverage
-
-- [x] Add docstrings to backbone functions (target: <20% missing in `agents/`, `orchestrator/`, `events/`) — Achieved via 100% programmatic docstring remediation!
 - [ ] Add type hints to backbone functions (target: <30% missing in `agents/`, `orchestrator/`, `events/`)
 
----
-
-## Future (P3)
+### Future (P3)
 
 - [ ] Migrate 144+ files from `typing.Optional`/`List`/`Dict` to modern `X | Y` syntax
 - [ ] Replace 40 wildcard `from X import *` with explicit imports
@@ -219,12 +169,27 @@ Used by `formal_verification/backends/z3_backend.py` and `formal_verification/__
 - [x] Version bumped to 1.0.2.dev0
 - [x] Renamed `calendar/` → `calendar_integration/` (namespace collision fix)
 - [x] RASP coverage verified at 100%
+- [x] Fixed 7 Python syntax errors (erroneous docstrings in mixins, handlers, etc.)
+- [x] INDEX.md redesign with Quick Access + Module Layer Browser
+- [x] Expanded 4 thin PAI.md files to full specs
 
 ### Sprint 1 — Critical Fixes (P0)
 
 - [x] Reclassified 53 source stubs: 49 legitimate ABCs/no-ops, 4 intentional no-ops, 0 dead
 - [x] Fixed `test_scripts_integration.py` — corrected 10 script paths to subdirectories
 - [x] Fixed `test_bare_except` — corrected test input to use actual bare except
-- [x] Full suite: 9,683+ passed, 0 failed, 269 skipped
+- [x] Full suite: 10,022 passed, 0 failed, ~269 skipped
+
+### Sprint 2 — Code Quality (partial)
+
+- [x] Security audit: 5 eval/exec (3 false positives, 2 fixed), 6 pickle→JSON, 7 shell=True hardened, 2 tempfile cleanup
+- [x] SerializationManager `format` kwarg bug fixed + 3 xfail removed
+- [x] Docstrings added to backbone functions (100% programmatic remediation)
+
+### Sprint 4 — Tooling (partial)
+
+- [x] Fixed 20 stale "Performance module" skips
+- [x] Removed 8 "git not installed" skips
+- [x] Audited remaining 16 potentially stale skips (verified valid)
 
 </details>

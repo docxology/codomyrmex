@@ -1055,3 +1055,87 @@ class TestEncryptionIntegration:
             pt = AESGCMEncryptor(returned_old).decrypt(ct_old)
             ct_new = AESGCMEncryptor(new_key).encrypt(pt)
             assert AESGCMEncryptor(new_key).decrypt(ct_new) == b"rotate me"
+
+
+# From test_coverage_boost.py
+class TestSigner:
+    """Tests for HMAC Signer."""
+
+    def test_sign_and_verify(self):
+        from codomyrmex.encryption.signing import Signer
+
+        signer = Signer("my-secret-key")
+        result = signer.sign("hello world")
+        assert result.signature
+        assert signer.verify("hello world", result.signature)
+
+    def test_verify_fails_with_wrong_data(self):
+        from codomyrmex.encryption.signing import Signer
+
+        signer = Signer("key")
+        result = signer.sign("original")
+        assert not signer.verify("tampered", result.signature)
+
+    def test_sha512_algorithm(self):
+        from codomyrmex.encryption.signing import SignatureAlgorithm, Signer
+
+        signer = Signer("key", SignatureAlgorithm.HMAC_SHA512)
+        result = signer.sign("data")
+        assert result.algorithm == SignatureAlgorithm.HMAC_SHA512
+        assert signer.verify("data", result.signature)
+
+    def test_sign_json_roundtrip(self):
+        from codomyrmex.encryption.signing import Signer
+
+        signer = Signer("json-key")
+        obj = {"user": "alice", "action": "deploy"}
+        signed = signer.sign_json(obj, key_id="k1")
+        assert "_signature" in signed
+        assert signer.verify_json(signed)
+
+    def test_verify_json_tampered(self):
+        from codomyrmex.encryption.signing import Signer
+
+        signer = Signer("json-key")
+        signed = signer.sign_json({"val": 1})
+        signed["val"] = 999  # Tamper
+        assert not signer.verify_json(signed)
+
+    def test_verify_json_no_signature(self):
+        from codomyrmex.encryption.signing import Signer
+
+        signer = Signer("key")
+        assert not signer.verify_json({"no_sig": True})
+
+
+# From test_coverage_boost.py
+class TestSignatureResult:
+    """Tests for SignatureResult.to_dict."""
+
+    def test_to_dict(self):
+        from codomyrmex.encryption.signing import SignatureAlgorithm, SignatureResult
+
+        sr = SignatureResult(
+            signature="abc123",
+            algorithm=SignatureAlgorithm.HMAC_SHA256,
+            key_id="k1",
+        )
+        d = sr.to_dict()
+        assert d["signature"] == "abc123"
+        assert d["algorithm"] == "hmac-sha256"
+        assert d["key_id"] == "k1"
+
+
+# From test_coverage_boost.py
+class TestFileSignature:
+    """Tests for sign_file / verify_file."""
+
+    def test_file_sign_verify(self, tmp_path):
+        from codomyrmex.encryption.signing import sign_file, verify_file
+
+        p = tmp_path / "doc.txt"
+        p.write_text("important document")
+
+        sig = sign_file(p, "file-secret")
+        assert verify_file(p, sig, "file-secret")
+        assert not verify_file(p, sig, "wrong-secret")

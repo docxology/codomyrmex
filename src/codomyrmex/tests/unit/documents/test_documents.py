@@ -1358,3 +1358,120 @@ class TestEdgeCases:
 
         doc = read_document(test_file)
         assert doc.content == {}
+
+
+# From test_coverage_boost.py
+class TestChunk:
+    """Tests for Chunk dataclass."""
+
+    def test_properties(self):
+        from codomyrmex.documents.chunking import Chunk
+
+        c = Chunk(text="hello world", index=0, start_char=0, end_char=11)
+        assert c.char_count == 11
+        assert c.word_count == 2
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerFixed:
+    """Tests for fixed-size chunking strategy."""
+
+    def test_short_text_single_chunk(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,
+        ))
+        chunks = chunker.chunk("short text")
+        assert len(chunks) == 1
+        assert chunks[0].text == "short text"
+
+    def test_long_text_multiple_chunks(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        text = "a" * 500
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.FIXED_SIZE,
+            chunk_size=200, chunk_overlap=50 , min_chunk_size=1,
+        ))
+        chunks = chunker.chunk(text)
+        assert len(chunks) > 1
+        # Verify no text is lost
+        assert all(c.text for c in chunks)
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerSentence:
+    """Tests for sentence-based chunking."""
+
+    def test_sentences_grouped(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        text = "First sentence. Second sentence. Third sentence. Fourth sentence."
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.SENTENCE, chunk_size=40, min_chunk_size=1,
+        ))
+        chunks = chunker.chunk(text)
+        assert len(chunks) >= 1
+        # All text should be represented
+        combined = " ".join(c.text for c in chunks)
+        assert "First" in combined
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerParagraph:
+    """Tests for paragraph-based chunking."""
+
+    def test_paragraphs_split(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        text = "Paragraph one content here.\n\nParagraph two content here.\n\nParagraph three content."
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.PARAGRAPH, min_chunk_size=10,
+        ))
+        chunks = chunker.chunk(text)
+        assert len(chunks) >= 2
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerRecursive:
+    """Tests for recursive chunking (default)."""
+
+    def test_recursive_splits(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        text = ("Paragraph one.\n\nParagraph two.\n\n" +
+                "A longer section. " * 100)
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.RECURSIVE, chunk_size=200, min_chunk_size=10,
+        ))
+        chunks = chunker.chunk(text)
+        assert len(chunks) >= 2
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerSemantic:
+    """Tests for semantic fallback (falls back to fixed-size)."""
+
+    def test_semantic_falls_back(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.SEMANTIC, chunk_size=100, min_chunk_size=1,
+        ))
+        chunks = chunker.chunk("Just some text content here.")
+        assert len(chunks) >= 1
+
+
+# From test_coverage_boost.py
+class TestDocumentChunkerMetadata:
+    """Tests for metadata pass-through."""
+
+    def test_metadata_preserved(self):
+        from codomyrmex.documents.chunking import ChunkConfig, ChunkStrategy, DocumentChunker
+
+        chunker = DocumentChunker(ChunkConfig(
+            strategy=ChunkStrategy.FIXED_SIZE, chunk_size=1000, min_chunk_size=1,
+        ))
+        chunks = chunker.chunk("content", metadata={"source": "test"})
+        assert chunks[0].metadata == {"source": "test"}

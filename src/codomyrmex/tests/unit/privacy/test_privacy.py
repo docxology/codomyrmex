@@ -1,3 +1,4 @@
+import hashlib
 """Zero-Mock tests for the privacy module (crumbs + mixnet).
 
 Uses real time.sleep with minimal delays for mixnet relay tests.
@@ -190,3 +191,148 @@ def test_mixnet_proxy_multiple_hops():
     payload = b"test"
     assert proxy.route_payload(payload, hops=1) == payload
     assert proxy.route_payload(payload, hops=5) == payload
+
+
+# From test_coverage_boost.py
+class TestDetectPII:
+    """Tests for PII detection."""
+
+    def test_detect_email(self):
+        from codomyrmex.privacy.privacy import detect_pii
+
+        matches = detect_pii("Contact alice@example.com for info")
+        types = {m.pii_type for m in matches}
+        assert "email" in types
+
+    def test_detect_phone(self):
+        from codomyrmex.privacy.privacy import detect_pii
+
+        matches = detect_pii("Call 555-123-4567 now")
+        types = {m.pii_type for m in matches}
+        assert "phone" in types
+
+    def test_detect_ssn(self):
+        from codomyrmex.privacy.privacy import detect_pii
+
+        matches = detect_pii("SSN: 123-45-6789")
+        types = {m.pii_type for m in matches}
+        assert "ssn" in types
+
+    def test_no_pii(self):
+        from codomyrmex.privacy.privacy import detect_pii
+
+        matches = detect_pii("No sensitive data here")
+        assert len(matches) == 0
+
+
+# From test_coverage_boost.py
+class TestMasking:
+    """Tests for data masking functions."""
+
+    def test_mask_hash(self):
+        from codomyrmex.privacy.privacy import mask_hash
+
+        result = mask_hash("secret")
+        expected = hashlib.sha256(b"secret").hexdigest()
+        assert result == expected
+
+    def test_mask_redact(self):
+        from codomyrmex.privacy.privacy import mask_redact
+
+        assert mask_redact("sensitive") == "***"
+        assert mask_redact("sensitive", "REDACTED") == "REDACTED"
+
+    def test_mask_partial(self):
+        from codomyrmex.privacy.privacy import mask_partial
+
+        result = mask_partial("1234567890", 4)
+        assert result.endswith("7890")
+        assert result.startswith("*")
+
+    def test_mask_email(self):
+        from codomyrmex.privacy.privacy import mask_email
+
+        result = mask_email("alice@example.com")
+        assert "@example.com" in result
+        assert result.startswith("a")
+
+
+# From test_coverage_boost.py
+class TestDifferentialPrivacy:
+    """Tests for differential privacy functions."""
+
+    def test_laplace_noise_returns_float(self):
+        from codomyrmex.privacy.privacy import laplace_noise
+
+        noise = laplace_noise(epsilon=1.0)
+        assert isinstance(noise, float)
+
+    def test_add_laplace_noise(self):
+        from codomyrmex.privacy.privacy import add_laplace_noise
+
+        noised = add_laplace_noise(100.0, epsilon=1.0)
+        assert isinstance(noised, float)
+        # With epsilon=1.0, noise should be moderate
+        assert 50 < noised < 150  # Very loose bounds
+
+    def test_dp_mean(self):
+        from codomyrmex.privacy.privacy import dp_mean
+
+        values = [10.0, 20.0, 30.0, 40.0, 50.0]
+        result = dp_mean(values, epsilon=10.0, lower=0.0, upper=100.0)
+        # High epsilon = low noise, should be close to true mean (30)
+        assert 10 < result < 50
+
+    def test_dp_count(self):
+        from codomyrmex.privacy.privacy import dp_count
+
+        result = dp_count(100, epsilon=10.0)
+        assert isinstance(result, float)
+        assert 90 < result < 110  # High epsilon = low noise
+
+
+# From test_coverage_boost.py
+class TestPrivacyProcessor:
+    """Tests for the Privacy processor class."""
+
+    def test_process_with_rules(self):
+        from codomyrmex.privacy.privacy import Privacy, PrivacyRule
+
+        p = Privacy()
+        p.add_rule(PrivacyRule("email", "email"))
+        p.add_rule(PrivacyRule("ssn", "redact"))
+
+        data = {"email": "alice@example.com", "ssn": "123-45-6789", "name": "Alice"}
+        result = p.process(data)
+        assert "@example.com" in result["email"]  # Domain preserved
+        assert result["ssn"] == "***"  # Redacted
+        assert result["name"] == "Alice"  # Untouched
+
+    def test_hash_strategy(self):
+        from codomyrmex.privacy.privacy import Privacy, PrivacyRule
+
+        p = Privacy()
+        p.add_rule(PrivacyRule("secret", "hash"))
+        result = p.process({"secret": "my-password"})
+        assert result["secret"] == hashlib.sha256(b"my-password").hexdigest()
+
+    def test_partial_strategy(self):
+        from codomyrmex.privacy.privacy import Privacy, PrivacyRule
+
+        p = Privacy()
+        p.add_rule(PrivacyRule("card", "partial", {"visible_chars": 4}))
+        result = p.process({"card": "4111111111111111"})
+        assert result["card"].endswith("1111")
+
+    def test_scan_pii(self):
+        from codomyrmex.privacy.privacy import Privacy
+
+        p = Privacy()
+        matches = p.scan_pii({"bio": "Email me at test@test.com", "age": "25"})
+        assert len(matches) > 0
+
+    def test_create_privacy_factory(self):
+        from codomyrmex.privacy.privacy import create_privacy
+
+        p = create_privacy()
+        assert p is not None

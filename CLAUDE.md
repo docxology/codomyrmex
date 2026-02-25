@@ -167,6 +167,14 @@ This project follows a strict zero-mock/stub/fallback/hardcoded policy:
 - **No hardcoded values**: URLs, ports, and connection strings use `os.getenv()` with centralized defaults from `config_management.defaults`.
 - **No legacy aliases**: Backward compatibility layers must have documented deprecation timelines or be removed.
 
+## Hard-Right Execution Standard
+
+Codomyrmex agents should bias toward the **hard right thing** over the easy option:
+
+- Prefer real measurements, benchmarks, and full test runs over estimates or assumptions.
+- Favour changes that are reversible, well-documented, and auditable, even if they take longer to implement.
+- Never trade away correctness, safety, or clarity for short-term convenience or minor performance wins.
+
 ### Test Skip Policy
 
 Use `@pytest.mark.skipif` for tests requiring: network access, API keys, or heavy SDKs not installed.
@@ -186,7 +194,7 @@ Module-specific `requirements.txt` files are **deprecated** - do not modify them
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (40119 symbols, 103134 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (39997 symbols, 103061 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

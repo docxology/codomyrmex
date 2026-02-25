@@ -550,3 +550,83 @@ class TestAsyncPerformancePatterns:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+# From test_tier3_promotions.py
+class TestRegressionDetector:
+    """Tests for RegressionDetector."""
+
+    def test_no_regression(self):
+        """Test functionality: no regression."""
+        from codomyrmex.performance.regression_detector import (
+            Baseline, BenchmarkResult, RegressionDetector,
+        )
+        detector = RegressionDetector()
+        detector.set_baseline(Baseline("import_time", mean=100.0))
+        result = BenchmarkResult("import_time", value=105.0)
+        report = detector.check(result)
+        assert report.severity.value == "info"
+
+    def test_warning_regression(self):
+        """Test functionality: warning regression."""
+        from codomyrmex.performance.regression_detector import (
+            Baseline, BenchmarkResult, RegressionDetector,
+        )
+        detector = RegressionDetector()
+        detector.set_baseline(Baseline("import_time", mean=100.0, warning_threshold=0.10))
+        result = BenchmarkResult("import_time", value=115.0)
+        report = detector.check(result)
+        assert report.severity.value == "warning"
+        assert report.is_regression is True
+
+    def test_critical_regression(self):
+        """Test functionality: critical regression."""
+        from codomyrmex.performance.regression_detector import (
+            Baseline, BenchmarkResult, RegressionDetector,
+        )
+        detector = RegressionDetector()
+        detector.set_baseline(Baseline("import_time", mean=100.0, critical_threshold=0.25))
+        result = BenchmarkResult("import_time", value=130.0)
+        report = detector.check(result)
+        assert report.severity.value == "critical"
+
+    def test_missing_baseline_raises(self):
+        """Test functionality: missing baseline raises."""
+        from codomyrmex.performance.regression_detector import (
+            BenchmarkResult, RegressionDetector,
+        )
+        detector = RegressionDetector()
+        with pytest.raises(KeyError):
+            detector.check(BenchmarkResult("unknown", value=1.0))
+
+
+# From test_tier3_promotions_pass2.py
+class TestBenchmarkComparison:
+    """Tests for benchmark comparison utilities."""
+
+    def test_compute_delta_improvement(self):
+        """Test functionality: compute delta improvement."""
+        from codomyrmex.performance.benchmark_comparison import compute_delta
+        delta = compute_delta("latency", before=100.0, after=80.0, higher_is_better=False)
+        assert delta.improved is True
+        assert delta.absolute_delta == -20.0
+
+    def test_compute_delta_regression(self):
+        """Test functionality: compute delta regression."""
+        from codomyrmex.performance.benchmark_comparison import compute_delta
+        delta = compute_delta("latency", before=100.0, after=120.0, higher_is_better=False)
+        assert delta.improved is False
+        assert delta.relative_delta == pytest.approx(20.0)
+
+    def test_mean_and_stddev(self):
+        """Test functionality: mean and stddev."""
+        from codomyrmex.performance.benchmark_comparison import mean, stddev
+        vals = [10.0, 20.0, 30.0]
+        assert mean(vals) == pytest.approx(20.0)
+        assert stddev(vals) > 0
+
+    def test_cv(self):
+        """Test functionality: cv."""
+        from codomyrmex.performance.benchmark_comparison import coefficient_of_variation
+        # Identical values → CV = 0
+        assert coefficient_of_variation([5.0, 5.0, 5.0]) == pytest.approx(0.0)

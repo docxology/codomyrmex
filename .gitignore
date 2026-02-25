@@ -231,3 +231,4 @@ pids/
 gha-creds-*.json
 .gitnexus
 pytest_output.txt
+/@output

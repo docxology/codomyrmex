@@ -1224,3 +1224,67 @@ class TestPlotter:
         )
         p = Plotter()
         assert p.figure_size == DEFAULT_FIGURE_SIZE
+
+
+# Coverage push — data_visualization
+class TestAdvancedPlotterCoverage:
+    """Coverage tests for AdvancedPlotter."""
+
+    def test_chart_style_enum(self):
+        from codomyrmex.data_visualization.engines.advanced_plotter import ChartStyle
+        assert len(list(ChartStyle)) > 0
+
+    def test_plot_config(self):
+        from codomyrmex.data_visualization.engines.advanced_plotter import PlotConfig
+        cfg = PlotConfig()
+        assert cfg is not None
+
+    def test_create_bar_chart(self, tmp_path):
+        from codomyrmex.data_visualization.engines.advanced_plotter import create_advanced_bar_chart
+        import matplotlib
+        matplotlib.use("Agg")
+        fig = create_advanced_bar_chart(["A", "B", "C"], [10, 20, 30], title="Test")
+        assert fig is not None
+
+    def test_dataset_dataclass(self):
+        from codomyrmex.data_visualization.engines.advanced_plotter import Dataset, DataPoint, PlotType
+        dp1 = DataPoint(x=1.0, y=2.0)
+        dp2 = DataPoint(x=2.0, y=3.0)
+        ds = Dataset(name="test", data=[dp1, dp2], plot_type=list(PlotType)[0], label="test")
+        assert ds.label == "test"
+
+
+class TestMermaidGeneratorExtended:
+    """Extended tests for Mermaid diagram generation."""
+
+    def test_create_git_branch_diagram(self):
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import create_git_branch_diagram
+        result = create_git_branch_diagram()
+        assert isinstance(result, str)
+
+    def test_create_commit_timeline(self):
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import create_commit_timeline_diagram
+        result = create_commit_timeline_diagram()
+        assert isinstance(result, str)
+
+
+class TestMermaidDeep:
+    """Deep tests for mermaid diagram generation."""
+
+    def test_create_git_workflow(self):
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import create_git_workflow_diagram
+        result = create_git_workflow_diagram()
+        assert isinstance(result, str)
+
+    def test_create_repo_structure(self):
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import create_repository_structure_diagram
+        result = create_repository_structure_diagram()
+        assert isinstance(result, str)
+
+    def test_generator_branch_diagram(self):
+        from codomyrmex.data_visualization.mermaid.mermaid_generator import MermaidDiagramGenerator
+        gen = MermaidDiagramGenerator()
+        branches = [{"name": "main", "commits": ["abc", "def"]}]
+        commits = [{"hash": "abc", "message": "init"}, {"hash": "def", "message": "feat"}]
+        diagram = gen.create_git_branch_diagram(branches=branches, commits=commits)
+        assert isinstance(diagram, str)

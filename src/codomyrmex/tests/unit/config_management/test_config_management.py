@@ -577,3 +577,99 @@ class TestConfigurationManagerEnhanced:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+# From test_coverage_boost_r4.py
+class TestConfigSchema:
+    """Tests for ConfigSchema."""
+
+    def test_valid_schema(self):
+        from codomyrmex.config_management.core.config_loader import ConfigSchema
+
+        schema = ConfigSchema(
+            schema={"type": "object", "properties": {"name": {"type": "string"}}},
+            title="TestSchema",
+        )
+        errors = schema.validate({"name": "hello"})
+        assert isinstance(errors, list)
+
+    def test_invalid_data(self):
+        from codomyrmex.config_management.core.config_loader import ConfigSchema
+
+        schema = ConfigSchema(
+            schema={
+                "type": "object",
+                "properties": {"age": {"type": "integer"}},
+                "required": ["age"],
+            },
+        )
+        errors = schema.validate({})
+        assert len(errors) > 0
+
+
+# From test_coverage_boost_r5.py
+class TestMigrationAction:
+    """Tests for MigrationAction enum."""
+
+    def test_enum_values(self):
+        from codomyrmex.config_management.migration.config_migrator import MigrationAction
+
+        assert MigrationAction.RENAME_FIELD.value == "rename_field"
+        assert MigrationAction.ADD_FIELD.value == "add_field"
+        assert MigrationAction.REMOVE_FIELD.value == "remove_field"
+
+
+# From test_coverage_boost_r5.py
+class TestMigrationRule:
+    """Tests for MigrationRule dataclass."""
+
+    def test_creation(self):
+        from codomyrmex.config_management.migration.config_migrator import (
+            MigrationAction, MigrationRule,
+        )
+
+        rule = MigrationRule(
+            action=MigrationAction.RENAME_FIELD,
+            description="Rename db_host to database.host",
+            from_version="1.0",
+            to_version="2.0",
+            old_path="db_host",
+            new_path="database.host",
+        )
+        assert rule.action == MigrationAction.RENAME_FIELD
+        assert rule.from_version == "1.0"
+
+    def test_to_dict(self):
+        from codomyrmex.config_management.migration.config_migrator import (
+            MigrationAction, MigrationRule,
+        )
+
+        rule = MigrationRule(
+            action=MigrationAction.ADD_FIELD,
+            description="Add debug flag",
+            from_version="1.0",
+            to_version="2.0",
+            new_path="debug",
+            new_value=False,
+        )
+        d = rule.to_dict()
+        assert d["action"] == "add_field"
+        assert d["from_version"] == "1.0"
+
+
+# From test_coverage_boost_r5.py
+class TestMigrationResult:
+    """Tests for MigrationResult."""
+
+    def test_success(self):
+        from codomyrmex.config_management.migration.config_migrator import MigrationResult
+
+        r = MigrationResult(
+            success=True,
+            original_version="1.0",
+            target_version="2.0",
+            migrated_config={"debug": True},
+        )
+        assert r.success
+        d = r.to_dict()
+        assert d["original_version"] == "1.0"

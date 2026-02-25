@@ -11,9 +11,10 @@ These are the general guiding principles for AI-assisted development across the 
 5.  **Functionality First**: Ensure all code is functional, robust, and achieves its intended purpose.
 6.  **Testability**: Write code that is inherently testable. New features or significant changes require corresponding tests.
 7.  **Security**: Maintain a security-conscious mindset. Refer to the root `SECURITY.md` and any module-specific `SECURITY.md` files.
-8.  **Efficiency**: Aim for efficient code, but balance this with clarity and maintainability. Premature optimization should be avoided.
-9.  **Documentation**: Keep all forms of documentation (READMEs, API specs, inline comments, changelogs) accurate and up-to-date with code changes.
-10. **User-Focus**: For APIs, tools, and documentation, consider the end-user (developer, AI agent, or end-user of the Codomyrmex platform).
+8.  **Evidence Over Assumption**: Prefer measurement, benchmarks, and real tests over guesses or hand-waving estimates.
+9.  **Integrity Over Convenience**: When there is tension between a quick shortcut and a correct, fully validated approach, choose the path that is auditable, reversible, and test-backed.
+10. **Documentation**: Keep all forms of documentation (READMEs, API specs, inline comments, changelogs) accurate and up-to-date with code changes.
+11. **User-Focus**: For APIs, tools, and documentation, consider the end-user (developer, AI agent, or end-user of the Codomyrmex platform).
 
 ## 2. Mandatory Policies
 

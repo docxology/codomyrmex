@@ -806,3 +806,92 @@ class TestEdgeCases:
         serialized = serializer.serialize(data)
         deserialized = serializer.deserialize(serialized)
         assert deserialized == data
+
+
+# From test_coverage_boost.py
+class TestStreamJSONL:
+    """Tests for JSONL streaming read/write."""
+
+    def test_roundtrip(self, tmp_path):
+        from codomyrmex.serialization.streaming import stream_jsonl_read, stream_jsonl_write
+
+        items = [{"id": i, "name": f"item-{i}"} for i in range(10)]
+        path = tmp_path / "test.jsonl"
+
+        count = stream_jsonl_write(path, iter(items))
+        assert count == 10
+
+        loaded = list(stream_jsonl_read(path))
+        assert len(loaded) == 10
+        assert loaded[0]["id"] == 0
+        assert loaded[9]["name"] == "item-9"
+
+    def test_flush_every(self, tmp_path):
+        from codomyrmex.serialization.streaming import stream_jsonl_write
+
+        items = [{"v": i} for i in range(250)]
+        path = tmp_path / "flushed.jsonl"
+        count = stream_jsonl_write(path, iter(items), flush_every=50)
+        assert count == 250
+
+
+# From test_coverage_boost.py
+class TestStreamCSV:
+    """Tests for CSV streaming read/write."""
+
+    def test_roundtrip(self, tmp_path):
+        from codomyrmex.serialization.streaming import stream_csv_read, stream_csv_write
+
+        items = [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "25"}]
+        path = tmp_path / "test.csv"
+
+        count = stream_csv_write(path, iter(items))
+        assert count == 2
+
+        loaded = list(stream_csv_read(path))
+        assert len(loaded) == 2
+        assert loaded[0]["name"] == "Alice"
+
+
+# From test_coverage_boost.py
+class TestChunkedJsonWrite:
+    """Tests for chunked_json_write."""
+
+    def test_writes_valid_json(self, tmp_path):
+        from codomyrmex.serialization.streaming import chunked_json_write
+
+        items = [{"x": i} for i in range(5)]
+        path = tmp_path / "chunked.json"
+        count = chunked_json_write(path, items, chunk_size=2)
+        assert count == 5
+
+        loaded = json.loads(path.read_text())
+        assert len(loaded) == 5
+
+
+# From test_coverage_boost.py
+class TestStreamBuffer:
+    """Tests for StreamBuffer."""
+
+    def test_manual_flush(self):
+        from codomyrmex.serialization.streaming import StreamBuffer
+
+        buf = StreamBuffer(max_size=100)
+        buf.add("a")
+        buf.add("b")
+        assert buf.pending == 2
+        flushed = buf.flush()
+        assert flushed == ["a", "b"]
+        assert buf.pending == 0
+        assert buf.total_flushed == 2
+
+    def test_auto_flush_on_full(self):
+        from codomyrmex.serialization.streaming import StreamBuffer
+
+        flushed_items = []
+        buf = StreamBuffer(max_size=3, flush_callback=lambda items: flushed_items.extend(items))
+        buf.add(1)
+        buf.add(2)
+        buf.add(3)  # Should trigger auto-flush
+        assert buf.total_flushed == 3
+        assert flushed_items == [1, 2, 3]

@@ -375,3 +375,41 @@ class TestBuildStagesAndScripts:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+# Coverage push — containerization/docker
+class TestImageOptimizerCoverage:
+    """Coverage tests for Docker ImageOptimizer."""
+
+    def test_image_analysis_dataclass(self):
+        from codomyrmex.containerization.docker.image_optimizer import ImageAnalysis
+        a = ImageAnalysis(
+            image_name="myapp:latest", size_bytes=100_000_000, layers=[],
+            base_image="python:3.12", exposed_ports=["8080"],
+            volumes=[], environment_vars=[], commands=[],
+        )
+        assert a.image_name == "myapp:latest"
+        assert a.optimization_score == 0.0
+
+    def test_optimization_suggestions(self):
+        from codomyrmex.containerization.docker.image_optimizer import ImageAnalysis
+        a = ImageAnalysis(
+            image_name="test", size_bytes=500_000_000, layers=[],
+            base_image="ubuntu:22.04", exposed_ports=[], volumes=[],
+            environment_vars=[], commands=["RUN apt-get install -y curl"],
+            potential_optimizations=["Use multi-stage build", "Minimize layers"],
+        )
+        assert len(a.potential_optimizations) == 2
+
+
+class TestBuildGeneratorCoverage:
+    """Coverage tests for Docker BuildGenerator."""
+
+    def test_build_script_dataclass(self):
+        from codomyrmex.containerization.docker.build_generator import BuildScript
+        bs = BuildScript(
+            name="app", dockerfile_path="./Dockerfile",
+            context_path=".", tags=["v1.0"],
+        )
+        assert bs.name == "app"
+        assert bs.tags == ["v1.0"]

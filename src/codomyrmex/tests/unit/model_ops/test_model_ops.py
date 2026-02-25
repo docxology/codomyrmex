@@ -512,3 +512,26 @@ def test_length_ratio_metric_empty_reference():
     ratio = length_ratio_metric(["", "abc"], ["", "abc"])
     # First pair: both empty -> 1.0; second pair: equal -> 1.0
     assert ratio == 1.0
+
+
+# From test_coverage_boost_r6.py
+class TestQualityEvaluation:
+    def test_quality_dimension(self):
+        from codomyrmex.model_ops.evaluation.quality import QualityDimension
+        assert len(list(QualityDimension)) > 0
+
+    def test_dimension_score(self):
+        from codomyrmex.model_ops.evaluation.quality import DimensionScore, QualityDimension
+        dim = list(QualityDimension)[0]
+        s = DimensionScore(dimension=dim, score=0.95)
+        assert s.score == 0.95
+
+    def test_quality_analyzer(self):
+        from codomyrmex.model_ops.evaluation.quality import QualityAnalyzer
+        qa = QualityAnalyzer()
+        assert qa is not None
+
+    def test_quality_report(self):
+        from codomyrmex.model_ops.evaluation.quality import QualityReport
+        r = QualityReport(overall_score=0.9)
+        assert r.overall_score == 0.9

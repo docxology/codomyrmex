@@ -4,6 +4,9 @@ Uses real ErrorAnalyzer, PatchGenerator, and Debugger with real internal
 components instead of mocking them.
 """
 
+import textwrap
+from pathlib import Path
+
 import pytest
 
 from codomyrmex.coding.debugging import (
@@ -89,3 +92,117 @@ class TestDebugger:
         result = self.debugger.debug("print('ok')", "ok", "", 0)
         # Should handle gracefully when there is no error to debug
         assert result is None or isinstance(result, dict)
+
+
+# From test_coverage_boost_r5.py
+class TestAnalysisEnums:
+    """Tests for static analysis enums."""
+
+    def test_analysis_type(self):
+        from codomyrmex.coding.static_analysis.static_analyzer import AnalysisType
+
+        assert AnalysisType.QUALITY.value == "quality"
+        assert AnalysisType.SECURITY.value == "security"
+
+    def test_severity_level(self):
+        from codomyrmex.coding.static_analysis.static_analyzer import SeverityLevel
+
+        assert SeverityLevel.INFO.value == "info"
+        assert SeverityLevel.CRITICAL.value == "critical"
+
+    def test_language(self):
+        from codomyrmex.coding.static_analysis.static_analyzer import Language
+
+        assert Language.PYTHON.value == "python"
+        assert Language.JAVASCRIPT.value == "javascript"
+
+
+# From test_coverage_boost_r5.py
+class TestAnalysisResult:
+    """Tests for AnalysisResult dataclass."""
+
+    def test_creation(self):
+        from codomyrmex.coding.static_analysis.static_analyzer import (
+            AnalysisResult, SeverityLevel,
+        )
+
+        r = AnalysisResult(
+            file_path="test.py",
+            line_number=10,
+            column_number=5,
+            severity=SeverityLevel.WARNING,
+            message="Unused variable",
+            rule_id="W001",
+            category="style",
+        )
+        assert r.file_path == "test.py"
+        assert r.severity == SeverityLevel.WARNING
+        assert r.confidence == 1.0
+
+
+# From test_coverage_boost_r5.py
+class TestCodeMetrics:
+    """Tests for CodeMetrics dataclass."""
+
+    def test_creation(self):
+        from codomyrmex.coding.static_analysis.static_analyzer import CodeMetrics
+
+        m = CodeMetrics(
+            lines_of_code=500,
+            cyclomatic_complexity=10,
+            maintainability_index=85.0,
+            technical_debt=2.5,
+            code_duplication=3.2,
+        )
+        assert m.lines_of_code == 500
+        assert m.maintainability_index == 85.0
+
+
+# From test_coverage_boost_r5.py
+class TestStaticAnalyzer:
+    """Tests for StaticAnalyzer."""
+
+    def test_init(self, tmp_path):
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        assert analyzer is not None
+
+    def test_detect_language(self, tmp_path):
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        py_file = tmp_path / "test.py"
+        py_file.write_text("print('hello')")
+        lang = analyzer._detect_language(str(py_file))
+        assert lang is not None
+
+    def test_analyze_python_file(self, tmp_path):
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        py_file = tmp_path / "sample.py"
+        py_file.write_text(textwrap.dedent("""\
+            def foo(x):
+                y = x + 1
+                return y
+
+            def bar():
+                pass
+        """))
+        results = analyzer.analyze_file(str(py_file))
+        assert isinstance(results, list)
+
+    def test_clear_results(self, tmp_path):
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        analyzer.clear_results()
+
+    def test_export_results(self, tmp_path):
+        from codomyrmex.coding.static_analysis.static_analyzer import StaticAnalyzer
+
+        analyzer = StaticAnalyzer(project_root=str(tmp_path))
+        out = str(tmp_path / "results.json")
+        analyzer.export_results(out, format="json")
+        assert Path(out).exists()

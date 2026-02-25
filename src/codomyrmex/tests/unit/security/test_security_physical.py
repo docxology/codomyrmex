@@ -239,3 +239,36 @@ class TestPerimeterManagement:
         assert isinstance(points, list)
 
 
+
+
+# From test_coverage_boost_r6.py
+class TestSecurityMonitor:
+    def test_alert_level(self):
+        from codomyrmex.security.digital.security_monitor import AlertLevel
+        assert len(list(AlertLevel)) > 0
+
+    def test_security_event_type(self):
+        from codomyrmex.security.digital.security_monitor import SecurityEventType
+        assert len(list(SecurityEventType)) > 0
+
+    def test_security_event(self):
+        from codomyrmex.security.digital.security_monitor import AlertLevel, SecurityEvent, SecurityEventType
+        evt = SecurityEvent(
+            event_id="e1", event_type=list(SecurityEventType)[0],
+            timestamp=datetime.now(), resource="test",
+        )
+        assert evt.event_id == "e1"
+
+    def test_security_monitor_init(self):
+        from codomyrmex.security.digital.security_monitor import SecurityMonitor
+        mon = SecurityMonitor()
+        assert mon is not None
+
+    def test_alert_rule(self):
+        from codomyrmex.security.digital.security_monitor import AlertLevel, AlertRule, SecurityEventType
+        rule = AlertRule(
+            rule_id="r1", name="test", description="test rule",
+            event_type=list(SecurityEventType)[0],
+            conditions={"count": 10}, alert_level=list(AlertLevel)[0],
+        )
+        assert rule.name == "test"

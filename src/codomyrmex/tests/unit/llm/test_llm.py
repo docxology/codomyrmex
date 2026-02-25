@@ -1102,3 +1102,32 @@ class TestErrorRecovery(TestCase):
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
+
+
+# Coverage push — llm/router
+class TestCostTracker:
+    """Tests for LLM cost tracking."""
+
+    def test_init(self):
+        from codomyrmex.llm.router import CostTracker
+        tracker = CostTracker()
+        assert tracker is not None
+
+
+class TestCostTrackerDeep:
+    """Deep tests for LLM cost tracking execution paths."""
+
+    def test_record_and_total(self):
+        from codomyrmex.llm.router import CostTracker
+        tracker = CostTracker()
+        tracker.record(model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01)
+        total = tracker.get_total_cost()
+        assert isinstance(total, (int, float))
+        assert total >= 0
+
+    def test_get_usage_report(self):
+        from codomyrmex.llm.router import CostTracker
+        tracker = CostTracker()
+        tracker.record(model_name="gpt-4", input_tokens=100, output_tokens=50, cost=0.01)
+        report = tracker.get_usage_report()
+        assert isinstance(report, (dict, str))
