@@ -11,6 +11,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"  # Updated to latest version
@@ -24,18 +26,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install UV
-        uses: astral-sh/setup-uv@v3
-        with:
-          version: ${{ env.UV_VERSION }}
-
-      - name: Set up Python
-        run: uv python install ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          uv sync --all-extras --dev
-
       - name: Cache dependencies and tools
         uses: actions/cache@v4
         with:
@@ -47,6 +37,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-deps-${{ env.PYTHON_VERSION }}-
             ${{ runner.os }}-deps-
+
+      - name: Install UV
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+
+      - name: Set up Python
+        run: uv python install ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras --dev
 
       - name: Run Ruff linting
         run: |
@@ -92,7 +94,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -124,7 +126,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -183,13 +185,13 @@ jobs:
 
       - name: Install UV (Unix)
         if: runner.os != 'Windows'
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
       - name: Install UV (Windows)
         if: runner.os == 'Windows'
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -220,6 +222,7 @@ jobs:
           uv run pytest src/codomyrmex/tests/integration/ -v --tb=short --junit-xml=junit-integration-${{ matrix.os }}-${{ matrix.python-version }}.xml || true
 
       - name: Save coverage.json to root
+        shell: bash
         run: |
           if [ -f coverage.json ]; then
             cp coverage.json ${{ github.workspace }}/coverage.json || true
@@ -227,6 +230,7 @@ jobs:
 
       - name: Generate coverage report
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        shell: bash
         run: |
           if [ -f coverage.json ]; then
             uv run python scripts/reports/generate_coverage_report.py || true
@@ -246,13 +250,12 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           file: ./coverage.xml
           fail_ci_if_error: false
           verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   comprehensive-tests:
     name: Comprehensive Module Tests
@@ -272,7 +275,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -289,7 +292,7 @@ jobs:
 
       - name: Run comprehensive tests for ${{ matrix.test-suite }}
         run: |
-          uv run pytest src/codomyrmex/tests/unit/test_${{ matrix.test-suite }}_comprehensive.py -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
+          uv run pytest src/codomyrmex/tests/unit/${{ matrix.test-suite }}/ -v --tb=short --junit-xml=junit-comprehensive-${{ matrix.test-suite }}.xml || true
 
       - name: Upload comprehensive test results
         uses: actions/upload-artifact@v4
@@ -307,7 +310,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -342,7 +345,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 

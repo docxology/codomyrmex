@@ -20,6 +20,8 @@ concurrency:
   group: workflow-status
   cancel-in-progress: false
 
+permissions: {}
+
 jobs:
   update-status:
     name: Update Workflow Status Dashboard

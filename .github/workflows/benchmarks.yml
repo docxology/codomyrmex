@@ -26,6 +26,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 env:
   PYTHON_VERSION: "3.11"
   UV_VERSION: "0.5.7"
@@ -66,7 +68,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -157,7 +159,7 @@ EOF
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -250,7 +252,7 @@ EOF
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 

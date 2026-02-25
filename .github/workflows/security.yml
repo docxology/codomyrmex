@@ -5,13 +5,13 @@ on:
     # Run security scans daily at 2 AM UTC
     - cron: '0 2 * * *'
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'pyproject.toml'
       - 'uv.lock'
       - '.github/workflows/security.yml'
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'pyproject.toml'
       - 'uv.lock'
@@ -21,6 +21,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions: {}
 
 env:
   PYTHON_VERSION: "3.11"
@@ -38,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -84,9 +86,9 @@ jobs:
           echo "🛡️  Running Safety vulnerability scanner..."
           uv pip install safety
           
-          # Generate safety report
-          safety check --json --output safety-report.json || true
-          safety check --output safety-report.txt || true
+          # Generate safety report (safety scan replaces deprecated safety check)
+          safety scan --output json --save-json safety-report.json || true
+          safety scan --output text --save-as text safety-report.txt || true
           
           # Add to security report
           echo "" >> security-report.md
@@ -123,7 +125,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -272,7 +274,7 @@ jobs:
           queries: security-extended
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -296,7 +298,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -379,8 +381,8 @@ jobs:
         uses: trufflesecurity/trufflehog@v3.63.7
         with:
           path: ./
-          base: main
-          head: HEAD
+          base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           extra_args: --debug --only-verified
 
   dependency-update:
@@ -397,7 +399,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v5
         with:
           version: ${{ env.UV_VERSION }}
 
@@ -442,7 +444,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.check_updates.outputs.updates_available == 'true'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update dependencies"

@@ -7,8 +7,6 @@
 
 # GitHub configuration and workflows
 /.github/ @docxology/codomyrmex-maintainers
-/.github/workflows/ @docxology/codomyrmex-maintainers
-/.github/ISSUE_TEMPLATE/ @docxology/codomyrmex-maintainers
 /.github/PULL_REQUEST_TEMPLATE.md @docxology/codomyrmex-maintainers
 /.github/CODEOWNERS @docxology/codomyrmex-maintainers
 /.github/dependabot.yml @docxology/codomyrmex-maintainers
@@ -38,7 +36,6 @@
 /tests/ @docxology/codomyrmex-maintainers
 
 # CI/CD and build configuration
-/.github/ @docxology/codomyrmex-maintainers
 /.cursorrules/ @docxology/codomyrmex-maintainers
 
 # Note: Replace @docxology/codomyrmex-maintainers with actual GitHub usernames or team names

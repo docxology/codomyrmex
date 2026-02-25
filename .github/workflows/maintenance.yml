@@ -21,6 +21,8 @@ concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
 
+permissions: {}
+
 jobs:
   stale-issues:
     name: Handle Stale Issues and PRs

@@ -64,10 +64,24 @@ updates:
     assignees:
       - "docxology/codomyrmex-maintainers"
 
-  # Note: If using npm/Node.js dependencies in the future, add:
-  # - package-ecosystem: "npm"
-  #   directory: "/src/codomyrmex/documentation"
-  #   schedule:
-  #     interval: "weekly"
+  # Node.js dependencies for documentation build
+  - package-ecosystem: "npm"
+    directory: "/src/codomyrmex/documentation"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "docxology/codomyrmex-maintainers"
+    assignees:
+      - "docxology/codomyrmex-maintainers"
 
 
