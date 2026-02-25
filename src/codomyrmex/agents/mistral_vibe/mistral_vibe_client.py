@@ -83,7 +83,7 @@ class MistralVibeClient(CLIAgentBase):
             raise MistralVibeError(f"Mistral Vibe command timed out: {str(e)}", command=self.command) from e
         except AgentError as e:
             raise MistralVibeError(f"Mistral Vibe command failed: {str(e)}", command=self.command) from e
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Mistral Vibe execution failed: {e}", exc_info=True)
             raise MistralVibeError(f"Mistral Vibe command failed: {str(e)}", command=self.command) from e
 
@@ -130,6 +130,6 @@ class MistralVibeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Mistral Vibe help: {e}")
             return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}

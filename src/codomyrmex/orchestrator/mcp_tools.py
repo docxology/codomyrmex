@@ -28,7 +28,7 @@ def get_scheduler_metrics() -> dict:
                 "execution_time": metrics.total_execution_time
             }
         }
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": f"Failed to retrieve scheduler metrics: {e}"}
 
 
@@ -60,7 +60,7 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
             for dep in deps:
                 try:
                     workflow.add_dependency(task_id, dep)
-                except Exception:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                     pass
                     
         # Verification happens implicitly or through a topological sort check
@@ -74,5 +74,5 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
         }
     except CycleError as e:
         return {"status": "error", "valid_dag": False, "message": str(e)}
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": f"Failed to analyze workflow: {e}"}

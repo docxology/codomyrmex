@@ -237,7 +237,7 @@ def run_todos(
                             _ = resolve_handler(try_path)
                             inferred_handler = try_path
                             break
-                        except Exception:
+                        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                             pass
             handler_path = item.handler_path or inferred_handler
             if not handler_path:
@@ -269,7 +269,7 @@ def run_todos(
 
             processed.append(item)
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             task_duration = time.time() - task_start_time
             task_times.append(task_duration)
             task_status.append("❌")
@@ -409,7 +409,7 @@ def _process_todos(controller: DroidController, manager: TodoManager, count: int
 
     except KeyboardInterrupt:
         print("\n\n⚠️  Operation interrupted by user.")
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         print(f"\n❌ Error during TODO processing: {e}")
     finally:
         # Always show final metrics

@@ -35,7 +35,7 @@ def cli_commands():
                     print(f"  {job}")
             else:
                 print("No scheduled jobs.")
-        except Exception:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
             print("Scheduler: no active jobs (scheduler not running)")
 
     def _scheduler_status():

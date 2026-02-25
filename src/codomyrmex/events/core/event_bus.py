@@ -217,12 +217,12 @@ class EventBus:
                         self.executor.submit(self._run_async_handler, subscription.handler, event)
                     else:
                         subscription.handler(event)
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     logger.error(f"Error in event handler {subscription.subscriber_id}: {e}")
                     self.events_failed += 1
 
             self.events_processed += 1
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error processing event: {e}")
             self.dead_letter_queue.append(event)
             self.events_failed += 1

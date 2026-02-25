@@ -93,7 +93,7 @@ class APIAgentBase(BaseAgent):
         # Initialize API client
         try:
             self.client = client_init_func(api_key)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             raise error_class(
                 f"Failed to initialize {name} client: {str(e)}"
             ) from e

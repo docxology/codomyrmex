@@ -348,7 +348,7 @@ class AgentOrchestrator:
                 "result": result
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return {
                 "success": False,
                 "agent": agent_name,

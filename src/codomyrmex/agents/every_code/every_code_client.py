@@ -155,7 +155,7 @@ class EveryCodeClient(CLIAgentBase):
                 f"Every Code command failed: {str(e)}",
                 command=self.command,
             ) from e
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             # Convert any other exception to EveryCodeError
             self.logger.error(
                 f"Every Code execution failed: {e}",
@@ -196,7 +196,7 @@ class EveryCodeClient(CLIAgentBase):
                 return None
 
             return str(path)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Error sanitizing path {path_str}: {e}")
             return None
 
@@ -276,7 +276,7 @@ class EveryCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(
                 f"Failed to get Every Code help: {e}",
                 extra={"command": self.command, "error": str(e)},
@@ -302,7 +302,7 @@ class EveryCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(
                 f"Failed to get Every Code version: {e}",
                 extra={"command": self.command, "error": str(e)},

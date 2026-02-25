@@ -76,7 +76,7 @@ class IntegrationBus:
         for handler in self._handlers.get("*", []):
             try:
                 handler(event)
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass
 
         return event

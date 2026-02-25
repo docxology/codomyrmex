@@ -90,7 +90,7 @@ class OpenClawClient(CLIAgentBase):
             raise OpenClawError(
                 f"OpenClaw command failed: {str(e)}", command=self.command
             ) from e
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenClaw execution failed: {e}", exc_info=True)
             raise OpenClawError(
                 f"OpenClaw command failed: {str(e)}", command=self.command
@@ -154,7 +154,7 @@ class OpenClawClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get OpenClaw version: {e}")
             return {"version": "", "exit_code": -1, "available": False, "error": str(e)}
 
@@ -168,7 +168,7 @@ class OpenClawClient(CLIAgentBase):
                 "error": result.get("stderr") if not result.get("success") else None,
                 "exit_code": result.get("exit_code", 0),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenClaw doctor failed: {e}", exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
@@ -192,7 +192,7 @@ class OpenClawClient(CLIAgentBase):
                 "error": result.get("stderr") if not result.get("success") else None,
                 "exit_code": result.get("exit_code", 0),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenClaw send_message failed: {e}", exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
@@ -206,7 +206,7 @@ class OpenClawClient(CLIAgentBase):
                 "error": result.get("stderr") if not result.get("success") else None,
                 "exit_code": result.get("exit_code", 0),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenClaw gateway start failed: {e}", exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
@@ -222,6 +222,6 @@ class OpenClawClient(CLIAgentBase):
                 "error": result.get("stderr") if not result.get("success") else None,
                 "exit_code": result.get("exit_code", 0),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Gateway status: {e}")
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}

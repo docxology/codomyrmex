@@ -180,7 +180,7 @@ class Workflow:
         if self._event_bus is not None:
             try:
                 self._event_bus.publish(event)
-            except Exception as exc:
+            except (AttributeError, TypeError, RuntimeError, ValueError) as exc:
                 self.logger.warning(f"EventBus publish failed: {exc}")
 
     def add_task(
@@ -525,8 +525,6 @@ class Workflow:
                     return await loop.run_in_executor(None, func)
         except asyncio.TimeoutError:
             raise asyncio.TimeoutError(f"Task '{task.name}' timed out after {task.timeout}s")
-        except Exception as e:
-            raise
 
     def get_task_result(self, task_name: str) -> TaskResult | None:
         """Get result of a specific task."""

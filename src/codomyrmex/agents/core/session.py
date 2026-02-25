@@ -250,7 +250,7 @@ class SessionManager:
                 session = AgentSession.load(path)
                 self.sessions[session.session_id] = session
                 count += 1
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.warning(f"Failed to load session from {path}: {e}")
 
         return count

@@ -201,7 +201,7 @@ class TodoManager:
                 output_lines.append(new_line)
                 if new_line != stripped:
                     changed += 1
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 # Preserve unparseable lines as-is
                 output_lines.append(line)
 

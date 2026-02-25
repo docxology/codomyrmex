@@ -269,7 +269,7 @@ class AsyncParallelRunner:
         if self._on_task_complete:
             try:
                 self._on_task_complete(task_result)
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 logger.debug("on_task_complete callback error for %s", name)
 
 

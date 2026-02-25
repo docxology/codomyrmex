@@ -388,7 +388,7 @@ class EditingOrchestrator:
                 else:
                     error_msg = getattr(result, "error", "unknown error")
                     errors.append(f"Step {i}: {error_msg}")
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 errors.append(f"Step {i}: {e}")
 
         summary = f"Applied {applied}/{len(edits)} edits to {task.file_path}"

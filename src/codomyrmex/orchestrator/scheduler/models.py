@@ -63,7 +63,7 @@ class Job:
             self.status = JobStatus.COMPLETED
             self.run_count += 1
             return self.result
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.error = str(e)
             self.status = JobStatus.FAILED
             raise

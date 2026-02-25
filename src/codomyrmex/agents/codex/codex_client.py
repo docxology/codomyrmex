@@ -124,7 +124,7 @@ class CodexClient(APIAgentBase):
         except openai.APIError as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time, openai.APIError)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time)
 
@@ -187,7 +187,7 @@ class CodexClient(APIAgentBase):
                 },
             )
             yield f"Error: Codex API error: {str(e)}"
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
                 "Unexpected error in Codex API stream",
                 exc_info=True,

@@ -76,7 +76,7 @@ class AgentOrchestrator:
                 try:
                     response = future.result()
                     responses[i] = response
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     self.logger.error(f"Agent {agent} failed: {e}")
                     responses[i] = AgentResponse(
                         content="",
@@ -123,7 +123,7 @@ class AgentOrchestrator:
                         f"Stopping after successful response from {agent}"
                     )
                     break
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Agent {agent} failed: {e}")
                 responses.append(
                     AgentResponse(
@@ -172,7 +172,7 @@ class AgentOrchestrator:
                     self.logger.warning(
                         f"Agent {agent} failed: {response.error}"
                     )
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Agent {agent} raised exception: {e}")
                 last_error_response = AgentResponse(
                     content="",

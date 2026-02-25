@@ -338,7 +338,7 @@ class AgentPool(Generic[T]):
 
                 return result
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 last_error = e
 
                 # Record failure
@@ -445,7 +445,7 @@ class FallbackChain(Generic[T]):
         for name, agent in self._agents:
             try:
                 return func(agent)
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 last_error = e
                 if on_fallback:
                     on_fallback(name, e)

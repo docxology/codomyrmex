@@ -140,7 +140,7 @@ class Scheduler:
         """Execute a job and reschedule if needed."""
         try:
             job.execute()
-        except Exception:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
             pass  # Error already recorded in job
 
         # Reschedule if has next run

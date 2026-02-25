@@ -78,7 +78,7 @@ class CircuitBreaker:
             try:
                 result = do_something()
                 cb.record_success("agent-1")
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 cb.record_failure("agent-1")
     """
 

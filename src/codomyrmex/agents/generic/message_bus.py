@@ -81,7 +81,7 @@ class MessageBus:
             for handler in self.subscribers[message.message_type]:
                 try:
                     handler(message)
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     self.logger.error(
                         f"Error in message handler: {e}", exc_info=True
                     )
@@ -91,7 +91,7 @@ class MessageBus:
             for handler in self.subscribers["*"]:
                 try:
                     handler(message)
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     self.logger.error(
                         f"Error in wildcard message handler: {e}", exc_info=True
                     )

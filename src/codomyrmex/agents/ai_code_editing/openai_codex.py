@@ -158,7 +158,7 @@ class OpenAICodex:
         except ValueError as e:
             logger.error(f"Configuration error: {e}")
             raise RuntimeError(f"Code generation failed: {e}")
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error generating code: {e}", exc_info=True)
             raise RuntimeError(f"Code generation failed: {e}")
 
@@ -260,7 +260,7 @@ class OpenAICodex:
                 "status": "success"
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error editing code: {e}", exc_info=True)
             raise RuntimeError(f"Code editing failed: {e}")
 
@@ -329,7 +329,7 @@ class OpenAICodex:
                 "status": "success"
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error explaining code: {e}", exc_info=True)
             raise RuntimeError(f"Code explanation failed: {e}")
 

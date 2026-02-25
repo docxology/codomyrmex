@@ -76,42 +76,42 @@ class InfrastructureAgent(BaseAgent):
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakComputeClient
             clients["compute"] = InfomaniakComputeClient.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Compute client unavailable")
 
         # Volume
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakVolumeClient
             clients["volume"] = InfomaniakVolumeClient.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Volume client unavailable")
 
         # Network
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakNetworkClient
             clients["network"] = InfomaniakNetworkClient.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Network client unavailable")
 
         # S3
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakS3Client
             clients["s3"] = InfomaniakS3Client.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("S3 client unavailable")
 
         # DNS
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakDNSClient
             clients["dns"] = InfomaniakDNSClient.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("DNS client unavailable")
 
         # Heat
         try:
             from codomyrmex.cloud.infomaniak import InfomaniakHeatClient
             clients["orchestration"] = InfomaniakHeatClient.from_env()
-        except Exception:
+        except (ImportError, OSError, ValueError, AttributeError):
             logger.debug("Heat client unavailable")
 
         return cls(clients=clients)
@@ -237,7 +237,7 @@ class InfrastructureAgent(BaseAgent):
                     if not validate():
                         logger.warning(f"Connection test failed for {name}")
                         return False
-                except Exception:
+                except (AttributeError, TypeError, OSError, ConnectionError):
                     logger.warning(f"Connection test error for {name}")
                     return False
         return True

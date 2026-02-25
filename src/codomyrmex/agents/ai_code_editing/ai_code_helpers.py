@@ -246,7 +246,7 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
             model = model_name or DEFAULT_LLM_MODEL["google"]
             return client, model
 
-        except Exception as e:
+        except (ImportError, ValueError, AttributeError, OSError) as e:
             raise RuntimeError(f"Failed to initialize Google Gemini client: {e}")
 
     elif provider == "ollama":
@@ -258,7 +258,7 @@ def get_llm_client(provider: str, model_name: str | None = None) -> tuple[Any, s
             manager = OllamaManager(auto_start_server=True)
             model = model_name or DEFAULT_LLM_MODEL["ollama"]
             return manager, model
-        except Exception as e:
+        except (ImportError, OSError, ConnectionError, RuntimeError, ValueError) as e:
             raise RuntimeError(f"Failed to initialize Ollama client: {e}")
 
     else:
@@ -1085,6 +1085,6 @@ def setup_environment() -> bool:
         logger.info(f"Available LLM providers: {', '.join(available_providers)}")
         return True
 
-    except Exception as e:
+    except (OSError, ValueError, AttributeError, RuntimeError) as e:
         logger.error(f"Error setting up environment: {e}")
         return False

@@ -227,7 +227,7 @@ def generate_script_documentation(scripts_dir: Path, output_file: Path) -> bool:
                     help_text = "Timed out getting help text"
                     fail_count += 1
                     print(" ⏰")
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     help_text = f"Error generating docs: {str(e)}"
                     fail_count += 1
                     print(" 💥")

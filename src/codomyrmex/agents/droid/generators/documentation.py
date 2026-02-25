@@ -666,7 +666,7 @@ class DocumentationConsistencyChecker:
                     if line.strip().startswith("#") and not line.startswith("# "):
                         issues.append(f"❌ {file_path}:{i+1}: Header should start with '# '")
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 issues.append(f"⚠️ {file_path}: Could not read file ({e})")
 
         return issues
@@ -696,7 +696,7 @@ class DocumentationConsistencyChecker:
                 if "\\\\r\\\\n" in content and "\\\\n" in content:
                     issues.append(f"❌ {file_path}: Mixed line endings")
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 issues.append(f"⚠️ {file_path}: Could not check formatting ({e})")
 
         return issues
@@ -720,7 +720,7 @@ class DocumentationConsistencyChecker:
                     if term in content:
                         term_usage[term].append(str(file_path))
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 issues.append(f"⚠️ {file_path}: Could not check content ({e})")
 
         # Report inconsistent term usage
@@ -762,7 +762,7 @@ class DocumentationConsistencyChecker:
                 if current_order != [s for s in expected_order if s in section_order]:
                     issues.append(f"⚠️ {file_path}: Section order could be improved")
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 issues.append(f"⚠️ {file_path}: Could not check structure ({e})")
 
         return issues

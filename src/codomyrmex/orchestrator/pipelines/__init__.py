@@ -190,7 +190,7 @@ class ParallelStage(Stage):
                 stage_id = futures[future]
                 try:
                     results[stage_id] = future.result()
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     results[stage_id] = {"error": str(e)}
 
         return results
@@ -278,7 +278,7 @@ class Pipeline:
                 stage.on_success(result, context)
                 return result
 
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 result.error = str(e)
                 result.status = StageStatus.FAILED
                 result.end_time = datetime.now()

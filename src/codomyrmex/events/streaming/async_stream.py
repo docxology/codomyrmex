@@ -134,7 +134,7 @@ class WebSocketStream:
             ws = self._connections[client_id]["websocket"]
             await ws.send(event.to_sse())
             return True
-        except Exception:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
             return False
 
 
@@ -185,7 +185,7 @@ class BatchingStream:
         for handler in self._handlers:
             try:
                 handler(batch)
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass
 
     async def add(self, event: Event) -> None:
@@ -201,7 +201,7 @@ class BatchingStream:
                 for handler in self._handlers:
                     try:
                         handler(batch)
-                    except Exception:
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                         pass
 
     def on_batch(self, handler: Callable[[list[Event]], None]) -> None:

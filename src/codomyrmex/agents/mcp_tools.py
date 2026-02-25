@@ -29,7 +29,7 @@ def execute_agent(agent_name: str, prompt: str) -> dict:
         request = AgentRequest(prompt=prompt)
         response = agent.execute(request)
         return {"status": "success", "content": response.content}
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": f"Failed to execute agent {agent_name}: {e}"}
 
 
@@ -68,5 +68,5 @@ def get_agent_memory(session_id: str) -> dict:
              
         logs = [{"role": m.role.value, "content": m.content} for m in session.messages[-50:]]
         return {"status": "success", "logs": logs, "session_id": session_id}
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": f"Failed to retrieve memory for {session_id}: {e}"}

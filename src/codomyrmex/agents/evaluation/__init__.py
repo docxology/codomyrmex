@@ -351,7 +351,7 @@ class AgentBenchmark(Generic[T]):
             if cost_calculator:
                 result.cost = cost_calculator(test_case.prompt, output)
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             result.passed = False
             result.errors.append(f"Exception: {str(e)}")
 

@@ -110,7 +110,7 @@ class GeminiCLIWrapper(BaseAgent):
         try:
             response = self._execute_impl(request)
             yield response.content
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Gemini CLI streaming failed: {e}")
             yield f"\n[Error: {e}]"
 

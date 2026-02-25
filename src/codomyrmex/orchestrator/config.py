@@ -34,7 +34,7 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
                 try:
                     with open(config_path) as f:
                         return yaml.safe_load(f) or {}
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     logger.warning(f"Failed to load YAML config {config_path}: {e}")
 
         # Also check for scripts_config.json
@@ -43,7 +43,7 @@ def load_config(scripts_dir: Path) -> dict[str, Any]:
             try:
                 with open(json_path) as f:
                     return json.load(f)
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.warning(f"Failed to load JSON config {json_path}: {e}")
 
         # Stop if we hit project root or system root

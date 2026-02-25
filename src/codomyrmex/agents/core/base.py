@@ -256,7 +256,7 @@ class BaseAgent(AgentInterface):
         try:
             self._validate_request(request)
             return self._execute_impl(request)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.exception(f"Error executing {self.name} request")
             return AgentResponse(
                 content="",
@@ -278,7 +278,7 @@ class BaseAgent(AgentInterface):
         try:
             self._validate_request(request)
             yield from self._stream_impl(request)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.exception(f"Error streaming {self.name} response")
             yield f"Error: {str(e)}"
 

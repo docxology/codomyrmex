@@ -99,7 +99,7 @@ class PipelineRetryExecutor:
                     attempts=attempt + 1,
                     total_delay=total_delay,
                 )
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 outcome = policy.should_retry(e, attempt + 1)
                 if outcome == RetryOutcome.RETRY:
                     delay = policy.compute_delay(attempt)
@@ -140,7 +140,7 @@ class PipelineRetryExecutor:
                     attempts=attempt + 1,
                     total_delay=total_delay,
                 )
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 outcome = policy.should_retry(e, attempt + 1)
                 if outcome == RetryOutcome.RETRY:
                     delay = policy.compute_delay(attempt)

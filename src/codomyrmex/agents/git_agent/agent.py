@@ -80,7 +80,7 @@ class GitAgent(BaseAgent):
             result = self._handle_action(action, params)
             return AgentResponse(content=str(result))
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.exception(f"GitAgent execution error: {e}")
             return AgentResponse(content="", error=str(e))
 

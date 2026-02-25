@@ -159,7 +159,7 @@ class AutonomousAgent:
             if self._scheduler is not None:
                 self._scheduler.record_success()
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"[{self.identity}] Generation error: {e}")
             if self._scheduler is not None:
                 self._scheduler.record_error()

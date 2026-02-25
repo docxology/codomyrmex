@@ -173,7 +173,7 @@ def shell(
             "stderr": e.stderr or "",
             "execution_time": timeout
         }
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {
             "success": False,
             "command": command,
@@ -492,7 +492,7 @@ def retry(
                     return await action(*args, **kwargs)
                 else:
                     return action(*args, **kwargs)
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 last_error = e
                 if attempt < max_attempts:
                     logger.warning(f"Attempt {attempt} failed, retrying in {current_delay}s: {e}")

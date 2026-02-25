@@ -56,7 +56,7 @@ class InMemoryStream(Stream):
                 if sub.should_receive(event) and sub.handler:
                     try:
                         sub.handler(event)
-                    except Exception:
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                         pass
 
     async def subscribe(

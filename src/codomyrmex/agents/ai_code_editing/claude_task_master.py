@@ -199,7 +199,7 @@ class ClaudeTaskMaster:
                     **kwargs
                 )
                 return response, attempt
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 error_str = str(e).lower()
                 is_retryable = (
                     "rate_limit" in error_str or
@@ -298,7 +298,7 @@ class ClaudeTaskMaster:
         except ValueError as e:
             logger.error(f"Configuration error: {e}")
             raise RuntimeError(f"Task execution failed: {e}") from None
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             logger.error(f"Error executing task: {e}", exc_info=True)
             return {
@@ -350,7 +350,7 @@ class ClaudeTaskMaster:
                 for text in stream.text_stream:
                     yield text
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Streaming error: {e}", exc_info=True)
             yield f"Error: {str(e)}"
 
@@ -433,7 +433,7 @@ class ClaudeTaskMaster:
                 "retries": retries,
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error decomposing task: {e}", exc_info=True)
             raise RuntimeError(f"Task decomposition failed: {e}") from None
 
@@ -508,7 +508,7 @@ class ClaudeTaskMaster:
                 "retries": retries,
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error analyzing task: {e}", exc_info=True)
             raise RuntimeError(f"Task analysis failed: {e}") from None
 
@@ -585,7 +585,7 @@ class ClaudeTaskMaster:
                 "retries": retries,
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error planning workflow: {e}", exc_info=True)
             raise RuntimeError(f"Workflow planning failed: {e}") from None
 
@@ -659,7 +659,7 @@ class ClaudeTaskMaster:
                 "retries": retries,
             }
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             logger.error(f"Error generating code: {e}", exc_info=True)
             raise RuntimeError(f"Code generation failed: {e}") from None
 

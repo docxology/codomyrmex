@@ -89,7 +89,7 @@ class JulesClient(CLIAgentBase):
             except AgentError as e:
                 # Other agent errors
                 raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 self.logger.error(f"Jules execution failed: {e}", exc_info=True)
                 raise JulesError(f"Jules command failed: {str(e)}", command=self.command) from e
 
@@ -132,7 +132,7 @@ class JulesClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get Jules help: {e}")
             return {"help_text": "", "exit_code": -1, "available": False, "error": str(e)}
 

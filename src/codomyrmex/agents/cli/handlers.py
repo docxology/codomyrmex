@@ -64,7 +64,7 @@ def handle_info(args):
         print_success("Information retrieved")
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Unexpected error retrieving information")
         print_error("Unexpected error retrieving information", exception=e)
         return False
@@ -133,7 +133,7 @@ def _handle_agent_execute(client_class, client_name: str, args: Any) -> bool:
         logger.error(f"{client_name} error: {str(e)}")
         print_error(f"{client_name} error", context=str(e), exception=e)
         return False
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception(f"Unexpected error during {client_name} execution")
         print_error(f"Unexpected error during {client_name} execution", exception=e)
         return False
@@ -174,7 +174,7 @@ def _handle_agent_stream(client_class, client_name: str, args: Any) -> bool:
         logger.error(f"{client_name} streaming error: {str(e)}")
         print_error(f"{client_name} streaming error", context=str(e), exception=e)
         return False
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception(f"Unexpected error during {client_name} streaming")
         print_error(f"Unexpected error during {client_name} streaming", exception=e)
         return False
@@ -192,7 +192,7 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
         client.setup()
         print_success(f"{client_name} setup completed")
         return True
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         print_error(f"Error setting up {client_name}", exception=e)
         return False
 
@@ -212,7 +212,7 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
         else:
             print_error(f"{client_name} connection test failed")
         return result
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         print_error(f"Error testing {client_name} connection", exception=e)
         return False
 
@@ -254,7 +254,7 @@ def handle_jules_check(args):
 
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error checking Jules availability")
         print_error("Error checking Jules availability", exception=e)
         return False
@@ -278,7 +278,7 @@ def handle_jules_help(args):
 
         return help_info.get("available", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error getting Jules help")
         print_error("Error getting Jules help", exception=e)
         return False
@@ -311,7 +311,7 @@ def handle_jules_command(args):
 
         return result.get("success", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error executing Jules command")
         print_error("Error executing Jules command", exception=e)
         return False
@@ -357,7 +357,7 @@ def handle_claude_check(args):
 
         return has_api_key
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error checking Claude configuration")
         print_error("Error checking Claude configuration", exception=e)
         return False
@@ -403,7 +403,7 @@ def handle_codex_check(args):
 
         return has_api_key
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error checking Codex configuration")
         print_error("Error checking Codex configuration", exception=e)
         return False
@@ -446,7 +446,7 @@ def handle_opencode_check(args):
 
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error checking OpenCode availability")
         print_error("Error checking OpenCode availability", exception=e)
         return False
@@ -477,7 +477,7 @@ def handle_opencode_init(args):
 
         return result.get("success", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error initializing OpenCode")
         print_error("Error initializing OpenCode", exception=e)
         return False
@@ -502,7 +502,7 @@ def handle_opencode_version(args):
 
         return version_info.get("available", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error getting OpenCode version")
         print_error("Error getting OpenCode version", exception=e)
         return False
@@ -547,7 +547,7 @@ def handle_gemini_check(args):
 
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error checking Gemini availability")
         print_error("Error checking Gemini availability", exception=e)
         return False
@@ -577,7 +577,7 @@ def handle_gemini_chat_save(args):
 
         return result.get("success", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error saving Gemini chat")
         print_error("Error saving Gemini chat", exception=e)
         return False
@@ -608,7 +608,7 @@ def handle_gemini_chat_resume(args):
 
         return result.get("success", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error resuming Gemini chat")
         print_error("Error resuming Gemini chat", exception=e)
         return False
@@ -640,7 +640,7 @@ def handle_gemini_chat_list(args):
 
         return result.get("success", False)
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error listing Gemini chats")
         print_error("Error listing Gemini chats", exception=e)
         return False
@@ -660,7 +660,7 @@ def _get_droid_controller() -> Any | None:
     if _droid_controller is None and create_default_controller is not None:
         try:
             _droid_controller = create_default_controller()
-        except Exception as e:
+        except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
             logger.error(f"Failed to create droid controller: {e}")
             return None
     return _droid_controller
@@ -683,7 +683,7 @@ def handle_droid_start(args):
         print_success("Droid controller started")
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error starting droid controller")
         print_error("Error starting droid controller", exception=e)
         return False
@@ -702,7 +702,7 @@ def handle_droid_stop(args):
         print_success("Droid controller stopped")
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error stopping droid controller")
         print_error("Error stopping droid controller", exception=e)
         return False
@@ -727,7 +727,7 @@ def handle_droid_status(args):
         print_success("Status retrieved")
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error getting droid status")
         print_error("Error getting droid status", exception=e)
         return False
@@ -748,7 +748,7 @@ def handle_droid_config_show(args):
         print_success("Configuration retrieved")
         return True
 
-    except Exception as e:
+    except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
         logger.exception("Error showing droid config")
         print_error("Error showing droid config", exception=e)
         return False

@@ -279,7 +279,7 @@ class ClaudeClient(APIAgentBase):
         except anthropic.APIError as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time, anthropic.APIError)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time)
 
@@ -431,7 +431,7 @@ class ClaudeClient(APIAgentBase):
                 },
             )
             yield f"Error: Claude API error: {str(e)}"
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
                 "Unexpected error in Claude API stream",
                 exc_info=True,
@@ -617,7 +617,7 @@ class ClaudeClient(APIAgentBase):
 
         try:
             return handler(**tool_input)
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Tool execution failed: {tool_name}", exc_info=True)
             raise ClaudeError(
                 f"Tool execution failed: {e}",
@@ -711,7 +711,7 @@ class ClaudeClient(APIAgentBase):
                         "tool_use_id": tool_call["id"],
                         "content": str(result),
                     })
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": tool_call["id"],
@@ -775,7 +775,7 @@ class ClaudeClient(APIAgentBase):
         try:
             with open(file_path, encoding="utf-8") as f:
                 original_content = f.read()
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return {
                 "success": False,
                 "error": f"Failed to read file: {e}",
@@ -1284,7 +1284,7 @@ Structure your response with:
                 "duration": timeout,
                 "command": command,
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return {
                 "success": False,
                 "return_code": -1,
@@ -1387,7 +1387,7 @@ Sample files:
                 if response.is_success():
                     result["analysis"] = response.content
                     result["tokens_used"] = response.tokens_used
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass  # Analysis is optional
 
         return result

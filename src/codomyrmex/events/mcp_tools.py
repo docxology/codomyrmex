@@ -35,7 +35,7 @@ def emit_event(
             "source": source,
             "priority": priority,
         }
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": str(e)}
 
 
@@ -56,7 +56,7 @@ def list_event_types() -> dict:
             "event_types": types,
             "count": len(types),
         }
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": str(e)}
 
 
@@ -87,5 +87,5 @@ def get_event_history(
             "events": history,
             "count": len(history),
         }
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         return {"status": "error", "message": str(e)}

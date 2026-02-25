@@ -126,7 +126,7 @@ class RetryEngine:
                         result.adjustments.append(
                             f"Adjusted config for {cat_key}"
                         )
-                    except Exception:
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                         pass
 
                 if attempt < self._max_retries:

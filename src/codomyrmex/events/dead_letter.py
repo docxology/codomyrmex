@@ -90,7 +90,7 @@ class DeadLetterQueue:
             try:
                 handler(letter.event_type, letter.payload)
                 succeeded += 1
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 letter.attempt_count += 1
                 letter.last_failure = time.time()
                 letter.error = str(e)

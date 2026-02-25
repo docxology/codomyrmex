@@ -792,7 +792,7 @@ class SensorManager:
             for callback in self._callbacks[sensor_type_key]:
                 try:
                     callback(reading)
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     logger.error(f"Callback error: {e}")
 
     def get_latest_reading(self, sensor_type: SensorType) -> Optional[SensorReading]:

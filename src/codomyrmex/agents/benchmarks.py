@@ -90,7 +90,7 @@ class AgentBenchmarker:
                 output=output,
                 metrics={"latency_ms": duration * 1000},
             )
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             duration = time.monotonic() - start
             result = BenchmarkResult(
                 task_name=task.name,

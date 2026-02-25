@@ -133,7 +133,7 @@ class ReActAgent(BaseAgent):
         if len(parts) > 2:
             try:
                 kwargs = json.loads(parts[2])
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass
 
         try:
@@ -143,7 +143,7 @@ class ReActAgent(BaseAgent):
                 content=f"Tool {tool_name} returned: {result}",
                 metadata={"tool": tool_name, "steps_taken": 1},
             )
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Tool {tool_name} failed: {e}")
             return AgentResponse(content="", error=str(e))
 

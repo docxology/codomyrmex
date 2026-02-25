@@ -78,7 +78,7 @@ class OpenCodeClient(CLIAgentBase):
             raise OpenCodeError(f"OpenCode command timed out: {str(e)}", command=self.command) from e
         except AgentError as e:
             raise OpenCodeError(f"OpenCode command failed: {str(e)}", command=self.command) from e
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"OpenCode execution failed: {e}", exc_info=True)
             raise OpenCodeError(f"OpenCode command failed: {str(e)}", command=self.command) from e
 
@@ -126,7 +126,7 @@ class OpenCodeClient(CLIAgentBase):
                 "error": result.get("stderr") if not result.get("success") else None,
                 "exit_code": result.get("exit_code", 0),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"Failed to initialize OpenCode project: {e}", exc_info=True)
             return {"success": False, "output": "", "error": str(e), "exit_code": -1}
 
@@ -139,6 +139,6 @@ class OpenCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(f"Failed to get OpenCode version: {e}")
             return {"version": "", "exit_code": -1, "available": False, "error": str(e)}

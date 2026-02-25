@@ -87,7 +87,7 @@ class ParallelRunner:
         if self.progress_callback:
             try:
                 self.progress_callback(script, status, details or {})
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.warning(f"Progress callback error: {e}")
 
     def run_scripts(
@@ -171,7 +171,7 @@ class ParallelRunner:
                 except concurrent.futures.CancelledError:
                     result.skipped += 1
                     self._emit_progress(script.name, "cancelled", {})
-                except Exception as e:
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                     result.failed += 1
                     result.results.append({
                         "script": str(script),

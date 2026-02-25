@@ -172,7 +172,7 @@ def run_script(
         result["stdout"] = e.stdout if e.stdout else ""
         result["stderr"] = e.stderr if e.stderr else ""
 
-    except Exception as e:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
         result["status"] = "error"
         result["error"] = str(e)
 
@@ -198,7 +198,7 @@ def _target_wrapper(q, f, a, k, memory_limit_mb):
     try:
         val = f(*a, **k)
         q.put(("success", val))
-    except Exception:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
         q.put(("error", traceback.format_exc()))
 
 def run_function(

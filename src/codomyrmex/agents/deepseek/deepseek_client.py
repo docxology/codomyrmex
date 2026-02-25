@@ -93,7 +93,7 @@ class DeepSeekClient(APIAgentBase):
                 execution_time=execution_time,
             )
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             self._handle_api_error(e, execution_time)
 
@@ -117,7 +117,7 @@ class DeepSeekClient(APIAgentBase):
                     if delta and delta.content:
                         yield delta.content
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(f"DeepSeek streaming error: {e}", exc_info=True)
             yield f"Error: {str(e)}"
 

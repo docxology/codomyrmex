@@ -123,7 +123,7 @@ class CLIAgentBase(BaseAgent):
                     timeout=5,
                 )
                 version = result.stdout.strip() or result.stderr.strip()
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass
 
         status = "healthy" if available else "unavailable"
@@ -183,7 +183,7 @@ class CLIAgentBase(BaseAgent):
                 extra={"command": cmd, "error": str(e)},
             )
             return False
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self._command_available = False
             self.logger.warning(
                 f"Error checking command '{cmd}' availability: {e}",
@@ -308,7 +308,7 @@ class CLIAgentBase(BaseAgent):
                 f"Command not found: {self.command}",
                 command=self.command,
             )
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             execution_time = time.time() - start_time
             self.logger.error(
                 f"Command execution failed: {e}",
@@ -402,7 +402,7 @@ class CLIAgentBase(BaseAgent):
                 },
             )
 
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.error(
                 f"Error streaming command output: {e}",
                 exc_info=True,

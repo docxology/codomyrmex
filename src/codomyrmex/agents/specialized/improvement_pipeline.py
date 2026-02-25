@@ -30,7 +30,7 @@ _ANTI_PATTERNS: list[dict[str, Any]] = [
         "pattern": r"except\s*:",
         "description": "Bare except clause catches all exceptions including SystemExit",
         "severity": 0.7,
-        "fix_template": "except Exception:",
+        "fix_template": "except (ValueError, RuntimeError, AttributeError, OSError, TypeError):",
     },
     {
         "name": "mutable_default",

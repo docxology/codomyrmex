@@ -200,7 +200,7 @@ class EventSchema:
             return True, []
         except jsonschema.ValidationError as e:
             return False, [f"Schema validation failed: {e.message}"]
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return False, [f"Validation error: {str(e)}"]
 
     def register_event_schema(self, event_type: EventType, schema: dict[str, Any]) -> None:

@@ -30,8 +30,8 @@
 | Total LOC | 414,862 |
 | Modules | 88 |
 | Functions / Classes | 23,208 / 5,210 |
-| Tests collected | 9,950 |
-| Tests passing / failing / skipped | 9,918 / 32 / ~270 |
+| Tests collected | 9,977 |
+| Tests passing / failing / skipped | 9,724 / 0 / 253 |
 | Coverage | 31% |
 | RASP coverage | 100% ✅ |
 | MCP tool files | 32 / 87 |

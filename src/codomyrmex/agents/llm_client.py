@@ -79,7 +79,7 @@ class OllamaClient:
                     content = msg.get("content", "")
                 else:
                     raise RuntimeError(f"Ollama returned {response.status}")
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             # Propagate error with context
             try:
                 # Try to list models to help debugging
@@ -88,7 +88,7 @@ class OllamaClient:
                          tags = json.loads(resp.read().decode("utf-8"))
                          models = [m.get("name") for m in tags.get("models", [])]
                          print(f"DEBUG: Available models: {models}")
-            except Exception:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                 pass
             raise RuntimeError(f"Real Ollama Connection Failed: {e}")
 
@@ -132,7 +132,7 @@ def get_llm_client(identity: str = "agent") -> Any:
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 logger.info(f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})")
                 return OllamaClient(model=model) 
-    except Exception:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
         pass
         
     raise RuntimeError(

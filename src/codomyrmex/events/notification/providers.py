@@ -86,7 +86,7 @@ class FileProvider(NotificationProvider):
                 channel=self.channel,
                 sent_at=datetime.now(),
             )
-        except Exception as e:
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             return NotificationResult(
                 notification_id=notification.id,
                 status=NotificationStatus.FAILED,

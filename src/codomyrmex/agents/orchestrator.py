@@ -204,7 +204,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     ag_client = AntigravityClient()
                     try:
                         ag_client.connect()
-                    except Exception:
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
                         pass
                         
                     provider = AntigravityToolProvider(ag_client)
@@ -234,7 +234,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                             
                     return AntigravityCodeImplementerWrapper(client)
                 return client
-            except Exception as e:
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
                 logger.error(f"Failed to create Claude client: {e}")
         
         # Fallback: same Ollama path, overriding the user's model choice for valid local inference if they selected Claude but don't have a key.

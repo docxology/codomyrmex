@@ -106,7 +106,7 @@ def _emit_scheduler_event(
             event_bus.publish(event)
         elif hasattr(event_bus, "emit"):
             event_bus.emit(event)
-    except Exception:
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
         logger.debug("Failed to emit scheduler event %s", event_type_name)
 
 
