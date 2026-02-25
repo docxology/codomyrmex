@@ -43,7 +43,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 |-------|-------------|
 | `WebsiteGenerator` | Generate static site from Jinja2 templates |
 | `DataProvider` | Aggregate data from Codomyrmex modules |
-| `WebsiteServer` | HTTP server with 22 API endpoints |
+| `WebsiteServer` | HTTP server with 27 API endpoints |
 
 ## API Endpoints
 
@@ -71,6 +71,11 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 | `/api/tools` | GET | MCP tools, resources, prompts |
 | `/api/trust/status` | GET | Trust gateway counts + destructive tools |
 | `/api/pai/action` | POST | Execute PAI action (verify/trust/reset/status) |
+| `/api/agent/dispatch` | POST | Start an agent orchestrator run |
+| `/api/agent/dispatch/status` | GET | Poll orchestrator transcript |
+| `/api/agent/dispatch/stop` | POST | Stop orchestrator run |
+| `/api/telemetry` | GET | Telemetry metric series and dashboard registry |
+| `/api/security/posture` | GET | Security posture: risk score, compliance rate |
 
 ## Directory Structure
 
@@ -79,7 +84,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
 | `generator.py` | Static site generator |
 | `data_provider.py` | Data aggregation layer (1122 lines) |
 | `server.py` | HTTP server with REST API |
-| `templates/` | 12 Jinja2 HTML templates + base layout |
+| `templates/` | 14 Jinja2 HTML templates + base layout |
 | `assets/` | CSS and JS static files |
 
 ## Testing

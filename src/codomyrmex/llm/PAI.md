@@ -215,6 +215,39 @@ providers:
     default_model: "claude-3-sonnet"
 ```
 
+## PAI Algorithm Phase Mapping
+
+| Phase | Activity | Key Functions/Tools |
+|-------|----------|-------------------|
+| **OBSERVE** | Discover available models and provider status; inspect context window usage | `OllamaManager.list_models()`, `list_local_models`, `ContextManager.usage()` |
+| **THINK** | Chain-of-thought decomposition; multi-step deliberative reasoning over prompts | `chain_of_thought.think()`, `chain_of_thought.reason()`, `chain_of_thought.conclude()` |
+| **PLAN** | Select provider and model; configure token budgets and routing strategy | `LLMConfig.from_environment()`, `LLMConfigPresets`, `router` module |
+| **BUILD** | Generate text, code, and embeddings; run Fabric patterns for structured output | `generate_text`, `ask`, `ModelRunner.generate()`, `FabricOrchestrator.run_pattern()` |
+| **EXECUTE** | Stream responses from local or cloud providers; execute RAG pipelines | `streaming` submodule, `rag` submodule, `providers.get_provider()` |
+| **VERIFY** | Validate outputs through guardrails; check token costs and response quality | `guardrails` submodule, `cost_tracking` submodule |
+| **LEARN** | Persist conversation memory; cache embeddings for future retrieval | `memory` submodule, `embeddings` submodule, `context_manager` |
+
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `generate_text` | Generate text using a specified LLM provider and model | SAFE |
+| `list_local_models` | List available local models managed by Ollama | SAFE |
+| `query_fabric_metadata` | Query configuration metadata for Fabric integration | SAFE |
+| `ask` | Ask a question to an LLM provider (default: OpenRouter free tier) | SAFE |
+
+All LLM module MCP tools are read-only or generative and classified as SAFE. No trust elevation is required.
+
+## Agent Capabilities
+
+| Agent Type | Primary Use | Key Submodules |
+|-----------|-------------|---------------|
+| **Engineer** | Code generation via LLM, embedding-based search, RAG-augmented coding | `providers`, `rag`, `embeddings`, `streaming` |
+| **Architect** | Chain-of-thought reasoning for design decisions, model selection strategy | `chain_of_thought`, `config`, `router` |
+| **QATester** | Guardrail validation of LLM outputs, cost and quality auditing | `guardrails`, `cost_tracking` |
+| **Explore** | Query local model inventory, discover provider capabilities | `ollama`, `providers`, `fabric` |
+| **Research** | RAG pipelines for knowledge retrieval, embedding similarity search | `rag`, `embeddings`, `memory` |
+
 ## Signposting
 
 ### Navigation

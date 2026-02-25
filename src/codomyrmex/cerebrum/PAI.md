@@ -223,6 +223,36 @@ active_inference:
   exploration_factor: 0.1
 ```
 
+## PAI Algorithm Phase Mapping
+
+| Phase | Activity | Key Functions/Tools |
+|-------|----------|-------------------|
+| **OBSERVE** | Retrieve similar cases from the CaseBase; load prior reasoning context | `CaseRetriever.retrieve()`, `query_knowledge_base`, `CaseBase.load()` |
+| **THINK** | Bayesian inference over code quality; active inference to minimize uncertainty | `InferenceEngine.query()`, `ActiveInferenceAgent.select_policy()`, `VariationalFreeEnergy` |
+| **PLAN** | Select reasoning strategy; configure similarity thresholds and planning horizon | `CerebrumConfig`, `PolicySelector`, `PriorBuilder` |
+| **BUILD** | Generate knowledge-augmented code context; construct Bayesian networks for analysis | `CerebrumEngine.retrieve_similar()`, `BayesianNetwork.add_node()`, `BayesianNetwork.add_edge()` |
+| **EXECUTE** | Run code review pipeline; detect anti-patterns and concept drift | `CodeReviewer`, `AntiPatternDetector`, `ConceptDriftTracker`, `AgentPromptSelector` |
+| **VERIFY** | Validate recommendations with confidence thresholds; review finding severity | `InferenceEngine.query()` with confidence checks, `ReviewFinding` severity classification |
+| **LEARN** | Distill reasoning traces into reusable cases; store outcomes for future retrieval | `DistillationPipeline.distill()`, `add_case_reference`, `CaseBase.add_case()` |
+
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `query_knowledge_base` | Perform semantic retrieval from the CaseBase | SAFE |
+| `add_case_reference` | Store intelligence context directly into the CaseBase | SAFE |
+
+Both cerebrum MCP tools are classified as SAFE. Case storage via `add_case_reference` writes to the CaseBase data structure (not the filesystem) and does not require trust elevation.
+
+## Agent Capabilities
+
+| Agent Type | Primary Use | Key Submodules |
+|-----------|-------------|---------------|
+| **Engineer** | Knowledge-augmented code generation using past case context | `core` (CerebrumEngine, CaseBase), `distillation` |
+| **Architect** | Case-based reasoning for architectural decisions; Bayesian uncertainty modeling | `core` (CerebrumEngine), `inference` (BayesianNetwork, ActiveInferenceAgent) |
+| **QATester** | Automated code review with anti-pattern detection and concept drift tracking | `code_reviewer`, `anti_patterns`, `drift_tracker` |
+| **Research** | Semantic case retrieval; knowledge base querying for prior solutions | `core` (CaseRetriever), `mcp_tools` (query_knowledge_base) |
+
 ## Signposting
 
 ### Navigation

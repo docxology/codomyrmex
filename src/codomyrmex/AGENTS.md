@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Main package directory containing 89 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 86 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Active Components
 

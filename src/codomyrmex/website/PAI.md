@@ -34,7 +34,7 @@ with socketserver.TCPServer(("", 8787), WebsiteServer) as httpd:
     httpd.serve_forever()
 ```
 
-### REST API (18 Endpoints)
+### REST API (27 Endpoints)
 
 The server exposes live data through REST endpoints:
 
@@ -42,7 +42,7 @@ The server exposes live data through REST endpoints:
 |----------|--------|-------------------|
 | `/api/status` | GET | OBSERVE — system overview |
 | `/api/health` | GET | VERIFY — system vitals, git, coverage |
-| `/api/modules` | GET | OBSERVE — all 106 modules with metadata |
+| `/api/modules` | GET | OBSERVE — all modules with metadata |
 | `/api/modules/{name}` | GET | OBSERVE — module detail with README |
 | `/api/agents` | GET | OBSERVE — agent integrations |
 | `/api/scripts` | GET | OBSERVE — available scripts |
@@ -55,6 +55,15 @@ The server exposes live data through REST endpoints:
 | `/api/tests` | POST | VERIFY — run pytest with JUnit XML parsing |
 | `/api/chat` | POST | EXECUTE — Ollama LLM chat proxy |
 | `/api/refresh` | POST | EXECUTE — regenerate site data |
+| `/api/llm/config` | GET | OBSERVE — LLM configuration |
+| `/api/tools` | GET | OBSERVE — MCP tools, resources, prompts |
+| `/api/trust/status` | GET | VERIFY — trust gateway counts |
+| `/api/pai/action` | POST | EXECUTE — PAI workflow actions |
+| `/api/agent/dispatch` | POST | EXECUTE — start orchestrator run |
+| `/api/agent/dispatch/status` | GET | VERIFY — poll orchestrator transcript |
+| `/api/agent/dispatch/stop` | POST | EXECUTE — stop orchestrator |
+| `/api/telemetry` | GET | OBSERVE — metric series, dashboard registry |
+| `/api/security/posture` | GET | VERIFY — risk score, compliance rate |
 
 ### Data Aggregation (35+ Methods)
 
@@ -82,13 +91,13 @@ dp.get_pai_awareness_data()   # missions, projects, tasks, Telos
 dp.run_tests()                # execute pytest, parse JUnit XML results
 ```
 
-### 10 Interactive Pages
+### 14 Interactive Pages
 
 | Page | Template | Features |
 |------|----------|----------|
 | **Dashboard** | `index.html` | Live metrics, MCP status, PAI summary, quick actions |
-| **Health** | `health.html` | System vitals, git info, coverage bars, test runner |
-| **Modules** | `modules.html` | Searchable grid of 106 modules with status badges |
+| **Health** | `health.html` | System vitals, git info, coverage bars, test runner, security posture |
+| **Modules** | `modules.html` | Searchable grid of modules with status badges |
 | **Scripts** | `scripts.html` | Searchable script cards with inline execution |
 | **Agents** | `agents.html` | AI agent integration catalog |
 | **Chat** | `chat.html` | Ollama LLM chat interface |
@@ -96,6 +105,21 @@ dp.run_tests()                # execute pytest, parse JUnit XML results
 | **Docs** | `docs.html` | Markdown documentation browser with syntax highlighting |
 | **Pipelines** | `pipelines.html` | CI/CD workflow visualization |
 | **Awareness** | `awareness.html` | PAI missions, projects, tasks, Mermaid dependency graph |
+| **PAI Control** | `pai_control.html` | Trust management, workflow actions, bridge status |
+| **Dispatch** | `dispatch.html` | Agent orchestrator dispatch and transcript |
+| **Tools** | `tools.html` | MCP tools, resources, and prompts browser |
+| **Telemetry** | `telemetry.html` | Metric series, dashboard registry, auto-refresh |
+
+## Related PAI Dashboards
+
+| Dashboard | Port | Start Command |
+|-----------|------|---------------|
+| Codomyrmex (this) | **8787** | `python scripts/website/launch_dashboard.py --open` |
+| PAI Observability | **5172** (UI) + **4000** (API) | `~/.claude/Observability/scripts/start-agent-observability-dashboard.sh` |
+| PAI Project Manager | **8889** | `bun ~/.claude/skills/PAI/Tools/PMServer.ts` |
+| MCP HTTP Server | **8080** | `python scripts/model_context_protocol/run_mcp_server.py --transport http` |
+
+> **Port note**: PAI VoiceServer (`~/.claude/VoiceServer/server.ts`) uses port **8888**. PMServer now defaults to **8889**. Start both simultaneously without conflict.
 
 ### Security Features
 
@@ -128,9 +152,9 @@ The dashboard probes the MCP server at `localhost:8080` and displays:
 
 | Class | File | Purpose |
 |-------|------|---------|
-| `WebsiteGenerator` | `generator.py` | Jinja2 static site generation (10 pages) |
-| `DataProvider` | `data_provider.py` | Data aggregation (35+ methods, 1122 lines) |
-| `WebsiteServer` | `server.py` | HTTP server with 18 REST API endpoints |
+| `WebsiteGenerator` | `generator.py` | Jinja2 static site generation (14 pages) |
+| `DataProvider` | `data_provider.py` | Data aggregation (35+ methods) |
+| `WebsiteServer` | `server.py` | HTTP server with 27 REST API endpoints |
 
 ## Accessibility
 

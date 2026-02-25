@@ -1,36 +1,101 @@
 # Agent Instructions for `codomyrmex.finance`
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.2 | **Status**: Active | **Last Updated**: February 2026
 
-## Context
+## Purpose
 
-The Finance module provides double-entry accounting, tax compliance, payroll processing, and financial forecasting. All financial operations use immutable `Transaction` records and must maintain balanced ledger states.
+The Finance module provides a complete double-entry bookkeeping engine with four subsystems: a general ledger that enforces balanced transactions and generates financial statements (balance sheet, income statement, trial balance); a progressive tax calculator with bracket-based computation and deduction support; a payroll processor that computes federal tax, Social Security, and Medicare withholdings and generates pay stubs; and a time-series forecaster offering moving average, exponential smoothing, and linear trend extrapolation. Agents use this module for financial modelling, tax estimation, and payroll automation within the codomyrmex ecosystem.
+
+## Active Components
+
+| Component | Type | File | Status |
+|-----------|------|------|--------|
+| `AccountType` | Enum | `ledger/ledger.py` | Active |
+| `Account` | Dataclass | `ledger/ledger.py` | Active |
+| `TransactionEntry` | Dataclass | `ledger/ledger.py` | Active |
+| `Transaction` | Dataclass | `ledger/ledger.py` | Active |
+| `Ledger` | Class | `ledger/ledger.py` | Active |
+| `LedgerError` | Exception | `ledger/ledger.py` | Active |
+| `TaxCalculator` | Class | `taxes/calculator.py` | Active |
+| `TaxResult` | Dataclass | `taxes/calculator.py` | Active |
+| `TaxError` | Exception | `taxes/calculator.py` | Active |
+| `PayrollProcessor` | Class | `payroll/processor.py` | Active |
+| `PayStub` | Dataclass | `payroll/processor.py` | Active |
+| `PayrollError` | Exception | `payroll/processor.py` | Active |
+| `Forecaster` | Class | `forecasting/forecast.py` | Active |
+| `ForecastError` | Exception | `forecasting/forecast.py` | Active |
+
+## MCP Tools
+
+The finance module does **not** expose any MCP tools. There is no `mcp_tools.py` file. All interaction is via direct Python imports.
 
 ## Usage Guidelines
 
-1. **Importing**: Import from the module root.
+1. **Importing**: Import from the module root for all public types.
 
    ```python
-   from codomyrmex.finance import Ledger, Transaction, Account, Forecaster, TaxCalculator, PayrollProcessor
+   from codomyrmex.finance import (
+       Ledger, Account, AccountType, Transaction, TransactionEntry, LedgerError,
+       TaxCalculator, TaxResult,
+       PayrollProcessor, PayStub,
+       Forecaster,
+   )
    ```
 
-2. **Double-Entry Principle**: Every `Transaction` must have equal debit and credit amounts. The `Ledger` enforces this invariant.
+2. **Double-Entry Principle**: Every `Transaction` must balance -- the sum of all entry amounts must equal zero (positive = debit, negative = credit). The `Ledger.post_transaction()` method enforces this invariant and raises `LedgerError` on imbalance.
 
-3. **Account Chart**: Use standard account naming: `Assets:*`, `Liabilities:*`, `Revenue:*`, `Expenses:*`, `Equity:*`.
+3. **Account Types**: Use the five standard classifications from `AccountType`:
+   - `ASSET` and `EXPENSE` -- normal debit balance (debit increases balance)
+   - `LIABILITY`, `EQUITY`, and `REVENUE` -- normal credit balance (credit increases balance)
 
-4. **Zero-Mock Policy**: Tests must use real `Ledger` instances with actual transactions. No mocking of financial calculations or storage.
+4. **Tax Calculations**: `TaxCalculator` defaults to simplified US federal brackets (2024-era rates). Custom brackets can be supplied. Results include effective rate, marginal rate, and per-bracket breakdown.
 
-5. **Tax Calculations**: `TaxCalculator` requires a `jurisdiction` parameter. Results are advisory — always validate with a professional.
+5. **Payroll Processing**: `PayrollProcessor` supports five pay cadences: weekly, biweekly, semimonthly, monthly, annual. It annualizes gross pay for federal tax computation, then pro-rates back to the period. FICA rates are 2024-standard (SS 6.2%, Medicare 1.45%).
 
-## Key Files
+6. **Forecasting**: `Forecaster` accepts a list of historical float values and supports three methods:
+   - `moving_average(window)` -- simple moving average
+   - `exponential_smoothing(alpha)` -- single exponential smoothing
+   - `linear_trend()` -- OLS linear regression with R-squared
+   - `forecast(periods, method)` -- project future values using any of the above
 
-| File | Purpose |
-|------|---------|
-| `ledger/` | Core accounting (Ledger, Transaction, Account, Journal) |
-| `taxes/` | TaxCalculator, TaxResult |
-| `payroll/` | PayrollProcessor, PayStub |
-| `forecasting/` | Financial prediction models |
+## Quick Verification
+
+```bash
+uv run python -c "from codomyrmex.finance import Ledger, AccountType, TaxCalculator, PayrollProcessor, Forecaster; print('OK')"
+uv run pytest src/codomyrmex/tests/unit/finance/ -v
+```
+
+## Operating Contracts
+
+- `Ledger.post_transaction()` raises `LedgerError` if entries do not sum to zero or reference unknown accounts. All account IDs are UUID4 strings generated by `create_account()`.
+- `Ledger.create_account()` raises `LedgerError` on duplicate account names.
+- `TaxCalculator.calculate_tax()` raises `TaxError` for negative income.
+- `TaxCalculator.apply_deductions()` returns taxable income floored at zero.
+- `PayrollProcessor.calculate_pay()` raises `PayrollError` for negative gross salary or unknown pay period cadence.
+- `PayrollProcessor.generate_pay_stub()` raises `PayrollError` if employee dict lacks `name` or `id`.
+- `Forecaster` methods raise `ForecastError` on insufficient data or invalid parameters.
+- `Transaction.is_balanced` is a read-only property check (abs(sum) < 1e-9).
+- **Zero-Mock Policy**: Tests must use real `Ledger`, `TaxCalculator`, `PayrollProcessor`, and `Forecaster` instances with actual transactions and calculations. No mocking of financial operations or storage.
+
+## Integration Points
+
+- **visualization module**: `finance/visualization.py` provides `plot_account_balances()` and `plot_transaction_volume()` for charting ledger state. These consume `Ledger` instances directly.
+- **data_visualization module**: Finance chart data can be rendered through the general-purpose charting pipeline.
+- **logging_monitoring module**: `Ledger` uses standard `logging.getLogger(__name__)` for transaction and account creation events.
+
+## Submodule Reference
+
+| Submodule | Key Classes | Responsibility |
+|-----------|-------------|---------------|
+| `ledger/` | `Ledger`, `Account`, `AccountType`, `Transaction`, `TransactionEntry` | Double-entry bookkeeping, balance sheet, income statement, trial balance |
+| `taxes/` | `TaxCalculator`, `TaxResult` | Progressive bracket-based tax calculation with deductions |
+| `payroll/` | `PayrollProcessor`, `PayStub` | Payroll computation with federal tax, SS, Medicare withholding |
+| `forecasting/` | `Forecaster` | Moving average, exponential smoothing, linear trend forecasting |
 
 ## Navigation
 
-- [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)
+- Module: `src/codomyrmex/finance/`
+- PAI integration: [PAI.md](PAI.md)
+- Specification: [SPEC.md](SPEC.md)
+- Root bridge: [/PAI.md](../../../PAI.md)
+- Parent: [../AGENTS.md](../AGENTS.md)
