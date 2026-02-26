@@ -142,7 +142,7 @@ class TestChaosScenarioRunner:
         """Running an unsupported scenario type returns failure result."""
         runner = ChaosScenarioRunner()
         config = ScenarioConfig(type=ScenarioType.DATABASE_FAILURE)
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is False
         assert "Unknown scenario" in result.observations[0]
         assert result.errors_detected == 0
@@ -155,7 +155,7 @@ class TestChaosScenarioRunner:
             duration_seconds=0.2,
             intensity=0.3,
         )
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is True
         assert result.scenario_type == ScenarioType.NETWORK_PARTITION
         assert result.recovery_time_ms >= 0
@@ -169,7 +169,7 @@ class TestChaosScenarioRunner:
             duration_seconds=0.1,
             targets=["api", "db"],
         )
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is True
         assert result.errors_detected == 2  # one per target
         assert result.recovery_time_ms == 1000
@@ -185,7 +185,7 @@ class TestChaosScenarioRunner:
             duration_seconds=0.15,
             parameters={"latency_ms": 50},
         )
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is True
         assert result.scenario_type == ScenarioType.HIGH_LATENCY
         assert "50ms" in result.observations[0]
@@ -198,7 +198,7 @@ class TestChaosScenarioRunner:
             duration_seconds=0.3,
             targets=["front", "middle", "back"],
         )
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is True
         assert result.errors_detected == 3  # one per target
         assert result.recovery_time_ms > 0
@@ -216,7 +216,7 @@ class TestChaosScenarioRunner:
             duration_seconds=0.1,
             targets=[],
         )
-        result = asyncio.get_event_loop().run_until_complete(runner.run(config))
+        result = asyncio.run(runner.run(config))
         assert result.success is True
         assert result.errors_detected == 0
 
@@ -257,7 +257,7 @@ class TestGameDay:
             duration_seconds=0.1,
             targets=["svc-a"],
         ))
-        results = asyncio.get_event_loop().run_until_complete(gd.run_all(parallel=False))
+        results = asyncio.run(gd.run_all(parallel=False))
         assert len(results) == 2
         assert all(r.success for r in results)
 
@@ -274,7 +274,7 @@ class TestGameDay:
             duration_seconds=0.1,
             targets=["svc-x"],
         ))
-        results = asyncio.get_event_loop().run_until_complete(gd.run_all(parallel=True))
+        results = asyncio.run(gd.run_all(parallel=True))
         assert len(results) == 2
         assert all(r.success for r in results)
 
@@ -295,7 +295,7 @@ class TestGameDay:
             duration_seconds=0.1,
             targets=["svc-a"],
         ))
-        asyncio.get_event_loop().run_until_complete(gd.run_all())
+        asyncio.run(gd.run_all())
         report = gd.report()
         assert "Scenarios Run:** 1" in report
         assert "service_outage" in report

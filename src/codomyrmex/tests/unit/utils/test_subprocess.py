@@ -446,7 +446,7 @@ class TestRunCommandAsync(unittest.TestCase):
 
     def _run(self, coro):
         """Helper to run async in sync test."""
-        return asyncio.get_event_loop().run_until_complete(coro)
+        return asyncio.run(coro)
 
     def test_simple_echo(self):
         result = self._run(run_command_async(["echo", "async_hello"]))

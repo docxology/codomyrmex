@@ -568,9 +568,9 @@ class TestRouting:
         assert status == 400  # Missing script name, but routed correctly
 
     def test_post_tests_routes_correctly(self, live_server):
-        """Test that POST /api/tests resolves."""
+        """Test that POST /api/tests resolves (202 Accepted for async test runs)."""
         status, data = live_server.post("/api/tests", {})
-        assert status == 200
+        assert status in (200, 202)  # 202 Accepted is correct for async test start
 
     def test_unknown_api_returns_404(self, live_server):
         """Test that unknown API endpoint returns 404."""
