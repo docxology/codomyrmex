@@ -180,12 +180,9 @@ class OrchestrationEngine:
             max_workers=self.config.get("max_workers", 4)
         )
         self.project_manager = ProjectManager(
-            projects_dir=self.config.get("projects_dir"),
-            templates_dir=self.config.get("templates_dir"),
+            projects_root=self.config.get("projects_dir"),
         )
-        self.resource_manager = ResourceManager(
-            config_file=self.config.get("resource_config")
-        )
+        self.resource_manager = ResourceManager()
 
         # Performance monitoring
         self.performance_monitor = (
@@ -200,7 +197,7 @@ class OrchestrationEngine:
         self.event_handlers: dict[str, list[Callable]] = {}
 
         # Start task orchestrator
-        self.task_orchestrator.start_execution()
+        self.task_orchestrator.start_processing()
 
         logger.info("OrchestrationEngine initialized successfully")
 

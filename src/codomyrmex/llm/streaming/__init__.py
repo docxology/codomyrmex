@@ -17,6 +17,10 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
+from codomyrmex.logging_monitoring import get_logger
+
+logger = get_logger(__name__)
+
 
 class StreamEventType(Enum):
     """Types of streaming events."""
@@ -207,8 +211,9 @@ class JSONStreamParser:
                             obj = json.loads(self._buffer)
                             self._objects.append(obj)
                             self._buffer = ""
-                        except json.JSONDecodeError:
-                            pass
+                        except json.JSONDecodeError as e:
+                            logger.warning("JSONStreamParser: discarding malformed JSON buffer (depth=0): %s", str(e))
+                            self._buffer = ""
 
     @property
     def has_complete_objects(self) -> bool:
@@ -288,8 +293,8 @@ class StreamHandler:
         for callback in callbacks:
             try:
                 callback(event)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("StreamHandler callback raised exception (ignored): %s", str(e))
 
     def iter_events(
         self,

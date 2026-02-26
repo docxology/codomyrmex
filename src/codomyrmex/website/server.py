@@ -114,6 +114,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_agent_dispatch()
         elif parsed_path.path == "/api/agent/dispatch/stop":
             self.handle_agent_dispatch_stop()
+        elif parsed_path.path == "/api/telemetry/seed":
+            self.handle_telemetry_seed()
         elif parsed_path.path.startswith("/api/config"):
             self.handle_config_save()
         else:
@@ -155,6 +157,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             self.handle_tools_list()
         elif parsed_path.path == "/api/trust/status":
             self.handle_trust_status()
+        elif parsed_path.path == "/api/tests/status":
+            self.handle_tests_status()
         elif parsed_path.path == "/api/telemetry":
             self.handle_telemetry()
         elif parsed_path.path == "/api/security/posture":
@@ -178,9 +182,16 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(500, "Data provider missing")
 
+    # Store latest test results for async retrieval
+    _test_results: dict | None = None
+
     def handle_tests_run(self) -> None:
-        """Handle POST /api/tests — run tests for a module."""
-        # Rate limiting: only one test run at a time
+        """Handle POST /api/tests — run tests for a module.
+
+        Runs tests in a background thread so the HTTP server stays
+        responsive. Returns 202 Accepted immediately. Poll
+        GET /api/tests/status to retrieve results.
+        """
         with self._test_lock:
             if self._test_running:
                 self.send_json_response(
@@ -191,28 +202,57 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             WebsiteServer._test_running = True
 
         try:
+            content_length = int(self.headers.get('Content-Length', 0))
+        except (TypeError, ValueError):
+            content_length = 0
+        module = None
+        if content_length > 0:
             try:
-                content_length = int(self.headers.get('Content-Length', 0))
-            except (TypeError, ValueError):
-                content_length = 0
-            module = None
-            if content_length > 0:
-                try:
-                    post_data = self.rfile.read(content_length)
-                    data = json.loads(post_data.decode('utf-8'))
-                    module = data.get('module')
-                except (json.JSONDecodeError, KeyError):
-                    self.send_json_response({"error": "Invalid JSON"}, status=400)
-                    return
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data.decode('utf-8'))
+                module = data.get('module')
+            except (json.JSONDecodeError, KeyError):
+                with self._test_lock:
+                    WebsiteServer._test_running = False
+                self.send_json_response({"error": "Invalid JSON"}, status=400)
+                return
 
-            if self.data_provider:
-                results = self.data_provider.run_tests(module)
-                self.send_json_response(results)
-            else:
-                self.send_error(500, "Data provider missing")
-        finally:
+        if not self.data_provider:
             with self._test_lock:
                 WebsiteServer._test_running = False
+            self.send_error(500, "Data provider missing")
+            return
+
+        dp = self.data_provider
+
+        def _run_tests_bg(mod: str | None) -> None:
+            try:
+                WebsiteServer._test_results = dp.run_tests(mod)
+            except Exception as exc:
+                WebsiteServer._test_results = {"error": str(exc)}
+            finally:
+                with WebsiteServer._test_lock:
+                    WebsiteServer._test_running = False
+
+        t = threading.Thread(target=_run_tests_bg, args=(module,), daemon=True)
+        t.start()
+        self.send_json_response(
+            {"status": "running", "message": "Test run started in background."},
+            status=202,
+        )
+
+    def handle_tests_status(self) -> None:
+        """Handle GET /api/tests/status — poll for test results."""
+        with self._test_lock:
+            running = self._test_running
+        if running:
+            self.send_json_response({"status": "running"})
+        elif WebsiteServer._test_results is not None:
+            self.send_json_response(
+                {"status": "done", "results": WebsiteServer._test_results}
+            )
+        else:
+            self.send_json_response({"status": "idle"})
 
     def handle_config_list(self) -> None:
         """Handle config list request."""
@@ -288,7 +328,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
 
     def handle_docs_get(self, path: str) -> None:
         """Handle GET /api/docs/{path} — return doc file content."""
-        doc_path = path.replace("/api/docs/", "", 1)
+        from urllib.parse import unquote
+        doc_path = unquote(path.replace("/api/docs/", "", 1))
         if not self.data_provider:
             self.send_error(500, "Data provider missing")
             return
@@ -656,8 +697,53 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                 reset_trust()
                 result = {"message": "Trust levels reset to UNTRUSTED"}
             elif action == "status":
-                from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
-                result = _tool_pai_status()
+                try:
+                    from codomyrmex.agents.pai.mcp_bridge import _tool_pai_status
+                    result = _tool_pai_status()
+                except Exception as _status_err:
+                    result = {
+                        "status": "degraded",
+                        "error": str(_status_err),
+                        "available": False,
+                    }
+            elif action == "analyze":
+                modules = self.data_provider.get_modules() if self.data_provider else []
+                summary = self.data_provider.get_system_summary() if self.data_provider else {}
+                active = sum(1 for m in modules if m.get("status") == "Active")
+                error_count = sum(1 for m in modules if m.get("status") not in ("Active", "Unknown"))
+                result = {
+                    "total_modules": len(modules),
+                    "active_modules": active,
+                    "error_modules": error_count,
+                    "system": summary,
+                }
+            elif action == "search":
+                import re
+                query = data.get("query", "").strip()
+                if not query:
+                    self.send_json_response({"error": "search requires 'query' field", "success": False}, status=400)
+                    return
+                try:
+                    pattern = re.compile(query, re.IGNORECASE)
+                except re.error as exc:
+                    self.send_json_response({"error": f"Invalid regex: {exc}", "success": False}, status=400)
+                    return
+                modules = self.data_provider.get_modules() if self.data_provider else []
+                hits = [
+                    m for m in modules
+                    if pattern.search(m.get("name", "")) or pattern.search(m.get("description", ""))
+                ]
+                result = {"query": query, "hits": hits, "count": len(hits)}
+            elif action == "docs":
+                module_name = data.get("module", "").strip()
+                if not module_name:
+                    self.send_json_response({"error": "docs requires 'module' field", "success": False}, status=400)
+                    return
+                detail = self.data_provider.get_module_detail(module_name) if self.data_provider else None
+                if detail is None:
+                    self.send_json_response({"error": f"Module '{module_name}' not found", "success": False}, status=404)
+                    return
+                result = detail
             elif action == "add_memory":
                 from codomyrmex.agentic_memory.mcp_tools import memory_put
                 content = data.get("content", "")
@@ -796,21 +882,173 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 self.send_json_response({"error": str(e)}, status=500)
 
+    # Persistent telemetry collector shared across requests
+    _telemetry_collector = None
+    _telemetry_dm = None
+
     def handle_telemetry(self) -> None:
-        """Handle GET /api/telemetry — metric series and dashboard registry."""
+        """Handle GET /api/telemetry — metric series and dashboard registry.
+
+        Uses a persistent MetricCollector that seeds baseline system
+        metrics on first access and refreshes them on each request.
+        """
         try:
-            from codomyrmex.telemetry.dashboard import MetricCollector, DashboardManager
-            collector = MetricCollector()
-            dm = DashboardManager(collector)
+            from codomyrmex.telemetry.dashboard import (
+                MetricCollector,
+                DashboardManager,
+                MetricType,
+                Panel,
+                PanelType,
+            )
+
+            # First-time setup: create persistent collector + dashboard
+            if WebsiteServer._telemetry_collector is None:
+                WebsiteServer._telemetry_collector = MetricCollector()
+                WebsiteServer._telemetry_dm = DashboardManager(
+                    WebsiteServer._telemetry_collector
+                )
+                # Create a default "System Overview" dashboard
+                dash = WebsiteServer._telemetry_dm.create(
+                    "System Overview",
+                    description="Baseline system metrics",
+                    tags=["system", "auto"],
+                )
+                dash.add_panel(Panel(
+                    id="modules", title="Module Count",
+                    panel_type=PanelType.STAT, metrics=["module_count"],
+                ))
+                dash.add_panel(Panel(
+                    id="tools", title="MCP Tool Count",
+                    panel_type=PanelType.STAT, metrics=["tool_count"],
+                ))
+                dash.add_panel(Panel(
+                    id="agents", title="Agent Count",
+                    panel_type=PanelType.STAT, metrics=["agent_count"],
+                ))
+
+            collector = WebsiteServer._telemetry_collector
+            dm = WebsiteServer._telemetry_dm
+
+            # Seed / refresh baseline metrics from DataProvider
+            if self.data_provider:
+                modules = self.data_provider.get_modules()
+                collector.record("module_count", float(len(modules)),
+                                metric_type=MetricType.GAUGE)
+                agents = self.data_provider.get_actual_agents()
+                collector.record("agent_count", float(len(agents)),
+                                metric_type=MetricType.GAUGE)
+                try:
+                    tools_data = self.data_provider.get_mcp_tools()
+                    collector.record("tool_count",
+                                    float(len(tools_data.get("tools", []))),
+                                    metric_type=MetricType.GAUGE)
+                except Exception:
+                    pass
+
+            # Build latest_values dict for the frontend
+            latest_values = {}
+            for name in collector._metrics:
+                latest = collector.get_latest(name)
+                if latest is not None:
+                    latest_values[name] = latest.value
+
             data = {
                 "status": "ok",
                 "dashboards": [d.to_dict() for d in dm.list()],
                 "metric_names": list(collector._metrics.keys()),
-                "total_metrics": sum(len(v) for v in collector._metrics.values()),
+                "total_metrics": sum(
+                    len(v) for v in collector._metrics.values()
+                ),
+                "latest_values": latest_values,
             }
         except Exception as exc:
             data = {"status": "error", "error": str(exc)}
         self.send_json_response(data)
+
+    def handle_telemetry_seed(self) -> None:
+        """Handle POST /api/telemetry/seed — seed baseline system metrics.
+
+        Triggers a fresh telemetry snapshot capturing module count,
+        tool count, agent count, and Python version.
+        """
+        try:
+            # Ensure persistent collector exists by calling handle_telemetry logic
+            from codomyrmex.telemetry.dashboard import (
+                MetricCollector,
+                DashboardManager,
+                MetricType,
+                Panel,
+                PanelType,
+            )
+
+            if WebsiteServer._telemetry_collector is None:
+                WebsiteServer._telemetry_collector = MetricCollector()
+                WebsiteServer._telemetry_dm = DashboardManager(
+                    WebsiteServer._telemetry_collector
+                )
+                dash = WebsiteServer._telemetry_dm.create(
+                    "System Overview",
+                    description="Baseline system metrics",
+                    tags=["system", "auto"],
+                )
+                dash.add_panel(Panel(
+                    id="modules", title="Module Count",
+                    panel_type=PanelType.STAT, metrics=["module_count"],
+                ))
+                dash.add_panel(Panel(
+                    id="tools", title="MCP Tool Count",
+                    panel_type=PanelType.STAT, metrics=["tool_count"],
+                ))
+                dash.add_panel(Panel(
+                    id="agents", title="Agent Count",
+                    panel_type=PanelType.STAT, metrics=["agent_count"],
+                ))
+
+            collector = WebsiteServer._telemetry_collector
+            seeded = []
+
+            if self.data_provider:
+                modules = self.data_provider.get_modules()
+                collector.record("module_count", float(len(modules)),
+                                metric_type=MetricType.GAUGE)
+                seeded.append("module_count")
+
+                agents = self.data_provider.get_actual_agents()
+                collector.record("agent_count", float(len(agents)),
+                                metric_type=MetricType.GAUGE)
+                seeded.append("agent_count")
+
+                try:
+                    tools_data = self.data_provider.get_mcp_tools()
+                    collector.record("tool_count",
+                                    float(len(tools_data.get("tools", []))),
+                                    metric_type=MetricType.GAUGE)
+                    seeded.append("tool_count")
+                except Exception:
+                    pass
+
+                # Additional useful metrics
+                import platform
+                collector.record("python_version_minor",
+                                float(sys.version_info.minor),
+                                metric_type=MetricType.GAUGE)
+                seeded.append("python_version_minor")
+
+                scripts = self.data_provider.get_available_scripts()
+                collector.record("script_count",
+                                float(len(scripts)),
+                                metric_type=MetricType.GAUGE)
+                seeded.append("script_count")
+
+            self.send_json_response({
+                "status": "ok",
+                "seeded_metrics": seeded,
+                "count": len(seeded),
+            })
+        except Exception as exc:
+            self.send_json_response(
+                {"status": "error", "error": str(exc)}, status=500
+            )
 
     def handle_security_posture(self) -> None:
         """Handle GET /api/security/posture — aggregate security posture."""

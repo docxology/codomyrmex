@@ -1,5 +1,6 @@
 """Unit tests for project_orchestration module."""
 
+import os
 import sys
 
 import pytest
@@ -667,7 +668,7 @@ class TestWorkflowManagerEnhancements:
 class TestWorkflowManagerLocation:
     """Test cases for WorkflowManager directory location."""
 
-    def test_default_location(self, tmp_path, monkeypatch):
+    def test_default_location(self, tmp_path):
         """Test that WorkflowManager defaults to config/workflows/production."""
         try:
             from codomyrmex.logistics.orchestration.project.workflow_manager import (
@@ -676,15 +677,16 @@ class TestWorkflowManagerLocation:
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
-        # Change to temp directory
-        monkeypatch.chdir(tmp_path)
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+        try:
+            manager = WorkflowManager()
 
-        manager = WorkflowManager()
-
-        # Should use default location
-        expected_location = tmp_path / "config" / "workflows" / "production"
-        assert manager.config_dir == expected_location
-        assert manager.config_dir.exists()
+            expected_location = tmp_path / "config" / "workflows" / "production"
+            assert manager.config_dir == expected_location
+            assert manager.config_dir.exists()
+        finally:
+            os.chdir(original_cwd)
 
     def test_custom_config_dir(self, tmp_path):
         """Test that custom config_dir parameter is respected."""
@@ -702,7 +704,7 @@ class TestWorkflowManagerLocation:
         assert manager.config_dir == custom_dir
         assert manager.config_dir.exists()
 
-    def test_load_workflows_from_production(self, tmp_path, monkeypatch):
+    def test_load_workflows_from_production(self, tmp_path):
         """Test loading workflows from production directory."""
         try:
             import json
@@ -713,11 +715,9 @@ class TestWorkflowManagerLocation:
         except ImportError:
             pytest.skip("WorkflowManager not available")
 
-        # Create production location with a test workflow
         production_location = tmp_path / "config" / "workflows" / "production"
         production_location.mkdir(parents=True, exist_ok=True)
 
-        # Create a test workflow file
         test_workflow = {
             "name": "test_workflow",
             "steps": [
@@ -737,12 +737,13 @@ class TestWorkflowManagerLocation:
         with open(workflow_file, "w") as f:
             json.dump(test_workflow, f)
 
-        # Change to temp directory
-        monkeypatch.chdir(tmp_path)
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+        try:
+            manager = WorkflowManager()
 
-        manager = WorkflowManager()
-
-        # Should load workflow from production directory
-        workflows = manager.list_workflows()
-        assert "test_workflow" in workflows
+            workflows = manager.list_workflows()
+            assert "test_workflow" in workflows
+        finally:
+            os.chdir(original_cwd)
 

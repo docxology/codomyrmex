@@ -158,9 +158,7 @@ class ConfigurationMonitor:
 
     def _get_previous_hash(self, file_path: str) -> str | None:
         """Get previous hash for a file."""
-        # This would typically check a database or file storage
-        # For now, return None (assume all files are new)
-        return None
+        raise NotImplementedError("Config hash persistence not yet implemented")
 
     def create_snapshot(self, environment: str, config_paths: list[str]) -> ConfigSnapshot:
         """Create a snapshot of configuration files for drift detection.

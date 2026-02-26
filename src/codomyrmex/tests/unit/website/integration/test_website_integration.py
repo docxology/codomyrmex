@@ -326,3 +326,29 @@ class TestSecurityIntegration:
 
         with pytest.raises(ValueError):
             provider.get_doc_content("src/script.py")
+
+
+@pytest.mark.integration
+class TestPaiAwarenessIntegration:
+    """Integration tests for PAI awareness data flow."""
+
+    def test_awareness_data_has_mermaid_graph(self):
+        """DataProvider.get_pai_awareness_data always returns a mermaid_graph string."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            from pathlib import Path
+            dp = DataProvider(Path(tmp))
+            dp._PAI_ROOT = Path(tmp) / ".claude"  # Isolate from real ~/.claude
+            data = dp.get_pai_awareness_data()
+            assert isinstance(data.get("mermaid_graph"), str)
+
+    def test_awareness_data_structure_complete(self):
+        """get_pai_awareness_data returns all required top-level keys."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            from pathlib import Path
+            dp = DataProvider(Path(tmp))
+            dp._PAI_ROOT = Path(tmp) / ".claude"
+            data = dp.get_pai_awareness_data()
+            required_keys = {"missions", "projects", "telos", "memory", "metrics", "mermaid_graph"}
+            assert required_keys.issubset(data.keys())

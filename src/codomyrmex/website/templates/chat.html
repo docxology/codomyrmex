@@ -24,25 +24,85 @@
     </form>
 </div>
 
-<style>
-    .chat-controls {
-        margin-right: 0.5rem;
+<script>
+    // Load available models on startup
+    (async function loadModels() {
+        try {
+            const resp = await fetch('/api/llm/config');
+            const data = await resp.json();
+            const sel = document.getElementById('model-select');
+            sel.innerHTML = '';
+            const models = data.available_models || [];
+            if (models.length === 0) {
+                sel.innerHTML = '<option value="">No models found</option>';
+                const banner = document.createElement('div');
+                banner.style.cssText = 'padding: 0.75rem 1rem; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; margin-bottom: 1rem; color: #f87171; font-size: 0.85rem;';
+                banner.innerHTML = '⚠️ <strong>Ollama not available</strong> — No models found. Start Ollama with <code style="font-size:0.8rem">ollama serve</code> and pull a model.';
+                document.querySelector('.chat-container').prepend(banner);
+            } else {
+                models.forEach(function (m) {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    if (m === data.default_model) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+            }
+        } catch (e) {
+            document.getElementById('model-select').innerHTML = '<option value="">Ollama offline</option>';
+            const banner = document.createElement('div');
+            banner.style.cssText = 'padding: 0.75rem 1rem; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; margin-bottom: 1rem; color: #f87171; font-size: 0.85rem;';
+            banner.innerHTML = '⚠️ <strong>Ollama offline</strong> — Cannot connect to the LLM backend. Start Ollama with <code style="font-size:0.8rem">ollama serve</code>.';
+            document.querySelector('.chat-container').prepend(banner);
+        }
+    })();
+
+    function appendMessage(role, text) {
+        const log = document.getElementById('chat-messages');
+        const div = document.createElement('div');
+        div.className = 'message ' + role;
+        div.textContent = text;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
     }
 
-    .model-select {
-        padding: 0.5rem;
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        color: var(--text-primary);
-        font-family: 'Fira Code', monospace;
-        font-size: 0.85rem;
-        outline: none;
-        cursor: pointer;
-    }
+    document.getElementById('chat-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const input = document.getElementById('chat-input');
+        const model = document.getElementById('model-select').value;
+        const message = input.value.trim();
+        if (!message) return;
 
-    .model-select:focus {
-        border-color: var(--accent-color);
-    }
-</style>
+        appendMessage('user', message);
+        input.value = '';
+        input.disabled = true;
+
+        const thinking = document.createElement('div');
+        thinking.className = 'message assistant thinking';
+        thinking.setAttribute('aria-busy', 'true');
+        thinking.textContent = '…';
+        document.getElementById('chat-messages').appendChild(thinking);
+
+        try {
+            const resp = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message, model: model })
+            });
+            const data = await resp.json();
+            thinking.remove();
+            if (data.success) {
+                appendMessage('assistant', data.response);
+            } else {
+                appendMessage('assistant', 'Error: ' + (data.error || 'Unknown error'));
+            }
+        } catch (err) {
+            thinking.remove();
+            appendMessage('assistant', 'Connection error: ' + err.message);
+        } finally {
+            input.disabled = false;
+            input.focus();
+        }
+    });
+</script>
 {% endblock %}

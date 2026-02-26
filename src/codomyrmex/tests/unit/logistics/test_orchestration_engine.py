@@ -327,31 +327,26 @@ class TestOrchestrationSession:
 
 @pytest.mark.unit
 class TestOrchestrationEngineInit:
-    """Tests for OrchestrationEngine initialization.
+    """Tests for OrchestrationEngine initialization."""
 
-    NOTE: The default constructor raises TypeError because it passes
-    ``projects_dir`` and ``templates_dir`` to ProjectManager which
-    expects ``projects_root``. This is a known integration bug in the
-    codebase. These tests document the current behavior.
-    """
+    def test_default_init_succeeds(self):
+        """Default constructor creates a working OrchestrationEngine."""
+        engine = OrchestrationEngine()
+        assert engine is not None
+        assert engine.config == {}
+        engine.task_orchestrator.stop_execution()
 
-    def test_default_init_raises_type_error(self):
-        """Default config triggers ProjectManager constructor mismatch."""
-        with pytest.raises(TypeError, match="projects_dir"):
-            OrchestrationEngine()
-
-    def test_init_with_empty_config_raises_type_error(self):
-        """Even an explicit empty config triggers the same bug."""
-        with pytest.raises(TypeError, match="projects_dir"):
-            OrchestrationEngine(config={})
+    def test_init_with_empty_config_succeeds(self):
+        """Explicit empty config creates a working engine."""
+        engine = OrchestrationEngine(config={})
+        assert engine.config == {}
+        engine.task_orchestrator.stop_execution()
 
     def test_init_config_is_stored(self):
-        """Verify config dict is stored before the constructor fails."""
-        # We can verify the config attribute is set by catching the error
-        # and checking the partially-constructed object is not available.
-        # Since the error happens mid-init, the object is never returned.
-        with pytest.raises(TypeError):
-            OrchestrationEngine(config={"max_workers": 8})
+        """Config dict is stored on the engine instance."""
+        engine = OrchestrationEngine(config={"max_workers": 8})
+        assert engine.config.get("max_workers") == 8
+        engine.task_orchestrator.stop_execution()
 
 
 # ---------------------------------------------------------------------------
@@ -1149,16 +1144,19 @@ class TestMCPTools:
 class TestGetOrchestrationEngine:
     """Tests for the get_orchestration_engine singleton function."""
 
-    def test_get_orchestration_engine_raises_on_broken_constructor(self):
-        """The global factory calls OrchestrationEngine() which is broken."""
-        # Reset global
+    def test_get_orchestration_engine_returns_singleton(self):
+        """The global factory creates and caches an OrchestrationEngine."""
         import codomyrmex.logistics.orchestration.project.orchestration_engine as mod
 
         original = mod._orchestration_engine
         mod._orchestration_engine = None
         try:
-            with pytest.raises(TypeError):
-                get_orchestration_engine()
+            engine = get_orchestration_engine()
+            assert engine is not None
+            # Second call returns same instance (singleton)
+            engine2 = get_orchestration_engine()
+            assert engine is engine2
+            engine.task_orchestrator.stop_execution()
         finally:
             mod._orchestration_engine = original
 

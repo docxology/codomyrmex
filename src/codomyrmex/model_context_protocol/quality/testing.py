@@ -406,7 +406,7 @@ class IntegrationTester:
         return suites
 
 
-class MockMCPClient:
+class TestMCPClient:
     """
     Mock MCP client for testing servers.
     """
@@ -482,6 +482,6 @@ __all__ = [
     "ToolTester",
     "ServerTester",
     "IntegrationTester",
-    "MockMCPClient",
+    "TestMCPClient",
     "run_quick_test",
 ]

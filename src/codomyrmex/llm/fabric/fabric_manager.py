@@ -73,10 +73,9 @@ class FabricManager:
                     if line.strip() and not line.startswith('Available patterns:')
                 ]
                 return patterns
-        except subprocess.TimeoutExpired:
-            pass
-
-        return []
+        except subprocess.TimeoutExpired as e:
+            self.logger.warning("Fabric command timed out: %s", str(e))
+            raise
 
     def run_pattern(
         self,

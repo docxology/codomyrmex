@@ -433,59 +433,80 @@
 
         btn.disabled = true;
         btn.innerHTML = '<span class="loader"></span> Running...';
-        resultsDiv.innerHTML = '<p style="color: var(--accent-color);">Running tests...</p>';
+        resultsDiv.innerHTML = '<p style="color: var(--accent-color);">Starting tests in background…</p>';
         outputDiv.classList.add('hidden');
 
         try {
+            // Fire POST — returns 202 immediately
             const body = moduleSelect.value ? { module: moduleSelect.value } : {};
-            const response = await fetch('/api/tests', {
+            const startResp = await fetch('/api/tests', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
-            const data = await response.json();
+            const startData = await startResp.json();
 
-            if (data.error) {
-                resultsDiv.innerHTML = `<p class="status-err">${data.error}</p>`;
-            } else {
-                const statusClass = data.success ? 'status-ok' : 'status-err';
-                resultsDiv.innerHTML = `
-                    <div class="test-summary">
-                        <div class="test-stat">
-                            <span class="test-stat-value status-ok">${data.passed}</span>
-                            <span class="test-stat-label">Passed</span>
-                        </div>
-                        <div class="test-stat">
-                            <span class="test-stat-value status-err">${data.failed}</span>
-                            <span class="test-stat-label">Failed</span>
-                        </div>
-                        <div class="test-stat">
-                            <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${data.errors}</span>
-                            <span class="test-stat-label">Errors</span>
-                        </div>
-                        <div class="test-stat">
-                            <span class="test-stat-value" style="color: var(--text-secondary);">${data.skipped}</span>
-                            <span class="test-stat-label">Skipped</span>
-                        </div>
-                        <div class="test-stat">
-                            <span class="test-stat-value">${data.total}</span>
-                            <span class="test-stat-label">Total</span>
-                        </div>
-                        <div class="test-stat">
-                            <span class="test-stat-value ${statusClass}">${data.success ? 'PASS' : 'FAIL'}</span>
-                            <span class="test-stat-label">Result</span>
-                        </div>
-                    </div>
-                `;
-
-                if (data.output) {
-                    outputDiv.textContent = data.output;
-                    outputDiv.classList.remove('hidden');
-                }
+            if (startData.error) {
+                resultsDiv.innerHTML = `<p class="status-err">${startData.error}</p>`;
+                btn.disabled = false;
+                btn.textContent = 'Run Tests';
+                return;
             }
+
+            // Poll for results
+            resultsDiv.innerHTML = '<p style="color: var(--accent-color);">⏳ Tests running in background — polling for results…</p>';
+            const pollInterval = setInterval(async () => {
+                try {
+                    const pollResp = await fetch('/api/tests/status');
+                    const pollData = await pollResp.json();
+                    if (pollData.status === 'done') {
+                        clearInterval(pollInterval);
+                        const data = pollData.results || {};
+                        if (data.error) {
+                            resultsDiv.innerHTML = `<p class="status-err">${data.error}</p>`;
+                        } else {
+                            const statusClass = data.success ? 'status-ok' : 'status-err';
+                            resultsDiv.innerHTML = `
+                                <div class="test-summary">
+                                    <div class="test-stat">
+                                        <span class="test-stat-value status-ok">${data.passed}</span>
+                                        <span class="test-stat-label">Passed</span>
+                                    </div>
+                                    <div class="test-stat">
+                                        <span class="test-stat-value status-err">${data.failed}</span>
+                                        <span class="test-stat-label">Failed</span>
+                                    </div>
+                                    <div class="test-stat">
+                                        <span class="test-stat-value ${data.errors > 0 ? 'status-err' : 'status-ok'}">${data.errors}</span>
+                                        <span class="test-stat-label">Errors</span>
+                                    </div>
+                                    <div class="test-stat">
+                                        <span class="test-stat-value" style="color: var(--text-secondary);">${data.skipped}</span>
+                                        <span class="test-stat-label">Skipped</span>
+                                    </div>
+                                    <div class="test-stat">
+                                        <span class="test-stat-value">${data.total}</span>
+                                        <span class="test-stat-label">Total</span>
+                                    </div>
+                                    <div class="test-stat">
+                                        <span class="test-stat-value ${statusClass}">${data.success ? 'PASS' : 'FAIL'}</span>
+                                        <span class="test-stat-label">Result</span>
+                                    </div>
+                                </div>`;
+                            if (data.output) {
+                                outputDiv.textContent = data.output;
+                                outputDiv.classList.remove('hidden');
+                            }
+                        }
+                        btn.disabled = false;
+                        btn.textContent = 'Run Tests';
+                    }
+                } catch (pollErr) {
+                    // Silently retry on poll failure
+                }
+            }, 2000);
         } catch (err) {
             resultsDiv.innerHTML = `<p class="status-err">Network error: ${err.message}</p>`;
-        } finally {
             btn.disabled = false;
             btn.textContent = 'Run Tests';
         }

@@ -21,12 +21,14 @@ from . import (
     discovery,
     execution,
     marketplace,
+    mcp_tools,
     permissions,
     testing,
     versioning,
 )
 from .skill_loader import SkillLoader
 from .skill_registry import SkillRegistry
+from .skill_runner import list_runnable_skills, run_skill, run_skill_by_name
 from .skill_sync import SkillSync
 from .skills_manager import SkillsManager
 
@@ -73,6 +75,11 @@ __all__ = [
     "execution",
     "composition",
     "testing",
+    "mcp_tools",
+    # Runner
+    "run_skill",
+    "run_skill_by_name",
+    "list_runnable_skills",
     "cli_commands",
 ]
 

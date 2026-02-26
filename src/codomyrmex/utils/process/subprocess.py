@@ -751,8 +751,25 @@ def stream_command(
             # Check if process has ended
             poll_result = process.poll()
 
+            # Use select to wait up to 0.05s on POSIX systems so we don't block
+            readable = []
+            import sys
+            if sys.platform != "win32":
+                import select
+                rlist = []
+                if process.stdout:
+                    rlist.append(process.stdout)
+                if not combine_streams and process.stderr:
+                    rlist.append(process.stderr)
+                if rlist:
+                    readable, _, _ = select.select(rlist, [], [], 0.05)
+            else:
+                readable = [process.stdout] if process.stdout else []
+                if not combine_streams and process.stderr:
+                    readable.append(process.stderr)
+
             # Read available output
-            if process.stdout:
+            if process.stdout and process.stdout in readable:
                 line = process.stdout.readline()
                 if line:
                     line = line.rstrip("\n\r")
@@ -763,7 +780,7 @@ def stream_command(
                         yield f"stdout: {line}"
                     continue
 
-            if not combine_streams and process.stderr:
+            if not combine_streams and process.stderr and process.stderr in readable:
                 line = process.stderr.readline()
                 if line:
                     line = line.rstrip("\n\r")

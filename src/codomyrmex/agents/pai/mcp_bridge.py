@@ -11,6 +11,17 @@ from .mcp.definitions import (
     _TOOL_DEFINITIONS,
 )
 from .mcp.discovery import invalidate_tool_cache
+from .mcp.proxy_tools import (
+    _tool_call_module_function,
+    _tool_get_module_readme,
+    _tool_list_module_functions,
+    _tool_list_modules,
+    _tool_list_workflows,
+    _tool_module_info,
+    _tool_pai_awareness,
+    _tool_pai_status,
+    _tool_run_tests,
+)
 from .mcp.server import (
     call_tool,
     create_codomyrmex_mcp_server,
@@ -29,6 +40,15 @@ __all__ = [
     "TOOL_COUNT",
     "RESOURCE_COUNT",
     "PROMPT_COUNT",
+    "_tool_call_module_function",
+    "_tool_get_module_readme",
+    "_tool_list_module_functions",
+    "_tool_list_modules",
+    "_tool_list_workflows",
+    "_tool_module_info",
+    "_tool_pai_awareness",
+    "_tool_pai_status",
+    "_tool_run_tests",
 ]
 
 TOOL_COUNT: int = len(_TOOL_DEFINITIONS)

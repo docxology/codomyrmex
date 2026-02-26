@@ -4,6 +4,10 @@ Migration Module
 Data migration with versioned steps, rollbacks, and transformers.
 """
 
+# Import migration_manager names first (wildcard) so that explicit
+# imports from .models take precedence and don't get overwritten.
+from .migration_manager import *  # noqa: E402, F401, F403
+
 from .executor import DataMigrator, MigrationRunner
 from .models import (
     CompositeTransformer,
@@ -58,5 +62,3 @@ __all__ = [
     # CLI
     "cli_commands",
 ]
-
-from .migration_manager import *  # noqa: E402, F401, F403

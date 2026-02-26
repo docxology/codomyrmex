@@ -45,23 +45,25 @@ except ImportError:
     PERFORMANCE_MONITOR_AVAILABLE = False
 
     def monitor_performance(*args, **kwargs):
-        """No-op decorator if dependencies missing."""
-        def decorator(func):
-            """Execute Decorator operations natively."""
-
-            return func
-        return decorator
+        raise ImportError(
+            "psutil is required for performance monitoring. "
+            "Install with: uv sync --extra performance"
+        )
 
     class performance_context:
-        """No-op context manager if dependencies missing."""
-        def __init__(self, *args, **kwargs): pass
-
-        def __enter__(self): return self
-
+        def __init__(self, *args, **kwargs):
+            raise ImportError(
+                "psutil is required for performance monitoring. "
+                "Install with: uv sync --extra performance"
+            )
+        def __enter__(self): raise ImportError("psutil required for performance monitoring")
         def __exit__(self, *args): pass
 
     def get_system_metrics(*args, **kwargs):
-        return {}
+        raise ImportError(
+            "psutil is required for performance monitoring. "
+            "Install with: uv sync --extra performance"
+        )
 
 def cli_commands():
     """Return CLI commands for the performance module."""

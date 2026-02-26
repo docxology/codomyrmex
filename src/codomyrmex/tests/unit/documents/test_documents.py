@@ -353,11 +353,19 @@ class TestDocumentsConfig:
         finally:
             set_config(original)
 
-    def test_config_env_var_cache_dir(self, tmp_path, monkeypatch):
+    def test_config_env_var_cache_dir(self, tmp_path):
         """Test cache directory from environment variable."""
-        monkeypatch.setenv('CODOMYRMEX_CACHE_DIR', str(tmp_path))
-        config = DocumentsConfig()
-        assert config.cache_directory == tmp_path / "documents_cache"
+        import os
+        original = os.environ.get('CODOMYRMEX_CACHE_DIR')
+        os.environ['CODOMYRMEX_CACHE_DIR'] = str(tmp_path)
+        try:
+            config = DocumentsConfig()
+            assert config.cache_directory == tmp_path / "documents_cache"
+        finally:
+            if original is None:
+                os.environ.pop('CODOMYRMEX_CACHE_DIR', None)
+            else:
+                os.environ['CODOMYRMEX_CACHE_DIR'] = original
 
 
 # ─── Validation Result ──────────────────────────────────────────────────

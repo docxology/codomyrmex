@@ -343,7 +343,7 @@ def cmd_cleanup(manager: RepositoryMetadataManager, args) -> None:
     print(f"   Remaining: {total_count - removed_count}")
 
 
-def main():
+def main(argv=None):
     """Main CLI function."""
     parser = argparse.ArgumentParser(
         description="Repository Metadata Management CLI",
@@ -407,7 +407,7 @@ Examples:
     )
     cleanup_parser.set_defaults(func=cmd_cleanup)
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if not args.command:
         parser.print_help()

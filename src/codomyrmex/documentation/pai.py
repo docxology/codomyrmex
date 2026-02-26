@@ -3,9 +3,12 @@ PAI documentation generation and updates.
 """
 
 import ast
+import logging
 import re
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 MAX_STUB_LINES = 55
 
@@ -47,8 +50,9 @@ def extract_exports(init_path: Path) -> dict[str, Any]:
     try:
         tree = ast.parse(content)
         docstring = ast.get_docstring(tree) or ""
-    except SyntaxError:
-        pass
+    except SyntaxError as e:
+        logger.warning("Documentation: syntax error in source file %s: %s", init_path, str(e))
+        raise
 
     # Extract __all__ list
     all_exports = []

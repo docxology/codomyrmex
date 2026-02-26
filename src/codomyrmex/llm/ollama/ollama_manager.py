@@ -98,8 +98,8 @@ class OllamaManager:
                 if response.status_code == 200:
                     self.logger.info("Ollama server is already running (HTTP API)")
                     return True
-            except requests.exceptions.RequestException:
-                pass
+            except requests.exceptions.RequestException as e:
+                self.logger.debug("Ollama HTTP API not responding, trying CLI check: %s", str(e))
 
         # Fallback to subprocess check
         try:
@@ -114,8 +114,8 @@ class OllamaManager:
                 self.logger.info("Ollama server is already running (CLI)")
                 return True
 
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
+        except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+            self.logger.debug("Ollama CLI check failed, will attempt to start server: %s", str(e))
 
         if not self.auto_start_server:
             self.logger.error("Ollama server not running and auto_start disabled")
@@ -140,8 +140,8 @@ class OllamaManager:
                     if response.status_code == 200:
                         self.logger.info("Ollama server started successfully (HTTP API)")
                         return True
-                except requests.exceptions.RequestException:
-                    pass
+                except requests.exceptions.RequestException as e:
+                    self.logger.debug("Ollama HTTP API still not responding after start: %s", str(e))
 
             # Fallback to subprocess test
             result = subprocess.run(

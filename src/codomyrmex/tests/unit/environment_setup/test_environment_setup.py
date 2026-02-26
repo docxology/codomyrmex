@@ -395,7 +395,7 @@ class TestEnvironmentSetupComprehensive:
         # Test that the module can access logging functions
         assert hasattr(env_checker, 'sys')
         assert hasattr(env_checker, 'os')
-        assert hasattr(env_checker, 'subprocess')
+        assert hasattr(env_checker, 'shutil')
 
     def test_env_checker_standalone_execution(self, code_dir, capsys):
         """Test env_checker standalone execution."""

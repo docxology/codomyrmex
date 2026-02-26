@@ -10,10 +10,13 @@ Example:
     >>> extensions = client.list_extensions()
 """
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from codomyrmex.ide import CommandExecutionError, ConnectionError, IDEClient, IDEError
+
+logger = logging.getLogger(__name__)
 
 
 class VSCodeClient(IDEClient):
@@ -181,8 +184,9 @@ class VSCodeClient(IDEClient):
         if settings_path.exists():
             try:
                 return json.loads(settings_path.read_text())
-            except json.JSONDecodeError:
-                return {}
+            except json.JSONDecodeError as e:
+                logger.warning("Failed to parse VS Code settings JSON at %s: %s", settings_path, str(e))
+                raise
         return {}
 
     def update_settings(self, settings: dict[str, Any]) -> bool:

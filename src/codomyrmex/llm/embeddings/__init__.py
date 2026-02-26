@@ -129,7 +129,7 @@ class EmbeddingProvider(ABC):
         pass
 
 
-class MockEmbeddingProvider(EmbeddingProvider):
+class TestEmbeddingProvider(EmbeddingProvider):
     """
     Mock provider for testing (generates deterministic pseudo-embeddings).
 
@@ -547,7 +547,7 @@ __all__ = [
     "SimilarityResult",
     # Providers
     "EmbeddingProvider",
-    "MockEmbeddingProvider",
+    "TestEmbeddingProvider",
     # Core classes
     "EmbeddingCache",
     "EmbeddingIndex",

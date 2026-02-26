@@ -130,6 +130,7 @@ class TestOpenClawClient:
             # Expected if authentication fails or CLI error
             pytest.skip("OpenClaw CLI authentication or execution failed")
 
+    @pytest.mark.skipif(not OPENCLAW_AVAILABLE, reason="openclaw CLI not installed")
     def test_openclaw_client_get_version(self):
         """Test getting OpenClaw version information."""
         client = OpenClawClient()

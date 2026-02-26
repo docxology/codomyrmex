@@ -55,17 +55,19 @@ try:
     )
 except ImportError:
     # Fallback for standalone execution
-    import logging
+    import logging as _logging
     def get_logger(name):
-        return logging.getLogger(name)
+        return _logging.getLogger(name)
     def setup_logging():
-        logging.basicConfig(level=logging.INFO)
+        _logging.basicConfig(level=_logging.INFO)
     class LogContext:
-        def __init__(self, **kwargs): pass
+        def __init__(self, **kwargs):
+            _logging.warning("codomyrmex not installed: LogContext operating as no-op. Install codomyrmex for full functionality.")
         def __enter__(self): return self
         def __exit__(self, *args): pass
     class PerformanceLogger:
-        def __init__(self, logger_name): pass
+        def __init__(self, logger_name):
+            _logging.warning("codomyrmex not installed: PerformanceLogger operating as no-op. Install codomyrmex for full functionality.")
         def time_operation(self, name, **kwargs):
             from contextlib import contextmanager
             @contextmanager

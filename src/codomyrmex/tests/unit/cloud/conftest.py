@@ -6,6 +6,7 @@ can be imported explicitly by test modules.  This file re-exports
 fixtures that inject them.
 """
 
+import os
 import sys
 from pathlib import Path
 
@@ -50,17 +51,42 @@ def mock_s3_client():
 # =========================================================================
 
 @pytest.fixture
-def infomaniak_openstack_env(monkeypatch):
+def infomaniak_openstack_env():
     """Set standard env vars for OpenStack connections."""
-    monkeypatch.setenv("INFOMANIAK_APP_CREDENTIAL_ID", "test-cred-id")
-    monkeypatch.setenv("INFOMANIAK_APP_CREDENTIAL_SECRET", "test-cred-secret")
-    monkeypatch.setenv("INFOMANIAK_AUTH_URL", "https://api.pub1.infomaniak.cloud/identity/v3/")
-    monkeypatch.setenv("INFOMANIAK_REGION", "dc3-a")
+    keys = [
+        "INFOMANIAK_APP_CREDENTIAL_ID",
+        "INFOMANIAK_APP_CREDENTIAL_SECRET",
+        "INFOMANIAK_AUTH_URL",
+        "INFOMANIAK_REGION",
+    ]
+    originals = {k: os.environ.get(k) for k in keys}
+    os.environ["INFOMANIAK_APP_CREDENTIAL_ID"] = "test-cred-id"
+    os.environ["INFOMANIAK_APP_CREDENTIAL_SECRET"] = "test-cred-secret"
+    os.environ["INFOMANIAK_AUTH_URL"] = "https://api.pub1.infomaniak.cloud/identity/v3/"
+    os.environ["INFOMANIAK_REGION"] = "dc3-a"
+    yield
+    for k, v in originals.items():
+        if v is None:
+            os.environ.pop(k, None)
+        else:
+            os.environ[k] = v
 
 
 @pytest.fixture
-def infomaniak_s3_env(monkeypatch):
+def infomaniak_s3_env():
     """Set standard env vars for S3 connections."""
-    monkeypatch.setenv("INFOMANIAK_S3_ACCESS_KEY", "test-s3-access")
-    monkeypatch.setenv("INFOMANIAK_S3_SECRET_KEY", "test-s3-secret")
-    monkeypatch.setenv("INFOMANIAK_S3_ENDPOINT", "https://s3.pub1.infomaniak.cloud/")
+    keys = [
+        "INFOMANIAK_S3_ACCESS_KEY",
+        "INFOMANIAK_S3_SECRET_KEY",
+        "INFOMANIAK_S3_ENDPOINT",
+    ]
+    originals = {k: os.environ.get(k) for k in keys}
+    os.environ["INFOMANIAK_S3_ACCESS_KEY"] = "test-s3-access"
+    os.environ["INFOMANIAK_S3_SECRET_KEY"] = "test-s3-secret"
+    os.environ["INFOMANIAK_S3_ENDPOINT"] = "https://s3.pub1.infomaniak.cloud/"
+    yield
+    for k, v in originals.items():
+        if v is None:
+            os.environ.pop(k, None)
+        else:
+            os.environ[k] = v

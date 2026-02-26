@@ -12,15 +12,11 @@ try:
     import requests
     from requests.adapters import HTTPAdapter
     from urllib3.util.retry import Retry
-    REQUESTS_AVAILABLE = True
-except ImportError:
-    REQUESTS_AVAILABLE = False
-    # Mocking for type checking or fallback
-    class HTTPAdapter:
-        """Functional component: HTTPAdapter."""
-        def __init__(self, **kwargs): pass
-    class Retry:
-        def __init__(self, **kwargs): pass
+except ImportError as e:
+    raise ImportError(
+        "requests and urllib3 libraries are required for the networking module. "
+        "Install with: uv sync --extra networking"
+    ) from e
 
 from codomyrmex.exceptions import CodomyrmexError
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -78,9 +74,6 @@ class HTTPClient:
             retry_backoff: Backoff factor for retries
             headers: Default headers
         """
-        if not REQUESTS_AVAILABLE:
-            raise ImportError("requests package not available. Install with: pip install requests")
-
         self.timeout = timeout
         self.max_retries = max_retries
         self.retry_backoff = retry_backoff

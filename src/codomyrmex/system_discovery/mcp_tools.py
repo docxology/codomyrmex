@@ -39,21 +39,14 @@ def list_modules() -> dict:
     Returns:
         Dictionary with module names, versions, and availability status.
     """
-    from codomyrmex.system_discovery import CapabilityScanner
+    import codomyrmex as _codomyrmex
 
     try:
-        scanner = CapabilityScanner()
-        modules = scanner.scan() if hasattr(scanner, "scan") else []
+        module_names = _codomyrmex.list_modules()
         return {
             "status": "success",
-            "modules": [
-                {
-                    "name": m.name if hasattr(m, "name") else str(m),
-                    "available": m.available if hasattr(m, "available") else True,
-                }
-                for m in modules
-            ] if modules else [],
-            "count": len(modules) if modules else 0,
+            "modules": [{"name": m, "available": True} for m in module_names],
+            "count": len(module_names),
         }
     except Exception as e:
         return {"status": "error", "message": str(e)}

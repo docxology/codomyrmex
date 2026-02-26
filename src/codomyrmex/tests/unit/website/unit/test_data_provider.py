@@ -737,6 +737,22 @@ class TestGetGitInfo:
         result = provider._get_git_info()
         assert "branch" in result
 
+    def test_returns_error_key_when_not_git_repo(self, tmp_path):
+        """Returns dict with 'error' key when tmp_path is not a git repo."""
+        provider = DataProvider(tmp_path)
+        result = provider._get_git_info()
+        # tmp_path is not a git repo, so either error OR branch from parent repo.
+        # In CI or non-repo contexts: 'error' key is present.
+        # In a repo context: 'branch' key is present. Both are valid.
+        assert "branch" in result or "error" in result
+
+    def test_branch_value_is_string(self, tmp_path):
+        """The 'branch' value is a string when git is available."""
+        provider = DataProvider(tmp_path)
+        result = provider._get_git_info()
+        if "branch" in result:
+            assert isinstance(result["branch"], str)
+
 
 @pytest.mark.unit
 class TestGetArchitectureLayers:
@@ -753,6 +769,22 @@ class TestGetArchitectureLayers:
         assert "Core" in names
         assert "Service" in names
         assert "Application" in names
+
+    def test_each_layer_has_required_keys(self, tmp_path):
+        """Each layer dict has 'name', 'modules', 'color'."""
+        provider = DataProvider(tmp_path)
+        result = provider._get_architecture_layers()
+        for layer in result:
+            assert "name" in layer, f"Layer missing 'name': {layer}"
+            assert "modules" in layer, f"Layer missing 'modules': {layer}"
+            assert "color" in layer, f"Layer missing 'color': {layer}"
+
+    def test_modules_is_list_in_each_layer(self, tmp_path):
+        """Each layer's 'modules' value is a list."""
+        provider = DataProvider(tmp_path)
+        result = provider._get_architecture_layers()
+        for layer in result:
+            assert isinstance(layer["modules"], list)
 
 
 @pytest.mark.unit

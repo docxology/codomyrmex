@@ -100,6 +100,8 @@ def _find_mcp_modules() -> list[str]:
         return sorted(parents)
 
     except Exception as exc:
+        import traceback
+        traceback.print_exc()
         logger.warning("_find_mcp_modules failed (%s); using fallback targets", exc)
         return list(_FALLBACK_SCAN_TARGETS)
 

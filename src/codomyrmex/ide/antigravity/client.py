@@ -1,8 +1,11 @@
+import logging
 import shutil
 import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from .models import (
     Artifact,
@@ -682,10 +685,11 @@ class AntigravityClient(IDEClient):
                     command=f"{Path(cli).name} chat",
                     output={"message": message, "method": "cli", "cli_path": cli, "mode": mode or "default"}
                 )
-            except subprocess.CalledProcessError:
-                # If CLI fails, we continue to fallback but log error
+            except subprocess.CalledProcessError as e:
+                logger.warning("Antigravity CLI notification failed: %s", str(e))
                 pass
-            except Exception:
+            except Exception as e:
+                logger.warning("Antigravity notify_user unexpected error: %s", str(e))
                 pass
 
         # Fallback implementation

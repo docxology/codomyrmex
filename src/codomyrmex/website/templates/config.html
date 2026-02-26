@@ -44,58 +44,86 @@
     </div>
 </div>
 
-<style>
-    .file-list {
-        list-style: none;
-        padding: 0;
-    }
-
-    .file-list li {
-        margin-bottom: 0.5rem;
-    }
-
-    .file-list a {
-        color: var(--text-secondary);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem;
-        border-radius: 6px;
-        transition: var(--transition);
-    }
-
-    .file-list a:hover,
-    .file-list a.active {
-        background-color: var(--bg-tertiary);
-        color: var(--text-primary);
-    }
-
-    .file-icon {
-        font-size: 1rem;
-    }
-</style>
-
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
         const configEditor = document.getElementById('config-editor');
         const emptyState = document.getElementById('config-empty-state');
-        const links = document.querySelectorAll('.config-file-link');
+        const saveBtn = document.getElementById('save-config-btn');
+        const currentFileLabel = document.getElementById('current-config-file');
+        const saveStatus = document.getElementById('save-status');
+        let activeFilename = null;
 
-        // Show editor when a file is selected
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                if (configEditor && emptyState) {
-                    emptyState.style.display = 'none';
-                    configEditor.style.display = 'block';
+        // Load file content via GET /api/config/{filename}
+        async function loadFile(filename) {
+            emptyState.style.display = 'none';
+            configEditor.style.display = 'block';
+            configEditor.disabled = true;
+            saveBtn.disabled = true;
+            currentFileLabel.textContent = filename;
+            saveStatus.textContent = '';
+
+            try {
+                const resp = await fetch('/api/config/' + encodeURIComponent(filename));
+                if (resp.ok) {
+                    const data = await resp.json();
+                    configEditor.value = data.content || '';
+                    configEditor.disabled = false;
+                    saveBtn.disabled = false;
+                    activeFilename = filename;
+                } else {
+                    const data = await resp.json();
+                    configEditor.value = '';
+                    saveStatus.textContent = 'Error loading file: ' + (data.error || resp.status);
+                    saveStatus.style.color = 'var(--error-color)';
                 }
+            } catch (err) {
+                saveStatus.textContent = 'Connection error: ' + err.message;
+                saveStatus.style.color = 'var(--error-color)';
+            }
+        }
+
+        // Save file content via POST /api/config
+        saveBtn.addEventListener('click', async function () {
+            if (!activeFilename) return;
+            saveBtn.disabled = true;
+            saveStatus.textContent = 'Saving…';
+            saveStatus.style.color = 'var(--text-secondary)';
+
+            try {
+                const resp = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: activeFilename, content: configEditor.value })
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    saveStatus.textContent = '✓ Saved';
+                    saveStatus.style.color = 'var(--success-color)';
+                } else {
+                    saveStatus.textContent = 'Save failed: ' + (data.error || resp.status);
+                    saveStatus.style.color = 'var(--error-color)';
+                }
+            } catch (err) {
+                saveStatus.textContent = 'Connection error: ' + err.message;
+                saveStatus.style.color = 'var(--error-color)';
+            } finally {
+                saveBtn.disabled = false;
+            }
+        });
+
+        // Wire file list links
+        document.querySelectorAll('.config-file-link').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelectorAll('.config-file-link').forEach(function (l) { l.classList.remove('active'); });
+                this.classList.add('active');
+                loadFile(this.dataset.filename);
             });
         });
 
-        // Auto-select first file if available
-        if (links.length > 0) {
-            setTimeout(() => links[0].click(), 100);
-        }
+        // Auto-select first file
+        const first = document.querySelector('.config-file-link');
+        if (first) setTimeout(function () { first.click(); }, 100);
     });
 </script>
 {% endblock %}

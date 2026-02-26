@@ -37,13 +37,15 @@ class TestGeminiClientInit:
         assert AgentCapabilities.TEXT_COMPLETION in client.capabilities
         assert client.client is not None
 
-    def test_init_without_key_warns(self, monkeypatch):
+    def test_init_without_key_warns(self):
         """GeminiClient warns (but doesn't crash) when no API key is available."""
-        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-        # The client logs a warning instead of raising
-        client = GeminiClient(config={"gemini_api_key": ""})
-        # api_key should be falsy
-        assert not client.api_key
+        original_value = os.environ.pop("GEMINI_API_KEY", None)
+        try:
+            client = GeminiClient(config={"gemini_api_key": ""})
+            assert not client.api_key
+        finally:
+            if original_value is not None:
+                os.environ["GEMINI_API_KEY"] = original_value
 
     @pytest.mark.skipif(not _HAS_GEMINI_KEY, reason="GEMINI_API_KEY not set")
     def test_default_model(self):

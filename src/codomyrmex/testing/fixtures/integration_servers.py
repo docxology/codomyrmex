@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import FastAPI
 
 
-class MockServerManager:
+class TestServerManager:
     """
     Zero-Mock Integration Testing Server Manager.
     

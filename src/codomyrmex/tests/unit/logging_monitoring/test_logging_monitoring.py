@@ -208,7 +208,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_basic(self, caplog):
         """Test basic PerformanceLogger functionality."""
-        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 
@@ -225,7 +225,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_context_manager(self, caplog):
         """Test PerformanceLogger context manager."""
-        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 
@@ -240,7 +240,7 @@ class TestLoggingMonitoring:
 
     def test_performance_logger_metrics(self, caplog):
         """Test PerformanceLogger metric logging."""
-        from codomyrmex.logging_monitoring.core.logger_config import PerformanceLogger
+        from codomyrmex.logging_monitoring.handlers.performance import PerformanceLogger
 
         perf_logger = PerformanceLogger("test.performance")
 

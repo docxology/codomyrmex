@@ -58,26 +58,38 @@ class TestInfomaniakNewsletterClient:
         assert client._token == "tok-abc"
         assert client._newsletter_id == "nl-456"
 
-    def test_from_env(self, monkeypatch):
+    def test_from_env(self):
         """from_env reads correct environment variables."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
-        monkeypatch.setenv("INFOMANIAK_NEWSLETTER_TOKEN", "env-token")
-        monkeypatch.setenv("INFOMANIAK_NEWSLETTER_ID", "env-nl-id")
+        keys = ["INFOMANIAK_NEWSLETTER_TOKEN", "INFOMANIAK_NEWSLETTER_ID"]
+        originals = {k: os.environ.get(k) for k in keys}
+        os.environ["INFOMANIAK_NEWSLETTER_TOKEN"] = "env-token"
+        os.environ["INFOMANIAK_NEWSLETTER_ID"] = "env-nl-id"
+        try:
+            client = InfomaniakNewsletterClient.from_env()
+            assert client._token == "env-token"
+            assert client._newsletter_id == "env-nl-id"
+        finally:
+            for k, v in originals.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
-        client = InfomaniakNewsletterClient.from_env()
-        assert client._token == "env-token"
-        assert client._newsletter_id == "env-nl-id"
-
-    def test_from_env_missing(self, monkeypatch):
+    def test_from_env_missing(self):
         """from_env raises ValueError when env vars are missing."""
         from codomyrmex.cloud.infomaniak.newsletter import InfomaniakNewsletterClient
 
+        removed = {}
         for key in list(os.environ):
             if key.startswith("INFOMANIAK_NEWSLETTER"):
-                monkeypatch.delenv(key, raising=False)
-        with pytest.raises(ValueError, match="Missing required environment variables"):
-            InfomaniakNewsletterClient.from_env()
+                removed[key] = os.environ.pop(key)
+        try:
+            with pytest.raises(ValueError, match="Missing required environment variables"):
+                InfomaniakNewsletterClient.from_env()
+        finally:
+            os.environ.update(removed)
 
     def test_auth_header_set(self):
         """__init__ sets Authorization Bearer header on session."""

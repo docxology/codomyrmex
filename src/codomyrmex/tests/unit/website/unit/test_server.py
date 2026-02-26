@@ -339,10 +339,11 @@ class TestPOSTEndpoints:
         assert "hello from test" in data["stdout"]
 
     def test_tests_run_endpoint(self, live_server):
-        """Test /api/tests endpoint returns test results."""
+        """Test /api/tests endpoint returns 202 Accepted (async background run)."""
         status, data = live_server.post("/api/tests", {})
-        assert status == 200
+        assert status == 202
         assert isinstance(data, dict)
+        assert data.get("status") == "running"
 
 
 # ── Security Tests ──────────────────────────────────────────────────
@@ -804,6 +805,73 @@ class TestPaiActionEndpoint:
         )
         assert status == 200
         assert data.get("success") is True
+
+
+# ── PAI Action New Backends Tests ────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestPaiActionNewBackends:
+    """Tests for the analyze, search, and docs PAI actions."""
+
+    def test_analyze_action_returns_200(self, live_server):
+        """analyze action returns 200 with success=True."""
+        status, data = live_server.post("/api/pai/action", {"action": "analyze"})
+        assert status == 200
+        assert data.get("success") is True
+
+    def test_analyze_result_has_module_counts(self, live_server):
+        """analyze result includes total_modules and active_modules."""
+        status, data = live_server.post("/api/pai/action", {"action": "analyze"})
+        assert status == 200
+        result = data.get("result", {})
+        assert "total_modules" in result
+        assert "active_modules" in result
+        assert isinstance(result["total_modules"], int)
+        assert isinstance(result["active_modules"], int)
+
+    def test_search_without_query_returns_400(self, live_server):
+        """search action without 'query' field returns 400 with success=False."""
+        status, data = live_server.post("/api/pai/action", {"action": "search"})
+        assert status == 400
+        assert data.get("success") is False
+
+    def test_search_with_query_returns_200(self, live_server):
+        """search with a valid query returns 200 and hits list."""
+        status, data = live_server.post("/api/pai/action", {"action": "search", "query": "fake"})
+        assert status == 200
+        assert data.get("success") is True
+        result = data.get("result", {})
+        assert "hits" in result
+        assert "count" in result
+        assert isinstance(result["hits"], list)
+        assert isinstance(result["count"], int)
+
+    def test_search_invalid_regex_returns_400(self, live_server):
+        """search with an invalid regex pattern returns 400 with success=False."""
+        status, data = live_server.post("/api/pai/action", {"action": "search", "query": "[invalid"})
+        assert status == 400
+        assert data.get("success") is False
+
+    def test_docs_without_module_returns_400(self, live_server):
+        """docs action without 'module' field returns 400 with success=False."""
+        status, data = live_server.post("/api/pai/action", {"action": "docs"})
+        assert status == 400
+        assert data.get("success") is False
+
+    def test_docs_unknown_module_returns_404(self, live_server):
+        """docs action with non-existent module returns 404 with success=False."""
+        status, data = live_server.post("/api/pai/action", {"action": "docs", "module": "nonexistent_module_xyz"})
+        assert status == 404
+        assert data.get("success") is False
+
+    def test_docs_known_module_returns_200(self, live_server):
+        """docs action with the live server's fake_mod returns 200 and a result dict."""
+        status, data = live_server.post("/api/pai/action", {"action": "docs", "module": "fake_mod"})
+        assert status == 200
+        assert data.get("success") is True
+        result = data.get("result", {})
+        assert isinstance(result, dict)
 
 
 # ── Agent Dispatch Status Endpoint Tests ─────────────────────────────

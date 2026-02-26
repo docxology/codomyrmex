@@ -1,14 +1,14 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing 208 MCP tools across 33 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing 190 MCP tools across 33 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 1.0.3 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 208
+**Version**: 1.0.4 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 190
 
 ## Description
 
-Full-spectrum coding workspace skill providing 208 MCP tools across 33 auto-discovered modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
+Full-spectrum coding workspace skill providing 190 MCP tools across 33 auto-discovered modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation.
 
 ## Installation
 

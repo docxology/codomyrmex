@@ -37,9 +37,7 @@ class OllamaClient:
 
     def create_session(self, session_id: str) -> None:
         """Execute Create Session operations natively."""
-        # Ollama manages context internally via /api/chat if messages are sent
-        # For this simple client, we rely on prompt context or stateless calls
-        return None
+        raise NotImplementedError("LLM session management not implemented")
 
     def execute_with_session(self, request: AgentRequest, session: Any = None, session_id: Any = None) -> Any:
         """Execute request using Ollama /api/chat for real conversation."""
@@ -126,7 +124,8 @@ def get_llm_client(identity: str = "agent") -> Any:
     # 2. Check Ollama
     try:
         # Quick health check
-        with urllib.request.urlopen("http://localhost:11434/api/tags", timeout=1.0) as resp:
+        base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+        with urllib.request.urlopen(f"{base}/api/tags", timeout=1.0) as resp:
             if resp.status == 200:
                 # Use configured model or default
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")

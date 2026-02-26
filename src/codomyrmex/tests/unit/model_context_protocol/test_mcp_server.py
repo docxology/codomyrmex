@@ -109,12 +109,12 @@ def server(code_dir):
 
 @pytest.fixture
 def mock_client(server):
-    """MockMCPClient wrapping the test server."""
+    """TestMCPClient wrapping the test server."""
     if str(Path(__file__).resolve().parents[3]) not in sys.path:
         sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-    from codomyrmex.model_context_protocol.quality.testing import MockMCPClient
-    return MockMCPClient(server)
+    from codomyrmex.model_context_protocol.quality.testing import TestMCPClient
+    return TestMCPClient(server)
 
 
 # ---------------------------------------------------------------------------
@@ -353,12 +353,12 @@ class TestToolExecution:
 
 
 # ---------------------------------------------------------------------------
-# MockMCPClient Tests
+# TestMCPClient Tests
 # ---------------------------------------------------------------------------
 
 @pytest.mark.unit
 class TestMockClient:
-    """Test the MockMCPClient from testing.py."""
+    """Test the TestMCPClient from testing.py."""
 
     def test_client_initialize(self, mock_client):
         """Test functionality: client initialize."""

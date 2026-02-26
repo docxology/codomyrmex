@@ -6,7 +6,10 @@ Generate and manage SBOMs for supply chain security.
 
 import hashlib
 import json
+import logging
 from dataclasses import dataclass, field
+
+logger = logging.getLogger(__name__)
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -146,8 +149,10 @@ class SBOMGenerator:
                     version=version,
                     purl=f"pkg:npm/{name}@{version}",
                 ))
-        except (FileNotFoundError, json.JSONDecodeError):
-            pass
+        except FileNotFoundError:
+            pass  # No package.json -- no npm dependencies, continue
+        except json.JSONDecodeError as e:
+            logger.warning("SBOM: malformed package.json, skipping npm deps: %s", str(e))
 
         self._components.extend(components)
         return components

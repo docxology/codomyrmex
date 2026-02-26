@@ -12,6 +12,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
+from codomyrmex.logging_monitoring import get_logger
+
+logger = get_logger(__name__)
+
 
 class MCPCapability(Enum):
     """MCP server capabilities."""
@@ -405,7 +409,8 @@ class MCPBridge:
                 if response:
                     # Write response to stdout
                     print(json.dumps(response), file=sys.stdout, flush=True)
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
+                logger.warning("MCP: malformed JSON line skipped: %s", str(e))
                 continue
             except Exception as e:
                 print(f"Error: {e}", file=sys.stderr)

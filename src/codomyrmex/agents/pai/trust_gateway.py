@@ -107,7 +107,7 @@ def _log_audit_entry(
     try:
         args_json = json.dumps(args, sort_keys=True)
         args_hash = hashlib.sha256(args_json.encode()).hexdigest()
-    except Exception:
+    except (TypeError, ValueError):
         args_hash = "unhashable"
 
     entry: AuditEntry = {
@@ -229,7 +229,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
     if _on_trust_change:
         try:
             _on_trust_change(old_level, new_level)
-        except Exception as e:
+        except (TypeError, RuntimeError) as e:
             logging.getLogger(__name__).error(f"Trust change callback failed: {e}")
 
     # Emit trust level change via EventBus
@@ -249,7 +249,7 @@ def _trigger_trust_change(old_level: TrustLevel, new_level: TrustLevel) -> None:
         logger.debug("Trust level change emitted: %s -> %s", old_level.name, new_level.name)
     except ImportError:
         logger.warning("EventBus not available; trust level change event not emitted")
-    except Exception as e:
+    except (RuntimeError, AttributeError) as e:
         logger.warning("Failed to emit trust level change event: %s", e)
 
 
@@ -343,7 +343,7 @@ class TrustRegistry:
                         self._levels[name] = TrustLevel(level_val)
                     except ValueError:
                         pass
-        except Exception as e:
+        except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
 
     def _save(self) -> None:
@@ -352,7 +352,7 @@ class TrustRegistry:
             self._ledger_path.parent.mkdir(parents=True, exist_ok=True)
             data = {name: lvl.value for name, lvl in self._levels.items()}
             self._ledger_path.write_text(json.dumps(data, indent=2))
-        except Exception as e:
+        except OSError as e:
             logger.error(f"Failed to save trust ledger: {e}")
 
     # ── Queries ───────────────────────────────────────────────────
@@ -562,7 +562,7 @@ def verify_capabilities() -> dict[str, Any]:
         mcp_resources = len(server._resources)
         mcp_prompts = len(server._prompts)
         mcp_server_name = server.config.name
-    except Exception:
+    except (ImportError, AttributeError, TypeError):
         mcp_server_name = "unknown"
         mcp_transport = "unknown"
         mcp_resources = 0

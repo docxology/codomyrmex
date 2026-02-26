@@ -43,9 +43,10 @@
     <span style="font-size: 1.2rem;">🚀</span>
     <div style="flex: 1;">
         <strong style="font-size: 0.9rem;">PAI Project Manager</strong>
-        <span id="aw-pm-status" style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">Kanban · Gantt · Git sync · AI dispatch — checking…</span>
+        <span id="aw-pm-status" style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">Kanban ·
+            Gantt · Git sync · AI dispatch — checking…</span>
     </div>
-    <a id="aw-pm-link" href="http://localhost:8889" target="_blank" rel="noopener"
+    <a id="aw-pm-link" href="http://localhost:8888" target="_blank" rel="noopener"
         style="text-decoration: none; padding: 0.35rem 0.85rem; background: #7c3aed; color: #fff; border-radius: 6px; font-size: 0.82rem; font-weight: 600; white-space: nowrap; opacity: 0.4; pointer-events: none;">
         Open PAI PM →</a>
 </div>
@@ -56,7 +57,8 @@
     <span style="font-size: 1.2rem;">📡</span>
     <div style="flex: 1;">
         <strong style="font-size: 0.9rem;">PAI Observability Dashboard</strong>
-        <span id="aw-obs-status" style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">Real-time agent monitoring · Event streams · Heat levels — checking…</span>
+        <span id="aw-obs-status" style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">Real-time
+            agent monitoring · Event streams · Heat levels — checking…</span>
     </div>
     <a id="aw-obs-link" href="http://localhost:5172" target="_blank" rel="noopener"
         style="text-decoration: none; padding: 0.35rem 0.85rem; background: #059669; color: #fff; border-radius: 6px; font-size: 0.82rem; font-weight: 600; white-space: nowrap; opacity: 0.4; pointer-events: none;">
@@ -642,36 +644,37 @@
 </style>
 
 <script>
-(function checkPaiPMStatus() {
-    const statusEl = document.getElementById('aw-pm-status');
-    const linkEl   = document.getElementById('aw-pm-link');
-    fetch('http://localhost:8889/api/dashboard', { signal: AbortSignal.timeout(3000) })
-        .then(r => {
-            if (!r.ok) throw new Error();
-            statusEl.textContent = 'Kanban · Gantt · Git sync · AI dispatch — Running on localhost:8889';
-            statusEl.style.color = '#10b981';
-            linkEl.style.opacity = '1';
-            linkEl.style.pointerEvents = 'auto';
-        })
-        .catch(() => {
-            statusEl.innerHTML = 'Not running — <code style="font-size:0.78rem">bun ~/.claude/skills/PAI/Tools/PMServer.ts</code>';
-        });
-})();
+    (function checkPaiPMStatus() {
+        const statusEl = document.getElementById('aw-pm-status');
+        const linkEl = document.getElementById('aw-pm-link');
+        fetch('http://localhost:8888/api/dashboard', { signal: AbortSignal.timeout(3000) })
+            .then(r => {
+                if (!r.ok) throw new Error();
+                statusEl.textContent = 'Kanban · Gantt · Git sync · AI dispatch — Running on localhost:8888';
+                statusEl.style.color = '#10b981';
+                linkEl.style.opacity = '1';
+                linkEl.style.pointerEvents = 'auto';
+                linkEl.href = 'http://localhost:8888';
+            })
+            .catch(() => {
+                statusEl.innerHTML = 'Not running — <code style="font-size:0.78rem">uv run python scripts/pai/dashboard.py</code>';
+            });
+    })();
 
-(function checkPaiObsStatus() {
-    const statusEl = document.getElementById('aw-obs-status');
-    const linkEl   = document.getElementById('aw-obs-link');
-    fetch('http://localhost:5172', { signal: AbortSignal.timeout(3000) })
-        .then(r => {
-            statusEl.textContent = 'Real-time agent monitoring · Event streams · Heat levels — Running on localhost:5172';
-            statusEl.style.color = '#10b981';
-            linkEl.style.opacity = '1';
-            linkEl.style.pointerEvents = 'auto';
-        })
-        .catch(() => {
-            statusEl.innerHTML = 'Not running — <code style="font-size:0.78rem">~/.claude/Observability/scripts/start-agent-observability-dashboard.sh</code>';
-        });
-})();
+    (function checkPaiObsStatus() {
+        const statusEl = document.getElementById('aw-obs-status');
+        const linkEl = document.getElementById('aw-obs-link');
+        fetch('http://localhost:5172', { signal: AbortSignal.timeout(3000) })
+            .then(r => {
+                statusEl.textContent = 'Real-time agent monitoring · Event streams · Heat levels — Running on localhost:5172';
+                statusEl.style.color = '#10b981';
+                linkEl.style.opacity = '1';
+                linkEl.style.pointerEvents = 'auto';
+            })
+            .catch(() => {
+                statusEl.innerHTML = 'Not running — <code style="font-size:0.78rem">~/.claude/Observability/scripts/start-agent-observability-dashboard.sh</code>';
+            });
+    })();
 </script>
 
 <script>

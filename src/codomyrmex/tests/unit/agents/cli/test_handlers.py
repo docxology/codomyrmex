@@ -278,16 +278,17 @@ class TestClaudeHandlers:
     execute/stream propagate it. We document this as expected behavior.
     """
 
-    def test_claude_execute_raises_due_to_broken_client(self, capsys):
-        """ClaudeClient.__init__ raises TypeError -- handler does not catch it."""
+    def test_claude_execute_runs(self, capsys):
+        """ClaudeClient execution acts normally and returns a bool."""
         args = _make_args(prompt="hello")
-        with pytest.raises(TypeError):
-            handle_claude_execute(args)
+        result = handle_claude_execute(args)
+        assert isinstance(result, bool)
 
-    def test_claude_stream_raises_due_to_broken_client(self, capsys):
+    def test_claude_stream_runs(self, capsys):
+        """ClaudeClient streaming acts normally and returns a bool."""
         args = _make_args(prompt="hello")
-        with pytest.raises(TypeError):
-            handle_claude_stream(args)
+        result = handle_claude_stream(args)
+        assert isinstance(result, bool)
 
     def test_claude_check_runs(self, capsys):
         """claude check does not instantiate ClaudeClient, uses get_config()."""

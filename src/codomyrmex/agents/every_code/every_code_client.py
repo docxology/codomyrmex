@@ -276,7 +276,7 @@ class EveryCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(
                 f"Failed to get Every Code help: {e}",
                 extra={"command": self.command, "error": str(e)},
@@ -302,7 +302,7 @@ class EveryCodeClient(CLIAgentBase):
                 "exit_code": result.get("exit_code", 0),
                 "available": result.get("success", False),
             }
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        except (AgentError, ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
             self.logger.warning(
                 f"Failed to get Every Code version: {e}",
                 extra={"command": self.command, "error": str(e)},

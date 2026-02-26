@@ -14,7 +14,6 @@ Zero-mock policy: uses real RepositoryMetadataManager backed by tmp_path JSON.
 
 import argparse
 import json
-import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
@@ -590,89 +589,51 @@ class TestCmdCleanup:
 class TestMain:
     """Tests for the main() argparse entrypoint."""
 
-    def test_main_no_args_prints_help(self, tmp_path, capsys, monkeypatch):
+    def test_main_no_args_prints_help(self, tmp_path, capsys):
         """Calling main with no arguments prints help and returns."""
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(tmp_path / "meta.json")],
-        )
-        # Need to create the file since RepositoryMetadataManager may try to load
         (tmp_path / "meta.json").write_text("{}")
-        # main() with no subcommand should print help
-        # argparse may call sys.exit, but our main() handles it gracefully
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(tmp_path / "meta.json")])
         captured = capsys.readouterr()
-        # The help text or "Available commands" should appear
-        # Since no command is given, parser.print_help() is called
         assert "Repository Metadata Management CLI" in captured.out or "usage:" in captured.out.lower()
 
-    def test_main_show_command(self, tmp_path, capsys, monkeypatch):
+    def test_main_show_command(self, tmp_path, capsys):
         """Main dispatches 'show' command correctly."""
         meta_file = tmp_path / "meta.json"
         meta_file.write_text("{}")
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(meta_file), "show"],
-        )
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(meta_file), "show"])
         captured = capsys.readouterr()
         assert "No repositories found in metadata" in captured.out
 
-    def test_main_report_command(self, tmp_path, capsys, monkeypatch):
+    def test_main_report_command(self, tmp_path, capsys):
         """Main dispatches 'report' command correctly."""
         meta_file = tmp_path / "meta.json"
         meta_file.write_text("{}")
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(meta_file), "report"],
-        )
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(meta_file), "report"])
         captured = capsys.readouterr()
         assert "Total Repositories: 0" in captured.out
 
-    def test_main_cleanup_dry_run(self, tmp_path, capsys, monkeypatch):
+    def test_main_cleanup_dry_run(self, tmp_path, capsys):
         """Main dispatches 'cleanup --dry-run' correctly."""
         meta_file = tmp_path / "meta.json"
         meta_file.write_text("{}")
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(meta_file), "cleanup", "--dry-run"],
-        )
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(meta_file), "cleanup", "--dry-run"])
         captured = capsys.readouterr()
         assert "Cleaning up repository metadata" in captured.out
 
-    def test_main_sync_status_command(self, tmp_path, capsys, monkeypatch):
+    def test_main_sync_status_command(self, tmp_path, capsys):
         """Main dispatches 'sync-status' command correctly."""
         meta_file = tmp_path / "meta.json"
         meta_file.write_text("{}")
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(meta_file), "sync-status"],
-        )
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(meta_file), "sync-status"])
         captured = capsys.readouterr()
         assert "No cloned repositories found" in captured.out
 
-    def test_main_with_invalid_metadata_file(self, tmp_path, capsys, monkeypatch):
+    def test_main_with_invalid_metadata_file(self, tmp_path, capsys):
         """Main handles errors from metadata manager initialization gracefully."""
-        # Point to a file containing invalid JSON
         bad_file = tmp_path / "bad.json"
         bad_file.write_text("NOT VALID JSON {{{")
-        monkeypatch.setattr(
-            sys,
-            "argv",
-            ["metadata", "--metadata-file", str(bad_file), "show"],
-        )
-        # This should not raise -- the manager handles bad JSON internally
-        metadata_cli.main()
+        metadata_cli.main(argv=["--metadata-file", str(bad_file), "show"])
         captured = capsys.readouterr()
-        # It should still run (manager starts with empty metadata on load error)
         assert "No repositories found" in captured.out or "Repository Metadata" in captured.out
 
 

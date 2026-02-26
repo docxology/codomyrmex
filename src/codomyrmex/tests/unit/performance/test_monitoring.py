@@ -390,7 +390,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_basic(self):
         """Test basic async profiler functionality."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def sample_async_function():
             await asyncio.sleep(0.01)
             return "completed"
@@ -401,7 +403,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_preserves_return_value(self):
         """Test that profiler preserves the return value."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def return_dict():
             await asyncio.sleep(0.001)
             return {"key": "value", "count": 42}
@@ -412,7 +416,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_preserves_function_name(self):
         """Test that profiler preserves function metadata."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def named_function():
             return True
 
@@ -421,7 +427,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_with_args(self):
         """Test async profiler with function arguments."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def add_numbers(a: int, b: int) -> int:
             await asyncio.sleep(0.001)
             return a + b
@@ -432,7 +440,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_with_kwargs(self):
         """Test async profiler with keyword arguments."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def greet(name: str, greeting: str = "Hello") -> str:
             await asyncio.sleep(0.001)
             return f"{greeting}, {name}!"
@@ -443,7 +453,9 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_exception_handling(self):
         """Test that profiler handles exceptions properly."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def failing_function():
             await asyncio.sleep(0.001)
             raise ValueError("Test error")
@@ -453,9 +465,10 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_concurrent_execution(self):
         """Test profiler with concurrent async executions."""
+        profiler = AsyncProfiler()
         results = []
 
-        @AsyncProfiler.profile
+        @profiler.profile
         async def concurrent_task(task_id: int):
             await asyncio.sleep(0.01)
             results.append(task_id)
@@ -473,12 +486,14 @@ class TestAsyncProfiler:
 
     async def test_async_profiler_nested_calls(self):
         """Test profiler with nested async function calls."""
-        @AsyncProfiler.profile
+        profiler = AsyncProfiler()
+
+        @profiler.profile
         async def inner_function(x: int) -> int:
             await asyncio.sleep(0.001)
             return x * 2
 
-        @AsyncProfiler.profile
+        @profiler.profile
         async def outer_function(x: int) -> int:
             result = await inner_function(x)
             return result + 1

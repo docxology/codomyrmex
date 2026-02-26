@@ -104,6 +104,7 @@ class TestEveryCodeClient:
         assert "available" in help_info
         assert "help_text" in help_info
 
+    @pytest.mark.skipif(not EVERY_CODE_AVAILABLE, reason="code/coder CLI not installed")
     def test_every_code_client_get_help_structure(self):
         """Test getting Every Code help information structure."""
         client = EveryCodeClient()
@@ -117,6 +118,7 @@ class TestEveryCodeClient:
         if EVERY_CODE_AVAILABLE:
             assert help_info["available"] is True
 
+    @pytest.mark.skipif(not EVERY_CODE_AVAILABLE, reason="code/coder CLI not installed")
     def test_every_code_client_get_version_structure(self):
         """Test getting Every Code version information structure."""
         client = EveryCodeClient()

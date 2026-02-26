@@ -455,4 +455,7 @@ __all__ = [
     "generate_secret",
 ]
 
-from .secret_scanner import *  # noqa: E402, F401, F403
+
+# Note: secret_scanner.py contains a minimal SecretScanner variant.
+# Do NOT wildcard-import it here — it would overwrite the full-featured
+# SecretScanner class defined above.

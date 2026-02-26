@@ -84,7 +84,7 @@ class CursorClient(IDEClient):
 
     def get_active_file(self) -> str | None:
         """Get the currently active file."""
-        return None
+        raise NotImplementedError("Cursor IDE integration: get_active_file not yet implemented")
 
     def open_file(self, path: str) -> bool:
         """Open a file in Cursor."""

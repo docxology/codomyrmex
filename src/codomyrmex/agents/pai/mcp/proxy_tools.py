@@ -20,7 +20,7 @@ def _get_package_version() -> str:
     try:
         from importlib.metadata import version
         return version("codomyrmex")
-    except Exception:
+    except ImportError:
         return "unknown"
 
 def _tool_list_modules(**_kwargs: Any) -> dict[str, Any]:
@@ -181,7 +181,7 @@ def _tool_pai_awareness(**_kwargs: Any) -> dict[str, Any]:
         from codomyrmex.website.data_provider import DataProvider
         dp = DataProvider(root_dir=_PROJECT_ROOT)
         return dp.get_pai_awareness_data()
-    except Exception as exc:
+    except (ImportError, AttributeError, OSError) as exc:
         logger.warning("PAI awareness data unavailable: %s", exc)
         return {"error": str(exc)}
 
@@ -215,7 +215,7 @@ def _tool_run_tests(*, module: str | None = None, verbose: bool = False) -> dict
         }
     except subprocess.TimeoutExpired:
         return {"error": "Test execution timed out (120s limit)"}
-    except Exception as exc:
+    except (subprocess.SubprocessError, OSError) as exc:
         return {"error": str(exc)}
 
 def _tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
@@ -256,7 +256,7 @@ def _tool_list_workflows(project_root=None, **_kwargs: Any) -> dict[str, Any]:
                 "filepath": str(item),
                 "size_bytes": item.stat().st_size,
             })
-        except Exception as e:
+        except OSError as e:
             warnings.append(f"Failed to read {item.name}: {e}")
 
     return {

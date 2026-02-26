@@ -51,41 +51,69 @@
     </div>
 </div>
 
-<style>
-    .doc-tree,
-    .doc-tree ul {
-        list-style: none;
-        padding-left: 1rem;
+<script>
+    // Configure marked.js for safe rendering
+    if (typeof marked !== 'undefined') {
+        marked.setOptions({ breaks: true, gfm: true });
     }
 
-    .doc-tree {
-        padding-left: 0;
+    function renderMarkdown(raw) {
+        if (typeof DOMPurify !== 'undefined' && typeof marked !== 'undefined') {
+            return DOMPurify.sanitize(marked.parse(raw));
+        }
+        return '<pre>' + raw.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
     }
 
-    .folder {
-        font-weight: 600;
-        color: var(--text-primary);
-        display: block;
-        margin-top: 0.5rem;
+    function highlightCode(container) {
+        if (typeof hljs !== 'undefined') {
+            container.querySelectorAll('pre code').forEach(function (block) {
+                hljs.highlightElement(block);
+            });
+        }
     }
 
-    .doc-link {
-        color: var(--text-secondary);
-        text-decoration: none;
-        font-size: 0.9rem;
-        display: block;
-        padding: 0.25rem 0;
-    }
+    // Folder expand/collapse
+    document.querySelectorAll('.folder').forEach(function (folder) {
+        folder.addEventListener('click', function () {
+            const expanded = this.getAttribute('aria-expanded') !== 'false';
+            this.setAttribute('aria-expanded', String(!expanded));
+            const group = this.nextElementSibling;
+            if (group) group.style.display = expanded ? 'none' : '';
+        });
+        folder.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+        });
+    });
 
-    .doc-link:hover {
-        color: var(--accent-color);
-    }
+    // Doc link click → fetch content
+    document.querySelectorAll('.doc-link').forEach(function (link) {
+        link.addEventListener('click', async function (e) {
+            e.preventDefault();
+            document.querySelectorAll('.doc-link').forEach(function (l) { l.classList.remove('active'); });
+            this.classList.add('active');
 
-    .markdown-body {
-        padding: 2rem;
-        background-color: var(--bg-secondary);
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
-    }
-</style>
+            const path = this.dataset.path;
+            const content = document.getElementById('doc-content');
+            content.innerHTML = '<p style="color: var(--text-secondary);">Loading…</p>';
+
+            try {
+                const resp = await fetch('/api/docs/' + path.split('/').map(encodeURIComponent).join('/'));
+                if (resp.ok) {
+                    const data = await resp.json();
+                    content.innerHTML = renderMarkdown(data.content || '');
+                    highlightCode(content);
+                } else {
+                    const data = await resp.json();
+                    content.innerHTML = '<p style="color: var(--error-color);">Error: ' + (data.error || resp.status) + '</p>';
+                }
+            } catch (err) {
+                content.innerHTML = '<p style="color: var(--error-color);">Connection error: ' + err.message + '</p>';
+            }
+        });
+    });
+
+    // Auto-open first doc on page load
+    const first = document.querySelector('.doc-link');
+    if (first) first.click();
+</script>
 {% endblock %}

@@ -3,9 +3,12 @@ Audit documentation completeness for codomyrmex modules.
 """
 
 import ast
+import logging
 import os
 import sys
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 PLACEHOLDER_TEXTS = ["Placeholder", "TODO: Add documentation", "# New Module"]
@@ -37,7 +40,8 @@ class ModuleAudit:
                     content = doc_path.read_text(encoding="utf-8", errors="replace")
                     if len(content) < 50 or any(p in content for p in PLACEHOLDER_TEXTS):
                         self.placeholder_docs.append(doc)
-                except Exception:
+                except Exception as e:
+                    logger.warning("Documentation audit error for %s: %s", doc, str(e))
                     self.missing_docs.append(doc)  # Treat unreadable as missing
 
         # Check py.typed
@@ -51,8 +55,9 @@ class ModuleAudit:
                 tree = ast.parse(init_path.read_text(encoding="utf-8", errors="replace"))
                 if ast.get_docstring(tree):
                     self.init_has_docstring = True
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Documentation audit check failed for %s: %s", init_path, str(e))
+                raise
 
         # Count python files
         self.files_count = len(list(self.path.glob("*.py")))

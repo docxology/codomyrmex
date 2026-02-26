@@ -26,6 +26,16 @@
                 <span class="metric-label">Status</span>
             </div>
         </div>
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <button id="seed-btn" class="btn" onclick="seedMetrics()"
+                style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                🌱 Seed Sample Metrics
+            </button>
+            <button class="btn" onclick="loadTelemetry()"
+                style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--surface-color);">
+                🔄 Refresh
+            </button>
+        </div>
     </div>
 
     <div class="card health-card">
@@ -34,6 +44,13 @@
             <p style="color: var(--text-secondary);">Loading…</p>
         </div>
     </div>
+</div>
+
+<!-- Live Metric Values -->
+<div id="metric-values-card" class="card" style="margin-bottom: 1.5rem; display: none;">
+    <h2 class="card-title">Latest Metric Values</h2>
+    <div id="metric-values-grid" class="metric-grid"
+        style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));"></div>
 </div>
 
 <!-- Dashboards Registry -->
@@ -84,14 +101,34 @@
             if (names.length === 0) {
                 namesList.innerHTML =
                     '<p style="color: var(--text-secondary); font-size: 0.85rem;">No metric series recorded yet. ' +
-                    'Metrics accumulate as the system runs and modules emit telemetry data.</p>';
+                    'Click <strong>Seed Sample Metrics</strong> to generate baseline system data.</p>';
             } else {
                 namesList.innerHTML =
                     '<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">' +
-                    names.map(function(n) {
+                    names.map(function (n) {
                         return '<span class="metric-chip">' + n + '</span>';
                     }).join('') +
                     '</div>';
+            }
+
+            // Latest metric values
+            var valuesCard = document.getElementById('metric-values-card');
+            var valuesGrid = document.getElementById('metric-values-grid');
+            var latestValues = data.latest_values || {};
+            var valueKeys = Object.keys(latestValues);
+            if (valueKeys.length > 0) {
+                valuesCard.style.display = 'block';
+                valuesGrid.innerHTML = valueKeys.map(function (k) {
+                    var val = latestValues[k];
+                    var displayVal = (typeof val === 'number') ? val.toLocaleString() : val;
+                    var label = k.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+                    return '<div class="metric">' +
+                        '<span class="metric-value" style="color: var(--accent-color);">' + displayVal + '</span>' +
+                        '<span class="metric-label">' + label + '</span>' +
+                        '</div>';
+                }).join('');
+            } else {
+                valuesCard.style.display = 'none';
             }
 
             // Dashboards
@@ -100,13 +137,12 @@
             if (dashes.length === 0) {
                 dashList.innerHTML =
                     '<p style="color: var(--text-secondary); font-size: 0.85rem;">No dashboards registered. ' +
-                    'Dashboards are created programmatically via <code>DashboardManager</code> from ' +
-                    '<code>codomyrmex.telemetry.dashboard</code>.</p>';
+                    'Click <strong>Seed Sample Metrics</strong> to create a System Overview dashboard.</p>';
             } else {
                 dashList.innerHTML =
                     '<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">' +
-                    dashes.map(function(d) {
-                        var tags = (d.tags || []).map(function(t) {
+                    dashes.map(function (d) {
+                        var tags = (d.tags || []).map(function (t) {
                             return '<span class="tag-chip">' + t + '</span>';
                         }).join(' ');
                         return '<div class="dash-card">' +
@@ -124,6 +160,30 @@
 
         } catch (err) {
             showError(err.message);
+        }
+    }
+
+    async function seedMetrics() {
+        var btn = document.getElementById('seed-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Seeding...';
+        try {
+            var resp = await fetch('/api/telemetry/seed', { method: 'POST' });
+            var data = await resp.json();
+            if (data.status === 'ok') {
+                btn.textContent = '✅ Seeded!';
+                setTimeout(function () {
+                    btn.textContent = '🌱 Seed Sample Metrics';
+                    btn.disabled = false;
+                }, 2000);
+                loadTelemetry();
+            } else {
+                btn.textContent = '❌ Error';
+                btn.disabled = false;
+            }
+        } catch (e) {
+            btn.textContent = '❌ Error';
+            btn.disabled = false;
         }
     }
 

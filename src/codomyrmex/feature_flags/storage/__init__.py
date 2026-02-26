@@ -9,10 +9,13 @@ simple JSON-file-based persistence).
 from __future__ import annotations
 
 import json
+import logging
 import os
 import threading
 from abc import ABC, abstractmethod
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class FlagStore(ABC):
@@ -162,8 +165,11 @@ class FileFlagStore(FlagStore):
         try:
             with open(self._path, encoding="utf-8") as fh:
                 return json.load(fh)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return {}
+        except FileNotFoundError:
+            return {}  # Valid: first-use, no flags file yet
+        except json.JSONDecodeError as e:
+            logger.warning("Feature flags storage file is corrupt, cannot parse JSON: %s", str(e))
+            raise
 
     def _write(self, data: dict[str, Any]) -> None:
         """Atomically write *data* to the JSON file."""

@@ -1049,3 +1049,97 @@ textarea:focus-visible {
     border: 1px solid rgba(239, 68, 68, 0.5);
     font-weight: 700;
 }
+
+/* ===== Chat Page ===== */
+
+.chat-controls {
+    margin-right: 0.5rem;
+}
+
+.model-select {
+    padding: 0.5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.model-select:focus {
+    border-color: var(--accent-color);
+}
+
+/* ===== Documentation Browser ===== */
+
+.doc-tree,
+.doc-tree ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.doc-tree {
+    padding-left: 0;
+}
+
+.folder {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.doc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    padding: 0.25rem 0;
+}
+
+.doc-link:hover,
+.doc-link.active {
+    color: var(--accent-color);
+}
+
+.markdown-body {
+    padding: 2rem;
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* ===== Config Editor ===== */
+
+.file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.file-list li {
+    margin-bottom: 0.5rem;
+}
+
+.file-list a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.file-list a:hover,
+.file-list a.active {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.file-icon {
+    font-size: 1rem;
+}

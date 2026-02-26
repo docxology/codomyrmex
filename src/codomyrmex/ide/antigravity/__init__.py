@@ -260,8 +260,7 @@ class AntigravityClient(IDEClient):
         Returns:
             File path or None if no file is active.
         """
-        # In a real integration, this would query the IDE state
-        return None
+        raise NotImplementedError("Antigravity IDE integration: get_active_file not yet implemented")
 
     def open_file(self, path: str) -> bool:
         """Open a file in Antigravity.

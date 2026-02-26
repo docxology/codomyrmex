@@ -399,42 +399,62 @@ class TestConfigurationManagerFileLoading:
 class TestConfigurationManagerEnvVars:
     """Tests for environment variable loading and override."""
 
-    def test_env_var_override(self, tmp_path, monkeypatch):
+    def test_env_var_override(self, tmp_path):
         """Environment variables with CONFIG_NAME_ prefix override file values."""
         # Write a YAML file
         yaml_file = tmp_path / "myapp.yaml"
         yaml_file.write_text(yaml.dump({"host": "filehost", "port": 3000}))
 
         # Set env var with the correct prefix
-        monkeypatch.setenv("MYAPP_HOST", "envhost")
-        monkeypatch.setenv("MYAPP_PORT", "9999")
+        saved = {k: os.environ.get(k) for k in ("MYAPP_HOST", "MYAPP_PORT")}
+        os.environ["MYAPP_HOST"] = "envhost"
+        os.environ["MYAPP_PORT"] = "9999"
+        try:
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            config = manager.load_configuration("myapp", sources=["myapp.yaml"])
 
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        config = manager.load_configuration("myapp", sources=["myapp.yaml"])
+            # Env vars should override (note: env values are strings)
+            assert config.data["host"] == "envhost"
+            assert config.data["port"] == "9999"
+        finally:
+            for k, v in saved.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
-        # Env vars should override (note: env values are strings)
-        assert config.data["host"] == "envhost"
-        assert config.data["port"] == "9999"
-
-    def test_env_var_only_matching_prefix(self, tmp_path, monkeypatch):
+    def test_env_var_only_matching_prefix(self, tmp_path):
         """Only env vars with the correct prefix are loaded."""
-        monkeypatch.setenv("TESTCFG_A", "1")
-        monkeypatch.setenv("OTHERCFG_B", "2")
+        saved = {k: os.environ.get(k) for k in ("TESTCFG_A", "OTHERCFG_B")}
+        os.environ["TESTCFG_A"] = "1"
+        os.environ["OTHERCFG_B"] = "2"
+        try:
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            config = manager.load_configuration("testcfg")
 
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        config = manager.load_configuration("testcfg")
+            assert "a" in config.data
+            assert "b" not in config.data
+        finally:
+            for k, v in saved.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
-        assert "a" in config.data
-        assert "b" not in config.data
-
-    def test_env_source_protocol(self, tmp_path, monkeypatch):
+    def test_env_source_protocol(self, tmp_path):
         """Sources with env:// protocol load specific environment variables."""
-        monkeypatch.setenv("MY_SECRET", "s3cr3t")
+        saved = os.environ.get("MY_SECRET")
+        os.environ["MY_SECRET"] = "s3cr3t"
+        try:
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            config = manager.load_configuration("secrets", sources=["env://MY_SECRET"])
 
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        config = manager.load_configuration("secrets", sources=["env://MY_SECRET"])
-
-        assert config.data.get("MY_SECRET") == "s3cr3t"
+            assert config.data.get("MY_SECRET") == "s3cr3t"
+        finally:
+            if saved is None:
+                os.environ.pop("MY_SECRET", None)
+            else:
+                os.environ["MY_SECRET"] = saved
 
     def test_env_source_protocol_missing_raises(self, tmp_path):
         """env:// source for missing variable raises FileNotFoundError (single-source guard)."""
@@ -768,32 +788,49 @@ class TestConfigurationManagerSchemaValidation:
 class TestConfigurationManagerEnvironments:
     """Tests for environment-based config directory structure."""
 
-    def test_environment_from_env_var(self, monkeypatch, tmp_path):
+    def test_environment_from_env_var(self, tmp_path):
         """ConfigurationManager reads ENVIRONMENT env var."""
-        monkeypatch.setenv("ENVIRONMENT", "production")
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        assert manager.environment == "production"
+        saved = os.environ.get("ENVIRONMENT")
+        os.environ["ENVIRONMENT"] = "production"
+        try:
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            assert manager.environment == "production"
+        finally:
+            if saved is None:
+                os.environ.pop("ENVIRONMENT", None)
+            else:
+                os.environ["ENVIRONMENT"] = saved
 
-    def test_default_environment(self, monkeypatch, tmp_path):
+    def test_default_environment(self, tmp_path):
         """Default environment is 'development'."""
-        monkeypatch.delenv("ENVIRONMENT", raising=False)
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        assert manager.environment == "development"
+        saved = os.environ.pop("ENVIRONMENT", None)
+        try:
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            assert manager.environment == "development"
+        finally:
+            if saved is not None:
+                os.environ["ENVIRONMENT"] = saved
 
-    def test_environment_specific_config(self, monkeypatch, tmp_path):
+    def test_environment_specific_config(self, tmp_path):
         """Environment-specific configs in environments/<env>/ are loaded."""
-        monkeypatch.setenv("ENVIRONMENT", "staging")
+        saved = os.environ.get("ENVIRONMENT")
+        os.environ["ENVIRONMENT"] = "staging"
+        try:
+            # Create environment-specific config
+            env_dir = tmp_path / "environments" / "staging"
+            env_dir.mkdir(parents=True)
+            env_config = env_dir / "app.yaml"
+            env_config.write_text(yaml.dump({"env_key": "staging_value"}))
 
-        # Create environment-specific config
-        env_dir = tmp_path / "environments" / "staging"
-        env_dir.mkdir(parents=True)
-        env_config = env_dir / "app.yaml"
-        env_config.write_text(yaml.dump({"env_key": "staging_value"}))
-
-        manager = ConfigurationManager(config_dir=str(tmp_path))
-        # Use default sources (which include environments/<env>/app.yaml)
-        config = manager.load_configuration("app")
-        assert config.data.get("env_key") == "staging_value"
+            manager = ConfigurationManager(config_dir=str(tmp_path))
+            # Use default sources (which include environments/<env>/app.yaml)
+            config = manager.load_configuration("app")
+            assert config.data.get("env_key") == "staging_value"
+        finally:
+            if saved is None:
+                os.environ.pop("ENVIRONMENT", None)
+            else:
+                os.environ["ENVIRONMENT"] = saved
 
 
 # ---------------------------------------------------------------------------

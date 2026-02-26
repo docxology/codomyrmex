@@ -12,6 +12,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
+logger = logging.getLogger(__name__)
+
 from codomyrmex.agentic_memory.obsidian.models import Note, VaultMetadata
 from codomyrmex.agentic_memory.obsidian.parser import (
     parse_note,
@@ -117,6 +119,7 @@ class ObsidianVault:
                 try:
                     data = json.loads(json_file.read_text())
                     config[json_file.stem] = data
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning("Obsidian vault config read failed for %s: %s", json_file, str(e))
+                    raise
         return config
