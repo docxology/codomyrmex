@@ -6,13 +6,11 @@ import shlex
 import subprocess
 from pathlib import Path
 
-import numpy as np
-
-from codomyrmex.coding import execute_code
-from codomyrmex.data_visualization import create_bar_chart, create_line_plot
+# NOTE: Core-layer imports (coding, data_visualization, system_discovery)
+# are loaded lazily inside the methods that need them to respect the
+# Foundation -> Core layer boundary.  Only Foundation-layer imports appear
+# at the top level.
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.logging_monitoring.core.logger_config import get_logger
-from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
 
 #!/usr/bin/env python3
 
@@ -24,10 +22,8 @@ structured nest.
 """
 
 try:
-
     logger = get_logger(__name__)
 except ImportError:
-
     logger = logging.getLogger(__name__)
 
 class InteractiveShell(cmd.Cmd):
@@ -56,11 +52,14 @@ Type 'explore' to begin your foraging adventure!
         """Initialize the interactive shell."""
         super().__init__()
 
-        # Initialize system discovery
-        if SystemDiscovery:
+        # Lazy-load SystemDiscovery from Core layer (system_discovery)
+        # to respect the Foundation -> Core layer boundary.
+        self.discovery = None
+        try:
+            from codomyrmex.system_discovery.core.discovery_engine import SystemDiscovery
             self.discovery = SystemDiscovery()
-        else:
-            self.discovery = None
+        except ImportError:
+            logger.warning("system_discovery module not available -- running in limited mode")
 
         # Track session data
         self.session_data = {
@@ -355,6 +354,9 @@ Type 'explore' to begin your foraging adventure!
     def _demo_data_visualization(self):
         """Demo the data visualization module."""
         try:
+            # Lazy-load Core-layer dependencies inside the method
+            import numpy as np
+            from codomyrmex.data_visualization import create_bar_chart, create_line_plot
 
             print("   📊 Creating sample line plot...")
             x = np.linspace(0, 6.28, 100)
@@ -411,6 +413,8 @@ Type 'explore' to begin your foraging adventure!
     def _demo_code_execution(self):
         """Demo the code execution sandbox."""
         try:
+            # Lazy-load Core-layer dependency inside the method
+            from codomyrmex.coding import execute_code
 
             print("   🏃 Executing sample Python code in sandbox...")
 

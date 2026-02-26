@@ -2,25 +2,51 @@
 
 This module initializes the MCP server and registers all available tools
 from the various sub-modules.
+
+Note: Core-layer MCP tool modules (coding, containerization, git_operations,
+search) are loaded lazily via importlib to respect the Foundation -> Core
+layer boundary.  They are imported at server start-up inside run_server(),
+NOT at module import time.
 """
 
 import asyncio
+import importlib
 import logging
+from typing import List
 
 from codomyrmex.logging_monitoring import get_logger
 
 from .server import MCPServer, MCPServerConfig
 
-# Import tool modules to register them
-try:
-    import codomyrmex.coding.mcp_tools
-    import codomyrmex.containerization.mcp_tools
-    import codomyrmex.git_operations.mcp_tools
-    import codomyrmex.search.mcp_tools
-except ImportError as e:
-    logging.warning(f"Some MCP tools could not be imported: {e}")
+# ---------------------------------------------------------------------------
+# Core-layer modules whose mcp_tools we want to register.
+# These are NOT imported at module level -- doing so would violate
+# the Foundation -> Core layer boundary.
+# ---------------------------------------------------------------------------
+_OPTIONAL_CORE_MCP_MODULES: List[str] = [
+    "codomyrmex.coding.mcp_tools",
+    "codomyrmex.containerization.mcp_tools",
+    "codomyrmex.git_operations.mcp_tools",
+    "codomyrmex.search.mcp_tools",
+]
 
 logger = get_logger(__name__)
+
+
+def _load_optional_mcp_tools():
+    """Late-bind Core-layer MCP tool modules.
+
+    Returns a list of successfully imported module objects.
+    Called inside ``run_server()`` -- never at module import time -- so that
+    the Foundation layer does not pull in Core-layer code on ``import``.
+    """
+    loaded = []
+    for module_path in _OPTIONAL_CORE_MCP_MODULES:
+        try:
+            loaded.append(importlib.import_module(module_path))
+        except ImportError as exc:
+            logger.warning("Optional MCP tool module %s could not be imported: %s", module_path, exc)
+    return loaded
 
 
 async def run_server() -> None:
@@ -34,13 +60,8 @@ async def run_server() -> None:
     )
     server = MCPServer(config)
 
-    # List of modules to scan for tools
-    modules_to_scan = [
-        codomyrmex.git_operations.mcp_tools,
-        codomyrmex.search.mcp_tools,
-        codomyrmex.coding.mcp_tools,
-        codomyrmex.containerization.mcp_tools,
-    ]
+    # Late-load Core-layer MCP tool modules (lazy, not at import time)
+    modules_to_scan = _load_optional_mcp_tools()
 
     for module in modules_to_scan:
         # Iterate over all attributes in the module

@@ -9,7 +9,7 @@ import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from io import StringIO
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 
 @dataclass
@@ -18,8 +18,8 @@ class Column:
     name: str
     key: str
     width: int | None = None
-    align: str = "left"  # left, right, center
-    formatter: callable | None = None
+    align: str = "left"    # Optional formatting function
+    formatter: Callable | None = None
 
     def format_value(self, value: Any) -> str:
         """Format a value for this column."""
