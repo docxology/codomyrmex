@@ -29,21 +29,21 @@ class TestObsidianVault:
         """Test functionality: get note by path."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("My Test Note.md")
-        assert note is not None
+        assert hasattr(note, 'title')
         assert note.title == "My Test Note"
 
     def test_get_note_by_title(self, tmp_vault):
         """Test functionality: get note by title."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("Simple Note")
-        assert note is not None
+        assert hasattr(note, 'title')
         assert note.title == "Simple Note"
 
     def test_get_note_without_extension(self, tmp_vault):
         """Test functionality: get note without extension."""
         vault = ObsidianVault(tmp_vault)
         note = vault.get_note("My Test Note")
-        assert note is not None
+        assert note.title == "My Test Note"
 
     def test_get_note_not_found(self, tmp_vault):
         """Test functionality: get note not found."""

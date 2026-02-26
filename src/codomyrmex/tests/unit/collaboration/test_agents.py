@@ -38,7 +38,7 @@ class TestCollaborativeAgent:
         """Test agent with auto-generated ID."""
         agent = CollaborativeAgent(name="Auto ID Agent")
 
-        assert agent.agent_id is not None
+        assert isinstance(agent.agent_id, str)
         assert len(agent.agent_id) > 0
 
     def test_agent_capabilities(self):

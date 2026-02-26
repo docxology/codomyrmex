@@ -66,7 +66,7 @@ class TestModuleConstants:
 
     def test_logger_is_not_none(self):
         mod = _import_website()
-        assert mod.logger is not None
+        assert hasattr(mod.logger, 'info')
 
 
 # ---------------------------------------------------------------------------

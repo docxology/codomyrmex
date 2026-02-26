@@ -11,7 +11,7 @@ class TestInferenceOptimizationImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.model_ops import optimization as inference_optimization
-        assert inference_optimization is not None
+        assert hasattr(inference_optimization, '__name__')
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""

@@ -575,3 +575,103 @@ class TestAuthenticator:
 
         assert authenticator.authorize(token, "resource", "read")
         assert authenticator.authorize(token, "resource", "write")
+
+
+# ==============================================================================
+# A5 expansion -- additional behavioral tests
+# ==============================================================================
+
+
+@pytest.mark.unit
+class TestTokenRoundtrip:
+    """Tests for Token dict roundtrip."""
+
+    def test_token_roundtrip_preserves_all_fields(self):
+        """Token -> to_dict -> from_dict preserves all data."""
+        original = Token(
+            token_id="rt-1", user_id="u-1",
+            permissions=["read", "write", "admin"],
+            expires_at=99999.0, created_at=10000.0,
+        )
+        d = original.to_dict()
+        restored = Token.from_dict(d)
+        assert restored.token_id == original.token_id
+        assert restored.user_id == original.user_id
+        assert restored.permissions == original.permissions
+        assert restored.expires_at == original.expires_at
+        assert restored.created_at == original.created_at
+
+    def test_token_empty_permissions(self):
+        """Token with no permissions has empty list."""
+        token = Token(token_id="t", user_id="u")
+        assert token.permissions == []
+
+
+@pytest.mark.unit
+class TestTokenManagerEdgeCases:
+    """Extended edge case tests for TokenManager."""
+
+    def test_create_many_tokens_same_user(self):
+        """Creating many tokens for same user all have unique IDs."""
+        manager = TokenManager(secret="test-secret")
+        ids = set()
+        for _ in range(20):
+            token = manager.create_token(user_id="user-123")
+            ids.add(token.token_id)
+        assert len(ids) == 20
+
+    def test_revoke_nonexistent_token_still_invalidates(self):
+        """Revoking a token that was never created adds it to revoked set."""
+        manager = TokenManager(secret="test-secret")
+        fake = Token(token_id="never-created", user_id="u")
+        manager.revoke_token(fake)
+        assert not manager.validate_token(fake)
+
+
+@pytest.mark.unit
+class TestPermissionRegistryEdgeCases:
+    """Extended tests for PermissionRegistry edge cases."""
+
+    def test_register_empty_permissions(self):
+        """Registering a role with empty permissions list."""
+        registry = PermissionRegistry()
+        registry.register_role("empty", [])
+        perms = registry.get_permissions("empty")
+        assert perms == set()
+
+    def test_has_permission_unknown_role(self):
+        """has_permission for unknown role returns False."""
+        registry = PermissionRegistry()
+        assert not registry.has_permission("nonexistent", "read")
+
+    def test_circular_inheritance_handled(self):
+        """Circular inheritance does not cause infinite loop."""
+        registry = PermissionRegistry()
+        registry.register_role("a", ["perm_a"])
+        registry.register_role("b", ["perm_b"])
+        registry.add_inheritance("a", "b")
+        registry.add_inheritance("b", "a")
+        perms = registry.get_permissions("a")
+        assert "perm_a" in perms
+        assert "perm_b" in perms
+
+
+@pytest.mark.unit
+class TestAPIKeyManagerEdgeCases:
+    """Extended tests for APIKeyManager."""
+
+    def test_api_key_prefix(self):
+        """All generated keys start with 'codomyrmex_'."""
+        manager = APIKeyManager()
+        for _ in range(5):
+            key = manager.generate_api_key(user_id="test")
+            assert key.startswith("codomyrmex_")
+
+    def test_revoke_all_keys_for_user(self):
+        """Revoking all keys for a user invalidates them all."""
+        manager = APIKeyManager()
+        keys = [manager.generate_api_key(user_id="u1") for _ in range(3)]
+        for key in keys:
+            assert manager.revoke_api_key(key)
+        for key in keys:
+            assert manager.validate_api_key(key) is None

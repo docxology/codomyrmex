@@ -475,3 +475,77 @@ def test_gitops_real_git_repo(tmp_path):
     version = sync.get_version()
     assert version is not None
     assert len(version) >= 7
+
+
+# ---------------------------------------------------------------------------
+# A5 expansion -- additional behavioral tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+def test_deployment_target_default_healthy():
+    """DeploymentTarget is healthy by default."""
+    target = DeploymentTarget(id="t", name="n", address="localhost")
+    assert target.healthy is True
+
+
+@pytest.mark.unit
+def test_deployment_result_success_state():
+    """Successful DeploymentResult has zero failures."""
+    result = DeploymentResult(
+        success=True, targets_updated=5, targets_failed=0,
+        duration_ms=100.0, state=DeploymentState.COMPLETED,
+    )
+    assert result.targets_failed == 0
+    assert result.success is True
+
+
+@pytest.mark.unit
+def test_rolling_deployment_batch_size_larger_than_targets():
+    """Rolling deployment with batch_size > targets still works."""
+    strategy = RollingStrategy(batch_size=100, delay_seconds=0)
+    targets = [
+        DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
+    ]
+    result = strategy.deploy(targets, "v1", lambda t, v: True)
+    assert result.success is True
+
+
+@pytest.mark.unit
+def test_canary_deployment_single_stage():
+    """Canary with single 100% stage works."""
+    strategy = CanaryStrategy(stages=[100], stage_duration_seconds=0)
+    targets = [
+        DeploymentTarget(id="t-0", name="n-0", address="localhost:8000")
+    ]
+    result = strategy.deploy(targets, "v1", lambda t, v: True)
+    assert result.success is True
+
+
+@pytest.mark.unit
+def test_create_strategy_rolling_defaults():
+    """create_strategy('rolling') with defaults uses batch_size=1."""
+    s = create_strategy("rolling")
+    assert isinstance(s, RollingStrategy)
+
+
+@pytest.mark.unit
+def test_manager_get_empty_history():
+    """Manager with no deployments has empty history."""
+    manager = DeploymentManager()
+    assert manager.get_deployment_history() == []
+
+
+@pytest.mark.unit
+def test_health_checker_empty_returns_healthy():
+    """HealthChecker with no checks returns healthy."""
+    checker = HealthChecker()
+    aggregated = checker.run_all()
+    assert aggregated.overall_status == HealthStatus.HEALTHY
+    assert aggregated.healthy_count == 0
+
+
+@pytest.mark.unit
+def test_deployment_state_enum_count():
+    """DeploymentState has exactly 6 values."""
+    assert len(DeploymentState) == 6

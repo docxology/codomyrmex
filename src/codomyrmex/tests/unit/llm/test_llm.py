@@ -295,7 +295,7 @@ class TestModelRunner(TestCase):
     def test_model_runner_initialization(self):
         """Test ModelRunner initializes correctly."""
         assert self.runner.ollama_manager is self.manager
-        assert self.runner.logger is not None
+        assert hasattr(self.runner.logger, 'info')
 
     def test_format_conversation_single_user_message(self):
         """Test _format_conversation with single user message."""
@@ -326,8 +326,8 @@ class TestModelRunner(TestCase):
 
         model_name = models[0].name
         result = self.runner.run_with_options(model_name, "Say hello in one word")
-        assert result is not None
         assert result.success is True
+        assert hasattr(result, 'response')
 
     def test_run_conversation_formats_messages(self):
         """Test run_conversation properly formats and executes conversation."""
@@ -625,7 +625,7 @@ class TestConfigManager(TestCase):
         # Use a non-existent config path so defaults are used
         manager = ConfigManager(str(Path(self.temp_dir) / "nonexistent_config.json"))
 
-        assert manager.config is not None
+        assert hasattr(manager.config, 'ollama_binary')
         assert manager.config.ollama_binary == "ollama"
         assert manager.config.default_model == "llama3.1:latest"
 
@@ -880,7 +880,7 @@ class TestFabricOrchestrator(TestCase):
 
         orchestrator = FabricOrchestrator()
 
-        assert orchestrator.fabric_manager is not None
+        assert hasattr(orchestrator.fabric_manager, 'list_patterns')
 
     @_skip_no_fabric
     def test_analyze_code_returns_results(self):
@@ -999,7 +999,7 @@ class TestGlobalConfigFunctions(TestCase):
         reset_config()
         config = get_config()
 
-        assert config is not None
+        assert hasattr(config, 'model')
         assert config.model == "llama3.1:latest"
 
     def test_set_config_updates_global(self):
@@ -1083,7 +1083,7 @@ class TestErrorRecovery(TestCase):
 
         manager = OllamaManager(auto_start_server=False)
         # Manager should initialize successfully with real Ollama
-        assert manager is not None
+        assert isinstance(manager, OllamaManager)
 
     def test_run_model_handles_nonexistent_model(self):
         """Test graceful handling when model doesn't exist."""
@@ -1110,7 +1110,8 @@ class TestCostTracker:
     def test_init(self):
         from codomyrmex.llm.router import CostTracker
         tracker = CostTracker()
-        assert tracker is not None
+        assert isinstance(tracker, CostTracker)
+        assert tracker.get_total_cost() == 0.0
 
 
 class TestCostTrackerDeep:

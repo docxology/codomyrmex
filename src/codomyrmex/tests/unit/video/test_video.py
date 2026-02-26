@@ -294,7 +294,7 @@ class TestVideoProcessor:
         """Test VideoProcessor can be imported."""
         try:
             from codomyrmex.video.processing.video_processor import VideoProcessor
-            assert VideoProcessor is not None
+            assert callable(VideoProcessor)
         except ImportError:
             pytest.skip("Video processing dependencies not installed")
 
@@ -323,7 +323,7 @@ class TestFrameExtractor:
         """Test FrameExtractor can be imported."""
         try:
             from codomyrmex.video.extraction.frame_extractor import FrameExtractor
-            assert FrameExtractor is not None
+            assert callable(FrameExtractor)
         except ImportError:
             pytest.skip("Frame extraction dependencies not installed")
 
@@ -344,7 +344,7 @@ class TestVideoAnalyzer:
         """Test VideoAnalyzer can be imported."""
         try:
             from codomyrmex.video.analysis.video_analyzer import VideoAnalyzer
-            assert VideoAnalyzer is not None
+            assert callable(VideoAnalyzer)
         except ImportError:
             pytest.skip("Video analysis dependencies not installed")
 
@@ -406,4 +406,4 @@ class TestVideoAnalyzerCoverage:
 
     def test_import(self):
         from codomyrmex.video.analysis.video_analyzer import VideoAnalyzer
-        assert VideoAnalyzer is not None
+        assert callable(VideoAnalyzer)

@@ -23,7 +23,8 @@ class TestTask:
 
         assert task.name == "Test Task"
         assert task.description == ""
-        assert task.id is not None
+        assert isinstance(task.id, str)
+        assert len(task.id) > 0
         assert task.priority == 5
         assert task.status == TaskStatus.PENDING
         assert task.required_capabilities == []

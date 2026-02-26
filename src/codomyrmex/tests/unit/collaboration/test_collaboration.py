@@ -48,7 +48,7 @@ class TestTaskManagerImport:
 
     def test_import(self):
         from codomyrmex.collaboration.coordination.task_manager import TaskManager
-        assert TaskManager is not None
+        assert callable(TaskManager)
 
 
 # Phase 2b — collaboration/coordination/task_manager
@@ -58,7 +58,7 @@ class TestDependencyGraph:
     def test_init(self):
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
         g = DependencyGraph()
-        assert g is not None
+        assert isinstance(g, DependencyGraph)
 
     def test_add_and_get_deps(self):
         from codomyrmex.collaboration.coordination.task_manager import DependencyGraph
@@ -97,7 +97,7 @@ class TestTaskManagerDeep:
     def test_init(self):
         from codomyrmex.collaboration.coordination.task_manager import TaskManager
         tm = TaskManager()
-        assert tm is not None
+        assert isinstance(tm, TaskManager)
 
     def test_scheduling_strategy_enum(self):
         from codomyrmex.collaboration.coordination.task_manager import (
@@ -112,4 +112,5 @@ class TestTaskQueue:
     def test_init(self):
         from codomyrmex.collaboration.coordination.task_manager import TaskQueue
         q = TaskQueue()
-        assert q is not None
+        assert isinstance(q, TaskQueue)
+        assert len(q) == 0

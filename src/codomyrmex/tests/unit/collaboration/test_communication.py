@@ -71,7 +71,7 @@ class TestMessageQueue:
         queue.put_nowait(message)
         received = queue.get_nowait()
 
-        assert received is not None
+        assert isinstance(received, AgentMessage)
         assert received.content == "Test"
 
         # Empty queue returns None
@@ -183,7 +183,7 @@ class TestChannelManager:
 
         retrieved = manager.get_channel_by_name("named-channel")
 
-        assert retrieved is not None
+        assert isinstance(retrieved, QueueChannel)
         assert retrieved.name == "named-channel"
 
     def test_manager_close_channel(self):
@@ -240,7 +240,8 @@ class TestBroadcaster:
             handler,
         )
 
-        assert sub_id is not None
+        assert isinstance(sub_id, str)
+        assert len(sub_id) > 0
         info = broadcaster.get_topic_info("test-topic")
         assert info.subscriber_count == 1
 
@@ -295,7 +296,7 @@ class TestDirectMessenger:
         """Test creating a direct messenger."""
         messenger = DirectMessenger(default_timeout=10.0)
 
-        assert messenger is not None
+        assert isinstance(messenger, DirectMessenger)
 
     def test_messenger_register_handler(self):
         """Test registering a handler."""
@@ -367,7 +368,7 @@ class TestConversationTracker:
         """Test creating a conversation tracker."""
         tracker = ConversationTracker()
 
-        assert tracker is not None
+        assert isinstance(tracker, ConversationTracker)
 
     def test_tracker_start_conversation(self):
         """Test starting a conversation."""
@@ -375,7 +376,8 @@ class TestConversationTracker:
 
         conv_id = tracker.start_conversation(["agent-1", "agent-2"])
 
-        assert conv_id is not None
+        assert isinstance(conv_id, str)
+        assert len(conv_id) > 0
         assert tracker.get_conversation(conv_id) == []
 
     def test_tracker_add_message(self):

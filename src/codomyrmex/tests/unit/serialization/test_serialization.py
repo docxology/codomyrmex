@@ -898,3 +898,87 @@ class TestStreamBuffer:
         buf.add(3)  # Should trigger auto-flush
         assert buf.total_flushed == 3
         assert flushed_items == [1, 2, 3]
+
+
+# ==============================================================================
+# A5 expansion -- additional behavioral tests
+# ==============================================================================
+
+
+class TestSerializerFormatSwitching:
+    """Tests for switching formats within the same Serializer instance."""
+
+    def test_json_then_pickle_roundtrip(self):
+        """Same serializer can handle JSON and pickle sequentially."""
+        s = Serializer()
+        data = {"key": "value", "number": 42}
+        # JSON
+        json_bytes = s.serialize(data, SerializationFormat.JSON)
+        json_result = s.deserialize(json_bytes, SerializationFormat.JSON)
+        assert json_result == data
+        # Pickle
+        pickle_bytes = s.serialize(data, SerializationFormat.PICKLE)
+        pickle_result = s.deserialize(pickle_bytes, SerializationFormat.PICKLE)
+        assert pickle_result == data
+
+    def test_serialize_none_value(self):
+        """Serializing a dict with None values works for JSON."""
+        s = Serializer(default_format=SerializationFormat.JSON)
+        data = {"nothing": None}
+        serialized = s.serialize(data)
+        deserialized = s.deserialize(serialized)
+        assert deserialized["nothing"] is None
+
+    def test_serialize_empty_string(self):
+        """Serializing a dict with empty string values."""
+        s = Serializer(default_format=SerializationFormat.JSON)
+        data = {"empty": ""}
+        serialized = s.serialize(data)
+        deserialized = s.deserialize(serialized)
+        assert deserialized["empty"] == ""
+
+    def test_pickle_preserves_set(self):
+        """Pickle preserves Python set type."""
+        s = Serializer(default_format=SerializationFormat.PICKLE)
+        data = {"items": {1, 2, 3}}
+        serialized = s.serialize(data)
+        deserialized = s.deserialize(serialized)
+        assert deserialized["items"] == {1, 2, 3}
+
+
+class TestStreamBufferExtended:
+    """Extended tests for StreamBuffer behavior."""
+
+    def test_flush_empty_buffer(self):
+        """Flushing empty buffer returns empty list."""
+        from codomyrmex.serialization.streaming import StreamBuffer
+        buf = StreamBuffer(max_size=10)
+        result = buf.flush()
+        assert result == []
+        assert buf.total_flushed == 0
+
+    def test_pending_count_accurate(self):
+        """pending count matches number of items added."""
+        from codomyrmex.serialization.streaming import StreamBuffer
+        buf = StreamBuffer(max_size=100)
+        for i in range(7):
+            buf.add(i)
+        assert buf.pending == 7
+
+    def test_multiple_flushes(self):
+        """Multiple manual flushes work correctly."""
+        from codomyrmex.serialization.streaming import StreamBuffer
+        buf = StreamBuffer(max_size=100)
+        buf.add("a")
+        buf.add("b")
+        first = buf.flush()
+        assert first == ["a", "b"]
+        buf.add("c")
+        second = buf.flush()
+        assert second == ["c"]
+        assert buf.total_flushed == 3
+
+    def test_serialization_error_is_exception(self):
+        """SerializationError inherits from Exception."""
+        error = SerializationError("test")
+        assert isinstance(error, Exception)

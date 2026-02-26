@@ -9,7 +9,7 @@ from codomyrmex.llm.embeddings import (
     EmbeddingCache,
     EmbeddingIndex,
     EmbeddingService,
-    MockEmbeddingProvider,
+    TestEmbeddingProvider,
     chunk_text,
     cosine_similarity,
     dot_product,
@@ -59,11 +59,11 @@ class TestEmbedding:
 
 
 class TestMockProvider:
-    """Tests for MockEmbeddingProvider."""
+    """Tests for TestEmbeddingProvider."""
 
     def test_embed_single(self):
         """Should generate embedding."""
-        provider = MockEmbeddingProvider(dimensions=128)
+        provider = TestEmbeddingProvider(dimensions=128)
         emb = provider.embed("hello world")
 
         assert emb.dimensions == 128
@@ -71,7 +71,7 @@ class TestMockProvider:
 
     def test_embed_batch(self):
         """Should generate batch embeddings."""
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         embeddings = provider.embed_batch(["hello", "world"])
 
         assert len(embeddings) == 2
@@ -80,7 +80,7 @@ class TestMockProvider:
 
     def test_deterministic(self):
         """Same text should produce same embedding."""
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         emb1 = provider.embed("test text")
         emb2 = provider.embed("test text")
 
@@ -135,7 +135,7 @@ class TestEmbeddingCache:
         cache.set(emb)
 
         cached = cache.get("hello", "test")
-        assert cached is not None
+        assert isinstance(cached, Embedding)
         assert cached.text == "hello"
 
     def test_cache_eviction(self):
@@ -199,7 +199,7 @@ class TestEmbeddingService:
 
     def test_embed_with_cache(self):
         """Should use cache."""
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         # First call - cache miss
@@ -216,7 +216,7 @@ class TestEmbeddingService:
 
     def test_embed_texts_batch(self):
         """Should batch embed texts."""
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         embeddings = service.embed_texts(["a", "b", "c"])
@@ -226,7 +226,7 @@ class TestEmbeddingService:
 
     def test_cache_hit_rate(self):
         """Should calculate hit rate."""
-        provider = MockEmbeddingProvider()
+        provider = TestEmbeddingProvider()
         service = EmbeddingService(provider=provider)
 
         service.embed("a")

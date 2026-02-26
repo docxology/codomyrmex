@@ -388,3 +388,104 @@ class TestErrorIntegration:
         assert "Failed to push changes" in formatted
         assert "git_command=git push origin main" in formatted
         assert "repository_path=/project/repo" in formatted
+
+
+# ==============================================================================
+# Specialized Exception Tests
+# ==============================================================================
+
+
+@pytest.mark.unit
+class TestSpecializedExceptions:
+    """Tests for specialized domain exceptions not yet covered."""
+
+    def test_cerebrum_error_hierarchy(self):
+        """CerebrumError inherits from CodomyrmexError."""
+        from codomyrmex.exceptions import CerebrumError
+        error = CerebrumError("Cerebrum failure")
+        assert isinstance(error, CodomyrmexError)
+        assert "Cerebrum failure" in str(error)
+
+    def test_case_error_inherits_cerebrum(self):
+        """CaseError inherits from CerebrumError."""
+        from codomyrmex.exceptions import CaseError, CerebrumError
+        error = CaseError("Case problem")
+        assert isinstance(error, CerebrumError)
+        assert isinstance(error, CodomyrmexError)
+
+    def test_case_not_found_error_chain(self):
+        """CaseNotFoundError inherits CaseError -> CerebrumError -> CodomyrmexError."""
+        from codomyrmex.exceptions import CaseNotFoundError, CaseError, CerebrumError
+        error = CaseNotFoundError("Case 42 missing")
+        assert isinstance(error, CaseError)
+        assert isinstance(error, CerebrumError)
+        assert isinstance(error, CodomyrmexError)
+
+    def test_invalid_case_error_chain(self):
+        """InvalidCaseError inherits CaseError."""
+        from codomyrmex.exceptions import InvalidCaseError, CaseError
+        error = InvalidCaseError("Invalid case data")
+        assert isinstance(error, CaseError)
+
+    def test_network_error_with_url_and_status(self):
+        """NetworkError stores url and status_code in context."""
+        from codomyrmex.exceptions import NetworkError
+        error = NetworkError("Connection failed", url="https://api.example.com", status_code=503)
+        assert error.context["url"] == "https://api.example.com"
+        assert error.context["status_code"] == 503
+        assert "url=https://api.example.com" in str(error)
+
+    def test_network_error_without_optional_fields(self):
+        """NetworkError without optional fields has minimal context."""
+        from codomyrmex.exceptions import NetworkError
+        error = NetworkError("Timeout")
+        assert "url" not in error.context
+        assert "status_code" not in error.context
+
+    def test_validation_error_with_field_and_rule(self):
+        """ValidationError stores field_name and validation_rule."""
+        from codomyrmex.exceptions import ValidationError
+        error = ValidationError(
+            "Field invalid", field_name="email", validation_rule="must_contain_at"
+        )
+        assert error.context["field_name"] == "email"
+        assert error.context["validation_rule"] == "must_contain_at"
+
+    def test_simulation_error_inherits_codomyrmex(self):
+        """SimulationError inherits from CodomyrmexError."""
+        from codomyrmex.exceptions import SimulationError
+        error = SimulationError("Simulation crashed")
+        assert isinstance(error, CodomyrmexError)
+
+    def test_deployment_error_inherits_codomyrmex(self):
+        """DeploymentError inherits from CodomyrmexError."""
+        from codomyrmex.exceptions import DeploymentError
+        error = DeploymentError("Deploy failed")
+        assert isinstance(error, CodomyrmexError)
+
+    def test_compression_error_inherits_codomyrmex(self):
+        """CompressionError inherits from CodomyrmexError."""
+        from codomyrmex.exceptions import CompressionError
+        error = CompressionError("Bad data")
+        assert isinstance(error, CodomyrmexError)
+
+    def test_all_exports_are_importable(self):
+        """Every name in __all__ is importable from the exceptions package."""
+        import codomyrmex.exceptions as exc_mod
+        for name in exc_mod.__all__:
+            assert hasattr(exc_mod, name), f"{name} listed in __all__ but missing"
+
+    def test_inference_error_deep_chain(self):
+        """InferenceError -> BayesianInferenceError -> CerebrumError -> CodomyrmexError."""
+        from codomyrmex.exceptions import (
+            InferenceError, BayesianInferenceError, CerebrumError,
+        )
+        error = InferenceError("Inference failed")
+        assert isinstance(error, BayesianInferenceError)
+        assert isinstance(error, CerebrumError)
+
+    def test_network_structure_error_chain(self):
+        """NetworkStructureError -> BayesianInferenceError."""
+        from codomyrmex.exceptions import NetworkStructureError, BayesianInferenceError
+        error = NetworkStructureError("Bad graph")
+        assert isinstance(error, BayesianInferenceError)

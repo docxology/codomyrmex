@@ -16,7 +16,7 @@ class TestDocumentation:
 
         try:
             from codomyrmex.documentation import documentation_website
-            assert documentation_website is not None
+            assert hasattr(documentation_website, '__file__')
         except ImportError as e:
             pytest.fail(f"Failed to import documentation_website: {e}")
 
@@ -147,7 +147,8 @@ class TestDocumentation:
         assert DEFAULT_DOCS_PORT == 3000
         assert DOCUSAURUS_BASE_PATH == "/codomyrmex/"
         assert DEFAULT_ACTION == "full_cycle"
-        assert DOCUSAURUS_ROOT_DIR is not None
+        assert isinstance(DOCUSAURUS_ROOT_DIR, str)
+        assert len(DOCUSAURUS_ROOT_DIR) > 0
         assert "localhost:3000" in EFFECTIVE_DOCS_URL
 
     @pytest.mark.slow
@@ -163,7 +164,7 @@ class TestValidateConfigs:
     def test_config_validator_init(self, tmp_path):
         from codomyrmex.documentation.scripts.validate_configs import ConfigValidator
         v = ConfigValidator(project_root=tmp_path)
-        assert v is not None
+        assert isinstance(v, ConfigValidator)
 
 
 class TestTripleCheck:
@@ -219,4 +220,4 @@ class TestConfigValidatorDeep:
         (tmp_path / "README.md").write_text("# Test Project")
         v = ConfigValidator(project_root=tmp_path)
         result = v.validate_all_configs()
-        assert result is not None
+        assert isinstance(result, (dict, list, bool))

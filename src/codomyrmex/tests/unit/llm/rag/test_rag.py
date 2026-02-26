@@ -31,7 +31,7 @@ class TestDocument:
     def test_content_hash(self):
         """Should compute content hash."""
         doc = Document.from_text("test content")
-        assert doc.content_hash is not None
+        assert isinstance(doc.content_hash, str)
         assert len(doc.content_hash) == 32  # MD5 hex
 
 

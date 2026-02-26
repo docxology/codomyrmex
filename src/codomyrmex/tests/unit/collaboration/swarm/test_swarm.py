@@ -159,7 +159,7 @@ class TestAgentPool:
         pool.register(SwarmAgent("a1", AgentRole.CODER))
         pool.assign(TaskAssignment(required_role=AgentRole.CODER))
         agent = pool.get("a1")
-        assert agent is not None
+        assert isinstance(agent, SwarmAgent)
         assert agent.active_tasks == 1
         pool.release("a1")
         assert agent.active_tasks == 0

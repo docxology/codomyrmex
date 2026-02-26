@@ -64,7 +64,7 @@ class TestSharedMemoryPool:
         pool.create_namespace("agent-a")
         pool.put("agent-a", "key", "value")
         entry = pool.get("agent-a", "key")
-        assert entry is not None
+        assert hasattr(entry, 'value')
         assert entry.value == "value"
 
     def test_global_search_cross_namespace(self):
@@ -97,7 +97,7 @@ class TestSharedMemoryPool:
 
         # Reader can read
         entry = pool.get("reader", "data", namespace="owner")
-        assert entry is not None
+        assert entry.value == "secret"
 
         # Reader can't write (needs own namespace)
         wrote = pool.put("reader", "hack", "bad")

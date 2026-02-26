@@ -337,3 +337,90 @@ class TestPrivacyProcessor:
 
         p = create_privacy()
         assert p is not None
+
+
+# ==============================================================================
+# A5 expansion -- additional behavioral tests
+# ==============================================================================
+
+
+@pytest.mark.unit
+class TestCrumbCleanerEdgeCases:
+    """Extended edge case tests for CrumbCleaner."""
+
+    def setup_method(self):
+        self.cleaner = CrumbCleaner()
+
+    def test_scrub_empty_dict(self):
+        """Scrubbing empty dict returns empty dict."""
+        result = self.cleaner.scrub({})
+        assert result == {}
+
+    def test_scrub_empty_list(self):
+        """Scrubbing empty list returns empty list."""
+        result = self.cleaner.scrub([])
+        assert result == []
+
+    def test_scrub_deeply_nested(self):
+        """Scrub handles deeply nested structures."""
+        data = {"a": {"b": {"c": {"ip_address": "1.2.3.4", "value": "keep"}}}}
+        result = self.cleaner.scrub(data)
+        assert "ip_address" not in result["a"]["b"]["c"]
+        assert result["a"]["b"]["c"]["value"] == "keep"
+
+    def test_generate_noise_different_each_call(self):
+        """Two noise generations produce different output."""
+        n1 = self.cleaner.generate_noise(32)
+        n2 = self.cleaner.generate_noise(32)
+        assert n1 != n2
+
+    def test_configure_blacklist_add_and_remove(self):
+        """Adding and removing blacklist entries in sequence works."""
+        self.cleaner.configure_blacklist(add=["custom_secret"])
+        assert "custom_secret" in self.cleaner._blacklist
+        self.cleaner.configure_blacklist(remove=["custom_secret"])
+        assert "custom_secret" not in self.cleaner._blacklist
+
+    def test_scrub_preserves_numeric_values(self):
+        """Scrub preserves integer and float values."""
+        data = {"count": 42, "rate": 3.14, "ip_address": "1.2.3.4"}
+        result = self.cleaner.scrub(data)
+        assert result["count"] == 42
+        assert result["rate"] == 3.14
+
+
+@pytest.mark.unit
+class TestMixnetProxyEdgeCases:
+    """Extended tests for MixnetProxy edge cases."""
+
+    def test_route_empty_payload(self):
+        """Routing empty bytes works."""
+        proxy = MixnetProxy()
+        result = proxy.route_payload(b"", hops=2)
+        assert result == b""
+
+    def test_route_large_payload(self):
+        """Routing a large payload preserves data."""
+        proxy = MixnetProxy()
+        payload = b"x" * 10000
+        result = proxy.route_payload(payload, hops=2)
+        assert result == payload
+
+
+@pytest.mark.unit
+class TestDetectPIIExtended:
+    """Extended PII detection tests."""
+
+    def test_detect_multiple_emails(self):
+        """Detects multiple email addresses in one string."""
+        from codomyrmex.privacy.privacy import detect_pii
+        text = "Contact alice@example.com or bob@example.com"
+        matches = detect_pii(text)
+        email_matches = [m for m in matches if m.pii_type == "email"]
+        assert len(email_matches) >= 2
+
+    def test_detect_pii_in_empty_string(self):
+        """No PII detected in empty string."""
+        from codomyrmex.privacy.privacy import detect_pii
+        matches = detect_pii("")
+        assert len(matches) == 0

@@ -184,7 +184,7 @@ class TestGuardrail:
             "The user email is test@example.com",
             sanitize=True
         )
-        assert result.sanitized_content is not None
+        assert isinstance(result.sanitized_content, str)
         assert "test@example.com" not in result.sanitized_content
         assert "[EMAIL]" in result.sanitized_content
 

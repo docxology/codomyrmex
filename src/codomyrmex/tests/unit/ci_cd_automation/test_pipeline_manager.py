@@ -137,14 +137,17 @@ class TestPipelineManagerInit:
         assert mgr.pipelines == {}
         assert mgr.active_executions == {}
 
-    def test_init_without_workspace_uses_cwd(self, tmp_path, monkeypatch):
+    def test_init_without_workspace_uses_cwd(self, tmp_path):
         """When no workspace_dir is passed, uses cwd/.pipelines."""
-        # NOTE: monkeypatch.chdir is not mocking -- it actually changes cwd
-        monkeypatch.chdir(tmp_path)
-        mgr = PipelineManager()
-        expected = os.path.join(str(tmp_path), ".pipelines")
-        assert mgr.workspace_dir == expected
-        assert os.path.isdir(expected)
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+        try:
+            mgr = PipelineManager()
+            expected = os.path.join(str(tmp_path), ".pipelines")
+            assert mgr.workspace_dir == expected
+            assert os.path.isdir(expected)
+        finally:
+            os.chdir(original_cwd)
 
     def test_init_idempotent_dirs(self, tmp_path):
         """Creating PipelineManager twice with same dir does not raise."""
@@ -867,17 +870,11 @@ class TestSavePipelineConfig:
 class TestParallelPipelineExecution:
     """Tests for parallel_pipeline_execution.
 
-    NOTE: parallel_pipeline_execution has a known bug where
-    concurrent.futures.wait(futures, ...) receives the futures dict itself
-    instead of futures.values(). This causes AttributeError on Python 3.13+
-    when stages have dependencies (the dict iterates over string keys).
-    Tests that trigger this code path are marked xfail.
+    Previously these tests were xfail due to two source bugs:
+    1. concurrent.futures.wait received dict_values instead of list (fixed)
+    2. min(0, 4) = 0 crashed ThreadPoolExecutor with empty stages (fixed)
     """
 
-    @pytest.mark.xfail(
-        reason="Known bug: concurrent.futures.wait receives dict instead of dict.values()",
-        strict=False,
-    )
     def test_single_stage_completes(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stages = [
@@ -890,10 +887,6 @@ class TestParallelPipelineExecution:
         assert "build" in result["stage_results"]
         assert result["stage_results"]["build"]["status"] == "completed"
 
-    @pytest.mark.xfail(
-        reason="Known bug: concurrent.futures.wait receives dict instead of dict.values()",
-        strict=False,
-    )
     def test_independent_stages_parallel(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stages = [
@@ -904,10 +897,6 @@ class TestParallelPipelineExecution:
         assert result["total_stages"] == 2
         assert result["completed_stages"] == 2
 
-    @pytest.mark.xfail(
-        reason="Known bug: concurrent.futures.wait receives dict instead of dict.values()",
-        strict=False,
-    )
     def test_dependent_stages(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         stages = [
@@ -917,10 +906,6 @@ class TestParallelPipelineExecution:
         result = mgr.parallel_pipeline_execution(stages)
         assert result["completed_stages"] == 2
 
-    @pytest.mark.xfail(
-        reason="Known bug: min(0, 4) = 0, invalid max_workers for ThreadPoolExecutor",
-        strict=False,
-    )
     def test_empty_stages(self, tmp_path):
         mgr = PipelineManager(workspace_dir=str(tmp_path / "ws"))
         result = mgr.parallel_pipeline_execution([])

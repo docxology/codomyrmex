@@ -24,23 +24,23 @@ class TestRoutingStrategy:
     """Test suite for RoutingStrategy."""
     def test_priority(self):
         """Test functionality: priority."""
-        assert RoutingStrategy.PRIORITY is not None
+        assert isinstance(RoutingStrategy.PRIORITY.value, (str, int))
 
     def test_round_robin(self):
         """Test functionality: round robin."""
-        assert RoutingStrategy.ROUND_ROBIN is not None
+        assert isinstance(RoutingStrategy.ROUND_ROBIN.value, (str, int))
 
     def test_random(self):
         """Test functionality: random."""
-        assert RoutingStrategy.RANDOM is not None
+        assert isinstance(RoutingStrategy.RANDOM.value, (str, int))
 
     def test_cost_optimized(self):
         """Test functionality: cost optimized."""
-        assert RoutingStrategy.COST_OPTIMIZED is not None
+        assert isinstance(RoutingStrategy.COST_OPTIMIZED.value, (str, int))
 
     def test_latency_optimized(self):
         """Test functionality: latency optimized."""
-        assert RoutingStrategy.LATENCY_OPTIMIZED is not None
+        assert isinstance(RoutingStrategy.LATENCY_OPTIMIZED.value, (str, int))
 
 
 @pytest.mark.unit
@@ -99,12 +99,12 @@ class TestModelRouter:
     def test_create_router(self):
         """Test functionality: create router."""
         router = ModelRouter()
-        assert router is not None
+        assert isinstance(router, ModelRouter)
 
     def test_create_with_strategy(self):
         """Test functionality: create with strategy."""
         router = ModelRouter(strategy=RoutingStrategy.COST_OPTIMIZED)
-        assert router is not None
+        assert isinstance(router, ModelRouter)
 
     def test_register_model(self):
         """Test functionality: register model."""
@@ -112,7 +112,8 @@ class TestModelRouter:
         config = ModelConfig(name="test", provider="test", model_id="test")
         router.register_model(config)
         stats = router.get_stats("test")
-        assert stats is not None
+        assert isinstance(stats, ModelStats)
+        assert stats.success_count == 0
 
     def test_select_model(self):
         """Test functionality: select model."""
@@ -120,7 +121,8 @@ class TestModelRouter:
         config = ModelConfig(name="test", provider="test", model_id="test")
         router.register_model(config)
         selected = router.select_model()
-        assert selected is not None
+        assert isinstance(selected, ModelConfig)
+        assert selected.name == "test"
 
 
 @pytest.mark.unit
@@ -129,7 +131,7 @@ class TestFallbackChain:
     def test_create_chain(self):
         """Test functionality: create chain."""
         chain = FallbackChain(models=["gpt-4", "gpt-3.5"])
-        assert chain is not None
+        assert isinstance(chain, FallbackChain)
 
 
 @pytest.mark.unit
@@ -138,7 +140,8 @@ class TestCostTracker:
     def test_create_tracker(self):
         """Test functionality: create tracker."""
         tracker = CostTracker()
-        assert tracker is not None
+        assert isinstance(tracker, CostTracker)
+        assert tracker.get_total_cost() == 0.0
 
     def test_record_and_total(self):
         """Test functionality: record and total."""

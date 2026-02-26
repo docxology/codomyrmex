@@ -157,6 +157,43 @@ class TestIdentityManager:
         """Test functionality: export nonexistent."""
         assert self.mgr.export_persona("fake") is None
 
+    def test_list_personas_empty(self):
+        """list_personas on empty manager returns empty list."""
+        personas = self.mgr.list_personas()
+        assert len(personas) == 0
+
+    def test_create_multiple_unique_personas(self):
+        """Creating multiple personas with unique IDs succeeds."""
+        for i in range(5):
+            self.mgr.create_persona(f"p{i}", f"User{i}", VerificationLevel.ANON)
+        assert len(self.mgr.list_personas()) == 5
+
+    def test_revoke_does_not_affect_other_personas(self):
+        """Revoking one persona does not remove others."""
+        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
+        self.mgr.create_persona("p2", "Bob", VerificationLevel.KYC)
+        self.mgr.revoke_persona("p1")
+        assert self.mgr.get_persona("p2") is not None
+        assert self.mgr.get_persona("p2").name == "Bob"
+
+    def test_set_active_persona_switch(self):
+        """Switching active persona works."""
+        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
+        self.mgr.create_persona("p2", "Bob", VerificationLevel.KYC)
+        self.mgr.set_active_persona("p1")
+        assert self.mgr.active_persona.name == "Alice"
+        self.mgr.set_active_persona("p2")
+        assert self.mgr.active_persona.name == "Bob"
+
+    def test_export_includes_attributes(self):
+        """export_persona includes attributes count or data."""
+        self.mgr.create_persona("p1", "Alice", VerificationLevel.ANON)
+        persona = self.mgr.get_persona("p1")
+        persona.add_attribute("role", "admin")
+        exported = self.mgr.export_persona("p1")
+        assert exported is not None
+        assert exported["id"] == "p1"
+
 
 @pytest.mark.unit
 @pytest.mark.skipif(not HAS_NUMPY, reason="numpy not installed")

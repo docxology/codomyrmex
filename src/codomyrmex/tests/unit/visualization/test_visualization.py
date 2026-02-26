@@ -35,7 +35,7 @@ from codomyrmex.data_visualization.core.theme import DEFAULT_THEME
 def test_module_import():
     """visualization module is importable."""
     import codomyrmex.data_visualization as visualization
-    assert visualization is not None
+    assert hasattr(visualization, "__all__")
 
 
 @pytest.mark.unit
@@ -84,8 +84,8 @@ def test_theme_to_dict():
 @pytest.mark.unit
 def test_default_theme_exists():
     """DEFAULT_THEME singleton is available."""
-    assert DEFAULT_THEME is not None
     assert isinstance(DEFAULT_THEME, Theme)
+    assert DEFAULT_THEME.primary == "#2c3e50"
 
 
 # --- Grid Tests ---
@@ -125,7 +125,7 @@ def test_dashboard_construction():
     """Dashboard initializes with title, theme, and empty grid."""
     dash = Dashboard(title="Test Dash")
     assert dash.title == "Test Dash"
-    assert dash.theme is not None
+    assert isinstance(dash.theme, Theme)
     assert isinstance(dash.grid, Grid)
     assert dash.grid.sections == []
 
@@ -227,7 +227,7 @@ def test_scatter_plot_construction():
 def test_general_report_construction():
     """GeneralSystemReport initializes with dashboard."""
     report = GeneralSystemReport()
-    assert report.dashboard is not None
+    assert isinstance(report.dashboard, Dashboard)
     assert report.dashboard.title == "Codomyrmex Executive Dashboard"
 
 

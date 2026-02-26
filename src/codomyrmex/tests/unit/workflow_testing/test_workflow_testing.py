@@ -11,7 +11,7 @@ class TestWorkflowTestingImports:
     def test_module_imports(self):
         """Verify module can be imported without errors."""
         from codomyrmex.testing import workflow as workflow_testing
-        assert workflow_testing is not None
+        assert hasattr(workflow_testing, '__name__')
 
     def test_public_api_exists(self):
         """Verify expected public API is available."""

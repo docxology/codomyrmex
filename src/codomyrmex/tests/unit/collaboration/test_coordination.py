@@ -94,7 +94,7 @@ class TestDependencyGraph:
         """Test creating a dependency graph."""
         graph = DependencyGraph()
 
-        assert graph is not None
+        assert isinstance(graph, DependencyGraph)
 
     def test_graph_add_task(self):
         """Test adding tasks to graph."""
@@ -156,7 +156,8 @@ class TestTaskManager:
 
         task_id = manager.submit(task)
 
-        assert task_id is not None
+        assert isinstance(task_id, str)
+        assert len(task_id) > 0
         assert manager.get_pending_count() == 1
         assert manager.get_task_status(task_id) == TaskStatus.QUEUED
 
@@ -194,7 +195,7 @@ class TestTaskManager:
         manager.submit(task)
         next_task = manager.get_next_task(agent)
 
-        assert next_task is not None
+        assert isinstance(next_task, Task)
         assert next_task.name == "Next Task"
         assert manager.get_running_count() == 1
 
@@ -226,7 +227,7 @@ class TestVotingMechanism:
         """Test creating a voting mechanism."""
         voting = VotingMechanism(quorum=0.5, threshold=0.5)
 
-        assert voting is not None
+        assert isinstance(voting, VotingMechanism)
 
     def test_voting_create_proposal(self):
         """Test creating a proposal."""
@@ -238,7 +239,8 @@ class TestVotingMechanism:
             proposer_id="agent-1",
         )
 
-        assert proposal.proposal_id is not None
+        assert isinstance(proposal.proposal_id, str)
+        assert len(proposal.proposal_id) > 0
         assert proposal.title == "Test Proposal"
 
     def test_voting_cast_vote(self):
@@ -300,7 +302,7 @@ class TestConsensusBuilder:
         """Test creating a consensus builder."""
         builder = ConsensusBuilder(convergence_threshold=0.8)
 
-        assert builder is not None
+        assert isinstance(builder, ConsensusBuilder)
 
     def test_consensus_propose_value(self):
         """Test proposing values."""
@@ -373,7 +375,7 @@ class TestBullyElection:
         result = await election.elect(agents)
 
         assert result.success is True
-        assert result.leader_id is not None
+        assert isinstance(result.leader_id, str)
         assert result.leader_id in ["a1", "a2", "a3"]
 
     @pytest.mark.asyncio
@@ -403,7 +405,7 @@ class TestRingElection:
         result = await election.elect(agents)
 
         assert result.success is True
-        assert result.leader_id is not None
+        assert isinstance(result.leader_id, str)
 
 
 class TestRandomElection:

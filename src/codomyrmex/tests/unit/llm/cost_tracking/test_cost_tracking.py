@@ -220,7 +220,7 @@ class TestConvenienceFunctions:
     def test_get_model_pricing(self):
         """Getting model pricing should work."""
         pricing = get_model_pricing("gpt-4o")
-        assert pricing is not None
+        assert hasattr(pricing, 'model_id')
         assert pricing.model_id == "gpt-4o"
 
         pricing = get_model_pricing("unknown")

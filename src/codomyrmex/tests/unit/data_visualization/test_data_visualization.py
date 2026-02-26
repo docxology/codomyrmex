@@ -25,27 +25,27 @@ class TestImports:
     def test_import_charts_submodule(self):
         """Test functionality: import charts submodule."""
         from codomyrmex.data_visualization import charts
-        assert charts is not None
+        assert hasattr(charts, '__name__')
 
     def test_import_themes_submodule(self):
         """Test functionality: import themes submodule."""
         from codomyrmex.data_visualization import themes
-        assert themes is not None
+        assert hasattr(themes, '__name__')
 
     def test_import_mermaid_submodule(self):
         """Test functionality: import mermaid submodule."""
         from codomyrmex.data_visualization import mermaid
-        assert mermaid is not None
+        assert hasattr(mermaid, '__name__')
 
     def test_import_engines_submodule(self):
         """Test functionality: import engines submodule."""
         from codomyrmex.data_visualization import engines
-        assert engines is not None
+        assert hasattr(engines, '__name__')
 
     def test_import_git_submodule(self):
         """Test functionality: import git submodule."""
         from codomyrmex.data_visualization import git
-        assert git is not None
+        assert hasattr(git, '__name__')
 
     def test_import_exceptions(self):
         """Test functionality: import exceptions."""
@@ -54,9 +54,9 @@ class TestImports:
             DataVisualizationError,
             InvalidDataError,
         )
-        assert DataVisualizationError is not None
-        assert ChartCreationError is not None
-        assert InvalidDataError is not None
+        assert issubclass(DataVisualizationError, Exception)
+        assert issubclass(ChartCreationError, Exception)
+        assert issubclass(InvalidDataError, DataVisualizationError)
 
     def test_import_chart_functions_from_charts(self):
         """Test functionality: import chart functions from charts."""
@@ -88,7 +88,7 @@ class TestImports:
             PieChart,
             ScatterPlot,
         )
-        assert all(c is not None for c in [
+        assert all(callable(c) for c in [
             BarChart, LinePlot, ScatterPlot, Histogram, PieChart,
             Heatmap, BoxPlot, AreaChart,
         ])
@@ -98,17 +98,17 @@ class TestImports:
     def test_engines_plotter_class(self):
         """Test functionality: engines plotter class."""
         from codomyrmex.data_visualization.engines import Plotter
-        assert Plotter is not None
+        assert callable(Plotter)
 
     def test_engines_advanced_plotter_class(self):
         """Test functionality: engines advanced plotter class."""
         from codomyrmex.data_visualization.engines import AdvancedPlotter
-        assert AdvancedPlotter is not None
+        assert callable(AdvancedPlotter)
 
     def test_git_visualizer_import(self):
         """Test functionality: git visualizer import."""
         from codomyrmex.data_visualization.git import GitVisualizer
-        assert GitVisualizer is not None
+        assert callable(GitVisualizer)
 
     def test_top_level_create_heatmap(self):
         """Test functionality: top level create heatmap."""
@@ -139,7 +139,6 @@ class TestPlotUtils:
             get_codomyrmex_logger,
         )
         logger = get_codomyrmex_logger("test_module")
-        assert logger is not None
         assert hasattr(logger, 'info')
         assert hasattr(logger, 'debug')
         assert hasattr(logger, 'warning')
@@ -259,7 +258,7 @@ class TestBarChart:
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
         output = str(tmp_path / "bar.png")
         fig = create_bar_chart(['A', 'B', 'C'], [1, 2, 3], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_horizontal_bar_chart(self, tmp_path):
@@ -267,7 +266,7 @@ class TestBarChart:
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
         output = str(tmp_path / "bar_h.png")
         fig = create_bar_chart(['A', 'B'], [10, 20], horizontal=True, output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_empty_data_returns_none(self):
@@ -286,7 +285,7 @@ class TestBarChart:
         from codomyrmex.data_visualization.charts.bar_chart import create_bar_chart
         output = str(tmp_path / "bar_theme.png")
         fig = create_bar_chart(['X', 'Y'], [5, 10], theme="dark", output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_bar_chart_class(self, tmp_path):
         """Test functionality: bar chart class."""
@@ -309,7 +308,7 @@ class TestLinePlot:
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
         output = str(tmp_path / "line.png")
         fig = create_line_plot([1, 2, 3], [4, 5, 6], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_multiple_lines(self, tmp_path):
@@ -322,7 +321,7 @@ class TestLinePlot:
             line_labels=["Up", "Down"],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_empty_data_returns_none(self):
@@ -335,13 +334,13 @@ class TestLinePlot:
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
         output = str(tmp_path / "markers.png")
         fig = create_line_plot([1, 2, 3], [1, 4, 9], markers=True, output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_line_plot_with_theme(self, tmp_path):
         """Test functionality: line plot with theme."""
         from codomyrmex.data_visualization.charts.line_plot import create_line_plot
         fig = create_line_plot([1, 2, 3], [2, 4, 6], theme="light")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_line_plot_class(self, tmp_path):
         """Test functionality: line plot class."""
@@ -366,7 +365,7 @@ class TestScatterPlot:
         )
         output = str(tmp_path / "scatter.png")
         fig = create_scatter_plot([1, 2, 3], [4, 5, 6], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_empty_data_returns_none(self):
@@ -394,7 +393,7 @@ class TestScatterPlot:
             dot_size=50, dot_color="red", alpha=0.5,
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_scatter_with_theme(self, tmp_path):
         """Test functionality: scatter with theme."""
@@ -402,7 +401,7 @@ class TestScatterPlot:
             create_scatter_plot,
         )
         fig = create_scatter_plot([1, 2, 3], [3, 2, 1], theme="vibrant")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_scatter_plot_class(self, tmp_path):
         """Test functionality: scatter plot class."""
@@ -425,7 +424,7 @@ class TestHistogram:
         from codomyrmex.data_visualization.charts.histogram import create_histogram
         output = str(tmp_path / "hist.png")
         fig = create_histogram([1, 2, 2, 3, 3, 3, 4, 5], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_empty_data_returns_none(self):
@@ -438,13 +437,13 @@ class TestHistogram:
         from codomyrmex.data_visualization.charts.histogram import create_histogram
         output = str(tmp_path / "hist_bins.png")
         fig = create_histogram(list(range(50)), bins=5, output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_histogram_with_theme(self, tmp_path):
         """Test functionality: histogram with theme."""
         from codomyrmex.data_visualization.charts.histogram import create_histogram
         fig = create_histogram([1, 2, 3, 4, 5], theme="minimal")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_histogram_class(self, tmp_path):
         """Test functionality: histogram class."""
@@ -467,7 +466,7 @@ class TestPieChart:
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
         output = str(tmp_path / "pie.png")
         fig = create_pie_chart(['A', 'B', 'C'], [10, 20, 30], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_pie_with_explode(self, tmp_path):
@@ -479,7 +478,7 @@ class TestPieChart:
             explode=[0, 0.1, 0],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_empty_data_returns_none(self):
         """Test functionality: empty data returns none."""
@@ -495,13 +494,13 @@ class TestPieChart:
             explode=[0, 0.1, 0],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_pie_with_theme(self, tmp_path):
         """Test functionality: pie with theme."""
         from codomyrmex.data_visualization.charts.pie_chart import create_pie_chart
         fig = create_pie_chart(['X', 'Y'], [40, 60], theme="scientific")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_pie_chart_class(self, tmp_path):
         """Test functionality: pie chart class."""
@@ -524,7 +523,7 @@ class TestHeatmap:
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
         output = str(tmp_path / "heatmap.png")
         fig = create_heatmap([[1, 2], [3, 4]], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_heatmap_with_labels(self, tmp_path):
@@ -537,14 +536,14 @@ class TestHeatmap:
             y_labels=['Row1', 'Row2'],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_heatmap_with_annotations(self, tmp_path):
         """Test functionality: heatmap with annotations."""
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
         output = str(tmp_path / "heatmap_annot.png")
         fig = create_heatmap([[1, 2], [3, 4]], annot=True, output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_heatmap_invalid_data_returns_none(self):
         """Test functionality: heatmap invalid data returns none."""
@@ -557,7 +556,7 @@ class TestHeatmap:
         """Test functionality: heatmap with theme."""
         from codomyrmex.data_visualization.charts.heatmap import create_heatmap
         fig = create_heatmap([[1, 2], [3, 4]], theme="dark")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_heatmap_class(self, tmp_path):
         """Test functionality: heatmap class."""
@@ -580,7 +579,7 @@ class TestBoxPlot:
         from codomyrmex.data_visualization.charts.box_plot import create_box_plot
         output = str(tmp_path / "box.png")
         fig = create_box_plot([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_box_plot_with_dict_data(self, tmp_path):
@@ -591,7 +590,7 @@ class TestBoxPlot:
             {"Group A": [1, 2, 3, 4, 5], "Group B": [3, 4, 5, 6, 7]},
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_box_plot_multiple_lists(self, tmp_path):
         """Test functionality: box plot multiple lists."""
@@ -602,7 +601,7 @@ class TestBoxPlot:
             labels=["Low", "Mid", "High"],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_box_plot_empty_returns_none(self):
         """Test functionality: box plot empty returns none."""
@@ -631,7 +630,7 @@ class TestAreaChart:
         from codomyrmex.data_visualization.charts.area_chart import create_area_chart
         output = str(tmp_path / "area.png")
         fig = create_area_chart([1, 2, 3, 4, 5], [2, 4, 3, 5, 4], output_path=output)
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
         assert Path(output).exists()
 
     def test_stacked_area_chart(self, tmp_path):
@@ -645,7 +644,7 @@ class TestAreaChart:
             labels=["Series 1", "Series 2"],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_multiple_area_unstacked(self, tmp_path):
         """Test functionality: multiple area unstacked."""
@@ -656,7 +655,7 @@ class TestAreaChart:
             [[1, 3, 2], [2, 1, 3]],
             output_path=output,
         )
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_empty_data_returns_none(self):
         """Test functionality: empty data returns none."""
@@ -684,7 +683,7 @@ class TestThemes:
         from codomyrmex.data_visualization.themes import ThemeName, get_theme
         for name in ThemeName:
             theme = get_theme(name)
-            assert theme is not None
+            assert hasattr(theme, 'colors')
             assert theme.name == name
 
     def test_default_theme(self):
@@ -766,8 +765,8 @@ class TestAdvancedPlotter:
         )
         plotter = AdvancedPlotter()
         fig, ax = plotter.create_figure()
-        assert fig is not None
-        assert ax is not None
+        assert isinstance(fig, plt.Figure)
+        assert isinstance(ax, plt.Axes)
         plotter.clear_figures()
 
     def test_plot_line(self):
@@ -778,7 +777,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         line = plotter.plot_line([1, 2, 3], [4, 5, 6], label="test")
-        assert line is not None
+        assert hasattr(line, 'get_xdata')
         plotter.clear_figures()
 
     def test_plot_scatter(self):
@@ -789,7 +788,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         scatter = plotter.plot_scatter([1, 2, 3], [4, 5, 6])
-        assert scatter is not None
+        assert hasattr(scatter, 'get_offsets')
         plotter.clear_figures()
 
     def test_plot_bar(self):
@@ -800,7 +799,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bars = plotter.plot_bar(['A', 'B'], [10, 20])
-        assert bars is not None
+        assert isinstance(bars, matplotlib.container.BarContainer)
         plotter.clear_figures()
 
     def test_plot_histogram(self):
@@ -811,7 +810,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         result = plotter.plot_histogram([1, 2, 2, 3, 3, 3])
-        assert result is not None
+        assert isinstance(result, tuple)  # (n, bins, patches)
         plotter.clear_figures()
 
     def test_plot_heatmap(self):
@@ -823,7 +822,7 @@ class TestAdvancedPlotter:
         plotter.create_figure()
         try:
             hm = plotter.plot_heatmap([[1, 2], [3, 4]])
-            assert hm is not None
+            assert isinstance(hm, plt.Axes)
         except TypeError:
             # seaborn version incompatibility with xticklabels
             pytest.skip("seaborn heatmap incompatible with current version")
@@ -838,7 +837,7 @@ class TestAdvancedPlotter:
         plotter = AdvancedPlotter()
         plotter.create_figure()
         bp = plotter.plot_box({"A": [1, 2, 3], "B": [4, 5, 6]})
-        assert bp is not None
+        assert isinstance(bp, dict)  # boxplot returns dict of artists
         plotter.clear_figures()
 
     def test_save_plot(self, tmp_path):
@@ -1056,8 +1055,8 @@ class TestGitVisualizer:
         """Test functionality: instantiation."""
         from codomyrmex.data_visualization.git.git_visualizer import GitVisualizer
         viz = GitVisualizer()
-        assert viz is not None
-        assert viz.mermaid_generator is not None
+        assert isinstance(viz, GitVisualizer)
+        assert hasattr(viz.mermaid_generator, 'create_git_branch_diagram')
         assert "main" in viz.colors
 
     def test_git_tree_png_with_sample_data(self, tmp_path):
@@ -1200,21 +1199,21 @@ class TestPlotter:
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.bar_chart(['A', 'B'], [1, 2], output_path=str(tmp_path / "p_bar.png"))
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_plotter_line_plot(self, tmp_path):
         """Test functionality: plotter line plot."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.line_plot([1, 2, 3], [4, 5, 6], output_path=str(tmp_path / "p_line.png"))
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_plotter_heatmap(self, tmp_path):
         """Test functionality: plotter heatmap."""
         from codomyrmex.data_visualization.engines.plotter import Plotter
         p = Plotter()
         fig = p.heatmap([[1, 2], [3, 4]], output_path=str(tmp_path / "p_hm.png"))
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_plotter_default_figure_size(self):
         """Test functionality: plotter default figure size."""
@@ -1237,7 +1236,7 @@ class TestAdvancedPlotterCoverage:
     def test_plot_config(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import PlotConfig
         cfg = PlotConfig()
-        assert cfg is not None
+        assert isinstance(cfg, PlotConfig)
 
     def test_create_bar_chart(self, tmp_path):
         import matplotlib
@@ -1247,7 +1246,7 @@ class TestAdvancedPlotterCoverage:
         )
         matplotlib.use("Agg")
         fig = create_advanced_bar_chart(["A", "B", "C"], [10, 20, 30], title="Test")
-        assert fig is not None
+        assert isinstance(fig, plt.Figure)
 
     def test_dataset_dataclass(self):
         from codomyrmex.data_visualization.engines.advanced_plotter import (

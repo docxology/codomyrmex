@@ -24,11 +24,11 @@ class TestVariantType:
     """Test suite for VariantType."""
     def test_control(self):
         """Test functionality: control."""
-        assert VariantType.CONTROL is not None
+        assert VariantType.CONTROL.value == "control" or isinstance(VariantType.CONTROL.value, (str, int))
 
     def test_treatment(self):
         """Test functionality: treatment."""
-        assert VariantType.TREATMENT is not None
+        assert VariantType.TREATMENT.value == "treatment" or isinstance(VariantType.TREATMENT.value, (str, int))
 
 
 @pytest.mark.unit
@@ -111,20 +111,21 @@ class TestExperimentManager:
     def test_create_manager(self):
         """Test functionality: create manager."""
         manager = ExperimentManager()
-        assert manager is not None
+        assert isinstance(manager, ExperimentManager)
 
     def test_create_experiment(self):
         """Test functionality: create experiment."""
         manager = ExperimentManager()
         experiment = manager.create_experiment("exp-1", "Test Experiment")
-        assert experiment is not None
+        assert isinstance(experiment, Experiment)
+        assert experiment.id == "exp-1"
 
     def test_get_experiment(self):
         """Test functionality: get experiment."""
         manager = ExperimentManager()
         manager.create_experiment("exp-1", "Test")
         experiment = manager.get_experiment("exp-1")
-        assert experiment is not None
+        assert isinstance(experiment, Experiment)
         assert experiment.id == "exp-1"
 
     def test_get_nonexistent_experiment(self):
@@ -142,4 +143,5 @@ class TestExperimentManager:
         ]
         manager.create_experiment("exp-1", "Test", variants=variants)
         variant = manager.get_variant("exp-1", "user-1")
-        assert variant is not None
+        assert isinstance(variant, Variant)
+        assert variant.name in ("control", "treatment")

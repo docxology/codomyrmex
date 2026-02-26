@@ -804,3 +804,75 @@ class TestEdgeCases:
 
         assert decompressed == data
         assert decompressed.decode("utf-8") == "Hello World!"
+
+
+# ==============================================================================
+# A5 expansion -- additional behavioral tests
+# ==============================================================================
+
+
+@pytest.mark.unit
+class TestCompressorReuse:
+    """Tests verifying compressor instances can be reused."""
+
+    def test_reuse_gzip_compressor(self):
+        """Same compressor handles multiple compress/decompress cycles."""
+        compressor = Compressor("gzip")
+        for i in range(5):
+            data = f"payload-{i}".encode() * 50
+            compressed = compressor.compress(data)
+            assert compressor.decompress(compressed) == data
+
+    def test_different_formats_produce_different_output(self):
+        """Compressing same data with different formats yields different bytes."""
+        data = b"test data " * 100
+        gzip_c = Compressor("gzip").compress(data)
+        zlib_c = Compressor("zlib").compress(data)
+        assert gzip_c != zlib_c
+
+    def test_compression_ratio_boundary_zero_reduction(self):
+        """When compressed == original size, ratio is 0."""
+        ratio = Compressor.get_compression_ratio(b"data", b"data")
+        assert ratio == 0.0
+
+    def test_auto_decompress_zip_format(self):
+        """auto_decompress handles zip format correctly."""
+        data = b"zip payload " * 100
+        compressed = compress_data(data, format="zip")
+        decompressed = auto_decompress(compressed)
+        assert decompressed == data
+
+
+@pytest.mark.unit
+class TestParallelCompressorEdgeCases:
+    """Extended tests for ParallelCompressor edge cases."""
+
+    def test_parallel_different_sizes(self):
+        """Parallel compression handles items of very different sizes."""
+        data_list = [b"x" * 10, b"y" * 10000, b"z" * 1]
+        compressor = ParallelCompressor("gzip")
+        compressed_list = compressor.compress_batch(data_list)
+        decompressed_list = compressor.decompress_batch(compressed_list)
+        assert decompressed_list == data_list
+
+    def test_parallel_zlib_format(self):
+        """ParallelCompressor works with zlib format."""
+        data_list = [b"data1" * 50, b"data2" * 50]
+        compressor = ParallelCompressor("zlib")
+        compressed_list = compressor.compress_batch(data_list)
+        decompressed_list = compressor.decompress_batch(compressed_list)
+        assert decompressed_list == data_list
+
+    def test_compression_error_str_message(self):
+        """CompressionError includes message in string representation."""
+        error = CompressionError("test error")
+        assert "test error" in str(error)
+
+    def test_format_detection_preserves_data(self):
+        """Detecting format does not alter compressed data."""
+        data = b"test data " * 50
+        compressor = Compressor("gzip")
+        compressed = compressor.compress(data)
+        detected = compressor.detect_format(compressed)
+        assert detected == "gzip"
+        assert compressor.decompress(compressed) == data

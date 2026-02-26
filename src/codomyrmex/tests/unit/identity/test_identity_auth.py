@@ -409,3 +409,78 @@ class TestCreateIdentity:
         """create_identity forwards the config dict."""
         ident = create_identity(config={"flag": True})
         assert ident.config["flag"] is True
+
+
+# ---------------------------------------------------------------------------
+# A5 expansion -- additional behavioral tests
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+class TestIdentityMultipleProviders:
+    """Tests for Identity with multiple providers."""
+
+    def test_register_multiple_providers(self):
+        """Multiple providers can coexist."""
+        ident = Identity()
+        pw = PasswordProvider()
+        pw.register("alice", "pw")
+        tp = TokenProvider()
+        ident.register_provider("password", pw)
+        ident.register_provider("token", tp)
+        token_str = tp.create_token()
+        # Login via password
+        t1 = ident.login("alice", {"user_id": "alice", "password": "pw"})
+        assert t1 is not None
+        # Login via token
+        t2 = ident.login("alice", {"token": token_str}, provider="token")
+        assert t2 is not None
+
+    def test_multiple_sessions_counted(self):
+        """Multiple logins create multiple active sessions."""
+        ident = Identity()
+        pw = PasswordProvider()
+        pw.register("alice", "pw")
+        ident.register_provider("password", pw)
+        t1 = ident.login("alice", {"user_id": "alice", "password": "pw"})
+        t2 = ident.login("alice", {"user_id": "alice", "password": "pw"})
+        assert ident.active_session_count == 2
+        ident.logout(t1.token)
+        assert ident.active_session_count == 1
+
+    def test_double_logout_same_token(self):
+        """Logging out the same token twice: first True, second False."""
+        ident = Identity()
+        pw = PasswordProvider()
+        pw.register("bob", "pw")
+        ident.register_provider("password", pw)
+        token = ident.login("bob", {"user_id": "bob", "password": "pw"})
+        assert ident.logout(token.token) is True
+        assert ident.logout(token.token) is False
+
+
+@pytest.mark.unit
+class TestAuthTokenEdgeCases:
+    """Additional edge case tests for AuthToken."""
+
+    def test_token_with_zero_ttl_is_immediately_expired(self):
+        """Token with expires_at at current time is expired."""
+        now = time.time()
+        tok = AuthToken(
+            token="t", user_id="u", issued_at=now, expires_at=now,
+        )
+        # At the exact boundary, is_expired depends on strict comparison
+        # The token should be expired or at the boundary
+        assert tok.remaining_seconds == 0.0 or tok.is_expired
+
+    def test_token_fields_stored(self):
+        """All token fields are accessible."""
+        now = time.time()
+        tok = AuthToken(
+            token="abc123", user_id="user42",
+            issued_at=now, expires_at=now + 100,
+            scopes=["read", "write"],
+        )
+        assert tok.token == "abc123"
+        assert tok.user_id == "user42"
+        assert tok.issued_at == now

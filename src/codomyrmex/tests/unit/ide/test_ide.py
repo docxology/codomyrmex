@@ -292,7 +292,7 @@ class TestAntigravityClient:
             assert artifact_path.read_text() == "# Test Content"
 
             # Verify context update
-            assert client.get_artifact("test_artifact") is not None
+            assert isinstance(client.get_artifact("test_artifact"), dict)
 
     def test_update_artifact_success(self):
         """update_artifact should successfully update file on disk."""
@@ -378,7 +378,7 @@ class TestAntigravityClient:
         """get_tool_info should return info for known tools."""
         client = AntigravityClient()
         info = client.get_tool_info("task_boundary")
-        assert info is not None
+        assert isinstance(info, dict)
         assert info["name"] == "task_boundary"
         assert "description" in info
 
@@ -587,7 +587,7 @@ class TestIDEClientHelperMethods:
         client = AntigravityClient()  # Use concrete implementation
         info = client.get_file_info(__file__)
 
-        assert info is not None
+        assert hasattr(info, 'name')
         assert info.name == "test_ide.py"
         assert info.language == "python"
         assert info.line_count > 0
@@ -653,7 +653,7 @@ class TestIDEClientHelperMethods:
         client.execute_command_safe("list_dir")
 
         last = client.get_last_command()
-        assert last is not None
+        assert hasattr(last, 'command')
         assert last.command == "list_dir"
 
     def test_get_last_command_empty_history(self):

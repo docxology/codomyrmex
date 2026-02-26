@@ -227,7 +227,8 @@ class TestChainOfThought:
         trace = cot.think("How do I optimize this query?")
         assert trace.step_count == 3  # NORMAL depth
         assert trace.is_complete
-        assert trace.conclusion is not None
+        assert hasattr(trace.conclusion, 'action')
+        assert hasattr(trace.conclusion, 'confidence')
         assert trace.duration_ms > 0
 
     def test_shallow_think(self) -> None:
@@ -254,7 +255,7 @@ class TestChainOfThought:
         cot = ChainOfThought()
         cot.think("One")
         last = cot.get_last_trace()
-        assert last is not None
+        assert hasattr(last, 'prompt')
         assert last.prompt == "One"
 
     def test_clear_traces(self) -> None:

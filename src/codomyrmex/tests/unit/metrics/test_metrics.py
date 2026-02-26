@@ -36,8 +36,8 @@ class TestMetricsModuleImport:
 
     def test_metrics_module_import(self):
         """Verify that the metrics module can be imported successfully."""
-        assert metrics is not None
         assert hasattr(metrics, "__path__")
+        assert hasattr(metrics, "__name__")
 
     def test_metrics_module_structure(self):
         """Verify basic structure of metrics module."""
@@ -491,7 +491,7 @@ class TestMetricAggregator:
 
     def test_aggregator_creation(self, aggregator):
         """Test basic aggregator creation."""
-        assert aggregator is not None
+        assert isinstance(aggregator, MetricAggregator)
 
     def test_aggregator_increment(self, aggregator):
         """Test aggregator increment."""
@@ -676,7 +676,7 @@ class TestStatsDClient:
         """Test StatsDClient creation with real client."""
         from codomyrmex.telemetry.metrics import StatsDClient
         client = StatsDClient(host="localhost", port=8125, prefix="test")
-        assert client is not None
+        assert isinstance(client, StatsDClient)
 
     @pytest.mark.skipif(
         metrics.StatsDClient is None,

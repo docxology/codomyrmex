@@ -621,3 +621,64 @@ class TestZ3BackendEmptyModel:
         backend = Z3Backend()
         with pytest.raises(ModelBuildError, match="model is empty"):
             backend.replace_item(0, "new = 1")
+
+
+# ────────────────────────────────────────────────────────────
+# A5 expansion — additional behavioral tests
+# ────────────────────────────────────────────────────────────
+
+
+@pytest.mark.unit
+class TestSolverStatusProperties:
+    """Extended tests for SolverStatus and SolverResult behaviors."""
+
+    def test_unknown_status_properties(self):
+        """SolverResult with UNKNOWN status: neither sat nor unsat."""
+        from codomyrmex.formal_verification import SolverResult, SolverStatus
+        result = SolverResult(status=SolverStatus.UNKNOWN)
+        assert not result.is_sat
+        assert not result.is_unsat
+        assert result.model is None
+
+    def test_sat_result_model_not_none(self):
+        """SAT result can carry a non-None model."""
+        from codomyrmex.formal_verification import SolverResult, SolverStatus
+        result = SolverResult(status=SolverStatus.SAT, model={"x": "42"})
+        assert result.model is not None
+        assert result.model["x"] == "42"
+
+    def test_unsat_result_model_is_none(self):
+        """UNSAT result has None model."""
+        from codomyrmex.formal_verification import SolverResult, SolverStatus
+        result = SolverResult(status=SolverStatus.UNSAT)
+        assert result.model is None
+
+    def test_solver_error_is_base_exception(self):
+        """SolverError inherits from Exception."""
+        from codomyrmex.formal_verification import SolverError
+        error = SolverError("test")
+        assert isinstance(error, Exception)
+
+    def test_solver_timeout_error_message(self):
+        """SolverTimeoutError preserves message."""
+        from codomyrmex.formal_verification import SolverTimeoutError
+        error = SolverTimeoutError("timed out after 30s")
+        assert "timed out" in str(error)
+
+    def test_invalid_constraint_error_inherits(self):
+        """InvalidConstraintError inherits SolverError."""
+        from codomyrmex.formal_verification import InvalidConstraintError, SolverError
+        error = InvalidConstraintError("bad constraint")
+        assert isinstance(error, SolverError)
+
+    def test_model_build_error_inherits(self):
+        """ModelBuildError inherits SolverError."""
+        from codomyrmex.formal_verification import ModelBuildError, SolverError
+        error = ModelBuildError("build failed")
+        assert isinstance(error, SolverError)
+
+    def test_backend_not_available_inherits(self):
+        """BackendNotAvailableError inherits SolverError."""
+        from codomyrmex.formal_verification import BackendNotAvailableError, SolverError
+        error = BackendNotAvailableError("no backend")
+        assert isinstance(error, SolverError)

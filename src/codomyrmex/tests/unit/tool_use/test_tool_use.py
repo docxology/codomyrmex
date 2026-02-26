@@ -536,3 +536,151 @@ class TestToolChain:
         result = chain.execute({"url": "test.com"})
         assert result.success
         assert result.context["processed"]["result"] == "EXTRACTED: TEST.COM"
+
+
+# ---------------------------------------------------------------------------
+# Extended behavioral tests (A5 expansion)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.unit
+class TestValidationResultExtended:
+    """Extended tests for ValidationResult edge cases."""
+
+    def test_merge_two_invalid(self):
+        """Merging two invalid results aggregates errors."""
+        a = ValidationResult(valid=False, errors=["err1"])
+        b = ValidationResult(valid=False, errors=["err2"])
+        merged = a.merge(b)
+        assert merged.valid is False
+        assert "err1" in merged.errors
+        assert "err2" in merged.errors
+
+    def test_merge_preserves_original(self):
+        """Merging does not mutate the original results."""
+        a = ValidationResult(valid=True, errors=[])
+        b = ValidationResult(valid=False, errors=["bad"])
+        merged = a.merge(b)
+        assert a.valid is True
+        assert len(a.errors) == 0
+        assert merged is not a
+
+    def test_to_dict_valid_has_empty_errors(self):
+        """Valid result to_dict has empty errors list."""
+        vr = ValidationResult(valid=True)
+        d = vr.to_dict()
+        assert d["valid"] is True
+        assert d["errors"] == []
+
+
+@pytest.mark.unit
+class TestToolRegistryExtended:
+    """Extended behavioral tests for ToolRegistry."""
+
+    def _make_entry(self, name="tool1", tags=None):
+        return ToolEntry(
+            name=name,
+            description=f"Tool {name}",
+            handler=lambda d: {"echo": d},
+            tags=tags or [],
+        )
+
+    def test_get_nonexistent_returns_none(self):
+        """get() for an unregistered name returns None."""
+        reg = ToolRegistry()
+        assert reg.get("missing") is None
+
+    def test_list_empty_registry(self):
+        """list() on empty registry returns empty list."""
+        reg = ToolRegistry()
+        assert reg.list() == []
+        assert reg.list_names() == []
+
+    def test_invoke_with_output_validation_failure(self):
+        """invoke with output schema that mismatches raises validation failure."""
+        reg = ToolRegistry()
+        reg.register(
+            ToolEntry(
+                name="typed",
+                description="Returns int but schema expects string",
+                handler=lambda d: 42,
+                output_schema={"type": "string"},
+            )
+        )
+        result = reg.invoke("typed", {}, validate=True)
+        assert not result.ok
+
+    def test_search_no_results(self):
+        """search returns empty list when nothing matches."""
+        reg = ToolRegistry()
+        reg.register(self._make_entry("alpha"))
+        results = reg.search(name_contains="zzz")
+        assert results == []
+
+    def test_registry_iteration_order(self):
+        """list_names returns sorted names."""
+        reg = ToolRegistry()
+        reg.register(self._make_entry("zebra"))
+        reg.register(self._make_entry("apple"))
+        reg.register(self._make_entry("mango"))
+        assert reg.list_names() == ["apple", "mango", "zebra"]
+
+
+@pytest.mark.unit
+class TestToolChainExtended:
+    """Extended behavioral tests for ToolChain."""
+
+    def test_chain_continue_on_failure(self):
+        """Chain with stop_on_failure=False continues after failure."""
+        reg = ToolRegistry()
+        reg.register(
+            ToolEntry(
+                name="fail",
+                description="Fails",
+                handler=lambda d: (_ for _ in ()).throw(RuntimeError("fail")),
+            )
+        )
+        reg.register(
+            ToolEntry(
+                name="ok",
+                description="Ok",
+                handler=lambda d: {"done": True},
+            )
+        )
+        chain = ToolChain(registry=reg)
+        chain.add_step(ChainStep(tool_name="fail"))
+        chain.add_step(ChainStep(tool_name="ok"))
+        result = chain.execute(stop_on_failure=False, validate_tools=False)
+        assert not result.success
+        assert len(result.step_results) == 2
+
+    def test_chain_execute_empty_input(self):
+        """Chain executes with empty dict input."""
+        reg = ToolRegistry()
+        reg.register(
+            ToolEntry(
+                name="noop",
+                description="Does nothing",
+                handler=lambda d: {"status": "ok"},
+            )
+        )
+        chain = ToolChain(registry=reg)
+        chain.add_step(ChainStep(tool_name="noop"))
+        result = chain.execute({})
+        assert result.success
+
+    def test_chain_result_to_dict(self):
+        """ChainResult has expected attributes."""
+        reg = ToolRegistry()
+        reg.register(
+            ToolEntry(
+                name="noop",
+                description="Noop",
+                handler=lambda d: {"v": 1},
+            )
+        )
+        chain = ToolChain(registry=reg)
+        chain.add_step(ChainStep(tool_name="noop"))
+        result = chain.execute()
+        assert isinstance(result.duration_ms, (int, float))
+        assert isinstance(result.step_results, list)
