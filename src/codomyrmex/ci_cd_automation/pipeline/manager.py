@@ -578,7 +578,7 @@ class PipelineManager:
         # Execute stages respecting dependencies
         completed = set()
         results = {}
-        max_workers = min(len(stages), 4)  # Limit concurrent stages
+        max_workers = max(min(len(stages), 4), 1)  # Limit concurrent stages; floor at 1
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {}
@@ -598,7 +598,7 @@ class PipelineManager:
                 if not ready_stages:
                     # Wait for running stages to complete
                     if futures:
-                        concurrent.futures.wait(futures, timeout=1.0)
+                        concurrent.futures.wait(list(futures.values()), timeout=1.0)
                         for stage_name, future in list(futures.items()):
                             if future.done():
                                 try:
