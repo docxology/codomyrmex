@@ -40,6 +40,44 @@ The Agentic Memory module provides persistent key-value memory for AI agents. It
 - **DO NOT**: Store sensitive credentials in memory (use `wallet/` or `auth/` instead)
 - **DO NOT**: Assume memory persistence — always handle `KeyError` from `memory_get`
 
+## Obsidian Subpackage
+
+The `obsidian/` subpackage is a 24-file vault integration layer with two operating modes:
+
+### Mode Selection
+
+| Mode | When to Use | Requirement |
+|------|-------------|-------------|
+| **Filesystem** | Batch processing, CI/CD, scripting, any Python environment | None — pure Python |
+| **CLI** | Live vault interaction, triggering Obsidian plugin actions, sync operations | Obsidian ≥1.12 with CLI enabled |
+
+### Key Import Paths
+
+```python
+# Filesystem mode — import from subpackage root
+from codomyrmex.agentic_memory.obsidian import (
+    ObsidianVault,       # vault root handle
+    create_note,         # write a new note
+    search_vault,        # full-text search
+    build_link_graph,    # wikilink graph analysis
+)
+
+# CLI mode
+from codomyrmex.agentic_memory.obsidian import ObsidianCLI, ObsidianCLIError
+cli = ObsidianCLI()  # raises ObsidianCLINotAvailable if CLI absent
+```
+
+### DO / DO NOT Contracts
+
+- **DO**: Use filesystem mode when Obsidian app availability is uncertain
+- **DO**: Catch `ObsidianCLINotAvailable` and fall back to filesystem mode when using CLI
+- **DO**: Use `ObsidianVault` as the root handle — pass it to all filesystem functions
+- **DO NOT**: Write directly to vault files outside of `crud.py` functions — bypass invalidates internal cache
+- **DO NOT**: Call CLI commands that modify vault state without explicit user intent
+- **DO NOT**: Store secrets or credentials in Obsidian notes via this subpackage
+
+Full reference: [obsidian/AGENTS.md](obsidian/AGENTS.md)
+
 ## Navigation
 
 - [README.md](README.md) | [SPEC.md](SPEC.md) | [PAI.md](PAI.md) | [Parent](../AGENTS.md)

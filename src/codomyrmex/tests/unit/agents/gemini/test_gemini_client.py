@@ -23,31 +23,64 @@ from codomyrmex.agents.core.exceptions import GeminiError
 from codomyrmex.agents.gemini.gemini_client import GeminiClient
 
 # ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+_GEMINI_ENV_VARS = ("GEMINI_API_KEY", "GEMINI_MODEL")
+
+
+def _clear_gemini_env() -> dict[str, str]:
+    """Remove all GEMINI_* env vars and reset global AgentConfig singleton.
+
+    Returns a dict of saved values for later restoration.
+    """
+    saved: dict[str, str] = {}
+    for var in _GEMINI_ENV_VARS:
+        val = os.environ.pop(var, None)
+        if val is not None:
+            saved[var] = val
+
+    # Reset the cached AgentConfig singleton so it doesn't retain stale
+    # env-derived values from earlier tests (e.g. via load_dotenv).
+    from codomyrmex.agents.core.config import reset_config
+    reset_config()
+
+    return saved
+
+
+def _restore_gemini_env(saved: dict[str, str]) -> None:
+    """Restore previously saved GEMINI_* env vars and reset config."""
+    for var, val in saved.items():
+        os.environ[var] = val
+    # Re-create the singleton with the restored env
+    from codomyrmex.agents.core.config import reset_config
+    reset_config()
+
+
+# ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
 
 @pytest.fixture()
 def client_no_key():
     """GeminiClient with no API key -- self.client is None."""
-    saved = os.environ.pop("GEMINI_API_KEY", None)
+    saved = _clear_gemini_env()
     try:
         gc = GeminiClient(config={})
         yield gc
     finally:
-        if saved is not None:
-            os.environ["GEMINI_API_KEY"] = saved
+        _restore_gemini_env(saved)
 
 
 @pytest.fixture()
 def client_with_custom_config():
     """GeminiClient with custom model and no API key."""
-    saved = os.environ.pop("GEMINI_API_KEY", None)
+    saved = _clear_gemini_env()
     try:
         gc = GeminiClient(config={"gemini_model": "gemini-1.5-pro"})
         yield gc
     finally:
-        if saved is not None:
-            os.environ["GEMINI_API_KEY"] = saved
+        _restore_gemini_env(saved)
 
 
 # ---------------------------------------------------------------------------
@@ -60,14 +93,13 @@ class TestGeminiClientInit:
 
     def test_init_no_config(self):
         """GeminiClient can be constructed with no config dict."""
-        saved = os.environ.pop("GEMINI_API_KEY", None)
+        saved = _clear_gemini_env()
         try:
             gc = GeminiClient()
             assert gc is not None
             assert gc.name == "gemini"
         finally:
-            if saved is not None:
-                os.environ["GEMINI_API_KEY"] = saved
+            _restore_gemini_env(saved)
 
     def test_init_empty_config(self, client_no_key):
         """GeminiClient constructed with empty config sets defaults."""
@@ -93,7 +125,7 @@ class TestGeminiClientInit:
 
     def test_api_key_from_config(self):
         """API key can be provided via config dict."""
-        saved = os.environ.pop("GEMINI_API_KEY", None)
+        saved = _clear_gemini_env()
         try:
             # This will try to create a real genai.Client and likely fail
             # with a network/auth error, which is caught and re-raised as GeminiError.
@@ -106,19 +138,17 @@ class TestGeminiClientInit:
             # Expected: SDK may fail to init with a fake key
             pass
         finally:
-            if saved is not None:
-                os.environ["GEMINI_API_KEY"] = saved
+            _restore_gemini_env(saved)
 
     def test_none_config_defaults(self):
         """Passing config=None should be equivalent to empty dict."""
-        saved = os.environ.pop("GEMINI_API_KEY", None)
+        saved = _clear_gemini_env()
         try:
             gc = GeminiClient(config=None)
             assert gc.name == "gemini"
             assert gc.default_model == "gemini-2.0-flash"
         finally:
-            if saved is not None:
-                os.environ["GEMINI_API_KEY"] = saved
+            _restore_gemini_env(saved)
 
 
 # ---------------------------------------------------------------------------

@@ -244,6 +244,7 @@ formal_verification = [
 
 obsidian = [
     "python-frontmatter>=1.0.0",  # Robust YAML frontmatter parsing
+    "pyyaml>=6.0.2",               # YAML frontmatter serialization
 ]
 
 calendar = [

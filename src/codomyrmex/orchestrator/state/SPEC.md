@@ -1,6 +1,6 @@
 # Technical Specification - State
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.orchestrator.state`  
 **Last Updated**: 2026-01-29
@@ -45,12 +45,12 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Immutable state transitions**: State objects are replaced on each transition rather than mutated in-place, preventing partial-update races.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- State is in-memory only; no persistence across orchestrator restarts.
+- Concurrent state transitions on the same workflow require external locking.
 
 ## 5. Testing
 
@@ -61,5 +61,6 @@ pytest tests/orchestrator_state/
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Distributed state sync: persist workflow state to an external store (Redis/PostgreSQL) so orchestrator restarts resume in-progress workflows without data loss.
+- Checkpoint/resume: emit periodic state snapshots mid-workflow; allow agents to resume from last checkpoint rather than restarting from scratch after a failure.
+- State diff and merge: provide utilities to compare two workflow state snapshots and merge non-conflicting transitions, enabling safe parallel state updates.

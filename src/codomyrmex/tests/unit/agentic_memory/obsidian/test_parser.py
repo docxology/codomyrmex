@@ -74,7 +74,8 @@ class TestExtractWikilinks:
         links = extract_wikilinks("[[Note#^block-id]]")
         assert len(links) == 1
         assert links[0].target == "Note"
-        assert links[0].heading == "^block-id"
+        assert links[0].block == "block-id"
+        assert links[0].heading is None
 
     def test_multiple_links(self):
         """Test functionality: multiple links."""

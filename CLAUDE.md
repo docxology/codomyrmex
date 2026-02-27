@@ -92,7 +92,7 @@ Each module is self-contained with standard structure:
 - **Model Context Protocol (MCP)**: Standardized interface for AI/LLM integration across modules
 - **Upward dependencies only**: Higher layers depend on lower, preventing circular dependencies
 - **Lazy module loading**: Modules load on-demand to reduce startup time
-- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 32 modules are auto-discovered.
+- **Auto-discovery**: Modules with an `mcp_tools.py` submodule using `@mcp_tool` decorators are automatically discovered and surfaced via the PAI MCP bridge — no manual registration needed. Currently 33 modules are auto-discovered.
 
 ### Extended Modules (auto-discovered via MCP)
 
@@ -112,18 +112,24 @@ Beyond the core layers above, these modules expose MCP tools via `@mcp_tool` dec
 - `plugin_system` - Plugin discovery and dependency resolution
 - `relations` - Relationship strength scoring
 - `agents/core` - ThinkingAgent reasoning traces and depth control
+- `agentic_memory` - Agent memory store, retrieve, and semantic search
+- `calendar_integration` - Calendar event management and scheduling
+- `data_visualization` - Chart/dashboard generation and HTML export
 - `email` - AgentMail inbox/message/thread management and webhook registration
 - `git_analysis` - Git history analysis, contributor stats, and commit pattern detection
 - `logging_monitoring` - Centralized structured logging and monitoring integration
 - `collaboration` - Multi-user session management and collaborative editing
 - `documentation` - Documentation generation, linting, and publishing workflows
+- `security` - Vulnerability scanning, secret detection, and security auditing
+- `skills` - Skill discovery, listing, and invocation management
+- `validation` - Schema validation, config validation, and validation summaries
 
 ## PAI Integration
 
 Codomyrmex serves as the toolbox for the [PAI system](https://github.com/danielmiessler/PAI) (`~/.claude/skills/PAI/`). Key integration points:
 
 - **Detection**: PAI is present when `~/.claude/skills/PAI/SKILL.md` exists
-- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 19 static tools (16 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~167 tools (163 safe + 4 destructive) across 32 auto-discovered modules, with 3 resources and 10 prompts
+- **MCP Bridge**: `src/codomyrmex/agents/pai/mcp_bridge.py` exposes 20 static tools (17 core + 3 universal proxy) + auto-discovered module tools via `pkgutil` scan of all `mcp_tools.py` submodules; the Codomyrmex PAI Skill surfaces ~167 tools (163 safe + 4 destructive) across 33 auto-discovered modules, with 3 resources and 10 prompts
 - **Trust Gateway**: `src/codomyrmex/agents/pai/trust_gateway.py` gates destructive tools (write, execute) behind explicit trust
 - **Workflows**: `/codomyrmexVerify` audits capabilities; `/codomyrmexTrust` enables destructive tools
 - **RASP Pattern**: Each module has `PAI.md` alongside `README.md`, `AGENTS.md`, `SPEC.md` — these describe AI capabilities the module offers
@@ -194,7 +200,7 @@ Module-specific `requirements.txt` files are **deprecated** - do not modify them
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (46722 symbols, 110725 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (47913 symbols, 113781 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

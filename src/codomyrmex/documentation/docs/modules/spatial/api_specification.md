@@ -11,6 +11,9 @@ The `spatial` module provides advanced modeling capabilities for 3D and 4D envir
 - **`three_d`**: Conventional 3D geometry processing.
 - **`four_d`**: 4D space-time and Synergetics modeling.
 - **`world_models`**: Cognitive map representations and environmental simulation.
+- **`coordinates`**: Coordinate system conversions (Cartesian, spherical, cylindrical, Synergetics, geographic).
+- **`physics`**: Physical simulation primitives.
+- **`rendering`**: Rendering primitives and scene graph utilities.
 
 ## 3. Usage Example
 

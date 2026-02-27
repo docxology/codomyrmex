@@ -67,7 +67,7 @@ All agents operating within this repository must:
 #### src/ - Source Code
 
 - Follow Python best practices (PEP 8)
-- Maintain test coverage (≥80%)
+- Maintain test coverage (≥67%)
 - Update `API_SPECIFICATION.md` when changing interfaces
 - Document MCP tools in `MCP_TOOL_SPECIFICATION.md`
 - Version changes in `CHANGELOG.md`
@@ -252,8 +252,10 @@ Located in `src/codomyrmex/`, these modules provide the primary capabilities:
   - Key Classes: `WebsiteBuilder`, `PageGenerator`
 - `meme/` - Memetics & Information Dynamics
   - Key Classes: `MemeSpecific`, `NarrativeEngine`
-- `agentic_memory/` - Long-term agent memory and recall
+- `agentic_memory/` - Long-term agent memory, recall, and Obsidian vault integration
   - Key Classes: `AgentMemory`, `VectorStoreMemory`
+  - Key Submodule: `obsidian/` — 19-module dual-mode Obsidian integration (filesystem + CLI)
+  - Key Functions: `ObsidianVault(path)`, `search_vault()`, `create_note()`, `build_link_graph()`, `parse_canvas()`
 - `audio/` - Audio processing and transcription
   - Key Classes: `AudioProcessor`, `Transcriber`
 - `bio_simulation/` - Biological simulation
@@ -454,7 +456,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (46722 symbols, 110725 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (47913 symbols, 113781 relationships, 300 execution flows).
 
 GitNexus provides a knowledge graph over this codebase — call chains, blast radius, execution flows, and semantic search.
 

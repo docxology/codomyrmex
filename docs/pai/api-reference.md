@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Python API Reference
 
-**Version**: v0.4.0 | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Last Updated**: February 2026
 
 ## Module: `codomyrmex.agents.pai`
 

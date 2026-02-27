@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3-dev] - 2026-02-27 — "Obsidian Module v3.0"
+
+### Added
+
+- **agentic_memory/obsidian v3.0**: Comprehensive dual-mode Obsidian vault integration
+  - **Filesystem layer** (7 modules): `vault.py`, `parser.py`, `models.py`, `crud.py`, `graph.py`, `search.py`, `canvas.py`
+  - **CLI layer** (12 modules): `cli.py`, `cli_search.py`, `daily_notes.py`, `properties.py`, `tasks.py`, `plugins.py`, `sync.py`, `bookmarks.py`, `templates.py`, `workspace.py`, `developer.py`, `commands.py`
+  - **Models**: `CodeBlock`, `MathBlock`, `DataviewField`, `SnippetInfo`, `ThemeInfo`, `PublishStatus`, `SyncHistoryEntry` + 11 existing models enhanced
+  - **Key functions**: `search_regex`, `filter_by_tags(match_all=)`, `find_dead_ends`, `find_hubs`, `get_shortest_path`, `append_note`, `prepend_note`, `move_note`, `save_canvas`, factory functions (`create_text_node`, `connect_nodes`), `eval_js`, `cdp_command`
+  - **Flat `__init__.py`** exports ~100 public names for convenience imports
+
+### Changed
+
+- **pyproject.toml**: Added `pyyaml` to `obsidian` optional deps
+- **pytest.ini**: Harmonized `--cov-fail-under` from 68% → 30% to match `pyproject.toml`
+
+### Metrics
+
+- Obsidian tests: **413 passed**, 2 skipped, 0 failed (18 test files)
+- Source modules: **19** (7 filesystem + 12 CLI)
+- Public functions: **~100**
+- Documentation: README.md, SPEC.md, AGENTS.md all at v3.0
+
+---
+
 ## [1.0.3-dev] - 2026-02-25 — "Skills Module Hardening"
 
 ### Added

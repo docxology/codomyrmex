@@ -33,8 +33,13 @@ graph_rag/
 ### 3.1 Public API
 
 ```python
-# Primary exports
-# TODO: Define public interface
+from codomyrmex.graph_rag import (
+    KnowledgeGraph,    # Core knowledge graph with entities and relationships
+    GraphRAGPipeline,  # End-to-end RAG pipeline with graph context
+    Entity, EntityType,
+    Relationship, RelationType,
+    GraphContext,
+)
 ```
 
 ### 3.2 Configuration
@@ -46,12 +51,13 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **In-memory graph**: `KnowledgeGraph` stores entities and relationships in-memory dicts; suitable for session-scoped knowledge, not persistent storage.
+2. **Pipeline pattern**: `GraphRAGPipeline` wraps graph construction + retrieval into a single callable, keeping consumer code simple.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- Graph is not persisted across sessions (in-memory only); use `agentic_memory` for durable storage.
+- No graph database backend — does not support very large-scale graphs (>100K nodes).
 
 ## 5. Testing
 
@@ -62,5 +68,6 @@ pytest tests/graph_rag/
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Graph database backend integration (Neo4j, NetworkX) to lift the current 100K-node ceiling on in-memory graphs.
+- Persistent graph storage across sessions: serialize the knowledge graph to disk and reload incrementally rather than rebuilding from source on every session start.
+- Multi-hop reasoning chains: expose a query interface that traces paths of configurable depth through the graph and returns confidence-weighted inference chains.

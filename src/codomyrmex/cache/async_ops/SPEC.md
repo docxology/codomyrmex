@@ -1,6 +1,6 @@
 # Technical Specification - Async Ops
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.cache.async_ops`  
 **Last Updated**: 2026-01-29
@@ -51,8 +51,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No connection pooling for async Redis operations by default; callers should manage pool lifecycle.
+- Async operations are not thread-safe without external locking.
 
 ## 5. Testing
 

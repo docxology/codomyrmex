@@ -16,16 +16,16 @@ The following table maps each essay to its core biological concept and the codom
 
 | Document | Core Concept | Primary Modules |
 |----------|-------------|-----------------|
-| [myrmecology.md](./myrmecology.md) | Study of ants, etymology | bio_simulation, spatial, embodiment, relations, governance |
+| [myrmecology.md](./myrmecology.md) | Study of ants, etymology | bio_simulation, spatial, embodiment, relations, validation |
 | [stigmergy.md](./stigmergy.md) | Indirect coordination | events, cache, logging_monitoring, agentic_memory, bio_simulation |
 | [eusociality.md](./eusociality.md) | Division of labor | agents, orchestrator, plugin_system, identity, system_discovery |
 | [swarm_intelligence.md](./swarm_intelligence.md) | Collective decision-making | meme, concurrency, evolutionary_ai, market, graph_rag |
-| [superorganism.md](./superorganism.md) | Colony as organism | system_discovery, telemetry, telemetry, model_context_protocol, bio_simulation |
-| [immune_system.md](./immune_system.md) | Digital defense | defense, security, identity, privacy, validation, chaos_engineering |
+| [superorganism.md](./superorganism.md) | Colony as organism | system_discovery, telemetry, model_context_protocol, bio_simulation |
+| [immune_system.md](./immune_system.md) | Digital defense | defense, security, identity, privacy, validation, testing |
 | [memory_and_forgetting.md](./memory_and_forgetting.md) | Memory models | agentic_memory, cache, cerebrum, vector_store, telemetry |
 | [evolution.md](./evolution.md) | Selection and fitness | evolutionary_ai, meme, prompt_engineering, model_ops, vector_store |
 | [free_energy.md](./free_energy.md) | Active inference | cerebrum, performance, telemetry, logging_monitoring, model_ops |
-| [metabolism.md](./metabolism.md) | Resource flow | performance, performance, rate_limiting, performance, cache, streaming |
+| [metabolism.md](./metabolism.md) | Resource flow | performance, concurrency, cache, events |
 | [symbiosis.md](./symbiosis.md) | Mutualism, holobiont | model_context_protocol, plugin_system, agents, llm, wallet |
 
 ## Suggested Reading Order
@@ -38,19 +38,19 @@ The documents are designed to be read independently, but the following sequence 
 
 **Foundation trio** (read in order):
 
-2. **[stigmergy.md](./stigmergy.md)** -- The most fundamental coordination mechanism: indirect communication through environmental modification. This concept underpins event systems, caching, and logging throughout the platform.
-3. **[eusociality.md](./eusociality.md)** -- How labor divides into specialized roles. Maps directly to the agent framework, orchestrator, and plugin architecture.
-4. **[superorganism.md](./superorganism.md)** -- How a distributed system of semi-autonomous components can exhibit organism-level coherence. Connects system discovery, telemetry, and the Model Context Protocol.
+1. **[stigmergy.md](./stigmergy.md)** -- The most fundamental coordination mechanism: indirect communication through environmental modification. This concept underpins event systems, caching, and logging throughout the platform.
+2. **[eusociality.md](./eusociality.md)** -- How labor divides into specialized roles. Maps directly to the agent framework, orchestrator, and plugin architecture.
+3. **[superorganism.md](./superorganism.md)** -- How a distributed system of semi-autonomous components can exhibit organism-level coherence. Connects system discovery, telemetry, and the Model Context Protocol.
 
 **Remaining documents** (any order):
 
-5. **[swarm_intelligence.md](./swarm_intelligence.md)** -- Collective decision-making without centralized control.
-6. **[immune_system.md](./immune_system.md)** -- Defense, threat detection, and adaptive security.
-7. **[memory_and_forgetting.md](./memory_and_forgetting.md)** -- How information persists, decays, and is selectively retrieved.
-8. **[evolution.md](./evolution.md)** -- Selection pressure, fitness landscapes, and iterative improvement.
-9. **[free_energy.md](./free_energy.md)** -- Active inference and the minimization of prediction error.
-10. **[metabolism.md](./metabolism.md)** -- Resource acquisition, allocation, and expenditure.
-11. **[symbiosis.md](./symbiosis.md)** -- Mutualistic partnerships and the holobiont concept.
+1. **[swarm_intelligence.md](./swarm_intelligence.md)** -- Collective decision-making without centralized control.
+2. **[immune_system.md](./immune_system.md)** -- Defense, threat detection, and adaptive security.
+3. **[memory_and_forgetting.md](./memory_and_forgetting.md)** -- How information persists, decays, and is selectively retrieved.
+4. **[evolution.md](./evolution.md)** -- Selection pressure, fitness landscapes, and iterative improvement.
+5. **[free_energy.md](./free_energy.md)** -- Active inference and the minimization of prediction error.
+6. **[metabolism.md](./metabolism.md)** -- Resource acquisition, allocation, and expenditure.
+7. **[symbiosis.md](./symbiosis.md)** -- Mutualistic partnerships and the holobiont concept.
 
 ## Related Resources
 

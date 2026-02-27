@@ -1,6 +1,6 @@
 # Technical Specification - Sanitizers
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.validation.sanitizers`  
 **Last Updated**: 2026-01-29

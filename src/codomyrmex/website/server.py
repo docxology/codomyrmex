@@ -886,6 +886,44 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
     _telemetry_collector = None
     _telemetry_dm = None
 
+    @classmethod
+    def _ensure_telemetry(cls):
+        """Lazily initialise the shared MetricCollector and DashboardManager.
+
+        Returns:
+            Tuple of (collector, dashboard_manager, MetricType) for callers.
+        """
+        from codomyrmex.telemetry.dashboard import (
+            DashboardManager,
+            MetricCollector,
+            MetricType,
+            Panel,
+            PanelType,
+        )
+
+        if cls._telemetry_collector is None:
+            cls._telemetry_collector = MetricCollector()
+            cls._telemetry_dm = DashboardManager(cls._telemetry_collector)
+            dash = cls._telemetry_dm.create(
+                "System Overview",
+                description="Baseline system metrics",
+                tags=["system", "auto"],
+            )
+            dash.add_panel(Panel(
+                id="modules", title="Module Count",
+                panel_type=PanelType.STAT, metrics=["module_count"],
+            ))
+            dash.add_panel(Panel(
+                id="tools", title="MCP Tool Count",
+                panel_type=PanelType.STAT, metrics=["tool_count"],
+            ))
+            dash.add_panel(Panel(
+                id="agents", title="Agent Count",
+                panel_type=PanelType.STAT, metrics=["agent_count"],
+            ))
+
+        return cls._telemetry_collector, cls._telemetry_dm, MetricType
+
     def handle_telemetry(self) -> None:
         """Handle GET /api/telemetry — metric series and dashboard registry.
 
@@ -893,41 +931,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         metrics on first access and refreshes them on each request.
         """
         try:
-            from codomyrmex.telemetry.dashboard import (
-                MetricCollector,
-                DashboardManager,
-                MetricType,
-                Panel,
-                PanelType,
-            )
-
-            # First-time setup: create persistent collector + dashboard
-            if WebsiteServer._telemetry_collector is None:
-                WebsiteServer._telemetry_collector = MetricCollector()
-                WebsiteServer._telemetry_dm = DashboardManager(
-                    WebsiteServer._telemetry_collector
-                )
-                # Create a default "System Overview" dashboard
-                dash = WebsiteServer._telemetry_dm.create(
-                    "System Overview",
-                    description="Baseline system metrics",
-                    tags=["system", "auto"],
-                )
-                dash.add_panel(Panel(
-                    id="modules", title="Module Count",
-                    panel_type=PanelType.STAT, metrics=["module_count"],
-                ))
-                dash.add_panel(Panel(
-                    id="tools", title="MCP Tool Count",
-                    panel_type=PanelType.STAT, metrics=["tool_count"],
-                ))
-                dash.add_panel(Panel(
-                    id="agents", title="Agent Count",
-                    panel_type=PanelType.STAT, metrics=["agent_count"],
-                ))
-
-            collector = WebsiteServer._telemetry_collector
-            dm = WebsiteServer._telemetry_dm
+            collector, dm, MetricType = self._ensure_telemetry()
 
             # Seed / refresh baseline metrics from DataProvider
             if self.data_provider:
@@ -972,39 +976,7 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
         tool count, agent count, and Python version.
         """
         try:
-            # Ensure persistent collector exists by calling handle_telemetry logic
-            from codomyrmex.telemetry.dashboard import (
-                MetricCollector,
-                DashboardManager,
-                MetricType,
-                Panel,
-                PanelType,
-            )
-
-            if WebsiteServer._telemetry_collector is None:
-                WebsiteServer._telemetry_collector = MetricCollector()
-                WebsiteServer._telemetry_dm = DashboardManager(
-                    WebsiteServer._telemetry_collector
-                )
-                dash = WebsiteServer._telemetry_dm.create(
-                    "System Overview",
-                    description="Baseline system metrics",
-                    tags=["system", "auto"],
-                )
-                dash.add_panel(Panel(
-                    id="modules", title="Module Count",
-                    panel_type=PanelType.STAT, metrics=["module_count"],
-                ))
-                dash.add_panel(Panel(
-                    id="tools", title="MCP Tool Count",
-                    panel_type=PanelType.STAT, metrics=["tool_count"],
-                ))
-                dash.add_panel(Panel(
-                    id="agents", title="Agent Count",
-                    panel_type=PanelType.STAT, metrics=["agent_count"],
-                ))
-
-            collector = WebsiteServer._telemetry_collector
+            collector, _dm, MetricType = self._ensure_telemetry()
             seeded = []
 
             if self.data_provider:

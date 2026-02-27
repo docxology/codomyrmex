@@ -9,7 +9,7 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is
 | Component | Count | Location |
 |-----------|-------|----------|
 | Algorithm | v1.5.0 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
-| Skills | 38 | `~/.claude/skills/` |
+| Skills | 55 | `~/.claude/skills/` |
 | Hooks | 20 | `~/.claude/hooks/` |
 | Tools | 59 | `~/.claude/skills/PAI/Tools/` |
 | Agents | 13 + subagent types | `~/.claude/skills/PAI/PAIAGENTSYSTEM.md` |
@@ -19,7 +19,7 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is an **89-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is an **86-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 19 static tools (16 core + 3 universal proxy) + ~148 auto-discovered module tools from 32 modules via `pkgutil` scan. Total: **167 tools** (163 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~167 tools for MCP exposure.
+**Tools**: 20 static tools (17 core + 3 universal proxy) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~167 tools** (163 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~167 tools for MCP exposure.
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)

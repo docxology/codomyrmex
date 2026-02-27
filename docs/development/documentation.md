@@ -77,6 +77,8 @@ All modules **MUST** have:
 
 - **README.md**: Module overview, features, quick start, and usage examples
 - **AGENTS.md**: Agent configuration, operating contracts, and navigation links
+- **SPEC.md**: Functional specification and design principles
+- **PAI.md**: Personal AI Infrastructure integration notes
 - **SECURITY.md**: Security considerations and vulnerability reporting process
 
 #### **Conditionally Required Files**

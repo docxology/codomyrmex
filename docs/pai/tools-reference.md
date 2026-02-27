@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Tools Reference
 
-**Version**: v0.4.0 | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Last Updated**: February 2026
 
 ## Overview
 
@@ -197,13 +197,13 @@ See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 
 | Category | Count | Trust |
 |----------|-------|-------|
-| Static safe | 15 | Auto-VERIFIED |
+| Static safe | 16 | Auto-VERIFIED |
 | Static destructive | 4 | Requires TRUSTED |
-| Dynamic safe | ~148 | Pattern-classified, auto-VERIFIED |
+| Dynamic safe | ~146 | Pattern-classified, auto-VERIFIED |
 | Dynamic destructive | ~4 (pattern-matched) | Requires TRUSTED |
 | **Total** | **~167** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 89-module codebase with 32 auto-discovered modules.
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 86-module codebase with 33 auto-discovered modules.
 
 ## Navigation
 

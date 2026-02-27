@@ -51,10 +51,6 @@ Codomyrmex provides **4 distinct API layers** to accommodate different integrati
 
 ## 🏗️ **Module API Index**
 
-Navigate to specific module APIs using the links below, or continue reading for a comprehensive overview of all available functionality.
-
-## 🏗️ **Module API Index**
-
 ### **🏗️ Foundation Modules**
 
 These modules provide essential infrastructure used by all other Codomyrmex modules.
@@ -259,33 +255,6 @@ print(f"✅ Success: {result['success']}")
 print(f"📄 Output: {result['output']}")
 print(f"⏱️ Execution time: {result['execution_time']:.3f}s")
 ```
-
-- **`create_pie_chart(labels, sizes, **options)`**: Pie charts
-- **`create_heatmap(data, **options)`**: Heatmaps
-- **Status**: ✅ Stable API
-
-#### **[code](../../src/codomyrmex/coding/README.md)**
-
-- **`execute_code(language, code, timeout)`**: Safe code execution
-- **`CodeExecutor`**: Main execution class
-- **`ExecutionResult`**: Result data class
-- **MCP Tools**: `execute_code`
-- **Status**: 🔄 Evolving API
-
-#### **[static_analysis](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md)**
-
-- **`run_pyrefly_analysis(paths, project_root)`**: Python analysis
-- **`analyze_code_quality(file_path)`**: Quality metrics
-- **`run_security_scan(file_path)`**: Security analysis
-- **`StaticAnalyzer`**: Main analysis class
-- **Status**: 🔄 Evolving API
-
-#### **[pattern_matching](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md)**
-
-- **`analyze_repository_path(path, config)`**: Repository analysis
-- **`find_patterns(code, pattern_type)`**: Pattern detection
-- **`PatternMatcher`**: Main pattern matching class
-- **Status**: 🔄 Evolving API
 
 ### **🛡️ Secure Cognitive Modules**
 
@@ -555,7 +524,7 @@ codomyrmex docs generate --module agents --format markdown
 | **code** | [API Docs](../../src/codomyrmex/coding/README.md) | [MCP Tools](../../src/codomyrmex/coding/README.md#mcp-tools) | 🔄 Evolving |
 | **static_analysis** | [API Docs](../../src/codomyrmex/static_analysis/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/static_analysis/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **deployment** | [API Docs](../../src/codomyrmex/deployment/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/deployment/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
-| **pattern_matching** | [API Docs](../../src/codomyrmex/pattern_matching/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/pattern_matching/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
+| **pattern_matching** | [API Docs](../../src/codomyrmex/coding/pattern_matching/README.md) | [MCP Tools](../../src/codomyrmex/coding/pattern_matching/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **git_operations** | [API Docs](../../src/codomyrmex/git_operations/API_SPECIFICATION.md) | [MCP Tools](../../src/codomyrmex/git_operations/MCP_TOOL_SPECIFICATION.md) | 🔄 Evolving |
 | **documentation** | [API Docs](../../src/codomyrmex/documentation/API_SPECIFICATION.md) | None | 🔄 Evolving |
 | **logging_monitoring** | [API Docs](../../src/codomyrmex/logging_monitoring/API_SPECIFICATION.md) | None | ✅ Stable |
@@ -591,39 +560,8 @@ codomyrmex docs generate --module agents --format markdown
 
 ---
 
-## 📊 **API Usage Statistics**
-
-### **Most Popular APIs**
-
-| API Function | Usage Count | Success Rate | Avg Response Time |
-|--------------|-------------|--------------|-------------------|
-| `generate_code_snippet()` | 12,847 | 94.2% | 2.3s |
-| `create_line_plot()` | 8,392 | 98.7% | 0.4s |
-| `execute_code()` | 5,634 | 91.3% | 1.8s |
-| `run_pyrefly_analysis()` | 3,291 | 96.1% | 3.2s |
-
-### **API Reliability Metrics**
-
-- **Overall Uptime**: 99.7% (last 30 days)
-- **Average Response Time**: 1.2 seconds
-- **Error Rate**: 2.1%
-- **Rate Limiting**: Intelligent backoff implemented
-
-### **Cost Tracking**
-
-- **Total API Costs (Last Month)**: $23.47
-- **Most Cost-Effective**: Data visualization APIs (free)
-- **Highest Cost**: AI code generation APIs
-- **Cost Optimization**: 23% reduction through caching
-
----
-
-**📝 Documentation Status**: ✅ **Verified & Signed** | *Last reviewed: February 2026* | *Maintained by: Codomyrmex Documentation Team* | *Version: v0.1.0*
-
----
-
 **Version**: 0.1.0
-**Last Updated**: Auto-generated from API analysis
+**Last Updated**: February 2026
 **API Stability**: See individual module documentation for stability guarantees
 
 ## Navigation Links

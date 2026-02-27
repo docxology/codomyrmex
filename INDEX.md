@@ -27,8 +27,8 @@
 | Auto-discovered modules | 32 (via `@mcp_tool` decorator) | [src/codomyrmex/agents/pai/mcp_bridge.py](src/codomyrmex/agents/pai/mcp_bridge.py) |
 | MCP resources | 3 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
-| Tests passing | 9,683+ / 0 failing | `uv run pytest` |
-| RASP doc coverage | 100% (89/86 modules) | [AGENTS.md](AGENTS.md) |
+| Tests passing | 413+ (49 collection errors from optional SDK deps) | `uv run pytest` |
+| RASP doc coverage | 100% (86/86 modules) | [AGENTS.md](AGENTS.md) |
 | Version | v1.0.3-dev | [pyproject.toml](pyproject.toml) |
 
 ## Module Layer Browser
@@ -98,7 +98,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 ```
 INDEX.md                           ← You are here
 ├── src/INDEX.md                   ← Source directory index
-│   └── src/codomyrmex/INDEX.md    ← 89-module catalog by layer
+│   └── src/codomyrmex/INDEX.md    ← 86-module catalog by layer
 └── docs/                          ← Documentation site
 ```
 

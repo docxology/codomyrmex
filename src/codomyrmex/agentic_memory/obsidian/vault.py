@@ -24,7 +24,7 @@ class ObsidianVault:
     """Load and navigate an Obsidian vault directory."""
 
     def __init__(self, path: str | Path) -> None:
-        """Execute   Init   operations natively."""
+        """Initialize the vault from a directory path."""
         path = Path(path)
         if not path.exists():
             raise FileNotFoundError(f"Vault path does not exist: {path}")
@@ -48,7 +48,7 @@ class ObsidianVault:
         self._notes = self._scan()
 
     def _scan(self) -> dict[str, Note]:
-        """Execute  Scan operations natively."""
+        """Scan the vault for .md files, parse each, and return as dict."""
         result: dict[str, Note] = {}
         for md in sorted(self.path.rglob("*.md")):
             rel = str(md.relative_to(self.path))
@@ -59,7 +59,7 @@ class ObsidianVault:
                 note = parse_note(md)
                 result[rel] = note
             except Exception as e:
-                logging.getLogger(__name__).warning("Skipping unparseable vault file %s: %s", md, e)
+                logger.warning("Skipping unparseable vault file %s: %s", md, e)
                 continue
         return result
 
@@ -85,19 +85,59 @@ class ObsidianVault:
         for note in notes.values():
             if note.title == name:
                 return note
+        # Match by alias
+        for note in notes.values():
+            if name in note.aliases:
+                return note
         return None
+
+    def has_note(self, name: str) -> bool:
+        """Return ``True`` if a note matching *name* exists."""
+        return self.get_note(name) is not None
+
+    def list_notes(self, *, folder: str | None = None) -> list[str]:
+        """Return relative paths to all notes, optionally within *folder*."""
+        paths = list(self.notes.keys())
+        if folder:
+            folder = folder.rstrip("/") + "/"
+            paths = [p for p in paths if p.startswith(folder)]
+        return sorted(paths)
+
+    def list_folders(self) -> list[str]:
+        """Return all unique folder paths in the vault."""
+        folders: set[str] = set()
+        for rel in self.notes:
+            parts = rel.rsplit("/", 1)
+            if len(parts) == 2:
+                folders.add(parts[0])
+        return sorted(folders)
+
+    def get_notes_by_tag(self, tag: str) -> list[Note]:
+        """Return all notes containing the given tag."""
+        tag = tag.lstrip("#")
+        results: list[Note] = []
+        for note in self.notes.values():
+            for t in note.tags:
+                if t.name == tag or t.name.startswith(tag + "/"):
+                    results.append(note)
+                    break
+        return results
 
     # ── metadata ─────────────────────────────────────────────────
 
     @property
     def metadata(self) -> VaultMetadata:
-        """Execute Metadata operations natively."""
+        """Compute summary statistics for the vault."""
         total_links = sum(len(n.links) for n in self.notes.values())
         all_tags = self.get_all_tags()
+        total_words = sum(n.word_count for n in self.notes.values())
+        folders = self.list_folders()
         return VaultMetadata(
             note_count=len(self.notes),
             tag_count=len(all_tags),
             link_count=total_links,
+            total_words=total_words,
+            folder_count=len(folders),
         )
 
     def get_all_tags(self) -> set[str]:
@@ -123,3 +163,22 @@ class ObsidianVault:
                     logger.warning("Obsidian vault config read failed for %s: %s", json_file, str(e))
                     raise
         return config
+
+    def get_daily_notes_config(self) -> dict[str, Any]:
+        """Return daily-notes plugin configuration, if available."""
+        config = self.get_config()
+        return config.get("daily-notes", {})
+
+    # ── magic methods ────────────────────────────────────────────
+
+    def __repr__(self) -> str:
+        return f"ObsidianVault({self.path!r})"
+
+    def __len__(self) -> int:
+        return len(self.notes)
+
+    def __contains__(self, name: str) -> bool:
+        return self.has_note(name)
+
+    def __iter__(self):
+        return iter(self.notes.values())

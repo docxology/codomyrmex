@@ -88,6 +88,35 @@ Three MCP tools are exposed for PAI agent consumption:
 
 **Core Layer** — Central memory infrastructure. Consumed by all agent modules. Uses `serialization/` for data persistence and integrates with `logging_monitoring/` for memory operation auditing.
 
+## Obsidian Vault Tools
+
+The `obsidian/` subpackage adds Obsidian-specific capabilities across Algorithm phases:
+
+### Extended PAI Phase Mapping
+
+| Phase | Obsidian Contribution | Key APIs |
+|-------|----------------------|----------|
+| **OBSERVE** | Search vault for prior notes on the current topic | `ObsidianVault`, `search_vault`, `cli_search` (CLI) |
+| **THINK** | Traverse the link graph to surface related concepts | `build_link_graph`, `get_backlinks`, `find_hubs` |
+| **BUILD** | Create structured notes for work products and code artefacts | `create_note`, `crud.*`, `ObsidianCLI` |
+| **EXECUTE** | Update canvas diagrams as architecture evolves | `create_canvas`, `add_canvas_node`, `connect_nodes` |
+| **LEARN** | Capture task outcomes and daily notes | `agentic_memory.obsidian.tasks` (`TaskItem`), `daily_notes` |
+
+### Quick Reference
+
+```python
+# OBSERVE — find prior work
+from codomyrmex.agentic_memory.obsidian import ObsidianVault, search_vault
+vault = ObsidianVault("~/vaults/work")
+hits = search_vault(vault, query="authentication refactor", limit=5)
+
+# LEARN — log today's outcome
+from codomyrmex.agentic_memory.obsidian.daily_notes import open_or_create_daily_note
+note = open_or_create_daily_note(vault)
+```
+
+Full reference: [obsidian/PAI.md](obsidian/PAI.md)
+
 ## Navigation
 
 - **Self**: [PAI.md](PAI.md)

@@ -485,15 +485,15 @@ class TestOrchestrationEngineSessionManagement:
         assert result is False
 
     def test_close_session_sets_status_before_crash(self, engine):
-        """close_session sets status='closed' and completed_at before
-        crashing on deallocate_resources."""
+        """close_session sets status=SessionStatus.COMPLETED and completed_at
+        before crashing on deallocate_resources."""
         sid = engine.create_session()
         session = engine.active_sessions[sid]
         assert session.completed_at is None
         with pytest.raises(AttributeError):
             engine.close_session(sid)
         # The status was set before the crash
-        assert session.status == "closed"
+        assert session.status is SessionStatus.COMPLETED
         assert session.completed_at is not None
 
     def test_close_session_nonexistent_does_not_raise(self, engine):

@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-**Version**: v1.0.0 | **Modules**: 84 | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Modules**: 86 | **Last Updated**: February 2026
 
 > [!TIP]
 > This INDEX confirms and catalogs every module directory in `src/codomyrmex/`.
@@ -14,7 +14,7 @@
 | [AGENTS.md](AGENTS.md) | Agent coordination & module listing |
 | [SPEC.md](SPEC.md) | Functional specification & architecture |
 | [PAI.md](PAI.md) | Personal AI Infrastructure mapping |
-| [**init**.py](__init__.py) | Canonical Python exports (84 modules) |
+| [**init**.py](__init__.py) | Canonical Python exports (86 modules) |
 
 ---
 
@@ -142,14 +142,14 @@ Advanced features with flexible dependencies.
 
 | Check | Status |
 | :--- | :--- |
-| Directions on disk | **84** |
-| Modules in `__init__.py._submodules` | **84** |
-| Modules in `__all__` | **87** (84 modules + 3 utility functions) |
+| Directions on disk | **86** |
+| Modules in `__init__.py._submodules` | **86** (excl. examples/tests) |
+| Modules in `__all__` | **89** (86 modules + 3 utility functions) |
 | Foundation Layer | **6** modules |
 | Core Layer | **15** modules |
 | Service Layer | **10** modules |
-| Specialized Layer | **53** modules |
-| **Total** | **84** ✅ |
+| Specialized Layer | **55** modules |
+| **Total** | **86** ✅ |
 
 ---
 

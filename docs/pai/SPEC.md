@@ -1,6 +1,6 @@
 # docs/pai — Functional Specification
 
-**Version**: v0.4.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 

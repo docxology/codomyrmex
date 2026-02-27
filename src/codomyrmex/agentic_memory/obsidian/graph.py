@@ -15,45 +15,53 @@ from codomyrmex.agentic_memory.obsidian.models import Note, Wikilink
 
 
 class _DiGraph:
-    """Minimal directed graph matching the part of the networkx API
-    that the tests exercise."""
+    """Minimal directed graph matching part of the networkx API."""
 
     def __init__(self) -> None:
-        """Execute   Init   operations natively."""
         self._adj: dict[str, set[str]] = {}
 
     def add_node(self, n: str) -> None:
-        """Execute Add Node operations natively."""
         self._adj.setdefault(n, set())
 
     def add_edge(self, u: str, v: str) -> None:
-        """Execute Add Edge operations natively."""
         self._adj.setdefault(u, set()).add(v)
         self._adj.setdefault(v, set())
 
     def number_of_nodes(self) -> int:
-        """Execute Number Of Nodes operations natively."""
         return len(self._adj)
 
     def number_of_edges(self) -> int:
-        """Execute Number Of Edges operations natively."""
         return sum(len(v) for v in self._adj.values())
 
     def is_directed(self) -> bool:
-        """Execute Is Directed operations natively."""
         return True
 
     def successors(self, n: str) -> list[str]:
-        """Execute Successors operations natively."""
         return list(self._adj.get(n, set()))
 
     def predecessors(self, n: str) -> list[str]:
-        """Execute Predecessors operations natively."""
         return [u for u, vs in self._adj.items() if n in vs]
 
     def nodes(self) -> list[str]:
-        """Execute Nodes operations natively."""
         return list(self._adj.keys())
+
+    def has_node(self, n: str) -> bool:
+        return n in self._adj
+
+    def has_edge(self, u: str, v: str) -> bool:
+        return v in self._adj.get(u, set())
+
+    def in_degree(self, n: str) -> int:
+        """Number of edges pointing to *n*."""
+        return len(self.predecessors(n))
+
+    def out_degree(self, n: str) -> int:
+        """Number of edges leaving *n*."""
+        return len(self._adj.get(n, set()))
+
+    def degree(self, n: str) -> int:
+        """Total degree (in + out)."""
+        return self.in_degree(n) + self.out_degree(n)
 
 
 # ── public API ───────────────────────────────────────────────────────
@@ -109,6 +117,31 @@ def find_orphans(vault: Any) -> list[Note]:
     return orphans
 
 
+def find_dead_ends(vault: Any) -> list[Note]:
+    """Return notes with no outgoing links (dead ends / leaf notes)."""
+    g = build_link_graph(vault)
+    dead_ends: list[Note] = []
+    for _rel, note in vault.notes.items():
+        if len(g.successors(note.title)) == 0 and len(g.predecessors(note.title)) > 0:
+            dead_ends.append(note)
+    return dead_ends
+
+
+def find_hubs(vault: Any, *, min_links: int = 5) -> list[tuple[Note, int]]:
+    """Return notes that are heavily linked (hub notes).
+
+    Returns ``(note, total_degree)`` tuples sorted by degree descending.
+    """
+    g = build_link_graph(vault)
+    hubs: list[tuple[Note, int]] = []
+    for _rel, note in vault.notes.items():
+        degree = g.degree(note.title)
+        if degree >= min_links:
+            hubs.append((note, degree))
+    hubs.sort(key=lambda x: x[1], reverse=True)
+    return hubs
+
+
 def find_broken_links(vault: Any) -> list[tuple[Note, Wikilink]]:
     """Return ``(source_note, wikilink)`` pairs where the target note
     does not exist in the vault."""
@@ -157,6 +190,16 @@ def get_link_stats(vault: Any) -> dict[str, Any]:
             stack.extend(g.successors(current))
             stack.extend(g.predecessors(current))
 
+    # Orphans and dead ends count
+    orphan_count = sum(
+        1 for n in g.nodes()
+        if g.in_degree(n) == 0 and g.out_degree(n) == 0
+    )
+    dead_end_count = sum(
+        1 for n in g.nodes()
+        if g.out_degree(n) == 0 and g.in_degree(n) > 0
+    )
+
     return {
         "node_count": n_nodes,
         "edge_count": n_edges,
@@ -164,4 +207,38 @@ def get_link_stats(vault: Any) -> dict[str, Any]:
         "components": components,
         "most_linked": most_linked,
         "top_linkers": top_linkers,
+        "orphan_count": orphan_count,
+        "dead_end_count": dead_end_count,
     }
+
+
+def get_shortest_path(
+    vault: Any,
+    source: str,
+    target: str,
+) -> list[str] | None:
+    """Find shortest path between two notes using BFS.
+
+    Returns a list of note titles from source to target, or ``None``
+    if no path exists.  Path is undirected (follows links both ways).
+    """
+    g = build_link_graph(vault)
+    if not g.has_node(source) or not g.has_node(target):
+        return None
+    if source == target:
+        return [source]
+
+    visited: set[str] = {source}
+    queue: list[list[str]] = [[source]]
+
+    while queue:
+        path = queue.pop(0)
+        current = path[-1]
+        neighbors = set(g.successors(current)) | set(g.predecessors(current))
+        for neighbor in neighbors:
+            if neighbor == target:
+                return path + [neighbor]
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(path + [neighbor])
+    return None

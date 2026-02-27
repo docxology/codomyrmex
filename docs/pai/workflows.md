@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Workflows
 
-**Version**: v0.4.0 | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Last Updated**: February 2026
 
 ## Overview
 
@@ -33,7 +33,7 @@ Codomyrmex provides two primary workflows for PAI integration, plus an Algorithm
         "safe_count": N, "destructive_count": M,
         "items": [{"name": ..., "trust_level": ..., "category": ...}]
     },
-    "resources": {"count": 2, "items": [...]},
+    "resources": {"count": 3, "items": [...]},
     "prompts": {"count": 10, "items": [...]},
     "mcp_server": {"healthy": True/False, "tools": N, "resources": M, "prompts": P},
     "pai_bridge": {"installed": True/False, "components": {...}},

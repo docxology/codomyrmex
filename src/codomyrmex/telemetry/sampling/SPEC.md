@@ -1,6 +1,6 @@
 # Technical Specification - Sampling
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.telemetry.sampling`  
 **Last Updated**: 2026-01-29
@@ -51,8 +51,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No adaptive sampling (auto-adjust rate based on load); rate is fixed per configuration.
+- Tail-based sampling (sample-on-error) is not implemented.
 
 ## 5. Testing
 

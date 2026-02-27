@@ -181,7 +181,7 @@ def print_progress_bar(current: int, total: int, prefix: str = "Progress") -> No
     """
     percentage = int(100 * current / total) if total > 0 else 100
     bar_length = 30
-    filled_length = int(bar_length * current // total)
+    filled_length = int(bar_length * current // total) if total > 0 else 0
     bar = "█" * filled_length + "-" * (bar_length - filled_length)
 
     print(f"\r{prefix}: [{bar}] {percentage}%", end="", flush=True)
@@ -231,7 +231,10 @@ def enhanced_error_context(operation: str, context: dict[str, Any] | None = None
         error_context.update(context)
 
     try:
-        with LogContext(**error_context):
+        with LogContext(
+            correlation_id=correlation_id,
+            additional_context=error_context,
+        ):
             yield
     except Exception as e:
         # Enhance error with context

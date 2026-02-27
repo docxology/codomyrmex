@@ -151,7 +151,9 @@ graph TD
 | **`orchestrator`** | Workflow execution | DAG execution, step composition, retry policies, **scheduling** |
 | **`testing`** | Test infrastructure | Fixtures, data generators, **workflow validation**, **chaos engineering** |
 | **`performance`** | Performance monitoring | Metrics collection, benchmarking, optimization guidance |
-| **`calendar`** | Event management | Calendar providers, event scheduling |
+| **`calendar_integration`** | Event management | Calendar providers, event scheduling |
+| **`release`** | Release management | Versioning, changelog generation, release coordination |
+| **`docs_gen`** | Documentation generation | Template scaffolding, source-to-docs conversion |
 
 ### **🎮 Application Modules**
 

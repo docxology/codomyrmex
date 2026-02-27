@@ -24,12 +24,12 @@ class TestParseCanvas:
     def test_parse_nodes(self, tmp_canvas_file):
         """Test functionality: parse nodes."""
         canvas = parse_canvas(tmp_canvas_file)
-        assert len(canvas.nodes) == 3
+        assert len(canvas.nodes) == 4
 
     def test_parse_edges(self, tmp_canvas_file):
         """Test functionality: parse edges."""
         canvas = parse_canvas(tmp_canvas_file)
-        assert len(canvas.edges) == 1
+        assert len(canvas.edges) == 2
         assert canvas.edges[0].label == "references"
 
     def test_parse_node_types(self, tmp_canvas_file):
@@ -44,7 +44,7 @@ class TestParseCanvas:
         """Test functionality: parse text node."""
         canvas = parse_canvas(tmp_canvas_file)
         text_nodes = [n for n in canvas.nodes if n.type == "text"]
-        assert len(text_nodes) == 1
+        assert len(text_nodes) == 2
         assert text_nodes[0].text == "Hello World"
 
     def test_parse_file_not_found(self, tmp_path):

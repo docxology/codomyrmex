@@ -1,6 +1,6 @@
 # PAI-Codomyrmex Architecture
 
-**Version**: v0.4.0 | **Last Updated**: February 2026
+**Version**: v1.0.3-dev | **Last Updated**: February 2026
 
 ## System Overview
 
@@ -40,7 +40,7 @@ PAI (Personal AI Infrastructure) is the orchestrator that runs The Algorithm on 
 │  └─────────────────────────────────┘  │
 │                                      │
 │  ┌─────────────────────────────────┐  │
-│  │ 78 Codomyrmex Modules           │  │
+│  │ 86 Codomyrmex Modules           │  │
 │  │ (coding, llm, security, ...)    │  │
 │  └─────────────────────────────────┘  │
 └──────────────────────────────────────┘
@@ -64,7 +64,7 @@ The discovery and validation layer. Reads PAI's filesystem to enumerate all subs
 - **Zero-mock**: Uses real `pathlib.Path` and `json` — no test doubles
 - **Graceful fallback**: Returns `[]` or `{}` when PAI is absent
 
-### MCP Bridge (`mcp_bridge.py`, ~1,266 lines)
+### MCP Bridge (`mcp_bridge.py`, ~36-line facade; logic in `mcp/` subpackage)
 
 Exposes all Codomyrmex capabilities as MCP tools for PAI consumption.
 
@@ -77,7 +77,7 @@ The bridge auto-discovers additional tools from Codomyrmex modules:
 1. **Phase 1**: Scans for `@mcp_tool` decorated functions in targeted modules
 2. **Phase 2**: Auto-discovers all public functions from every module via `discover_all_public_tools()`
 
-**Resources (2):** `codomyrmex://modules` (inventory), `codomyrmex://status` (health)
+**Resources (3):** `codomyrmex://modules` (inventory), `codomyrmex://status` (health), `codomyrmex://discovery/metrics` (scan stats)
 
 **Prompts (10):**
 - 3 dotted prompts: `analyze_module`, `debug_issue`, `create_test`
@@ -95,8 +95,8 @@ UNTRUSTED ──/codomyrmexVerify──→ VERIFIED ──/codomyrmexTrust──
    └────────────────────────────────┴──────────────────────────────┘
 ```
 
-**Safe tools (14 static):** Auto-promoted to VERIFIED by `/codomyrmexVerify`
-- `read_file`, `list_directory`, `analyze_python`, `search_codebase`, `git_status`, `git_diff`, `json_query`, `checksum_file`, `list_modules`, `module_info`, `pai_status`, `pai_awareness`, `list_module_functions`, `get_module_readme`
+**Safe tools (16 static):** Auto-promoted to VERIFIED by `/codomyrmexVerify`
+- `read_file`, `list_directory`, `analyze_python`, `search_codebase`, `git_status`, `git_diff`, `json_query`, `checksum_file`, `list_modules`, `module_info`, `pai_status`, `pai_awareness`, `list_module_functions`, `get_module_readme`, `list_workflows`, `invalidate_cache`
 
 **Destructive tools (4):** Require explicit `/codomyrmexTrust`
 - `write_file`, `run_command`, `run_tests`, `call_module_function`

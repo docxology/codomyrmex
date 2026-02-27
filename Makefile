@@ -1,7 +1,7 @@
 # Codomyrmex Development Makefile
 # Common development tasks and workflows
 
-.PHONY: help install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp
+.PHONY: help install setup test lint format type-check security clean docs serve build deploy benchmark benchmark-mcp test-obsidian test-fast
 
 # Default target
 help:
@@ -16,6 +16,8 @@ help:
 	@echo "  test-integration - Run integration tests only"
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  test-coverage-html - Open HTML coverage report in browser"
+	@echo "  test-obsidian - Run Obsidian module tests only"
+	@echo "  test-fast    - Run tests without coverage overhead"
 	@echo "  lint         - Run code linting"
 	@echo "  format       - Format code with black and isort"
 	@echo "  type-check   - Run type checking with mypy"
@@ -57,6 +59,14 @@ test-unit:
 test-integration:
 	@echo "Running integration tests..."
 	uv run pytest src/codomyrmex/tests/integration/ -v --tb=short -m integration
+
+test-obsidian:
+	@echo "Running Obsidian module tests..."
+	uv run pytest src/codomyrmex/tests/unit/agentic_memory/obsidian/ -v --tb=short --override-ini="addopts="
+
+test-fast:
+	@echo "Running tests without coverage..."
+	uv run pytest src/codomyrmex/tests/ -q --no-header --override-ini="addopts="
 
 test-coverage:
 	@echo "Running tests with coverage report..."

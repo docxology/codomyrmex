@@ -1,6 +1,6 @@
 # Technical Specification - Alerting
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.telemetry.alerting`  
 **Last Updated**: 2026-01-29
@@ -51,8 +51,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No persistence of alert history across sessions.
+- Notification delivery (email, Slack) requires integration with external services via environment variables.
 
 ## 5. Testing
 

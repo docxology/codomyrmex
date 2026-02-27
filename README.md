@@ -3,9 +3,9 @@
 **Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.2--dev-blue.svg)](https://github.com/docxology/codomyrmex)
-[![Tests](https://img.shields.io/badge/tests-11,065%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
-[![Coverage](https://img.shields.io/badge/coverage-~31%25-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Version](https://img.shields.io/badge/version-1.0.3--dev-blue.svg)](https://github.com/docxology/codomyrmex)
+[![Tests](https://img.shields.io/badge/tests-15,179%20passing-brightgreen.svg)](https://github.com/docxology/codomyrmex)
+[![Coverage](https://img.shields.io/badge/coverage-~68%25-blue.svg)](https://github.com/docxology/codomyrmex)
 
 > **A modular, extensible coding workspace designed for AI development workflows**
 
@@ -18,7 +18,7 @@ Codomyrmex is a **modular development platform** that brings together 86 special
 ### Key Features
 
 - 🤖 **AI-Powered Development** - Built-in support for Large Language Models via Model Context Protocol (MCP)
-- 🧩 **Modular Architecture** - 89 independent, composable modules with clear interfaces
+- 🧩 **Modular Architecture** - 86 independent, composable modules with clear interfaces
 - 🔍 **Code Analysis** - Static analysis, pattern matching, security scanning, and quality metrics
 - 🏗️ **Build & Deploy** - Multi-language builds, CI/CD automation, container management
 - 📊 **Visualization** - Data visualization, 3D/4D spatial modeling, and interactive plots
@@ -74,7 +74,7 @@ Codomyrmex documentation is organized into focused guides for different needs:
 | [**Architecture**](docs/project/architecture.md) | System design and principles |
 | [**Module Overview**](docs/modules/overview.md) | Understanding the module system |
 | [**Contributing**](docs/project/contributing.md) | How to contribute to Codomyrmex |
-| [**Project Roadmap**](docs/project/todo.md) | Current priorities and future plans |
+| [**Project Roadmap**](docs/project/README.md) | Current priorities and future plans |
 
 ### 💻 Development
 
@@ -1030,7 +1030,7 @@ codomyrmex/
 ```mermaid
 graph TD
     subgraph corePlatform ["Core Platform"]
-        CoreSrc["src/codomyrmex/ 78 Modules"]
+        CoreSrc["src/codomyrmex/ 86 Modules"]
         CoreScripts["scripts/ Automation & Orchestration"]
         CoreTests["src/codomyrmex/tests/ Unit & Integration Tests"]
     end
@@ -1480,8 +1480,8 @@ pie title Module Development Status (February 2026)
 ## Key Metrics
 
 - **Lines of Code**: ~100K+ across 86 modules
-- **Test Coverage**: ~28% (measured)
-- **Module Count**: 86 modules (89 load successfully; 6 additional require optional SDKs)
+- **Test Coverage**: ~68% (15,179 tests passing, gate: 67%)
+- **Module Count**: 86 modules (86 load successfully; 6 additional require optional SDKs)
 - **Language Support**: Python, JavaScript, Go, Rust, Java
 - **AI Integration**: 5+ LLM providers supported
 - **Documentation**: 200+ pages across all modules

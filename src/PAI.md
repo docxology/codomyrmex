@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This is the main source directory containing the `codomyrmex` Python package with 89 specialized modules organized across four architectural layers.
+This is the main source directory containing the `codomyrmex` Python package with 86 specialized modules organized across four architectural layers.
 
 ## AI Agent Guidance
 

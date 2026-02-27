@@ -1,11 +1,12 @@
 """Obsidian vault search and filtering.
 
-Full-text search with title-boosted scoring, plus tag, frontmatter,
-and date-based filters.
+Full-text search with title-boosted scoring, regex search, plus tag,
+frontmatter, date-based, and multi-criteria filters.
 """
 
 from __future__ import annotations
 
+import re
 from datetime import date, datetime
 from typing import Any
 
@@ -19,30 +20,48 @@ def search_vault(
     query: str,
     *,
     limit: int = 50,
+    case_sensitive: bool = False,
+    folder: str | None = None,
 ) -> list[SearchResult]:
-    """Case-insensitive search across title and content with scoring."""
+    """Case-insensitive search across title, content, and tags with scoring.
+
+    Parameters
+    ----------
+    limit : int
+        Maximum number of results (default 50).
+    case_sensitive : bool
+        If ``True``, perform case-sensitive matching.
+    folder : str | None
+        Restrict search to notes within a specific folder.
+    """
     if not query.strip():
         return []
 
-    q = query.lower()
+    q = query if case_sensitive else query.lower()
     results: list[SearchResult] = []
 
-    for _rel, note in vault.notes.items():
+    for rel, note in vault.notes.items():
+        # Folder filter
+        if folder and not rel.startswith(folder.rstrip("/") + "/"):
+            continue
+
         score = 0.0
         match_type = "content"
         context = ""
 
+        title = note.title if case_sensitive else note.title.lower()
+        body = note.content if case_sensitive else note.content.lower()
+
         # Title match (boosted — highest priority)
-        if q in note.title.lower():
+        if q in title:
             score += 2.0
             match_type = "title"
             context = note.title
 
         # Content match
-        body_lower = note.content.lower()
-        if q in body_lower:
+        if q in body:
             score += 1.0
-            idx = body_lower.find(q)
+            idx = body.find(q)
             start = max(0, idx - 40)
             end = min(len(note.content), idx + len(q) + 40)
             if match_type != "title":
@@ -51,10 +70,18 @@ def search_vault(
 
         # Tag match
         for tag in note.tags:
-            if q in tag.name.lower():
+            tag_name = tag.name if case_sensitive else tag.name.lower()
+            if q in tag_name:
                 score += 0.5
                 if match_type not in ("title",):
                     match_type = "tag"
+
+        # Frontmatter value match
+        for _key, val in note.frontmatter.items():
+            val_str = str(val) if case_sensitive else str(val).lower()
+            if q in val_str:
+                score += 0.3
+                break
 
         if score > 0:
             results.append(SearchResult(
@@ -65,6 +92,45 @@ def search_vault(
             ))
 
     results.sort(key=lambda r: r.score, reverse=True)
+    return results[:limit]
+
+
+# ── regex search ─────────────────────────────────────────────────────
+
+
+def search_regex(
+    vault: Any,
+    pattern: str,
+    *,
+    limit: int = 50,
+    flags: int = re.IGNORECASE,
+) -> list[SearchResult]:
+    """Search note content using a regular expression pattern.
+
+    Parameters
+    ----------
+    pattern : str
+        Regular expression pattern.
+    limit : int
+        Maximum number of results.
+    flags : int
+        Regex flags (default ``re.IGNORECASE``).
+    """
+    compiled = re.compile(pattern, flags)
+    results: list[SearchResult] = []
+
+    for _rel, note in vault.notes.items():
+        match = compiled.search(note.content)
+        if match:
+            idx = match.start()
+            start = max(0, idx - 40)
+            end = min(len(note.content), match.end() + 40)
+            results.append(SearchResult(
+                note=note,
+                score=1.0,
+                match_type="content",
+                context=note.content[start:end].strip(),
+            ))
     return results[:limit]
 
 
@@ -97,6 +163,36 @@ def filter_by_tag(
     return results
 
 
+def filter_by_tags(
+    vault: Any,
+    tags: list[str],
+    *,
+    match_all: bool = True,
+) -> list[Note]:
+    """Return notes matching multiple tags.
+
+    Parameters
+    ----------
+    tags : list[str]
+        Tags to filter by (leading ``#`` stripped).
+    match_all : bool
+        If ``True`` (default), notes must contain ALL tags.
+        If ``False``, notes matching ANY tag are included.
+    """
+    cleaned_tags = [t.lstrip("#") for t in tags]
+    results: list[Note] = []
+
+    for _rel, note in vault.notes.items():
+        note_tag_names = {t.name for t in note.tags}
+        if match_all:
+            if all(t in note_tag_names for t in cleaned_tags):
+                results.append(note)
+        else:
+            if any(t in note_tag_names for t in cleaned_tags):
+                results.append(note)
+    return results
+
+
 # ── frontmatter filter ───────────────────────────────────────────────
 
 
@@ -111,6 +207,18 @@ def filter_by_frontmatter(
         if key in note.frontmatter:
             if value is None or note.frontmatter[key] == value:
                 results.append(note)
+    return results
+
+
+def filter_by_frontmatter_exists(
+    vault: Any,
+    *keys: str,
+) -> list[Note]:
+    """Return notes that have ALL specified frontmatter keys."""
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        if all(k in note.frontmatter for k in keys):
+            results.append(note)
     return results
 
 
@@ -152,4 +260,34 @@ def filter_by_date(
             continue
         results.append(note)
 
+    return results
+
+
+# ── link-based search ────────────────────────────────────────────────
+
+
+def find_notes_linking_to(vault: Any, target: str) -> list[Note]:
+    """Return notes that contain a wikilink to *target*."""
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        for link in note.links:
+            if link.target == target:
+                results.append(note)
+                break
+    return results
+
+
+def find_notes_with_embeds(vault: Any, target: str | None = None) -> list[Note]:
+    """Return notes that embed files.
+
+    If *target* is given, only return notes embedding that specific file.
+    """
+    results: list[Note] = []
+    for _rel, note in vault.notes.items():
+        if target:
+            if any(e.target == target for e in note.embeds):
+                results.append(note)
+        else:
+            if note.embeds:
+                results.append(note)
     return results

@@ -1,6 +1,6 @@
 # Technical Specification - Templates
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.orchestrator.templates`  
 **Last Updated**: 2026-01-29
@@ -45,12 +45,12 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Jinja2-based rendering**: Templates use Jinja2 for variable interpolation, enabling conditional blocks and loops in workflow definitions.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- Templates are not versioned independently from the orchestrator module.
+- No hot-reload of template changes; orchestrator restart required.
 
 ## 5. Testing
 
@@ -61,5 +61,6 @@ pytest tests/orchestrator_templates/
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Template inheritance: allow workflow templates to extend a base template, overriding specific steps without duplicating shared structure.
+- Validation at load time: parse and type-check Jinja2 template variables against a declared schema when the template is first registered, surfacing errors before runtime.
+- Hot-reload: watch template files for changes and reload without restarting the orchestrator, enabling live editing of workflow definitions during development.

@@ -34,7 +34,7 @@ src/
 
 | Component                | Type    | Description                                   |
 | ------------------------ | ------- | --------------------------------------------- |
-| `codomyrmex/`            | Package | Main module package (89 modules)              |
+| `codomyrmex/`            | Package | Main module package (86 modules)              |
 | `codomyrmex.llm/`        | Package | LLM integration subpackage                    |
 | `__init__.py`            | Module  | Package initialization                        |
 | [README.md](README.md)   | Doc     | Directory overview                            |

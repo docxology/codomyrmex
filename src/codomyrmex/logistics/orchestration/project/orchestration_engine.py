@@ -248,7 +248,7 @@ class OrchestrationEngine:
         with self.session_lock:
             if session_id in self.active_sessions:
                 context = self.active_sessions[session_id]
-                context.status = "closed"
+                context.status = SessionStatus.COMPLETED
                 context.completed_at = datetime.now(timezone.utc)
 
                 # Cleanup session resources
@@ -274,7 +274,7 @@ class OrchestrationEngine:
             return {"success": False, "error": f"Session {session_id} not found"}
 
         context.started_at = datetime.now(timezone.utc)
-        context.status = "executing_workflow"
+        context.status = SessionStatus.ACTIVE
 
         try:
             # Allocate resources if needed
@@ -341,7 +341,7 @@ class OrchestrationEngine:
             }
 
             # Update context
-            context.status = "completed" if result["success"] else "failed"
+            context.status = SessionStatus.COMPLETED if result["success"] else SessionStatus.FAILED
             context.completed_at = datetime.now(timezone.utc)
 
             # Emit events
@@ -358,7 +358,7 @@ class OrchestrationEngine:
             return result
 
         except Exception as e:
-            context.status = "failed"
+            context.status = SessionStatus.FAILED
             context.completed_at = datetime.now(timezone.utc)
             logger.error(f"Workflow execution failed: {e}")
 
@@ -647,12 +647,18 @@ class OrchestrationEngine:
 
     def shutdown(self):
         """Shutdown the orchestration engine."""
-        logger.info("Shutting down OrchestrationEngine...")
+        try:
+            logger.info("Shutting down OrchestrationEngine...")
+        except (ValueError, OSError):
+            pass  # stream already closed at interpreter shutdown
 
         # Close all active sessions
         session_ids = list(self.active_sessions.keys())
         for session_id in session_ids:
-            self.close_session(session_id)
+            try:
+                self.close_session(session_id)
+            except (ValueError, OSError):
+                pass
 
         # Stop components
         self.task_orchestrator.stop_execution()
@@ -661,13 +667,16 @@ class OrchestrationEngine:
         if hasattr(self.resource_manager, "save_resources"):
             self.resource_manager.save_resources()
 
-        logger.info("OrchestrationEngine shutdown complete")
+        try:
+            logger.info("OrchestrationEngine shutdown complete")
+        except (ValueError, OSError):
+            pass
 
     def __del__(self):
         """Cleanup on deletion."""
         try:
             self.shutdown()
-        except (AttributeError, RuntimeError, OSError):
+        except (AttributeError, RuntimeError, OSError, ValueError):
             # Ignore errors during cleanup - object may be partially destroyed
             pass
 

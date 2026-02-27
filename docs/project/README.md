@@ -4,7 +4,7 @@
 
 ## Overview
 
-Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (78 modules).
+Project-level documentation covering architecture, contributing guidelines, and project governance for the Codomyrmex platform (86 modules).
 
 ## Contents
 
@@ -18,7 +18,7 @@ Project-level documentation covering architecture, contributing guidelines, and 
 ### Architecture
 
 - **Layered Design**: Foundation → Core → Service → Application
-- **Modularity**: 78 independent, composable modules
+- **Modularity**: 86 independent, composable modules
 - **AI Integration**: MCP-compatible tool interfaces
 - **Secure Cognitive Layer**: Identity, Wallet, Defense, Market, Privacy
 
@@ -34,7 +34,7 @@ Project-level documentation covering architecture, contributing guidelines, and 
 - [Getting Started](../getting-started/) — User onboarding
 - [Development](../development/) — Developer guides
 - [Reference](../reference/) — Technical reference
-- [Modules](../modules/) — Per-module documentation (78)
+- [Modules](../modules/) — Per-module documentation (86)
 
 ## Navigation
 

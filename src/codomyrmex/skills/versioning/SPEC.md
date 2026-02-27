@@ -46,12 +46,12 @@ Environment variables:
 
 ### 4.1 Design Decisions
 
-1. **Decision 1**: Rationale
+1. **Semantic versioning only**: Version management follows semver (MAJOR.MINOR.PATCH); non-semver schemes are not supported.
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- Version history is in-memory per session; no persistent version ledger across sessions.
+- No automatic rollback support; callers must manage downgrade logic.
 
 ## 5. Testing
 
@@ -62,5 +62,6 @@ pytest tests/skills_versioning/
 
 ## 6. Future Considerations
 
-- Enhancement 1
-- Enhancement 2
+- Semantic version conflict detection: when multiple skills declare incompatible version constraints on shared dependencies, surface conflicts with actionable resolution suggestions rather than raising a bare ImportError.
+- Persistent version ledger: write resolved version records to disk so the state survives across sessions, enabling audit trails and reproducible skill environments.
+- Automatic rollback: when a skill upgrade fails its post-install checks, automatically revert to the previously resolved version and log the rollback event.

@@ -101,8 +101,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- Distributed tracing across process boundaries requires explicit trace context propagation by callers.
+- High-frequency tracing (>1000 spans/sec) may impact performance; use sampling to reduce overhead.
 
 ## 5. Testing
 

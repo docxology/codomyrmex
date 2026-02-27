@@ -393,99 +393,7 @@ production_code = refactor_code_snippet(
 )
 ```
 
-## 🎮 Interactive Exploration
-
-### **Launch the Interactive Shell**
-
-```bash
-# Method 1: Use the orchestrator (recommended)
-./start_here.sh
-# Choose option 7: Interactive Shell
-
-# Method 2: Direct launch
-uv run python -c "
-import sys; sys.path.insert(0, 'src')
-from codomyrmex.terminal_interface import InteractiveShell
-InteractiveShell().run()
-"
-```
-
-### **Shell Commands to Try**
-
-```bash
-🐜 codomyrmex> explore                    # Overview of all modules
-🐜 codomyrmex> forage visualization       # Find visualization capabilities
-🐜 codomyrmex> demo data_visualization    # Run live demo
-🐜 codomyrmex> dive agents       # Deep dive into AI module
-🐜 codomyrmex> status                     # System health check
-🐜 codomyrmex> export                     # Generate system inventory
-```
-
-## 🔍 Troubleshooting
-
-### **Common Issues**
-
-#### **❌ Module not found**
-
-```bash
-# Ensure proper installation
-uv sync
-# Verify you're in project root and venv is active
-```
-
-#### **❌ Docker issues**
-
-```bash
-# Ensure Docker is running
-docker run hello-world
-# Add user to docker group (Linux)
-sudo usermod -aG docker $USER
-```
-
-#### **❌ API key errors**
-
-```bash
-# Add keys to .env file in project root
-echo 'OPENAI_API_KEY="your-key"' >> .env
-```
-
-#### **❌ Plot not displaying**
-
-```bash
-# Set show_plot=True or check matplotlib backend
-uv run python -c "import matplotlib; print(matplotlib.get_backend())"
-```
-
-### **Get Help**
-
-- 📚 **Complete Setup Guide**: [Setup](setup.md) - Comprehensive installation and configuration
-- 🔍 **Detailed Troubleshooting**: [Troubleshooting](../reference/troubleshooting.md)
-- 💬 **Community Support**: [GitHub Discussions](https://github.com/docxology/codomyrmex/discussions)
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/docxology/codomyrmex/issues)
-
-### **Next Steps**
-
-1. **🎮 [Interactive Examples](../examples/basic-examples.md)** - Try hands-on demonstrations
-2. **📚 [Full Documentation](../README.md)** - Complete documentation hub
-3. **🏗️ [Architecture Guide](../project/architecture.md)** - Understand system design
-4. **🤝 [Contributing Guide](../project/contributing.md)** - Join development
-
 ## 🚀 Next Steps
-
-### **🎮 Try Interactive Examples**
-
-```bash
-# Launch the example selector for guided exploration
-cd examples
-./select-example.sh
-
-# Or run all basic examples in sequence
-./run-all-basic.sh
-
-# Or try specific examples
-cd basic && ./data-visualization-demo.sh
-cd ../integration && ./ai-enhanced-analysis.sh
-```
 
 ### **Dive Deeper**
 
@@ -501,53 +409,9 @@ cd ../integration && ./ai-enhanced-analysis.sh
 2. **🧪 [Development Setup](../development/environment-setup.md)** - Set up development environment
 3. **🔧 [Create a Module](tutorials/creating-a-module.md)** - Build your own Codomyrmex module
 
-### **Explore Use Cases**
-
-1. **🤖 AI-Enhanced Development** - Use AI to accelerate coding workflows
-2. **📊 Data Analysis Pipelines** - Create visualizations and process data
-3. **🔍 Code Quality Automation** - Set up automated quality checking
-4. **🏗️ Build Orchestration** - Automate build and deployment processes
-
 ---
 
 **🎉 Congratulations!** You've successfully set up Codomyrmex and tried the core features. You're ready to explore the modular toolkit for code analysis, generation, and workflow automation.
-
-## 🤖 Configure AI Features (Optional)
-
-Codomyrmex includes AI capabilities that are completely optional. Here's how to enable them:
-
-### **Add API Keys**
-
-```bash
-# Create .env file with your AI provider keys
-cat > .env << EOF
-# AI Provider API Keys (optional - only needed for AI features)
-OPENAI_API_KEY="sk-your-openai-key-here"
-ANTHROPIC_API_KEY="sk-ant-your-anthropic-key-here"
-GOOGLE_API_KEY="AIzaSy-your-google-key-here"
-
-# Logging Configuration (optional)
-LOG_LEVEL="INFO"
-EOF
-```
-
-### **Test AI Features**
-
-```python
-# Test AI code generation
-from codomyrmex.agents import generate_code_snippet
-
-result = generate_code_snippet(
-    prompt="Create a function to calculate fibonacci numbers",
-    language="python"
-)
-
-if result["status"] == "success":
-    print("🤖 AI Generated Code:")
-    print(result["generated_code"])
-```
-
-> **💡 Tip**: AI features work with OpenAI, Anthropic, and Google models. You only need one provider to get started!
 
 **Happy coding! 🐜✨**
 
@@ -555,5 +419,5 @@ if result["status"] == "success":
 
 - **Parent**: [Project Overview](../README.md)
 - **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Documentation**: [Reference Guides](../README.md)
 - **Home**: [Repository Root](../../README.md)

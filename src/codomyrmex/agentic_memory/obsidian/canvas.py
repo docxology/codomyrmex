@@ -1,4 +1,4 @@
-"""JSON Canvas operations — parse, create, serialise.
+"""JSON Canvas operations — parse, create, serialise, mutate.
 
 Implements the `Obsidian JSON Canvas spec
 <https://jsoncanvas.org/spec/1.0/>`_.
@@ -7,6 +7,7 @@ Implements the `Obsidian JSON Canvas spec
 from __future__ import annotations
 
 import json
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -44,6 +45,20 @@ def create_canvas(
     return canvas
 
 
+def save_canvas(canvas: Canvas, path: str | Path | None = None) -> Path:
+    """Save a canvas to disk. Uses ``canvas.path`` if *path* is not given.
+
+    Returns the path where the file was saved.
+    """
+    target = Path(path) if path else canvas.path
+    if target is None:
+        raise ValueError("No path specified for canvas")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(canvas_to_dict(canvas), indent=2))
+    canvas.path = target
+    return target
+
+
 # ── serialisation ────────────────────────────────────────────────────
 
 
@@ -54,8 +69,12 @@ def canvas_to_dict(canvas: Canvas) -> dict[str, Any]:
     """
     nodes: list[dict[str, Any]] = []
     for n in canvas.nodes:
-        d: dict[str, Any] = {"id": n.id, "type": n.type, "x": n.x, "y": n.y, "width": n.width, "height": n.height}
-        for key in ("text", "file", "url", "color"):
+        d: dict[str, Any] = {
+            "id": n.id, "type": n.type,
+            "x": n.x, "y": n.y,
+            "width": n.width, "height": n.height,
+        }
+        for key in ("text", "file", "url", "color", "label"):
             val = getattr(n, key, None)
             if val is not None:
                 d[key] = val
@@ -64,7 +83,7 @@ def canvas_to_dict(canvas: Canvas) -> dict[str, Any]:
     edges: list[dict[str, Any]] = []
     for e in canvas.edges:
         d = {"id": e.id, "fromNode": e.fromNode, "toNode": e.toNode}
-        for key in ("fromSide", "toSide", "label"):
+        for key in ("fromSide", "toSide", "label", "color"):
             val = getattr(e, key, None)
             if val is not None:
                 d[key] = val
@@ -88,6 +107,7 @@ def canvas_from_dict(data: dict[str, Any]) -> Canvas:
             file=nd.get("file"),
             url=nd.get("url"),
             color=nd.get("color"),
+            label=nd.get("label"),
         ))
 
     edges: list[CanvasEdge] = []
@@ -99,6 +119,7 @@ def canvas_from_dict(data: dict[str, Any]) -> Canvas:
             fromSide=ed.get("fromSide"),
             toSide=ed.get("toSide"),
             label=ed.get("label"),
+            color=ed.get("color"),
         ))
 
     return Canvas(nodes=nodes, edges=edges)
@@ -117,3 +138,98 @@ def add_canvas_edge(canvas: Canvas, edge: CanvasEdge) -> Canvas:
     """Append an edge to the canvas (mutates in place, returns same object)."""
     canvas.edges.append(edge)
     return canvas
+
+
+def remove_canvas_node(canvas: Canvas, node_id: str) -> CanvasNode | None:
+    """Remove a node and all its connected edges. Returns the removed node."""
+    removed = None
+    for i, n in enumerate(canvas.nodes):
+        if n.id == node_id:
+            removed = canvas.nodes.pop(i)
+            break
+    if removed:
+        # Also remove connected edges
+        canvas.edges = [
+            e for e in canvas.edges
+            if e.fromNode != node_id and e.toNode != node_id
+        ]
+    return removed
+
+
+def remove_canvas_edge(canvas: Canvas, edge_id: str) -> CanvasEdge | None:
+    """Remove an edge by ID. Returns the removed edge."""
+    for i, e in enumerate(canvas.edges):
+        if e.id == edge_id:
+            return canvas.edges.pop(i)
+    return None
+
+
+def create_text_node(
+    text: str,
+    *,
+    x: int = 0,
+    y: int = 0,
+    width: int = 250,
+    height: int = 140,
+    color: str | None = None,
+) -> CanvasNode:
+    """Create a text node with an auto-generated ID."""
+    return CanvasNode(
+        id=f"node-{uuid.uuid4().hex[:8]}",
+        type="text",
+        x=x, y=y, width=width, height=height,
+        text=text, color=color,
+    )
+
+
+def create_file_node(
+    file: str,
+    *,
+    x: int = 0,
+    y: int = 0,
+    width: int = 250,
+    height: int = 140,
+) -> CanvasNode:
+    """Create a file-reference node with an auto-generated ID."""
+    return CanvasNode(
+        id=f"node-{uuid.uuid4().hex[:8]}",
+        type="file",
+        x=x, y=y, width=width, height=height,
+        file=file,
+    )
+
+
+def create_link_node(
+    url: str,
+    *,
+    x: int = 0,
+    y: int = 0,
+    width: int = 250,
+    height: int = 140,
+) -> CanvasNode:
+    """Create a link node with an auto-generated ID."""
+    return CanvasNode(
+        id=f"node-{uuid.uuid4().hex[:8]}",
+        type="link",
+        x=x, y=y, width=width, height=height,
+        url=url,
+    )
+
+
+def connect_nodes(
+    from_id: str,
+    to_id: str,
+    *,
+    from_side: str | None = None,
+    to_side: str | None = None,
+    label: str | None = None,
+) -> CanvasEdge:
+    """Create an edge between two nodes with an auto-generated ID."""
+    return CanvasEdge(
+        id=f"edge-{uuid.uuid4().hex[:8]}",
+        fromNode=from_id,
+        toNode=to_id,
+        fromSide=from_side,
+        toSide=to_side,
+        label=label,
+    )

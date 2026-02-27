@@ -62,7 +62,7 @@ codomyrmex quick pipe "codomyrmex check" "codomyrmex test agents"
 # See which modules are loaded and healthy
 codomyrmex status
 
-# List all 89 modules with their availability
+# List all 86 modules with their availability
 codomyrmex modules
 
 # Run environment validation before work begins

@@ -92,8 +92,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- No guaranteed warm completion within a deadline; callers should implement their own readiness checks.
+- Warmer concurrency is bounded by the underlying cache backend limits.
 
 ## 5. Testing
 

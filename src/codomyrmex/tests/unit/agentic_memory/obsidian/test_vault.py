@@ -11,7 +11,7 @@ class TestObsidianVault:
         """Test functionality: load vault."""
         vault = ObsidianVault(tmp_vault)
         assert vault.path == tmp_vault.resolve()
-        assert len(vault.notes) == 4  # 3 root + 1 nested
+        assert len(vault.notes) == 7  # 4 root + 1 nested + 1 daily + 1 template
 
     def test_vault_not_found(self, tmp_path):
         """Test functionality: vault not found."""
@@ -54,7 +54,7 @@ class TestObsidianVault:
         """Test functionality: metadata."""
         vault = ObsidianVault(tmp_vault)
         meta = vault.metadata
-        assert meta.note_count == 4
+        assert meta.note_count == 7
         assert meta.tag_count > 0
         assert meta.link_count > 0
 
@@ -64,7 +64,7 @@ class TestObsidianVault:
         _ = vault.notes  # Load cache
         (tmp_vault / "New Note.md").write_text("# New\nContent.")
         vault.refresh()
-        assert len(vault.notes) == 5
+        assert len(vault.notes) == 8
 
     def test_excludes_dotfiles(self, tmp_vault):
         """Test functionality: excludes dotfiles."""

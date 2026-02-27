@@ -1,16 +1,52 @@
 # Validation - MCP Tool Specification
 
-This document outlines the specification for tools within the Validation module that are intended to be integrated with the Model Context Protocol (MCP).
+This document specifies the MCP tools exposed by the Validation module via `@mcp_tool` decorators in `mcp_tools.py`. These tools are auto-discovered by the PAI MCP bridge.
 
-## Current Status: No MCP Tools Defined
+## Available MCP Tools
 
-The Validation module provides a unified input/output validation framework with support for JSON Schema validation, Pydantic model validation, custom validators, contextual validation, type-safe parsing, and comprehensive error reporting for internal use by other Codomyrmex modules. These functions are primarily for programmatic integration within the application lifecycle and are not suited for exposure as Model Context Protocol (MCP) tools.
+### `validate_schema`
 
-MCP tools are typically designed for discrete, invocable actions or queries that an external agent (like an LLM) would trigger. The internal validation, schema checking, and data sanitization mechanisms do not fit this paradigm.
+Validate arbitrary data against a JSON Schema or Pydantic model.
 
-If future enhancements to this module introduce features that are appropriate for MCP (e.g., validating arbitrary JSON data against a provided schema and returning structured error reports, or listing available validation rules), this document will be updated accordingly.
+**Parameters:**
+- `data` (dict, required): Data to validate
+- `schema` (dict, required): JSON Schema definition or Pydantic model reference
+- `validator_type` (str, default `"json_schema"`): Strategy — `"json_schema"`, `"pydantic"`, or `"custom"`
 
-For details on how to use the validation functionalities within your Python code, please refer to the module's `README.md` and `API_SPECIFICATION.md`.
+**Returns:** `{is_valid, errors: [{field, message}], warnings: [...]}`
+
+**Trust level:** Safe
+
+---
+
+### `validate_config`
+
+Validate a configuration dictionary for required keys and type correctness.
+
+**Parameters:**
+- `config` (dict, required): Configuration dictionary to validate
+- `required_keys` (list[str], optional): Keys that must be present
+- `strict` (bool, default `false`): Reject unknown keys if `true`
+
+**Returns:** `{is_valid, missing_keys: [...], extra_keys: [...], errors: [...]}`
+
+**Trust level:** Safe
+
+---
+
+### `validation_summary`
+
+Return aggregate statistics from the validation manager.
+
+**Parameters:** None
+
+**Returns:** `{run_count, pass_rate, error_rate, validators_used: [...]}`
+
+**Trust level:** Safe
+
+---
+
+For programmatic Python integration, refer to `README.md` and `API_SPECIFICATION.md`.
 
 ## Navigation Links
 

@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-02-26T09:23:50.486231"
+    "timestamp": "2026-02-26T17:11:34.740268"
   },
   "modules": {
     "tool_use": {
@@ -448,7 +448,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x1050fa120>, default_factory=<dataclasses._MISSING_TYPE object at 0x1050fa120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1050fa120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x102ba6120>, default_factory=<dataclasses._MISSING_TYPE object at 0x102ba6120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x102ba6120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -8054,7 +8054,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 07:42:06"
+      "last_modified": "2026-02-26 17:03:43"
     },
     "tests": {
       "name": "tests",
@@ -8100,7 +8100,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 08:54:11"
+      "last_modified": "2026-02-26 17:05:36"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -10632,7 +10632,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x107b3be00>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x109623e00>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -25939,7 +25939,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:29:22"
+      "last_modified": "2026-02-26 17:02:42"
     },
     "email": {
       "name": "email",

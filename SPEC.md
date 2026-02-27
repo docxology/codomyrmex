@@ -184,12 +184,15 @@ Tracked items by sprint target. Resolved items are kept for historical reference
 | Item | Status | Sprint Target | Notes |
 |------|--------|---------------|-------|
 | Circular imports: ~35 pairs across modules | Open | Sprint 3 | Use `isort --check` + dependency graph to surface |
-| Oversized files: 6 non-test files >1K LOC | Open | Sprint 3 | `reviewer.py` (2,286 lines) is largest; 5 of original 8 modularized in v1.0.2 |
+| Oversized files: 6 non-test files >1K LOC | Open | Sprint 3 | `reviewer.py` (2,286 lines) is largest; `server.py` (1,080 lines); 5 of original 8 modularized in v1.0.2 |
 | EventBus trust events wrong signature | **Resolved v1.0.2** | — | `EventType.TRUST_LEVEL_CHANGED` added; `publish_event` call fixed in `trust_gateway.py` |
 | PAI.md thin files (5 modules at <52 lines) | **Resolved v1.0.2** | — | All 5 expanded to ≥100 lines with MCP tool docs and phase mapping |
 | Tool versioning: no deprecation scheme | **Resolved v1.0.2** | — | `version` + `deprecated_in` params added to `@mcp_tool` decorator |
 | Stale module/tool counts in docs | **Resolved v1.0.3** | — | Updated: 88 modules, 208 tools (204 safe + 4 destructive), 3 resources |
 | 6 optional modules fail import | Expected | — | Cloud (AWS/Azure/GCP), performance.monitoring, lazy_loader, security cert validator — require optional SDKs |
+| Shutdown logging on closed streams | **Resolved v1.0.3** | — | `OrchestrationEngine.__del__` and `shutdown()` guarded against `ValueError` on closed file handles |
+| Session status enum misuse | **Resolved v1.0.3** | — | `close_session()` now uses `SessionStatus.COMPLETED` instead of raw `"closed"` string |
+| Telemetry DRY violation in server.py | **Resolved v1.0.3** | — | Extracted `_ensure_telemetry()` classmethod; eliminated ~60 lines of duplicated init code |
 | Bidirectional PAI↔codomyrmex comms | Open | Sprint 4 | Codomyrmex cannot initiate calls to PAI; filesystem back-channel only |
 | Tool versioning: no deprecation timeline UI | Open | Sprint 4 | `deprecated_in` metadata added but not surfaced in MCP tool list |
 

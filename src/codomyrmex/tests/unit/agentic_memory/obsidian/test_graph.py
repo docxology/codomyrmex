@@ -47,8 +47,8 @@ class TestBacklinks:
     def test_backlinks_none(self, tmp_vault):
         """Test functionality: backlinks none."""
         vault = ObsidianVault(tmp_vault)
-        backlinks = get_backlinks(vault, "Nested Note")
-        # No notes link to Nested Note
+        # Hub Note now links to Nested Note, so check a note with truly no backlinks
+        backlinks = get_backlinks(vault, "2024-01-15")
         assert len(backlinks) == 0
 
     def test_backlinks_not_found(self, tmp_vault):
@@ -75,9 +75,10 @@ class TestOrphans:
         """Test functionality: finds orphans."""
         vault = ObsidianVault(tmp_vault)
         orphans = find_orphans(vault)
-        # Nested Note has no links in or out
+        # Hub Note now links to Nested Note, so it's not orphaned anymore
+        # Daily template is a true orphan (no links in or out)
         titles = [n.title for n in orphans]
-        assert "Nested Note" in titles
+        assert "Daily" in titles  # Templates/Daily.md has no in/out links
 
 
 class TestBrokenLinks:

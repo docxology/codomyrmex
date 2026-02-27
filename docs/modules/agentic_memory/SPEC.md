@@ -43,6 +43,39 @@ Provides persistent, structured memory for AI agents with key-value storage, sea
 - Depends on: `serialization/` (JSON persistence), `logging_monitoring/` (audit logging)
 - Consumed by: All agent modules, MCP server (`store_memory`, `recall_memory`, `list_memories`)
 
+## Obsidian Integration
+
+The `obsidian/` subpackage extends agentic memory with Obsidian vault integration.
+
+### Architectural Constraints
+
+- **Dual-mode**: Filesystem and CLI modes are independent; filesystem never invokes CLI
+- **Real execution**: No stubs — filesystem operations use actual `pathlib.Path`; CLI wraps real `obsidian` binary
+- **Graceful degradation**: `ObsidianCLINotAvailable` is raised (not suppressed) when CLI is absent; callers decide whether to fall back to filesystem mode
+- **Zero-mock policy**: Tests use real temporary vaults via `tmp_path` fixtures
+
+### Public API Surface (from `obsidian/__init__.py`)
+
+**Filesystem core:**
+- `ObsidianVault` — vault root; `Note`, `Tag`, `Wikilink`, `Canvas`, `CanvasNode`, `CanvasEdge`, `SearchResult`, `VaultMetadata` models
+- `parse_note`, `serialize_note`, `parse_frontmatter` — note serialisation
+- `create_note`, `read_note`, `update_note`, `delete_note`, `move_note`, `rename_note` — CRUD
+- `build_link_graph`, `get_backlinks`, `get_forward_links`, `find_orphans`, `find_hubs` — graph analysis
+- `search_vault`, `search_regex`, `filter_by_tag`, `filter_by_frontmatter` — search
+
+**Canvas:**
+- `create_canvas`, `parse_canvas`, `save_canvas`, `add_canvas_node`, `add_canvas_edge`, `connect_nodes`
+
+**CLI core:**
+- `ObsidianCLI`, `CLIResult`, `ObsidianCLIError`, `ObsidianCLINotAvailable`
+
+**CLI domain models:**
+- `BookmarkItem`, `TaskItem`, `TemplateInfo`, `PluginInfo`, `ThemeInfo`, `SnippetInfo`
+- `PropertyValue`, `SyncStatus`, `SyncHistoryEntry`, `PublishStatus`
+- `OutlineItem`, `WordCount`, `DiffResult`, `HistoryEntry`, `ConsoleEntry`
+
+Full reference: [obsidian/SPEC.md](obsidian/SPEC.md)
+
 ## Navigation
 
 - [README.md](README.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../SPEC.md)

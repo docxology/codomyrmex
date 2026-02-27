@@ -1,7 +1,7 @@
 # Personal AI Infrastructure — docs/pai Documentation Module
 
 **Module**: docs/pai
-**Version**: v0.4.0
+**Version**: v1.0.3-dev
 **Status**: Active
 **Upstream**: [danielmiessler/Personal_AI_Infrastructure](https://github.com/danielmiessler/Personal_AI_Infrastructure)
 

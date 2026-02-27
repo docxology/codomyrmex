@@ -1,6 +1,6 @@
 # Technical Specification - Replication
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Status**: Planned | **Last Updated**: February 2026
 
 **Module**: `codomyrmex.cache.replication`  
 **Last Updated**: 2026-01-29
@@ -51,8 +51,8 @@ Environment variables:
 
 ### 4.2 Limitations
 
-- Known limitation 1
-- Known limitation 2
+- Active-active write conflicts are not automatically resolved; use versioning or last-write-wins.
+- Replication lag is not surfaced as a metric by default.
 
 ## 5. Testing
 
