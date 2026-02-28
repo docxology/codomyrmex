@@ -263,7 +263,7 @@ def test_modify_labels() -> None:
 @SKIP
 @pytest.mark.unit
 def test_mcp_tools_load() -> None:
-    """MCP tools are importable and have correct metadata."""
+    """All 12 email MCP tools (8 AgentMail + 4 Gmail) are importable with correct metadata."""
     from codomyrmex.email.mcp_tools import (
         agentmail_create_inbox,
         agentmail_create_webhook,
@@ -273,6 +273,10 @@ def test_mcp_tools_load() -> None:
         agentmail_list_threads,
         agentmail_reply_to_message,
         agentmail_send_message,
+        gmail_create_draft,
+        gmail_get_message,
+        gmail_list_messages,
+        gmail_send_message,
     )
 
     tools = [
@@ -284,7 +288,12 @@ def test_mcp_tools_load() -> None:
         agentmail_create_inbox,
         agentmail_list_threads,
         agentmail_create_webhook,
+        gmail_send_message,
+        gmail_list_messages,
+        gmail_get_message,
+        gmail_create_draft,
     ]
+    assert len(tools) == 12
     for tool in tools:
         assert callable(tool)
         meta = getattr(tool, "_mcp_tool_meta", None)

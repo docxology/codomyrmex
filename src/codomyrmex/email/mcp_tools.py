@@ -3,7 +3,9 @@
 Exposes AgentMail send, receive, inbox management, thread listing,
 and webhook registration as MCP tools for agent consumption.
 
-All tools read AGENTMAIL_API_KEY from the environment. No credentials
+Also exposes Gmail send, list, get, and draft as MCP tools via GmailProvider.
+Gmail tools read GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN
+from the environment. AgentMail tools read AGENTMAIL_API_KEY. No credentials
 are accepted as parameters or stored in code.
 """
 
@@ -30,6 +32,20 @@ def _get_provider(inbox_id: str | None = None):
             "agentmail SDK is not installed. Run: uv sync --extra email"
         )
     return AgentMailProvider(default_inbox_id=inbox_id)
+
+
+def _get_gmail_provider():
+    """Instantiate GmailProvider using environment credentials.
+
+    Reads GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN
+    from the environment (or falls back to Application Default Credentials).
+    """
+    from .gmail.provider import GMAIL_AVAILABLE, GmailProvider
+    if not GMAIL_AVAILABLE:
+        raise ImportError(
+            "Gmail dependencies are not installed. Run: uv sync --extra email"
+        )
+    return GmailProvider.from_env()
 
 
 @mcp_tool(
@@ -311,6 +327,195 @@ def agentmail_list_threads(
                 }
                 for t in threads
             ],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}
+
+
+@mcp_tool(
+    category="email",
+    description=(
+        "Send an email via Gmail API from FristonBlanket@gmail.com. "
+        "Requires GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars."
+    ),
+)
+def gmail_send_message(
+    to: list[str],
+    subject: str,
+    body_text: str,
+    body_html: str | None = None,
+    cc: list[str] | None = None,
+    bcc: list[str] | None = None,
+) -> dict[str, Any]:
+    """Send an email immediately via the Gmail API (FristonBlanket@gmail.com).
+
+    Args:
+        to: List of recipient email addresses.
+        subject: Email subject line.
+        body_text: Plain-text message body.
+        body_html: Optional HTML message body.
+        cc: Optional CC recipient list.
+        bcc: Optional BCC recipient list.
+
+    Returns:
+        ``{"status": "ok", "message_id": "...", "subject": "..."}`` on success.
+        ``{"status": "error", "error": "..."}`` on failure.
+    """
+    try:
+        from .generics import EmailDraft
+        provider = _get_gmail_provider()
+        draft = EmailDraft(
+            subject=subject,
+            to=to,
+            cc=cc or [],
+            bcc=bcc or [],
+            body_text=body_text,
+            body_html=body_html,
+        )
+        sent = provider.send_message(draft)
+        return {
+            "status": "ok",
+            "message_id": sent.id,
+            "thread_id": sent.thread_id,
+            "subject": sent.subject,
+            "to": [a.email for a in sent.to],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}
+
+
+@mcp_tool(
+    category="email",
+    description=(
+        "List messages in the Gmail inbox (FristonBlanket@gmail.com). "
+        "Supports Gmail search query syntax (e.g. 'is:unread', 'from:user@example.com'). "
+        "Requires GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars."
+    ),
+)
+def gmail_list_messages(
+    query: str = "",
+    max_results: int = 20,
+) -> dict[str, Any]:
+    """List messages in the Gmail inbox, optionally filtered by a Gmail search query.
+
+    Args:
+        query: Gmail search query string (default empty = all messages).
+            Examples: ``"is:unread"``, ``"from:boss@example.com"``,
+            ``"subject:Weekly Schedule"``.
+        max_results: Maximum number of messages to return (default 20).
+
+    Returns:
+        ``{"status": "ok", "count": N, "messages": [...]}`` on success.
+        ``{"status": "error", "error": "..."}`` on failure.
+    """
+    try:
+        provider = _get_gmail_provider()
+        messages = provider.list_messages(query=query, max_results=max_results)
+        return {
+            "status": "ok",
+            "count": len(messages),
+            "messages": [
+                {
+                    "message_id": m.id,
+                    "thread_id": m.thread_id,
+                    "subject": m.subject,
+                    "from": m.sender.email,
+                    "date": m.date.isoformat() if m.date else None,
+                    "labels": m.labels,
+                    "preview": (m.body_text or "")[:200] if m.body_text else None,
+                }
+                for m in messages
+            ],
+        }
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}
+
+
+@mcp_tool(
+    category="email",
+    description=(
+        "Get a specific Gmail message by its ID (FristonBlanket@gmail.com). "
+        "Requires GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars."
+    ),
+)
+def gmail_get_message(message_id: str) -> dict[str, Any]:
+    """Fetch the full content of a specific Gmail message by its ID.
+
+    Args:
+        message_id: The Gmail message ID (opaque string from the Gmail API).
+
+    Returns:
+        ``{"status": "ok", "message": {...}}`` with full message fields on success.
+        ``{"status": "error", "error": "..."}`` on failure.
+    """
+    try:
+        provider = _get_gmail_provider()
+        msg = provider.get_message(message_id)
+        return {
+            "status": "ok",
+            "message": {
+                "message_id": msg.id,
+                "thread_id": msg.thread_id,
+                "subject": msg.subject,
+                "from": msg.sender.email,
+                "from_name": msg.sender.name,
+                "to": [a.email for a in msg.to],
+                "cc": [a.email for a in msg.cc],
+                "date": msg.date.isoformat() if msg.date else None,
+                "body_text": msg.body_text,
+                "body_html": msg.body_html,
+                "labels": msg.labels,
+            },
+        }
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}
+
+
+@mcp_tool(
+    category="email",
+    description=(
+        "Create a Gmail draft (not sent) in FristonBlanket@gmail.com. "
+        "Returns the draft ID. "
+        "Requires GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars."
+    ),
+)
+def gmail_create_draft(
+    to: list[str],
+    subject: str,
+    body_text: str,
+    body_html: str | None = None,
+    cc: list[str] | None = None,
+    bcc: list[str] | None = None,
+) -> dict[str, Any]:
+    """Create a Gmail draft without sending it.
+
+    Args:
+        to: List of recipient email addresses.
+        subject: Email subject line.
+        body_text: Plain-text message body.
+        body_html: Optional HTML message body.
+        cc: Optional CC recipient list.
+        bcc: Optional BCC recipient list.
+
+    Returns:
+        ``{"status": "ok", "draft_id": "..."}`` on success.
+        ``{"status": "error", "error": "..."}`` on failure.
+    """
+    try:
+        from .generics import EmailDraft
+        provider = _get_gmail_provider()
+        draft = EmailDraft(
+            subject=subject,
+            to=to,
+            cc=cc or [],
+            bcc=bcc or [],
+            body_text=body_text,
+            body_html=body_html,
+        )
+        draft_id = provider.create_draft(draft)
+        return {
+            "status": "ok",
+            "draft_id": draft_id,
         }
     except Exception as exc:
         return {"status": "error", "error": str(exc)}

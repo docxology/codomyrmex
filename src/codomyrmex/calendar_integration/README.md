@@ -90,7 +90,7 @@ These tools are auto-discovered and exposed via the Codomyrmex MCP bridge. Agent
 | `calendar_update_event` | `event_id`, `summary`, `start_time`, `end_time`, `description`, `location`, `attendees` | Replace all event fields (PUT semantics — all fields overwritten) |
 | `calendar_delete_event` | `event_id` | Permanently delete an event |
 
-**Attendee injection:** `calendar_create_event` and `calendar_update_event` always add `danielarifriedman@gmail.com` to the attendees list. This cannot be suppressed.
+**Attendee injection:** `calendar_create_event` and `calendar_update_event` always add `FristonBlanket@gmail.com` to the attendees list. This cannot be suppressed.
 
 **Datetime format:** All `start_time` / `end_time` parameters must be ISO 8601 strings, e.g. `"2026-02-24T10:00:00Z"` or `"2026-02-24T10:00:00-08:00"`.
 

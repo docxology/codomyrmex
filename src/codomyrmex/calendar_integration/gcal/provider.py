@@ -1,5 +1,6 @@
 """Google Calendar implementation of the CalendarProvider interface."""
 
+import os
 from datetime import datetime
 
 from ..exceptions import (
@@ -21,6 +22,8 @@ except ImportError:
     HttpError = Exception
     build = None
     GCAL_AVAILABLE = False
+
+_GCAL_SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
 class GoogleCalendar(CalendarProvider):
@@ -47,6 +50,49 @@ class GoogleCalendar(CalendarProvider):
             self.service = service or build('calendar', 'v3', credentials=credentials)
         except Exception as e:
             raise CalendarAuthError(f"Failed to initialize Google Calendar API service: {e}")
+
+    @classmethod
+    def from_env(cls) -> "GoogleCalendar":
+        """Create a GoogleCalendar from environment variables.
+
+        Tries GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET first,
+        then falls back to Application Default Credentials.
+
+        Raises:
+            ImportError: If Google Calendar dependencies are not installed.
+            CalendarAuthError: If no valid credentials are available.
+        """
+        if not GCAL_AVAILABLE:
+            raise ImportError(
+                "Google Calendar dependencies are not installed. "
+                "Run: uv sync --extra calendar"
+            )
+
+        refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
+        client_id = os.getenv("GOOGLE_CLIENT_ID")
+        client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+
+        if refresh_token and client_id and client_secret:
+            creds = Credentials(
+                token=None,
+                refresh_token=refresh_token,
+                token_uri="https://oauth2.googleapis.com/token",
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=_GCAL_SCOPES,
+            )
+            return cls(credentials=creds)
+
+        try:
+            import google.auth  # noqa: PLC0415 — conditional import
+            creds, _ = google.auth.default(scopes=_GCAL_SCOPES)
+            return cls(credentials=creds)
+        except Exception as e:
+            raise CalendarAuthError(
+                "No Google Calendar credentials found. Set GOOGLE_CLIENT_ID + "
+                "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
+                f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
+            ) from e
 
     def _event_to_gcal_dict(self, event: CalendarEvent) -> dict:
         """Serialize a ``CalendarEvent`` to the Google Calendar API request body.

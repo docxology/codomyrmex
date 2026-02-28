@@ -22,36 +22,57 @@ except ImportError:
 
 from codomyrmex.calendar_integration.generics import CalendarEvent
 
+# Default attendee injected into every create/update call.
+# Override via CODOMYRMEX_CALENDAR_ATTENDEE env var.
+_DEFAULT_ATTENDEE = os.environ.get(
+    "CODOMYRMEX_CALENDAR_ATTENDEE", "FristonBlanket@gmail.com"
+)
+
 
 def _get_provider() -> Any:
-    """Initialize the GoogleCalendar provider from PAI OAuth token and env vars.
+    """Initialize the GoogleCalendar provider, preferring env-var credentials.
+
+    Auth is attempted in two paths, in order:
+
+    1. **Env vars** — ``GOOGLE_REFRESH_TOKEN`` + ``GOOGLE_CLIENT_ID`` +
+       ``GOOGLE_CLIENT_SECRET`` (same vars used by Gmail).  This is the
+       recommended path for PAI integration.
+    2. **Token file** — ``~/.codomyrmex/gcal_token.json`` written by the PAI
+       dashboard OAuth flow (legacy path, still supported).
 
     Returns:
         A configured ``GoogleCalendar`` instance ready for API calls.
 
     Raises:
-        RuntimeError: Under four conditions —
-            1. **Missing dependencies** — Google Calendar packages not installed.
-               Fix: ``uv sync --extra calendar``.
-            2. **No token file** — ``~/.codomyrmex/gcal_token.json`` does not
-               exist.  Fix: authenticate via the PAI dashboard first.
-            3. **Malformed token** — The token file exists but cannot be parsed
-               as JSON or is missing required fields (``access_token``/
-               ``refresh_token``).
-            4. **Missing env vars** — ``GOOGLE_CLIENT_ID`` or
-               ``GOOGLE_CLIENT_SECRET`` are not set.  Load them from a ``.env``
-               file or export them in the shell before invoking MCP tools.
+        RuntimeError: If Google Calendar dependencies are not installed, or if
+            neither auth path produces valid credentials.
     """
     try:
-        from google.oauth2.credentials import Credentials
-
-        from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
+        from codomyrmex.calendar_integration.gcal.provider import GCAL_AVAILABLE, GoogleCalendar
     except ImportError:
         raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`")
 
+    if not GCAL_AVAILABLE:
+        raise RuntimeError("Google Calendar dependencies not installed. Run `uv sync --extra calendar`")
+
+    # Path 1: env vars (GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET)
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
+
+    if os.environ.get("GOOGLE_REFRESH_TOKEN") and os.environ.get("GOOGLE_CLIENT_ID"):
+        return GoogleCalendar.from_env()
+
+    # Path 2: token file (PAI dashboard OAuth flow)
     token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
     if not token_path.exists():
-        raise RuntimeError("Google Calendar not authenticated. Please connect via PAI dashboard.")
+        raise RuntimeError(
+            "Google Calendar not authenticated. Set GOOGLE_REFRESH_TOKEN + "
+            "GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET env vars, or authenticate "
+            "via the PAI dashboard."
+        )
 
     try:
         with open(token_path) as f:
@@ -59,18 +80,13 @@ def _get_provider() -> Any:
     except Exception as e:
         raise RuntimeError(f"Failed to read calendar token: {e}")
 
-    try:
-        from dotenv import load_dotenv
-        load_dotenv()
-    except ImportError:
-        pass
-
     client_id = os.environ.get("GOOGLE_CLIENT_ID")
     client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
 
     if not client_id or not client_secret:
         raise RuntimeError("GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variables are missing.")
 
+    from google.oauth2.credentials import Credentials
     creds = Credentials(
         token=token_data.get("access_token"),
         refresh_token=token_data.get("refresh_token"),
@@ -129,7 +145,7 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
     category="calendar",
     description=(
         "Create a new calendar event. "
-        "danielarifriedman@gmail.com is automatically injected as an attendee "
+        "The configured default attendee is automatically injected "
         "on every event regardless of the attendees parameter."
     ),
 )
@@ -143,8 +159,9 @@ def calendar_create_event(
 ) -> dict[str, Any]:
     """Create a new event in the Google Calendar.
 
-    ``danielarifriedman@gmail.com`` is always added to ``attendees`` before the
-    API call, even when ``attendees=[]`` or ``attendees=None``.
+    The default attendee (``_DEFAULT_ATTENDEE``) is always added to
+    ``attendees`` before the API call, even when ``attendees=[]`` or
+    ``attendees=None``.
 
     Args:
         summary: Event title displayed in the calendar.
@@ -152,8 +169,8 @@ def calendar_create_event(
         end_time: ISO 8601 string, e.g. ``"2026-02-24T11:00:00Z"``.
         description: Free-text event description (default empty string).
         location: Physical or virtual location (default empty string).
-        attendees: Additional email addresses to invite.  Daniel's address is
-            always appended automatically.
+        attendees: Additional email addresses to invite.  The default
+            attendee is always appended automatically.
 
     Returns:
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
@@ -162,11 +179,11 @@ def calendar_create_event(
     try:
         provider = _get_provider()
 
-        # Ensure Daniel is included if attendees is empty
+        # Ensure the default attendee is included
         if attendees is None:
-            attendees = ["danielarifriedman@gmail.com"]
-        elif "danielarifriedman@gmail.com" not in attendees:
-            attendees.append("danielarifriedman@gmail.com")
+            attendees = [_DEFAULT_ATTENDEE]
+        elif _DEFAULT_ATTENDEE not in attendees:
+            attendees.append(_DEFAULT_ATTENDEE)
 
         evt = CalendarEvent(
             summary=summary,
@@ -251,7 +268,7 @@ def calendar_delete_event(event_id: str) -> dict[str, Any]:
     category="calendar",
     description=(
         "Update an existing calendar event (PUT semantics — all fields replaced). "
-        "danielarifriedman@gmail.com is automatically injected as an attendee "
+        "The configured default attendee is automatically injected "
         "on every update regardless of the attendees parameter."
     ),
 )
@@ -267,8 +284,8 @@ def calendar_update_event(
     """Replace all fields of an existing calendar event (PUT semantics).
 
     All fields are overwritten on the server; fields not supplied here are not
-    preserved from the prior version of the event.  ``danielarifriedman@gmail.com``
-    is always added to ``attendees`` before the API call.
+    preserved from the prior version of the event.  The default attendee
+    (``_DEFAULT_ATTENDEE``) is always added to ``attendees`` before the API call.
 
     Args:
         event_id: The Google Calendar event ID to update.
@@ -277,8 +294,8 @@ def calendar_update_event(
         end_time: ISO 8601 string, e.g. ``"2026-02-24T11:00:00Z"``.
         description: Replacement event description (default empty string).
         location: Replacement location (default empty string).
-        attendees: Replacement attendee list.  Daniel's address is always
-            appended automatically.
+        attendees: Replacement attendee list.  The default attendee is
+            always appended automatically.
 
     Returns:
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
@@ -288,11 +305,11 @@ def calendar_update_event(
     try:
         provider = _get_provider()
 
-        # Ensure Daniel is included if attendees is empty
+        # Ensure the default attendee is included
         if attendees is None:
-            attendees = ["danielarifriedman@gmail.com"]
-        elif "danielarifriedman@gmail.com" not in attendees:
-            attendees.append("danielarifriedman@gmail.com")
+            attendees = [_DEFAULT_ATTENDEE]
+        elif _DEFAULT_ATTENDEE not in attendees:
+            attendees.append(_DEFAULT_ATTENDEE)
 
         evt = CalendarEvent(
             summary=summary,

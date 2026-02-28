@@ -1,6 +1,7 @@
 """Gmail implementation of the EmailProvider interface."""
 
 import base64
+import os
 from datetime import datetime
 from email.message import EmailMessage as PyEmailMessage
 
@@ -23,6 +24,12 @@ except ImportError:
     HttpError = Exception
     build = None
     GMAIL_AVAILABLE = False
+
+_GMAIL_SCOPES = [
+    "https://www.googleapis.com/auth/gmail.send",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.modify",
+]
 
 
 class GmailProvider(EmailProvider):
@@ -49,6 +56,52 @@ class GmailProvider(EmailProvider):
             self.service = service or build('gmail', 'v1', credentials=credentials)
         except Exception as e:
             raise EmailAuthError(f"Failed to initialize Gmail API service: {e}")
+
+    @classmethod
+    def from_env(cls) -> "GmailProvider":
+        """Create a GmailProvider from environment variables.
+
+        Tries OAuth2 env vars first (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
+        GOOGLE_REFRESH_TOKEN), then falls back to Application Default Credentials
+        (GOOGLE_APPLICATION_CREDENTIALS).
+
+        Raises:
+            EmailAuthError: If no valid credentials are available.
+            ImportError: If Gmail dependencies are not installed.
+        """
+        if not GMAIL_AVAILABLE:
+            raise ImportError(
+                "Gmail dependencies are not installed. "
+                "Run: uv sync --extra email"
+            )
+
+        # Option 1: Explicit OAuth2 env vars
+        refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
+        client_id = os.getenv("GOOGLE_CLIENT_ID")
+        client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+
+        if refresh_token and client_id and client_secret:
+            creds = Credentials(
+                token=None,
+                refresh_token=refresh_token,
+                token_uri="https://oauth2.googleapis.com/token",
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=_GMAIL_SCOPES,
+            )
+            return cls(credentials=creds)
+
+        # Option 2: Application Default Credentials
+        try:
+            import google.auth  # noqa: PLC0415 — conditional import
+            creds, _ = google.auth.default(scopes=_GMAIL_SCOPES)
+            return cls(credentials=creds)
+        except Exception as e:
+            raise EmailAuthError(
+                "No Gmail credentials found. Set GOOGLE_CLIENT_ID + "
+                "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
+                f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
+            ) from e
 
     def _parse_email_address(self, raw_header: str) -> list[EmailAddress]:
         """Parse a raw 'To' or 'From' header into a list of EmailAddress objects."""
@@ -133,10 +186,10 @@ class GmailProvider(EmailProvider):
              msg['Bcc'] = ", ".join(draft.bcc)
 
         if draft.body_html:
-            msg.set_content(draft.body_text)
+            msg.set_content(draft.body_text or "")
             msg.add_alternative(draft.body_html, subtype='html')
         else:
-            msg.set_content(draft.body_text)
+            msg.set_content(draft.body_text or "")
 
         raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
         return {'raw': raw}

@@ -41,6 +41,34 @@ provider.send(draft)
 | **EXECUTE** | Send notifications, reports, and alerts |
 | **LEARN** | Archive sent/received emails for reference |
 
+## MCP Tools
+
+Twelve tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge.
+
+### AgentMail Tools
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `agentmail_send_message` | Send an email message via AgentMail | Safe | email |
+| `agentmail_list_messages` | List messages in an AgentMail inbox | Safe | email |
+| `agentmail_get_message` | Get a specific AgentMail message by ID | Safe | email |
+| `agentmail_reply_to_message` | Reply to an existing AgentMail message | Safe | email |
+| `agentmail_list_inboxes` | List all AgentMail inboxes | Safe | email |
+| `agentmail_create_inbox` | Create a new AgentMail inbox | Safe | email |
+| `agentmail_list_threads` | List email threads in an AgentMail inbox | Safe | email |
+| `agentmail_create_webhook` | Register a webhook for AgentMail inbox events | Safe | email |
+
+### Gmail Tools (FristonBlanket@gmail.com — direct Gmail API)
+
+Requires: `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `gmail_send_message` | Send email from FristonBlanket@gmail.com | Safe | email |
+| `gmail_list_messages` | List inbox messages (supports Gmail query syntax) | Safe | email |
+| `gmail_get_message` | Fetch full message content by ID | Safe | email |
+| `gmail_create_draft` | Create a Gmail draft (not sent, returns draft ID) | Safe | email |
+
 ## Architecture Role
 
 **Extended Layer** — Utility module for agent-initiated communication. Consumed by `logistics/` for notification dispatching.

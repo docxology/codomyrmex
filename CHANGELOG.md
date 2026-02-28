@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.3-dev] - 2026-02-27 — "Obsidian Module v3.0"
+## [Unreleased] — Google Affordances & Auth Unification
+
+### Added
+
+- **email/gmail**: `GmailProvider.from_env()` — OAuth2 env var constructor (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`) with ADC fallback
+- **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via FristonBlanket@gmail.com
+- **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as GmailProvider
+- **tests/integration/email**: 11-test integration suite (9 skip without live creds); tests cover send/list/get/retrieve and MCP tool layer
+
+### Changed
+
+- **calendar_integration/mcp_tools**: `_get_provider()` now prefers `GOOGLE_REFRESH_TOKEN` env vars (token file falls back as legacy path)
+
+### Fixed
+
+- `calendar_integration/README.md`: Wrong default attendee email corrected (`danielarifriedman@gmail.com` → `FristonBlanket@gmail.com`)
+- `email/API_SPECIFICATION.md`: Wrong env var corrected (`GOOGLE_CREDENTIALS` → `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`)
+- `email/PAI.md`: Now documents all 12 MCP tools (8 AgentMail + 4 Gmail)
+
+---
+
+## [1.0.3] - 2026-02-27 — "Obsidian v3.0 & Skills Hardening"
 
 ### Added
 
@@ -15,42 +36,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Models**: `CodeBlock`, `MathBlock`, `DataviewField`, `SnippetInfo`, `ThemeInfo`, `PublishStatus`, `SyncHistoryEntry` + 11 existing models enhanced
   - **Key functions**: `search_regex`, `filter_by_tags(match_all=)`, `find_dead_ends`, `find_hubs`, `get_shortest_path`, `append_note`, `prepend_note`, `move_note`, `save_canvas`, factory functions (`create_text_node`, `connect_nodes`), `eval_js`, `cdp_command`
   - **Flat `__init__.py`** exports ~100 public names for convenience imports
-
-### Changed
-
-- **pyproject.toml**: Added `pyyaml` to `obsidian` optional deps
-- **pytest.ini**: Harmonized `--cov-fail-under` from 68% → 30% to match `pyproject.toml`
-
-### Metrics
-
-- Obsidian tests: **413 passed**, 2 skipped, 0 failed (18 test files)
-- Source modules: **19** (7 filesystem + 12 CLI)
-- Public functions: **~100**
-- Documentation: README.md, SPEC.md, AGENTS.md all at v3.0
-
----
-
-## [1.0.3-dev] - 2026-02-25 — "Skills Module Hardening"
-
-### Added
-
 - **skills/mcp_tools.py**: 7 MCP tools (`skills_list`, `skills_get`, `skills_search`, `skills_sync`, `skills_add_custom`, `skills_get_categories`, `skills_get_upstream_status`) via `@mcp_tool` decorator
 - **skills/skill_runner.py**: Execution bridge (`run_skill`, `run_skill_by_name`, `list_runnable_skills`) connecting discovery registry to skill execution
 - **skills/skills/templates/**: 3 starter YAML skill templates (`code_review`, `testing`, `documentation`) with patterns, anti-patterns, validations, and sharp edges
 
 ### Changed
 
-- **arscontexta/**init**.py**: Modularized from 928 → 63 LOC; extracted `types.py`, `exceptions.py`, `services.py` as submodules (re-exporting from canonical `models.py`)
-- **Version bumped** to `1.0.3.dev0`
+- **pyproject.toml**: Added `pyyaml` to `obsidian` optional deps
+- **pytest.ini**: Harmonized `--cov-fail-under` from 68% → 30% to match `pyproject.toml`
+- **arscontexta/\_\_init\_\_.py**: Modularized from 928 → 63 LOC; extracted `types.py`, `exceptions.py`, `services.py` as submodules (re-exporting from canonical `models.py`)
 
 ### Fixed
 
 - **versioning/version_registry.py**: Circular import → relative sibling import (`from .versioning import`)
-- **llm/memory/**init**.py**: `callable | None` → `Callable | None` (Python 3.13 compat)
+- **llm/memory/\_\_init\_\_.py**: `callable | None` → `Callable | None` (Python 3.13 compat)
 - **orchestrator/core.py**: `PerformanceLogger` import from correct module
 
 ### Metrics
 
+- Obsidian tests: **413 passed**, 2 skipped, 0 failed (18 test files)
+- Obsidian source modules: **19** (7 filesystem + 12 CLI), **~100** public functions
 - Skill tests: **102 passed**, 3 skipped, 0 failed
 - MCP tool files: 32 → **33** (`skills/mcp_tools.py` added)
 - Tests collected: **11,065** (0 collection errors)

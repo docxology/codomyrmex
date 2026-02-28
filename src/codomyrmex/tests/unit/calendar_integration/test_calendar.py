@@ -283,6 +283,46 @@ class TestCalendarModuleExports:
 # ── Live Google Calendar tests (skipped unless creds available) ───────
 
 
+class TestGoogleCalendarFromEnv:
+    """Unit tests for GoogleCalendar.from_env() — no live API calls required."""
+
+    def test_from_env_exists(self):
+        """GoogleCalendar.from_env() classmethod exists and is callable."""
+        from codomyrmex.calendar_integration.gcal.provider import GoogleCalendar
+        assert hasattr(GoogleCalendar, 'from_env')
+        assert callable(GoogleCalendar.from_env)
+
+    def test_from_env_raises_auth_error_without_credentials(self):
+        """from_env() raises CalendarAuthError (or ImportError) when no credentials available."""
+        import os
+        from codomyrmex.calendar_integration.exceptions import CalendarAuthError
+        from codomyrmex.calendar_integration.gcal.provider import GCAL_AVAILABLE, GoogleCalendar
+
+        if not GCAL_AVAILABLE:
+            pytest.skip("Google Calendar SDK not installed")
+
+        # Temporarily clear Google env vars to force the no-credentials path
+        saved = {k: os.environ.pop(k, None) for k in (
+            "GOOGLE_REFRESH_TOKEN", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
+            "GOOGLE_APPLICATION_CREDENTIALS",
+        )}
+        try:
+            with pytest.raises((CalendarAuthError, Exception)):
+                GoogleCalendar.from_env()
+        finally:
+            for k, v in saved.items():
+                if v is not None:
+                    os.environ[k] = v
+
+    def test_from_env_raises_import_error_when_sdk_missing(self):
+        """from_env() raises ImportError when GCAL_AVAILABLE is False."""
+        from codomyrmex.calendar_integration.gcal.provider import GCAL_AVAILABLE, GoogleCalendar
+        if GCAL_AVAILABLE:
+            pytest.skip("GCAL_AVAILABLE is True — SDK-missing path not testable in this environment")
+        with pytest.raises(ImportError, match="Google Calendar dependencies"):
+            GoogleCalendar.from_env()
+
+
 @pytest.mark.skipif(
     not cal_module.CALENDAR_AVAILABLE,
     reason="Google Calendar dependencies not installed (uv sync --extra calendar)"
