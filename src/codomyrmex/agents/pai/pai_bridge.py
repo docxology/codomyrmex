@@ -560,8 +560,9 @@ class PAIBridge:
         files: list[str] = []
         try:
             files = sorted(f.name for f in sec_dir.iterdir() if f.is_file())
-        except OSError:
-            pass
+        except OSError as e:
+            logger.warning("Failed to list security config files in %s: %s", sec_dir, e)
+
 
         return {
             "exists": True,
@@ -589,7 +590,8 @@ class PAIBridge:
             return []
         try:
             return sorted(f.name for f in telos_dir.iterdir() if f.is_file())
-        except OSError:
+        except OSError as e:
+            logger.warning("Failed to list TELOS files: %s", e)
             return []
 
     # ==================================================================
@@ -650,8 +652,9 @@ class PAIBridge:
         if exists:
             try:
                 count = sum(1 for _ in path.iterdir())
-            except OSError:
-                pass
+            except OSError as e:
+                logger.warning("Failed to count entries in %s: %s", path, e)
+
         return {"exists": exists, "count": count, "path": str(path)}
 
     def _load_settings(self) -> dict[str, Any] | None:
@@ -673,5 +676,6 @@ class PAIBridge:
             return None
         try:
             return json.loads(path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
-        except (json.JSONDecodeError, OSError):
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning("Failed to read JSON file %s: %s", path, e)
             return None

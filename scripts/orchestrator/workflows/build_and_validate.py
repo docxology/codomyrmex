@@ -23,7 +23,7 @@ project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.orchestrator import Workflow, RetryPolicy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
 
 
 async def clean_build(_task_results: dict = None) -> dict:
@@ -143,7 +143,6 @@ async def build_package(_task_results: dict = None) -> dict:
 
 async def validate_build(_task_results: dict = None) -> dict:
     """Validate the built package."""
-    from codomyrmex.orchestrator import TaskResult
 
     dist_dir = project_root / "dist"
 

@@ -16,8 +16,6 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
-import subprocess
 
 
 def check_requirements(req_file: Path) -> dict:

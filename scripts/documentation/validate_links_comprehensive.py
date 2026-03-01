@@ -14,7 +14,6 @@ import re
 import sys
 from pathlib import Path
 from typing import NamedTuple
-from urllib.parse import urlparse
 
 
 class LinkResult(NamedTuple):

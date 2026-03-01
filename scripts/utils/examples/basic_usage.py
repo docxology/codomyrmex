@@ -10,8 +10,6 @@ Demonstrates actual utility capabilities:
 """
 
 import sys
-import os
-import shutil
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -27,8 +25,7 @@ from codomyrmex.utils import (
     safe_json_loads,
     safe_json_dumps,
     hash_content,
-    timing_decorator,
-    retry
+    timing_decorator
 )
 
 def main():

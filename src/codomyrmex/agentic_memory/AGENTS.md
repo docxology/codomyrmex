@@ -33,6 +33,16 @@ The Agentic Memory module provides persistent key-value memory for AI agents. It
 | `stores.py` | `InMemoryStore`, `JSONFileStore` backends |
 | `user_profile.py` | User preference tracking |
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `memory_put` | Store a new memory entry with content, optional type, and importance | `content`, `memory_type` (episodic), `importance` (medium) | Safe |
+| `memory_get` | Retrieve a memory by its ID | `memory_id` | Safe |
+| `memory_search` | Search memories by a text query; returns ranked results | `query`, `k` (default 5) | Safe |
+
 ## Agent Operating Contract
 
 - **DO**: Use `memory_put` to capture learnings after successful operations

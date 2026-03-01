@@ -174,7 +174,8 @@ def derive_argon2id(
                 "key_length": key_length,
             },
         )
-    except ImportError:
+    except ImportError as e:
+        logger.debug("Argon2id import not available: %s", e)
         pass
     except Exception as exc:
         raise KDFError(f"Argon2id derivation failed: {exc}") from exc

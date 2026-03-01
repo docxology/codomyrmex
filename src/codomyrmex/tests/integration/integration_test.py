@@ -1,4 +1,4 @@
-import unittest
+import pytest
 
 from codomyrmex.logistics.orchestration.project import (
     ProjectType,
@@ -18,62 +18,11 @@ except ImportError:
     ORCHESTRATION_AVAILABLE = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class TestOrchestrationIntegration(unittest.TestCase):
+class TestOrchestrationIntegration:
     """Integration tests for orchestration components."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup_environment(self):
         """Set up test environment."""
         self.engine = get_orchestration_engine()
         self.wf_manager = get_workflow_manager()
@@ -83,9 +32,7 @@ class TestOrchestrationIntegration(unittest.TestCase):
 
         # Clean up any existing test data
         self._cleanup_test_data()
-
-    def tearDown(self):
-        """Clean up after tests."""
+        yield
         self._cleanup_test_data()
 
     def _cleanup_test_data(self):
@@ -115,16 +62,16 @@ class TestOrchestrationIntegration(unittest.TestCase):
         ]
 
         success = self.wf_manager.create_workflow("test_workflow", steps)
-        self.assertTrue(success)
+        assert success
 
         # Verify workflow exists
         workflows = self.wf_manager.list_workflows()
-        self.assertIn("test_workflow", workflows)
+        assert "test_workflow" in workflows
 
         # Test workflow execution
         result = self.wf_manager.execute_workflow("test_workflow")
-        self.assertIsNotNone(result)
-        self.assertEqual(result.workflow_name, "test_workflow")
+        assert result is not None
+        assert result.workflow_name == "test_workflow"
 
     def test_project_creation_and_management(self):
         """Test project creation and management."""
@@ -135,18 +82,18 @@ class TestOrchestrationIntegration(unittest.TestCase):
             description="Test project for integration testing"
         )
 
-        self.assertIsNotNone(project)
-        self.assertEqual(project.name, "test_project")
-        self.assertEqual(project.type, ProjectType.AI_ANALYSIS)
+        assert project is not None
+        assert project.name == "test_project"
+        assert project.type == ProjectType.AI_ANALYSIS
 
         # Verify project exists
         projects = self.project_manager.list_projects()
-        self.assertIn("test_project", projects)
+        assert "test_project" in projects
 
         # Test project status
         status = self.project_manager.get_project_status("test_project")
-        self.assertIsNotNone(status)
-        self.assertEqual(status['name'], "test_project")
+        assert status is not None
+        assert status['name'] == "test_project"
 
     def test_task_orchestration_with_dependencies(self):
         """Test task orchestration with dependencies."""
@@ -170,26 +117,26 @@ class TestOrchestrationIntegration(unittest.TestCase):
         task1_id = self.task_orchestrator.add_task(task1)
         task2_id = self.task_orchestrator.add_task(task2)
 
-        self.assertIsNotNone(task1_id)
-        self.assertIsNotNone(task2_id)
+        assert task1_id is not None
+        assert task2_id is not None
 
         # Verify tasks are in queue
         tasks = self.task_orchestrator.list_tasks()
-        self.assertEqual(len(tasks), 2)
+        assert len(tasks) == 2
 
         # Test task execution
         self.task_orchestrator.start_execution()
 
         # Wait for completion
         completed = self.task_orchestrator.wait_for_completion(timeout=10.0)
-        self.assertTrue(completed)
+        assert completed
 
         # Verify task results
         task1_result = self.task_orchestrator.get_task_result(task1_id)
         task2_result = self.task_orchestrator.get_task_result(task2_id)
 
-        self.assertIsNotNone(task1_result)
-        self.assertIsNotNone(task2_result)
+        assert task1_result is not None
+        assert task2_result is not None
 
     def test_resource_allocation_and_deallocation(self):
         """Test resource allocation and deallocation."""
@@ -201,19 +148,19 @@ class TestOrchestrationIntegration(unittest.TestCase):
 
         # Allocate resources
         allocated = self.resource_manager.allocate_resources(user_id, requirements)
-        self.assertIsNotNone(allocated)
+        assert allocated is not None
 
         # Verify allocation
         user_allocations = self.resource_manager.get_user_allocations(user_id)
-        self.assertGreater(len(user_allocations), 0)
+        assert len(user_allocations) > 0
 
         # Deallocate resources
         deallocated = self.resource_manager.deallocate_resources(user_id)
-        self.assertTrue(deallocated)
+        assert deallocated
 
         # Verify deallocation
         user_allocations_after = self.resource_manager.get_user_allocations(user_id)
-        self.assertEqual(len(user_allocations_after), 0)
+        assert len(user_allocations_after) == 0
 
     def test_orchestration_engine_session_management(self):
         """Test orchestration engine session management."""
@@ -223,20 +170,20 @@ class TestOrchestrationIntegration(unittest.TestCase):
             mode="resource_aware"
         )
 
-        self.assertIsNotNone(session_id)
+        assert session_id is not None
 
         # Verify session exists
         session = self.engine.get_session(session_id)
-        self.assertIsNotNone(session)
-        self.assertEqual(session.user_id, "test_user")
+        assert session is not None
+        assert session.user_id == "test_user"
 
         # Close session
         closed = self.engine.close_session(session_id)
-        self.assertTrue(closed)
+        assert closed
 
         # Verify session is closed
         session_after = self.engine.get_session(session_id)
-        self.assertIsNone(session_after)
+        assert session_after is None
 
     def test_complex_workflow_execution(self):
         """Test complex workflow execution through orchestration engine."""
@@ -264,18 +211,18 @@ class TestOrchestrationIntegration(unittest.TestCase):
         # Execute workflow
         result = self.engine.execute_complex_workflow(workflow_definition)
 
-        self.assertIsNotNone(result)
-        self.assertIn('success', result)
-        self.assertIn('results', result)
+        assert result is not None
+        assert 'success' in result
+        assert 'results' in result
 
     def test_system_health_check(self):
         """Test system health check."""
         health = self.engine.health_check()
 
-        self.assertIsNotNone(health)
-        self.assertIn('overall_status', health)
-        self.assertIn('components', health)
-        self.assertIn('timestamp', health)
+        assert health is not None
+        assert 'overall_status' in health
+        assert 'components' in health
+        assert 'timestamp' in health
 
         # Verify expected components are checked
         expected_components = [
@@ -286,7 +233,7 @@ class TestOrchestrationIntegration(unittest.TestCase):
         ]
 
         for component in expected_components:
-            self.assertIn(component, health['components'])
+            assert component in health['components']
 
     def test_performance_monitoring_integration(self):
         """Test performance monitoring integration."""
@@ -294,7 +241,7 @@ class TestOrchestrationIntegration(unittest.TestCase):
 
             # Create performance monitor
             monitor = PerformanceMonitor()
-            self.assertIsNotNone(monitor)
+            assert monitor is not None
 
             # Test workflow with performance monitoring
             steps = [
@@ -309,14 +256,14 @@ class TestOrchestrationIntegration(unittest.TestCase):
             self.wf_manager.create_workflow("perf_test_workflow", steps)
             result = self.wf_manager.execute_workflow("perf_test_workflow")
 
-            self.assertIsNotNone(result)
+            assert result is not None
 
             # Get performance summary
             perf_summary = self.wf_manager.get_performance_summary()
-            self.assertIsNotNone(perf_summary)
+            assert perf_summary is not None
 
         except ImportError:
-            self.skipTest("Performance monitoring not available")
+            pytest.skip("Performance monitoring not available")
 
     def test_error_handling_and_recovery(self):
         """Test error handling and recovery mechanisms."""
@@ -334,8 +281,8 @@ class TestOrchestrationIntegration(unittest.TestCase):
         result = self.wf_manager.execute_workflow("error_test_workflow")
 
         # Should handle error gracefully
-        self.assertIsNotNone(result)
-        self.assertIn('errors', result.__dict__)
+        assert result is not None
+        assert 'errors' in result.__dict__
 
     def test_concurrent_execution(self):
         """Test concurrent execution of multiple workflows."""
@@ -361,9 +308,9 @@ class TestOrchestrationIntegration(unittest.TestCase):
             results.append(result)
 
         # Verify all workflows completed
-        self.assertEqual(len(results), 3)
+        assert len(results) == 3
         for result in results:
-            self.assertIsNotNone(result)
+            assert result is not None
 
     def test_resource_contention_handling(self):
         """Test handling of resource contention."""
@@ -377,49 +324,51 @@ class TestOrchestrationIntegration(unittest.TestCase):
 
         # First user should get resources
         allocated1 = self.resource_manager.allocate_resources(user1, requirements)
-        self.assertIsNotNone(allocated1)
+        assert allocated1 is not None
 
         # Second user should fail to get resources
         allocated2 = self.resource_manager.allocate_resources(user2, requirements)
-        self.assertIsNone(allocated2)
+        assert allocated2 is None
 
         # Release first user's resources
         deallocated = self.resource_manager.deallocate_resources(user1)
-        self.assertTrue(deallocated)
+        assert deallocated
 
         # Now second user should be able to get resources
         allocated2_retry = self.resource_manager.allocate_resources(user2, requirements)
-        self.assertIsNotNone(allocated2_retry)
+        assert allocated2_retry is not None
 
         # Clean up
         self.resource_manager.deallocate_resources(user2)
 
 
-class TestOrchestrationEdgeCases(unittest.TestCase):
+class TestOrchestrationEdgeCases:
     """Test edge cases and error conditions."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup_environment(self):
         """Set up test environment."""
         self.engine = get_orchestration_engine()
         self.wf_manager = get_workflow_manager()
         self.task_orchestrator = get_task_orchestrator()
         self.project_manager = get_project_manager()
         self.resource_manager = get_resource_manager()
+        yield
 
     def test_nonexistent_workflow_execution(self):
         """Test execution of nonexistent workflow."""
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.wf_manager.execute_workflow("nonexistent_workflow")
 
     def test_nonexistent_project_operations(self):
         """Test operations on nonexistent project."""
         # Test getting nonexistent project
         project = self.project_manager.get_project("nonexistent_project")
-        self.assertIsNone(project)
+        assert project is None
 
         # Test project status for nonexistent project
         status = self.project_manager.get_project_status("nonexistent_project")
-        self.assertIsNone(status)
+        assert status is None
 
     def test_invalid_task_creation(self):
         """Test creation of invalid tasks."""
@@ -432,11 +381,11 @@ class TestOrchestrationEdgeCases(unittest.TestCase):
         )
 
         # Should not raise exception during creation
-        self.assertIsNotNone(task)
+        assert task is not None
 
         # But execution should fail gracefully
         task_id = self.task_orchestrator.add_task(task)
-        self.assertIsNotNone(task_id)
+        assert task_id is not None
 
     def test_resource_allocation_with_invalid_requirements(self):
         """Test resource allocation with invalid requirements."""
@@ -448,7 +397,7 @@ class TestOrchestrationEdgeCases(unittest.TestCase):
         }
 
         allocated = self.resource_manager.allocate_resources(user_id, invalid_requirements)
-        self.assertIsNone(allocated)
+        assert allocated is None
 
     def test_circular_dependencies(self):
         """Test handling of circular dependencies in tasks."""
@@ -478,45 +427,18 @@ class TestOrchestrationEdgeCases(unittest.TestCase):
 
         # Wait for completion (should timeout due to circular dependency)
         completed = self.task_orchestrator.wait_for_completion(timeout=5.0)
-        self.assertFalse(completed)  # Should not complete due to circular dependency
+        assert not completed  # Should not complete due to circular dependency
 
 
 def run_integration_tests():
     """Run all integration tests."""
-    print("🧪 Running Codomyrmex Orchestration Integration Tests")
+    print("Running Codomyrmex Orchestration Integration Tests")
     print("=" * 60)
 
-    # Create test suite
-    test_suite = unittest.TestSuite()
+    # Use pytest programmatic API
+    exit_code = pytest.main([__file__, "-v"])
 
-    # Add test cases
-    test_suite.addTest(unittest.makeSuite(TestOrchestrationIntegration))
-    test_suite.addTest(unittest.makeSuite(TestOrchestrationEdgeCases))
-
-    # Run tests
-    runner = unittest.TextTestRunner(verbosity=2)
-    result = runner.run(test_suite)
-
-    # Print summary
-    print("\n" + "=" * 60)
-    print("TEST SUMMARY")
-    print("=" * 60)
-    print(f"Tests run: {result.testsRun}")
-    print(f"Failures: {len(result.failures)}")
-    print(f"Errors: {len(result.errors)}")
-    print(f"Success rate: {((result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100):.1f}%")
-
-    if result.failures:
-        print("\nFAILURES:")
-        for test, traceback in result.failures:
-            print(f"  {test}: {traceback}")
-
-    if result.errors:
-        print("\nERRORS:")
-        for test, traceback in result.errors:
-            print(f"  {test}: {traceback}")
-
-    return result.wasSuccessful()
+    return exit_code == 0
 
 
 if __name__ == "__main__":

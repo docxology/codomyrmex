@@ -2,7 +2,6 @@
 """Enrich the 17 remaining thin README files by reading deeper into module structure."""
 import ast
 import os
-import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DOCS = os.path.join(REPO, "docs", "modules")

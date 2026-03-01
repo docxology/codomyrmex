@@ -94,6 +94,18 @@ manager.create("code_review_session")
 manager.create("documentation_session")
 ```
 
+## MCP Tools
+
+Three tools are auto-discovered via `@mcp_tool` from `agents/mcp_tools.py` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `execute_agent` | Execute an agent task using a specified provider and prompt | Safe | agents |
+| `list_agents` | List available agent providers and their capabilities | Safe | agents |
+| `get_agent_memory` | Retrieve conversation history for a named agent session | Safe | agents |
+
+**Note:** These tools expose the top-level `agents/` module via MCP. Sub-module specific tools (e.g., `think`, `get_last_trace`) are exposed by `agents/core/` separately.
+
 ## PAI Agent System Integration
 
 When codomyrmex is used with the [PAI system](../../../PAI.md) (`~/.claude/skills/PAI/`), the agents module maps directly to PAI's three-tier agent architecture.
@@ -115,12 +127,12 @@ Each PAI subagent type maps to specific codomyrmex capabilities:
 | PAI Subagent | Primary Codomyrmex Modules | What It Uses |
 |-------------|---------------------------|-------------|
 | **Engineer** | `agents/ai_code_editing/`, `coding/`, `static_analysis/` | `CodeEditor.refactor()`, `CodeEditor.generate()`, sandbox execution |
-| **Architect** | `agents/theory/`, `cerebrum/`, `pattern_matching/` | `DeliberativeArchitecture`, case-based reasoning, pattern analysis |
+| **Architect** | `agents/core/`, `cerebrum/`, `pattern_matching/` | ThinkingAgent (Chain-of-Thought), case-based reasoning, pattern analysis |
 | **QATester** | `static_analysis/`, `security/`, `coding/` | `SecurityScanner.scan()`, test runners, browser automation |
 | **Designer** | `agents/ai_code_editing/`, `ide/` | Component generation, UI code editing |
 | **Pentester** | `security/`, `static_analysis/`, `encryption/` | Vulnerability scanning, security analysis |
 | **Explore** | `documents/`, `search/`, `pattern_matching/` | File discovery, content search, pattern recognition |
-| **Research** (GeminiResearcher, ClaudeResearcher, GrokResearcher) | `documents/`, `graph_rag/`, `search/` | Document processing, graph RAG, knowledge retrieval |
+| **Research** (GeminiResearcher, ClaudeResearcher, GrokResearcher) | `search/`, `agentic_memory/`, `cerebrum/` | Full-text/fuzzy search, memory retrieval, knowledge base queries |
 
 ### Named Agents and MCP
 
@@ -173,7 +185,7 @@ PAI composes capabilities using named patterns. These map to codomyrmex orchestr
 | Phase | Agent Activity | Codomyrmex Module |
 |-------|---------------|-------------------|
 | **OBSERVE** | Explore agent reads codebase, searches patterns | `system_discovery`, `pattern_matching`, `search` |
-| **THINK** | Capability selection, ISC expansion | `cerebrum` (reasoning), `agents/theory/` |
+| **THINK** | Capability selection, ISC expansion | `cerebrum` (case-based reasoning), `agents/core` (ThinkingAgent) |
 | **PLAN** | Workflow definition | `orchestrator` (DAG construction) |
 | **BUILD** | Engineer/Designer creates artifacts | `agents/ai_code_editing/`, `coding` |
 | **EXECUTE** | Selected agents run work in parallel | `agents/` (all providers), `AgentPool` |

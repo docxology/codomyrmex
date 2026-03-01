@@ -124,7 +124,8 @@ class SBOMGenerator:
                         version=version,
                         purl=f"pkg:pypi/{name}@{version}",
                     ))
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            logger.warning("SBOM: requirements file not found: %s", e)
             pass
 
         self._components.extend(components)
@@ -149,8 +150,9 @@ class SBOMGenerator:
                     version=version,
                     purl=f"pkg:npm/{name}@{version}",
                 ))
-        except FileNotFoundError:
-            pass  # No package.json -- no npm dependencies, continue
+        except FileNotFoundError as e:
+            logger.warning("SBOM: package.json not found, skipping npm deps: %s", e)
+            pass
         except json.JSONDecodeError as e:
             logger.warning("SBOM: malformed package.json, skipping npm deps: %s", str(e))
 
@@ -181,7 +183,8 @@ class SBOMGenerator:
                     version=version.strip(),
                     purl=f"pkg:pypi/{name.strip()}@{version.strip()}",
                 ))
-        except (FileNotFoundError, ImportError):
+        except (FileNotFoundError, ImportError) as e:
+            logger.warning("SBOM: failed to parse pyproject.toml: %s", e)
             pass
 
         self._components.extend(components)
@@ -244,7 +247,8 @@ class SupplyChainVerifier:
             # we do a secure hash comparison fallback.
             import hmac
             return hmac.compare_digest(actual, expected)
-        except Exception:
+        except Exception as e:
+            logger.warning("Signature verification failed: %s", e)
             return False
 
     def compute_file_hash(self, path: str, algorithm: str = "sha256") -> str:

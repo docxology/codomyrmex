@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import re
-from datetime import datetime
 
 
 def analyze_document(path: Path) -> dict:

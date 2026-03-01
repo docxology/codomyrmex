@@ -71,9 +71,16 @@ def convert_document(document: Document, target_format: DocumentFormat) -> Docum
 def _to_markdown(content: str, source_format: DocumentFormat) -> str:
     """Convert content to markdown."""
     if source_format == DocumentFormat.HTML:
-        raise NotImplementedError("HTML-to-markdown conversion requires configured converter backend")
+        try:
+            from markdownify import markdownify as md
+            return md(content, heading_style="ATX", strip=["script", "style"])
+        except ImportError:
+            # Fallback: strip HTML tags for basic conversion
+            import re
+            clean = re.sub(r"<[^>]+>", "", content)
+            return clean.strip()
     elif source_format == DocumentFormat.TEXT:
-        # Text to markdown (wrap in code block or preserve)
+        # Text to markdown (preserve as-is)
         return content
     else:
         return content

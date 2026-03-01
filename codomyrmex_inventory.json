@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-02-26T17:11:34.740268"
+    "timestamp": "2026-02-28T18:50:17.535402"
   },
   "modules": {
     "tool_use": {
@@ -231,7 +231,7 @@
           "signature": "class CursorClient",
           "docstring": "Client for interacting with Cursor IDE.\n\nProvides programmatic access to Cursor's AI-assisted development capabilities\nincluding Composer automation, rules management, and model configuration.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide/cursor/__init__.py",
-          "line_number": 20,
+          "line_number": 23,
           "is_public": true,
           "dependencies": []
         },
@@ -448,7 +448,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x102ba6120>, default_factory=<dataclasses._MISSING_TYPE object at 0x102ba6120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x102ba6120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x104c12120>, default_factory=<dataclasses._MISSING_TYPE object at 0x104c12120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104c12120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -493,7 +493,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:07:23"
+      "last_modified": "2026-02-28 17:40:13"
     },
     "encryption": {
       "name": "encryption",
@@ -662,7 +662,7 @@
           "signature": "(data: bytes, key: bytes, algorithm: str = 'AES') -> bytes",
           "docstring": "Decrypt data using specified algorithm.\n\nArgs:\n    data: Encrypted data\n    key: Decryption key\n    algorithm: Algorithm (AES or RSA)\n\nReturns:\n    Decrypted data",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/encryption/core/encryptor.py",
-          "line_number": 413,
+          "line_number": 414,
           "is_public": true,
           "dependencies": []
         },
@@ -706,7 +706,7 @@
           "signature": "(data: bytes, key: bytes, algorithm: str = 'AES') -> bytes",
           "docstring": "Encrypt data using specified algorithm.\n\nArgs:\n    data: Data to encrypt\n    key: Encryption key\n    algorithm: Algorithm (AES or RSA)\n\nReturns:\n    Encrypted data",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/encryption/core/encryptor.py",
-          "line_number": 399,
+          "line_number": 400,
           "is_public": true,
           "dependencies": []
         },
@@ -728,7 +728,7 @@
           "signature": "() -> bytes",
           "docstring": "Generate a random AES-256 key.\n\nReturns:\n    32-byte AES key",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/encryption/core/encryptor.py",
-          "line_number": 427,
+          "line_number": 428,
           "is_public": true,
           "dependencies": []
         },
@@ -803,7 +803,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:28:15"
     },
     "feature_flags": {
       "name": "feature_flags",
@@ -862,7 +862,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the feature_flags module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags/__init__.py",
-          "line_number": 28,
+          "line_number": 33,
           "is_public": true,
           "dependencies": []
         },
@@ -893,6 +893,28 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
           "type": "other",
           "signature": "<module 'codomyrmex.feature_flags.experiments' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags/experiments.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logger",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
+          "type": "other",
+          "signature": "<Logger codomyrmex.feature_flags (DEBUG)>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logging",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
+          "type": "other",
+          "signature": "<module 'logging' from '/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/logging/__init__.py'>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/feature_flags",
           "line_number": 0,
@@ -937,7 +959,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:08:04"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "collaboration": {
       "name": "collaboration",
@@ -1434,7 +1456,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "crypto": {
       "name": "crypto",
@@ -1700,7 +1722,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "agentic_memory": {
       "name": "agentic_memory",
@@ -1911,7 +1933,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:08:14"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "documentation": {
       "name": "documentation",
@@ -2089,7 +2111,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:08:50"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "video": {
       "name": "video",
@@ -2291,7 +2313,7 @@
           "signature": "class VideoAnalyzer",
           "docstring": "Analyze video files and extract metadata.\n\nThis class provides methods for extracting video information including\nduration, resolution, codec, frame count, and more.\n\nExample:\n    ```python\n    analyzer = VideoAnalyzer()\n\n    # Get complete video info\n    info = analyzer.get_info(\"video.mp4\")\n    print(f\"Duration: {info.duration}s\")\n    print(f\"Resolution: {info.width}x{info.height}\")\n\n    # Quick checks\n    duration = analyzer.get_duration(\"video.mp4\")\n    fps = analyzer.get_fps(\"video.mp4\")\n  ",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/video/analysis/video_analyzer.py",
-          "line_number": 36,
+          "line_number": 39,
           "is_public": true,
           "dependencies": []
         },
@@ -2520,7 +2542,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:30:51"
     },
     "llm": {
       "name": "llm",
@@ -2755,7 +2777,7 @@
           "signature": "(tool) -> dict[str, typing.Any]",
           "docstring": "Convert a codomyrmex.llm.tools.Tool to MCP format.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/llm/mcp.py",
-          "line_number": 423,
+          "line_number": 445,
           "is_public": true,
           "dependencies": []
         },
@@ -2777,7 +2799,7 @@
           "signature": "(registry) -> codomyrmex.llm.mcp.MCPBridge",
           "docstring": "Create an MCPBridge from an LLM ToolRegistry.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/llm/mcp.py",
-          "line_number": 444,
+          "line_number": 466,
           "is_public": true,
           "dependencies": []
         },
@@ -3017,7 +3039,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:09:30"
+      "last_modified": "2026-02-28 17:28:15"
     },
     "terminal_interface": {
       "name": "terminal_interface",
@@ -3087,7 +3109,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the terminal_interface module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/__init__.py",
-          "line_number": 38,
+          "line_number": 43,
           "is_public": true,
           "dependencies": []
         },
@@ -3107,6 +3129,28 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
           "type": "other",
           "signature": "<module 'codomyrmex.terminal_interface.completions' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface/completions/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logger",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "other",
+          "signature": "<Logger codomyrmex.terminal_interface (DEBUG)>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logging",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
+          "type": "other",
+          "signature": "<module 'logging' from '/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/logging/__init__.py'>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/terminal_interface",
           "line_number": 0,
@@ -3151,7 +3195,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:34:17"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "formal_verification": {
       "name": "formal_verification",
@@ -3362,7 +3406,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "meme": {
       "name": "meme",
@@ -4545,7 +4589,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 18:05:06"
     },
     "identity": {
       "name": "identity",
@@ -5424,7 +5468,7 @@
           "signature": "class SecurityScanResult",
           "docstring": "Results from a security scan operation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 82,
+          "line_number": 77,
           "is_public": true,
           "dependencies": []
         },
@@ -5479,7 +5523,7 @@
           "signature": "class VulnerabilityReport",
           "docstring": "Comprehensive vulnerability assessment report.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 48,
+          "line_number": 43,
           "is_public": true,
           "dependencies": []
         },
@@ -5490,7 +5534,7 @@
           "signature": "class VulnerabilityScanner",
           "docstring": "Comprehensive vulnerability scanner for code and dependencies.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 109,
+          "line_number": 104,
           "is_public": true,
           "dependencies": []
         },
@@ -5677,7 +5721,7 @@
           "signature": "(target_path: str) -> list[dict[str, typing.Any]]",
           "docstring": "Convenience function for code security auditing.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 286,
+          "line_number": 297,
           "is_public": true,
           "dependencies": []
         },
@@ -5721,7 +5765,7 @@
           "signature": "(target_path: str, standards: list[str] | None = None) -> list[dict[str, typing.Any]]",
           "docstring": "Convenience function for compliance checking.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 292,
+          "line_number": 303,
           "is_public": true,
           "dependencies": []
         },
@@ -6150,7 +6194,7 @@
           "signature": "(target_path: str, scan_types: list[str] | None = None) -> codomyrmex.security.digital.vulnerability_scanner.VulnerabilityReport",
           "docstring": "Convenience function to scan vulnerabilities.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 281,
+          "line_number": 292,
           "is_public": true,
           "dependencies": []
         },
@@ -6225,7 +6269,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:08:39"
+      "last_modified": "2026-02-28 18:11:43"
     },
     "auth": {
       "name": "auth",
@@ -6458,7 +6502,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 18:12:09"
     },
     "docs_gen": {
       "name": "docs_gen",
@@ -6618,7 +6662,7 @@
           "signature": "(src_dir: 'Path') -> 'list[dict[str, str]]'",
           "docstring": "Run the __all__ audit. Returns list of findings.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/exports.py",
-          "line_number": 78,
+          "line_number": 81,
           "is_public": true,
           "dependencies": []
         },
@@ -6629,7 +6673,7 @@
           "signature": "(init_path: 'Path') -> 'tuple[bool, list[str] | None]'",
           "docstring": "Parse __init__.py and check for __all__.\n\nReturns:\n    (has_all, names): Whether __all__ exists, and its contents if parseable.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/exports.py",
-          "line_number": 41,
+          "line_number": 44,
           "is_public": true,
           "dependencies": []
         },
@@ -6640,7 +6684,7 @@
           "signature": "(edges: list[dict[str, typing.Any]]) -> list[dict[str, typing.Any]]",
           "docstring": "Apply layer-boundary rules and return violations.\n\nRules (from SPEC.md):\n- Foundation modules must not import Core, Service, or Specialized modules\n- Core modules must not import Service or Specialized modules\n- Service modules must not import Specialized modules",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/imports.py",
-          "line_number": 116,
+          "line_number": 120,
           "is_public": true,
           "dependencies": []
         },
@@ -6662,7 +6706,7 @@
           "signature": "(filepath: pathlib._local.Path) -> list[str]",
           "docstring": "Extract imported codomyrmex module names using AST.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/imports.py",
-          "line_number": 58,
+          "line_number": 61,
           "is_public": true,
           "dependencies": []
         },
@@ -6684,7 +6728,7 @@
           "signature": "(src_dir: pathlib._local.Path) -> list[dict[str, typing.Any]]",
           "docstring": "Scan all .py files and extract cross-module imports via AST.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/static_analysis/imports.py",
-          "line_number": 82,
+          "line_number": 86,
           "is_public": true,
           "dependencies": []
         }
@@ -6693,7 +6737,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:05:39"
+      "last_modified": "2026-02-28 17:50:02"
     },
     "networking": {
       "name": "networking",
@@ -6774,7 +6818,7 @@
           "signature": "class PortScanner",
           "docstring": "Utility for scanning open ports on a host.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/networking/raw_sockets.py",
-          "line_number": 79,
+          "line_number": 88,
           "is_public": true,
           "dependencies": []
         },
@@ -6873,7 +6917,7 @@
           "signature": "class TCPClient",
           "docstring": "Simple TCP client.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/networking/raw_sockets.py",
-          "line_number": 8,
+          "line_number": 9,
           "is_public": true,
           "dependencies": []
         },
@@ -6884,7 +6928,7 @@
           "signature": "class TCPServer",
           "docstring": "Simple TCP server.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/networking/raw_sockets.py",
-          "line_number": 33,
+          "line_number": 42,
           "is_public": true,
           "dependencies": []
         },
@@ -6895,7 +6939,7 @@
           "signature": "class UDPClient",
           "docstring": "Simple UDP client.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/networking/raw_sockets.py",
-          "line_number": 58,
+          "line_number": 67,
           "is_public": true,
           "dependencies": []
         },
@@ -7014,7 +7058,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:09:03"
+      "last_modified": "2026-02-28 18:04:33"
     },
     "serialization": {
       "name": "serialization",
@@ -7416,7 +7460,7 @@
           "signature": "class CompositeScorer",
           "docstring": "Combines multiple scorers with configurable weights.\n\nThe final score is the weighted average of all constituent scorers.\n\nArgs:\n    scorers: List of WeightedScorer instances. Can also be populated\n        via add_scorer().",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 220,
+          "line_number": 224,
           "is_public": true,
           "dependencies": []
         },
@@ -7438,7 +7482,7 @@
           "signature": "class ContainsScorer",
           "docstring": "Scores 1.0 if the output contains the reference as a substring, 0.0 otherwise.\n\nArgs:\n    case_sensitive: Whether the substring search is case-sensitive.\n        Defaults to False.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 99,
+          "line_number": 102,
           "is_public": true,
           "dependencies": []
         },
@@ -7515,7 +7559,7 @@
           "signature": "class ExactMatchScorer",
           "docstring": "Scores 1.0 if output exactly matches reference, 0.0 otherwise.\n\nArgs:\n    case_sensitive: Whether comparison is case-sensitive. Defaults to True.\n    strip_whitespace: Whether to strip leading/trailing whitespace\n        before comparison. Defaults to True.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 60,
+          "line_number": 63,
           "is_public": true,
           "dependencies": []
         },
@@ -7548,7 +7592,7 @@
           "signature": "class LengthScorer",
           "docstring": "Scores based on output length relative to a target range.\n\nReturns 1.0 if the output length falls within [min_length, max_length].\nReturns a proportional score that decays linearly as the length moves\naway from the target range, reaching 0.0 at twice the deviation.\n\nThe reference parameter is ignored; scoring is based solely on the\noutput length and the configured target range.\n\nArgs:\n    min_length: Minimum acceptable character count.\n    max_length: Maximum acceptable character count.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 128,
+          "line_number": 131,
           "is_public": true,
           "dependencies": []
         },
@@ -7702,7 +7746,7 @@
           "signature": "class RegexScorer",
           "docstring": "Scores 1.0 if the output matches the reference as a regex pattern, 0.0 otherwise.\n\nThe reference parameter is treated as a regex pattern.\n\nArgs:\n    flags: Regex flags to apply. Defaults to 0 (no flags).\n    full_match: If True, the entire output must match the pattern.\n        If False, the pattern just needs to be found somewhere in the output.\n        Defaults to False.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 178,
+          "line_number": 181,
           "is_public": true,
           "dependencies": []
         },
@@ -7735,7 +7779,7 @@
           "signature": "class Scorer",
           "docstring": "Abstract base class for output scorers.\n\nAll scorers implement the score() method that compares an output\nagainst a reference value and returns a float between 0.0 and 1.0.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 22,
+          "line_number": 25,
           "is_public": true,
           "dependencies": []
         },
@@ -7768,7 +7812,7 @@
           "signature": "class WeightedScorer",
           "docstring": "A scorer paired with a weight for use in CompositeScorer.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 213,
+          "line_number": 217,
           "is_public": true,
           "dependencies": []
         },
@@ -7801,7 +7845,7 @@
           "signature": "() -> 'CompositeScorer'",
           "docstring": "Create a default composite scorer with sensible defaults.\n\nReturns a CompositeScorer configured with:\n    - ExactMatchScorer (weight 2.0)\n    - ContainsScorer (weight 1.0)\n    - LengthScorer (weight 0.5)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_ops/evaluation/scorers.py",
-          "line_number": 315,
+          "line_number": 319,
           "is_public": true,
           "dependencies": []
         },
@@ -7942,7 +7986,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:28:15"
     },
     "website": {
       "name": "website",
@@ -8054,7 +8098,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 17:03:43"
+      "last_modified": "2026-02-28 17:40:23"
     },
     "tests": {
       "name": "tests",
@@ -8100,7 +8144,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 17:05:36"
+      "last_modified": "2026-02-28 18:37:01"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -8137,7 +8181,7 @@
           "signature": "class GitNexusBridge",
           "docstring": "Subprocess bridge to the GitNexus CLI tool.\n\nProvides structural code analysis via knowledge graph queries.\nRequires Node.js/npx or a built vendor distribution.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_analysis/core/gitnexus_bridge.py",
-          "line_number": 27,
+          "line_number": 30,
           "is_public": true,
           "dependencies": []
         },
@@ -8148,7 +8192,7 @@
           "signature": "class GitNexusNotAvailableError",
           "docstring": "Raised when neither npx nor built vendor gitnexus is found.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_analysis/core/gitnexus_bridge.py",
-          "line_number": 23,
+          "line_number": 26,
           "is_public": true,
           "dependencies": []
         },
@@ -8190,7 +8234,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:03:27"
+      "last_modified": "2026-02-28 17:17:03"
     },
     "containerization": {
       "name": "containerization",
@@ -8227,7 +8271,7 @@
           "signature": "class ContainerMetrics",
           "docstring": "Container performance metrics.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/performance_optimizer.py",
-          "line_number": 14,
+          "line_number": 17,
           "is_public": true,
           "dependencies": []
         },
@@ -8236,9 +8280,9 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization",
           "type": "class",
           "signature": "class ContainerOptimizer",
-          "docstring": "Container performance optimizer.\n\nProvides resource optimization for containers including:\n- CPU and memory allocation optimization\n- Resource limit recommendations\n- Performance tuning suggestions",
+          "docstring": "Container performance optimizer.\n\nProvides resource optimization for containers including:\n- CPU and memory allocation optimization\n- Resource limit recommendations\n- Performance tuning suggestions\n\nRequires Docker CLI to be installed for metric collection.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/performance_optimizer.py",
-          "line_number": 60,
+          "line_number": 68,
           "is_public": true,
           "dependencies": []
         },
@@ -8258,9 +8302,9 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization",
           "type": "class",
           "signature": "class ContainerSecurityScanner",
-          "docstring": "Container security scanner for vulnerability detection.\n\nProvides scanning capabilities for container images and running containers.",
+          "docstring": "Container security scanner for vulnerability detection via Trivy.\n\nRequires Trivy CLI: https://trivy.dev/latest/getting-started/installation/",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/security_scanner.py",
-          "line_number": 78,
+          "line_number": 141,
           "is_public": true,
           "dependencies": []
         },
@@ -8436,7 +8480,7 @@
           "signature": "class SecurityScanResult",
           "docstring": "Result of a security scan.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/security_scanner.py",
-          "line_number": 37,
+          "line_number": 40,
           "is_public": true,
           "dependencies": []
         },
@@ -8469,7 +8513,7 @@
           "signature": "(config: codomyrmex.containerization.docker.docker_manager.ContainerConfig, push: bool = False, registry_auth: dict[str, str] | None = None) -> dict[str, typing.Any]",
           "docstring": "Convenience function to build containers.\n\nArgs:\n    config: Container configuration\n    push: Whether to push after building\n    registry_auth: Registry authentication\n\nReturns:\n    Dict containing build results",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/docker/docker_manager.py",
-          "line_number": 671,
+          "line_number": 672,
           "is_public": true,
           "dependencies": []
         },
@@ -8524,7 +8568,7 @@
           "signature": "(operation: str, registry_url: str, credentials: dict[str, str] | None = None, **kwargs: Any) -> Any",
           "docstring": "Manage container registry operations.\n\nArgs:\n    operation: Operation to perform ('push', 'pull', 'list', 'delete', 'info', 'tag')\n    registry_url: URL of the container registry\n    credentials: Optional credentials dict with 'username' and 'password'\n    **kwargs: Operation-specific arguments\n\nReturns:\n    Operation result",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/registry/container_registry.py",
-          "line_number": 611,
+          "line_number": 612,
           "is_public": true,
           "dependencies": []
         },
@@ -8535,7 +8579,7 @@
           "signature": "() -> codomyrmex.containerization.docker.docker_manager.DockerManager",
           "docstring": "Convenience function to create Docker manager.\n\nReturns:\n    DockerManager: Configured Docker manager",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/docker/docker_manager.py",
-          "line_number": 691,
+          "line_number": 692,
           "is_public": true,
           "dependencies": []
         },
@@ -8557,7 +8601,7 @@
           "signature": "(container_ids: list[str], optimizer: codomyrmex.containerization.security.performance_optimizer.ContainerOptimizer | None = None) -> dict[str, dict[str, typing.Any]]",
           "docstring": "Optimize multiple containers.\n\nArgs:\n    container_ids: List of container IDs to optimize\n    optimizer: Optional pre-configured optimizer instance\n\nReturns:\n    Dictionary mapping container IDs to optimization results",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/performance_optimizer.py",
-          "line_number": 137,
+          "line_number": 262,
           "is_public": true,
           "dependencies": []
         },
@@ -8588,9 +8632,9 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization",
           "type": "function",
           "signature": "(image: str, scanner: codomyrmex.containerization.security.security_scanner.ContainerSecurityScanner | None = None, **kwargs) -> codomyrmex.containerization.security.security_scanner.SecurityScanResult",
-          "docstring": "Convenience function to scan container security.\n\nArgs:\n    image: Image name/tag to scan\n    scanner: Optional pre-configured scanner instance\n    **kwargs: Additional scan options\n\nReturns:\n    SecurityScanResult with findings",
+          "docstring": "Scan a container image for security issues.\n\nArgs:\n    image: Image name/tag to scan\n    scanner: Optional pre-configured scanner instance\n    **kwargs: Additional options passed to scan_image\n\nReturns:\n    SecurityScanResult with findings\n\nRaises:\n    NotImplementedError: If Trivy CLI is not installed",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/containerization/security/security_scanner.py",
-          "line_number": 154,
+          "line_number": 305,
           "is_public": true,
           "dependencies": []
         },
@@ -8621,7 +8665,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "environment_setup": {
       "name": "environment_setup",
@@ -8713,7 +8757,7 @@
           "signature": "() -> bool",
           "docstring": "Check if the 'uv' package manager is available in the system PATH.\n\nThe 'uv' tool is a fast Python package installer and resolver that can\nbe used as an alternative to pip.\n\nReturns:\n    True if 'uv' is found in the system PATH, False otherwise.\n\nExample:\n    >>> if is_uv_available():\n    ...     subprocess.run([\"uv\", \"pip\", \"install\", \"package\"])\n    ... else:\n    ...     subprocess.run([\"pip\", \"install\", \"package\"])",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
-          "line_number": 114,
+          "line_number": 115,
           "is_public": true,
           "dependencies": []
         },
@@ -8724,7 +8768,7 @@
           "signature": "() -> bool",
           "docstring": "Check if the current Python interpreter is running within a uv-managed environment.\n\nDetermines whether the current execution context is inside a virtual\nenvironment (indicated by VIRTUAL_ENV environment variable) or if uv\nis available in the system.\n\nReturns:\n    True if running in a virtual environment or uv is available,\n    False otherwise.\n\nExample:\n    >>> if is_uv_environment():\n    ...     print(\"Running in uv-managed environment\")",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
-          "line_number": 131,
+          "line_number": 132,
           "is_public": true,
           "dependencies": []
         },
@@ -8735,7 +8779,7 @@
           "signature": "() -> bool",
           "docstring": "Validate that the Python version meets minimum requirements.\n\nChecks that the current Python interpreter is version 3.10 or higher,\nwhich is required for Codomyrmex functionality.\n\nReturns:\n    True if Python version is 3.10 or higher, False otherwise.\n\nExample:\n    >>> if not validate_python_version():\n    ...     print(f\"Python 3.10+ required, found {sys.version}\")\n    ...     sys.exit(1)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/environment_setup/env_checker.py",
-          "line_number": 98,
+          "line_number": 99,
           "is_public": true,
           "dependencies": []
         }
@@ -8744,7 +8788,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:28:15"
     },
     "simulation": {
       "name": "simulation",
@@ -9078,7 +9122,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:36:39"
     },
     "agents": {
       "name": "agents",
@@ -9252,6 +9296,17 @@
           "dependencies": []
         },
         {
+          "name": "AgenticSeekClient",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents",
+          "type": "class",
+          "signature": "class AgenticSeekClient",
+          "docstring": "Client for the agenticSeek autonomous agent framework.\n\nagenticSeek is a fully-local alternative to Manus AI that\nautonomously browses the web, writes and executes code, and\nplans complex multi-step tasks\u2014all running on local hardware.\n\nThis client integrates as a ``CLIAgentBase`` and provides:\n\n* CLI invocation via ``uv run cli.py``\n* Docker-based invocation via ``docker compose``\n* ``config.ini`` reading and writing\n* Environment health checks (Docker, Ollama, SearxNG)\n* Heuristic agent routin",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/agentic_seek/agentic_seek_client.py",
+          "line_number": 40,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "BaseAgent",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents",
           "type": "class",
@@ -9269,7 +9324,7 @@
           "signature": "class CLIAgentBase",
           "docstring": "Base class for CLI-based agents with common subprocess execution patterns.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/generic/cli_agent_base.py",
-          "line_number": 43,
+          "line_number": 46,
           "is_public": true,
           "dependencies": []
         },
@@ -9379,7 +9434,7 @@
           "signature": "class EveryCodeClient",
           "docstring": "Client for interacting with Every Code CLI tool.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/every_code/every_code_client.py",
-          "line_number": 19,
+          "line_number": 22,
           "is_public": true,
           "dependencies": []
         },
@@ -9615,6 +9670,17 @@
           "dependencies": []
         },
         {
+          "name": "agentic_seek",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents",
+          "type": "other",
+          "signature": "<module 'codomyrmex.agents.agentic_seek' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/agentic_seek/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "ai_code_editing",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents",
           "type": "other",
@@ -9665,7 +9731,7 @@
           "signature": "(text: str) -> str",
           "docstring": "Clean agent response by removing common artifacts.\n\nRemoves:\n- Leading/trailing whitespace\n- Multiple consecutive blank lines\n- Common AI response prefixes",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/core/parsers.py",
-          "line_number": 226,
+          "line_number": 227,
           "is_public": true,
           "dependencies": []
         },
@@ -9687,7 +9753,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the agents module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/__init__.py",
-          "line_number": 202,
+          "line_number": 207,
           "is_public": true,
           "dependencies": []
         },
@@ -9995,7 +10061,7 @@
           "signature": "(text: str, language: str | None = None) -> list[codomyrmex.agents.core.parsers.CodeBlock]",
           "docstring": "Extract fenced code blocks from text.\n\nArgs:\n    text: Text containing code blocks\n    language: Filter by specific language (e.g., \"python\", \"javascript\")\n\nReturns:\n    List of extracted CodeBlock objects",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/core/parsers.py",
-          "line_number": 96,
+          "line_number": 97,
           "is_public": true,
           "dependencies": []
         },
@@ -10006,7 +10072,7 @@
           "signature": "(text: str, language: str | None = None) -> codomyrmex.agents.core.parsers.CodeBlock | None",
           "docstring": "Extract the first code block, optionally filtered by language.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/core/parsers.py",
-          "line_number": 137,
+          "line_number": 138,
           "is_public": true,
           "dependencies": []
         },
@@ -10028,7 +10094,7 @@
           "signature": "(text: str, patterns: dict[str, str], flags: int = re.MULTILINE) -> dict[str, str | None]",
           "docstring": "Extract structured data using regex patterns.\n\nArgs:\n    text: Text to parse\n    patterns: Dict mapping field names to regex patterns\n    flags: Regex flags\n\nReturns:\n    Dict of extracted values (None if not found)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/agents/core/parsers.py",
-          "line_number": 143,
+          "line_number": 144,
           "is_public": true,
           "dependencies": []
         },
@@ -10125,7 +10191,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 07:17:51"
+      "last_modified": "2026-02-28 18:11:30"
     },
     "utils": {
       "name": "utils",
@@ -10184,7 +10250,7 @@
           "signature": "class ConfigurableScript",
           "docstring": "Extended script base with additional configuration helpers.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/script_base.py",
-          "line_number": 614,
+          "line_number": 619,
           "is_public": true,
           "dependencies": []
         },
@@ -10272,7 +10338,7 @@
           "signature": "class ScriptBase",
           "docstring": "Base class for all codomyrmex scripts.\n\nProvides unified infrastructure for:\n- CLI argument parsing with standard + custom args\n- Configuration loading from multiple sources\n- Structured logging to console and file\n- Output directory and file management\n- Result collection and saving\n- Performance tracking",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/script_base.py",
-          "line_number": 145,
+          "line_number": 148,
           "is_public": true,
           "dependencies": []
         },
@@ -10283,7 +10349,7 @@
           "signature": "class ScriptConfig",
           "docstring": "Configuration container for scripts.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/script_base.py",
-          "line_number": 79,
+          "line_number": 82,
           "is_public": true,
           "dependencies": []
         },
@@ -10294,7 +10360,7 @@
           "signature": "class ScriptResult",
           "docstring": "Standardized script execution result.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/script_base.py",
-          "line_number": 121,
+          "line_number": 124,
           "is_public": true,
           "dependencies": []
         },
@@ -10371,7 +10437,7 @@
           "signature": "(command: 'str') -> 'bool'",
           "docstring": "Check if a command is available on the system.\n\nArgs:\n    command: Command name to check.\n\nReturns:\n    True if command is available, False otherwise.\n\nExample:\n    >>> if check_command_available(\"git\"):\n    ...     result = run_command([\"git\", \"status\"])",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 959,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -10404,7 +10470,7 @@
           "signature": "(base: dict, override: dict) -> dict",
           "docstring": "Deep merge two dictionaries.\n\nArgs:\n    base: Base dictionary\n    override: Dictionary with values to merge/override\n\nReturns:\n    Merged dictionary",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 252,
+          "line_number": 256,
           "is_public": true,
           "dependencies": []
         },
@@ -10415,7 +10481,7 @@
           "signature": "(path: str | pathlib._local.Path) -> pathlib._local.Path",
           "docstring": "Ensure a directory exists, creating it if necessary.\n\nArgs:\n    path: Directory path to ensure exists\n\nReturns:\n    Path object for the directory",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 45,
+          "line_number": 48,
           "is_public": true,
           "dependencies": []
         },
@@ -10426,7 +10492,7 @@
           "signature": "(d: dict, parent_key: str = '', sep: str = '.') -> dict",
           "docstring": "Flatten a nested dictionary.\n\nArgs:\n    d: Dictionary to flatten\n    parent_key: Prefix for keys\n    sep: Separator between key levels\n\nReturns:\n    Flattened dictionary",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 231,
+          "line_number": 235,
           "is_public": true,
           "dependencies": []
         },
@@ -10459,7 +10525,7 @@
           "signature": "(command: 'str', version_args: 'Sequence[str]' = ('--version',)) -> 'str | None'",
           "docstring": "Get the version string of a command.\n\nArgs:\n    command: Command name.\n    version_args: Arguments to get version (default: --version).\n\nReturns:\n    Version string if available, None otherwise.\n\nExample:\n    >>> version = get_command_version(\"git\")\n    >>> print(version)  # \"git version 2.39.0\"",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 977,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -10470,7 +10536,7 @@
           "signature": "(key: str, default: str | None = None, required: bool = False) -> str | None",
           "docstring": "Get environment variable with options.\n\nArgs:\n    key: Environment variable name\n    default: Default value if not set\n    required: If True, raise ValueError when not set\n\nReturns:\n    Environment variable value",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 214,
+          "line_number": 218,
           "is_public": true,
           "dependencies": []
         },
@@ -10481,7 +10547,7 @@
           "signature": "(fmt: str = '%Y-%m-%d_%H-%M-%S') -> str",
           "docstring": "Get current timestamp as formatted string.\n\nArgs:\n    fmt: strftime format string\n\nReturns:\n    Formatted timestamp",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 186,
+          "line_number": 190,
           "is_public": true,
           "dependencies": []
         },
@@ -10492,7 +10558,7 @@
           "signature": "(content: str | bytes, algorithm: str = 'sha256') -> str",
           "docstring": "Generate hash of content.\n\nArgs:\n    content: String or bytes to hash\n    algorithm: Hash algorithm (sha256, sha512, md5)\n\nReturns:\n    Hex digest of hash",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 92,
+          "line_number": 95,
           "is_public": true,
           "dependencies": []
         },
@@ -10503,7 +10569,7 @@
           "signature": "(path: str | pathlib._local.Path, algorithm: str = 'sha256') -> str | None",
           "docstring": "Generate hash of file contents.\n\nArgs:\n    path: Path to file\n    algorithm: Hash algorithm\n\nReturns:\n    Hex digest or None if file not found",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 110,
+          "line_number": 113,
           "is_public": true,
           "dependencies": []
         },
@@ -10563,6 +10629,28 @@
           "dependencies": []
         },
         {
+          "name": "logger",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "type": "other",
+          "signature": "<Logger codomyrmex.utils (DEBUG)>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logging",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "type": "other",
+          "signature": "<module 'logging' from '/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/logging/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "make_async",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "function",
@@ -10613,7 +10701,7 @@
           "signature": "(command: 'str | list[str]') -> 'str'",
           "docstring": "Safely quote a command for shell execution.\n\nArgs:\n    command: Command as string or list.\n\nReturns:\n    Properly quoted command string.\n\nExample:\n    >>> quote_command([\"echo\", \"hello world\"])\n    \"echo 'hello world'\"",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 1003,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -10632,7 +10720,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x109623e00>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10b7dae40>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -10646,7 +10734,7 @@
           "signature": "(max_attempts: int = 3, delay: float = 1.0, backoff: float = 2.0, exceptions: tuple = (<class 'Exception'>,)) -> collections.abc.Callable[[collections.abc.Callable[..., ~T]], collections.abc.Callable[..., ~T]]",
           "docstring": "Decorator for retrying failed operations with exponential backoff.\n\nArgs:\n    max_attempts: Maximum number of attempts\n    delay: Initial delay between retries in seconds\n    backoff: Multiplier for delay after each retry\n    exceptions: Tuple of exceptions to catch and retry\n\nReturns:\n    Decorator function",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 147,
+          "line_number": 151,
           "is_public": true,
           "dependencies": []
         },
@@ -10690,7 +10778,7 @@
           "signature": "(name: str, description: str, run_func: collections.abc.Callable[[argparse.Namespace, codomyrmex.utils.process.script_base.ScriptConfig], dict[str, typing.Any]], add_args_func: collections.abc.Callable[[argparse.ArgumentParser], None] | None = None, version: str = '1.0.0') -> int",
           "docstring": "Convenience function to run a simple script.\n\nArgs:\n    name: Script name\n    description: Script description\n    run_func: Main execution function\n    add_args_func: Optional function to add custom arguments\n    version: Script version\n\nReturns:\n    Exit code",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/script_base.py",
-          "line_number": 668,
+          "line_number": 673,
           "is_public": true,
           "dependencies": []
         },
@@ -10701,7 +10789,7 @@
           "signature": "(command: 'str | list[str]', *, max_attempts: 'int' = 3, delay: 'float' = 1.0, backoff: 'float' = 2.0, retry_on_codes: 'Sequence[int] | None' = None, retry_on_timeout: 'bool' = True, on_retry: 'Callable[[int, SubprocessResult], None] | None' = None, **kwargs: 'Any') -> 'SubprocessResult'",
           "docstring": "Execute a command with retry logic for flaky commands.\n\nThis function wraps run_command with configurable retry behavior,\nuseful for commands that may fail intermittently due to network\nissues or transient errors.\n\nArgs:\n    command: Command to execute.\n    max_attempts: Maximum number of execution attempts.\n    delay: Initial delay between retries in seconds.\n    backoff: Multiplier for delay after each retry.\n    retry_on_codes: Return codes that should trigger retry. If None,\n        retry on",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 859,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -10712,7 +10800,7 @@
           "signature": "(obj: Any, indent: int = 2, default: str = '{}') -> str",
           "docstring": "Safely serialize to JSON with fallback.\n\nArgs:\n    obj: Object to serialize\n    indent: Indentation level\n    default: Default string if serialization fails\n\nReturns:\n    JSON string",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 75,
+          "line_number": 78,
           "is_public": true,
           "dependencies": []
         },
@@ -10723,7 +10811,7 @@
           "signature": "(text: str, default: Any = None) -> Any",
           "docstring": "Safely parse JSON with a fallback default.\n\nArgs:\n    text: JSON string to parse\n    default: Default value if parsing fails\n\nReturns:\n    Parsed JSON or default value",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 59,
+          "line_number": 62,
           "is_public": true,
           "dependencies": []
         },
@@ -10745,7 +10833,7 @@
           "signature": "(command: 'str') -> 'list[str]'",
           "docstring": "Split a command string into list of arguments.\n\nArgs:\n    command: Command string.\n\nReturns:\n    List of command arguments.\n\nExample:\n    >>> split_command(\"echo 'hello world'\")\n    [\"echo\", \"hello world\"]",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 1021,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -10789,7 +10877,7 @@
           "signature": "(func: collections.abc.Callable[..., ~T]) -> collections.abc.Callable[..., ~T]",
           "docstring": "Decorator to measure function execution time.\n\nAdds execution_time_ms to function result if it's a dict,\notherwise logs the time.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 127,
+          "line_number": 131,
           "is_public": true,
           "dependencies": []
         },
@@ -10800,7 +10888,7 @@
           "signature": "(s: str, max_length: int = 100, suffix: str = '...') -> str",
           "docstring": "Truncate string to maximum length with suffix.\n\nArgs:\n    s: String to truncate\n    max_length: Maximum length including suffix\n    suffix: Suffix to add when truncated\n\nReturns:\n    Truncated string",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/__init__.py",
-          "line_number": 198,
+          "line_number": 202,
           "is_public": true,
           "dependencies": []
         },
@@ -10820,7 +10908,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:09:25"
+      "last_modified": "2026-02-28 18:20:18"
     },
     "release": {
       "name": "release",
@@ -11556,7 +11644,7 @@
           "signature": "class TemplatingError",
           "docstring": "Raised when templating operations fail.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/__init__.py",
-          "line_number": 148,
+          "line_number": 153,
           "is_public": true,
           "dependencies": []
         },
@@ -11567,7 +11655,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the templating module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/__init__.py",
-          "line_number": 100,
+          "line_number": 105,
           "is_public": true,
           "dependencies": []
         },
@@ -11611,7 +11699,7 @@
           "signature": "(engine_type: str = 'jinja2')",
           "docstring": "Get or create default template engine instance.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/__init__.py",
-          "line_number": 44,
+          "line_number": 49,
           "is_public": true,
           "dependencies": []
         },
@@ -11627,13 +11715,35 @@
           "dependencies": []
         },
         {
+          "name": "logger",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating",
+          "type": "other",
+          "signature": "<Logger codomyrmex.templating (DEBUG)>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logging",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating",
+          "type": "other",
+          "signature": "<module 'logging' from '/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/logging/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "render",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating",
           "type": "function",
           "signature": "(template: str, context: dict = None, engine: str = 'jinja2') -> str",
           "docstring": "Render a template string with context data.\n\nThis is a convenience function that uses the default template engine.\n\nArgs:\n    template: Template string (e.g., \"Hello {{ name }}!\")\n    context: Dictionary of data to pass to template\n    engine: Template engine to use ('jinja2' or 'mako')\n\nReturns:\n    Rendered string\n\nExample:\n    >>> render(\"Hello {{ name }}!\", {\"name\": \"World\"})\n    'Hello World!'",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/__init__.py",
-          "line_number": 55,
+          "line_number": 60,
           "is_public": true,
           "dependencies": []
         },
@@ -11644,7 +11754,7 @@
           "signature": "(path: str, context: dict = None, engine: str = 'jinja2') -> str",
           "docstring": "Load and render a template file.\n\nArgs:\n    path: Path to template file\n    context: Dictionary of data to pass to template\n    engine: Template engine to use ('jinja2' or 'mako')\n\nReturns:\n    Rendered string",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/templating/__init__.py",
-          "line_number": 80,
+          "line_number": 85,
           "is_public": true,
           "dependencies": []
         }
@@ -11653,7 +11763,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "cli": {
       "name": "cli",
@@ -12086,7 +12196,7 @@
           "signature": "() -> bool",
           "docstring": "Launch the interactive Codomyrmex shell.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cli/handlers/system.py",
-          "line_number": 263,
+          "line_number": 262,
           "is_public": true,
           "dependencies": []
         },
@@ -12161,7 +12271,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 16:40:01"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "module_template": {
       "name": "module_template",
@@ -13729,7 +13839,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "vector_store": {
       "name": "vector_store",
@@ -13896,7 +14006,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:36:39"
     },
     "search": {
       "name": "search",
@@ -14650,7 +14760,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "networks": {
       "name": "networks",
@@ -15083,7 +15193,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "edge_computing": {
       "name": "edge_computing",
@@ -15230,7 +15340,7 @@
           "signature": "class EdgeRuntime",
           "docstring": "Runtime for edge function execution with metrics.\n\nTracks invocation latency, cold-start events, and per-function\ncall counts for monitoring.\n\nExample::\n\n    node = EdgeNode(id=\"edge-1\", region=\"us-west\")\n    runtime = EdgeRuntime(node)\n    fn = EdgeFunction(id=\"greet\", handler=lambda name: f\"Hello {name}\")\n    runtime.deploy(fn)\n    result = runtime.invoke(\"greet\", \"world\")\n    assert result == \"Hello world\"",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/edge_computing/core/runtime.py",
-          "line_number": 30,
+          "line_number": 33,
           "is_public": true,
           "dependencies": []
         },
@@ -15404,7 +15514,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "logging_monitoring": {
       "name": "logging_monitoring",
@@ -15540,7 +15650,7 @@
           "signature": "(name: str) -> logging.Logger",
           "docstring": "Get a logger instance with the specified name.\n\nCreates or retrieves a logger from the logging hierarchy. The logger\ninherits configuration from the root logger set up by setup_logging().\n\nArgs:\n    name: The name of the logger, typically __name__ of the calling module.\n\nReturns:\n    A configured Logger instance.\n\nExample:\n    >>> logger = get_logger(__name__)\n    >>> logger.info(\"Processing started\")\n    >>> logger.error(\"An error occurred\", exc_info=True)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/logging_monitoring/core/logger_config.py",
-          "line_number": 195,
+          "line_number": 196,
           "is_public": true,
           "dependencies": []
         },
@@ -15615,7 +15725,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "config_management": {
       "name": "config_management",
@@ -15872,7 +15982,7 @@
           "signature": "(config_paths: list[str], interval_seconds: int = 300, workspace_dir: str | None = None) -> dict[str, typing.Any]",
           "docstring": "Monitor configuration changes continuously.\n\nArgs:\n    config_paths: List of configuration paths to monitor\n    interval_seconds: Monitoring interval in seconds\n    workspace_dir: Workspace directory\n\nReturns:\n    Monitoring summary",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/config_management/monitoring/config_monitor.py",
-          "line_number": 422,
+          "line_number": 446,
           "is_public": true,
           "dependencies": []
         },
@@ -15925,7 +16035,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:07:43"
+      "last_modified": "2026-02-28 17:48:34"
     },
     "prompt_engineering": {
       "name": "prompt_engineering",
@@ -16349,7 +16459,7 @@
           "signature": "class DeploymentManager",
           "docstring": "High-level deployment manager for orchestrating deployments.\n\nProvides a simple interface for deploying services using\ndifferent strategies.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment/__init__.py",
-          "line_number": 52,
+          "line_number": 55,
           "is_public": true,
           "dependencies": []
         },
@@ -16415,7 +16525,7 @@
           "signature": "class GitOpsSynchronizer",
           "docstring": "GitOps synchronization manager.\n\nSynchronizes deployment configurations from a Git repository.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment/__init__.py",
-          "line_number": 155,
+          "line_number": 159,
           "is_public": true,
           "dependencies": []
         },
@@ -16503,7 +16613,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the deployment module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment/__init__.py",
-          "line_number": 219,
+          "line_number": 224,
           "is_public": true,
           "dependencies": []
         },
@@ -16534,6 +16644,28 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
           "type": "other",
           "signature": "<module 'codomyrmex.deployment.health_checks' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment/health_checks/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logger",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
+          "type": "other",
+          "signature": "<Logger codomyrmex.deployment (DEBUG)>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "logging",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
+          "type": "other",
+          "signature": "<module 'logging' from '/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/logging/__init__.py'>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/deployment",
           "line_number": 0,
@@ -16589,7 +16721,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:48:34"
     },
     "tree_sitter": {
       "name": "tree_sitter",
@@ -16680,7 +16812,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-27 14:55:31"
     },
     "cloud": {
       "name": "cloud",
@@ -17364,7 +17496,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:26:57"
     },
     "compression": {
       "name": "compression",
@@ -17933,7 +18065,7 @@
           "signature": "class APIResponse",
           "docstring": "Represents an API response.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 72,
+          "line_number": 73,
           "is_public": true,
           "dependencies": []
         },
@@ -17944,7 +18076,7 @@
           "signature": "class APIRouter",
           "docstring": "Router for managing API endpoints.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 127,
+          "line_number": 128,
           "is_public": true,
           "dependencies": []
         },
@@ -18142,7 +18274,7 @@
           "signature": "class CursorPaginator",
           "docstring": "Opaque cursor-based pagination using base64-encoded indices.\n\nCursors encode the item index as a base64 string, making them opaque\nto clients while remaining simple to decode on the server.\n\nExample::\n\n    paginator = CursorPaginator()\n    # First page (no cursor)\n    request = PaginationRequest(page_size=10)\n    response = paginator.paginate(all_items, request)\n    # Next page\n    next_req = PaginationRequest(\n        page_size=10,\n        cursor=response.page_info.end_cursor,\n    )\n    next_re",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 255,
+          "line_number": 258,
           "is_public": true,
           "dependencies": []
         },
@@ -18329,7 +18461,7 @@
           "signature": "class KeysetPaginator",
           "docstring": "Keyset (seek) pagination based on a sort field value.\n\nItems are sorted by the specified ``sort_field`` and the page starts\nafter the item whose sort field value matches ``after_key``.\n\nThis strategy is efficient for large datasets because it avoids\ncounting offsets from the beginning of the collection.\n\nArgs:\n    sort_field: The attribute or dictionary key to sort and seek on.\n        Can be overridden per-request via\n        :attr:`PaginationRequest.sort_field`.\n\nExample::\n\n    paginator = Key",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 368,
+          "line_number": 371,
           "is_public": true,
           "dependencies": []
         },
@@ -18406,7 +18538,7 @@
           "signature": "class OffsetPaginator",
           "docstring": "Standard offset / page-number based pagination.\n\nSlices the item list using a 1-based ``page`` number and ``page_size``.\nIf no ``page`` is provided in the request it defaults to ``1``.\n\nExample::\n\n    paginator = OffsetPaginator()\n    request = PaginationRequest(page=2, page_size=10)\n    response = paginator.paginate(all_items, request)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 202,
+          "line_number": 205,
           "is_public": true,
           "dependencies": []
         },
@@ -18428,7 +18560,7 @@
           "signature": "class PageInfo",
           "docstring": "Metadata describing the current page of results.\n\nCarries enough information for clients to navigate through paginated\ncollections regardless of the pagination strategy in use.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 43,
+          "line_number": 46,
           "is_public": true,
           "dependencies": []
         },
@@ -18439,7 +18571,7 @@
           "signature": "class PaginatedResponse",
           "docstring": "A page of results together with its metadata.\n\nThis is the standard return type produced by all :class:`Paginator`\nimplementations.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 120,
+          "line_number": 123,
           "is_public": true,
           "dependencies": []
         },
@@ -18450,7 +18582,7 @@
           "signature": "class PaginationRequest",
           "docstring": "Parameters supplied by the client to control pagination.\n\nDifferent pagination strategies use different subsets of these fields:\n\n- **Offset**: ``page`` and ``page_size``.\n- **Cursor**: ``cursor`` and ``page_size``.\n- **Keyset**: ``after_key``, ``sort_field``, ``sort_direction``, and\n  ``page_size``.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 144,
+          "line_number": 147,
           "is_public": true,
           "dependencies": []
         },
@@ -18461,7 +18593,7 @@
           "signature": "class PaginationStrategy",
           "docstring": "Supported pagination strategies.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 23,
+          "line_number": 26,
           "is_public": true,
           "dependencies": []
         },
@@ -18472,7 +18604,7 @@
           "signature": "class Paginator",
           "docstring": "Abstract base class for pagination strategies.\n\nConcrete subclasses implement a single ``paginate`` method that accepts an\nin-memory list of items together with a :class:`PaginationRequest` and\nreturns a :class:`PaginatedResponse`.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 170,
+          "line_number": 173,
           "is_public": true,
           "dependencies": []
         },
@@ -18494,7 +18626,7 @@
           "signature": "class RESTAPI",
           "docstring": "Main REST API class that handles HTTP requests and responses.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 284,
+          "line_number": 285,
           "is_public": true,
           "dependencies": []
         },
@@ -18648,7 +18780,7 @@
           "signature": "class SortDirection",
           "docstring": "Sort ordering direction.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 31,
+          "line_number": 34,
           "is_public": true,
           "dependencies": []
         },
@@ -18659,7 +18791,7 @@
           "signature": "class StandardizationAPIEndpoint",
           "docstring": "Represents an API endpoint configuration.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 113,
+          "line_number": 114,
           "is_public": true,
           "dependencies": []
         },
@@ -18670,7 +18802,7 @@
           "signature": "class StandardizationOpenAPIGenerator",
           "docstring": "Generator for OpenAPI specifications from REST/GraphQL API instances.\n\nThis generator creates OpenAPI specs from API framework instances.\nUsed primarily by the standardization submodule.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 433,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -18868,7 +19000,7 @@
           "signature": "(title: str = 'Codomyrmex API', version: str = '1.0.0') -> codomyrmex.api.standardization.rest_api.RESTAPI",
           "docstring": "Create a new REST API instance.\n\nArgs:\n    title: API title\n    version: API version\n\nReturns:\n    RESTAPI instance",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 462,
+          "line_number": 463,
           "is_public": true,
           "dependencies": []
         },
@@ -18945,7 +19077,7 @@
           "signature": "(api: None) -> codomyrmex.api.openapi_generator.OpenAPISpecification",
           "docstring": "Create OpenAPI spec from a GraphQL API.\n\nArgs:\n    api: GraphQL API instance\n\nReturns:\n    OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 988,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -18956,7 +19088,7 @@
           "signature": "(api: None) -> codomyrmex.api.openapi_generator.OpenAPISpecification",
           "docstring": "Create OpenAPI spec from a REST API.\n\nArgs:\n    api: REST API instance\n\nReturns:\n    OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 961,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -18967,7 +19099,7 @@
           "signature": "(strategy: codomyrmex.api.pagination.PaginationStrategy = <PaginationStrategy.OFFSET: 'offset'>, **kwargs: Any) -> codomyrmex.api.pagination.Paginator",
           "docstring": "Create a paginator instance for the given strategy.\n\nThis is the recommended way to obtain a :class:`Paginator`.  It maps\na :class:`PaginationStrategy` enum value to the corresponding concrete\nclass, forwarding any extra keyword arguments to the constructor.\n\nArgs:\n    strategy: The pagination strategy to use.\n    **kwargs: Additional keyword arguments passed to the paginator\n        constructor (e.g. ``sort_field`` for :class:`KeysetPaginator`).\n\nReturns:\n    A :class:`Paginator` instance confi",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/pagination/__init__.py",
-          "line_number": 501,
+          "line_number": 504,
           "is_public": true,
           "dependencies": []
         },
@@ -18989,7 +19121,7 @@
           "signature": "(prefix: str = '') -> codomyrmex.api.standardization.rest_api.APIRouter",
           "docstring": "Create a new API router.\n\nArgs:\n    prefix: Router prefix\n\nReturns:\n    APIRouter instance",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/standardization/rest_api.py",
-          "line_number": 475,
+          "line_number": 476,
           "is_public": true,
           "dependencies": []
         },
@@ -19099,7 +19231,7 @@
           "signature": "(title: str = 'Codomyrmex API', version: str = '1.0.0', description: str = 'API for Codomyrmex') -> codomyrmex.api.openapi_generator.StandardizationOpenAPIGenerator",
           "docstring": "Create a new OpenAPI generator for standardization.\n\nArgs:\n    title: API title\n    version: API version\n    description: API description\n\nReturns:\n    StandardizationOpenAPIGenerator instance",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 945,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -19110,7 +19242,7 @@
           "signature": "(title: str, version: str, endpoints: list[typing.Any], base_url: str = '') -> dict[str, typing.Any]",
           "docstring": "Convenience function to generate OpenAPI specification from endpoints.\n\nArgs:\n    title: API title\n    version: API version\n    endpoints: List of API endpoints\n    base_url: Base API URL\n\nReturns:\n    Dict containing OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 907,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -19231,7 +19363,7 @@
           "signature": "(spec: dict[str, typing.Any]) -> list[str]",
           "docstring": "Convenience function to validate OpenAPI specification.\n\nArgs:\n    spec: OpenAPI specification dictionary\n\nReturns:\n    List of validation errors (empty if valid)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 930,
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -19262,7 +19394,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 18:20:09"
     },
     "physical_management": {
       "name": "physical_management",
@@ -19310,7 +19442,7 @@
           "signature": "class CoordinateSystem",
           "docstring": "Coordinate system utilities.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
-          "line_number": 411,
+          "line_number": 412,
           "is_public": true,
           "dependencies": []
         },
@@ -19453,7 +19585,7 @@
           "signature": "class PhysicalConstants",
           "docstring": "Physical constants for calculations.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
-          "line_number": 384,
+          "line_number": 385,
           "is_public": true,
           "dependencies": []
         },
@@ -19475,7 +19607,7 @@
           "signature": "class PhysicalObjectManager",
           "docstring": "Main manager for physical object operations.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/object_manager.py",
-          "line_number": 726,
+          "line_number": 727,
           "is_public": true,
           "dependencies": []
         },
@@ -19497,7 +19629,7 @@
           "signature": "class PredictiveAnalytics",
           "docstring": "Simple predictive analytics using statistical methods.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
-          "line_number": 428,
+          "line_number": 433,
           "is_public": true,
           "dependencies": []
         },
@@ -19552,7 +19684,7 @@
           "signature": "class StreamingAnalytics",
           "docstring": "Central streaming analytics manager.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/analytics.py",
-          "line_number": 247,
+          "line_number": 248,
           "is_public": true,
           "dependencies": []
         },
@@ -19574,7 +19706,7 @@
           "signature": "class UnitConverter",
           "docstring": "Utility for unit conversions.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/physical_management/sensor_integration.py",
-          "line_number": 392,
+          "line_number": 393,
           "is_public": true,
           "dependencies": []
         },
@@ -19649,7 +19781,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:03:27"
+      "last_modified": "2026-02-28 17:36:39"
     },
     "ci_cd_automation": {
       "name": "ci_cd_automation",
@@ -19686,7 +19818,7 @@
           "signature": "class Deployment",
           "docstring": "Deployment configuration and status.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
-          "line_number": 88,
+          "line_number": 89,
           "is_public": true,
           "dependencies": []
         },
@@ -19708,7 +19840,7 @@
           "signature": "class DeploymentOrchestrator",
           "docstring": "Comprehensive deployment orchestrator for multiple platforms.\n\nFeatures:\n- Multi-platform deployment (Docker, Kubernetes, traditional)\n- Environment management\n- Deployment strategies (rolling, blue-green, canary)\n- Health checking and monitoring\n- Automated rollback\n- Pre and post-deployment hooks",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
-          "line_number": 130,
+          "line_number": 131,
           "is_public": true,
           "dependencies": []
         },
@@ -19719,7 +19851,7 @@
           "signature": "class Environment",
           "docstring": "Deployment environment configuration.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
-          "line_number": 55,
+          "line_number": 56,
           "is_public": true,
           "dependencies": []
         },
@@ -19972,7 +20104,7 @@
           "signature": "(config_path: str | None = None) -> codomyrmex.ci_cd_automation.deployment_orchestrator.DeploymentOrchestrator",
           "docstring": "Convenience function to create deployment orchestrator.\n\nArgs:\n    config_path: Path to deployment configuration file\n\nReturns:\n    DeploymentOrchestrator: Configured orchestrator",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ci_cd_automation/deployment_orchestrator.py",
-          "line_number": 643,
+          "line_number": 644,
           "is_public": true,
           "dependencies": []
         },
@@ -20058,7 +20190,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:49:17"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "finance": {
       "name": "finance",
@@ -20328,7 +20460,7 @@
           "signature": "class CodeReviewer",
           "docstring": "Main code reviewer class with pyscn integration.\n\nImplementation is organized into five mixins for maintainability:\n- LintToolsMixin: External tool runners (pylint, flake8, mypy, bandit, vulture)\n- AnalysisPatternsMixin: Complexity, dead code, architecture analysis\n- PerformanceOptMixin: Performance optimization suggestions\n- DashboardMixin: Quality dashboard and metrics computation\n- ReportingMixin: HTML/JSON/Markdown report generation",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/coding/review/reviewer.py",
-          "line_number": 85,
+          "line_number": 77,
           "is_public": true,
           "dependencies": []
         },
@@ -20460,7 +20592,7 @@
           "signature": "class Patch",
           "docstring": "Represents a code patch for fixing an error.\n\nContains the patch content in unified diff format along with\nmetadata about the fix including description and confidence level.\n\nAttributes:\n    file_path: Path to the file being patched.\n    diff: The patch content in unified diff format.\n    description: Human-readable description of what the patch fixes.\n    confidence: Confidence score from 0.0 to 1.0 indicating\n        likelihood of the patch being correct.\n\nExample:\n    >>> patch = Patch(\n    .",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/coding/debugging/patch_generator.py",
-          "line_number": 30,
+          "line_number": 27,
           "is_public": true,
           "dependencies": []
         },
@@ -20471,7 +20603,7 @@
           "signature": "class PatchGenerator",
           "docstring": "Generates patches for diagnosed errors using LLM assistance.\n\nUses a language model to analyze errors and generate candidate\npatches. Constructs prompts with error context and parses\nresponses into structured Patch objects.\n\nAttributes:\n    llm_client: The LLM client used for patch generation.\n\nExample:\n    >>> generator = PatchGenerator(llm_client=anthropic_client)\n    >>> patches = generator.generate(buggy_code, error_diagnosis)\n    >>> best_patch = max(patches, key=lambda p: p.confidence)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/coding/debugging/patch_generator.py",
-          "line_number": 58,
+          "line_number": 55,
           "is_public": true,
           "dependencies": []
         },
@@ -20636,7 +20768,7 @@
           "signature": "() -> bool",
           "docstring": "Check if Docker is available on the system.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/coding/sandbox/container.py",
-          "line_number": 20,
+          "line_number": 21,
           "is_public": true,
           "dependencies": []
         },
@@ -20867,7 +20999,7 @@
           "signature": "(language: str, code_file_path: str, temp_dir: str, stdin_file: str | None = None, timeout: int = 30, session_id: str | None = None) -> dict[str, typing.Any]",
           "docstring": "Execute code in a Docker container with security constraints.\n\nArgs:\n    language: Programming language of the code\n    code_file_path: Path to the code file relative to temp_dir\n    temp_dir: Directory containing code and input files\n    stdin_file: Path to stdin file or None\n    timeout: Maximum execution time in seconds\n    session_id: Optional session identifier for persistent environments\n\nReturns:\n    Dictionary with execution results",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/coding/sandbox/container.py",
-          "line_number": 33,
+          "line_number": 35,
           "is_public": true,
           "dependencies": []
         },
@@ -20953,7 +21085,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:39:10"
+      "last_modified": "2026-02-28 18:02:33"
     },
     "maintenance": {
       "name": "maintenance",
@@ -21432,7 +21564,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:17:47"
+      "last_modified": "2026-02-28 17:41:01"
     },
     "database_management": {
       "name": "database_management",
@@ -21733,7 +21865,7 @@
           "signature": "(migration_dir: str, database_url: str, direction: str = 'up') -> dict[str, typing.Any]",
           "docstring": "Run database migrations.\n\nArgs:\n    migration_dir: Directory containing migration files\n    database_url: Database connection URL\n    direction: Migration direction (\"up\" or \"down\")\n\nReturns:\n    Migration execution results",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/database_management/migration/migration_manager.py",
-          "line_number": 659,
+          "line_number": 660,
           "is_public": true,
           "dependencies": []
         },
@@ -21764,7 +21896,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:34:17"
+      "last_modified": "2026-02-28 17:40:59"
     },
     "skills": {
       "name": "skills",
@@ -21878,7 +22010,7 @@
           "signature": "class SkillSync",
           "docstring": "Handles syncing with upstream vibeship-spawner-skills repository.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/skills/skill_sync.py",
-          "line_number": 56,
+          "line_number": 59,
           "is_public": true,
           "dependencies": []
         },
@@ -22118,7 +22250,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:34:17"
+      "last_modified": "2026-02-28 17:48:34"
     },
     "dark": {
       "name": "dark",
@@ -22276,7 +22408,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "defense": {
       "name": "defense",
@@ -22480,7 +22612,7 @@
           "signature": "class MCPClientError",
           "docstring": "Raised when the MCP client encounters an error.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/transport/client.py",
-          "line_number": 306,
+          "line_number": 307,
           "is_public": true,
           "dependencies": []
         },
@@ -22951,7 +23083,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:09:49"
+      "last_modified": "2026-02-28 17:36:24"
     },
     "telemetry": {
       "name": "telemetry",
@@ -23076,7 +23208,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the telemetry module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry/__init__.py",
-          "line_number": 59,
+          "line_number": 61,
           "is_public": true,
           "dependencies": []
         },
@@ -23239,7 +23371,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:44:00"
     },
     "documents": {
       "name": "documents",
@@ -24044,7 +24176,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:28:15"
     },
     "calendar_integration": {
       "name": "calendar_integration",
@@ -24147,7 +24279,7 @@
           "signature": "class GoogleCalendar",
           "docstring": "Google Calendar provider implementation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/calendar_integration/gcal/provider.py",
-          "line_number": 26,
+          "line_number": 29,
           "is_public": true,
           "dependencies": []
         },
@@ -24205,24 +24337,13 @@
           "line_number": 0,
           "is_public": true,
           "dependencies": []
-        },
-        {
-          "name": "mcp_tools",
-          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/calendar_integration",
-          "type": "other",
-          "signature": "<module 'codomyrmex.calendar_integration.mcp_tools' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/calendar_integration/mcp_tools.py'>",
-          "docstring": "No docstring",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/calendar_integration",
-          "line_number": 0,
-          "is_public": true,
-          "dependencies": []
         }
       ],
       "dependencies": [],
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:53:40"
     },
     "dependency_injection": {
       "name": "dependency_injection",
@@ -24270,7 +24391,7 @@
           "signature": "class Scope",
           "docstring": "Defines the lifetime strategy for a registered service.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/dependency_injection/scopes.py",
-          "line_number": 33,
+          "line_number": 36,
           "is_public": true,
           "dependencies": []
         },
@@ -24281,7 +24402,7 @@
           "signature": "class ScopeContext",
           "docstring": "Context manager that provides scoped dependency resolution.\n\nWithin a ScopeContext, any service registered with Scope.SCOPED will\nreceive a single shared instance per context. When the context exits,\nall scoped instances are released.\n\nThread-safe: each ScopeContext maintains its own instance cache with\na lock, so multiple threads can resolve within the same scope safely.\n\nArgs:\n    container: The Container to resolve dependencies from.\n\nExample:\n    container = Container()\n    container.registe",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/dependency_injection/scopes.py",
-          "line_number": 62,
+          "line_number": 65,
           "is_public": true,
           "dependencies": []
         },
@@ -24400,7 +24521,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "spatial": {
       "name": "spatial",
@@ -24512,7 +24633,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:03:27"
+      "last_modified": "2026-02-28 16:20:17"
     },
     "events": {
       "name": "events",
@@ -24899,7 +25020,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 07:14:46"
+      "last_modified": "2026-02-28 17:39:51"
     },
     "performance": {
       "name": "performance",
@@ -24969,7 +25090,7 @@
           "signature": "class PerformanceProfiler",
           "docstring": "Class-based profiler for consistency with tests.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/profiling/benchmark.py",
-          "line_number": 232,
+          "line_number": 238,
           "is_public": true,
           "dependencies": []
         },
@@ -25024,7 +25145,7 @@
           "signature": "(ttl: int | None = None, cache_key_prefix: str | None = None, cache_manager: codomyrmex.performance.caching.cache_manager.CacheManager | None = None) -> collections.abc.Callable",
           "docstring": "Decorator for caching function results.\n\nArgs:\n    ttl: Time-to-live for cache entries in seconds. If None, uses default.\n    cache_key_prefix: Prefix for cache keys. If None, uses function name.\n    cache_manager: Cache manager to use. If None, uses global instance.\n\nReturns:\n    Decorated function with caching enabled\n\nExample:\n    >>> @cached_function(ttl=3600)  # Cache for 1 hour\n    ... def expensive_computation(data):\n    ...     # Some expensive operation\n    ...     return result",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/caching/cache_manager.py",
-          "line_number": 183,
+          "line_number": 184,
           "is_public": true,
           "dependencies": []
         },
@@ -25057,7 +25178,7 @@
           "signature": "() -> dict[str, typing.Any]",
           "docstring": "Get comprehensive system metrics.\n\nReturns:\n    Dictionary containing current system metrics",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/monitoring/performance_monitor.py",
-          "line_number": 342,
+          "line_number": 343,
           "is_public": true,
           "dependencies": []
         },
@@ -25101,7 +25222,7 @@
           "signature": "(function_name: str | None = None, monitor: codomyrmex.performance.monitoring.performance_monitor.PerformanceMonitor | None = None) -> collections.abc.Callable",
           "docstring": "Decorator for monitoring function performance.\n\nArgs:\n    function_name: Name to use for monitoring (defaults to function name)\n    monitor: Performance monitor to use (defaults to global instance)\n\nReturns:\n    Decorated function with performance monitoring enabled",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/monitoring/performance_monitor.py",
-          "line_number": 265,
+          "line_number": 266,
           "is_public": true,
           "dependencies": []
         },
@@ -25134,7 +25255,7 @@
           "signature": "(operation: str)",
           "docstring": "Context manager that records execution time of a block.\n\nArgs:\n    operation: Name of the operation being tracked.",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/contextlib.py",
-          "line_number": 422,
+          "line_number": 423,
           "is_public": true,
           "dependencies": []
         },
@@ -25145,7 +25266,7 @@
           "signature": "(func: 'Callable', *args: 'Any', **kwargs: 'Any') -> 'dict[str, Any]'",
           "docstring": "Profile a single function call for time and memory.\n\nArgs:\n    func: Function to profile.\n    *args: Positional arguments.\n    **kwargs: Keyword arguments.\n\nReturns:\n    Dict with 'execution_time' (seconds) and 'memory_usage' (MB).",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/profiling/benchmark.py",
-          "line_number": 127,
+          "line_number": 132,
           "is_public": true,
           "dependencies": []
         },
@@ -25167,7 +25288,7 @@
           "signature": "(func: 'Callable[[], Any]', iterations: 'int' = 5, warmup: 'int' = 0, name: 'str' = '') -> 'dict[str, Any]'",
           "docstring": "Run a benchmark on a function.\n\nArgs:\n    func: Callable with no arguments (use lambda/partial for args).\n    iterations: Number of measured iterations.\n    warmup: Warmup iterations before measuring.\n    name: Optional benchmark name.\n\nReturns:\n    Dictionary containing benchmark statistics.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/performance/profiling/benchmark.py",
-          "line_number": 91,
+          "line_number": 94,
           "is_public": true,
           "dependencies": []
         }
@@ -25176,7 +25297,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:09:14"
+      "last_modified": "2026-02-28 17:36:39"
     },
     "evolutionary_ai": {
       "name": "evolutionary_ai",
@@ -25651,7 +25772,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "logistics": {
       "name": "logistics",
@@ -25710,7 +25831,7 @@
           "signature": "class OrchestrationEngine",
           "docstring": "Main orchestration engine coordinating all components.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/logistics/orchestration/project/orchestration_engine.py",
-          "line_number": 168,
+          "line_number": 169,
           "is_public": true,
           "dependencies": []
         },
@@ -25939,7 +26060,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 17:02:42"
+      "last_modified": "2026-02-28 17:36:23"
     },
     "email": {
       "name": "email",
@@ -26075,7 +26196,7 @@
           "signature": "class GmailProvider",
           "docstring": "Google Mail provider implementation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/email/gmail/provider.py",
-          "line_number": 28,
+          "line_number": 35,
           "is_public": true,
           "dependencies": []
         },
@@ -26119,7 +26240,7 @@
           "signature": "()",
           "docstring": "Return CLI commands for the email module.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/email/__init__.py",
-          "line_number": 41,
+          "line_number": 42,
           "is_public": true,
           "dependencies": []
         },
@@ -26172,7 +26293,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:39:20"
     },
     "cerebrum": {
       "name": "cerebrum",
@@ -26363,7 +26484,7 @@
           "signature": "class FPFCombinatoricsAnalyzer",
           "docstring": "Analyzes all combinatorics of FPF patterns using CEREBRUM.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cerebrum/fpf/combinatorics.py",
-          "line_number": 44,
+          "line_number": 46,
           "is_public": true,
           "dependencies": []
         },
@@ -26801,7 +26922,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:31"
+      "last_modified": "2026-02-28 17:48:48"
     },
     "orchestrator": {
       "name": "orchestrator",
@@ -27190,7 +27311,7 @@
           "signature": "(*actions: collections.abc.Callable, names: list[str] | None = None) -> codomyrmex.orchestrator.workflows.workflow.Workflow",
           "docstring": "Create a linear workflow where each task depends on the previous.\n\nArgs:\n    *actions: Callables to execute in order\n    names: Optional task names (defaults to action names or indices)\n\nReturns:\n    Configured Workflow",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/orchestrator/workflows/workflow.py",
-          "line_number": 573,
+          "line_number": 578,
           "is_public": true,
           "dependencies": []
         },
@@ -27322,7 +27443,7 @@
           "signature": "(initial: collections.abc.Callable, parallel_tasks: list[collections.abc.Callable], final: collections.abc.Callable, initial_name: str = 'initial', final_name: str = 'final') -> codomyrmex.orchestrator.workflows.workflow.Workflow",
           "docstring": "Create a fan-out/fan-in workflow pattern.\n\ninitial -> [parallel_tasks...] -> final\n\nArgs:\n    initial: Initial task to run first\n    parallel_tasks: Tasks to run in parallel after initial\n    final: Final task to run after all parallel tasks complete\n\nReturns:\n    Configured Workflow",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/orchestrator/workflows/workflow.py",
-          "line_number": 614,
+          "line_number": 619,
           "is_public": true,
           "dependencies": []
         },
@@ -27421,7 +27542,7 @@
           "signature": "(*actions: collections.abc.Callable, names: list[str] | None = None) -> codomyrmex.orchestrator.workflows.workflow.Workflow",
           "docstring": "Create a workflow where all tasks run in parallel.\n\nArgs:\n    *actions: Callables to execute in parallel\n    names: Optional task names\n\nReturns:\n    Configured Workflow",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/orchestrator/workflows/workflow.py",
-          "line_number": 595,
+          "line_number": 600,
           "is_public": true,
           "dependencies": []
         },
@@ -27738,7 +27859,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:23:24"
+      "last_modified": "2026-02-28 18:17:58"
     },
     "validation": {
       "name": "validation",
@@ -27746,6 +27867,28 @@
       "description": "**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026",
       "version": "unknown",
       "capabilities": [
+        {
+          "name": "Result",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/validation",
+          "type": "class",
+          "signature": "class Result",
+          "docstring": "Standard result type for module operations.\n\nEvery module operation should return a Result to enable\nconsistent error handling and status checking.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/validation/schemas/core.py",
+          "line_number": 30,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "ResultStatus",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/validation",
+          "type": "class",
+          "signature": "class ResultStatus",
+          "docstring": "Status of an operation result.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/validation/schemas/core.py",
+          "line_number": 12,
+          "is_public": true,
+          "dependencies": []
+        },
         {
           "name": "contextual",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/validation",
@@ -27894,7 +28037,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 17:36:39"
     },
     "quantum": {
       "name": "quantum",
@@ -28208,7 +28351,7 @@
           "signature": "class FPFIndex",
           "docstring": "Search index for FPF patterns and concepts.\n\nProvides fast lookup and search capabilities over the FPF specification.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/fpf/core/models.py",
-          "line_number": 194,
+          "line_number": 195,
           "is_public": true,
           "dependencies": []
         },
@@ -28514,7 +28657,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 13:03:27"
+      "last_modified": "2026-02-28 17:48:34"
     },
     "git_operations": {
       "name": "git_operations",
@@ -28771,7 +28914,7 @@
           "signature": "(url: str, destination: str, branch: str = None) -> bool",
           "docstring": "Clone a Git repository to the specified destination.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/decorators.py",
-          "line_number": 100,
+          "line_number": 101,
           "is_public": true,
           "dependencies": []
         },
@@ -29024,7 +29167,7 @@
           "signature": "(path: str, initial_commit: bool = True) -> bool",
           "docstring": "Initialize a new Git repository at the specified path.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/model_context_protocol/decorators.py",
-          "line_number": 40,
+          "line_number": 41,
           "is_public": true,
           "dependencies": []
         },
@@ -29167,7 +29310,7 @@
           "signature": "(mode: str = 'mixed', target: str = 'HEAD', repository_path: str = None) -> bool",
           "docstring": "Reset repository to a specific state.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/git_operations/core/commands/status.py",
-          "line_number": 203,
+          "line_number": 204,
           "is_public": true,
           "dependencies": []
         },
@@ -29253,7 +29396,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-26 06:07:54"
+      "last_modified": "2026-02-28 17:36:23"
     }
   },
   "system_status": {

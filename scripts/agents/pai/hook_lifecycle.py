@@ -26,9 +26,9 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents.pai import PAIBridge, ALGORITHM_PHASES
+from codomyrmex.agents.pai import PAIBridge
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning,
+    setup_logging, print_info, print_warning,
 )
 
 

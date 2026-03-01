@@ -13,6 +13,16 @@ Large Language Model integration: providers, chains, and prompts.
 - **PromptTemplate** — Template-based prompts
 - **LLMChain** — Chained LLM operations
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `generate_text` | Generate text using a specified LLM provider and model (OpenRouter, Ollama) | Safe |
+| `list_local_models` | List available local models managed by Ollama | Safe |
+| `query_fabric_metadata` | Query configuration metadata for Microsoft Fabric integration | Safe |
+
 ## Agent Instructions
 
 1. **Use templates** — Structured, reusable prompts

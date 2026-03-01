@@ -9,7 +9,6 @@ Demonstrates actual git capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -24,7 +23,6 @@ from codomyrmex.git_operations import (
     check_git_availability,
     is_git_repository,
     get_current_branch,
-    get_status,
     get_commit_history,
     get_config,
     RepositoryManager

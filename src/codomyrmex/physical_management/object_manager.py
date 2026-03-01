@@ -527,7 +527,8 @@ class ObjectRegistry:
             try:
                 self.event_handlers[event_type].remove(handler)
                 return True
-            except ValueError:
+            except ValueError as e:
+                logger.warning("Event handler not found for %s: %s", event_type, e)
                 return False
 
     def get_events(

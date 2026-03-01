@@ -1,6 +1,6 @@
 # Codomyrmex Module Index
 
-**Version**: v1.0.0 | **Modules**: 86 | **Last Updated**: February 2026
+**Version**: v1.0.0 | **Modules**: 88 | **Last Updated**: February 2026
 
 > [!TIP]
 > This INDEX confirms and catalogs every module directory in `src/codomyrmex/`.
@@ -14,7 +14,7 @@
 | [AGENTS.md](AGENTS.md) | Agent coordination & module listing |
 | [SPEC.md](SPEC.md) | Functional specification & architecture |
 | [PAI.md](PAI.md) | Personal AI Infrastructure mapping |
-| [**init**.py](__init__.py) | Canonical Python exports (86 modules) |
+| [**init**.py](__init__.py) | Canonical Python exports (88 modules) |
 
 ---
 
@@ -86,7 +86,7 @@ Advanced features with flexible dependencies.
 | [agents/](agents/) | AI agent integrations (Claude, Codex, Jules…) | 445 |
 | [audio/](audio/) | Audio processing & analysis | 69 |
 | [bio_simulation/](bio_simulation/) | Biological simulation models | 37 |
-| [calendar/](calendar/) | Event management & calendar providers | 23 |
+| [calendar_integration/](calendar_integration/) | Event management & calendar providers | 23 |
 | [cerebrum/](cerebrum/) | Case-based reasoning & Bayesian inference | 115 |
 | [cli/](cli/) | Command-line interface | 83 |
 | [collaboration/](collaboration/) | Team collaboration tools | 93 |
@@ -142,14 +142,14 @@ Advanced features with flexible dependencies.
 
 | Check | Status |
 | :--- | :--- |
-| Directions on disk | **86** |
-| Modules in `__init__.py._submodules` | **86** (excl. examples/tests) |
-| Modules in `__all__` | **89** (86 modules + 3 utility functions) |
+| Directions on disk | **88** |
+| Modules in `__init__.py._submodules` | **88** (excl. examples/tests) |
+| Modules in `__all__` | **91** (88 modules + 3 utility functions) |
 | Foundation Layer | **6** modules |
 | Core Layer | **15** modules |
 | Service Layer | **10** modules |
 | Specialized Layer | **55** modules |
-| **Total** | **86** ✅ |
+| **Total** | **88** ✅ |
 
 ---
 

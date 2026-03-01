@@ -10,7 +10,6 @@ import os
 import sys
 import tempfile
 import time
-import unittest
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
@@ -53,30 +52,22 @@ except ImportError:
 
 
 @pytest.mark.unit
-class TestBuildSynthesis(unittest.TestCase):
+class TestBuildSynthesis:
     """Test cases for build synthesis functionality."""
-
-    def setUp(self):
-        """Set up test fixtures."""
-        self.test_dir = tempfile.mkdtemp()
-
-    def tearDown(self):
-        """Clean up test fixtures."""
-        import shutil
-        shutil.rmtree(self.test_dir, ignore_errors=True)
 
     def test_check_build_environment(self):
         """Test build environment checking."""
         result = check_build_environment()
         # This should work regardless of what's installed
         # Function returns a dict, not a bool
-        self.assertIsInstance(result, dict)
-        self.assertIn('python_available', result)
+        assert isinstance(result, dict)
+        assert 'python_available' in result
 
-    def test_synthesize_python_executable(self):
+    def test_synthesize_python_executable(self, tmp_path):
         """Test synthesis of Python executable."""
-        source_file = os.path.join(self.test_dir, "test_script.py")
-        output_file = os.path.join(self.test_dir, "test_executable.py")
+        test_dir = str(tmp_path)
+        source_file = os.path.join(test_dir, "test_script.py")
+        output_file = os.path.join(test_dir, "test_executable.py")
 
         # Create a simple Python script
         with open(source_file, 'w') as f:
@@ -94,29 +85,30 @@ if __name__ == "__main__":
             artifact_type="executable"
         )
 
-        self.assertTrue(result)
-        self.assertTrue(os.path.exists(output_file))
+        assert result
+        assert os.path.exists(output_file)
 
         # Check that the output contains expected content
         with open(output_file) as f:
             content = f.read()
-            self.assertIn("import", content)
+            assert "import" in content
             # The synthesized executable may use exec() or main() depending on implementation
-            self.assertTrue("main()" in content or "__main__" in content or "exec(" in content)
+            assert "main()" in content or "__main__" in content or "exec(" in content
 
-    def test_validate_build_output(self):
+    def test_validate_build_output(self, tmp_path):
         """Test build output validation."""
+        test_dir = str(tmp_path)
         # Create a test file with proper Python code
-        test_file = os.path.join(self.test_dir, "test_output.py")
+        test_file = os.path.join(test_dir, "test_output.py")
         with open(test_file, 'w') as f:
             f.write("# Test Python file\nimport sys\ndef main():\n    print('Hello')\n\nif __name__ == '__main__':\n    main()\n")
 
         validation = validate_build_output(test_file)
 
-        self.assertTrue(validation["exists"])
-        self.assertTrue(validation["is_file"])
-        self.assertTrue(validation["size_bytes"] > 0)
-        self.assertEqual(len(validation["errors"]), 0)
+        assert validation["exists"]
+        assert validation["is_file"]
+        assert validation["size_bytes"] > 0
+        assert len(validation["errors"]) == 0
 
     def test_orchestrate_build_pipeline(self):
         """Test build pipeline orchestration."""
@@ -130,30 +122,31 @@ if __name__ == "__main__":
 
         results = orchestrate_build_pipeline(build_config)
 
-        self.assertIsInstance(results, dict)
-        self.assertIn("overall_success", results)
-        self.assertIn("stages", results)
-        self.assertIn("artifacts", results)
-        self.assertIn("errors", results)
+        assert isinstance(results, dict)
+        assert "overall_success" in results
+        assert "stages" in results
+        assert "artifacts" in results
+        assert "errors" in results
 
-    def test_synthesize_nonexistent_source(self):
+    def test_synthesize_nonexistent_source(self, tmp_path):
         """Test synthesis with nonexistent source file."""
+        test_dir = str(tmp_path)
         result = synthesize_build_artifact(
             source_path="/nonexistent/file.py",
-            output_path=os.path.join(self.test_dir, "output.py"),
+            output_path=os.path.join(test_dir, "output.py"),
             artifact_type="executable"
         )
 
-        self.assertFalse(result)
+        assert not result
 
     def test_validate_nonexistent_output(self):
         """Test validation of nonexistent output file."""
         validation = validate_build_output("/nonexistent/file.py")
 
-        self.assertFalse(validation["exists"])
-        self.assertIn("does not exist", validation["errors"][0])
+        assert not validation["exists"]
+        assert "does not exist" in validation["errors"][0]
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_supported_languages(self):
         """Test getting supported languages."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -161,16 +154,16 @@ if __name__ == "__main__":
         )
 
         languages = get_supported_languages()
-        self.assertIsInstance(languages, list)
-        self.assertGreater(len(languages), 0)
+        assert isinstance(languages, list)
+        assert len(languages) > 0
 
         # Should include common languages
         common_languages = ["python", "javascript", "java", "cpp", "c"]
         for lang in common_languages:
             if lang in languages:
-                self.assertIn(lang, languages)
+                assert lang in languages
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_create_build_manifest(self):
         """Test build manifest creation."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -186,13 +179,13 @@ if __name__ == "__main__":
 
         manifest = create_build_manifest(build_config)
 
-        self.assertIsInstance(manifest, dict)
-        self.assertIn("build_config", manifest)
-        self.assertIn("timestamp", manifest)
-        self.assertIn("manifest_version", manifest)
-        self.assertEqual(manifest["build_config"]["name"], "test_build")
+        assert isinstance(manifest, dict)
+        assert "build_config" in manifest
+        assert "timestamp" in manifest
+        assert "manifest_version" in manifest
+        assert manifest["build_config"]["name"] == "test_build"
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_optimize_build_config(self):
         """Test build configuration optimization."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -207,11 +200,11 @@ if __name__ == "__main__":
 
         optimized = optimize_build_config(config)
 
-        self.assertIsInstance(optimized, dict)
+        assert isinstance(optimized, dict)
         # Should have optimization recommendations
-        self.assertIn("parallel_jobs", optimized)
+        assert "parallel_jobs" in optimized
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_validate_build_dependencies(self):
         """Test build dependency validation."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -221,15 +214,15 @@ if __name__ == "__main__":
         dependencies = ["os", "sys", "json"]  # Built-in modules
         result = validate_build_dependencies(dependencies)
 
-        self.assertIsInstance(result, dict)
-        self.assertIn("valid", result)
-        self.assertIn("missing", result)
-        self.assertIn("available", result)
+        assert isinstance(result, dict)
+        assert "valid" in result
+        assert "missing" in result
+        assert "available" in result
 
         # Built-in modules should be available
-        self.assertTrue(result["valid"] or len(result["available"]) > 0)
+        assert result["valid"] or len(result["available"]) > 0
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_parallel_build_execution(self):
         """Test parallel build execution."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -244,24 +237,25 @@ if __name__ == "__main__":
 
         results = parallel_build_execution(build_tasks, max_workers=2)
 
-        self.assertIsInstance(results, list)
-        self.assertEqual(len(results), len(build_tasks))
+        assert isinstance(results, list)
+        assert len(results) == len(build_tasks)
 
         for result in results:
-            self.assertIn("task", result)
-            self.assertIn("success", result)
-            self.assertIn("duration", result)
+            assert "task" in result
+            assert "success" in result
+            assert "duration" in result
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
-    def test_incremental_build_check(self):
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
+    def test_incremental_build_check(self, tmp_path):
         """Test incremental build checking."""
+        test_dir = str(tmp_path)
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             incremental_build_check,
         )
 
         # Create test files with different modification times
-        old_file = os.path.join(self.test_dir, "old.py")
-        new_file = os.path.join(self.test_dir, "new.py")
+        old_file = os.path.join(test_dir, "old.py")
+        new_file = os.path.join(test_dir, "new.py")
 
         with open(old_file, 'w') as f:
             f.write("# Old file")
@@ -275,11 +269,12 @@ if __name__ == "__main__":
 
         needs_build = incremental_build_check(source_files, build_cache)
 
-        self.assertIsInstance(needs_build, bool)
+        assert isinstance(needs_build, bool)
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
-    def test_cleanup_build_artifacts(self):
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
+    def test_cleanup_build_artifacts(self, tmp_path):
         """Test build artifact cleanup."""
+        test_dir = str(tmp_path)
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             cleanup_build_artifacts,
         )
@@ -287,7 +282,7 @@ if __name__ == "__main__":
         # Create some test artifacts
         artifacts = []
         for i in range(3):
-            artifact = os.path.join(self.test_dir, f"artifact_{i}.tmp")
+            artifact = os.path.join(test_dir, f"artifact_{i}.tmp")
             with open(artifact, 'w') as f:
                 f.write(f"Test artifact {i}")
             artifacts.append(artifact)
@@ -295,13 +290,13 @@ if __name__ == "__main__":
         # Clean them up
         result = cleanup_build_artifacts(artifacts)
 
-        self.assertTrue(result)
+        assert result
 
         # Verify they're gone
         for artifact in artifacts:
-            self.assertFalse(os.path.exists(artifact))
+            assert not os.path.exists(artifact)
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_get_build_metrics(self):
         """Test build metrics collection."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -319,12 +314,12 @@ if __name__ == "__main__":
 
         metrics = get_build_metrics(build_results)
 
-        self.assertIsInstance(metrics, dict)
-        self.assertIn("build_success_rate", metrics)
-        self.assertIn("average_build_time", metrics)
-        self.assertIn("artifact_creation_rate", metrics)
+        assert isinstance(metrics, dict)
+        assert "build_success_rate" in metrics
+        assert "average_build_time" in metrics
+        assert "artifact_creation_rate" in metrics
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_export_build_report(self):
         """Test build report export."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -341,20 +336,21 @@ if __name__ == "__main__":
 
         # Test JSON export
         json_report = export_build_report(build_data, "json")
-        self.assertIsInstance(json_report, str)
+        assert isinstance(json_report, str)
 
         parsed = json.loads(json_report)
-        self.assertEqual(parsed["build_id"], "test_build_123")
+        assert parsed["build_id"] == "test_build_123"
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
-    def test_import_build_config(self):
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
+    def test_import_build_config(self, tmp_path):
         """Test build configuration import."""
+        test_dir = str(tmp_path)
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             import_build_config,
         )
 
         # Create a test config file
-        config_file = os.path.join(self.test_dir, "build_config.json")
+        config_file = os.path.join(test_dir, "build_config.json")
         config_data = {
             "name": "test_project",
             "version": "1.0.0",
@@ -366,10 +362,10 @@ if __name__ == "__main__":
 
         imported_config = import_build_config(config_file)
 
-        self.assertIsInstance(imported_config, dict)
-        self.assertEqual(imported_config["name"], "test_project")
+        assert isinstance(imported_config, dict)
+        assert imported_config["name"] == "test_project"
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_validate_build_config(self):
         """Test build configuration validation."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -384,8 +380,8 @@ if __name__ == "__main__":
         }
 
         is_valid, errors = validate_build_config(valid_config)
-        self.assertTrue(is_valid)
-        self.assertEqual(len(errors), 0)
+        assert is_valid
+        assert len(errors) == 0
 
         # Invalid config
         invalid_config = {
@@ -394,10 +390,10 @@ if __name__ == "__main__":
         }
 
         is_valid, errors = validate_build_config(invalid_config)
-        self.assertFalse(is_valid)
-        self.assertGreater(len(errors), 0)
+        assert not is_valid
+        assert len(errors) > 0
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_get_build_history(self):
         """Test build history retrieval."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -406,11 +402,11 @@ if __name__ == "__main__":
 
         history = get_build_history(limit=10)
 
-        self.assertIsInstance(history, list)
+        assert isinstance(history, list)
         # History might be empty if no builds have been recorded
-        self.assertGreaterEqual(len(history), 0)
+        assert len(history) >= 0
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_rollback_build(self):
         """Test build rollback functionality."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import rollback_build
@@ -418,11 +414,11 @@ if __name__ == "__main__":
         # Test rollback to non-existent build (should fail gracefully)
         result = rollback_build("nonexistent_build_id")
 
-        self.assertIsInstance(result, bool)
+        assert isinstance(result, bool)
         # Should return False for non-existent build
-        self.assertFalse(result)
+        assert not result
 
-    @unittest.skipUnless(FULL_BUILD_AVAILABLE, "Full build synthesis not available")
+    @pytest.mark.skipif(not FULL_BUILD_AVAILABLE, reason="Full build synthesis not available")
     def test_monitor_build_progress(self):
         """Test build progress monitoring."""
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
@@ -434,14 +430,14 @@ if __name__ == "__main__":
 
         progress = monitor_build_progress(build_id)
 
-        self.assertIsInstance(progress, dict)
+        assert isinstance(progress, dict)
         # Progress info should be available even for non-existent builds
-        self.assertIn("status", progress)
+        assert "status" in progress
 
     def test_concurrent_build_operations(self):
         """Test concurrent build operations."""
         if not FULL_BUILD_AVAILABLE:
-            self.skipTest("Full build synthesis not available")
+            pytest.skip("Full build synthesis not available")
 
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             parallel_build_execution,
@@ -458,12 +454,12 @@ if __name__ == "__main__":
 
         results = parallel_build_execution(tasks, max_workers=3)
 
-        self.assertEqual(len(results), len(tasks))
+        assert len(results) == len(tasks)
 
         # All tasks should have completed
         for result in results:
-            self.assertIn("success", result)
-            self.assertIn("duration", result)
+            assert "success" in result
+            assert "duration" in result
 
     def test_build_error_handling(self):
         """Test error handling in build operations."""
@@ -475,20 +471,19 @@ if __name__ == "__main__":
         ]
 
         for config in invalid_configs:
-            with self.subTest(config=config):
-                try:
-                    results = orchestrate_build_pipeline(config)
-                    # Should handle gracefully
-                    self.assertIsInstance(results, dict)
-                    self.assertIn("overall_success", results)
-                except Exception:
-                    # Some errors might be raised, that's acceptable
-                    pass
+            try:
+                results = orchestrate_build_pipeline(config)
+                # Should handle gracefully
+                assert isinstance(results, dict)
+                assert "overall_success" in results
+            except Exception:
+                # Some errors might be raised, that's acceptable
+                pass
 
     def test_build_resource_limits(self):
         """Test build operations under resource constraints."""
         if not FULL_BUILD_AVAILABLE:
-            self.skipTest("Full build synthesis not available")
+            pytest.skip("Full build synthesis not available")
 
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             parallel_build_execution,
@@ -502,9 +497,9 @@ if __name__ == "__main__":
 
         results = parallel_build_execution(tasks, max_workers=1)
 
-        self.assertEqual(len(results), len(tasks))
+        assert len(results) == len(tasks)
         for result in results:
-            self.assertIn("success", result)
+            assert "success" in result
 
     def test_build_timeout_handling(self):
         """Test timeout handling in build operations."""
@@ -518,12 +513,13 @@ if __name__ == "__main__":
 
         results = orchestrate_build_pipeline(slow_config)
 
-        self.assertIsInstance(results, dict)
+        assert isinstance(results, dict)
         # Should complete within timeout
-        self.assertIn("overall_success", results)
+        assert "overall_success" in results
 
-    def test_build_artifact_validation_comprehensive(self):
+    def test_build_artifact_validation_comprehensive(self, tmp_path):
         """Comprehensive test of build artifact validation."""
+        test_dir = str(tmp_path)
         # Test various file types and validation scenarios
         test_cases = [
             ("python_file", "test.py", "# Python file\ndef hello():\n    print('hello')\n", True),
@@ -533,25 +529,24 @@ if __name__ == "__main__":
         ]
 
         for case_name, filename, content, should_be_valid in test_cases:
-            with self.subTest(case=case_name):
-                filepath = os.path.join(self.test_dir, filename)
+            filepath = os.path.join(test_dir, filename)
 
-                if isinstance(content, str):
-                    with open(filepath, 'w') as f:
-                        f.write(content)
-                else:
-                    with open(filepath, 'wb') as f:
-                        f.write(content)
+            if isinstance(content, str):
+                with open(filepath, 'w') as f:
+                    f.write(content)
+            else:
+                with open(filepath, 'wb') as f:
+                    f.write(content)
 
-                validation = validate_build_output(filepath)
+            validation = validate_build_output(filepath)
 
-                self.assertIsInstance(validation, dict)
-                self.assertIn("exists", validation)
-                self.assertTrue(validation["exists"])  # File should exist
+            assert isinstance(validation, dict)
+            assert "exists" in validation
+            assert validation["exists"]  # File should exist
 
-                if should_be_valid:
-                    self.assertTrue(validation["is_file"])
-                    self.assertGreater(validation["size_bytes"], 0)
+            if should_be_valid:
+                assert validation["is_file"]
+                assert validation["size_bytes"] > 0
 
     def test_build_configuration_edge_cases(self):
         """Test build configuration edge cases."""
@@ -563,18 +558,17 @@ if __name__ == "__main__":
         ]
 
         for config in edge_configs:
-            with self.subTest(config=config):
-                try:
-                    results = orchestrate_build_pipeline(config)
-                    self.assertIsInstance(results, dict)
-                except Exception:
-                    # Edge cases might raise exceptions, that's acceptable
-                    pass
+            try:
+                results = orchestrate_build_pipeline(config)
+                assert isinstance(results, dict)
+            except Exception:
+                # Edge cases might raise exceptions, that's acceptable
+                pass
 
     def test_build_metrics_calculation(self):
         """Test build metrics calculation."""
         if not FULL_BUILD_AVAILABLE:
-            self.skipTest("Full build synthesis not available")
+            pytest.skip("Full build synthesis not available")
 
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             get_build_metrics,
@@ -588,15 +582,14 @@ if __name__ == "__main__":
         ]
 
         for result in test_results:
-            with self.subTest(result=result):
-                metrics = get_build_metrics(result)
-                self.assertIsInstance(metrics, dict)
-                self.assertIn("build_success_rate", metrics)
+            metrics = get_build_metrics(result)
+            assert isinstance(metrics, dict)
+            assert "build_success_rate" in metrics
 
     def test_build_report_formats(self):
         """Test different build report formats."""
         if not FULL_BUILD_AVAILABLE:
-            self.skipTest("Full build synthesis not available")
+            pytest.skip("Full build synthesis not available")
 
         from codomyrmex.ci_cd_automation.build.build_orchestrator import (
             export_build_report,
@@ -612,15 +605,10 @@ if __name__ == "__main__":
         formats = ["json", "xml", "yaml"] if hasattr(export_build_report, '__code__') and 'format' in export_build_report.__code__.co_varnames else ["json"]
 
         for fmt in formats:
-            with self.subTest(format=fmt):
-                try:
-                    report = export_build_report(test_data, fmt)
-                    self.assertIsInstance(report, str)
-                    self.assertGreater(len(report), 0)
-                except Exception:
-                    # Some formats might not be supported
-                    pass
-
-
-if __name__ == '__main__':
-    unittest.main()
+            try:
+                report = export_build_report(test_data, fmt)
+                assert isinstance(report, str)
+                assert len(report) > 0
+            except Exception:
+                # Some formats might not be supported
+                pass

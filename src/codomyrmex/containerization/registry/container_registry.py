@@ -534,7 +534,8 @@ class ContainerRegistry:
                 }
             }
 
-        except ImageNotFound:
+        except ImageNotFound as e:
+            logger.warning("Image not found in registry: %s", e)
             return None
         except DockerException as e:
             logger.error(f"Failed to get image info: {e}")

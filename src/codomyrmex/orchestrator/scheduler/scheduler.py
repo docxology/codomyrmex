@@ -6,6 +6,7 @@ Task scheduler with support for various trigger types.
 
 import concurrent.futures
 import heapq
+import logging
 import threading
 import time
 from collections.abc import Callable
@@ -14,6 +15,8 @@ from typing import Any
 
 from .models import Job, JobStatus
 from .triggers import CronTrigger, IntervalTrigger, OnceTrigger, Trigger
+
+logger = logging.getLogger(__name__)
 
 
 class Scheduler:
@@ -140,7 +143,8 @@ class Scheduler:
         """Execute a job and reschedule if needed."""
         try:
             job.execute()
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            logger.warning("Job '%s' execution failed: %s", job.name if hasattr(job, 'name') else job, e)
             pass  # Error already recorded in job
 
         # Reschedule if has next run

@@ -10,11 +10,9 @@ Usage:
     python scaffold_modules.py            # Execute creation
 """
 
-import os
 import sys
 from pathlib import Path
 from datetime import datetime
-from typing import Tuple
 from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_warning
 
 # Add project root to path

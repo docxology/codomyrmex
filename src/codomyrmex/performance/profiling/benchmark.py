@@ -10,11 +10,14 @@ Provides:
 
 from __future__ import annotations
 
+import logging
 import statistics
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 try:
     import psutil
@@ -108,7 +111,8 @@ def run_benchmark(
     for _ in range(warmup):
         try:
             func()
-        except Exception:
+        except Exception as e:
+            logger.debug("Benchmark warmup iteration raised: %s", e)
             pass
 
     times: list[float] = []
@@ -116,7 +120,8 @@ def run_benchmark(
         start = time.perf_counter()
         try:
             func()
-        except Exception:
+        except Exception as e:
+            logger.debug("Benchmark iteration raised: %s", e)
             pass
         times.append(time.perf_counter() - start)
 
@@ -143,7 +148,8 @@ def profile_function(func: Callable, *args: Any, **kwargs: Any) -> dict[str, Any
     start = time.perf_counter()
     try:
         func(*args, **kwargs)
-    except Exception:
+    except Exception as e:
+        logger.debug("Profiled function raised: %s", e)
         pass
     execution_time = time.perf_counter() - start
 

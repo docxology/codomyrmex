@@ -7,7 +7,6 @@ Zero-mock policy: all data is real in-memory numeric arrays.
 """
 
 import json
-import math
 import statistics
 import time
 
@@ -458,11 +457,6 @@ class TestStreamingAnalyticsManager:
         with pytest.raises(ValueError, match="Unsupported export format"):
             sa.export_stream_data("bad-fmt", format="xml")
 
-    @pytest.mark.xfail(
-        reason="export_stream_data bug: AnalyticsMetric enum keys are not JSON-serializable "
-               "when completed_windows exist with calculated metrics",
-        strict=False,
-    )
     def test_export_with_completed_windows(self):
         """Exporting a stream whose windows have completed should produce valid JSON."""
         sa = StreamingAnalytics()

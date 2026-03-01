@@ -17,10 +17,8 @@ except ImportError:
 
 import argparse
 import gzip
-import bz2
 import zipfile
 import tarfile
-import os
 
 
 def format_size(size: int) -> str:

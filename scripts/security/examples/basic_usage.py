@@ -10,7 +10,6 @@ Demonstrates actual security capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -24,7 +23,6 @@ from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_inf
 from codomyrmex.security import (
     VulnerabilityScanner,
     AccessControlSystem,
-    SecurityPrinciple,
     get_security_principles
 )
 

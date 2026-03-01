@@ -7,6 +7,7 @@ Cache pre-population and warming strategies.
 __version__ = "0.1.0"
 
 import concurrent.futures
+import logging
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -15,6 +16,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, Set, TypeVar
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar('T')
 K = TypeVar('K')
@@ -307,7 +310,8 @@ class CacheWarmer(Generic[K, V]):
             value = self.value_loader.load(key)
             self.cache[key] = value
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to warm cache key %r: %s", key, e)
             return False
 
     def start_scheduler(self) -> None:

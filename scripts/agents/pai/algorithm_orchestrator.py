@@ -42,7 +42,7 @@ from codomyrmex.agents.pai import (
     reset_trust,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning, print_error,
+    setup_logging, print_info, print_success, print_warning,
 )
 
 

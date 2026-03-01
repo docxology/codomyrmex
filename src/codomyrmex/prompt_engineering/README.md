@@ -193,4 +193,5 @@ Original standalone modules remain as backward-compatible re-export wrappers.
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/prompt_engineering/](../../../docs/modules/prompt_engineering/)
 - [API_SPECIFICATION](API_SPECIFICATION.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)

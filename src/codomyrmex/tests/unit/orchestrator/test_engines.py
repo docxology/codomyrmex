@@ -11,7 +11,6 @@ from codomyrmex.orchestrator.engines import (
     SequentialEngine,
     ParallelEngine,
     WorkflowDefinition,
-    WorkflowResult,
     TaskState,
     create_engine,
 )

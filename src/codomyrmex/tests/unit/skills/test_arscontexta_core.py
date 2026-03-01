@@ -12,23 +12,17 @@ import pytest
 
 from codomyrmex.skills.arscontexta.core import (
     ArsContextaManager,
-    DerivationEngine,
     KernelPrimitiveRegistry,
     MethodologyGraph,
-    ProcessingPipeline,
     VaultHealthChecker,
 )
 from codomyrmex.skills.arscontexta.models import (
-    ConfigDimension,
-    DimensionSignal,
     HealthStatus,
     KernelConfig,
     KernelLayer,
     KernelPrimitive,
-    PipelineStage,
     ResearchClaim,
     VaultConfig,
-    VaultSpace,
 )
 
 

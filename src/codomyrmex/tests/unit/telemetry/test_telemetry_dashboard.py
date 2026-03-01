@@ -6,7 +6,6 @@ and DashboardManager from both the submodule files and the
 __init__.py re-exports.
 """
 
-import time
 from datetime import datetime, timedelta
 
 import pytest

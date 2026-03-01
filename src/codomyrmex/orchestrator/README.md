@@ -111,13 +111,26 @@ Script orchestration engine for discovering, configuring, and running Python scr
 ## Quick Start
 
 ```python
-from codomyrmex.orchestrator import StepError, OrchestratorTimeoutError
+import asyncio
+from codomyrmex.orchestrator import Workflow, RetryPolicy
 
-# Create a StepError instance
-steperror = StepError()
+def fetch_data():
+    return {"users": 150}
 
-# Use OrchestratorTimeoutError for additional functionality
-orchestratortimeouterror = OrchestratorTimeoutError()
+def transform(data):
+    return {k: v * 2 for k, v in data.items()}
+
+def report(result):
+    print(f"Report: {result}")
+
+wf = Workflow(name="etl-pipeline", fail_fast=True)
+wf.add_task("fetch", action=fetch_data)
+wf.add_task("transform", action=transform, dependencies=["fetch"],
+            retry_policy=RetryPolicy(max_attempts=3))
+wf.add_task("report", action=report, dependencies=["transform"])
+
+results = asyncio.run(wf.run())
+print(wf.get_summary())
 ```
 
 ## Testing

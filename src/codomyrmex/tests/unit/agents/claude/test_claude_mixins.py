@@ -532,7 +532,6 @@ class TestFileOpsMixin:
 
     def test_edit_file_auto_detects_language_from_extension(self):
         """Verify the lang_map logic by checking a real temp file path."""
-        from codomyrmex.agents.claude.mixins.file_ops import FileOpsMixin
 
         # We just verify the lang_map dict exists and covers common extensions
         ext_map = {

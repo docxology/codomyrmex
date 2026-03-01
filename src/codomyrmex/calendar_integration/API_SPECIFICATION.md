@@ -75,16 +75,12 @@ Token storage: `~/.codomyrmex/gcal_token.json` (written by PAI dashboard OAuth f
 
 ```python
 from datetime import datetime, timezone
-from codomyrmex.calendar import CalendarProvider, CalendarEvent, CALENDAR_AVAILABLE
+from codomyrmex.calendar_integration import CalendarProvider, CalendarEvent, CALENDAR_AVAILABLE
 
 if CALENDAR_AVAILABLE:
-    from codomyrmex.calendar.gcal.provider import GoogleCalendar
-    from google.oauth2.credentials import Credentials
+    from codomyrmex.calendar_integration import GoogleCalendar
 
-    creds = Credentials(token="...", refresh_token="...",
-                        token_uri="https://oauth2.googleapis.com/token",
-                        client_id="...", client_secret="...")
-    cal: CalendarProvider = GoogleCalendar(credentials=creds)
+    cal: CalendarProvider = GoogleCalendar.from_env()
 
     # List next 7 days of events
     now = datetime.now(timezone.utc)

@@ -9,7 +9,6 @@ Demonstrates actual static analysis capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -22,7 +21,6 @@ except ImportError:
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.static_analysis import (
     StaticAnalyzer,
-    AnalysisType,
     get_available_tools,
     analyze_file
 )

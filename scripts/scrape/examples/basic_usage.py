@@ -8,7 +8,6 @@ Demonstrates actual scraping capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path

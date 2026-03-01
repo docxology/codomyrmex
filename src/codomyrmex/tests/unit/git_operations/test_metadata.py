@@ -12,7 +12,6 @@ Tests all public CLI command functions:
 Zero-mock policy: uses real RepositoryMetadataManager backed by tmp_path JSON.
 """
 
-import argparse
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path

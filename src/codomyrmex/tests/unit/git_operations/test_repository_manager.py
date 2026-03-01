@@ -9,7 +9,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import unittest
 from pathlib import Path
 
 import pytest
@@ -32,13 +31,17 @@ def check_git_available():
         return False
 
 
+_GIT_AVAILABLE = check_git_available()
+
+
 @pytest.mark.unit
-class TestRepositoryManager(unittest.TestCase):
+class TestRepositoryManager:
     """Test cases for Repository Manager."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup_environment(self, tmp_path):
         """Set up test environment."""
-        self.temp_dir = tempfile.mkdtemp()
+        self.temp_dir = str(tmp_path)
         self.library_file = os.path.join(self.temp_dir, "test_library.txt")
         self.base_path = os.path.join(self.temp_dir, "repos")
 
@@ -57,11 +60,7 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
             base_path=self.base_path
         )
         self.test_repo = self.manager.get_repository("testuser/testrepo")
-
-    def tearDown(self):
-        """Clean up test environment."""
-        if os.path.exists(self.temp_dir):
-            shutil.rmtree(self.temp_dir, ignore_errors=True)
+        yield
 
     def test_repository_creation(self):
         """Test Repository dataclass creation."""
@@ -74,9 +73,9 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
             local_path_suggestion="testuser/testrepo"
         )
 
-        self.assertEqual(repo.full_name, "testuser/testrepo")
-        self.assertTrue(repo.is_development_repo)
-        self.assertFalse(repo.is_readonly_repo)
+        assert repo.full_name == "testuser/testrepo"
+        assert repo.is_development_repo
+        assert not repo.is_readonly_repo
 
     def test_repository_manager_initialization(self):
         """Test RepositoryManager initialization."""
@@ -85,10 +84,10 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
             base_path=self.base_path
         )
 
-        self.assertEqual(len(manager.repositories), 3)
-        self.assertIn("testuser/testrepo", manager.repositories)
-        self.assertIn("external/library", manager.repositories)
-        self.assertIn("upstream/project", manager.repositories)
+        assert len(manager.repositories) == 3
+        assert "testuser/testrepo" in manager.repositories
+        assert "external/library" in manager.repositories
+        assert "upstream/project" in manager.repositories
 
     def test_list_repositories(self):
         """Test listing repositories."""
@@ -99,20 +98,20 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
 
         # List all repositories
         all_repos = manager.list_repositories()
-        self.assertEqual(len(all_repos), 3)
+        assert len(all_repos) == 3
 
         # List by type
         own_repos = manager.list_repositories(RepositoryType.OWN)
-        self.assertEqual(len(own_repos), 1)
-        self.assertEqual(own_repos[0].full_name, "testuser/testrepo")
+        assert len(own_repos) == 1
+        assert own_repos[0].full_name == "testuser/testrepo"
 
         use_repos = manager.list_repositories(RepositoryType.USE)
-        self.assertEqual(len(use_repos), 1)
-        self.assertEqual(use_repos[0].full_name, "external/library")
+        assert len(use_repos) == 1
+        assert use_repos[0].full_name == "external/library"
 
         fork_repos = manager.list_repositories(RepositoryType.FORK)
-        self.assertEqual(len(fork_repos), 1)
-        self.assertEqual(fork_repos[0].full_name, "upstream/project")
+        assert len(fork_repos) == 1
+        assert fork_repos[0].full_name == "upstream/project"
 
     def test_get_repository(self):
         """Test getting a specific repository."""
@@ -123,13 +122,13 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
 
         # Get existing repository
         repo = manager.get_repository("testuser/testrepo")
-        self.assertIsNotNone(repo)
-        self.assertEqual(repo.owner, "testuser")
-        self.assertEqual(repo.name, "testrepo")
+        assert repo is not None
+        assert repo.owner == "testuser"
+        assert repo.name == "testrepo"
 
         # Get non-existing repository
         repo = manager.get_repository("nonexistent/repo")
-        self.assertIsNone(repo)
+        assert repo is None
 
     def test_search_repositories(self):
         """Test searching repositories."""
@@ -140,22 +139,22 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
 
         # Search by name
         results = manager.search_repositories("testrepo")
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].full_name, "testuser/testrepo")
+        assert len(results) == 1
+        assert results[0].full_name == "testuser/testrepo"
 
         # Search by owner
         results = manager.search_repositories("external")
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].full_name, "external/library")
+        assert len(results) == 1
+        assert results[0].full_name == "external/library"
 
         # Search by description
         results = manager.search_repositories("library")
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].full_name, "external/library")
+        assert len(results) == 1
+        assert results[0].full_name == "external/library"
 
         # Search with no results
         results = manager.search_repositories("nonexistent")
-        self.assertEqual(len(results), 0)
+        assert len(results) == 0
 
     def test_get_local_path(self):
         """Test getting local path for repository."""
@@ -168,9 +167,9 @@ FORK|upstream|project|https://github.com/upstream/project.git|Forked project|for
         local_path = manager.get_local_path(repo)
 
         expected_path = Path(self.base_path) / "testuser/testrepo"
-        self.assertEqual(local_path, expected_path)
+        assert local_path == expected_path
 
-    @unittest.skipUnless(check_git_available(), "Git not available")
+    @pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git not available")
     def test_clone_repository_success(self):
         """Test successful repository cloning with real git."""
         manager = RepositoryManager(
@@ -209,7 +208,7 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         # Clone should work with local path
         success = manager.clone_repository("testuser/testrepo")
         # May succeed or fail depending on implementation
-        self.assertIsInstance(success, bool)
+        assert isinstance(success, bool)
 
     def test_clone_repository_failure(self):
         """Test failed repository cloning with real git."""
@@ -221,7 +220,7 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         # Try to clone a non-existent repository
         success = manager.clone_repository("testuser/testrepo")
         # Should fail for non-existent remote
-        self.assertIsInstance(success, bool)
+        assert isinstance(success, bool)
 
     def test_clone_nonexistent_repository(self):
         """Test cloning non-existent repository."""
@@ -232,9 +231,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
 
         success = manager.clone_repository("nonexistent/repo")
 
-        self.assertFalse(success)
+        assert not success
 
-    @unittest.skipUnless(check_git_available(), "Git not available")
+    @pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git not available")
     def test_update_repository_success(self):
         """Test successful repository update with real git."""
         manager = RepositoryManager(
@@ -268,7 +267,7 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
 
         # Update should work
         success = manager.update_repository("testuser/testrepo")
-        self.assertIsInstance(success, bool)
+        assert isinstance(success, bool)
 
     def test_update_repository_not_cloned(self):
         """Test updating repository that's not cloned locally."""
@@ -280,9 +279,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         success = manager.update_repository("testuser/testrepo")
 
         # Should fail if not cloned
-        self.assertIsInstance(success, bool)
+        assert isinstance(success, bool)
 
-    @unittest.skipUnless(check_git_available(), "Git not available")
+    @pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git not available")
     def test_get_repository_status(self):
         """Test getting repository status with real git."""
         manager = RepositoryManager(
@@ -316,10 +315,10 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
 
         status = manager.get_repository_status("testuser/testrepo")
 
-        self.assertIsNotNone(status)
-        self.assertEqual(status["repository"], "testuser/testrepo")
-        self.assertEqual(status["type"], "OWN")
-        self.assertTrue(status["is_development"])
+        assert status is not None
+        assert status["repository"] == "testuser/testrepo"
+        assert status["type"] == "OWN"
+        assert status["is_development"]
 
     def test_get_repository_status_not_cloned(self):
         """Test getting status of repository that's not cloned."""
@@ -330,9 +329,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
 
         status = manager.get_repository_status("testuser/testrepo")
 
-        self.assertIsNotNone(status)
-        self.assertIn("error", status)
-        self.assertEqual(status["error"], "Repository not found locally")
+        assert status is not None
+        assert "error" in status
+        assert status["error"] == "Repository not found locally"
 
     def test_bulk_clone(self):
         """Test bulk cloning repositories with real git."""
@@ -344,9 +343,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         results = manager.bulk_clone()
 
         # Should return results for all repositories
-        self.assertEqual(len(results), 3)
+        assert len(results) == 3
         # Results may be True or False depending on whether repos exist
-        self.assertTrue(all(isinstance(v, bool) for v in results.values()))
+        assert all(isinstance(v, bool) for v in results.values())
 
     def test_bulk_update(self):
         """Test bulk updating repositories with real git."""
@@ -358,9 +357,9 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         results = manager.bulk_update()
 
         # Should return results for all repositories
-        self.assertEqual(len(results), 3)
+        assert len(results) == 3
         # Results may be True or False depending on whether repos are cloned
-        self.assertTrue(all(isinstance(v, bool) for v in results.values()))
+        assert all(isinstance(v, bool) for v in results.values())
 
     def test_invalid_library_file(self):
         """Test handling of invalid library file."""
@@ -376,7 +375,7 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         )
 
         # Should handle invalid entries gracefully
-        self.assertEqual(len(manager.repositories), 0)
+        assert len(manager.repositories) == 0
 
     def test_nonexistent_library_file(self):
         """Test handling of non-existent library file."""
@@ -386,7 +385,7 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
         )
 
         # Should handle missing file gracefully
-        self.assertEqual(len(manager.repositories), 0)
+        assert len(manager.repositories) == 0
 
     def test_repository_type_properties(self):
         """Test repository type properties."""
@@ -396,8 +395,8 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
             owner="test", name="repo", url="url",
             description="desc", local_path_suggestion="path"
         )
-        self.assertTrue(own_repo.is_development_repo)
-        self.assertFalse(own_repo.is_readonly_repo)
+        assert own_repo.is_development_repo
+        assert not own_repo.is_readonly_repo
 
         # Test USE repository
         use_repo = Repository(
@@ -405,8 +404,8 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
             owner="test", name="repo", url="url",
             description="desc", local_path_suggestion="path"
         )
-        self.assertFalse(use_repo.is_development_repo)
-        self.assertTrue(use_repo.is_readonly_repo)
+        assert not use_repo.is_development_repo
+        assert use_repo.is_readonly_repo
 
         # Test FORK repository
         fork_repo = Repository(
@@ -414,11 +413,10 @@ OWN|testuser|testrepo|{test_repo_path}|Test repository|testuser/testrepo
             owner="test", name="repo", url="url",
             description="desc", local_path_suggestion="path"
         )
-        self.assertTrue(fork_repo.is_development_repo)
-        self.assertFalse(fork_repo.is_readonly_repo)
+        assert fork_repo.is_development_repo
+        assert not fork_repo.is_readonly_repo
 
-
-    @unittest.skipUnless(check_git_available(), "Git not available")
+    @pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git not available")
     def test_sync_repository(self):
         """Test syncing a repository with real git."""
         # Create a local bare remote
@@ -443,9 +441,9 @@ OWN|testuser|testrepo|{remote_path}|Test repository|testuser/testrepo
 
         # Sync should succeed (pull + push)
         result = manager.sync_repository("testuser/testrepo")
-        self.assertIsInstance(result, bool)
+        assert isinstance(result, bool)
 
-    @unittest.skipUnless(check_git_available(), "Git not available")
+    @pytest.mark.skipif(not _GIT_AVAILABLE, reason="Git not available")
     def test_prune_repository(self):
         """Test pruning a repository with real git."""
         # Create a local bare remote
@@ -470,7 +468,4 @@ OWN|testuser|testrepo|{remote_path}|Test repository|testuser/testrepo
 
         # Prune should succeed
         result = manager.prune_repository("testuser/testrepo")
-        self.assertIsInstance(result, bool)
-
-if __name__ == '__main__':
-    unittest.main()
+        assert isinstance(result, bool)

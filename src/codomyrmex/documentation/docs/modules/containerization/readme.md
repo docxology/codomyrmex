@@ -72,6 +72,29 @@ uv sync
 - `security/` - Security scanner and performance optimizer
 - `exceptions.py` - Exception hierarchy for container operations
 
+## Dependencies
+
+Install the containerization extras:
+
+```bash
+uv sync --extra containerization
+```
+
+| Package | Purpose |
+|---------|---------|
+| `docker>=6.0.0` | Docker Engine API -- build, run, stop, and inspect containers |
+| `kubernetes` | Kubernetes client -- deploy, scale, and manage pods/services |
+| `PyYAML` | Parse Kubernetes manifests and Compose files |
+
+**Environment variables** (optional):
+
+| Variable | Description |
+|----------|-------------|
+| `DOCKER_HOST` | Docker daemon socket (default: `unix:///var/run/docker.sock`) |
+| `KUBECONFIG` | Path to Kubernetes config (default: `~/.kube/config`) |
+
+All submodule imports are guarded with `try/except ImportError`, so the module loads even when these packages are not installed -- only the affected submodule becomes unavailable.
+
 ## Quick Start
 
 ```python

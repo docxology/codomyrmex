@@ -175,7 +175,8 @@ class ASTMatcher:
         try:
             code_tree = ast.parse(code)
             tmpl_tree = ast.parse(template)
-        except SyntaxError:
+        except SyntaxError as e:
+            logger.warning("Failed to parse code or template for structure matching: %s", e)
             return False
 
         code_nodes = list(ast.iter_child_nodes(code_tree))

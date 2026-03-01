@@ -62,7 +62,8 @@ class GmailProvider(EmailProvider):
         """Create a GmailProvider from environment variables.
 
         Tries OAuth2 env vars first (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
-        GOOGLE_REFRESH_TOKEN), then falls back to Application Default Credentials
+        GOOGLE_REFRESH_TOKEN), then token file (~/.codomyrmex/gmail_token.json),
+        then falls back to Application Default Credentials
         (GOOGLE_APPLICATION_CREDENTIALS).
 
         Raises:
@@ -91,6 +92,29 @@ class GmailProvider(EmailProvider):
             )
             return cls(credentials=creds)
 
+        # Option 1b: Token file from PMServer OAuth flow
+        import json
+        from pathlib import Path
+
+        token_path = Path.home() / ".codomyrmex" / "gmail_token.json"
+        if token_path.exists() and client_id and client_secret:
+            try:
+                token_data = json.loads(token_path.read_text())
+                file_refresh = token_data.get("refresh_token")
+                if file_refresh:
+                    creds = Credentials(
+                        token=token_data.get("access_token"),
+                        refresh_token=file_refresh,
+                        token_uri="https://oauth2.googleapis.com/token",
+                        client_id=client_id,
+                        client_secret=client_secret,
+                        scopes=_GMAIL_SCOPES,
+                    )
+                    return cls(credentials=creds)
+            except (json.JSONDecodeError, OSError) as e:
+                logger.debug("Service account credentials unavailable, falling through to ADC: %s", e)
+                pass  # fall through to ADC
+
         # Option 2: Application Default Credentials
         try:
             import google.auth  # noqa: PLC0415 — conditional import
@@ -100,6 +124,7 @@ class GmailProvider(EmailProvider):
             raise EmailAuthError(
                 "No Gmail credentials found. Set GOOGLE_CLIENT_ID + "
                 "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
+                "or place a token file at ~/.codomyrmex/gmail_token.json, "
                 f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
             ) from e
 
@@ -127,7 +152,7 @@ class GmailProvider(EmailProvider):
 
             date_str = headers.get('date', '')
             import email.utils
-            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.utcnow()
+            parsed_date = email.utils.parsedate_to_datetime(date_str) if date_str else datetime.now(tz=datetime.now().astimezone().tzinfo)
 
             body_text = ""
             body_html = ""

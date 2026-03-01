@@ -150,7 +150,8 @@ def setup_logging(force: bool = True) -> None:
             file_handler = logging.FileHandler(log_file, mode="a")
             file_handler.setFormatter(formatter)
             handlers.append(file_handler)
-        except OSError:
+        except OSError as e:
+            print(f"Warning: could not create log file {log_file}: {e}")
             pass
 
     logging.basicConfig(level=log_level, handlers=handlers, force=True)

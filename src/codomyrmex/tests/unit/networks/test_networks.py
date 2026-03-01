@@ -15,7 +15,6 @@ Tests cover:
 - NetworkGraph: node_count, edge_count
 """
 
-from pathlib import Path
 
 import pytest
 

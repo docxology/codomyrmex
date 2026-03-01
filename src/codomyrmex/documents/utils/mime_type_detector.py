@@ -54,5 +54,6 @@ def detect_mime_type(file_path: Path) -> str | None:
     try:
         mime_type, _ = mimetypes.guess_type(str(file_path))
         return mime_type
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to detect MIME type for %s: %s", file_path, e)
         return None

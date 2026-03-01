@@ -24,8 +24,6 @@ Covers:
 
 import json
 import sqlite3
-import time
-from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -42,11 +40,9 @@ from codomyrmex.database_management.schema_generator import (
 )
 from codomyrmex.database_management.migration.models import (
     CompositeTransformer,
-    DataTransformer,
     FieldRenameTransformer,
     FieldTypeTransformer,
     Migration as MigrationModel,
-    MigrationDirection,
     MigrationResult as MigrationModelResult,
     MigrationStatus,
     MigrationStep,
@@ -57,9 +53,7 @@ from codomyrmex.database_management.migration.executor import (
 )
 from codomyrmex.database_management.migration.migration_manager import (
     DatabaseConnector,
-    Migration as MigrationManagerMigration,
     MigrationManager,
-    MigrationResult as MigrationManagerResult,
 )
 from codomyrmex.exceptions import CodomyrmexError
 

@@ -13,6 +13,20 @@ Agent skill management: discovery, registration, and execution.
 - **SkillExecutor** — Execute skills
 - **SkillComposer** — Compose skills
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `skills_list` | List available skills, optionally filtered by category | Safe |
+| `skills_get` | Get a specific skill by category and name | Safe |
+| `skills_search` | Search skills by query string | Safe |
+| `skills_sync` | Sync with upstream vibeship-spawner-skills repository | Safe |
+| `skills_add_custom` | Add a custom skill that overrides upstream | Safe |
+| `skills_get_categories` | Get all available skill categories | Safe |
+| `skills_get_upstream_status` | Get status of upstream repository (exists, branch, last commit) | Safe |
+
 ## Agent Instructions
 
 1. **Register skills** — Add to registry on startup

@@ -68,7 +68,7 @@ class SimulatedAgent(AgentInterface):
 
     def setup(self) -> None:
         """Execute Setup operations natively."""
-        pass
+        return None  # Demo agent — no setup needed
 
     def test_connection(self) -> bool:
         """Execute Test Connection operations natively."""

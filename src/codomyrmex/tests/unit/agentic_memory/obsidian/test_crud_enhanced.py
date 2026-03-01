@@ -11,7 +11,6 @@ from codomyrmex.agentic_memory.obsidian.crud import (
     create_note,
     move_note,
     prepend_note,
-    read_note,
     read_note_raw,
     remove_frontmatter_key,
 )

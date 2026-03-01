@@ -5,12 +5,15 @@ Provides different strategies for evaluating feature flags.
 """
 
 import hashlib
+import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -255,7 +258,8 @@ class AttributeStrategy(EvaluationStrategy):
 
         try:
             return op_func(attr_value, self.value)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError) as e:
+            logger.warning("Attribute condition check failed for %s: %s", self.attribute, e)
             return False
 
     def to_dict(self) -> dict[str, Any]:

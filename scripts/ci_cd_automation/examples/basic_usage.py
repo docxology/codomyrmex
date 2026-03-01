@@ -9,7 +9,6 @@ Demonstrates actual CI/CD capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path

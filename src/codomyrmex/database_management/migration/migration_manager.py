@@ -571,7 +571,8 @@ class MigrationManager:
                 (migration_id,)
             )
             return cursor.fetchone() is not None
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to check migration applied status for %s: %s", migration_id, e)
             return False
 
     def _save_migration_history(self, migration: Migration, result: MigrationResult):

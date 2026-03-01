@@ -8,11 +8,14 @@ desired state and the actual deployed state, and can reconcile differences.
 from __future__ import annotations
 
 import hashlib
+import logging
 import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class SyncState(Enum):
@@ -171,7 +174,8 @@ class GitOpsSynchronizer:
             if result.returncode == 0:
                 return result.stdout.strip()
             return None
-        except (subprocess.SubprocessError, FileNotFoundError):
+        except (subprocess.SubprocessError, FileNotFoundError) as e:
+            logger.warning("Failed to resolve HEAD revision for branch %s: %s", self._target_branch, e)
             return None
 
     def _build_status(self, desired: str | None) -> SyncStatus:

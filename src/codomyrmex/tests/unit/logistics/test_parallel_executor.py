@@ -17,7 +17,6 @@ Covers:
 Zero-mock policy: all tests use real objects only.
 """
 
-import time
 
 import pytest
 

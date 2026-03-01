@@ -121,7 +121,7 @@ class TestInfomaniakObjectStorageClient:
             content_type="text/plain",
         )
 
-    def test_upload_file(self, mock_openstack_connection, monkeypatch, tmp_path):
+    def test_upload_file(self, mock_openstack_connection, tmp_path):
         """upload_file reads file from disk and delegates to upload_object."""
         client = InfomaniakObjectStorageClient(mock_openstack_connection)
 

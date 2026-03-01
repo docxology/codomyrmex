@@ -194,7 +194,8 @@ def _perform_symbol_extraction(path: str) -> list[str]:
     try:
         source = file_path.read_text(encoding="utf-8", errors="ignore")
         tree = ast.parse(source, filename=str(file_path))
-    except SyntaxError:
+    except SyntaxError as e:
+        logger.warning("Skipping file with syntax error %s: %s", file_path, e)
         return []
 
     symbols = []

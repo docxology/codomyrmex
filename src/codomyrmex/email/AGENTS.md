@@ -17,12 +17,12 @@ The `email` module gives agents the ability to send, receive, list, and manage e
 | `GmailProvider` | Concrete provider | `gmail/provider.py` | Active (requires OAuth2 credentials) |
 | `AgentMailProvider` | Concrete provider | `agentmail/provider.py` | Active (requires `AGENTMAIL_API_KEY`) |
 | `exceptions` | Exception hierarchy | `exceptions.py` | Active |
-| `mcp_tools` | MCP tool definitions | `mcp_tools.py` | Active (8 tools, AgentMail backend) |
+| `mcp_tools` | MCP tool definitions | `mcp_tools.py` | Active (12 tools: 8 AgentMail + 4 Gmail) |
 | `cli_commands` | CLI status handler | `__init__.py` | Active |
 
 ## MCP Tools Available
 
-All MCP tools use the AgentMail backend and are auto-discovered via `@mcp_tool` decorators.
+All MCP tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge. AgentMail tools use the AgentMail API (`AGENTMAIL_API_KEY`). Gmail tools use Google OAuth2 (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`).
 
 | Tool | Description | Trust Level |
 |------|-------------|-------------|
@@ -34,6 +34,10 @@ All MCP tools use the AgentMail backend and are auto-discovered via `@mcp_tool` 
 | `agentmail_create_inbox` | Create a new inbox | Safe |
 | `agentmail_list_threads` | List threads in an inbox | Safe |
 | `agentmail_create_webhook` | Register a webhook for events | Safe |
+| `gmail_send_message` | Send an email via Gmail API using OAuth2 credentials | Safe |
+| `gmail_list_messages` | List messages in the Gmail inbox with optional search query | Safe |
+| `gmail_get_message` | Fetch a specific Gmail message by its ID | Safe |
+| `gmail_create_draft` | Create a Gmail draft without sending it | Safe |
 
 ## Provider Abstract Interface
 

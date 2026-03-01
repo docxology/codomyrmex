@@ -23,7 +23,6 @@ from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_inf
 from codomyrmex.database_management import (
     DatabaseManager,
     DatabaseConnection,
-    manage_databases,
     generate_schema
 )
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from typing import Any
 
 
@@ -73,7 +74,8 @@ class WebSocketLogHandler(logging.Handler):
         """Remove a WebSocket client's queue."""
         try:
             self._clients.remove(client_queue)
-        except ValueError:
+        except ValueError as e:
+            print(f"Warning: remove_client called for unknown queue: {e}", file=sys.stderr)
             pass
 
     @property
@@ -138,11 +140,13 @@ class WebSocketLogHandler(logging.Handler):
             # Drop oldest
             try:
                 self._queue.get_nowait()
-            except asyncio.QueueEmpty:
+            except asyncio.QueueEmpty as e:
+                print(f"Warning: queue empty during drop-oldest: {e}", file=sys.stderr)
                 pass
             try:
                 self._queue.put_nowait(entry)
-            except asyncio.QueueFull:
+            except asyncio.QueueFull as e:
+                print(f"Warning: queue still full after drop-oldest: {e}", file=sys.stderr)
                 pass
             self._dropped += 1
 
@@ -154,11 +158,13 @@ class WebSocketLogHandler(logging.Handler):
                 # Drop oldest for this client
                 try:
                     client_queue.get_nowait()
-                except asyncio.QueueEmpty:
+                except asyncio.QueueEmpty as e:
+                    print(f"Warning: client queue empty during drop-oldest: {e}", file=sys.stderr)
                     pass
                 try:
                     client_queue.put_nowait(entry)
-                except asyncio.QueueFull:
+                except asyncio.QueueFull as e:
+                    print(f"Warning: client queue still full after drop-oldest: {e}", file=sys.stderr)
                     pass
                 self._dropped += 1
 

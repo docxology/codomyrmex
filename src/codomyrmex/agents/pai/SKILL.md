@@ -1,14 +1,14 @@
 ---
 name: Codomyrmex
-description: Full-spectrum coding workspace skill providing 167 MCP tools across 32 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
+description: Full-spectrum coding workspace skill providing 171 MCP tools across 33 modules. USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', 'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', 'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', 'codomyrmex memory', 'codomyrmex docs', 'codomyrmex status', 'codomyrmex git', 'codomyrmex security', 'codomyrmex ai', 'codomyrmex code', 'codomyrmex data', 'codomyrmex deploy', 'codomyrmex test', or uses any 'codomyrmex' automation tools.
 ---
 # Codomyrmex Skill for PAI
 
-**Version**: 1.0.3 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 167
+**Version**: 1.0.4 | **Type**: Infrastructure Skill | **MCP**: `codomyrmex-mcp-server` | **Skills**: 15 | **Tools**: 171
 
 ## Description
 
-Full-spectrum coding workspace skill providing 167 MCP tools across 32 auto-discovered modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation. Access via MCP protocol or direct Python calls.
+Full-spectrum coding workspace skill providing 171 MCP tools across 33 auto-discovered modules for AI-assisted development, code analysis, testing, documentation generation, and workflow automation. Access via MCP protocol or direct Python calls.
 
 ## Quick Start
 
@@ -26,9 +26,9 @@ trust_all()             # Step 2: Grant full execution trust
 result = trusted_call_tool("codomyrmex.write_file", path="x.py", content="...")
 ```
 
-## Tools (167)
+## Tools (171)
 
-Auto-discovered from 32 modules via `pkgutil` scan of all `mcp_tools` submodules. 163 safe + 4 destructive.
+Auto-discovered from 33 modules via `pkgutil` scan of all `mcp_tools` submodules. 167 safe + 4 destructive.
 
 | Tool | Category | Description |
 |------|----------|-------------|

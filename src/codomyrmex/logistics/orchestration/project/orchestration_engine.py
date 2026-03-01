@@ -153,7 +153,8 @@ class OrchestrationSession:
         if data.get("created_at"):
             try:
                 sess.created_at = datetime.fromisoformat(data["created_at"])
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to parse created_at '%s': %s", data["created_at"], e)
                 pass
         if data.get("status"):
             try:
@@ -649,7 +650,8 @@ class OrchestrationEngine:
         """Shutdown the orchestration engine."""
         try:
             logger.info("Shutting down OrchestrationEngine...")
-        except (ValueError, OSError):
+        except (ValueError, OSError) as e:
+            print(f"Warning: log stream error during shutdown: {e}")
             pass  # stream already closed at interpreter shutdown
 
         # Close all active sessions
@@ -657,7 +659,8 @@ class OrchestrationEngine:
         for session_id in session_ids:
             try:
                 self.close_session(session_id)
-            except (ValueError, OSError):
+            except (ValueError, OSError) as e:
+                print(f"Warning: error closing session {session_id} during shutdown: {e}")
                 pass
 
         # Stop components
@@ -669,15 +672,17 @@ class OrchestrationEngine:
 
         try:
             logger.info("OrchestrationEngine shutdown complete")
-        except (ValueError, OSError):
+        except (ValueError, OSError) as e:
+            print(f"Warning: log stream error during shutdown: {e}")
             pass
 
     def __del__(self):
         """Cleanup on deletion."""
         try:
             self.shutdown()
-        except (AttributeError, RuntimeError, OSError, ValueError):
+        except (AttributeError, RuntimeError, OSError, ValueError) as e:
             # Ignore errors during cleanup - object may be partially destroyed
+            print(f"Warning: error during OrchestrationEngine cleanup: {e}")
             pass
 
 

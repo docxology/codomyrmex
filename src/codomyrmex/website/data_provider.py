@@ -232,7 +232,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
                     end = content.find('"""', start)
                     if end != -1:
                         return content[start:end].strip()
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to parse __init__.py docstring in %s: %s", path, e)
                 pass
         return "No description available"
 
@@ -274,7 +275,8 @@ class DataProvider(HealthProviderMixin, PAIProviderMixin):
 
                 description = docstring
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Failed to extract script metadata from %s: %s", script_path, e)
             pass
 
         return title, description

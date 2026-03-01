@@ -16,12 +16,15 @@ Submodules:
 import functools
 import hashlib
 import json
+import logging
 import os
 import time
 from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional, TypeVar, Union
+
+logger = logging.getLogger(__name__)
 
 # Import subprocess utilities
 from .process.subprocess import (
@@ -120,7 +123,8 @@ def hash_file(path: str | Path, algorithm: str = "sha256") -> str | None:
     try:
         with open(path, "rb") as f:
             return hash_content(f.read(), algorithm)
-    except OSError:
+    except OSError as e:
+        logger.warning("Failed to hash file %s: %s", path, e)
         return None
 
 
@@ -286,7 +290,8 @@ try:
         timed_operation,
         with_retry,
     )
-except ImportError:
+except ImportError as e:
+    logger.debug("Optional utils imports not available: %s", e)
     pass
 
 # Script base utilities

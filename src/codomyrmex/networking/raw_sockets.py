@@ -2,6 +2,7 @@
 
 import logging
 import socket
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +14,14 @@ class TCPClient:
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def __enter__(self) -> "TCPClient":
+        """Support use as a context manager."""
+        return self
+
+    def __exit__(self, *args) -> None:
+        """Close socket on context manager exit (prevents fd leaks)."""
+        self.close()
 
     def connect(self) -> None:
         """Execute Connect operations natively."""
@@ -68,7 +77,7 @@ class UDPClient:
         """Execute Send operations natively."""
         self.sock.sendto(data, (self.host, self.port))
 
-    def receive(self, buffer_size: int = 1024) -> tuple[bytes, any]:
+    def receive(self, buffer_size: int = 1024) -> tuple[bytes, Any]:
         """Execute Receive operations natively."""
         return self.sock.recvfrom(buffer_size)
 
@@ -87,7 +96,8 @@ class PortScanner:
             try:
                 sock.connect((host, port))
                 return True
-            except (TimeoutError, OSError, ConnectionRefusedError):
+            except (TimeoutError, OSError, ConnectionRefusedError) as e:
+                logger.warning("Port %d on %s is not open: %s", port, host, e)
                 return False
 
     @staticmethod

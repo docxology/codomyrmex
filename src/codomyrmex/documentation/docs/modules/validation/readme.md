@@ -4,7 +4,7 @@
 
 ## Overview
 
-Unified input validation framework for Codomyrmex with support for JSON Schema, Pydantic models, and custom validators. Provides a `Validator` class that validates data against schemas, a `ValidationManager` for managing multiple validators, contextual validation with issue tracking, type-safe parsing, and a comprehensive exception hierarchy for granular error reporting. Includes submodules for reusable validation rules, input sanitizers, and schema definitions.
+Validation utilities for system integrity and integration checks. The top-level package exports a PAI integration validator and shared result types used across 74+ codomyrmex modules. Additional validation capabilities (schema validation, config validation, validation summaries) are available via submodules and MCP tools.
 
 ## Installation
 
@@ -20,76 +20,33 @@ uv sync
 
 ## Key Exports
 
-### Core Classes
-- **`Validator`** -- Main validation engine that validates data against a schema using a configurable `validator_type` (json_schema, pydantic, custom)
-- **`ValidationManager`** -- Manages collections of validators and coordinates multi-schema validation workflows
-- **`ValidationResult`** -- Result object containing `is_valid` boolean, list of errors, and validation metadata
-- **`ValidationWarning`** -- Non-fatal validation warning with severity and location information
-- **`ContextualValidator`** -- Context-aware validator that accumulates `ValidationIssue` objects for complex nested structures
-- **`ValidationIssue`** -- Describes a specific validation problem with path, message, and severity
-- **`TypeSafeParser`** -- Parser that coerces and validates data into expected types with detailed error reporting
-- **`ValidationSummary`** -- Aggregated summary of validation results across multiple validation runs
+The top-level `codomyrmex.validation` package exports three items (see `__init__.py`):
 
-### Convenience Functions
-- **`validate()`** -- Validate data against a schema in one call, returns a `ValidationResult`
-- **`is_valid()`** -- Returns True/False for whether data passes schema validation
-- **`get_errors()`** -- Returns the list of validation errors for given data and schema
+| Export | Type | Description |
+|--------|------|-------------|
+| `validate_pai_integration` | Function | Validates PAI system integration and returns a diagnostic report |
+| `Result` | Class | Shared result container imported from `validation.schemas` |
+| `ResultStatus` | Enum | Status enum (`OK`, `ERROR`, etc.) imported from `validation.schemas` |
 
-### Submodules
-- **`rules`** -- Reusable validation rule definitions (string patterns, numeric ranges, custom predicates)
-- **`sanitizers`** -- Input sanitization utilities (HTML stripping, whitespace normalization, encoding fixes)
-- **`schemas`** -- Predefined JSON Schema definitions for common data structures
-
-### Exceptions
-- **`ValidationError`** -- Base validation error
-- **`SchemaError`** -- Invalid or malformed schema definition
-- **`ConstraintViolationError`** -- Data violates a defined constraint
-- **`TypeValidationError`** -- Data type does not match expected type
-- **`RequiredFieldError`** -- Required field is missing from input
-- **`RangeValidationError`** -- Numeric value outside allowed range
-- **`FormatValidationError`** -- String does not match expected format (email, URL, etc.)
-- **`LengthValidationError`** -- String or collection length outside allowed bounds
-- **`CustomValidationError`** -- Error from a custom validation rule
+> **Note**: The full validation API -- including `validate_schema`, `validate_config`, and `validation_summary` MCP tools -- is available via submodules (`validation.schemas`, `validation.pai`) and through the MCP tool interface.
 
 ## Directory Contents
 
-- `validator.py` -- Core Validator class, ValidationResult, and ValidationWarning
-- `validation_manager.py` -- ValidationManager for multi-schema coordination
-- `contextual.py` -- ContextualValidator and ValidationIssue for nested structure validation
-- `parser.py` -- TypeSafeParser for type coercion with validation
-- `summary.py` -- ValidationSummary for aggregating results
-- `examples_validator.py` -- Validation of code examples and documentation samples
-- `exceptions.py` -- Full exception hierarchy for validation errors
-- `rules/` -- Reusable validation rule definitions
-- `sanitizers/` -- Input sanitization utilities
-- `schemas/` -- Predefined JSON Schema definitions
+- `__init__.py` -- Package exports (`validate_pai_integration`, `Result`, `ResultStatus`)
+- `pai.py` -- PAI integration validation logic
+- `schemas/` -- Shared `Result` and `ResultStatus` types used for cross-module interop
 
 ## Quick Start
 
 ```python
-from codomyrmex.validation import validate, is_valid, get_errors
+from codomyrmex.validation import Result, ResultStatus, validate_pai_integration
 
-# Define a JSON Schema
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string", "minLength": 1},
-        "age": {"type": "integer", "minimum": 0},
-    },
-    "required": ["name", "age"],
-}
+# Check a result
+result = Result(status=ResultStatus.OK, message="Validation passed")
+print(result.status)  # ResultStatus.OK
 
-# Validate data against the schema
-result = validate({"name": "Alice", "age": 30}, schema)
-print(f"Valid: {result.is_valid}")
-
-# Quick boolean check
-assert is_valid({"name": "Bob", "age": 25}, schema)
-
-# Get detailed errors for invalid data
-errors = get_errors({"name": "", "age": -1}, schema)
-for err in errors:
-    print(f"Error: {err}")
+# Validate PAI integration
+report = validate_pai_integration()
 ```
 
 ## Testing
@@ -98,15 +55,12 @@ for err in errors:
 uv run python -m pytest src/codomyrmex/tests/ -k validation -v
 ```
 
-## Consolidated Sub-modules
-
-The following modules have been consolidated into this module as sub-packages:
+## Submodules
 
 | Sub-module | Description |
 |------------|-------------|
-| **`schemas/`** | Shared type registry and pydantic model definitions |
-
-Original standalone modules remain as backward-compatible re-export wrappers.
+| **`schemas/`** | Shared `Result` and `ResultStatus` types used by 74+ modules for cross-module interop |
+| **`pai.py`** | PAI integration validation (`validate_pai_integration`) |
 
 ## Navigation
 

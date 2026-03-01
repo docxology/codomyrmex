@@ -13,6 +13,74 @@ Git repository operations: commits, branches, merges, and history.
 - **Branch** — Branch management
 - **DiffManager** — View diffs
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge. The 34 tools are grouped by category below.
+
+**Setup & Status**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_check_availability` | Check if git is available on this system | Safe |
+| `git_is_repo` | Check if a directory is a git repository | Safe |
+| `git_repo_status` | Get repository status (modified, staged, untracked files) | Safe |
+| `git_current_branch` | Get the current branch name | Safe |
+| `git_get_config` | Read a git configuration value by key | Safe |
+| `git_set_config` | Set a git configuration value (local or global scope) | Destructive |
+
+**Commits & Staging**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_commit` | Stage files and create a commit with a message | Destructive |
+| `git_amend` | Amend the most recent commit message or content | Destructive |
+| `git_commit_details` | Get detailed metadata for a specific commit by SHA | Safe |
+| `git_log` | Get recent commit history | Safe |
+| `git_blame` | Show git blame output for a file (line-by-line attribution) | Safe |
+
+**Branches & Merging**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_create_branch` | Create a new branch | Destructive |
+| `git_switch_branch` | Switch to a different branch | Destructive |
+| `git_delete_branch` | Delete a local branch (force option for unmerged) | Destructive |
+| `git_merge` | Merge a source branch into a target branch | Destructive |
+| `git_rebase` | Rebase current branch onto a target branch | Destructive |
+| `git_cherry_pick` | Cherry-pick a specific commit onto the current branch | Destructive |
+| `git_revert` | Revert a commit by creating a new inverse commit | Destructive |
+| `git_reset` | Reset repository to a commit (soft/mixed/hard mode) | Destructive |
+
+**Remote Operations**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_clone` | Clone a repository from a URL to a local path | Destructive |
+| `git_init` | Initialize a new git repository | Destructive |
+| `git_pull` | Pull latest changes from a remote | Destructive |
+| `git_push` | Push local commits to a remote | Destructive |
+| `git_fetch` | Fetch changes from a remote without merging | Safe |
+| `git_add_remote` | Add a named remote URL | Destructive |
+| `git_remove_remote` | Remove a named remote | Destructive |
+| `git_list_remotes` | List all configured remotes | Safe |
+
+**Diffs & Stash**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_diff` | Get diff of uncommitted changes (staged or unstaged) | Safe |
+| `git_stash` | Stash uncommitted changes with optional description | Destructive |
+| `git_stash_apply` | Apply a stash entry to the working directory | Destructive |
+| `git_stash_list` | List all stash entries | Safe |
+
+**Tags & Cleanup**
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `git_create_tag` | Create a lightweight or annotated tag | Destructive |
+| `git_list_tags` | List all tags in the repository | Safe |
+| `git_clean` | Delete untracked files from the working tree (irreversible) | Destructive |
+
 ## Agent Instructions
 
 1. **Check status first** — Verify clean state

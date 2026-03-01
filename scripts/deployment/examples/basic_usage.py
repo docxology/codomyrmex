@@ -13,7 +13,7 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
@@ -79,7 +79,7 @@ class DeploymentScript(ScriptBase):
 
         # Import deployment module (after dry_run check)
         from codomyrmex.deployment import (
-            DeploymentManager, CanaryStrategy, BlueGreenStrategy, GitOpsSynchronizer
+            DeploymentManager, CanaryStrategy, BlueGreenStrategy
         )
 
         manager = DeploymentManager()

@@ -62,6 +62,49 @@ except Exception as e:
 - **Coda.io**: Pass API token to CodaClient constructor
 - **Infomaniak**: Application Credentials for OpenStack; OAuth2 Bearer token for Newsletter
 
+## MCP Tools
+
+Three MCP tools are auto-discovered via `@mcp_tool` and available through the PAI
+MCP bridge for cloud operations:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `codomyrmex.list_cloud_instances` | List virtual machine instances running in Infomaniak OpenStack cloud | Safe | cloud |
+| `codomyrmex.list_s3_buckets` | List S3 buckets available in Infomaniak storage | Safe | cloud |
+| `codomyrmex.upload_file_to_s3` | Upload a local file to Infomaniak S3 storage | Safe | cloud |
+
+**Prerequisites**: `INFOMANIAK_APP_CREDENTIAL_ID`, `INFOMANIAK_APP_CREDENTIAL_SECRET`
+(for instances) and `INFOMANIAK_S3_ACCESS_KEY`, `INFOMANIAK_S3_SECRET_KEY` (for S3)
+must be set in the environment.
+
+### MCP Tool Usage Examples
+
+```python
+# List running cloud instances
+result = mcp_call("codomyrmex.list_cloud_instances")
+# Returns: {"status": "success", "instances": [...], "count": N}
+
+# List S3 buckets
+result = mcp_call("codomyrmex.list_s3_buckets")
+# Returns: {"status": "success", "buckets": ["bucket-name", ...], "count": N}
+
+# Upload a file
+result = mcp_call("codomyrmex.upload_file_to_s3", {
+    "file_path": "/tmp/report.pdf",
+    "bucket": "my-bucket",
+    "object_name": "reports/2026/report.pdf",
+})
+# Returns: {"status": "success", "message": "Successfully uploaded ..."}
+```
+
+## PAI Algorithm Phase Mapping
+
+| Phase | Cloud Contribution | MCP Tools |
+|-------|-------------------|-----------|
+| **EXECUTE** (5/7) | Deploy artifacts to cloud infrastructure; upload build outputs | `upload_file_to_s3` |
+| **VERIFY** (6/7) | Confirm cloud resources exist and are healthy | `list_cloud_instances`, `list_s3_buckets` |
+| **LEARN** (7/7) | Audit cloud resource usage patterns | `list_cloud_instances` |
+
 ## Key Files
 
 | File | Purpose |
@@ -69,6 +112,7 @@ except Exception as e:
 | `__init__.py` | Public API exports |
 | `common/__init__.py` | Abstract base classes |
 | `coda_io/client.py` | Full Coda.io REST API client |
+| `mcp_tools.py` | MCP tool definitions |
 | `SPEC.md` | Technical specification |
 
 ## Best Practices
@@ -87,6 +131,8 @@ except Exception as e:
 
 ## Navigation
 
-- **Specification**: [SPEC.md](SPEC.md)
-- **Agent Guide**: [AGENTS.md](AGENTS.md)
-- **Parent**: [codomyrmex](../README.md)
+- **Self**: [PAI.md](PAI.md)
+- **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
+- **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
+- **MCP Tools**: [mcp_tools.py](mcp_tools.py)
+- **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md)

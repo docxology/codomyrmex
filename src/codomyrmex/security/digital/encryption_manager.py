@@ -10,7 +10,7 @@ import os
 try:
     from cryptography.fernet import Fernet
     from cryptography.hazmat.primitives import hashes, serialization
-    from cryptography.hazmat.primitives.asymmetric import padding, rsa
+    from cryptography.hazmat.primitives.asymmetric import rsa
     from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
     CRYPTOGRAPHY_AVAILABLE = True
 except ImportError:
@@ -60,8 +60,13 @@ class EncryptionManager:
         return self.decrypt(token).decode('utf-8')
 
     @staticmethod
-    def generate_key_pair() -> tuple[bytes, bytes]:
+    def generate_key_pair(password: bytes | None = None) -> tuple[bytes, bytes]:
         """Generate RSA key pair.
+
+        Args:
+            password: Optional password to encrypt the private key PEM. When None,
+                the private key is returned unencrypted — callers are responsible
+                for protecting it (e.g. restrict file permissions, use secure storage).
 
         Returns:
             Tuple of (private_key_pem, public_key_pem)
@@ -74,10 +79,15 @@ class EncryptionManager:
             key_size=2048,
         )
 
+        encryption_algorithm = (
+            serialization.BestAvailableEncryption(password)
+            if password is not None
+            else serialization.NoEncryption()
+        )
         private_pem = private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
+            encryption_algorithm=encryption_algorithm,
         )
 
         public_key = private_key.public_key()

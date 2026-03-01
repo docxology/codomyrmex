@@ -10,7 +10,6 @@ Usage:
 """
 
 import sys
-import time
 import os
 from pathlib import Path
 import logging

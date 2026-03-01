@@ -1,6 +1,5 @@
 """Tests for the analyzer module."""
 
-import pytest
 from pathlib import Path
 
 from src.analyzer import ProjectAnalyzer, AnalysisResult

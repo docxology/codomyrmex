@@ -30,7 +30,8 @@ def cmd_list(manager: RepositoryManager, args) -> None:
     if args.type:
         try:
             repo_type = RepositoryType(args.type.upper())
-        except ValueError:
+        except ValueError as e:
+            logger.warning("Invalid repository type '%s': %s", args.type, e)
             print(f"Invalid repository type: {args.type}")
             print(f"Valid types: {', '.join([t.value for t in RepositoryType])}")
             return
@@ -88,7 +89,8 @@ def cmd_clone(manager: RepositoryManager, args) -> None:
         if args.type:
             try:
                 repo_type = RepositoryType(args.type.upper())
-            except ValueError:
+            except ValueError as e:
+                logger.warning("Invalid repository type for clone '%s': %s", args.type, e)
                 print(f"Invalid repository type: {args.type}")
                 return
 
@@ -135,7 +137,8 @@ def cmd_update(manager: RepositoryManager, args) -> None:
         if args.type:
             try:
                 repo_type = RepositoryType(args.type.upper())
-            except ValueError:
+            except ValueError as e:
+                logger.warning("Invalid repository type for update '%s': %s", args.type, e)
                 print(f"Invalid repository type: {args.type}")
                 return
 
@@ -426,6 +429,7 @@ Examples:
     try:
         manager = RepositoryManager(library_file=args.library, base_path=args.base_path)
     except Exception as e:
+        logger.warning("Failed to initialize repository manager: %s", e)
         print(f"Error initializing repository manager: {e}")
         return
 

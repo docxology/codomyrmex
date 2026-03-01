@@ -383,7 +383,8 @@ class OpenAICodex:
         try:
             self._get_client()
             return True
-        except (ImportError, ValueError):
+        except (ImportError, ValueError) as e:
+            logger.warning("OpenAI Codex unavailable: %s", e)
             return False
 
 

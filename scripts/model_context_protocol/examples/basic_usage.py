@@ -8,7 +8,6 @@ Demonstrates actual MCP schemas:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -18,7 +17,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
+from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info
 from codomyrmex.model_context_protocol import (
     MCPToolCall,
     MCPToolResult,

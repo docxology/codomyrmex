@@ -107,3 +107,9 @@ pages = gen.generate_pages()         # dict[str, str] of path -> markdown conten
 - [search/](../search/) -- General-purpose search (docs_gen search is specialized for API docs)
 - [PAI.md](PAI.md) -- PAI integration details
 - [Root PAI bridge](../../../PAI.md) -- Authoritative PAI system bridge document
+
+## Navigation
+
+- **Extended Docs**: [docs/modules/docs_gen/](../../../docs/modules/docs_gen/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README.md](../../../README.md)

@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import math
-import json
 
 
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

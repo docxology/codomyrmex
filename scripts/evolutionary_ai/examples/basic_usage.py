@@ -14,7 +14,7 @@ Usage:
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Callable
+from typing import Any, Dict, Callable
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
@@ -88,7 +88,7 @@ class EvolutionaryAIScript(ScriptBase):
 
         # Import evolutionary_ai module (after dry_run check)
         from codomyrmex.evolutionary_ai import (
-            Genome, Population, crossover, mutate, tournament_selection
+            Population
         )
 
         # Select fitness function

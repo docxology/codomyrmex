@@ -12,7 +12,6 @@ Demonstrates actual compression capabilities:
 
 import sys
 import os
-import shutil
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -25,7 +24,6 @@ except ImportError:
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.compression import (
     compress,
-    decompress,
     auto_decompress,
     compress_file,
     decompress_file,

@@ -120,8 +120,8 @@ class PerformanceMixin:
                                 continue
                     if len(root.split(os.sep)) - len(str(self.project_root).split(os.sep)) > 3:
                         break
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Error during performance pattern scan: %s", e)
 
             # Performance score calculation
             base_score = 100.0

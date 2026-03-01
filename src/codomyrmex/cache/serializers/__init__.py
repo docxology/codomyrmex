@@ -6,11 +6,14 @@ Provides serializers for cache values.
 
 import base64
 import json
+import logging
 import pickle
 import zlib
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class CacheSerializer(ABC):
@@ -163,7 +166,8 @@ class TypedSerializer(CacheSerializer):
         try:
             json.dumps(value)
             return True
-        except (TypeError, ValueError):
+        except (TypeError, ValueError) as e:
+            logger.debug("Value is not JSON serializable: %s", e)
             return False
 
 

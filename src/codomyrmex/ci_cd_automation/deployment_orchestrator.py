@@ -6,6 +6,7 @@ and release coordination capabilities.
 """
 
 import json
+import logging
 import os
 import shutil
 import socket
@@ -25,8 +26,8 @@ try:
     import kubernetes.config
     import requests
     import yaml
-except ImportError:
-    pass # Managed in usage or assumed installed
+except ImportError as e:
+    logging.getLogger(__name__).debug("Optional deployment dependency not installed: %s", e)
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
 

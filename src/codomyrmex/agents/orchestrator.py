@@ -205,8 +205,8 @@ def _create_llm_client(spec: AgentSpec) -> Any:
                     ag_client = AntigravityClient()
                     try:
                         ag_client.connect()
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
-                        pass
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                        logger.warning("Antigravity client connection failed: %s", e)
 
                     provider = AntigravityToolProvider(ag_client)
                     registry = provider.get_tool_registry()
@@ -307,7 +307,7 @@ class ConversationOrchestrator:
             if todo_fc.content:
                 self.todo_items = extract_todo_items(todo_fc.content)
                 # Also add TO-DO as a context file.
-                if todo_fc not in self.context_files:
+                if not any(fc.path == todo_fc.path for fc in self.context_files):
                     self.context_files.append(todo_fc)
                 logger.info(
                     f"[Orchestrator] Extracted {len(self.todo_items)} TO-DO items "

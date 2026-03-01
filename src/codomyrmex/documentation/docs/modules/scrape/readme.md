@@ -61,10 +61,18 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.scrape import ScrapeConfig, ScrapeFormat, ScrapeResult
+from codomyrmex.scrape import Scraper, ScrapeConfig, ScrapeOptions, ScrapeFormat
 
-# Initialize ScrapeConfig
-instance = ScrapeConfig()
+# Configure and scrape a page
+config = ScrapeConfig(timeout=30)
+scraper = Scraper(config=config)
+result = scraper.scrape("https://example.com")
+print(result.content)
+
+# Scrape with specific format options
+options = ScrapeOptions(formats=[ScrapeFormat.MARKDOWN, ScrapeFormat.HTML])
+result = scraper.scrape("https://example.com", options)
+print(result.content)
 ```
 
 ## Testing

@@ -62,6 +62,15 @@ pipe(
 )
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `get_scheduler_metrics` | Retrieve the current metrics of the Orchestrator AsyncScheduler | Safe |
+| `analyze_workflow_dependencies` | Analyze a proposed workflow DAG for cyclic dependencies | Safe |
+
 ## Navigation Links
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -70,6 +70,15 @@ update_spec()
 | **VERIFY** | Validate documentation quality, check for stale references |
 | **LEARN** | Record documentation improvements and audit history |
 
+## MCP Tools
+
+Two tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `generate_module_docs` | Generate documentation for a codomyrmex module (README, SPEC, AGENTS) | Safe | documentation |
+| `audit_rasp_compliance` | Audit modules for RASP documentation compliance (README/AGENTS/SPEC/PAI.md) | Safe | documentation |
+
 ## Architecture Role
 
 **Service Layer** — Consumes `static_analysis/` (import scanning), `system_discovery/` (module listing), `documents/` (file I/O). Consumed by `maintenance/` for automated doc updates.

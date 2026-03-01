@@ -106,7 +106,8 @@ def validate_bitcoin_address(address: str) -> bool:
         valid = checksum == expected
         logger.debug("Bitcoin address %s validation: %s", address[:8], valid)
         return valid
-    except Exception:
+    except Exception as e:
+        logger.warning("Bitcoin address validation failed for %s: %s", address[:8], e)
         return False
 
 
@@ -215,5 +216,6 @@ def validate_ethereum_address(address: str) -> bool:
         valid = address == expected
         logger.debug("Ethereum address EIP-55 validation: %s", valid)
         return valid
-    except Exception:
+    except Exception as e:
+        logger.warning("Ethereum address validation failed for %s: %s", address[:8], e)
         return False

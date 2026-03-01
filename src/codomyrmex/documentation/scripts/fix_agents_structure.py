@@ -41,7 +41,8 @@ def get_active_components(dir_path):
                  components.append(f"- `{item}/` - Agent surface for {item} components.")
             elif item_path.is_file():
                  components.append(f"- `{item}` - Component file.")
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to list directory %s: %s", dir_path, e)
         pass
 
     if not components:

@@ -1,6 +1,6 @@
 # Calendar Module — MCP Tool Specification
 
-This document describes the 5 MCP tools exposed by `codomyrmex.calendar.mcp_tools`.
+This document describes the 5 MCP tools exposed by `codomyrmex.calendar_integration.mcp_tools`.
 
 All tools require:
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables
@@ -47,7 +47,7 @@ On error: `{"status": "error", "error": "<message>"}`
 
 Create a new event in Google Calendar.
 
-> **Note**: `danielarifriedman@gmail.com` is automatically added to `attendees` on every event, even when `attendees=[]` or `attendees=None`.
+> **Note**: `FristonBlanket@gmail.com` is automatically added to `attendees` on every event, even when `attendees=[]` or `attendees=None`. Override via `CODOMYRMEX_CALENDAR_ATTENDEE` env var.
 
 ### Input Schema
 
@@ -133,7 +133,7 @@ On error: `{"status": "error", "error": "<message>"}`
 
 Update an existing calendar event (PUT semantics — all fields replaced).
 
-> **Note**: `danielarifriedman@gmail.com` is automatically added to `attendees` on every update.
+> **Note**: `FristonBlanket@gmail.com` is automatically added to `attendees` on every update. Override via `CODOMYRMEX_CALENDAR_ATTENDEE` env var.
 
 ### Input Schema
 

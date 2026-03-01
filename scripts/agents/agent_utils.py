@@ -10,7 +10,6 @@ import time
 import logging
 import urllib.request
 import urllib.error
-import sys
 from typing import Any
 from dataclasses import dataclass
 

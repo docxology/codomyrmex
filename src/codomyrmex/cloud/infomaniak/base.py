@@ -169,7 +169,7 @@ class InfomaniakS3Base:
 
     def close(self):
         """Close the S3 client (no-op for boto3, but provided for consistency)."""
-        pass
+        return None  # boto3 session cleanup handled by GC
 
     def validate_connection(self) -> bool:
         """

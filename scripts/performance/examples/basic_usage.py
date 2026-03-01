@@ -9,7 +9,6 @@ Demonstrates actual optimization techniques:
 """
 
 import sys
-import os
 import time
 from pathlib import Path
 
@@ -22,7 +21,6 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.performance import (
-    LazyLoader,
     CacheManager,
     cached_function,
     monitor_performance,

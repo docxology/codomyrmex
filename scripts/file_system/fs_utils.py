@@ -16,9 +16,6 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import os
-import shutil
-from datetime import datetime
 
 
 def format_size(bytes: int) -> str:

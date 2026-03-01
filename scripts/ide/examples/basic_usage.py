@@ -9,7 +9,6 @@ Demonstrates actual IDE capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -23,7 +22,6 @@ from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_inf
 from codomyrmex.ide import (
     CursorClient,
     IDECommand,
-    IDEStatus,
     FileInfo
 )
 

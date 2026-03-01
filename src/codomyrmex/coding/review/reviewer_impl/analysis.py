@@ -276,7 +276,8 @@ def complex_function(data):
                 if f"from {pres_module} import" in content or f"import {pres_module}" in content:
                     return True
 
-        except Exception:
+        except Exception as e:
+            logger.debug("Failed to check imports in %s: %s", file_path, e)
             pass
 
         return False

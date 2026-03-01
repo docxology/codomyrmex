@@ -193,6 +193,7 @@ def handle_agent_setup(client_class, client_name: str, args: Any) -> bool:
         print_success(f"{client_name} setup completed")
         return True
     except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+        logger.warning("Failed to set up %s: %s", client_name, e)
         print_error(f"Error setting up {client_name}", exception=e)
         return False
 
@@ -213,6 +214,7 @@ def handle_agent_test(client_class, client_name: str, args: Any) -> bool:
             print_error(f"{client_name} connection test failed")
         return result
     except (AgentError, ClaudeError, CodexError, GeminiError, JulesError, OpenCodeError, ValueError, RuntimeError, AttributeError, OSError) as e:
+        logger.warning("Failed to test %s connection: %s", client_name, e)
         print_error(f"Error testing {client_name} connection", exception=e)
         return False
 

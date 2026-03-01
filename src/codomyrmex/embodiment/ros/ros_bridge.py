@@ -168,7 +168,8 @@ class ROS2Bridge:
             try:
                 self._subscribers[topic].remove(callback)
                 self._topic_meta[topic].subscriber_count -= 1
-            except ValueError:
+            except ValueError as e:
+                logger.debug("Unsubscribe called for already-removed callback on topic '%s': %s", topic, e)
                 pass
 
         return _unsubscribe

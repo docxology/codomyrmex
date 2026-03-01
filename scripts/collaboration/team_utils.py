@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import subprocess
-import re
 from collections import defaultdict
 
 

@@ -44,7 +44,8 @@ class AgentsFileFixer:
                     continue  # Don't include AGENTS.md itself to avoid circular references
                 if item.is_file() or item.is_dir():
                     items.add(item.name)
-        except PermissionError:
+        except PermissionError as e:
+            logger.warning("Permission denied reading directory %s: %s", directory, e)
             pass
 
         return items

@@ -918,5 +918,6 @@ def _parse_datetime(value: str | None) -> datetime | None:
         if value.endswith("Z"):
             value = value[:-1] + "+00:00"
         return datetime.fromisoformat(value)
-    except (ValueError, TypeError):
+    except (ValueError, TypeError) as e:
+        logger.debug("Failed to parse datetime %r: %s", value, e)
         return None

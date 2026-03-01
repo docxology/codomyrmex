@@ -3,7 +3,7 @@ import re
 import shutil
 import sys
 
-from codomyrmex.utils.cli_helpers import print_error, print_info, print_success, setup_logging
+from codomyrmex.utils.cli_helpers import print_info, print_success, setup_logging
 
 SRC_DIR = "src/codomyrmex"
 DOCS_DIR = "docs/modules"

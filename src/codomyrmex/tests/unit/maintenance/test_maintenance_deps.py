@@ -9,7 +9,6 @@ Zero-mock policy: all tests use real data structures, tmp_path fixtures,
 and in-memory strings. No mocks, stubs, or fakes.
 """
 
-from pathlib import Path
 
 import pytest
 

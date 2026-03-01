@@ -45,7 +45,8 @@ def resolve_link(base_path: Path, link: str) -> Path:
     try:
         resolved.relative_to(REPO_ROOT)
         return resolved
-    except ValueError:
+    except ValueError as e:
+        logger.warning("Failed to resolve link %s: %s", link, e)
         return None
 
 def validate_file(filepath: Path) -> list[tuple[str, str]]:

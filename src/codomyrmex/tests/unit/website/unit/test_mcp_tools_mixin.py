@@ -5,7 +5,6 @@ Tests the MCP tools/resources/prompts aggregation method directly.
 Server-level endpoint tests for /api/tools are in test_server.py.
 """
 import pytest
-from pathlib import Path
 from codomyrmex.website.data_provider import DataProvider
 
 

@@ -9,7 +9,6 @@ Demonstrates actual document I/O capabilities:
 """
 
 import sys
-import os
 import shutil
 from pathlib import Path
 

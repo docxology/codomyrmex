@@ -4,7 +4,10 @@ Handles OAuth2 device flow and local server flow to acquire and cache tokens.
 Requires `google-auth-oauthlib`, `google-auth-httplib2`, and `google-api-python-client`.
 """
 
+import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 try:
     from google.auth.transport.requests import Request
@@ -56,7 +59,7 @@ class GoogleAuthenticator:
         """
         Acquire valid credentials. Retrieves from cache if found and valid.
         Refreshes if expired. Otherwise, initiates an interactive browser flow.
-        
+
         Returns:
             google.oauth2.credentials.Credentials: The valid credentials object.
         """
@@ -66,8 +69,9 @@ class GoogleAuthenticator:
         if os.path.exists(self.token_file):
             try:
                 creds = Credentials.from_authorized_user_file(self.token_file, self.scopes)
-            except Exception:
+            except Exception as e:
                 # If the cache file is malformed, simply ignore it and re-auth
+                logger.warning("Malformed token cache file %s, will re-auth: %s", self.token_file, e)
                 pass
 
         # If there are no (valid) credentials available, let the user log in.
@@ -75,15 +79,16 @@ class GoogleAuthenticator:
             if creds and creds.expired and creds.refresh_token:
                 try:
                     creds.refresh(Request())
-                except Exception:
-                    # If refresh fails, we must force a new full flow
+                except Exception as e:
+                    logger.warning("OAuth token refresh failed: %s — running interactive flow", e)
                     creds = self._run_interactive_flow()
             else:
                 creds = self._run_interactive_flow()
 
-            # Save the credentials for the next run
+            # Save the credentials for the next run (owner-readable only)
             with open(self.token_file, 'w') as token:
                 token.write(creds.to_json())
+            os.chmod(self.token_file, 0o600)
 
         return creds
 

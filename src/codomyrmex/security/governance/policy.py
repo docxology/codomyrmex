@@ -4,9 +4,12 @@ Provides PolicyRule, PolicyEngine, and PolicyError for defining
 and enforcing governance policies with composable rules.
 """
 
+import logging
 from collections.abc import Callable
 from typing import Any
 from uuid import uuid4
+
+logger = logging.getLogger(__name__)
 
 
 class PolicyError(Exception):
@@ -46,7 +49,8 @@ class PolicyRule:
         """
         try:
             return bool(self.condition(context))
-        except Exception:
+        except Exception as e:
+            logger.warning("Policy rule '%s' evaluation failed: %s", self.name, e)
             return False
 
     def __repr__(self) -> str:

@@ -7,8 +7,11 @@ for evaluating LLM outputs against reference values.
 
 from __future__ import annotations
 
+import logging
 import re
 from abc import ABC, abstractmethod
+
+logger = logging.getLogger(__name__)
 from dataclasses import dataclass
 from typing import Any
 
@@ -201,7 +204,8 @@ class RegexScorer(Scorer):
         """Execute Score operations natively."""
         try:
             pattern = re.compile(reference, self._flags)
-        except re.error:
+        except re.error as e:
+            logger.warning("Invalid regex pattern '%s': %s", reference, e)
             return 0.0
 
         if self._full_match:

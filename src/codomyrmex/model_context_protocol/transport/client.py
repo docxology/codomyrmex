@@ -265,7 +265,8 @@ class MCPClient:
                 parsed = _MCPToolError.from_json(content_text)
                 if parsed:
                     result["_error"] = parsed
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to parse structured MCPToolError: %s", e)
                 pass  # leave unstructured
 
         return result

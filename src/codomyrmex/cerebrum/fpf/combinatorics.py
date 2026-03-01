@@ -3,6 +3,8 @@ import json
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+import logging
+logger = logging.getLogger(__name__)
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -740,7 +742,8 @@ class FPFCombinatoricsAnalyzer:
             clusters = list(nx.connected_components(G))
 
             return [sorted(list(cluster)) for cluster in clusters if len(cluster) > 2]
-        except ImportError:
+        except ImportError as e:
+            logger.debug("Optional networkx graph clustering unavailable: %s", e)
             return []
 
     def run_comprehensive_combinatorics(self) -> dict[str, Any]:

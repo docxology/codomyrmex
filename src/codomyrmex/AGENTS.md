@@ -1,10 +1,10 @@
 # Codomyrmex Agents — src/codomyrmex
 
-**Version**: v1.0.2-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
 
 ## Purpose
 
-Main package directory containing 86 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
+Main package directory containing 88 specialized modules for the Codomyrmex platform. Provides comprehensive AI development workflow capabilities including coding, analysis, documentation, and orchestration.
 
 ## Active Components
 

@@ -4,7 +4,10 @@ This module provides the VideoAnalyzer class for extracting information
 and metadata from video files.
 """
 
+import logging
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.video.exceptions import (
     UnsupportedFormatError,
@@ -237,7 +240,8 @@ class VideoAnalyzer:
             try:
                 with VideoFileClip(str(path)) as clip:
                     return clip.audio is not None
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to check audio presence in %s: %s", path, e)
                 return False
         else:
             # OpenCV doesn't have reliable audio detection
@@ -276,7 +280,8 @@ class VideoAnalyzer:
                 with VideoFileClip(str(path)) as clip:
                     return clip.duration > 0
 
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to validate video file %s: %s", video_path, e)
             return False
 
         return False

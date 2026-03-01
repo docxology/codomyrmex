@@ -80,6 +80,27 @@ class Workflow:
     ) -> dict[str, TaskResult]: ...
 ```
 
+> **Note on `orchestrator.pipelines`**: The `pipelines` submodule provides a separate `Pipeline` class
+> with a **synchronous** `run()` method (not `async def execute()`). See section 2.2.1 below.
+
+### 2.2.1 Pipeline (synchronous)
+
+The `orchestrator.pipelines` module provides a `Pipeline` class with synchronous execution:
+
+```python
+from codomyrmex.orchestrator.pipelines import Pipeline, FunctionStage, PipelineBuilder
+
+class Pipeline:
+    """Pipeline for orchestrating multi-stage workflows."""
+    def __init__(self, pipeline_id: str | None = None, name: str | None = None, fail_fast: bool = True): ...
+    def add_stage(self, stage: Stage) -> "Pipeline": ...
+    def set_context(self, key: str, value: Any) -> "Pipeline": ...
+    def run(self, initial_context: dict[str, Any] | None = None) -> PipelineResult: ...
+```
+
+The `run()` method is synchronous. It resolves stage execution order via topological sort,
+executes stages sequentially (respecting `depends_on` declarations), and returns a `PipelineResult`.
+
 ### 2.3 Workflow Helper Functions
 
 ```python

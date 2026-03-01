@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import ast
-import os
 
 
 def extract_module_info(file_path: Path) -> dict:

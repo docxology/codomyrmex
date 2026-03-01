@@ -91,7 +91,7 @@ All built-in tools delegate to `tools.py` implementations with real functionalit
 | **Memory** | `recall_memory` | Retrieve value from session memory | OBSERVE |
 | **Memory** | `list_memories` | List all stored memory keys | OBSERVE |
 | **Module** | `list_modules` | List all codomyrmex modules | OBSERVE |
-| **Module** | `get_module_info` | Get module README, file listing | OBSERVE |
+| **Module** | `module_info` | Get module info and file listing for a specific module | OBSERVE |
 
 ### Discovered Tools (~18) — From MCP Specifications
 
@@ -196,6 +196,16 @@ open http://localhost:8080/
 | **EXECUTE** | `run_command` — shell execution; all tools available for agent-driven work |
 | **VERIFY** | `checksum_file` — integrity checks; `analyze_python_file` — code quality; `git_diff` — change validation |
 | **LEARN** | `store_memory` — capture learnings; discovery system learns from new `MCP_TOOL_SPECIFICATION.md` files |
+
+## MCP Introspection Tools
+
+Three tools are auto-discovered via `@mcp_tool` from `model_context_protocol/mcp_tools.py` — these allow PAI agents to introspect the MCP server itself:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `inspect_server` | Inspect the running MCP server configuration, capabilities, and registered tools | Safe | model_context_protocol |
+| `list_registered_tools` | List all tools currently registered with the MCP server, with schemas | Safe | model_context_protocol |
+| `get_tool_schema` | Get the input/output schema for a specific registered tool | Safe | model_context_protocol |
 
 ## MCP Protocol Version
 

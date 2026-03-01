@@ -152,7 +152,8 @@ class AlertEngine:
                 for handler in self._handlers:
                     try:
                         handler(alert)
-                    except Exception:
+                    except Exception as e:
+                        logger.warning("Alert handler failed for rule %s: %s", rule.name, e)
                         pass
 
         return fired

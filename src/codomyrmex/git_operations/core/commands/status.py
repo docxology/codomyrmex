@@ -164,7 +164,8 @@ def get_diff(target: str = "HEAD", repository_path: str = None, cached: bool = F
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to get diff: {e}")
         return ""
-    except FileNotFoundError:
+    except FileNotFoundError as e:
+        logger.warning("Git not found when getting diff: %s", e)
         return ""
     except Exception as e:
         logger.error(f"Unexpected error getting diff: {e}")

@@ -109,4 +109,5 @@ simulation/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/simulation/](../../../docs/modules/simulation/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

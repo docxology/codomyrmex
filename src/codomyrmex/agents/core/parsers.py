@@ -66,7 +66,8 @@ def parse_json_response(text: str, strict: bool = False) -> ParseResult:
     try:
         data = json.loads(text.strip())
         return ParseResult(success=True, data=data, raw_text=text)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        logger.debug("Direct JSON parse failed, trying code-block extraction: %s", e)
         pass
 
     # Try extracting from markdown code blocks

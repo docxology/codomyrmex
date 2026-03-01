@@ -33,7 +33,7 @@ from codomyrmex.agents.pai import (
 )
 from codomyrmex.agents.pai.mcp_bridge import get_total_tool_count
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning, print_error,
+    setup_logging, print_success,
 )
 
 SECTIONS = ["registry", "server", "health"]

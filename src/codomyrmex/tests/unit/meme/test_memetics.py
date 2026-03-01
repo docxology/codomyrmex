@@ -7,7 +7,6 @@ operators.  All tests use real dataclass instances and real function calls.
 
 from __future__ import annotations
 
-import math
 import random
 
 import pytest

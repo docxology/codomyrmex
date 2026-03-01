@@ -255,9 +255,8 @@ def show_system_status():
             stats = monitor.get_stats()
             print("\n⚡ Performance Stats:")
             print(f"  📊 Monitored functions: {len(stats.get('functions', []))}")
-        except (AttributeError, KeyError, TypeError):
-            # Performance monitor may not be available or stats may be incomplete
-            pass
+        except (AttributeError, KeyError, TypeError) as e:
+            logger.debug("Performance stats unavailable: %s", e)
 
 
 def run_interactive_shell() -> bool:

@@ -1,5 +1,3 @@
-import pytest
-
 #!/usr/bin/env python3
 """
 Comprehensive Unit Tests for GitHub Operations.
@@ -13,13 +11,15 @@ Following project conventions:
 - All outputs placed in numbered subfolders
 """
 
+import json
 import os
 import shutil
 import sys
 import tempfile
-import unittest
 from datetime import datetime
 from pathlib import Path
+
+import pytest
 
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
@@ -46,8 +46,56 @@ from codomyrmex.git_operations.core.git import (
 )
 
 
-@pytest.mark.unit
-class TestGitHubOperationsComprehensive(unittest.TestCase):
+# Module-level skip: all tests require a GitHub token
+_GITHUB_TOKEN = None
+_SKIP_GITHUB = True
+
+if check_git_availability():
+    try:
+        _GITHUB_TOKEN = _validate_github_token(None)
+        _SKIP_GITHUB = False
+    except GitHubAPIError:
+        pass
+
+pytestmark = [
+    pytest.mark.unit,
+    pytest.mark.skipif(_SKIP_GITHUB, reason="Git unavailable or GITHUB_TOKEN not set"),
+]
+
+
+# Class-level state for tracking test repositories
+_test_repositories = []
+_local_test_dirs = []
+_test_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+_output_dir = Path("@output/01_github_ops_test_results")
+
+
+@pytest.fixture(autouse=True, scope="module")
+def _module_setup_teardown():
+    """Module-level setup and teardown for GitHub operations tests."""
+    _output_dir.mkdir(parents=True, exist_ok=True)
+    yield
+    # Clean up GitHub repositories
+    for repo_info in _test_repositories:
+        try:
+            owner = repo_info.get('owner')
+            name = repo_info.get('name')
+            if owner and name:
+                print(f"Cleaning up repository: {owner}/{name}")
+                delete_github_repository(owner, name, _GITHUB_TOKEN)
+        except Exception as e:
+            print(f"Warning: Could not clean up repository {repo_info}: {e}")
+
+    # Clean up local directories
+    for local_dir in _local_test_dirs:
+        try:
+            if os.path.exists(local_dir):
+                shutil.rmtree(local_dir, ignore_errors=True)
+        except Exception as e:
+            print(f"Warning: Could not clean up directory {local_dir}: {e}")
+
+
+class TestGitHubOperationsComprehensive:
     """
     Comprehensive test suite for GitHub Operations.
 
@@ -59,68 +107,16 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
     - Test with real GitHub API integration
     """
 
-    @classmethod
-    def setUpClass(cls):
-        """Set up class-level test fixtures."""
-        # Check if Git and GitHub token are available
-        if not check_git_availability():
-            # Skip GitHub tests gracefully - this is expected in CI environments
-            cls.github_token = None
-            cls.skip_github_tests = True
-            return
-
-        try:
-            cls.github_token = _validate_github_token(None)
-            cls.skip_github_tests = False
-        except GitHubAPIError:
-            # Skip GitHub tests gracefully - this is expected in CI environments
-            cls.github_token = None
-            cls.skip_github_tests = True
-
-        # Create output directory for test results
-        cls.output_dir = Path("@output/01_github_ops_test_results")
-        cls.output_dir.mkdir(parents=True, exist_ok=True)
-
-        # Track created repositories for cleanup
-        cls.test_repositories = []
-        cls.local_test_dirs = []
-
-        # Test configuration
-        cls.test_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        cls.private_repo_name = f"private_test_{cls.test_timestamp}"
-        cls.public_repo_name = f"public_test_{cls.test_timestamp}"
-
-    @classmethod
-    def tearDownClass(cls):
-        """Clean up class-level test fixtures."""
-        # Clean up GitHub repositories
-        for repo_info in cls.test_repositories:
-            try:
-                owner = repo_info.get('owner')
-                name = repo_info.get('name')
-                if owner and name:
-                    print(f"Cleaning up repository: {owner}/{name}")
-                    delete_github_repository(owner, name, cls.github_token)
-            except Exception as e:
-                print(f"Warning: Could not clean up repository {repo_info}: {e}")
-
-        # Clean up local directories
-        for local_dir in cls.local_test_dirs:
-            try:
-                if os.path.exists(local_dir):
-                    shutil.rmtree(local_dir, ignore_errors=True)
-            except Exception as e:
-                print(f"Warning: Could not clean up directory {local_dir}: {e}")
-
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self, tmp_path):
         """Set up test fixtures for each test."""
-        if self.skip_github_tests:
-            # Don't skip, just mark that GitHub is not available
-            self.github_available = False
-        else:
-            self.github_available = True
-            self.test_dir = tempfile.mkdtemp(prefix="github_test_")
-            self.local_test_dirs.append(self.test_dir)
+        self.github_token = _GITHUB_TOKEN
+        self.test_dir = str(tmp_path)
+        _local_test_dirs.append(self.test_dir)
+        self.test_timestamp = _test_timestamp
+        self.output_dir = _output_dir
+        self.private_repo_name = f"private_test_{self.test_timestamp}"
+        self.public_repo_name = f"public_test_{self.test_timestamp}"
 
     def _log_test_result(self, test_name: str, result: dict, success: bool = True):
         """Log test results to output directory."""
@@ -134,25 +130,19 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
             "github_token_available": bool(self.github_token)
         }
 
-        import json
         with open(log_file, 'w') as f:
             json.dump(test_log, f, indent=2)
 
         if success:
-            print(f"✅ {test_name}: PASSED")
+            print(f"{test_name}: PASSED")
         else:
-            print(f"❌ {test_name}: FAILED - {result}")
+            print(f"{test_name}: FAILED - {result}")
 
     # ==================== GITHUB REPOSITORY CREATION TESTS ====================
 
     def test_create_private_repository(self):
         """Test creating a private GitHub repository."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-
-        print(f"\n🔒 Testing private repository creation: {self.private_repo_name}")
+        print(f"\nTesting private repository creation: {self.private_repo_name}")
 
         result = create_github_repository(
             name=self.private_repo_name,
@@ -164,28 +154,23 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
             license_template="mit"
         )
 
-        self.assertTrue(result["success"])
-        self.assertEqual(result["repository"]["name"], self.private_repo_name)
-        self.assertTrue(result["repository"]["private"])
-        self.assertIn("github.com", result["repository"]["html_url"])
+        assert result["success"] is True
+        assert result["repository"]["name"] == self.private_repo_name
+        assert result["repository"]["private"] is True
+        assert "github.com" in result["repository"]["html_url"]
 
         # Track for cleanup
         repo_info = {
             'owner': result["repository"]["full_name"].split('/')[0],
             'name': result["repository"]["name"]
         }
-        self.test_repositories.append(repo_info)
+        _test_repositories.append(repo_info)
 
         self._log_test_result("create_private_repository", result)
 
     def test_create_public_repository(self):
         """Test creating a public GitHub repository."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-
-        print(f"\n🌐 Testing public repository creation: {self.public_repo_name}")
+        print(f"\nTesting public repository creation: {self.public_repo_name}")
 
         result = create_github_repository(
             name=self.public_repo_name,
@@ -196,27 +181,22 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
             gitignore_template="Python"
         )
 
-        self.assertTrue(result["success"])
-        self.assertEqual(result["repository"]["name"], self.public_repo_name)
-        self.assertFalse(result["repository"]["private"])
-        self.assertIn("github.com", result["repository"]["html_url"])
+        assert result["success"] is True
+        assert result["repository"]["name"] == self.public_repo_name
+        assert result["repository"]["private"] is False
+        assert "github.com" in result["repository"]["html_url"]
 
         # Track for cleanup
         repo_info = {
             'owner': result["repository"]["full_name"].split('/')[0],
             'name': result["repository"]["name"]
         }
-        self.test_repositories.append(repo_info)
+        _test_repositories.append(repo_info)
 
         self._log_test_result("create_public_repository", result)
 
     def test_get_repository_info(self):
         """Test retrieving repository information."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-
         # First create a repository to test with
         create_result = create_github_repository(
             name=f"info_test_{self.test_timestamp}",
@@ -229,17 +209,17 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
         repo_name = create_result["repository"]["name"]
 
         # Track for cleanup
-        self.test_repositories.append({'owner': owner, 'name': repo_name})
+        _test_repositories.append({'owner': owner, 'name': repo_name})
 
-        print(f"\n📊 Testing repository info retrieval: {owner}/{repo_name}")
+        print(f"\nTesting repository info retrieval: {owner}/{repo_name}")
 
         # Test getting repository info
         repo_info = get_repository_info(owner, repo_name, self.github_token)
 
-        self.assertEqual(repo_info["name"], repo_name)
-        self.assertEqual(repo_info["full_name"], f"{owner}/{repo_name}")
-        self.assertTrue(repo_info["private"])
-        self.assertIsNotNone(repo_info["created_at"])
+        assert repo_info["name"] == repo_name
+        assert repo_info["full_name"] == f"{owner}/{repo_name}"
+        assert repo_info["private"] is True
+        assert repo_info["created_at"] is not None
 
         self._log_test_result("get_repository_info", repo_info)
 
@@ -247,12 +227,7 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
 
     def test_complete_pull_request_workflow(self):
         """Test complete pull request workflow from creation to reading."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-
-        print("\n🔄 Testing complete PR workflow")
+        print("\nTesting complete PR workflow")
 
         # Step 1: Create test repository
         create_result = create_github_repository(
@@ -268,26 +243,26 @@ class TestGitHubOperationsComprehensive(unittest.TestCase):
         clone_url = create_result["repository"]["clone_url"]
 
         # Track for cleanup
-        self.test_repositories.append({'owner': owner, 'name': repo_name})
+        _test_repositories.append({'owner': owner, 'name': repo_name})
 
-        print(f"   📁 Created repository: {repo_full_name}")
+        print(f"   Created repository: {repo_full_name}")
 
         # Step 2: Clone repository locally
         local_repo_path = os.path.join(self.test_dir, "pr_test_repo")
         clone_success = clone_repository(clone_url, local_repo_path)
-        self.assertTrue(clone_success, "Repository clone should succeed")
+        assert clone_success is True, "Repository clone should succeed"
 
-        print(f"   📥 Cloned repository to: {local_repo_path}")
+        print(f"   Cloned repository to: {local_repo_path}")
 
         # Step 3: Create feature branch
         feature_branch = "feature/test-pr-workflow"
         branch_success = create_branch(feature_branch, local_repo_path)
-        self.assertTrue(branch_success, "Feature branch creation should succeed")
+        assert branch_success is True, "Feature branch creation should succeed"
 
         current_branch = get_current_branch(local_repo_path)
-        self.assertEqual(current_branch, feature_branch)
+        assert current_branch == feature_branch
 
-        print(f"   🌿 Created feature branch: {feature_branch}")
+        print(f"   Created feature branch: {feature_branch}")
 
         # Step 4: Make changes and commit
         test_file_path = os.path.join(local_repo_path, "test_feature.py")
@@ -307,18 +282,18 @@ if __name__ == "__main__":
 """)
 
         add_success = add_files(["test_feature.py"], local_repo_path)
-        self.assertTrue(add_success, "Adding files should succeed")
+        assert add_success is True, "Adding files should succeed"
 
         commit_success = commit_changes("Add test feature for PR workflow", local_repo_path)
-        self.assertTrue(commit_success, "Commit should succeed")
+        assert commit_success is True, "Commit should succeed"
 
-        print("   💾 Added and committed test file")
+        print("   Added and committed test file")
 
         # Step 5: Push feature branch
         push_success = push_changes("origin", feature_branch, local_repo_path)
-        self.assertTrue(push_success, "Push should succeed")
+        assert push_success is True, "Push should succeed"
 
-        print("   📤 Pushed feature branch to remote")
+        print("   Pushed feature branch to remote")
 
         # Step 6: Create pull request
         pr_title = "Add test feature for PR workflow validation"
@@ -342,30 +317,30 @@ This PR is part of the comprehensive GitHub operations testing suite."""
             github_token=self.github_token
         )
 
-        self.assertTrue(pr_result["success"])
-        self.assertEqual(pr_result["pull_request"]["title"], pr_title)
-        self.assertEqual(pr_result["pull_request"]["head"]["ref"], feature_branch)
+        assert pr_result["success"] is True
+        assert pr_result["pull_request"]["title"] == pr_title
+        assert pr_result["pull_request"]["head"]["ref"] == feature_branch
 
         pr_number = pr_result["pull_request"]["number"]
-        print(f"   📋 Created PR #{pr_number}: {pr_title}")
+        print(f"   Created PR #{pr_number}: {pr_title}")
 
         # Step 7: Read pull request details
         pr_details = get_pull_request(owner, repo_name, pr_number, self.github_token)
 
-        self.assertEqual(pr_details["number"], pr_number)
-        self.assertEqual(pr_details["title"], pr_title)
-        self.assertEqual(pr_details["state"], "open")
-        self.assertFalse(pr_details["merged"])
+        assert pr_details["number"] == pr_number
+        assert pr_details["title"] == pr_title
+        assert pr_details["state"] == "open"
+        assert pr_details["merged"] is False
 
-        print(f"   📖 Retrieved PR details: #{pr_details['number']}")
+        print(f"   Retrieved PR details: #{pr_details['number']}")
 
         # Step 8: List pull requests
         pr_list = get_pull_requests(owner, repo_name, "open", self.github_token)
 
-        self.assertGreater(len(pr_list), 0)
-        self.assertTrue(any(pr["number"] == pr_number for pr in pr_list))
+        assert len(pr_list) > 0
+        assert any(pr["number"] == pr_number for pr in pr_list)
 
-        print(f"   📝 Listed PRs: found {len(pr_list)} open PRs")
+        print(f"   Listed PRs: found {len(pr_list)} open PRs")
 
         # Log comprehensive workflow result
         workflow_result = {
@@ -393,14 +368,10 @@ This PR is part of the comprehensive GitHub operations testing suite."""
 
     def test_repository_creation_errors(self):
         """Test error handling in repository creation."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-        print("\n🚫 Testing repository creation error handling")
+        print("\nTesting repository creation error handling")
 
         # Test creating repository with invalid name (empty)
-        with self.assertRaises(GitHubAPIError):
+        with pytest.raises(GitHubAPIError):
             create_github_repository(
                 name="",
                 github_token=self.github_token
@@ -415,30 +386,30 @@ This PR is part of the comprehensive GitHub operations testing suite."""
             private=True,
             github_token=self.github_token
         )
-        self.assertTrue(result1["success"])
+        assert result1["success"] is True
 
         # Track for cleanup
         owner = result1["repository"]["full_name"].split('/')[0]
-        self.test_repositories.append({'owner': owner, 'name': existing_repo_name})
+        _test_repositories.append({'owner': owner, 'name': existing_repo_name})
 
         # Second creation with same name should fail
-        with self.assertRaises(GitHubAPIError):
+        with pytest.raises(GitHubAPIError):
             create_github_repository(
                 name=existing_repo_name,
                 private=True,
                 github_token=self.github_token
             )
 
-        print("   ✅ Error handling working correctly")
+        print("   Error handling working correctly")
 
         self._log_test_result("repository_creation_errors", {"error_handling": "passed"})
 
     def test_pr_errors(self):
         """Test error handling in pull request operations."""
-        print("\n🚫 Testing PR error handling")
+        print("\nTesting PR error handling")
 
         # Test creating PR for non-existent repository
-        with self.assertRaises(GitHubAPIError):
+        with pytest.raises(GitHubAPIError):
             create_pull_request(
                 repo_owner="nonexistent",
                 repo_name="nonexistent",
@@ -449,10 +420,10 @@ This PR is part of the comprehensive GitHub operations testing suite."""
             )
 
         # Test getting PR from non-existent repository
-        with self.assertRaises(GitHubAPIError):
+        with pytest.raises(GitHubAPIError):
             get_pull_request("nonexistent", "nonexistent", 1, self.github_token)
 
-        print("   ✅ PR error handling working correctly")
+        print("   PR error handling working correctly")
 
         self._log_test_result("pr_errors", {"error_handling": "passed"})
 
@@ -460,12 +431,7 @@ This PR is part of the comprehensive GitHub operations testing suite."""
 
     def test_end_to_end_development_workflow(self):
         """Test complete end-to-end development workflow."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-
-        print("\n🔄 Testing complete end-to-end development workflow")
+        print("\nTesting complete end-to-end development workflow")
 
         workflow_steps = []
 
@@ -486,19 +452,19 @@ This PR is part of the comprehensive GitHub operations testing suite."""
             clone_url = repo_info["clone_url"]
 
             # Track for cleanup
-            self.test_repositories.append({'owner': owner, 'name': repo_name})
-            workflow_steps.append("✅ Repository created")
+            _test_repositories.append({'owner': owner, 'name': repo_name})
+            workflow_steps.append("Repository created")
 
             # Step 2: Clone repository
             local_repo_path = os.path.join(self.test_dir, "e2e_test_repo")
             clone_success = clone_repository(clone_url, local_repo_path)
-            self.assertTrue(clone_success)
-            workflow_steps.append("✅ Repository cloned")
+            assert clone_success is True
+            workflow_steps.append("Repository cloned")
 
             # Step 3: Create feature branch
             feature_branch = "feature/e2e-test-feature"
             create_branch(feature_branch, local_repo_path)
-            workflow_steps.append("✅ Feature branch created")
+            workflow_steps.append("Feature branch created")
 
             # Step 4: Create multiple files and commit
             files_to_create = [
@@ -519,18 +485,18 @@ This PR is part of the comprehensive GitHub operations testing suite."""
             # Add all files
             file_names = [fp for fp, _ in files_to_create]
             add_success = add_files(file_names, local_repo_path)
-            self.assertTrue(add_success)
+            assert add_success is True
 
             # Commit changes
             commit_message = "Add complete project structure for E2E testing\n\n- Add src package with main module\n- Add tests package with test module\n- Add README and requirements.txt\n\nThis commit demonstrates a realistic development workflow."
             commit_success = commit_changes(commit_message, local_repo_path)
-            self.assertTrue(commit_success)
-            workflow_steps.append("✅ Files created and committed")
+            assert commit_success is True
+            workflow_steps.append("Files created and committed")
 
             # Step 5: Push feature branch
             push_success = push_changes("origin", feature_branch, local_repo_path)
-            self.assertTrue(push_success)
-            workflow_steps.append("✅ Feature branch pushed")
+            assert push_success is True
+            workflow_steps.append("Feature branch pushed")
 
             # Step 6: Create pull request
             pr_title = "Add complete project structure for E2E testing"
@@ -549,11 +515,11 @@ This PR is part of the comprehensive GitHub operations testing suite."""
 - `requirements.txt` - Python dependencies
 
 ### Features Demonstrated
-- ✅ Repository creation via GitHub API
-- ✅ Local Git operations (clone, branch, commit, push)
-- ✅ Multi-file project structure
-- ✅ Comprehensive commit messages
-- ✅ Pull request creation via GitHub API
+- Repository creation via GitHub API
+- Local Git operations (clone, branch, commit, push)
+- Multi-file project structure
+- Comprehensive commit messages
+- Pull request creation via GitHub API
 
 **Created by automated E2E test at:** {datetime.now().isoformat()}
 
@@ -569,21 +535,21 @@ This PR validates the complete development workflow from repository creation to 
                 github_token=self.github_token
             )
 
-            self.assertTrue(pr_result["success"])
+            assert pr_result["success"] is True
             pr_number = pr_result["pull_request"]["number"]
-            workflow_steps.append(f"✅ Pull request #{pr_number} created")
+            workflow_steps.append(f"Pull request #{pr_number} created")
 
             # Step 7: Verify pull request
             pr_details = get_pull_request(owner, repo_name, pr_number, self.github_token)
-            self.assertEqual(pr_details["state"], "open")
-            self.assertGreater(pr_details["commits"], 0)
-            self.assertGreater(pr_details["changed_files"], 0)
-            workflow_steps.append("✅ Pull request verified")
+            assert pr_details["state"] == "open"
+            assert pr_details["commits"] > 0
+            assert pr_details["changed_files"] > 0
+            workflow_steps.append("Pull request verified")
 
             # Step 8: Verify repository status
             repo_status = get_status(local_repo_path)
-            self.assertTrue(repo_status["clean"])  # Should be clean after push
-            workflow_steps.append("✅ Repository status verified")
+            assert repo_status["clean"] is True  # Should be clean after push
+            workflow_steps.append("Repository status verified")
 
             # Final workflow result
             final_result = {
@@ -608,15 +574,15 @@ This PR validates the complete development workflow from repository creation to 
                 "test_duration": "completed_successfully"
             }
 
-            print("\n📊 E2E Workflow Summary:")
+            print("\nE2E Workflow Summary:")
             for step in workflow_steps:
                 print(f"   {step}")
-            print(f"   📋 PR #{pr_number}: {pr_result['pull_request']['html_url']}")
+            print(f"   PR #{pr_number}: {pr_result['pull_request']['html_url']}")
 
             self._log_test_result("end_to_end_development_workflow", final_result)
 
         except Exception as e:
-            workflow_steps.append(f"❌ Error: {str(e)}")
+            workflow_steps.append(f"Error: {str(e)}")
             self._log_test_result("end_to_end_development_workflow", {
                 "error": str(e),
                 "completed_steps": workflow_steps
@@ -627,11 +593,7 @@ This PR validates the complete development workflow from repository creation to 
 
     def test_generate_comprehensive_report(self):
         """Generate a comprehensive report of all test results."""
-        if not self.github_available:
-            # Test passes when GitHub is not available
-            self.assertTrue(True)
-            return
-        print("\n📊 Generating comprehensive test report")
+        print("\nGenerating comprehensive test report")
 
         # Collect all test logs
         log_files = list(self.output_dir.glob(f"*_{self.test_timestamp}.json"))
@@ -644,7 +606,7 @@ This PR validates the complete development workflow from repository creation to 
                 "github_integration": True,
                 "git_available": check_git_availability()
             },
-            "repositories_created": len(self.test_repositories),
+            "repositories_created": len(_test_repositories),
             "test_results": [],
             "summary": {
                 "passed": 0,
@@ -654,7 +616,6 @@ This PR validates the complete development workflow from repository creation to 
         }
 
         # Process each test log
-        import json
         for log_file in log_files:
             try:
                 with open(log_file) as f:
@@ -675,7 +636,7 @@ This PR validates the complete development workflow from repository creation to 
                 "name": f"{repo['owner']}/{repo['name']}",
                 "owner": repo["owner"],
                 "repository": repo["name"]
-            } for repo in self.test_repositories
+            } for repo in _test_repositories
         ]
 
         # Save comprehensive report
@@ -692,10 +653,10 @@ This PR validates the complete development workflow from repository creation to 
 **Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 ## Test Results Summary
-- ✅ **Passed:** {report["summary"]["passed"]}
-- ❌ **Failed:** {report["summary"]["failed"]}
-- ⏭️ **Skipped:** {report["summary"]["skipped"]}
-- 📁 **Repositories Created:** {report["repositories_created"]}
+- **Passed:** {report["summary"]["passed"]}
+- **Failed:** {report["summary"]["failed"]}
+- **Skipped:** {report["summary"]["skipped"]}
+- **Repositories Created:** {report["repositories_created"]}
 
 ## Created Test Repositories
 """)
@@ -722,14 +683,14 @@ following the project's test-driven development approach with no mocks.
 All test resources are automatically cleaned up after test completion.
 """)
 
-        print(f"   📋 Generated comprehensive report: {report_file}")
-        print(f"   📝 Generated summary: {summary_md}")
-        print("\n📊 Test Session Summary:")
-        print(f"   ✅ Passed: {report['summary']['passed']}")
-        print(f"   ❌ Failed: {report['summary']['failed']}")
-        print(f"   📁 Repositories: {report['repositories_created']}")
+        print(f"   Generated comprehensive report: {report_file}")
+        print(f"   Generated summary: {summary_md}")
+        print(f"\nTest Session Summary:")
+        print(f"   Passed: {report['summary']['passed']}")
+        print(f"   Failed: {report['summary']['failed']}")
+        print(f"   Repositories: {report['repositories_created']}")
 
-        self.assertGreater(report["summary"]["passed"], 0, "At least some tests should pass")
+        assert report["summary"]["passed"] > 0, "At least some tests should pass"
 
 
 if __name__ == '__main__':
@@ -741,4 +702,4 @@ if __name__ == '__main__':
     print("Ensure GITHUB_TOKEN environment variable is set with appropriate permissions.")
     print("="*80)
 
-    unittest.main(verbosity=2, buffer=False)
+    pytest.main([__file__, '-v'])

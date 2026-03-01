@@ -1,10 +1,11 @@
 """Email module for Codomyrmex.
 
-This module provides generic email interfaces and a Gmail provider.
+This module provides generic email interfaces, a Gmail provider, and an AgentMail provider.
 
 Submodules:
     - generics: Provides `EmailMessage`, `EmailDraft`, and abstract `EmailProvider`
     - gmail: Provides `GmailProvider` implementation
+    - agentmail: Provides `AgentMailProvider` implementation (API-first agent email)
 
 Installation:
     Install email dependencies with:

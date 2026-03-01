@@ -66,6 +66,7 @@ exceptions/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/exceptions/](../../../docs/modules/exceptions/)
 - **Parent Directory**: [codomyrmex](../README.md)
 - **Project Root**: ../../../README.md
 - **Related**: [Validation](../validation/README.md)

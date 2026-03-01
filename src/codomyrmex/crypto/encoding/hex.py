@@ -56,5 +56,6 @@ def is_valid_hex(string: str) -> bool:
     try:
         bytes.fromhex(string)
         return True
-    except (ValueError, TypeError):
+    except (ValueError, TypeError) as e:
+        logger.warning("Hex validation failed for input: %s", e)
         return False

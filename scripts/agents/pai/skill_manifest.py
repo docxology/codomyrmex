@@ -26,7 +26,6 @@ except ImportError:
 
 from codomyrmex.agents.pai import (
     get_skill_manifest,
-    get_tool_registry,
     PAIBridge,
     ALGORITHM_PHASES,
     TOOL_COUNT,

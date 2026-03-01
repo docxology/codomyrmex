@@ -7,10 +7,8 @@ uses tmp_path fixtures.
 """
 from __future__ import annotations
 
-import json
 import time
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -23,9 +21,8 @@ from codomyrmex.agents.droid.controller import (
     DroidConfig,
     DroidController,
     DroidMode,
-    DroidStatus,
 )
-from codomyrmex.agents.droid.todo import TodoItem, TodoManager
+from codomyrmex.agents.droid.todo import TodoManager
 
 
 # ---------------------------------------------------------------------------
@@ -251,12 +248,6 @@ class TestManagerControllerIntegration:
         assert status["system"]["controller_active"] is True
         assert status["controller_metrics"]["sessions_started"] == 1
 
-    @pytest.mark.xfail(
-        reason="Bug in controller.py: performance_context() called with "
-               "'operation_id' kwarg instead of 'operation'",
-        raises=TypeError,
-        strict=True,
-    )
     def test_execute_task_through_controller(self, tmp_path: Path) -> None:
         mgr = _make_manager(tmp_path)
         config = DroidConfig(mode=DroidMode.TEST, safe_mode=False)

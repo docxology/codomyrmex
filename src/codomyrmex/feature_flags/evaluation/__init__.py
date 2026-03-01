@@ -8,8 +8,11 @@ rules and percentage-based rollout evaluation.
 from __future__ import annotations
 
 import hashlib
+import logging
 from dataclasses import dataclass, field
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from ..strategies import EvaluationContext, EvaluationResult, EvaluationStrategy
 
@@ -50,7 +53,8 @@ class TargetingRule:
 
         try:
             return op_fn(actual, self.value)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError) as e:
+            logger.warning("Targeting rule comparison failed for attribute %s: %s", self.attribute, e)
             return False
 
 

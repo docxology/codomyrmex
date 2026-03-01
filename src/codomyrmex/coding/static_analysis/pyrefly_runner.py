@@ -46,7 +46,8 @@ class PyreflyRunner:
         try:
             subprocess.run(["pyrefly", "--version"], capture_output=True, timeout=5)
             return True
-        except (FileNotFoundError, subprocess.TimeoutExpired):
+        except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+            logger.warning("Pyrefly availability check failed: %s", e)
             return False
 
     def analyze_file(self, file_path: str) -> PyreflyResult:

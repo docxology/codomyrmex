@@ -16,8 +16,6 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import importlib.util
-import json
 
 
 def find_plugins(search_paths: list = None) -> list:

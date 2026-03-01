@@ -24,7 +24,6 @@ import logging
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import setup_logging, get_logger
 from codomyrmex.events import get_event_bus, Event, EventType
-from codomyrmex.config_management import load_configuration
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 

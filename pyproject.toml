@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "codomyrmex"
-version = "1.0.3.dev0"
+version = "1.0.3"
 description = "A Modular, Extensible Coding Workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -300,7 +300,7 @@ omit = [
 ]
 
 [tool.coverage.report]
-fail_under = 30
+fail_under = 68
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",

@@ -161,7 +161,7 @@ done
 
 ## Calendar MCP Tools
 
-These tools are accessible directly from agents without HTTP — they call the Google Calendar API through `~/.codomyrmex/gcal_token.json`. All datetimes must be **ISO 8601** strings (e.g., `"2026-02-24T10:00:00Z"`). `danielarifriedman@gmail.com` is injected automatically as an attendee on every create/update call.
+These tools are accessible directly from agents without HTTP — they call the Google Calendar API through `~/.codomyrmex/gcal_token.json`. All datetimes must be **ISO 8601** strings (e.g., `"2026-02-24T10:00:00Z"`). `FristonBlanket@gmail.com` is injected automatically as an attendee on every create/update call.
 
 | Tool | Key Parameters | Description |
 |------|---------------|-------------|

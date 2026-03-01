@@ -308,8 +308,8 @@ class EditingOrchestrator:
                 if len(content) > 4000:
                     content = content[:4000] + "\n... (truncated)"
                 context_parts.append(f"=== {Path(cf).name} ===\n{content}")
-            except (FileNotFoundError, OSError):
-                pass
+            except (FileNotFoundError, OSError) as e:
+                logger.debug("Skipping unreadable context file %s: %s", cf, e)
 
         context_section = ""
         if context_parts:
@@ -503,8 +503,8 @@ class EditingOrchestrator:
         if match:
             try:
                 return float(match.group(1))
-            except ValueError:
-                pass
+            except ValueError as e:
+                logger.debug("Failed to parse score from review text: %s", e)
         return 0.0
 
     @staticmethod

@@ -284,7 +284,8 @@ Sample files:
                 if response.is_success():
                     result["analysis"] = response.content
                     result["tokens_used"] = response.tokens_used
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                logger.debug("Optional analysis step failed: %s", e)
                 pass  # Analysis is optional
 
         return result

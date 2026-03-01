@@ -61,6 +61,15 @@ cache.set("key", "value", ttl=60)
 assert cache.get("key") == "value"
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `performance_check_regression` | Check a benchmark result against a stored baseline for regressions | Safe |
+| `performance_compare_benchmarks` | Compute the delta between two benchmark values | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

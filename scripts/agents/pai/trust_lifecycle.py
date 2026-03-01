@@ -26,8 +26,6 @@ except ImportError:
 
 from codomyrmex.agents.pai import (
     TrustLevel,
-    TrustRegistry,
-    SAFE_TOOLS,
     DESTRUCTIVE_TOOLS,
     SAFE_TOOL_COUNT,
     DESTRUCTIVE_TOOL_COUNT,
@@ -38,7 +36,6 @@ from codomyrmex.agents.pai import (
     get_trust_report,
     is_trusted,
     reset_trust,
-    call_tool,
 )
 from codomyrmex.utils.cli_helpers import (
     setup_logging, print_info, print_success, print_warning, print_error,

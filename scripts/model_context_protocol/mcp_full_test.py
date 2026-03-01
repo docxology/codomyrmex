@@ -308,7 +308,7 @@ def run_server_tests(runner: TestRunner):
 def run_validator_tests(runner: TestRunner):
     """Test MCP validators."""
     from codomyrmex.model_context_protocol.validators import (
-        SchemaValidator, MessageValidator, ToolCallValidator, ValidationResult
+        SchemaValidator, MessageValidator, ToolCallValidator
     )
     
     print("\n✅ Testing Validators...")
@@ -405,7 +405,7 @@ def run_validator_tests(runner: TestRunner):
 def run_discovery_tests(runner: TestRunner):
     """Test MCP discovery."""
     from codomyrmex.model_context_protocol.discovery import (
-        ModuleScanner, SpecificationScanner, ToolCatalog, DiscoveredTool
+        SpecificationScanner, ToolCatalog, DiscoveredTool
     )
     
     print("\n🔍 Testing Discovery...")

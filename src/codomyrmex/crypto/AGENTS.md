@@ -71,6 +71,16 @@ This document defines which PAI agent types can access which crypto submodules a
 | OBSERVED | Read-only, analysis | Hashing, analysis, encoding, verification |
 | TRUSTED | Full access | Key generation, encryption, signing, wallet creation |
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `hash_data` | Compute a cryptographic hash of the input data | `data`, `algorithm` (sha256/sha384/sha512/sha3_256/blake2b) | Safe |
+| `verify_hash` | Verify that data matches an expected hash (constant-time comparison) | `data`, `expected_hash`, `algorithm` | Safe |
+| `generate_key` | Generate a cryptographic key | `algorithm` (aes128/aes256/hmac256), `encoding` (hex/base64) | Safe |
+
 ## CLI Command Access
 
 | Command | Required Trust |

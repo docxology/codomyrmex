@@ -481,7 +481,8 @@ def _analyze_directory_structure(path: str, max_depth: int = 3) -> dict[str, Any
                 )
             else:
                 result["children"].append({"name": entry.name, "type": "file"})
-    except PermissionError:
+    except PermissionError as e:
+        logger.warning("Permission denied reading directory %s: %s", path, e)
         pass
     return result
 

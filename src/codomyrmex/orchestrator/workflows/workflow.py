@@ -300,7 +300,8 @@ class Workflow:
         try:
             from .observability.orchestrator_events import workflow_started as _ws
             self._publish_event(_ws(self.name, len(self.tasks)))
-        except ImportError:
+        except ImportError as e:
+            self.logger.debug("Observability events not available: %s", e)
             pass
 
         # Reset task states
@@ -373,7 +374,8 @@ class Workflow:
                 try:
                     from .observability.orchestrator_events import task_started as _ts
                     self._publish_event(_ts(self.name, task.name))
-                except ImportError:
+                except ImportError as e:
+                    self.logger.debug("Observability events not available: %s", e)
                     pass
                 coroutines.append(self._execute_task_with_retry(task))
 
@@ -392,7 +394,8 @@ class Workflow:
                             task_failed as _tf,
                         )
                         self._publish_event(_tf(self.name, task.name, str(result)))
-                    except ImportError:
+                    except ImportError as e:
+                        self.logger.debug("Observability events not available: %s", e)
                         pass
 
                     if self.fail_fast:
@@ -424,7 +427,8 @@ class Workflow:
                             execution_time=task.execution_time,
                             attempts=task.attempts,
                         ))
-                    except ImportError:
+                    except ImportError as e:
+                        self.logger.debug("Observability events not available: %s", e)
                         pass
 
         # Summary
@@ -450,7 +454,8 @@ class Workflow:
                     skipped=len(skipped_tasks),
                     elapsed=elapsed,
                 ))
-        except ImportError:
+        except ImportError as e:
+            self.logger.debug("Observability events not available: %s", e)
             pass
 
         results = {name: task.result for name, task in self.tasks.items()}

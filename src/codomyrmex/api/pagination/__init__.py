@@ -9,11 +9,14 @@ arbitrary collections, producing standardized page metadata and HTTP headers.
 __version__ = "0.1.0"
 
 import base64
+import logging
 import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Enums
@@ -478,8 +481,8 @@ class KeysetPaginator(Paginator):
                 end_cursor = base64.urlsafe_b64encode(
                     f"keyset:{last_value}".encode()
                 ).decode("ascii")
-            except (KeyError, AttributeError):
-                pass
+            except (KeyError, AttributeError) as e:
+                logger.debug("Failed to compute keyset cursors for pagination: %s", e)
 
         page_info = PageInfo(
             has_next_page=end < total_items,

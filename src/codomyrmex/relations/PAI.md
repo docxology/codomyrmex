@@ -55,6 +55,14 @@ diagram = render_social_graph(crm)
 | **VERIFY** | Social graph visualization verifies relationship network topology |
 | **LEARN** | Interaction history and tagging patterns support relationship analytics |
 
+## MCP Tools
+
+One tool is auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `relations_score_strength` | Score the relationship strength between two entities given interaction history | Safe | relations |
+
 ## Architecture Role
 
 **Application Layer** -- Domain-specific CRM module. Depends on the `visualization` module for Mermaid diagram rendering. Has no upward dependencies from other modules.

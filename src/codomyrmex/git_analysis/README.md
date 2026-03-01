@@ -93,3 +93,9 @@ Both modules can be used together: use `git_operations` to manage repos, then `g
 - **GitNexus structural tools**: Node.js + npm/npx (or built vendor dist)
   - Install: `npm install -g gitnexus` or use `npx` (zero-install)
   - Vendor build: `cd vendor/gitnexus && npm install && npm run build`
+
+## Navigation
+
+- **Extended Docs**: [docs/modules/git_analysis/](../../../docs/modules/git_analysis/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README.md](../../../README.md)

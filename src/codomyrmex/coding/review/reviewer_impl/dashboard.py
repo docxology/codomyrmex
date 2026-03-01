@@ -460,7 +460,8 @@ class DashboardMixin:
                     # Limit traversal depth
                     if len(root.split(os.sep)) - len(str(self.project_root).split(os.sep)) > 5:
                         break
-            except Exception:
+            except Exception as e:
+                logger.warning("Security analysis walk failed: %s", e)
                 pass
 
             # Normalize penalty based on codebase size
@@ -515,7 +516,8 @@ class DashboardMixin:
                                 continue
                     if len(root.split(os.sep)) - len(str(self.project_root).split(os.sep)) > 3:
                         break
-            except Exception:
+            except Exception as e:
+                logger.warning("Performance analysis walk failed: %s", e)
                 pass
 
             # Performance score calculation
@@ -721,7 +723,8 @@ class DashboardMixin:
                     try:
                         with open(os.path.join(root, file), encoding='utf-8') as f:
                             total_lines += len(f.readlines())
-                    except Exception:
+                    except Exception as e:
+                        logger.debug("Failed to count lines in file: %s", e)
                         pass
         return total_lines
 

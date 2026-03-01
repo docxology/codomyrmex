@@ -9,9 +9,7 @@ Demonstrates actual logistics capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
-from datetime import datetime
 
 # Ensure codomyrmex is in path
 try:

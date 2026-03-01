@@ -6,6 +6,9 @@ import ast
 import os
 from pathlib import Path
 from typing import Any
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Layer sets aligned with src/codomyrmex/SPEC.md architecture
 # exceptions and validation are cross-cutting foundation concerns used by all layers
@@ -60,7 +63,8 @@ def extract_imports_ast(filepath: Path) -> list[str]:
     try:
         source = filepath.read_text(encoding="utf-8", errors="replace")
         tree = ast.parse(source, str(filepath))
-    except (SyntaxError, UnicodeDecodeError):
+    except (SyntaxError, UnicodeDecodeError) as e:
+        logger.debug("Skipping unreadable file %s: %s", filepath, e)
         return []
 
     modules = []

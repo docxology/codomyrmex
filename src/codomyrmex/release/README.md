@@ -132,6 +132,7 @@ certification checks during real CI pipeline runs.
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/release/](../../../docs/modules/release/)
 - [PAI.md](PAI.md) -- PAI integration and phase mapping
 - [AGENTS.md](AGENTS.md) -- Agentic operating contracts
 - [SPEC.md](SPEC.md) -- Formal specification

@@ -21,7 +21,6 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from unittest import TestCase
 
 import pytest
 import requests as _requests_lib
@@ -55,19 +54,18 @@ _skip_no_fabric = pytest.mark.skipif(
 # ============================================================================
 
 @pytest.mark.unit
-class TestLLMConfig(TestCase):
+class TestLLMConfig:
     """Tests for LLMConfig class."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self, tmp_path):
         """Set up test fixtures."""
-        self.temp_dir = tempfile.mkdtemp()
-        self.original_env = {}
+        self.temp_dir = str(tmp_path)
 
-    def tearDown(self):
-        """Clean up after tests."""
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
-        # Restore environment
-        import os
+    @pytest.fixture(autouse=True)
+    def _cleanup_env(self):
+        """Clean up LLM environment variables after each test."""
+        yield
         for key in ['LLM_MODEL', 'LLM_TEMPERATURE', 'LLM_MAX_TOKENS',
                     'LLM_TOP_P', 'LLM_TOP_K', 'LLM_TIMEOUT', 'LLM_BASE_URL']:
             if key in os.environ:
@@ -224,7 +222,7 @@ class TestLLMConfig(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestExecutionOptions(TestCase):
+class TestExecutionOptions:
     """Tests for ExecutionOptions dataclass."""
 
     def test_execution_options_defaults(self):
@@ -278,14 +276,13 @@ class TestExecutionOptions(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestModelRunner(TestCase):
+@_skip_no_ollama
+class TestModelRunner:
     """Tests for ModelRunner class with real OllamaManager (skip if unavailable)."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self):
         """Set up test fixtures."""
-        if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
-
         from codomyrmex.llm.ollama.model_runner import ModelRunner
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
@@ -322,7 +319,7 @@ class TestModelRunner(TestCase):
         """Test run_with_options uses real Ollama and returns result."""
         models = self.manager.list_models()
         if not models:
-            self.skipTest("No Ollama models installed")
+            pytest.skip("No Ollama models installed")
 
         model_name = models[0].name
         result = self.runner.run_with_options(model_name, "Say hello in one word")
@@ -333,7 +330,7 @@ class TestModelRunner(TestCase):
         """Test run_conversation properly formats and executes conversation."""
         models = self.manager.list_models()
         if not models:
-            self.skipTest("No Ollama models installed")
+            pytest.skip("No Ollama models installed")
 
         model_name = models[0].name
         messages = [
@@ -347,7 +344,7 @@ class TestModelRunner(TestCase):
         """Test benchmark_model returns proper benchmark results."""
         models = self.manager.list_models()
         if not models:
-            self.skipTest("No Ollama models installed")
+            pytest.skip("No Ollama models installed")
 
         model_name = models[0].name
         test_prompts = ["Say hi"]
@@ -365,12 +362,9 @@ class TestModelRunner(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestOllamaManager(TestCase):
+@_skip_no_ollama
+class TestOllamaManager:
     """Tests for OllamaManager class with real Ollama (skip if unavailable)."""
-
-    def setUp(self):
-        if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
 
     def test_ollama_manager_initialization(self):
         """Test OllamaManager initializes correctly."""
@@ -413,7 +407,7 @@ class TestOllamaManager(TestCase):
         manager = OllamaManager(auto_start_server=False)
         models = manager.list_models()
         if not models:
-            self.skipTest("No Ollama models installed")
+            pytest.skip("No Ollama models installed")
 
         result = manager.run_model(models[0].name, 'Say hello in one word', save_output=False)
 
@@ -462,18 +456,15 @@ class TestOllamaManager(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestOutputManager(TestCase):
+class TestOutputManager:
     """Tests for OutputManager class."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self, tmp_path):
         """Set up test fixtures."""
-        self.temp_dir = tempfile.mkdtemp()
+        self.temp_dir = str(tmp_path)
         from codomyrmex.llm.ollama.output_manager import OutputManager
         self.output_manager = OutputManager(self.temp_dir)
-
-    def tearDown(self):
-        """Clean up after tests."""
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_output_manager_creates_directories(self):
         """Test OutputManager creates required directories."""
@@ -607,16 +598,13 @@ class TestOutputManager(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestConfigManager(TestCase):
+class TestConfigManager:
     """Tests for ConfigManager class."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self, tmp_path):
         """Set up test fixtures."""
-        self.temp_dir = tempfile.mkdtemp()
-
-    def tearDown(self):
-        """Clean up after tests."""
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
+        self.temp_dir = str(tmp_path)
 
     def test_config_manager_initialization(self):
         """Test ConfigManager initializes with config."""
@@ -697,7 +685,7 @@ class TestConfigManager(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestLLMExceptions(TestCase):
+class TestLLMExceptions:
     """Tests for LLM exception classes."""
 
     def test_llm_connection_error(self):
@@ -803,7 +791,7 @@ class TestLLMExceptions(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestFabricManager(TestCase):
+class TestFabricManager:
     """Tests for FabricManager class (skip if fabric CLI unavailable)."""
 
     def test_fabric_manager_initialization(self):
@@ -818,7 +806,7 @@ class TestFabricManager(TestCase):
     def test_fabric_not_available_when_missing(self):
         """Test FabricManager handles unavailable fabric."""
         if _FABRIC_AVAILABLE:
-            self.skipTest("fabric is installed — cannot test unavailable path")
+            pytest.skip("fabric is installed -- cannot test unavailable path")
 
         from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
@@ -845,7 +833,7 @@ class TestFabricManager(TestCase):
         manager = FabricManager()
         patterns = manager.list_patterns()
         if not patterns:
-            self.skipTest("No fabric patterns available")
+            pytest.skip("No fabric patterns available")
 
         result = manager.run_pattern(patterns[0], "test input")
 
@@ -855,7 +843,7 @@ class TestFabricManager(TestCase):
     def test_run_pattern_unavailable_returns_error(self):
         """Test run_pattern returns error when fabric unavailable."""
         if _FABRIC_AVAILABLE:
-            self.skipTest("fabric is installed — cannot test unavailable path")
+            pytest.skip("fabric is installed -- cannot test unavailable path")
 
         from codomyrmex.llm.fabric.fabric_manager import FabricManager
 
@@ -871,7 +859,7 @@ class TestFabricManager(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestFabricOrchestrator(TestCase):
+class TestFabricOrchestrator:
     """Tests for FabricOrchestrator class."""
 
     def test_orchestrator_initialization(self):
@@ -919,14 +907,13 @@ class TestFabricOrchestrator(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestAsyncModelRunner(TestCase):
+@_skip_no_ollama
+class TestAsyncModelRunner:
     """Tests for async methods in ModelRunner."""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def _setup(self):
         """Set up test fixtures."""
-        if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
-
         from codomyrmex.llm.ollama.model_runner import ModelRunner
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
@@ -979,17 +966,15 @@ class TestAsyncModelRunner(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestGlobalConfigFunctions(TestCase):
+class TestGlobalConfigFunctions:
     """Tests for global config functions."""
 
-    def setUp(self):
-        """Reset global config before each test."""
+    @pytest.fixture(autouse=True)
+    def _reset_config(self):
+        """Reset global config before and after each test."""
         from codomyrmex.llm.config import reset_config
         reset_config()
-
-    def tearDown(self):
-        """Reset global config after each test."""
-        from codomyrmex.llm.config import reset_config
+        yield
         reset_config()
 
     def test_get_config_creates_default(self):
@@ -1031,7 +1016,7 @@ class TestGlobalConfigFunctions(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestTokenCounting(TestCase):
+class TestTokenCounting:
     """Tests for token counting functionality."""
 
     def test_execution_result_contains_token_count(self):
@@ -1052,14 +1037,14 @@ class TestTokenCounting(TestCase):
     def test_run_model_captures_eval_count(self):
         """Test run_model captures eval_count from real API response."""
         if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
+            pytest.skip("Ollama server not reachable")
 
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
         manager = OllamaManager(auto_start_server=False)
         models = manager.list_models()
         if not models:
-            self.skipTest("No Ollama models installed")
+            pytest.skip("No Ollama models installed")
 
         result = manager.run_model(models[0].name, 'Say hello', save_output=False)
         # tokens_used should be set when available
@@ -1071,13 +1056,13 @@ class TestTokenCounting(TestCase):
 # ============================================================================
 
 @pytest.mark.unit
-class TestErrorRecovery(TestCase):
+class TestErrorRecovery:
     """Tests for error recovery and retry patterns."""
 
     def test_cli_fallback_when_http_unavailable(self):
         """Test that OllamaManager can initialize when Ollama is available."""
         if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
+            pytest.skip("Ollama server not reachable")
 
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
@@ -1088,7 +1073,7 @@ class TestErrorRecovery(TestCase):
     def test_run_model_handles_nonexistent_model(self):
         """Test graceful handling when model doesn't exist."""
         if not _OLLAMA_AVAILABLE:
-            self.skipTest("Ollama server not reachable")
+            pytest.skip("Ollama server not reachable")
 
         from codomyrmex.llm.ollama.ollama_manager import OllamaManager
 
@@ -1103,7 +1088,7 @@ if __name__ == '__main__':
     pytest.main([__file__, '-v'])
 
 
-# Coverage push — llm/router
+# Coverage push -- llm/router
 class TestCostTracker:
     """Tests for LLM cost tracking."""
 

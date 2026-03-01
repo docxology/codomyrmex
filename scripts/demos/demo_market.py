@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.market import ReverseAuction, DemandAggregator
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def demo_reverse_auction():

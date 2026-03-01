@@ -60,6 +60,15 @@ assert "modules" in result
 assert "circular_dependencies" in result
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `maintenance_health_check` | Run a simple health check and return its status | Safe |
+| `maintenance_list_tasks` | List all registered maintenance tasks and their status | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

@@ -6,11 +6,10 @@ and that every module has a corresponding orchestrator.
 """
 
 import sys
-import os
 import argparse
 import logging
 from pathlib import Path
-from typing import Set, Tuple, List
+from typing import Set, Tuple
 
 # Add src to path to import AntigravityClient (scripts/utils/file.py -> parents[2] is repo root)
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))

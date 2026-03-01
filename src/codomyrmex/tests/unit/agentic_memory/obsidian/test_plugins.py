@@ -1,6 +1,5 @@
 """Tests for plugin, theme, and snippet management CLI commands."""
 
-import shutil
 
 import pytest
 

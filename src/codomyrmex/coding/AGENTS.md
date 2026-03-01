@@ -47,6 +47,18 @@ if diagnosis.can_fix:
     debugger.apply_and_verify(patch)
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `code_execute` | Execute code in a sandboxed environment (Python, JavaScript, etc.) | `language`, `code`, `timeout` (default 30) | Destructive |
+| `code_list_languages` | List all supported programming languages for code execution | (none) | Safe |
+| `code_review_file` | Analyze a Python file for quality metrics, complexity, and issues | `path` | Safe |
+| `code_review_project` | Analyze a project directory for code quality and architecture violations | `path` | Safe |
+| `code_debug` | Analyze an error and suggest fixes using the Debugger | `code`, `stdout`, `stderr`, `exit_code` | Safe |
+
 ## Testing Patterns
 
 ```python

@@ -65,4 +65,5 @@ bio_simulation/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/bio_simulation/](../../../docs/modules/bio_simulation/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

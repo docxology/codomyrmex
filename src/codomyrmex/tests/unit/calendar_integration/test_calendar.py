@@ -315,12 +315,34 @@ class TestGoogleCalendarFromEnv:
                     os.environ[k] = v
 
     def test_from_env_raises_import_error_when_sdk_missing(self):
-        """from_env() raises ImportError when GCAL_AVAILABLE is False."""
-        from codomyrmex.calendar_integration.gcal.provider import GCAL_AVAILABLE, GoogleCalendar
-        if GCAL_AVAILABLE:
-            pytest.skip("GCAL_AVAILABLE is True — SDK-missing path not testable in this environment")
-        with pytest.raises(ImportError, match="Google Calendar dependencies"):
-            GoogleCalendar.from_env()
+        """from_env() raises ImportError when GCAL_AVAILABLE is False.
+
+        Uses real module attribute manipulation (not mocking) to
+        temporarily disable the SDK flag, then verifies the guard
+        clause in from_env() raises ImportError.
+        """
+        import codomyrmex.calendar_integration.gcal.provider as gcal_mod
+        original = gcal_mod.GCAL_AVAILABLE
+        try:
+            gcal_mod.GCAL_AVAILABLE = False
+            with pytest.raises(ImportError, match="Google Calendar dependencies"):
+                gcal_mod.GoogleCalendar.from_env()
+        finally:
+            gcal_mod.GCAL_AVAILABLE = original
+
+    def test_init_raises_import_error_when_sdk_missing(self):
+        """GoogleCalendar.__init__() raises ImportError when GCAL_AVAILABLE is False.
+
+        Tests the constructor guard clause in addition to from_env().
+        """
+        import codomyrmex.calendar_integration.gcal.provider as gcal_mod
+        original = gcal_mod.GCAL_AVAILABLE
+        try:
+            gcal_mod.GCAL_AVAILABLE = False
+            with pytest.raises(ImportError, match="Google Calendar dependencies"):
+                gcal_mod.GoogleCalendar(credentials=object())
+        finally:
+            gcal_mod.GCAL_AVAILABLE = original
 
 
 @pytest.mark.skipif(

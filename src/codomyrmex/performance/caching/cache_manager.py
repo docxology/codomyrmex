@@ -153,8 +153,9 @@ class CacheManager:
         try:
             with open(cache_file, "wb") as f:
                 pickle.dump((value, timestamp, ttl), f)
-        except (OSError, pickle.PickleError):
+        except (OSError, pickle.PickleError) as e:
             # If we can't write to disk, that's okay - we still have it in memory
+            logger.debug("Failed to write cache entry %s to disk: %s", key, e)
             pass
 
     def clear(self) -> None:

@@ -5,6 +5,10 @@ This module provides template engine support (Jinja2, Mako) for code generation,
 documentation templates, and dynamic content.
 """
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 # Shared schemas for cross-module interop
 try:
     from codomyrmex.validation.schemas import Result, ResultStatus
@@ -18,7 +22,8 @@ from . import context, engines, filters
 # Try to import optional submodules
 try:
     from . import loaders
-except ImportError:
+except ImportError as e:
+    logger.debug("Optional templating submodule 'loaders' not available: %s", e)
     pass
 
 # Try to import from existing modules, but don't fail if they don't exist

@@ -4,7 +4,6 @@ These tests ensure test_project properly integrates with all key codomyrmex
 modules without falling back to stdlib implementations.
 """
 
-import pytest
 
 
 class TestLoggingMonitoringIntegration:
@@ -88,7 +87,7 @@ class TestEventsIntegration:
 
     def test_import_event_bus(self):
         """Verify EventBus imports."""
-        from codomyrmex.events import EventBus, get_event_bus
+        from codomyrmex.events import get_event_bus
         
         bus = get_event_bus()
         assert bus is not None

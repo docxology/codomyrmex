@@ -171,10 +171,10 @@ Dynamic tools are classified using pattern matching on function names:
 
 See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 
-### Email / AgentMail (8 tools)
+### Email / AgentMail + Gmail (12 tools)
 
 **Module**: `codomyrmex.email.mcp_tools`
-**Auth**: Requires `AGENTMAIL_API_KEY` environment variable
+**Auth**: AgentMail tools require `AGENTMAIL_API_KEY`. Gmail tools require `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`.
 **Category**: `email`
 
 | Tool | Trust | Description |
@@ -187,9 +187,14 @@ See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 | `agentmail_reply_to_message` | **Destructive** | Reply to an existing message |
 | `agentmail_list_threads` | Safe | List conversation threads in an inbox |
 | `agentmail_create_webhook` | **Destructive** | Register a webhook for inbox events |
+| `gmail_send_message` | **Destructive** | Send an email via Gmail API |
+| `gmail_list_messages` | Safe | List messages in the Gmail inbox |
+| `gmail_get_message` | Safe | Fetch a specific Gmail message by ID |
+| `gmail_create_draft` | **Destructive** | Create a Gmail draft without sending |
 
 **Notes:**
-- All tools require `agentmail>=0.2.17` (`uv sync --extra email`)
+- AgentMail tools require `agentmail>=0.2.17` (`uv sync --extra email`)
+- Gmail tools require Google OAuth2 credentials in environment variables
 - Inbox defaults to `AGENTMAIL_DEFAULT_INBOX` env var when `inbox_id` is omitted
 - Full provider API: `src/codomyrmex/email/agentmail/API_SPECIFICATION.md`
 
@@ -201,9 +206,9 @@ See `_DESTRUCTIVE_PATTERNS` in `trust_gateway.py` for the full list.
 | Static destructive | 4 | Requires TRUSTED |
 | Dynamic safe | ~146 | Pattern-classified, auto-VERIFIED |
 | Dynamic destructive | ~4 (pattern-matched) | Requires TRUSTED |
-| **Total** | **~167** | — |
+| **Total** | **~171** | — |
 
-> Run `/codomyrmexVerify` to get the current exact count. Total reflects 86-module codebase with 33 auto-discovered modules.
+> Run `/codomyrmexVerify` to get the current exact count. Total reflects 88-module codebase with 33 auto-discovered modules.
 
 ## Navigation
 

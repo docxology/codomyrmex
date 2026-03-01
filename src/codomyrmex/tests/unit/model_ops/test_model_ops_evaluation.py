@@ -41,7 +41,6 @@ from codomyrmex.model_ops.evaluation import (
     RecallMetric,
     RegexScorer,
     RMSEMetric,
-    Scorer,
     SuiteResult,
     TaskType,
     WeightedScorer,

@@ -119,4 +119,5 @@ static_analysis/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/static_analysis/](../../../docs/modules/static_analysis/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

@@ -65,7 +65,8 @@ class APIRequest:
         if self.body:
             try:
                 return json.loads(self.body.decode('utf-8'))
-            except (json.JSONDecodeError, UnicodeDecodeError):
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                logger.warning("Failed to parse JSON body: %s", e)
                 return None
         return None
 

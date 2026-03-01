@@ -216,7 +216,7 @@ class AgentMailProvider(EmailProvider):
             if sent_id:
                 return self.get_message(sent_id, resolved_inbox)
             # If no ID returned, construct a minimal EmailMessage from draft
-            from datetime import datetime
+            from datetime import datetime, timezone
 
             from ..generics import EmailAddress
             return EmailMessage(
@@ -227,7 +227,7 @@ class AgentMailProvider(EmailProvider):
                 bcc=[EmailAddress(email=addr) for addr in draft.bcc],
                 body_text=draft.body_text,
                 body_html=draft.body_html,
-                date=datetime.utcnow(),
+                date=datetime.now(timezone.utc),
             )
         except ApiError as exc:
             _raise_for_api_error(exc, "send_message")

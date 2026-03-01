@@ -260,7 +260,8 @@ class InfomaniakS3Client(InfomaniakS3Base, StorageClient):
         try:
             self._client.head_bucket(Bucket=name)
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Bucket existence check failed for %r: %s", name, e)
             return False
 
     # =========================================================================

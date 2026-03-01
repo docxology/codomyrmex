@@ -506,7 +506,6 @@ class TestRunMethod:
 
     def test_run_handles_keyboard_interrupt(self):
         """Verify run() catches KeyboardInterrupt gracefully."""
-        from codomyrmex.terminal_interface.shells.interactive_shell import InteractiveShell
 
         shell, _ = _make_shell()
 

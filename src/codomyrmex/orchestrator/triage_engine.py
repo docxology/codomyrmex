@@ -172,7 +172,8 @@ class TriageEngine:
             try:
                 lines = py_file.read_text().splitlines()
                 total_loc += sum(1 for ln in lines if ln.strip() and not ln.strip().startswith("#"))
-            except (OSError, UnicodeDecodeError):
+            except (OSError, UnicodeDecodeError) as e:
+                logger.debug("Could not read file %s for LOC count: %s", py_file, e)
                 pass
         profile.loc = total_loc
 

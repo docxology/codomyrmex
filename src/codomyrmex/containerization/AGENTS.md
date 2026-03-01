@@ -54,6 +54,17 @@ compose.up(detach=True)
 compose.down()
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `container_runtime_status` | Check availability of container runtimes (Docker, Kubernetes) | (none) | Safe |
+| `container_build` | Build container images using Docker | `image_name`, `dockerfile_path`, `tag` | Destructive |
+| `container_list` | List running containers managed by Docker | (none) | Safe |
+| `container_security_scan` | Scan a container image for security vulnerabilities | `image` | Safe |
+
 ## Testing Patterns
 
 ```python

@@ -225,7 +225,8 @@ class AgentRegistry:
             self._health_check_task.cancel()
             try:
                 await self._health_check_task
-            except asyncio.CancelledError:
+            except asyncio.CancelledError as e:
+                logger.debug("Health monitoring task cancelled: %s", e)
                 pass
         logger.info("Agent registry health monitoring stopped")
 

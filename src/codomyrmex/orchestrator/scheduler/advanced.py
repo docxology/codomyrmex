@@ -5,6 +5,7 @@ Persistent scheduling and job dependencies.
 """
 
 import json
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -13,6 +14,8 @@ from pathlib import Path
 from typing import Any
 
 from . import JobStatus, Scheduler
+
+logger = logging.getLogger(__name__)
 
 
 class DependencyStatus(Enum):
@@ -134,7 +137,8 @@ class PersistentScheduler(Scheduler):
                         kwargs=job_data.get("kwargs", {}),
                     )
                     self._job_functions[job_id] = func_name
-        except (json.JSONDecodeError, KeyError):
+        except (json.JSONDecodeError, KeyError) as e:
+            logger.warning("Failed to load scheduler state from %s: %s", self._state_path, e)
             pass
 
     def _save_state(self) -> None:

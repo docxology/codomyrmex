@@ -15,7 +15,7 @@ import json
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
 from codomyrmex.privacy import CrumbCleaner, MixnetProxy
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 
 
 def demo_crumb_scrubbing():

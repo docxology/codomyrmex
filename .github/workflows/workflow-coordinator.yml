@@ -78,8 +78,6 @@ jobs:
             dependencies:
               - 'pyproject.toml'
               - 'uv.lock'
-              - 'poetry.lock'
-              - 'Pipfile.lock'
             security:
               - 'pyproject.toml'
               - '.bandit'

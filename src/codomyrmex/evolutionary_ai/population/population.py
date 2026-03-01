@@ -227,7 +227,8 @@ class Population:
             i, j = _rand.sample(range(n), 2)
             try:
                 distances.append(self.individuals[i].distance(self.individuals[j]))
-            except ValueError:
+            except ValueError as e:
+                logger.debug("Distance calculation failed for individuals %d and %d: %s", i, j, e)
                 pass
             attempts += 1
 

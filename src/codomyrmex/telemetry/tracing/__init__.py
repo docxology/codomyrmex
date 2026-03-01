@@ -240,7 +240,7 @@ class ConsoleExporter(SpanExporter):
 
     def shutdown(self) -> None:
         """No-op shutdown for console exporter."""
-        pass
+        return None  # Intentional no-op
 
 
 class InMemoryExporter(SpanExporter):

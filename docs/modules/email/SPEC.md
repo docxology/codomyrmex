@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Email composition, sending, and management through a provider-abstracted interface. Currently supports Gmail with pluggable backend architecture.
+Email composition, sending, and management through a provider-abstracted interface. Supports Gmail (Google OAuth2) and AgentMail (API key) with pluggable backend architecture.
 
 ## Functional Requirements
 
@@ -12,15 +12,15 @@ Email composition, sending, and management through a provider-abstracted interfa
 
 | Interface | Signature | Description |
 |-----------|-----------|-------------|
-| `EmailDraft(to, subject, body)` | Constructor | Compose outgoing email |
-| `provider.send(draft)` | `→ EmailMessage` | Send email via provider |
+| `EmailDraft(to, subject, body_text)` | Constructor | Compose outgoing email |
+| `provider.send_message(draft)` | `→ EmailMessage` | Send email via provider |
 | `provider.list_messages(query)` | `→ list[EmailMessage]` | Query inbox |
 
 ### Provider Interface
 
 | Method | Description |
 |--------|-------------|
-| `send(draft)` | Send an email draft |
+| `send_message(draft)` | Send an email draft |
 | `list_messages(query)` | List messages matching query |
 | `get_message(id)` | Get message by ID |
 | `delete_message(id)` | Delete a message |
@@ -28,17 +28,26 @@ Email composition, sending, and management through a provider-abstracted interfa
 ### Gmail Provider
 
 - **Prerequisite**: `uv sync --extra email` for Gmail dependencies
-- **Authentication**: OAuth2 via credentials.json
+- **Authentication**: OAuth2 via `GmailProvider.from_env()` using `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` env vars
 - **Query syntax**: Gmail search operators (`is:unread`, `from:`, `has:attachment`)
 - **Availability**: Check `GMAIL_AVAILABLE` before use
+
+### AgentMail Provider
+
+- **Prerequisite**: `uv sync --extra email` for AgentMail dependencies
+- **Authentication**: API key via `AGENTMAIL_API_KEY` env var; constructed as `AgentMailProvider()`
+- **Query syntax**: AgentMail inbox/thread filtering
+- **Availability**: Check `AGENTMAIL_AVAILABLE` before use
 
 ### Exceptions
 
 | Exception | When |
 |-----------|------|
 | `EmailError` | Base error for all email operations |
-| `EmailSendError` | Failed to send email |
-| `EmailConnectionError` | Provider connection failure |
+| `EmailAuthError` | Authentication failure with provider |
+| `EmailAPIError` | Provider API error (quota, 5xx, etc.) |
+| `MessageNotFoundError` | Requested message ID not found |
+| `InvalidMessageError` | Message data failed validation |
 
 ## Non-Functional Requirements
 

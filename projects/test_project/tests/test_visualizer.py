@@ -1,6 +1,5 @@
 """Tests for the visualizer module."""
 
-import pytest
 from pathlib import Path
 
 from src.visualizer import DataVisualizer, ChartConfig

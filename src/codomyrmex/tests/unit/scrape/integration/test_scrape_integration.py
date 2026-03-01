@@ -63,7 +63,6 @@ class TestScrapeIntegration:
         assert result.total >= 0
         # Search results may vary, so we just check structure
 
-    @pytest.mark.skip(reason="Extract may require specific URLs and schemas")
     def test_extract_data(self, scraper):
         """Test data extraction."""
         schema = {

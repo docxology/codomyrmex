@@ -10,7 +10,6 @@ Demonstrates actual spatial capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path

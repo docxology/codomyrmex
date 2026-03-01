@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import random
-import json
 
 
 def create_population(size: int, genome_length: int = 10) -> list:

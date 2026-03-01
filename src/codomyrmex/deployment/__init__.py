@@ -7,8 +7,11 @@ Provides deployment strategies, managers, and utilities:
 - GitOps synchronization
 """
 
+import logging
 import os
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -108,7 +111,8 @@ class DeploymentManager:
 
         try:
             result = strategy.deploy(targets, version, deploy_fn)
-        except Exception:
+        except Exception as e:
+            logger.warning("Deployment of %s v%s failed: %s", service_name, version, e)
             self._deployments.append({
                 "service": service_name,
                 "version": version,
@@ -205,7 +209,8 @@ class GitOpsSynchronizer:
                 )
                 if result.returncode == 0 and result.stdout.strip():
                     return result.stdout.strip()
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to get git revision: %s", e)
                 pass
         if not self._synced:
             return "unknown"

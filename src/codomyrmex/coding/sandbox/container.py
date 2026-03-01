@@ -6,6 +6,7 @@ Handles Docker container creation, execution, and cleanup for sandboxed code exe
 
 import os
 import subprocess
+import tempfile
 import time
 from typing import Any
 
@@ -26,7 +27,8 @@ def check_docker_available() -> bool:
             timeout=5,
         )
         return result.returncode == 0
-    except (subprocess.SubprocessError, FileNotFoundError):
+    except (subprocess.SubprocessError, FileNotFoundError) as e:
+        logger.warning("Docker availability check failed: %s", e)
         return False
 
 
@@ -58,8 +60,16 @@ def run_code_in_docker(
     # Prepare Docker command
     docker_args = DEFAULT_DOCKER_ARGS.copy()
 
+    # Validate temp_dir is within system temp to prevent path traversal (C4)
+    real_temp = os.path.realpath(temp_dir)
+    _tmp_base = os.path.realpath(tempfile.gettempdir())
+    if not (real_temp == _tmp_base or real_temp.startswith(_tmp_base + os.sep)):
+        raise ValueError(
+            f"temp_dir must be within system temp directory: {temp_dir!r}"
+        )
+
     # Add volume mapping for code and working directory
-    docker_args.append(f"-v={temp_dir}:/sandbox")
+    docker_args.append(f"-v={real_temp}:/sandbox")
     docker_args.append("-w=/sandbox")  # Set working directory
 
     # Prepare the command to run inside the container
@@ -67,13 +77,13 @@ def run_code_in_docker(
         cmd.format(filename=code_file_path) for cmd in language_config["command"]
     ]
 
-    # Handle stdin if provided
-    stdin_redirect = f" < {os.path.basename(stdin_file)}" if stdin_file else ""
-
-    # Final command to run
-    if stdin_redirect:
-        # For stdin redirection, we need to use shell
-        container_cmd = ["sh", "-c", f"{' '.join(container_cmd)}{stdin_redirect}"]
+    # Validate stdin_file is inside temp_dir (no path traversal, no shell injection) (C3)
+    if stdin_file:
+        real_stdin = os.path.realpath(stdin_file)
+        if not real_stdin.startswith(real_temp + os.sep):
+            raise ValueError(
+                f"stdin_file must be inside temp_dir: {stdin_file!r}"
+            )
 
     # Calculate the docker command timeout (slightly longer than the code timeout)
     docker_timeout = timeout * language_config.get("timeout_factor", 1.2)
@@ -89,14 +99,21 @@ def run_code_in_docker(
     logger.info(f"Executing code in Docker: {' '.join(docker_cmd)}")
 
     try:
-        # Run the Docker command
-        process = subprocess.Popen(
-            docker_cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
-            bufsize=1,
-        )
+        # Open stdin file outside shell (no shell injection possible) (C3)
+        _stdin_fh = open(os.path.realpath(stdin_file)) if stdin_file else None  # noqa: WPS515
+        try:
+            process = subprocess.Popen(
+                docker_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=_stdin_fh,
+                universal_newlines=True,
+                bufsize=1,
+            )
+        finally:
+            # Popen dups the fd; safe to close our handle immediately
+            if _stdin_fh is not None:
+                _stdin_fh.close()
 
         try:
             stdout, stderr = process.communicate(timeout=docker_timeout)
@@ -132,8 +149,8 @@ def run_code_in_docker(
                             ["docker", "kill", container_id],
                             capture_output=True,
                         )
-            except subprocess.SubprocessError:
-                pass  # Ignore errors in cleanup
+            except subprocess.SubprocessError as e:
+                logger.warning("Container cleanup error — orphaned container may remain: %s", e)
 
     except subprocess.SubprocessError as e:
         stdout = ""

@@ -92,7 +92,8 @@ def check_and_setup_env_vars(repo_root: str) -> bool:
             return True
         else:
             return False
-    except ImportError:
+    except ImportError as e:
+        logger.warning("Failed to load .env from %s: %s", repo_root, e)
         return False
 
 def validate_python_version() -> bool:

@@ -5,6 +5,7 @@ Provides implementations for OTLP and other telemetry protocols.
 """
 
 import json
+import logging
 import os
 import threading
 import time
@@ -13,6 +14,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from queue import Queue
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.config_management.defaults import DEFAULT_OTEL_ENDPOINT
 
@@ -107,7 +110,8 @@ class FileExporter(SpanExporter):
                     for span in spans:
                         f.write(json.dumps(span.to_dict()) + '\n')
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("FileExporter failed to write spans to %s: %s", self.filepath, e)
             return False
 
     def shutdown(self) -> None:
@@ -234,7 +238,8 @@ class OTLPExporter(SpanExporter):
             with urllib.request.urlopen(req, timeout=self.timeout) as response:
                 return response.status == 200
 
-        except Exception:
+        except Exception as e:
+            logger.warning("OTLPExporter failed to export spans to %s: %s", self.endpoint, e)
             return False
 
     def shutdown(self) -> None:
@@ -277,7 +282,8 @@ class BatchExporter(SpanExporter):
                 try:
                     span = self._queue.get(timeout=remaining)
                     batch.append(span)
-                except Exception:
+                except Exception as e:
+                    logger.debug("BatchExporter queue get timed out or interrupted: %s", e)
                     break
 
             if batch:
@@ -288,7 +294,8 @@ class BatchExporter(SpanExporter):
         for span in spans:
             try:
                 self._queue.put_nowait(span)
-            except Exception:
+            except Exception as e:
+                logger.warning("BatchExporter queue full, dropping span: %s", e)
                 return False
         return True
 
@@ -302,7 +309,8 @@ class BatchExporter(SpanExporter):
         while not self._queue.empty():
             try:
                 remaining.append(self._queue.get_nowait())
-            except Exception:
+            except Exception as e:
+                logger.debug("BatchExporter queue drain interrupted: %s", e)
                 break
 
         if remaining:
@@ -324,7 +332,8 @@ class MultiExporter(SpanExporter):
         for exporter in self.exporters:
             try:
                 results.append(exporter.export(spans))
-            except Exception:
+            except Exception as e:
+                logger.warning("MultiExporter sub-exporter %r failed: %s", exporter, e)
                 results.append(False)
         return any(results)
 
@@ -333,7 +342,8 @@ class MultiExporter(SpanExporter):
         for exporter in self.exporters:
             try:
                 exporter.shutdown()
-            except Exception:
+            except Exception as e:
+                logger.debug("Exporter shutdown error: %s", e)
                 pass
 
 

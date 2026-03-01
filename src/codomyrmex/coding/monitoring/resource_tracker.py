@@ -61,8 +61,8 @@ class ResourceMonitor:
             # Get CPU usage (sample for 0.1 seconds)
             cpu_percent = process.cpu_percent(interval=0.1)
             self.cpu_usage.append(cpu_percent)
-        except (AttributeError, psutil.NoSuchProcess, psutil.AccessDenied):
-            pass  # Process may have ended
+        except (AttributeError, psutil.NoSuchProcess, psutil.AccessDenied) as e:
+            logger.debug("Resource tracking skipped (process may have ended): %s", e)
 
     def get_resource_usage(self) -> dict[str, Any]:
         """Get current resource usage statistics."""

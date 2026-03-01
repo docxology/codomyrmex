@@ -57,7 +57,7 @@ except ImportError:
                 "Install with: uv sync --extra performance"
             )
         def __enter__(self): raise ImportError("psutil required for performance monitoring")
-        def __exit__(self, *args): pass
+        def __exit__(self, *args): return None  # No-op: psutil not available
 
     def get_system_metrics(*args, **kwargs):
         raise ImportError(

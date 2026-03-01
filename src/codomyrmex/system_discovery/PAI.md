@@ -68,12 +68,13 @@ report = reporter.generate()
 
 ## MCP Integration
 
-Two MCP tools are powered by this module:
+Three MCP tools are powered by this module:
 
-| Tool | MCP Name | Description |
-|------|----------|-------------|
-| Module listing | `list_modules` | List all codomyrmex modules |
-| Module info | `get_module_info` | Get README, file listing for a specific module |
+| Tool | MCP Name | Description | Trust Level |
+|------|----------|-------------|-------------|
+| Health check | `health_check` | Run health check on all codomyrmex modules | Safe |
+| Module listing | `list_modules` | List all codomyrmex modules with status | Safe |
+| Dependency tree | `dependency_tree` | Get module dependency tree and layer violations | Safe |
 
 ## Architecture Role
 

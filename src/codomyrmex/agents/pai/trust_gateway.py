@@ -341,7 +341,8 @@ class TrustRegistry:
                 if name in self._levels:
                     try:
                         self._levels[name] = TrustLevel(level_val)
-                    except ValueError:
+                    except ValueError as e:
+                        logger.warning("Invalid trust level %r for %r in ledger, skipping: %s", level_val, name, e)
                         pass
         except (json.JSONDecodeError, OSError, KeyError) as e:
             logger.warning(f"Failed to load trust ledger: {e}")
@@ -548,9 +549,11 @@ def verify_capabilities() -> dict[str, Any]:
             if discovery_metrics.last_scan_time else -1.0
         )
         discovery_last_duration = discovery_metrics.scan_duration_ms
-    except ImportError:
+    except ImportError as e:
+        logger.warning("Discovery engine import failed during health check: %s", e)
         pass # _DISCOVERY_ENGINE might not be directly importable or available in all setups
-    except AttributeError:
+    except AttributeError as e:
+        logger.warning("Discovery engine missing expected attributes: %s", e)
         pass # _DISCOVERY_ENGINE might not have get_metrics() or related attributes
 
     # ── MCP server health ─────────────────────────────────────────

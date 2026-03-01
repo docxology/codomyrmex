@@ -18,8 +18,6 @@ except ImportError:
 import argparse
 import subprocess
 import os
-import json
-from datetime import datetime
 
 
 def find_deploy_configs() -> list:

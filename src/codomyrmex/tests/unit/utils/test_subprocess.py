@@ -12,7 +12,6 @@ import asyncio
 import os
 import sys
 import tempfile
-import unittest
 
 import pytest
 
@@ -38,7 +37,7 @@ from codomyrmex.utils.process.subprocess import (
 # CommandErrorType enum
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestCommandErrorType(unittest.TestCase):
+class TestCommandErrorType:
     """Tests for the CommandErrorType enum."""
 
     def test_all_members_present(self):
@@ -53,29 +52,29 @@ class TestCommandErrorType(unittest.TestCase):
             "WORKING_DIR_NOT_FOUND",
             "UNKNOWN",
         }
-        self.assertEqual(names, expected)
+        assert names == expected
 
     def test_values_are_strings(self):
         for member in CommandErrorType:
-            self.assertIsInstance(member.value, str)
+            assert isinstance(member.value, str)
 
 
 # ---------------------------------------------------------------------------
 # CommandError exception
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestCommandError(unittest.TestCase):
+class TestCommandError:
     """Tests for the CommandError exception class."""
 
     def test_basic_construction(self):
         err = CommandError("boom")
-        self.assertEqual(err.message, "boom")
-        self.assertEqual(err.error_type, CommandErrorType.EXECUTION_FAILED)
-        self.assertIsNone(err.command)
-        self.assertIsNone(err.return_code)
-        self.assertEqual(err.stdout, "")
-        self.assertEqual(err.stderr, "")
-        self.assertIsNone(err.original_exception)
+        assert err.message == "boom"
+        assert err.error_type == CommandErrorType.EXECUTION_FAILED
+        assert err.command is None
+        assert err.return_code is None
+        assert err.stdout == ""
+        assert err.stderr == ""
+        assert err.original_exception is None
 
     def test_full_construction(self):
         orig = RuntimeError("inner")
@@ -88,12 +87,12 @@ class TestCommandError(unittest.TestCase):
             stderr="err",
             original_exception=orig,
         )
-        self.assertEqual(err.error_type, CommandErrorType.TIMEOUT)
-        self.assertEqual(err.command, ["git", "push"])
-        self.assertEqual(err.return_code, 128)
-        self.assertEqual(err.stdout, "out")
-        self.assertEqual(err.stderr, "err")
-        self.assertIs(err.original_exception, orig)
+        assert err.error_type == CommandErrorType.TIMEOUT
+        assert err.command == ["git", "push"]
+        assert err.return_code == 128
+        assert err.stdout == "out"
+        assert err.stderr == "err"
+        assert err.original_exception is orig
 
     def test_str_with_all_fields(self):
         err = CommandError(
@@ -103,31 +102,31 @@ class TestCommandError(unittest.TestCase):
             stderr="fatal error",
         )
         s = str(err)
-        self.assertIn("boom", s)
-        self.assertIn("git status", s)
-        self.assertIn("Return code: 1", s)
-        self.assertIn("fatal error", s)
+        assert "boom" in s
+        assert "git status" in s
+        assert "Return code: 1" in s
+        assert "fatal error" in s
 
     def test_str_with_string_command(self):
         err = CommandError(message="failed", command="echo hello")
         s = str(err)
-        self.assertIn("echo hello", s)
+        assert "echo hello" in s
 
     def test_str_minimal(self):
         err = CommandError("just a message")
-        self.assertEqual(str(err), "just a message")
+        assert str(err) == "just a message"
 
     def test_repr(self):
         err = CommandError("msg", error_type=CommandErrorType.TIMEOUT, return_code=1)
         r = repr(err)
-        self.assertIn("CommandError", r)
-        self.assertIn("timeout", r)
-        self.assertIn("1", r)
+        assert "CommandError" in r
+        assert "timeout" in r
+        assert "1" in r
 
     def test_is_exception(self):
         err = CommandError("test")
-        self.assertIsInstance(err, Exception)
-        with self.assertRaises(CommandError):
+        assert isinstance(err, Exception)
+        with pytest.raises(CommandError):
             raise err
 
     def test_stderr_truncated_in_str(self):
@@ -135,58 +134,58 @@ class TestCommandError(unittest.TestCase):
         err = CommandError(message="fail", stderr=long_stderr)
         s = str(err)
         # Stderr gets truncated to 500 chars in __str__
-        self.assertIn("Stderr:", s)
-        self.assertTrue(len(s) < len(long_stderr) + 200)
+        assert "Stderr:" in s
+        assert len(s) < len(long_stderr) + 200
 
 
 # ---------------------------------------------------------------------------
 # SubprocessResult dataclass
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestSubprocessResult(unittest.TestCase):
+class TestSubprocessResult:
     """Tests for the SubprocessResult dataclass."""
 
     def test_default_values(self):
         r = SubprocessResult()
-        self.assertEqual(r.stdout, "")
-        self.assertEqual(r.stderr, "")
-        self.assertEqual(r.return_code, 0)
-        self.assertEqual(r.duration, 0.0)
-        self.assertTrue(r.success)
-        self.assertFalse(r.timed_out)
-        self.assertIsNone(r.error_message)
+        assert r.stdout == ""
+        assert r.stderr == ""
+        assert r.return_code == 0
+        assert r.duration == 0.0
+        assert r.success
+        assert not r.timed_out
+        assert r.error_message is None
 
     def test_post_init_success(self):
         r = SubprocessResult(return_code=0, timed_out=False)
-        self.assertTrue(r.success)
+        assert r.success
 
     def test_post_init_failure_nonzero(self):
         r = SubprocessResult(return_code=1)
-        self.assertFalse(r.success)
+        assert not r.success
 
     def test_post_init_failure_timeout(self):
         r = SubprocessResult(return_code=0, timed_out=True)
-        self.assertFalse(r.success)
+        assert not r.success
 
     def test_output_combined(self):
         r = SubprocessResult(stdout="out", stderr="err")
-        self.assertEqual(r.output, "out\nerr")
+        assert r.output == "out\nerr"
 
     def test_output_stdout_only(self):
         r = SubprocessResult(stdout="hello")
-        self.assertEqual(r.output, "hello")
+        assert r.output == "hello"
 
     def test_output_empty(self):
         r = SubprocessResult()
-        self.assertEqual(r.output, "")
+        assert r.output == ""
 
     def test_command_string_from_list(self):
         r = SubprocessResult(command=["git", "status"])
-        self.assertEqual(r.command_string, "git status")
+        assert r.command_string == "git status"
 
     def test_command_string_from_str(self):
         r = SubprocessResult(command="echo hello")
-        self.assertEqual(r.command_string, "echo hello")
+        assert r.command_string == "echo hello"
 
     def test_to_dict(self):
         r = SubprocessResult(
@@ -197,231 +196,223 @@ class TestSubprocessResult(unittest.TestCase):
             command=["echo", "hi"],
         )
         d = r.to_dict()
-        self.assertEqual(d["stdout"], "out")
-        self.assertEqual(d["stderr"], "err")
-        self.assertEqual(d["return_code"], 0)
-        self.assertEqual(d["duration"], 1.5)
-        self.assertEqual(d["command"], "echo hi")
-        self.assertTrue(d["success"])
-        self.assertFalse(d["timed_out"])
-        self.assertIsNone(d["error_message"])
+        assert d["stdout"] == "out"
+        assert d["stderr"] == "err"
+        assert d["return_code"] == 0
+        assert d["duration"] == 1.5
+        assert d["command"] == "echo hi"
+        assert d["success"]
+        assert not d["timed_out"]
+        assert d["error_message"] is None
 
     def test_raise_on_error_success(self):
         r = SubprocessResult(return_code=0)
         ret = r.raise_on_error()
-        self.assertIs(ret, r)
+        assert ret is r
 
     def test_raise_on_error_failure(self):
         r = SubprocessResult(return_code=1, error_message="bad")
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             r.raise_on_error()
-        self.assertEqual(ctx.exception.error_type, CommandErrorType.EXECUTION_FAILED)
+        assert ctx.value.error_type == CommandErrorType.EXECUTION_FAILED
 
     def test_raise_on_error_timeout(self):
         r = SubprocessResult(return_code=-1, timed_out=True)
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             r.raise_on_error()
-        self.assertEqual(ctx.exception.error_type, CommandErrorType.TIMEOUT)
+        assert ctx.value.error_type == CommandErrorType.TIMEOUT
 
     def test_raise_on_error_custom_message(self):
         r = SubprocessResult(return_code=1)
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             r.raise_on_error("custom msg")
-        self.assertIn("custom msg", str(ctx.exception))
+        assert "custom msg" in str(ctx.value)
 
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestPrepareCommand(unittest.TestCase):
+class TestPrepareCommand:
     """Tests for _prepare_command."""
 
     def test_shell_list_joined(self):
         result = _prepare_command(["echo", "hello"], shell=True)
-        self.assertEqual(result, "echo hello")
+        assert result == "echo hello"
 
     def test_shell_string_passthrough(self):
         result = _prepare_command("echo hello", shell=True)
-        self.assertEqual(result, "echo hello")
+        assert result == "echo hello"
 
     def test_nonshell_string_split(self):
         result = _prepare_command("echo hello world", shell=False)
-        self.assertEqual(result, ["echo", "hello", "world"])
+        assert result == ["echo", "hello", "world"]
 
     def test_nonshell_list_copy(self):
         original = ["git", "status"]
         result = _prepare_command(original, shell=False)
-        self.assertEqual(result, ["git", "status"])
+        assert result == ["git", "status"]
 
 
 @pytest.mark.unit
-class TestPrepareEnvironment(unittest.TestCase):
+class TestPrepareEnvironment:
     """Tests for _prepare_environment."""
 
     def test_none_env_inherit(self):
         result = _prepare_environment(env=None, inherit_env=True)
-        self.assertIsNone(result)
+        assert result is None
 
     def test_env_with_inherit(self):
         result = _prepare_environment(env={"FOO": "bar"}, inherit_env=True)
-        self.assertIsNotNone(result)
-        self.assertEqual(result["FOO"], "bar")
+        assert result is not None
+        assert result["FOO"] == "bar"
         # Should also contain inherited vars
-        self.assertIn("PATH", result)
+        assert "PATH" in result
 
     def test_no_inherit_no_env(self):
         result = _prepare_environment(env=None, inherit_env=False)
-        self.assertEqual(result, {})
+        assert result == {}
 
     def test_no_inherit_with_env(self):
         result = _prepare_environment(env={"A": "1"}, inherit_env=False)
-        self.assertEqual(result, {"A": "1"})
+        assert result == {"A": "1"}
         # Should NOT have inherited PATH
-        self.assertNotIn("HOME", result)
+        assert "HOME" not in result
 
 
 @pytest.mark.unit
-class TestValidateWorkingDirectory(unittest.TestCase):
+class TestValidateWorkingDirectory:
     """Tests for _validate_working_directory."""
 
     def test_none_returns_none(self):
-        self.assertIsNone(_validate_working_directory(None))
+        assert _validate_working_directory(None) is None
 
     def test_valid_dir(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             result = _validate_working_directory(tmpdir)
-            self.assertEqual(result, os.path.abspath(tmpdir))
+            assert result == os.path.abspath(tmpdir)
 
     def test_nonexistent_dir_raises(self):
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             _validate_working_directory("/nonexistent_dir_xyz_abc_123")
-        self.assertEqual(
-            ctx.exception.error_type, CommandErrorType.WORKING_DIR_NOT_FOUND
-        )
+        assert ctx.value.error_type == CommandErrorType.WORKING_DIR_NOT_FOUND
 
 
 # ---------------------------------------------------------------------------
 # run_command
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestRunCommand(unittest.TestCase):
+class TestRunCommand:
     """Tests for the run_command function."""
 
     def test_simple_echo(self):
         result = run_command(["echo", "hello"])
-        self.assertTrue(result.success)
-        self.assertIn("hello", result.stdout)
-        self.assertEqual(result.return_code, 0)
-        self.assertGreater(result.duration, 0.0)
+        assert result.success
+        assert "hello" in result.stdout
+        assert result.return_code == 0
+        assert result.duration > 0.0
 
     def test_string_command(self):
         result = run_command("echo hello")
-        self.assertTrue(result.success)
-        self.assertIn("hello", result.stdout)
+        assert result.success
+        assert "hello" in result.stdout
 
     def test_shell_mode(self):
         result = run_command("echo $HOME", shell=True)
-        self.assertTrue(result.success)
-        self.assertTrue(len(result.stdout.strip()) > 0)
+        assert result.success
+        assert len(result.stdout.strip()) > 0
 
     def test_nonzero_exit_code(self):
         result = run_command([sys.executable, "-c", "import sys; sys.exit(42)"])
-        self.assertFalse(result.success)
-        self.assertEqual(result.return_code, 42)
-        self.assertIsNotNone(result.error_message)
+        assert not result.success
+        assert result.return_code == 42
+        assert result.error_message is not None
 
     def test_check_raises_on_failure(self):
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             run_command(
                 [sys.executable, "-c", "import sys; sys.exit(1)"], check=True
             )
-        self.assertEqual(
-            ctx.exception.error_type, CommandErrorType.EXECUTION_FAILED
-        )
+        assert ctx.value.error_type == CommandErrorType.EXECUTION_FAILED
 
     def test_check_success_no_raise(self):
         result = run_command(["echo", "ok"], check=True)
-        self.assertTrue(result.success)
+        assert result.success
 
     def test_cwd(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             result = run_command([sys.executable, "-c", "import os; print(os.getcwd())"], cwd=tmpdir)
-            self.assertTrue(result.success)
+            assert result.success
             # Resolve both to handle symlinks (e.g., /var -> /private/var on macOS)
-            self.assertEqual(
-                os.path.realpath(result.stdout.strip()),
-                os.path.realpath(tmpdir),
+            assert (
+                os.path.realpath(result.stdout.strip())
+                == os.path.realpath(tmpdir)
             )
 
     def test_invalid_cwd(self):
         # _validate_working_directory raises CommandError which is re-raised
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             run_command(["echo", "hi"], cwd="/nonexistent_dir_xyz_abc_123")
-        self.assertEqual(
-            ctx.exception.error_type, CommandErrorType.WORKING_DIR_NOT_FOUND
-        )
+        assert ctx.value.error_type == CommandErrorType.WORKING_DIR_NOT_FOUND
 
     def test_invalid_cwd_check(self):
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             run_command(
                 ["echo", "hi"],
                 cwd="/nonexistent_dir_xyz_abc_123",
                 check=True,
             )
-        self.assertEqual(
-            ctx.exception.error_type, CommandErrorType.WORKING_DIR_NOT_FOUND
-        )
+        assert ctx.value.error_type == CommandErrorType.WORKING_DIR_NOT_FOUND
 
     def test_env_variables(self):
         result = run_command(
             [sys.executable, "-c", "import os; print(os.environ.get('MY_TEST_VAR', ''))"],
             env={"MY_TEST_VAR": "test_value_123"},
         )
-        self.assertTrue(result.success)
-        self.assertIn("test_value_123", result.stdout)
+        assert result.success
+        assert "test_value_123" in result.stdout
 
     def test_timeout_returns_timed_out(self):
         result = run_command(
             [sys.executable, "-c", "import time; time.sleep(30)"],
             timeout=0.3,
         )
-        self.assertTrue(result.timed_out)
-        self.assertFalse(result.success)
-        self.assertIsNotNone(result.error_message)
+        assert result.timed_out
+        assert not result.success
+        assert result.error_message is not None
 
     def test_timeout_check_raises(self):
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             run_command(
                 [sys.executable, "-c", "import time; time.sleep(30)"],
                 timeout=0.3,
                 check=True,
             )
-        self.assertEqual(ctx.exception.error_type, CommandErrorType.TIMEOUT)
+        assert ctx.value.error_type == CommandErrorType.TIMEOUT
 
     def test_command_not_found(self):
         result = run_command(["nonexistent_binary_xyz_abc_123"])
-        self.assertFalse(result.success)
-        self.assertIsNotNone(result.error_message)
+        assert not result.success
+        assert result.error_message is not None
 
     def test_command_not_found_check(self):
-        with self.assertRaises(CommandError) as ctx:
+        with pytest.raises(CommandError) as ctx:
             run_command(["nonexistent_binary_xyz_abc_123"], check=True)
-        self.assertEqual(ctx.exception.error_type, CommandErrorType.FILE_NOT_FOUND)
+        assert ctx.value.error_type == CommandErrorType.FILE_NOT_FOUND
 
     def test_input_data(self):
         result = run_command(
             [sys.executable, "-c", "import sys; print(sys.stdin.read().strip())"],
             input_data="piped_input",
         )
-        self.assertTrue(result.success)
-        self.assertIn("piped_input", result.stdout)
+        assert result.success
+        assert "piped_input" in result.stdout
 
     def test_stderr_capture(self):
         result = run_command(
             [sys.executable, "-c", "import sys; sys.stderr.write('err_msg\\n')"]
         )
-        self.assertIn("err_msg", result.stderr)
+        assert "err_msg" in result.stderr
 
     def test_inherit_env_false(self):
         # Without inherited env, PATH is missing, so python won't be found
@@ -433,7 +424,7 @@ class TestRunCommand(unittest.TestCase):
         # The result might fail or succeed depending on platform, but
         # if it succeeds the PATH should be missing
         if result.success:
-            self.assertIn("NONE", result.stdout)
+            assert "NONE" in result.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -441,7 +432,7 @@ class TestRunCommand(unittest.TestCase):
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
 @pytest.mark.asyncio
-class TestRunCommandAsync(unittest.TestCase):
+class TestRunCommandAsync:
     """Tests for run_command_async."""
 
     def _run(self, coro):
@@ -450,25 +441,25 @@ class TestRunCommandAsync(unittest.TestCase):
 
     def test_simple_echo(self):
         result = self._run(run_command_async(["echo", "async_hello"]))
-        self.assertTrue(result.success)
-        self.assertIn("async_hello", result.stdout)
+        assert result.success
+        assert "async_hello" in result.stdout
 
     def test_string_command(self):
         result = self._run(run_command_async("echo async_str"))
-        self.assertTrue(result.success)
-        self.assertIn("async_str", result.stdout)
+        assert result.success
+        assert "async_str" in result.stdout
 
     def test_shell_mode(self):
         result = self._run(run_command_async("echo $HOME", shell=True))
-        self.assertTrue(result.success)
-        self.assertTrue(len(result.stdout.strip()) > 0)
+        assert result.success
+        assert len(result.stdout.strip()) > 0
 
     def test_nonzero_exit(self):
         result = self._run(
             run_command_async([sys.executable, "-c", "import sys; sys.exit(7)"])
         )
-        self.assertFalse(result.success)
-        self.assertEqual(result.return_code, 7)
+        assert not result.success
+        assert result.return_code == 7
 
     def test_timeout(self):
         result = self._run(
@@ -477,15 +468,15 @@ class TestRunCommandAsync(unittest.TestCase):
                 timeout=0.3,
             )
         )
-        self.assertTrue(result.timed_out)
-        self.assertFalse(result.success)
+        assert result.timed_out
+        assert not result.success
 
     def test_command_not_found(self):
         result = self._run(
             run_command_async(["nonexistent_binary_xyz_abc_123"])
         )
-        self.assertFalse(result.success)
-        self.assertIsNotNone(result.error_message)
+        assert not result.success
+        assert result.error_message is not None
 
     def test_cwd(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -495,10 +486,10 @@ class TestRunCommandAsync(unittest.TestCase):
                     cwd=tmpdir,
                 )
             )
-            self.assertTrue(result.success)
-            self.assertEqual(
-                os.path.realpath(result.stdout.strip()),
-                os.path.realpath(tmpdir),
+            assert result.success
+            assert (
+                os.path.realpath(result.stdout.strip())
+                == os.path.realpath(tmpdir)
             )
 
     def test_input_data(self):
@@ -508,15 +499,15 @@ class TestRunCommandAsync(unittest.TestCase):
                 input_data="async_piped",
             )
         )
-        self.assertTrue(result.success)
-        self.assertIn("async_piped", result.stdout)
+        assert result.success
+        assert "async_piped" in result.stdout
 
 
 # ---------------------------------------------------------------------------
 # stream_command
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestStreamCommand(unittest.TestCase):
+class TestStreamCommand:
     """Tests for stream_command."""
 
     def _exhaust_generator(self, gen):
@@ -531,15 +522,15 @@ class TestStreamCommand(unittest.TestCase):
     def test_basic_streaming(self):
         gen = stream_command([sys.executable, "-c", "print('line1'); print('line2')"])
         lines, result = self._exhaust_generator(gen)
-        self.assertTrue(len(lines) >= 2)
-        self.assertIsInstance(result, SubprocessResult)
-        self.assertTrue(result.success)
+        assert len(lines) >= 2
+        assert isinstance(result, SubprocessResult)
+        assert result.success
 
     def test_stdout_prefix(self):
         gen = stream_command([sys.executable, "-c", "print('hello')"])
         lines, _ = self._exhaust_generator(gen)
         found = any("stdout:" in line and "hello" in line for line in lines)
-        self.assertTrue(found, f"Expected stdout prefix in lines: {lines}")
+        assert found, f"Expected stdout prefix in lines: {lines}"
 
     def test_combine_streams(self):
         gen = stream_command(
@@ -549,16 +540,16 @@ class TestStreamCommand(unittest.TestCase):
         lines, _ = self._exhaust_generator(gen)
         # When combined, no prefix
         found = any("combined_out" in line for line in lines)
-        self.assertTrue(found)
+        assert found
         # Should NOT have stdout: prefix
         prefixed = any(line.startswith("stdout:") for line in lines)
-        self.assertFalse(prefixed)
+        assert not prefixed
 
     def test_command_not_found(self):
         gen = stream_command(["nonexistent_binary_xyz_abc_123"])
         lines, result = self._exhaust_generator(gen)
-        self.assertFalse(result.success)
-        self.assertIsNotNone(result.error_message)
+        assert not result.success
+        assert result.error_message is not None
 
     def test_cwd(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -567,7 +558,7 @@ class TestStreamCommand(unittest.TestCase):
                 cwd=tmpdir,
             )
             lines, result = self._exhaust_generator(gen)
-            self.assertTrue(result.success)
+            assert result.success
 
     def test_timeout(self):
         gen = stream_command(
@@ -575,21 +566,21 @@ class TestStreamCommand(unittest.TestCase):
             timeout=0.5,
         )
         lines, result = self._exhaust_generator(gen)
-        self.assertTrue(result.timed_out)
-        self.assertFalse(result.success)
+        assert result.timed_out
+        assert not result.success
 
 
 # ---------------------------------------------------------------------------
 # run_with_retry
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestRunWithRetry(unittest.TestCase):
+class TestRunWithRetry:
     """Tests for run_with_retry."""
 
     def test_success_first_attempt(self):
         result = run_with_retry(["echo", "ok"], max_attempts=3)
-        self.assertTrue(result.success)
-        self.assertIn("ok", result.stdout)
+        assert result.success
+        assert "ok" in result.stdout
 
     def test_all_attempts_fail(self):
         result = run_with_retry(
@@ -598,7 +589,7 @@ class TestRunWithRetry(unittest.TestCase):
             delay=0.01,
             backoff=1.0,
         )
-        self.assertFalse(result.success)
+        assert not result.success
 
     def test_retry_on_specific_codes(self):
         result = run_with_retry(
@@ -608,8 +599,8 @@ class TestRunWithRetry(unittest.TestCase):
             backoff=1.0,
             retry_on_codes=[42],
         )
-        self.assertFalse(result.success)
-        self.assertEqual(result.return_code, 42)
+        assert not result.success
+        assert result.return_code == 42
 
     def test_no_retry_on_unmatched_code(self):
         # Exit code 99, but retry_on_codes only includes 42
@@ -620,8 +611,8 @@ class TestRunWithRetry(unittest.TestCase):
             delay=0.01,
             retry_on_codes=[42],
         )
-        self.assertFalse(result.success)
-        self.assertEqual(result.return_code, 99)
+        assert not result.success
+        assert result.return_code == 99
 
     def test_on_retry_callback(self):
         attempts = []
@@ -637,7 +628,7 @@ class TestRunWithRetry(unittest.TestCase):
             on_retry=track_retry,
         )
         # Should be called for attempts 1 and 2 (not the last one)
-        self.assertEqual(attempts, [1, 2])
+        assert attempts == [1, 2]
 
     def test_on_retry_callback_exception_handled(self):
         def bad_callback(attempt, result):
@@ -651,7 +642,7 @@ class TestRunWithRetry(unittest.TestCase):
             backoff=1.0,
             on_retry=bad_callback,
         )
-        self.assertFalse(result.success)
+        assert not result.success
 
     def test_retry_on_timeout_default(self):
         result = run_with_retry(
@@ -661,7 +652,7 @@ class TestRunWithRetry(unittest.TestCase):
             backoff=1.0,
             timeout=0.2,
         )
-        self.assertFalse(result.success)
+        assert not result.success
 
     def test_retry_on_timeout_disabled(self):
         result = run_with_retry(
@@ -672,70 +663,70 @@ class TestRunWithRetry(unittest.TestCase):
             timeout=0.2,
         )
         # Should return after first attempt, not retry
-        self.assertTrue(result.timed_out)
+        assert result.timed_out
 
 
 # ---------------------------------------------------------------------------
 # Utility functions
 # ---------------------------------------------------------------------------
 @pytest.mark.unit
-class TestCheckCommandAvailable(unittest.TestCase):
+class TestCheckCommandAvailable:
     """Tests for check_command_available."""
 
     def test_python_available(self):
-        self.assertTrue(check_command_available("python3") or check_command_available("python"))
+        assert check_command_available("python3") or check_command_available("python")
 
     def test_nonexistent_command(self):
-        self.assertFalse(check_command_available("nonexistent_binary_xyz_abc_123"))
+        assert not check_command_available("nonexistent_binary_xyz_abc_123")
 
     def test_echo_available(self):
-        self.assertTrue(check_command_available("echo"))
+        assert check_command_available("echo")
 
 
 @pytest.mark.unit
-class TestGetCommandVersion(unittest.TestCase):
+class TestGetCommandVersion:
     """Tests for get_command_version."""
 
     def test_python_version(self):
         version = get_command_version(sys.executable)
-        self.assertIsNotNone(version)
-        self.assertIn("Python", version)
+        assert version is not None
+        assert "Python" in version
 
     def test_nonexistent_command(self):
         version = get_command_version("nonexistent_binary_xyz_abc_123")
-        self.assertIsNone(version)
+        assert version is None
 
 
 @pytest.mark.unit
-class TestQuoteCommand(unittest.TestCase):
+class TestQuoteCommand:
     """Tests for quote_command."""
 
     def test_list_command(self):
         result = quote_command(["echo", "hello world"])
-        self.assertIsInstance(result, str)
-        self.assertIn("hello world", result)
+        assert isinstance(result, str)
+        assert "hello world" in result
 
     def test_string_passthrough(self):
         result = quote_command("echo hello")
-        self.assertEqual(result, "echo hello")
+        assert result == "echo hello"
 
     def test_empty_list(self):
         result = quote_command([])
-        self.assertEqual(result, "")
+        assert result == ""
 
 
 @pytest.mark.unit
-class TestSplitCommand(unittest.TestCase):
+class TestSplitCommand:
     """Tests for split_command."""
 
     def test_simple_split(self):
         result = split_command("echo hello world")
-        self.assertEqual(result, ["echo", "hello", "world"])
+        assert result == ["echo", "hello", "world"]
 
     def test_quoted_args(self):
         result = split_command("echo 'hello world'")
-        self.assertEqual(result, ["echo", "hello world"])
+        assert result == ["echo", "hello world"]
 
     def test_empty_string(self):
         result = split_command("")
-        self.assertEqual(result, [])
+        assert result == []

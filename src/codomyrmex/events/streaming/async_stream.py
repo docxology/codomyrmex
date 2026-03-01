@@ -5,10 +5,13 @@ Async-first streaming implementations.
 """
 
 import asyncio
+import logging
 from collections.abc import AsyncIterator, Callable
 from typing import Any
 
 from . import Event, EventType
+
+logger = logging.getLogger(__name__)
 
 
 class AsyncStream:
@@ -37,7 +40,8 @@ class AsyncStream:
             self._dispatcher_task.cancel()
             try:
                 await self._dispatcher_task
-            except asyncio.CancelledError:
+            except asyncio.CancelledError as e:
+                logger.debug("Dispatcher task cancelled cleanly: %s", e)
                 pass
 
     async def _dispatch_loop(self) -> None:
@@ -56,8 +60,9 @@ class AsyncStream:
         for sub_queue in self._subscribers.values():
             try:
                 sub_queue.put_nowait(event)
-            except asyncio.QueueFull:
+            except asyncio.QueueFull as e:
                 # Drop event if subscriber can't keep up
+                logger.debug("Subscriber queue full, dropping event: %s", e)
                 pass
 
     async def publish(self, event: Event) -> bool:
@@ -65,7 +70,8 @@ class AsyncStream:
         try:
             await asyncio.wait_for(self._buffer.put(event), timeout=5.0)
             return True
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
+            logger.warning("Event publish timed out after 5s: %s", e)
             return False
 
     async def subscribe(self, buffer_size: int = 100) -> str:
@@ -134,7 +140,8 @@ class WebSocketStream:
             ws = self._connections[client_id]["websocket"]
             await ws.send(event.to_sse())
             return True
-        except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+        except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+            logger.debug("Failed to send to WebSocket client %s: %s", client_id, e)
             return False
 
 
@@ -185,7 +192,8 @@ class BatchingStream:
         for handler in self._handlers:
             try:
                 handler(batch)
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                logger.debug("Batch handler error during flush: %s", e)
                 pass
 
     async def add(self, event: Event) -> None:
@@ -201,7 +209,8 @@ class BatchingStream:
                 for handler in self._handlers:
                     try:
                         handler(batch)
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                        logger.debug("Batch handler error during add: %s", e)
                         pass
 
     def on_batch(self, handler: Callable[[list[Event]], None]) -> None:

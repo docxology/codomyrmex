@@ -21,7 +21,8 @@ except ImportError:
             cmd.extend([url, str(destination)])
             subprocess.run(cmd, check=True, capture_output=True)
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to clone repository via fallback: %s", e)
             return False
 
     def is_git_repository(path: str) -> bool:
@@ -34,7 +35,8 @@ except ImportError:
                 capture_output=True,
             )
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to detect git repository via fallback: %s", e)
             return False
 
     def pull_changes(repository_path: str) -> bool:
@@ -47,7 +49,8 @@ except ImportError:
                 capture_output=True,
             )
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to pull changes via fallback: %s", e)
             return False
 
 logger = get_logger(__name__)

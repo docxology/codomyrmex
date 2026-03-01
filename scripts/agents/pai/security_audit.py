@@ -34,7 +34,7 @@ from codomyrmex.agents.pai import (
     get_trust_report,
 )
 from codomyrmex.utils.cli_helpers import (
-    setup_logging, print_info, print_success, print_warning, print_error,
+    setup_logging, print_info, print_warning,
 )
 
 SECTIONS = ["security", "telos", "classification", "env", "trust"]

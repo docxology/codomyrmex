@@ -65,6 +65,16 @@ result = server.call_tool("search", query="test")
 assert result is not None
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `inspect_server` | Inspect the running MCP server's configuration and state | Safe |
+| `list_registered_tools` | List all tools registered across the MCP ecosystem | Safe |
+| `get_tool_schema` | Get the JSON schema for a specific registered MCP tool | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

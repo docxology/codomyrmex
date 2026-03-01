@@ -37,13 +37,13 @@ except ImportError:
         """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
             """Execute   Init   operations natively."""
-            pass
+            return None  # Intentional no-op
         def __enter__(self):
             """Execute   Enter   operations natively."""
             return self
         def __exit__(self, *args):
             """Execute   Exit   operations natively."""
-            pass
+            return None  # Intentional no-op
 
 
 

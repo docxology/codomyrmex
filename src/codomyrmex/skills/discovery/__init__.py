@@ -7,12 +7,15 @@ Provides mechanisms for discovering and registering agent skills.
 import hashlib
 import inspect
 import json
+import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class SkillCategory(Enum):
@@ -158,7 +161,8 @@ class FunctionSkill(Skill):
         type_hints = {}
         try:
             type_hints = func.__annotations__
-        except AttributeError:
+        except AttributeError as e:
+            logger.debug("Could not read annotations from %s: %s", func, e)
             pass
 
         for name, param in sig.parameters.items():
@@ -359,7 +363,8 @@ class SkillDiscoverer:
                     instance = obj()
                     self.registry.register(instance)
                     discovered.append(instance)
-                except TypeError:
+                except TypeError as e:
+                    logger.debug("Could not instantiate skill class %s: %s", name, e)
                     pass
 
         return discovered

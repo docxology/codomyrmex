@@ -60,14 +60,15 @@ audit = security_audit_code(path="src/codomyrmex/auth/")
 | **VERIFY** | Full security audit: vulnerability scanning + secret detection + compliance checking |
 | **LEARN** | Audit results captured for improving future security posture |
 
-## MCP Integration
+## MCP Tools
 
-Two tools are exposed via MCP for PAI agent consumption:
+Three tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
 
-| Tool | MCP Name | Description |
-|------|----------|-------------|
-| `scan_project_security` | `security__scan_project` | Project-wide vulnerability scan |
-| `security_audit_code` | `security__audit_code` | Targeted code audit |
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `scan_vulnerabilities` | Scan code or a directory for security vulnerabilities | Safe | security |
+| `scan_secrets` | Detect secrets and credentials in source files | Safe | security |
+| `audit_code_security` | Run a full security audit on a file or project directory | Safe | security |
 
 ## Architecture Role
 

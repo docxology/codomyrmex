@@ -10,6 +10,9 @@ Provides:
 from __future__ import annotations
 
 import ast
+import logging
+
+logger = logging.getLogger(__name__)
 from pathlib import Path
 from typing import Any
 
@@ -155,7 +158,8 @@ def _collect_defined_functions(py_file: Path) -> list[str]:
     """Extract top-level function names from a Python file."""
     try:
         tree = ast.parse(py_file.read_text(encoding="utf-8", errors="replace"), str(py_file))
-    except SyntaxError:
+    except SyntaxError as e:
+        logger.warning("Skipping file with syntax error %s: %s", py_file, e)
         return []
     return [
         node.name

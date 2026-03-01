@@ -171,4 +171,5 @@ uv run python -m pytest src/codomyrmex/tests/unit/tool_use/ -v
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/tool_use/](../../../docs/modules/tool_use/)
 - [API_SPECIFICATION](API_SPECIFICATION.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)

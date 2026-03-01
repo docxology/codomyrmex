@@ -5,10 +5,13 @@ for building structured learning paths.
 """
 
 import json
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 from uuid import UUID, uuid4
+
+logger = logging.getLogger(__name__)
 
 
 class Difficulty(Enum):
@@ -202,7 +205,8 @@ class Curriculum:
                     if mod_idx >= level_idx:
                         filtered.append(name)
                 path = filtered
-            except (ValueError, IndexError):
+            except (ValueError, IndexError) as e:
+                logger.warning("Failed to filter curriculum path by difficulty level '%s': %s", student_level, e)
                 pass
 
         return path

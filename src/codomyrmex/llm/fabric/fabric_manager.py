@@ -46,7 +46,8 @@ class FabricManager:
                 timeout=10
             )
             return result.returncode == 0
-        except (subprocess.TimeoutExpired, FileNotFoundError):
+        except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+            self.logger.warning("Fabric availability check failed: %s", e)
             return False
 
     def list_patterns(self) -> list[str]:

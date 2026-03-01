@@ -92,7 +92,8 @@ def save_config(data: dict[str, Any], path: Path | str | None = None) -> Path:
     # Restrict permissions — file may contain secrets
     try:
         config_path.chmod(0o600)
-    except OSError:
+    except OSError as e:
+        logger.debug("chmod 0o600 failed (expected on some OS): %s", e)
         pass  # Windows or other OS where chmod is limited
 
     logger.info("Config saved to %s", config_path)

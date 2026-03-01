@@ -134,8 +134,8 @@ class AgentPromptSelector:
             tpl = PromptTemplate.from_dict(tpl_data)
             try:
                 self._registry.add(tpl)
-            except ValueError:
-                pass  # Already exists
+            except ValueError as e:
+                logger.debug("Built-in template already registered: %s", e)
 
     @property
     def registry(self) -> TemplateRegistry:

@@ -11,7 +11,7 @@ import logging
 project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.ide.antigravity import AntigravityClient, IDEStatus
+from codomyrmex.ide.antigravity import AntigravityClient
 
 # Configure logging
 logging.basicConfig(

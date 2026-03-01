@@ -52,6 +52,16 @@ The crypto module maps to multiple phases of the PAI Algorithm, providing crypto
 - **Certificate Verification**: Use `graphy.certificates.verify_certificate_chain()` to validate PKI chains.
 - **Hash Verification**: Use `graphy.hashing.verify_hash()` to confirm data integrity.
 
+## MCP Tools
+
+Three tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `hash_data` | Compute a cryptographic hash of data using a specified algorithm (SHA-256, etc.) | Safe | crypto |
+| `verify_hash` | Verify that data matches a given cryptographic hash digest | Safe | crypto |
+| `generate_key` | Generate a cryptographic key (symmetric, asymmetric, or key pair) | Safe | crypto |
+
 ## Agent Capabilities
 
 | PAI Agent Type | Primary Submodules | Use Case |

@@ -6,15 +6,12 @@ Tests InMemoryHistoryStore, FileHistoryStore, and SQLiteHistoryStore.
 from __future__ import annotations
 
 import json
-import os
 from datetime import datetime, timedelta
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.agents.history.models import (
     Conversation,
-    HistoryMessage,
     MessageRole,
 )
 from codomyrmex.agents.history.stores import (

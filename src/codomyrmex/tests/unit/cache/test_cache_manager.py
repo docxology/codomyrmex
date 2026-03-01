@@ -9,7 +9,6 @@ Covers:
 """
 
 import time
-from pathlib import Path
 
 import pytest
 
@@ -155,29 +154,17 @@ class TestCacheManagerBackendSelection:
         cache = mgr.get_cache("unk", backend="memcached_nonexistent")
         assert isinstance(cache, InMemoryCache)
 
-    def test_redis_fallback_to_in_memory(self):
-        """Redis backend falls back when redis is unavailable or RedisCache is broken.
-
-        Known issue: RedisCache defines get_stats() instead of the abstract
-        property 'stats', making it uninstantiable. The CacheManager only
-        catches ImportError, so this currently raises TypeError when the redis
-        package IS installed but RedisCache cannot be constructed. We mark
-        this as xfail to document the real bug.
-        """
+    def test_redis_backend_returns_valid_cache(self):
+        """Redis backend returns a valid Cache instance (RedisCache or fallback)."""
         from codomyrmex.cache.cache_manager import CacheManager
-        from codomyrmex.cache.backends.in_memory import InMemoryCache
+        from codomyrmex.cache.cache import Cache
 
         mgr = CacheManager()
-        if _redis_available():
-            # Redis package is installed but RedisCache is missing abstract 'stats'
-            # property -- CacheManager._create_backend doesn't catch TypeError
-            pytest.xfail(
-                "RedisCache defines get_stats() instead of abstract property "
-                "'stats', causing TypeError on instantiation"
-            )
         cache = mgr.get_cache("red", backend="redis")
-        # Without redis package, ImportError is caught and we get InMemoryCache
-        assert isinstance(cache, InMemoryCache)
+        # If redis package is installed, we get a RedisCache;
+        # otherwise CacheManager falls back to InMemoryCache.
+        # Either way it must be a valid Cache.
+        assert isinstance(cache, Cache)
 
     def test_same_name_different_backend_creates_two(self):
         from codomyrmex.cache.cache_manager import CacheManager

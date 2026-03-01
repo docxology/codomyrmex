@@ -74,6 +74,36 @@ Key findings:
 - Highest churn: README.md (58x), TO-DO.md (46x), pyproject.toml (42x)
 - 2 branches: main (active), pr3-branch
 
+## MCP Tools Available
+
+All 16 tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+### GitNexus Tools (structural code analysis -- requires Node.js/npx)
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `git_analysis_index_repo` | Index a repository with GitNexus (Tree-sitter AST + KuzuDB graph) | `repo_path` | Safe |
+| `git_analysis_query` | Hybrid BM25 + semantic search over the GitNexus knowledge graph | `repo_path`, `query_text`, `limit` | Safe |
+| `git_analysis_symbol_context` | 360-degree symbol analysis: all incoming and outgoing dependencies | `repo_path`, `symbol` | Safe |
+| `git_analysis_impact` | Blast-radius assessment for a symbol change with confidence scoring | `repo_path`, `symbol` | Safe |
+| `git_analysis_detect_changes` | Map a git diff to architectural impact on modules and symbols | `repo_path`, `diff` (optional) | Safe |
+| `git_analysis_cypher_query` | Execute a raw Cypher query against the KuzuDB knowledge graph | `repo_path`, `cypher_query` | Safe |
+| `git_analysis_list_indexed` | List all repositories indexed in the global GitNexus registry | (none) | Safe |
+
+### GitPython Tools (commit history analysis)
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `git_analysis_commit_history` | Detailed commit history with per-commit statistics | `repo_path`, `max_count`, `branch` | Safe |
+| `git_analysis_contributor_stats` | Per-author aggregate statistics across all commits | `repo_path` | Safe |
+| `git_analysis_code_churn` | Top N most-frequently-changed files (code churn analysis) | `repo_path`, `top_n` | Safe |
+| `git_analysis_branch_topology` | Repository branch topology: all branches and tip commits | `repo_path` | Safe |
+| `git_analysis_commit_frequency` | Commit frequency bucketed by day, week, or month | `repo_path`, `by` (day/week/month) | Safe |
+| `git_analysis_filtered_history` | Filtered commit history with date, author, and branch constraints | `repo_path`, `max_count`, `since`, `until`, `author`, `branch` | Safe |
+| `git_analysis_file_history` | Commit history for a specific file path | `repo_path`, `file_path`, `max_count` | Safe |
+| `git_analysis_directory_churn` | Commit frequency aggregated by top-level directory | `repo_path`, `top_n` | Safe |
+| `git_analysis_hotspots` | Hotspot analysis combining churn frequency with recency | `repo_path`, `top_n` | Safe |
+
 ## Testing
 
 Tests at `src/codomyrmex/tests/unit/git_analysis/`:

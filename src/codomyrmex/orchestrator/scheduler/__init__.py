@@ -4,7 +4,11 @@ Scheduler Module
 Task scheduling and job queuing with support for cron and interval triggers.
 """
 
+import logging
+
 __version__ = "0.1.0"
+
+logger = logging.getLogger(__name__)
 
 # Shared schemas for cross-module interop
 try:
@@ -25,7 +29,8 @@ try:
         PersistentScheduler,
         ScheduledRecurrence,
     )
-except ImportError:
+except ImportError as e:
+    logger.debug("Advanced scheduler extensions not available: %s", e)
     pass
 
 def cli_commands():

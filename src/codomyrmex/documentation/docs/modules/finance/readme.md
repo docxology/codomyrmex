@@ -67,4 +67,5 @@ finance/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/finance/](../../../docs/modules/finance/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

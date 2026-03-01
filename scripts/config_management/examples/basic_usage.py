@@ -9,7 +9,6 @@ Demonstrates actual configuration capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -21,7 +20,6 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.config_management import (
-    load_configuration,
     validate_configuration,
     Configuration
 )

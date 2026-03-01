@@ -18,7 +18,6 @@ except ImportError:
 import argparse
 import subprocess
 import shutil
-import os
 
 
 def check_tool(name: str) -> dict:

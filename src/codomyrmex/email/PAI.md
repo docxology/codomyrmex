@@ -11,17 +11,17 @@ The Email module provides email composition, sending, and management through a p
 ### Email Operations
 
 ```python
-from codomyrmex.email import EmailAddress, EmailDraft, EmailMessage, EmailProvider
+from codomyrmex.email import AgentMailProvider, EmailDraft, AGENTMAIL_AVAILABLE
 
-# Compose and send email
-draft = EmailDraft(
-    to=[EmailAddress("team@example.com")],
-    subject="Sprint Summary",
-    body="Completed PAI.md enrichment across 40+ modules."
-)
-
-provider = EmailProvider()
-provider.send(draft)
+# AgentMail (requires AGENTMAIL_API_KEY env var)
+if AGENTMAIL_AVAILABLE:
+    provider = AgentMailProvider()
+    draft = EmailDraft(
+        to=["team@example.com"],
+        subject="Sprint Summary",
+        body_text="Completed PAI.md enrichment across 40+ modules."
+    )
+    sent = provider.send_message(draft)
 ```
 
 ## Key Exports
@@ -79,3 +79,32 @@ Requires: `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`
 - **Parent**: [../PAI.md](../PAI.md) — Source-level PAI module map
 - **Root Bridge**: [../../../PAI.md](../../../PAI.md) — Authoritative PAI system bridge doc
 - **Siblings**: [README.md](README.md) | [AGENTS.md](AGENTS.md) | [SPEC.md](SPEC.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md)
+
+## PAI Dashboard Integration
+
+The email module's functionality is also available via the PAI Dashboard (PMServer.ts, port 8889) as REST endpoints. This provides browser-accessible email without needing the Python MCP bridge.
+
+### MCP Tool → Dashboard Route Mapping
+
+| Python MCP Tool | Dashboard Route | Notes |
+|-----------------|-----------------|-------|
+| `agentmail_list_inboxes` | `GET /api/email/agentmail/inboxes` | Direct mapping |
+| `agentmail_list_messages` | `GET /api/email/agentmail/messages` | Same params |
+| `agentmail_get_message` | `GET /api/email/agentmail/message/:id` | Same response shape |
+| `agentmail_send_message` | `POST /api/email/agentmail/send` | Same body fields |
+| `agentmail_reply_to_message` | `POST /api/email/agentmail/reply/:id` | Same body fields |
+| `agentmail_list_threads` | `GET /api/email/agentmail/threads` | Same params |
+| `gmail_list_messages` | `GET /api/email/gmail/messages` | Same params |
+| `gmail_get_message` | `GET /api/email/gmail/message/:id` | Same response shape |
+| `gmail_send_message` | `POST /api/email/gmail/send` | Same body fields |
+
+### OAuth (Dashboard-specific)
+
+Gmail OAuth is managed via dashboard routes not exposed as MCP tools:
+
+- `GET /api/gmail/auth` — initiate OAuth flow (CSRF state generated)
+- `GET /api/gmail/callback` — handle callback (CSRF state validated + consumed)
+- `GET /api/gmail/status` — check connection status
+- `POST /api/gmail/disconnect` — revoke token
+
+Setup guide: `~/.claude/skills/PAI/SYSTEM/EMAIL-SETUP.md`

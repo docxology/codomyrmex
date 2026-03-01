@@ -1,7 +1,7 @@
 # Email Module — MCP Tool Specification
 
-This document describes the 8 MCP tools exposed by `codomyrmex.email.mcp_tools`.
-All tools require `AGENTMAIL_API_KEY` set in the environment.
+This document describes the 12 MCP tools exposed by `codomyrmex.email.mcp_tools`.
+AgentMail tools require `AGENTMAIL_API_KEY`. Gmail tools require `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REFRESH_TOKEN`.
 
 ---
 
@@ -245,6 +245,127 @@ Register a webhook for AgentMail events.
   "url": "https://example.com/webhook",
   "event_types": ["message.received"],
   "inbox_ids": []
+}
+```
+
+---
+
+## `gmail_send_message`
+
+Send an email via Gmail API using OAuth2 credentials.
+
+### Input Schema
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `to` | `List[str]` | Yes | Recipient email addresses |
+| `subject` | `str` | Yes | Email subject line |
+| `body_text` | `str` | Yes | Plain-text message body |
+| `body_html` | `str \| None` | No | HTML message body |
+| `cc` | `List[str] \| None` | No | CC recipients |
+| `bcc` | `List[str] \| None` | No | BCC recipients |
+
+### Output Schema
+
+```json
+{
+  "status": "ok",
+  "message_id": "msg_...",
+  "thread_id": "thr_...",
+  "subject": "...",
+  "to": ["recipient@example.com"]
+}
+```
+
+---
+
+## `gmail_list_messages`
+
+List messages in the Gmail inbox with optional search query.
+
+### Input Schema
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `query` | `str` | No | Gmail search query (e.g. `"is:unread"`, `"from:user@example.com"`). Default: empty (all messages) |
+| `max_results` | `int` | No | Maximum messages to return (default 20) |
+
+### Output Schema
+
+```json
+{
+  "status": "ok",
+  "count": 5,
+  "messages": [
+    {
+      "message_id": "msg_...",
+      "thread_id": "thr_...",
+      "subject": "...",
+      "from": "sender@example.com",
+      "date": "2026-02-23T10:00:00",
+      "labels": [],
+      "preview": "First 200 chars of body..."
+    }
+  ]
+}
+```
+
+---
+
+## `gmail_get_message`
+
+Fetch a specific Gmail message by its ID.
+
+### Input Schema
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `message_id` | `str` | Yes | The Gmail message ID (opaque string from the Gmail API) |
+
+### Output Schema
+
+```json
+{
+  "status": "ok",
+  "message": {
+    "message_id": "msg_...",
+    "thread_id": "thr_...",
+    "subject": "...",
+    "from": "sender@example.com",
+    "from_name": "Sender Name",
+    "to": ["recipient@example.com"],
+    "cc": [],
+    "date": "2026-02-23T10:00:00",
+    "body_text": "...",
+    "body_html": null,
+    "labels": []
+  }
+}
+```
+
+---
+
+## `gmail_create_draft`
+
+Create a Gmail draft without sending it.
+
+### Input Schema
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `to` | `List[str]` | Yes | Recipient email addresses |
+| `subject` | `str` | Yes | Email subject line |
+| `body_text` | `str` | Yes | Plain-text message body |
+| `body_html` | `str \| None` | No | HTML message body |
+| `cc` | `List[str] \| None` | No | CC recipients |
+| `bcc` | `List[str] \| None` | No | BCC recipients |
+
+### Output Schema
+
+```json
+{
+  "status": "ok",
+  "draft_id": "draft_..."
 }
 ```
 

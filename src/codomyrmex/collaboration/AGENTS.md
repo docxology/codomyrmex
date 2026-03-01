@@ -13,6 +13,16 @@ Multi-agent collaboration, shared state, and coordination patterns.
 - **SharedState** — Synchronized state
 - **TaskPool** — Distributed task allocation
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `swarm_submit_task` | Submit a task to the agent swarm for distributed execution | Safe |
+| `pool_status` | Get the current status of the collaboration swarm pool and protocols | Safe |
+| `list_agents` | List available agent capabilities and coordination protocols | Safe |
+
 ## Agent Instructions
 
 1. **Use sessions** — Create sessions for related work

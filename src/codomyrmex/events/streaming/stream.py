@@ -5,11 +5,14 @@ In-memory and SSE stream backends.
 """
 
 import asyncio
+import logging
 import threading
 from abc import ABC, abstractmethod
 from collections.abc import AsyncIterator, Callable
 
 from .models import Event, EventType, Subscription
+
+logger = logging.getLogger(__name__)
 
 
 class Stream(ABC):
@@ -56,7 +59,8 @@ class InMemoryStream(Stream):
                 if sub.should_receive(event) and sub.handler:
                     try:
                         sub.handler(event)
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                        logger.warning("Stream handler error for subscription '%s': %s", sub.topic, e)
                         pass
 
     async def subscribe(

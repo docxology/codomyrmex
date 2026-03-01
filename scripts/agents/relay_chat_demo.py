@@ -18,7 +18,6 @@ Uses the modular `AutonomousAgent` class from `codomyrmex.agents`.
 """
 
 import time
-import threading
 import sys
 from pathlib import Path
 

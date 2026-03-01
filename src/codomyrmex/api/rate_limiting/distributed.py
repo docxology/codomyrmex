@@ -4,6 +4,7 @@ Distributed Rate Limiting
 Rate limiting with Redis backend for distributed systems.
 """
 
+import logging
 import os
 import threading
 import time
@@ -13,6 +14,8 @@ from typing import Any
 from codomyrmex.config_management.defaults import DEFAULT_REDIS_URL
 
 from . import RateLimiter, RateLimitExceeded, RateLimitResult
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -65,8 +68,8 @@ class RedisRateLimiter(RateLimiter):
                     remaining=remaining,
                     limit=self.limit,
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Redis check failed, falling back to local limiter: %s", e)
 
         # Fallback to local
         with self._lock:
@@ -104,8 +107,8 @@ class RedisRateLimiter(RateLimiter):
                 )
             except RateLimitExceeded:
                 raise
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Redis acquire failed, falling back to local limiter: %s", e)
 
         # Fallback to local
         with self._lock:
@@ -129,8 +132,8 @@ class RedisRateLimiter(RateLimiter):
             try:
                 redis_key = self._get_key(key)
                 self._redis.delete(redis_key)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Redis reset failed for key %s: %s", key, e)
 
         with self._lock:
             self._local_cache.pop(key, None)

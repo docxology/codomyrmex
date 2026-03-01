@@ -16,7 +16,6 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 
 
 def analyze_principles(path: str = ".") -> dict:

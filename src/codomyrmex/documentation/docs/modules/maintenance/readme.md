@@ -70,4 +70,5 @@ maintenance/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/maintenance/](../../../docs/modules/maintenance/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

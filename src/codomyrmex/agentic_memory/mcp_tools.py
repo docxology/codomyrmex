@@ -25,11 +25,6 @@ def _agent_memory():
     return AgentMemory
 
 
-def _stores():
-    """Lazy import stores."""
-    from codomyrmex.agentic_memory import stores
-    return stores
-
 
 @mcp_tool(
     category="agentic_memory",

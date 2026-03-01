@@ -1,9 +1,12 @@
 """Type-safe parser for validated data conversion."""
 
+import logging
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
 from pydantic import ValidationError as PydanticValidationError
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -15,7 +18,8 @@ class TypeSafeParser:
         """Attempt to parse data into a specific model."""
         try:
             return model.model_validate(data)
-        except PydanticValidationError:
+        except PydanticValidationError as e:
+            logger.warning("Failed to parse data as %s: %s", model.__name__, e)
             return None
 
     @staticmethod

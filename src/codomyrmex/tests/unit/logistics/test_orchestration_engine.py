@@ -12,7 +12,6 @@ Covers:
 Zero-mock policy: all tests use real objects only.
 """
 
-import importlib
 import uuid
 from datetime import datetime, timezone
 

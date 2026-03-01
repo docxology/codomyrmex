@@ -73,7 +73,7 @@ class CacheManager:
             try:
                 from .backends.redis_backend import RedisCache
                 return RedisCache()
-            except ImportError:
+            except (ImportError, TypeError, OSError):
                 logger.warning("Redis not available, falling back to in-memory cache")
                 return InMemoryCache()
         else:

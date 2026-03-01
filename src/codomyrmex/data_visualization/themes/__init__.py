@@ -4,9 +4,12 @@ Theme definitions for data visualization.
 Provides predefined color schemes and styling configurations.
 """
 
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class ThemeName(Enum):
@@ -194,7 +197,8 @@ def apply_theme(theme: Theme) -> None:
     try:
         import matplotlib.pyplot as plt
         plt.rcParams.update(theme.to_matplotlib_rcparams())
-    except ImportError:
+    except ImportError as e:
+        logger.debug("matplotlib not available, cannot apply theme: %s", e)
         pass  # matplotlib not available
 
 

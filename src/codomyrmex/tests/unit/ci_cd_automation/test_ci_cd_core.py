@@ -18,12 +18,9 @@ Zero-mock policy: all tests use real objects and tmp_path for filesystem.
 """
 
 import json
-import os
-import time
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
-import yaml
 
 from codomyrmex.ci_cd_automation.deployment_orchestrator import (
     Deployment,
@@ -52,7 +49,6 @@ from codomyrmex.ci_cd_automation.pipeline.async_manager import (
 )
 from codomyrmex.ci_cd_automation.pipeline.manager import PipelineManager
 from codomyrmex.ci_cd_automation.pipeline.pipeline_monitor import (
-    PipelineMetrics,
     PipelineMonitor,
     PipelineReport,
     ReportType,

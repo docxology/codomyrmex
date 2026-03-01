@@ -6,7 +6,6 @@ and file operations.
 """
 
 import os
-import unittest
 from io import BytesIO
 
 import pytest
@@ -86,7 +85,7 @@ class TestCompressor:
 
 
 @pytest.mark.unit
-class TestGzipCompression(unittest.TestCase):
+class TestGzipCompression:
     """Tests for gzip compression."""
 
     def test_gzip_compression(self):
@@ -95,8 +94,8 @@ class TestGzipCompression(unittest.TestCase):
         compressor = Compressor("gzip")
         compressed = compressor.compress(data)
         decompressed = compressor.decompress(compressed)
-        self.assertEqual(data, decompressed)
-        self.assertTrue(len(compressed) < len(data))
+        assert data == decompressed
+        assert len(compressed) < len(data)
 
     def test_gzip_compression_levels(self):
         """Test different gzip compression levels."""
@@ -107,18 +106,18 @@ class TestGzipCompression(unittest.TestCase):
         level_9 = compressor.compress(data, level=9)
 
         # Higher level should produce smaller output (usually)
-        self.assertTrue(len(level_9) <= len(level_1))
+        assert len(level_9) <= len(level_1)
 
         # Both should decompress correctly
-        self.assertEqual(compressor.decompress(level_1), data)
-        self.assertEqual(compressor.decompress(level_9), data)
+        assert compressor.decompress(level_1) == data
+        assert compressor.decompress(level_9) == data
 
     def test_gzip_empty_data(self):
         """Test gzip compression of empty data."""
         compressor = Compressor("gzip")
         compressed = compressor.compress(b"")
         decompressed = compressor.decompress(compressed)
-        self.assertEqual(decompressed, b"")
+        assert decompressed == b""
 
     def test_gzip_binary_data(self):
         """Test gzip compression of binary data."""
@@ -126,7 +125,7 @@ class TestGzipCompression(unittest.TestCase):
         compressor = Compressor("gzip")
         compressed = compressor.compress(data)
         decompressed = compressor.decompress(compressed)
-        self.assertEqual(data, decompressed)
+        assert data == decompressed
 
     def test_gzip_level_0(self):
         """Test gzip with level 0 (no compression)."""
@@ -134,7 +133,7 @@ class TestGzipCompression(unittest.TestCase):
         compressor = Compressor("gzip")
         compressed = compressor.compress(data, level=0)
         decompressed = compressor.decompress(compressed)
-        self.assertEqual(data, decompressed)
+        assert data == decompressed
 
 
 @pytest.mark.unit
@@ -192,7 +191,7 @@ class TestZipCompression:
 
 
 @pytest.mark.unit
-class TestZstdCompression(unittest.TestCase):
+class TestZstdCompression:
     """Tests for Zstandard compression."""
 
     def test_zstd_compression(self):
@@ -202,9 +201,9 @@ class TestZstdCompression(unittest.TestCase):
             compressor = ZstdCompressor()
             compressed = compressor.compress(data)
             decompressed = compressor.decompress(compressed)
-            self.assertEqual(data, decompressed)
+            assert data == decompressed
         except ImportError:
-            self.skipTest("zstandard not installed")
+            pytest.skip("zstandard not installed")
 
     def test_zstd_compression_levels(self):
         """Test different zstd compression levels."""
@@ -213,13 +212,13 @@ class TestZstdCompression(unittest.TestCase):
             compressor = ZstdCompressor()
             compressed = compressor.compress(data, level=5)
             decompressed = compressor.decompress(compressed)
-            self.assertEqual(data, decompressed)
+            assert data == decompressed
         except ImportError:
-            self.skipTest("zstandard not installed")
+            pytest.skip("zstandard not installed")
 
 
 @pytest.mark.unit
-class TestParallelCompressor(unittest.TestCase):
+class TestParallelCompressor:
     """Tests for parallel compression."""
 
     def test_parallel_compression(self):
@@ -228,13 +227,13 @@ class TestParallelCompressor(unittest.TestCase):
         compressor = ParallelCompressor("gzip")
         compressed_list = compressor.compress_batch(data_list)
         decompressed_list = compressor.decompress_batch(compressed_list)
-        self.assertEqual(data_list, decompressed_list)
+        assert data_list == decompressed_list
 
     def test_parallel_compression_empty_list(self):
         """Test parallel compression with empty list."""
         compressor = ParallelCompressor("gzip")
         result = compressor.compress_batch([])
-        self.assertEqual(result, [])
+        assert result == []
 
     def test_parallel_compression_single_item(self):
         """Test parallel compression with single item."""
@@ -242,7 +241,7 @@ class TestParallelCompressor(unittest.TestCase):
         compressor = ParallelCompressor("gzip")
         compressed_list = compressor.compress_batch(data_list)
         decompressed_list = compressor.decompress_batch(compressed_list)
-        self.assertEqual(data_list, decompressed_list)
+        assert data_list == decompressed_list
 
     def test_parallel_compression_many_items(self):
         """Test parallel compression with many items."""
@@ -250,13 +249,13 @@ class TestParallelCompressor(unittest.TestCase):
         compressor = ParallelCompressor("gzip")
         compressed_list = compressor.compress_batch(data_list)
         decompressed_list = compressor.decompress_batch(compressed_list)
-        self.assertEqual(data_list, decompressed_list)
+        assert data_list == decompressed_list
 
     def test_parallel_decompression_empty_list(self):
         """Test parallel decompression with empty list."""
         compressor = ParallelCompressor("gzip")
         result = compressor.decompress_batch([])
-        self.assertEqual(result, [])
+        assert result == []
 
 
 @pytest.mark.unit

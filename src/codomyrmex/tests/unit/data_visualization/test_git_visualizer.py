@@ -691,18 +691,8 @@ class TestCreateComprehensiveGitReport:
         not importlib.util.find_spec("codomyrmex.git_operations"),
         reason="Requires git_operations module",
     )
-    @pytest.mark.xfail(
-        reason="Source bug: create_git_workflow_diagram called without required workflow_steps arg (line 700)",
-        strict=True,
-        raises=TypeError,
-    )
     def test_with_real_repo(self, visualizer, tmp_path):
-        """Run against the actual codomyrmex repo if git_operations is available.
-
-        Currently xfail: create_comprehensive_git_report calls
-        mermaid_generator.create_git_workflow_diagram() without the required
-        workflow_steps positional argument, raising TypeError.
-        """
+        """Run against the actual codomyrmex repo if git_operations is available."""
         import codomyrmex.data_visualization.git.git_visualizer as mod
 
         if not mod.GIT_OPERATIONS_AVAILABLE:
@@ -736,7 +726,6 @@ class TestCreateComprehensiveGitReport:
         if not mod.GIT_OPERATIONS_AVAILABLE:
             pytest.skip("git_operations not importable")
 
-        from codomyrmex.git_operations.core.git import is_git_repository
 
         non_git = tmp_path / "not_a_repo"
         non_git.mkdir()

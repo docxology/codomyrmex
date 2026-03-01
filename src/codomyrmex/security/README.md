@@ -149,7 +149,7 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.security import SBOMFormat, LicenseType, Component
+from codomyrmex.security.sbom import SBOMFormat, LicenseType, Component
 
 # Initialize SBOMFormat
 instance = SBOMFormat()

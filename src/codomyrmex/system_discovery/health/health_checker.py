@@ -160,9 +160,11 @@ class HealthChecker:
             module_path = f"codomyrmex.{module_name}"
             importlib.import_module(module_path)
             return True
-        except ImportError:
+        except ImportError as e:
+            logger.warning("Module %s not importable: %s", module_name, e)
             return False
-        except Exception:
+        except Exception as e:
+            logger.warning("Unexpected error checking module %s availability: %s", module_name, e)
             return False
 
     def _determine_overall_status(self, result: HealthCheckResult) -> HealthStatus:
@@ -447,5 +449,6 @@ def check_module_availability(module_name: str) -> bool:
     try:
         importlib.import_module(f"codomyrmex.{module_name}")
         return True
-    except ImportError:
+    except ImportError as e:
+        logger.warning("Module %s not importable: %s", module_name, e)
         return False

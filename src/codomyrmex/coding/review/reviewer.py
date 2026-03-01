@@ -5,10 +5,7 @@ This module provides advanced static analysis capabilities including pyscn integ
 for high-performance code quality assessment, security scanning, and maintainability analysis.
 """
 
-import json
 import os
-import re
-import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -24,14 +21,9 @@ from .analyzer import PyscnAnalyzer
 from .models import (
     AnalysisResult,
     AnalysisSummary,
-    ArchitectureViolation,
     CodeMetrics,
-    ComplexityReductionSuggestion,
-    DeadCodeFinding,
     Language,
-    QualityDashboard,
     QualityGateResult,
-    SeverityLevel,
 )
 
 logger = get_logger(__name__)

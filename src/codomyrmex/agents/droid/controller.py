@@ -326,7 +326,7 @@ class DroidController:
             self._enter_execution()
 
         try:
-            with performance_context("droid_task", operation_id=operation_id):
+            with performance_context(f"droid_task:{operation_id}"):
                 result = handler(*args, **kwargs)
         except Exception as exc:  # pragma: no cover - handled in tests
             with self._lock:

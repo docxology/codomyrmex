@@ -125,10 +125,10 @@ class HTTPClient:
             NetworkingError: If request fails
         """
         try:
-            # Merge headers
-            request_headers = {}
+            # Merge headers: start from session defaults, then apply per-request overrides (H1)
+            request_headers = dict(self.session.headers)
             if "headers" in kwargs:
-                request_headers = kwargs.pop("headers")
+                request_headers.update(kwargs.pop("headers"))
 
             # Use session options but allow overrides
             timeout = kwargs.pop("timeout", self.timeout)
@@ -146,8 +146,8 @@ class HTTPClient:
             try:
                 if response.content:
                     json_data = response.json()
-            except Exception:
-                pass
+            except (ValueError, requests.exceptions.JSONDecodeError) as e:
+                logger.debug("Response JSON parse failed: %s", e)
 
             return Response(
                 status_code=response.status_code,

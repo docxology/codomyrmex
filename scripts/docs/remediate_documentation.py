@@ -10,7 +10,6 @@ Remediates documentation gaps:
 import os
 import argparse
 from pathlib import Path
-from typing import List
 
 REQUIRED_DOCS = ["README.md", "AGENTS.md", "SPEC.md", "PAI.md"]
 

@@ -64,6 +64,15 @@ memory.store("key", "value")
 assert memory.retrieve("key") == "value"
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `query_knowledge_base` | Perform semantic retrieval from the CaseBase | Safe |
+| `add_case_reference` | Store intelligence context directly into the CaseBase | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

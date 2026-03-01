@@ -1,9 +1,12 @@
+import logging
 import os
 import subprocess
 import time
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.agents.core import AgentRequest, AgentResponse, BaseAgent
 from codomyrmex.agents.core.exceptions import AgentError, AgentTimeoutError
@@ -123,7 +126,8 @@ class CLIAgentBase(BaseAgent):
                     timeout=5,
                 )
                 version = result.stdout.strip() or result.stderr.strip()
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                logger.debug("Version check for %r failed: %s", self.command, e)
                 pass
 
         status = "healthy" if available else "unavailable"

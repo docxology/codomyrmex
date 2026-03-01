@@ -7,7 +7,6 @@ Preserves existing content — only appends/inserts missing sections.
 """
 import ast
 import os
-import re
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

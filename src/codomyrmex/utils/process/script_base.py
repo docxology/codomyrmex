@@ -35,6 +35,7 @@ Usage:
 
 import argparse
 import json
+import logging
 import os
 import traceback
 from abc import ABC, abstractmethod
@@ -64,7 +65,7 @@ except ImportError:
         def __init__(self, **kwargs):
             _logging.warning("codomyrmex not installed: LogContext operating as no-op. Install codomyrmex for full functionality.")
         def __enter__(self): return self
-        def __exit__(self, *args): pass
+        def __exit__(self, *args): return None  # No-op context manager exit
     class PerformanceLogger:
         def __init__(self, logger_name):
             _logging.warning("codomyrmex not installed: PerformanceLogger operating as no-op. Install codomyrmex for full functionality.")
@@ -74,6 +75,8 @@ except ImportError:
             def ctx():
                 yield
             return ctx()
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -292,7 +295,7 @@ Environment Variables:
         Args:
             parser: Argument parser to extend
         """
-        pass
+        return None  # Override in subclass to add CLI arguments
 
     def load_config(self, args: argparse.Namespace) -> ScriptConfig:
         """Load configuration from multiple sources.
@@ -353,6 +356,7 @@ Environment Variables:
                     self.log_warning(f"Unknown config format: {path.suffix}")
                     return {}
         except Exception as e:
+            logger.warning("Failed to load config file %s: %s", path, e)
             self.log_warning(f"Failed to load config file: {e}")
             return {}
 
@@ -474,6 +478,7 @@ Environment Variables:
             self.log_debug(f"Result saved to: {result_file}")
             return result_file
         except Exception as e:
+            logger.warning("Failed to save result to %s: %s", result_file, e)
             self.log_warning(f"Failed to save result: {e}")
             return None
 

@@ -5,10 +5,13 @@ File-backed vector storage for persistence across restarts.
 """
 
 import json
+import logging
 import threading
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from . import (
     DistanceMetric,
@@ -68,7 +71,8 @@ class PersistentVectorStore(VectorStore):
                         metadata=item.get("metadata", {}),
                     )
                     self._vectors[entry.id] = entry
-            except (json.JSONDecodeError, KeyError):
+            except (json.JSONDecodeError, KeyError) as e:
+                logger.warning("Failed to load vector store from %s: %s", self._path, e)
                 pass
 
     def _save(self) -> None:

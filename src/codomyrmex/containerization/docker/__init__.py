@@ -5,6 +5,7 @@ Provides utilities for building, managing, and running Docker containers.
 """
 
 import json
+import logging
 import os
 import subprocess
 import tempfile
@@ -12,6 +13,8 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -437,7 +440,8 @@ class DockerComposeClient:
 
         try:
             return json.loads(result.stdout)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            logger.warning("Failed to parse docker-compose ps output: %s", e)
             return []
 
 

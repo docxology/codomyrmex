@@ -6,7 +6,6 @@ Sends keystrokes directly to the active window/pane.
 
 import sys
 import subprocess
-import time
 import argparse
 import logging
 

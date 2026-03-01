@@ -1,5 +1,9 @@
 """Accessibility utility functions."""
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 def calculate_contrast_ratio(fg: str, bg: str) -> float:
     """Calculate WCAG contrast ratio between two colors."""
@@ -20,7 +24,8 @@ def calculate_contrast_ratio(fg: str, bg: str) -> float:
         lighter = max(l1, l2)
         darker = min(l1, l2)
         return (lighter + 0.05) / (darker + 0.05)
-    except (ValueError, IndexError):
+    except (ValueError, IndexError) as e:
+        _logger.debug("Failed to calculate contrast ratio for %r/%r: %s", fg, bg, e)
         return 0.0
 
 

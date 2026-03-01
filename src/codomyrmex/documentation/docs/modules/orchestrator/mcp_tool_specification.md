@@ -1,199 +1,133 @@
 # Orchestrator - MCP Tool Specification
 
-This document outlines the specification for tools within the Orchestrator module that are intended to be integrated with the Model Context Protocol (MCP).
+This document specifies the MCP tools **currently implemented** in the Orchestrator module.
+
+> **Note:** This spec was updated to reflect the actual implementation in `mcp_tools.py`.
+> Previously documented tools (`run_workflow`, `list_workflows`, `create_workflow`, `cancel_workflow`)
+> are **not yet implemented** — they are planned future additions. See the Planned Tools section below.
 
 ## General Considerations
 
-- **Tool Integration**: This module provides workflow execution and multi-step task orchestration.
-- **Configuration**: Workflows are defined in YAML/JSON and can be parameterized.
+- **Tool Integration**: This module provides scheduler metrics and workflow DAG analysis.
+- **Category**: `orchestrator`
+- **Auto-discovered**: Yes (via `@mcp_tool` decorator in `mcp_tools.py`)
 
 ---
 
-## Tool: `run_workflow`
+## Tool: `get_scheduler_metrics`
 
 ### 1. Tool Purpose and Description
 
-Executes a defined workflow, coordinating multiple steps and handling data flow between them. Supports sequential, parallel, and conditional execution patterns.
+Retrieve the current metrics of the Orchestrator's `AsyncScheduler`, including jobs scheduled, completed, failed, cancelled, and total execution time.
 
 ### 2. Invocation Name
 
-`run_workflow`
+`get_scheduler_metrics`
 
 ### 3. Input Schema (Parameters)
 
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `workflow_name` | `string` | Yes | Name or path of the workflow to execute | `"build_and_test"` |
-| `parameters` | `object` | No | Parameters to pass to the workflow | `{"target": "production"}` |
-| `dry_run` | `boolean` | No | If true, validate without executing | `false` |
-| `timeout` | `integer` | No | Overall workflow timeout in seconds | `3600` |
-| `parallel_limit` | `integer` | No | Max concurrent parallel steps | `4` |
+None — this tool takes no parameters.
 
-### 4. Output Schema (Return Value)
+### 4. Output Schema
 
-| Field Name | Type | Description | Example Value |
-|:-----------|:-----|:------------|:--------------|
-| `status` | `string` | Overall status: "success", "failed", "partial" | `"success"` |
-| `workflow_id` | `string` | Unique identifier for this execution | `"wf-abc123"` |
-| `steps_completed` | `integer` | Number of steps completed | `5` |
-| `steps_total` | `integer` | Total number of steps | `5` |
-| `step_results` | `array[object]` | Results from each step | See below |
-| `execution_time` | `number` | Total execution time in seconds | `45.2` |
-| `error_message` | `string` | Error details if status is "failed" | `null` |
+| Field | Type | Description |
+|:------|:-----|:------------|
+| `status` | `string` | `"success"` or `"error"` |
+| `metrics.total_jobs` | `integer` | Total jobs scheduled |
+| `metrics.completed` | `integer` | Jobs completed successfully |
+| `metrics.failed` | `integer` | Jobs that failed |
+| `metrics.cancelled` | `integer` | Jobs that were cancelled |
+| `metrics.execution_time` | `float` | Cumulative execution time in seconds |
+| `message` | `string` | Error message (only on `"error"` status) |
 
-**Step result structure:**
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `step_name` | `string` | Name of the step |
-| `status` | `string` | Step status |
-| `output` | `any` | Step output data |
-| `duration` | `number` | Step execution time |
-
-### 5. Error Handling
-
-- **Workflow Not Found**: Returns error if workflow definition doesn't exist
-- **Parameter Validation**: Validates required parameters before execution
-- **Step Failures**: Can be configured to continue, retry, or abort on step failure
-- **Timeout**: Aborts workflow if overall timeout is exceeded
-
-### 6. Idempotency
-
-- **Idempotent**: Depends on workflow definition; some workflows may be idempotent
-
-### 7. Usage Examples
+### 5. Example Usage
 
 ```json
+// Request: no parameters
+// Response (success):
 {
-  "tool_name": "run_workflow",
-  "arguments": {
-    "workflow_name": "ci_pipeline",
-    "parameters": {
-      "branch": "main",
-      "run_tests": true,
-      "deploy_target": "staging"
-    },
-    "timeout": 1800
+  "status": "success",
+  "metrics": {
+    "total_jobs": 42,
+    "completed": 38,
+    "failed": 2,
+    "cancelled": 2,
+    "execution_time": 314.7
   }
 }
 ```
 
-### 8. Security Considerations
-
-- **Access Control**: Workflows may require specific permissions
-- **Secret Management**: Secrets should be injected at runtime, not stored in definitions
-- **Sandboxing**: Consider sandboxing untrusted workflow steps
-
 ---
 
-## Tool: `list_workflows`
+## Tool: `analyze_workflow_dependencies`
 
 ### 1. Tool Purpose and Description
 
-Lists all available workflow definitions with their metadata and execution status.
+Analyze a proposed workflow task graph (DAG) for cyclic dependencies. Validates that the workflow can be scheduled and returns a valid execution order if the graph is acyclic.
 
 ### 2. Invocation Name
 
-`list_workflows`
+`analyze_workflow_dependencies`
 
 ### 3. Input Schema (Parameters)
 
 | Parameter Name | Type | Required | Description | Example Value |
 |:---------------|:-----|:---------|:------------|:--------------|
-| `category` | `string` | No | Filter by workflow category | `"build"` |
-| `include_running` | `boolean` | No | Include currently running instances | `true` |
+| `tasks` | `array[object]` | Yes | List of task descriptors with id and dependencies | See example |
 
-### 4. Output Schema (Return Value)
+Each task object:
 
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `workflows` | `array[object]` | List of workflow definitions |
-| `running_count` | `integer` | Number of currently running workflows |
+| Field | Type | Required | Description |
+|:------|:-----|:---------|:------------|
+| `id` | `string` | Yes | Unique task identifier |
+| `dependencies` | `array[string]` | No | IDs of tasks this task depends on |
 
-### 5. Error Handling
+### 4. Output Schema
 
-- Returns empty list if no workflows are defined
+| Field | Type | Description |
+|:------|:-----|:------------|
+| `status` | `string` | `"success"` or `"error"` |
+| `valid_dag` | `boolean` | `true` if no cycles detected |
+| `execution_order` | `array[string]` | Topological order of task IDs (on success) |
+| `message` | `string` | Error details (on `"error"` or cycle detected) |
 
-### 6. Idempotency
+### 5. Example Usage
 
-- **Idempotent**: Yes
+```json
+// Request:
+{
+  "tasks": [
+    {"id": "build", "dependencies": []},
+    {"id": "test", "dependencies": ["build"]},
+    {"id": "deploy", "dependencies": ["test"]}
+  ]
+}
 
----
+// Response (valid DAG):
+{
+  "status": "success",
+  "valid_dag": true,
+  "execution_order": ["build", "test", "deploy"]
+}
 
-## Tool: `create_workflow`
-
-### 1. Tool Purpose and Description
-
-Creates a new workflow definition from a specification.
-
-### 2. Invocation Name
-
-`create_workflow`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `name` | `string` | Yes | Workflow name | `"my_workflow"` |
-| `definition` | `object` | Yes | Workflow definition object | See documentation |
-| `overwrite` | `boolean` | No | Overwrite if exists | `false` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "created", "updated", or "error" |
-| `workflow_path` | `string` | Path to the saved workflow |
-
-### 5. Error Handling
-
-- **Validation Error**: Returns error if definition is invalid
-- **Already Exists**: Returns error if workflow exists and overwrite is false
-
-### 6. Idempotency
-
-- **Idempotent**: Yes, with overwrite=true
+// Response (cycle detected):
+{
+  "status": "error",
+  "valid_dag": false,
+  "message": "Cycle detected: deploy -> build -> deploy"
+}
+```
 
 ---
 
-## Tool: `cancel_workflow`
+## Planned Tools (Not Yet Implemented)
 
-### 1. Tool Purpose and Description
+The following tools are documented as future work. They do **not** exist in the current implementation
+and will raise `NotImplementedError` until implemented.
 
-Cancels a running workflow execution.
-
-### 2. Invocation Name
-
-`cancel_workflow`
-
-### 3. Input Schema (Parameters)
-
-| Parameter Name | Type | Required | Description | Example Value |
-|:---------------|:-----|:---------|:------------|:--------------|
-| `workflow_id` | `string` | Yes | ID of the workflow execution to cancel | `"wf-abc123"` |
-| `reason` | `string` | No | Reason for cancellation | `"User requested"` |
-
-### 4. Output Schema (Return Value)
-
-| Field Name | Type | Description |
-|:-----------|:-----|:------------|
-| `status` | `string` | "cancelled" or "error" |
-| `steps_completed` | `integer` | Steps completed before cancellation |
-
-### 5. Error Handling
-
-- **Not Found**: Returns error if workflow_id doesn't exist
-- **Already Completed**: Returns info if workflow already finished
-
-### 6. Idempotency
-
-- **Idempotent**: Yes
-
----
-
-## Navigation Links
-
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
-- **Home**: [Root README](../../../README.md)
+| Tool Name | Description |
+|:----------|:------------|
+| `run_workflow` | Execute a named workflow with parameters and dry-run support |
+| `list_workflows` | List all available workflow definitions |
+| `create_workflow` | Create a new workflow definition from a task graph |
+| `cancel_workflow` | Cancel a running workflow by ID |

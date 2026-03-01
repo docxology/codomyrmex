@@ -157,8 +157,32 @@ class ConfigurationMonitor:
         return changes
 
     def _get_previous_hash(self, file_path: str) -> str | None:
-        """Get previous hash for a file."""
-        raise NotImplementedError("Config hash persistence not yet implemented")
+        """Get previous hash for a file from persistent storage."""
+        hash_store_path = self.monitoring_dir / "config_hashes.json"
+        if not hash_store_path.exists():
+            return None
+        try:
+            with open(hash_store_path, "r") as f:
+                stored_hashes = json.load(f)
+            return stored_hashes.get(file_path)
+        except (json.JSONDecodeError, OSError):
+            logger.warning("Could not read config hash store; treating as first run")
+            return None
+
+    def _persist_hashes(self, file_hashes: dict[str, str]) -> None:
+        """Persist file hashes to disk for future change detection."""
+        hash_store_path = self.monitoring_dir / "config_hashes.json"
+        existing: dict[str, str] = {}
+        if hash_store_path.exists():
+            try:
+                with open(hash_store_path, "r") as f:
+                    existing = json.load(f)
+            except (json.JSONDecodeError, OSError) as e:
+                logger.debug("Hash store unreadable, starting fresh: %s", e)
+                pass
+        existing.update(file_hashes)
+        with open(hash_store_path, "w") as f:
+            json.dump(existing, f, indent=2)
 
     def create_snapshot(self, environment: str, config_paths: list[str]) -> ConfigSnapshot:
         """Create a snapshot of configuration files for drift detection.

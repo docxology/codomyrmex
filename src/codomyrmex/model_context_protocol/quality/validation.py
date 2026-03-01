@@ -136,7 +136,8 @@ def _coerce_types(
                     coerced[key] = True
                 elif low in _BOOL_FALSY:
                     coerced[key] = False
-        except (ValueError, TypeError):
+        except (ValueError, TypeError) as e:
+            logger.debug("Coercion of key '%s' to %s failed: %s", key, expected_type, e)
             pass  # Let validation catch it
 
     return coerced

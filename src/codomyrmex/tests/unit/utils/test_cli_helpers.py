@@ -9,9 +9,7 @@ save_json_file, OUTPUT_WIDTH.
 """
 
 import argparse
-import io
 import json
-import sys
 import time
 from pathlib import Path
 
@@ -373,13 +371,8 @@ class TestPrintProgressBar:
         captured = capsys.readouterr()
         assert "50%" in captured.out
 
-    @pytest.mark.xfail(
-        reason="Source bug: print_progress_bar divides by zero in filled_length calc when total=0",
-        raises=ZeroDivisionError,
-        strict=True,
-    )
-    def test_zero_total_triggers_division_error(self):
-        """print_progress_bar guards percentage but not filled_length calc."""
+    def test_zero_total_does_not_raise(self):
+        """print_progress_bar handles total=0 without ZeroDivisionError."""
         print_progress_bar(0, 0)
 
 
@@ -693,44 +686,35 @@ class TestCreateDryRunPlan:
 class TestEnhancedErrorContext:
     """Tests for enhanced_error_context context manager.
 
-    NOTE: enhanced_error_context passes 'operation' and 'timestamp' as kwargs
-    to LogContext, which only accepts 'correlation_id' and 'additional_context'.
-    This causes a TypeError, which the except block then enhances and re-raises.
-    These tests document and verify this known behavior.
+    Verifies that enhanced_error_context wraps LogContext correctly
+    and enhances exceptions with operation and correlation ID metadata.
     """
 
-    @pytest.mark.xfail(
-        reason="Source bug: LogContext receives unsupported kwargs (operation, timestamp)",
-        raises=TypeError,
-        strict=True,
-    )
-    def test_no_exception_still_raises_due_to_logcontext_bug(self):
+    def test_no_exception_completes_cleanly(self):
+        """Context manager does not raise when body succeeds."""
         with enhanced_error_context("test_op"):
-            pass
+            pass  # Should complete without error
 
     def test_exception_is_enhanced_with_operation_and_correlation(self):
-        """Even though LogContext itself fails, the error enhancement still works
-        because the except block catches the TypeError and enhances it."""
-        with pytest.raises(TypeError) as exc_info:
+        """Exceptions raised inside are enhanced with operation context."""
+        with pytest.raises(ValueError) as exc_info:
             with enhanced_error_context("db_query"):
-                pass  # LogContext.__init__ will raise TypeError
+                raise ValueError("connection lost")
         msg = str(exc_info.value)
         assert "Operation: db_query" in msg
         assert "Correlation ID: op_" in msg
 
     def test_exception_chain_preserved(self):
-        with pytest.raises(TypeError) as exc_info:
+        """Original exception is preserved as __cause__."""
+        with pytest.raises(RuntimeError) as exc_info:
             with enhanced_error_context("parse"):
-                pass  # LogContext.__init__ will raise TypeError
+                raise RuntimeError("bad input")
         assert exc_info.value.__cause__ is not None
 
-    def test_additional_context_also_triggers_logcontext_bug(self):
-        """Even with explicit context dict, LogContext still receives invalid kwargs."""
-        with pytest.raises(TypeError) as exc_info:
-            with enhanced_error_context("op", context={"user": "admin"}):
-                pass
-        msg = str(exc_info.value)
-        assert "Operation: op" in msg
+    def test_additional_context_completes_cleanly(self):
+        """Context with extra dict does not raise when body succeeds."""
+        with enhanced_error_context("op", context={"user": "admin"}):
+            pass  # Should complete without error
 
 
 # ---------------------------------------------------------------------------

@@ -293,7 +293,8 @@ if BaseAgent is not None:
             """
             try:
                 return self.client.is_connected()
-            except Exception:
+            except Exception as e:
+                logger.warning("Antigravity connection test failed: %s", e)
                 return False
 
         def get_tool_registry(self) -> ToolRegistry:

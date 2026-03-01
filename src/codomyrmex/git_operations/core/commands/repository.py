@@ -34,7 +34,8 @@ def is_git_repository(path: str = None) -> bool:
             check=False,
         )
         return result.returncode == 0
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to check if %s is a git repository: %s", path, e)
         return False
 
 @mcp_tool()

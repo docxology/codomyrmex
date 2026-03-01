@@ -11,7 +11,6 @@ Demonstrates actual encryption capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -26,7 +25,6 @@ from codomyrmex.encryption import (
     encrypt,
     decrypt,
     generate_key,
-    Encryptor,
     KeyManager,
     encrypt_file,
     decrypt_file,

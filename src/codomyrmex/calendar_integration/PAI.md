@@ -11,20 +11,24 @@ The Calendar module provides calendar event management with provider abstraction
 ### Event Management
 
 ```python
-from codomyrmex.calendar import CalendarEvent, CalendarProvider
+from datetime import datetime, timedelta, timezone
+from codomyrmex.calendar_integration import CalendarEvent, GoogleCalendar
 
-# Create calendar events
+# Initialize provider (reads credentials from environment or token file)
+provider = GoogleCalendar.from_env()
+
+# Create a calendar event
 event = CalendarEvent(
-    title="Sprint Review",
-    start="2026-02-23T10:00:00",
-    end="2026-02-23T11:00:00",
+    summary="Sprint Review",
+    start_time=datetime(2026, 2, 23, 10, 0, tzinfo=timezone.utc),
+    end_time=datetime(2026, 2, 23, 11, 0, tzinfo=timezone.utc),
     description="Review sprint 25 deliverables"
 )
+created = provider.create_event(event)
 
-# Use a provider to manage events
-provider = CalendarProvider()
-provider.create_event(event)
-events = provider.list_events(date="2026-02-23")
+# List upcoming events
+now = datetime.now(timezone.utc)
+events = provider.list_events(time_min=now, time_max=now + timedelta(days=7))
 ```
 
 ## Key Exports
@@ -43,6 +47,18 @@ events = provider.list_events(date="2026-02-23")
 | **OBSERVE** | Query upcoming events and deadlines for context |
 | **PLAN** | Schedule tasks and milestones on the calendar |
 | **EXECUTE** | Create events for completed work items |
+
+## MCP Tools
+
+Five tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `calendar_list_events` | List calendar events within a date range | Safe | calendar_integration |
+| `calendar_create_event` | Create a new calendar event | Safe | calendar_integration |
+| `calendar_get_event` | Get details of a specific calendar event by ID | Safe | calendar_integration |
+| `calendar_delete_event` | Delete a calendar event by ID | Safe | calendar_integration |
+| `calendar_update_event` | Update an existing calendar event | Safe | calendar_integration |
 
 ## Architecture Role
 

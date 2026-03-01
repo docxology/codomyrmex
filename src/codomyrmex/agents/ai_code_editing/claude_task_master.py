@@ -779,7 +779,8 @@ class ClaudeTaskMaster:
         try:
             self._get_client()
             return True
-        except (ImportError, ValueError):
+        except (ImportError, ValueError) as e:
+            logger.warning("Claude Task Master unavailable: %s", e)
             return False
 
 

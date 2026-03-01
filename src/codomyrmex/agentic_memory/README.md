@@ -14,57 +14,52 @@ uv add codomyrmex
 
 ## Key Exports
 
-### Memory Operations
-
-| Export | Type | Purpose |
-|--------|------|---------|
-| `memory_get` | Function | Retrieve a stored memory by key |
-| `memory_put` | Function | Store a key-value memory entry |
-| `memory_search` | Function | Search memories by query pattern |
-| `memory_list` | Function | List all stored memory keys |
-
-### Storage Backends
-
-| Export | Type | Purpose |
-|--------|------|---------|
-| `InMemoryStore` | Class | Session-scoped in-memory storage |
-| `JSONFileStore` | Class | Persistent file-backed JSON storage |
-
-### Data Models
-
-| Export | Type | Purpose |
-|--------|------|---------|
-| `MemoryEntry` | Model | Individual memory record with metadata |
-| `MemoryQuery` | Model | Search query specification |
-| `UserProfile` | Class | User preference and behavior tracking |
+| Export | Type | Description |
+|--------|------|-------------|
+| `AgentMemory` | Class | Primary memory store for AI agents |
+| `ConversationMemory` | Class | Conversation history with sliding window |
+| `InMemoryStore` | Class | In-process volatile memory backend |
+| `JSONFileStore` | Class | JSON file-backed persistent memory |
+| `KnowledgeMemory` | Class | Semantic knowledge base with retrieval |
+| `Memory` | Class | Base memory abstraction |
+| `MemoryImportance` | Enum | Importance levels (LOW/MEDIUM/HIGH/CRITICAL) |
+| `MemoryType` | Enum | Memory categories (EPISODIC/SEMANTIC/PROCEDURAL/WORKING) |
+| `RetrievalResult` | Class | Memory retrieval result with relevance score |
+| `UserProfile` | Class | User-specific memory profile |
+| `VectorStoreMemory` | Class | Vector embedding-backed memory store |
 
 ## Quick Start
 
+> **MCP Tools vs Python API**: The MCP tools `memory_put`, `memory_get`, and `memory_search`
+> are exposed for AI agent use via the MCP bridge (see `mcp_tools.py`). For direct Python
+> usage, use the class-based API documented below: `AgentMemory`, `InMemoryStore`,
+> `JSONFileStore`, etc.
+
 ```python
-from codomyrmex.agentic_memory import memory_put, memory_get, memory_search, memory_list
+from codomyrmex.agentic_memory import AgentMemory, InMemoryStore
 
-# Store a learning
-memory_put(key="pattern_01", value={"type": "refactoring", "outcome": "success"})
+# Create an in-memory store
+store = InMemoryStore()
+memory = AgentMemory(store=store)
 
-# Retrieve
-entry = memory_get(key="pattern_01")
+# Store a memory
+memory.store("The user prefers concise responses", importance="high")
 
-# Search
-results = memory_search(query="refactoring", limit=10)
-
-# List all keys
-all_keys = memory_list()
+# Retrieve relevant memories
+results = memory.retrieve("user preferences", top_k=5)
+for result in results:
+    print(f"[{result.importance}] {result.content}")
 ```
 
 ### Using Storage Backends
 
 ```python
-from codomyrmex.agentic_memory.stores import InMemoryStore, JSONFileStore
+from codomyrmex.agentic_memory import InMemoryStore, JSONFileStore
 
-# Session-scoped memory
+# Session-scoped memory (volatile)
 session = InMemoryStore()
 
-# Persistent across sessions
+# Persistent across sessions (file-backed)
 persistent = JSONFileStore(path="~/.codomyrmex/memory/")
 ```
 
@@ -72,24 +67,26 @@ persistent = JSONFileStore(path="~/.codomyrmex/memory/")
 
 ```
 agentic_memory/
-├── __init__.py          # Public API (memory_get, memory_put, memory_search, memory_list)
-├── memory.py            # Core memory operations
-├── models.py            # MemoryEntry, MemoryQuery data models
+├── __init__.py          # Public API (AgentMemory, Memory, stores, enums)
+├── memory.py            # Core memory classes (AgentMemory, ConversationMemory, etc.)
+├── models.py            # Memory, MemoryType, MemoryImportance, RetrievalResult
 ├── stores.py            # InMemoryStore, JSONFileStore backends
 ├── user_profile.py      # UserProfile tracking
+├── mcp_tools.py         # MCP tool definitions (memory_put, memory_get, memory_search)
 └── tests/               # Unit tests (Zero-Mock policy)
 ```
 
 ## MCP Integration
 
-Three MCP tools are exposed:
+Three MCP tools are exposed via `mcp_tools.py` (auto-discovered by the MCP bridge):
 
-| Tool | MCP Name | Description |
-|------|----------|-------------|
-| `memory_put` | `store_memory` | Store key-value pair |
-| `memory_get` | `recall_memory` | Retrieve value by key |
-| `memory_list` | `list_memories` | List all stored keys |
+| MCP Tool | Description |
+|----------|-------------|
+| `memory_put` | Store a new memory entry with content, type, and importance |
+| `memory_get` | Retrieve a memory by its ID |
+| `memory_search` | Search memories by text query, returns ranked results |
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/agentic_memory/](../../../docs/modules/agentic_memory/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

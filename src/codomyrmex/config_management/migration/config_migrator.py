@@ -213,8 +213,8 @@ class ConfigMigrator:
                 return [(self.version_order[i], self.version_order[i-1])
                        for i in range(from_idx, to_idx, -1)]
 
-        except ValueError:
-            # Version not in order
+        except ValueError as e:
+            logger.warning("Version not found in migration order: %s", e)
             return []
 
     def validate_migration(self, config: dict[str, Any], target_version: str) -> bool:

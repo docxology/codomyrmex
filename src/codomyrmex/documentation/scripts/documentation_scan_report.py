@@ -309,7 +309,8 @@ class DocumentationScanner:
                     for term in term_group:
                         if term.lower() in content.lower():
                             term_usage[term].append(str(md_file.relative_to(self.repo_root)))
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to read markdown file %s: %s", md_file, e)
                 pass
 
         # Check for inconsistent usage
@@ -460,7 +461,8 @@ class DocumentationScanner:
                             'line': i,
                             'length': len(line)
                         })
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to read markdown file %s: %s", md_file, e)
                 pass
 
         return issues[:20]  # Limit results
@@ -480,7 +482,8 @@ class DocumentationScanner:
                         'file': str(md_file.relative_to(self.repo_root)),
                         'marker': 'TODO/FIXME'
                     })
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to read markdown file %s: %s", md_file, e)
                 pass
 
         return issues[:20]  # Limit results

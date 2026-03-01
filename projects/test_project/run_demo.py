@@ -19,11 +19,10 @@ import sys
 # Add src to path for local development
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.main import run_analysis, run_pipeline
-from src.analyzer import ProjectAnalyzer
+from src.main import run_analysis
 from src.visualizer import DataVisualizer
 from src.reporter import ReportGenerator, ReportConfig
-from src.pipeline import AnalysisPipeline, PipelineStatus
+from src.pipeline import AnalysisPipeline
 
 
 def print_header(text: str) -> None:

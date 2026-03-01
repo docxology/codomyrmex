@@ -4,12 +4,15 @@ Migration Models
 Data classes, enums, and transformers for data migration.
 """
 
+import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class MigrationStatus(Enum):
@@ -152,7 +155,8 @@ class FieldTypeTransformer(DataTransformer):
             if field_name in result:
                 try:
                     result[field_name] = target_type(result[field_name])
-                except (ValueError, TypeError):
+                except (ValueError, TypeError) as e:
+                    logger.warning("Failed to convert field %r to %s: %s", field_name, target_type, e)
                     pass
         return result
 

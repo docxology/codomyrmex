@@ -234,7 +234,7 @@ SKILL_DESCRIPTIONS: dict[str, str] = {
         "read settings, or update settings."
     ),
     "Codomyrmex": (
-        "Full-spectrum coding workspace skill providing 181 MCP tools across 32 modules. "
+        "Full-spectrum coding workspace skill providing 171 MCP tools across 33 modules. "
         "USE WHEN user says 'verify codomyrmex', 'codomyrmexVerify', 'audit codomyrmex', "
         "'trust codomyrmex', 'codomyrmexTrust', 'trust tools', 'enable destructive tools', "
         "'check pai status', 'codomyrmex tools', 'codomyrmex analyze', 'codomyrmex search', "

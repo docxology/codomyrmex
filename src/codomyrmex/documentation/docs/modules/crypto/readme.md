@@ -112,3 +112,9 @@ codomyrmex crypto:status       # Check submodule availability
 codomyrmex crypto:algorithms   # List supported algorithms
 codomyrmex crypto:hash         # Quick hash computation
 ```
+
+## Navigation
+
+- **Extended Docs**: [docs/modules/crypto/](../../../docs/modules/crypto/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README.md](../../../README.md)

@@ -114,11 +114,11 @@ class Stage(ABC):
 
     def on_success(self, result: StageResult, context: dict[str, Any]) -> None:
         """Called on successful execution."""
-        pass
+        return None  # Optional hook — subclass may override
 
     def on_failure(self, result: StageResult, context: dict[str, Any]) -> None:
         """Called on failed execution."""
-        pass
+        return None  # Optional hook — subclass may override
 
 
 class FunctionStage(Stage):

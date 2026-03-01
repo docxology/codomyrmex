@@ -15,8 +15,6 @@ from codomyrmex.logging_monitoring import get_logger
 # Optional import for data visualization
 try:
     from codomyrmex.data_visualization import (
-        BaseChartVisualizer,
-        BaseNetworkVisualizer,
         GitVisualizer,
         MermaidDiagramGenerator,
     )

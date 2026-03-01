@@ -33,6 +33,20 @@ LLM module providing language model integration, prompt management, and output h
 - **`LLMConfigPresets`** — Preset configurations for different use cases (creative, precise, balanced)
 - `get_config` / `set_config` / `reset_config` — Global configuration access
 
+### MCP Integration
+- **`MCPBridge`** — Bridge between Codomyrmex tools and the Model Context Protocol
+- **`MCPResource`** — MCP resource definition for exposing data to LLM clients
+- **`MCPPrompt`** — MCP prompt definition for structured prompt templates
+- **`convert_tool_to_mcp`** — Convert a Codomyrmex tool function into an MCP-compatible tool descriptor
+- **`create_mcp_bridge_from_registry`** — Create an MCPBridge instance from the tool registry
+
+### MCP Tools
+- **`ask`** — Ask a question to an LLM provider (default: OpenRouter free tier)
+
+### Consolidated Submodules
+- **`safety`** — Content safety filtering and PII detection
+- **`multimodal`** — Vision and audio AI model support
+
 ### Submodules
 - `providers` / `chains` / `memory` / `tools` / `guardrails` / `streaming` / `embeddings` / `rag` / `cost_tracking` / `prompts`
 

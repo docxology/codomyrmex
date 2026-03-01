@@ -18,10 +18,7 @@ from codomyrmex.skills.arscontexta.models import (
     DimensionSignal,
     KernelConfig,
     KernelLayer,
-    KernelPrimitive,
     PipelineStage,
-    StageResult,
-    VaultSpace,
 )
 
 

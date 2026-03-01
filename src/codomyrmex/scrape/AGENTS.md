@@ -13,6 +13,15 @@ Web scraping with browser automation and DOM extraction.
 - **DOMExtractor** — Extract from DOM
 - **RateLimiter** — Respect rate limits
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `scrape_extract_content` | Extract structured content (title, headings, links) from raw HTML | Safe |
+| `scrape_text_similarity` | Compute text similarity between two strings using Jaccard index | Safe |
+
 ## Agent Instructions
 
 1. **Respect robots.txt** — Check before scraping

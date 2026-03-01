@@ -132,7 +132,8 @@ class ReActAgent(BaseAgent):
         if len(parts) > 2:
             try:
                 kwargs = json.loads(parts[2])
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                logger.debug("Could not parse tool kwargs as JSON: %s", e)
                 pass
 
         try:
@@ -243,7 +244,8 @@ Final Answer: ...
         if args_str.startswith("{"):
             try:
                 return json.loads(args_str)
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
+                logger.debug("Action args not valid JSON, falling back to key=value parse: %s", e)
                 pass
 
         result: dict[str, Any] = {}

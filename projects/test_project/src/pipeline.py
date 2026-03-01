@@ -21,16 +21,13 @@ from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-import logging
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.events import get_event_bus, Event, EventType
-from codomyrmex.orchestrator import TaskStatus as OrchestratorTaskStatus
-from codomyrmex.performance import PerformanceProfiler, profile_function
+from codomyrmex.events import get_event_bus
+from codomyrmex.performance import PerformanceProfiler
 from codomyrmex.exceptions import (
     CodomyrmexError,
-    OrchestrationError,
     WorkflowError,
 )
 

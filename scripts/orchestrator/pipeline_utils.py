@@ -18,7 +18,6 @@ except ImportError:
 import argparse
 import json
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def load_pipeline(path: Path) -> dict:

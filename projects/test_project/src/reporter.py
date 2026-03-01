@@ -13,15 +13,13 @@ Example:
 """
 
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import json
-import logging
 
 # Real codomyrmex imports - no fallback for mega-seed project
 from codomyrmex.logging_monitoring import get_logger
-from codomyrmex.serialization import serialize, SerializationFormat
 
 HAS_CODOMYRMEX_LOGGING = True  # Exported for integration tests
 

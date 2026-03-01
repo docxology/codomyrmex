@@ -2,7 +2,7 @@
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
-The `calendar` module provides a unified, generic interface for integrating with various calendar providers, with an initial focus on Google Calendar (`gcal`). It adheres strictly to the Codomyrmex Zero-Mock policy, ensuring reliable and verifiable interactions with real calendar APIs.
+The `calendar_integration` module provides a unified, generic interface for integrating with various calendar providers, with an initial focus on Google Calendar (`gcal`). It adheres strictly to the Codomyrmex Zero-Mock policy, ensuring reliable and verifiable interactions with real calendar APIs.
 
 ## Features
 
@@ -24,10 +24,10 @@ This will install packages such as `google-api-python-client`, `google-auth-http
 
 ```python
 from datetime import datetime, timedelta, timezone
-from codomyrmex.calendar import GoogleCalendar, CalendarEvent
+from codomyrmex.calendar_integration import GoogleCalendar, CalendarEvent
 
-# Initialize the provider (requires valid credentials)
-provider = GoogleCalendar(credentials=my_google_credentials)
+# Initialize the provider from environment credentials
+provider = GoogleCalendar.from_env()  # reads GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET
 
 # List events in the next week
 now = datetime.now(timezone.utc)
@@ -52,8 +52,8 @@ print(f"Created event ID: {created_event.id}")
 
 - `exceptions.py`: Custom exceptions for calendar operations.
 - `generics.py`: Standard interfaces (`CalendarProvider`, `CalendarEvent`).
-- `gcal.py`: The `GoogleCalendar` implementation.
-- `mcp_tools.py`: Exposes `GoogleCalendar` operations as MCP Tools (list, create, get, update, delete) for agentic scheduling. Incorporates automatic bidirectional sync (injecting `danielarifriedman@gmail.com` as an attendee) directly.
+- `gcal/provider.py`: The `GoogleCalendar` implementation.
+- `mcp_tools.py`: Exposes `GoogleCalendar` operations as MCP Tools (list, create, get, update, delete) for agentic scheduling. Automatically injects `FristonBlanket@gmail.com` (or `CODOMYRMEX_CALENDAR_ATTENDEE` env var) as an attendee on every create/update.
 
 For detailed technical specifications, see [SPEC.md](./SPEC.md). For agent instructions on how to use this module, see [AGENTS.md](./AGENTS.md).
 
@@ -73,6 +73,7 @@ Google Calendar authentication is handled through the PAI dashboard OAuth flow. 
 | `GOOGLE_CLIENT_SECRET` | Same credential entry as above |
 
 **Google Cloud Console setup:**
+
 - Enable the **Google Calendar API** for your project.
 - Create an OAuth 2.0 credential with application type **Desktop app**.
 - Add the scope: `https://www.googleapis.com/auth/calendar`
@@ -90,7 +91,7 @@ These tools are auto-discovered and exposed via the Codomyrmex MCP bridge. Agent
 | `calendar_update_event` | `event_id`, `summary`, `start_time`, `end_time`, `description`, `location`, `attendees` | Replace all event fields (PUT semantics — all fields overwritten) |
 | `calendar_delete_event` | `event_id` | Permanently delete an event |
 
-**Attendee injection:** `calendar_create_event` and `calendar_update_event` always add `danielarifriedman@gmail.com` to the attendees list. This cannot be suppressed.
+**Attendee injection:** `calendar_create_event` and `calendar_update_event` always add `FristonBlanket@gmail.com` to the attendees list. This cannot be suppressed.
 
 **Datetime format:** All `start_time` / `end_time` parameters must be ISO 8601 strings, e.g. `"2026-02-24T10:00:00Z"` or `"2026-02-24T10:00:00-08:00"`.
 
@@ -99,15 +100,15 @@ These tools are auto-discovered and exposed via the Codomyrmex MCP bridge. Agent
 Catch calendar-specific exceptions when using the provider directly:
 
 ```python
-from codomyrmex.calendar import GoogleCalendar, CalendarEvent
-from codomyrmex.calendar.exceptions import (
+from codomyrmex.calendar_integration import GoogleCalendar, CalendarEvent
+from codomyrmex.calendar_integration.exceptions import (
     CalendarAuthError,
     EventNotFoundError,
     CalendarAPIError,
 )
 
 try:
-    provider = GoogleCalendar(credentials=creds)
+    provider = GoogleCalendar.from_env()
     event = provider.get_event("some_event_id")
 except CalendarAuthError as e:
     # Invalid or expired credentials — re-authenticate via PAI dashboard
@@ -129,3 +130,9 @@ if result["status"] == "error":
 else:
     event = result["event"]
 ```
+
+## Navigation
+
+- **Extended Docs**: [docs/modules/calendar_integration/](../../../docs/modules/calendar_integration/)
+- **Parent Directory**: [codomyrmex](../README.md)
+- **Project Root**: [README.md](../../../README.md)

@@ -21,7 +21,7 @@ import sys
 import time
 import threading
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Add project root to path
@@ -96,9 +96,6 @@ class ConcurrencyScript(ScriptBase):
             return results
 
         # Import concurrency module (after dry_run check)
-        from codomyrmex.concurrency import (
-            LocalLock, LocalSemaphore, LockManager, ReadWriteLock
-        )
 
         # Test 1: LocalLock
         self.log_info("\n1. Testing LocalLock - File-based mutex")

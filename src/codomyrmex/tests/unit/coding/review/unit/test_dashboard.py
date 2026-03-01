@@ -10,8 +10,6 @@ and real CodeReviewer instances.
 
 from __future__ import annotations
 
-import importlib.util
-import os
 from pathlib import Path
 from typing import Any
 
@@ -19,13 +17,10 @@ import pytest
 
 from codomyrmex.coding.review.reviewer_impl.dashboard import DashboardMixin
 from codomyrmex.coding.review.models import (
-    AnalysisResult,
     ArchitectureViolation,
-    CodeMetrics,
     ComplexityReductionSuggestion,
     DeadCodeFinding,
     QualityDashboard,
-    SeverityLevel,
 )
 
 

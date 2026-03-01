@@ -94,7 +94,8 @@ class DependencyResolver:
                 DependencyInfo(name=p["name"], version=p["version"])
                 for p in packages
             ]
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError) as e:
+            logger.warning("Failed to list installed packages: %s", e)
             return []
 
     def suggest_resolution(self, conflicts: list[Conflict]) -> list[str]:
@@ -243,7 +244,8 @@ class DependencyResolver:
                 }
                 for p in packages
             ]
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError) as e:
+            logger.warning("Failed to find outdated packages: %s", e)
             return []
 
     def full_audit(self, pyproject_path: Path | None = None) -> dict[str, Any]:

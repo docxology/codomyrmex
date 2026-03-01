@@ -65,6 +65,16 @@ report = reporter.generate()
 assert 0 <= report.health_score <= 100
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `health_check` | Run a health check on the system or a specific module | Safe |
+| `list_modules` | List all registered modules and their availability | Safe |
+| `dependency_tree` | Show the dependency tree for a specific module | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

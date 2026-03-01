@@ -4,8 +4,11 @@ Alert Manager
 Alert rule management and notification for observability.
 """
 
+import logging
 import threading
 from collections.abc import Callable
+
+logger = logging.getLogger(__name__)
 
 from .models import Alert, AlertSeverity
 
@@ -70,7 +73,8 @@ class AlertManager:
                 else:
                     if rule_name in self._alerts and self._alerts[rule_name].is_active:
                         self._alerts[rule_name].resolve()
-            except Exception:
+            except Exception as e:
+                logger.warning("Alert rule evaluation failed for %s: %s", rule_name, e)
                 pass
 
         return new_alerts

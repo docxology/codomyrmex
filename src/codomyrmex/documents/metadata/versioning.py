@@ -27,7 +27,8 @@ def get_document_version(file_path: str | Path) -> str | None:
         from .extractor import extract_metadata
         metadata = extract_metadata(file_path)
         return metadata.get("version")
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to get document version for %s: %s", file_path, e)
         return None
 
 

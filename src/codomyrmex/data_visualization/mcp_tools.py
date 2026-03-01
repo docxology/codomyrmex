@@ -47,11 +47,21 @@ def generate_chart(
             # Fallback for dynamic unpacking based on the provided dictionary
             result = factory(**data)
 
-        return {
+        response: dict = {
             "status": "success",
             "rendered": True,
-            "chart_type": chart_type
+            "chart_type": chart_type,
+            "chart": result,
         }
+
+        if output_path and result is not None:
+            import os
+            os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(str(result))
+            response["output_path"] = output_path
+
+        return response
     except Exception as e:
         return {"status": "error", "message": str(e)}
 

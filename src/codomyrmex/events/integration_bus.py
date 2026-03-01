@@ -76,7 +76,8 @@ class IntegrationBus:
         for handler in self._handlers.get("*", []):
             try:
                 handler(event)
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                logger.warning("Wildcard handler error for topic '%s': %s", topic, e)
                 pass
 
         return event

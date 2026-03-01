@@ -150,7 +150,8 @@ class FPFSpec(BaseModel):
         if isinstance(v, str):
             try:
                 return datetime.fromisoformat(v)
-            except ValueError:
+            except ValueError as e:
+                logger.warning("Failed to parse last_updated date '%s': %s", v, e)
                 return None
         return v
     source_url: str | None = Field(None, description="Source URL or path")

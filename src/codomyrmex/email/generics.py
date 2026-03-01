@@ -43,29 +43,29 @@ class EmailProvider(abc.ABC):
     @abc.abstractmethod
     def list_messages(self, query: str = "", max_results: int = 100) -> list[EmailMessage]:
         """List messages matching the generic query."""
-        pass
+        ...
 
     @abc.abstractmethod
     def get_message(self, message_id: str) -> EmailMessage:
         """Fetch a specific message by its ID."""
-        pass
+        ...
 
     @abc.abstractmethod
     def send_message(self, draft: EmailDraft) -> EmailMessage:
         """Send a new email immediately."""
-        pass
+        ...
 
     @abc.abstractmethod
     def create_draft(self, draft: EmailDraft) -> str:
         """Create a new draft and return its ID."""
-        pass
+        ...
 
     @abc.abstractmethod
     def delete_message(self, message_id: str) -> None:
         """Delete an email message."""
-        pass
+        ...
 
     @abc.abstractmethod
     def modify_labels(self, message_id: str, add_labels: list[str], remove_labels: list[str]) -> None:
         """Add or remove labels from a message."""
-        pass
+        ...

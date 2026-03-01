@@ -143,4 +143,5 @@ No external (pip) dependencies are required.
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/networks/](../../../docs/modules/networks/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

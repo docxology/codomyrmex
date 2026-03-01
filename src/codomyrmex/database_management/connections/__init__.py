@@ -6,6 +6,7 @@ Connection pooling, health checks, and connection management.
 
 __version__ = "0.1.0"
 
+import logging
 import queue
 import threading
 import time
@@ -16,6 +17,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, Generic, List, Optional, TypeVar
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar('T')
 
@@ -236,7 +239,8 @@ class ConnectionPool(Generic[T]):
         # Check validity
         try:
             return conn.is_valid()
-        except Exception:
+        except Exception as e:
+            logger.warning("Connection validity check failed: %s", e)
             return False
 
     def acquire(self, timeout: float | None = None) -> Connection[T]:
@@ -314,7 +318,8 @@ class ConnectionPool(Generic[T]):
         """Remove a connection from the pool."""
         try:
             conn.close()
-        except Exception:
+        except Exception as e:
+            logger.debug("Error closing connection during removal: %s", e)
             pass
 
         with self._lock:
@@ -355,7 +360,8 @@ class ConnectionPool(Generic[T]):
             for conn in self._all_connections:
                 try:
                     conn.close()
-                except Exception:
+                except Exception as e:
+                    logger.debug("Error closing connection during pool shutdown: %s", e)
                     pass
             self._all_connections.clear()
 
@@ -363,7 +369,8 @@ class ConnectionPool(Generic[T]):
         try:
             while True:
                 self._pool.get_nowait()
-        except queue.Empty:
+        except queue.Empty as e:
+            logger.debug("Connection pool queue drained: %s", e)
             pass
 
 

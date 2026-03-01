@@ -9,6 +9,8 @@ import ast
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+import logging
+logger = logging.getLogger(__name__)
 
 
 class ComplexityLevel(Enum):
@@ -93,7 +95,8 @@ def calculate_cyclomatic_complexity(code: str) -> int:
     """
     try:
         tree = ast.parse(code)
-    except SyntaxError:
+    except SyntaxError as e:
+        logger.debug("Cannot compute complexity, invalid syntax: %s", e)
         return 1
 
     complexity = 1

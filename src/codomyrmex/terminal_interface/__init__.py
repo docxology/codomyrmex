@@ -6,13 +6,18 @@ exploring and interacting with the Codomyrmex ecosystem in engaging,
 accessible ways.
 """
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 # Submodule exports - import first
 from . import commands, completions, rendering, shells
 
 # Try optional submodules
 try:
     from . import utils
-except ImportError:
+except ImportError as e:
+    logger.debug("Optional terminal_interface submodule 'utils' not available: %s", e)
     pass
 
 # Try to import from existing modules, but don't fail if they don't exist

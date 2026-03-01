@@ -946,7 +946,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                     collector.record("tool_count",
                                     float(len(tools_data.get("tools", []))),
                                     metric_type=MetricType.GAUGE)
-                except Exception:
+                except Exception as e:
+                    logger.debug("Failed to record tool_count metric: %s", e)
                     pass
 
             # Build latest_values dict for the frontend
@@ -996,7 +997,8 @@ class WebsiteServer(http.server.SimpleHTTPRequestHandler):
                                     float(len(tools_data.get("tools", []))),
                                     metric_type=MetricType.GAUGE)
                     seeded.append("tool_count")
-                except Exception:
+                except Exception as e:
+                    logger.debug("Failed to seed tool_count metric: %s", e)
                     pass
 
                 # Additional useful metrics

@@ -20,49 +20,50 @@ uv sync
 
 ## Key Exports
 
-### Core Functions
+All exports below are available directly from `codomyrmex.data_visualization`:
 
-- **`get_available_styles()`** -- Return list of available chart style names from the `ChartStyle` enum
-- **`get_available_palettes()`** -- Return list of available color palette names from the `ColorPalette` enum
-- **`get_available_plot_types()`** -- Return list of supported plot type names from the `PlotType` enum
-- **`create_heatmap()`** -- Generate a heatmap visualization from matrix data
-- **`create_box_plot()`** -- Generate a box plot for statistical distribution display
-- **`create_area_chart()`** -- Generate a filled area chart
+| Export | Type | Description |
+|--------|------|-------------|
+| `Theme` | Class | Theme configuration for visual styling |
+| `DEFAULT_THEME` | Instance | Pre-built light theme instance |
+| `DARK_THEME` | Instance | Pre-built dark theme instance |
+| `Dashboard` | Class | HTML dashboard container |
+| `Card` | Class | Dashboard card component |
+| `Table` | Class | Data table component |
+| `Grid` | Class | Layout grid for dashboard sections |
+| `Section` | Class | Named dashboard section |
+| `render_html` | Function | Render component to HTML string |
+| `generate_report` | Function | Generate and save typed HTML report |
+| `Report` | Class | Base report class |
+| `GeneralSystemReport` | Class | System overview report |
+| `FinanceReport` | Class | Financial metrics report |
+| `MarketingReport` | Class | Marketing analytics report |
+| `LogisticsReport` | Class | Logistics operations report |
+| `create_bar_chart` | Function | Create bar chart from data dict |
+| `create_line_plot` | Function | Create line plot from data |
+| `create_scatter_plot` | Function | Create scatter plot from data |
+| `create_area_chart` | Function | Create area chart from data |
+| `create_heatmap` | Function | Create heatmap from matrix data |
+| `create_histogram` | Function | Create histogram from value list |
+| `create_pie_chart` | Function | Create pie chart from category data |
+| `create_box_plot` | Function | Create box plot from distribution data |
+| `AreaChart` | Class | Area chart component |
+| `BarChart` / `BarPlot` | Class | Bar chart component (BarPlot is alias) |
+| `BoxPlot` | Class | Box plot component |
+| `Heatmap` | Class | Heatmap component |
+| `Histogram` | Class | Histogram component |
+| `LinePlot` | Class | Line plot component |
+| `PieChart` | Class | Pie chart component |
+| `ScatterPlot` | Class | Scatter plot component |
+| `MermaidDiagram` | Class | Mermaid diagram generator |
 
 ### Submodules
 
-- **`themes`** -- Chart theming and style configuration
-- **`mermaid`** -- Mermaid diagram generation for flowcharts, sequences, and Git diagrams
-- **`charts`** -- Individual chart type implementations (bar, line, scatter, histogram, pie, heatmap, box, area)
-
-### Advanced Plotter (when matplotlib available)
-
-- **`AdvancedPlotter`** -- Full-featured plotting engine with multi-panel dashboard support
-- **`ChartStyle`** -- Enum of chart styles (DEFAULT, MINIMAL, MODERN, CLASSIC, DARK)
-- **`ColorPalette`** -- Enum of color palettes (DEFAULT, VIRIDIS, PLASMA, CIVIDIS, RAINBOW)
-- **`PlotType`** -- Enum of plot types (LINE, BAR, SCATTER, HISTOGRAM, PIE)
-- **`PlotConfig` / `DataPoint` / `Dataset`** -- Configuration and data structures for the plotter
-- **`create_line_plot()` / `create_scatter_plot()` / `create_bar_chart()` / `create_histogram()`** -- Convenience functions for common chart types
-- **`create_dashboard()`** -- Generate a multi-chart dashboard layout
-
-### Basic Charts (fallback when advanced plotter unavailable)
-
-- **`LinePlot` / `ScatterPlot` / `BarChart` / `Histogram` / `PieChart`** -- Individual chart classes
-- **`create_pie_chart()`** -- Generate a pie chart
-
-### Git Visualization (optional)
-
-- **`GitVisualizer`** -- Visualize Git repository structure and history
-- **`create_git_tree_mermaid()` / `create_git_tree_png()`** -- Render Git trees as Mermaid or PNG
-- **`visualize_git_repository()`** -- Full repository visualization
-
-### Mermaid Generation (optional)
-
-- **`MermaidDiagramGenerator`** -- Generate various Mermaid diagram types
-- **`create_git_branch_diagram()`** -- Branch topology as Mermaid
-- **`create_commit_timeline_diagram()`** -- Commit history timeline
-- **`create_git_workflow_diagram()`** -- Git workflow as Mermaid
-- **`create_repository_structure_diagram()`** -- Directory structure as Mermaid
+- **`charts/`** -- Individual chart type implementations (bar, line, scatter, histogram, pie, heatmap, box, area)
+- **`themes/`** -- Chart theming and style configuration
+- **`mermaid/`** -- Mermaid diagram generation for flowcharts, sequences, and Git diagrams
+- **`engines/`** -- Advanced matplotlib-based plotting engine (see [Advanced API](#advanced-api) below)
+- **`git/`** -- Git repository visualization
 
 ## Directory Contents
 
@@ -76,10 +77,38 @@ uv sync
 ## Quick Start
 
 ```python
-from codomyrmex.data_visualization import get_available_styles, get_available_palettes, get_available_plot_types
+from codomyrmex.data_visualization import create_bar_chart, Dashboard, Theme, DEFAULT_THEME
 
-result = get_available_styles()
+# Create a simple bar chart
+chart_html = create_bar_chart(
+    {"categories": ["Q1", "Q2", "Q3", "Q4"], "values": [100, 150, 120, 180]},
+    title="Quarterly Revenue"
+)
+
+# Build a dashboard
+dashboard = Dashboard(title="My Dashboard", theme=DEFAULT_THEME)
+dashboard.render(output_path="report.html")
 ```
+
+```python
+from codomyrmex.data_visualization import generate_report
+
+# Generate a typed HTML report to disk
+path = generate_report(output_dir="./reports", report_type="finance")
+```
+
+## Advanced API
+
+For programmatic chart creation with matplotlib, use the `AdvancedPlotter` directly:
+
+```python
+from codomyrmex.data_visualization.engines.advanced_plotter import AdvancedPlotter
+```
+
+This provides `AdvancedPlotter`, `ChartStyle`, `ColorPalette`, `PlotType`, `PlotConfig`, `DataPoint`,
+`Dataset`, `get_available_styles()`, and `create_dashboard()` for matplotlib-based workflows.
+These are **not** re-exported from the top-level package and require the explicit submodule import
+shown above.
 
 ## Testing
 

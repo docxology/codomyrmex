@@ -7,7 +7,6 @@ convenience functions, and edge cases.
 
 import importlib.util
 import os
-import tempfile
 
 import pytest
 
@@ -842,9 +841,6 @@ class TestImportFallbacks:
         names regardless of whether the real performance module loaded).
         """
         # The module-level PERFORMANCE_MONITORING_AVAILABLE flag tells us
-        from codomyrmex.data_visualization.engines.advanced_plotter import (
-            PERFORMANCE_MONITORING_AVAILABLE,
-        )
         # Regardless of whether real or fallback, the decorator should work
         # Just verify the plotter works (decorator applied to all methods)
         cfg = PlotConfig(show_plot=False)

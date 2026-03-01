@@ -66,12 +66,18 @@ class CodeEditor(BaseAgent):
     def setup(self) -> None:
         """Setup Code Editor."""
         # Could check if optional deps (anthropic, openai) are installed
-        pass
+        return None  # Optional setup hook — subclass may override
 
     def test_connection(self) -> bool:
-        """Test if underlying helpers working."""
-        # Simple check if modules imported
-        return True
+        """Test if underlying helpers are working by calling a real helper function."""
+        try:
+            # CodeLanguage is a lightweight enum import — verifies the module loads correctly
+            from codomyrmex.agents.ai_code_editing.ai_code_helpers.models import CodeLanguage
+            _ = list(CodeLanguage)
+            return True
+        except Exception as e:
+            logger.warning("Code editor connection test failed: %s", e)
+            return False
 
     # First-class methods
     def generate_code(self, prompt: str, context: str | None = None) -> str:

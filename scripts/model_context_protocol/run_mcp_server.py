@@ -29,13 +29,11 @@ except ImportError:
 import argparse
 import asyncio
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 from codomyrmex.model_context_protocol import MCPServer, MCPServerConfig
 from codomyrmex.model_context_protocol.discovery import (
     DiscoveredTool,
-    SpecificationScanner,
-    ToolCatalog,
     discover_tools,
 )
 from codomyrmex.model_context_protocol import tools as mcp_tools

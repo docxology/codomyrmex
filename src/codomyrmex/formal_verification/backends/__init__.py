@@ -5,7 +5,11 @@ multi-backend architecture. Z3 is the primary backend; others can be
 added by subclassing SolverBackend.
 """
 
+import logging
+
 from .base import SolverBackend, SolverResult, SolverStatus
+
+logger = logging.getLogger(__name__)
 
 __all__ = ["SolverBackend", "SolverResult", "SolverStatus"]
 
@@ -13,5 +17,6 @@ __all__ = ["SolverBackend", "SolverResult", "SolverStatus"]
 try:
     from .z3_backend import Z3Backend
     __all__.append("Z3Backend")
-except ImportError:
+except ImportError as e:
+    logger.debug("Z3 backend not available (z3-solver not installed): %s", e)
     pass

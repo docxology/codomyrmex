@@ -57,7 +57,7 @@ except ImportError:
         """Functional component: performance_context."""
         def __init__(self, *args, **kwargs):
             """Execute   Init   operations natively."""
-            pass
+            return None  # Intentional no-op
 
         def __enter__(self):
             """Execute   Enter   operations natively."""
@@ -65,7 +65,7 @@ except ImportError:
 
         def __exit__(self, *args):
             """Execute   Exit   operations natively."""
-            pass
+            return None  # Intentional no-op
 
 
 # Enums for analysis types and severity levels
@@ -957,7 +957,8 @@ class StaticAnalyzer:
                     complexity += len(node.values) - 1
 
             return complexity
-        except SyntaxError:
+        except SyntaxError as e:
+            logger.debug("Cannot compute complexity for file with syntax error: %s", e)
             return 1
 
     def _calculate_code_duplication(self, content: str) -> float:

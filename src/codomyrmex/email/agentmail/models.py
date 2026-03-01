@@ -164,7 +164,8 @@ def _sdk_message_to_email_message(msg: Any, inbox_id: str | None = None) -> Emai
     elif isinstance(date_raw, (int, float)):
         date = datetime.fromtimestamp(date_raw)
     else:
-        date = datetime.utcnow()
+        from datetime import timezone as _tz
+        date = datetime.now(_tz.utc)
 
     return EmailMessage(
         id=message_id,

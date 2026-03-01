@@ -1,9 +1,9 @@
 """Agents Module for Codomyrmex.
 
-This module provides integration with 12 agentic frameworks:
+This module provides integration with 13 agentic frameworks:
 
 - **API-based**: Claude, Codex, O1, DeepSeek, Qwen (extend ``APIAgentBase``)
-- **CLI-based**: Jules, OpenCode, OpenClaw, Gemini, Mistral Vibe, Every Code (extend ``CLIAgentBase``)
+- **CLI-based**: Jules, OpenCode, OpenClaw, Gemini, Mistral Vibe, Every Code, agenticSeek (extend ``CLIAgentBase``)
 - **Local**: Ollama (via ``llm/ollama/``)
 
 Integration:
@@ -199,6 +199,11 @@ try:
 except ImportError:
     GitAgent = None
 
+try:
+    from .agentic_seek import AgenticSeekClient
+except ImportError:
+    AgenticSeekClient = None
+
 def cli_commands():
     """Return CLI commands for the agents module."""
     def _list_agents():
@@ -216,6 +221,7 @@ def cli_commands():
             "o1": O1Client,
             "deepseek": DeepSeekClient,
             "qwen": QwenClient,
+            "agentic_seek": AgenticSeekClient,
         }
         for name, client in provider_map.items():
             status = "available" if client is not None else "not installed"
@@ -297,6 +303,8 @@ __all__ = [
     "InfrastructureAgent",
     # Agent setup
     "AgentRegistry",
+    # agenticSeek (lazy-loaded)
+    "AgenticSeekClient",
 ]
 
 __version__ = "0.2.0"

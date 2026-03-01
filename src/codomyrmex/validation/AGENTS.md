@@ -72,6 +72,16 @@ errors = validator.validate(
 assert len(errors) == 0
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `validate_schema` | Validate data against a JSON Schema | Safe |
+| `validate_config` | Validate a configuration dictionary against common patterns | Safe |
+| `validation_summary` | Get a summary of validation operations performed in this session | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

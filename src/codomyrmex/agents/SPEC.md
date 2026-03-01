@@ -43,7 +43,7 @@ The `agents` module provides integration with various agentic frameworks includi
 
 ### Testing
 
-- **Unit Tests**: 129 zero-mock tests in `tests/unit/agents/`
+- **Unit Tests**: Comprehensive zero-mock test suite in `tests/unit/agents/` (1300+ tests across 69 files)
 - **Integration Tests**: Test integration with Codomyrmex modules
 - **End-to-End Tests**: Test complete agent workflows
 - **Policy**: All tests use real objects, no mocking (zero-mock policy)
@@ -136,7 +136,7 @@ graph TD
 ### Core Capabilities
 
 1. **Agent Framework Integration**: Integrate with multiple agent frameworks:
-   - CLI-based: Jules, Gemini, OpenCode, OpenClaw, Mistral Vibe, Every Code
+   - CLI-based: Jules, Gemini, OpenCode, OpenClaw, Mistral Vibe, Every Code (OpenClaw via `agents/openclaw/`)
    - API-based: Claude, Codex, O1, DeepSeek, Qwen
    - Local: Ollama
 2. **Unified Interface**: Provide consistent interface across all agent frameworks

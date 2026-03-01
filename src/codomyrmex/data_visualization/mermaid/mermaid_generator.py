@@ -92,7 +92,7 @@ class MermaidDiagramGenerator:
 
     def create_git_workflow_diagram(
         self,
-        workflow_steps: list[dict[str, Any]],
+        workflow_steps: list[dict[str, Any]] | None = None,
         title: str = "Git Workflow",
         output_path: str = None,
     ) -> str:

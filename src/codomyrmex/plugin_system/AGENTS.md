@@ -47,6 +47,15 @@ if plugin:
         plugin.deactivate()
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `plugin_scan_entry_points` | Scan for installed plugins via Python package entry points | `entry_point_group` (default "codomyrmex.plugins") | Safe |
+| `plugin_resolve_dependencies` | Resolve plugin dependencies and produce a topological load order | `plugins` (list of dicts with name and dependencies) | Safe |
+
 ## Testing Patterns
 
 ```python

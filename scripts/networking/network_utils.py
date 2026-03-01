@@ -20,7 +20,6 @@ import socket
 import urllib.request
 import urllib.error
 import time
-import json
 
 
 def check_port(host: str, port: int, timeout: float = 2) -> bool:

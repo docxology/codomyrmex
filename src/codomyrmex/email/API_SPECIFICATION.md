@@ -73,7 +73,7 @@ from codomyrmex.email import EmailProvider, EmailDraft, EmailMessage, GMAIL_AVAI
 
 if GMAIL_AVAILABLE:
     from codomyrmex.email import GmailProvider
-    provider: EmailProvider = GmailProvider()
+    provider: EmailProvider = GmailProvider.from_env()
 
     # List recent messages
     messages = provider.list_messages(query="is:unread", max_results=10)

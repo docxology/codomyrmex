@@ -458,8 +458,8 @@ class MetricsMixin:
                     # Limit traversal depth
                     if len(root.split(os.sep)) - len(str(self.project_root).split(os.sep)) > 5:
                         break
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Error during code quality pattern scan: %s", e)
 
             # Normalize penalty based on codebase size
             if files_analyzed > 0:

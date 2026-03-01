@@ -39,11 +39,11 @@ from codomyrmex.config_management import core, deployment, monitoring
 
 Three MCP tools available:
 
-| Tool | Description |
-|------|-------------|
-| `config_get` | Read a configuration value |
-| `config_set` | Write a configuration value |
-| `config_validate` | Validate configuration against schema |
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `get_config` | Read a configuration value by key | Safe |
+| `set_config` | Write a configuration value by key | Safe |
+| `validate_config` | Validate configuration against schema | Safe |
 
 ## Architecture Role
 

@@ -9,9 +9,12 @@ Provides:
 
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from .models import EdgeExecutionError, EdgeFunction, EdgeNode
 
@@ -126,7 +129,8 @@ class EdgeRuntime:
             return False
         try:
             func.handler()
-        except Exception:
+        except Exception as e:
+            logger.warning("Pre-warm failed for function '%s': %s", function_id, e)
             pass
         self._warm_functions.add(function_id)
         return True

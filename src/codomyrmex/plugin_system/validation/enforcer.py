@@ -126,7 +126,8 @@ class InterfaceEnforcer:
                             f"{name}: expected {len(iface_params)} args, got {len(plugin_params)}"
                         )
                         result.notes.append(f"Signature mismatch on {name}")
-                except (ValueError, TypeError):
+                except (ValueError, TypeError) as e:
+                    logger.debug("Could not compare signatures for %s: %s", name, e)
                     pass
 
         return result

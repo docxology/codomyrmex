@@ -153,7 +153,8 @@ class SensorManager:
         if sensor_key in self._callbacks:
             try:
                 self._callbacks[sensor_key].remove(callback)
-            except ValueError:
+            except ValueError as e:
+                logger.debug("Callback not found during unsubscribe for %s: %s", sensor_key, e)
                 pass
 
     def get_device_status(self, device_id: str) -> DeviceStatus | None:

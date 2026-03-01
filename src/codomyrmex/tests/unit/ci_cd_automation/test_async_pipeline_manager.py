@@ -12,7 +12,6 @@ catch blocks without any stubs.
 
 import json
 import os
-import tempfile
 from datetime import datetime, timezone
 
 import pytest
@@ -180,29 +179,47 @@ class TestAsyncPipelineManagerInit:
         assert mgr.workspace_dir == ws
         assert os.path.isdir(ws)
 
-    def test_default_base_url_without_env(self, tmp_path, monkeypatch):
+    def test_default_base_url_without_env(self, tmp_path):
         """Without CI_CD_API_URL env var, defaults to github.com."""
-        monkeypatch.delenv("CI_CD_API_URL", raising=False)
-        mgr = _make_manager(tmp_path, base_url=None)
-        # When base_url=None AND env var missing, falls through to default
-        # We passed base_url=None so re-create properly:
-        ws = str(tmp_path / "ws2")
-        mgr2 = AsyncPipelineManager(workspace_dir=ws)
-        assert "github.com" in mgr2.base_url
+        original = os.environ.get("CI_CD_API_URL")
+        try:
+            os.environ.pop("CI_CD_API_URL", None)
+            ws = str(tmp_path / "ws2")
+            mgr2 = AsyncPipelineManager(workspace_dir=ws)
+            assert "github.com" in mgr2.base_url
+        finally:
+            if original is None:
+                os.environ.pop("CI_CD_API_URL", None)
+            else:
+                os.environ["CI_CD_API_URL"] = original
 
-    def test_base_url_from_env(self, tmp_path, monkeypatch):
+    def test_base_url_from_env(self, tmp_path):
         """CI_CD_API_URL env var is respected when no explicit base_url."""
-        monkeypatch.setenv("CI_CD_API_URL", "https://env.example.com")
-        ws = str(tmp_path / "ws3")
-        mgr = AsyncPipelineManager(workspace_dir=ws)
-        assert mgr.base_url == "https://env.example.com"
+        original = os.environ.get("CI_CD_API_URL")
+        try:
+            os.environ["CI_CD_API_URL"] = "https://env.example.com"
+            ws = str(tmp_path / "ws3")
+            mgr = AsyncPipelineManager(workspace_dir=ws)
+            assert mgr.base_url == "https://env.example.com"
+        finally:
+            if original is None:
+                os.environ.pop("CI_CD_API_URL", None)
+            else:
+                os.environ["CI_CD_API_URL"] = original
 
-    def test_api_token_from_env(self, tmp_path, monkeypatch):
+    def test_api_token_from_env(self, tmp_path):
         """CI_CD_API_TOKEN env var is picked up."""
-        monkeypatch.setenv("CI_CD_API_TOKEN", "env-token-123")
-        ws = str(tmp_path / "ws4")
-        mgr = AsyncPipelineManager(workspace_dir=ws)
-        assert mgr.api_token == "env-token-123"
+        original = os.environ.get("CI_CD_API_TOKEN")
+        try:
+            os.environ["CI_CD_API_TOKEN"] = "env-token-123"
+            ws = str(tmp_path / "ws4")
+            mgr = AsyncPipelineManager(workspace_dir=ws)
+            assert mgr.api_token == "env-token-123"
+        finally:
+            if original is None:
+                os.environ.pop("CI_CD_API_TOKEN", None)
+            else:
+                os.environ["CI_CD_API_TOKEN"] = original
 
     def test_workspace_created(self, tmp_path):
         """Workspace directory is created during init."""
@@ -541,44 +558,76 @@ class TestAsyncWaitForCompletion:
 class TestConvenienceFunctions:
     """Tests for the module-level async convenience functions."""
 
-    async def test_async_trigger_pipeline_convenience(self, tmp_path, monkeypatch):
+    async def test_async_trigger_pipeline_convenience(self):
         """Module-level async_trigger_pipeline returns a result."""
-        # Point at unreachable URL to avoid real network calls
-        monkeypatch.setenv("CI_CD_API_URL", _UNREACHABLE_URL)
-        monkeypatch.delenv("CI_CD_API_TOKEN", raising=False)
+        orig_url = os.environ.get("CI_CD_API_URL")
+        orig_tok = os.environ.get("CI_CD_API_TOKEN")
+        try:
+            os.environ["CI_CD_API_URL"] = _UNREACHABLE_URL
+            os.environ.pop("CI_CD_API_TOKEN", None)
+            result = await async_trigger_pipeline(
+                repo_owner="owner",
+                repo_name="repo",
+                workflow_id="ci.yml",
+            )
+            assert isinstance(result, AsyncPipelineResult)
+            assert result.status == PipelineStatus.FAILURE
+        finally:
+            if orig_url is None:
+                os.environ.pop("CI_CD_API_URL", None)
+            else:
+                os.environ["CI_CD_API_URL"] = orig_url
+            if orig_tok is None:
+                os.environ.pop("CI_CD_API_TOKEN", None)
+            else:
+                os.environ["CI_CD_API_TOKEN"] = orig_tok
 
-        result = await async_trigger_pipeline(
-            repo_owner="owner",
-            repo_name="repo",
-            workflow_id="ci.yml",
-        )
-        assert isinstance(result, AsyncPipelineResult)
-        assert result.status == PipelineStatus.FAILURE
-
-    async def test_async_get_pipeline_status_convenience(self, tmp_path, monkeypatch):
+    async def test_async_get_pipeline_status_convenience(self):
         """Module-level async_get_pipeline_status returns a result."""
-        monkeypatch.setenv("CI_CD_API_URL", _UNREACHABLE_URL)
-        monkeypatch.delenv("CI_CD_API_TOKEN", raising=False)
+        orig_url = os.environ.get("CI_CD_API_URL")
+        orig_tok = os.environ.get("CI_CD_API_TOKEN")
+        try:
+            os.environ["CI_CD_API_URL"] = _UNREACHABLE_URL
+            os.environ.pop("CI_CD_API_TOKEN", None)
+            result = await async_get_pipeline_status(
+                repo_owner="owner",
+                repo_name="repo",
+                run_id=1,
+            )
+            assert isinstance(result, AsyncPipelineResult)
+            assert result.status == PipelineStatus.FAILURE
+        finally:
+            if orig_url is None:
+                os.environ.pop("CI_CD_API_URL", None)
+            else:
+                os.environ["CI_CD_API_URL"] = orig_url
+            if orig_tok is None:
+                os.environ.pop("CI_CD_API_TOKEN", None)
+            else:
+                os.environ["CI_CD_API_TOKEN"] = orig_tok
 
-        result = await async_get_pipeline_status(
-            repo_owner="owner",
-            repo_name="repo",
-            run_id=1,
-        )
-        assert isinstance(result, AsyncPipelineResult)
-        assert result.status == PipelineStatus.FAILURE
-
-    async def test_async_wait_for_completion_convenience(self, tmp_path, monkeypatch):
+    async def test_async_wait_for_completion_convenience(self):
         """Module-level async_wait_for_completion returns a result."""
-        monkeypatch.setenv("CI_CD_API_URL", _UNREACHABLE_URL)
-        monkeypatch.delenv("CI_CD_API_TOKEN", raising=False)
-
-        result = await async_wait_for_completion(
-            repo_owner="owner",
-            repo_name="repo",
-            run_id=1,
-            poll_interval=1,
-            timeout=2,
-        )
-        assert isinstance(result, AsyncPipelineResult)
-        assert result.status == PipelineStatus.FAILURE
+        orig_url = os.environ.get("CI_CD_API_URL")
+        orig_tok = os.environ.get("CI_CD_API_TOKEN")
+        try:
+            os.environ["CI_CD_API_URL"] = _UNREACHABLE_URL
+            os.environ.pop("CI_CD_API_TOKEN", None)
+            result = await async_wait_for_completion(
+                repo_owner="owner",
+                repo_name="repo",
+                run_id=1,
+                poll_interval=1,
+                timeout=2,
+            )
+            assert isinstance(result, AsyncPipelineResult)
+            assert result.status == PipelineStatus.FAILURE
+        finally:
+            if orig_url is None:
+                os.environ.pop("CI_CD_API_URL", None)
+            else:
+                os.environ["CI_CD_API_URL"] = orig_url
+            if orig_tok is None:
+                os.environ.pop("CI_CD_API_TOKEN", None)
+            else:
+                os.environ["CI_CD_API_TOKEN"] = orig_tok

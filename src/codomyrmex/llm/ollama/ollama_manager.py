@@ -312,7 +312,8 @@ class OllamaManager:
                 return int(float(size_str[:-2]) * 1024)
             else:
                 return int(size_str)
-        except (ValueError, IndexError, TypeError):
+        except (ValueError, IndexError, TypeError) as e:
+            self.logger.warning("Failed to parse model size '%s': %s", size_str, e)
             return 0
 
     def _get_model_info(self, model_name: str) -> dict[str, Any] | None:

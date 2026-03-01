@@ -14,6 +14,16 @@ Full-text search, fuzzy matching, and semantic search capabilities.
 - **QueryParser** — Parse search queries
 - **Tokenizer** — Text tokenization
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `search_documents` | Perform a quick full-text search across a list of text strings with TF-IDF scoring | Safe |
+| `search_index_query` | Create a search index from documents, then query it | Safe |
+| `search_fuzzy` | Find the best fuzzy match for a query string among candidates using Levenshtein distance | Safe |
+
 ## Agent Instructions
 
 1. **Index at startup** — Build index before queries

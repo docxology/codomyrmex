@@ -1,7 +1,10 @@
+import logging
 import subprocess
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from codomyrmex.agents.core import (
     AgentCapabilities,
@@ -94,7 +97,8 @@ class EveryCodeClient(CLIAgentBase):
             )
             if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
                 return code_command
-        except (subprocess.TimeoutExpired, FileNotFoundError):
+        except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+            logger.debug("Primary command %r not available: %s", code_command, e)
             pass
 
         # Fall back to alternative command
@@ -107,7 +111,8 @@ class EveryCodeClient(CLIAgentBase):
             )
             if result.returncode == 0 or "--version" in (result.stdout or result.stderr):
                 return alt_command
-        except (subprocess.TimeoutExpired, FileNotFoundError):
+        except (subprocess.TimeoutExpired, FileNotFoundError) as e:
+            logger.debug("Alternative command %r not available: %s", alt_command, e)
             pass
 
         # Return primary as default (will fail later if not available)

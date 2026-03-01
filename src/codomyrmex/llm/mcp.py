@@ -358,7 +358,7 @@ class MCPBridge:
             }
 
     async def _handle_resource_read(self, params: dict[str, Any]) -> dict[str, Any]:
-        """Handle resource read."""
+        """Handle resource read by returning content for registered resources."""
         uri = params.get("uri")
 
         if uri not in self._resources:
@@ -366,7 +366,29 @@ class MCPBridge:
 
         resource = self._resources[uri]
 
-        raise NotImplementedError("MCP resource read not yet implemented for this resource type")
+        # File-based resources: read from filesystem
+        if uri.startswith("file://"):
+            import pathlib
+            file_path = pathlib.Path(uri.removeprefix("file://"))
+            if file_path.exists():
+                content = file_path.read_text(encoding="utf-8")
+            else:
+                raise FileNotFoundError(f"Resource file not found: {file_path}")
+        else:
+            # For non-file resources, return metadata as content
+            content = json.dumps({
+                "uri": resource.uri,
+                "name": resource.name,
+                "description": resource.description,
+            }, indent=2)
+
+        return {
+            "contents": [{
+                "uri": resource.uri,
+                "mimeType": resource.mime_type,
+                "text": content,
+            }],
+        }
 
     async def _handle_prompt_get(self, params: dict[str, Any]) -> dict[str, Any]:
         """Handle prompt get."""

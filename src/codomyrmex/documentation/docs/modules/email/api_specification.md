@@ -34,7 +34,7 @@ uv sync --extra email
 
 ### 2.3 Concrete Providers
 
-- **`GmailProvider`**: Implements `EmailProvider` via the Google Gmail API. Requires `GOOGLE_CREDENTIALS` (service account JSON path or OAuth credentials).
+- **`GmailProvider`**: Implements `EmailProvider` via the Google Gmail API. Auth via `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN` env vars (or Application Default Credentials as fallback). Use `GmailProvider.from_env()` to construct from env vars.
 - **`AgentMailProvider`**: Implements `EmailProvider` via the AgentMail API. Requires `AGENTMAIL_API_KEY`.
 
 ### 2.4 Exception Hierarchy (`exceptions.py`)
@@ -59,7 +59,10 @@ EmailError (base)
 
 | Variable | Required By | Description |
 |----------|-------------|-------------|
-| `GOOGLE_CREDENTIALS` | GmailProvider | Path to Google service account or OAuth2 credentials JSON |
+| `GOOGLE_CLIENT_ID` | GmailProvider | OAuth2 client ID from Google Cloud Console |
+| `GOOGLE_CLIENT_SECRET` | GmailProvider | OAuth2 client secret from Google Cloud Console |
+| `GOOGLE_REFRESH_TOKEN` | GmailProvider | OAuth2 refresh token for FristonBlanket@gmail.com |
+| `GOOGLE_APPLICATION_CREDENTIALS` | GmailProvider | Fallback: path to ADC JSON (service account or `gcloud` credentials) |
 | `AGENTMAIL_API_KEY` | AgentMailProvider | AgentMail API key |
 | `AGENTMAIL_DEFAULT_INBOX` | AgentMailProvider | Default inbox ID for send operations |
 
@@ -70,7 +73,7 @@ from codomyrmex.email import EmailProvider, EmailDraft, EmailMessage, GMAIL_AVAI
 
 if GMAIL_AVAILABLE:
     from codomyrmex.email import GmailProvider
-    provider: EmailProvider = GmailProvider()
+    provider: EmailProvider = GmailProvider.from_env()
 
     # List recent messages
     messages = provider.list_messages(query="is:unread", max_results=10)

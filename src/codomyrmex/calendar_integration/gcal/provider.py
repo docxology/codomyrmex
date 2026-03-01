@@ -56,6 +56,7 @@ class GoogleCalendar(CalendarProvider):
         """Create a GoogleCalendar from environment variables.
 
         Tries GOOGLE_REFRESH_TOKEN + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET first,
+        then token file (~/.codomyrmex/gcal_token.json),
         then falls back to Application Default Credentials.
 
         Raises:
@@ -83,6 +84,29 @@ class GoogleCalendar(CalendarProvider):
             )
             return cls(credentials=creds)
 
+        # Option 1b: Token file from PMServer OAuth flow
+        import json
+        from pathlib import Path
+
+        token_path = Path.home() / ".codomyrmex" / "gcal_token.json"
+        if token_path.exists() and client_id and client_secret:
+            try:
+                token_data = json.loads(token_path.read_text())
+                file_refresh = token_data.get("refresh_token")
+                if file_refresh:
+                    creds = Credentials(
+                        token=token_data.get("access_token"),
+                        refresh_token=file_refresh,
+                        token_uri="https://oauth2.googleapis.com/token",
+                        client_id=client_id,
+                        client_secret=client_secret,
+                        scopes=_GCAL_SCOPES,
+                    )
+                    return cls(credentials=creds)
+            except (json.JSONDecodeError, OSError) as e:
+                logger.debug("Service account credentials unavailable, falling through to ADC: %s", e)
+                pass  # fall through to ADC
+
         try:
             import google.auth  # noqa: PLC0415 — conditional import
             creds, _ = google.auth.default(scopes=_GCAL_SCOPES)
@@ -91,6 +115,7 @@ class GoogleCalendar(CalendarProvider):
             raise CalendarAuthError(
                 "No Google Calendar credentials found. Set GOOGLE_CLIENT_ID + "
                 "GOOGLE_CLIENT_SECRET + GOOGLE_REFRESH_TOKEN env vars, "
+                "or place a token file at ~/.codomyrmex/gcal_token.json, "
                 f"or configure GOOGLE_APPLICATION_CREDENTIALS: {e}"
             ) from e
 

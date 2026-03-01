@@ -1,17 +1,17 @@
-# Agent Instructions for `codomyrmex.calendar`
+# Agent Instructions for `codomyrmex.calendar_integration`
 
 **Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
 
 ## Context
 
-The `calendar` module provides the Codomyrmex ecosystem with a unified, standard interface to interact with third-party calendar providers. It currently features Google Calendar support.
+The `calendar_integration` module provides the Codomyrmex ecosystem with a unified, standard interface to interact with third-party calendar providers. It currently features Google Calendar support.
 
 ## Usage Guidelines
 
-1. **Importing:** Always import `CalendarProvider`, `CalendarEvent`, and exceptions directly from the `calendar` module root.
+1. **Importing:** Always import `CalendarProvider`, `CalendarEvent`, and exceptions directly from the `calendar_integration` module root.
 
    ```python
-   from codomyrmex.calendar import CalendarEvent, CalendarError, GoogleCalendar
+   from codomyrmex.calendar_integration import CalendarEvent, CalendarError, GoogleCalendar
    ```
 
 2. **Availability Check:**
@@ -54,9 +54,9 @@ The `calendar` module provides the Codomyrmex ecosystem with a unified, standard
 
    **Bidirectional Sync:** Both the PMServer.ts PAI dashboard (`:8888`) and the Codomyrmex MCP tools read from the same `~/.codomyrmex/gcal_token.json` OAuth token file, which authenticates against the same Google account. This means there is no separate sync job — any event created via either path appears in the same Google Calendar, and reads from either path reflect the same ground truth. No additional polling or reconciliation is needed.
 
-   **Attendee Injection Behavior:** Every call to `calendar_create_event` or `calendar_update_event` unconditionally adds `danielarifriedman@gmail.com` to the attendees list before sending the request to Google Calendar. This behavior is triggered regardless of what the caller passes in the `attendees` parameter:
-   - If `attendees=None` → list is initialized to `["danielarifriedman@gmail.com"]`
+   **Attendee Injection Behavior:** Every call to `calendar_create_event` or `calendar_update_event` unconditionally adds `FristonBlanket@gmail.com` (or the value of `CODOMYRMEX_CALENDAR_ATTENDEE` env var) to the attendees list before sending the request to Google Calendar. This behavior is triggered regardless of what the caller passes in the `attendees` parameter:
+   - If `attendees=None` → list is initialized to `["FristonBlanket@gmail.com"]`
    - If `attendees=[...]` and the address is absent → it is appended
-   - If `attendees=[..., "danielarifriedman@gmail.com"]` → no duplicate is added
+   - If `attendees=[..., "FristonBlanket@gmail.com"]` → no duplicate is added
 
-   This injection **cannot be suppressed** without modifying `mcp_tools.py` directly. It guarantees Daniel always appears as an attendee on every calendar event managed through this system.
+   This injection **cannot be suppressed** without modifying `mcp_tools.py` directly. It guarantees the primary account always appears as an attendee on every calendar event managed through this system.

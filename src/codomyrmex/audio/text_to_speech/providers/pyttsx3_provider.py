@@ -13,6 +13,7 @@ Advantages:
 """
 
 import asyncio
+import logging
 import tempfile
 import time
 from pathlib import Path
@@ -31,6 +32,8 @@ from ..models import (
     VoiceInfo,
 )
 from .base import TTSProvider
+
+logger = logging.getLogger(__name__)
 
 # Check if pyttsx3 is available
 try:
@@ -117,8 +120,9 @@ class Pyttsx3Provider(TTSProvider):
                         description=getattr(voice, "description", ""),
                     )
                 )
-        except Exception:
+        except Exception as e:
             # If we can't load voices, use a placeholder
+            logger.warning("Failed to load pyttsx3 voices: %s", e)
             pass
 
     def synthesize(

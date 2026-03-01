@@ -14,7 +14,7 @@ except ImportError:
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.agents import ReactiveArchitecture, DeliberativeArchitecture, KnowledgeBase
+from codomyrmex.agents import ReactiveArchitecture, DeliberativeArchitecture
 from codomyrmex.agents.theory.reasoning_models import SymbolicReasoningModel
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_section
 

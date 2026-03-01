@@ -18,7 +18,6 @@ Zero-mock policy: no unittest.mock, no MagicMock, no monkeypatch.
 All tests are @pytest.mark.unit and do NOT require Docker to be running.
 """
 
-import shutil
 from datetime import datetime
 
 import pytest

@@ -64,6 +64,16 @@ await bus.publish(UserCreated(user_id="1", email="test@test.com"))
 assert len(handled) == 1
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `emit_event` | Emit an event to the event bus | Safe |
+| `list_event_types` | List all registered event types in the event bus | Safe |
+| `get_event_history` | Retrieve recent event history from the event bus | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

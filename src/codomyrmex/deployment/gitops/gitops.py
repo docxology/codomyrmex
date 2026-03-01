@@ -38,5 +38,6 @@ class GitOpsSynchronizer:
                 capture_output=True, text=True, check=True
             )
             return result.stdout.strip()
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to get repo version at %s: %s", self.local_path, e)
             return None

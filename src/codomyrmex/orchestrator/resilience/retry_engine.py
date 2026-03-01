@@ -127,12 +127,14 @@ class RetryEngine:
                         result.adjustments.append(
                             f"Adjusted config for {cat_key}"
                         )
-                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+                    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                        logger.warning("Config adjustment for %s failed: %s", cat_key, e)
                         pass
 
                 if attempt < self._max_retries:
+                    # attempt+1 gives correct 2x, 4x, 8x... progression (first retry = 2x base)
                     delay = min(
-                        self._base_delay * (self._backoff_factor ** attempt),
+                        self._base_delay * (self._backoff_factor ** (attempt + 1)),
                         self._max_delay,
                     )
                     time.sleep(delay)

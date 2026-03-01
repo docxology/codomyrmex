@@ -37,6 +37,8 @@ class RedisCache(Cache):
 
         host = host or os.getenv("REDIS_HOST", "localhost")
         port = port or int(os.getenv("REDIS_PORT", "6379"))
+        if not (1 <= port <= 65535):
+            raise ValueError(f"Invalid Redis port: {port}. Must be between 1 and 65535.")
         self.client = redis.Redis(host=host, port=port, db=db, decode_responses=False)
         self.default_ttl = default_ttl
         self._stats = CacheStats()
@@ -110,8 +112,8 @@ class RedisCache(Cache):
             self._stats.misses = info.get("keyspace_misses", 0)
             self._stats.total_requests = self._stats.hits + self._stats.misses
             self._stats.size = self.client.dbsize()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning("Failed to retrieve Redis cache stats: %s", e)
         return self._stats
 
 

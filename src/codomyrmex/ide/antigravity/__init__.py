@@ -11,8 +11,11 @@ Example:
     >>> capabilities = client.get_capabilities()
 """
 import json
+import logging
 import os
 import shutil
+
+logger = logging.getLogger(__name__)
 import subprocess
 import time
 from collections.abc import Callable
@@ -298,7 +301,8 @@ class AntigravityClient(IDEClient):
             ]
             if candidates:
                 return str(max(candidates, key=lambda p: p.stat().st_mtime))
-        except OSError:
+        except OSError as e:
+            logger.debug("Failed to scan Antigravity workspace for files: %s", e)
             pass
         return None
 

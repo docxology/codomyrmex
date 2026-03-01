@@ -229,7 +229,8 @@ class ExamplesValidator:
                             message="orchestrate.py missing docstring",
                             file_path=str(orchestrator)
                         ))
-            except Exception:
+            except Exception as e:
+                logger.warning("Failed to parse orchestrate.py in module %s: %s", module, e)
                 pass
 
         return issues

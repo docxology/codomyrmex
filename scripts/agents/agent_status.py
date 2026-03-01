@@ -17,7 +17,6 @@ except ImportError:
 
 import argparse
 import os
-import json
 
 
 def find_agents_configs() -> list:

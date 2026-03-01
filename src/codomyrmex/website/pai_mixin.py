@@ -44,7 +44,8 @@ class PAIProviderMixin:
                 data = yaml.safe_load(mission_file.read_text(encoding="utf-8"))
                 if not isinstance(data, dict):
                     continue
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to parse mission YAML %s: %s", mission_file, e)
                 continue
 
             # Merge progress.json if present
@@ -53,7 +54,8 @@ class PAIProviderMixin:
             if progress_file.exists():
                 try:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
-                except Exception:
+                except Exception as e:
+                    logger.debug("Failed to parse progress.json for mission %s: %s", mission_dir.name, e)
                     pass
 
             missions.append({
@@ -89,7 +91,8 @@ class PAIProviderMixin:
                 data = yaml.safe_load(project_file.read_text(encoding="utf-8"))
                 if not isinstance(data, dict):
                     continue
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to parse project YAML %s: %s", project_file, e)
                 continue
 
             # Merge progress.json if present
@@ -98,7 +101,8 @@ class PAIProviderMixin:
             if progress_file.exists():
                 try:
                     progress = _json.loads(progress_file.read_text(encoding="utf-8"))
-                except Exception:
+                except Exception as e:
+                    logger.debug("Failed to parse progress.json for project %s: %s", project_dir.name, e)
                     pass
 
             projects.append({
@@ -216,7 +220,8 @@ class PAIProviderMixin:
         if work_dir.exists():
             try:
                 work_sessions_count = sum(1 for d in work_dir.iterdir() if d.is_dir())
-            except OSError:
+            except OSError as e:
+                logger.debug("Failed to count work sessions in %s: %s", work_dir, e)
                 pass
 
         return {
@@ -324,7 +329,8 @@ class PAIProviderMixin:
                     d.name for d in skills_dir.iterdir()
                     if d.is_dir() and not d.name.startswith(".")
                 )
-        except Exception:
+        except Exception as e:
+            logger.debug("Failed to discover PAI skills: %s", e)
             pass
         try:
             hooks_dir = self._PAI_ROOT / "hooks"
@@ -333,7 +339,8 @@ class PAIProviderMixin:
                     f.stem for f in hooks_dir.iterdir()
                     if f.is_file() and not f.name.startswith(".")
                 )
-        except Exception:
+        except Exception as e:
+            logger.debug("Failed to discover PAI hooks: %s", e)
             pass
 
         return {

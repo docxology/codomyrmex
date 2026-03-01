@@ -69,6 +69,65 @@ class TestPatchGenerator:
 
 
 @pytest.mark.unit
+class TestPatchGeneratorParsing:
+    """Zero-mock tests for PatchGenerator._parse_patches — the diff extraction logic."""
+
+    def setup_method(self):
+        self.generator = PatchGenerator(llm_client=None)
+        self.diagnosis = ErrorDiagnosis("NameError", "name 'x' is not defined", "script.py", 5, "trace")
+
+    def test_fenced_diff_block(self):
+        """Parse a fenced ```diff code block."""
+        response = (
+            "Here is the fix:\n"
+            "```diff\n"
+            "--- a/script.py\n"
+            "+++ b/script.py\n"
+            "@@ -5 +5 @@\n"
+            "-print(x)\n"
+            "+x = 0\n"
+            "+print(x)\n"
+            "```\n"
+        )
+        patches = self.generator._parse_patches(response, self.diagnosis)
+        assert len(patches) == 1
+        assert "--- a/script.py" in patches[0].diff
+        assert "+x = 0" in patches[0].diff
+        assert patches[0].file_path == "script.py"
+        assert patches[0].confidence == 0.9
+
+    def test_multiple_diffs_confidence_decay(self):
+        """Multiple diff blocks should have decreasing confidence."""
+        response = (
+            "```diff\n--- a/a.py\n+++ b/a.py\n@@ -1 +1 @@\n-old\n+new\n```\n"
+            "```diff\n--- a/b.py\n+++ b/b.py\n@@ -1 +1 @@\n-old2\n+new2\n```\n"
+        )
+        patches = self.generator._parse_patches(response, self.diagnosis)
+        assert len(patches) == 2
+        assert patches[0].confidence > patches[1].confidence
+
+    def test_text_only_fallback(self):
+        """Text without diff should produce a low-confidence suggestion patch."""
+        response = "You should add x = 0 before the print statement."
+        patches = self.generator._parse_patches(response, self.diagnosis)
+        assert len(patches) == 1
+        assert patches[0].confidence == 0.3
+        assert "suggestion" in patches[0].description.lower()
+
+    def test_empty_response(self):
+        """Empty string should produce no patches."""
+        patches = self.generator._parse_patches("", self.diagnosis)
+        assert patches == []
+
+    def test_construct_prompt(self):
+        """_construct_prompt should produce a well-formed prompt with error details."""
+        prompt = self.generator._construct_prompt("x = 1\nprint(y)", self.diagnosis)
+        assert "NameError" in prompt
+        assert "script.py" in prompt
+        assert "print(y)" in prompt
+
+
+@pytest.mark.unit
 class TestDebugger:
     """Test suite for Debugger."""
     def setup_method(self):

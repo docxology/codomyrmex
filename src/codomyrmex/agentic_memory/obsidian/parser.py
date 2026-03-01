@@ -6,9 +6,12 @@ All extraction is regex/YAML-based with no external Obsidian dependencies.
 
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 try:
     import yaml
@@ -113,12 +116,14 @@ def extract_embeds(content: str) -> list[Embed]:
                 try:
                     width = int(parts[0])
                     height = int(parts[1])
-                except ValueError:
+                except ValueError as e:
+                    logger.debug("Non-integer embed dimensions %r: %s", dims, e)
                     pass
             else:
                 try:
                     width = int(dims)
-                except ValueError:
+                except ValueError as e:
+                    logger.debug("Non-integer embed width %r: %s", dims, e)
                     pass
         else:
             target = raw

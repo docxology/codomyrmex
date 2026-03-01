@@ -130,9 +130,17 @@ codomyrmex coding execute [lang] [code] # Execute code snippet
 | `DeadCodeFinding` | Detected dead/unreachable code |
 | `ComplexityReductionSuggestion` | Suggestion to reduce complexity |
 
-## MCP Integration
+## MCP Tools
 
-The MCP server's `run_command` tool provides shell command execution. The `analyze_python_file` tool uses code analysis capabilities from this module's review submodule for Python AST inspection.
+Five tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `code_execute` | Execute code in a sandboxed environment | Safe | coding |
+| `code_list_languages` | List supported languages for code execution | Safe | coding |
+| `code_review_file` | Run automated code review on a single file | Safe | coding |
+| `code_review_project` | Run automated code review on a full project directory | Safe | coding |
+| `code_debug` | Analyze a code error and suggest patches | Safe | coding |
 
 ## PAI Algorithm Phase Mapping
 

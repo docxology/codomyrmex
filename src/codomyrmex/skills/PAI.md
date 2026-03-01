@@ -15,7 +15,7 @@ There are **two separate skill systems** that interact through a well-defined br
 | **Codomyrmex Skills** | `src/codomyrmex/skills/` (this module) | `SkillsManager`, `SkillLoader` | Internal Python skills for the development platform |
 | **PAI Skills** | `~/.claude/skills/` | PAI Algorithm (SKILL.md) | Personal AI skills invoked by the Algorithm |
 
-The **bridge** between them is the Codomyrmex PAI Skill at `~/.claude/skills/Codomyrmex/SKILL.md`. This PAI-side skill exposes codomyrmex capabilities (115 auto-discovered MCP tools from 27 modules, 2 resources, 10 prompts) to the PAI Algorithm via the MCP protocol. It also provides the `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
+The **bridge** between them is the Codomyrmex PAI Skill at `~/.claude/skills/Codomyrmex/SKILL.md`. This PAI-side skill exposes codomyrmex capabilities (~148 auto-discovered MCP tools from 33 modules plus ~19 static tools = ~167 total, 3 resources, 10 prompts) to the PAI Algorithm via the MCP protocol. It also provides the `/codomyrmexVerify` and `/codomyrmexTrust` workflows.
 
 ### How They Connect
 
@@ -52,14 +52,44 @@ from codomyrmex.skills import SkillsManager, SkillLoader, SkillSync, permissions
 | `composition` | Function/Constant | Skill composition and chaining |
 | `testing` | Function/Constant | Skill testing framework |
 
+## MCP Tools
+
+Seven MCP tools are auto-discovered via `@mcp_tool` and available through the PAI
+MCP bridge for skills management:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `codomyrmex.skills_list` | List available skills, optionally filtered by category | Safe | skills |
+| `codomyrmex.skills_get` | Get a specific skill by category and name | Safe | skills |
+| `codomyrmex.skills_search` | Search skills by query string | Safe | skills |
+| `codomyrmex.skills_sync` | Sync with upstream vibeship-spawner-skills repository | Safe | skills |
+| `codomyrmex.skills_add_custom` | Add a custom skill that overrides upstream | Safe | skills |
+| `codomyrmex.skills_get_categories` | Get all available skill categories | Safe | skills |
+| `codomyrmex.skills_get_upstream_status` | Get status of upstream repository (branch, commits, changes) | Safe | skills |
+
+### MCP Tool Usage Examples
+
+```python
+# List all skills
+result = mcp_call("codomyrmex.skills_list")
+# Returns: [{"category": "...", "name": "...", ...}, ...]
+
+# Search by keyword
+result = mcp_call("codomyrmex.skills_search", {"query": "authentication"})
+
+# Get categories
+result = mcp_call("codomyrmex.skills_get_categories")
+# Returns: ["security", "coding", "ai", ...]
+```
+
 ## PAI Algorithm Phase Mapping
 
-| Phase | Skills Contribution |
-|-------|------------------------------|
-| **OBSERVE** | `SkillRegistry.discover()` — scan available skills matching task context |
-| **PLAN** | `SkillsManager.resolve_dependencies()` — check skill prerequisites |
-| **EXECUTE** | `SkillLoader.load()` + `execution.run()` — load and run matched skills |
-| **VERIFY** | `testing.validate()` — verify skill execution results |
+| Phase | Skills Contribution | MCP Tools |
+|-------|---------------------|-----------|
+| **OBSERVE** | Discover available skills matching task context | `skills_list`, `skills_search` |
+| **THINK** | Check skill metadata to inform capability selection decisions | `skills_get`, `skills_get_categories` |
+| **PLAN** | Verify skill prerequisites and upstream sync status | `skills_get_upstream_status`, `skills_sync` |
+| **EXECUTE** | Invoke skill by name; confirm custom overrides are in place | `skills_get`, `skills_add_custom` |
 
 ## Architecture Role
 

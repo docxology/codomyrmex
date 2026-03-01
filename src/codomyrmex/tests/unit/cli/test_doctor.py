@@ -7,15 +7,12 @@ functions, and the run_doctor orchestrator.
 from __future__ import annotations
 
 import json
-import os
-from pathlib import Path
 
 import pytest
 
 from codomyrmex.cli.doctor import (
     CheckResult,
     check_module_imports,
-    check_rasp,
     check_workflows,
     run_doctor,
 )

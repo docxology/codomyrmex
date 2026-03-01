@@ -794,7 +794,8 @@ class GitVisualizer:
                                 substructure[subitem.name] = {}
                             else:
                                 substructure[subitem.name] = "file"
-                    except PermissionError:
+                    except PermissionError as e:
+                        logger.debug("Permission denied reading subdirectory: %s", e)
                         pass
                     structure[item.name] = substructure
                 else:

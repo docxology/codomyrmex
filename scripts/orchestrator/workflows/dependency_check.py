@@ -17,13 +17,13 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 
-from codomyrmex.orchestrator import Workflow, parallel
-from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success, print_error
+from codomyrmex.orchestrator import Workflow
+from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_error
 
 
 async def list_outdated_packages(_task_results: dict = None) -> Dict[str, Any]:

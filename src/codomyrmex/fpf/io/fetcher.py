@@ -76,8 +76,8 @@ class FPFFetcher:
             remote_hash = hashlib.sha256(remote_content.encode()).hexdigest()
 
             return local_hash != remote_hash
-        except Exception:
-            # If check fails, assume updates are available
+        except Exception as e:
+            logger.debug("FPF update check failed, assuming updates available: %s", e)
             return True
 
     def get_version_info(self, repo: str = "ailev/FPF") -> dict[str, any]:

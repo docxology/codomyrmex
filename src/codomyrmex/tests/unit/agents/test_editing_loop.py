@@ -11,7 +11,6 @@ Tests cover:
 - EditingOrchestrator.run_task / run_tasks (requires live LLM)
 """
 
-import importlib.util
 import os
 import textwrap
 

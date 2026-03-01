@@ -1,5 +1,7 @@
 # performance - API Specification
 
+**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+
 ## Introduction
 
 This document provides the complete API specification for the `performance` module.

@@ -99,6 +99,7 @@ uv run pytest src/codomyrmex/tests/unit/dependency_injection/ -v
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/dependency_injection/](../../../docs/modules/dependency_injection/)
 - [API_SPECIFICATION](API_SPECIFICATION.md) | [PAI](PAI.md) | [MCP_TOOL_SPECIFICATION](MCP_TOOL_SPECIFICATION.md)
 - **Parent**: [Source README](../README.md)
 - **Home**: [Root README](../../../README.md)

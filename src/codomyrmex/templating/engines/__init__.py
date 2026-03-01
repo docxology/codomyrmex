@@ -5,12 +5,15 @@ Provides different template rendering engines.
 """
 
 import html
+import logging
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -210,7 +213,8 @@ class Jinja2LikeEngine(TemplateEngine):
             elif isinstance(value, (list, tuple)):
                 try:
                     value = value[int(part)]
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
+                    logger.warning("Failed to resolve path segment '%s': %s", part, e)
                     return None
             elif hasattr(value, part):
                 value = getattr(value, part)

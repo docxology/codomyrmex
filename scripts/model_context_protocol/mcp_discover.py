@@ -21,13 +21,10 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 import argparse
-import json
 
 from codomyrmex.model_context_protocol.discovery import (
-    ModuleScanner,
     SpecificationScanner,
     ToolCatalog,
-    discover_tools,
 )
 from codomyrmex.utils.cli_helpers import setup_logging, print_info, print_success
 

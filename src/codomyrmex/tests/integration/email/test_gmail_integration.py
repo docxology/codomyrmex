@@ -56,7 +56,7 @@ def _make_provider():
 @pytest.mark.integration
 def test_gmail_provider_from_env() -> None:
     """GmailProvider.from_env() builds a live-connected service without error."""
-    from codomyrmex.email.gmail.provider import GMAIL_AVAILABLE, GmailProvider
+    from codomyrmex.email.gmail.provider import GMAIL_AVAILABLE
 
     assert GMAIL_AVAILABLE, "Gmail dependencies not installed (uv sync --extra email)"
     provider = _make_provider()

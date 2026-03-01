@@ -5,7 +5,6 @@ filter_by_tags (multi-tag), filter_by_frontmatter_exists,
 find_notes_linking_to, find_notes_with_embeds.
 """
 
-import re
 
 from codomyrmex.agentic_memory.obsidian.search import (
     filter_by_frontmatter_exists,

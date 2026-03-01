@@ -172,7 +172,8 @@ class Encryptor:
                 hashes.SHA256()
             )
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Signature verification failed: %s", e)
             return False
 
     def _encrypt_aes(self, data: bytes, key: bytes) -> bytes:

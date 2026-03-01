@@ -6,7 +6,6 @@ which have zero direct coverage. Pipeline, git_info, and architecture_layers
 are already tested in test_data_provider.py.
 """
 import pytest
-from pathlib import Path
 from codomyrmex.website.data_provider import DataProvider
 
 

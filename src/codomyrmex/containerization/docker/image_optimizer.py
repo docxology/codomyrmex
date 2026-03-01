@@ -266,7 +266,8 @@ class ImageOptimizer:
                     match = re.search(r'FROM\s+([^\s\n]+)', created_by, re.IGNORECASE)
                     if match:
                         return match.group(1).strip()
-        except Exception:
+        except Exception as e:
+            logger.debug("Failed to detect base image: %s", e)
             pass
 
         return "unknown"

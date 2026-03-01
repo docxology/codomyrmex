@@ -1,6 +1,6 @@
 # Codomyrmex &harr; PAI System Bridge
 
-**Version**: v1.0.3-dev | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
 
 ## What Is PAI?
 
@@ -11,7 +11,7 @@ PAI (Personal AI Infrastructure) is the system at `~/.claude/skills/PAI/`. It is
 | Algorithm | v1.5.0 | `~/.claude/skills/PAI/SKILL.md` (CORE) |
 | Skills | 55 | `~/.claude/skills/` |
 | Hooks | 20 | `~/.claude/hooks/` |
-| Tools | 59 | `~/.claude/skills/PAI/Tools/` |
+| Tools | 60 | `~/.claude/skills/PAI/Tools/` |
 | Agents | 13 + subagent types | `~/.claude/skills/PAI/PAIAGENTSYSTEM.md` |
 | Memory | WORK / STATE / LEARNING | `~/.claude/skills/PAI/MEMORY/` |
 
@@ -19,11 +19,11 @@ PAI operates inside Claude Code sessions. It runs the Algorithm on every prompt,
 
 ## How Codomyrmex Serves PAI
 
-Codomyrmex is an **86-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
+Codomyrmex is an **88-module Python development platform**. PAI agents consume codomyrmex capabilities via the Model Context Protocol (MCP). The relationship is:
 
 ```
 PAI (TypeScript/Bun, ~/.claude/)  ──MCP──>  Codomyrmex (Python, this repo)
-     Algorithm + Skills + Hooks              86 modules of dev-platform tools
+     Algorithm + Skills + Hooks              88 modules of dev-platform tools
 ```
 
 PAI is the **orchestrator**. Codomyrmex is the **toolbox**.
@@ -36,7 +36,7 @@ The MCP server is the operational bridge between PAI and codomyrmex:
 graph LR
     subgraph PAI ["PAI System (~/.claude/)"]
         Algo["Algorithm v1.5.0"]
-        Skills["38 Skills"]
+        Skills["55 Skills"]
         Agents["Named Agents"]
     end
 
@@ -49,7 +49,7 @@ graph LR
         CodeAnalysis["Code Analysis"]
         Shell["Shell Execution"]
         Memory["Memory/Knowledge"]
-        Modules["86 Module Tools"]
+        Modules["88 Module Tools"]
     end
 
     Algo --> Agents
@@ -63,7 +63,7 @@ graph LR
 
 **Server**: `scripts/model_context_protocol/run_mcp_server.py`
 **Transports**: stdio (Claude Desktop/Code) and HTTP with Web UI (port 8080)
-**Tools**: 20 static tools (17 core + 3 universal proxy) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~167 tools** (163 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~167 tools for MCP exposure.
+**Tools**: 20 static tools (17 core + 3 universal proxy) + ~146 auto-discovered module tools from 33 modules via `pkgutil` scan. Total: **~171 tools** (167 safe + 4 destructive). The Codomyrmex PAI Skill (`~/.claude/skills/Codomyrmex/SKILL.md`) surfaces ~171 tools for MCP exposure.
 **Web UI**: `http://localhost:8080/` — interactive tool tester, server info, resources, prompts
 **Config**: Register in `claude_desktop_config.json` (see [Connecting PAI tutorial](docs/getting-started/tutorials/connecting-pai.md))
 **Full docs**: [src/codomyrmex/model_context_protocol/PAI.md](src/codomyrmex/model_context_protocol/PAI.md)
@@ -76,10 +76,10 @@ that gates destructive operations behind explicit approval:
 ```
 UNTRUSTED ──/codomyrmexVerify──> VERIFIED ──/codomyrmexTrust──> TRUSTED
    │                                │                              │
-   └── All tools start here         └── 163 safe tools promoted    └── 4 destructive tools enabled
+   └── All tools start here         └── 167 safe tools promoted    └── 4 destructive tools enabled
 ```
 
-**Safe tools (163)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
+**Safe tools (167)**: Auto-promoted to VERIFIED by `/codomyrmexVerify`. All read, list,
 analyze, search, git status/diff, and discovery tools.
 
 **Destructive tools (4)**: Require explicit `/codomyrmexTrust`:
@@ -99,7 +99,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 
 | Algorithm Phase | Purpose | Codomyrmex Modules |
 |----------------|---------|-------------------|
-| **OBSERVE** (1/7) | Understand the request | `pattern_matching`, `search`, `documents`, `system_discovery`, `config_management` |
+| **OBSERVE** (1/7) | Understand the request | `coding/pattern_matching`, `search`, `documents`, `system_discovery`, `config_management` |
 | **THINK** (2/7) | Select capabilities, expand ISC | `cerebrum`, `agents/core` (ThinkingAgent), `graph_rag`, `relations` |
 | **PLAN** (3/7) | Finalize approach | `orchestrator` (workflow DAGs), `logistics`, `plugin_system` (dependency resolution) |
 | **BUILD** (4/7) | Create artifacts | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build/`, `documentation` |
@@ -113,8 +113,8 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 ~/.claude/                          # PRIVATE (per-user, never committed)
 ├── skills/PAI/                     # Algorithm, skills, tools, hooks
 │   ├── SKILL.md                    # CORE (the Algorithm)
-│   ├── Skills/                     # 38 skills
-│   ├── Tools/                      # 59 tools
+│   ├── Skills/                     # 55 skills
+│   ├── Tools/                      # 60 tools
 │   ├── USER/                       # Personal data
 │   └── MEMORY/                     # WORK, STATE, LEARNING
 ├── hooks/                          # 20 hooks
@@ -122,7 +122,7 @@ Each phase of the PAI Algorithm maps to specific codomyrmex modules:
 └── claude_desktop_config.json      # MCP server registrations
 
 codomyrmex/                         # SHARED (this repo, committed)
-├── src/codomyrmex/                 # 86 Python modules
+├── src/codomyrmex/                 # 88 Python modules
 ├── scripts/model_context_protocol/ # MCP server runner
 ├── PAI.md                          # THIS FILE (bridge doc)
 └── docs/                           # Documentation

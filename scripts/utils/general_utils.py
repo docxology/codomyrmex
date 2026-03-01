@@ -18,9 +18,7 @@ except ImportError:
 import argparse
 import uuid
 import hashlib
-import time
 import re
-import json
 from datetime import datetime
 
 

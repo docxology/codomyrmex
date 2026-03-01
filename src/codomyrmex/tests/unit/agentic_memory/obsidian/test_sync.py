@@ -1,6 +1,5 @@
 """Tests for sync & publish CLI commands."""
 
-import shutil
 import pytest
 
 from codomyrmex.agentic_memory.obsidian.cli import ObsidianCLI, ObsidianCLINotAvailable

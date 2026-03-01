@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — src/codomyrmex
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.3 | **Status**: Active | **Last Updated**: February 2026
 
 ## Overview
 
@@ -17,8 +17,7 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [llm/](llm/) | Model Management | Local (Ollama) and cloud model integration |
 | [model_context_protocol/](model_context_protocol/) | Tool Standards | Standardized AI tool interfaces |
 | [agents/](agents/) | Agent Framework | Multi-provider AI agent orchestration |
-| [audio/](audio/) | Audio Processing | Audio analysis and generation |
-| [video/](video/) | Video Processing | Video analysis and generation |
+| [agents/core/](agents/core/) | ThinkingAgent | Chain-of-Thought reasoning engine (`think`, `get_last_trace`) |
 
 ### Intelligent Code Operations
 
@@ -29,30 +28,13 @@ The Codomyrmex modules provide PAI capabilities across several domains:
 | [search/](search/) | Pattern Recognition | Code pattern identification |
 | [coding/](coding/) | Safe Execution | Sandboxed AI code execution |
 
-- **Secure Cognitive Architecture**:
-  - `identity`: Multi-persona management and bio-cognitive verification.
-  - `wallet`: Self-custody and "Natural Ritual" recovery (ZKP).
-  - `defense`: Active countermeasures and "Rabbit Hole" containment.
-  - `market`: Reverse auctions and demand aggregation.
-  - `privacy`: Metadata scrubbing and mixnet proxying.
-
-### Memetics & Influence
-
-| Module | PAI Capability | Description |
-| :--- | :--- | :--- |
-| [meme/](meme/) | Information Dynamics | Propagate ideas, analyze narratives, frame reality |
-| [meme/neurolinguistic/](meme/neurolinguistic/) | Persuasion | Cognitive framing and linguistic pattern engineering |
-| [meme/contagion/](meme/contagion/) | Viral Forecasting | Predict spread and detect cascades |
-
 ### Knowledge & Reasoning
 
 | Module | PAI Capability | Description |
 | :--- | :--- | :--- |
-| [cerebrum/](cerebrum/) | Reasoning Engine | Case-based and Bayesian reasoning |
-| [documents/](documents/) | Knowledge Processing | Document analysis and retrieval |
-| [graph_rag/](graph_rag/) | Graph RAG | Graph-based Retrieval Augmented Generation |
-| [agentic_memory/](agentic_memory/) | Memory Systems | Long-term memory for agents |
-| [fpf/](fpf/) | Functional Analysis | Functional programming transformations |
+| [cerebrum/](cerebrum/) | Reasoning Engine | Case-based reasoning (`query_knowledge_base`, `add_case_reference`) |
+| [agentic_memory/](agentic_memory/) | Memory Systems | Long-term memory for agents (`memory_put`, `memory_get`, `memory_search`) |
+| [search/](search/) | Document Search | Full-text, indexed, and fuzzy search (`search_documents`, `search_index_query`, `search_fuzzy`) |
 
 ### Workflow Automation
 
@@ -91,8 +73,7 @@ graph TB
     subgraph paiCore ["PAI Core Layer"]
         LLM["llm/"]
         Cerebrum["cerebrum/"]
-        Documents["documents/"]
-        Meme["meme/"]
+        AgentsCore["agents/core/"]
     end
 
     subgraph paiExecution ["PAI Execution Layer"]
@@ -109,12 +90,11 @@ graph TB
 
     Agents --> LLM
     Agents --> Cerebrum
+    Agents --> AgentsCore
     MCP --> LLM
     LLM --> Coding
     Cerebrum --> Static
-    Documents --> Orchestrator
-    Meme --> Orchestrator
-    Meme --> LLM
+    AgentsCore --> Orchestrator
     Coding --> Security
     Orchestrator --> Auth
 ```
@@ -136,8 +116,8 @@ graph TB
     end
 
     subgraph Modules ["Codomyrmex Modules"]
-        PM["search, documents"]
-        CB["cerebrum, agents/theory, graph_rag"]
+        PM["search, system_discovery"]
+        CB["cerebrum, agents/core (ThinkingAgent)"]
         OR["orchestrator, logistics"]
         CE["agents/ai_code_editing, coding, ci_cd_automation/build"]
         AG["agents (all providers), git_operations"]
@@ -147,19 +127,17 @@ graph TB
 
     OBSERVE --> PM
     THINK --> CB
-    THINK --> ME["meme/ (analysis)"]
     PLAN --> OR
     BUILD --> CE
     EXECUTE --> AG
-    EXECUTE --> MI["meme/ (influence)"]
     VERIFY --> SA
     LEARN --> AM
 ```
 
 | Phase | Modules Used | What They Provide |
 | :--- | :--- | :--- |
-| **OBSERVE** | `search`, `documents`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
-| **THINK** | `cerebrum`, `agents/theory/`, `graph_rag` | Case-based reasoning, deliberative architecture, knowledge graphs |
+| **OBSERVE** | `search`, `system_discovery` | Codebase understanding, pattern recognition, file discovery |
+| **THINK** | `cerebrum`, `agents/core` (ThinkingAgent) | Case-based reasoning, Chain-of-Thought reasoning traces |
 | **PLAN** | `orchestrator`, `logistics` | DAG-based workflow construction, scheduling |
 | **BUILD** | `agents/ai_code_editing/`, `coding`, `ci_cd_automation/build` | Code generation, sandbox execution, multi-language builds |
 | **EXECUTE** | `agents/` (all providers), `coding`, `git_operations` | Agent dispatch, sandboxed execution, version control |

@@ -125,7 +125,7 @@ class ArchitectureMixin:
                 if f"from {pres_module} import" in content or f"import {pres_module}" in content:
                     return True
 
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Error checking layer violation for %s: %s", business_file, e)
 
         return False

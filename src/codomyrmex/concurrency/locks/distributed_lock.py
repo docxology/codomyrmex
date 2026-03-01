@@ -79,5 +79,6 @@ class LocalLock(BaseLock):
             self.is_held = False
             try:
                 os.remove(self.lock_path)
-            except OSError:
+            except OSError as e:
+                logger.debug("Failed to remove lock file %s: %s", self.lock_path, e)
                 pass

@@ -11,20 +11,23 @@ The Calendar module provides calendar event management with provider abstraction
 ### Event Management
 
 ```python
-from codomyrmex.calendar import CalendarEvent, CalendarProvider
+from datetime import datetime, timedelta, timezone
+from codomyrmex.calendar_integration import CalendarEvent, GoogleCalendar
 
-# Create calendar events
+# Initialize the provider from environment variables
+provider = GoogleCalendar.from_env()
+
+# Create a calendar event
 event = CalendarEvent(
-    title="Sprint Review",
-    start="2026-02-23T10:00:00",
-    end="2026-02-23T11:00:00",
+    summary="Sprint Review",
+    start_time=datetime(2026, 2, 23, 10, 0, tzinfo=timezone.utc),
+    end_time=datetime(2026, 2, 23, 11, 0, tzinfo=timezone.utc),
     description="Review sprint 25 deliverables"
 )
 
-# Use a provider to manage events
-provider = CalendarProvider()
-provider.create_event(event)
-events = provider.list_events(date="2026-02-23")
+created = provider.create_event(event)
+now = datetime.now(timezone.utc)
+events = provider.list_events(time_min=now, time_max=now + timedelta(days=7))
 ```
 
 ## Key Exports
@@ -33,8 +36,9 @@ events = provider.list_events(date="2026-02-23")
 |--------|------|---------|
 | `CalendarEvent` | Class | Event data model |
 | `CalendarProvider` | Class | Abstract calendar provider interface |
-| `cli_commands` | Function | CLI commands for calendar operations |
-| Calendar exceptions | Various | `CalendarError`, `EventNotFound`, etc. |
+| `GoogleCalendar` | Class | Google Calendar implementation |
+| `CALENDAR_AVAILABLE` | Constant | Whether Google Calendar dependencies are installed |
+| Calendar exceptions | Various | `CalendarError`, `CalendarAuthError`, `CalendarAPIError`, `EventNotFoundError`, `InvalidEventError` |
 
 ## PAI Algorithm Phase Mapping
 

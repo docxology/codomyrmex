@@ -63,6 +63,15 @@ result = run_benchmark(suite)
 | **VERIFY** | Run benchmarks to detect performance regressions in changes |
 | **LEARN** | Track performance metrics over time for trend analysis |
 
+## MCP Tools
+
+Two tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `performance_check_regression` | Check if a benchmark result shows a performance regression vs baseline | Safe | performance |
+| `performance_compare_benchmarks` | Compare two benchmark results and return a detailed diff | Safe | performance |
+
 ## Architecture Role
 
 **Core Layer** — Cross-cutting performance infrastructure. `CacheManager` and `LazyLoader` consumed by all modules needing optimization. Zero-Mock benchmark suite validates performance characteristics.

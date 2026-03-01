@@ -58,9 +58,15 @@ codomyrmex logging_monitoring levels   # List available log levels with numeric 
 | **VERIFY** | Log output enables post-execution verification and debugging |
 | **LEARN** | Log files capture execution history for pattern analysis |
 
-## MCP Integration
+## MCP Tools
 
-The MCP server (`run_mcp_server.py`) uses `get_logger(__name__)` for all server-side logging. When running in HTTP mode, server logs appear in the terminal alongside uvicorn access logs.
+One tool is auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `logging_format_structured` | Format a log message as structured JSON for consumption by monitoring systems | Safe | logging_monitoring |
+
+**Note:** The MCP server itself (`run_mcp_server.py`) uses `get_logger(__name__)` for all server-side logging. When running in HTTP mode, server logs appear in the terminal alongside uvicorn access logs.
 
 ## Architecture Role
 

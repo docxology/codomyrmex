@@ -4,9 +4,12 @@ Model Storage Backends
 Storage backends for model artifacts.
 """
 
+import logging
 import threading
 from abc import ABC, abstractmethod
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 class ModelStore(ABC):
@@ -56,7 +59,8 @@ class FileModelStore(ModelStore):
         try:
             Path(path).unlink()
             return True
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            logger.warning("Artifact not found for deletion at '%s': %s", path, e)
             return False
 
 

@@ -154,7 +154,8 @@ class FileBasedCache(Cache):
                     return False
 
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to check cache key existence: %s", e)
             return False
 
     @property

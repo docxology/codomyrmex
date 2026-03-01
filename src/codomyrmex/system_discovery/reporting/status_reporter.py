@@ -179,7 +179,8 @@ class StatusReporter:
         try:
             importlib.import_module(module_name)
             return True
-        except ImportError:
+        except ImportError as e:
+            logger.debug("Module %r not importable: %s", module_name, e)
             return False
 
     def check_git_status(self) -> dict[str, Any]:
@@ -241,7 +242,8 @@ class StatusReporter:
                     1 for line in lines if line.endswith(("M", "D", "??"))
                 )
 
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
+            logger.warning("Git status check timed out: %s", e)
             pass
 
         if not status["is_git_repo"]:
@@ -258,7 +260,8 @@ class StatusReporter:
             )
             if result.returncode == 0:
                 status["current_branch"] = result.stdout.strip()
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
+            logger.warning("Git branch check timed out: %s", e)
             pass
 
         # Get remotes
@@ -274,7 +277,8 @@ class StatusReporter:
                 status["remotes"] = [
                     line.strip() for line in result.stdout.split("\n") if line.strip()
                 ]
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
+            logger.warning("Git remote check timed out: %s", e)
             pass
 
         # Get recent commits
@@ -290,7 +294,8 @@ class StatusReporter:
                 status["recent_commits"] = [
                     line.strip() for line in result.stdout.split("\n") if line.strip()
                 ]
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
+            logger.warning("Git log check timed out: %s", e)
             pass
 
         return status

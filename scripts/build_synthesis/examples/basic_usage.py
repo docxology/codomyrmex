@@ -9,7 +9,6 @@ Demonstrates actual build capabilities:
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Ensure codomyrmex is in path
@@ -21,7 +20,6 @@ except ImportError:
 
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.build_synthesis import (
-    BuildManager,
     create_python_build_target,
     get_available_build_types,
     check_build_environment

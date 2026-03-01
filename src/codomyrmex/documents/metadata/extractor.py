@@ -77,7 +77,8 @@ def _extract_pdf_metadata(file_path: Path) -> dict[str, Any]:
             "creator": pdf_metadata.get("/Creator", ""),
             "producer": pdf_metadata.get("/Producer", ""),
         }
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to extract PDF metadata from %s: %s", file_path, e)
         return {}
 
 
@@ -97,7 +98,8 @@ def _extract_markdown_metadata(file_path: Path) -> dict[str, Any]:
                     return frontmatter
 
         return {}
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to extract markdown metadata from %s: %s", file_path, e)
         return {}
 
 
@@ -114,7 +116,8 @@ def _extract_json_metadata(file_path: Path) -> dict[str, Any]:
                     if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
                 }
         return {}
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to extract JSON metadata from %s: %s", file_path, e)
         return {}
 
 
@@ -131,7 +134,8 @@ def _extract_yaml_metadata(file_path: Path) -> dict[str, Any]:
                     if k in ["title", "author", "description", "version", "metadata", "created_at", "updated_at"]
                 }
         return {}
-    except Exception:
+    except Exception as e:
+        logger.warning("Failed to extract YAML metadata from %s: %s", file_path, e)
         return {}
 
 

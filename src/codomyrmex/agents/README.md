@@ -33,6 +33,10 @@ uv sync
 - **`AgentResponse`** — Dataclass response structure from agent operations (content, error, tokens)
 - **`AgentConfig`** / `get_config` / `set_config` / `reset_config` — Configuration management
 
+### Git Operations
+
+- **`GitAgent`** — Agent specialized for Git and GitHub operations: repository sync, remote management, and issue management (extends BaseAgent)
+
 ### Code Editing
 
 - **`CodeEditor`** — Agent specialized in code editing, generation, and analysis (extends BaseAgent)

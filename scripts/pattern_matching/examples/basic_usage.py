@@ -24,7 +24,7 @@ def main():
     # 1. Pattern Matching Analysis
     print_info("Testing Pattern Matching initialization...")
     try:
-        from codomyrmex.pattern_matching import get_embedding_function, analyze_repository_path
+        from codomyrmex.pattern_matching import get_embedding_function
         
         # Test embedding function if available
         try:

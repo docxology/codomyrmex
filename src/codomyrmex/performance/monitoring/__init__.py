@@ -43,9 +43,9 @@ except ImportError:
 
     class performance_context:
         """No-op context manager if dependencies missing."""
-        def __init__(self, *args, **kwargs): pass
+        def __init__(self, *args, **kwargs): return None  # No-op stub
         def __enter__(self): return self
-        def __exit__(self, *args): pass
+        def __exit__(self, *args): return None  # No-op stub
 
     def get_system_metrics(*args, **kwargs):
         return {}

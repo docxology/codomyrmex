@@ -9,7 +9,6 @@ Demonstrates actual skills capabilities:
 """
 
 import sys
-import os
 import shutil
 from pathlib import Path
 
@@ -23,9 +22,7 @@ except ImportError:
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error
 from codomyrmex.skills import (
     get_skills_manager,
-    SkillsManager,
-    SkillRegistry,
-    SkillLoader
+    SkillsManager
 )
 
 def main():

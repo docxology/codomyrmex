@@ -14,10 +14,13 @@ radius) rather than git commit history — complementing GitHistoryAnalyzer.
 from __future__ import annotations
 
 import json
+import logging
 import shutil
 import subprocess
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class GitNexusNotAvailableError(RuntimeError):
@@ -44,7 +47,8 @@ class GitNexusBridge:
         try:
             self._resolve_cmd()
             return True
-        except GitNexusNotAvailableError:
+        except GitNexusNotAvailableError as e:
+            logger.warning("GitNexus is not available: %s", e)
             return False
 
     def _resolve_cmd(self) -> list[str]:

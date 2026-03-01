@@ -23,7 +23,7 @@ project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src"))
 sys.path.insert(0, str(project_root))  # Add for scripts package imports
 
-from scripts.orchestrator.workflows import WORKFLOWS, list_workflows, get_workflow
+from scripts.orchestrator.workflows import list_workflows, get_workflow
 
 
 def main() -> int:

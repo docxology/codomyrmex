@@ -18,7 +18,6 @@ except ImportError:
 import argparse
 import os
 import subprocess
-import json
 
 
 def find_ci_configs() -> list:

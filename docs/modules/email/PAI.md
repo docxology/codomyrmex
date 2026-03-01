@@ -11,17 +11,18 @@ The Email module provides email composition, sending, and management through a p
 ### Email Operations
 
 ```python
-from codomyrmex.email import EmailAddress, EmailDraft, EmailMessage, EmailProvider
+from codomyrmex.email import AgentMailProvider, EmailDraft, AGENTMAIL_AVAILABLE
 
 # Compose and send email
-draft = EmailDraft(
-    to=[EmailAddress("team@example.com")],
-    subject="Sprint Summary",
-    body="Completed PAI.md enrichment across 40+ modules."
-)
+if AGENTMAIL_AVAILABLE:
+    draft = EmailDraft(
+        to=["team@example.com"],
+        subject="Sprint Summary",
+        body_text="Completed PAI.md enrichment across 40+ modules."
+    )
 
-provider = EmailProvider()
-provider.send(draft)
+    provider = AgentMailProvider()
+    provider.send_message(draft)
 ```
 
 ## Key Exports
@@ -32,7 +33,11 @@ provider.send(draft)
 | `EmailDraft` | Class | Outgoing email composition |
 | `EmailMessage` | Class | Complete email message (sent/received) |
 | `EmailProvider` | Class | Abstract email provider interface |
-| `cli_commands` | Function | CLI commands for email operations |
+| `GmailProvider` | Class | Google Mail implementation (OAuth2) |
+| `AgentMailProvider` | Class | AgentMail implementation (API-key) |
+| `EMAIL_AVAILABLE` | Constant | Whether any email provider is available |
+| `GMAIL_AVAILABLE` | Constant | Whether Gmail dependencies are installed |
+| `AGENTMAIL_AVAILABLE` | Constant | Whether AgentMail SDK is installed |
 
 ## PAI Algorithm Phase Mapping
 

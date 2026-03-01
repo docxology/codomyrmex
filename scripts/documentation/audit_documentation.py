@@ -15,7 +15,7 @@ _project_root = Path(__file__).resolve().parents[2]
 if str(_project_root / "src") not in sys.path:
     sys.path.insert(0, str(_project_root / "src"))
 
-from codomyrmex.utils import ScriptBase, ScriptConfig
+from codomyrmex.utils import ScriptBase
 
 class DocumentationAudit(ScriptBase):
     def __init__(self):

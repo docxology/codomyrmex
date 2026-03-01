@@ -598,7 +598,8 @@ class DockerManager:
                     layer_size = entry.get("Size", 0)
                     if layer_size > 0:
                         layer_sizes.append(layer_size)
-            except Exception:
+            except Exception as e:
+                logger.debug("Failed to parse layer sizes from image history: %s", e)
                 pass
 
             analysis = {

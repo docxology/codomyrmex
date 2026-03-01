@@ -19,6 +19,15 @@ Documentation generation and quality management module. Provides Docusaurus-base
 - **`src/`** — Docusaurus React components and pages
 - **`static/`** — Static assets (images, stylesheets) for the documentation site
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `generate_module_docs` | Generate or update the RASP documentation suite for a specific module | `module_name` | Safe |
+| `audit_rasp_compliance` | Audit the repository for RASP (README, AGENTS, SPEC, PAI) compliance | `module_name` (optional; omit for whole repo) | Safe |
+
 ## Operating Contracts
 
 - Call `check_doc_environment()` before any build operation to verify Node.js and npm are available.

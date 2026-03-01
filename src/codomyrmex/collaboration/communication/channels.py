@@ -213,7 +213,8 @@ class MessageQueue:
         """Get a message without waiting, returns None if empty."""
         try:
             return self._queue.get_nowait()
-        except asyncio.QueueEmpty:
+        except asyncio.QueueEmpty as e:
+            logger.debug("No message available in queue: %s", e)
             return None
 
     def clear(self) -> int:

@@ -23,14 +23,21 @@ class AgentRequest:
     prompt: str
     metadata: dict[str, Any] | None = None
 
+_OLLAMA_ALLOWED_PREFIXES = ("http://localhost:", "http://127.0.0.1:", "https://localhost:", "https://127.0.0.1:")
+
+
 class OllamaClient:
     """Client for local Ollama instance (REST API).
-    
+
     Implements a robust interface compatible with ClaudeClient
     for use in ClaudeCodeEndpoint, using real LLM inference.
     """
     def __init__(self, model: str = "llama3", base_url: str = DEFAULT_OLLAMA_URL):
         """Execute   Init   operations natively."""
+        if not any(base_url.startswith(prefix) for prefix in _OLLAMA_ALLOWED_PREFIXES):
+            raise ValueError(
+                f"base_url must be a localhost address to prevent SSRF: {base_url!r}"
+            )
         self.model = model
         self.base_url = base_url
         self.session_manager = None # dummy for interface compatibility
@@ -43,18 +50,12 @@ class OllamaClient:
         """Execute request using Ollama /api/chat for real conversation."""
         url = f"{self.base_url}/api/chat"
 
-        # Construct chat messages
-        messages = [{"role": "user", "content": request.prompt}]
-
-        # Check if system prompt is embedded in context or prompt
-        if "System:" in request.prompt:
-            parts = request.prompt.split("System:", 1)
-            if len(parts) > 1:
-                sys_instruction, user_msg = parts[1].split("\n", 1) if "\n" in parts[1] else (parts[1], "")
-                messages = [
-                    {"role": "system", "content": sys_instruction.strip()},
-                    {"role": "user", "content": user_msg.strip() or "Proceed."}
-                ]
+        # Build structured messages from request metadata (no string splitting — prevents prompt injection)
+        # Callers embed system context via request.metadata["system"], not by embedding "System:" in the prompt.
+        messages = []
+        if request.metadata and request.metadata.get("system"):
+            messages.append({"role": "system", "content": request.metadata["system"]})
+        messages.append({"role": "user", "content": request.prompt})
 
         payload = {
             "model": self.model,
@@ -85,10 +86,11 @@ class OllamaClient:
                      if resp.status == 200:
                          tags = json.loads(resp.read().decode("utf-8"))
                          models = [m.get("name") for m in tags.get("models", [])]
-                         print(f"DEBUG: Available models: {models}")
-            except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+                         logger.debug("Available models for debugging: %s", models)
+            except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as debug_err:
+                logger.debug("Failed to list available Ollama models for debug: %s", debug_err)
                 pass
-            raise RuntimeError(f"Real Ollama Connection Failed: {e}")
+            raise RuntimeError(f"Real Ollama Connection Failed: {e}") from e
 
         elapsed = time.monotonic() - start_time
 
@@ -105,11 +107,11 @@ class OllamaClient:
 
 def get_llm_client(identity: str = "agent") -> Any:
     """Factory to get the best available REAL LLM client.
-    
+
     Priority:
     1. ClaudeClient (if ANTHROPIC_API_KEY set)
     2. OllamaClient (if reachable)
-    
+
     Raises RuntimeError if no real client is available.
     """
     # 1. Check Claude
@@ -118,7 +120,8 @@ def get_llm_client(identity: str = "agent") -> Any:
         if os.environ.get("ANTHROPIC_API_KEY"):
             logger.info(f"[{identity}] Using real ClaudeClient (API Key found)")
             return ClaudeClient()
-    except ImportError:
+    except ImportError as e:
+        logger.warning("[%s] ClaudeClient import failed: %s", identity, e)
         pass
 
     # 2. Check Ollama
@@ -131,7 +134,8 @@ def get_llm_client(identity: str = "agent") -> Any:
                 model = os.environ.get("OLLAMA_MODEL", "codellama:latest")
                 logger.info(f"[{identity}] Using real OllamaClient (Localhost reachable, model={model})")
                 return OllamaClient(model=model)
-    except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+    except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+        logger.warning("[%s] Ollama connection check failed: %s", identity, e)
         pass
 
     raise RuntimeError(

@@ -96,7 +96,8 @@ class AsyncLocalSemaphore(BaseSemaphore):
                         timeout=timeout
                     )
                     return True
-                except asyncio.TimeoutError:
+                except asyncio.TimeoutError as e:
+                    logger.warning("Semaphore acquisition timed out after %.1fs: %s", timeout, e)
                     return False
 
             try:

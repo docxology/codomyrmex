@@ -211,7 +211,8 @@ class VSCodeClient(IDEClient):
 
             settings_path.write_text(json.dumps(existing, indent=4))
             return True
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to update VS Code settings: %s", e)
             return False
 
     def start_debug(self, config: dict | None = None) -> bool:

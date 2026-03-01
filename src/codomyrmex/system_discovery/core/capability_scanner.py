@@ -281,7 +281,8 @@ class CapabilityScanner:
                             imports.add(alias.name)
                     elif isinstance(node, ast.ImportFrom) and node.module:
                         imports.add(node.module)
-                except Exception:
+                except Exception as e:
+                    logger.debug("Failed to extract import info from AST node: %s", e)
                     pass
 
         return functions, classes, constants, imports

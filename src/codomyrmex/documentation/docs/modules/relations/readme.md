@@ -65,4 +65,5 @@ relations/
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/relations/](../../../docs/modules/relations/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

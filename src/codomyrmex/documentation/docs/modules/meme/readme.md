@@ -60,4 +60,5 @@ The module has 11 specialized submodules spanning sign theory, network theory, a
 
 ## Navigation
 
+- **Extended Docs**: [docs/modules/meme/](../../../docs/modules/meme/)
 - [SPEC.md](SPEC.md) | [AGENTS.md](AGENTS.md) | [PAI.md](PAI.md) | [Parent](../README.md)

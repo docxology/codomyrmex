@@ -7,10 +7,13 @@ testing, documentation generation, and workflow automation.
 
 __version__ = "1.0.3.dev0"
 
+import logging
 import os
 import pkgutil
 from pathlib import Path
 from typing import List
+
+logger = logging.getLogger(__name__)
 
 
 def get_version() -> str:
@@ -135,7 +138,8 @@ def __getattr__(name):
 # These are the "always available" modules
 try:
     from . import exceptions, utils
-except ImportError:
+except ImportError as e:
+    logger.debug("Optional eager imports unavailable: %s", e)
     pass
 
 __all__ = [

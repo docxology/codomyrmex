@@ -20,9 +20,12 @@ Usage:
 from __future__ import annotations
 
 import enum
+import logging
 import threading
 import uuid
 from typing import TYPE_CHECKING, Any, TypeVar
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from .container import Container
@@ -163,7 +166,8 @@ class ScopeContext:
                     if callable(method):
                         try:
                             method()
-                        except Exception:
+                        except Exception as e:
+                            logger.debug("Error disposing scoped instance via %s: %s", method_name, e)
                             pass
                         break
             self._instances.clear()

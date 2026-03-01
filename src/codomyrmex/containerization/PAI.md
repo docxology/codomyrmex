@@ -40,6 +40,17 @@ commands = cli_commands()
 | **EXECUTE** | Run sandboxed code execution in containers; deploy services |
 | **VERIFY** | Security scan container images for vulnerabilities |
 
+## MCP Tools
+
+Four tools are auto-discovered via `@mcp_tool` and available through the PAI MCP bridge:
+
+| Tool | Description | Trust Level | Category |
+|------|-------------|-------------|----------|
+| `container_runtime_status` | Check the status and info of the container runtime (Docker/Podman) | Safe | containerization |
+| `container_build` | Build a Docker image from a Dockerfile | Safe | containerization |
+| `container_list` | List running containers with status and resource usage | Safe | containerization |
+| `container_security_scan` | Scan a container image for security vulnerabilities | Safe | containerization |
+
 ## Architecture Role
 
 **Service Layer** — Consumes `coding/` for Dockerfile generation. Consumed by `ci_cd_automation/` for deployment pipelines and `cloud/` for container orchestration.

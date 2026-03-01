@@ -479,7 +479,8 @@ class ArsContextaManager:
         if layer:
             try:
                 kl = KernelLayer(layer)
-            except ValueError:
+            except ValueError as e:
+                logger.debug("Invalid kernel layer %r: %s", layer, e)
                 return []
             prims = self.registry.list_by_layer(kl)
         else:

@@ -69,6 +69,16 @@ except Exception as e:
     print(f"Enforcement failed: {e}")
 ```
 
+## MCP Tools Available
+
+All tools are auto-discovered via `@mcp_tool` decorators and exposed through the MCP bridge.
+
+| Tool | Description | Key Parameters | Trust Level |
+|------|-------------|----------------|-------------|
+| `scan_vulnerabilities` | Scan a project directory for known security vulnerabilities | `path` (default ".") | Safe |
+| `scan_secrets` | Scan a specific file for leaked secrets, API keys, or credentials | `file_path` | Safe |
+| `audit_code_security` | Audit code quality and security for a specific file or directory | `path` | Safe |
+
 ## Navigation
 
 - [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

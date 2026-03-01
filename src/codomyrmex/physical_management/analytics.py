@@ -184,7 +184,8 @@ class DataStream:
         try:
             self.subscribers.remove(callback)
             return True
-        except ValueError:
+        except ValueError as e:
+            logger.warning("Failed to unsubscribe callback from stream: %s", e)
             return False
 
     def get_recent_data(self, duration: float) -> list[DataPoint]:
@@ -307,7 +308,8 @@ class StreamingAnalytics:
         try:
             self.processors.remove(processor)
             return True
-        except ValueError:
+        except ValueError as e:
+            logger.warning("Failed to remove data processor: %s", e)
             return False
 
     def create_alert(
@@ -397,7 +399,10 @@ class StreamingAnalytics:
                         "start_time": w.start_time,
                         "end_time": w.end_time,
                         "duration": w.duration,
-                        "metrics": w.calculate_metrics(),
+                        "metrics": {
+                            k.value: v
+                            for k, v in w.calculate_metrics().items()
+                        },
                     }
                     for w in stream.completed_windows
                 ],

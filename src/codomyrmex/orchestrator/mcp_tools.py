@@ -1,6 +1,10 @@
 """MCP tools for the orchestrator module."""
 
+import logging
+
 from codomyrmex.model_context_protocol.decorators import mcp_tool
+
+logger = logging.getLogger(__name__)
 
 
 @mcp_tool(category="orchestrator")
@@ -60,7 +64,8 @@ def analyze_workflow_dependencies(tasks: list[dict]) -> dict:
             for dep in deps:
                 try:
                     workflow.add_dependency(task_id, dep)
-                except (ValueError, RuntimeError, AttributeError, OSError, TypeError):
+                except (ValueError, RuntimeError, AttributeError, OSError, TypeError) as e:
+                    logger.warning("Failed to add dependency %s -> %s: %s", task_id, dep, e)
                     pass
 
         # Verification happens implicitly or through a topological sort check

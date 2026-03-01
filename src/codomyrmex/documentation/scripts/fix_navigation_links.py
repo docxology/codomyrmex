@@ -52,7 +52,8 @@ class NavigationLinkFixer:
             else:
                 # Absolute path
                 return False
-        except (OSError, ValueError):
+        except (OSError, ValueError) as e:
+            logger.warning("Failed to validate navigation link %s: %s", link_target, e)
             return False
 
     def fix_navigation_links(self, agents_file: Path, dry_run: bool = True) -> bool:

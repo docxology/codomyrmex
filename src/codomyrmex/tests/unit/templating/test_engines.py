@@ -11,7 +11,6 @@ Tests cover:
 """
 
 import pytest
-from typing import Any
 
 from codomyrmex.templating.engines import (
     TemplateContext,
