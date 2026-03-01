@@ -90,7 +90,8 @@ class DraftMixin:
         resolved_inbox = self._resolve_inbox_id(inbox_id)
         try:
             response = self._client.inboxes.drafts.list(resolved_inbox, limit=limit)
-            return [_sdk_draft_to_model(d, resolved_inbox) for d in response]
+            items = getattr(response, "drafts", None) or list(response)
+            return [_sdk_draft_to_model(d, resolved_inbox) for d in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_drafts")
         except Exception as exc:

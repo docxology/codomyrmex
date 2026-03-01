@@ -39,7 +39,8 @@ class WebhookMixin:
         """
         try:
             response = self._client.webhooks.list(limit=limit)
-            return [_sdk_webhook_to_model(w) for w in response]
+            items = getattr(response, "webhooks", None) or list(response)
+            return [_sdk_webhook_to_model(w) for w in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_webhooks")
         except Exception as exc:

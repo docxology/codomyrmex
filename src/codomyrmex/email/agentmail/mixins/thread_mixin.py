@@ -58,7 +58,8 @@ class ThreadMixin:
             if after:
                 kwargs["after"] = after
             response = self._client.inboxes.threads.list(resolved_inbox, **kwargs)
-            return [_sdk_thread_to_model(t) for t in response]
+            items = getattr(response, "threads", None) or list(response)
+            return [_sdk_thread_to_model(t) for t in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_threads")
         except Exception as exc:

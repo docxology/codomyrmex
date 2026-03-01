@@ -1,6 +1,6 @@
 # Personal AI Infrastructure — Website Module
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.1.0 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -116,10 +116,10 @@ dp.run_tests()                # execute pytest, parse JUnit XML results
 |-----------|------|---------------|
 | Codomyrmex (this) | **8787** | `python scripts/website/launch_dashboard.py --open` |
 | PAI Observability | **5172** (UI) + **4000** (API) | `~/.claude/Observability/scripts/start-agent-observability-dashboard.sh` |
-| PAI Project Manager | **8889** | `bun ~/.claude/skills/PAI/Tools/PMServer.ts` |
+| PAI Project Manager | **8888** | `bun ~/.claude/skills/PAI/Tools/PMServer.ts` (or via `dashboard.py`) |
 | MCP HTTP Server | **8080** | `python scripts/model_context_protocol/run_mcp_server.py --transport http` |
 
-> **Port note**: PAI VoiceServer (`~/.claude/VoiceServer/server.ts`) uses port **8888**. PMServer now defaults to **8889**. Start both simultaneously without conflict.
+> **Combined launch**: `uv run python scripts/pai/dashboard.py` starts both the PMServer (:8888) and Codomyrmex (:8787) simultaneously.
 
 ### Security Features
 
@@ -144,6 +144,7 @@ dp.run_tests()                # execute pytest, parse JUnit XML results
 ## MCP Server Integration
 
 The dashboard probes the MCP server at `localhost:8080` and displays:
+
 - Tool count (33), resource count, prompt count
 - Server status (online/offline)
 - Direct link to the MCP Web UI

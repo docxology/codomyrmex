@@ -200,7 +200,7 @@ Module-specific `requirements.txt` files are **deprecated** - do not modify them
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (49124 symbols, 114787 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (49441 symbols, 116480 relationships, 300 execution flows).
 
 ## Always Start Here
 

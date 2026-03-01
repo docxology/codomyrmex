@@ -63,7 +63,7 @@ The module exports 40+ functions covering all Git operations. Key examples:
 - `git_manager.get_status(repository_path: str = None) -> dict[str, Any]`
 - `git_manager.get_commit_history(limit: int = 10, repository_path: str = None) -> list[dict]`
 
-See [API_SPECIFICATION.md](API_SPECIFICATION.md) and [COMPLETE_API_DOCUMENTATION.md](docs/COMPLETE_API_DOCUMENTATION.md) for complete function list.
+See [API_SPECIFICATION.md](API_SPECIFICATION.md) for complete function list.
 
 ### Dependencies
 

@@ -124,6 +124,8 @@ def test_create_draft_and_send() -> None:
     assert isinstance(fetched_draft, AgentMailDraft)
     assert fetched_draft.draft_id == draft_id
 
+    # Small delay for API eventual consistency before sending
+    time.sleep(2)
     sent = provider.send_draft(draft_id)
     assert isinstance(sent, EmailMessage)
 

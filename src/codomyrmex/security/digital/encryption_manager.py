@@ -124,3 +124,31 @@ class EncryptionManager:
 
         key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
         return key, salt
+
+
+def encrypt_sensitive_data(data: str | bytes) -> dict[str, bytes]:
+    """Encrypt sensitive data using a freshly generated symmetric key.
+
+    Args:
+        data: Plaintext string or bytes to encrypt.
+
+    Returns:
+        Dict with 'encrypted_data' (bytes) and 'key' (bytes, the Fernet key).
+    """
+    manager = EncryptionManager()
+    encrypted = manager.encrypt(data)
+    return {"encrypted_data": encrypted, "key": manager.key}
+
+
+def decrypt_sensitive_data(encrypted_data: bytes, key: bytes) -> str:
+    """Decrypt data that was encrypted with ``encrypt_sensitive_data``.
+
+    Args:
+        encrypted_data: Ciphertext bytes produced by ``encrypt_sensitive_data``.
+        key: The Fernet key that was used during encryption.
+
+    Returns:
+        Decrypted plaintext string.
+    """
+    manager = EncryptionManager(key=key)
+    return manager.decrypt_to_string(encrypted_data)

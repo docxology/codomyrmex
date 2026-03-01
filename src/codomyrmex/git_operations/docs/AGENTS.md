@@ -10,8 +10,6 @@ Documentation files and guides.
 
 - `API_SPECIFICATION.md` – Project file
 - `CHANGELOG.md` – Project file
-- `COMPLETE_API_DOCUMENTATION.md` – Project file
-- `COMPREHENSIVE_USAGE_EXAMPLES.md` – Project file
 - `MCP_TOOL_SPECIFICATION.md` – Project file
 - `METADATA_SYSTEM_GUIDE.md` – Project file
 - `README.md` – Project file

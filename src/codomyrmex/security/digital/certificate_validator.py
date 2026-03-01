@@ -140,3 +140,29 @@ class CertificateValidator:
             parts.append(f"O={components[b'O'].decode('utf-8', errors='ignore')}")
 
         return ", ".join(parts) or "Unknown"
+
+
+def validate_ssl_certificates(hostname: str, port: int = 443, timeout: int = 10) -> dict[str, Any]:
+    """Validate SSL certificate for *hostname* and return a plain dict result.
+
+    Args:
+        hostname: Hostname (or IP) to connect to.
+        port: TCP port (default 443).
+        timeout: Connection timeout in seconds (default 10).
+
+    Returns:
+        Dict representation of :class:`SSLValidationResult`.
+    """
+    validator = CertificateValidator(timeout=timeout)
+    result = validator.validate_certificate(hostname, port)
+    return {
+        "hostname": result.hostname,
+        "port": result.port,
+        "valid": result.valid,
+        "certificate_info": result.certificate_info,
+        "validation_errors": result.validation_errors,
+        "expiration_days": result.expiration_days,
+        "issuer": result.issuer,
+        "subject": result.subject,
+        "serial_number": result.serial_number,
+    }

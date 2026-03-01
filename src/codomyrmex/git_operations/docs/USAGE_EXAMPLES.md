@@ -381,7 +381,7 @@ create_git_analysis_report(
 )
 ```
 
-For more detailed function signatures and parameters, see [COMPLETE_API_DOCUMENTATION.md](./COMPLETE_API_DOCUMENTATION.md) and [API_SPECIFICATION.md](./API_SPECIFICATION.md).
+For more detailed function signatures and parameters, see [API_SPECIFICATION.md](./API_SPECIFICATION.md).
 
 ## Navigation Links
 

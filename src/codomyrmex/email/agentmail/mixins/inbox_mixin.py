@@ -47,7 +47,8 @@ class InboxMixin:
             if page_token:
                 kwargs["page_token"] = page_token
             response = self._client.inboxes.list(**kwargs)
-            return [_sdk_inbox_to_model(inbox) for inbox in response]
+            items = getattr(response, "inboxes", None) or list(response)
+            return [_sdk_inbox_to_model(inbox) for inbox in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_inboxes")
         except Exception as exc:

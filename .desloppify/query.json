@@ -1,0 +1,501 @@
+{
+  "command": "show",
+  "query": "private_imports",
+  "status_filter": "open",
+  "total": 10,
+  "summary": {
+    "by_tier": {
+      "T3": 10
+    },
+    "by_detector": {
+      "private_imports": 10
+    },
+    "files": 1
+  },
+  "by_file": {
+    "src/codomyrmex/agents/pai/mcp_bridge.py": [
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_PROMPT_DEFINITIONS::from::src/codomyrmex/agents/pai/mcp/definitions.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_PROMPT_DEFINITIONS` from src/codomyrmex/agents/pai/mcp/definitions.py",
+        "detail": {
+          "symbol": "_PROMPT_DEFINITIONS",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/definitions.py",
+          "source_module": "mcp.definitions"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_RESOURCE_DEFINITIONS::from::src/codomyrmex/agents/pai/mcp/definitions.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_RESOURCE_DEFINITIONS` from src/codomyrmex/agents/pai/mcp/definitions.py",
+        "detail": {
+          "symbol": "_RESOURCE_DEFINITIONS",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/definitions.py",
+          "source_module": "mcp.definitions"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_TOOL_DEFINITIONS::from::src/codomyrmex/agents/pai/mcp/definitions.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_TOOL_DEFINITIONS` from src/codomyrmex/agents/pai/mcp/definitions.py",
+        "detail": {
+          "symbol": "_TOOL_DEFINITIONS",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/definitions.py",
+          "source_module": "mcp.definitions"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_call_module_function::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_call_module_function` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_call_module_function",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_get_module_readme::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_get_module_readme` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_get_module_readme",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_list_module_functions::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_list_module_functions` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_list_module_functions",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_list_modules::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_list_modules` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_list_modules",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_list_workflows::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_list_workflows` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_list_workflows",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_module_info::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_module_info` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_module_info",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      },
+      {
+        "id": "private_imports::src/codomyrmex/agents/pai/mcp_bridge.py::_tool_pai_awareness::from::src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "tier": 3,
+        "confidence": "medium",
+        "summary": "Cross-module private import: `_tool_pai_awareness` from src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+        "detail": {
+          "symbol": "_tool_pai_awareness",
+          "source_file": "src/codomyrmex/agents/pai/mcp_bridge.py",
+          "target_file": "src/codomyrmex/agents/pai/mcp/proxy_tools.py",
+          "source_module": "mcp.proxy_tools"
+        }
+      }
+    ]
+  },
+  "total_matching": 13,
+  "hidden": {
+    "by_detector": {
+      "private_imports": 3
+    },
+    "total": 3
+  },
+  "noise_budget": 10,
+  "noise_global_budget": 0,
+  "narrative": {
+    "phase": "middle_grind",
+    "headline": "\u26a0 115 security findings \u2014 review before other cleanup. 7066 findings open. Error consistency (0.0%) needs attention \u2014 run `desloppify next` to start.",
+    "dimensions": {
+      "lowest_dimensions": [
+        {
+          "name": "Error consistency",
+          "strict": 0.0,
+          "issues": 0,
+          "impact": 0.0,
+          "subjective": true,
+          "impact_description": "re-review to improve"
+        },
+        {
+          "name": "Abstraction fit",
+          "strict": 0.0,
+          "issues": 0,
+          "impact": 0.0,
+          "subjective": true,
+          "impact_description": "re-review to improve"
+        },
+        {
+          "name": "AI generated debt",
+          "strict": 0.0,
+          "issues": 0,
+          "impact": 0.0,
+          "subjective": true,
+          "impact_description": "re-review to improve"
+        }
+      ],
+      "biggest_gap_dimensions": [],
+      "stagnant_dimensions": []
+    },
+    "actions": [
+      {
+        "type": "reorganize",
+        "detector": "flat_dirs",
+        "count": 10,
+        "description": "10 flat_dirs findings \u2014 create subdirectories and use `desloppify move`",
+        "command": "desloppify show flat_dirs --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 1,
+        "lane": "restructure"
+      },
+      {
+        "type": "reorganize",
+        "detector": "coupling",
+        "count": 28,
+        "description": "28 coupling findings \u2014 fix boundary violations with `desloppify move`",
+        "command": "desloppify show coupling --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 2,
+        "lane": "restructure"
+      },
+      {
+        "type": "reorganize",
+        "detector": "cycles",
+        "count": 1,
+        "description": "1 cycles findings \u2014 break cycles by extracting shared code or using `desloppify move`",
+        "command": "desloppify show cycles --status open",
+        "impact": 0.0,
+        "dimension": "Security",
+        "priority": 3,
+        "lane": "restructure"
+      },
+      {
+        "type": "reorganize",
+        "detector": "facade",
+        "count": 181,
+        "description": "181 facade findings \u2014 flatten re-export facades or consolidate barrel files",
+        "command": "desloppify show facade --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 4,
+        "lane": "restructure"
+      },
+      {
+        "type": "refactor",
+        "detector": "uncalled_functions",
+        "count": 1,
+        "description": "1 uncalled_functions findings \u2014 remove dead functions or document why they're retained",
+        "command": "desloppify show uncalled_functions --status open",
+        "impact": 0.0,
+        "dimension": "Unknown",
+        "priority": 5,
+        "lane": "refactor"
+      },
+      {
+        "type": "refactor",
+        "detector": "structural",
+        "count": 598,
+        "description": "598 structural findings \u2014 decompose large files \u2014 extract logic into focused modules",
+        "command": "desloppify show structural --status open",
+        "impact": 0.0,
+        "dimension": "File health",
+        "priority": 6,
+        "lane": "refactor"
+      },
+      {
+        "type": "refactor",
+        "detector": "props",
+        "count": 7,
+        "description": "7 props findings \u2014 split bloated components, extract sub-components",
+        "command": "desloppify show props --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 7,
+        "lane": "refactor"
+      },
+      {
+        "type": "refactor",
+        "detector": "dupes",
+        "count": 189,
+        "description": "189 dupes findings \u2014 extract shared utility or consolidate duplicates",
+        "command": "desloppify show dupes --status open",
+        "impact": 0.0,
+        "dimension": "Duplication",
+        "priority": 8,
+        "lane": "refactor"
+      },
+      {
+        "type": "refactor",
+        "detector": "dict_keys",
+        "count": 296,
+        "description": "296 dict_keys findings \u2014 fix dict key mismatches \u2014 dead writes are likely dead code, schema drift suggests a typo or missed rename",
+        "command": "desloppify show dict_keys --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 9,
+        "lane": "refactor"
+      },
+      {
+        "type": "refactor",
+        "detector": "test_coverage",
+        "count": 1440,
+        "description": "1440 test_coverage findings \u2014 add tests for untested production modules \u2014 prioritize by import count",
+        "command": "desloppify show test_coverage --status open",
+        "impact": 0.0,
+        "dimension": "Test health",
+        "priority": 10,
+        "lane": "test_coverage"
+      },
+      {
+        "type": "refactor",
+        "detector": "responsibility_cohesion",
+        "count": 71,
+        "description": "71 responsibility_cohesion findings \u2014 split modules with too many responsibilities \u2014 extract focused sub-modules",
+        "command": "desloppify show responsibility_cohesion --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 11,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "unused",
+        "count": 1018,
+        "description": "1018 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "command": "desloppify show unused --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 12,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "smells",
+        "count": 1714,
+        "description": "1714 smells findings \u2014 inspect with `desloppify next` and fix manually",
+        "command": "desloppify show smells --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 13,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "global_mutable_config",
+        "count": 32,
+        "description": "32 global_mutable_config findings \u2014 refactor module-level mutable state \u2014 use explicit init functions or dependency injection",
+        "command": "desloppify show global_mutable_config --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 14,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "private_imports",
+        "count": 13,
+        "description": "13 private_imports findings \u2014 stop importing private symbols across module boundaries",
+        "command": "desloppify show private_imports --status open",
+        "impact": 0.0,
+        "dimension": "Code quality",
+        "priority": 15,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "security",
+        "count": 115,
+        "description": "115 security findings \u2014 review and fix security findings \u2014 prioritize by severity",
+        "command": "desloppify show security --status open",
+        "impact": 0.0,
+        "dimension": "Security",
+        "priority": 16,
+        "lane": "refactor"
+      },
+      {
+        "type": "manual_fix",
+        "detector": "subjective_review",
+        "count": 1352,
+        "description": "1352 files need design review \u2014 run design review with dimension templates",
+        "command": "desloppify fix review",
+        "impact": 0.0,
+        "dimension": "Test health",
+        "priority": 17,
+        "lane": "refactor"
+      }
+    ],
+    "strategy": {
+      "fixer_leverage": {
+        "auto_fixable_count": 0,
+        "total_count": 7066,
+        "coverage": 0.0,
+        "impact_ratio": 0.0,
+        "recommendation": "none"
+      },
+      "lanes": {
+        "restructure": {
+          "actions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "file_count": 220,
+          "total_impact": 0.0,
+          "automation": "manual",
+          "run_first": false
+        },
+        "refactor": {
+          "actions": [
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ],
+          "file_count": 2150,
+          "total_impact": 0.0,
+          "automation": "manual",
+          "run_first": false
+        },
+        "test_coverage": {
+          "actions": [
+            10
+          ],
+          "file_count": 1440,
+          "total_impact": 0.0,
+          "automation": "manual",
+          "run_first": false
+        }
+      },
+      "can_parallelize": true,
+      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify."
+    },
+    "tools": {
+      "fixers": [],
+      "move": {
+        "available": true,
+        "relevant": true,
+        "reason": "28 coupling violations + 10 flat directories",
+        "usage": "desloppify move <source> <dest> [--dry-run]"
+      },
+      "plan": {
+        "command": "desloppify plan",
+        "description": "Generate prioritized markdown cleanup plan"
+      },
+      "badge": {
+        "generated": true,
+        "in_readme": false,
+        "path": "scorecard.png",
+        "recommendation": "Add to README: <img src=\"scorecard.png\" width=\"100%\">"
+      }
+    },
+    "debt": {
+      "overall_gap": 0.0,
+      "wontfix_count": 0,
+      "worst_dimension": null,
+      "worst_gap": 0.0,
+      "trend": "stable"
+    },
+    "milestone": null,
+    "primary_action": {
+      "command": "desloppify show flat_dirs --status open",
+      "description": "10 flat_dirs findings \u2014 create subdirectories and use `desloppify move`"
+    },
+    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
+    "verification_step": {
+      "command": "desloppify scan",
+      "reason": "revalidate after changes"
+    },
+    "risk_flags": [],
+    "strict_target": {
+      "target": 95.0,
+      "current": 32.0,
+      "gap": 63.0,
+      "state": "below",
+      "warning": null
+    },
+    "reminders": [
+      {
+        "type": "zone_classification",
+        "message": "1198 of 2753 files classified as non-production (10 config, 466 script, 712 test, 10 vendor). Override with `desloppify zone set <file> production` if any are misclassified.",
+        "command": "desloppify zone show",
+        "priority": 2,
+        "severity": "medium"
+      }
+    ],
+    "reminder_history": {
+      "zone_classification": 3,
+      "report_scores": 2,
+      "feedback_nudge": 1
+    }
+  },
+  "config": {
+    "target_strict_score": 95,
+    "review_max_age_days": 30,
+    "review_batch_max_files": 80,
+    "holistic_max_age_days": 30,
+    "generate_scorecard": true,
+    "badge_path": "scorecard.png",
+    "exclude": [],
+    "ignore": [],
+    "ignore_metadata": {},
+    "zone_overrides": {},
+    "review_dimensions": [],
+    "large_files_threshold": 0,
+    "props_threshold": 0,
+    "finding_noise_budget": 10,
+    "finding_noise_global_budget": 0,
+    "languages": {}
+  }
+}

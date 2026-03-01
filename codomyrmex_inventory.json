@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "root_path": "/Users/mini/Documents/GitHub/codomyrmex",
     "python_version": "3.13.11 (main, Dec  5 2025, 21:16:49) [Clang 21.1.4 ]",
-    "timestamp": "2026-02-28T18:50:17.535402"
+    "timestamp": "2026-02-28T19:27:52.873249"
   },
   "modules": {
     "tool_use": {
@@ -448,7 +448,7 @@
           "name": "field",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/ide",
           "type": "function",
-          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x104c12120>, default_factory=<dataclasses._MISSING_TYPE object at 0x104c12120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x104c12120>)",
+          "signature": "(*, default=<dataclasses._MISSING_TYPE object at 0x1051d2120>, default_factory=<dataclasses._MISSING_TYPE object at 0x1051d2120>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x1051d2120>)",
           "docstring": "Return an object to identify dataclass fields.\n\ndefault is the default value of the field.  default_factory is a\n0-argument function called to initialize a field's value.  If init\nis true, the field will be a parameter to the class's __init__()\nfunction.  If repr is true, the field will be included in the\nobject's repr().  If hash is true, the field will be included in the\nobject's hash().  If compare is true, the field will be used in\ncomparison functions.  metadata, if specified, must be a map",
           "file_path": "/Users/mini/.local/share/uv/python/cpython-3.13.11-macos-aarch64-none/lib/python3.13/dataclasses.py",
           "line_number": 383,
@@ -2222,7 +2222,7 @@
           "name": "OPENCV_AVAILABLE",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/video",
           "type": "constant",
-          "signature": "OPENCV_AVAILABLE = False",
+          "signature": "OPENCV_AVAILABLE = True",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/video",
           "line_number": 0,
@@ -2244,7 +2244,7 @@
           "name": "PROCESSING_AVAILABLE",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/video",
           "type": "constant",
-          "signature": "PROCESSING_AVAILABLE = False",
+          "signature": "PROCESSING_AVAILABLE = True",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/video",
           "line_number": 0,
@@ -5468,7 +5468,7 @@
           "signature": "class SecurityScanResult",
           "docstring": "Results from a security scan operation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 77,
+          "line_number": 76,
           "is_public": true,
           "dependencies": []
         },
@@ -5523,7 +5523,7 @@
           "signature": "class VulnerabilityReport",
           "docstring": "Comprehensive vulnerability assessment report.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 43,
+          "line_number": 42,
           "is_public": true,
           "dependencies": []
         },
@@ -5534,7 +5534,7 @@
           "signature": "class VulnerabilityScanner",
           "docstring": "Comprehensive vulnerability scanner for code and dependencies.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 104,
+          "line_number": 103,
           "is_public": true,
           "dependencies": []
         },
@@ -5721,7 +5721,7 @@
           "signature": "(target_path: str) -> list[dict[str, typing.Any]]",
           "docstring": "Convenience function for code security auditing.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 297,
+          "line_number": 296,
           "is_public": true,
           "dependencies": []
         },
@@ -5765,7 +5765,7 @@
           "signature": "(target_path: str, standards: list[str] | None = None) -> list[dict[str, typing.Any]]",
           "docstring": "Convenience function for compliance checking.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 303,
+          "line_number": 302,
           "is_public": true,
           "dependencies": []
         },
@@ -6194,7 +6194,7 @@
           "signature": "(target_path: str, scan_types: list[str] | None = None) -> codomyrmex.security.digital.vulnerability_scanner.VulnerabilityReport",
           "docstring": "Convenience function to scan vulnerabilities.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/security/digital/vulnerability_scanner.py",
-          "line_number": 292,
+          "line_number": 291,
           "is_public": true,
           "dependencies": []
         },
@@ -6269,7 +6269,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 18:11:43"
+      "last_modified": "2026-02-28 19:09:28"
     },
     "auth": {
       "name": "auth",
@@ -8098,7 +8098,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 17:40:23"
+      "last_modified": "2026-02-28 19:27:35"
     },
     "tests": {
       "name": "tests",
@@ -8144,7 +8144,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 18:37:01"
+      "last_modified": "2026-02-28 19:26:55"
     },
     "git_analysis": {
       "name": "git_analysis",
@@ -10437,7 +10437,7 @@
           "signature": "(command: 'str') -> 'bool'",
           "docstring": "Check if a command is available on the system.\n\nArgs:\n    command: Command name to check.\n\nReturns:\n    True if command is available, False otherwise.\n\nExample:\n    >>> if check_command_available(\"git\"):\n    ...     result = run_command([\"git\", \"status\"])",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 0,
+          "line_number": 650,
           "is_public": true,
           "dependencies": []
         },
@@ -10525,7 +10525,7 @@
           "signature": "(command: 'str', version_args: 'Sequence[str]' = ('--version',)) -> 'str | None'",
           "docstring": "Get the version string of a command.\n\nArgs:\n    command: Command name.\n    version_args: Arguments to get version (default: --version).\n\nReturns:\n    Version string if available, None otherwise.\n\nExample:\n    >>> version = get_command_version(\"git\")\n    >>> print(version)  # \"git version 2.39.0\"",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 0,
+          "line_number": 668,
           "is_public": true,
           "dependencies": []
         },
@@ -10701,7 +10701,7 @@
           "signature": "(command: 'str | list[str]') -> 'str'",
           "docstring": "Safely quote a command for shell execution.\n\nArgs:\n    command: Command as string or list.\n\nReturns:\n    Properly quoted command string.\n\nExample:\n    >>> quote_command([\"echo\", \"hello world\"])\n    \"echo 'hello world'\"",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 0,
+          "line_number": 695,
           "is_public": true,
           "dependencies": []
         },
@@ -10720,7 +10720,7 @@
           "name": "registry",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "type": "other",
-          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10b7dae40>",
+          "signature": "<codomyrmex.utils.integration.ModuleRegistry object at 0x10be0d550>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils",
           "line_number": 0,
@@ -10788,8 +10788,8 @@
           "type": "function",
           "signature": "(command: 'str | list[str]', *, max_attempts: 'int' = 3, delay: 'float' = 1.0, backoff: 'float' = 2.0, retry_on_codes: 'Sequence[int] | None' = None, retry_on_timeout: 'bool' = True, on_retry: 'Callable[[int, SubprocessResult], None] | None' = None, **kwargs: 'Any') -> 'SubprocessResult'",
           "docstring": "Execute a command with retry logic for flaky commands.\n\nThis function wraps run_command with configurable retry behavior,\nuseful for commands that may fail intermittently due to network\nissues or transient errors.\n\nArgs:\n    command: Command to execute.\n    max_attempts: Maximum number of execution attempts.\n    delay: Initial delay between retries in seconds.\n    backoff: Multiplier for delay after each retry.\n    retry_on_codes: Return codes that should trigger retry. If None,\n        retry on",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 0,
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess_advanced.py",
+          "line_number": 242,
           "is_public": true,
           "dependencies": []
         },
@@ -10833,7 +10833,7 @@
           "signature": "(command: 'str') -> 'list[str]'",
           "docstring": "Split a command string into list of arguments.\n\nArgs:\n    command: Command string.\n\nReturns:\n    List of command arguments.\n\nExample:\n    >>> split_command(\"echo 'hello world'\")\n    [\"echo\", \"hello world\"]",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 0,
+          "line_number": 713,
           "is_public": true,
           "dependencies": []
         },
@@ -10843,8 +10843,8 @@
           "type": "function",
           "signature": "(command: 'str | list[str]', *, cwd: 'str | None' = None, env: 'Mapping[str, str] | None' = None, timeout: 'float | None' = None, shell: 'bool' = False, inherit_env: 'bool' = True, combine_streams: 'bool' = False, encoding: 'str' = 'utf-8', errors: 'str' = 'replace') -> 'Generator[str, None, SubprocessResult]'",
           "docstring": "Execute a command and yield output lines in real-time.\n\nThis generator function allows processing command output as it's produced,\nuseful for long-running commands or showing progress.\n\nArgs:\n    command: Command to execute.\n    cwd: Working directory for the command.\n    env: Additional environment variables to set.\n    timeout: Maximum execution time in seconds.\n    shell: If True, execute command through the shell.\n    inherit_env: If True, inherit current environment variables.\n    combine_s",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess.py",
-          "line_number": 646,
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/utils/process/subprocess_advanced.py",
+          "line_number": 29,
           "is_public": true,
           "dependencies": []
         },
@@ -11396,7 +11396,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-25 12:17:32"
+      "last_modified": "2026-02-28 19:09:00"
     },
     "graph_rag": {
       "name": "graph_rag",
@@ -14873,7 +14873,7 @@
           "name": "EDGE_TTS_AVAILABLE",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/audio",
           "type": "constant",
-          "signature": "EDGE_TTS_AVAILABLE = False",
+          "signature": "EDGE_TTS_AVAILABLE = True",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/audio",
           "line_number": 0,
@@ -14895,7 +14895,7 @@
           "name": "PYTTSX3_AVAILABLE",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/audio",
           "type": "constant",
-          "signature": "PYTTSX3_AVAILABLE = False",
+          "signature": "PYTTSX3_AVAILABLE = True",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/audio",
           "line_number": 0,
@@ -16834,11 +16834,11 @@
         {
           "name": "AzureBlobClient",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "type": "other",
-          "signature": "None",
-          "docstring": "No docstring",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "line_number": 0,
+          "type": "class",
+          "signature": "class AzureBlobClient",
+          "docstring": "Wrapper for Azure Blob Storage operations.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/azure/__init__.py",
+          "line_number": 12,
           "is_public": true,
           "dependencies": []
         },
@@ -17054,11 +17054,11 @@
         {
           "name": "GCSClient",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "type": "other",
-          "signature": "None",
-          "docstring": "No docstring",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "line_number": 0,
+          "type": "class",
+          "signature": "class GCSClient",
+          "docstring": "Wrapper for Google Cloud Storage operations.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/gcp/__init__.py",
+          "line_number": 10,
           "is_public": true,
           "dependencies": []
         },
@@ -17318,11 +17318,11 @@
         {
           "name": "S3Client",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "type": "other",
-          "signature": "None",
-          "docstring": "No docstring",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
-          "line_number": 0,
+          "type": "class",
+          "signature": "class S3Client",
+          "docstring": "Wrapper for AWS S3 operations.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/aws/__init__.py",
+          "line_number": 11,
           "is_public": true,
           "dependencies": []
         },
@@ -17389,6 +17389,28 @@
           "docstring": "Reference to a Coda workspace.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/coda_io/models.py",
           "line_number": 119,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "aws",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "type": "other",
+          "signature": "<module 'codomyrmex.cloud.aws' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/aws/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "azure",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "type": "other",
+          "signature": "<module 'codomyrmex.cloud.azure' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/azure/__init__.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "line_number": 0,
           "is_public": true,
           "dependencies": []
         },
@@ -17463,6 +17485,17 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
           "type": "other",
           "signature": "<module 'codomyrmex.cloud.edge' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/edge.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "gcp",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
+          "type": "other",
+          "signature": "<module 'codomyrmex.cloud.gcp' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud/gcp/__init__.py'>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/cloud",
           "line_number": 0,
@@ -18087,7 +18120,7 @@
           "signature": "class APISchema",
           "docstring": "API schema definition for documentation generation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 71,
+          "line_number": 49,
           "is_public": true,
           "dependencies": []
         },
@@ -18306,8 +18339,8 @@
           "type": "class",
           "signature": "class DocumentationOpenAPIGenerator",
           "docstring": "OpenAPI 3.0 specification generator from code analysis/documentation.\n\nThis generator creates OpenAPI specs from endpoint lists and documentation.\nUsed primarily by the documentation submodule.",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 134,
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_documentation_generator.py",
+          "line_number": 22,
           "is_public": true,
           "dependencies": []
         },
@@ -18549,7 +18582,7 @@
           "signature": "class OpenAPISpecification",
           "docstring": "OpenAPI specification container.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 94,
+          "line_number": 72,
           "is_public": true,
           "dependencies": []
         },
@@ -18747,7 +18780,7 @@
           "signature": "class SharedAPISchema",
           "docstring": "API schema definition for documentation generation.",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 71,
+          "line_number": 49,
           "is_public": true,
           "dependencies": []
         },
@@ -18801,8 +18834,8 @@
           "type": "class",
           "signature": "class StandardizationOpenAPIGenerator",
           "docstring": "Generator for OpenAPI specifications from REST/GraphQL API instances.\n\nThis generator creates OpenAPI specs from API framework instances.\nUsed primarily by the standardization submodule.",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_standardization_generator.py",
+          "line_number": 62,
           "is_public": true,
           "dependencies": []
         },
@@ -19077,7 +19110,7 @@
           "signature": "(api: None) -> codomyrmex.api.openapi_generator.OpenAPISpecification",
           "docstring": "Create OpenAPI spec from a GraphQL API.\n\nArgs:\n    api: GraphQL API instance\n\nReturns:\n    OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "line_number": 199,
           "is_public": true,
           "dependencies": []
         },
@@ -19088,7 +19121,7 @@
           "signature": "(api: None) -> codomyrmex.api.openapi_generator.OpenAPISpecification",
           "docstring": "Create OpenAPI spec from a REST API.\n\nArgs:\n    api: REST API instance\n\nReturns:\n    OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "line_number": 172,
           "is_public": true,
           "dependencies": []
         },
@@ -19228,10 +19261,10 @@
           "name": "generate_openapi_spec_from_api",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
           "type": "function",
-          "signature": "(title: str = 'Codomyrmex API', version: str = '1.0.0', description: str = 'API for Codomyrmex') -> codomyrmex.api.openapi_generator.StandardizationOpenAPIGenerator",
+          "signature": "(title: str = 'Codomyrmex API', version: str = '1.0.0', description: str = 'API for Codomyrmex') -> codomyrmex.api.openapi_standardization_generator.StandardizationOpenAPIGenerator",
           "docstring": "Create a new OpenAPI generator for standardization.\n\nArgs:\n    title: API title\n    version: API version\n    description: API description\n\nReturns:\n    StandardizationOpenAPIGenerator instance",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "line_number": 156,
           "is_public": true,
           "dependencies": []
         },
@@ -19242,7 +19275,7 @@
           "signature": "(title: str, version: str, endpoints: list[typing.Any], base_url: str = '') -> dict[str, typing.Any]",
           "docstring": "Convenience function to generate OpenAPI specification from endpoints.\n\nArgs:\n    title: API title\n    version: API version\n    endpoints: List of API endpoints\n    base_url: Base API URL\n\nReturns:\n    Dict containing OpenAPI specification",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "line_number": 118,
           "is_public": true,
           "dependencies": []
         },
@@ -19291,10 +19324,32 @@
           "dependencies": []
         },
         {
+          "name": "openapi_documentation_generator",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
+          "type": "other",
+          "signature": "<module 'codomyrmex.api.openapi_documentation_generator' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_documentation_generator.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
           "name": "openapi_generator",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
           "type": "other",
           "signature": "<module 'codomyrmex.api.openapi_generator' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py'>",
+          "docstring": "No docstring",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
+          "line_number": 0,
+          "is_public": true,
+          "dependencies": []
+        },
+        {
+          "name": "openapi_standardization_generator",
+          "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
+          "type": "other",
+          "signature": "<module 'codomyrmex.api.openapi_standardization_generator' from '/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_standardization_generator.py'>",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api",
           "line_number": 0,
@@ -19363,7 +19418,7 @@
           "signature": "(spec: dict[str, typing.Any]) -> list[str]",
           "docstring": "Convenience function to validate OpenAPI specification.\n\nArgs:\n    spec: OpenAPI specification dictionary\n\nReturns:\n    List of validation errors (empty if valid)",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/api/openapi_generator.py",
-          "line_number": 0,
+          "line_number": 141,
           "is_public": true,
           "dependencies": []
         },
@@ -21564,7 +21619,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 17:41:01"
+      "last_modified": "2026-02-28 19:25:54"
     },
     "database_management": {
       "name": "database_management",
@@ -23106,7 +23161,7 @@
           "name": "HAS_OTLP_EXPORTER",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry",
           "type": "constant",
-          "signature": "HAS_OTLP_EXPORTER = False",
+          "signature": "HAS_OTLP_EXPORTER = True",
           "docstring": "No docstring",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry",
           "line_number": 0,
@@ -23138,11 +23193,11 @@
         {
           "name": "OTLPExporter",
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry",
-          "type": "other",
-          "signature": "None",
-          "docstring": "No docstring",
-          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry",
-          "line_number": 0,
+          "type": "class",
+          "signature": "class OTLPExporter",
+          "docstring": "Exporter that sends spans to an OTLP collector via HTTP.",
+          "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/telemetry/exporters/otlp_exporter.py",
+          "line_number": 13,
           "is_public": true,
           "dependencies": []
         },
@@ -26293,7 +26348,7 @@
       "is_importable": true,
       "has_tests": false,
       "has_docs": true,
-      "last_modified": "2026-02-28 17:39:20"
+      "last_modified": "2026-02-28 19:25:40"
     },
     "cerebrum": {
       "name": "cerebrum",
@@ -27672,9 +27727,9 @@
           "module_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/orchestrator",
           "type": "function",
           "signature": "(argv=None)",
-          "docstring": "Main entry point.",
+          "docstring": "Main entry point for the script orchestrator.\n\nParses arguments, discovers scripts, executes them, and reports results.\nDelegates to private helper functions for each phase.\n\nArgs:\n    argv: Optional argument list (defaults to sys.argv).\n\nReturns:\n    Exit code (0 for success, 1 for failures).",
           "file_path": "/Users/mini/Documents/GitHub/codomyrmex/src/codomyrmex/orchestrator/core.py",
-          "line_number": 42,
+          "line_number": 346,
           "is_public": true,
           "dependencies": []
         },

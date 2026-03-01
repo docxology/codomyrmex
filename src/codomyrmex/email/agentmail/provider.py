@@ -152,8 +152,8 @@ class AgentMailProvider(
                 kwargs["after"] = after
 
             response = self._client.inboxes.messages.list(resolved_inbox, **kwargs)
-            messages = list(response) if response else []
-            return [_sdk_message_to_email_message(m, resolved_inbox) for m in messages]
+            items = getattr(response, "messages", None) or (list(response) if response else [])
+            return [_sdk_message_to_email_message(m, resolved_inbox) for m in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_messages")
         except Exception as exc:
@@ -476,7 +476,8 @@ class AgentMailProvider(
         """
         try:
             response = self._client.pods.list(limit=limit)
-            return [_sdk_pod_to_model(p) for p in response]
+            items = getattr(response, "pods", None) or list(response)
+            return [_sdk_pod_to_model(p) for p in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_pods")
         except Exception as exc:
@@ -553,7 +554,8 @@ class AgentMailProvider(
         """
         try:
             response = self._client.domains.list(limit=limit)
-            return [_sdk_domain_to_model(d) for d in response]
+            items = getattr(response, "domains", None) or list(response)
+            return [_sdk_domain_to_model(d) for d in items]
         except ApiError as exc:
             _raise_for_api_error(exc, "list_domains")
         except Exception as exc:

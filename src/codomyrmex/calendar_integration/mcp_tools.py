@@ -28,7 +28,7 @@ from codomyrmex.calendar_integration.generics import CalendarEvent
 # Default attendee injected into every create/update call.
 # Override via CODOMYRMEX_CALENDAR_ATTENDEE env var.
 _DEFAULT_ATTENDEE: str = os.environ.get(
-    "CODOMYRMEX_CALENDAR_ATTENDEE", _DEFAULT_ATTENDEE
+    "CODOMYRMEX_CALENDAR_ATTENDEE", "FristonBlanket@gmail.com"
 )
 
 
@@ -138,7 +138,7 @@ def calendar_list_events(days_ahead: int = 7) -> dict[str, Any]:
     category="calendar",
     description=(
         "Create a new calendar event. "
-        "danielarifriedman@gmail.com is automatically injected as an attendee "
+        "The configured default attendee is automatically injected "
         "on every event regardless of the attendees parameter."
     ),
 )
@@ -152,8 +152,9 @@ def calendar_create_event(
 ) -> dict[str, Any]:
     """Create a new event in the Google Calendar.
 
-    ``danielarifriedman@gmail.com`` is always added to ``attendees`` before the
-    API call, even when ``attendees=[]`` or ``attendees=None``.
+    The default attendee (``_DEFAULT_ATTENDEE``) is always added to
+    ``attendees`` before the API call, even when ``attendees=[]`` or
+    ``attendees=None``.
 
     Args:
         summary: Event title displayed in the calendar.
@@ -161,8 +162,8 @@ def calendar_create_event(
         end_time: ISO 8601 string, e.g. ``"2026-02-24T11:00:00Z"``.
         description: Free-text event description (default empty string).
         location: Physical or virtual location (default empty string).
-        attendees: Additional email addresses to invite.  Daniel's address is
-            always appended automatically.
+        attendees: Additional email addresses to invite.  The default
+            attendee is always appended automatically.
 
     Returns:
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
@@ -171,7 +172,7 @@ def calendar_create_event(
     try:
         provider = _get_provider()
 
-        # Ensure Daniel is included if attendees is empty
+        # Ensure the default attendee is included
         if attendees is None:
             attendees = [_DEFAULT_ATTENDEE]
         elif _DEFAULT_ATTENDEE not in attendees:
@@ -260,7 +261,7 @@ def calendar_delete_event(event_id: str) -> dict[str, Any]:
     category="calendar",
     description=(
         "Update an existing calendar event (PUT semantics — all fields replaced). "
-        "danielarifriedman@gmail.com is automatically injected as an attendee "
+        "The configured default attendee is automatically injected "
         "on every update regardless of the attendees parameter."
     ),
 )
@@ -276,8 +277,8 @@ def calendar_update_event(
     """Replace all fields of an existing calendar event (PUT semantics).
 
     All fields are overwritten on the server; fields not supplied here are not
-    preserved from the prior version of the event.  ``danielarifriedman@gmail.com``
-    is always added to ``attendees`` before the API call.
+    preserved from the prior version of the event.  The default attendee
+    (``_DEFAULT_ATTENDEE``) is always added to ``attendees`` before the API call.
 
     Args:
         event_id: The Google Calendar event ID to update.
@@ -286,8 +287,8 @@ def calendar_update_event(
         end_time: ISO 8601 string, e.g. ``"2026-02-24T11:00:00Z"``.
         description: Replacement event description (default empty string).
         location: Replacement location (default empty string).
-        attendees: Replacement attendee list.  Daniel's address is always
-            appended automatically.
+        attendees: Replacement attendee list.  The default attendee is
+            always appended automatically.
 
     Returns:
         ``{"status": "ok", "event_id": "<id>", "link": "<url>"}`` on success.
@@ -297,7 +298,7 @@ def calendar_update_event(
     try:
         provider = _get_provider()
 
-        # Ensure Daniel is included if attendees is empty
+        # Ensure the default attendee is included
         if attendees is None:
             attendees = [_DEFAULT_ATTENDEE]
         elif _DEFAULT_ATTENDEE not in attendees:

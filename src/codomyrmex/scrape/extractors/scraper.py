@@ -4,6 +4,7 @@ This module provides the main Scraper class that serves as the primary
 interface for scraping operations, delegating to provider-specific adapters.
 """
 
+from urllib.parse import urlparse
 
 from codomyrmex.logging_monitoring import get_logger
 
@@ -90,6 +91,11 @@ class Scraper(BaseScraper):
         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ScrapeValidationError(
+                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+            )
 
         logger.info(f"Scraping URL: {url}")
         try:
@@ -118,6 +124,11 @@ class Scraper(BaseScraper):
         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ScrapeValidationError(
+                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+            )
 
         logger.info(f"Starting crawl from URL: {url}")
         try:
@@ -146,6 +157,11 @@ class Scraper(BaseScraper):
         """
         if not url or not isinstance(url, str):
             raise ScrapeValidationError("URL must be a non-empty string", field="url", value=str(url))
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ScrapeValidationError(
+                f"URL must start with http:// or https://, got: {url}", field="url", value=url
+            )
 
         logger.info(f"Mapping website structure: {url}" + (f" (search: {search})" if search else ""))
         try:
@@ -217,6 +233,11 @@ class Scraper(BaseScraper):
                     f"All URLs must be non-empty strings, got: {url}",
                     field="urls",
                     value=str(url),
+                )
+            parsed = urlparse(url)
+            if parsed.scheme not in ("http", "https") or not parsed.netloc:
+                raise ScrapeValidationError(
+                    f"URL must start with http:// or https://, got: {url}", field="urls", value=url
                 )
 
         logger.info(f"Extracting data from {len(urls)} URL(s)")
