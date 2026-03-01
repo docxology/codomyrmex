@@ -441,14 +441,28 @@ def check_module_availability(module_name: str) -> bool:
     Check if a module is available and importable.
 
     Args:
-        module_name: Name of the module to check
+        module_name: Name of the module to check (any Python module, e.g. 'os', 'json')
 
     Returns:
         True if module is available, False otherwise
     """
     try:
-        importlib.import_module(f"codomyrmex.{module_name}")
+        importlib.import_module(module_name)
         return True
     except ImportError as e:
         logger.warning("Module %s not importable: %s", module_name, e)
         return False
+
+
+def perform_health_check(module_name: str) -> HealthCheckResult:
+    """
+    Convenience function to perform a health check for a module.
+
+    Args:
+        module_name: Name of the module to check
+
+    Returns:
+        HealthCheckResult with detailed health information
+    """
+    checker = HealthChecker()
+    return checker.perform_health_check(module_name)

@@ -9,6 +9,7 @@ from .health_checker import (
     HealthCheckResult,
     HealthStatus,
     check_module_availability,
+    perform_health_check,
 )
 from .health_reporter import (
     HealthReport,
@@ -23,6 +24,7 @@ __all__ = [
     "HealthCheckResult",
     "HealthStatus",
     "check_module_availability",
+    "perform_health_check",
     "HealthReporter",
     "HealthReport",
     "generate_health_report",
