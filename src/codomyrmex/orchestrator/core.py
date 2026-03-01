@@ -39,8 +39,15 @@ from .observability.reporting import (
 )
 
 
-def main(argv=None):
-    """Main entry point."""
+def _parse_args(argv=None) -> argparse.Namespace:
+    """Parse command-line arguments for the orchestrator.
+
+    Args:
+        argv: Argument list (defaults to sys.argv if None).
+
+    Returns:
+        Parsed argument namespace.
+    """
     parser = argparse.ArgumentParser(
         description="Run and log all scripts in the scripts directory",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -82,7 +89,7 @@ Examples:
     parser.add_argument(
         "--output-dir", "-o",
         type=Path,
-        default=None, # Will default to scripts dir parent / output / script_logs
+        default=None,  # Will default to scripts dir parent / output / script_logs
         help="Output directory for logs",
     )
 
@@ -111,51 +118,49 @@ Examples:
         help="Generate Markdown documentation to this file path",
     )
 
-    args = parser.parse_args(argv)
+    return parser.parse_args(argv)
 
-    # Determine scripts_dir
-    # If not provided, assume we are running from a script in scripts/ or
-    # try to locate it relative to current working directory
+
+def _resolve_scripts_dir(args: argparse.Namespace) -> Path | None:
+    """Determine the scripts directory from arguments or heuristics.
+
+    Args:
+        args: Parsed arguments.
+
+    Returns:
+        Resolved scripts directory path, or None if it cannot be determined.
+    """
     if args.scripts_dir:
-        scripts_dir = args.scripts_dir.resolve()
+        return args.scripts_dir.resolve()
+
+    # Fallback heuristics
+    cwd = Path.cwd()
+    if (cwd / "scripts").exists():
+        return (cwd / "scripts").resolve()
+    elif cwd.name == "scripts":
+        return cwd.resolve()
     else:
-        # Fallback: assume run_all_scripts.py is the caller or we are in project root
-        # This is a bit heuristical; ideally the caller passes it
-        cwd = Path.cwd()
-        if (cwd / "scripts").exists():
-            scripts_dir = (cwd / "scripts").resolve()
-        elif cwd.name == "scripts":
-            scripts_dir = cwd.resolve()
-        else:
-             # Try to find from run_all_scripts path in sys.argv[0] if present
-             caller = Path(sys.argv[0]).resolve()
-             if caller.parent.name == "scripts":
-                 scripts_dir = caller.parent
-             else:
-                 print_error("Could not determine scripts directory. Please use --scripts-dir")
-                 return 1
+        # Try to find from run_all_scripts path in sys.argv[0] if present
+        caller = Path(sys.argv[0]).resolve()
+        if caller.parent.name == "scripts":
+            return caller.parent
 
-    if not args.output_dir:
-        # Default output dir relative to project root (parent of scripts dir)
-        args.output_dir = scripts_dir.parent / "output" / "script_logs"
+    return None
 
-    # Load configuration
-    config = load_config(scripts_dir)
 
-    # Handle Doc Generation
-    if args.generate_docs:
-        output_file = Path(args.generate_docs).resolve()
-        success = generate_script_documentation(scripts_dir, output_file)
-        return 0 if success else 1
+def _discover_and_display_scripts(
+    scripts_dir: Path, args: argparse.Namespace, config: dict
+) -> tuple[list[Path], int]:
+    """Discover scripts and display them grouped by subdirectory.
 
-    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    perf_logger = PerformanceLogger("orchestrator.performance")
+    Args:
+        scripts_dir: Root directory to search.
+        args: Parsed arguments (subdirs, filter, max_depth, verbose, dry_run).
+        config: Loaded orchestrator config.
 
-    print_section("SCRIPT ORCHESTRATOR")
-    print_info(f"Scripts directory: {scripts_dir}")
-    print_info(f"Run ID: {run_id}")
-
-    # Discover scripts
+    Returns:
+        Tuple of (discovered scripts list, exit code if early exit needed or -1 to continue).
+    """
     print_section("Discovering Scripts", separator="-")
     scripts = discover_scripts(
         scripts_dir,
@@ -168,7 +173,7 @@ Examples:
 
     if not scripts:
         print_warning("No scripts found matching criteria")
-        return 0
+        return scripts, 0
 
     # Group by subdirectory for display
     by_subdir: dict[str, list[Path]] = {}
@@ -196,11 +201,192 @@ Examples:
         for script in scripts:
             script_config = get_script_config(script, scripts_dir, config)
             if script_config.get("skip"):
-                 print(f"⚠️  WOULD SKIP: {script.name} ({script_config.get('skip_reason', 'Configured to skip')})")
-                 skipped_count += 1
+                print(f"  WOULD SKIP: {script.name} ({script_config.get('skip_reason', 'Configured to skip')})")
+                skipped_count += 1
 
-        print(f"ℹ️  Skipped by config: {skipped_count}")
-        return 0
+        print(f"  Skipped by config: {skipped_count}")
+        return scripts, 0
+
+    return scripts, -1  # -1 signals "continue execution"
+
+
+def _execute_scripts(
+    scripts: list[Path], scripts_dir: Path, args: argparse.Namespace, config: dict
+) -> list[dict]:
+    """Execute all discovered scripts and collect results.
+
+    Args:
+        scripts: List of script paths to execute.
+        scripts_dir: Root scripts directory.
+        args: Parsed arguments (timeout, verbose).
+        config: Loaded orchestrator config.
+
+    Returns:
+        List of result dictionaries for each script.
+    """
+    results = []
+    progress = ProgressReporter(total=len(scripts), prefix="Progress")
+
+    for i, script in enumerate(scripts, 1):
+        relative_path = script.relative_to(scripts_dir)
+        progress.update(message=f"Running {relative_path}")
+
+        if args.verbose:
+            timestamp = datetime.now().strftime("%H:%M:%S")
+            print(f"\n[{timestamp}] [{i}/{len(scripts)}] Running: {relative_path}")
+
+        # Get script config
+        script_config = get_script_config(script, scripts_dir, config)
+
+        # Check if skipped
+        if script_config.get("skip"):
+            results.append({
+                "script": str(script),
+                "name": script.name,
+                "subdirectory": script.parent.name,
+                "status": "skipped",
+                "execution_time": 0.0,
+                "start_time": datetime.now().isoformat(),
+                "end_time": datetime.now().isoformat(),
+                "error": script_config.get('skip_reason', 'Configured to skip'),
+                "stdout": "",
+                "stderr": "",
+                "exit_code": None
+            })
+            continue
+
+        result = run_script(
+            script,
+            timeout=args.timeout,
+            cwd=scripts_dir.parent,  # Run from project root
+            config=script_config
+        )
+
+        # Use improved subdirectory for logging to avoid collisions (e.g. module/examples/)
+        result["subdirectory"] = str(script.relative_to(scripts_dir).parent)
+
+        # Save individual log
+        log_file = save_log(result, args.output_dir, datetime.now().strftime("%Y%m%d_%H%M%S"))
+        result["log_file"] = str(log_file)
+
+        results.append(result)
+
+        # Show status
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        if result["status"] == "passed":
+            if args.verbose:
+                print_success(f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)")
+        elif result["status"] == "failed":
+            print_error(f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})")
+        elif result["status"] == "timeout":
+            print_warning(f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)")
+        else:
+            print_error(f"  [{timestamp}] {result['name']} ({result['error']})")
+
+    progress.complete("Done")
+    return results
+
+
+def _report_results(results: list[dict], args: argparse.Namespace, run_id: str) -> int:
+    """Generate and display the summary report.
+
+    Args:
+        results: List of script execution result dicts.
+        args: Parsed arguments (output_dir).
+        run_id: Unique run identifier.
+
+    Returns:
+        Exit code (0 if all passed, 1 if any failed/errored/timed out).
+    """
+    print_section("Summary Report", separator="=")
+    summary = generate_report(results, args.output_dir, run_id)
+
+    print(f"\nTotal Scripts: {summary['total_scripts']}")
+    print_with_color(f"  Passed:  {summary['passed']}", "green")
+    print_with_color(f"  Failed:  {summary['failed']}", "red" if summary['failed'] > 0 else "default")
+    print_with_color(f"  Timeout: {summary['timeout']}", "yellow" if summary['timeout'] > 0 else "default")
+    print_with_color(f"  Error:   {summary['error']}", "red" if summary['error'] > 0 else "default")
+    print(f"\nTotal Execution Time: {summary['total_execution_time']:.1f}s")
+
+    # By subdirectory breakdown
+    print("\nBy Subdirectory:")
+    for subdir, stats in sorted(summary["by_subdirectory"].items()):
+        status_marker = "PASS" if stats["failed"] == 0 else "FAIL"
+        print(f"  {status_marker} {subdir}: {stats['passed']}/{stats['total']} passed")
+
+    # Top Slowest Scripts
+    print_section("Top 5 Slowest Scripts", separator="-")
+    slowest = sorted(results, key=lambda x: x["execution_time"], reverse=True)[:5]
+    for r in slowest:
+        print(f"  {r['execution_time']:.2f}s: {r['subdirectory']}/{r['name']}")
+
+    print(f"\nLogs saved to: {args.output_dir / run_id}")
+    print(f"Summary report: {args.output_dir / run_id / 'summary.json'}")
+
+    # Show failed scripts
+    failed = [r for r in results if r["status"] not in ("passed", "skipped")]
+    if failed:
+        print_section("Failed Scripts", separator="-")
+        for r in failed:
+            print(f"  FAIL {r['subdirectory']}/{r['name']}")
+            if r["error"]:
+                print(f"     Error: {r['error']}")
+            elif r["stderr"]:
+                # Show last line of stderr for better context (usually the Exception)
+                lines = r["stderr"].strip().split("\n")
+                last_line = lines[-1] if lines else ""
+                print(f"     {last_line}")
+                # Also show the line before if it helps (e.g. "SyntaxError: ...")
+                if len(lines) > 1 and "Traceback" not in lines[-1]:
+                    print(f"     {lines[-2]}")
+
+    return summary, 1 if summary["failed"] + summary["error"] + summary["timeout"] > 0 else 0
+
+
+def main(argv=None):
+    """Main entry point for the script orchestrator.
+
+    Parses arguments, discovers scripts, executes them, and reports results.
+    Delegates to private helper functions for each phase.
+
+    Args:
+        argv: Optional argument list (defaults to sys.argv).
+
+    Returns:
+        Exit code (0 for success, 1 for failures).
+    """
+    args = _parse_args(argv)
+
+    # Determine scripts_dir
+    scripts_dir = _resolve_scripts_dir(args)
+    if scripts_dir is None:
+        print_error("Could not determine scripts directory. Please use --scripts-dir")
+        return 1
+
+    if not args.output_dir:
+        # Default output dir relative to project root (parent of scripts dir)
+        args.output_dir = scripts_dir.parent / "output" / "script_logs"
+
+    # Load configuration
+    config = load_config(scripts_dir)
+
+    # Handle Doc Generation
+    if args.generate_docs:
+        output_file = Path(args.generate_docs).resolve()
+        success = generate_script_documentation(scripts_dir, output_file)
+        return 0 if success else 1
+
+    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    perf_logger = PerformanceLogger("orchestrator.performance")
+
+    print_section("SCRIPT ORCHESTRATOR")
+    print_info(f"Scripts directory: {scripts_dir}")
+    print_info(f"Run ID: {run_id}")
+
+    # Discover scripts
+    scripts, early_exit = _discover_and_display_scripts(scripts_dir, args, config)
+    if early_exit >= 0:
+        return early_exit
 
     # Execute scripts with LogContext for correlation ID
     with LogContext(correlation_id=run_id) as ctx:
@@ -217,71 +403,10 @@ Examples:
         print_info(f"Timeout per script: {args.timeout}s")
         print()
 
-        results = []
-        progress = ProgressReporter(total=len(scripts), prefix="Progress")
-
-        for i, script in enumerate(scripts, 1):
-            relative_path = script.relative_to(scripts_dir)
-            progress.update(message=f"Running {relative_path}")
-
-            if args.verbose:
-                timestamp = datetime.now().strftime("%H:%M:%S")
-                print(f"\n[{timestamp}] [{i}/{len(scripts)}] Running: {relative_path}")
-
-            # Get script config
-            script_config = get_script_config(script, scripts_dir, config)
-
-            # Check if skipped
-            if script_config.get("skip"):
-                # Add skipped result
-                results.append({
-                    "script": str(script),
-                    "name": script.name,
-                    "subdirectory": script.parent.name,
-                    "status": "skipped",
-                    "execution_time": 0.0,
-                    "start_time": datetime.now().isoformat(),
-                    "end_time": datetime.now().isoformat(),
-                    "error": script_config.get('skip_reason', 'Configured to skip'),
-                    "stdout": "",
-                    "stderr": "",
-                    "exit_code": None
-                })
-                continue
-
-            result = run_script(
-                script,
-                timeout=args.timeout,
-                cwd=scripts_dir.parent,  # Run from project root
-                config=script_config
-            )
-
-            # Use improved subdirectory for logging to avoid collisions (e.g. module/examples/)
-            result["subdirectory"] = str(script.relative_to(scripts_dir).parent)
-
-            # Save individual log
-            log_file = save_log(result, args.output_dir, run_id)
-            result["log_file"] = str(log_file)
-
-            results.append(result)
-
-            # Show status
-            timestamp = datetime.now().strftime("%H:%M:%S")
-            if result["status"] == "passed":
-                if args.verbose:
-                    print_success(f"  [{timestamp}] {result['name']} ({result['execution_time']:.1f}s)")
-            elif result["status"] == "failed":
-                print_error(f"  [{timestamp}] {result['name']} (exit code {result['exit_code']})")
-            elif result["status"] == "timeout":
-                print_warning(f"  [{timestamp}] {result['name']} (timeout after {args.timeout}s)")
-            else:
-                print_error(f"  [{timestamp}] {result['name']} ({result['error']})")
-
-        progress.complete("Done")
+        results = _execute_scripts(scripts, scripts_dir, args, config)
 
         # Generate summary report
-        print_section("Summary Report", separator="=")
-        summary = generate_report(results, args.output_dir, run_id)
+        summary, exit_code = _report_results(results, args, run_id)
 
         # Log RUN_COMPLETED event
         run_duration = perf_logger.end_timer("full_run")
@@ -296,47 +421,7 @@ Examples:
             "total_execution_time": summary["total_execution_time"],
         })
 
-        print(f"\nTotal Scripts: {summary['total_scripts']}")
-        print_with_color(f"  Passed:  {summary['passed']}", "green")
-        print_with_color(f"  Failed:  {summary['failed']}", "red" if summary['failed'] > 0 else "default")
-        print_with_color(f"  Timeout: {summary['timeout']}", "yellow" if summary['timeout'] > 0 else "default")
-        print_with_color(f"  Error:   {summary['error']}", "red" if summary['error'] > 0 else "default")
-        print(f"\nTotal Execution Time: {summary['total_execution_time']:.1f}s")
-
-        # By subdirectory breakdown
-        print("\nBy Subdirectory:")
-        for subdir, stats in sorted(summary["by_subdirectory"].items()):
-            status = "✅" if stats["failed"] == 0 else "❌"
-            print(f"  {status} {subdir}: {stats['passed']}/{stats['total']} passed")
-
-        # Top Slowest Scripts
-        print_section("Top 5 Slowest Scripts", separator="-")
-        slowest = sorted(results, key=lambda x: x["execution_time"], reverse=True)[:5]
-        for r in slowest:
-             print(f"  {r['execution_time']:.2f}s: {r['subdirectory']}/{r['name']}")
-
-        print(f"\nLogs saved to: {args.output_dir / run_id}")
-        print(f"Summary report: {args.output_dir / run_id / 'summary.json'}")
-
-        # Show failed scripts
-        failed = [r for r in results if r["status"] not in ("passed", "skipped")]
-        if failed:
-            print_section("Failed Scripts", separator="-")
-            for r in failed:
-                print(f"  ❌ {r['subdirectory']}/{r['name']}")
-                if r["error"]:
-                    print(f"     Error: {r['error']}")
-                elif r["stderr"]:
-                    # Show last line of stderr for better context (usually the Exception)
-                    lines = r["stderr"].strip().split("\n")
-                    last_line = lines[-1] if lines else ""
-                    print(f"     {last_line}")
-                    # Also show the line before if it helps (e.g. "SyntaxError: ...")
-                    if len(lines) > 1 and "Traceback" not in lines[-1]:
-                         print(f"     {lines[-2]}")
-
-        # Return non-zero if any failed
-        return 1 if summary["failed"] + summary["error"] + summary["timeout"] > 0 else 0
+        return exit_code
 
 
 if __name__ == "__main__":
