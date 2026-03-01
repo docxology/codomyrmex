@@ -5,6 +5,12 @@ inbox management, threads, drafts, webhooks, pods, and domains.
 
 All methods use the official agentmail Python SDK. Authentication is
 exclusively via the AGENTMAIL_API_KEY environment variable.
+
+Method groups are split into focused mixins:
+- DraftMixin  -- draft create/update/delete/send
+- InboxMixin  -- inbox management (create, list, delete)
+- ThreadMixin -- thread/conversation operations
+- WebhookMixin -- webhook registration and management
 """
 
 from __future__ import annotations
@@ -13,7 +19,7 @@ import os
 from typing import Any, NoReturn
 
 from ..exceptions import EmailAPIError, EmailAuthError, MessageNotFoundError
-from ..generics import EmailDraft, EmailMessage, EmailProvider
+from ..generics import EmailAddress, EmailDraft, EmailMessage, EmailProvider
 
 try:
     from agentmail import AgentMail
@@ -25,21 +31,14 @@ except ImportError:
     ApiError = Exception  # type: ignore
     AGENTMAIL_AVAILABLE = False
 
+from .mixins import DraftMixin, InboxMixin, ThreadMixin, WebhookMixin
 from .models import (
     AgentMailAttachment,
     AgentMailDomain,
-    AgentMailDraft,
-    AgentMailInbox,
     AgentMailPod,
-    AgentMailThread,
-    AgentMailWebhook,
     _sdk_domain_to_model,
-    _sdk_draft_to_model,
-    _sdk_inbox_to_model,
     _sdk_message_to_email_message,
     _sdk_pod_to_model,
-    _sdk_thread_to_model,
-    _sdk_webhook_to_model,
 )
 
 
@@ -53,7 +52,13 @@ def _raise_for_api_error(exc: Exception, context: str) -> NoReturn:
     raise EmailAPIError(f"AgentMail API error during {context}: {exc}") from exc
 
 
-class AgentMailProvider(EmailProvider):
+class AgentMailProvider(
+    DraftMixin,
+    InboxMixin,
+    ThreadMixin,
+    WebhookMixin,
+    EmailProvider,
+):
     """Email provider backed by the AgentMail API (https://agentmail.to).
 
     Implements the full EmailProvider interface plus AgentMail-specific
@@ -130,8 +135,8 @@ class AgentMailProvider(EmailProvider):
             max_results: Maximum number of messages to return.
             inbox_id: Inbox to list. Defaults to AGENTMAIL_DEFAULT_INBOX.
             labels: Filter by label strings.
-            before: ISO datetime string — return messages before this time.
-            after: ISO datetime string — return messages after this time.
+            before: ISO datetime string -- return messages before this time.
+            after: ISO datetime string -- return messages after this time.
 
         Returns:
             List of EmailMessage objects.
@@ -218,7 +223,6 @@ class AgentMailProvider(EmailProvider):
             # If no ID returned, construct a minimal EmailMessage from draft
             from datetime import datetime, timezone
 
-            from ..generics import EmailAddress
             return EmailMessage(
                 subject=draft.subject,
                 sender=EmailAddress(email=resolved_inbox),
@@ -233,48 +237,6 @@ class AgentMailProvider(EmailProvider):
             _raise_for_api_error(exc, "send_message")
         except Exception as exc:
             raise EmailAPIError(f"Unexpected error sending message: {exc}") from exc
-
-    def create_draft(
-        self,
-        draft: EmailDraft,
-        inbox_id: str | None = None,
-    ) -> str:
-        """Create a draft and return its ID.
-
-        Args:
-            draft: EmailDraft with recipients, subject, and body.
-            inbox_id: Target inbox. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Returns:
-            The draft ID string.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            kwargs: dict[str, Any] = {}
-            if draft.to:
-                kwargs["to"] = draft.to
-            if draft.cc:
-                kwargs["cc"] = draft.cc
-            if draft.bcc:
-                kwargs["bcc"] = draft.bcc
-            if draft.subject:
-                kwargs["subject"] = draft.subject
-            if draft.body_text:
-                kwargs["text"] = draft.body_text
-            if draft.body_html:
-                kwargs["html"] = draft.body_html
-
-            response = self._client.inboxes.drafts.create(resolved_inbox, **kwargs)
-            draft_id = (
-                getattr(response, "draft_id", None) or getattr(response, "id", None)
-            )
-            if not draft_id:
-                raise EmailAPIError("AgentMail returned no draft ID from create_draft.")
-            return str(draft_id)
-        except ApiError as exc:
-            _raise_for_api_error(exc, "create_draft")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error creating draft: {exc}") from exc
 
     def delete_message(
         self,
@@ -342,102 +304,6 @@ class AgentMailProvider(EmailProvider):
             raise EmailAPIError(
                 f"Unexpected error modifying labels on {message_id}: {exc}"
             ) from exc
-
-    # -------------------------------------------------------------------------
-    # Inbox management
-    # -------------------------------------------------------------------------
-
-    def list_inboxes(
-        self,
-        limit: int = 50,
-        page_token: str | None = None,
-    ) -> list[AgentMailInbox]:
-        """List all inboxes accessible with the current API key.
-
-        Args:
-            limit: Maximum number of inboxes to return.
-            page_token: Pagination cursor from a previous response.
-
-        Returns:
-            List of AgentMailInbox objects.
-        """
-        try:
-            kwargs: dict[str, Any] = {"limit": limit}
-            if page_token:
-                kwargs["page_token"] = page_token
-            response = self._client.inboxes.list(**kwargs)
-            return [_sdk_inbox_to_model(inbox) for inbox in response]
-        except ApiError as exc:
-            _raise_for_api_error(exc, "list_inboxes")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error listing inboxes: {exc}") from exc
-
-    def get_inbox(self, inbox_id: str) -> AgentMailInbox:
-        """Retrieve a specific inbox by ID.
-
-        Args:
-            inbox_id: The inbox ID (e.g., ``username@agentmail.to``).
-
-        Returns:
-            AgentMailInbox object.
-
-        Raises:
-            MessageNotFoundError: If the inbox does not exist.
-        """
-        try:
-            inbox = self._client.inboxes.get(inbox_id)
-            return _sdk_inbox_to_model(inbox)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"get_inbox({inbox_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching inbox {inbox_id}: {exc}") from exc
-
-    def create_inbox(
-        self,
-        username: str | None = None,
-        domain: str | None = None,
-        display_name: str | None = None,
-    ) -> AgentMailInbox:
-        """Create a new inbox.
-
-        Args:
-            username: Username part of the email address (before ``@``).
-            domain: Domain for the inbox. Defaults to agentmail.to.
-            display_name: Human-readable display name.
-
-        Returns:
-            The newly created AgentMailInbox.
-        """
-        try:
-            kwargs: dict[str, Any] = {}
-            if username:
-                kwargs["username"] = username
-            if domain:
-                kwargs["domain"] = domain
-            if display_name:
-                kwargs["display_name"] = display_name
-            inbox = self._client.inboxes.create(**kwargs)
-            return _sdk_inbox_to_model(inbox)
-        except ApiError as exc:
-            _raise_for_api_error(exc, "create_inbox")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error creating inbox: {exc}") from exc
-
-    def delete_inbox(self, inbox_id: str) -> None:
-        """Delete an inbox and all its messages.
-
-        Args:
-            inbox_id: The inbox ID to delete.
-
-        Raises:
-            MessageNotFoundError: If the inbox does not exist.
-        """
-        try:
-            self._client.inboxes.delete(inbox_id)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"delete_inbox({inbox_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting inbox {inbox_id}: {exc}") from exc
 
     # -------------------------------------------------------------------------
     # Message extended operations
@@ -594,363 +460,6 @@ class AgentMailProvider(EmailProvider):
             raise
         except Exception as exc:
             raise EmailAPIError(f"Unexpected error fetching raw message {message_id}: {exc}") from exc
-
-    # -------------------------------------------------------------------------
-    # Thread management
-    # -------------------------------------------------------------------------
-
-    def list_threads(
-        self,
-        inbox_id: str | None = None,
-        limit: int = 50,
-        labels: list[str] | None = None,
-        before: str | None = None,
-        after: str | None = None,
-    ) -> list[AgentMailThread]:
-        """List threads in an inbox.
-
-        Args:
-            inbox_id: Inbox to list threads from. Defaults to AGENTMAIL_DEFAULT_INBOX.
-            limit: Maximum number of threads to return.
-            labels: Filter by labels.
-            before: Return threads before this ISO datetime string.
-            after: Return threads after this ISO datetime string.
-
-        Returns:
-            List of AgentMailThread objects.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            kwargs: dict[str, Any] = {"limit": limit}
-            if labels:
-                kwargs["labels"] = labels
-            if before:
-                kwargs["before"] = before
-            if after:
-                kwargs["after"] = after
-            response = self._client.inboxes.threads.list(resolved_inbox, **kwargs)
-            return [_sdk_thread_to_model(t) for t in response]
-        except ApiError as exc:
-            _raise_for_api_error(exc, "list_threads")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error listing threads: {exc}") from exc
-
-    def get_thread(
-        self,
-        thread_id: str,
-        inbox_id: str | None = None,
-    ) -> AgentMailThread:
-        """Fetch a specific thread.
-
-        Args:
-            thread_id: The thread ID.
-            inbox_id: Inbox containing the thread. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Returns:
-            AgentMailThread object.
-
-        Raises:
-            MessageNotFoundError: If the thread does not exist.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            thread = self._client.inboxes.threads.get(resolved_inbox, thread_id)
-            return _sdk_thread_to_model(thread)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"get_thread({thread_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching thread {thread_id}: {exc}") from exc
-
-    def delete_thread(
-        self,
-        thread_id: str,
-        inbox_id: str | None = None,
-    ) -> None:
-        """Delete a thread and all its messages.
-
-        Args:
-            thread_id: The thread ID to delete.
-            inbox_id: Inbox containing the thread. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Raises:
-            MessageNotFoundError: If the thread does not exist.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            self._client.inboxes.threads.delete(resolved_inbox, thread_id)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"delete_thread({thread_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting thread {thread_id}: {exc}") from exc
-
-    # -------------------------------------------------------------------------
-    # Draft management
-    # -------------------------------------------------------------------------
-
-    def list_drafts(
-        self,
-        inbox_id: str | None = None,
-        limit: int = 50,
-    ) -> list[AgentMailDraft]:
-        """List drafts in an inbox.
-
-        Args:
-            inbox_id: Inbox to list drafts from. Defaults to AGENTMAIL_DEFAULT_INBOX.
-            limit: Maximum number of drafts to return.
-
-        Returns:
-            List of AgentMailDraft objects.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            response = self._client.inboxes.drafts.list(resolved_inbox, limit=limit)
-            return [_sdk_draft_to_model(d, resolved_inbox) for d in response]
-        except ApiError as exc:
-            _raise_for_api_error(exc, "list_drafts")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error listing drafts: {exc}") from exc
-
-    def get_draft(
-        self,
-        draft_id: str,
-        inbox_id: str | None = None,
-    ) -> AgentMailDraft:
-        """Fetch a specific draft.
-
-        Args:
-            draft_id: The draft ID.
-            inbox_id: Inbox containing the draft. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Returns:
-            AgentMailDraft object.
-
-        Raises:
-            MessageNotFoundError: If the draft does not exist.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            draft = self._client.inboxes.drafts.get(resolved_inbox, draft_id)
-            return _sdk_draft_to_model(draft, resolved_inbox)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"get_draft({draft_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching draft {draft_id}: {exc}") from exc
-
-    def update_draft(
-        self,
-        draft_id: str,
-        inbox_id: str | None = None,
-        to: list[str] | None = None,
-        cc: list[str] | None = None,
-        bcc: list[str] | None = None,
-        subject: str | None = None,
-        text: str | None = None,
-        html: str | None = None,
-    ) -> AgentMailDraft:
-        """Update draft fields.
-
-        Args:
-            draft_id: The draft ID to update.
-            inbox_id: Inbox containing the draft. Defaults to AGENTMAIL_DEFAULT_INBOX.
-            to: New recipient list.
-            cc: New CC list.
-            bcc: New BCC list.
-            subject: New subject line.
-            text: New plain-text body.
-            html: New HTML body.
-
-        Returns:
-            Updated AgentMailDraft object.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            kwargs: dict[str, Any] = {}
-            if to is not None:
-                kwargs["to"] = to
-            if cc is not None:
-                kwargs["cc"] = cc
-            if bcc is not None:
-                kwargs["bcc"] = bcc
-            if subject is not None:
-                kwargs["subject"] = subject
-            if text is not None:
-                kwargs["text"] = text
-            if html is not None:
-                kwargs["html"] = html
-            draft = self._client.inboxes.drafts.update(resolved_inbox, draft_id, **kwargs)
-            return _sdk_draft_to_model(draft, resolved_inbox)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"update_draft({draft_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error updating draft {draft_id}: {exc}") from exc
-
-    def send_draft(
-        self,
-        draft_id: str,
-        inbox_id: str | None = None,
-    ) -> EmailMessage:
-        """Send a saved draft immediately.
-
-        Args:
-            draft_id: The draft ID to send.
-            inbox_id: Inbox containing the draft. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Returns:
-            The sent message as an EmailMessage.
-
-        Raises:
-            MessageNotFoundError: If the draft does not exist.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            response = self._client.inboxes.drafts.send(resolved_inbox, draft_id)
-            sent_id = getattr(response, "message_id", None) or getattr(response, "id", None)
-            if sent_id:
-                return self.get_message(sent_id, resolved_inbox)
-            return _sdk_message_to_email_message(response, resolved_inbox)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"send_draft({draft_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error sending draft {draft_id}: {exc}") from exc
-
-    def delete_draft(
-        self,
-        draft_id: str,
-        inbox_id: str | None = None,
-    ) -> None:
-        """Delete a draft.
-
-        Args:
-            draft_id: The draft ID to delete.
-            inbox_id: Inbox containing the draft. Defaults to AGENTMAIL_DEFAULT_INBOX.
-
-        Raises:
-            MessageNotFoundError: If the draft does not exist.
-        """
-        resolved_inbox = self._resolve_inbox_id(inbox_id)
-        try:
-            self._client.inboxes.drafts.delete(resolved_inbox, draft_id)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"delete_draft({draft_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting draft {draft_id}: {exc}") from exc
-
-    # -------------------------------------------------------------------------
-    # Webhook management
-    # -------------------------------------------------------------------------
-
-    def list_webhooks(self, limit: int = 50) -> list[AgentMailWebhook]:
-        """List all webhook subscriptions.
-
-        Args:
-            limit: Maximum number of webhooks to return.
-
-        Returns:
-            List of AgentMailWebhook objects.
-        """
-        try:
-            response = self._client.webhooks.list(limit=limit)
-            return [_sdk_webhook_to_model(w) for w in response]
-        except ApiError as exc:
-            _raise_for_api_error(exc, "list_webhooks")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error listing webhooks: {exc}") from exc
-
-    def get_webhook(self, webhook_id: str) -> AgentMailWebhook:
-        """Fetch a specific webhook.
-
-        Args:
-            webhook_id: The webhook ID.
-
-        Returns:
-            AgentMailWebhook object.
-
-        Raises:
-            MessageNotFoundError: If the webhook does not exist.
-        """
-        try:
-            webhook = self._client.webhooks.get(webhook_id)
-            return _sdk_webhook_to_model(webhook)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"get_webhook({webhook_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error fetching webhook {webhook_id}: {exc}") from exc
-
-    def create_webhook(
-        self,
-        url: str,
-        event_types: list[str],
-        inbox_ids: list[str] | None = None,
-        pod_ids: list[str] | None = None,
-    ) -> AgentMailWebhook:
-        """Register a new webhook subscription.
-
-        Args:
-            url: The HTTPS endpoint to receive events.
-            event_types: List of event types (e.g., ``["message.received"]``).
-            inbox_ids: Restrict events to specific inboxes.
-            pod_ids: Restrict events to specific pods.
-
-        Returns:
-            The registered AgentMailWebhook.
-        """
-        try:
-            kwargs: dict[str, Any] = {"url": url, "event_types": event_types}
-            if inbox_ids:
-                kwargs["inbox_ids"] = inbox_ids
-            if pod_ids:
-                kwargs["pod_ids"] = pod_ids
-            webhook = self._client.webhooks.create(**kwargs)
-            return _sdk_webhook_to_model(webhook)
-        except ApiError as exc:
-            _raise_for_api_error(exc, "create_webhook")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error creating webhook: {exc}") from exc
-
-    def update_webhook(
-        self,
-        webhook_id: str,
-        add_inbox_ids: list[str] | None = None,
-        remove_inbox_ids: list[str] | None = None,
-    ) -> AgentMailWebhook:
-        """Update a webhook's inbox subscriptions.
-
-        Args:
-            webhook_id: The webhook ID to update.
-            add_inbox_ids: Inboxes to add to the subscription.
-            remove_inbox_ids: Inboxes to remove from the subscription.
-
-        Returns:
-            Updated AgentMailWebhook.
-        """
-        try:
-            kwargs: dict[str, Any] = {}
-            if add_inbox_ids:
-                kwargs["add_inbox_ids"] = add_inbox_ids
-            if remove_inbox_ids:
-                kwargs["remove_inbox_ids"] = remove_inbox_ids
-            webhook = self._client.webhooks.update(webhook_id, **kwargs)
-            return _sdk_webhook_to_model(webhook)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"update_webhook({webhook_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error updating webhook {webhook_id}: {exc}") from exc
-
-    def delete_webhook(self, webhook_id: str) -> None:
-        """Delete a webhook subscription.
-
-        Args:
-            webhook_id: The webhook ID to delete.
-
-        Raises:
-            MessageNotFoundError: If the webhook does not exist.
-        """
-        try:
-            self._client.webhooks.delete(webhook_id)
-        except ApiError as exc:
-            _raise_for_api_error(exc, f"delete_webhook({webhook_id})")
-        except Exception as exc:
-            raise EmailAPIError(f"Unexpected error deleting webhook {webhook_id}: {exc}") from exc
 
     # -------------------------------------------------------------------------
     # Pod management
