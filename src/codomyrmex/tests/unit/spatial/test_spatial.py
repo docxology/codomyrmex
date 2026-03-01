@@ -347,3 +347,54 @@ class TestScene3D:
 
         assert len(scene_a.objects) == 1
         assert len(scene_b.objects) == 0
+
+
+# ---------------------------------------------------------------
+# WorldModel ABC
+# ---------------------------------------------------------------
+
+@pytest.mark.unit
+class TestWorldModelABC:
+    """Tests that WorldModel is a properly enforced ABC."""
+
+    def test_world_model_cannot_be_instantiated(self):
+        """WorldModel.update() is abstract — direct instantiation must raise TypeError."""
+        from codomyrmex.spatial.world_models import WorldModel
+        with pytest.raises(TypeError):
+            WorldModel()
+
+    def test_world_model_subclass_must_implement_update(self):
+        """Subclass missing update() should also raise TypeError."""
+        from codomyrmex.spatial.world_models import WorldModel
+
+        class IncompleteModel(WorldModel):
+            pass  # Missing update()
+
+        with pytest.raises(TypeError):
+            IncompleteModel()
+
+    def test_concrete_subclass_can_be_instantiated(self):
+        """Subclass implementing update() should instantiate successfully."""
+        from codomyrmex.spatial.world_models import WorldModel
+
+        class ConcreteModel(WorldModel):
+            def update(self, perception_data):
+                self.entities.append(perception_data)
+
+        model = ConcreteModel(environment_type="test")
+        assert model.environment_type == "test"
+        assert isinstance(model.entities, list)
+
+    def test_concrete_subclass_update_called(self):
+        """update() on a concrete subclass should execute and mutate state."""
+        from codomyrmex.spatial.world_models import WorldModel
+
+        class TrackingModel(WorldModel):
+            def update(self, perception_data):
+                self.entities.append(perception_data)
+
+        model = TrackingModel()
+        assert len(model.entities) == 0
+        model.update({"sensor": "lidar", "distance": 5.0})
+        assert len(model.entities) == 1
+        assert model.entities[0]["sensor"] == "lidar"

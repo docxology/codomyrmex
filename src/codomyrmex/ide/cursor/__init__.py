@@ -11,6 +11,8 @@ Example:
 """
 
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -76,15 +78,62 @@ class CursorClient(IDEClient):
         }
 
     def execute_command(self, command: str, args: dict | None = None) -> Any:
-        """Execute a Cursor command."""
+        """Execute a Cursor command via the CLI.
+
+        Attempts to invoke the real Cursor CLI ('cursor'). Raises
+        CommandExecutionError if the CLI is not installed.
+
+        Args:
+            command: Command name to execute.
+            args: Optional command arguments.
+
+        Returns:
+            Command result dict from CLI output.
+
+        Raises:
+            CommandExecutionError: If not connected, CLI unavailable, or CLI fails.
+        """
         if not self._connected:
             raise CommandExecutionError("Not connected to Cursor")
 
-        return {"status": "success", "command": command, "args": args or {}}
+        cli = shutil.which("cursor")
+        if not cli:
+            raise CommandExecutionError(
+                f"Cursor CLI not available. Install Cursor's CLI integration to use "
+                f"command execution. Command '{command}' cannot be executed without the CLI."
+            )
+
+        try:
+            cmd = [cli, "--command", command]
+            if args:
+                cmd.extend(["--args", json.dumps(args)])
+            result = subprocess.run(
+                cmd, check=True, capture_output=True, text=True, timeout=30
+            )
+            return {"status": "success", "output": result.stdout}
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr if e.stderr else str(e)
+            raise CommandExecutionError(f"Cursor CLI failed for '{command}': {error_msg}") from e
+        except subprocess.TimeoutExpired as e:
+            raise CommandExecutionError(f"Cursor command '{command}' timed out after 30s") from e
 
     def get_active_file(self) -> str | None:
-        """Get the currently active file."""
-        raise NotImplementedError("Cursor IDE integration: get_active_file not yet implemented")
+        """Get the currently active file (heuristic: most recently modified)."""
+        if not self._connected or not self.workspace_path.exists():
+            return None
+        try:
+            candidates = [
+                f for f in self.workspace_path.rglob("*")
+                if f.is_file()
+                and not any(part.startswith(".") for part in f.parts)
+                and f.suffix in {".py", ".md", ".txt", ".yaml", ".yml", ".toml", ".json", ".js", ".ts"}
+            ]
+            if not candidates:
+                return None
+            most_recent = max(candidates, key=lambda p: p.stat().st_mtime)
+            return str(most_recent)
+        except OSError:
+            return None
 
     def open_file(self, path: str) -> bool:
         """Open a file in Cursor."""

@@ -224,20 +224,21 @@ class AntigravityClient(IDEClient):
         }
 
     def execute_command(self, command: str, args: dict | None = None) -> Any:
-        """Execute an Antigravity command.
+        """Execute an Antigravity command via the CLI.
 
-        Note: This method simulates command execution. In a real integration,
-        this would interface with the actual Antigravity API.
+        Attempts to invoke the real Antigravity CLI ('agy' or 'antigravity').
+        Raises CommandExecutionError if the CLI is not installed.
 
         Args:
             command: Command name to execute.
             args: Optional command arguments.
 
         Returns:
-            Command result.
+            Command result dict from CLI output.
 
         Raises:
-            CommandExecutionError: If command execution fails.
+            CommandExecutionError: If not connected, unknown command, CLI unavailable,
+                or CLI execution fails.
         """
         if not self._connected:
             raise CommandExecutionError("Not connected to Antigravity session")
@@ -245,22 +246,61 @@ class AntigravityClient(IDEClient):
         if command not in self.TOOLS:
             raise CommandExecutionError(f"Unknown command: {command}")
 
-        # Return simulated success response
-        return {
-            "status": "success",
-            "command": command,
-            "args": args or {},
-            "message": f"Command '{command}' executed successfully",
-            "timestamp": datetime.now().isoformat(),
-        }
+        cli = shutil.which("agy") or shutil.which("antigravity")
+        if not cli:
+            raise CommandExecutionError(
+                f"Antigravity CLI not available. Install 'agy' or 'antigravity' to use "
+                f"direct tool execution. Command '{command}' cannot be executed without the CLI."
+            )
+
+        try:
+            result = subprocess.run(
+                [cli, "tool", command, "--json", json.dumps(args or {})],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if result.stdout:
+                try:
+                    return json.loads(result.stdout)
+                except json.JSONDecodeError:
+                    return {"status": "success", "output": result.stdout}
+            return {"status": "success", "command": command}
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr if e.stderr else str(e)
+            raise CommandExecutionError(f"CLI execution failed for '{command}': {error_msg}") from e
+        except subprocess.TimeoutExpired as e:
+            raise CommandExecutionError(f"CLI command '{command}' timed out after 30s") from e
 
     def get_active_file(self) -> str | None:
-        """Get the currently active file in the IDE.
+        """Get the currently active file in Antigravity.
+
+        Uses artifact modification times and workspace heuristics.
 
         Returns:
             File path or None if no file is active.
         """
-        raise NotImplementedError("Antigravity IDE integration: get_active_file not yet implemented")
+        # Check conversation artifacts first
+        if self._context and self._context.artifacts:
+            most_recent = max(self._context.artifacts, key=lambda a: a.modified)
+            if most_recent.path and Path(most_recent.path).exists():
+                return most_recent.path
+
+        # Fallback: most recently modified source file in cwd
+        try:
+            cwd = Path.cwd()
+            candidates = [
+                f for f in cwd.rglob("*")
+                if f.is_file()
+                and not any(part.startswith(".") for part in f.parts)
+                and f.suffix in {".py", ".md", ".txt", ".yaml", ".yml", ".toml", ".json"}
+            ]
+            if candidates:
+                return str(max(candidates, key=lambda p: p.stat().st_mtime))
+        except OSError:
+            pass
+        return None
 
     def open_file(self, path: str) -> bool:
         """Open a file in Antigravity.
