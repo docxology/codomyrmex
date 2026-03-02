@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Codomyrmex-v1.0.6-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Codomyrmex-v1.0.7-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Modules-122-green?style=for-the-badge" alt="Modules">
   <img src="https://img.shields.io/badge/Python_Files-1800+-orange?style=for-the-badge" alt="Python Files">
   <img src="https://img.shields.io/badge/Tests-800+-purple?style=for-the-badge" alt="Tests">

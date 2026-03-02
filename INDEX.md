@@ -1,6 +1,6 @@
 # Codomyrmex Project Index
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
 
 > [!TIP]
 > Master index for the Codomyrmex project. Use this as the entry point for navigating the entire repository.
@@ -29,7 +29,7 @@
 | MCP prompts | 10 | [docs/pai/tools-reference.md](docs/pai/tools-reference.md) |
 | Tests collected | 21,035 | `uv run pytest --co -q` |
 | RASP doc coverage | 100% | [AGENTS.md](AGENTS.md) |
-| Version | v1.0.6 | [pyproject.toml](pyproject.toml) |
+| Version | v1.0.7 | [pyproject.toml](pyproject.toml) |
 
 ## Module Layer Browser
 

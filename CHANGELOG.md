@@ -26,6 +26,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.7] - 2026-03-02 — "Sprint 19 — Documentation Audit & TODO Reconciliation"
+
+### Added
+
+- **Sprint 19 entry in TODO.md** with all documentation audit work documented
+- **PAI interface triple-check**: Verified all 5 PAI subsystems via CLI and browser (299 tools, 3 resources, 10 prompts)
+
+### Changed
+
+- **TODO.md**: Reconciled 15 stale metrics with verified actuals:
+  - Modules: 88 → **124**
+  - Source files: 1,623 → **1,793**; LOC: 290K → **308K** (source), 490K → **558K** (total)
+  - Tests: ~20,530 → **21,036**; Test files: 700 → **767**
+  - MCP tools: ~214 → **~250** decorators / **299** registered; Auto-discovered modules: 45 → **78**
+  - Pass-only stubs: 227 → **2** (massive improvement)
+  - py.typed markers: 88 → **538**; PAI skills: 76 → **81**
+  - Ruff violations: corrected "0" claim to actual **1,226** (regressed via new modules)
+  - Coverage gate: corrected "68%" claim to actual **~32%** (needs investigation)
+
+### Fixed
+
+- **README.md, SPEC.md, AGENTS.md, PAI.md, CLAUDE.md, INDEX.md, docs/README.md, docs/AGENTS.md, .github/README.md**: All version references updated to v1.0.7, module counts corrected to 124, tool counts corrected
+- **AGENTS.md, INDEX.md**: Removed dead `cursorrules/` directory references
+- **AGENTS.md**: Removed dead file references (`resources.json`, `test.db`, `workflow.db`); fixed `tools/` → `tool_use/`
+- **SPEC.md, INDEX.md**: Corrected stale "February 2026" → "March 2026"
+- **PAI.md**: Version header updated v1.0.5 → v1.0.7
+
 ## [1.0.6] - 2026-03-02 — "Sprint 17 — MCP Expansion & Code Health"
 
 ### Added

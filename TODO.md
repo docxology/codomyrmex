@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.6 | **Date**: 2026-03-02 | **Modules**: 88 | **Active Sprint**: 18+
+**Version**: v1.0.7 | **Date**: 2026-03-02 | **Modules**: 124 | **Active Sprint**: 19+
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -10,53 +10,36 @@ This is the authoritative project backlog. Updated after each sprint.
 
 | Metric | Value | Method |
 | :--- | :--- | :--- |
-| Top-level source modules | 88 | `len(codomyrmex._submodules)` |
-| Source files (non-test) | 1,623 | `find -name "*.py" -not -path "*/tests/*"` |
-| Source LOC (non-test) | 290,319 | `wc -l` across source files |
-| Total LOC (incl. tests) | 490,240 | `wc -l` across all `.py` |
-| Test files | 700 | Sprint 18: +6 new test files |
-| Test suite | ~20,530+ tests collected | `uv run pytest --collect-only` |
-| Ruff violations | **0** | Sprint 16: F405 star-imports eliminated; 2 ImportError bugs fixed |
-| `NotImplementedError` sites | 13 ABC-annotated (`# ABC: intentional`) + ~10 implementation gaps | Architectural patterns verified |
-| Pass-only function stubs | **227** across 38 modules | AST analysis (down from 255) |
+| Top-level source modules | **124** | `ls -d src/codomyrmex/*/` |
+| Source files (non-test) | 1,793 | `find -name "*.py" -not -path "*/tests/*"` |
+| Source LOC (non-test) | 307,504 | `wc -l` across source files |
+| Total LOC (incl. tests) | 557,855 | `wc -l` across all `.py` |
+| Test files | 767 | `find -name "test_*.py"` |
+| Test suite | **21,036** tests collected | `uv run pytest --collect-only` |
+| Ruff violations | **1,226** | Sprint 16 zeroed; regressed via new modules & rules |
+| `NotImplementedError` sites | 13 ABC-annotated (`# ABC: intentional`) | Architectural patterns verified |
+| Pass-only function stubs | **2** (down from 227) | AST analysis |
 | Missing `@abstractmethod` markers | **0** (was 26, all resolved v1.0.4) | AST analysis ✅ |
-| Coverage gate | 68% (Sprint 16 target: 70%) | +102 new tests: `ide/antigravity/client.py` (65), `git_operations/cli/repo.py` (37) |
-| MCP Tools | **~214** (+16 Sprint 18: prompt_engineering/database_management/auth/environment_setup/utils/tool_use) | Auto-discovery + manual |
-| Auto-discovered MCP modules | 45 (+6 Sprint 18) | MCP bridge |
-| RASP documentation compliance | 100% (88/88) | Automated audit |
-| `py.typed` markers | 88/88 | PEP 561 ✅ |
+| Coverage gate | `fail_under=68` in pyproject; actual ~32% | Needs investigation |
+| MCP Tools | **~250** `@mcp_tool` decorators; **299** registered at runtime | Auto-discovery + static |
+| Auto-discovered MCP modules | **78** (74 at maxdepth 2) | MCP bridge |
+| `mcp_tools.py` files | **78** | `find -name mcp_tools.py` |
+| RASP documentation compliance | 124/124 | Automated audit |
+| `py.typed` markers | **538** | PEP 561 ✅ |
 | Zero-Mock policy | Enforced via `ruff.lint.flake8-tidy-imports.banned-api` | `pyproject.toml` |
 | Python compatibility | 3.10 – 3.14 | `pyproject.toml classifiers` + `conftest.py` namespace guard |
-| PAI Skills | 76 installed | Skill registry |
+| PAI Skills | **81** installed | Skill registry |
 
-### Pass-Only Stub Distribution (Top 15 Modules)
+### Pass-Only Stub Status
 
-| Module | Stub Count | Nature |
-| :--- | :---: | :--- |
-| `cloud` | 27 | ABC interfaces (`CloudProvider`, `StorageProvider`, `ComputeProvider`, `ServerlessProvider`) + Infomaniak |
-| `llm` | 25 | ABC interfaces (`BaseLLMProvider`, `BaseEmbedding`, `BaseMemory`, `BaseChunker`, `BaseRetriever`) |
-| `cache` | 17 | ABC interfaces (`BaseCacheBackend`) + backend implementations |
-| `agents` | 16 | ABC/protocol methods + `AgentRegistry` |
-| `audio` | 14 | ABC + STT/TTS provider stubs |
-| `collaboration` | 12 | `CollaborationAgent`, `Channel`, `Protocol` ABCs |
-| `coding` | 12 | Parser ABCs + refactoring/static analysis stubs |
-| `telemetry` | 10 | `SpanExporter`, `MetricReader` ABC methods |
-| `ide` | 8 | `IDEIntegration` base class — 8 methods all stubs |
-| `model_ops` | 8 | `FeatureStore`, `ArtifactStore` interfaces |
-| `security` | 7 | `AuditStore`, `ComplianceControl`, `SecurityCheck` ABCs |
-| `api` | 7 | `APIEndpoint` interface methods |
-| `orchestrator` | 7 | `ExecutionEngine`, `PipelineStage`, `Trigger` ABCs |
-| `containerization` | 6 | WASM runtime + security scanner stubs |
-| `vector_store` | 6 | `VectorStore` ABC — full interface |
-
-> **Interpretation**: ~120 of the 227 stubs are intentional ABCs (abstract base class methods defining interfaces for subclass implementation). The remaining ~107 are **implementation gaps** — methods on concrete classes or modules that should contain real logic.
+> **Down from 227 → 2.** Nearly all pass-only stubs have been implemented or properly marked as ABCs. Only 2 remain across the entire codebase.
 
 ---
 
 ## 🔴 CRITICAL (blocking / must fix now)
 
-- [ ] **Ratchet coverage gate** from `fail_under=68` → 70% (Sprint 16: +102 tests for `ide/antigravity/client.py` + `git_operations/cli/repo.py`; awaiting full-suite verification)
-  - Remaining targets: `email/agentmail/provider.py` (14%), `cli/handlers/quick.py` (6%)
+- [ ] **Coverage investigation**: `fail_under=68` in pyproject.toml but actual coverage measures ~32%. Investigate cause (import errors? partial collection?) and either fix or recalibrate gate
+- [ ] **Ruff regression**: Was zeroed in Sprint 16 but now at 1,226 violations from new modules/rules. Triage and fix.
 - [x] **Circular import audit** *(Sprint 16)* — 1,646 modules imported cleanly; 0 circular imports; 2 `ImportError` bugs fixed (`ci_cd_automation/build/build_manager.py`, `model_ops/fine_tuning/fine_tuning.py`)
 
 ---
@@ -83,14 +66,15 @@ Prioritized by module criticality and user-facing impact. Excludes ~120 intentio
 | **P3** | `evolutionary_ai` | 3 | `mutate()`, `crossover()`, `select()` operators | `numpy` |
 | **P3** | `feature_flags` | 3 | `Strategy.evaluate()`, serialization | None |
 
-### MCP Coverage (~42 modules missing `mcp_tools.py`)
+### MCP Coverage (78/124 modules have `mcp_tools.py`)
 
-Modules with no MCP exposure — invisible to the PAI bridge.
-Sprint 16 completed: `static_analysis` ✅, `vector_store` ✅, `feature_flags` ✅
-Sprint 17 completed: `serialization` ✅, `cache` ✅, `deployment` ✅, `model_ops` ✅, `testing` ✅, `templating` ✅
-Sprint 18 completed: `prompt_engineering` ✅, `database_management` ✅, `auth` ✅, `environment_setup` ✅, `utils` ✅, `tool_use` ✅
+**78 modules** now have MCP exposure (up from 45 in Sprint 18). 46 modules remain without `mcp_tools.py`.
+Sprint 16: `static_analysis` ✅, `vector_store` ✅, `feature_flags` ✅
+Sprint 17: `serialization` ✅, `cache` ✅, `deployment` ✅, `model_ops` ✅, `testing` ✅, `templating` ✅
+Sprint 18: `prompt_engineering` ✅, `database_management` ✅, `auth` ✅, `environment_setup` ✅, `utils` ✅, `tool_use` ✅
+Sprint 19: 4 additional modules + documentation audit
 
-| Module Group | Modules |
+| Module Group | Remaining Modules Without MCP |
 |---|---|
 | Infrastructure | `api`, `ci_cd_automation` |
 | AI / ML | `evolutionary_ai` |
@@ -103,7 +87,7 @@ Sprint 18 completed: `prompt_engineering` ✅, `database_management` ✅, `auth`
 
 ### Type Checking
 
-- [x] Add `py.typed` markers across all modules with type hints (PEP 561) — **88/88 modules complete** *(Sprint 15)*
+- [x] Add `py.typed` markers across all modules with type hints (PEP 561) — **538 markers** across 124 modules *(Sprint 15+)*
 - [ ] Check and complete type hint coverage: `cerebrum/`, `events/`, `search/`, `config_management/`, etc.
 
 ### Documentation — Completed ✅
@@ -111,10 +95,10 @@ Sprint 18 completed: `prompt_engineering` ✅, `database_management` ✅, `auth`
 <details>
 <summary>Wave 2 + SPEC.md Expansion (March 2026) — all done</summary>
 
-- [x] **PAI.md version headers** — all 88 bumped to `v1.0.5 | March 2026`
-- [x] **AGENTS.md Agent Role Access Matrix** — added to all 88 modules (was 9/88)
-- [x] **README.md PAI Integration section** — added to all 88 modules (was 6/88)
-- [x] **PAI.md MCP Tools table** — added to all 88 modules (was 30/88)
+- [x] **PAI.md version headers** — all modules bumped to `v1.0.6 | March 2026`
+- [x] **AGENTS.md Agent Role Access Matrix** — added to all modules
+- [x] **README.md PAI Integration section** — added to all modules
+- [x] **PAI.md MCP Tools table** — added to all modules
 - [x] All 8 stub SPEC.md files expanded (agentic_memory, bio_simulation, ci_cd_automation, config_management, finance, model_context_protocol, physical_management, system_discovery) — 43-49 → 143-190 lines each
 
 </details>
@@ -146,7 +130,7 @@ First feature release targeting external consumption.
 | **Mutation testing expansion** | `pyproject.toml [tool.mutmut]` | Extend beyond 3 files to cover `security/secrets/`, `orchestrator/core.py`, `events/core/event_bus.py` |
 | **mypy strict ramp** | `pyproject.toml [[tool.mypy.overrides]]` | Promote `agents` to `disallow_untyped_defs = true`. Current: ~612 errors. Target: ≤300 |
 | **Integration test formalization** | `tests/integration/` | Formalize 11 workflow files into CI pipeline with `pytest -m integration` marker |
-| **Documentation site deployment** | `docs_gen/site_generator.py`, `mkdocs.yml` (new) | `mkdocs-material` site from 88 module RASP docs → GitHub Pages |
+| **Documentation site deployment** | `docs_gen/site_generator.py`, `mkdocs.yml` (new) | `mkdocs-material` site from 124 module RASP docs → GitHub Pages |
 
 ### Rules Submodule Enhancements (agentic_memory/rules/)
 
@@ -256,6 +240,18 @@ Architectural extensions and research directions. Aspirational and may require s
 ---
 
 ## ✅ COMPLETED — Sprint History
+
+### Sprint 19 (March 2026) — Documentation Audit + MCP Expansion
+
+- [x] **Repo-wide documentation audit**: 10 files corrected (README, SPEC, AGENTS, PAI, CLAUDE, INDEX, docs/README, docs/AGENTS, .github/README)
+- [x] Version alignment: all docs updated v1.0.3/v1.0.5 → v1.0.6 → v1.0.7
+- [x] Module count alignment: 88/95 → 124 across all documentation
+- [x] MCP tool count alignment: various → ~250 decorators / 299 registered
+- [x] Removed dead cross-references: `cursorrules/`, `resources.json`, `test.db`, `workflow.db`
+- [x] Fixed module naming: `tools/` → `tool_use/`
+- [x] Triple-checked PAI interface: 299 tools, 3 resources, 10 prompts, MCP Web UI verified via browser
+- [x] TODO.md reconciliation: 15 stale metrics corrected to verified actuals
+- [x] Pass-only stubs: 227 → 2 (massive improvement from prior sprints)
 
 ### Sprint 18 (March 2026) — MCP Coverage Expansion (6 Modules)
 
@@ -394,4 +390,4 @@ Architectural extensions and research directions. Aspirational and may require s
 
 ---
 
-*Last updated: 2026-03-02 — Unified from `TO-DO.md` + `TODO.md`. Metrics reconciled to Sprint 17 values.*
+*Last updated: 2026-03-02 — Metrics reconciled to Sprint 19 verified actuals (v1.0.7).*

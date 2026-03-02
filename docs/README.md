@@ -1,6 +1,6 @@
 # Codomyrmex Documentation
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026 | **Total Docs**: 900+
+**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026 | **Total Docs**: 900+
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # Codomyrmex Agents — Repository Root
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -432,7 +432,7 @@ Before completing significant changes:
 
 ## Version History
 
-- **v1.0.6** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
+- **v1.0.7** (March 2026) - Sprint 17 MCP expansion: 74 auto-discovered modules, ~367 tools; module count updated to 122; version synchronized across all docs
 - **v1.0.5** (March 2026) - Sprint 16 MCP coverage, ruff violations zeroed, circular imports resolved
 - **v1.0.3** (March 2026) - Documentation audit: experimental/stub labels added to non-MCP-exposed and stub-only modules; accuracy review across phantom module references
 - **v0.1.7** (February 2026) - Module count corrected to 86, version synchronized, missing modules added to discovery

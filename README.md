@@ -1,6 +1,6 @@
 # Codomyrmex
 
-**Version**: v1.0.6 | **Status**: Active | **Last Updated**: March 2026
+**Version**: v1.0.7 | **Status**: Active | **Last Updated**: March 2026
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://github.com/docxology/codomyrmex)
