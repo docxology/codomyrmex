@@ -11,7 +11,6 @@ import pytest
 
 from codomyrmex.website.handlers.proxy_handler import ProxyHandler
 
-
 # ── Helpers ──────────────────────────────────────────────────────────
 
 

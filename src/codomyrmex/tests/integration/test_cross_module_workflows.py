@@ -7,6 +7,7 @@ ensuring that different components work together seamlessly in complex scenarios
 """
 
 import os
+import re
 import tempfile
 import time
 

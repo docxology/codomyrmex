@@ -186,7 +186,7 @@ class TestHandleAgentSetupNoneClient:
         args = _make_args()
         handle_agent_setup(None, "FakeAgent", args)
         captured = capsys.readouterr()
-        assert "not available" in captured.out.lower() or result is False
+        assert "not available" in captured.out.lower()
 
 
 @pytest.mark.unit
