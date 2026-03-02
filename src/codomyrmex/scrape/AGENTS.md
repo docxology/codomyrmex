@@ -4,7 +4,21 @@
 
 ## Module Overview
 
-Web scraping with browser automation and DOM extraction.
+Web scraping with browser automation and DOM extraction. Provides `Scraper` for simple HTTP-based
+scraping, `BrowserScraper` for JavaScript-heavy sites, and `DOMExtractor` for structured DOM
+parsing. Two MCP tools (`scrape_extract_content`, `scrape_text_similarity`) expose content
+extraction and similarity comparison.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `Scraper`, `BrowserScraper`, `DOMExtractor`, `RateLimiter` |
+| `extractors/scraper.py` | `Scraper` — HTTP-based content fetching with URL validation |
+| `browser_scraper.py` | `BrowserScraper` — async browser automation for JavaScript sites |
+| `dom_extractor.py` | `DOMExtractor` — CSS-selector-based DOM parsing |
+| `rate_limiter.py` | `RateLimiter` — per-domain rate limiting |
+| `mcp_tools.py` | MCP tools: `scrape_extract_content`, `scrape_text_similarity` |
 
 ## Key Classes
 
@@ -56,6 +70,14 @@ data = extractor.extract({
 })
 ```
 
+## Operating Contracts
+
+- `Scraper.get()` validates URL scheme — only `http://` and `https://` are accepted; others raise `ValueError`
+- `BrowserScraper` requires an async runtime — always `await` its methods
+- `RateLimiter` is enforced per-domain — create one instance and reuse across requests
+- `scrape_text_similarity` uses Jaccard index — returns 0.0–1.0 (1.0 = identical)
+- **DO NOT** pass raw file paths or file:// URLs to `Scraper.get()` — only web URLs
+
 ## Testing Patterns
 
 ```python
@@ -75,11 +97,12 @@ assert time.time() - start >= 1.0
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `scrape_extract_content`, `scrape_text_similarity`; full web content extraction | TRUSTED |
-| **Architect** | Read + Design | `scrape_text_similarity`; content similarity analysis, data extraction design | OBSERVED |
-| **QATester** | Validation | `scrape_extract_content`, `scrape_text_similarity`; extraction correctness verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `scrape_extract_content`, `scrape_text_similarity` | TRUSTED |
+| **Architect** | Read + Design | `scrape_text_similarity` — content similarity analysis, data extraction design | OBSERVED |
+| **QATester** | Validation | `scrape_extract_content`, `scrape_text_similarity` — extraction correctness verification | OBSERVED |
+| **Researcher** | Read-only | `scrape_extract_content`, `scrape_text_similarity` — full read access for research | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Extracting web content during OBSERVE phase, computing text similarity for research, gathering external data.
@@ -89,6 +112,9 @@ assert time.time() - start >= 1.0
 
 ### QATester Agent
 **Use Cases**: Validating extraction quality during VERIFY, confirming URL validation works correctly.
+
+### Researcher Agent
+**Use Cases**: Extracting structured content from web pages and computing text similarity for research analysis.
 
 ## Navigation
 

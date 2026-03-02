@@ -101,18 +101,22 @@ SearchIndex.add(doc_id, title, content, path, tags)
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
 |-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, doc template design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, documentation quality validation | OBSERVED |
+| **Engineer** | Full | Direct Python import, full API access | TRUSTED |
+| **Architect** | Read + Design | Doc template design, extraction pipeline review | OBSERVED |
+| **QATester** | Validation | Doc extraction accuracy, search index round-trip, site completeness | OBSERVED |
+| **Researcher** | Read-only | Query search index, inspect extracted documentation | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Generate documentation via APIDocExtractor, build search indices, configure site generation during BUILD/EXECUTE phases
+**Use Cases**: Generate documentation via `APIDocExtractor`, build search indices, configure site generation during BUILD/EXECUTE phases.
 
 ### Architect Agent
-**Use Cases**: Design documentation templates, validate extraction pipeline architecture, review search index strategy
+**Use Cases**: Design documentation templates, validate extraction pipeline architecture, review search index strategy.
 
 ### QATester Agent
-**Use Cases**: Validate doc extraction accuracy, verify search index round-trip correctness, test site generation completeness
+**Use Cases**: Validate doc extraction accuracy, verify search index round-trip correctness, test site generation completeness.
+
+### Researcher Agent
+**Use Cases**: Querying the search index and inspecting extracted module documentation for research and knowledge discovery.
 
 ## Navigation
 

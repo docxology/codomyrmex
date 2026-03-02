@@ -4,7 +4,20 @@
 
 ## Module Overview
 
-OpenTelemetry-compatible tracing, metrics, and observability.
+OpenTelemetry-compatible tracing, metrics, and observability for the Codomyrmex platform. Provides
+`start_span()` for code tracing, `MetricCollector` for counters and gauges, `OTLPExporter` for
+shipping telemetry to OTLP endpoints, and `Dashboard` for real-time metric visualization. No MCP
+tools — accessed exclusively via direct Python import.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `TraceContext`, `MetricCollector`, `Dashboard`, `OTLPExporter`, `start_span`, `traced`, `monitor_performance` |
+| `tracing.py` | `TraceContext`, `start_span()` — span management and context propagation |
+| `metrics.py` | `MetricCollector` — counter and gauge recording |
+| `exporters.py` | `OTLPExporter` — ship telemetry to OTLP endpoints |
+| `dashboard.py` | `Dashboard` — real-time metric visualization server |
 
 ## Key Classes
 
@@ -56,22 +69,34 @@ def test_func():
 assert test_func() == 42
 ```
 
+## Operating Contracts
+
+- All span names must be globally unique — use `module.operation` pattern (e.g., `agents.execute`)
+- `MetricCollector` is not thread-safe — create one instance per thread or use thread-local storage
+- `OTLPExporter` requires `OTLP_ENDPOINT` env var — raises `ConfigurationError` if not set
+- `Dashboard.start_server()` binds to a port — ensure port is free before calling
+- **DO NOT** include PII (user IDs, emails) in span attributes or metric labels
+
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | None — Python import only | TRUSTED |
+| **Architect** | Read + Design | None — observability strategy and metric naming design | OBSERVED |
+| **QATester** | Validation | None — metric accuracy and span propagation testing | OBSERVED |
+| **Researcher** | Read-only | None — inspect trace and metric data for analysis | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Instrument code with metrics and traces, configure OTLP exporters, register dashboard views during BUILD/VERIFY phases
+**Use Cases**: Instrument code with metrics and traces, configure OTLP exporters, register dashboard views during BUILD/VERIFY phases.
 
 ### Architect Agent
-**Use Cases**: Design observability strategy, define metric naming conventions, plan tracing topology across services
+**Use Cases**: Design observability strategy, define metric naming conventions, plan tracing topology across services.
 
 ### QATester Agent
-**Use Cases**: Validate metric collection accuracy, verify alert rule thresholds, test span propagation and dashboard rendering
+**Use Cases**: Validate metric collection accuracy, verify alert rule thresholds, test span propagation and dashboard rendering.
+
+### Researcher Agent
+**Use Cases**: Inspecting trace data and metric time series for performance research and observability analysis.
 
 ## Navigation
 

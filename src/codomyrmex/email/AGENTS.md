@@ -102,20 +102,24 @@ EmailError (base)
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `agentmail_send_message`, `agentmail_list_messages`, `agentmail_create_inbox`, `gmail_send_message`, `gmail_list_messages`; full inbox management | TRUSTED |
-| **Architect** | Read + Design | `agentmail_list_inboxes`, `agentmail_list_messages`; inbox architecture review | OBSERVED |
-| **QATester** | Validation | `agentmail_list_messages`, `agentmail_get_message`; message delivery validation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | All 12 AgentMail + Gmail tools | TRUSTED |
+| **Architect** | Read + Design | `agentmail_list_inboxes`, `agentmail_list_messages` — inbox architecture review | OBSERVED |
+| **QATester** | Validation | `agentmail_list_messages`, `agentmail_get_message` — message delivery validation | OBSERVED |
+| **Researcher** | Read-only | `agentmail_list_messages`, `agentmail_get_message`, `agentmail_list_inboxes`, `gmail_list_messages` — inbox inspection | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Agent-to-agent communication via AgentMail, automated email workflows, BUILD phase notifications, Gmail integration for user-facing emails
+**Use Cases**: Agent-to-agent communication via AgentMail, automated email workflows, BUILD phase notifications, Gmail integration for user-facing emails.
 
 ### Architect Agent
-**Use Cases**: Inbox structure review, thread organization design, email routing architecture
+**Use Cases**: Inbox structure review, thread organization design, email routing architecture.
 
 ### QATester Agent
-**Use Cases**: Validate message delivery, verify inbox creation, test webhook registration
+**Use Cases**: Validate message delivery, verify inbox creation, test webhook registration.
+
+### Researcher Agent
+**Use Cases**: Inspecting inbox contents and message history for research analysis and communication pattern studies.
 
 ## Navigation
 

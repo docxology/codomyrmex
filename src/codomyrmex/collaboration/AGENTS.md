@@ -6,6 +6,24 @@
 
 Multi-agent collaboration, shared state, and coordination patterns.
 
+## Module Overview
+
+Multi-agent collaboration framework for distributed task coordination, shared state management, and
+swarm orchestration. Provides `SwarmManager` as central orchestrator, `MessageBus` for inter-agent
+messaging, and `ConsensusEngine` for voting-based decisions. Three MCP tools (`swarm_submit_task`,
+`pool_status`, `list_agents`) expose swarm operations to PAI agents.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `SwarmManager`, `SwarmAgent`, `AgentRole`, `MessageBus`, `ConsensusEngine` |
+| `swarm_manager.py` | `SwarmManager` — central orchestrator for agent pool |
+| `swarm_agent.py` | `SwarmAgent` — agent participating in the swarm |
+| `message_bus.py` | `MessageBus` — pub/sub inter-agent messaging |
+| `consensus.py` | `ConsensusEngine` — voting and consensus building |
+| `mcp_tools.py` | MCP tools: `swarm_submit_task`, `pool_status`, `list_agents` |
+
 ## Swarm Management
 
 The **`SwarmManager`** is the central orchestrator for agent collaboration. It manages the agent pool, coordinates messages, and handles task decomposition.
@@ -62,6 +80,35 @@ async def on_task(message: SwarmMessage):
             )
         )
 ```
+
+## Operating Contracts
+
+- Agents must subscribe to `tasks.role.{your_role}` topic BEFORE the `SwarmManager` starts dispatching
+- `MessageBus` is async — all publish/subscribe operations must be `await`ed
+- `SwarmManager.collect_result()` blocks until all task results are received — set a timeout
+- `ConsensusEngine` requires at least 2 participating agents to produce a valid consensus
+- **DO NOT** use `SwarmAgent` outside of a `SwarmManager` context — lifecycle depends on manager
+
+## PAI Agent Role Access Matrix
+
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `swarm_submit_task`, `pool_status`, `list_agents` | TRUSTED |
+| **Architect** | Read + Design | `pool_status`, `list_agents` — swarm architecture review, agent topology design | OBSERVED |
+| **QATester** | Validation | `pool_status`, `list_agents` — swarm health verification, agent availability checks | OBSERVED |
+| **Researcher** | Read-only | `pool_status`, `list_agents` — inspect swarm state and agent capabilities | SAFE |
+
+### Engineer Agent
+**Use Cases**: Submitting tasks to the swarm during EXECUTE, monitoring pool status, managing agent coordination workflows.
+
+### Architect Agent
+**Use Cases**: Designing swarm topologies, reviewing agent role assignments, planning coordination patterns.
+
+### QATester Agent
+**Use Cases**: Verifying swarm health during VERIFY, confirming agent availability and task completion.
+
+### Researcher Agent
+**Use Cases**: Inspecting swarm pool status and agent capabilities for research analysis.
 
 ## Navigation
 

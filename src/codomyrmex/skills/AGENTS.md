@@ -4,7 +4,19 @@
 
 ## Module Overview
 
-Agent skill management: discovery, registration, and execution.
+Agent skill management covering discovery, registration, execution, and composition of PAI skills.
+Provides `SkillRegistry` for discovering and indexing skills from the `~/.claude/skills/` directory,
+`SkillExecutor` for invoking skills by name, and seven MCP tools for the full skill lifecycle.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `Skill`, `SkillRegistry`, `SkillExecutor`, `SkillComposer` |
+| `registry.py` | `SkillRegistry` — discover and register skills from PAI skills directory |
+| `executor.py` | `SkillExecutor` — execute skills by name with typed parameters |
+| `composer.py` | `SkillComposer` — compose multiple skills into a pipeline |
+| `mcp_tools.py` | MCP tools: `skills_list`, `skills_get`, `skills_search`, `skills_sync`, `skills_add_custom`, `skills_get_categories`, `skills_get_upstream_status` |
 
 ## Key Classes
 
@@ -78,13 +90,22 @@ result = executor.execute("code_review", code="print(1)")
 assert result is not None
 ```
 
+## Operating Contracts
+
+- `skills_sync` fetches from an upstream repository — requires network access
+- `skills_add_custom` writes to the skills directory — ensure the path is writable
+- `SkillRegistry.discover()` scans `~/.claude/skills/` — must exist before calling
+- `SkillExecutor.execute_composed()` runs skills sequentially — order matters
+- **DO NOT** modify skill files directly; use `skills_add_custom` for overrides
+
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | All 7 `skills_*` tools; skill discovery, invocation, and lifecycle management | TRUSTED |
-| **Architect** | Read + Design | `skills_list`, `skills_get`; skill inventory review, skill architecture design | OBSERVED |
-| **QATester** | Validation | `skills_list`, `skills_get`; skill availability verification, invocation testing | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | All 7 `skills_*` tools | TRUSTED |
+| **Architect** | Read + Design | `skills_list`, `skills_get` — skill inventory review, architecture design | OBSERVED |
+| **QATester** | Validation | `skills_list`, `skills_get` — skill availability verification, invocation testing | OBSERVED |
+| **Researcher** | Read-only | `skills_list`, `skills_search`, `skills_get`, `skills_get_categories` — full catalog read access | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Discovering and invoking skills during EXECUTE, managing skill lifecycle, building skill composition workflows.
@@ -94,6 +115,9 @@ assert result is not None
 
 ### QATester Agent
 **Use Cases**: Verifying skill discovery during VERIFY, confirming skill invocation correctness.
+
+### Researcher Agent
+**Use Cases**: Searching and browsing the skill catalog for research analysis and capability assessment.
 
 ## Navigation
 

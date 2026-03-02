@@ -85,21 +85,34 @@ def sync_config(storage: StorageClient, bucket: str, local_path: str):
 3. **Use CloudConfig**: Leverage `CloudConfig.from_env()` to discover configured providers.
 4. **Structured Logging**: Errors are logged automatically; use `CloudError` to catch unified exceptions.
 
-## MCP Interface
+## MCP Tools Available
 
-This module exposes cloud operations for Model Context Protocol agents:
-
-- `list_cloud_instances()`: Lists active compute instances (Infomaniak).
-- `list_s3_buckets()`: Lists S3 buckets (Infomaniak).
-- `upload_file_to_s3(file_path, bucket, object_name)`: Uploads to Infomaniak S3.
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `list_cloud_instances` | List active compute instances (Infomaniak) | SAFE |
+| `list_s3_buckets` | List S3 buckets (Infomaniak) | SAFE |
+| `upload_file_to_s3` | Upload a file to Infomaniak S3 | TRUSTED |
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `list_cloud_instances`, `list_s3_buckets`, `upload_file_to_s3`; lifecycle management | TRUSTED |
-| **Architect** | Read + Design | Resource listing, inventory, architecture review | OBSERVED |
-| **QATester** | Validation | Resource availability verification, upload success confirmation | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `list_cloud_instances`, `list_s3_buckets`, `upload_file_to_s3` | TRUSTED |
+| **Architect** | Read + Design | `list_cloud_instances`, `list_s3_buckets` — resource inventory and architecture review | OBSERVED |
+| **QATester** | Validation | `list_cloud_instances`, `list_s3_buckets` — resource availability verification | OBSERVED |
+| **Researcher** | Read-only | `list_cloud_instances`, `list_s3_buckets` — inspect cloud resource state | SAFE |
+
+### Engineer Agent
+**Use Cases**: Listing and managing cloud resources during EXECUTE, uploading artifacts to S3, infrastructure lifecycle management.
+
+### Architect Agent
+**Use Cases**: Resource inventory for architectural decisions, reviewing multi-cloud provider topology.
+
+### QATester Agent
+**Use Cases**: Verifying resource availability during VERIFY, confirming upload success.
+
+### Researcher Agent
+**Use Cases**: Inspecting cloud resource state and instance inventory for analysis.
 
 ## Navigation Links
 

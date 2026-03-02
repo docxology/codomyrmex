@@ -94,15 +94,19 @@ uv run python -m pytest src/codomyrmex/tests/ -k prompt_engineering -v
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
 |-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+| **Engineer** | Full | Direct Python import, full API access | TRUSTED |
+| **Architect** | Read + Design | API review, template system design, optimization strategy evaluation | OBSERVED |
+| **QATester** | Validation | Integration testing via pytest, prompt quality validation | OBSERVED |
+| **Researcher** | Read-only | Query templates, evaluate quality scores, inspect version history | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Designs and optimizes prompts for LLM tasks using `PromptTemplate`, `PromptOptimizer`, and `VersionManager`. Creates templates, applies optimization strategies (CONCISE, CHAIN_OF_THOUGHT, FEW_SHOT), and tracks prompt versions.
+**Use Cases**: Design and optimize prompts using `PromptTemplate`, `PromptOptimizer`, and `VersionManager`. Create templates, apply optimization strategies (CONCISE, CHAIN_OF_THOUGHT, FEW_SHOT), and track prompt versions.
 
 ### Architect Agent
-**Use Cases**: Designs prompt template systems, reviews `TemplateRegistry` organization, evaluates optimization strategy selection, and plans prompt versioning workflows across modules.
+**Use Cases**: Design prompt template systems, review `TemplateRegistry` organization, evaluate optimization strategy selection, plan versioning workflows.
 
 ### QATester Agent
-**Use Cases**: Validates prompt effectiveness and output quality via `PromptEvaluator` and `EvaluationCriteria`. Tests template rendering, round-trip version tracking, and optimization token reduction accuracy.
+**Use Cases**: Validate prompt effectiveness via `PromptEvaluator` and `EvaluationCriteria`. Test template rendering, round-trip version tracking, and optimization accuracy.
+
+### Researcher Agent
+**Use Cases**: Querying template registries, evaluating prompt quality scores, and inspecting version history for research analysis.

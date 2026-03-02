@@ -2,72 +2,88 @@
 
 **Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
-## Context
+## Module Overview
 
-The `calendar_integration` module provides the Codomyrmex ecosystem with a unified, standard interface to interact with third-party calendar providers. It currently features Google Calendar support.
+Unified calendar integration for the Codomyrmex platform, currently featuring Google Calendar
+support. Provides `GoogleCalendar` for event CRUD operations, `CalendarEvent` for typed event
+data, and five MCP tools for agent-driven scheduling. All events must use timezone-aware
+`datetime` objects. Requires `uv sync --extra calendar` and a valid `gcal_token.json`.
 
-## Usage Guidelines
+## Key Files
 
-1. **Importing:** Always import `CalendarProvider`, `CalendarEvent`, and exceptions directly from the `calendar_integration` module root.
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `CalendarProvider`, `CalendarEvent`, `GoogleCalendar`, `GCAL_AVAILABLE`, exceptions |
+| `google/provider.py` | `GoogleCalendar` — Google Calendar OAuth2 provider implementation |
+| `generics.py` | `CalendarProvider` ABC, `CalendarEvent` Pydantic model, `CalendarAddress` |
+| `exceptions.py` | `CalendarAuthError`, `EventNotFoundError`, `CalendarError` |
+| `mcp_tools.py` | MCP tools: `calendar_list_events`, `calendar_create_event`, `calendar_get_event`, `calendar_delete_event`, `calendar_update_event` |
 
-   ```python
-   from codomyrmex.calendar_integration import CalendarEvent, CalendarError, GoogleCalendar
-   ```
+## Key Classes
 
-2. **Availability Check:**
-   Before running any Google Calendar code, check the `GCAL_AVAILABLE` flag, and instruct the user to install the dependencies if it evaluates to `False`.
+- **`GoogleCalendar`** — Google Calendar provider with OAuth2 via `gcal_token.json`
+- **`CalendarProvider`** — Abstract base class all providers must implement
+- **`CalendarEvent`** — Pydantic model for calendar events (start, end, title, attendees, etc.)
+- **`GCAL_AVAILABLE`** — Boolean flag indicating whether Google Calendar SDK is installed
 
-   ```bash
-   uv sync --extra calendar
-   ```
+## MCP Tools Available
 
-3. **Zero-Mock Policy:**
-   When writing tests involving the calendar module, **never mock** the `GoogleCalendar` API interactions. Rely strictly on authentic responses. Use `pytest.mark.skipif` to bypass tests if valid credentials are not accessible in the test environment (e.g., if a `pytest.fixture` fails to find required environment variables).
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `calendar_list_events` | List calendar events for a given time range | SAFE |
+| `calendar_create_event` | Create a new calendar event | SAFE |
+| `calendar_get_event` | Fetch a specific calendar event by ID | SAFE |
+| `calendar_delete_event` | Delete a calendar event by ID | TRUSTED |
+| `calendar_update_event` | Update an existing calendar event | SAFE |
 
-4. **Timezones:**
-   Ensure all `datetime` objects interacting with `CalendarEvent` are timezone-aware.
-   Replace naive datetimes via `datetime.replace(tzinfo=timezone.utc)` or similar before attempting to map to physical objects.
+## Agent Instructions
 
-   **Example — attaching timezone info before passing to `CalendarEvent`:**
-   ```python
-   from datetime import datetime
-   from zoneinfo import ZoneInfo
+1. **Check availability first** — Check `GCAL_AVAILABLE` before any Google Calendar code; if `False`, instruct user to `uv sync --extra calendar`
+2. **Always use timezone-aware datetimes** — Replace naive datetimes via `datetime.replace(tzinfo=timezone.utc)` or `ZoneInfo` before passing to `CalendarEvent`
+3. **Use MCP tools for scheduling** — Prefer `calendar_create_event` MCP tool over direct `GoogleCalendar.create_event()` for autonomous agent use
+4. **Catch specific exceptions** — Catch `EventNotFoundError` and `CalendarAuthError`; never use bare `except Exception: pass`
+5. **Zero-Mock Policy** — Tests must never mock Google Calendar API calls; use `pytest.mark.skipif` when credentials are unavailable
 
-   # Option A: Use zoneinfo for named timezones (Python 3.9+)
-   tz_la = ZoneInfo("America/Los_Angeles")
-   start = datetime(2026, 3, 1, 10, 0, 0, tzinfo=tz_la)
+## Operating Contracts
 
-   # Option B: UTC via timezone.utc (always safe)
-   from datetime import timezone
-   start_utc = datetime(2026, 3, 1, 18, 0, 0, tzinfo=timezone.utc)
+- **Attendee injection**: `calendar_create_event` and `calendar_update_event` unconditionally add `FristonBlanket@gmail.com` to attendees. This behavior **cannot be suppressed** without modifying `mcp_tools.py`. Override the default address via `CODOMYRMEX_CALENDAR_ATTENDEE` env var
+- **Bidirectional sync**: The PAI dashboard (`:8888`) and MCP tools read from the same `~/.codomyrmex/gcal_token.json` — no separate sync job needed; events created via either path appear in the same Google Calendar
+- **Timezone requirement**: All `datetime` objects in `CalendarEvent` must be timezone-aware — naive datetimes raise `ValueError`
+- **Token file path**: Auth reads from `~/.codomyrmex/gcal_token.json` — ensure this file exists and is valid before calling any event operation
 
-   # Equivalent ISO 8601 string formats accepted by mcp_tools:
-   # "2026-03-01T18:00:00Z"        ← UTC, Z suffix
-   # "2026-03-01T10:00:00-08:00"   ← Named offset
-   ```
+## Common Patterns
 
-5. **Error Handling:**
-   Catch specific exceptions such as `EventNotFoundError` and `CalendarAuthError` dynamically, logging them descriptively with the `AgentEventBus` or standard python `logging`. Do not use generic block catch-alls like `except Exception: pass` when dealing with the calendar.
+```python
+from codomyrmex.calendar_integration import CalendarEvent, GCAL_AVAILABLE, GoogleCalendar
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
-6. **Agentic Scheduling (MCP Tools):**
-   When autonomous agents interact with the Codomyrmex backend to manage Daniel's tasks, they should leverage the integrated MCP tools (`calendar_create_event`, `calendar_list_events`, `calendar_update_event`, `calendar_delete_event`). These tools gracefully handle initialization via `.codomyrmex/gcal_token.json`.
+if not GCAL_AVAILABLE:
+    raise ImportError("Run: uv sync --extra calendar")
 
-   **Bidirectional Sync:** Both the PMServer.ts PAI dashboard (`:8888`) and the Codomyrmex MCP tools read from the same `~/.codomyrmex/gcal_token.json` OAuth token file, which authenticates against the same Google account. This means there is no separate sync job — any event created via either path appears in the same Google Calendar, and reads from either path reflect the same ground truth. No additional polling or reconciliation is needed.
+# Create an event with named timezone
+tz = ZoneInfo("America/Los_Angeles")
+event = CalendarEvent(
+    title="Sprint Review",
+    start=datetime(2026, 3, 15, 10, 0, 0, tzinfo=tz),
+    end=datetime(2026, 3, 15, 11, 0, 0, tzinfo=tz),
+)
+cal = GoogleCalendar()
+created = cal.create_event(event)
 
-   **Attendee Injection Behavior:** Every call to `calendar_create_event` or `calendar_update_event` unconditionally adds `FristonBlanket@gmail.com` to the attendees list before sending the request to Google Calendar. This behavior is triggered regardless of what the caller passes in the `attendees` parameter:
-   - If `attendees=None` → list is initialized to `["FristonBlanket@gmail.com"]`
-   - If `attendees=[...]` and the address is absent → it is appended
-   - If `attendees=[..., "FristonBlanket@gmail.com"]` → no duplicate is added
-
-   This injection **cannot be suppressed** without modifying `mcp_tools.py` directly. It guarantees Daniel always appears as an attendee on every calendar event managed through this system. The default attendee address can be overridden at runtime via the `CODOMYRMEX_CALENDAR_ATTENDEE` environment variable.
+# ISO 8601 strings also accepted by MCP tools:
+# "2026-03-15T18:00:00Z"        ← UTC
+# "2026-03-15T10:00:00-08:00"   ← Offset notation
+```
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `calendar_list_events`, `calendar_create_event`, `calendar_get_event`, `calendar_delete_event`, `calendar_update_event`; full calendar CRUD | TRUSTED |
-| **Architect** | Read + Design | `calendar_list_events`, `calendar_get_event`; calendar schema review, scheduling design | OBSERVED |
-| **QATester** | Validation | `calendar_list_events`, `calendar_get_event`; event data correctness, scheduling verification | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `calendar_list_events`, `calendar_create_event`, `calendar_get_event`, `calendar_delete_event`, `calendar_update_event` | TRUSTED |
+| **Architect** | Read + Design | `calendar_list_events`, `calendar_get_event` — schema review, scheduling design | OBSERVED |
+| **QATester** | Validation | `calendar_list_events`, `calendar_get_event` — event correctness, scheduling verification | OBSERVED |
+| **Researcher** | Read-only | `calendar_list_events`, `calendar_get_event` — inspect calendar state for analysis | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Creating and managing calendar events during EXECUTE, scheduling automated tasks, tracking project milestones.
@@ -77,3 +93,10 @@ The `calendar_integration` module provides the Codomyrmex ecosystem with a unifi
 
 ### QATester Agent
 **Use Cases**: Verifying calendar events were created correctly, confirming scheduling logic during VERIFY.
+
+### Researcher Agent
+**Use Cases**: Inspecting calendar events and schedules for research analysis and planning insights.
+
+## Navigation
+
+- [README](README.md) | [SPEC](SPEC.md) | [PAI](PAI.md)

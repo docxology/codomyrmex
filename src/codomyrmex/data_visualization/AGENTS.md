@@ -4,7 +4,20 @@
 
 ## Module Overview
 
-Charts, graphs, and visual data representations.
+Charts, graphs, and visual data representations for the Codomyrmex platform. Provides `LineChart`
+for time series, `BarChart` for categorical comparisons, `Dashboard` for multi-chart layouts, and
+`VisualizationEngine` for rendering and theme control. Two MCP tools (`generate_chart`,
+`export_dashboard`) expose chart generation and HTML export.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `__init__.py` | Exports `Chart`, `LineChart`, `BarChart`, `Dashboard`, `VisualizationEngine`, `export_chart` |
+| `charts.py` | `LineChart`, `BarChart` — core chart classes |
+| `dashboard.py` | `Dashboard` — multi-chart layout manager |
+| `visualization.py` | `VisualizationEngine`, `Theme` — rendering engine and theme control |
+| `mcp_tools.py` | MCP tools: `generate_chart`, `export_dashboard` |
 
 ## Key Classes
 
@@ -52,6 +65,21 @@ engine = VisualizationEngine(theme=Theme.DARK)
 engine.render_to_file(data, "output.png")
 ```
 
+## MCP Tools Available
+
+| Tool | Description | Trust Level |
+|------|-------------|-------------|
+| `generate_chart` | Generate a chart from data with specified type (line, bar, scatter) | SAFE |
+| `export_dashboard` | Export a dashboard layout to HTML with embedded charts | SAFE |
+
+## Operating Contracts
+
+- `Dashboard.render()` requires all charts to be added before calling
+- `VisualizationEngine.render_to_file()` creates the parent directory if it doesn't exist
+- `generate_chart` MCP tool returns chart data as dict — not a file path; use `export_dashboard` for HTML export
+- `export_chart()` is a convenience function — it wraps `VisualizationEngine.render_to_file()`
+- **DO NOT** add more than 10 charts to a single Dashboard — performance degrades
+
 ## Testing Patterns
 
 ```python
@@ -67,11 +95,12 @@ assert Path("/tmp/test.png").exists()
 
 ## PAI Agent Role Access Matrix
 
-| PAI Agent | Access Level | Primary Capabilities | Trust Level |
-|-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | `generate_chart`, `export_dashboard`; full visualization pipeline | TRUSTED |
-| **Architect** | Read + Design | `generate_chart`; chart type selection, dashboard layout design | OBSERVED |
-| **QATester** | Validation | `generate_chart`, `export_dashboard`; chart output validation, dashboard correctness | OBSERVED |
+| PAI Agent | Access Level | MCP Tools | Trust Level |
+|-----------|-------------|-----------|-------------|
+| **Engineer** | Full | `generate_chart`, `export_dashboard` | TRUSTED |
+| **Architect** | Read + Design | `generate_chart` — chart type selection, dashboard layout design | OBSERVED |
+| **QATester** | Validation | `generate_chart`, `export_dashboard` — chart output validation, dashboard correctness | OBSERVED |
+| **Researcher** | Read-only | `generate_chart`, `export_dashboard` — generate research visualizations | SAFE |
 
 ### Engineer Agent
 **Use Cases**: Generating charts and dashboards during LEARN phase, visualizing metrics and test results, exporting dashboard HTML for reporting.
@@ -81,6 +110,9 @@ assert Path("/tmp/test.png").exists()
 
 ### QATester Agent
 **Use Cases**: Validating chart output during VERIFY, confirming dashboard renders correctly, checking data accuracy.
+
+### Researcher Agent
+**Use Cases**: Generating charts and dashboards for research analysis and visual data presentation.
 
 ## Navigation
 

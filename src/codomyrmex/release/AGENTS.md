@@ -129,18 +129,22 @@ print(f'Preflight ready: {pf.ready}, Checks: {pf.checks_passed}/{pf.checks_total
 
 | PAI Agent | Access Level | Primary Capabilities | Trust Level |
 |-----------|-------------|---------------------|-------------|
-| **Engineer** | Full | Direct Python import, class instantiation, full API access | TRUSTED |
-| **Architect** | Read + Design | API review, interface design, dependency analysis | OBSERVED |
-| **QATester** | Validation | Integration testing via pytest, output validation | OBSERVED |
+| **Engineer** | Full | Direct Python import, full pipeline access (certify-build-publish) | TRUSTED |
+| **Architect** | Read + Design | Certification threshold review, release strategy design | OBSERVED |
+| **QATester** | Validation | Integration testing, artifact integrity verification, preflight checks | OBSERVED |
+| **Researcher** | Read-only | Inspect certification reports, review publish history | SAFE |
 
 ### Engineer Agent
-**Use Cases**: Manages version bumps, changelog generation, and semantic versioning via `ReleaseValidator`, `PackageBuilder`, and `DistributionManager`. Runs the certify-build-publish pipeline and handles artifact checksums.
+**Use Cases**: Manages version bumps, changelog generation, and semantic versioning via `ReleaseValidator`, `PackageBuilder`, and `DistributionManager`. Runs the certify-build-publish pipeline.
 
 ### Architect Agent
-**Use Cases**: Reviews release strategy and versioning policy, evaluates certification check thresholds, designs publish target workflows, and analyzes the certify-build-publish pipeline architecture.
+**Use Cases**: Reviews release strategy and versioning policy, evaluates certification check thresholds, designs publish target workflows.
 
 ### QATester Agent
-**Use Cases**: Validates release artifacts and integrity, verifies certification checks pass/fail correctly, confirms build artifact checksums, and tests preflight checks against all distribution targets.
+**Use Cases**: Validates release artifacts and integrity, verifies certification checks, confirms artifact checksums, tests preflight checks.
+
+### Researcher Agent
+**Use Cases**: Inspecting certification reports and publish history for release analysis and audit trail review.
 
 ## Navigation
 
