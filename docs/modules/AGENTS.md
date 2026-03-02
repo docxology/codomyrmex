@@ -12,7 +12,7 @@
   - [Module Overview](overview.md)
   - [Module Relationships](relationships.md)
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -79,8 +79,9 @@ Code analysis and pattern recognition.
 | Module | Description |
 |--------|-------------|
 | [coding/](coding/) | Safe code execution sandbox, static analysis, pattern matching |
-| [formal_verification/](formal_verification/) | Formal verification |
+| [formal_verification/](formal_verification/) | Model checking, theorem proving, formal proofs |
 | [static_analysis/](static_analysis/) | Code parsing, ASTs, pattern matching |
+| [tree_sitter/](tree_sitter/) | Tree-sitter grammar and AST utilities |
 
 ### Data & Visualization Modules
 
@@ -89,6 +90,8 @@ Data management and visualization.
 | Module | Description |
 |--------|-------------|
 | [data_visualization/](data_visualization/) | Charts and plots |
+| [git_analysis/](git_analysis/) | Git history analysis, commit patterns |
+| [search/](search/) | Full-text search, TF-IDF, fuzzy matching |
 
 ### DevOps & Infrastructure Modules
 
@@ -100,10 +103,12 @@ Build, deployment, and infrastructure management.
 | [cloud/](cloud/) | Cloud provider integration |
 | [containerization/](containerization/) | Docker/Kubernetes management |
 | [deployment/](deployment/) | Deployment strategies and orchestration |
+| [docs_gen/](docs_gen/) | Documentation scaffolding and source-to-docs |
 | [git_operations/](git_operations/) | Git workflow automation |
 | [maintenance/](maintenance/) | Project maintenance tools and dependency analysis |
 | [orchestrator/](orchestrator/) | Workflow execution engine |
 | [performance/](performance/) | Performance profiling and benchmarking |
+| [release/](release/) | Versioning, changelog generation, release coordination |
 
 ### Security & Cognitive Modules
 
@@ -111,6 +116,8 @@ Autonomous security and economic capabilities.
 
 | Module | Description |
 |--------|-------------|
+| [auth/](auth/) | Authentication and authorization |
+| [crypto/](crypto/) | Cryptography utilities, protocols, steganography |
 | [dark/](dark/) | Dark mode utilities and PDF processing |
 | [defense/](defense/) | Active defense systems |
 | [identity/](identity/) | 3-Tier personas, bio-verification |
@@ -148,6 +155,7 @@ Supporting utilities and infrastructure.
 | Module | Description |
 |--------|-------------|
 | [auth/](auth/) | Authentication and authorization |
+| [bio_simulation/](bio_simulation/) | Ant colony simulation, pheromone foraging |
 | [documentation/](documentation/) | Documentation generation |
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
@@ -161,7 +169,9 @@ Supporting utilities and infrastructure.
 | [networks/](networks/) | Network graph analysis |
 | [physical_management/](physical_management/) | Physical asset management |
 | [plugin_system/](plugin_system/) | Plugin architecture |
+| [quantum/](quantum/) | Quantum algorithm primitives, circuit simulation |
 | [scrape/](scrape/) | Web scraping utilities |
+| [simulation/](simulation/) | General simulation framework, agent-based modeling |
 | [spatial/](spatial/) | Spatial data processing |
 | [system_discovery/](system_discovery/) | Module discovery and health monitoring |
 | [templating/](templating/) | Template rendering engine |

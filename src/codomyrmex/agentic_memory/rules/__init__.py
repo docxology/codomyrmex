@@ -17,9 +17,14 @@ Quick usage::
         print(rule.priority.name, rule.name)
 
 MCP tools (auto-discovered by PAI bridge):
-    - ``rules_list_modules``      — list all modules with rules
-    - ``rules_get_module_rule``   — get rule for a specific module
-    - ``rules_get_applicable``    — get all applicable rules for a context
+    - ``rules_list_modules``        — list all modules with rules
+    - ``rules_get_module_rule``     — get rule for a specific module
+    - ``rules_get_applicable``      — get all applicable rules for a context
+    - ``rules_get_section``         — get a specific section (0–7) from a module rule
+    - ``rules_search``              — full-text search across all 75 rules
+    - ``rules_list_cross_module``   — list cross-module rule names
+    - ``rules_list_file_specific``  — list file-specific rule names
+    - ``rules_list_all``            — list all rules sorted by priority
 """
 
 from .engine import RuleEngine

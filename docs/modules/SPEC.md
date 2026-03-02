@@ -1,6 +1,6 @@
 # modules - Functional Specification
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -15,31 +15,37 @@ Documentation files and guides for modules.
 ## Design Principles
 
 ### Modularity
+
 - Self-contained components
 - Clear boundaries
 - Minimal dependencies
 
 ### Internal Coherence
+
 - Logical organization
 - Consistent patterns
 - Unified design
 
 ### Parsimony
+
 - Essential elements only
 - No unnecessary complexity
 - Minimal surface area
 
 ### Functionality
+
 - Focus on working solutions
 - Forward-looking design
 - Current needs focus
 
 ### Testing
+
 - Comprehensive coverage
 - TDD practices
 - Real data analysis
 
 ### Documentation
+
 - Self-documenting code
 - Clear APIs
 - Complete specifications

@@ -46,4 +46,4 @@ The `security.ai_safety` module provides the same public API:
 
 - [README.md](README.md) — Module overview
 - [security/ai_safety/README.md](../security/ai_safety/README.md) — Migration target
-- [TO-DO.md](../../../TO-DO.md) — Structural quality items
+- [TODO.md](../../../TODO.md) — Structural quality items

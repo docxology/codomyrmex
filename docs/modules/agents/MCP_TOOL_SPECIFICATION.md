@@ -192,7 +192,7 @@ Registers a tool function with the agent's tool registry, allowing the agent to 
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../../docs/README.md)
+- **Parent**: [Agents Module](README.md)
+- **Module Index**: [All Modules](../AGENTS.md)
+- **Documentation**: [Reference Guides](../README.md)
 - **Home**: [Root README](../../../README.md)

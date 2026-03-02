@@ -53,7 +53,7 @@ Full module catalog with layer assignments: [src/codomyrmex/INDEX.md](src/codomy
 | [AGENTS.md](AGENTS.md) | Agent coordination & capabilities |
 | [PAI.md](PAI.md) | Personal AI Infrastructure bridge |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
-| [TO-DO.md](TO-DO.md) | Future features & improvements |
+| [TODO.md](TODO.md) | Future features & improvements |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
 | [SECURITY.md](SECURITY.md) | Security policy |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |

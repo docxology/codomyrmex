@@ -378,3 +378,122 @@ def test_ruleset_to_dict_first_entry_highest_priority() -> None:
     dicts = rule_set.to_dict()
     assert len(dicts) >= 2
     assert dicts[0]["priority"] == "FILE_SPECIFIC"
+
+
+# ---------------------------------------------------------------------------
+# RuleEngine.list_all_rules + RuleRegistry.list_all_rules
+# ---------------------------------------------------------------------------
+
+
+def test_engine_list_all_rules_count() -> None:
+    """list_all_rules() returns all 75 rules (1 general + 8 cross + 60 modules + 6 file)."""
+    engine = RuleEngine(RULES_ROOT)
+    all_rules = engine.list_all_rules()
+    assert len(all_rules) == 75
+
+
+def test_engine_list_all_rules_sorted() -> None:
+    """list_all_rules() is sorted FILE_SPECIFIC first, GENERAL last."""
+    engine = RuleEngine(RULES_ROOT)
+    all_rules = engine.list_all_rules()
+    priorities = [r.priority.value for r in all_rules]
+    assert priorities == sorted(priorities)
+    # First item must be FILE_SPECIFIC (value 1)
+    assert all_rules[0].priority.value == 1
+    # Last item must be GENERAL (value 4)
+    assert all_rules[-1].priority.value == 4
+
+
+def test_engine_list_all_rules_no_duplicates() -> None:
+    """list_all_rules() contains no duplicate (name, priority) pairs.
+
+    The same name can appear at different priority levels (e.g. 'data_visualization'
+    exists as both a MODULE rule and a CROSS_MODULE rule).  The uniqueness
+    invariant is on (name, priority), not name alone.
+    """
+    engine = RuleEngine(RULES_ROOT)
+    pairs = [(r.name, r.priority) for r in engine.list_all_rules()]
+    assert len(pairs) == len(set(pairs))
+
+
+# ---------------------------------------------------------------------------
+# New MCP tools — rules_get_section, rules_search,
+# rules_list_cross_module, rules_list_file_specific, rules_list_all
+# ---------------------------------------------------------------------------
+
+
+def test_mcp_rules_get_section_found() -> None:
+    """rules_get_section returns section dict for a known module + section 0."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_get_section
+
+    result = rules_get_section("agentic_memory", 0)
+    assert result is not None
+    assert result["number"] == 0
+    assert "title" in result
+    assert "content" in result
+
+
+def test_mcp_rules_get_section_not_found_rule() -> None:
+    """rules_get_section returns None for an unknown module."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_get_section
+
+    assert rules_get_section("nonexistent_module_xyzzy", 0) is None
+
+
+def test_mcp_rules_get_section_not_found_section() -> None:
+    """rules_get_section returns None when section number does not exist."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_get_section
+
+    assert rules_get_section("agents", 99) is None
+
+
+def test_mcp_rules_search_finds_matches() -> None:
+    """rules_search returns non-empty list for a common term."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_search
+
+    results = rules_search("Python")
+    assert isinstance(results, list)
+    assert len(results) > 0
+    first = results[0]
+    assert "name" in first
+    assert "priority" in first
+    assert "file_path" in first
+
+
+def test_mcp_rules_search_no_matches() -> None:
+    """rules_search returns empty list for an improbable query."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_search
+
+    results = rules_search("xyzzy_improbable_string_9999")
+    assert results == []
+
+
+def test_mcp_rules_list_cross_module() -> None:
+    """rules_list_cross_module returns exactly 8 names."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_list_cross_module
+
+    names = rules_list_cross_module()
+    assert isinstance(names, list)
+    assert len(names) == 8
+    assert "logging_monitoring" in names
+
+
+def test_mcp_rules_list_file_specific() -> None:
+    """rules_list_file_specific returns at least python and yaml."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_list_file_specific
+
+    names = rules_list_file_specific()
+    assert isinstance(names, list)
+    assert "python" in names
+    assert "yaml" in names
+
+
+def test_mcp_rules_list_all() -> None:
+    """rules_list_all returns 75 summary dicts, FILE_SPECIFIC first."""
+    from codomyrmex.agentic_memory.rules.mcp_tools import rules_list_all
+
+    all_rules = rules_list_all()
+    assert isinstance(all_rules, list)
+    assert len(all_rules) == 75
+    assert all_rules[0]["priority"] == "FILE_SPECIFIC"
+    assert all_rules[-1]["priority"] == "GENERAL"

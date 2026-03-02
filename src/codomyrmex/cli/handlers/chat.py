@@ -24,7 +24,7 @@ def handle_chat_session(
             print(f"🎯 Targeting scaffolding: {todo_path}")
 
         orch = ConversationOrchestrator.dev_loop(
-            todo_path=todo_path if todo_path else "TO-DO.md",
+            todo_path=todo_path if todo_path else "TODO.md",
             extra_files=context,
         )
 

@@ -68,14 +68,18 @@ config.save_config()
 ### Core Components
 
 #### `OllamaManager`
+
 Main integration class providing:
+
 - Model discovery and listing
 - Server management and connectivity
 - Basic model execution
 - Statistics and analytics
 
 #### `ModelRunner`
+
 Advanced execution engine offering:
+
 - Custom execution options
 - Batch processing
 - Model comparison
@@ -83,14 +87,18 @@ Advanced execution engine offering:
 - Conversation support
 
 #### `OutputManager`
+
 Output and configuration management:
+
 - Response saving and organization
 - Configuration persistence
 - Batch result handling
 - Statistics and cleanup
 
 #### `ConfigManager`
+
 System configuration management:
+
 - Global settings management
 - Model-specific configurations
 - Execution presets
@@ -525,6 +533,7 @@ python -m pytest src/codomyrmex/tests/unit/test_ollama_integration.py::TestOllam
 ### Common Issues
 
 #### "Ollama server not responding"
+
 ```bash
 # Start the Ollama server
 ollama serve
@@ -534,6 +543,7 @@ ollama list
 ```
 
 #### "Model not available"
+
 ```bash
 # Download the model
 ollama run llama3.1:8b
@@ -543,6 +553,7 @@ ollama list
 ```
 
 #### "Permission denied" errors
+
 ```bash
 # Ensure ollama binary is executable
 chmod +x $(which ollama)
@@ -552,6 +563,7 @@ ps aux | grep ollama
 ```
 
 #### Configuration loading errors
+
 ```python
 # Reset to defaults if config is corrupted
 config = ConfigManager()
@@ -562,21 +574,25 @@ config.save_config()
 ## 🎓 Best Practices
 
 ### Model Selection
+
 - **Start small**: Use smaller models (135M-2B) for testing
 - **Match use case**: Choose models based on your needs (code, general, vision)
 - **Monitor resources**: Larger models require more RAM and disk space
 
 ### Execution Optimization
+
 - **Use appropriate timeouts**: Adjust based on model size and complexity
 - **Batch processing**: Use `run_batch()` for multiple prompts
 - **Save outputs**: Enable output saving for analysis and debugging
 
 ### Configuration Management
+
 - **Regular backups**: Export configurations before major changes
 - **Validate settings**: Use `validate_config()` before deployment
 - **Organize outputs**: Use descriptive names for saved files
 
 ### Performance Tips
+
 - **Model caching**: Ollama caches models for faster subsequent runs
 - **Concurrent execution**: Use batch processing for multiple requests
 - **Resource monitoring**: Monitor RAM usage with large models
@@ -592,6 +608,7 @@ config.save_config()
 ## 📞 Support
 
 For issues and questions:
+
 - Check the test suite for examples of proper usage
 - Review the example scripts in `examples/`
 - Consult the Ollama documentation for model-specific issues
@@ -605,7 +622,7 @@ For issues and questions:
 
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../docs/README.md)
+- **Parent**: [Module Documentation](README.md)
+- **Module Index**: [All Modules](AGENTS.md)
+- **Documentation**: [Reference Guides](README.md)
 - **Home**: [Repository Root](../../README.md)

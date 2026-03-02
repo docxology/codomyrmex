@@ -20,7 +20,7 @@ class ClosePackedSphere:
 
 def synergetics_transform(coord_3d):
     """Transforms 3D coordinates to 4D Synergetic coordinates."""
-    raise NotImplementedError(
+    raise NotImplementedError(  # ABC: intentional — future-work sentinel
         "synergetics_transform: Fuller-inspired 3D→4D coordinate transform not yet implemented"
     )
 

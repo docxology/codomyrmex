@@ -1,6 +1,6 @@
 # Module Documentation
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Overview
 
@@ -62,7 +62,9 @@ Code analysis and pattern recognition.
 | Module | Description |
 |--------|-------------|
 | [coding/](coding/) | Safe code execution, static analysis, and pattern matching |
+| [formal_verification/](formal_verification/) | Model checking, theorem proving, and formal proofs |
 | [static_analysis/](static_analysis/) | Static analysis and code parsing |
+| [tree_sitter/](tree_sitter/) | Tree-sitter grammar and AST utilities |
 
 ### Data & Visualization Modules
 
@@ -71,6 +73,7 @@ Data management and visualization.
 | Module | Description |
 |--------|-------------|
 | [data_visualization/](data_visualization/) | Charts, plots, and multi-format export |
+| [git_analysis/](git_analysis/) | Git history analysis, commit patterns, and repository health |
 | [search/](search/) | Full-text search with TF-IDF, fuzzy matching, and hybrid BM25+semantic |
 
 ### DevOps & Infrastructure Modules
@@ -85,10 +88,12 @@ Build, deployment, and infrastructure management.
 | [dependency_injection/](dependency_injection/) | IoC container, service registration, lifecycle scoping |
 | [deployment/](deployment/) | Deployment strategies and orchestration |
 | [edge_computing/](edge_computing/) | Edge deployment and IoT gateways |
+| [docs_gen/](docs_gen/) | Documentation template scaffolding and source-to-docs conversion |
 | [git_operations/](git_operations/) | Git workflow automation and merge conflict resolution |
 | [networking/](networking/) | Network utilities and service mesh |
 | [orchestrator/](orchestrator/) | Workflow execution engine and scheduling |
 | [performance/](performance/) | Performance profiling and benchmarking |
+| [release/](release/) | Versioning, changelog generation, and release coordination |
 | [testing/](testing/) | Test fixtures, generators, workflow testing, and chaos engineering |
 
 ### Security & Cognitive Modules
@@ -115,9 +120,11 @@ User interfaces and communication channels.
 |--------|-------------|
 | [api/](api/) | REST/GraphQL API framework with rate limiting |
 | [audio/](audio/) | Audio processing and transcription |
+| [calendar_integration/](calendar_integration/) | Calendar providers, event scheduling (Google Calendar) |
 | [cli/](cli/) | Command-line interface with shell completion |
 | [collaboration/](collaboration/) | Multi-agent collaboration and swarm coordination |
 | [documents/](documents/) | Document processing and RAG chunking |
+| [email/](email/) | Email communication (Gmail, AgentMail) |
 | [fpf/](fpf/) | File processing framework |
 | [ide/](ide/) | IDE integration |
 | [skills/](skills/) | Skill management system |
@@ -132,6 +139,7 @@ Supporting utilities and infrastructure.
 | Module | Description |
 |--------|-------------|
 | [bio_simulation/](bio_simulation/) | Ant colony simulation, pheromone foraging, genetic algorithms |
+| [crypto/](crypto/) | Cryptography utilities, protocols, and steganography |
 | [documentation/](documentation/) | Documentation generation and education |
 | [embodiment/](embodiment/) | Physical/robotic system integration |
 | [evolutionary_ai/](evolutionary_ai/) | Genetic algorithms and optimization |
@@ -148,6 +156,7 @@ Supporting utilities and infrastructure.
 | [quantum/](quantum/) | Quantum algorithm primitives and circuit simulation |
 | [relations/](relations/) | Entity relationship management |
 | [scrape/](scrape/) | Web scraping utilities |
+| [simulation/](simulation/) | General simulation framework, agent-based modeling |
 | [spatial/](spatial/) | Spatial data processing |
 | [system_discovery/](system_discovery/) | Module discovery and health monitoring |
 | [templating/](templating/) | Template rendering engine |

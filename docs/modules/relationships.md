@@ -1,6 +1,6 @@
 # 🔗 Codomyrmex Module Relationships & Interdependencies
 
-**Version**: v1.0.0 | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Last Updated**: March 2026
 
 This document provides a comprehensive overview of how Codomyrmex modules interact with each other, their dependencies, and data flow patterns.
 
@@ -225,7 +225,7 @@ graph TD
   issues = run_pyrefly_analysis(target_paths=["src/"], project_root=".")
   ```
 
-#### **`code` Integration Points**
+#### **`coding` Integration Points**
 
 - **Consumes**: `logging_monitoring`
 - **Provides**: Code execution, sandboxing, review, and monitoring

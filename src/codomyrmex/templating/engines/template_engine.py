@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any
 
 from jinja2 import Environment, FileSystemLoader
-from jinja2 import Template as Jinja2Template
 from mako.template import Template as MakoTemplate
 
 from codomyrmex.exceptions import CodomyrmexError
@@ -138,7 +137,7 @@ class TemplateEngine:
             for name, func in self._filters.items():
                 env.filters[name] = func
 
-            template_obj = Jinja2Template(template, environment=env)
+            template_obj = env.from_string(template)
             return template_obj.render(**context)
         except ImportError:
             raise TemplatingError("jinja2 package not available. Install with: pip install jinja2") from None

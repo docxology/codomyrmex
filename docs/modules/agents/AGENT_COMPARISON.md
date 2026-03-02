@@ -91,7 +91,7 @@ from codomyrmex.agents.claude import ClaudeClient
 
 client = ClaudeClient(config={
     "claude_api_key": "your-api-key",
-    "claude_model": "claude-3-opus-20240229"
+    "claude_model": "claude-sonnet-4-20250514"
 })
 ```
 
@@ -120,7 +120,7 @@ from codomyrmex.agents.codex import CodexClient
 
 client = CodexClient(config={
     "codex_api_key": "your-api-key",
-    "codex_model": "code-davinci-002"
+    "codex_model": "codex-mini-latest"
 })
 ```
 

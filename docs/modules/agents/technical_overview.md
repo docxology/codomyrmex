@@ -1,6 +1,6 @@
-# Ai Code Editing - Technical Overview
+# AI Code Editing Submodule - Technical Overview
 
-This document provides a detailed technical overview of the Ai Code Editing module.
+This document provides a detailed technical overview of the AI Code Editing submodule (`agents/ai_code_editing/`).
 
 ## 1. Introduction and Purpose
 
@@ -10,7 +10,7 @@ The AI Code Editing module is a pivotal component of the Codomyrmex project, eng
 
 The module's architecture is designed around a set of interacting components that handle the lifecycle of an AI-assisted code editing task, from receiving a request to delivering a result.
 
-- **Key Components/Sub-modules**: 
+- **Key Components/Sub-modules**:
   - **`LlmConnectorService`**: Abstracting the communication layer with various LLM providers (e.g., OpenAI, Anthropic). This component manages API endpoint interactions, request/response (de)serialization, and API key handling (retrieved from secure configurations).
   - **`PromptOrchestrator`**: Responsible for dynamically constructing tailored prompts for specific tasks (e.g., generating a Python function, refactoring a Java class, summarizing a code block). It utilizes prompt templates and injects relevant context (code snippets, user instructions, style guides) to optimize LLM outputs.
   - **`CodeParserUtil`**: (Optional, but highly recommended for advanced features) Integrates with code parsing libraries (e.g., tree-sitter, ANTLR, or project-specific parsers like `cased/kit` if available) to transform source code into Abstract Syntax Trees (ASTs) or other structured formats. This allows for more precise context extraction, targeted modifications, and validation of LLM outputs.
@@ -18,7 +18,7 @@ The module's architecture is designed around a set of interacting components tha
   - **`ChangeApplicator`**: Takes the raw code suggestions from the LLM and intelligently applies them to the target source file(s). This may involve merging changes, ensuring proper formatting according to project standards, and potentially running linters or pre-commit hooks on the modified code.
   - **`McpToolImplementations`**: Provides the concrete logic for tools exposed via the Model Context Protocol (MCP), such as `generate_code_snippet` and `refactor_code_snippet`. These implementations orchestrate the services of the other components to fulfill MCP requests.
 
-- **Data Flow**: 
+- **Data Flow**:
   A typical workflow involves:
     1. An incoming request (e.g., an MCP tool call like `refactor_code_snippet`) is received by the relevant `McpToolImplementations` component.
     2. The `ContextAggregator` gathers relevant source code and other contextual information based on the request.
@@ -28,14 +28,14 @@ The module's architecture is designed around a set of interacting components tha
     6. The `ChangeApplicator` processes the LLM's response and applies the changes to the codebase, or prepares the generated code for output.
     7. The result (e.g., status of refactoring, generated code) is returned to the caller.
 
-- **Core Algorithms/Logic**: 
-    - **Contextual Chunking**: Algorithms to identify and extract the most relevant pieces of code from a larger codebase to fit within LLM context windows.
-    - **Prompt Templating and Injection**: Sophisticated templating mechanisms that can adapt to different LLMs and tasks.
-    - **Diff and Merge Strategies**: For applying LLM suggestions to existing code, potentially involving 3-way merge logic if the base code has changed.
-- **External Dependencies**: 
-    - LLM Provider SDKs: e.g., `openai` Python library for OpenAI models, `anthropic` Python library for Claude models.
-    - Code Parsing Libraries (if used): e.g., `tree-sitter` and corresponding language grammars.
-    - HTTP client libraries: For direct API interactions if SDKs are not comprehensive.
+- **Core Algorithms/Logic**:
+  - **Contextual Chunking**: Algorithms to identify and extract the most relevant pieces of code from a larger codebase to fit within LLM context windows.
+  - **Prompt Templating and Injection**: Sophisticated templating mechanisms that can adapt to different LLMs and tasks.
+  - **Diff and Merge Strategies**: For applying LLM suggestions to existing code, potentially involving 3-way merge logic if the base code has changed.
+- **External Dependencies**:
+  - LLM Provider SDKs: e.g., `openai` Python library for OpenAI models, `anthropic` Python library for Claude models.
+  - Code Parsing Libraries (if used): e.g., `tree-sitter` and corresponding language grammars.
+  - HTTP client libraries: For direct API interactions if SDKs are not comprehensive.
 
 ```mermaid
 flowchart TD
@@ -129,29 +129,29 @@ Key configuration options influence the module's behavior and interaction with L
 
 The Ai Code Editing module is designed with scalability and performance in mind, though continuous optimization will be necessary as usage grows and LLM capabilities evolve.
 
-- **Concurrent LLM API Calls**: 
-    - The `LlmConnectorService` should be designed to handle multiple concurrent requests to LLM providers. This typically involves using asynchronous operations (e.g., Python's `asyncio` with `aiohttp`) for non-blocking I/O when making API calls.
-    - Connection pooling can be utilized if interacting with LLM APIs via HTTPS to reduce latency from repeated TLS handshakes.
-- **Context Retrieval Efficiency**: 
-    - For large codebases, naively sending entire files as context is not feasible due to LLM context window limitations and cost.
-    - The `ContextAggregator` needs efficient strategies: 
-        - **AST-based chunking**: Parsing code to identify logical blocks (functions, classes) and selectively including relevant ones.
-        - **Semantic Search**: Using embedding models (potentially via `pattern_matching` module or a dedicated vector store) to find semantically similar code snippets or documentation relevant to the user's request.
-        - **Caching of Context**: Frequently accessed or computed contextual information (e.g., project-wide style guides, common utility function summaries) could be cached.
-- **LLM Response Processing**: 
-    - Parsing and validating LLM responses, especially if they include structured data or code that needs to be diffed/merged, should be optimized.
-    - The `ChangeApplicator` should efficiently apply changes without unnecessary overhead.
+- **Concurrent LLM API Calls**:
+  - The `LlmConnectorService` should be designed to handle multiple concurrent requests to LLM providers. This typically involves using asynchronous operations (e.g., Python's `asyncio` with `aiohttp`) for non-blocking I/O when making API calls.
+  - Connection pooling can be utilized if interacting with LLM APIs via HTTPS to reduce latency from repeated TLS handshakes.
+- **Context Retrieval Efficiency**:
+  - For large codebases, naively sending entire files as context is not feasible due to LLM context window limitations and cost.
+  - The `ContextAggregator` needs efficient strategies:
+    - **AST-based chunking**: Parsing code to identify logical blocks (functions, classes) and selectively including relevant ones.
+    - **Semantic Search**: Using embedding models (potentially via `pattern_matching` module or a dedicated vector store) to find semantically similar code snippets or documentation relevant to the user's request.
+    - **Caching of Context**: Frequently accessed or computed contextual information (e.g., project-wide style guides, common utility function summaries) could be cached.
+- **LLM Response Processing**:
+  - Parsing and validating LLM responses, especially if they include structured data or code that needs to be diffed/merged, should be optimized.
+  - The `ChangeApplicator` should efficiently apply changes without unnecessary overhead.
 - **Potential Bottlenecks**:
-    - **LLM API Rate Limits**: External LLM providers impose rate limits. The `LlmConnectorService` needs to respect these limits, potentially implementing client-side rate limiting, queuing, and exponential backoff for retries.
-    - **LLM Latency**: LLM inference can take seconds. The module design must account for this, providing asynchronous interfaces where possible so as not to block calling applications.
-    - **Context Window Sizes**: Limited context windows of LLMs remain a primary constraint. Efficient context packing and retrieval are critical.
-    - **Processing Large Files/Projects**: Initial parsing or indexing of large codebases for context generation can be time-consuming. This might be done as a background process or on-demand with optimized algorithms.
+  - **LLM API Rate Limits**: External LLM providers impose rate limits. The `LlmConnectorService` needs to respect these limits, potentially implementing client-side rate limiting, queuing, and exponential backoff for retries.
+  - **LLM Latency**: LLM inference can take seconds. The module design must account for this, providing asynchronous interfaces where possible so as not to block calling applications.
+  - **Context Window Sizes**: Limited context windows of LLMs remain a primary constraint. Efficient context packing and retrieval are critical.
+  - **Processing Large Files/Projects**: Initial parsing or indexing of large codebases for context generation can be time-consuming. This might be done as a background process or on-demand with optimized algorithms.
 - **Strategies for Optimization**:
-    - **Caching**: Caching LLM responses for identical prompts (if the task is deterministic and context hasn't changed) can significantly reduce latency and cost. Cache keys would need to carefully consider all inputs to the prompt.
-    - **Prompt Engineering**: Continuously refining prompt templates in the `PromptOrchestrator` to be concise yet effective can improve LLM response quality and reduce token usage.
-    - **Model Selection**: Using smaller, faster LLMs for simpler tasks (e.g., basic summarization, simple syntax changes) and reserving larger, more powerful models for complex generation or refactoring.
-    - **Batching**: If multiple similar, independent requests can be processed, batching them for LLM providers that support it might offer efficiency gains (though this is less common for interactive editing tasks).
-    - **Streaming Responses**: For tasks like code generation, if the LLM provider supports streaming, the `LlmConnectorService` could stream tokens back to the client. This improves perceived performance by showing partial results sooner.
+  - **Caching**: Caching LLM responses for identical prompts (if the task is deterministic and context hasn't changed) can significantly reduce latency and cost. Cache keys would need to carefully consider all inputs to the prompt.
+  - **Prompt Engineering**: Continuously refining prompt templates in the `PromptOrchestrator` to be concise yet effective can improve LLM response quality and reduce token usage.
+  - **Model Selection**: Using smaller, faster LLMs for simpler tasks (e.g., basic summarization, simple syntax changes) and reserving larger, more powerful models for complex generation or refactoring.
+  - **Batching**: If multiple similar, independent requests can be processed, batching them for LLM providers that support it might offer efficiency gains (though this is less common for interactive editing tasks).
+  - **Streaming Responses**: For tasks like code generation, if the LLM provider supports streaming, the `LlmConnectorService` could stream tokens back to the client. This improves perceived performance by showing partial results sooner.
 
 ## 7. Security Aspects
 
@@ -169,10 +169,11 @@ Beyond the general security measures outlined in `SECURITY.md`:
 - **Interactive Editing Features**: Developing capabilities for more iterative, conversational code editing sessions.
 - **Automated Validation of LLM Suggestions**: Integrating static analysis tools or unit test generation/execution to validate the correctness and quality of LLM-generated or refactored code before application.
 - **Caching**: Implementing caching strategies for LLM responses to identical prompts to reduce latency and cost for repeated requests.
-- **Local LLM Support**: Adding connectors for locally hosted LLMs for enhanced privacy and control. 
+- ~~**Local LLM Support**~~: ✅ Completed — Ollama integration provides local LLM hosting via `llm/ollama/`.
+
 ## Navigation Links
 
-- **Parent**: [Project Overview](../README.md)
-- **Module Index**: [All Agents](../../AGENTS.md)
-- **Documentation**: [Reference Guides](../../README.md)
-- **Home**: [Root README](../../README.md)
+- **Parent**: [Agents Module](README.md)
+- **Module Index**: [All Modules](../AGENTS.md)
+- **Documentation**: [Reference Guides](../README.md)
+- **Home**: [Root README](../../../README.md)

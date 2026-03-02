@@ -3,7 +3,7 @@
 Orchestrates sustained multi-turn conversations between Ollama, Claude Code,
 and Antigravity agents using real LLM inference over the file-based relay bus.
 
-Supports file-injection: inject real project files (TO-DO.md, SPEC.md, source
+Supports file-injection: inject real project files (TODO.md, SPEC.md, source
 files, etc.) into agent context so conversations are grounded in actual code.
 
 Usage — basic conversation::
@@ -22,7 +22,7 @@ Usage — basic conversation::
 Usage — file-injected TO-DO development loop::
 
     orch = ConversationOrchestrator.dev_loop(
-        todo_path="TO-DO.md",
+        todo_path="TODO.md",
         extra_files=["CHANGELOG.md", "src/codomyrmex/agents/orchestrator.py"],
     )
     transcript = orch.run(rounds=0)  # infinite, scaffolded by TO-DO items
@@ -263,7 +263,7 @@ class ConversationOrchestrator:
         seed_prompt: Initial prompt to kick off the conversation.
         relay_dir: Override relay storage directory (for tests).
         context_files: Paths to project files to inject into agent context.
-        todo_path: Path to TO-DO.md for per-round scaffolding.
+        todo_path: Path to TODO.md for per-round scaffolding.
         max_retries: Number of LLM retry attempts on failure.
     """
 
@@ -466,7 +466,7 @@ class ConversationOrchestrator:
     def dev_loop(
         cls,
         *,
-        todo_path: str | Path = "TO-DO.md",
+        todo_path: str | Path = "TODO.md",
         extra_files: list[str | Path] | None = None,
         agents: list[dict[str, str]] | None = None,
         channel: str = "",
@@ -478,7 +478,7 @@ class ConversationOrchestrator:
         items for per-round development scaffolding.
 
         Args:
-            todo_path: Path to TO-DO.md (or any checklist file).
+            todo_path: Path to TODO.md (or any checklist file).
             extra_files: Additional project files to inject as context.
             agents: Agent specs (defaults to architect + developer + reviewer).
             channel: Relay channel ID.

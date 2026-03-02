@@ -457,7 +457,7 @@ Before completing significant changes:
 <!-- gitnexus:start -->
 # GitNexus MCP
 
-This project is indexed by GitNexus as **codomyrmex** (54767 symbols, 127096 relationships, 300 execution flows).
+This project is indexed by GitNexus as **codomyrmex** (57575 symbols, 135652 relationships, 300 execution flows).
 
 ## Always Start Here
 

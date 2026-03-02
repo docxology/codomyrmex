@@ -119,3 +119,25 @@ class RuleRegistry:
             f.name[: -len(".cursorrules")]
             for f in fs_dir.glob("*.cursorrules")
         )
+
+    def list_all_rules(self) -> list[Rule]:
+        """Return all rules from every level, sorted by priority (FILE_SPECIFIC first).
+
+        Collects and returns every general, cross-module, module, and file-specific
+        rule.  The list is sorted by :attr:`RulePriority.value` ascending, so
+        ``FILE_SPECIFIC`` (value 1) comes first and ``GENERAL`` (value 4) last.
+        """
+        all_rules: list[Rule] = []
+        general = self.get_general()
+        if general is not None:
+            all_rules.append(general)
+        all_rules.extend(self.get_cross_module_rules())
+        for name in self.list_module_names():
+            rule = self.get_module_rule(name)
+            if rule is not None:
+                all_rules.append(rule)
+        for name in self.list_file_rule_names():
+            rule = self._load_if_exists(self._root / "file-specific" / f"{name}.cursorrules")
+            if rule is not None:
+                all_rules.append(rule)
+        return sorted(all_rules, key=lambda r: r.priority.value)

@@ -122,7 +122,7 @@ class Cli:
             output_json=output_json,
         )
 
-    def chat(self, todo="TO-DO.md", rounds=0, context=None, stream=False, resume=None):
+    def chat(self, todo="TODO.md", rounds=0, context=None, stream=False, resume=None):
         """Launch infinite conversation and dev_loop"""
         if context is None:
             context = []

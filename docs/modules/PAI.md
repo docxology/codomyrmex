@@ -57,7 +57,7 @@ If you're looking for how PAI (the system) integrates with codomyrmex, start at 
 ## Cross-References
 
 - [README.md](README.md) — Module index and category tables
-- [AGENTS.md](AGENTS.md) — Agent quality standards (84/84 complete)
+- [AGENTS.md](AGENTS.md) — Agent quality standards (88/88 complete)
 - [SPEC.md](SPEC.md) — Module system specification
 - [overview.md](overview.md) — Architecture and design principles
 - [relationships.md](relationships.md) — Dependency matrix and data flows

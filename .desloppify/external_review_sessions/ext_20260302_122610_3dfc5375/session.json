@@ -1,0 +1,17 @@
+{
+  "session_id": "ext_20260302_122610_3dfc5375",
+  "status": "open",
+  "runner": "claude",
+  "created_at": "2026-03-02T12:26:10+00:00",
+  "expires_at": "2026-03-03T12:26:10+00:00",
+  "ttl_hours": 24,
+  "token": "4acb52f724b320151baa2d3db764806a",
+  "attest": "I validated this review was completed without awareness of overall score and is unbiased.",
+  "packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packets/holistic_packet_20260302_122610.json",
+  "blind_packet_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/review_packet_blind.json",
+  "packet_sha256": "2764cb0b4ce2f3a5db93463d42ec1d5aa59a643ca68532283322e8519edd9512",
+  "template_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/external_review_sessions/ext_20260302_122610_3dfc5375/review_result.template.json",
+  "launch_prompt_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/external_review_sessions/ext_20260302_122610_3dfc5375/claude_launch_prompt.md",
+  "instructions_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/external_review_sessions/ext_20260302_122610_3dfc5375/reviewer_instructions.md",
+  "expected_output_path": "/Users/mini/Documents/GitHub/codomyrmex/.desloppify/external_review_sessions/ext_20260302_122610_3dfc5375/review_result.json"
+}

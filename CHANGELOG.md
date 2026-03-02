@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **email/gmail**: `GmailProvider.from_env()` — OAuth2 env var constructor (`GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`) with ADC fallback
-- **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via FristonBlanket@gmail.com
+- **email/mcp_tools**: 4 Gmail MCP tools — `gmail_send_message`, `gmail_list_messages`, `gmail_get_message`, `gmail_create_draft`; PAI can now send Gmail directly via <FristonBlanket@gmail.com>
 - **calendar_integration/gcal**: `GoogleCalendar.from_env()` — same unified OAuth2 env var pattern as GmailProvider
 - **tests/integration/email**: 11-test integration suite (9 skip without live creds); tests cover send/list/get/retrieve and MCP tool layer
 
@@ -23,6 +23,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `calendar_integration/README.md`: Wrong default attendee email corrected (`danielarifriedman@gmail.com` → `FristonBlanket@gmail.com`)
 - `email/API_SPECIFICATION.md`: Wrong env var corrected (`GOOGLE_CREDENTIALS` → `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN`)
 - `email/PAI.md`: Now documents all 12 MCP tools (8 AgentMail + 4 Gmail)
+
+---
+
+## [1.0.6] - 2026-03-02 — "Sprint 17 — MCP Expansion & Code Health"
+
+### Added
+
+- **Sprint 17 — MCP Coverage Expansion** (6 new modules):
+  - `serialization/mcp_tools.py` — 3 tools: `serialize_data`, `deserialize_data`, `serialization_list_formats`
+  - `cache/mcp_tools.py` — 4 tools: `cache_get`, `cache_set`, `cache_delete`, `cache_stats`
+  - `deployment/mcp_tools.py` — 3 tools: `deployment_execute`, `deployment_list_strategies`, `deployment_get_history`
+  - `model_ops/mcp_tools.py` — 3 tools: `model_ops_score_output`, `model_ops_sanitize_dataset`, `model_ops_list_scorers`
+  - `testing/mcp_tools.py` — 2 tools: `testing_generate_data`, `testing_list_strategies`
+  - `templating/mcp_tools.py` — 2 tools: `template_render`, `template_validate`
+- **Sprint 16 — MCP Coverage Expansion** (3 new modules):
+  - `static_analysis/mcp_tools.py` — 3 tools
+  - `vector_store/mcp_tools.py` — 4 tools
+  - `feature_flags/mcp_tools.py` — 3 tools
+- **Sprint 16 — Rules Submodule Enhancements** (`agentic_memory/rules/`):
+  - 5 new MCP tools: `rules_get_section`, `rules_search`, `rules_list_cross_module`, `rules_list_file_specific`, `rules_list_all`
+  - `RuleRegistry.list_all_rules()` + `RuleEngine.list_all_rules()` for full 75-rule inventory
+  - 11 new tests for rules submodule (54 total)
+- **44 new tests** across 6 Sprint 17 test files — all passing
+- **27 new tests** for Sprint 16 MCP modules
+- **102 new tests** for coverage: `ide/antigravity/client.py` (65), `git_operations/cli/repo.py` (37)
+- **Documentation audit**: docs/modules/ comprehensive review and improvement
+- **Repo-wide zero-mock audit**: verified 0 `unittest.mock` imports in source or test code
+- **GitHub Actions audit**: verified all 20 workflows complete and accurate
+
+### Changed
+
+- **TODO unification**: Merged `TO-DO.md` + `TODO.md` into single authoritative `TODO.md`
+  - Updated 6 cross-references (`chat.py`, `core.py`, `orchestrator.py`, `defense/DEPRECATED.md`, `embodiment/DEPRECATED.md`, `INDEX.md`)
+  - Deleted redundant `TO-DO.md`
+- **Ruff violations**: 43 → **0** (Sprint 16: F405 star-imports eliminated)
+- **MCP tool count**: 181 → **~198** (+17 tools)
+- **Auto-discovered MCP modules**: 33 → **39** (+6 Sprint 17)
+- **Coverage gate**: aligned at 68% across `pyproject.toml`, `pytest.ini`, `ci.yml` (target: 70%)
+- `ide/antigravity/__init__.py`: refactored from 940 LOC → 110 LOC (re-export facade)
+- Version: `1.0.5` → `1.0.6`
+
+### Fixed
+
+- **Circular import audit** (Sprint 16): 1,646 modules imported cleanly; 0 circular imports detected
+  - Fixed `ImportError` in `ci_cd_automation/build/build_manager.py`
+  - Fixed `ImportError` in `model_ops/fine_tuning/fine_tuning.py`
+- **Jinja2 bug**: `templating/engines/template_engine.py:141` — `Jinja2Template(template, environment=env)` → `env.from_string(template)` (TypeError with modern Jinja2)
+
+### Metrics
+
+- MCP modules with `mcp_tools.py`: 33 → **39**
+- `@mcp_tool` decorators: 181 → **~198**
+- Ruff violations: **0** (was 43 in v1.0.5)
+- Circular imports: **0** (was ~35 estimated)
+- Pass-only stubs: **227** across 38 modules (down from 255)
+- Zero-Mock policy: **enforced** via `ruff.lint.flake8-tidy-imports.banned-api`
 
 ---
 

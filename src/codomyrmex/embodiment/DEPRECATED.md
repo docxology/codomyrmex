@@ -39,4 +39,4 @@ from codomyrmex.embodiment import EmbodimentInterface
 
 - [README.md](README.md) — Module overview
 - [AGENTS.md](AGENTS.md) — Agent coordination
-- [TO-DO.md](../../../TO-DO.md) — Longer-term vision section
+- [TODO.md](../../../TODO.md) — Longer-term vision section

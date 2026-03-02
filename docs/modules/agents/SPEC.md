@@ -43,7 +43,7 @@ The `agents` module provides integration with various agentic frameworks includi
 
 ### Testing
 
-- **Unit Tests**: 129 zero-mock tests in `tests/unit/agents/`
+- **Unit Tests**: 350+ zero-mock tests in `tests/unit/agents/`
 - **Integration Tests**: Test integration with Codomyrmex modules
 - **End-to-End Tests**: Test complete agent workflows
 - **Policy**: All tests use real objects, no mocking (zero-mock policy)

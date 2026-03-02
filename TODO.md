@@ -1,6 +1,6 @@
 # Codomyrmex — TODO
 
-**Version**: v1.0.5 | **Date**: 2026-03-02 | **Modules**: 88 | **Active Sprint**: 17+
+**Version**: v1.0.6 | **Date**: 2026-03-02 | **Modules**: 88 | **Active Sprint**: 17+
 
 This is the authoritative project backlog. Updated after each sprint.
 
@@ -382,4 +382,4 @@ Architectural extensions and research directions. Aspirational and may require s
 
 ---
 
-*Last updated: 2026-03-02 — Unified from `TO-DO.md` + `TODO.md`. Metrics reconciled to Sprint 16 values.*
+*Last updated: 2026-03-02 — Unified from `TO-DO.md` + `TODO.md`. Metrics reconciled to Sprint 17 values.*

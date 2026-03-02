@@ -110,3 +110,7 @@ class RuleEngine:
     def list_file_rule_names(self) -> list[str]:
         """Return sorted list of all file-specific rule names."""
         return self._registry.list_file_rule_names()
+
+    def list_all_rules(self) -> list[Rule]:
+        """Return all rules across all categories sorted by priority (FILE_SPECIFIC first)."""
+        return self._registry.list_all_rules()

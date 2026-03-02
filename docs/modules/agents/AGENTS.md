@@ -1,6 +1,6 @@
-# Codomyrmex Agents — src/codomyrmex/agents
+# Codomyrmex Agents — docs/modules/agents
 
-**Version**: v1.0.0 | **Status**: Active | **Last Updated**: February 2026
+**Version**: v1.0.5 | **Status**: Active | **Last Updated**: March 2026
 
 ## Purpose
 
@@ -22,6 +22,7 @@ Multi-provider agent framework with 12 provider integrations (5 API, 6 CLI, 1 lo
 | `gemini/` | CLI | `CLIAgentBase` | `gemini` | Functional |
 | `mistral_vibe/` | CLI | `CLIAgentBase` | `vibe` | Functional |
 | `every_code/` | CLI | `CLIAgentBase` | `code` | Functional |
+| `openclaw/` | CLI | `CLIAgentBase` | `openclaw` | Functional |
 | Ollama (local) | Local | via `llm/ollama/` | `OLLAMA_BASE_URL` | Functional |
 
 ### Core & Infrastructure

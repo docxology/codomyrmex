@@ -112,9 +112,9 @@ uv run python -m pytest src/codomyrmex/tests/ -k vector_store -v
 
 ## Documentation
 
-- [Module Documentation](../../../docs/modules/vector_store/README.md)
-- [Agent Guide](../../../docs/modules/vector_store/AGENTS.md)
-- [Specification](../../../docs/modules/vector_store/SPEC.md)
+- [Module Documentation](README.md)
+- [Agent Guide](AGENTS.md)
+- [Specification](SPEC.md)
 
 ## Navigation
 
