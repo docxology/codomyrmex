@@ -826,7 +826,7 @@ wheels = [
 
 [[package]]
 name = "codomyrmex"
-version = "1.0.7"
+version = "1.0.8"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -897,8 +897,6 @@ containerization = [
     { name = "docker" },
 ]
 crypto = [
-    { name = "cryptography" },
-    { name = "mnemonic" },
     { name = "pillow" },
 ]
 dark = [
@@ -990,7 +988,6 @@ security-audit = [
     { name = "safety" },
 ]
 serialization = [
-    { name = "msgpack" },
     { name = "pandas" },
     { name = "protobuf" },
     { name = "pyarrow" },
@@ -1038,7 +1035,6 @@ requires-dist = [
     { name = "chardet", marker = "extra == 'documents'", specifier = ">=5.0.0" },
     { name = "chromadb", marker = "extra == 'embedding'", specifier = ">=0.4.0" },
     { name = "cryptography", specifier = ">=41.0.0" },
-    { name = "cryptography", marker = "extra == 'crypto'", specifier = ">=42.0.0" },
     { name = "cryptography", marker = "extra == 'security-audit'", specifier = ">=41.0.0" },
     { name = "diff-match-patch", specifier = ">=20230430.0" },
     { name = "docker", marker = "extra == 'containerization'", specifier = ">=6.0.0" },
@@ -1069,11 +1065,9 @@ requires-dist = [
     { name = "mkdocs", marker = "extra == 'physical-management'", specifier = ">=1.2.0" },
     { name = "mkdocs-material", marker = "extra == 'physical-management'", specifier = ">=7.3.0" },
     { name = "mnemonic", specifier = ">=0.21" },
-    { name = "mnemonic", marker = "extra == 'crypto'", specifier = ">=0.20" },
     { name = "moderngl", marker = "extra == 'modeling-3d'", specifier = ">=5.6.0" },
     { name = "moviepy", marker = "extra == 'video'", specifier = ">=1.0.3" },
     { name = "msgpack", specifier = ">=1.1.2" },
-    { name = "msgpack", marker = "extra == 'serialization'", specifier = ">=1.0.0" },
     { name = "networkx", specifier = ">=3.0.0" },
     { name = "numpy", specifier = ">=2.2.0" },
     { name = "openai", marker = "extra == 'llm-providers'", specifier = ">=1.0.0" },

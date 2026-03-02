@@ -1,37 +1,279 @@
 {
-  "command": "resolve",
-  "patterns": [
-    "review::.::holistic::error_consistency::err_002::e0593db7"
+  "command": "next",
+  "items": [
+    {
+      "id": "unused::scripts/concurrency/concurrency_demo.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/concurrency/concurrency_demo.py",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.Any",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/concurrency/concurrency_demo.py",
+      "summary": "Unused imports: typing.Any",
+      "detail": {
+        "line": 15,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.Any\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.Dict",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/concurrency/concurrency_demo.py",
+      "summary": "Unused imports: typing.Dict",
+      "detail": {
+        "line": 15,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.Dict\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/concurrency/concurrency_demo.py::typing.List",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/concurrency/concurrency_demo.py",
+      "summary": "Unused imports: typing.List",
+      "detail": {
+        "line": 15,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/concurrency_demo.py::typing.List\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/concurrency/orchestrate.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/concurrency/orchestrate.py",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 5,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/concurrency/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/config_monitoring/orchestrate.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/config_monitoring/orchestrate.py",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/config_monitoring/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/config_monitoring/orchestrate.py::pathlib.Path",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/config_monitoring/orchestrate.py",
+      "summary": "Unused imports: pathlib.Path",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/config_monitoring/orchestrate.py::pathlib.Path\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/cost_management/cost_management_demo.py::datetime.datetime",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/cost_management/cost_management_demo.py",
+      "summary": "Unused imports: datetime.datetime",
+      "detail": {
+        "line": 11,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/cost_management/cost_management_demo.py::datetime.datetime\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/cost_management/cost_management_demo.py::time",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/cost_management/cost_management_demo.py",
+      "summary": "Unused imports: time",
+      "detail": {
+        "line": 9,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/cost_management/cost_management_demo.py::time\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/data_lineage/data_lineage_demo.py::json",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/data_lineage/data_lineage_demo.py",
+      "summary": "Unused imports: json",
+      "detail": {
+        "line": 10,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/data_lineage/data_lineage_demo.py::json\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseConnection",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/database_management/orchestrate.py",
+      "summary": "Unused imports: codomyrmex.database_management.DatabaseConnection",
+      "detail": {
+        "line": 19,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseConnection\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseType",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/database_management/orchestrate.py",
+      "summary": "Unused imports: codomyrmex.database_management.DatabaseType",
+      "detail": {
+        "line": 18,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::codomyrmex.database_management.DatabaseType\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/database_management/orchestrate.py::os",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/database_management/orchestrate.py",
+      "summary": "Unused imports: os",
+      "detail": {
+        "line": 7,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/database_management/orchestrate.py::os\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/deployment/orchestrate.py::codomyrmex",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/deployment/orchestrate.py",
+      "summary": "Unused imports: codomyrmex",
+      "detail": {
+        "line": 20,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/deployment/orchestrate.py::codomyrmex\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    },
+    {
+      "id": "unused::scripts/deployment/orchestrate.py::codomyrmex.deployment.health_checks.HealthChecker",
+      "kind": "finding",
+      "tier": 1,
+      "effective_tier": 1,
+      "confidence": "high",
+      "detector": "unused",
+      "file": "scripts/deployment/orchestrate.py",
+      "summary": "Unused imports: codomyrmex.deployment.health_checks.HealthChecker",
+      "detail": {
+        "line": 33,
+        "category": "imports"
+      },
+      "status": "open",
+      "primary_command": "desloppify resolve fixed \"unused::scripts/deployment/orchestrate.py::codomyrmex.deployment.health_checks.HealthChecker\" --note \"<what you did>\" --attest \"I have actually [DESCRIBE THE CONCRETE CHANGE YOU MADE] and I am not gaming the score by resolving without fixing.\""
+    }
   ],
-  "status": "false_positive",
-  "resolved": [
-    "review::.::holistic::error_consistency::err_002::e0593db7"
-  ],
-  "count": 1,
-  "next_command": "desloppify issues",
-  "overall_score": 62.8,
-  "objective_score": 78.1,
-  "strict_score": 62.8,
-  "verified_strict_score": 78.1,
-  "prev_overall_score": 62.8,
-  "prev_objective_score": 78.1,
-  "prev_strict_score": 62.8,
-  "prev_verified_strict_score": 78.1,
-  "attestation": "I have actually run grep on all three files and confirmed 0 bare pass statements exist. I am not gaming the score by resolving without investigation.",
+  "queue": {
+    "tier_counts": {
+      "1": 41,
+      "2": 10639,
+      "3": 17748,
+      "4": 8818
+    },
+    "requested_tier": 1,
+    "selected_tier": 1,
+    "fallback_reason": null,
+    "available_tiers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "total": 41
+  },
   "narrative": {
-    "phase": "stagnation",
-    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. Score plateaued at 62.8 for 5 scans. Test health (6.7%) is where the breakthrough is. (7 review findings \u2014 run `desloppify issues`)",
+    "phase": "middle_grind",
+    "headline": "\u26a0 780 security findings \u2014 review before other cleanup. 37236 findings open. Test health (6.7%) needs attention \u2014 run `desloppify next` to start.",
     "dimensions": {
       "lowest_dimensions": [
         {
           "name": "Test health",
           "strict": 6.7,
-          "issues": 18822,
+          "issues": 18821,
           "impact": 0.0
         },
         {
           "name": "AI generated debt",
-          "strict": 38.0,
+          "strict": 42.0,
           "issues": 0,
           "impact": 0.0,
           "subjective": true,
@@ -39,7 +281,7 @@
         },
         {
           "name": "Dep health",
-          "strict": 44.0,
+          "strict": 45.0,
           "issues": 0,
           "impact": 0.0,
           "subjective": true,
@@ -59,79 +301,13 @@
           "stuck_scans": 5
         },
         {
-          "name": "Error consistency",
-          "strict": 45.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Abstraction fit",
-          "strict": 52.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "AI generated debt",
-          "strict": 38.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "High elegance",
-          "strict": 55.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Mid elegance",
-          "strict": 50.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Low elegance",
-          "strict": 54.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Cross-module arch",
-          "strict": 48.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Convention drift",
-          "strict": 62.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Dep health",
-          "strict": 44.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Test strategy",
-          "strict": 58.0,
-          "stuck_scans": 5
-        },
-        {
           "name": "Structure nav",
           "strict": 60.0,
-          "stuck_scans": 5
-        },
-        {
-          "name": "Design coherence",
-          "strict": 52.0,
           "stuck_scans": 5
         }
       ]
     },
     "actions": [
-      {
-        "type": "issue_queue",
-        "detector": "review",
-        "count": 7,
-        "description": "7 review findings need investigation \u2014 run `desloppify issues` to see the work queue",
-        "command": "desloppify issues",
-        "impact": 0.0,
-        "dimension": "Unknown",
-        "priority": 1,
-        "lane": "refactor"
-      },
       {
         "type": "reorganize",
         "detector": "flat_dirs",
@@ -140,7 +316,7 @@
         "command": "desloppify show flat_dirs --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 2,
+        "priority": 1,
         "lane": "restructure"
       },
       {
@@ -151,7 +327,7 @@
         "command": "desloppify show coupling --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 3,
+        "priority": 2,
         "lane": "restructure"
       },
       {
@@ -162,7 +338,7 @@
         "command": "desloppify show cycles --status open",
         "impact": 0.0,
         "dimension": "Security",
-        "priority": 4,
+        "priority": 3,
         "lane": "restructure"
       },
       {
@@ -173,7 +349,7 @@
         "command": "desloppify show facade --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 5,
+        "priority": 4,
         "lane": "restructure"
       },
       {
@@ -184,7 +360,7 @@
         "command": "desloppify show uncalled_functions --status open",
         "impact": 0.0,
         "dimension": "Unknown",
-        "priority": 6,
+        "priority": 5,
         "lane": "refactor"
       },
       {
@@ -195,7 +371,7 @@
         "command": "desloppify show structural --status open",
         "impact": 0.0,
         "dimension": "File health",
-        "priority": 7,
+        "priority": 6,
         "lane": "refactor"
       },
       {
@@ -206,7 +382,7 @@
         "command": "desloppify show props --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 8,
+        "priority": 7,
         "lane": "refactor"
       },
       {
@@ -217,7 +393,7 @@
         "command": "desloppify show dupes --status open",
         "impact": 0.0,
         "dimension": "Duplication",
-        "priority": 9,
+        "priority": 8,
         "lane": "refactor"
       },
       {
@@ -228,7 +404,7 @@
         "command": "desloppify show dict_keys --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 10,
+        "priority": 9,
         "lane": "refactor"
       },
       {
@@ -239,7 +415,7 @@
         "command": "desloppify show test_coverage --status open",
         "impact": 0.0,
         "dimension": "Test health",
-        "priority": 11,
+        "priority": 10,
         "lane": "test_coverage"
       },
       {
@@ -250,18 +426,18 @@
         "command": "desloppify show responsibility_cohesion --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 12,
+        "priority": 11,
         "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "unused",
-        "count": 507,
-        "description": "507 unused findings \u2014 inspect with `desloppify next` and fix manually",
+        "count": 499,
+        "description": "499 unused findings \u2014 inspect with `desloppify next` and fix manually",
         "command": "desloppify show unused --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 13,
+        "priority": 12,
         "lane": "refactor"
       },
       {
@@ -272,7 +448,7 @@
         "command": "desloppify show smells --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 14,
+        "priority": 13,
         "lane": "refactor"
       },
       {
@@ -283,7 +459,7 @@
         "command": "desloppify show global_mutable_config --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 15,
+        "priority": 14,
         "lane": "refactor"
       },
       {
@@ -294,7 +470,7 @@
         "command": "desloppify show private_imports --status open",
         "impact": 0.0,
         "dimension": "Code quality",
-        "priority": 16,
+        "priority": 15,
         "lane": "refactor"
       },
       {
@@ -305,25 +481,25 @@
         "command": "desloppify show security --status open",
         "impact": 0.0,
         "dimension": "Security",
-        "priority": 17,
+        "priority": 16,
         "lane": "refactor"
       },
       {
         "type": "manual_fix",
         "detector": "subjective_review",
-        "count": 8629,
-        "description": "8629 files need design review \u2014 run design review with dimension templates",
+        "count": 8628,
+        "description": "8628 files need design review \u2014 run design review with dimension templates",
         "command": "desloppify fix review",
         "impact": 0.0,
         "dimension": "Test health",
-        "priority": 18,
+        "priority": 17,
         "lane": "refactor"
       }
     ],
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 0,
-        "total_count": 37266,
+        "total_count": 37236,
         "coverage": 0.0,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -331,10 +507,10 @@
       "lanes": {
         "restructure": {
           "actions": [
+            1,
             2,
             3,
-            4,
-            5
+            4
           ],
           "file_count": 1514,
           "total_impact": 0.0,
@@ -343,28 +519,27 @@
         },
         "refactor": {
           "actions": [
-            1,
+            5,
             6,
             7,
             8,
             9,
-            10,
+            11,
             12,
             13,
             14,
             15,
             16,
-            17,
-            18
+            17
           ],
-          "file_count": 12014,
+          "file_count": 12013,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
         },
         "test_coverage": {
           "actions": [
-            11
+            10
           ],
           "file_count": 10193,
           "total_impact": 0.0,
@@ -373,7 +548,7 @@
         }
       },
       "can_parallelize": true,
-      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 7 finding(s) \u2014 `desloppify issues`."
+      "hint": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify."
     },
     "tools": {
       "fixers": [],
@@ -396,55 +571,360 @@
     },
     "debt": {
       "overall_gap": 0.0,
-      "wontfix_count": 0,
+      "wontfix_count": 8,
       "worst_dimension": null,
       "worst_gap": 0.0,
       "trend": "stable"
     },
     "milestone": null,
     "primary_action": {
-      "command": "desloppify issues",
-      "description": "7 review findings need investigation \u2014 run `desloppify issues` to see the work queue"
+      "command": "desloppify show flat_dirs --status open",
+      "description": "66 flat_dirs findings \u2014 create subdirectories and use `desloppify move`"
     },
-    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify. Review: 7 finding(s) \u2014 `desloppify issues`.",
+    "why_now": "3 independent workstreams, safe to parallelize. Rescan after each phase to verify.",
     "verification_step": {
       "command": "desloppify scan",
       "reason": "revalidate after changes"
     },
-    "risk_flags": [],
+    "risk_flags": [
+      {
+        "type": "wontfix_gap",
+        "severity": "medium",
+        "message": "Strict/lenient gap is 0.0 pts with 8 wontfix findings"
+      }
+    ],
     "strict_target": {
       "target": 95.0,
-      "current": 62.8,
-      "gap": 32.2,
+      "current": 64.3,
+      "gap": 30.7,
       "state": "below",
       "warning": null
     },
-    "reminders": [
-      {
-        "type": "rereview_needed",
-        "message": "Subjective results may be stale after resolve. Re-run `desloppify review --prepare` to refresh, or reset with `desloppify scan --reset-subjective` before a clean rerun.",
-        "command": "desloppify review --prepare",
-        "priority": 1,
-        "severity": "high"
-      },
-      {
-        "type": "rescan_needed",
-        "message": "Rescan to verify \u2014 cascading effects may create new findings.",
-        "command": "desloppify scan",
-        "priority": 1,
-        "severity": "high"
-      }
-    ],
+    "reminders": [],
     "reminder_history": {
       "zone_classification": 3,
       "report_scores": 11,
       "feedback_nudge": 3,
       "stagnant_nudge": 14,
-      "review_findings_pending": 3,
-      "rereview_needed": 1,
-      "rescan_needed": 1
+      "review_findings_pending": 3
     }
   },
+  "overall_score": 64.3,
+  "objective_score": 78.1,
+  "strict_score": 64.3,
+  "scorecard_dimensions": [
+    {
+      "name": "File health",
+      "score": 88.9,
+      "strict": 88.9,
+      "checks": 12898,
+      "issues": 2201,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "AI generated debt",
+      "score": 42.0,
+      "strict": 42.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 55.0,
+      "strict": 55.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Code quality",
+      "score": 96.0,
+      "strict": 96.0,
+      "checks": 95166,
+      "issues": 6053,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Convention drift",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 58.0,
+      "strict": 58.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 45.0,
+      "strict": 45.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 51.0,
+      "strict": 51.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Duplication",
+      "score": 89.7,
+      "strict": 89.7,
+      "checks": 64235,
+      "issues": 6651,
+      "tier": 3,
+      "subjective": false
+    },
+    {
+      "name": "Elegance",
+      "score": 56.3,
+      "strict": 56.3,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 52.0,
+      "strict": 52.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Security",
+      "score": 98.5,
+      "strict": 98.5,
+      "checks": 25539,
+      "issues": 798,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Structure nav",
+      "score": 60.0,
+      "strict": 60.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test health",
+      "score": 6.7,
+      "strict": 6.7,
+      "checks": 144656,
+      "issues": 18821,
+      "tier": 4,
+      "subjective": false
+    },
+    {
+      "name": "Test strategy",
+      "score": 57.0,
+      "strict": 57.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
+  "subjective_measures": [
+    {
+      "name": "AI generated debt",
+      "score": 42.0,
+      "strict": 42.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "ai_generated_debt"
+      ]
+    },
+    {
+      "name": "Abstraction fit",
+      "score": 55.0,
+      "strict": 55.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "abstraction_fitness"
+      ]
+    },
+    {
+      "name": "Convention drift",
+      "score": 63.0,
+      "strict": 63.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "convention_outlier"
+      ]
+    },
+    {
+      "name": "Cross-module arch",
+      "score": 58.0,
+      "strict": 58.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "cross_module_architecture"
+      ]
+    },
+    {
+      "name": "Dep health",
+      "score": 45.0,
+      "strict": 45.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "dependency_health"
+      ]
+    },
+    {
+      "name": "Design coherence",
+      "score": 51.0,
+      "strict": 51.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "design_coherence"
+      ]
+    },
+    {
+      "name": "Elegance",
+      "score": 56.3,
+      "strict": 56.3,
+      "checks": 30,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "high_level_elegance",
+        "mid_level_elegance",
+        "low_level_elegance"
+      ]
+    },
+    {
+      "name": "Error consistency",
+      "score": 52.0,
+      "strict": 52.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "error_consistency"
+      ]
+    },
+    {
+      "name": "Structure nav",
+      "score": 60.0,
+      "strict": 60.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "package_organization"
+      ]
+    },
+    {
+      "name": "Test strategy",
+      "score": 57.0,
+      "strict": 57.0,
+      "checks": 10,
+      "issues": 0,
+      "tier": 4,
+      "subjective": true,
+      "placeholder": false,
+      "cli_keys": [
+        "test_strategy"
+      ]
+    }
+  ],
   "config": {
     "target_strict_score": 95,
     "review_max_age_days": 30,

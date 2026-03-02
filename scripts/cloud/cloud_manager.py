@@ -7,9 +7,7 @@ to manage resources across different providers (AWS, Coda.io, etc.)
 """
 
 import sys
-import os
 from pathlib import Path
-from datetime import datetime
 
 # Ensure codomyrmex is in path
 try:
@@ -19,7 +17,7 @@ except ImportError:
     sys.path.insert(0, str(project_root / "src"))
 
 from codomyrmex.cloud.common import CloudConfig, CloudProvider, ResourceType
-from codomyrmex.cloud import S3Client, GCSClient, AzureBlobClient, CodaClient
+from codomyrmex.cloud import S3Client, GCSClient, CodaClient
 from codomyrmex.utils.cli_helpers import setup_logging, print_success, print_info, print_error, print_section, print_warning
 
 def demo_storage(config: CloudConfig):

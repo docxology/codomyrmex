@@ -18,7 +18,7 @@ from .contract import Contract
 
 
 class ContractStatus(Enum):
-    """Functional component: ContractStatus."""
+    """Deployment lifecycle stages of a smart contract (draft → deployed → active → deprecated → archived)."""
     DRAFT = auto()
     DEPLOYED = auto()
     ACTIVE = auto()

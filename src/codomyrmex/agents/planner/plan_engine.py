@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 
 class TaskPriority(Enum):
-    """Functional component: TaskPriority."""
+    """Scheduling urgency levels for agent planner tasks."""
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -21,7 +21,7 @@ class TaskPriority(Enum):
 
 
 class TaskState(Enum):
-    """Functional component: TaskState."""
+    """Execution lifecycle state of a planner task."""
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"

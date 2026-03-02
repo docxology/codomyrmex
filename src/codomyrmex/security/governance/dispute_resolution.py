@@ -4,7 +4,7 @@ from enum import Enum, auto
 
 
 class DisputeStatus(Enum):
-    """Functional component: DisputeStatus."""
+    """Lifecycle states of a contract dispute from open to closed."""
     OPEN = auto()
     UNDER_REVIEW = auto()
     RESOLVED = auto()
@@ -16,7 +16,7 @@ class DisputeError(Exception):
 
 @dataclass
 class Dispute:
-    """Functional component: Dispute."""
+    """A formal dispute filed against a contract, tracking filer identity and resolution status."""
     id: str
     contract_id: str
     filer_id: str

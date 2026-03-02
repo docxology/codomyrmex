@@ -34,7 +34,7 @@ except ImportError:
         return decorator
 
     class performance_context:
-        """Functional component: performance_context."""
+        """No-op context manager used when PerformanceMonitor is not installed."""
         def __init__(self, *args, **kwargs):
             return None  # Intentional no-op
         def __enter__(self):

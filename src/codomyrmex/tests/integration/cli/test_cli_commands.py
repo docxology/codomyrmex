@@ -8,6 +8,7 @@ def test_check_command():
         [sys.executable, "-m", "codomyrmex.cli", "check"],
         capture_output=True,
         text=True,
+        timeout=60,
     )
     assert result.returncode == 0
     assert ("Codomyrmex Environment Check" in result.stdout or
@@ -19,6 +20,7 @@ def test_info_command():
         [sys.executable, "-m", "codomyrmex.cli", "info"],
         capture_output=True,
         text=True,
+        timeout=60,
     )
     assert result.returncode == 0
     assert "Codomyrmex - A Modular, Extensible Coding Workspace" in result.stdout
@@ -29,6 +31,7 @@ def test_doctor_command():
         [sys.executable, "-m", "codomyrmex.cli", "doctor", "--all_checks"],
         capture_output=True,
         text=True,
+        timeout=60,
     )
     assert result.returncode == 0
     assert "Codomyrmex Doctor" in result.stdout

@@ -34,7 +34,7 @@ class PerformanceMetrics:
 
 @dataclass
 class SystemMetrics:
-    """Functional component: SystemMetrics."""
+    """Point-in-time snapshot of system resource utilization (CPU, memory, disk, network)."""
     cpu_percent: float
     memory_percent: float
     memory_used_mb: float
@@ -46,7 +46,7 @@ class SystemMetrics:
     timestamp: float = field(default_factory=time.time)
 
 class SystemMonitor:
-    """Functional component: SystemMonitor."""
+    """Background monitor that samples system metrics at a fixed polling interval via psutil."""
     def __init__(self, interval: float = 1.0):
         self.interval = interval
         self._process = psutil.Process() if HAS_PSUTIL else None

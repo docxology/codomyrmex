@@ -1,0 +1,267 @@
+{
+  "session": {
+    "id": "ext_20260302_212343_436434b5",
+    "token": "2cec16f1456eb469efa9ac074cb19ee1"
+  },
+  "assessments": {
+    "cross_module_architecture": 58,
+    "convention_outlier": 63,
+    "error_consistency": 52,
+    "abstraction_fitness": 55,
+    "dependency_health": 45,
+    "test_strategy": 57,
+    "ai_generated_debt": 42,
+    "package_organization": 60,
+    "high_level_elegance": 54,
+    "mid_level_elegance": 56,
+    "low_level_elegance": 59,
+    "design_coherence": 51
+  },
+  "findings": [
+    {
+      "dimension": "error_consistency",
+      "identifier": "git_mcp_tools_status_value_inconsistency",
+      "summary": "git_list_branches returns status 'success' while every other git MCP tool returns 'ok'",
+      "related_files": ["src/codomyrmex/git_operations/mcp_tools.py"],
+      "evidence": [
+        "34 occurrences of '\"status\": \"ok\"' in git mcp_tools.py vs 1 occurrence of '\"status\": \"success\"' in git_list_branches (line 187)",
+        "git_check_availability and git_list_branches lack try/except blocks while all 33 other functions have them, leaving them unable to return the standard error shape on failure"
+      ],
+      "suggestion": "Change git_list_branches to return '\"status\": \"ok\"' and wrap the call in try/except returning '{\"status\": \"error\", \"error\": str(exc)}' on failure, matching all sibling tools.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "branching_commands_swallow_errors_return_false",
+      "summary": "branching.py returns False on failure instead of raising, losing error context at the caller",
+      "related_files": ["src/codomyrmex/git_operations/core/commands/branching.py"],
+      "evidence": [
+        "create_branch, switch_branch, delete_branch, get_current_branch all catch exceptions and return False or None with only a logger.error call",
+        "The mcp_tools.py layer wraps these in try/except expecting exceptions to propagate, but they never do — the MCP tool returns {\"status\": \"ok\"} even when the underlying operation silently failed"
+      ],
+      "suggestion": "Remove the bare-except-return-False pattern in branching commands. Let CalledProcessError propagate so mcp_tools.py try/except can catch it and return the error shape.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dual_trust_state_divergence",
+      "summary": "trust_gateway has two separate trust states (_trust_level global and _registry) that can diverge",
+      "related_files": ["src/codomyrmex/agents/pai/trust_gateway.py"],
+      "evidence": [
+        "Module-level trust_tool() (line 614) calls _registry.trust_tool() but never updates _trust_level",
+        "trust_all() (line 635) updates both state variables but trust_tool() only updates one",
+        "get_current_trust_level() (line 790) reads _trust_level, so after calling trust_tool('codomyrmex.write_file'), is_trusted() returns True via _registry but get_current_trust_level() still returns UNTRUSTED"
+      ],
+      "suggestion": "Remove the redundant _trust_level global variable. Derive the aggregate level from _registry.get_aggregate_level() in get_current_trust_level() to keep a single source of truth.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "functional_component_docstring_pattern",
+      "summary": "28 TypedDict and dataclass definitions use 'Functional component: X.' as the entire docstring, adding no information",
+      "related_files": [
+        "src/codomyrmex/agents/pai/trust_gateway.py",
+        "src/codomyrmex/agents/llm_client.py",
+        "src/codomyrmex/agents/planner/plan_engine.py",
+        "src/codomyrmex/cli/commands.py",
+        "src/codomyrmex/privacy/mixnet.py"
+      ],
+      "evidence": [
+        "Pattern '\"\"\"Functional component: X.\"\"\"' found 28 times across production code",
+        "trust_gateway.py line 87: 'class AuditEntry(TypedDict): \"\"\"Functional component: AuditEntry.\"\"\"' — the docstring merely restates the class name",
+        "This is a hallmark AI-generation artifact: every instance adds zero informational value beyond what the class name already conveys"
+      ],
+      "suggestion": "Replace each 'Functional component: X.' docstring with a description of the type's purpose and fields.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "test_functionality_boilerplate_docstrings",
+      "summary": "19.2% of test functions (4014 of 20892) have 'Test functionality: X.' as their entire docstring",
+      "related_files": [
+        "src/codomyrmex/tests/unit/collaboration/swarm/test_swarm.py",
+        "src/codomyrmex/tests/unit/tool_use/test_tool_use.py"
+      ],
+      "evidence": [
+        "Pattern '\"\"\"Test functionality: <name>.\"\"\"' appears 4014 times in the test suite",
+        "test_swarm.py: 'def test_auto_id: \"\"\"Test functionality: auto id.\"\"\"' — restates only the test name with zero behavioral context",
+        "These docstrings add no information about preconditions, inputs, or expected outcomes — a reader learns nothing beyond what the function name already says"
+      ],
+      "suggestion": "Replace with scenario-describing docstrings that state the precondition and expected outcome, e.g. 'SwarmMessage auto-assigns a non-empty message_id on construction.'",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "heavy_deps_in_core_not_optional",
+      "summary": "scipy, fastapi, uvicorn, pylint, bandit, numpy, and loguru are unconditional core dependencies for all installs",
+      "related_files": ["pyproject.toml"],
+      "evidence": [
+        "pyproject.toml [project.dependencies] includes 'scipy>=1.7.0' (used only by cerebrum), 'fastapi>=0.100.0' and 'uvicorn>=0.23.0' (used only by API/server modules)",
+        "'pylint>=3.0.0', 'bandit>=1.8.0', 'radon>=6.0.0' are only used by static_analysis module but forced on all installs",
+        "'loguru>=0.7.0' is not the project's logging framework — 80+ files use stdlib logging vs 2 files using loguru — yet it is a mandatory core dep"
+      ],
+      "suggestion": "Move scipy to a 'cerebrum' optional extra, fastapi/uvicorn to an 'api' extra, pylint/bandit/radon to 'static_analysis' extra, and remove loguru from core deps.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "duplicate_deps_in_base_and_optional",
+      "summary": "cryptography and msgpack appear in both core dependencies and optional extras at conflicting version constraints",
+      "related_files": ["pyproject.toml"],
+      "evidence": [
+        "cryptography: 'cryptography>=41.0.0' in [project.dependencies] AND 'cryptography>=42.0.0' in [project.optional-dependencies.crypto] — different lower bounds",
+        "msgpack: 'msgpack>=1.1.2' in [project.dependencies] AND 'msgpack>=1.0.0' in [project.optional-dependencies.serialization] — conflicting lower bounds",
+        "Duplicate declarations suggest the optional extras were added without auditing the base list, creating version resolution ambiguity"
+      ],
+      "suggestion": "Remove cryptography and msgpack from [project.dependencies] if they are optional-only, or remove them from the optional extras if they truly belong in core.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "terminal_interface_imports_higher_layers",
+      "summary": "terminal_interface (Foundation layer) imports system_discovery and coding (Core layer) at constructor time",
+      "related_files": ["src/codomyrmex/terminal_interface/shells/interactive_shell.py"],
+      "evidence": [
+        "interactive_shell.py constructor (__init__) at line 57-60 imports SystemDiscovery from codomyrmex.system_discovery.core.discovery_engine directly inside __init__",
+        "The file comment (line 17-18) acknowledges these are 'Core-layer imports', confirming the author was aware of the layering violation",
+        "Foundation layer should only import from Foundation layer — this creates an upward dependency in the wrong direction"
+      ],
+      "suggestion": "Move SystemDiscovery and coding imports to the methods that use them (lazy import pattern) rather than the constructor, keeping constructor imports at the Foundation layer only.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "legacy_swarm_shim_returns_fake_data",
+      "summary": "Legacy SwarmManager.execute() returns hardcoded fake strings 'Result from {agent_id}' with no actual execution",
+      "related_files": ["src/codomyrmex/collaboration/protocols/swarm.py"],
+      "evidence": [
+        "SwarmManager.execute() (line 47-52) iterates agents and returns '{\"agent_id\": \"Result from agent_id\"}' without calling any real task execution",
+        "AgentProxy.send_task() (line 19-20) returns 'f\"Result from {self.name}\"' unconditionally",
+        "The test test_swarm_execution asserts 'isinstance(results[\"A1\"], str) and results[\"A1\"]' which trivially passes against this stub"
+      ],
+      "suggestion": "If the legacy shim is kept, document clearly that execute() returns placeholder strings and mark the tests as documentation of stub behavior with an explicit xfail.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "trust_gateway_accesses_private_discovery_engine",
+      "summary": "trust_gateway.verify_capabilities() imports and accesses _DISCOVERY_ENGINE, a private attribute of mcp_bridge",
+      "related_files": ["src/codomyrmex/agents/pai/trust_gateway.py"],
+      "evidence": [
+        "Lines 530-554: 'from codomyrmex.agents.pai.mcp_bridge import _DISCOVERY_ENGINE' with a comment 'mcp_bridge._DISCOVERY_ENGINE is private but we can access it for now'",
+        "The code comment on line 530 explicitly acknowledges this is not the intended interface — a documented violation of encapsulation"
+      ],
+      "suggestion": "Add a public get_discovery_metrics() function to mcp_bridge.py that returns the relevant metrics, removing the need for trust_gateway to access a private attribute.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "duplicate_export_in_trust_gateway_all",
+      "summary": "trusted_call_tool appears twice in __all__ of trust_gateway.py",
+      "related_files": ["src/codomyrmex/agents/pai/trust_gateway.py"],
+      "evidence": [
+        "Line 821 and line 823 both contain '\"trusted_call_tool\"' in the __all__ list",
+        "Duplicate __all__ entries indicate the list was assembled without review — Python does not raise an error for duplicates so the bug is silent"
+      ],
+      "suggestion": "Remove the duplicate '\"trusted_call_tool\"' entry from __all__.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "performance_init_import_after_all",
+      "summary": "performance/__init__.py has an import statement after __all__, creating confusing load order",
+      "related_files": ["src/codomyrmex/performance/__init__.py"],
+      "evidence": [
+        "Line 105: 'from . import analysis, benchmarking  # noqa: E402, F401' appears after __all__ is fully defined (lines 88-103)",
+        "The noqa comment acknowledges it violates E402 — the violation was suppressed rather than fixed",
+        "These submodule imports are side-effect imports placed after __all__ rather than at the top with the other imports, making the module's initialization contract non-obvious"
+      ],
+      "suggestion": "Move the analysis and benchmarking imports to the top of the file with the other imports, before __all__, and remove the noqa suppression.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "misplaced_module_docstring_in_script",
+      "summary": "check_doc_links.py has its module docstring placed after import statements, not at file top",
+      "related_files": ["src/codomyrmex/documentation/scripts/check_doc_links.py"],
+      "evidence": [
+        "Lines 1-6 are import statements (import os, re, sys, Path, get_logger)",
+        "The module docstring 'Documentation Link Validation Script...' begins at line 8, after the imports",
+        "Python module docstrings must be the first statement in a file to be recognized by the __doc__ attribute — placing them after imports breaks this convention"
+      ],
+      "suggestion": "Move the module docstring to line 1, before all import statements.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "swarm_execution_test_validates_stub_not_behavior",
+      "summary": "test_swarm_execution validates that strings are non-empty but the implementation returns hardcoded fake strings",
+      "related_files": [
+        "src/codomyrmex/tests/unit/collaboration/test_collaboration.py",
+        "src/codomyrmex/collaboration/protocols/swarm.py"
+      ],
+      "evidence": [
+        "test_swarm_execution asserts 'isinstance(results[\"A1\"], str) and results[\"A1\"]' — trivially true for any non-empty string",
+        "protocols/swarm.py line 51 returns 'f\"Result from {agent.agent_id}\"' unconditionally — this is a hardcoded stub",
+        "The test passes without verifying any task routing, execution, or result mapping logic — it tests the shape of hardcoded data, not behavior"
+      ],
+      "suggestion": "Either replace the legacy shim with real delegation to the async SwarmManager, or mark these tests with an explicit xfail explaining that they document stub behavior.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "scripts_directory_mirrors_src_without_clear_ownership",
+      "summary": "Top-level scripts/ directory (105 entries) mirrors src/codomyrmex/ module structure without clear boundary",
+      "related_files": ["scripts/cloud/examples/basic_usage.py"],
+      "evidence": [
+        "The scripts/ directory contains 105 entries organized as scripts/cloud, scripts/agents, scripts/audio, etc., mirroring the src/codomyrmex module layout",
+        "scripts/cloud/examples/basic_usage.py manually patches sys.path to import from src/ when the package is not installed",
+        "This creates parallel namespaces for 'cloud', 'agents', etc. with no documented rule for when something belongs in scripts/ vs src/codomyrmex/"
+      ],
+      "suggestion": "Define an explicit policy: scripts/ contains standalone entry points that must not duplicate module logic. Examples and demos should live in src/codomyrmex/<module>/examples/ or be invoked via the CLI.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "mcp_auto_discovery_no_allowlist",
+      "summary": "MCP auto-discovery scans all mcp_tools.py files with no per-module opt-in, creating implicit coupling at the system boundary",
+      "related_files": ["src/codomyrmex/agents/pai/mcp_bridge.py"],
+      "evidence": [
+        "The PAI bridge uses pkgutil to scan every mcp_tools.py in the src/codomyrmex package tree and surfaces any @mcp_tool function as an MCP tool with no allowlist or per-module registry",
+        "CLAUDE.md documents 39 auto-discovered modules but does not describe how a module can prevent its tools from being surfaced",
+        "Any new mcp_tools.py file immediately becomes part of the public MCP surface with no deliberate registration step, creating implicit architectural coupling"
+      ],
+      "suggestion": "Add an explicit __mcp_exported__ = True flag in each module's __init__.py or maintain a central allowlist in mcp_bridge.py, so module authors explicitly declare intent to export tools rather than relying on file presence.",
+      "confidence": "medium"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "auto_injected_dead_config_blocks_in_functions",
+      "summary": "Auto-injected YAML config loading blocks inside run_swarm() and harvest() load config_data that is never used",
+      "related_files": [
+        "scripts/agents/mega_swarm_dispatcher.py",
+        "scripts/agents/mega_swarm_harvester.py",
+        "scripts/bio_simulation/run_colony.py"
+      ],
+      "evidence": [
+        "mega_swarm_dispatcher.py lines 101-109: config loading block appears inside run_swarm() after the swarm has already been dispatched; config_data is assigned but never referenced",
+        "mega_swarm_harvester.py lines 74-82: identical config block inside harvest() after print('Successfully applied...'); config_data is unused",
+        "run_colony.py lines 15-22: config block is at the top of main() but config_data is never passed to Colony(), Population(), or any other call in the function"
+      ],
+      "suggestion": "Remove the auto-injected config blocks entirely since config_data is unused in all three cases, or move config loading to module level and pass values as parameters to the functions that need them.",
+      "confidence": "high"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "unchecked_cli_arg_int_conversion_and_exit_in_function",
+      "summary": "mega_swarm_dispatcher.py converts sys.argv[1] to int with no ValueError guard and calls exit(1) inside a library function",
+      "related_files": ["scripts/agents/mega_swarm_dispatcher.py"],
+      "evidence": [
+        "Line 114: 'limit = int(sys.argv[1]) if len(sys.argv) > 1 else None' checks argument presence but not integer validity — './mega_swarm_dispatcher.py foo' raises an unhandled ValueError traceback",
+        "Line 67 inside dispatch_jules() calls 'exit(1)' directly — mixing process termination into a function makes it untestable without subprocess isolation and prevents the caller from handling the error"
+      ],
+      "suggestion": "Wrap the int() conversion in try/except ValueError and print a usage message. Replace exit(1) in dispatch_jules() with 'raise RuntimeError(\"jules CLI not found\")' so the caller controls termination.",
+      "confidence": "high"
+    }
+  ]
+}

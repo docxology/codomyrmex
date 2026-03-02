@@ -14,7 +14,7 @@ logger = get_logger(__name__)
 
 @dataclass
 class Packet:
-    """Functional component: Packet."""
+    """A routable encrypted data unit in the mixnet, tracking payload, route, and remaining hops."""
     payload: bytes
     route_id: str
     hops_remaining: int

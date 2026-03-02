@@ -10,7 +10,7 @@ from .mcp.definitions import (
     _RESOURCE_DEFINITIONS,
     _TOOL_DEFINITIONS,
 )
-from .mcp.discovery import invalidate_tool_cache
+from .mcp.discovery import get_discovery_metrics, invalidate_tool_cache
 from .mcp.proxy_tools import (
     _tool_call_module_function,
     _tool_get_module_readme,
@@ -36,6 +36,7 @@ __all__ = [
     "get_skill_manifest",
     "call_tool",
     "get_total_tool_count",
+    "get_discovery_metrics",
     "invalidate_tool_cache",
     "TOOL_COUNT",
     "RESOURCE_COUNT",

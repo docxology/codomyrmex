@@ -211,10 +211,15 @@ class TestVisualizationPerformanceWorkflow:
             "times": benchmark_result.get("all_times", [benchmark_result["average_time"]] * benchmark_result["iterations"])
         }
 
-        plot_result = create_line_plot(perf_data, "Benchmark Performance")
+        import matplotlib.figure
 
-        assert isinstance(plot_result, str)
-        assert len(plot_result) > 0
+        plot_result = create_line_plot(
+            perf_data["iterations"],
+            perf_data["times"],
+            "Benchmark Performance",
+        )
+
+        assert isinstance(plot_result, matplotlib.figure.Figure)
 
     @pytest.mark.skipif(not DATA_VISUALIZATION_AVAILABLE,
                        reason="Data visualization module not available")
@@ -222,18 +227,18 @@ class TestVisualizationPerformanceWorkflow:
         """Test error handling in visualization components."""
         from codomyrmex.data_visualization import create_bar_chart
 
-        # Test with invalid data
+        # Test with invalid data — source returns None when required keys are missing
         invalid_data = {"invalid": "data"}
         result = create_bar_chart(invalid_data, "Invalid Chart")
 
-        # Should handle gracefully (either return error or empty result)
-        assert isinstance(result, str)
+        # Should handle gracefully and return None (no exception raised)
+        assert result is None
 
-        # Test with empty data
+        # Test with empty data — source returns None for empty categories/values
         empty_data = {"categories": [], "values": []}
         result = create_bar_chart(empty_data, "Empty Chart")
 
-        assert isinstance(result, str)
+        assert result is None
 
     @pytest.mark.skipif(not PERFORMANCE_AVAILABLE,
                        reason="Performance module not available")
@@ -288,8 +293,9 @@ class TestVisualizationPerformanceWorkflow:
                 "categories": test_data["chart_labels"],
                 "values": test_data["performance_metrics"]
             }
+            import matplotlib.figure
             chart = create_bar_chart(viz_data, "Performance Chart")
-            assert isinstance(chart, str)
+            assert isinstance(chart, matplotlib.figure.Figure)
 
         if PERFORMANCE_AVAILABLE:
             from codomyrmex.performance import run_benchmark
@@ -344,10 +350,10 @@ class TestVisualizationPerformanceWorkflow:
 
             data = {"categories": ["A", "B", "C"], "values": [1, 2, 3]}
 
+            import matplotlib.figure
             # Test basic creation
             result = create_bar_chart(data, "Format Test")
-            assert isinstance(result, str)
-            assert len(result) > 0
+            assert isinstance(result, matplotlib.figure.Figure)
 
             # Could test different formats if supported
             # (Currently assuming single format, but extensible)

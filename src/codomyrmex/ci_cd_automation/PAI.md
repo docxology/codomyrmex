@@ -154,29 +154,31 @@ result = orchestrator.deploy("api-v2.1.0")
 # result.logs -> ["Deploying api-v2.1.0...", "Health check passed", ...]
 ```
 
-## MCP Tools
+## MCP Tools (Auto-discovered)
 
-No direct MCP tools via `@mcp_tool` decorator. Access CI/CD Automation capabilities through the `call_module_function` universal proxy tool exposed by the PAI MCP bridge.
+Three tools are auto-discovered from `mcp_tools.py` via the `@mcp_tool` decorator:
+
+| Tool | Description |
+|------|-------------|
+| `pipeline_list` | List all configured pipelines and their current status |
+| `pipeline_run(pipeline_name, dry_run)` | Execute or dry-run a named pipeline |
+| `build_status(pipeline_name)` | Get health and status metrics for a pipeline |
 
 ```python
-# Example: invoke ci_cd_automation via the proxy tool
-from codomyrmex.agents.pai.mcp_bridge import call_tool
+# Example: invoke ci_cd_automation MCP tools directly
+from codomyrmex.ci_cd_automation.mcp_tools import pipeline_list, pipeline_run, build_status
 
-# Run a pipeline
-result = call_tool(
-    "call_module_function",
-    module="ci_cd_automation",
-    function="run_pipeline",
-    args={"config_path": "pipeline.yaml"}
-)
+# List all pipelines
+result = pipeline_list()
+# {"status": "success", "pipelines": ["build", "test", "deploy", "release"]}
 
-# Create a deployment
-result = call_tool(
-    "call_module_function",
-    module="ci_cd_automation",
-    function="manage_deployments",
-    args={"config_path": "deployment_config.yaml"}
-)
+# Run the test pipeline
+result = pipeline_run("test")
+# {"status": "success", "pipeline": "test", "result": "completed"}
+
+# Check build health
+result = build_status("build")
+# {"status": "success", "pipeline": "build", "health": {...}}
 
 # Handle rollback
 result = call_tool(

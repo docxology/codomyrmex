@@ -14,7 +14,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
     # Create a dummy psutil module for type hints
     class _DummyPSUtil:
-        """Functional component: _DummyPSUtil."""
+        """No-op psutil stub used when psutil is not installed; all metrics return zero."""
         Process = None
         def cpu_percent(*args, **kwargs):
             return 0.0

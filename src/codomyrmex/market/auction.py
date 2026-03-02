@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 @dataclass
 class Bid:
-    """Functional component: Bid."""
+    """A provider's submitted bid in a marketplace auction, with price, details, and timestamp."""
     provider_id: str
     amount: float
     details: str
@@ -21,7 +21,7 @@ class Bid:
 
 @dataclass
 class AuctionRequest:
-    """Functional component: AuctionRequest."""
+    """An open request to auction a service item, collecting provider bids until settled."""
     id: str
     requester_persona_id: str  # Anonymous ID
     item_description: str

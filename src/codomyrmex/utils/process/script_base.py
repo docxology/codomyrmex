@@ -690,7 +690,7 @@ def run_script(
         Exit code
     """
     class SimpleScript(ScriptBase):
-        """Functional component: SimpleScript."""
+        """Concrete ScriptBase that delegates add_arguments and run to plain functions, created by script_from_functions."""
         def add_arguments(self, parser):
             if add_args_func:
                 add_args_func(parser)

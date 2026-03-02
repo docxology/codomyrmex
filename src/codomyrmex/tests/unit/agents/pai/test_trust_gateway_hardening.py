@@ -482,3 +482,119 @@ class TestSecurityErrorOnUntrusted:
         kwargs = _kwargs_for(destructive)
         with pytest.raises(trust_gateway.SecurityError):
             trusted_call_tool(destructive, **kwargs)
+
+
+# ---------------------------------------------------------------------------
+# TestTrustToolSingleToolFix
+# ---------------------------------------------------------------------------
+
+class TestTrustToolSingleToolFix:
+    """Validate the bug-fix where get_current_trust_level() derives from the
+    registry aggregate rather than the stale _trust_level global.
+
+    After calling trust_tool() for a single tool, get_current_trust_level()
+    must immediately reflect TRUSTED because get_aggregate_level() returns
+    "trusted" as soon as any tool reaches TRUSTED.
+    """
+
+    def setup_method(self):
+        """Ensure pristine registry state before each test."""
+        ledger = _registry._ledger_path
+        if ledger.exists():
+            ledger.unlink()
+        reset_trust()
+        clear_audit_log()
+
+    def teardown_method(self):
+        """Restore clean state after each test."""
+        reset_trust()
+        clear_audit_log()
+        ledger = _registry._ledger_path
+        if ledger.exists():
+            ledger.unlink()
+
+    def test_trust_tool_updates_get_current_trust_level(self):
+        """After trusting one tool, get_current_trust_level() returns TRUSTED.
+
+        This tests the fix: get_current_trust_level() now derives from
+        _registry.get_aggregate_level() which returns 'trusted' the moment
+        any single tool is TRUSTED, rather than reading a stale global.
+        """
+        # Arrange: fresh UNTRUSTED state
+        assert get_current_trust_level() == TrustLevel.UNTRUSTED
+
+        # Act: promote exactly one tool
+        trust_tool("codomyrmex.write_file")
+
+        # Assert: aggregate level reflects the per-tool change immediately
+        assert get_current_trust_level() == TrustLevel.TRUSTED
+
+    def test_trust_tool_returns_tool_info(self):
+        """trust_tool() return dict must contain tool, new_level, and report keys."""
+        # Arrange: trust_all() first so we can reset and test single-tool path cleanly
+        trust_all()
+        reset_trust()
+
+        # Act
+        result = trust_tool("codomyrmex.write_file")
+
+        # Assert: all three documented keys present
+        assert "tool" in result, f"Missing 'tool' key in result: {result}"
+        assert "new_level" in result, f"Missing 'new_level' key in result: {result}"
+        assert "report" in result, f"Missing 'report' key in result: {result}"
+
+        # Values are meaningful
+        assert result["tool"] == "codomyrmex.write_file"
+        assert result["new_level"] == "trusted"
+        assert isinstance(result["report"], dict)
+
+    def test_trust_tool_unknown_tool_raises(self):
+        """Calling trust_tool() with an unregistered name raises KeyError."""
+        with pytest.raises(KeyError):
+            trust_tool("codomyrmex.nonexistent_tool")
+
+    def test_verify_capabilities_returns_correct_structure(self):
+        """verify_capabilities() must return dict with status, tools, modules, trust keys."""
+        result = trust_gateway.verify_capabilities()
+
+        # Top-level keys that must always be present
+        assert "status" in result, f"Missing 'status' key: {list(result.keys())}"
+        assert "tools" in result, f"Missing 'tools' key: {list(result.keys())}"
+        assert "modules" in result, f"Missing 'modules' key: {list(result.keys())}"
+        assert "trust" in result, f"Missing 'trust' key: {list(result.keys())}"
+
+        # status must be "verified" on success
+        assert result["status"] == "verified"
+
+        # tools sub-dict has required fields
+        tools = result["tools"]
+        assert "total" in tools
+        assert "safe" in tools
+        assert "destructive" in tools
+        assert tools["total"] >= 1
+
+        # modules sub-dict has required fields
+        modules = result["modules"]
+        assert "loaded" in modules
+        assert modules["loaded"] >= 1
+
+        # trust sub-dict has required fields
+        trust = result["trust"]
+        assert "level" in trust
+        assert "gateway_healthy" in trust
+        assert trust["gateway_healthy"] is True
+
+    def test_trust_sequence_verify_then_trust(self):
+        """verify_capabilities() followed by trust_all() yields TRUSTED aggregate level."""
+        # Arrange: start UNTRUSTED
+        assert get_current_trust_level() == TrustLevel.UNTRUSTED
+
+        # Act step 1: verify
+        verify_result = trust_gateway.verify_capabilities()
+        assert verify_result["status"] == "verified"
+
+        # Act step 2: trust all
+        trust_all()
+
+        # Assert: aggregate level is now TRUSTED
+        assert get_current_trust_level() == TrustLevel.TRUSTED

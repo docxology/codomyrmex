@@ -127,9 +127,11 @@ class MessageBus:
                     # but typically pub/sub is fire-and-forget.
                     # HOWEVER, in our demo, the "agent" is on the same loop.
                     tasks.append(asyncio.create_task(sub.handler(message)))
+                    delivered += 1  # async: assume delivery (fire-and-forget)
                 else:
                     try:
                         sub.handler(message)
+                        delivered += 1  # sync: only count successful invocations
                     except Exception as exc:
                         logger.warning(
                             "Handler error",
@@ -138,7 +140,6 @@ class MessageBus:
                                 "error": str(exc),
                             },
                         )
-                delivered += 1
 
         # We don't await them here to keep it async fire-and-forget
         # but they are now running on the loop.

@@ -29,6 +29,7 @@ from .profiling.benchmark import (
     profile_function,
     run_benchmark,
 )
+from . import analysis, benchmarking  # noqa: F401
 
 # Import PerformanceMonitor — requires psutil. If unavailable, callers must guard
 # with `if PERFORMANCE_MONITOR_AVAILABLE:` before using monitor_performance.
@@ -102,4 +103,3 @@ if PERFORMANCE_MONITOR_AVAILABLE:
     __all__.append("performance_context")
     __all__.append("get_system_metrics")
 
-from . import analysis, benchmarking  # noqa: E402, F401

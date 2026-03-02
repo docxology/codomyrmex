@@ -35,10 +35,10 @@ else:
     if nx is None:
         # Create a dummy type for nx when not available
         class _DummyGraph:
-            """Functional component: _DummyGraph."""
+            """Minimal graph stub used when networkx is not installed."""
             pass
         class _DummyNX:
-            """Functional component: _DummyNX."""
+            """Minimal networkx module replacement used when networkx is not installed."""
             Graph = _DummyGraph
             DiGraph = _DummyGraph
         nx = _DummyNX()

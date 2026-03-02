@@ -30,10 +30,8 @@ def merge_branch(
             f"Merging branch '{source_branch}' into '{target_branch}' in {repository_path}"
         )
 
-        # Switch to target branch first
-        if not switch_branch(target_branch, repository_path):
-            logger.error(f"Failed to switch to target branch '{target_branch}'")
-            return False
+        # Switch to target branch first; CalledProcessError propagates to outer except
+        switch_branch(target_branch, repository_path)
 
         # Prepare merge command
         cmd = ["git", "merge", "--no-edit"]

@@ -64,11 +64,15 @@ commands = cli_commands()
 
 **Core Layer** — Foundational document I/O used by `documentation`, `agentic_memory`, `search`, and agent modules. No upward dependencies.
 
-## MCP Tools
+## MCP Tools (Auto-discovered)
 
-This module does not expose MCP tools directly. Access its capabilities via:
-- Direct Python import: `from codomyrmex.documents import ...`
-- CLI: `codomyrmex documents <command>`
+Three tools are auto-discovered from `mcp_tools.py`:
+
+| Tool | Description |
+|------|-------------|
+| `document_read(path, encoding, max_bytes)` | Read a file; auto-detects format (md/json/yaml/html/csv/etc.) |
+| `document_list(directory, recursive, formats)` | List document files filtered by extension |
+| `document_search(query, directory, recursive, formats, max_results)` | Search text pattern across documents with excerpts |
 
 ## Navigation
 

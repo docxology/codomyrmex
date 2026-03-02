@@ -115,7 +115,7 @@ def event_handler(event_types: EventType | list[EventType] | str | list[str],
 
 
 class AutoEventListener(EventListener):
-    """Functional component: AutoEventListener."""
+    """EventListener that auto-discovers handler methods via the _is_event_handler attribute at runtime."""
     def register_handlers(self, obj: Any) -> None:
         for attr_name in dir(obj):
             attr = getattr(obj, attr_name)

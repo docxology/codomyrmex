@@ -152,3 +152,26 @@ def _discover_dynamic_tools() -> list[tuple[str, str, Any, dict[str, Any]]]:
 
     return tools
 
+
+def get_discovery_metrics() -> dict[str, Any] | None:
+    """Return discovery engine metrics as a plain dict, or None if not initialized.
+
+    Public accessor so callers (e.g. trust_gateway) don't need to import the
+    private ``_DISCOVERY_ENGINE`` module-level variable directly.
+
+    Returns:
+        Dict with keys ``failed_modules`` (list), ``scan_duration_ms`` (float),
+        and ``last_scan_time`` (datetime or None); or None if engine not yet
+        initialized.
+    """
+    if _DISCOVERY_ENGINE is None:
+        return None
+    try:
+        metrics = _DISCOVERY_ENGINE.get_metrics()
+        return {
+            "failed_modules": list(getattr(metrics, "failed_modules", [])),
+            "scan_duration_ms": float(getattr(metrics, "scan_duration_ms", 0.0)),
+            "last_scan_time": getattr(metrics, "last_scan_time", None),
+        }
+    except AttributeError:
+        return None

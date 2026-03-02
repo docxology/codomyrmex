@@ -17,7 +17,6 @@ from codomyrmex.ci_cd_automation import (
     ArtifactManager,
     PipelineManager,
     DeploymentOrchestrator,
-    EnvironmentType,
 )
 
 def run_example():

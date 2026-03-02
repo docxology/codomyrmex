@@ -64,8 +64,7 @@ def dispatch_jules(module_name: str) -> None:
             stderr=subprocess.DEVNULL
         )
     except FileNotFoundError:
-        print("Error: 'jules' CLI not found. Is it installed?")
-        exit(1)
+        raise RuntimeError("'jules' CLI not found. Is it installed?") from None
 
 def run_swarm(max_agents: int = None) -> None:
     """Run the mega swarm in batches."""
@@ -98,18 +97,15 @@ def run_swarm(max_agents: int = None) -> None:
     print("Use 'jules remote pull --session <ID> --apply' to merge completed work.")
 
 
-    # Auto-injected: Load configuration
-    import yaml
-    from pathlib import Path
-    config_path = Path(__file__).resolve().parent.parent.parent / "config" / "agents" / "config.yaml"
-    config_data = {}
-    if config_path.exists():
-        with open(config_path, "r") as f:
-            config_data = yaml.safe_load(f) or {}
-            print(f"Loaded config from config/agents/config.yaml")
-
 if __name__ == "__main__":
     import sys
     # Optional arg to limit agents (e.g. ./mega_swarm_dispatcher.py 5)
-    limit = int(sys.argv[1]) if len(sys.argv) > 1 else None
+    limit = None
+    if len(sys.argv) > 1:
+        try:
+            limit = int(sys.argv[1])
+        except ValueError:
+            print(f"Usage: {sys.argv[0]} [max_agents]")
+            print(f"  max_agents must be an integer, got: {sys.argv[1]!r}")
+            sys.exit(1)
     run_swarm(limit)

@@ -1,16 +1,16 @@
-import os
-import re
-import sys
-from pathlib import Path
-
-from codomyrmex.logging_monitoring import get_logger
-
 """
 Documentation Link Validation Script
 
 This script validates all internal markdown links in the documentation directory,
 identifying broken links, missing files, and incorrect references.
 """
+
+import os
+import re
+import sys
+from pathlib import Path
+
+from codomyrmex.logging_monitoring import get_logger
 
 
 

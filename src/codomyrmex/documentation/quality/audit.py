@@ -5,6 +5,7 @@ Audit documentation completeness for codomyrmex modules.
 import ast
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from codomyrmex.logging_monitoring.core.logger_config import get_logger
@@ -79,7 +80,7 @@ def generate_report(audits: list[ModuleAudit], report_file: Path) -> None:
     report_lines = [
         "# Documentation Audit Report",
         "",
-        f"**Date**: {os.popen('date').read().strip()}",
+        f"**Date**: {datetime.now().isoformat(timespec='seconds')}",
         f"**Total Modules Scanned**: {total_modules}",
         "",
         "## Summary",

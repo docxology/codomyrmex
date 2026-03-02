@@ -68,6 +68,14 @@ class Serializer:
             if fmt == SerializationFormat.JSON:
                 return self._deserialize_json(data, target_type)
             elif fmt == SerializationFormat.PICKLE:
+                if not isinstance(data, (bytes, bytearray)):
+                    raise SerializationError(
+                        f"Pickle deserialization requires bytes, got {type(data).__name__}"
+                    )
+                if len(data) > 100 * 1024 * 1024:  # 100 MB safety limit
+                    raise SerializationError(
+                        f"Pickle payload too large: {len(data)} bytes (limit: 100 MB)"
+                    )
                 return pickle.loads(data)
             elif fmt == SerializationFormat.YAML:
                 return self._deserialize_yaml(data, target_type)

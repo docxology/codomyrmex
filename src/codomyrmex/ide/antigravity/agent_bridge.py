@@ -255,7 +255,7 @@ if BaseAgent is not None:
 
             # ConversationOrchestrator expects an object with `is_success()`, `content`, `tokens_used`, etc.
             class AdapterResponse:
-                """Functional component: AdapterResponse."""
+                """Normalises a raw provider response to the agent response interface expected by the IDE bridge."""
                 def __init__(self, resp):
                     self.content = resp.content
                     self.tokens_used = 0

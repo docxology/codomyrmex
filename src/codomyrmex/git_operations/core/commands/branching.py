@@ -7,60 +7,44 @@ logger = get_logger(__name__)
 
 
 def create_branch(branch_name: str, repository_path: str = None) -> bool:
-    """Create and switch to a new Git branch."""
+    """Create and switch to a new Git branch.
+
+    Raises:
+        subprocess.CalledProcessError: If git reports a non-zero exit code.
+    """
     if repository_path is None:
         repository_path = os.getcwd()
 
-    try:
-        logger.info(f"Creating new branch '{branch_name}' in {repository_path}")
-
-        subprocess.run(
-            ["git", "checkout", "-b", branch_name],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-
-        logger.info(f"Branch '{branch_name}' created and checked out successfully")
-        return True
-
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to create branch '{branch_name}': {e}")
-        if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error creating branch: {e}")
-        return False
+    logger.info(f"Creating new branch '{branch_name}' in {repository_path}")
+    subprocess.run(
+        ["git", "checkout", "-b", branch_name],
+        cwd=repository_path,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    logger.info(f"Branch '{branch_name}' created and checked out successfully")
+    return True
 
 def switch_branch(branch_name: str, repository_path: str = None) -> bool:
-    """Switch to an existing Git branch."""
+    """Switch to an existing Git branch.
+
+    Raises:
+        subprocess.CalledProcessError: If git reports a non-zero exit code.
+    """
     if repository_path is None:
         repository_path = os.getcwd()
 
-    try:
-        logger.info(f"Switching to branch '{branch_name}' in {repository_path}")
-
-        subprocess.run(
-            ["git", "checkout", branch_name],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-
-        logger.info(f"Switched to branch '{branch_name}' successfully")
-        return True
-
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to switch to branch '{branch_name}': {e}")
-        if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error switching branch: {e}")
-        return False
+    logger.info(f"Switching to branch '{branch_name}' in {repository_path}")
+    subprocess.run(
+        ["git", "checkout", branch_name],
+        cwd=repository_path,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    logger.info(f"Switched to branch '{branch_name}' successfully")
+    return True
 
 def delete_branch(branch_name: str, repository_path: str = None, force: bool = False) -> bool:
     """Delete a local git branch.
@@ -69,29 +53,23 @@ def delete_branch(branch_name: str, repository_path: str = None, force: bool = F
         branch_name: Name of the branch to delete.
         repository_path: Path to git repository (defaults to cwd).
         force: If True, use -D (force delete even if unmerged). Default False uses -d.
+
+    Raises:
+        subprocess.CalledProcessError: If git reports a non-zero exit code.
     """
     if repository_path is None:
         repository_path = os.getcwd()
 
-    try:
-        flag = "-D" if force else "-d"
-        subprocess.run(
-            ["git", "branch", flag, branch_name],
-            cwd=repository_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        logger.info(f"Deleted branch {branch_name} (force={force})")
-        return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to delete branch {branch_name}: {e}")
-        if e.stderr:
-            logger.error(f"Git error: {e.stderr}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error deleting branch: {e}")
-        return False
+    flag = "-D" if force else "-d"
+    subprocess.run(
+        ["git", "branch", flag, branch_name],
+        cwd=repository_path,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    logger.info(f"Deleted branch {branch_name} (force={force})")
+    return True
 
 def get_current_branch(repository_path: str = None) -> str | None:
     """Get the name of the current Git branch."""

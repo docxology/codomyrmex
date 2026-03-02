@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Command(Enum):
-    """Functional component: Command."""
+    """CLI command name constants used for routing in the codomyrmex CLI."""
     CHECK = "check"
     INFO = "info"
     MODULES = "modules"

@@ -612,9 +612,16 @@ def trust_tool(tool_name: str) -> dict[str, Any]:
     Returns:
         Trust state after promotion.
     """
-    # Note: We don't trigger global trust change for single tool,
-    # but we could if we tracked per-tool granularity in events.
+    global _trust_level
     new_level = _registry.trust_tool(tool_name)
+    # Keep _trust_level global in sync with the registry aggregate so that
+    # get_current_trust_level() is consistent regardless of which function
+    # is consulted. _registry.trust_tool() fires _trigger_trust_change for
+    # the per-tool transition; we only update the global if the aggregate
+    # actually changed to avoid spurious global-level events.
+    derived = TrustLevel(_registry.get_aggregate_level())
+    if derived != _trust_level:
+        _trust_level = derived
     return {
         "tool": tool_name,
         "new_level": new_level.value,
@@ -778,8 +785,13 @@ def trusted_call_tool(name: str, **kwargs: Any) -> dict[str, Any]:
 
 
 def get_current_trust_level() -> TrustLevel:
-    """Return the current global trust level."""
-    return _trust_level
+    """Return the current global trust level derived from per-tool registry state.
+
+    Derives the level from the registry so that per-tool promotions via
+    ``trust_tool()`` are reflected immediately, keeping this function
+    consistent with the trust level reported by ``verify_capabilities()``.
+    """
+    return TrustLevel(_registry.get_aggregate_level())
 
 
 def reset_trust() -> None:

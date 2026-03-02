@@ -19,7 +19,7 @@ logger = get_logger(__name__)
 
 @dataclass
 class AgentRequest:
-    """Functional component: AgentRequest."""
+    """Input container for an LLM agent call: the prompt and optional metadata for context injection."""
     prompt: str
     metadata: dict[str, Any] | None = None
 
@@ -93,7 +93,7 @@ class OllamaClient:
         elapsed = time.monotonic() - start_time
 
         class Response:
-            """Functional component: Response."""
+            """Minimal response object returned by OllamaClient.execute_with_session."""
             def is_success(self): return True
             pass
 

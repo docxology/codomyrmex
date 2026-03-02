@@ -218,7 +218,7 @@ def _create_llm_client(spec: AgentSpec) -> Any:
 
                     # Wrap the client so execute_with_session calls execute_with_tools
                     class AntigravityCodeImplementerWrapper:
-                        """Functional component: AntigravityCodeImplementerWrapper."""
+                        """Adapts a base IDE client to the execute_with_session interface expected by the orchestrator."""
                         def __init__(self, base_client):
                             self.client = base_client
 

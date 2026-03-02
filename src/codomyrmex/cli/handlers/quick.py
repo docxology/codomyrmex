@@ -139,7 +139,8 @@ def handle_quick_pipe(commands: list[str], stop_on_error: bool = True) -> bool:
             cmd,
             shell=True,  # SECURITY: Intentional — pipe executor runs CLI command strings
             capture_output=True,
-            text=True
+            text=True,
+            timeout=60,
         )
         return {
             "command": cmd,
